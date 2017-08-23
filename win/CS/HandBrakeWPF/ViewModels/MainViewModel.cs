@@ -18,7 +18,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using System.Threading;
     using System.Windows;
-    using System.Windows.Data;
     using System.Windows.Input;
 
     using Caliburn.Micro;
@@ -82,8 +81,6 @@ namespace HandBrakeWPF.ViewModels
         private readonly Win7 windowsSeven = new Win7();
         private string windowName;
         private string sourceLabel;
-        private OutputFormat selectedOutputFormat;
-        private bool isMkv;
         private string statusLabel;
         private string programStatusLabel;
         private Source scannedSource;
@@ -140,6 +137,9 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="videoViewModel">
         /// The video View Model.
         /// </param>
+        /// <param name="summaryViewModel">
+        /// The summary view model.
+        /// </param>
         /// <param name="filtersViewModel">
         /// The filters View Model.
         /// </param>
@@ -167,7 +167,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="notifyIconService">Wrapper around the WinForms NotifyIcon for this app. </param>
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService, 
             IErrorService errorService, IUpdateService updateService, 
-            IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, 
+            IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, ISummaryViewModel summaryViewModel,
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
             IX264ViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
             IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel, INotifyIconService notifyIconService)
@@ -183,6 +183,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService = userSettingService;
             this.queueProcessor = IoC.Get<IQueueProcessor>();
 
+            this.SummaryViewModel = summaryViewModel;
             this.PictureSettingsViewModel = pictureSettingsViewModel;
             this.VideoViewModel = videoViewModel;
             this.MetaDataViewModel = metaDataViewModel;
@@ -295,6 +296,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public IMetaDataViewModel MetaDataViewModel { get; set; }
 
+        public ISummaryViewModel SummaryViewModel { get; set; }
+
         #endregion
 
         #region Properties
@@ -389,12 +392,6 @@ namespace HandBrakeWPF.ViewModels
   
                 if (this.selectedPreset != null)
                 {
-                    // Main Window Settings
-                    this.OptimizeMP4 = selectedPreset.Task.OptimizeMP4;
-                    this.IPod5GSupport = selectedPreset.Task.IPod5GSupport;
-                    this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
-                    this.AlignAVStart = selectedPreset.Task.AlignAVStart;
-
                     // Tab Settings
                     this.PictureSettingsViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.VideoViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
@@ -404,9 +401,7 @@ namespace HandBrakeWPF.ViewModels
                     this.ChaptersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.AdvancedViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.MetaDataViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-
-                    // Do this again to force an update for m4v/mp4 selection
-                    this.SelectedOutputFormat = selectedPreset.Task.OutputFormat;
+                    this.SummaryViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                 }
 
                 this.NotifyOfPropertyChange(() => this.SelectedPreset);
@@ -417,63 +412,6 @@ namespace HandBrakeWPF.ViewModels
         {
             this.NotifyOfPropertyChange(() => this.SelectedPreset);
             this.selectedPreset.IsSelected = true;
-        }
-
-        /// <summary>
-        /// Optimise MP4 Checkbox
-        /// </summary>
-        public bool OptimizeMP4
-        {
-            get
-            {
-                return this.CurrentTask.OptimizeMP4;
-            }
-            set
-            {
-                if (value == this.CurrentTask.OptimizeMP4)
-                {
-                    return;
-                }
-                this.CurrentTask.OptimizeMP4 = value;
-                this.NotifyOfPropertyChange(() => this.OptimizeMP4);
-            }
-        }
-
-        /// <summary>
-        /// iPod 5G Status
-        /// </summary>
-        public bool IPod5GSupport
-        {
-            get
-            {
-                return this.CurrentTask.IPod5GSupport;
-            }
-            set
-            {
-                if (value == this.CurrentTask.IPod5GSupport)
-                {
-                    return;
-                }
-                this.CurrentTask.IPod5GSupport = value;
-                this.NotifyOfPropertyChange(() => this.IPod5GSupport);
-            }
-        }
-
-        public bool AlignAVStart
-        {
-            get
-            {
-                return this.CurrentTask.AlignAVStart;
-            }
-            set
-            {
-                if (value == this.CurrentTask.AlignAVStart)
-                {
-                    return;
-                }
-                this.CurrentTask.AlignAVStart = value;
-                this.NotifyOfPropertyChange(() => this.AlignAVStart);
-            }
         }
 
         /// <summary>
@@ -697,22 +635,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether IsMkv.
-        /// </summary>
-        public bool IsMkv
-        {
-            get
-            {
-                return this.isMkv;
-            }
-            set
-            {
-                this.isMkv = value;
-                this.NotifyOfPropertyChange(() => this.IsMkv);
-            }
-        }
-
-        /// <summary>
         /// Gets RangeMode.
         /// </summary>
         public IEnumerable<OutputFormat> OutputFormats
@@ -763,13 +685,11 @@ namespace HandBrakeWPF.ViewModels
                         switch (ext)
                         {
                             case ".mkv":
-                                this.SelectedOutputFormat = OutputFormat.Mkv;
+                                this.SummaryViewModel.SetContainer(OutputFormat.Mkv);
                                 break;
                             case ".mp4":
-                                this.SelectedOutputFormat = OutputFormat.Mp4;
-                                break;
                             case ".m4v":
-                                this.SelectedOutputFormat = OutputFormat.Mp4;
+                                this.SummaryViewModel.SetContainer(OutputFormat.Mp4);
                                 break;
                         }
                     }
@@ -980,33 +900,6 @@ namespace HandBrakeWPF.ViewModels
 
                     this.IsTimespanRange = false;
                     this.NotifyOfPropertyChange(() => this.IsTimespanRange);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets SelectedOutputFormat.
-        /// </summary>
-        public OutputFormat SelectedOutputFormat
-        {
-            get
-            {
-                return this.selectedOutputFormat;
-            }
-
-            set
-            {
-                if (!Equals(this.selectedOutputFormat, value))
-                {
-                    this.selectedOutputFormat = value;
-                    this.CurrentTask.OutputFormat = value;
-                    this.NotifyOfPropertyChange(() => SelectedOutputFormat);
-                    this.NotifyOfPropertyChange(() => this.CurrentTask.OutputFormat);
-                    this.NotifyOfPropertyChange(() => IsMkv);
-                    this.SetExtension(string.Format(".{0}", this.selectedOutputFormat.ToString().ToLower()));
-
-                    this.VideoViewModel.RefreshTask();
-                    this.AudioViewModel.RefreshTask();
                 }
             }
         }
@@ -1238,12 +1131,14 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.hasSource;
             }
+
             set
             {
                 if (value.Equals(this.hasSource))
                 {
                     return;
                 }
+
                 this.hasSource = value;
                 this.NotifyOfPropertyChange(() => this.HasSource);
             }
@@ -1286,6 +1181,8 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Presets);
             this.presetService.LoadCategoryStates();
 
+            this.SummaryViewModel.OutputFormatChanged += this.SummaryViewModel_OutputFormatChanged;
+
             // Queue Recovery
             bool queueRecovered = QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService, StartupOptions.AutoRestartQueue);
 
@@ -1314,11 +1211,22 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Log Cleaning
-            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs))
             {
                 Thread clearLog = new Thread(() => GeneralUtilities.ClearLogFiles(30));
                 clearLog.Start();
             }
+        }
+
+        private void SummaryViewModel_OutputFormatChanged(object sender, OutputFormatChangedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.Extension))
+            {
+                this.Destination = Path.ChangeExtension(this.Destination, e.Extension);
+            }
+
+            this.VideoViewModel.RefreshTask();
+            this.AudioViewModel.RefreshTask();
         }
 
         /// <summary>
@@ -1340,6 +1248,8 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
             this.userSettingService.SettingChanged -= this.UserSettingServiceSettingChanged;
+
+            this.SummaryViewModel.OutputFormatChanged -= this.SummaryViewModel_OutputFormatChanged;
         }
 
         #endregion
@@ -1858,11 +1768,11 @@ namespace HandBrakeWPF.ViewModels
                     switch (Path.GetExtension(saveFileDialog.FileName))
                     {
                         case ".mkv":
-                            this.SelectedOutputFormat = OutputFormat.Mkv;
+                            this.SummaryViewModel.SetContainer(OutputFormat.Mkv);
                             break;
                         case ".mp4":
                         case ".m4v":
-                            this.SelectedOutputFormat = OutputFormat.Mp4;
+                            this.SummaryViewModel.SetContainer(OutputFormat.Mp4);
                             break;
                     }
 
@@ -2185,8 +2095,6 @@ namespace HandBrakeWPF.ViewModels
                 this.SelectedPointToPoint = this.CurrentTask.PointToPointMode; // Force reset.
                 this.SelectedStartPoint = start;
                 this.SelectedEndPoint = end;
-                this.NotifyOfPropertyChange(() => this.SelectedOutputFormat);
-                this.NotifyOfPropertyChange(() => IsMkv);
 
                 // Update the Tab Controls
                 this.PictureSettingsViewModel.UpdateTask(this.CurrentTask);
@@ -2197,62 +2105,13 @@ namespace HandBrakeWPF.ViewModels
                 this.ChaptersViewModel.UpdateTask(this.CurrentTask);
                 this.AdvancedViewModel.UpdateTask(this.CurrentTask);
                 this.MetaDataViewModel.UpdateTask(this.CurrentTask);
+                this.SummaryViewModel.UpdateTask(this.CurrentTask);
 
                 // Cleanup
                 this.ShowStatusWindow = false;
                 this.SourceLabel = this.SourceName;
                 this.StatusLabel = Resources.Main_ScanCompleted;
             });
-        }
-
-        /// <summary>
-        /// Make sure the correct file extension is set based on user preferences and setup the GUI for the file container selected.
-        /// </summary>
-        /// <param name="newExtension">
-        /// The new extension.
-        /// </param>
-        private void SetExtension(string newExtension)
-        {
-            // Make sure the output extension is set correctly based on the users preferences and selection.
-            if (newExtension == ".mp4" || newExtension == ".m4v")
-            {
-                switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
-                {
-                    case 0: // Auto
-                        newExtension = MP4Helper.RequiresM4v(this.CurrentTask) ? ".m4v" : ".mp4";
-                        break;
-                    case 1: // MP4
-                        newExtension = ".mp4";
-                        break;
-                    case 2: // M4v
-                        newExtension = ".m4v";
-                        break;
-                }
-
-                this.IsMkv = false;
-            }
-
-            // Now disable controls that are not required. The Following are for MP4 only!
-            if (newExtension == ".mkv")
-            {
-                this.IsMkv = true;
-                this.CurrentTask.OptimizeMP4 = false;
-                this.CurrentTask.IPod5GSupport = false;
-                this.CurrentTask.AlignAVStart = false;
-
-                this.NotifyOfPropertyChange(() => this.OptimizeMP4);
-                this.NotifyOfPropertyChange(() => this.IPod5GSupport);
-                this.NotifyOfPropertyChange(() => this.AlignAVStart);              
-            }
-
-            // Update The browse file extension display
-            if (Path.HasExtension(newExtension))
-            {
-                this.Destination = Path.ChangeExtension(this.Destination, newExtension);
-            }
-
-            // Update the UI Display
-            this.NotifyOfPropertyChange(() => this.CurrentTask);
         }
 
         /// <summary>
@@ -2271,6 +2130,7 @@ namespace HandBrakeWPF.ViewModels
                 this.ChaptersViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.AdvancedViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.MetaDataViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
+                this.SummaryViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
             }
         }
 

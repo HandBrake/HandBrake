@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Views
     using System.Windows.Input;
     using System.Windows.Media;
 
+    using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -112,6 +113,18 @@ namespace HandBrakeWPF.Views
                 source = VisualTreeHelper.GetParent(source);
 
             return source as TreeViewItem;
+        }
+
+        private void TabControl_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems.Count > 0)
+            {
+                TabItem tab = e.AddedItems[0] as TabItem;
+                if (tab != null && Properties.ResourcesUI.MainView_SummaryTab.Equals(tab.Header))
+                {
+                    ((MainViewModel)this.DataContext).SummaryViewModel.UpdateDisplayedInfo();
+                }
+            }
         }
     }
 }

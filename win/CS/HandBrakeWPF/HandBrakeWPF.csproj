@@ -166,6 +166,7 @@
     <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
     <Compile Include="Converters\Video\VideoOptionsTooltipConverter.cs" />
     <Compile Include="Converters\Video\ScalingConverter.cs" />
+    <Compile Include="EventArgs\OutputFormatChangedEventArgs.cs" />
     <Compile Include="EventArgs\QueueCompletedEventArgs.cs" />
     <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
     <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
@@ -275,6 +276,7 @@
     <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Utilities\Win7.cs" />
     <Compile Include="ViewModels\Interfaces\IManagePresetViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ISummaryViewModel.cs" />
     <Compile Include="ViewModels\ManagePresetViewModel.cs" />
     <Compile Include="ViewModels\AudioDefaultsViewModel.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
@@ -293,6 +295,7 @@
     <Compile Include="ViewModels\PopupWindowViewModel.cs" />
     <Compile Include="ViewModels\StaticPreviewViewModel.cs" />
     <Compile Include="ViewModels\SubtitlesDefaultsViewModel.cs" />
+    <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="Views\ManagePresetView.xaml.cs">
       <DependentUpon>ManagePresetView.xaml</DependentUpon>
     </Compile>
@@ -419,6 +422,9 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\SubtitlesDefaultsView.xaml.cs">
       <DependentUpon>SubtitlesDefaultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SummaryView.xaml.cs">
+      <DependentUpon>SummaryView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\X264View.xaml.cs">
       <DependentUpon>X264View.xaml</DependentUpon>
@@ -576,6 +582,10 @@
     <Page Include="Views\SubtitlesDefaultsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SummaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\X264View.xaml">
       <SubType>Designer</SubType>

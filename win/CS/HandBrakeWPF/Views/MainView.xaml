@@ -397,52 +397,8 @@
                 </Grid>
             </StackPanel>
 
-            <!--  Output Options  -->
-            <StackPanel Grid.Row="2" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
-                        Margin="10,5,10,5"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        >
-                <Label Content="{x:Static Properties:ResourcesUI.MainView_OutputSettings}" FontWeight="Bold" />
-                <StackPanel Orientation="Horizontal">
-                    <Label Margin="8,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Container}" />
-                    <ComboBox Name="Container"
-                              MinWidth="100"
-                              Margin="8,0,0,0"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Mux}"
-                              ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
-                              SelectedItem="{Binding SelectedOutputFormat, Converter={StaticResource enumComboConverter}}"
-                              />
-                    <CheckBox Name="WebOptimized"
-                              Margin="8,0,0,0"
-                              VerticalAlignment="Center"
-                              Content="{x:Static Properties:ResourcesUI.MainView_WebOptimized}"
-                              IsChecked="{Binding Path=OptimizeMP4}"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Optimise}"
-                              Visibility="{Binding IsMkv,
-                                                   Converter={StaticResource boolToVisConverter},
-                                                   ConverterParameter=true}"
-                              />
-                    <CheckBox Name="AlignAVStart"
-                              Margin="8,0,0,0"
-                              VerticalAlignment="Center"
-                              Content="{x:Static Properties:ResourcesUI.MainView_AlignAVStart}"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AlignAVStart}"
-                              IsChecked="{Binding Path=AlignAVStart}"
-                              Visibility="{Binding IsMkv,
-                                                   Converter={StaticResource boolToVisConverter},
-                                                   ConverterParameter=true}" />
-                    <CheckBox Name="iPod5G"
-                              Margin="8,0,0,0"
-                              VerticalAlignment="Center"
-                              Content="{x:Static Properties:ResourcesUI.MainView_iPod5G}"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_IpodAtom}"
-                              IsChecked="{Binding Path=IPod5GSupport}"
-                              Visibility="{Binding IsMkv,
-                                                   Converter={StaticResource boolToVisConverter},
-                                                   ConverterParameter=true}" />
-                </StackPanel>
-            </StackPanel>
+            <!--  Presets Options  -->
+            <!-- TODO New Preset Controls Grid.Row=2 -->
 
             <!--  Tab Control  -->
             <TabControl Name="tabControl" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
@@ -450,9 +406,12 @@
                         Margin="10,10,10,6"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        
+                        SelectionChanged="TabControl_OnSelectionChanged"
                         Visibility="{Binding IsQueueShowingInLine,  Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"
                         >
+                <TabItem Name="summaryTab" Header="{x:Static Properties:ResourcesUI.MainView_SummaryTab}">
+                    <ContentControl x:Name="SummaryViewModel" />
+                </TabItem>
                 <TabItem Name="pictureTab" Header="{x:Static Properties:ResourcesUI.MainView_PictureTab}">
                     <ContentControl x:Name="PictureSettingsViewModel" />
                 </TabItem>

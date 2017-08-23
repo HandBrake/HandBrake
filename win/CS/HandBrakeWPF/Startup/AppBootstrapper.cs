@@ -89,6 +89,7 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<IFiltersViewModel, FiltersViewModel>();
             this.container.Singleton<IVideoViewModel, VideoViewModel>();
             this.container.Singleton<IMetaDataViewModel, MetaDataViewModel>();
+            this.container.Singleton<ISummaryViewModel, SummaryViewModel>();
 
             // Shell
             this.container.Singleton<IShellViewModel, ShellViewModel>();

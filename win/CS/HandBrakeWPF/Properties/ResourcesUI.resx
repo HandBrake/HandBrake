@@ -911,4 +911,49 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="MainView_AlignAVStart" xml:space="preserve">
     <value>Align A/V Start</value>
   </data>
+  <data name="MainView_SummaryTab" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
+    <value>Additional Audio Tracks</value>
+  </data>
+  <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
+    <value>Additional Subtitle Tracks</value>
+  </data>
+  <data name="SummaryView_Burned" xml:space="preserve">
+    <value>Burned</value>
+  </data>
+  <data name="SummaryView_Chapters" xml:space="preserve">
+    <value>Chapter Markers</value>
+  </data>
+  <data name="SummaryView_Deblock" xml:space="preserve">
+    <value>Deblock</value>
+  </data>
+  <data name="SummaryView_Detelecine" xml:space="preserve">
+    <value>Detelecine</value>
+  </data>
+  <data name="SummaryView_display" xml:space="preserve">
+    <value>display</value>
+  </data>
+  <data name="SummaryView_Grayscale" xml:space="preserve">
+    <value>Grayscale</value>
+  </data>
+  <data name="SummaryView_NoAudioTracks" xml:space="preserve">
+    <value>No Audio Tracks</value>
+  </data>
+  <data name="SummaryView_NoChapters" xml:space="preserve">
+    <value>No Chapter Markers</value>
+  </data>
+  <data name="SummaryView_NoFilters" xml:space="preserve">
+    <value>No Filters</value>
+  </data>
+  <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
+    <value>No Subtitle Tracks</value>
+  </data>
+  <data name="SummaryView_Rotation" xml:space="preserve">
+    <value>Rotation</value>
+  </data>
+  <data name="SummaryView_storage" xml:space="preserve">
+    <value>storage</value>
+  </data>
 </root>

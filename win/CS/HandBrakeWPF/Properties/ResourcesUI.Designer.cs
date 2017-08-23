@@ -952,6 +952,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Summary.
+        /// </summary>
+        public static string MainView_SummaryTab {
+            get {
+                return ResourceManager.GetString("MainView_SummaryTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to through.
         /// </summary>
         public static string MainView_through {
@@ -2264,6 +2273,132 @@ namespace HandBrakeWPF.Properties {
         public static string SubtitleView_SubtitleDefaultsDescription {
             get {
                 return ResourceManager.GetString("SubtitleView_SubtitleDefaultsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Additional Audio Tracks.
+        /// </summary>
+        public static string SummaryView_AdditionalAudioTracks {
+            get {
+                return ResourceManager.GetString("SummaryView_AdditionalAudioTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Additional Subtitle Tracks.
+        /// </summary>
+        public static string SummaryView_AdditionalSubtitleTracks {
+            get {
+                return ResourceManager.GetString("SummaryView_AdditionalSubtitleTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Burned.
+        /// </summary>
+        public static string SummaryView_Burned {
+            get {
+                return ResourceManager.GetString("SummaryView_Burned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chapter Markers.
+        /// </summary>
+        public static string SummaryView_Chapters {
+            get {
+                return ResourceManager.GetString("SummaryView_Chapters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deblock.
+        /// </summary>
+        public static string SummaryView_Deblock {
+            get {
+                return ResourceManager.GetString("SummaryView_Deblock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detelecine.
+        /// </summary>
+        public static string SummaryView_Detelecine {
+            get {
+                return ResourceManager.GetString("SummaryView_Detelecine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to display.
+        /// </summary>
+        public static string SummaryView_display {
+            get {
+                return ResourceManager.GetString("SummaryView_display", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grayscale.
+        /// </summary>
+        public static string SummaryView_Grayscale {
+            get {
+                return ResourceManager.GetString("SummaryView_Grayscale", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Audio Tracks.
+        /// </summary>
+        public static string SummaryView_NoAudioTracks {
+            get {
+                return ResourceManager.GetString("SummaryView_NoAudioTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Chapter Markers.
+        /// </summary>
+        public static string SummaryView_NoChapters {
+            get {
+                return ResourceManager.GetString("SummaryView_NoChapters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Filters.
+        /// </summary>
+        public static string SummaryView_NoFilters {
+            get {
+                return ResourceManager.GetString("SummaryView_NoFilters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Subtitle Tracks.
+        /// </summary>
+        public static string SummaryView_NoSubtitleTracks {
+            get {
+                return ResourceManager.GetString("SummaryView_NoSubtitleTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rotation.
+        /// </summary>
+        public static string SummaryView_Rotation {
+            get {
+                return ResourceManager.GetString("SummaryView_Rotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to storage.
+        /// </summary>
+        public static string SummaryView_storage {
+            get {
+                return ResourceManager.GetString("SummaryView_storage", resourceCulture);
             }
         }
         
