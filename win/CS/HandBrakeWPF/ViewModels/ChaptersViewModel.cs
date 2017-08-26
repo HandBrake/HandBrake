@@ -92,6 +92,20 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public ObservableCollection<ChapterMarker> Chapters
+        {
+            get
+            {
+                return this.Task.ChapterNames;
+            }
+
+            set
+            {
+                this.Task.ChapterNames = value;
+                this.NotifyOfPropertyChange(() => this.Chapters);
+            }
+        }
+
         #endregion
 
         #region Properties
@@ -134,7 +148,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 using (var csv = new StreamWriter(fileName))
                 {
-                    foreach (ChapterMarker row in this.Task.ChapterNames)
+                    foreach (ChapterMarker row in this.Chapters)
                     {
                         csv.Write("{0},{1}{2}", row.ChapterNumber, CsvHelper.Escape(row.ChapterName), Environment.NewLine);
                     }
@@ -218,7 +232,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Now iterate over each chatper we have, and set it's name
-            foreach (ChapterMarker item in this.Task.ChapterNames)
+            foreach (ChapterMarker item in this.Chapters)
             {
                 // If we don't have a chapter name for this chapter then 
                 // fallback to the value that is already set for the chapter
@@ -252,7 +266,6 @@ namespace HandBrakeWPF.ViewModels
         public void SetSource(Source source, Title title, Preset preset, EncodeTask task)
         {
             this.Task = task;
-            this.NotifyOfPropertyChange(() => this.Task);
 
             if (preset != null)
             {
@@ -275,8 +288,8 @@ namespace HandBrakeWPF.ViewModels
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.Task = task;
-            this.Task.IncludeChapterMarkers = preset.Task.IncludeChapterMarkers;
-            this.NotifyOfPropertyChange(() => this.Task);
+            this.IncludeChapterMarkers = preset.Task.IncludeChapterMarkers;
+            this.NotifyOfPropertyChange(() => this.Chapters);
         }
 
         /// <summary>
@@ -289,8 +302,8 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Task = task;
 
-            this.NotifyOfPropertyChange(() => this.Task.IncludeChapterMarkers);
-            this.NotifyOfPropertyChange(() => this.Task.ChapterNames);
+            this.NotifyOfPropertyChange(() => this.IncludeChapterMarkers);
+            this.NotifyOfPropertyChange(() => this.Chapters);
         }
 
         /// <summary>
@@ -314,7 +327,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // Cache the chapters in this screen
             this.SourceChapterList = new ObservableCollection<Chapter>(sourceChapters);
-            this.Task.ChapterNames.Clear();
+            this.Chapters.Clear();
 
             // Then Add new Chapter Markers.
             int counter = 1;
@@ -323,7 +336,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 string chapterName = string.IsNullOrEmpty(chapter.ChapterName) ? string.Format("Chapter {0}", counter) : chapter.ChapterName;
                 var marker = new ChapterMarker(chapter.ChapterNumber, chapterName, chapter.Duration);
-                this.Task.ChapterNames.Add(marker);
+                this.Chapters.Add(marker);
 
                 counter += 1;
             }
@@ -346,10 +359,10 @@ namespace HandBrakeWPF.ViewModels
             validationErrorMessage = null;
 
             // If the number of chapters don't match, prompt for confirmation
-            if (importedChapters.Count != this.Task.ChapterNames.Count)
+            if (importedChapters.Count != this.Chapters.Count)
             {
                 if (this.errorService.ShowMessageBox(
-                        string.Format(Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg, this.Task.ChapterNames.Count, importedChapters.Count),
+                        string.Format(Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg, this.Chapters.Count, importedChapters.Count),
                         Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning,
                         MessageBoxButton.YesNo,
                         MessageBoxImage.Question) !=
@@ -364,7 +377,7 @@ namespace HandBrakeWPF.ViewModels
             //      (I chose 15sec based on empirical evidence from testing a few DVDs and comparing to chapter-marker files I downloaded)
             //      => This check will not be performed for the first and last chapter as they're very likely to differ significantly due to language and region
             //         differences (e.g. longer title sequences and different distributor credits)
-            var diffs = importedChapters.Zip(this.Task.ChapterNames, (import, source) => source.Duration - import.Value.Item2);
+            var diffs = importedChapters.Zip(this.Chapters, (import, source) => source.Duration - import.Value.Item2);
             if (diffs.Count(diff => Math.Abs(diff.TotalSeconds) > 15) > 2)
             {
                 if (this.errorService.ShowMessageBox(
