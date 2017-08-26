@@ -14,19 +14,14 @@
         <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </UserControl.Resources>
 
-    <Grid Margin="5,5,0,0">
+    <Grid Margin="10,5,0,5">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
         <!-- Column 1 -->
-
-        <Grid Margin="5,0,0,0" Grid.Column="0" >
+        <Grid Grid.Column="0" MinWidth="325" MaxWidth="400" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="75" />
                 <ColumnDefinition Width="*" />
@@ -59,8 +54,8 @@
 
 
             <TextBlock Text="Format:" FontSize="14" FontFamily="Sergio Light" Grid.Row="0" VerticalAlignment="Center" />
-            <ComboBox Name="Container" Width="100" HorizontalAlignment="Left" Margin="0,2,0,5"  Grid.Row="0" Grid.Column="1"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Mux}"
+            <ComboBox Name="Container" Width="100" HorizontalAlignment="Left"  Grid.Row="0" Grid.Column="1"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Mux}" VerticalAlignment="Center"
                               ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
                               SelectedItem="{Binding SelectedOutputFormat, Converter={StaticResource enumComboConverter}}" />
             <CheckBox Name="WebOptimized" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"
@@ -81,8 +76,8 @@
 
             <TextBlock Text="Tracks:" FontSize="14" FontFamily="Sergio Light" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding VideoTrackInfo}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" />
-            <TextBlock Text="{Binding AudioTrackInfo}" Grid.Row="6" Grid.Column="1" />
-            <TextBlock Text="{Binding SubtitleTrackInfo}" Grid.Row="7" Grid.Column="1" />
+            <TextBlock Text="{Binding AudioTrackInfo}" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding SubtitleTrackInfo}" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" />
             <TextBlock Text="{Binding ChapterInfo}" Grid.Row="8" Grid.Column="1" />
 
             <TextBlock Text="Filters:" FontSize="14" FontFamily="Sergio Light" Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" />
@@ -90,61 +85,52 @@
         </Grid>
 
         <!-- Column 2 -->
-
-        <Grid Grid.Column="1">
+        <Grid Grid.Column="1" Margin="10,0,0,5">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            
-            <Grid>
-                <Image Source="{Binding PreviewImage}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="10,5,10,0" x:Name="previewImage" MouseMove="PreviewImage_OnMouseMove" Panel.ZIndex="0" />
 
-                <Border BorderThickness="1,1,1,1" CornerRadius="8,8,8,8"  VerticalAlignment="Center" HorizontalAlignment="Left"  Panel.ZIndex="1" cal:Message.Attach="[Event MouseDown] = [Action PreviousPreview]"
+            <Grid Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" MinHeight="26" />
+                    <RowDefinition Height="Auto" MinHeight="26" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Image Source="{Binding PreviewImage}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,10,0" x:Name="previewImage" MouseMove="PreviewImage_OnMouseMove" MouseLeave="PreviewImage_OnMouseLeave" Panel.ZIndex="0" Grid.ColumnSpan="2"
+                       MaxWidth="{Binding MaxWidth}" MaxHeight="{Binding MaxHeight}" />
+
+                <Border BorderThickness="1,1,1,1" CornerRadius="8,8,8,8"  VerticalAlignment="Center" HorizontalAlignment="Left"  Panel.ZIndex="1" cal:Message.Attach="[Event MouseDown] = [Action PreviousPreview]" Grid.ColumnSpan="2"
                         Background="Black" Opacity="0.75" Margin="20,0,0,0" Visibility="{Binding IsPreviousPreviewControlVisible, Converter={StaticResource boolToVisConverter}}" >
                     <TextBlock Text="&lt;" FontSize="30" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="8,3" Margin="0" />
                 </Border>
 
-                <Border BorderThickness="1,1,1,1" CornerRadius="8,8,8,8"  VerticalAlignment="Center" HorizontalAlignment="Right" Panel.ZIndex="1"  cal:Message.Attach="[Event MouseDown] = [Action NextPreview]"
+                <Border BorderThickness="1,1,1,1" CornerRadius="8,8,8,8"  VerticalAlignment="Center" HorizontalAlignment="Right" Panel.ZIndex="1"  cal:Message.Attach="[Event MouseDown] = [Action NextPreview]" Grid.ColumnSpan="2"
                         Background="Black" Opacity="0.75" Margin="0,0,20,0" Visibility="{Binding IsNextPreviewControlVisible, Converter={StaticResource boolToVisConverter}}">
-                        <TextBlock Text="&gt;" FontSize="30" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="8,3" Margin="0" />
+                    <TextBlock Text="&gt;" FontSize="30" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="8,3" Margin="0" />
                 </Border>
 
-                <Border BorderThickness="1,1,1,1" CornerRadius="8,8,8,8"  VerticalAlignment="Bottom" HorizontalAlignment="Center" 
+                <Border BorderThickness="1,1,1,1" CornerRadius="8,8,8,8"  VerticalAlignment="Bottom" HorizontalAlignment="Center"  Grid.ColumnSpan="2"
                         Background="Black" Opacity="0.75" Margin="0,5,0,10">
                     <TextBlock Text="{Binding PreviewInfo}" FontSize="14" Foreground="White" Padding="8,3" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}" />
                 </Border>
-            </Grid>
-          
 
-            <Grid Margin="10,5,0,0" Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="85" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                <TextBlock Text="Dimensions:" FontSize="14" FontFamily="Sergio Light" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding DimensionInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" />
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+                <TextBlock Text="Aspect:" FontSize="14" FontFamily="Sergio Light" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Visibility="Collapsed" />
+                <TextBlock Text="{Binding AspectInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="2" Grid.Column="1" Margin="5,0,0,0" Visibility="Collapsed" />
 
-                <Grid.Resources>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Margin" Value="0,0,0,0" />
-                        <Setter Property="Padding" Value="3" />
-                    </Style>
-                </Grid.Resources>
-
-                <TextBlock Text="Dimensions:" FontSize="14" FontFamily="Sergio Light" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBlock Text="{Binding DimensionInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="0" Grid.Column="1" />
-
-                <TextBlock Text="Aspect:" FontSize="14" FontFamily="Sergio Light" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Visibility="Collapsed" />
-                <TextBlock Text="{Binding AspectInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="1" Grid.Column="1" Visibility="Collapsed" />
             </Grid>
         </Grid>
 

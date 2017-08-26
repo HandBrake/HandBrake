@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Views
 {
     using System.Windows.Controls;
     using System.Windows.Input;
+    using System.Windows.Media;
 
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -41,6 +42,19 @@ namespace HandBrakeWPF.Views
 
                 ((ISummaryViewModel)this.DataContext).SetPreviewControlVisibility(leftHalf, rightHalf);
             }
+        }
+
+        private void PreviewImage_OnMouseLeave(object sender, MouseEventArgs e)
+        {
+            HitTestResult result = VisualTreeHelper.HitTest(this.previewImage, e.GetPosition(this.previewImage));
+
+            if (result != null && result.VisualHit.GetType() == typeof(Image))
+            {
+                e.Handled = true;
+                return;
+            }
+
+            ((ISummaryViewModel)this.DataContext).SetPreviewControlVisibility(false, false);
         }
     }
 }

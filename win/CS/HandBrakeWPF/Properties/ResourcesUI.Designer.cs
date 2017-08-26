@@ -19,7 +19,7 @@ namespace HandBrakeWPF.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ResourcesUI {
@@ -817,7 +817,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Picture.
+        ///   Looks up a localized string similar to Dimensions.
         /// </summary>
         public static string MainView_PictureTab {
             get {
@@ -2412,11 +2412,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Source.
+        /// </summary>
+        public static string SummaryView_NoSource {
+            get {
+                return ResourceManager.GetString("SummaryView_NoSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Subtitle Tracks.
         /// </summary>
         public static string SummaryView_NoSubtitleTracks {
             get {
                 return ResourceManager.GetString("SummaryView_NoSubtitleTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Tracks.
+        /// </summary>
+        public static string SummaryView_NoTracks {
+            get {
+                return ResourceManager.GetString("SummaryView_NoTracks", resourceCulture);
             }
         }
         

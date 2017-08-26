@@ -172,7 +172,7 @@
     <value>Pause</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
-    <value>Picture</value>
+    <value>Dimensions</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
     <value>Presets</value>
@@ -970,5 +970,11 @@ This will not affect your current settings in the Subtitle tab.</value>
   </data>
   <data name="SummaryView_PreviewInfo" xml:space="preserve">
     <value>Preview {0} of {1}</value>
+  </data>
+  <data name="SummaryView_NoSource" xml:space="preserve">
+    <value>No Source</value>
+  </data>
+  <data name="SummaryView_NoTracks" xml:space="preserve">
+    <value>No Tracks</value>
   </data>
 </root>

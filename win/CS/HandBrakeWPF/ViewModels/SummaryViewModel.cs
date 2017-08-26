@@ -17,6 +17,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Text;
     using System.Windows.Media.Imaging;
 
+    using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
     using HandBrakeWPF.EventArgs;
@@ -43,6 +44,10 @@ namespace HandBrakeWPF.ViewModels
         private Title currentTitle;
         private bool isMkv;
         private int selectedPreview = 2;
+
+        private bool isPreviousPreviewControlVisible;
+
+        private bool isNextPreviewControlVisible;
 
         public SummaryViewModel(IScan scanService, IUserSettingService userSettingService)
         {
@@ -126,6 +131,8 @@ namespace HandBrakeWPF.ViewModels
 
         public BitmapImage PreviewImage { get; set; }
         public bool PreviewNotAvailable { get; set; }
+        public int MaxWidth { get; set; }
+        public int MaxHeight { get; set; }
 
         public string VideoTrackInfo { get; set; }
         public string AudioTrackInfo { get; set; }
@@ -136,10 +143,37 @@ namespace HandBrakeWPF.ViewModels
         public string DimensionInfo { get; set; }
         public string AspectInfo { get; set; }
 
-        public bool IsPreviousPreviewControlVisible { get; set; } = false;
-        public bool IsNextPreviewControlVisible { get; set; } = false;
-        public bool IsPreviewInfoVisible { get; set; } = false;
+
+        public bool IsPreviewInfoVisible { get; set; }
         public string PreviewInfo { get; set; }
+
+        public bool IsPreviousPreviewControlVisible
+        {
+            get
+            {
+                return this.isPreviousPreviewControlVisible;
+            }
+            set
+            {
+                if (value == this.isPreviousPreviewControlVisible) return;
+                this.isPreviousPreviewControlVisible = value;
+                this.NotifyOfPropertyChange(() => this.IsPreviousPreviewControlVisible);
+            }
+        }
+
+        public bool IsNextPreviewControlVisible
+        {
+            get
+            {
+                return this.isNextPreviewControlVisible;
+            }
+            set
+            {
+                if (value == this.isNextPreviewControlVisible) return;
+                this.isNextPreviewControlVisible = value;
+                this.NotifyOfPropertyChange(() => this.IsNextPreviewControlVisible);
+            }
+        }
 
         #endregion
 
@@ -303,7 +337,6 @@ namespace HandBrakeWPF.ViewModels
             if (this.selectedPreview == maxPreview)
             {
                 this.IsNextPreviewControlVisible = false;
-                this.NotifyOfPropertyChange(() => this.IsNextPreviewControlVisible);
             }
         }
 
@@ -318,7 +351,6 @@ namespace HandBrakeWPF.ViewModels
             if (this.selectedPreview == 1)
             {
                 this.IsPreviousPreviewControlVisible = false;
-                this.NotifyOfPropertyChange(() => this.IsPreviousPreviewControlVisible);
             }
         }
 
@@ -341,9 +373,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.IsNextPreviewControlVisible = false;
             }
-
-            this.NotifyOfPropertyChange(() => this.IsPreviousPreviewControlVisible);
-            this.NotifyOfPropertyChange(() => this.IsNextPreviewControlVisible);
         }
 
         #region Private Methods
@@ -477,7 +506,7 @@ namespace HandBrakeWPF.ViewModels
                 filters.Add(ResourcesUI.SummaryView_Rotation);
             }
 
-            return string.Join(", ", filters).Trim();
+            return string.Join(", ", filters).TrimEnd(',').Trim();
         }
 
         private string GetAudioDescription()
@@ -492,13 +521,17 @@ namespace HandBrakeWPF.ViewModels
             if (this.Task.AudioTracks.Count >= 1)
             {
                 AudioTrack track1 = this.Task.AudioTracks[0];
-                desc.AppendLine(string.Format("{0}, {1}", EnumHelper<AudioEncoder>.GetDisplay(track1.Encoder), track1.MixDown));
+                HBMixdown mixdownName = HandBrakeEncoderHelpers.GetMixdown(track1.MixDown);
+                string mixdown = mixdownName != null ? ", " + mixdownName.DisplayName : string.Empty;
+                desc.AppendLine(string.Format("{0}{1}", EnumHelper<AudioEncoder>.GetDisplay(track1.Encoder), mixdown));
             }
 
             if (this.Task.AudioTracks.Count >= 2)
             {
                 AudioTrack track2 = this.Task.AudioTracks[1];
-                desc.AppendLine(string.Format("{0}, {1}", EnumHelper<AudioEncoder>.GetDisplay(track2.Encoder), track2.MixDown));
+                HBMixdown mixdownName = HandBrakeEncoderHelpers.GetMixdown(track2.MixDown);
+                string mixdown = mixdownName != null ? ", " + mixdownName.DisplayName : string.Empty;
+                desc.AppendLine(string.Format("{0}{1}", EnumHelper<AudioEncoder>.GetDisplay(track2.Encoder), mixdown));
             }
 
             if (this.Task.AudioTracks.Count > 2)
@@ -521,13 +554,17 @@ namespace HandBrakeWPF.ViewModels
             if (this.Task.SubtitleTracks.Count >= 1)
             {
                 SubtitleTrack track1 = this.Task.SubtitleTracks[0];
-                desc.AppendLine(string.Format("{0}, {1}", track1.SourceTrack, track1.Burned ? ResourcesUI.SummaryView_Burned : string.Empty));
+                string subtitleName = track1.IsSrtSubtitle ? track1.SrtFileName : track1.SourceTrack.ToString();
+                string burned = track1.Burned ? ", " + ResourcesUI.SummaryView_Burned : string.Empty;
+                desc.AppendLine(string.Format("{0}{1}", subtitleName, burned));
             }
 
             if (this.Task.SubtitleTracks.Count >= 2)
             {
                 SubtitleTrack track2 = this.Task.SubtitleTracks[1];
-                desc.AppendLine(string.Format("{0}, {1}", track2.SourceTrack, track2.Burned ? ResourcesUI.SummaryView_Burned : string.Empty));
+                string subtitleName = track2.IsSrtSubtitle ? track2.SrtFileName : track2.SourceTrack.ToString();
+                string burned = track2.Burned ? ", " + ResourcesUI.SummaryView_Burned : string.Empty;
+                desc.AppendLine(string.Format("{0}{1}", subtitleName, burned));
             }
 
             if (this.Task.SubtitleTracks.Count > 2)
@@ -540,7 +577,7 @@ namespace HandBrakeWPF.ViewModels
 
         private void ClearDisplay()
         {
-            this.VideoTrackInfo = string.Empty;
+            this.VideoTrackInfo = ResourcesUI.SummaryView_NoTracks;
             this.NotifyOfPropertyChange(() => this.VideoTrackInfo);
 
             this.AudioTrackInfo = string.Empty;
@@ -552,10 +589,10 @@ namespace HandBrakeWPF.ViewModels
             this.ChapterInfo = string.Empty;
             this.NotifyOfPropertyChange(() => this.ChapterInfo);
 
-            this.FiltersInfo = string.Empty;
+            this.FiltersInfo = ResourcesUI.SummaryView_NoFilters;
             this.NotifyOfPropertyChange(() => this.FiltersInfo);
 
-            this.DimensionInfo = string.Empty;
+            this.DimensionInfo = ResourcesUI.SummaryView_NoSource;
             this.NotifyOfPropertyChange(() => this.ChapterInfo);
 
             this.AspectInfo = string.Empty;
@@ -595,9 +632,13 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.PreviewNotAvailable = false;
                 this.PreviewImage = image;
+                this.MaxWidth = (int)image.Width;
+                this.MaxHeight = (int)image.Height;
                 this.IsPreviewInfoVisible = true;
                 this.NotifyOfPropertyChange(() => this.IsPreviewInfoVisible);
                 this.NotifyOfPropertyChange(() => this.PreviewImage);
+                this.NotifyOfPropertyChange(() => this.MaxWidth);
+                this.NotifyOfPropertyChange(() => this.MaxHeight);
             }
         }
 
