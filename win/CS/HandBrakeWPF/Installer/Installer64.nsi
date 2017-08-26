@@ -99,9 +99,9 @@ Function .onInit
  ;Run the uninstaller
   uninst:
    IfSilent +3
-   Exec $INSTDIR\uninst.exe
+   ExecWait $INSTDIR\uninst.exe
    goto done
-   Exec '"$INSTDIR\uninst.exe" /S'
+   ExecWait '"$INSTDIR\uninst.exe" /S'
   done:
 FunctionEnd
 
