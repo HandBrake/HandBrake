@@ -8,6 +8,7 @@ win/CS/**/*.Cache
 win/CS/**/*.user
 win/CS/packages/**/*
 win/CS/**/applicationhost.config
+*.ide
 
 # Xcode user data
 xcuserdata
@@ -29,4 +30,3 @@ gtk/depcomp
 gtk/install-sh
 gtk/ltmain.sh
 gtk/missing
-
