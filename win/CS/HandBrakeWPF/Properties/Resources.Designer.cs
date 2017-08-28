@@ -19,7 +19,7 @@ namespace HandBrakeWPF.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -1435,6 +1435,51 @@ namespace HandBrakeWPF.Properties {
         public static string Question {
             get {
                 return ResourceManager.GetString("Question", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake is already encoding a file..
+        /// </summary>
+        public static string Queue_AlreadyEncoding {
+            get {
+                return ResourceManager.GetString("Queue_AlreadyEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please stop the current encode. If the problem persists, please restart HandBrake..
+        /// </summary>
+        public static string Queue_AlreadyEncodingSolution {
+            get {
+                return ResourceManager.GetString("Queue_AlreadyEncodingSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to reset job status as it is not in an Error or Completed state.
+        /// </summary>
+        public static string Queue_UnableToResetJob {
+            get {
+                return ResourceManager.GetString("Queue_UnableToResetJob", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to restore queue file..
+        /// </summary>
+        public static string Queue_UnableToRestoreFile {
+            get {
+                return ResourceManager.GetString("Queue_UnableToRestoreFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file may be corrupted or from an older incompatible version of HandBrake.
+        /// </summary>
+        public static string Queue_UnableToRestoreFileExtended {
+            get {
+                return ResourceManager.GetString("Queue_UnableToRestoreFileExtended", resourceCulture);
             }
         }
         

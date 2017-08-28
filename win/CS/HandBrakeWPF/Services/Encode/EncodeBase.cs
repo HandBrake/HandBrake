@@ -131,7 +131,7 @@ namespace HandBrakeWPF.Services.Encode
         /// <param name="configuration">
         /// The configuration.
         /// </param>
-        public void ProcessLogs(string destination, bool isPreview, HBConfiguration configuration)
+        public string ProcessLogs(string destination, bool isPreview, HBConfiguration configuration)
         {
             try
             {
@@ -162,11 +162,15 @@ namespace HandBrakeWPF.Services.Encode
                 {
                     this.WriteFile(logContent, Path.Combine(configuration.SaveLogCopyDirectory, encodeLogFile));
                 }
+
+                return encodeLogFile;
             }
             catch (Exception exc)
             {
                 Debug.WriteLine(exc); // This exception doesn't warrent user interaction, but it should be logged
             }
+
+            return null;
         }
 
         /// <summary>

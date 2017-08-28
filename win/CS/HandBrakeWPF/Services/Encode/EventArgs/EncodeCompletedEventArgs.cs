@@ -10,12 +10,10 @@
 namespace HandBrakeWPF.Services.Encode.EventArgs
 {
     using System;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Encode Progress Event Args
     /// </summary>
-    [DataContract]
     public class EncodeCompletedEventArgs : EventArgs
     {
         /// <summary>
@@ -33,36 +31,50 @@ namespace HandBrakeWPF.Services.Encode.EventArgs
         /// <param name="filename">
         /// The filename.
         /// </param>
-        public EncodeCompletedEventArgs(bool sucessful, Exception exception, string errorInformation, string filename)
+        /// <param name="logPath">
+        /// The path and filename of the log for this encode.
+        /// </param>
+        /// <param name="finalSizeInBytes">
+        /// The final size of the file in bytes.
+        /// </param>
+        public EncodeCompletedEventArgs(bool sucessful, Exception exception, string errorInformation, string filename, string logPath, long finalSizeInBytes)
         {
             this.Successful = sucessful;
             this.Exception = exception;
             this.ErrorInformation = errorInformation;
             this.FileName = filename;
+            this.ActivityLogPath = logPath;
+            this.FinalFilesizeInBytes = finalSizeInBytes;
         }
 
         /// <summary>
         /// Gets or sets the file name.
         /// </summary>
-        [DataMember]
-        public string FileName { get; set; }
+        public string FileName { get; private set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether Successful.
         /// </summary>
-        [DataMember]
-        public bool Successful { get; set; }
+        public bool Successful { get; private set; }
 
         /// <summary>
         /// Gets or sets Exception.
         /// </summary>
-        [DataMember]
-        public Exception Exception { get; set; }
+        public Exception Exception { get; private set; }
 
         /// <summary>
         /// Gets or sets ErrorInformation.
         /// </summary>
-        [DataMember]
-        public string ErrorInformation { get; set; }
+        public string ErrorInformation { get; private set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ActivityLogPath { get; private set; }
+
+        /// <summary>
+        /// Final filesize in bytes
+        /// </summary>
+        public long FinalFilesizeInBytes { get; private set; }
     }
 }

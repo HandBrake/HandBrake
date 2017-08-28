@@ -48,7 +48,6 @@ namespace HandBrakeWPF.Services.Queue
         /// </summary>
         private static readonly object QueueLock = new object();
         private readonly IUserSettingService userSettingService;
-        private readonly IErrorService errorService;
         private readonly BindingList<QueueTask> queue = new BindingList<QueueTask>();
         private readonly string queueFile;
         private bool clearCompleted;
@@ -72,10 +71,9 @@ namespace HandBrakeWPF.Services.Queue
         /// <exception cref="ArgumentNullException">
         /// Services are not setup
         /// </exception>
-        public QueueProcessor(IEncode encodeService, IUserSettingService userSettingService, IErrorService errorService)
+        public QueueProcessor(IEncode encodeService, IUserSettingService userSettingService)
         {
             this.userSettingService = userSettingService;
-            this.errorService = errorService;
             this.EncodeService = encodeService;
 
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
@@ -318,19 +316,9 @@ namespace HandBrakeWPF.Services.Queue
         {
             if (this.queue.Count > 0)
             {
-                QueueTask job = this.queue.FirstOrDefault(q => q.Status == QueueItemStatus.Waiting);
-                if (job != null)
-                {
-                    job.Status = QueueItemStatus.InProgress;
-                    this.LastProcessedJob = job;
-                    this.InvokeQueueChanged(EventArgs.Empty);
-                }
-
-                this.BackupQueue(string.Empty);
-                return job;
+                return this.queue.FirstOrDefault(q => q.Status == QueueItemStatus.Waiting);
             }
 
-            this.BackupQueue(string.Empty);
             return null;
         }
 
@@ -399,7 +387,7 @@ namespace HandBrakeWPF.Services.Queue
             if (job.Status != QueueItemStatus.Error && job.Status != QueueItemStatus.Completed)
             {
                 throw new GeneralApplicationException(
-                    "Job Error", "Unable to reset job status as it is not in an Error or Completed state", null);
+                    Resources.Error, Resources.Queue_UnableToResetJob, null);
             }
 
             job.Status = QueueItemStatus.Waiting;
@@ -437,10 +425,7 @@ namespace HandBrakeWPF.Services.Queue
                         }
                         catch (Exception exc)
                         {
-                            throw new GeneralApplicationException(
-                                "Unable to restore queue file.",
-                                "The file may be corrupted or from an older incompatible version of HandBrake",
-                                exc);
+                            throw new GeneralApplicationException(Resources.Queue_UnableToRestoreFile, Resources.Queue_UnableToRestoreFileExtended, exc);
                         }
 
                         if (list != null)
@@ -544,6 +529,9 @@ namespace HandBrakeWPF.Services.Queue
         private void EncodeServiceEncodeCompleted(object sender, EncodeCompletedEventArgs e)
         {
             this.LastProcessedJob.Status = QueueItemStatus.Completed;
+            this.LastProcessedJob.Statistics.EndTime = DateTime.Now;
+            this.LastProcessedJob.Statistics.CompletedActivityLogPath = e.ActivityLogPath;
+            this.LastProcessedJob.Statistics.FinalFileSize = e.FinalFilesizeInBytes;
 
             // Clear the completed item of the queue if the setting is set.
             if (this.clearCompleted)
@@ -638,10 +626,15 @@ namespace HandBrakeWPF.Services.Queue
                     LogService.GetLogger().LogMessage(Resources.PauseOnLowDiskspace, LogMessageType.ScanOrEncode, LogLevel.Info);
                     job.Status = QueueItemStatus.Waiting;
                     this.Pause();
+                    this.BackupQueue(string.Empty);
                     return; // Don't start the next job.
                 }
 
+                job.Status = QueueItemStatus.InProgress;
+                job.Statistics.StartTime = DateTime.Now;
+                this.LastProcessedJob = job;
                 this.IsProcessing = true;
+                this.InvokeQueueChanged(EventArgs.Empty);
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
                 this.EncodeService.Start(job.Task, job.Configuration);
             }
@@ -653,6 +646,8 @@ namespace HandBrakeWPF.Services.Queue
                 // Fire the event to tell connected services.
                 this.OnQueueCompleted(new QueueCompletedEventArgs(false));
             }
+
+            this.BackupQueue(string.Empty);
         }
 
         #endregion

@@ -239,6 +239,7 @@
     <Compile Include="Services\Presets\Interfaces\IPresetService.cs" />
     <Compile Include="Services\Interfaces\IUserSettingService.cs" />
     <Compile Include="Services\Presets\PresetService.cs" />
+    <Compile Include="Services\Queue\Model\QueueStats.cs" />
     <Compile Include="Services\Queue\Model\QueueTaskContainer.cs" />
     <Compile Include="Services\Queue\QueueProcessor.cs" />
     <Compile Include="Services\Queue\Model\QueueItemStatus.cs" />

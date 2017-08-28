@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Services.Encode
 {
     using System;
     using System.Diagnostics;
+    using System.IO;
 
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.EventArgs;
@@ -21,15 +22,16 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrake.ApplicationServices.Services.Logging.Model;
 
     using HandBrakeWPF.Exceptions;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Factories;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
+    using EncodeTask = Model.EncodeTask;
+    using IEncode = Interfaces.IEncode;
 
     /// <summary>
     /// LibHB Implementation of IEncode
     /// </summary>
-    public class LibEncode : HandBrakeWPF.Services.Encode.EncodeBase, IEncode
+    public class LibEncode : EncodeBase, IEncode
     {
         #region Private Variables
 
@@ -63,7 +65,7 @@ namespace HandBrakeWPF.Services.Encode
                 // Sanity Checking and Setup
                 if (this.IsEncoding)
                 {
-                    throw new GeneralApplicationException("HandBrake is already encoding a file.", "Please stop the current encode. If the problem persists, please restart HandBrake.", null);
+                    throw new GeneralApplicationException(Resources.Queue_AlreadyEncoding, Resources.Queue_AlreadyEncodingSolution, null);
                 }
 
                 // Setup
@@ -99,7 +101,7 @@ namespace HandBrakeWPF.Services.Encode
                 this.IsEncoding = false;
 
                 this.ServiceLogMessage("Failed to start encoding ..." + Environment.NewLine + exc);
-                this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", task.Source));
+                this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", task.Source, null, 0));
             }
         }
 
@@ -203,14 +205,36 @@ namespace HandBrakeWPF.Services.Encode
             this.ServiceLogMessage("Encode Completed ...");
            
             // Handling Log Data 
-            this.ProcessLogs(this.currentTask.Destination, this.isPreviewInstance, this.currentConfiguration);
+            string hbLog = this.ProcessLogs(this.currentTask.Destination, this.isPreviewInstance, this.currentConfiguration);
+            long filesize = this.GetFilesize(this.currentTask.Destination);
 
             // Raise the Encode Completed EVent.
             this.InvokeEncodeCompleted(
                 e.Error
-                    ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Destination)
-                    : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Destination));
+                    ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Destination, hbLog, filesize)
+                    : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Destination, hbLog, filesize));
         }
+
+        private long GetFilesize(string destination)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(destination) && File.Exists(destination))
+                {
+                    return new FileInfo(destination).Length;
+                }
+
+                return 0;
+            }
+            catch (Exception e)
+            {
+                this.ServiceLogMessage("Unable to get final filesize ..." + Environment.NewLine + e);
+                Debug.WriteLine(e);
+            }
+
+            return 0;
+        }
+
         #endregion
     }
 }

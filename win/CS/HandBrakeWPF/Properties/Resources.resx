@@ -849,4 +849,19 @@ Remaining Time: {4}</value>
   <data name="Main_LowDiskspace" xml:space="preserve">
     <value>Your destination directory is low on diskspace. Please free up some disk space on your destination drive. Alternatively you can change the level at which this alert triggers in Options. </value>
   </data>
+  <data name="Queue_UnableToResetJob" xml:space="preserve">
+    <value>Unable to reset job status as it is not in an Error or Completed state</value>
+  </data>
+  <data name="Queue_UnableToRestoreFile" xml:space="preserve">
+    <value>Unable to restore queue file.</value>
+  </data>
+  <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
+    <value>The file may be corrupted or from an older incompatible version of HandBrake</value>
+  </data>
+  <data name="Queue_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake is already encoding a file.</value>
+  </data>
+  <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
+    <value>Please stop the current encode. If the problem persists, please restart HandBrake.</value>
+  </data>
 </root>

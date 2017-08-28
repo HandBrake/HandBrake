@@ -35,6 +35,7 @@ namespace HandBrakeWPF.Services.Queue.Model
             this.Status = QueueItemStatus.Waiting;
             id = id + 1;
             this.Id = string.Format("{0}.{1}", GeneralUtilities.ProcessId, id);
+            this.Statistics = new QueueStats();
         }
 
         /// <summary>
@@ -58,6 +59,8 @@ namespace HandBrakeWPF.Services.Queue.Model
 
             id = id + 1;
             this.Id = string.Format("{0}.{1}", GeneralUtilities.ProcessId, id);
+
+            this.Statistics = new QueueStats();
         }
 
         public string Id { get; }
@@ -93,6 +96,8 @@ namespace HandBrakeWPF.Services.Queue.Model
         /// Gets or sets the configuration.
         /// </summary>
         public HBConfiguration Configuration { get; set; }
+
+        public QueueStats Statistics { get; set; }
 
         #endregion
 
