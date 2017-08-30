@@ -16,13 +16,14 @@ namespace HandBrakeWPF.Services.Queue.Model
     public class QueueStats : PropertyChangedBase
     {
         private DateTime startTime;
-
         private DateTime endTime;
-
         private long? finalFileSize;
+        private DateTime pausedStartPoint;
+        private TimeSpan pausedTimespan;
 
         public QueueStats()
         {
+            this.pausedTimespan = new TimeSpan();
         }
 
         public DateTime StartTime
@@ -55,12 +56,19 @@ namespace HandBrakeWPF.Services.Queue.Model
             }
         }
 
+        public TimeSpan PausedDuration
+        {
+            get
+            {
+                return this.pausedTimespan;
+            }
+        }
+
         public TimeSpan Duration
         {
             get
             {
-                // TODO, take into account Paused Duration. Requires some refactoring first.
-                return this.EndTime - this.StartTime;
+                return this.EndTime - this.StartTime - this.PausedDuration;
             }
         }
 
@@ -96,5 +104,18 @@ namespace HandBrakeWPF.Services.Queue.Model
         }
 
         public string CompletedActivityLogPath { get; set; }
+
+        public void SetPaused(bool isPaused)
+        {
+            if (isPaused)
+            {
+                this.pausedStartPoint = DateTime.Now;
+            }
+            else
+            {
+                TimeSpan pausedDuration = DateTime.Now - this.pausedStartPoint;
+                this.pausedTimespan = this.PausedDuration.Add(pausedDuration);
+            }
+        }
     }
 }

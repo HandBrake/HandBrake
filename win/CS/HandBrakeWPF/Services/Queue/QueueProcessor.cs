@@ -470,6 +470,7 @@ namespace HandBrakeWPF.Services.Queue
             if (this.EncodeService.IsEncoding && !this.EncodeService.IsPasued)
             {
                 this.EncodeService.Pause();
+                this.LastProcessedJob.Statistics.SetPaused(true);
             }
 
             this.Pause();
@@ -499,6 +500,7 @@ namespace HandBrakeWPF.Services.Queue
                 this.EncodeService.Resume();
                 this.IsProcessing = true;
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(this.LastProcessedJob));
+                this.LastProcessedJob.Statistics.SetPaused(false);
             }
 
             if (!this.EncodeService.IsEncoding)
