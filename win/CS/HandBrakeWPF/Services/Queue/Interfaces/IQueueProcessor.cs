@@ -155,11 +155,6 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         void MoveUp(int index);
 
         /// <summary>
-        /// Requests a pause of the encode queue.
-        /// </summary>
-        void Pause();
-
-        /// <summary>
         /// Remove a job from the Queue.
         /// This method is Thread Safe
         /// </summary>
@@ -192,6 +187,21 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// The clear Completed.
         /// </param>
         void Start(bool clearCompleted);
+
+        /// <summary>
+        /// Stop the current encode and pause the queue.
+        /// </summary>
+        void Stop();
+
+        /// <summary>
+        /// Pause the queue but allow the current encode to complete.
+        /// </summary>
+        void Pause();
+
+        /// <summary>
+        /// Pause and Encode and the Queue.
+        /// </summary>
+        void PauseEncode();
 
         #endregion
     }

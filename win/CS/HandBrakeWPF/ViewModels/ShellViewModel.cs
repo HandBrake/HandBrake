@@ -193,7 +193,7 @@ namespace HandBrakeWPF.ViewModels
             if (processor != null && processor.EncodeService.IsEncoding)
             {
                 MessageBoxResult result =
-                    errorService.ShowMessageBox(
+                    this.errorService.ShowMessageBox(
                         Resources.ShellViewModel_CanClose,
                         Resources.Warning,
                         MessageBoxButton.YesNo,
@@ -201,8 +201,7 @@ namespace HandBrakeWPF.ViewModels
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    processor.Pause();
-                    processor.EncodeService.Stop();
+                    processor.Stop();
                     if (this.MainViewModel != null)
                     {
                         this.MainViewModel.Shutdown();

@@ -34,7 +34,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.EventArgs;
-    using HandBrakeWPF.Services.Encode.Interfaces;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
@@ -77,7 +76,6 @@ namespace HandBrakeWPF.ViewModels
         private readonly INotifyIconService notifyIconService;
         private readonly IUserSettingService userSettingService;
         private readonly IScan scanService;
-        private readonly IEncode encodeService;
         private readonly Win7 windowsSeven = new Win7();
         private string windowName;
         private string sourceLabel;
@@ -111,9 +109,6 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         /// <param name="scanService">
         /// The scan Service.
-        /// </param>
-        /// <param name="encodeService">
-        /// The encode Service.
         /// </param>
         /// <param name="presetService">
         /// The preset Service.
@@ -165,7 +160,7 @@ namespace HandBrakeWPF.ViewModels
         /// The Meta Data View Model
         /// </param>
         /// <param name="notifyIconService">Wrapper around the WinForms NotifyIcon for this app. </param>
-        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IEncode encodeService, IPresetService presetService, 
+        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IPresetService presetService, 
             IErrorService errorService, IUpdateService updateService, 
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, ISummaryViewModel summaryViewModel,
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
@@ -173,7 +168,6 @@ namespace HandBrakeWPF.ViewModels
             IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel, INotifyIconService notifyIconService)
         {
             this.scanService = scanService;
-            this.encodeService = encodeService;
             this.presetService = presetService;
             this.errorService = errorService;
             this.updateService = updateService;
@@ -208,6 +202,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.JobProcessingStarted += this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.QueueCompleted += this.QueueCompleted;
             this.queueProcessor.QueueChanged += this.QueueChanged;
+            this.queueProcessor.QueuePaused += this.QueueProcessor_QueuePaused;
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
             this.userSettingService.SettingChanged += this.UserSettingServiceSettingChanged;
 
@@ -1262,16 +1257,17 @@ namespace HandBrakeWPF.ViewModels
         public void Shutdown()
         {
             // Shutdown Service
-            this.encodeService.Stop();
+            this.queueProcessor.Stop();
             this.presetService.SaveCategoryStates();
 
             // Unsubscribe from Events.
             this.scanService.ScanStarted -= this.ScanStared;
             this.scanService.ScanCompleted -= this.ScanCompleted;
             this.scanService.ScanStatusChanged -= this.ScanStatusChanged;
-
+            this.queueProcessor.QueuePaused -= this.QueueProcessor_QueuePaused;
             this.queueProcessor.QueueCompleted -= this.QueueCompleted;
             this.queueProcessor.QueueChanged -= this.QueueChanged;
+          
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
             this.userSettingService.SettingChanged -= this.UserSettingServiceSettingChanged;
@@ -1592,9 +1588,9 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Check if we already have jobs, and if we do, just start the queue.
-            if (this.queueProcessor.Count != 0 || this.encodeService.IsPasued)
+            if (this.queueProcessor.Count != 0 || this.queueProcessor.EncodeService.IsPasued)
             {
-                if (this.encodeService.IsPasued)
+                if (this.queueProcessor.EncodeService.IsPasued)
                 {
                     this.IsEncoding = true;
                 }
@@ -1665,8 +1661,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PauseEncode()
         {
-            this.queueProcessor.Pause();
-            this.encodeService.Pause();
+            this.queueProcessor.PauseEncode();
             this.IsEncoding = false;
         }
 
@@ -1675,8 +1670,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void StopEncode()
         {
-            this.queueProcessor.Pause();
-            this.encodeService.Stop();
+            this.queueProcessor.Stop();
         }
 
         /// <summary>
@@ -2472,6 +2466,17 @@ namespace HandBrakeWPF.ViewModels
                   this.NotifyOfPropertyChange(() => this.QueueLabel);
                   this.NotifyOfPropertyChange(() => this.StartLabel);
               });
+        }
+
+        private void QueueProcessor_QueuePaused(object sender, EventArgs e)
+        {
+            Execute.OnUIThread(
+                () =>
+                {
+                    this.ProgramStatusLabel = Resources.Main_QueuePaused;
+                    this.NotifyOfPropertyChange(() => this.QueueLabel);
+                    this.NotifyOfPropertyChange(() => this.StartLabel);
+                });
         }
 
         /// <summary>

@@ -462,7 +462,17 @@ namespace HandBrakeWPF.Services.Queue
         public void Pause()
         {
             this.IsProcessing = false;
-            this.InvokeQueuePaused(EventArgs.Empty);     
+            this.InvokeQueuePaused(EventArgs.Empty);
+        }
+
+        public void PauseEncode()
+        {
+            if (this.EncodeService.IsEncoding && !this.EncodeService.IsPasued)
+            {
+                this.EncodeService.Pause();
+            }
+
+            this.Pause();
         }
 
         /// <summary>
@@ -488,12 +498,23 @@ namespace HandBrakeWPF.Services.Queue
             {
                 this.EncodeService.Resume();
                 this.IsProcessing = true;
+                this.InvokeJobProcessingStarted(new QueueProgressEventArgs(this.LastProcessedJob));
             }
 
             if (!this.EncodeService.IsEncoding)
             {
                 this.ProcessNextJob();
             }
+        }
+
+        public void Stop()
+        {
+            if (this.EncodeService.IsEncoding)
+            {
+                this.EncodeService.Stop();
+            }
+            this.IsProcessing = false;
+            this.InvokeQueuePaused(EventArgs.Empty);
         }
 
         #endregion
@@ -612,7 +633,7 @@ namespace HandBrakeWPF.Services.Queue
                 handler(this, e);
             }
         }
-        
+
         /// <summary>
         /// Run through all the jobs on the queue.
         /// </summary>
