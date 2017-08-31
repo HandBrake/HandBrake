@@ -9,6 +9,7 @@
 #import "HBJob+HBJobConversion.h"
 #import "HBDVDDetector.h"
 #import "HBUtilities.h"
+#import "HBImageUtilities.h"
 
 #import "HBStateFormatter+Private.h"
 #import "HBTitle+Private.h"
@@ -314,178 +315,6 @@ typedef void (^HBCoreCleanupHandler)(void);
 }
 
 #pragma mark - Preview images
-
-- (CGImageRef)CGImageRotatedByAngle:(CGImageRef)imgRef angle:(CGFloat)angle flipped:(BOOL)flipped CF_RETURNS_RETAINED
-{
-    CGFloat angleInRadians = angle * (M_PI / 180);
-    CGFloat width = CGImageGetWidth(imgRef);
-    CGFloat height = CGImageGetHeight(imgRef);
-
-    CGRect imgRect = CGRectMake(0, 0, width, height);
-    CGAffineTransform transform = CGAffineTransformMakeRotation(angleInRadians);
-    CGRect rotatedRect = CGRectApplyAffineTransform(imgRect, transform);
-
-    CGColorSpaceRef colorSpace = CGImageGetColorSpace(imgRef);
-    CGContextRef bmContext = CGBitmapContextCreate(NULL,
-                                                   (size_t)rotatedRect.size.width,
-                                                   (size_t)rotatedRect.size.height,
-                                                   8,
-                                                   0,
-                                                   colorSpace,
-                                                   kCGImageAlphaPremultipliedFirst);
-    CGContextSetAllowsAntialiasing(bmContext, FALSE);
-    CGContextSetInterpolationQuality(bmContext, kCGInterpolationNone);
-
-    // Rotate
-    CGContextTranslateCTM(bmContext,
-                          + (rotatedRect.size.width / 2),
-                          + (rotatedRect.size.height / 2));
-    CGContextRotateCTM(bmContext, -angleInRadians);
-    CGContextTranslateCTM(bmContext,
-                          - (rotatedRect.size.width / 2),
-                          - (rotatedRect.size.height / 2));
-
-    // Flip
-    if (flipped)
-    {
-        CGAffineTransform flipHorizontal = CGAffineTransformMake(-1, 0, 0, 1, floor(rotatedRect.size.width), 0);
-        CGContextConcatCTM(bmContext, flipHorizontal);
-    }
-
-    CGContextDrawImage(bmContext,
-                       CGRectMake((rotatedRect.size.width - width)/2.0f,
-                                  (rotatedRect.size.height - height)/2.0f,
-                                  width,
-                                  height),
-                       imgRef);
-
-    CGImageRef rotatedImage = CGBitmapContextCreateImage(bmContext);
-    CFRelease(bmContext);
-
-    return rotatedImage;
-}
-
-- (CGColorSpaceRef)copyColorSpaceWithColorPrimaries:(int)colorPrimaries
-{
-    const CGFloat whitePoint[] = {0.95047, 1.0, 1.08883};
-    const CGFloat blackPoint[] = {0, 0, 0};
-
-    // See https://developer.apple.com/library/content/technotes/tn2257/_index.html
-    const CGFloat gamma[] = {1.961, 1.961, 1.961};
-
-    // RGB/XYZ Matrices (D65 white point)
-    switch (colorPrimaries) {
-        case HB_COLR_PRI_EBUTECH:
-        {
-            // Rec. 601, 625 line
-            const CGFloat matrix[] = {0.4305538, 0.2220043, 0.0201822,
-                                      0.3415498, 0.7066548, 0.1295534,
-                                      0.1783523, 0.0713409, 0.9393222};
-            return CGColorSpaceCreateCalibratedRGB(whitePoint, blackPoint, gamma, matrix);
-        }
-        case HB_COLR_PRI_SMPTEC:
-        {
-            // Rec. 601, 525 line
-            const CGFloat matrix[] = {0.3935209, 0.2123764, 0.0187391,
-                                      0.3652581, 0.7010599, 0.1119339,
-                                      0.1916769, 0.0865638, 0.9583847};
-            return CGColorSpaceCreateCalibratedRGB(whitePoint, blackPoint, gamma, matrix);
-        }
-        case HB_COLR_PRI_BT2020:
-        {
-            // Rec. 2020
-            const CGFloat matrix[] = {0.6369580, 0.2627002, 0.0000000,
-                                      0.1446169, 0.6779981, 0.0280727,
-                                      0.1688810, 0.0593017, 1.0609851};
-            return CGColorSpaceCreateCalibratedRGB(whitePoint, blackPoint, gamma, matrix);
-        }
-        case HB_COLR_PRI_BT709:
-        default:
-        {
-            // Rec. 709
-            const CGFloat matrix[] = {0.4124564, 0.2126729, 0.0193339,
-                                      0.3575761, 0.7151522, 0.1191920,
-                                      0.1804375, 0.0721750, 0.9503041};
-            return CGColorSpaceCreateCalibratedRGB(whitePoint, blackPoint, gamma, matrix);
-        }
-    }
-}
-
-- (CGColorSpaceRef)copyColorSpaceWithPrimaries:(int)primaries transfer:(int)transfer matrix:(int)matrix
-{
-    if (NSAppKitVersionNumber < NSAppKitVersionNumber10_11)
-    {
-        return [self copyColorSpaceWithColorPrimaries:primaries];
-    }
-    
-    CFStringRef primariesKey = NULL;
-    switch (primaries)
-    {
-        case HB_COLR_PRI_EBUTECH:
-            primariesKey = kCVImageBufferColorPrimaries_EBU_3213;
-            break;
-
-        case HB_COLR_PRI_SMPTEC:
-            primariesKey = kCVImageBufferColorPrimaries_SMPTE_C;
-            break;
-
-        case HB_COLR_PRI_BT2020:
-            primariesKey = kCVImageBufferColorPrimaries_ITU_R_2020;
-            break;
-
-        case HB_COLR_PRI_BT709:
-        default:
-            primariesKey = kCVImageBufferColorPrimaries_ITU_R_709_2;
-    }
-
-    CFStringRef transferKey = NULL;
-    switch (transfer)
-    {
-        case HB_COLR_TRA_SMPTE240M:
-            transferKey = kCVImageBufferTransferFunction_SMPTE_240M_1995;
-            break;
-
-        case HB_COLR_TRA_BT2020_10:
-        case HB_COLR_TRA_BT2020_12:
-            transferKey = kCVImageBufferTransferFunction_ITU_R_2020;
-            break;
-
-        case HB_COLR_TRA_BT709:
-        default:
-            transferKey = kCVImageBufferTransferFunction_ITU_R_709_2;
-    }
-
-    CFStringRef matrixKey = NULL;
-    switch (matrix)
-    {
-        case HB_COLR_MAT_SMPTE170M:
-            matrixKey = kCVImageBufferYCbCrMatrix_ITU_R_601_4;
-            break;
-
-        case HB_COLR_MAT_SMPTE240M:
-            matrixKey = kCVImageBufferYCbCrMatrix_SMPTE_240M_1995;
-            break;
-
-        case HB_COLR_MAT_BT2020_NCL:
-        case HB_COLR_MAT_BT2020_CL:
-            matrixKey = kCVImageBufferYCbCrMatrix_ITU_R_2020;
-            break;
-
-        case HB_COLR_MAT_BT709:
-        default:
-            matrixKey = kCVImageBufferYCbCrMatrix_ITU_R_709_2;;
-    }
-
-    const void *keys[3] = { kCVImageBufferColorPrimariesKey, kCVImageBufferTransferFunctionKey, kCVImageBufferYCbCrMatrixKey };
-    const void *values[3] = { primariesKey, transferKey, matrixKey};
-    CFDictionaryRef attachments = CFDictionaryCreate(NULL, keys, values, 3, &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-
-    CGColorSpaceRef colorSpace = CVImageBufferCreateColorSpaceFromAttachments(attachments);
-
-    CFRelease(attachments);
-
-    return colorSpace;
-}
         
 - (CGImageRef)copyImageAtIndex:(NSUInteger)index
                       forTitle:(HBTitle *)title
@@ -516,9 +345,9 @@ typedef void (^HBCoreCleanupHandler)(void);
         CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNone;
         CFMutableDataRef imgData = CFDataCreateMutable(kCFAllocatorDefault, 3 * image->width * image->height);
         CGDataProviderRef provider = CGDataProviderCreateWithCFData(imgData);
-        CGColorSpaceRef colorSpace = [self copyColorSpaceWithPrimaries:title.hb_title->color_prim
-                                                              transfer:title.hb_title->color_transfer
-                                                                matrix:title.hb_title->color_matrix];
+        CGColorSpaceRef colorSpace = copyColorSpace(title.hb_title->color_prim,
+                                                    title.hb_title->color_transfer,
+                                                    title.hb_title->color_matrix);
 
         img = CGImageCreate(image->width,
                             image->height,
@@ -555,7 +384,7 @@ typedef void (^HBCoreCleanupHandler)(void);
 
     if (angle || flipped)
     {
-        CGImageRef rotatedImg = [self CGImageRotatedByAngle:img angle:angle flipped:flipped];
+        CGImageRef rotatedImg = CGImageRotated(img, angle, flipped);
         CGImageRelease(img);
         return rotatedImg;
     }
