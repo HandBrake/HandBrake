@@ -115,45 +115,14 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 char *video_option_tooltip = NULL;
 
-G_MODULE_EXPORT void
-video_preset_slider_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-    ghb_widget_to_setting(ud->settings, widget);
-
-    int presetIndex = ghb_dict_get_int(ud->settings, "VideoPresetSlider");
-    const char * const *video_presets;
-    const char *preset = "medium";
-    int count;
-
-    int encoder = ghb_get_video_encoder(ud->settings);
-    video_presets = hb_video_encoder_get_presets(encoder);
-    if (video_presets != NULL)
-    {
-        for (count = 0; video_presets[count]; count++);
-        if (presetIndex < count)
-        {
-            preset = video_presets[presetIndex];
-        }
-    }
-
-    ghb_set_video_preset(ud->settings, encoder, preset);
-    GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
-    ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
-
-    ghb_check_dependency(ud, widget, NULL);
-    ghb_clear_presets_selection(ud);
-}
-
-void
-ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
+static void
+update_adv_settings_tooltip(signal_user_data_t *ud)
 {
     if (video_option_tooltip == NULL)
     {
         GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
         video_option_tooltip = gtk_widget_get_tooltip_text(eo);
     }
-
-    ghb_widget_to_setting(ud->settings, widget);
 
     int encoder = ghb_get_video_encoder(ud->settings);
     if (!ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions") &&
@@ -261,6 +230,43 @@ ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
         gtk_widget_set_tooltip_text(eo, tt);
         g_free(tt);
     }
+}
+
+G_MODULE_EXPORT void
+video_preset_slider_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+
+    int presetIndex = ghb_dict_get_int(ud->settings, "VideoPresetSlider");
+    const char * const *video_presets;
+    const char *preset = "medium";
+    int count;
+
+    int encoder = ghb_get_video_encoder(ud->settings);
+    video_presets = hb_video_encoder_get_presets(encoder);
+    if (video_presets != NULL)
+    {
+        for (count = 0; video_presets[count]; count++);
+        if (presetIndex < count)
+        {
+            preset = video_presets[presetIndex];
+        }
+    }
+
+    ghb_set_video_preset(ud->settings, encoder, preset);
+    GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
+    ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
+
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    update_adv_settings_tooltip(ud);
+}
+
+void
+ghb_video_setting_changed(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    update_adv_settings_tooltip(ud);
 
     ghb_check_dependency(ud, widget, NULL);
     ghb_clear_presets_selection(ud);
