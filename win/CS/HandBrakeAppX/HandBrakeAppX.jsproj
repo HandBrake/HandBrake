@@ -81,9 +81,12 @@
   <!-- To modify your build process, add your task inside one of the targets below then uncomment
        that target and the DisableFastUpToDateCheck PropertyGroup. 
        Other similar extension points exist, see Microsoft.Common.targets. -->
-  <!--<Target Name="BeforeBuild">
+  <Target Name="BeforeBuild">
+    <Exec Command="xcopy ..\HandBrakeWPF\bin\$(Platform)\Release\*.exe win32 /I /Y" />
+    <Exec Command="xcopy ..\HandBrakeWPF\bin\$(Platform)\Release\*.dll win32 /I /Y" />
+    <Exec Command="xcopy ..\HandBrakeWPF\bin\$(Platform)\Release\*.config win32 /I /Y" />
   </Target>
-    <Target Name="AfterBuild">
+  <!-- <Target Name="AfterBuild">
   </Target>
   <PropertyGroup>
     <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
