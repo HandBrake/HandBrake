@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.ApplicationServices", "HandBrake.ApplicationServices\HandBrake.ApplicationServices.csproj", "{087A2BA8-BAC2-4577-A46F-07FF9D420016}"
 EndProject
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeTools", "HandBrakeTools\HandBrakeTools.csproj", "{3BAEBAC7-9042-4863-876F-C550ADCA66DC}"
+EndProject
+Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "HandBrakeAppX", "HandBrakeAppX\HandBrakeAppX.jsproj", "{6E855245-E402-4C0F-BB0B-EEB63082F6AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,8 +48,19 @@ Global
 		{3BAEBAC7-9042-4863-876F-C550ADCA66DC}.Release|x64.Build.0 = Release|Any CPU
 		{3BAEBAC7-9042-4863-876F-C550ADCA66DC}.Release|x86.ActiveCfg = Release|Any CPU
 		{3BAEBAC7-9042-4863-876F-C550ADCA66DC}.Release|x86.Build.0 = Release|Any CPU
+		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Debug|x64.ActiveCfg = Debug|x64
+		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Debug|x64.Build.0 = Debug|x64
+		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Debug|x64.Deploy.0 = Debug|x64
+		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Debug|x86.ActiveCfg = Debug|x64
+		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Release|x64.ActiveCfg = Release|x64
+		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Release|x64.Build.0 = Release|x64
+		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Release|x64.Deploy.0 = Release|x64
+		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F2A9851D-E91D-41D4-9C3C-636A61503FCB}
 	EndGlobalSection
 EndGlobal

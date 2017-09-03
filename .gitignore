@@ -8,6 +8,10 @@ win/CS/**/*.Cache
 win/CS/**/*.user
 win/CS/packages/**/*
 win/CS/**/applicationhost.config
+win/CS/HandBrakeAppX/win32/**/*
+win/CS/HandBrakeAppX/bld/**/*
+win/CS/HandBrakeAppX/AppPackages/**/*
+win/CS/HandBrakeAppX/BundleArtifacts/**/*
 *.ide
 
 # Xcode user data
