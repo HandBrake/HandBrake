@@ -12,11 +12,14 @@ namespace HandBrakeWPF.Utilities
 {
     using System;
     using System.Runtime.InteropServices;
+    using System.Text;
 
     public class UwpDetect
     {
         [DllImport("kernel32.dll")]
-        static extern int GetCurrentPackageFullName(ref int length, IntPtr fullName);
+        static extern int GetCurrentPackageFullName(ref int length, [MarshalAs(UnmanagedType.LPWStr)] StringBuilder fullName);
+
+        private const int APPMODEL_ERROR_NO_PACKAGE = 15700;
 
         public static bool IsUWP()
         {
@@ -26,10 +29,15 @@ namespace HandBrakeWPF.Utilities
             }
 
             int length = 0;
-            IntPtr name = IntPtr.Zero;
-            GetCurrentPackageFullName(ref length, name); // Only available in 6.2 or later.
+            StringBuilder packageName = new StringBuilder(1024);
 
-            if (length > 0)
+            int result = GetCurrentPackageFullName(ref length, packageName); // Only available in 6.2 or later.
+            if (result == APPMODEL_ERROR_NO_PACKAGE)
+            {
+                return false;
+            }
+
+            if (packageName.ToString().Trim().Length > 0)
             {
                 return true;
             }
