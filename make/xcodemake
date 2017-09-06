@@ -86,11 +86,11 @@ case "$spec" in
 esac
 
 ## compute if re/configure necessary
-if [ ! -f $EXTERNAL_BUILD/GNUmakefile ]; then
+if [ ! -f "$EXTERNAL_BUILD/GNUmakefile" ]; then
     reconfigure="no configuration present"
-elif [ $EXTERNAL_SRC/make/configure.py -nt $EXTERNAL_BUILD/GNUmakefile ]; then
+elif [ "$EXTERNAL_SRC/make/configure.py" -nt "$EXTERNAL_BUILD/GNUmakefile" ]; then
     reconfigure="configure script was updated"
-elif [ $EXTERNAL_DRIVER == "bootstrap" ]; then
+elif [ "$EXTERNAL_DRIVER" == "bootstrap" ]; then
     reconfigure="driver bootstrap"
 else
     reconfigure=
@@ -160,7 +160,7 @@ if [ -n "$reconfigure" ]; then
     EXTERNAL_CONFIGURE=
 
     ## invoke configure with (hidden) option which indicates conf performed by xcode
-    (set -ex; $EXTERNAL_SRC/configure --force \
+    (set -ex; "$EXTERNAL_SRC/configure" --force \
         $EXTERNAL_CONF_ARGS \
         --build="$EXTERNAL_BUILD" \
         $driver \
@@ -171,11 +171,11 @@ if [ -n "$reconfigure" ]; then
 fi
 
 ## log environment as provided by Xcode
-logdir=$EXTERNAL_BUILD/log
-if [ ! -d $logdir ]; then
-    mkdir -p $logdir
+logdir="$EXTERNAL_BUILD/log"
+if [ ! -d "$logdir" ]; then
+    mkdir -p "$logdir"
 fi
-env | sort > $logdir/xcodemake.env.txt
+env | sort > "$logdir/xcodemake.env.txt"
 
 [ $exit_post_log -ne 0 ] && exit 0
 
@@ -196,4 +196,4 @@ fi
 ## pull the trigger
 ## must set XCODE.driver to prevent inifinite recursion
 set -x
-exec make -C $EXTERNAL_BUILD XCODE.driver=xcodemake $jobs $goals $EXTERNAL_VARS
+exec make -C "$EXTERNAL_BUILD" XCODE.driver=xcodemake $jobs $goals $EXTERNAL_VARS
