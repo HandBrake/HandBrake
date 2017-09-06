@@ -402,7 +402,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// </param>
         /// <param name="channelLayout">channel layout of the source track</param>
         /// <returns>True if available.</returns>
-        public static bool MixdownIsSupported(HBMixdown mixdown, HBAudioEncoder encoder, int channelLayout)
+        public static bool MixdownIsSupported(HBMixdown mixdown, HBAudioEncoder encoder, long channelLayout)
         {
             return HBFunctions.hb_mixdown_is_supported(mixdown.Id, (uint)encoder.Id, (uint)channelLayout) > 0;
         }

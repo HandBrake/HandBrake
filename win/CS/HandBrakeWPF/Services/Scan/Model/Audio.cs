@@ -51,7 +51,7 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// <param name="channelLayout">
         /// The channel Layout.
         /// </param>
-        public Audio(int trackNumber, string language, string languageCode, string description, int codec, int sampleRate, int bitrate, int channelLayout)
+        public Audio(int trackNumber, string language, string languageCode, string description, int codec, int sampleRate, int bitrate, long channelLayout)
         {
             this.ChannelLayout = channelLayout;
             this.TrackNumber = trackNumber;
@@ -101,7 +101,7 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// <summary>
         /// Gets or sets the channel layout of the source track (mixdown)
         /// </summary>
-        public int ChannelLayout { get; set; }
+        public long ChannelLayout { get; set; }
 
         /// <summary>
         /// Override of the ToString method to make this object easier to use in the UI

@@ -23,16 +23,16 @@ namespace HandBrake.ApplicationServices.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the chapter start.
         /// </summary>
-        public int? Start { get; set; }
+        public long? Start { get; set; }
 
         /// <summary>
         /// Gets or sets the frame to start.
         /// </summary>
-        public int? End { get; set; }
+        public long? End { get; set; }
 
         /// <summary>
         /// Gets or sets the seek points.
         /// </summary>
-        public int? SeekPoints { get; set; }
+        public long? SeekPoints { get; set; }
     }
 }
