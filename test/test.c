@@ -4228,7 +4228,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         hb_value_get_string(hb_dict_get(dest_dict, "Mux")));
 
     // Now set non-preset settings in the job dict
-    int range_start = 0, range_end = 0, range_seek_points = 0;
+    int64_t range_start = 0, range_end = 0, range_seek_points = 0;
     const char *range_type = "chapter";
     if (chapter_start   && chapter_end    &&
         !start_at_pts   && !stop_at_pts   &&
