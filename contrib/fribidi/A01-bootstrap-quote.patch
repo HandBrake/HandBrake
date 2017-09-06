@@ -1,0 +1,12 @@
+diff -u fribidi-0.19.7/bootstrap.orig fribidi-0.19.7/bootstrap
+--- fribidi-0.19.7/bootstrap.orig	2012-08-27 15:30:17.000000000 -0400
++++ fribidi-0.19.7/bootstrap	2017-09-06 13:59:20.000000000 -0400
+@@ -144,7 +144,7 @@
+ fi # !AUTOCONF
+ 
+ # move to build dir
+-cd $OLDDIR
++cd "$OLDDIR"
+ 
+ # configure
+ if test -n "$CONFIG"; then
