@@ -1213,7 +1213,7 @@ main(int argc, char *argv[])
     ghb_set_custom_filter_tooltip(ud, "PictureDetelecineCustom",
                                   "detelecine", HB_FILTER_DETELECINE);
     ghb_set_custom_filter_tooltip(ud, "PictureCombDetectCustom",
-                                  "interlace detection", HB_FILTER_DETELECINE);
+                                  "interlace detection", HB_FILTER_COMB_DETECT);
 
     gtk_widget_show(ghb_window);
 
