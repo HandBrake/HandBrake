@@ -1,9 +1,12 @@
 ## This file is processed only when shunting build through xcodebuild
 
-.PHONY: macosx.build macosx.clean macosx.install macosx.install-strip macosx.uninstall
+.PHONY: macosx.build macosx.archive macosx.clean macosx.install macosx.install-strip macosx.uninstall
 
 macosx.build:
 	$(call MACOSX.XCODE,HandBrakeCLI HandBrake,build)
+
+macosx.archive:
+	$(call MACOSX.XCODE_ARCHIVE,HandBrake-Distribution,archive)
 
 macosx.clean:
 	$(call MACOSX.XCODE,HandBrakeCLI HandBrake,clean)
@@ -25,6 +28,7 @@ macosx.uninstall:
 	$(RM.exe) -f $(PREFIX/)bin/HandBrakeCLI
 
 build: macosx.build
+archive: macosx.archive
 clean: macosx.clean
 install: macosx.install
 install-strip: macosx.install-strip
@@ -33,7 +37,7 @@ xclean: clean
 
 ###############################################################################
 
-MACOSX.goals = $(filter-out build clean install,$(MAKECMDGOALS))
+MACOSX.goals = $(filter-out build archive clean install,$(MAKECMDGOALS))
 
 $(MACOSX.goals): __goals__
 	@true
