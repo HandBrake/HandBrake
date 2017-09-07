@@ -72,6 +72,8 @@
 		A91119A41C7DD614001C463C /* HBSubtitlesDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F4728B1976BAA70009EC65 /* HBSubtitlesDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91119A51C7DD644001C463C /* HBDistributedArray.h in Headers */ = {isa = PBXBuildFile; fileRef = A9E66D6E1A67A2A8007B641D /* HBDistributedArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91119A61C7DD64A001C463C /* HBDistributedArray.m in Sources */ = {isa = PBXBuildFile; fileRef = A9E66D6F1A67A2A8007B641D /* HBDistributedArray.m */; };
+		A91485FE1F61296100374C12 /* HBFiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91485FD1F61296100374C12 /* HBFiltersViewController.m */; };
+		A91485FF1F612A8A00374C12 /* HBFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91485FA1F61291F00374C12 /* HBFiltersViewController.xib */; };
 		A914BCB31BC441C700157917 /* HBPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = A914BCB21BC441C700157917 /* HBPreviewView.m */; };
 		A916180E1C845161000556C6 /* NSDictionary+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A93B0DF71C804CF50051A3FA /* NSDictionary+HBAdditions.m */; };
 		A916C9921C84498F00C7B560 /* DockTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB433415F98A2B009C0961 /* DockTextField.m */; };
@@ -403,6 +405,9 @@
 		A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTrackPreset.m; sourceTree = "<group>"; };
 		A91017B21A64440A00039BFB /* HBSubtitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitles.h; sourceTree = "<group>"; };
 		A91017B31A64440A00039BFB /* HBSubtitles.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitles.m; sourceTree = "<group>"; };
+		A91485FB1F61291F00374C12 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = HBFiltersViewController.xib; sourceTree = "<group>"; };
+		A91485FC1F61296100374C12 /* HBFiltersViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBFiltersViewController.h; sourceTree = "<group>"; };
+		A91485FD1F61296100374C12 /* HBFiltersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBFiltersViewController.m; sourceTree = "<group>"; };
 		A914BCB11BC441C700157917 /* HBPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPreviewView.h; sourceTree = "<group>"; };
 		A914BCB21BC441C700157917 /* HBPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewView.m; sourceTree = "<group>"; };
 		A9160A331AE7A165009A7818 /* HBCodingUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBCodingUtilities.h; sourceTree = "<group>"; };
@@ -864,6 +869,7 @@
 				A9CF25EF1990D62C0023F727 /* Presets.xib */,
 				A9E2FD291A21BC6F000E8D3F /* AddPreset.xib */,
 				A99F40D11B624EA500750170 /* HBPictureViewController.xib */,
+				A91485FA1F61291F00374C12 /* HBFiltersViewController.xib */,
 				A93E0ED51972958C00FD67FB /* Video.xib */,
 				A9F2EB6D196F12C800066546 /* Audio.xib */,
 				A932E26A1988334B0047D13E /* AudioDefaults.xib */,
@@ -1180,6 +1186,8 @@
 				A9CF25F61990D6820023F727 /* HBPresetsViewController.m */,
 				A99F40CC1B624E7E00750170 /* HBPictureViewController.h */,
 				A99F40CD1B624E7E00750170 /* HBPictureViewController.m */,
+				A91485FC1F61296100374C12 /* HBFiltersViewController.h */,
+				A91485FD1F61296100374C12 /* HBFiltersViewController.m */,
 				A93E0ED01972957000FD67FB /* HBVideoController.h */,
 				A93E0ED11972957000FD67FB /* HBVideoController.m */,
 				A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */,
@@ -1470,6 +1478,7 @@
 				A96664BB1CCE493D00DA4A57 /* HBEncodingProgressHUDController.xib in Resources */,
 				A9E1468316BC2AD800C307BC /* PrevTemplate.pdf in Resources */,
 				A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */,
+				A91485FF1F612A8A00374C12 /* HBFiltersViewController.xib in Resources */,
 				A95BC1E81CD2548A008D6A33 /* volLowTemplate.pdf in Resources */,
 				A9C0DB85197E7B0000DF55B3 /* SubtitlesDefaults.xib in Resources */,
 				A9DC6C56196F0517002AE6B4 /* Subtitles.xib in Resources */,
@@ -1528,6 +1537,7 @@
 				273F20B514ADBE670021BE6D /* HBPreferencesController.m in Sources */,
 				273F20AC14ADBE670021BE6D /* HBController.m in Sources */,
 				A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */,
+				A91485FE1F61296100374C12 /* HBFiltersViewController.m in Sources */,
 				A96664B01CCE45BF00DA4A57 /* HBPlayerHUDController.m in Sources */,
 				A99F40CF1B624E7E00750170 /* HBPictureViewController.m in Sources */,
 				273F20AF14ADBE670021BE6D /* HBAudioController.m in Sources */,
@@ -1707,6 +1717,14 @@
 				273F218914ADDDA10021BE6D /* English */,
 			);
 			name = Queue.xib;
+			sourceTree = "<group>";
+		};
+		A91485FA1F61291F00374C12 /* HBFiltersViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A91485FB1F61291F00374C12 /* English */,
+			);
+			name = HBFiltersViewController.xib;
 			sourceTree = "<group>";
 		};
 		A92268791A6E569B00A8D5C5 /* MainWindow.xib */ = {

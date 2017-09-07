@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13168.3" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13168.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13189.4"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -12,6 +12,7 @@
                 <outlet property="fAdvancedTab" destination="2015" id="8FF-6a-xSj"/>
                 <outlet property="fAudioTab" destination="1475" id="AJX-Da-Tfc"/>
                 <outlet property="fChaptersTitlesTab" destination="1989" id="df9-TK-GBD"/>
+                <outlet property="fFiltersTab" destination="0UB-bG-kwS" id="9at-ML-tDd"/>
                 <outlet property="fMainTabView" destination="1474" id="sl5-BZ-ymC"/>
                 <outlet property="fPictureTab" destination="eij-Sn-QmJ" id="Ccp-rO-nqD"/>
                 <outlet property="fPresetDrawer" destination="1841" id="LDc-Da-rl7"/>
@@ -67,12 +68,18 @@
                         <tabViewItems>
                             <tabViewItem label="Video" identifier="1" id="1477">
                                 <view key="view" id="1478">
-                                    <rect key="frame" x="10" y="29" width="874" height="315"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
-                            <tabViewItem label="Picture" identifier="2" id="eij-Sn-QmJ" userLabel="PictureTab">
+                            <tabViewItem label="Dimensions" identifier="2" id="eij-Sn-QmJ" userLabel="PictureTab">
                                 <view key="view" id="nvx-9b-6fF">
+                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                            </tabViewItem>
+                            <tabViewItem label="Filters" identifier="" id="0UB-bG-kwS">
+                                <view key="view" id="JAj-E3-Cq2">
                                     <rect key="frame" x="10" y="25" width="874" height="319"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
@@ -675,7 +682,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         <popUpButton key="view" misplaced="YES" imageHugsTitle="YES" id="pJJ-0V-TQq">
                             <rect key="frame" x="28" y="14" width="58" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addqueue" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="QCi-1O-Msg">

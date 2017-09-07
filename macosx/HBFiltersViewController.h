@@ -6,10 +6,10 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class HBPicture;
+@class HBFilters;
 
-@interface HBPictureViewController : NSViewController
+@interface HBFiltersViewController : NSViewController
 
-@property (nonatomic, readwrite, weak) HBPicture *picture;
+@property (nonatomic, readwrite, weak) HBFilters *filters;
 
 @end

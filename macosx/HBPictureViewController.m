@@ -6,7 +6,6 @@
 
 #import "HBPictureViewController.h"
 
-@import HandBrakeKit.HBFilters;
 @import HandBrakeKit.HBPicture;
 
 static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;

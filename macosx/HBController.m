@@ -16,6 +16,7 @@
 #import "HBMutablePreset.h"
 
 #import "HBPictureViewController.h"
+#import "HBFiltersViewController.h"
 #import "HBVideoController.h"
 #import "HBAudioController.h"
 #import "HBSubtitlesController.h"
@@ -37,6 +38,10 @@
     // Picture controller
     HBPictureViewController * fPictureViewController;
     IBOutlet NSTabViewItem  * fPictureTab;
+
+    // Filters controller
+    HBFiltersViewController * fFiltersViewController;
+    IBOutlet NSTabViewItem  * fFiltersTab;
 
     // Video view controller
     HBVideoController       * fVideoController;
@@ -260,6 +265,10 @@
     // setup the picture view controller
     fPictureViewController = [[HBPictureViewController alloc] init];
     [fPictureTab setView:[fPictureViewController view]];
+
+    // setup the filters view controller
+    fFiltersViewController = [[HBFiltersViewController alloc] init];
+    [fFiltersTab setView:[fFiltersViewController view]];
 
     [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
                                                               forKeyPath:@"values.HBShowAdvancedTab"
@@ -787,7 +796,7 @@
 
     // Set the jobs info to the view controllers
     fPictureViewController.picture = job.picture;
-    fPictureViewController.filters = job.filters;
+    fFiltersViewController.filters = job.filters;
     fVideoController.video = job.video;
     fAudioController.audio = job.audio;
     fSubtitlesViewController.subtitles = job.subtitles;
