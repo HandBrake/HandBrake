@@ -20,59 +20,22 @@
                ReferencedContainer = "container:HandBrake.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "273F1FFE14ADAE950021BE6D"
-               BuildableName = "HandBrakeCLI"
-               BlueprintName = "HandBrakeCLI"
-               ReferencedContainer = "container:HandBrake.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "NO"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A9736F0A1C7DA5FE008F1D18"
-               BuildableName = "HandBrakeKitTests.xctest"
-               BlueprintName = "HandBrakeKitTests"
-               ReferencedContainer = "container:HandBrake.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
-      buildConfiguration = "release-sandbox"
+      buildConfiguration = "release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A9736F0A1C7DA5FE008F1D18"
-               BuildableName = "HandBrakeKitTests.xctest"
-               BlueprintName = "HandBrakeKitTests"
-               ReferencedContainer = "container:HandBrake.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "273F1FFE14ADAE950021BE6D"
-            BuildableName = "HandBrakeCLI"
-            BlueprintName = "HandBrakeCLI"
+            BlueprintIdentifier = "273F203814ADBC200021BE6D"
+            BuildableName = "HandBrake.app"
+            BlueprintName = "HandBrake"
             ReferencedContainer = "container:HandBrake.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -80,10 +43,10 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "release-sandbox"
+      buildConfiguration = "release"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      disableMainThreadChecker = "YES"
+      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -104,26 +67,28 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "release-sandbox"
+      buildConfiguration = "release"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "273F1FFE14ADAE950021BE6D"
-            BuildableName = "HandBrakeCLI"
-            BlueprintName = "HandBrakeCLI"
+            BlueprintIdentifier = "273F203814ADBC200021BE6D"
+            BuildableName = "HandBrake.app"
+            BlueprintName = "HandBrake"
             ReferencedContainer = "container:HandBrake.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "release-sandbox">
+      buildConfiguration = "release">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "release-sandbox"
+      buildConfiguration = "release"
+      customArchiveName = "HandBrake"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>

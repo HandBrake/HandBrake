@@ -34,16 +34,12 @@
                ReferencedContainer = "container:HandBrake.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-      </BuildActionEntries>
-   </BuildAction>
-   <TestAction
-      buildConfiguration = "debug"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <Testables>
-         <TestableReference
-            skipped = "NO">
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A9736F0A1C7DA5FE008F1D18"
@@ -51,14 +47,23 @@
                BlueprintName = "HandBrakeKitTests"
                ReferencedContainer = "container:HandBrake.xcodeproj">
             </BuildableReference>
-         </TestableReference>
+         </BuildActionEntry>
+      </BuildActionEntries>
+   </BuildAction>
+   <TestAction
+      buildConfiguration = "debug-sandbox"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
+      shouldUseLaunchSchemeArgsEnv = "YES">
+      <Testables>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "273F203814ADBC200021BE6D"
-            BuildableName = "HandBrake.app"
-            BlueprintName = "HandBrake"
+            BlueprintIdentifier = "273F1FFE14ADAE950021BE6D"
+            BuildableName = "HandBrakeCLI"
+            BlueprintName = "HandBrakeCLI"
             ReferencedContainer = "container:HandBrake.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -66,9 +71,10 @@
       </AdditionalOptions>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "debug"
+      buildConfiguration = "debug-sandbox"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -89,7 +95,7 @@
       </AdditionalOptions>
    </LaunchAction>
    <ProfileAction
-      buildConfiguration = "debug"
+      buildConfiguration = "debug-sandbox"
       shouldUseLaunchSchemeArgsEnv = "YES"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
@@ -106,10 +112,10 @@
       </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
-      buildConfiguration = "debug">
+      buildConfiguration = "debug-sandbox">
    </AnalyzeAction>
    <ArchiveAction
-      buildConfiguration = "debug"
+      buildConfiguration = "debug-sandbox"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
