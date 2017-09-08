@@ -204,7 +204,7 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
 
-                    <Grid HorizontalAlignment="Stretch">
+                    <Grid HorizontalAlignment="Stretch" Grid.IsSharedSizeScope="False">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
