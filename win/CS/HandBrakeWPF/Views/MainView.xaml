@@ -340,7 +340,7 @@
                                        VerticalAlignment="Center"
                                        Text="{x:Static Properties:ResourcesUI.MainView_Options}" />
 
-                                <Path Height="5" Margin="2,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
                                   Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrowPreset" />
                             </StackPanel>

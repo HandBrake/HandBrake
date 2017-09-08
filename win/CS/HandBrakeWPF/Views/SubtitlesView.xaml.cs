@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System.Windows;
     using System.Windows.Controls;
 
     /// <summary>
@@ -21,7 +22,18 @@ namespace HandBrakeWPF.Views
         /// </summary>
         public SubtitlesView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+        }
+
+        private void SubtitleOptionsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            if (button != null && button.ContextMenu != null)
+            {
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                button.ContextMenu.IsOpen = true;
+            }
         }
     }
 }

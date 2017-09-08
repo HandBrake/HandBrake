@@ -61,13 +61,27 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <splitButton:SplitMenuButton Content="{x:Static Properties:ResourcesUI.Shared_AddTrack}" cal:Message.Attach="[Event Click] = [Action Add]"  FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0">
-                    <splitButton:SplitMenuButton.ItemSource>
-                        <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
-                        <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
-                        <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
-                    </splitButton:SplitMenuButton.ItemSource>
-                </splitButton:SplitMenuButton>
+                <Button x:Name="audioOptionsButton" FontWeight="Bold" Margin="0,0,10,0" Grid.Column="0" Click="AudioOptionsButton_OnClick">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="0,0,5,0" Padding="0"
+                                       VerticalAlignment="Center"
+                                       Text="{x:Static Properties:ResourcesUI.Shared_AddTrack}" />
+
+                            <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                  Data="M 0 0 L 4 4 L 8 0 Z"
+                                  Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrowPreset" />
+                        </StackPanel>
+                    </Button.Content>
+
+                    <Button.ContextMenu>
+                        <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}">
+                            <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
+                            <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
+                            <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+                </Button>
 
                 <Button MinWidth="65" Grid.Column="1"
                     Margin="0,0,10,0"
