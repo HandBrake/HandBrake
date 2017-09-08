@@ -53,7 +53,7 @@
             </Grid.Resources>
 
 
-            <TextBlock Text="Format:" FontSize="14" FontFamily="Sergio Light" Grid.Row="0" VerticalAlignment="Center" />
+            <TextBlock Text="Format:" FontWeight="Bold" Grid.Row="0" VerticalAlignment="Center" />
             <ComboBox Name="Container" Width="100" HorizontalAlignment="Left"  Grid.Row="0" Grid.Column="1"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Mux}" VerticalAlignment="Center"
                               ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
@@ -74,13 +74,13 @@
                               IsChecked="{Binding Path=IPod5GSupport}"
                               Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter},  ConverterParameter=true}" />
 
-            <TextBlock Text="Tracks:" FontSize="14" FontFamily="Sergio Light" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
+            <TextBlock Text="Tracks:" FontWeight="Bold" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding VideoTrackInfo}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" />
             <TextBlock Text="{Binding AudioTrackInfo}" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap" />
             <TextBlock Text="{Binding SubtitleTrackInfo}" Grid.Row="7" Grid.Column="1" TextWrapping="Wrap" />
             <TextBlock Text="{Binding ChapterInfo}" Grid.Row="8" Grid.Column="1" />
 
-            <TextBlock Text="Filters:" FontSize="14" FontFamily="Sergio Light" Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" />
+            <TextBlock Text="Filters:" FontWeight="Bold" Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding FiltersInfo}" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextWrapping="Wrap" />
         </Grid>
 
