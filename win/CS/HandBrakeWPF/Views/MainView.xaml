@@ -10,8 +10,7 @@
              FontSize="11"
              cal:Message.Attach="[Event Loaded] = [Action Load]"
              SnapsToDevicePixels="True"
-             UseLayoutRounding="True"
->
+             UseLayoutRounding="True">
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="booleanConverter" />
@@ -39,13 +38,11 @@
         <StackPanel Grid.Row="0"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    Orientation="Vertical"
-        >
+                    Orientation="Vertical">
             <!--  Main Menu  -->
             <Menu Height="23"
                   HorizontalAlignment="Stretch"
-                  VerticalAlignment="Top"
-            >
+                  VerticalAlignment="Top">
                 <MenuItem Header="_File">
                     <MenuItem Header="Choose Source" cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]" InputGestureText="Alt + O" />
                     <Separator />
@@ -70,7 +67,6 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-
 
                 <MenuItem Header="_Presets" x:Name="presetMenu" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
 
@@ -117,20 +113,17 @@
                      SnapsToDevicePixels="False"
                      ToolBar.OverflowMode="Never"
                      ToolBarTray.IsLocked="True"
-                     KeyboardNavigation.TabNavigation="Continue"
-            >
+                     KeyboardNavigation.TabNavigation="Continue">
 
                 <Button Name="SelectSource" x:Uid="Choose Source" AutomationProperties.Name="Choose Source"
                         cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/Movies.png"
-                        />
+                               Source="Images/Movies.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_SourceOpen}"
-                        />
+                               Content="{x:Static Properties:ResourcesUI.MainView_SourceOpen}"/>
                     </StackPanel>
                 </Button>
 
@@ -140,17 +133,14 @@
                         cal:Message.Attach="[Event Click] = [Action StartEncode]"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
-                                             ConverterParameter=true}"
-                >
+                                             ConverterParameter=true}">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/Play.png"
-                        />
+                               Source="Images/Play.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{Binding StartLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_StartEncode}'}"
-                        />
+                               Content="{Binding StartLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_StartEncode}'}"/>
                     </StackPanel>
                 </Button>
 
@@ -158,18 +148,15 @@
                         cal:Message.Attach="[Event Click] = [Action StopEncode]"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
-                                             ConverterParameter=false}"
-                >
+                                             ConverterParameter=false}">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/stop.png"
-                        />
+                               Source="Images/stop.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_Stop}"
-                        />
+                               Content="{x:Static Properties:ResourcesUI.MainView_Stop}"/>
                     </StackPanel>
                 </Button>
 
@@ -177,18 +164,15 @@
                         cal:Message.Attach="[Event Click] = [Action PauseEncode]"
                         Visibility="{Binding CanPause,
                                              Converter={StaticResource boolToVisConverter},
-                                             ConverterParameter=false}"
-                >
+                                             ConverterParameter=false}">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/Pause.png"
-                        />
+                               Source="Images/Pause.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_Pause}"
-                        />
+                               Content="{x:Static Properties:ResourcesUI.MainView_Pause}"/>
                     </StackPanel>
                 </Button>
 
@@ -221,12 +205,10 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/Queue_small.png"
-                        />
+                               Source="Images/Queue_small.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}"
-                        />
+                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}"/>
                     </StackPanel>
                 </Button>
 
@@ -237,12 +219,10 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/picture_small.png"
-                        />
+                               Source="Images/picture_small.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Preview"
-                        />
+                               Content="Preview"/>
                     </StackPanel>
                 </Button>
 
@@ -250,12 +230,10 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/ActivityWindow.png"
-                        />
+                               Source="Images/ActivityWindow.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Activity Log"
-                        />
+                               Content="Activity Log"/>
                     </StackPanel>
                 </Button>
             </ToolBar>
@@ -275,8 +253,7 @@
                 <!--  Source  -->
                 <StackPanel Margin="10,5,5,5"
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                >
+                            VerticalAlignment="Stretch">
                     <Grid HorizontalAlignment="Stretch" Margin="0,0,10,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -296,8 +273,7 @@
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding ScannedSource.Titles}"
                                   ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Title}"
-                                  SelectedItem="{Binding Path=SelectedTitle}"
-                        />
+                                  SelectedItem="{Binding Path=SelectedTitle}" />
                         <Label Margin="8,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Angle}" />
 
                         <ComboBox Name="Angles"
@@ -310,8 +286,7 @@
                                   MinWidth="80"
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding RangeMode}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Range}"
-                                  SelectedItem="{Binding SelectedPointToPoint}"
-                        />
+                                  SelectedItem="{Binding SelectedPointToPoint}" />
                         <ComboBox Name="StartPoint"
                                   MinWidth="60"
                                   Margin="8,0,0,0"
@@ -319,14 +294,12 @@
                                   SelectedItem="{Binding SelectedStartPoint}"
                                   Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
-                                                       ConverterParameter=true}"
-                        />
+                                                       ConverterParameter=true}" />
                         <Controls:TimeSpanBox  Number="{Binding SelectedStartPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding IsTimespanRange}"
                                                MinWidth="80" Margin="8,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
-                                                       ConverterParameter=false}"
-                        />
+                                                       ConverterParameter=false}" />
 
                         <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_through}" />
                         <ComboBox Name="EndPoint"
@@ -336,14 +309,12 @@
                                   SelectedItem="{Binding SelectedEndPoint}"
                                   Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
-                                                       ConverterParameter=true}"
-                        />
+                                                       ConverterParameter=true}" />
                         <Controls:TimeSpanBox  Number="{Binding SelectedEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding IsTimespanRange}"
                                                MinWidth="80" Margin="8,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
-                                                       ConverterParameter=false}"
-                        />
+                                                       ConverterParameter=false}" />
 
                         <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
                         <Label Margin="4,0,0,0" Content="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
@@ -493,8 +464,7 @@
                               ActionText="Cancel"
                               SecondaryActionText="Open Log Window"
                               SecondaryAction="{Binding OpenLogWindowAction}"
-                              CancelAction="{Binding CancelAction}"
-        />
+                              CancelAction="{Binding CancelAction}" />
 
         <Controls:AlertPanel x:Name="alertPanel"
                              Grid.Row="0"
