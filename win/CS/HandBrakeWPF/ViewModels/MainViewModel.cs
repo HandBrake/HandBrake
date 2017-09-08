@@ -89,7 +89,6 @@ namespace HandBrakeWPF.ViewModels
         private Preset selectedPreset;
         private EncodeTask queueEditTask;
         private int lastEncodePercentage;
-        private bool isPresetPanelShowing;
         private bool showSourceSelection;
         private BindingList<SourceMenuItem> drives;
         private bool canPause;
@@ -97,6 +96,8 @@ namespace HandBrakeWPF.ViewModels
         private string alertWindowHeader;
         private string alertWindowText;
         private bool hasSource;
+
+        private IPresetObject selectedPresetCategory;
 
         #endregion
 
@@ -206,7 +207,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.EncodeService.EncodeStatusChanged += this.EncodeStatusChanged;
             this.userSettingService.SettingChanged += this.UserSettingServiceSettingChanged;
 
-            this.Presets = new BindingList<IPresetObject>();
+            this.PresetsCategories = new BindingList<IPresetObject>();
             this.Drives = new BindingList<SourceMenuItem>();
 
             // Set Process Priority
@@ -362,12 +363,49 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets Presets.
         /// </summary>
-        public IEnumerable<IPresetObject> Presets { get; set; }
+        public IEnumerable<IPresetObject> PresetsCategories { get; set; }
+
+        public IPresetObject SelectedPresetCategory
+        {
+            get
+            {
+                return this.selectedPresetCategory;
+            }
+            set
+            {
+                if (!object.Equals(this.selectedPresetCategory, value))
+                {
+                    this.selectedPresetCategory = value;
+                    this.NotifyOfPropertyChange(() => this.SelectedPresetCategory);
+                    this.NotifyOfPropertyChange(() => this.CategoryPresets);
+                }
+            }
+        }
+
+        public IEnumerable<Preset> CategoryPresets
+        {
+            get
+            {
+                PresetDisplayCategory category = this.SelectedPresetCategory as PresetDisplayCategory;
+                if (category != null && category.Presets != null)
+                {
+                    if (!category.Presets.Contains(this.SelectedPreset))
+                    {
+                        this.SelectedPreset = category.Presets.FirstOrDefault();
+                    }
+
+                    return new BindingList<Preset>(category.Presets);
+                }
+
+                this.SelectedPreset = null;
+                return new BindingList<Preset>();
+            }
+        }
 
         /// <summary>
         /// Gets or sets SelectedPreset.
         /// </summary>
-        public object SelectedPreset
+        public Preset SelectedPreset
         {
             get
             {
@@ -376,30 +414,11 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                if (value == null || value.GetType() != typeof(Preset))
+                if (!object.Equals(this.selectedPreset, value))
                 {
-                    return;
+                    this.selectedPreset = value;
+                    this.NotifyOfPropertyChange(() => this.SelectedPreset);
                 }
-
-                this.selectedPreset = (Preset)value;
-
-                this.presetService.SetSelected(selectedPreset);
-  
-                if (this.selectedPreset != null)
-                {
-                    // Tab Settings
-                    this.PictureSettingsViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                    this.VideoViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                    this.FiltersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                    this.AudioViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                    this.SubtitleViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                    this.ChaptersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                    this.AdvancedViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                    this.MetaDataViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                    this.SummaryViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                }
-
-                this.NotifyOfPropertyChange(() => this.SelectedPreset);
             }
         }
 
@@ -912,31 +931,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether is preset panel showing.
-        /// </summary>
-        public bool IsPresetPanelShowing
-        {
-            get
-            {
-                return this.isPresetPanelShowing;
-            }
-            set
-            {
-                if (!Equals(this.isPresetPanelShowing, value))
-                {
-                    this.isPresetPanelShowing = value;
-                    this.NotifyOfPropertyChange(() => this.IsPresetPanelShowing);
-
-                    // Save the setting if it has changed.
-                    if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel) != value)
-                    {
-                        this.userSettingService.SetUserSetting(UserSettingConstants.ShowPresetPanel, value);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating progress percentage.
         /// </summary>
         public int ProgressPercentage { get; set; }
@@ -1194,14 +1188,10 @@ namespace HandBrakeWPF.ViewModels
             // Perform an update check if required
             this.updateService.PerformStartupUpdateCheck(this.HandleUpdateCheckResults);
 
-            // Show or Hide the Preset Panel.
-            this.IsPresetPanelShowing = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel);
-
             // Setup the presets.
             this.presetService.Load();
-            this.Presets = this.presetService.Presets;
-            this.NotifyOfPropertyChange(() => this.Presets);
-            this.presetService.LoadCategoryStates();
+            this.PresetsCategories = this.presetService.Presets;
+            this.NotifyOfPropertyChange(() => this.PresetsCategories);
 
             this.SummaryViewModel.OutputFormatChanged += this.SummaryViewModel_OutputFormatChanged;
 
@@ -1224,7 +1214,8 @@ namespace HandBrakeWPF.ViewModels
                 this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
             }
 
-            this.SelectedPreset = this.presetService.DefaultPreset;
+            // Preset Selection
+            this.SetDefaultPreset();
 
             // Reset WhenDone if necessary.
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
@@ -1258,7 +1249,6 @@ namespace HandBrakeWPF.ViewModels
         {
             // Shutdown Service
             this.queueProcessor.Stop();
-            this.presetService.SaveCategoryStates();
 
             // Unsubscribe from Events.
             this.scanService.ScanStarted -= this.ScanStared;
@@ -1843,11 +1833,12 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PresetAdd()
         {
-            // TODO select the new preset.
             IAddPresetViewModel presetViewModel = IoC.Get<IAddPresetViewModel>();
             presetViewModel.Setup(this.CurrentTask, this.SelectedTitle, this.AudioViewModel.AudioBehaviours, this.SubtitleViewModel.SubtitleBehaviours);
             this.windowManager.ShowDialog(presetViewModel);
-            this.NotifyOfPropertyChange(() => this.Presets);
+
+            this.NotifyOfPropertyChange(() => this.PresetsCategories);
+            this.NotifyOfPropertyChange(() => this.CategoryPresets);
         }
 
         /// <summary>
@@ -1939,7 +1930,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.presetService.Remove(this.selectedPreset);
-                this.NotifyOfPropertyChange(() => this.Presets);
+                this.NotifyOfPropertyChange(() => this.CategoryPresets);
             }
             else
             {
@@ -1973,7 +1964,7 @@ namespace HandBrakeWPF.ViewModels
             if (dialogResult.HasValue && dialogResult.Value)
             {
                 this.presetService.Import(dialog.FileName);
-                this.NotifyOfPropertyChange(() => this.Presets);
+                this.NotifyOfPropertyChange(() => this.CategoryPresets);
             }
         }
 
@@ -2014,9 +2005,18 @@ namespace HandBrakeWPF.ViewModels
         public void PresetReset()
         {
             this.presetService.UpdateBuiltInPresets();
-            this.NotifyOfPropertyChange(() => this.Presets);
-            this.SelectedPreset = this.presetService.DefaultPreset;
+
+            this.NotifyOfPropertyChange(() => this.PresetsCategories);
+            this.NotifyOfPropertyChange(() => this.CategoryPresets);
+
+            this.SetDefaultPreset();
+
             this.errorService.ShowMessageBox(Resources.Presets_ResetComplete, Resources.Presets_ResetHeader, MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        public void PresetSelect()
+        {
+            this.PresetSelect(this.SelectedPreset);
         }
 
         /// <summary>
@@ -2030,7 +2030,28 @@ namespace HandBrakeWPF.ViewModels
             Preset preset = tag as Preset;
             if (preset != null)
             {
+                if (this.SelectedPresetCategory == null || this.SelectedPresetCategory.Category != preset.Category)
+                {
+                    this.SelectedPresetCategory = this.PresetsCategories.FirstOrDefault(c => c.Category == preset.Category);
+                }
+
                 this.SelectedPreset = preset;
+            }
+
+            this.presetService.SetSelected(this.selectedPreset);
+            
+            if (this.selectedPreset != null)
+            {
+                // Tab Settings
+                this.PictureSettingsViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                this.VideoViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                this.FiltersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                this.AudioViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                this.SubtitleViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                this.ChaptersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                this.AdvancedViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                this.MetaDataViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                this.SummaryViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
             }
         }
 
@@ -2216,6 +2237,21 @@ namespace HandBrakeWPF.ViewModels
             this.ShowAlertWindow = true;
             this.AlertWindowHeader = header;
             this.AlertWindowText = message;
+        }
+
+        private void SetDefaultPreset()
+        {
+            // Preset Selection
+            if (this.presetService.DefaultPreset != null)
+            {
+                PresetDisplayCategory category =
+                    (PresetDisplayCategory)this.PresetsCategories.FirstOrDefault(
+                        p => p.Category == this.presetService.DefaultPreset.Category);
+
+                this.SelectedPresetCategory = category;
+                this.SelectedPreset = this.presetService.DefaultPreset;
+                this.PresetSelect();
+            }
         }
 
         #endregion

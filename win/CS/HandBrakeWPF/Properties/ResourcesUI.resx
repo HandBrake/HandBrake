@@ -151,7 +151,7 @@
     <value>Duration</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
-    <value>File</value>
+    <value>Save To</value>
   </data>
   <data name="MainView_FiltersTab" xml:space="preserve">
     <value>Filters</value>

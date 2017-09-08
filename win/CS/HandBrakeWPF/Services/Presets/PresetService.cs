@@ -543,39 +543,6 @@ namespace HandBrakeWPF.Services.Presets
             selectedPreset.IsSelected = true;
         }
 
-        public void SaveCategoryStates()
-        {
-            StringCollection expandedPresets = new StringCollection();
-            foreach (IPresetObject presetObject in this.presets)
-            {
-                PresetDisplayCategory category = presetObject as PresetDisplayCategory;
-                if (category != null && category.IsExpanded)
-                {
-                    expandedPresets.Add(category.Category);
-                }
-            }
-
-            this.userSettingService.SetUserSetting(UserSettingConstants.PresetExpandedStateList, expandedPresets);
-        }
-
-        public void LoadCategoryStates()
-        {
-            StringCollection expandedPresets = this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.PresetExpandedStateList);
-            if (expandedPresets == null || expandedPresets.Count == 0)
-            {
-                return;
-            }
-
-            foreach (IPresetObject presetObject in this.presets)
-            {
-                PresetDisplayCategory category = presetObject as PresetDisplayCategory;
-                if (category != null && expandedPresets.Contains(category.Category))
-                {
-                    category.IsExpanded = true;
-                }
-            }
-        }
-
         #endregion
 
         #region Private Helpers

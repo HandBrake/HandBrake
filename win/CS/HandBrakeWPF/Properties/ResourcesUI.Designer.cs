@@ -736,7 +736,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File.
+        ///   Looks up a localized string similar to Save To.
         /// </summary>
         public static string MainView_File {
             get {

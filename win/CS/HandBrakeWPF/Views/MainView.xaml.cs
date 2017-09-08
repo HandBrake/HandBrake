@@ -31,29 +31,6 @@ namespace HandBrakeWPF.Views
         }
 
         /// <summary>
-        /// Hide the overflow control on the Preset panel.
-        /// TODO find a better way of doing this. This seems to be the common solution. 
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void ToolBarLoaded(object sender, RoutedEventArgs e)
-        {
-            ToolBar toolBar = sender as ToolBar;
-            if (toolBar != null)
-            {
-                var overflowGrid = toolBar.Template.FindName("OverflowGrid", toolBar) as FrameworkElement;
-                if (overflowGrid != null)
-                {
-                    overflowGrid.Visibility = Visibility.Collapsed;
-                }
-            }
-        }
-
-        /// <summary>
         /// Add to Queue button context menu handling.
         /// </summary>
         /// <param name="sender">
@@ -87,34 +64,6 @@ namespace HandBrakeWPF.Views
             ((IMainViewModel)this.DataContext).AddToQueue();
         }
 
-        private void PresetTreeviewItemCollasped(object sender, RoutedEventArgs e)
-        {
-            if (e.Source.GetType() == typeof(TreeViewItem))
-            {
-                TreeViewItem item = e.Source as TreeViewItem;
-                if (item != null) item.IsSelected = false;
-            }
-        }
-
-        private void PresetListTree_OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            TreeViewItem treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
-
-            if (treeViewItem != null)
-            {
-                treeViewItem.Focus();
-                e.Handled = true;
-            }
-        }
-
-        private static TreeViewItem VisualUpwardSearch(DependencyObject source)
-        {
-            while (source != null && !(source is TreeViewItem))
-                source = VisualTreeHelper.GetParent(source);
-
-            return source as TreeViewItem;
-        }
-
         private void TabControl_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems.Count > 0)
@@ -124,6 +73,17 @@ namespace HandBrakeWPF.Views
                 {
                     ((MainViewModel)this.DataContext).SummaryViewModel.UpdateDisplayedInfo();
                 }
+            }
+        }
+
+        private void MorePresetOptionsButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            if (button != null && button.ContextMenu != null)
+            {
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                button.ContextMenu.IsOpen = true;
             }
         }
     }

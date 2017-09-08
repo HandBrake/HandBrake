@@ -147,11 +147,6 @@ namespace HandBrakeWPF
         public const string RemovePunctuation = "RemovePunctuation";
 
         /// <summary>
-        /// The Show Preset Panel
-        /// </summary>
-        public const string ShowPresetPanel = "ShowPresetPanel";
-
-        /// <summary>
         /// The reset when done action.
         /// </summary>
         public const string ResetWhenDoneAction = "ResetWhenDoneAction";
