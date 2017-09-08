@@ -1156,7 +1156,7 @@ namespace HandBrakeWPF.ViewModels
                         this.SelectedTitle.Resolution.Height,
                         displayW,
                         this.SelectedTitle.Resolution.Height, 
-                        this.SelectedTitle.Fps, 
+                        Math.Round(this.SelectedTitle.Fps, 2), 
                         this.SelectedTitle.AudioTracks.Count, 
                         ResourcesUI.MainView_AudioTrackCount,
                         this.SelectedTitle.Subtitles.Count,
