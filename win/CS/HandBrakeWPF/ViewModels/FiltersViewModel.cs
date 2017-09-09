@@ -773,6 +773,7 @@ namespace HandBrakeWPF.ViewModels
 
                 // Custom Values
                 this.CustomDecomb = preset.Task.CustomDecomb;
+                this.CustomCombDetect = preset.Task.CustomCombDetect;
                 this.CustomDeinterlace = preset.Task.CustomDeinterlace;
                 this.CustomDetelecine = preset.Task.CustomDetelecine;
                 this.CustomDenoise = preset.Task.CustomDenoise;

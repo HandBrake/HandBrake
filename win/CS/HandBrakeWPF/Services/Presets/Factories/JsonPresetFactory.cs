@@ -205,7 +205,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
                 if (preset.Task.Deinterlace == Deinterlace.Custom)
                 {
-                    preset.Task.CustomDecomb = importedPreset.PictureDeinterlaceCustom;
+                    preset.Task.CustomDeinterlace = importedPreset.PictureDeinterlaceCustom;
                 }
             }
 
@@ -234,7 +234,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 }
             }
 
-            preset.Task.CustomDeinterlace = importedPreset.PictureDetelecineCustom;
             preset.Task.CustomDenoise = importedPreset.PictureDenoiseCustom;
             preset.Task.CustomDetelecine = importedPreset.PictureDetelecineCustom;
             preset.Task.CustomCombDetect = importedPreset.PictureCombDetectCustom;
@@ -629,14 +628,13 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             // Filters
             preset.PictureDeblock = export.Task.Deblock;
+
             preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
                 ? "decomb"
                 : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? "yadif" : "off";
-
             preset.PictureDeinterlacePreset = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
                 ? EnumHelper<Decomb>.GetShortName(export.Task.Decomb)
                 : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? EnumHelper<Deinterlace>.GetShortName(export.Task.Deinterlace) : string.Empty;
-
             preset.PictureDeinterlaceCustom = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
                 ? export.Task.CustomDecomb
                 : export.Task.DeinterlaceFilter == DeinterlaceFilter.Yadif ? export.Task.CustomDeinterlace : string.Empty;
@@ -644,12 +642,12 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureCombDetectPreset = EnumHelper<CombDetect>.GetShortName(export.Task.CombDetect);
             preset.PictureCombDetectCustom = export.Task.CustomCombDetect;
 
-            preset.PictureDeinterlaceCustom = export.Task.CustomDeinterlace;
             preset.PictureDenoiseCustom = export.Task.CustomDenoise;
             preset.PictureDenoiseFilter = EnumHelper<Denoise>.GetShortName(export.Task.Denoise);
             preset.PictureDenoisePreset = EnumHelper<DenoisePreset>.GetShortName(export.Task.DenoisePreset);
             preset.PictureDenoiseTune = EnumHelper<DenoiseTune>.GetShortName(export.Task.DenoiseTune);
             preset.PictureDetelecine = EnumHelper<Detelecine>.GetShortName(export.Task.Detelecine);
+
             preset.PictureDetelecineCustom = export.Task.CustomDetelecine;
 
             preset.PictureSharpenFilter = EnumHelper<Sharpen>.GetShortName(export.Task.Sharpen);
