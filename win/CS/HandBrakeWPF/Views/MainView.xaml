@@ -333,10 +333,24 @@
                 <StackPanel Orientation="Horizontal" Margin="8,0,0,0">
                     <ComboBox ItemsSource="{Binding PresetsCategories}" SelectedItem="{Binding SelectedPresetCategory}" Width="150" DisplayMemberPath="Category"  Margin="5,0,0,0" VerticalAlignment="Center" />
                     <ComboBox ItemsSource="{Binding CategoryPresets}" SelectedItem="{Binding SelectedPreset}" Width="250" Margin="10,0,0,0" VerticalAlignment="Center">
-
+                        <ComboBox.Resources>
+                            <Style TargetType="ToolTip">
+                                <Style.Resources>
+                                    <Style TargetType="ContentPresenter">
+                                        <Style.Resources>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="TextWrapping" Value="Wrap" />
+                                            </Style>
+                                        </Style.Resources>
+                                    </Style>
+                                </Style.Resources>
+                                <Setter Property="MaxWidth" Value="400" />
+                            </Style>
+                        </ComboBox.Resources>
+                        
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="1500">
                                     <StackPanel.Resources>
                                         <Style TargetType="TextBlock">
                                             <Setter Property="FontStyle" Value="Normal" />
