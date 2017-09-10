@@ -72,6 +72,10 @@
 
                     <MenuItem Header="_Presets" ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}" />
                     <Separator />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_PresetRemove}" cal:Message.Attach="[Event Click] = [Action PresetRemove]" />
+                    <Separator />
                     <MenuItem Header="_Import from file" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
                     <MenuItem Header="_Export to file" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
                     <Separator />
@@ -328,7 +332,28 @@
                 <Label Content="Presets" FontWeight="Bold" VerticalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" Margin="8,0,0,0">
                     <ComboBox ItemsSource="{Binding PresetsCategories}" SelectedItem="{Binding SelectedPresetCategory}" Width="150" DisplayMemberPath="Category"  Margin="5,0,0,0" VerticalAlignment="Center" />
-                    <ComboBox ItemsSource="{Binding CategoryPresets}" SelectedItem="{Binding SelectedPreset}" DisplayMemberPath="Name" Width="250" Margin="10,0,0,0" VerticalAlignment="Center" />
+                    <ComboBox ItemsSource="{Binding CategoryPresets}" SelectedItem="{Binding SelectedPreset}" Width="250" Margin="10,0,0,0" VerticalAlignment="Center">
+
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel.Resources>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="FontStyle" Value="Normal" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=IsDefault}" Value="True">
+                                                    <Setter Property="FontStyle" Value="Italic" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+
+                                    </StackPanel.Resources>
+                                    <TextBlock Text="{Binding Name}" />
+                                    <TextBlock Text="(Default)" Visibility="{Binding IsDefault, Converter={StaticResource boolToVisConverter}}" Margin="5,0,0,0" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
                     <Button Content="Reload" cal:Message.Attach="[Event Click] = [Action PresetSelect]"  Margin="15,0,0,0" VerticalAlignment="Center" />
                     <Button Content="Save Custom Preset" cal:Message.Attach="[Event Click] = [Action PresetAdd]"  Margin="5,0,0,0" VerticalAlignment="Center" />
@@ -351,6 +376,8 @@
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
                                 <Separator />
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
+                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_PresetRemove}" cal:Message.Attach="[Event Click] = [Action PresetRemove]" />
                                 <Separator />
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />

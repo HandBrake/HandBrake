@@ -1896,7 +1896,8 @@ namespace HandBrakeWPF.ViewModels
             this.windowManager.ShowDialog(presetViewModel);
             Preset preset = presetViewModel.Preset;
 
-            this.SelectedPreset = preset; // Reselect the preset
+            this.NotifyOfPropertyChange(() => this.CategoryPresets);
+            this.SelectedPreset = preset; // Reselect the preset      
         }
 
         /// <summary>
@@ -1931,6 +1932,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.presetService.Remove(this.selectedPreset);
                 this.NotifyOfPropertyChange(() => this.CategoryPresets);
+                this.SelectedPreset = this.CategoryPresets.FirstOrDefault();
             }
             else
             {

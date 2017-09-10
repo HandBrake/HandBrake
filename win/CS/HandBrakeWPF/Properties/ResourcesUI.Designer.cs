@@ -835,6 +835,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Preset.
+        /// </summary>
+        public static string MainView_PresetRemove {
+            get {
+                return ResourceManager.GetString("MainView_PresetRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Presets.
         /// </summary>
         public static string MainView_Presets {

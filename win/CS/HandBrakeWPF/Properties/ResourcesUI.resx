@@ -977,4 +977,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="SummaryView_NoTracks" xml:space="preserve">
     <value>No Tracks</value>
   </data>
+  <data name="MainView_PresetRemove" xml:space="preserve">
+    <value>Delete Preset</value>
+  </data>
 </root>
