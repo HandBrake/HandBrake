@@ -36,6 +36,16 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         void Load();
 
         /// <summary>
+        /// Save the state of the Preset Treview
+        /// </summary>
+        void SaveCategoryStates();
+
+        /// <summary>
+        /// Load the state of the Preset Treeview.
+        /// </summary>
+        void LoadCategoryStates();
+
+        /// <summary>
         /// Add a new preset to the system
         /// </summary>
         /// <param name="preset">

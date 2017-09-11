@@ -105,7 +105,7 @@ namespace HandBrakeWPF
         /// The last preview duration
         /// </summary>
         public const string LastPreviewDuration = "LastPreviewDuration";
-    
+
         /// <summary>
         /// When Complete Action
         /// </summary>
@@ -145,6 +145,11 @@ namespace HandBrakeWPF
         /// The remove punctuation.
         /// </summary>
         public const string RemovePunctuation = "RemovePunctuation";
+
+        /// <summary>
+        /// The Show Preset Panel
+        /// </summary>
+        public const string ShowPresetPanel = "ShowPresetPanel";
 
         /// <summary>
         /// The reset when done action.

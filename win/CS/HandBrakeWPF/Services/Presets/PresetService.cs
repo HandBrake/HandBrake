@@ -472,7 +472,7 @@ namespace HandBrakeWPF.Services.Presets
                 foreach (var hbpreset in category.ChildrenArray)
                 {
                     Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
-                    preset.IsBuildIn = true; 
+                    preset.IsBuildIn = true;
                     preset.Category = category.PresetName;
                     preset.Task.AllowedPassthruOptions = new AllowedPassthru(true); // We don't want to override the built-in preset
 
@@ -541,6 +541,39 @@ namespace HandBrakeWPF.Services.Presets
             }
 
             selectedPreset.IsSelected = true;
+        }
+
+        public void SaveCategoryStates()
+        {
+            StringCollection expandedPresets = new StringCollection();
+            foreach (IPresetObject presetObject in this.presets)
+            {
+                PresetDisplayCategory category = presetObject as PresetDisplayCategory;
+                if (category != null && category.IsExpanded)
+                {
+                    expandedPresets.Add(category.Category);
+                }
+            }
+
+            this.userSettingService.SetUserSetting(UserSettingConstants.PresetExpandedStateList, expandedPresets);
+        }
+
+        public void LoadCategoryStates()
+        {
+            StringCollection expandedPresets = this.userSettingService.GetUserSetting<StringCollection>(UserSettingConstants.PresetExpandedStateList);
+            if (expandedPresets == null || expandedPresets.Count == 0)
+            {
+                return;
+            }
+
+            foreach (IPresetObject presetObject in this.presets)
+            {
+                PresetDisplayCategory category = presetObject as PresetDisplayCategory;
+                if (category != null && expandedPresets.Contains(category.Category))
+                {
+                    category.IsExpanded = true;
+                }
+            }
         }
 
         #endregion
@@ -654,10 +687,10 @@ namespace HandBrakeWPF.Services.Presets
                 {
                     string filename = this.RecoverFromCorruptedPresetFile(this.presetFile);
                     this.errorService.ShowMessageBox(
-                       Resources.PresetService_UnableToLoadPresets + filename,
-                       Resources.PresetService_UnableToLoad,
-                       MessageBoxButton.OK,
-                       MessageBoxImage.Exclamation);
+                        Resources.PresetService_UnableToLoadPresets + filename,
+                        Resources.PresetService_UnableToLoad,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Exclamation);
 
                     this.UpdateBuiltInPresets();
                     return; // Update built-in presets stores the presets locally, so just return.
@@ -707,7 +740,16 @@ namespace HandBrakeWPF.Services.Presets
                         foreach (HBPreset hbpreset in category.ChildrenArray)
                         {
                             Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
-                            preset.Category = category.PresetName;
+                            
+                            // Migration
+                            if (category.PresetName == "User Presets")
+                            {
+                                preset.Category = UserPresetCatgoryName;
+                            }
+                            else
+                            {
+                                preset.Category = category.PresetName;
+                            }
                             preset.IsBuildIn = hbpreset.Type == 0;
 
                             // IF we are using Source Max, Set the Max Width / Height values.
@@ -797,9 +839,10 @@ namespace HandBrakeWPF.Services.Presets
                 // Wrap the categories in a container. 
                 JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
                 PresetTransportContainer container = new PresetTransportContainer(
-                    Constants.PresetVersionMajor,
-                    Constants.PresetVersionMinor,
-                    Constants.PresetVersionMicro) { PresetList = new List<object>() };
+                                                             Constants.PresetVersionMajor,
+                                                             Constants.PresetVersionMinor,
+                                                             Constants.PresetVersionMicro)
+                                                         { PresetList = new List<object>() };
                 container.PresetList.AddRange(presetCategories.Values);
                 container.PresetList.AddRange(uncategorisedPresets);
 

@@ -418,6 +418,11 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.selectedPreset = value;
                     this.NotifyOfPropertyChange(() => this.SelectedPreset);
+
+                    if (value != null)
+                    {
+                        this.PresetSelect(value);
+                    }
                 }
             }
         }
@@ -1192,6 +1197,7 @@ namespace HandBrakeWPF.ViewModels
             this.presetService.Load();
             this.PresetsCategories = this.presetService.Presets;
             this.NotifyOfPropertyChange(() => this.PresetsCategories);
+            this.presetService.LoadCategoryStates();
 
             this.SummaryViewModel.OutputFormatChanged += this.SummaryViewModel_OutputFormatChanged;
 
@@ -1249,6 +1255,7 @@ namespace HandBrakeWPF.ViewModels
         {
             // Shutdown Service
             this.queueProcessor.Stop();
+            this.presetService.SaveCategoryStates();
 
             // Unsubscribe from Events.
             this.scanService.ScanStarted -= this.ScanStared;
@@ -1897,7 +1904,8 @@ namespace HandBrakeWPF.ViewModels
             Preset preset = presetViewModel.Preset;
 
             this.NotifyOfPropertyChange(() => this.CategoryPresets);
-            this.SelectedPreset = preset; // Reselect the preset      
+            this.selectedPreset = preset; // Reselect the preset      
+            this.NotifyOfPropertyChange(() => this.SelectedPreset);
         }
 
         /// <summary>
@@ -2037,23 +2045,24 @@ namespace HandBrakeWPF.ViewModels
                     this.SelectedPresetCategory = this.PresetsCategories.FirstOrDefault(c => c.Category == preset.Category);
                 }
 
-                this.SelectedPreset = preset;
-            }
+                this.selectedPreset = preset;
+                this.NotifyOfPropertyChange(() => this.SelectedPreset);
 
-            this.presetService.SetSelected(this.selectedPreset);
-            
-            if (this.selectedPreset != null)
-            {
-                // Tab Settings
-                this.PictureSettingsViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                this.VideoViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                this.FiltersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                this.AudioViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                this.SubtitleViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                this.ChaptersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                this.AdvancedViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                this.MetaDataViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                this.SummaryViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                this.presetService.SetSelected(this.selectedPreset);
+
+                if (this.selectedPreset != null)
+                {
+                    // Tab Settings
+                    this.PictureSettingsViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                    this.VideoViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                    this.FiltersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                    this.AudioViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                    this.SubtitleViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                    this.ChaptersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                    this.AdvancedViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                    this.MetaDataViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                    this.SummaryViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                }
             }
         }
 
@@ -2252,7 +2261,6 @@ namespace HandBrakeWPF.ViewModels
 
                 this.SelectedPresetCategory = category;
                 this.SelectedPreset = this.presetService.DefaultPreset;
-                this.PresetSelect();
             }
         }
 
