@@ -38,5 +38,7 @@ void ghb_subtitle_set_pref_lang(GhbValue *settings);
 void ghb_clear_subtitle_selection(GtkBuilder *builder);
 GhbValue *ghb_get_subtitle_list(GhbValue *settings);
 GhbValue *ghb_get_subtitle_settings(GhbValue *settings);
+char * ghb_subtitle_short_description(const GhbValue *subsource,
+                                      const GhbValue *subsettings);
 
 #endif // _SUBTITLEHANDLER_H_

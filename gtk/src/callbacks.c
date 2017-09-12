@@ -1239,15 +1239,33 @@ ghb_load_post_settings(signal_user_data_t * ud)
 static void
 show_scan_progress(signal_user_data_t *ud)
 {
-    GtkProgressBar *progress;
-    GtkLabel *label;
+    GtkWidget      * source_info;
+    GtkProgressBar * progress;
+    GtkLabel       * label;
 
     progress = GTK_PROGRESS_BAR(GHB_WIDGET(ud->builder, "scan_prog"));
-    gtk_progress_bar_set_fraction (progress, 0);
+    gtk_progress_bar_set_fraction(progress, 0);
     gtk_widget_show(GTK_WIDGET(progress));
 
     label = GTK_LABEL(GHB_WIDGET(ud->builder, "volume_label"));
     gtk_label_set_text( label, _("Scanning ...") );
+
+    source_info = GHB_WIDGET(ud->builder, "SourceInfoBox");
+    gtk_widget_hide(source_info);
+}
+
+static void
+hide_scan_progress(signal_user_data_t *ud)
+{
+    GtkWidget      * source_info;
+    GtkProgressBar * progress;
+
+    progress = GTK_PROGRESS_BAR(GHB_WIDGET(ud->builder, "scan_prog"));
+    gtk_progress_bar_set_fraction(progress, 1.0);
+    gtk_widget_hide(GTK_WIDGET(progress));
+
+    source_info = GHB_WIDGET(ud->builder, "SourceInfoBox");
+    gtk_widget_show(source_info);
 }
 
 static void
@@ -1707,38 +1725,6 @@ get_rate_string(gint rate_num, gint rate_den)
 static void
 update_aspect_info(signal_user_data_t *ud)
 {
-    GtkWidget *widget;
-    gchar *text;
-
-    text = ghb_dict_get_bool(ud->settings, "PictureAutoCrop") ? _("On") : _("Off");
-    widget = GHB_WIDGET(ud->builder, "crop_auto");
-    gtk_label_set_text(GTK_LABEL(widget), text);
-    text = ghb_dict_get_bool(ud->settings, "autoscale") ? _("On") : _("Off");
-    widget = GHB_WIDGET(ud->builder, "scale_auto");
-    gtk_label_set_text(GTK_LABEL(widget), text);
-    switch (ghb_settings_combo_int(ud->settings, "PicturePAR"))
-    {
-        case HB_ANAMORPHIC_NONE:
-            text = _("Off");
-            break;
-        case HB_ANAMORPHIC_STRICT:
-            text = _("Strict");
-            break;
-        case HB_ANAMORPHIC_LOOSE:
-            text = _("Loose");
-            break;
-        case HB_ANAMORPHIC_CUSTOM:
-            text = _("Custom");
-            break;
-        case HB_ANAMORPHIC_AUTO:
-            text = _("Automatic");
-            break;
-        default:
-            text = _("Unknown");
-            break;
-    }
-    widget = GHB_WIDGET(ud->builder, "scale_anamorphic");
-    gtk_label_set_text(GTK_LABEL(widget), text);
 }
 
 static void
@@ -1760,41 +1746,30 @@ update_crop_info(signal_user_data_t *ud)
         crop[3] = ghb_dict_get_int(ud->settings, "PictureRightCrop");
         width = title->geometry.width - crop[2] - crop[3];
         height = title->geometry.height - crop[0] - crop[1];
-        widget = GHB_WIDGET(ud->builder, "crop_dimensions");
         text = g_strdup_printf ("%d x %d", width, height);
-        gtk_label_set_text(GTK_LABEL(widget), text);
         widget = GHB_WIDGET(ud->builder, "crop_dimensions2");
         gtk_label_set_text(GTK_LABEL(widget), text);
         g_free(text);
     }
-    widget = GHB_WIDGET (ud->builder, "crop_values");
-    text = g_strdup_printf ("%d:%d:%d:%d", crop[0], crop[1], crop[2], crop[3]);
-    gtk_label_set_text (GTK_LABEL(widget), text);
-    g_free(text);
 }
 
 static void
 update_scale_info(signal_user_data_t *ud)
 {
-    GtkWidget *widget;
-    gchar *text;
-
-    gint width = ghb_dict_get_int(ud->settings, "scale_width");
-    gint height = ghb_dict_get_int(ud->settings, "scale_height");
-    widget = GHB_WIDGET(ud->builder, "scale_dimensions");
-    text = g_strdup_printf("%d x %d", width, height);
-    gtk_label_set_text(GTK_LABEL(widget), text);
-    g_free(text);
 }
 
 void
 ghb_update_title_info(signal_user_data_t *ud)
 {
-    GtkWidget *widget;
-    gchar *text;
-
-    int title_id, titleindex;
-    const hb_title_t * title;
+    GtkWidget           * widget;
+    gchar               * text;
+    gchar               * aspect;
+    gchar               * rate;
+    int                   title_id, titleindex;
+    int                   audio_count, subtitle_count;
+    const hb_title_t    * title;
+    const hb_geometry_t * geo;
+    gint                  aspect_n, aspect_d;
 
     title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
@@ -1803,33 +1778,27 @@ ghb_update_title_info(signal_user_data_t *ud)
 
     update_title_duration(ud);
 
-    widget = GHB_WIDGET (ud->builder, "source_video_codec");
-    if ( title->video_codec_name )
-        gtk_label_set_text (GTK_LABEL(widget), title->video_codec_name);
-    else
-        gtk_label_set_text (GTK_LABEL(widget), _("Unknown"));
+    geo = &title->geometry;
+    hb_reduce(&aspect_n, &aspect_d, geo->width * geo->par.num,
+              geo->height * geo->par.den);
+    aspect = get_aspect_string(aspect_n, aspect_d);
+    rate   = get_rate_string(title->vrate.num, title->vrate.den);
+    audio_count = hb_list_count(title->list_audio);
+    subtitle_count = hb_list_count(title->list_subtitle);
 
-    widget = GHB_WIDGET (ud->builder, "source_dimensions");
-    text = g_strdup_printf ("%d x %d", title->geometry.width, title->geometry.height);
-    gtk_label_set_text (GTK_LABEL(widget), text);
-    g_free(text);
+    text = g_strdup_printf(
+        "%dx%d (%dx%d), %s, %s FPS, %d Audio Track%s, %d Subtitle Track%s",
+        geo->width, geo->height,
+        geo->width * geo->par.num / geo->par.den, geo->height,
+        aspect, rate,
+        audio_count, audio_count == 1 ? "" : "s",
+        subtitle_count, subtitle_count == 1 ? "" : "s");
 
-    widget = GHB_WIDGET (ud->builder, "source_aspect");
-    gint aspect_n, aspect_d;
-    hb_reduce(&aspect_n, &aspect_d,
-                title->geometry.width * title->geometry.par.num,
-                title->geometry.height * title->geometry.par.den);
-    text = get_aspect_string(aspect_n, aspect_d);
-    gtk_label_set_text (GTK_LABEL(widget), text);
-    g_free(text);
-
-    widget = GHB_WIDGET (ud->builder, "source_frame_rate");
-    text = (gchar*)get_rate_string(title->vrate.num, title->vrate.den);
-    gtk_label_set_text (GTK_LABEL(widget), text);
-    g_free(text);
-
-    //widget = GHB_WIDGET (ud->builder, "source_interlaced");
-    //gtk_label_set_text (GTK_LABEL(widget), title->interlaced ? "Yes" : "No");
+    widget = GHB_WIDGET(ud->builder, "source_info_label");
+    gtk_label_set_text(GTK_LABEL(widget), text);
+    free(text);
+    free(aspect);
+    free(rate);
 
     ghb_update_display_aspect_label(ud);
 
@@ -1846,6 +1815,320 @@ static void update_meta(GhbValue *settings, const char *name, const char *val)
         ghb_dict_remove(metadata, name);
     else
         ghb_dict_set_string(metadata, name, val);
+}
+
+void
+ghb_update_summary_info(signal_user_data_t *ud)
+{
+    GString            * str;
+    char               * text;
+    int                  title_id;
+    GtkWidget          * widget;
+    GhbValue           * titleDict;
+
+    title_id  = ghb_dict_get_int(ud->settings, "title");
+    titleDict = ghb_get_title_dict(title_id);
+    if (titleDict == NULL)
+    {
+        // No title, clear summary
+        widget = GHB_WIDGET(ud->builder, "tracks_summary");
+        gtk_label_set_text(GTK_LABEL(widget), "");
+        widget = GHB_WIDGET(ud->builder, "filters_summary");
+        gtk_label_set_text(GTK_LABEL(widget), "");
+        widget = GHB_WIDGET(ud->builder, "dimensions_summary");
+        gtk_label_set_text(GTK_LABEL(widget), "--");
+        widget = GHB_WIDGET(ud->builder, "aspect_summary");
+        gtk_label_set_text(GTK_LABEL(widget), "--");
+        widget = GHB_WIDGET(ud->builder, "preview_button_image");
+        gtk_image_set_from_icon_name(GTK_IMAGE(widget), "hb-icon", 128);
+        return;
+    }
+
+    // Video Track
+    const hb_encoder_t * video_encoder;
+    const hb_rate_t    * fps;
+    hb_rational_t        vrate;
+    char               * rate_str;
+
+    str = g_string_new("");
+    video_encoder = ghb_settings_video_encoder(ud->settings, "VideoEncoder");
+    fps = ghb_settings_video_framerate(ud->settings, "VideoFramerate");
+    if (fps->rate == 0)
+    {
+        hb_dict_extract_rational(&vrate, titleDict, "FrameRate");
+    }
+    else
+    {
+        vrate.num = 27000000;
+        vrate.den = fps->rate;
+    }
+    rate_str = get_rate_string(vrate.num, vrate.den);
+    g_string_append_printf(str, "%s, %s FPS", video_encoder->name, rate_str);
+    if (ghb_dict_get_bool(ud->settings, "VideoFramerateCFR"))
+    {
+        g_string_append_printf(str, " CFR");
+    }
+    else if (ghb_dict_get_bool(ud->settings, "VideoFrameratePFR"))
+    {
+        g_string_append_printf(str, " PFR");
+    }
+    else if (ghb_dict_get_bool(ud->settings, "VideoFramerateVFR"))
+    {
+        g_string_append_printf(str, " VFR");
+    }
+
+    // Audio Tracks (show at most 3 tracks)
+    GhbValue * audioList;
+    GhbValue * sourceAudioList;
+    int        ii, count, show;
+
+    sourceAudioList = ghb_dict_get(titleDict, "AudioList");
+    audioList    = ghb_get_job_audio_list(ud->settings);
+    show = count = ghb_array_len(audioList);
+    if (count > 3)
+    {
+        show = 2;
+    }
+    for (ii = 0; ii < show; ii++)
+    {
+        GhbValue           * asettings, * asource;
+        const hb_mixdown_t * audio_mix;
+        const hb_encoder_t * audio_encoder;
+        const char         * lang;
+        int                  track;
+
+        asettings     = ghb_array_get(audioList, ii);
+        track         = ghb_dict_get_int(asettings, "Track");
+        asource       = ghb_array_get(sourceAudioList, track);
+        lang          = ghb_dict_get_string(asource, "Language");
+        audio_encoder = ghb_settings_audio_encoder(asettings, "Encoder");
+        if (audio_encoder->codec & HB_ACODEC_PASS_FLAG)
+        {
+            g_string_append_printf(str, "\n%s, %s", lang, audio_encoder->name);
+        }
+        else
+        {
+            audio_mix = ghb_settings_mixdown(asettings, "Mixdown");
+            g_string_append_printf(str, "\n%s, %s, %s", lang,
+                                   audio_encoder->name, audio_mix->name);
+        }
+    }
+    if (show < count)
+    {
+        g_string_append_printf(str, "\n+ %d more audio track%s", count - show,
+                               count - show > 1 ? "s" : "");
+    }
+
+    // Subtitle Tracks (show at most 3 tracks)
+    GhbValue * subtitleDict;
+    GhbValue * searchDict;
+    GhbValue * subtitleList;
+    GhbValue * sourceSubtitleList;
+    gboolean   search;
+
+    sourceSubtitleList = ghb_dict_get(titleDict, "SubtitleList");
+    subtitleDict       = ghb_get_job_subtitle_settings(ud->settings);
+    subtitleList       = ghb_dict_get(subtitleDict, "SubtitleList");
+    searchDict         = ghb_dict_get(subtitleDict, "Search");
+    search             = ghb_dict_get_bool(searchDict, "Enable");
+    show = count       = ghb_array_len(subtitleList) + search;
+    if (count > 3)
+    {
+        show = 2;
+    }
+    if (search)
+    {
+        gboolean force, burn, def;
+
+        force = ghb_dict_get_bool(searchDict, "Forced");
+        burn  = ghb_dict_get_bool(searchDict, "Burn");
+        def   = ghb_dict_get_bool(searchDict, "Default");
+
+        g_string_append_printf(str, "\nForeign Audio Scan");
+        if (force)
+        {
+            g_string_append_printf(str, ", Forced Only");
+        }
+        if (burn)
+        {
+            g_string_append_printf(str, ", Burned");
+        }
+        else if (def)
+        {
+            g_string_append_printf(str, ", Default");
+        }
+        show--;
+        count--;
+    }
+    for (ii = 0; ii < show; ii++)
+    {
+        GhbValue           * subsettings, * subsource;
+        int                  track;
+        char               * desc;
+        gboolean             force, burn, def;
+
+        subsettings = ghb_array_get(subtitleList, ii);
+        track       = ghb_dict_get_int(subsettings, "Track");
+        subsource   = ghb_array_get(sourceSubtitleList, track);
+        desc        = ghb_subtitle_short_description(subsource, subsettings);
+        force       = ghb_dict_get_bool(subsettings, "Forced");
+        burn        = ghb_dict_get_bool(subsettings, "Burn");
+        def         = ghb_dict_get_bool(subsettings, "Default");
+
+        g_string_append_printf(str, "\n%s", desc);
+        if (force)
+        {
+            g_string_append_printf(str, ", Forced Only");
+        }
+        if (burn)
+        {
+            g_string_append_printf(str, ", Burned");
+        }
+        else if (def)
+        {
+            g_string_append_printf(str, ", Default");
+        }
+    }
+    if (show < count)
+    {
+        g_string_append_printf(str, "\n+ %d more subtitle track%s",
+                               count - show,
+                               count - show > 1 ? "s" : "");
+    }
+
+    if (ghb_dict_get_bool(ud->settings, "ChapterMarkers"))
+    {
+        g_string_append_printf(str, "\nChapter Markers");
+    }
+
+    text = g_string_free(str, FALSE);
+    widget = GHB_WIDGET(ud->builder, "tracks_summary");
+    gtk_label_set_text(GTK_LABEL(widget), text);
+    g_free(text);
+
+    // Filters
+    gboolean     detel, comb_detect, deint, decomb, deblock, nlmeans, denoise;
+    gboolean     unsharp, lapsharp, rot, gray;
+    const char * sval;
+    int          ival;
+
+    sval        = ghb_dict_get_string(ud->settings, "PictureDetelecine");
+    detel       = sval != NULL && !!strcasecmp(sval, "off");
+    sval        = ghb_dict_get_string(ud->settings, "PictureCombDetectPreset");
+    comb_detect = sval != NULL && !!strcasecmp(sval, "off");
+    sval        = ghb_dict_get_string(ud->settings, "PictureDeinterlaceFilter");
+    deint       = sval != NULL && !strcasecmp(sval, "deinterlace");
+    decomb      = sval != NULL && !strcasecmp(sval, "decomb");
+    ival        = ghb_dict_get_int(ud->settings, "PictureDeblock");
+    deblock     = ival >= 5;
+    sval        = ghb_dict_get_string(ud->settings, "PictureDenoiseFilter");
+    nlmeans     = sval != NULL && !strcasecmp(sval, "nlmeans");
+    denoise     = sval != NULL && !strcasecmp(sval, "hqdn3d");
+    sval        = ghb_dict_get_string(ud->settings, "PictureSharpenFilter");
+    unsharp     = sval != NULL && !strcasecmp(sval, "unsharp");
+    lapsharp    = sval != NULL && !strcasecmp(sval, "lapsharp");
+    sval        = ghb_dict_get_string(ud->settings, "PictureRotate");
+    rot         = sval != NULL && !!strcasecmp(sval, "disable=1");
+    gray        = ghb_dict_get_bool(ud->settings, "VideoGrayScale");
+
+    str = g_string_new("");
+    sval = "";
+    if (detel)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DETELECINE);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (comb_detect)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_COMB_DETECT);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (deint)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DEINTERLACE);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (decomb)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DECOMB);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (deblock)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DEBLOCK);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (nlmeans)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_NLMEANS);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (denoise)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_DENOISE);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (unsharp)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_UNSHARP);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (lapsharp)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_LAPSHARP);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (rot)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_ROTATE);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+    if (gray)
+    {
+        hb_filter_object_t * filter = hb_filter_get(HB_FILTER_GRAYSCALE);
+        g_string_append_printf(str, "%s%s", sval, filter->name);
+        sval = ", ";
+    }
+
+    text = g_string_free(str, FALSE);
+    widget = GHB_WIDGET(ud->builder, "filters_summary");
+    gtk_label_set_text(GTK_LABEL(widget), text);
+    g_free(text);
+
+    int    width, height, display_width, display_height, par_width, par_height;
+    char * display_aspect;
+
+    width          = ghb_dict_get_int(ud->settings, "scale_width");
+    height         = ghb_dict_get_int(ud->settings, "scale_height");
+    display_width  = ghb_dict_get_int(ud->settings, "PictureDisplayWidth");
+    display_height = ghb_dict_get_int(ud->settings, "PictureDisplayHeight");
+    par_width      = ghb_dict_get_int(ud->settings, "PicturePARWidth");
+    par_height     = ghb_dict_get_int(ud->settings, "PicturePARHeight");
+
+    text = g_strdup_printf("%dx%d storage, %dx%d display",
+                           width, height, display_width, display_height);
+    widget = GHB_WIDGET(ud->builder, "dimensions_summary");
+    gtk_label_set_text(GTK_LABEL(widget), text);
+    g_free(text);
+
+    display_aspect = ghb_get_display_aspect_string(display_width,
+                                                   display_height);
+    text = g_strdup_printf("%d:%d PAR, %s DAR",
+                           par_width, par_height, display_aspect);
+    widget = GHB_WIDGET(ud->builder, "aspect_summary");
+    gtk_label_set_text(GTK_LABEL(widget), text);
+    g_free(text);
+    g_free(display_aspect);
 }
 
 void
@@ -1977,12 +2260,14 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     g_free(dest);
 
     ghb_dict_set_int(settings, "preview_frame", 2);
+    ghb_update_summary_info(ud);
 }
 
 void
 ghb_set_current_title_settings(signal_user_data_t *ud)
 {
     set_title_settings(ud, ud->settings);
+    ghb_update_summary_info(ud);
 }
 
 static void
@@ -2023,6 +2308,7 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
     ghb_value_free(&ud->settings_array);
     ud->settings_array = settings_array;
     ud->settings = ghb_array_get(ud->settings_array, titleindex);
+    ghb_update_summary_info(ud);
 }
 
 static gboolean update_preview = FALSE;
@@ -2128,32 +2414,11 @@ ptop_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-framerate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-    ghb_widget_to_setting(ud->settings, widget);
-
-    if (ghb_settings_video_framerate_rate(ud->settings, "VideoFramerate") != 0)
-    {
-        if (!ghb_dict_get_bool(ud->settings, "VideoFrameratePFR"))
-        {
-            ghb_ui_update(ud, "VideoFramerateCFR", ghb_boolean_value(TRUE));
-        }
-    }
-    if (ghb_settings_video_framerate_rate(ud->settings, "VideoFramerate") == 0 &&
-        ghb_dict_get_bool(ud->settings, "VideoFrameratePFR"))
-    {
-        ghb_ui_update(ud, "VideoFramerateVFR", ghb_boolean_value(TRUE));
-    }
-    ghb_check_dependency(ud, widget, NULL);
-    ghb_clear_presets_selection(ud);
-    ghb_live_reset(ud);
-}
-
-G_MODULE_EXPORT void
 setting_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
+    ghb_update_summary_info(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 }
@@ -2178,6 +2443,7 @@ comb_detect_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
                           ghb_string_value("decomb"));
         }
     }
+    ghb_update_summary_info(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2198,6 +2464,7 @@ deint_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_ui_update(ud, "PictureCombDetectPreset",
                       ghb_string_value("off"));
     }
+    ghb_update_summary_info(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2210,6 +2477,7 @@ denoise_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_update_ui_combo_box(ud, "PictureDenoisePreset", NULL, FALSE);
     ghb_ui_update(ud, "PictureDenoisePreset",
                   ghb_dict_get(ud->settings, "PictureDenoisePreset"));
+    ghb_update_summary_info(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2224,6 +2492,7 @@ sharpen_filter_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_ui_update(ud, "PictureSharpenPreset",
                   ghb_dict_get(ud->settings, "PictureSharpenPreset"));
     ghb_ui_update(ud, "PictureSharpenTune", ghb_string_value("none"));
+    ghb_update_summary_info(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2345,6 +2614,7 @@ chapter_markers_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     end      = ghb_dict_get_int(ud->settings, "end_point");
     markers &= (end > start);
     ghb_dict_set_bool(dest, "ChapterMarkers", markers);
+    ghb_update_summary_info(ud);
 }
 
 G_MODULE_EXPORT void
@@ -3365,7 +3635,6 @@ ghb_backend_events(signal_user_data_t *ud)
     else if (status.scan.state & GHB_STATE_SCANDONE)
     {
         const gchar *source;
-        GtkProgressBar *scan_prog;
         GtkLabel *label;
 
         GtkWidget *widget;
@@ -3383,9 +3652,7 @@ ghb_backend_events(signal_user_data_t *ud)
         source = ghb_dict_get_string(ud->globals, "scan_source");
         update_source_label(ud, source);
 
-        scan_prog = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "scan_prog"));
-        gtk_progress_bar_set_fraction (scan_prog, 1.0);
-        gtk_widget_hide(GTK_WIDGET(scan_prog));
+        hide_scan_progress(ud);
 
         int title_id, titleindex;
         const hb_title_t *title;

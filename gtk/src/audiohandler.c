@@ -895,6 +895,39 @@ ghb_audio_list_refresh_all(signal_user_data_t *ud)
 {
     ghb_sanitize_audio_tracks(ud);
     audio_refresh_list_ui(ud);
+    ghb_update_summary_info(ud);
+}
+
+void
+audio_update_setting(
+    GhbValue           *val,
+    const char         *name,
+    signal_user_data_t *ud)
+{
+    GhbValue *asettings;
+
+    if (block_updates)
+    {
+        ghb_value_free(&val);
+        return;
+    }
+
+    asettings = audio_get_selected_settings(ud, NULL);
+    if (asettings != NULL)
+    {
+        if (val != NULL)
+            ghb_dict_set(asettings, name, val);
+        else
+            ghb_dict_remove(asettings, name);
+        audio_deps(ud, asettings, NULL);
+        ghb_update_summary_info(ud);
+        ghb_audio_list_refresh_selected(ud);
+        ghb_live_reset(ud);
+    }
+    else
+    {
+        ghb_value_free(&val);
+    }
 }
 
 G_MODULE_EXPORT void
@@ -902,24 +935,18 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     static gint prev_acodec = 0;
     gint acodec;
-    GhbValue *asettings;
 
     ghb_widget_to_setting(ud->settings, widget);
-    asettings = audio_get_selected_settings(ud, NULL);
-    if (!block_updates && asettings != NULL)
-    {
-        ghb_dict_set(asettings, "Encoder", ghb_widget_value(widget));
-        audio_deps(ud, asettings, widget);
-        ghb_audio_list_refresh_selected(ud);
-        ghb_live_reset(ud);
-    }
+    audio_update_setting(ghb_widget_value(widget), "Encoder", ud);
 
     acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
 
     float low, high, gran, defval;
     int dir;
+    GhbValue *asettings;
     hb_audio_quality_get_limits(acodec, &low, &high, &gran, &dir);
     defval = hb_audio_quality_get_default(acodec);
+    asettings = audio_get_selected_settings(ud, NULL);
     if (asettings != NULL && ghb_audio_quality_enabled(asettings))
     {
         gdouble quality = ghb_dict_get_double(asettings, "Quality");
@@ -1000,56 +1027,11 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 audio_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GhbValue *asettings;
-
     g_debug("audio_track_changed_cb ()");
     ghb_widget_to_setting(ud->settings, widget);
-    if (block_updates)
-    {
-        return;
-    }
-
-    asettings = audio_get_selected_settings(ud, NULL);
-    if (asettings != NULL)
-    {
-        GhbValue *val = ghb_widget_value(widget);
-        ghb_dict_set(asettings, "Track", ghb_value_xform(val, GHB_INT));
-        ghb_value_free(&val);
-        audio_deps(ud, asettings, widget);
-        ghb_audio_list_refresh_selected(ud);
-        ghb_live_reset(ud);
-    }
-}
-
-void
-audio_update_setting(
-    GhbValue           *val,
-    const char         *name,
-    signal_user_data_t *ud)
-{
-    GhbValue *asettings;
-
-    if (block_updates)
-    {
-        ghb_value_free(&val);
-        return;
-    }
-
-    asettings = audio_get_selected_settings(ud, NULL);
-    if (asettings != NULL)
-    {
-        if (val != NULL)
-            ghb_dict_set(asettings, name, val);
-        else
-            ghb_dict_remove(asettings, name);
-        audio_deps(ud, asettings, NULL);
-        ghb_audio_list_refresh_selected(ud);
-        ghb_live_reset(ud);
-    }
-    else
-    {
-        ghb_value_free(&val);
-    }
+    GhbValue *val = ghb_widget_value(widget);
+    audio_update_setting(ghb_value_xform(val, GHB_INT), "Track", ud);
+    ghb_value_free(&val);
 }
 
 G_MODULE_EXPORT void
@@ -1399,6 +1381,7 @@ audio_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
                 audio_update_dialog_widgets(ud, asettings);
             }
             audio_refresh_list_ui(ud);
+            ghb_update_summary_info(ud);
         }
         else
         {
@@ -1442,6 +1425,7 @@ audio_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         } while (asettings != NULL);
     }
     audio_refresh_list_ui(ud);
+    ghb_update_summary_info(ud);
 }
 
 G_MODULE_EXPORT void
@@ -1555,6 +1539,7 @@ audio_reset_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_sanitize_audio_tracks(ud);
     audio_update_dialog_widgets(ud, audio_get_selected_settings(ud, NULL));
     audio_refresh_list_ui(ud);
+    ghb_update_summary_info(ud);
 }
 
 static GtkWidget *find_widget_recurse(GtkWidget *widget, const gchar *name)

@@ -225,6 +225,7 @@ const hb_rate_t* ghb_settings_audio_bitrate(
 const char* ghb_audio_bitrate_get_short_name(int rate);
 hb_audio_config_t* ghb_get_audio_info(const hb_title_t *title, gint track);
 hb_subtitle_t* ghb_get_subtitle_info(const hb_title_t *title, gint track);
+char * ghb_get_display_aspect_string(int disp_width, int disp_height);
 
 hb_handle_t* ghb_scan_handle(void);
 hb_handle_t* ghb_queue_handle(void);

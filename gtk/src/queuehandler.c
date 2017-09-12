@@ -78,6 +78,47 @@ queue_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t 
     }
 }
 
+char *
+ghb_subtitle_short_description(const GhbValue *subsource,
+                               const GhbValue *subsettings)
+{
+    GhbValue *srt;
+    char *desc = NULL;
+
+    srt = ghb_dict_get(subsettings, "SRT");
+    if (srt != NULL)
+    {
+        const gchar *code;
+        const gchar *lang;
+        const iso639_lang_t *iso;
+
+        lang = ghb_dict_get_string(srt, "Language");
+        code = ghb_dict_get_string(srt, "Codeset");
+
+        iso = lang_lookup(lang);
+        if (iso != NULL)
+        {
+            if (iso->native_name != NULL)
+                lang = iso->native_name;
+            else
+                lang = iso->eng_name;
+        }
+
+        desc = g_strdup_printf("%s (%s)(SRT)", lang, code);
+    }
+    else if (subsource == NULL)
+    {
+        desc = g_strdup(_("Foreign Audio Scan"));
+    }
+    else
+    {
+        const char * lang = ghb_dict_get_string(subsource, "Language");
+        desc = g_strdup_printf("%s", lang);
+    }
+
+    return desc;
+}
+
 static char *
 subtitle_get_track_description(const GhbValue *subsource,
                                const GhbValue *subsettings)
@@ -120,15 +161,13 @@ subtitle_get_track_description(const GhbValue *subsource,
     }
     else if (subsource == NULL)
     {
-        desc = g_strdup(_("Foreign Audio Search"));
+        desc = g_strdup(_("Foreign Audio Scan"));
     }
     else
     {
         int track         = ghb_dict_get_int(subsettings, "Track");
-        int source        = ghb_dict_get_int(subsource, "Source");
         const char * lang = ghb_dict_get_string(subsource, "Language");
-        desc = g_strdup_printf("%d - %s (%s)", track + 1,
-                                lang, hb_subsource_name(source));
+        desc = g_strdup_printf("%d - %s", track + 1, lang);
     }
 
     return desc;

@@ -71,6 +71,7 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
     ghb_show_container_options(ud);
+    ghb_update_summary_info(ud);
     ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
@@ -330,3 +331,35 @@ format_video_preset_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
     return g_strdup_printf(" %-12s", "ERROR");
 }
 
+G_MODULE_EXPORT void
+framerate_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_update_summary_info(ud);
+
+    if (ghb_settings_video_framerate_rate(ud->settings, "VideoFramerate") != 0)
+    {
+        if (!ghb_dict_get_bool(ud->settings, "VideoFrameratePFR"))
+        {
+            ghb_ui_update(ud, "VideoFramerateCFR", ghb_boolean_value(TRUE));
+        }
+    }
+    if (ghb_settings_video_framerate_rate(ud->settings, "VideoFramerate") == 0 &&
+        ghb_dict_get_bool(ud->settings, "VideoFrameratePFR"))
+    {
+        ghb_ui_update(ud, "VideoFramerateVFR", ghb_boolean_value(TRUE));
+    }
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+}
+
+G_MODULE_EXPORT void
+framerate_mode_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    ghb_update_summary_info(ud);
+    ghb_check_dependency(ud, widget, NULL);
+    ghb_clear_presets_selection(ud);
+    ghb_live_reset(ud);
+}

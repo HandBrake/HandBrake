@@ -606,7 +606,7 @@ int hb_dict_extract_rational(hb_rational_t *dst, const hb_dict_t * dict,
         {
             return 0;
         }
-        hb_value_t * den_val = hb_dict_get(val, "Num");
+        hb_value_t * den_val = hb_dict_get(val, "Den");
         if (den_val == NULL)
         {
             return 0;

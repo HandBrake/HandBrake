@@ -379,7 +379,7 @@ subtitle_get_track_description(GhbValue *settings, GhbValue *subsettings)
         track = ghb_dict_get_int(subsettings, "Track");
         if (val == NULL || track < 0)
         {
-            desc = g_strdup(_("Foreign Audio Search"));
+            desc = g_strdup(_("Foreign Audio Scan"));
         }
         else
         {
@@ -717,7 +717,12 @@ subtitle_update_setting(GhbValue *val, const char *name, signal_user_data_t *ud)
     {
         ghb_dict_set(subsettings, name, val);
         subtitle_list_refresh_selected(ud, subsettings);
+        ghb_update_summary_info(ud);
         ghb_live_reset(ud);
+    }
+    else
+    {
+        ghb_value_free(&val);
     }
     return subsettings;
 }
@@ -818,6 +823,7 @@ subtitle_srt_radio_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
         }
         subtitle_update_dialog_widgets(ud, subsettings);
         subtitle_list_refresh_selected(ud, subsettings);
+        ghb_update_summary_info(ud);
         ghb_live_reset(ud);
     }
 }
@@ -857,6 +863,7 @@ srt_setting_update(GhbValue *val, const char *name, signal_user_data_t *ud)
         {
             ghb_dict_set(srt, name, val);
             subtitle_list_refresh_selected(ud, subsettings);
+            ghb_update_summary_info(ud);
             ghb_live_reset(ud);
         }
         else
@@ -1094,6 +1101,7 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         {
             ghb_value_free(&backup);
         }
+        ghb_update_summary_info(ud);
     }
 }
 
@@ -1150,6 +1158,7 @@ subtitle_add_fas_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
         ghb_value_free(&backup);
     }
+    ghb_update_summary_info(ud);
 }
 
 G_MODULE_EXPORT void
@@ -1184,6 +1193,7 @@ subtitle_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
                            FALSE, FALSE, FALSE, &one_burned);
     }
     subtitle_refresh_list_ui(ud);
+    ghb_update_summary_info(ud);
     ghb_live_reset(ud);
 }
 
@@ -1191,6 +1201,7 @@ G_MODULE_EXPORT void
 subtitle_reset_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 {
     ghb_set_pref_subtitle(ud);
+    ghb_update_summary_info(ud);
 }
 
 // When the container changes, it may be necessary to burn additional
@@ -1533,6 +1544,7 @@ subtitle_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         {
             ghb_value_free(&backup);
         }
+        ghb_update_summary_info(ud);
     }
 }
 
@@ -1585,6 +1597,7 @@ subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *u
                 // Enable FAS button
                 GtkWidget *w = GHB_WIDGET(ud->builder, "subtitle_add_fas");
                 gtk_widget_set_sensitive(w, 1);
+                ghb_update_summary_info(ud);
                 return;
             }
             row--;
@@ -1604,6 +1617,7 @@ subtitle_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *u
         // Remove the selected item
         gtk_tree_store_remove(GTK_TREE_STORE(tm), &ti);
 
+        ghb_update_summary_info(ud);
         ghb_live_reset(ud);
     }
     gtk_tree_path_free(tp);

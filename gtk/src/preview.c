@@ -841,11 +841,11 @@ static void set_mini_preview_image(signal_user_data_t *ud, GdkPixbuf * pix)
     preview_height = gdk_pixbuf_get_height(pix);
 
     // Scale and display the mini-preview
-    height = MIN(ud->preview->button_height, 200);
+    height = MIN(ud->preview->button_height - 32, preview_height);
     width = preview_width * height / preview_height;
-    if (width > 400)
+    if (width > ud->preview->button_width - 32)
     {
-        width = 400;
+        width = MIN(ud->preview->button_width - 32, preview_width);
         height = preview_height * width / preview_width;
     }
     if ((height >= 16) && (width >= 16))
@@ -876,7 +876,7 @@ GdkPixbuf * do_preview_scaling(signal_user_data_t *ud, GdkPixbuf *pix)
     preview_width  = gdk_pixbuf_get_width(pix);
     preview_height = gdk_pixbuf_get_height(pix);
 
-    if (ud->preview->render_width < 0 || ud->preview->render_height < 0)
+    if (ud->preview->render_width <= 0 || ud->preview->render_height <= 0)
     {
         // resize preview window to fit preview
         preview_set_render_size(ud, preview_width, preview_height);
@@ -936,7 +936,11 @@ init_preview_image(signal_user_data_t *ud)
 
     title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    if (title == NULL) return;
+    if (title == NULL)
+    {
+        g_object_unref(ud->preview->pix);
+        ud->preview->pix = NULL;
+    }
     widget = GHB_WIDGET (ud->builder, "preview_frame");
     ud->preview->frame = ghb_widget_int(widget) - 1;
     if (ud->preview->encoded[ud->preview->frame])
@@ -970,11 +974,6 @@ init_preview_image(signal_user_data_t *ud)
     pix_width  = gdk_pixbuf_get_width(ud->preview->pix);
     pix_height = gdk_pixbuf_get_height(ud->preview->pix);
     preview_set_size(ud, pix_width, pix_height);
-
-    gchar *text = g_strdup_printf("%d x %d", width, height);
-    widget = GHB_WIDGET(ud->builder, "preview_dims");
-    gtk_label_set_text(GTK_LABEL(widget), text);
-    g_free(text);
 }
 
 void

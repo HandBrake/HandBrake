@@ -3688,14 +3688,12 @@ ghb_set_scale_settings(GhbValue *settings, gint mode)
     ghb_dict_set_int(par, "Den", resultGeo.par.den);
 }
 
-void
-ghb_update_display_aspect_label(signal_user_data_t *ud)
+char *
+ghb_get_display_aspect_string(int disp_width, int disp_height)
 {
-    gint disp_width, disp_height, dar_width, dar_height;
+    gint dar_width, dar_height;
     gchar *str;
 
-    disp_width = ghb_dict_get_int(ud->settings, "PictureDisplayWidth");
-    disp_height = ghb_dict_get_int(ud->settings, "PictureDisplayHeight");
     hb_reduce(&dar_width, &dar_height, disp_width, disp_height);
     gint iaspect = dar_width * 9 / dar_height;
     if (dar_width > 2 * dar_height)
@@ -3714,6 +3712,18 @@ ghb_update_display_aspect_label(signal_user_data_t *ud)
     {
         str = g_strdup_printf("%d : %d", dar_width, dar_height);
     }
+    return str;
+}
+
+void
+ghb_update_display_aspect_label(signal_user_data_t *ud)
+{
+    gint disp_width, disp_height;
+    gchar *str;
+
+    disp_width  = ghb_dict_get_int(ud->settings, "PictureDisplayWidth");
+    disp_height = ghb_dict_get_int(ud->settings, "PictureDisplayHeight");
+    str         = ghb_get_display_aspect_string(disp_width, disp_height);
     ghb_ui_update(ud, "display_aspect", ghb_string_value(str));
     g_free(str);
 }
@@ -3725,6 +3735,7 @@ ghb_set_scale(signal_user_data_t *ud, gint mode)
     ud->scale_busy = TRUE;
 
     ghb_set_scale_settings(ud->settings, mode);
+    ghb_update_summary_info(ud);
     ghb_picture_settings_deps(ud);
 
     // Step needs to be at least 2 because odd widths cause scaler crash

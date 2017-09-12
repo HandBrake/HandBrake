@@ -66,7 +66,7 @@ hb_filter_object_t hb_filter_pad =
 {
     .id                = HB_FILTER_PAD,
     .enforce_order     = 1,
-    .name              = "pad",
+    .name              = "Pad",
     .settings          = NULL,
     .init              = null_init,
     .work              = null_work,
@@ -82,7 +82,7 @@ hb_filter_object_t hb_filter_rotate =
 {
     .id                = HB_FILTER_ROTATE,
     .enforce_order     = 1,
-    .name              = "rotate",
+    .name              = "Rotate",
     .settings          = NULL,
     .init              = null_init,
     .work              = null_work,
@@ -98,7 +98,7 @@ hb_filter_object_t hb_filter_deinterlace =
 {
     .id                = HB_FILTER_DEINTERLACE,
     .enforce_order     = 1,
-    .name              = "deinterlace",
+    .name              = "Deinterlace",
     .settings          = NULL,
     .init              = null_init,
     .work              = null_work,
