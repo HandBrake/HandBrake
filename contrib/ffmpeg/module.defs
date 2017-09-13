@@ -41,6 +41,8 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=flac \
     --enable-encoder=mpeg2video \
     --enable-encoder=mpeg4 \
+    --enable-encoder=h264_nvenc \
+    --enable-encoder=hevc_nvenc \
     --enable-encoder=libmp3lame \
     --enable-libopus \
     --enable-encoder=libopus \
