@@ -668,8 +668,8 @@ int qsv_enc_init(hb_work_private_t *pv)
     if ((MFXQueryIMPL   (qsv->mfx_session, &impl)    == MFX_ERR_NONE) &&
         (MFXQueryVersion(qsv->mfx_session, &version) == MFX_ERR_NONE))
     {
-        hb_log("qsv_enc_init: using '%s' implementation, API: %"PRIu16".%"PRIu16"",
-               hb_qsv_impl_get_name(impl), version.Major, version.Minor);
+        hb_log("qsv_enc_init: using '%s %s' implementation, API: %"PRIu16".%"PRIu16"",
+               hb_qsv_impl_get_name(impl), hb_qsv_impl_get_via_name(impl), version.Major, version.Minor);
     }
     else
     {

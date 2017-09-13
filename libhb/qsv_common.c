@@ -644,6 +644,11 @@ int hb_qsv_info_init()
      */
     mfxSession session;
     mfxVersion version = { .Major = 1, .Minor = 0, };
+#ifdef SYS_LINUX
+    mfxIMPL hw_preference = MFX_IMPL_VIA_ANY;
+#else
+    mfxIMPL hw_preference = MFX_IMPL_VIA_D3D11;
+#endif
 
     // check for software fallback
     if (MFXInit(MFX_IMPL_SOFTWARE, &version, &session) == MFX_ERR_NONE)
@@ -664,25 +669,41 @@ int hb_qsv_info_init()
     }
 
     // check for actual hardware support
-    if (MFXInit(MFX_IMPL_HARDWARE_ANY, &version, &session) == MFX_ERR_NONE)
-    {
-        // Media SDK hardware found, but check that our minimum is supported
-        //
-        // Note: this-party hardware (QSV_G0) is unsupported for the time being
-        MFXQueryVersion(session, &qsv_hardware_version);
-        if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G1 &&
-            HB_CHECK_MFX_VERSION(qsv_hardware_version,
-                                 HB_QSV_MINVERSION_MAJOR,
-                                 HB_QSV_MINVERSION_MINOR))
+    do{
+        if (MFXInit(MFX_IMPL_HARDWARE_ANY | hw_preference, &version, &session) == MFX_ERR_NONE)
         {
-            query_capabilities(session, qsv_hardware_version, &qsv_hardware_info_avc);
-            query_capabilities(session, qsv_hardware_version, &qsv_hardware_info_hevc);
-            // now that we know which hardware encoders are
-            // available, we can set the preferred implementation
-            hb_qsv_impl_set_preferred("hardware");
+            // Media SDK hardware found, but check that our minimum is supported
+            //
+            // Note: this-party hardware (QSV_G0) is unsupported for the time being
+            MFXQueryVersion(session, &qsv_hardware_version);
+            if (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G1 &&
+                HB_CHECK_MFX_VERSION(qsv_hardware_version,
+                                     HB_QSV_MINVERSION_MAJOR,
+                                     HB_QSV_MINVERSION_MINOR))
+            {
+                query_capabilities(session, qsv_hardware_version, &qsv_hardware_info_avc);
+                qsv_hardware_info_avc.implementation = MFX_IMPL_HARDWARE_ANY | hw_preference;
+                query_capabilities(session, qsv_hardware_version, &qsv_hardware_info_hevc);
+                qsv_hardware_info_hevc.implementation = MFX_IMPL_HARDWARE_ANY | hw_preference;
+                // now that we know which hardware encoders are
+                // available, we can set the preferred implementation
+                hb_qsv_impl_set_preferred("hardware");
+            }
+            MFXClose(session);
+            hw_preference = 0;
         }
-        MFXClose(session);
+        else
+        {
+#ifndef SYS_LINUX
+            // Windows only: After D3D11 we will try D3D9
+            if (hw_preference == MFX_IMPL_VIA_D3D11)
+                hw_preference = MFX_IMPL_VIA_D3D9;
+            else
+#endif
+                hw_preference = 0;
+        }
     }
+    while(hw_preference != 0);
 
     // success
     return 0;
@@ -796,8 +817,9 @@ void hb_qsv_info_print()
         if (hb_qsv_info_avc != NULL && hb_qsv_info_avc->available)
         {
             hb_log(" - H.264 encoder: yes");
-            hb_log("    - preferred implementation: %s",
-                   hb_qsv_impl_get_name(hb_qsv_info_avc->implementation));
+            hb_log("    - preferred implementation: %s %s",
+                   hb_qsv_impl_get_name(hb_qsv_info_avc->implementation),
+                   hb_qsv_impl_get_via_name(hb_qsv_info_avc->implementation));
             if (qsv_hardware_info_avc.available)
             {
                 log_capabilities(1, qsv_hardware_info_avc.capabilities,
@@ -816,8 +838,9 @@ void hb_qsv_info_print()
         if (hb_qsv_info_hevc != NULL && hb_qsv_info_hevc->available)
         {
             hb_log(" - H.265 encoder: yes (8bit: yes, 10bit: %s)", (qsv_hardware_generation(hb_get_cpu_platform()) < QSV_G6) ? "no" : "yes" );
-            hb_log("    - preferred implementation: %s",
-                   hb_qsv_impl_get_name(hb_qsv_info_hevc->implementation));
+            hb_log("    - preferred implementation: %s %s",
+                   hb_qsv_impl_get_name(hb_qsv_info_hevc->implementation),
+                   hb_qsv_impl_get_via_name(hb_qsv_info_hevc->implementation));
             if (qsv_hardware_info_hevc.available)
             {
                 log_capabilities(1, qsv_hardware_info_hevc.capabilities,
@@ -2157,6 +2180,19 @@ const char* hb_qsv_impl_get_name(int impl)
         default:
             return NULL;
     }
+}
+
+const char* hb_qsv_impl_get_via_name(int impl)
+{
+    if (impl & MFX_IMPL_VIA_VAAPI)
+        return "via VAAPI";
+    else if (impl & MFX_IMPL_VIA_D3D11)
+        return "via D3D11";
+    else if (impl & MFX_IMPL_VIA_D3D9)
+        return "via D3D9";
+    else if (impl & MFX_IMPL_VIA_ANY)
+        return "via ANY";
+    else return NULL;
 }
 
 void hb_qsv_force_workarounds()
