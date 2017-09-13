@@ -1871,16 +1871,26 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     GtkResponseType    response;
     const gchar       *exportDir;
     gchar             *filename;
+    GhbValue          *dict;
 
     path = get_selected_path(ud);
     if (path == NULL || path->depth <= 0)
     {
+        char * new_name;
+
         free(path);
-        return;
+        dict = ghb_settings_to_preset(ud->settings);
+        name = ghb_dict_get_string(dict, "PresetName");
+        new_name = g_strdup_printf("%s (modified)", name);
+        ghb_dict_set_string(dict, "PresetName", new_name);
+        free(new_name);
+    }
+    else
+    {
+        dict = hb_value_dup(hb_preset_get(path));
+        free(path);
     }
 
-    GhbValue *dict = hb_preset_get(path);
-    free(path);
     if (dict == NULL)
     {
         return;
@@ -1925,6 +1935,7 @@ preset_export_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
         g_free(filename);
     }
     gtk_widget_destroy(dialog);
+    hb_value_free(&dict);
 }
 
 G_MODULE_EXPORT void

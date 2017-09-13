@@ -105,6 +105,8 @@
         "WhenComplete": "notify",
         "SrtDir": "",
         "window_width": 1,
-        "window_height": 1
+        "window_height": 1,
+        "preset_window_width": 1,
+        "preset_window_height": 1
     }
 }

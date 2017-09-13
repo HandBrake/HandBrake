@@ -4083,6 +4083,15 @@ show_activity_menu_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT gboolean
+presets_window_delete_cb(GtkWidget *xwidget, GdkEvent *event, signal_user_data_t *ud)
+{
+    gtk_widget_set_visible(xwidget, FALSE);
+    GtkWidget *widget = GHB_WIDGET(ud->builder, "show_presets");
+    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), FALSE);
+    return TRUE;
+}
+
+G_MODULE_EXPORT gboolean
 activity_window_delete_cb(GtkWidget *xwidget, GdkEvent *event, signal_user_data_t *ud)
 {
     gtk_widget_set_visible(xwidget, FALSE);
@@ -4250,25 +4259,47 @@ show_queue_menu_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
     gtk_toggle_tool_button_set_active(button, active);
 }
 
+static void
+presets_window_set_visible(signal_user_data_t *ud, gboolean visible)
+{
+    GtkWidget     * presets_window;
+    GtkWidget     * hb_window;
+    int             x, y;
+
+    hb_window = GHB_WIDGET(ud->builder, "hb_window");
+    if (!gtk_widget_is_visible(hb_window))
+    {
+        return;
+    }
+
+    presets_window = GHB_WIDGET(ud->builder, "presets_window");
+    gtk_widget_set_visible(presets_window, visible);
+    if (visible)
+    {
+        int w, h;
+        w = ghb_dict_get_int(ud->prefs, "presets_window_width");
+        h = ghb_dict_get_int(ud->prefs, "presets_window_height");
+        if (w > 200 && h > 200)
+        {
+            gtk_window_resize(GTK_WINDOW(presets_window), w, h);
+        }
+        gtk_window_get_position(GTK_WINDOW(hb_window), &x, &y);
+        x -= w + 10;
+        if (x < 0)
+        {
+            gtk_window_move(GTK_WINDOW(hb_window), w + 10, y);
+            x = 0;
+        }
+        gtk_window_move(GTK_WINDOW(presets_window), x, y);
+    }
+}
+
 G_MODULE_EXPORT void
 show_presets_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    GtkWidget *frame;
-    GtkWindow *hb_window;
-
-    g_debug("show_presets_clicked_cb ()");
-    frame = GHB_WIDGET (ud->builder, "presets_frame");
     ghb_widget_to_setting(ud->prefs, widget);
-    if (ghb_dict_get_bool(ud->prefs, "show_presets"))
-    {
-        gtk_widget_show_now(frame);
-    }
-    else
-    {
-        gtk_widget_hide(frame);
-        hb_window = GTK_WINDOW(GHB_WIDGET (ud->builder, "hb_window"));
-        gtk_window_resize(hb_window, 16, 16);
-    }
+    presets_window_set_visible(ud, ghb_dict_get_bool(ud->prefs,
+                                                     "show_presets"));
     ghb_pref_save(ud->prefs, "show_presets");
 }
 
@@ -5783,12 +5814,46 @@ ghb_notify_done(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT gboolean
+window_map_cb(
+    GtkWidget *widget,
+    GdkEventAny *event,
+    signal_user_data_t *ud)
+{
+    presets_window_set_visible(ud, ghb_dict_get_bool(ud->prefs,
+                                                     "show_presets"));
+    return FALSE;
+}
+
+G_MODULE_EXPORT gboolean
+presets_window_configure_cb(
+    GtkWidget *widget,
+    GdkEventConfigure *event,
+    signal_user_data_t *ud)
+{
+    if (gtk_widget_get_visible(widget))
+    {
+        gint w, h;
+        w = ghb_dict_get_int(ud->prefs, "presets_window_width");
+        h = ghb_dict_get_int(ud->prefs, "presets_window_height");
+
+        if ( w != event->width || h != event->height )
+        {
+            ghb_dict_set_int(ud->prefs, "presets_window_width", event->width);
+            ghb_dict_set_int(ud->prefs, "presets_window_height", event->height);
+            ghb_pref_set(ud->prefs, "presets_window_width");
+            ghb_pref_set(ud->prefs, "presets_window_height");
+            ghb_prefs_store();
+        }
+    }
+    return FALSE;
+}
+
+G_MODULE_EXPORT gboolean
 window_configure_cb(
     GtkWidget *widget,
     GdkEventConfigure *event,
     signal_user_data_t *ud)
 {
-    //g_message("preview_configure_cb()");
     if (gtk_widget_get_visible(widget))
     {
         gint w, h;
