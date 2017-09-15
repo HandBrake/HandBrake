@@ -1542,7 +1542,7 @@ This is often the feature title of a DVD.</property>
                   <object class="GtkMenuButton" id="presets_menu_button">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="direction">down</property>
+                    <property name="direction">right</property>
                     <child>
                       <object class="GtkBox" id="presets_menu_button_box">
                         <property name="orientation">horizontal</property>
@@ -1567,7 +1567,7 @@ This is often the feature title of a DVD.</property>
                           <object class="GtkImage" id="presets_menu_button_arrow">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="icon_name">pan-down-symbolic</property>
+                            <property name="icon_name">pan-end-symbolic</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
