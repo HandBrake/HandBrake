@@ -29,7 +29,6 @@
 
 #define GHB_WIDGET(b,n) GTK_WIDGET(gtk_builder_get_object ((b), (n)))
 //#define GHB_WIDGET(b,n)   GTK_WIDGET(debug_get_object((b), (n)))
-#define GHB_ACTION(b,n) GTK_ACTION(gtk_builder_get_object ((b), (n)))
 #define GHB_OBJECT(b,n) gtk_builder_get_object ((b), (n))
 
 GObject* debug_get_object(GtkBuilder *b, const gchar *n);
@@ -59,23 +58,25 @@ typedef struct preview_s preview_t;
 typedef struct
 {
     gchar *current_dvd_device;
-    gboolean debug;
-    gboolean dont_clear_presets;
-    gboolean scale_busy;
-    gint cancel_encode;
-    GtkBuilder *builder;
-    GhbValue *x264_priv;
-    GhbValue *globals;
-    GhbValue *prefs;
-    GhbValue *settings;
-    GhbValue *settings_array;
-    GhbValue *queue;
-    GIOChannel *activity_log;
-    GIOChannel *job_activity_log;
-    preview_t *preview;
-    gchar *appcast;
-    gint appcast_len;
-    GdkVisibilityState hb_visibility;
+    gboolean              debug;
+    gboolean              dont_clear_presets;
+    gboolean              scale_busy;
+    gint                  cancel_encode;
+    GtkBuilder          * builder;
+    GhbValue            * x264_priv;
+    GhbValue            * globals;
+    GhbValue            * prefs;
+    GhbValue            * settings;
+    GhbValue            * settings_array;
+    GhbValue            * queue;
+    GIOChannel          * activity_log;
+    GIOChannel          * job_activity_log;
+    preview_t           * preview;
+    gchar               * appcast;
+    gint                  appcast_len;
+    GdkVisibilityState    hb_visibility;
+    int                   stderr_src_id;
+    GtkApplication      * app;
 } signal_user_data_t;
 
 enum

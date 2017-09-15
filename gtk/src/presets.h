@@ -42,10 +42,11 @@ gchar* ghb_get_user_config_dir(gchar *subdir);
 void ghb_override_user_config_dir(char *dir);
 void ghb_settings_to_ui(signal_user_data_t *ud, GhbValue *dict);
 void ghb_clear_presets_selection(signal_user_data_t *ud);
-void ghb_select_preset(GtkBuilder *builder, const char *name);
-void ghb_select_default_preset(GtkBuilder *builder);
+void ghb_select_preset(signal_user_data_t *ud, const char *name);
+void ghb_select_default_preset(signal_user_data_t *ud);
 void ghb_presets_list_init(signal_user_data_t *ud,
                            const hb_preset_index_t *path);
+void ghb_presets_menu_init(signal_user_data_t *ud);
 int ghb_find_pid_file();
 void ghb_write_pid_file();
 GhbValue* ghb_get_current_preset(signal_user_data_t *ud);

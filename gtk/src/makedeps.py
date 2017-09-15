@@ -6,9 +6,6 @@ import json
 
 DepEntry = collections.namedtuple('DepEntry', 'widget dep enable die hide')
 dep_map = (
-    DepEntry("title", "queue_add", "none", True, False),
-    DepEntry("title", "queue_add_menu", "none", True, False),
-    DepEntry("title", "queue_add_multiple_menu", "none", True, False),
     DepEntry("title", "preview_frame", "none", True, False),
     DepEntry("title", "chapters_tab", "none", True, False),
     DepEntry("title", "start_point", "none", True, False),

@@ -93,9 +93,9 @@ create_builder_or_die(const gchar * name)
     const gchar *ghb_ui;
     gsize data_size;
 
-    ghb_ui_register_resource();
     GResource *ui_res = ghb_ui_get_resource();
-    GBytes *gbytes = g_resource_lookup_data(ui_res, "/org/handbrake/ui/ghb.ui",
+    GBytes *gbytes = g_resource_lookup_data(ui_res,
+                                            "/org/handbrake/ghb/ui/ghb.ui",
                                             0, NULL);
     ghb_ui = g_bytes_get_data(gbytes, &data_size);
 
@@ -649,7 +649,8 @@ IoRedirect(signal_user_data_t *ud)
     // "Invalid byte sequence in conversion input"
     // Set disable encoding on the channel.
     g_io_channel_set_encoding(channel, NULL, NULL);
-    g_io_add_watch(channel, G_IO_IN, ghb_log_cb, (gpointer)ud );
+    ud->stderr_src_id =
+        g_io_add_watch(channel, G_IO_IN, ghb_log_cb, (gpointer)ud );
 }
 
 typedef struct
@@ -818,69 +819,143 @@ stackswitcher button.text-button    \n\
 
 extern G_MODULE_EXPORT void status_icon_query_tooltip_cb(void);
 
-int
-main(int argc, char *argv[])
+extern G_MODULE_EXPORT void
+ghb_shutdown_cb(GApplication * app, signal_user_data_t *ud)
 {
-    signal_user_data_t *ud;
-    GError *error = NULL;
-    GOptionContext *context;
+}
 
-#if defined(_WIN32)
-    // Tell gdk pixbuf where it's loader config file is.
-    _putenv_s("GDK_PIXBUF_MODULE_FILE", "ghb.exe.local/loaders.cache");
-    _putenv_s("GST_PLUGIN_PATH", "lib/gstreamer-1.0");
-#endif
+G_MODULE_EXPORT void
+source_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+single_title_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+destination_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+preferences_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+quit_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+queue_add_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+queue_add_all_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+queue_start_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+queue_pause_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+queue_save_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+show_presets_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
+G_MODULE_EXPORT void
+hbfd_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
+G_MODULE_EXPORT void
+show_queue_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
+G_MODULE_EXPORT void
+show_preview_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
+G_MODULE_EXPORT void
+show_activity_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
+G_MODULE_EXPORT void
+preset_save_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+preset_remove_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+preset_default_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+preset_folder_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+preset_export_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+preset_import_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+presets_reload_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+about_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+guide_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+preset_select_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 
-    hb_global_init();
-
-#ifdef ENABLE_NLS
-    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
-    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
-    textdomain(GETTEXT_PACKAGE);
-#endif
-
-    context = g_option_context_new(_("- Transcode media formats"));
-    g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
-    g_option_context_add_group(context, gtk_get_option_group(TRUE));
-#if defined(_ENABLE_GST)
-    g_option_context_add_group(context, gst_init_get_option_group());
-#endif
-    g_option_context_parse(context, &argc, &argv, &error);
-    if (error != NULL)
+static void map_actions(GApplication * app, signal_user_data_t * ud)
+{
+    const GActionEntry entries[] =
     {
-        g_warning("%s: %s", G_STRFUNC, error->message);
-        g_clear_error(&error);
-    }
-    g_option_context_free(context);
+        { "source",         source_action_cb            },
+        { "single",         single_title_action_cb      },
+        { "destination",    destination_action_cb       },
+        { "preferences",    preferences_action_cb       },
+        { "quit",           quit_action_cb              },
+        { "queue-add",      queue_add_action_cb         },
+        { "queue-add-all",  queue_add_all_action_cb     },
+        { "queue-start",    queue_start_action_cb       },
+        { "queue-pause",    queue_pause_action_cb       },
+        { "queue-save",     queue_save_action_cb        },
+        { "hbfd",           NULL,
+          NULL, "false",    hbfd_action_cb              },
+        { "show-presets",   NULL,
+          NULL, "false",    show_presets_action_cb      },
+        { "show-queue",     NULL,
+          NULL, "false",    show_queue_action_cb        },
+        { "show-preview",   NULL,
+          NULL, "false",    show_preview_action_cb      },
+        { "show-activity",  NULL,
+          NULL, "false",    show_activity_action_cb     },
+        { "preset-save",    preset_save_action_cb       },
+        { "preset-remove",  preset_remove_action_cb     },
+        { "preset-default", preset_default_action_cb    },
+        { "preset-folder",  preset_folder_action_cb     },
+        { "preset-export",  preset_export_action_cb     },
+        { "preset-import",  preset_import_action_cb     },
+        { "presets-reload", presets_reload_action_cb    },
+        { "about",          about_action_cb             },
+        { "guide",          guide_action_cb             },
+        { "preset-select",  preset_select_action_cb, "s"    },
+    };
+    g_action_map_add_action_entries(G_ACTION_MAP(app), entries,
+                                    G_N_ELEMENTS(entries), ud);
+}
 
-#if defined(_WIN32)
-    if (win32_console)
+gboolean
+ghb_idle_ui_init(signal_user_data_t *ud)
+{
+    ghb_settings_to_ui(ud, ud->globals);
+    ghb_settings_to_ui(ud, ud->prefs);
+    // Note that ghb_settings_to_ui(ud->settings) happens when initial
+    // empty title is initialized.
+
+    // Init settings that are dependent on command line args
+    if (dvd_device != NULL)
     {
-        // Enable console logging
-        if(AttachConsole(ATTACH_PARENT_PROCESS) || AllocConsole()){
-            close(STDOUT_FILENO);
-            freopen("CONOUT$", "w", stdout);
-            close(STDERR_FILENO);
-            freopen("CONOUT$", "w", stderr);
-        }
+        // Source overridden from command line option
+        ghb_dict_set_string(ud->globals, "scan_source", dvd_device);
+        g_idle_add((GSourceFunc)ghb_idle_scan, ud);
     }
     else
     {
-        // Non-console windows apps do not have a stderr->_file
-        // assigned properly
-        stderr->_file = STDERR_FILENO;
-        stdout->_file = STDOUT_FILENO;
+        GhbValue *gval = ghb_dict_get_value(ud->prefs, "default_source");
+        ghb_dict_set(ud->globals, "scan_source", ghb_value_dup(gval));
     }
-#endif
 
-    if (argc > 1 && dvd_device == NULL && argv[1][0] != '-')
+    if (arg_preset != NULL)
     {
-        dvd_device = argv[1];
+        ghb_select_preset(ud, arg_preset);
+    }
+    else
+    {
+        ghb_select_default_preset(ud);
     }
 
-    gtk_init(&argc, &argv);
+    // Grey out widgets that are dependent on a disabled feature
+    ghb_check_all_depencencies(ud);
 
-    GtkCssProvider *css = gtk_css_provider_new();
+    return FALSE;
+}
+
+extern G_MODULE_EXPORT void
+ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
+{
+    GError             * error = NULL;
+    GtkCssProvider     * css = gtk_css_provider_new();
+
     error = NULL;
     gtk_css_provider_load_from_data(css, MyCSS, -1, &error);
     if (error == NULL)
@@ -913,11 +988,16 @@ main(int argc, char *argv[])
     }
 
     ghb_write_pid_file();
-    ud = g_malloc0(sizeof(signal_user_data_t));
+
+    // map application actions (menu callbacks)
+    map_actions(app, ud);
+
+    // connect shutdown signal for cleanup
+    g_signal_connect(app, "shutdown", (GCallback)ghb_shutdown_cb, ud);
+
     ud->debug = ghb_debug;
     g_log_set_handler(NULL, G_LOG_LEVEL_DEBUG, debug_log_handler, ud);
     g_log_set_handler("Gtk", G_LOG_LEVEL_WARNING, warn_log_handler, ud);
-    //g_log_set_handler("Gtk", G_LOG_LEVEL_CRITICAL, warn_log_handler, ud);
 
     ud->globals = ghb_dict_new();
     ud->prefs = ghb_dict_new();
@@ -926,14 +1006,10 @@ main(int argc, char *argv[])
     ghb_array_append(ud->settings_array, ud->settings);
 
     ud->builder = create_builder_or_die(BUILDER_NAME);
+
     // Enable events that alert us to media change events
     watch_volumes(ud);
 
-    //GtkWidget *widget = GHB_WIDGET(ud->builder, "PictureDetelecineCustom");
-    //gtk_entry_set_inner_border(widget, 2);
-
-    // Since GtkBuilder no longer assigns object ids to widget names
-    // Assign a few that are necessary for style overrides to work
 #if defined(_NO_UPDATE_CHECK)
     GtkWidget *widget;
     widget = GHB_WIDGET(ud->builder, "check_updates_box");
@@ -975,6 +1051,9 @@ main(int argc, char *argv[])
     buffer = gtk_text_view_get_buffer(textview);
     g_signal_connect(buffer, "changed", (GCallback)plot_changed_cb, ud);
 
+    // Initialize HB global settings and tables.
+    ghb_backend_init(0);
+    // Set up UI combo boxes.  Some of these rely on HB global settings.
     ghb_combo_init(ud);
 
     g_debug("ud %p\n", ud);
@@ -1009,52 +1088,23 @@ main(int argc, char *argv[])
     ghb_prefs_to_settings(ud->prefs);
 
     int logLevel = ghb_dict_get_int(ud->prefs, "LoggingLevel");
-    ghb_backend_init(logLevel);
+    ghb_log_level_set(logLevel);
 
     // Load the presets files
     ghb_presets_load(ud);
-    // Note that ghb_preset_to_settings(ud->settings) is called when
-    // the default preset is selected.
 
-    ghb_settings_to_ui(ud, ud->globals);
-    ghb_settings_to_ui(ud, ud->prefs);
-    // Note that ghb_settings_to_ui(ud->settings) happens when initial
-    // empty title is initialized.
+    // GActions associated with widgets do not fire when the widget
+    // is changed from this GtkApplication "activate" signal.
+    // So initialize UI when idle.
+    g_idle_add((GSourceFunc)ghb_idle_ui_init, ud);
 
-
-    if (ghb_dict_get_bool(ud->prefs, "hbfd"))
-    {
-        ghb_hbfd(ud, TRUE);
-    }
     const gchar *source = ghb_dict_get_string(ud->prefs, "default_source");
     ghb_dvd_set_current(source, ud);
 
     // Populate the presets tree view
     ghb_presets_list_init(ud, NULL);
-    // Get the first preset name
-    if (arg_preset != NULL)
-    {
-        ghb_select_preset(ud->builder, arg_preset);
-    }
-    else
-    {
-        ghb_select_default_preset(ud->builder);
-    }
+    ghb_presets_menu_init(ud);
 
-    // Grey out widgets that are dependent on a disabled feature
-    ghb_check_all_depencencies(ud);
-
-    if (dvd_device != NULL)
-    {
-        // Source overridden from command line option
-        ghb_dict_set_string(ud->globals, "scan_source", dvd_device);
-        g_idle_add((GSourceFunc)ghb_idle_scan, ud);
-    }
-    else
-    {
-        GhbValue *gval = ghb_dict_get_value(ud->prefs, "default_source");
-        ghb_dict_set(ud->globals, "scan_source", ghb_value_dup(gval));
-    }
     // Reload and check status of the last saved queue
     g_idle_add((GSourceFunc)ghb_reload_queue, ud);
 
@@ -1215,13 +1265,85 @@ main(int argc, char *argv[])
     ghb_set_custom_filter_tooltip(ud, "PictureCombDetectCustom",
                                   "interlace detection", HB_FILTER_COMB_DETECT);
 
+    gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(ghb_window));
+    GtkWidget * window = GHB_WIDGET(ud->builder, "presets_window");
+    gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
+
     gtk_widget_show(ghb_window);
+}
 
-    // Everything should be go-to-go.  Lets rock!
+int
+main(int argc, char *argv[])
+{
+    //signal_user_data_t *ud;
+    GError *error = NULL;
+    GOptionContext *context;
 
-    gtk_main();
+#if defined(_WIN32)
+    // Tell gdk pixbuf where it's loader config file is.
+    _putenv_s("GDK_PIXBUF_MODULE_FILE", "ghb.exe.local/loaders.cache");
+    _putenv_s("GST_PLUGIN_PATH", "lib/gstreamer-1.0");
+#endif
+
+
+#ifdef ENABLE_NLS
+    bindtextdomain(GETTEXT_PACKAGE, PACKAGE_LOCALE_DIR);
+    bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+    textdomain(GETTEXT_PACKAGE);
+#endif
+
+    context = g_option_context_new(_("- Transcode media formats"));
+    g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
+    g_option_context_add_group(context, gtk_get_option_group(TRUE));
+#if defined(_ENABLE_GST)
+    g_option_context_add_group(context, gst_init_get_option_group());
+#endif
+    g_option_context_parse(context, &argc, &argv, &error);
+    if (error != NULL)
+    {
+        g_warning("%s: %s", G_STRFUNC, error->message);
+        g_clear_error(&error);
+    }
+    g_option_context_free(context);
+    if (argc > 1 && dvd_device == NULL && argv[1][0] != '-')
+    {
+        dvd_device = argv[1];
+    }
+
+#if defined(_WIN32)
+    if (win32_console)
+    {
+        // Enable console logging
+        if(AttachConsole(ATTACH_PARENT_PROCESS) || AllocConsole()){
+            close(STDOUT_FILENO);
+            freopen("CONOUT$", "w", stdout);
+            close(STDERR_FILENO);
+            freopen("CONOUT$", "w", stderr);
+        }
+    }
+    else
+    {
+        // Non-console windows apps do not have a stderr->_file
+        // assigned properly
+        stderr->_file = STDERR_FILENO;
+        stdout->_file = STDOUT_FILENO;
+    }
+#endif
+
+    int                  status;
+    signal_user_data_t * ud;
+
+    ghb_ui_register_resource();
+    ud = g_malloc0(sizeof(signal_user_data_t));
+    ud->app = gtk_application_new("org.handbrake.ghb",
+                                  G_APPLICATION_FLAGS_NONE);
+    g_signal_connect(ud->app, "activate", (GCallback)ghb_activate_cb, ud);
+    status = g_application_run(G_APPLICATION(ud->app), argc, argv);
+
     ghb_backend_close();
 
+    // Remove stderr redirection
+    g_source_remove(ud->stderr_src_id);
     ghb_value_free(&ud->queue);
     ghb_value_free(&ud->settings_array);
     ghb_value_free(&ud->prefs);
@@ -1240,5 +1362,5 @@ main(int argc, char *argv[])
     g_free(ud->current_dvd_device);
     g_free(ud);
 
-    return 0;
+    return status;
 }

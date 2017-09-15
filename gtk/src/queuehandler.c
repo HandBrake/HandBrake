@@ -973,7 +973,8 @@ open_queue_file(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-queue_save_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+queue_save_action_cb(GSimpleAction *action, GVariant *param,
+                     signal_user_data_t *ud)
 {
     save_queue_file(ud);
 }
@@ -1328,7 +1329,6 @@ static gboolean
 queue_add(signal_user_data_t *ud, GhbValue *settings, gint batch)
 {
     // Add settings to the queue
-    g_debug("queue_add ()");
     if (!validate_settings(ud, settings, batch))
     {
         return FALSE;
@@ -1369,9 +1369,9 @@ queue_add(signal_user_data_t *ud, GhbValue *settings, gint batch)
 }
 
 G_MODULE_EXPORT void
-queue_add_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+queue_add_action_cb(GSimpleAction *action, GVariant *param,
+                    signal_user_data_t *ud)
 {
-    g_debug("queue_add_clicked_cb ()");
     queue_add(ud, ud->settings, 0);
     // Validation of settings may have changed audio list
     ghb_audio_list_refresh_all(ud);
@@ -1830,10 +1830,9 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-queue_add_multiple_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+queue_add_all_action_cb(GSimpleAction *action, GVariant *param,
+                        signal_user_data_t *ud)
 {
-    g_debug("queue_add_multiple_clicked_cb ()");
-
     GtkListBox *list;
     GtkWidget *row;
     gint count, ii;
@@ -1974,6 +1973,7 @@ ghb_queue_remove_row(signal_user_data_t *ud, int row)
 {
     ghb_queue_remove_row_internal(ud, row);
     ghb_save_queue(ud->queue);
+    ghb_queue_buttons_grey(ud);
 }
 
 G_MODULE_EXPORT void
@@ -1988,6 +1988,7 @@ queue_delete_all_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
     ghb_save_queue(ud->queue);
     ghb_update_pending(ud);
+    ghb_queue_buttons_grey(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2003,7 +2004,6 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
     GhbValue *queueDict, *uiDict;
     gint status;
 
-    g_debug("queue_remove_clicked_cb ()");
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
     store = gtk_tree_view_get_model(treeview);
     treepath = gtk_tree_path_new_from_string (path);
@@ -2043,6 +2043,7 @@ queue_remove_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
         gtk_tree_path_free (treepath);
     }
     ghb_update_pending(ud);
+    ghb_queue_buttons_grey(ud);
 }
 
 static gint
@@ -2267,12 +2268,13 @@ queue_drag_cb(
 void
 ghb_queue_buttons_grey(signal_user_data_t *ud)
 {
-    GtkWidget *widget;
+    GtkWidget       * widget;
+    GSimpleAction   * action;
     gint queue_count;
     gint title_id, titleindex;
     const hb_title_t *title;
     gint queue_state, scan_state;
-    gboolean show_start, show_stop, paused;
+    gboolean allow_start, show_stop, allow_add, paused;
 
     queue_count = ghb_array_len(ud->queue);
     title_id = ghb_dict_get_int(ud->settings, "title");
@@ -2281,50 +2283,54 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     queue_state = ghb_get_queue_state();
     scan_state = ghb_get_scan_state();
 
-    show_stop = queue_state &
-                (GHB_STATE_WORKING | GHB_STATE_SEARCHING |
-                 GHB_STATE_SCANNING | GHB_STATE_MUXING | GHB_STATE_PAUSED);
-    show_start = !(scan_state & GHB_STATE_SCANNING) &&
-                    (title !=NULL || queue_count > 0);
+    show_stop   = queue_state &
+                  (GHB_STATE_WORKING | GHB_STATE_SEARCHING |
+                   GHB_STATE_SCANNING | GHB_STATE_MUXING | GHB_STATE_PAUSED);
+    allow_start = !(scan_state & GHB_STATE_SCANNING) &&
+                    (title != NULL || queue_count > 0);
+    allow_add   = !(scan_state & GHB_STATE_SCANNING) && title != NULL;
 
 
     paused = queue_state & GHB_STATE_PAUSED;
 
-    widget = GHB_WIDGET(ud->builder, "queue_save");
-    gtk_widget_set_sensitive(widget, !!queue_count);
-    widget = GHB_WIDGET(ud->builder, "queue_add");
-    gtk_widget_set_sensitive(widget, show_start);
-    widget = GHB_WIDGET(ud->builder, "queue_add_menu");
-    gtk_widget_set_sensitive(widget, show_start);
-    widget = GHB_WIDGET(ud->builder, "queue_add_multiple_menu");
-    gtk_widget_set_sensitive(widget, show_start);
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
+                                                        "queue-save"));
+    g_simple_action_set_enabled(action, !!queue_count);
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
+                                                        "queue-add"));
+    g_simple_action_set_enabled(action, allow_add);
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
+                                                        "queue-add-all"));
+    g_simple_action_set_enabled(action, allow_add);
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
+                                                        "queue-start"));
+    g_simple_action_set_enabled(action, allow_start || show_stop);
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
+                                                        "queue-pause"));
+    g_simple_action_set_enabled(action, show_stop);
 
-    widget = GHB_WIDGET (ud->builder, "queue_start1");
+    widget = GHB_WIDGET (ud->builder, "queue_start");
     if (show_stop)
     {
-        gtk_widget_set_sensitive (widget, TRUE);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop\nEncoding"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Stop Encoding"));
     }
     else
     {
-        gtk_widget_set_sensitive (widget, show_start);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Start\nEncoding"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Start Encoding"));
     }
-    widget = GHB_WIDGET (ud->builder, "queue_pause1");
+    widget = GHB_WIDGET (ud->builder, "queue_pause");
     if (paused)
     {
-        gtk_widget_set_sensitive (widget, show_stop);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Resume\nEncoding"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Resume Encoding"));
     }
     else
     {
-        gtk_widget_set_sensitive (widget, show_stop);
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-pause");
         gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Pause\nEncoding"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Pause Encoding"));
@@ -2333,26 +2339,22 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     widget = GHB_WIDGET (ud->builder, "queue_start_menu");
     if (show_stop)
     {
-        gtk_widget_set_sensitive (widget, TRUE);
         gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("S_top Encoding"));
         gtk_widget_set_tooltip_text(widget, _("Stop Encoding"));
     }
     else
     {
-        gtk_widget_set_sensitive (widget, show_start);
         gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("_Start Encoding"));
         gtk_widget_set_tooltip_text(widget, _("Start Encoding"));
     }
     widget = GHB_WIDGET (ud->builder, "queue_pause_menu");
     if (paused)
     {
-        gtk_widget_set_sensitive (widget, show_start);
         gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("_Resume Encoding"));
         gtk_widget_set_tooltip_text(widget, _("Resume Encoding"));
     }
     else
     {
-        gtk_widget_set_sensitive (widget, show_stop);
         gtk_menu_item_set_label(GTK_MENU_ITEM(widget), _("_Pause Encoding"));
         gtk_widget_set_tooltip_text(widget, _("Pause Encoding"));
     }
@@ -2374,7 +2376,8 @@ queue_list_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, GtkCel
 }
 
 G_MODULE_EXPORT void
-queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+queue_start_action_cb(GSimpleAction *action, GVariant *param,
+                      signal_user_data_t *ud)
 {
     GhbValue *queueDict, *uiDict;
     gboolean running = FALSE;
@@ -2423,7 +2426,8 @@ queue_start_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-queue_pause_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+queue_pause_action_cb(GSimpleAction *action, GVariant *param,
+                      signal_user_data_t *ud)
 {
     ghb_pause_resume_queue();
 }

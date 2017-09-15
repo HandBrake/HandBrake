@@ -936,7 +936,7 @@ init_preview_image(signal_user_data_t *ud)
 
     title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    if (title == NULL)
+    if (title == NULL && ud->preview->pix != NULL)
     {
         g_object_unref(ud->preview->pix);
         ud->preview->pix = NULL;
@@ -1068,22 +1068,19 @@ preview_button_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, si
 }
 
 void
-ghb_preview_set_visible(signal_user_data_t *ud)
+ghb_preview_set_visible(signal_user_data_t *ud, gboolean visible)
 {
+    GtkWidget *widget;
+#if 0
     gint title_id, titleindex;
     const hb_title_t *title;
-    GtkToggleToolButton *button;
-    GtkWidget *widget;
-    gboolean active;
-
-    button = GTK_TOGGLE_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_preview"));
-    active = gtk_toggle_tool_button_get_active(button);
 
     title_id = ghb_dict_get_int(ud->settings, "title");
     title = ghb_lookup_title(title_id, &titleindex);
-    active &= title != NULL;
+    visible &= title != NULL;
+#endif
     widget = GHB_WIDGET(ud->builder, "preview_window");
-    if (active)
+    if (visible)
     {
         gint x, y;
         x = ghb_dict_get_int(ud->prefs, "preview_x");
@@ -1092,7 +1089,7 @@ ghb_preview_set_visible(signal_user_data_t *ud)
             gtk_window_move(GTK_WINDOW(widget), x, y);
         gtk_window_deiconify(GTK_WINDOW(widget));
     }
-    gtk_widget_set_visible(widget, active);
+    gtk_widget_set_visible(widget, visible);
 }
 
 static void
@@ -1113,29 +1110,14 @@ update_preview_labels(signal_user_data_t *ud, gboolean active)
 }
 
 G_MODULE_EXPORT void
-preview_toggled_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+show_preview_action_cb(GSimpleAction *action, GVariant *value,
+                       signal_user_data_t *ud)
 {
-    GtkCheckMenuItem *menuitem;
-    gboolean          active;
+    gboolean state = g_variant_get_boolean(value);
 
-    active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(xwidget));
-    ghb_preview_set_visible(ud);
-    update_preview_labels(ud, active);
-
-    menuitem = GTK_CHECK_MENU_ITEM(GHB_WIDGET(ud->builder,
-                                              "show_preview_menu"));
-    gtk_check_menu_item_set_active(menuitem, active);
-}
-
-G_MODULE_EXPORT void
-preview_menu_toggled_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-    GtkToggleToolButton *button;
-    gboolean active;
-
-    active = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(xwidget));
-    button = GTK_TOGGLE_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_preview"));
-    gtk_toggle_tool_button_set_active(button, active);
+    g_simple_action_set_state(action, value);
+    ghb_preview_set_visible(ud, state);
+    update_preview_labels(ud, state);
 }
 
 G_MODULE_EXPORT void

@@ -30,13 +30,13 @@ ghb_load_icons()
 #if GTK_CHECK_VERSION(3, 14, 0)
     ghb_icons_register_resource();
     gtk_icon_theme_add_resource_path(gtk_icon_theme_get_default(),
-                                     "/org/handbrake/icons");
+                                     "/org/handbrake/ghb/icons");
 #else
     ghb_icons_register_resource();
     GResource *icon_res = ghb_icons_get_resource();
 
     char ** children = g_resource_enumerate_children(icon_res,
-                                "/org/handbrake/icons/scalable/apps", 0, NULL);
+                            "/org/handbrake/ghb/icons/scalable/apps", 0, NULL);
 
     if (children == NULL)
     {
@@ -46,8 +46,10 @@ ghb_load_icons()
     int ii;
     for (ii = 0; children[ii] != NULL; ii++)
     {
-        char *path = g_strdup_printf("/org/handbrake/icons/scalable/apps/%s",
-                                     children[ii]);
+        char * path;
+
+        path = g_strdup_printf("/org/handbrake/ghb/icons/scalable/apps/%s",
+                               children[ii]);
         GBytes *gbytes = g_resource_lookup_data(icon_res, path, 0, NULL);
         gsize data_size;
         gconstpointer data = g_bytes_get_data(gbytes, &data_size);

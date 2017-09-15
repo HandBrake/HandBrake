@@ -305,24 +305,23 @@ ghb_check_all_depencencies(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-on_quit1_activate(GtkMenuItem *quit, signal_user_data_t *ud)
+quit_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 {
     gint state = ghb_get_queue_state();
-    g_debug("on_quit1_activate ()");
     if (state & (GHB_STATE_WORKING|GHB_STATE_SEARCHING))
     {
         if (ghb_cancel_encode2(ud, _("Closing HandBrake will terminate encoding.\n")))
         {
             ghb_hb_cleanup(FALSE);
             prune_logs(ud);
-            gtk_main_quit();
+            g_application_quit(G_APPLICATION(ud->app));
             return;
         }
         return;
     }
     ghb_hb_cleanup(FALSE);
     prune_logs(ud);
-    gtk_main_quit();
+    g_application_quit(G_APPLICATION(ud->app));
 }
 
 gboolean
@@ -1193,7 +1192,7 @@ ghb_load_settings(signal_user_data_t * ud)
     else
     {
         ghb_dict_set_bool(ud->settings, "preset_reload", TRUE);
-        ghb_select_preset(ud->builder, fullname);
+        ghb_select_preset(ud, fullname);
         ghb_dict_set_bool(ud->settings, "preset_reload", FALSE);
     }
 
@@ -1370,7 +1369,7 @@ ghb_do_scan(
 }
 
 static void
-do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
+do_source_dialog(gboolean single, signal_user_data_t *ud)
 {
     GtkWidget *dialog;
     const gchar *sourcename;
@@ -1420,6 +1419,7 @@ do_source_dialog(GtkButton *button, gboolean single, signal_user_data_t *ud)
     }
 }
 
+#if 0
 G_MODULE_EXPORT void
 source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
 {
@@ -1431,14 +1431,32 @@ source_button_clicked_cb(GtkButton *button, signal_user_data_t *ud)
     }
     else
     {
-        do_source_dialog(button, FALSE, ud);
+        do_source_dialog(FALSE, ud);
     }
 }
+#else
+G_MODULE_EXPORT void
+source_action_cb(GSimpleAction *action, GVariant *param,
+                 signal_user_data_t *ud)
+{
+    ghb_status_t status;
+    ghb_get_status(&status);
+    if (status.scan.state & GHB_STATE_SCANNING)
+    {
+        ghb_backend_scan_stop();
+    }
+    else
+    {
+        do_source_dialog(FALSE, ud);
+    }
+}
+#endif
 
 G_MODULE_EXPORT void
-single_title_source_cb(GtkButton *button, signal_user_data_t *ud)
+single_title_action_cb(GSimpleAction *action, GVariant * param,
+                       signal_user_data_t *ud)
 {
-    do_source_dialog(button, TRUE, ud);
+    do_source_dialog(TRUE, ud);
 }
 
 G_MODULE_EXPORT void
@@ -1590,7 +1608,8 @@ dest_file_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-destination_browse_clicked_cb(GtkButton *button, signal_user_data_t *ud)
+destination_action_cb(GSimpleAction *action, GVariant *param,
+                      signal_user_data_t *ud)
 {
     GtkWidget *dialog;
     GtkEntry *entry;
@@ -1598,7 +1617,6 @@ destination_browse_clicked_cb(GtkButton *button, signal_user_data_t *ud)
     gchar *basename;
     GtkWindow *hb_window;
 
-    g_debug("destination_browse_clicked_cb ()");
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     destname = ghb_dict_get_string(ud->settings, "destination");
     dialog = gtk_file_chooser_dialog_new("Choose Destination",
@@ -1636,7 +1654,7 @@ window_destroy_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *
     g_debug("window_destroy_event_cb ()");
     ghb_hb_cleanup(FALSE);
     prune_logs(ud);
-    gtk_main_quit();
+    g_application_quit(G_APPLICATION(ud->app));
     return FALSE;
 }
 
@@ -1651,14 +1669,14 @@ window_delete_event_cb(GtkWidget *widget, GdkEvent *event, signal_user_data_t *u
         {
             ghb_hb_cleanup(FALSE);
             prune_logs(ud);
-            gtk_main_quit();
+            g_application_quit(G_APPLICATION(ud->app));
             return FALSE;
         }
         return TRUE;
     }
     ghb_hb_cleanup(FALSE);
     prune_logs(ud);
-    gtk_main_quit();
+    g_application_quit(G_APPLICATION(ud->app));
     return FALSE;
 }
 
@@ -2344,7 +2362,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         gtk_range_set_range(GTK_RANGE(widget), 1, preview_count);
 
         ghb_reset_preview_image(ud);
-        ghb_preview_set_visible(ud);
+        //ghb_preview_set_visible(ud);
     }
 }
 
@@ -2989,11 +3007,11 @@ generic_entry_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-prefs_dialog_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+preferences_action_cb(GSimpleAction *action, GVariant *param,
+                      signal_user_data_t *ud)
 {
     GtkWidget *dialog;
 
-    g_debug("prefs_dialog_cb ()");
     dialog = GHB_WIDGET(ud->builder, "prefs_dialog");
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
@@ -3021,7 +3039,7 @@ quit_cb(countdown_t *cd)
         prune_logs(cd->ud);
 
         gtk_widget_destroy (GTK_WIDGET(cd->dlg));
-        gtk_main_quit();
+        g_application_quit(G_APPLICATION(cd->ud->app));
         return FALSE;
     }
     str = g_strdup_printf(_("%s\n\n%s in %d seconds ..."),
@@ -3043,7 +3061,7 @@ shutdown_cb(countdown_t *cd)
         prune_logs(cd->ud);
 
         ghb_shutdown_gsm();
-        gtk_main_quit();
+        g_application_quit(G_APPLICATION(cd->ud->app));
         return FALSE;
     }
     str = g_strdup_printf(_("%s\n\n%s in %d seconds ..."),
@@ -4055,31 +4073,16 @@ update_activity_labels(signal_user_data_t *ud, gboolean active)
 }
 
 G_MODULE_EXPORT void
-show_activity_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+show_activity_action_cb(GSimpleAction *action, GVariant *value,
+                        signal_user_data_t *ud)
 {
-    GtkWidget        *activity_window;
-    GtkCheckMenuItem *menuitem;
-    gboolean          active;
+    GtkWidget * activity_window;
+    gboolean    state = g_variant_get_boolean(value);
 
-    active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
+    g_simple_action_set_state(action, value);
     activity_window = GHB_WIDGET(ud->builder, "activity_window");
-    gtk_widget_set_visible(activity_window, active);
-    update_activity_labels(ud, active);
-
-    menuitem = GTK_CHECK_MENU_ITEM(GHB_WIDGET(ud->builder,
-                                              "show_activity_menu"));
-    gtk_check_menu_item_set_active(menuitem, active);
-}
-
-G_MODULE_EXPORT void
-show_activity_menu_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-    GtkToggleToolButton *button;
-    gboolean             active;
-
-    active = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
-    button = GTK_TOGGLE_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_activity"));
-    gtk_toggle_tool_button_set_active(button, active);
+    gtk_widget_set_visible(activity_window, state);
+    update_activity_labels(ud, state);
 }
 
 G_MODULE_EXPORT gboolean
@@ -4151,26 +4154,13 @@ browse_url(const gchar *url)
 #endif
 }
 
-#if 0
-    JJJ
-void
-about_web_hook(GtkAboutDialog *about, const gchar *link, gpointer data)
-{
-    browse_url(link);
-}
-#endif
-
 G_MODULE_EXPORT void
-about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+about_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 {
     GtkWidget *widget = GHB_WIDGET (ud->builder, "hb_about");
     gchar *ver;
 
     ver = g_strdup_printf("%s (%s)", HB_PROJECT_VERSION, HB_PROJECT_BUILD_ARCH);
-#if 0
-    JJJ
-    gtk_about_dialog_set_url_hook(about_web_hook, NULL, NULL);
-#endif
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(widget), ver);
     g_free(ver);
     gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(widget),
@@ -4183,7 +4173,7 @@ about_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 #define HB_DOCS "https://handbrake.fr/docs/"
 
 G_MODULE_EXPORT void
-guide_activate_cb(GtkWidget *xwidget, signal_user_data_t *ud)
+guide_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 {
     browse_url(HB_DOCS);
 }
@@ -4227,36 +4217,29 @@ update_queue_labels(signal_user_data_t *ud)
     g_free(str);
 }
 
-G_MODULE_EXPORT void
-show_queue_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+static void
+show_queue(signal_user_data_t *ud, gboolean show)
 {
     GtkWidget        *tab;
-    GtkCheckMenuItem *menuitem;
     GtkStack         *stack;
-    gboolean          active;
 
-    active = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(widget));
     stack = GTK_STACK(GHB_WIDGET(ud->builder, "QueueStack"));
-    if (active)
+    if (show)
         tab = GHB_WIDGET(ud->builder, "queue_tab");
     else
         tab = GHB_WIDGET(ud->builder, "settings_tab");
     gtk_stack_set_visible_child(stack, tab);
     update_queue_labels(ud);
-
-    menuitem = GTK_CHECK_MENU_ITEM(GHB_WIDGET(ud->builder, "show_queue_menu"));
-    gtk_check_menu_item_set_active(menuitem, active);
 }
 
 G_MODULE_EXPORT void
-show_queue_menu_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+show_queue_action_cb(GSimpleAction *action, GVariant *value,
+                     signal_user_data_t *ud)
 {
-    GtkToggleToolButton *button;
-    gboolean active;
+    gboolean state = g_variant_get_boolean(value);
 
-    active = gtk_check_menu_item_get_active(GTK_CHECK_MENU_ITEM(widget));
-    button = GTK_TOGGLE_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
-    gtk_toggle_tool_button_set_active(button, active);
+    g_simple_action_set_state(action, value);
+    show_queue(ud, state);
 }
 
 static void
@@ -4272,17 +4255,18 @@ presets_window_set_visible(signal_user_data_t *ud, gboolean visible)
         return;
     }
 
+    int w, h;
+    w = ghb_dict_get_int(ud->prefs, "presets_window_width");
+    h = ghb_dict_get_int(ud->prefs, "presets_window_height");
+
     presets_window = GHB_WIDGET(ud->builder, "presets_window");
+    if (w > 200 && h > 200)
+    {
+        gtk_window_resize(GTK_WINDOW(presets_window), w, h);
+    }
     gtk_widget_set_visible(presets_window, visible);
     if (visible)
     {
-        int w, h;
-        w = ghb_dict_get_int(ud->prefs, "presets_window_width");
-        h = ghb_dict_get_int(ud->prefs, "presets_window_height");
-        if (w > 200 && h > 200)
-        {
-            gtk_window_resize(GTK_WINDOW(presets_window), w, h);
-        }
         gtk_window_get_position(GTK_WINDOW(hb_window), &x, &y);
         x -= w + 10;
         if (x < 0)
@@ -4295,9 +4279,13 @@ presets_window_set_visible(signal_user_data_t *ud, gboolean visible)
 }
 
 G_MODULE_EXPORT void
-show_presets_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+show_presets_action_cb(GSimpleAction *action, GVariant *value,
+                       signal_user_data_t *ud)
 {
-    ghb_widget_to_setting(ud->prefs, widget);
+    gboolean state = g_variant_get_boolean(value);
+
+    g_simple_action_set_state(action, value);
+    ghb_dict_set(ud->prefs, "show_presets", ghb_boolean_value(state));
     presets_window_set_visible(ud, ghb_dict_get_bool(ud->prefs,
                                                      "show_presets"));
     ghb_pref_save(ud->prefs, "show_presets");
@@ -4501,7 +4489,7 @@ ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
 {
     GtkWidget *widget;
     g_debug("ghb_hbfd");
-    widget = GHB_WIDGET(ud->builder, "queue_pause1");
+    widget = GHB_WIDGET(ud->builder, "queue_pause");
     gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET(ud->builder, "queue_add");
     gtk_widget_set_visible(widget, !hbfd);
@@ -4528,12 +4516,13 @@ ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
 }
 
 G_MODULE_EXPORT void
-hbfd_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+hbfd_action_cb(GSimpleAction *action, GVariant *value, signal_user_data_t *ud)
 {
-    g_debug("hbfd_toggled_cb");
-    ghb_widget_to_setting(ud->prefs, widget);
-    gboolean hbfd = ghb_dict_get_bool(ud->prefs, "hbfd");
-    ghb_hbfd(ud, hbfd);
+    gboolean state = g_variant_get_boolean(value);
+
+    g_simple_action_set_state(action, value);
+    ghb_dict_set(ud->prefs, "hbfd", ghb_boolean_value(state));
+    ghb_hbfd(ud, state);
     ghb_pref_save(ud->prefs, "hbfd");
 }
 
@@ -4607,7 +4596,6 @@ tweaks_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 hbfd_feature_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    g_debug("hbfd_feature_changed_cb");
     ghb_widget_to_setting (ud->prefs, widget);
     const gchar *name = ghb_get_setting_key(widget);
     ghb_pref_set(ud->prefs, name);

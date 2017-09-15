@@ -6,7 +6,6 @@ define([filter_output],
             [$1])])dnl
 filter_output([
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.16.0 on Tue Jan 14 14:36:08 2014 -->
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
   <object class="GtkFileFilter" id="SourceFilterAVI"/>
@@ -126,7 +125,7 @@ conjunction with the "Forced" option.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="presets_save_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-save</property>
                       </object>
                     </child>
                     <child>
@@ -135,7 +134,7 @@ conjunction with the "Forced" option.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="presets_remove_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-remove</property>
                       </object>
                     </child>
                     <child>
@@ -144,7 +143,7 @@ conjunction with the "Forced" option.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="presets_default_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-default</property>
                       </object>
                     </child>
                     <child>
@@ -153,7 +152,7 @@ conjunction with the "Forced" option.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="presets_new_folder_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-folder</property>
                       </object>
                     </child>
                     <child>
@@ -162,7 +161,7 @@ conjunction with the "Forced" option.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="preset_export_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-export</property>
                       </object>
                     </child>
                     <child>
@@ -171,7 +170,7 @@ conjunction with the "Forced" option.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="preset_import_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-import</property>
                       </object>
                     </child>
                     <child>
@@ -180,7 +179,7 @@ conjunction with the "Forced" option.</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="presets_restore_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.presets-reload</property>
                       </object>
                     </child>
                   </object>
@@ -711,42 +710,7 @@ libx264 authors:
     </child>
   </object>
 
-  <object class="GtkMenu" id="tray_menu">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkMenuItem" id="show_hide">
-        <property name="label" translatable="yes">_Minimize/Maximize</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <signal name="activate" handler="show_hide_toggle_cb" swapped="no"/>
-      </object>
-      <object class="GtkMenuItem" id="tray_queue_pause">
-        <property name="label" translatable="yes">_Pause Encoding</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <signal name="activate" handler="queue_pause_clicked_cb" swapped="no"/>
-      </object>
-      <object class="GtkMenuItem" id="tray_quit">
-        <property name="label" translatable="yes">_Quit</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <signal name="activate" handler="on_quit1_activate" swapped="no"/>
-      </object>
-      <object class="GtkMenuItem" id="tray_about">
-        <property name="label" translatable="yes">_About</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <signal name="activate" handler="about_activate_cb" swapped="no"/>
-      </object>
-    </child>
-  </object>
-
-  <object class="GtkWindow" id="hb_window">
+  <object class="GtkApplicationWindow" id="hb_window">
     <property name="can_focus">False</property>
     <property name="events">GDK_VISIBILITY_NOTIFY_MASK</property>
     <property name="title" translatable="yes">HandBrake</property>
@@ -784,7 +748,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="source_button_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.source</property>
                       </object>
                     </child>
                     <child>
@@ -793,7 +757,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="single_title_source_cb" swapped="no"/>
+                        <property name="action-name">app.single</property>
                       </object>
                     </child>
                     <child>
@@ -802,7 +766,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="destination_browse_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.destination</property>
                       </object>
                     </child>
                     <child>
@@ -817,7 +781,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="prefs_dialog_cb" swapped="no"/>
+                        <property name="action-name">app.preferences</property>
                       </object>
                     </child>
                     <child>
@@ -832,7 +796,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="on_quit1_activate" swapped="no"/>
+                        <property name="action-name">app.quit</property>
                       </object>
                     </child>
                   </object>
@@ -855,7 +819,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="queue_add_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.queue-add</property>
                       </object>
                     </child>
                     <child>
@@ -864,7 +828,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="queue_add_multiple_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.queue-add-all</property>
                       </object>
                     </child>
                     <child>
@@ -873,7 +837,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="queue_start_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.queue-start</property>
                       </object>
                     </child>
                     <child>
@@ -882,7 +846,16 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="queue_pause_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.queue-pause</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="queue_save_menu">
+                        <property name="label" translatable="yes">S_ave Queue</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">app.queue-save</property>
                       </object>
                     </child>
                   </object>
@@ -905,7 +878,7 @@ libx264 authors:
                         <property name="visible">False</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="toggled" handler="hbfd_toggled_cb" swapped="no"/>
+                        <property name="action-name">app.hbfd</property>
                       </object>
                     </child>
                     <child>
@@ -914,7 +887,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="toggled" handler="show_presets_toggled_cb" swapped="no"/>
+                        <property name="action-name">app.show-presets</property>
                       </object>
                     </child>
                     <child>
@@ -923,7 +896,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="toggled" handler="show_queue_menu_toggled_cb" swapped="no"/>
+                        <property name="action-name">app.show-queue</property>
                       </object>
                     </child>
                     <child>
@@ -932,7 +905,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="toggled" handler="preview_menu_toggled_cb" swapped="no"/>
+                        <property name="action-name">app.show-preview</property>
                       </object>
                     </child>
                     <child>
@@ -941,7 +914,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="toggled" handler="show_activity_menu_toggled_cb" swapped="no"/>
+                        <property name="action-name">app.show-activity</property>
                       </object>
                     </child>
                   </object>
@@ -964,7 +937,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="presets_save_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-save</property>
                       </object>
                     </child>
                     <child>
@@ -973,7 +946,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="presets_remove_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-remove</property>
                       </object>
                     </child>
                     <child>
@@ -982,7 +955,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="presets_default_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-default</property>
                       </object>
                     </child>
                     <child>
@@ -991,7 +964,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="presets_new_folder_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-folder</property>
                       </object>
                     </child>
                     <child>
@@ -1000,7 +973,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="preset_export_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-export</property>
                       </object>
                     </child>
                     <child>
@@ -1009,7 +982,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="preset_import_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.preset-import</property>
                       </object>
                     </child>
                     <child>
@@ -1018,7 +991,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="presets_restore_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.presets-reload</property>
                       </object>
                     </child>
                   </object>
@@ -1041,7 +1014,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="about_activate_cb" swapped="no"/>
+                        <property name="action-name">app.about</property>
                       </object>
                     </child>
                     <child>
@@ -1050,7 +1023,7 @@ libx264 authors:
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
-                        <signal name="activate" handler="guide_activate_cb" swapped="no"/>
+                        <property name="action-name">app.guide</property>
                       </object>
                     </child>
                   </object>
@@ -1065,249 +1038,175 @@ libx264 authors:
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="hbox10">
-            <property name="orientation">horizontal</property>
+          <object class="GtkBox" id="vbox11">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <child>
-              <object class="GtkBox" id="vbox11">
-                <property name="orientation">vertical</property>
+              <object class="GtkToolbar" id="toolbar1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="margin-end">12</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="show-arrow">False</property>
+                <property name="icon_size">5</property>
                 <child>
-                  <object class="GtkToolbar" id="toolbar1">
+                  <object class="GtkToolButton" id="sourcetoolbutton">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="show-arrow">False</property>
-                    <property name="icon_size">5</property>
-                    <child>
-                      <object class="GtkToolButton" id="sourcetoolbutton">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip_text" translatable="yes">Choose Video Source</property>
-                        <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Open
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Choose Video Source</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Open
 Source</property>
-                        <property name="icon_name">hb-source</property>
-                        <signal name="clicked" handler="source_button_clicked_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="queue_add">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can_focus">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip_text" translatable="yes">Add to Queue</property>
-                        <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Add To
-Queue</property>
-                        <property name="icon_name">hb-add-queue</property>
-                        <signal name="clicked" handler="queue_add_clicked_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="queue_start1">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can_focus">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip_text" translatable="yes">Start Encoding</property>
-                        <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Start
-Encoding</property>
-                        <property name="icon_name">hb-start</property>
-                        <signal name="clicked" handler="queue_start_clicked_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToolButton" id="queue_pause1">
-                        <property name="visible">True</property>
-                        <property name="sensitive">False</property>
-                        <property name="can_focus">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip_text" translatable="yes">Pause Encoding</property>
-                        <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Pause
-Encoding</property>
-                        <property name="icon_name">hb-pause</property>
-                        <signal name="clicked" handler="queue_pause_clicked_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSeparatorToolItem" id="main_tool_sep1">
-                        <property name="visible">True</property>
-                        <property name="draw">False</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="homogeneous">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToggleToolButton" id="show_queue">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip_text" translatable="yes">Show Queue</property>
-                        <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Show
-Queue</property>
-                        <property name="icon_name">hb-showqueue</property>
-                        <signal name="toggled" handler="show_queue_toggled_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToggleToolButton" id="show_preview">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip_text" translatable="yes">Show Preview Window</property>
-                        <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Show
-Preview</property>
-                        <property name="icon_name">hb-picture</property>
-                        <signal name="toggled" handler="preview_toggled_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkToggleToolButton" id="show_activity">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="tooltip_text" translatable="yes">Show Activity Window</property>
-                        <property name="is_important">True</property>
-                        <property name="label" translatable="yes">Show
-Activity</property>
-                        <property name="icon_name">hb-activity</property>
-                        <signal name="toggled" handler="show_activity_toggled_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="homogeneous">True</property>
-                      </packing>
-                    </child>
+                    <property name="icon_name">hb-source</property>
+                    <property name="action-name">app.source</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="homogeneous">True</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkBox" id="vbox15">
-                    <property name="orientation">vertical</property>
-                    <property name="hexpand">True</property>
-                    <property name="halign">GTK_ALIGN_FILL</property>
+                  <object class="GtkToolButton" id="queue_add">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Add to Queue</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Add To
+Queue</property>
+                    <property name="icon_name">hb-add-queue</property>
+                    <property name="action-name">app.queue-add</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="queue_start">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Start Encoding</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Start
+Encoding</property>
+                    <property name="icon_name">hb-start</property>
+                    <property name="action-name">app.queue-start</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToolButton" id="queue_pause">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Pause Encoding</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Pause
+Encoding</property>
+                    <property name="icon_name">hb-pause</property>
+                    <property name="action-name">app.queue-pause</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="main_tool_sep1">
+                    <property name="visible">True</property>
+                    <property name="draw">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleToolButton" id="show_queue">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Show Queue</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Show
+Queue</property>
+                    <property name="icon_name">hb-showqueue</property>
+                    <property name="action-name">app.show-queue</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleToolButton" id="show_preview">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Show Preview Window</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Show
+Preview</property>
+                    <property name="icon_name">hb-picture</property>
+                    <property name="action-name">app.show-preview</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleToolButton" id="show_activity">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Show Activity Window</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Show
+Activity</property>
+                    <property name="icon_name">hb-activity</property>
+                    <property name="action-name">app.show-activity</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">True</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="hbox54">
+                <property name="orientation">horizontal</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <child>
+                  <object class="GtkBox" id="SourceInfoBox">
+                    <property name="orientation">horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
-                      <object class="GtkBox" id="hbox54">
-                        <property name="orientation">horizontal</property>
+                      <object class="GtkLabel" id="label7">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="margin-start">6</property>
-                        <child>
-                          <object class="GtkBox" id="SourceInfoBox">
-                            <property name="orientation">horizontal</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="spacing">6</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <child>
-                              <object class="GtkLabel" id="label7">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Source:&lt;/b&gt;</property>
-                                <property name="use_markup">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="volume_label">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="halign">start</property>
-                                <property name="ellipsize">middle</property>
-                                <property name="margin-end">12</property>
-                                <property name="label" translatable="yes">None</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="source_info_label">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="halign">end</property>
-                                <property name="label" translatable="yes"></property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkProgressBar" id="scan_prog">
-                            <property name="height_request">10</property>
-                            <property name="can_focus">False</property>
-                            <property name="valign">center</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                          </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="label" translatable="yes">&lt;b&gt;Source:&lt;/b&gt;</property>
+                        <property name="use_markup">True</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1316,245 +1215,367 @@ Activity</property>
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkGrid" id="table7">
+                      <object class="GtkLabel" id="volume_label">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="column_spacing">5</property>
-                        <property name="hexpand">True</property>
-                        <property name="halign">GTK_ALIGN_FILL</property>
-                        <property name="margin-start">6</property>
-                        <property name="row-spacing">2</property>
-                        <child>
-                          <object class="GtkLabel" id="label20">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">end</property>
-                            <property name="label" translatable="yes">Title:</property>
-                          </object>
-                          <packing>
-                            <property name="top_attach">0</property>
-                            <property name="left_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="hbox42">
-                            <property name="orientation">horizontal</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="hexpand">True</property>
-                            <property name="halign">GTK_ALIGN_FILL</property>
-                            <property name="spacing">5</property>
-                            <child>
-                              <object class="GtkComboBox" id="title">
-                                <property name="visible">True</property>
-                                <property name="valign">GTK_ALIGN_CENTER</property>
-                                <property name="can_focus">False</property>
-                                <property name="halign">start</property>
-                                <property name="tooltip_text" translatable="yes">Set the title to encode.
-By default the longest title is chosen.
-This is often the feature title of a DVD.</property>
-                                <property name="has_frame">False</property>
-                                <signal name="changed" handler="title_changed_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="angle_label">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="halign">end</property>
-                                <property name="label" translatable="yes">Angle:</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="angle">
-                                <property name="width-chars">3</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip_text" translatable="yes">For multi-angle DVD's, select the desired angle to encode.</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
-                                <property name="adjustment">adjustment27</property>
-                                <property name="halign">end</property>
-                                <signal name="value-changed" handler="title_angle_changed_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkButton" id="title_reset">
-                                <property name="label" translatable="yes">Reset All Titles</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Apply current settings to all titles</property>
-                                <property name="receives_default">True</property>
-                                <property name="halign">end</property>
-                                <signal name="clicked" handler="title_reset_clicked_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">3</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="top_attach">0</property>
-                            <property name="left_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkBox" id="chapter_box">
-                            <property name="halign">start</property>
-                            <property name="valign">center</property>
-                            <property name="orientation">horizontal</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="spacing">5</property>
-                            <child>
-                              <object class="GtkComboBox" id="PtoPType">
-                                <property name="visible">True</property>
-                                <property name="valign">GTK_ALIGN_CENTER</property>
-                                <property name="can_focus">False</property>
-                                <property name="tooltip_text" translatable="yes">Range of title to encode. Can be chapters, seconds, or frames.</property>
-                                <signal name="changed" handler="ptop_widget_changed_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="start_point">
-                                <property name="width-chars">10</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip_text" translatable="yes">Set the first chapter to encode.</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
-                                <property name="adjustment">adjustment1</property>
-                                <property name="numeric">True</property>
-                                <signal name="value-changed" handler="start_point_changed_cb" swapped="no"/>
-                                <signal name="output" handler="ptop_output_cb" swapped="no"/>
-                                <signal name="input" handler="ptop_input_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="label56">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">through</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="end_point">
-                                <property name="width-chars">10</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="tooltip_text" translatable="yes">Set the last chapter to encode.</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
-                                <property name="adjustment">adjustment2</property>
-                                <property name="numeric">True</property>
-                                <signal name="value-changed" handler="end_point_changed_cb" swapped="no"/>
-                                <signal name="output" handler="ptop_output_cb" swapped="no"/>
-                                <signal name="input" handler="ptop_input_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">3</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkBox" id="hbox47">
-                                <property name="orientation">horizontal</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                <property name="spacing">7</property>
-                                <child>
-                                  <object class="GtkLabel" id="label6">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="label" translatable="yes">Duration:</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="title_duration">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                    <property name="halign">start</property>
-                                    <property name="label" translatable="yes">hh:mm:ss</property>
-                                    <property name="width_chars">8</property>
-                                  </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">4</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="top_attach">1</property>
-                            <property name="left_attach">1</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="halign">start</property>
+                        <property name="ellipsize">middle</property>
+                        <property name="margin-end">12</property>
+                        <property name="label" translatable="yes">None</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="source_info_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes"></property>
                       </object>
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkProgressBar" id="scan_prog">
+                    <property name="height_request">10</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">center</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkGrid" id="table7">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="column_spacing">5</property>
+                <property name="hexpand">True</property>
+                <property name="halign">GTK_ALIGN_FILL</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="row-spacing">2</property>
+                <child>
+                  <object class="GtkLabel" id="label20">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Title:</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="hbox42">
+                    <property name="orientation">horizontal</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="hexpand">True</property>
+                    <property name="halign">GTK_ALIGN_FILL</property>
+                    <property name="spacing">5</property>
+                    <child>
+                      <object class="GtkComboBox" id="title">
+                        <property name="visible">True</property>
+                        <property name="valign">GTK_ALIGN_CENTER</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">start</property>
+                        <property name="tooltip_text" translatable="yes">Set the title to encode.
+By default the longest title is chosen.
+This is often the feature title of a DVD.</property>
+                        <property name="has_frame">False</property>
+                        <signal name="changed" handler="title_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="angle_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="label" translatable="yes">Angle:</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="angle">
+                        <property name="width-chars">3</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip_text" translatable="yes">For multi-angle DVD's, select the desired angle to encode.</property>
+                        <property name="primary_icon_activatable">False</property>
+                        <property name="secondary_icon_activatable">False</property>
+                        <property name="adjustment">adjustment27</property>
+                        <property name="halign">end</property>
+                        <signal name="value-changed" handler="title_angle_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="title_reset">
+                        <property name="label" translatable="yes">Reset All Titles</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Apply current settings to all titles</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">end</property>
+                        <signal name="clicked" handler="title_reset_clicked_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="chapter_box">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="spacing">5</property>
+                    <child>
+                      <object class="GtkComboBox" id="PtoPType">
+                        <property name="visible">True</property>
+                        <property name="valign">GTK_ALIGN_CENTER</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Range of title to encode. Can be chapters, seconds, or frames.</property>
+                        <signal name="changed" handler="ptop_widget_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="start_point">
+                        <property name="width-chars">10</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip_text" translatable="yes">Set the first chapter to encode.</property>
+                        <property name="primary_icon_activatable">False</property>
+                        <property name="secondary_icon_activatable">False</property>
+                        <property name="adjustment">adjustment1</property>
+                        <property name="numeric">True</property>
+                        <signal name="value-changed" handler="start_point_changed_cb" swapped="no"/>
+                        <signal name="output" handler="ptop_output_cb" swapped="no"/>
+                        <signal name="input" handler="ptop_input_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label56">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">through</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="end_point">
+                        <property name="width-chars">10</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="tooltip_text" translatable="yes">Set the last chapter to encode.</property>
+                        <property name="primary_icon_activatable">False</property>
+                        <property name="secondary_icon_activatable">False</property>
+                        <property name="adjustment">adjustment2</property>
+                        <property name="numeric">True</property>
+                        <signal name="value-changed" handler="end_point_changed_cb" swapped="no"/>
+                        <signal name="output" handler="ptop_output_cb" swapped="no"/>
+                        <signal name="input" handler="ptop_input_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="hbox47">
+                        <property name="orientation">horizontal</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="spacing">7</property>
+                        <child>
+                          <object class="GtkLabel" id="label6">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Duration:</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="title_duration">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">hh:mm:ss</property>
+                            <property name="width_chars">8</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="left_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="preset_selection_box">
+                <property name="halign">start</property>
+                <property name="valign">center</property>
+                <property name="orientation">horizontal</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">12</property>
+                <property name="spacing">5</property>
+                <child>
+                  <object class="GtkLabel" id="preset_selection_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Preset:&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkMenuButton" id="presets_menu_button">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="direction">down</property>
+                    <child>
+                      <object class="GtkBox" id="presets_menu_button_box">
+                        <property name="orientation">horizontal</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="presets_menu_button_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="width-chars">50</property>
+                            <property name="xalign">0</property>
+                            <property name="label" translatable="yes">Choose Preset</property>
+                            <property name="use_markup">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="presets_menu_button_arrow">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="icon_name">pan-down-symbolic</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
                     </child>
                   </object>
                   <packing>
@@ -1567,7 +1588,7 @@ This is often the feature title of a DVD.</property>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
@@ -6871,7 +6892,7 @@ Resets all queue jobs to pending and ready to run again.</property>
                         <property name="icon_name">document-save-as</property>
                         <property name="tooltip_text" translatable="yes">Save the current queue of encode jobs to a file.
 This file may be reloaded at a later time to edit your jobs and re-encode.</property>
-                        <signal name="clicked" handler="queue_save_clicked_cb" swapped="no"/>
+                        <property name="action-name">app.queue-save</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -8569,6 +8590,8 @@ Setting this to 0 means there is no maximum height.</property>
     <signal name="delete-event" handler="preview_window_delete_cb" swapped="no"/>
     <child>
       <object class="GtkEventBox" id="preview_image">
+        <property name="width_request">854</property>
+        <property name="height_request">480</property>
         <property name="visible">True</property>
         <property name="app_paintable">True</property>
         <property name="can_focus">False</property>
