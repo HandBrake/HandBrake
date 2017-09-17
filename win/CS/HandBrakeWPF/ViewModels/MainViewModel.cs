@@ -89,6 +89,7 @@ namespace HandBrakeWPF.ViewModels
         private Preset selectedPreset;
         private EncodeTask queueEditTask;
         private int lastEncodePercentage;
+        private bool isPresetPanelShowing;
         private bool showSourceSelection;
         private BindingList<SourceMenuItem> drives;
         private bool canPause;
@@ -951,6 +952,31 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether is preset panel showing.
+        /// </summary>
+        public bool IsPresetPanelShowing
+        {
+            get
+            {
+                return this.isPresetPanelShowing;
+            }
+            set
+            {
+                if (!Equals(this.isPresetPanelShowing, value))
+                {
+                    this.isPresetPanelShowing = value;
+                    this.NotifyOfPropertyChange(() => this.IsPresetPanelShowing);
+
+                    // Save the setting if it has changed.
+                    if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel) != value)
+                    {
+                        this.userSettingService.SetUserSetting(UserSettingConstants.ShowPresetPanel, value);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating progress percentage.
         /// </summary>
         public int ProgressPercentage { get; set; }
@@ -1207,6 +1233,9 @@ namespace HandBrakeWPF.ViewModels
         {
             // Perform an update check if required
             this.updateService.PerformStartupUpdateCheck(this.HandleUpdateCheckResults);
+
+            // Show or Hide the Preset Panel.
+            this.IsPresetPanelShowing = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPresetPanel);
 
             // Setup the presets.
             this.presetService.Load();
