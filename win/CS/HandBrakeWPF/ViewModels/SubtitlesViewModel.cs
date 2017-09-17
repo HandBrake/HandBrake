@@ -9,8 +9,8 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.IO;
     using System.Linq;
 
@@ -18,11 +18,11 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Microsoft.Win32;
@@ -68,6 +68,8 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
         #region Properties
 
@@ -478,6 +480,40 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Task);
         }
 
+        public bool MatchesPreset(Preset preset)
+        {
+            // Check the default behaviours.
+            if (preset.SubtitleTrackBehaviours.AddClosedCaptions != this.SubtitleBehaviours.AddClosedCaptions)
+            {
+                return false;
+            }
+
+            if (preset.SubtitleTrackBehaviours.AddForeignAudioScanTrack != this.SubtitleBehaviours.AddForeignAudioScanTrack)
+            {
+                return false;
+            }
+
+            if (preset.SubtitleTrackBehaviours.SelectedBehaviour != this.SubtitleBehaviours.SelectedBehaviour)
+            {
+                return false;
+            }
+
+            if (preset.SubtitleTrackBehaviours.SelectedBurnInBehaviour != this.SubtitleBehaviours.SelectedBurnInBehaviour)
+            {
+                return false;
+            }
+
+            foreach (var item in this.SubtitleBehaviours.SelectedLangauges)
+            {
+                if (!preset.SubtitleTrackBehaviours.SelectedLangauges.Contains(item))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Setup this window for a new source
         /// </summary>
@@ -511,6 +547,11 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Methods
+
+        protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
+        {
+            this.TabStatusChanged?.Invoke(this, e);
+        }
 
         /// <summary>
         /// Add a subtitle track.

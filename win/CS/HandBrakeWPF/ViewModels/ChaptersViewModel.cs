@@ -19,6 +19,7 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
@@ -66,6 +67,8 @@ namespace HandBrakeWPF.ViewModels
             this.Task = new EncodeTask();
             this.errorService = errorService;
         }
+
+        public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
         #endregion
 
@@ -306,6 +309,16 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Chapters);
         }
 
+        public bool MatchesPreset(Preset preset)
+        {
+            if (preset.Task.IncludeChapterMarkers != this.IncludeChapterMarkers)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Reset Chapter Names
         /// </summary>
@@ -345,6 +358,11 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Private Methods
+
+        protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
+        {
+            this.TabStatusChanged?.Invoke(this, e);
+        }
 
         /// <summary>
         /// Validates any imported chapter information against the currently detected chapter information in the 

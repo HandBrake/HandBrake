@@ -96,8 +96,9 @@ namespace HandBrakeWPF.ViewModels
         private string alertWindowHeader;
         private string alertWindowText;
         private bool hasSource;
-
+        private bool isSettingPreset;
         private IPresetObject selectedPresetCategory;
+        private bool isModifiedPreset;
 
         #endregion
 
@@ -424,6 +425,20 @@ namespace HandBrakeWPF.ViewModels
                         this.PresetSelect(value);
                     }
                 }
+            }
+        }
+
+        public bool IsModifiedPreset
+        {
+            get
+            {
+                return this.isModifiedPreset;
+            }
+            set
+            {
+                if (value == this.isModifiedPreset) return;
+                this.isModifiedPreset = value;
+                this.NotifyOfPropertyChange();
             }
         }
 
@@ -1235,6 +1250,16 @@ namespace HandBrakeWPF.ViewModels
                 Thread clearLog = new Thread(() => GeneralUtilities.ClearLogFiles(30));
                 clearLog.Start();
             }
+
+            this.PictureSettingsViewModel.TabStatusChanged += this.TabStatusChanged;
+            this.VideoViewModel.TabStatusChanged += this.TabStatusChanged;
+            this.FiltersViewModel.TabStatusChanged += this.TabStatusChanged;
+            this.AudioViewModel.TabStatusChanged += this.TabStatusChanged;
+            this.SubtitleViewModel.TabStatusChanged += this.TabStatusChanged;
+            this.ChaptersViewModel.TabStatusChanged += this.TabStatusChanged;
+            this.AdvancedViewModel.TabStatusChanged += this.TabStatusChanged;
+            this.MetaDataViewModel.TabStatusChanged += this.TabStatusChanged;
+            this.SummaryViewModel.TabStatusChanged += this.TabStatusChanged;
         }
 
         private void SummaryViewModel_OutputFormatChanged(object sender, OutputFormatChangedEventArgs e)
@@ -1270,6 +1295,17 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SettingChanged -= this.UserSettingServiceSettingChanged;
 
             this.SummaryViewModel.OutputFormatChanged -= this.SummaryViewModel_OutputFormatChanged;
+
+            // Tab status events
+            this.PictureSettingsViewModel.TabStatusChanged -= this.TabStatusChanged;
+            this.VideoViewModel.TabStatusChanged -= this.TabStatusChanged;
+            this.FiltersViewModel.TabStatusChanged -= this.TabStatusChanged;
+            this.AudioViewModel.TabStatusChanged -= this.TabStatusChanged;
+            this.SubtitleViewModel.TabStatusChanged -= this.TabStatusChanged;
+            this.ChaptersViewModel.TabStatusChanged -= this.TabStatusChanged;
+            this.AdvancedViewModel.TabStatusChanged -= this.TabStatusChanged;
+            this.MetaDataViewModel.TabStatusChanged -= this.TabStatusChanged;
+            this.SummaryViewModel.TabStatusChanged -= this.TabStatusChanged;
         }
 
         #endregion
@@ -2053,6 +2089,7 @@ namespace HandBrakeWPF.ViewModels
                 if (this.selectedPreset != null)
                 {
                     // Tab Settings
+                    this.isSettingPreset = true;
                     this.PictureSettingsViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.VideoViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.FiltersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
@@ -2062,6 +2099,7 @@ namespace HandBrakeWPF.ViewModels
                     this.AdvancedViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.MetaDataViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.SummaryViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                    this.isSettingPreset = false;
                 }
             }
         }
@@ -2175,6 +2213,7 @@ namespace HandBrakeWPF.ViewModels
             // Setup the Tabs
             if (this.selectedTitle != null)
             {
+                this.isSettingPreset = true;
                 this.PictureSettingsViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.VideoViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.FiltersViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
@@ -2184,7 +2223,60 @@ namespace HandBrakeWPF.ViewModels
                 this.AdvancedViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.MetaDataViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.SummaryViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
+                this.isSettingPreset = false;
             }
+        }
+
+        private void TabStatusChanged(object sender, TabStatusEventArgs e)
+        {
+            if (this.isSettingPreset)
+            {
+                return; // Don't process this when we are setting up.
+            }
+
+            bool matchesPreset = this.PictureSettingsViewModel.MatchesPreset(this.selectedPreset);
+
+            if (!this.VideoViewModel.MatchesPreset(this.selectedPreset))
+            {
+                matchesPreset = false;
+            }
+
+            if (!this.FiltersViewModel.MatchesPreset(this.selectedPreset))
+            {
+                matchesPreset = false;
+            }
+
+            if (!this.AudioViewModel.MatchesPreset(this.selectedPreset))
+            {
+                matchesPreset = false;
+            }
+
+            if (!this.SubtitleViewModel.MatchesPreset(this.selectedPreset))
+            {
+                matchesPreset = false;
+            }
+
+            if (!this.ChaptersViewModel.MatchesPreset(this.selectedPreset))
+            {
+                matchesPreset = false;
+            }
+
+            if (!this.AdvancedViewModel.MatchesPreset(this.selectedPreset))
+            {
+                matchesPreset = false;
+            }
+
+            if (!this.MetaDataViewModel.MatchesPreset(this.selectedPreset))
+            {
+                matchesPreset = false;
+            }
+
+            if (!this.SummaryViewModel.MatchesPreset(this.selectedPreset))
+            {
+                matchesPreset = false;
+            }
+
+            this.IsModifiedPreset = matchesPreset;
         }
 
         /// <summary>

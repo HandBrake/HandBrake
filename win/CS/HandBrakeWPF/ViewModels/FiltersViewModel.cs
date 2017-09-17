@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Globalization;
@@ -20,6 +21,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Interop.HbLib;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
@@ -57,6 +59,8 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
         #region Properties
 
@@ -826,6 +830,106 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.SelectedRotation);
         }
 
+        public bool MatchesPreset(Preset preset)
+        {
+            if (preset.Task.Detelecine != this.SelectedDetelecine)
+            {
+                return false;
+            }
+
+            if (preset.Task.CustomDetelecine != this.CustomDetelecine)
+            {
+                return false;
+            }
+            
+            if (preset.Task.DeinterlaceFilter != this.SelectedDeinterlaceFilter)
+            {
+                return false;
+            }
+
+            if (preset.Task.Deinterlace != this.SelectedDeInterlace)
+            {
+                return false;
+            }
+
+            if (preset.Task.Decomb != this.SelectedDecomb)
+            {
+                return false;
+            }
+
+            if (preset.Task.CombDetect != this.SelectedCombDetectPreset)
+            {
+                return false;
+            }
+
+            if (preset.Task.CustomDecomb != this.CustomDecomb)
+            {
+                return false;
+            }
+
+            if (preset.Task.CustomDeinterlace != this.CustomDeinterlace)
+            {
+                return false;
+            }
+
+            if (preset.Task.CustomCombDetect != this.CustomCombDetect)
+            {
+                return false;
+            }
+
+            if (preset.Task.Denoise != this.SelectedDenoise)
+            {
+                return false;
+            }
+
+            if (preset.Task.DenoisePreset != this.SelectedDenoisePreset)
+            {
+                return false;
+            }
+
+            if (preset.Task.DenoiseTune != this.SelectedDenoiseTune)
+            {
+                return false;
+            }
+
+            if (preset.Task.Sharpen != this.SelectedSharpen)
+            {
+                return false;
+            }
+
+            if (!Equals(preset.Task.SharpenPreset, this.SelectedSharpenPreset))
+            {
+                return false;
+            }
+
+            if (!Equals(preset.Task.SharpenTune, this.SelectedSharpenTune))
+            {
+                return false;
+            }
+
+            if (preset.Task.Deblock != this.DeblockValue)
+            {
+                return false;
+            }
+
+            if (preset.Task.Grayscale != this.Grayscale)
+            {
+                return false;
+            }
+
+            if (preset.Task.Rotation != this.SelectedRotation)
+            {
+                return false;
+            }
+
+            if (preset.Task.FlipVideo != this.FlipVideo)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Setup this window for a new source
         /// </summary>
@@ -846,6 +950,13 @@ namespace HandBrakeWPF.ViewModels
             this.CurrentTask = task;
         }
 
+        #endregion
+
+        #region Private Methods
+        protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
+        {
+            this.TabStatusChanged?.Invoke(this, e);
+        }
         #endregion
     }
 }

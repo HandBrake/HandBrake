@@ -20,6 +20,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
@@ -77,9 +78,6 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        /// <param name="advancedEncoderOptionsCommand">
-        /// The advanced Encoder Options Command.
-        /// </param>
         public VideoViewModel(IUserSettingService userSettingService)
         {
             this.Task = new EncodeTask { VideoEncoder = VideoEncoder.X264 };
@@ -98,6 +96,8 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
         #region Public Properties
 
@@ -1004,6 +1004,96 @@ namespace HandBrakeWPF.ViewModels
             }          
         }
 
+        public bool MatchesPreset(Preset preset)
+        {
+            if (preset.Task.VideoEncoder != this.Task.VideoEncoder)
+            {
+                return false;
+            }
+
+            if (preset.Task.Framerate != this.Task.Framerate)
+            {
+                return false;
+            }
+
+            if (preset.Task.FramerateMode != this.Task.FramerateMode)
+            {
+                return false;
+            }
+
+            if (preset.Task.VideoEncodeRateType != this.Task.VideoEncodeRateType)
+            {
+                return false;
+            }
+
+            if (preset.Task.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate)
+            {
+                if (preset.Task.VideoBitrate != this.Task.VideoBitrate)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (preset.Task.Quality != this.Task.Quality)
+                {
+                    return false;
+                }
+            }
+
+            if (preset.Task.TwoPass != this.Task.TwoPass)
+            {
+                return false;
+            }
+
+            if (preset.Task.TurboFirstPass != this.Task.TurboFirstPass)
+            {
+                return false;
+            }
+
+            if (this.Task.VideoEncoder == VideoEncoder.X264 || this.Task.VideoEncoder == VideoEncoder.X264_10
+                || this.Task.VideoEncoder == VideoEncoder.X265 || this.Task.VideoEncoder == VideoEncoder.X265_10
+                || this.Task.VideoEncoder == VideoEncoder.X265_12 || this.Task.VideoEncoder == VideoEncoder.QuickSync
+                || this.Task.VideoEncoder == VideoEncoder.QuickSyncH265
+                || this.Task.VideoEncoder == VideoEncoder.QuickSyncH26510b)
+            {
+                if (!Equals(preset.Task.VideoPreset, this.Task.VideoPreset))
+                {
+                    return false;
+                }
+
+                foreach (VideoTune taskVideoTune in preset.Task.VideoTunes)
+                {
+                    if (!this.Task.VideoTunes.Contains(taskVideoTune))
+                    {
+                        return false;
+                    }
+                }
+
+                if (preset.Task.VideoTunes != this.Task.VideoTunes)
+                {
+                    return false;
+                }
+
+                if (!Equals(preset.Task.VideoProfile, this.Task.VideoProfile))
+                {
+                    return false;
+                }
+
+                if (!Equals(preset.Task.VideoLevel, this.Task.VideoLevel))
+                {
+                    return false;
+                }
+            }
+
+            if (!Equals(preset.Task.ExtraAdvancedArguments, this.Task.ExtraAdvancedArguments))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
         /// </summary>
@@ -1026,6 +1116,11 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
+        {
+            this.TabStatusChanged?.Invoke(this, e);
+        }
 
         /// <summary>
         /// Set the bounds of the Constant Quality Slider

@@ -9,8 +9,11 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
+
     using Caliburn.Micro;
 
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
@@ -39,6 +42,8 @@ namespace HandBrakeWPF.ViewModels
         {
             this.Task = new EncodeTask();
         }
+
+        public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
         /// <summary>
         /// The Current Job
@@ -121,6 +126,11 @@ namespace HandBrakeWPF.ViewModels
         public void UpdateTask(EncodeTask encodeTask)
         {
             this.Task = encodeTask;
+        }
+
+        public bool MatchesPreset(Preset preset)
+        {
+            return true;
         }
     }
 }

@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -20,6 +21,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Utilities;
 
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -70,6 +72,8 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
         #region Properties
 
@@ -266,6 +270,81 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Task);
         }
 
+        public bool MatchesPreset(Preset preset)
+        {
+            // Check the default behaviours still match the preset.
+            if (preset.AudioTrackBehaviours.SelectedBehaviour != this.AudioBehaviours.SelectedBehaviour)
+            {
+                return false;
+            }
+
+            if (preset.AudioTrackBehaviours.SelectedTrackDefaultBehaviour
+                != this.AudioBehaviours.SelectedTrackDefaultBehaviour)
+            {
+                return false;
+            }
+
+            foreach (var item in this.AudioBehaviours.SelectedLangauges)
+            {
+                if (!preset.AudioTrackBehaviours.SelectedLangauges.Contains(item))
+                {
+                    return false;
+                }
+            }
+
+            if (preset.Task.AllowedPassthruOptions.AudioAllowMP3Pass != this.Task.AllowedPassthruOptions.AudioAllowMP3Pass)
+            {
+                return false;
+            }
+
+            if (preset.Task.AllowedPassthruOptions.AudioAllowAACPass != this.Task.AllowedPassthruOptions.AudioAllowAACPass)
+            {
+                return false;
+            }
+
+            if (preset.Task.AllowedPassthruOptions.AudioAllowAC3Pass != this.Task.AllowedPassthruOptions.AudioAllowAC3Pass)
+            {
+                return false;
+            }
+
+            if (preset.Task.AllowedPassthruOptions.AudioAllowEAC3Pass != this.Task.AllowedPassthruOptions.AudioAllowEAC3Pass)
+            {
+                return false;
+            }
+
+            if (preset.Task.AllowedPassthruOptions.AudioAllowDTSPass != this.Task.AllowedPassthruOptions.AudioAllowDTSPass)
+            {
+                return false;
+            }
+
+            if (preset.Task.AllowedPassthruOptions.AudioAllowDTSHDPass != this.Task.AllowedPassthruOptions.AudioAllowDTSHDPass)
+            {
+                return false;
+            }
+
+            if (preset.Task.AllowedPassthruOptions.AudioAllowTrueHDPass != this.Task.AllowedPassthruOptions.AudioAllowTrueHDPass)
+            {
+                return false;
+            }
+
+            if (preset.Task.AllowedPassthruOptions.AudioAllowFlacPass != this.Task.AllowedPassthruOptions.AudioAllowFlacPass)
+            {
+                return false;
+            }
+
+            if (preset.Task.AllowedPassthruOptions.AudioEncoderFallback != this.Task.AllowedPassthruOptions.AudioEncoderFallback)
+            {
+                return false;
+            }
+
+            if (preset.AudioTrackBehaviours.SelectedLangauges != this.AudioBehaviours.SelectedLangauges)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// Set the Source Title
         /// </summary>
@@ -326,6 +405,10 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Methods
+        protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
+        {
+            this.TabStatusChanged?.Invoke(this, e);
+        }
 
         /// <summary>
         /// Add the specified source track, or the first track in the SourceTracks collection if available.

@@ -9,6 +9,9 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using System;
+
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
 
@@ -19,6 +22,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface ITabInterface
     {
+        event EventHandler<TabStatusEventArgs> TabStatusChanged;
+
         /// <summary>
         /// Setup the window after a scan.
         /// </summary>
@@ -54,5 +59,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The task.
         /// </param>
         void UpdateTask(EncodeTask task);
+
+        bool MatchesPreset(Preset preset);
     }
 }

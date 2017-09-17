@@ -170,6 +170,7 @@
     <Compile Include="EventArgs\QueueCompletedEventArgs.cs" />
     <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
     <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
+    <Compile Include="EventArgs\TabStatusEventArgs.cs" />
     <Compile Include="Exceptions\GeneralApplicationException.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\TreeViewHelper.cs" />

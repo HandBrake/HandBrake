@@ -17,6 +17,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Presets.Model;
@@ -133,6 +134,8 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
         #region Properties
 
@@ -822,9 +825,29 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Task);
         }
 
+        public bool MatchesPreset(Preset preset)
+        {
+            if (preset.Task.Anamorphic != this.SelectedAnamorphicMode)
+            {
+                return false;
+            }
+
+            if (preset.Task.Modulus != this.SelectedModulus)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         #endregion
 
         #region Methods
+
+        protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
+        {
+            this.TabStatusChanged?.Invoke(this, e);
+        }
 
         /// <summary>
         /// The init.

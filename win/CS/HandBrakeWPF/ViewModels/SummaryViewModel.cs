@@ -55,6 +55,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService = userSettingService;
         }
 
+        public event EventHandler<TabStatusEventArgs> TabStatusChanged;
         public event EventHandler<OutputFormatChangedEventArgs> OutputFormatChanged;
 
         public Preset Preset
@@ -309,6 +310,31 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.AlignAVStart);
         }
 
+        public bool MatchesPreset(Preset preset)
+        {
+            if (preset.Task.OutputFormat != this.SelectedOutputFormat)
+            {
+                return false;
+            }
+
+            if (preset.Task.OptimizeMP4 != this.OptimizeMP4)
+            {
+                return false;
+            }
+
+            if (preset.Task.AlignAVStart != this.AlignAVStart)
+            {
+                return false;
+            }
+
+            if (preset.Task.IPod5GSupport != this.IPod5GSupport)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public void UpdateDisplayedInfo()
         {
             if (this.CurrentTitle == null)
@@ -376,6 +402,11 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #region Private Methods
+
+        protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
+        {
+            this.TabStatusChanged?.Invoke(this, e);
+        }
 
         private void UpdateSettings(Preset selectedPreset)
         {

@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
 
+    using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Presets.Model;
@@ -189,6 +190,8 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #endregion
+
+        public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
         #region Properties
 
@@ -954,6 +957,11 @@ namespace HandBrakeWPF.ViewModels
             this.AdvancedOptionsString = task.AdvancedEncoderOptions;
         }
 
+        public bool MatchesPreset(Preset preset)
+        {
+            return false;
+        }
+
         /// <summary>
         /// Setup this window for a new source
         /// </summary>
@@ -980,6 +988,11 @@ namespace HandBrakeWPF.ViewModels
         #endregion
 
         #region Methods
+
+        protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
+        {
+            this.TabStatusChanged?.Invoke(this, e);
+        }
 
         /// <summary>
         /// The set advanced to defaults.
