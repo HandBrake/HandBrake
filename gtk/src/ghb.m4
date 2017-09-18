@@ -1599,14 +1599,15 @@ This is often the feature title of a DVD.</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="preset_selection_reset">
-                    <property name="label" translatable="yes">Reset</property>
+                  <object class="GtkButton" id="preset_selection_reload">
+                    <property name="label" translatable="yes">Reload</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Reset the current title to default Preset values</property>
+                    <property name="tooltip_text" translatable="yes">Reload the encoding settings for the currently selected preset.
+Modifications will be discarded.</property>
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
-                    <property name="action-name">app.preset-reset</property>
+                    <property name="action-name">app.preset-reload</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

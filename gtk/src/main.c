@@ -875,7 +875,7 @@ guide_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 preset_select_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
-preset_reset_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+preset_reload_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 
 static void map_actions(GApplication * app, signal_user_data_t * ud)
 {
@@ -911,7 +911,7 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "about",          about_action_cb                 },
         { "guide",          guide_action_cb                 },
         { "preset-select",  preset_select_action_cb, "s"    },
-        { "preset-reset",   preset_reset_action_cb,         },
+        { "preset-reload",  preset_reload_action_cb,        },
     };
     g_action_map_add_action_entries(G_ACTION_MAP(app), entries,
                                     G_N_ELEMENTS(entries), ud);

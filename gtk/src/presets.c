@@ -1150,8 +1150,8 @@ preset_select_action_cb(GSimpleAction *action, GVariant *param,
 }
 
 G_MODULE_EXPORT void
-preset_reset_action_cb(GSimpleAction *action, GVariant *param,
-                       signal_user_data_t *ud)
+preset_reload_action_cb(GSimpleAction *action, GVariant *param,
+                        signal_user_data_t *ud)
 {
     const char * preset_path;
 
@@ -2681,7 +2681,7 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
                                          "preset_selection_modified_label"));
             gtk_label_set_markup(label, "");
             action = G_SIMPLE_ACTION(g_action_map_lookup_action(
-                                     G_ACTION_MAP(ud->app), "preset-reset"));
+                                     G_ACTION_MAP(ud->app), "preset-reload"));
             g_simple_action_set_enabled(action, FALSE);
         }
         free(path);
@@ -2707,7 +2707,7 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
     gtk_label_set_markup(label, "<u><i>Modified</i></u>");
 
     action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "preset-reset"));
+                                                        "preset-reload"));
     g_simple_action_set_enabled(action, TRUE);
 }
 
