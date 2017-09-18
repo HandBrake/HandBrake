@@ -1146,11 +1146,9 @@ preset_select_action_cb(GSimpleAction *action, GVariant *value,
 {
     const char        * preset_path = g_variant_get_string(value, NULL);
 
-    printf("value %s\n", preset_path);
     ghb_select_preset(ud, preset_path);
 }
 
-#if 1
 void
 ghb_presets_menu_init(signal_user_data_t *ud)
 {
@@ -1249,7 +1247,26 @@ ghb_presets_menu_init(signal_user_data_t *ud)
     mb = GTK_MENU_BUTTON(GHB_WIDGET(ud->builder, "presets_menu_button"));
     gtk_menu_button_set_menu_model(mb, G_MENU_MODEL(menu));
 }
-#endif
+
+
+void
+ghb_presets_menu_clear(signal_user_data_t *ud)
+{
+    GtkMenuButton * mb;
+    GMenuModel    * mm;
+
+    mb = GTK_MENU_BUTTON(GHB_WIDGET(ud->builder, "presets_menu_button"));
+    mm = gtk_menu_button_get_menu_model(mb);
+    gtk_menu_button_set_menu_model(mb, NULL);
+    g_object_unref(G_OBJECT(mm));
+}
+
+void
+ghb_presets_menu_reinit(signal_user_data_t *ud)
+{
+    ghb_presets_menu_clear(ud);
+    ghb_presets_menu_init(ud);
+}
 
 void
 ghb_presets_list_init(signal_user_data_t *ud, const hb_preset_index_t *path)
@@ -1871,6 +1888,7 @@ settings_save(signal_user_data_t *ud, hb_preset_index_t *path, const char *name)
     }
     ghb_value_free(&dict);
     store_presets();
+    ghb_presets_menu_reinit(ud);
 
     ud->dont_clear_presets = TRUE;
     // Make the new preset the selected item
@@ -2008,6 +2026,7 @@ preset_import_action_cb(GSimpleAction *action, GVariant *param,
 
         // Re-init the UI preset list
         ghb_presets_list_reinit(ud);
+        ghb_presets_menu_reinit(ud);
         if (index < 0)
         {
             ghb_select_default_preset(ud);
@@ -2201,6 +2220,7 @@ presets_reload_action_cb(GSimpleAction *action, GVariant *param,
     store_presets();
 
     ghb_presets_list_reinit(ud);
+    ghb_presets_menu_reinit(ud);
     ghb_select_default_preset(ud);
 }
 
@@ -2263,6 +2283,7 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
             {
                 store_presets();
                 presets_list_remove(ud, path);
+                ghb_presets_menu_reinit(ud);
             }
             if (valid)
             {
@@ -2535,6 +2556,7 @@ presets_drag_cb(
             free(dst_path);
 
             store_presets();
+            ghb_presets_menu_reinit(ud);
         }
         gtk_tree_path_free(dst_treepath);
         free(src_path);
@@ -2615,7 +2637,7 @@ ghb_get_current_preset(signal_user_data_t *ud)
 G_MODULE_EXPORT void
 presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t *ud)
 {
-    GtkWidget         * widget;
+    GSimpleAction     * action;
     hb_preset_index_t * path;
     gboolean            sensitive = FALSE;
 
@@ -2634,12 +2656,12 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
             ghb_load_post_settings(ud);
             set_preset_menu_button_label(ud, path);
         }
+        sensitive = TRUE;
         free(path);
     }
-    widget = GHB_WIDGET (ud->builder, "presets_remove");
-    gtk_widget_set_sensitive(widget, sensitive);
-    widget = GHB_WIDGET (ud->builder, "presets_window_remove");
-    gtk_widget_set_sensitive(widget, sensitive);
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
+                                                        "preset-remove"));
+    g_simple_action_set_enabled(action, sensitive);
 }
 
 void
