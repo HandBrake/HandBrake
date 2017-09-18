@@ -2241,75 +2241,80 @@ G_MODULE_EXPORT void
 preset_remove_action_cb(GSimpleAction *action, GVariant *param,
                         signal_user_data_t *ud)
 {
-    GtkTreeView      *treeview;
-    GtkTreeSelection *selection;
-    GtkTreeModel     *store;
-    GtkTreeIter       iter;
-    gchar            *preset;
-    GtkResponseType   response;
 
-    treeview  = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
-    selection = gtk_tree_view_get_selection (treeview);
-    if (gtk_tree_selection_get_selected(selection, &store, &iter))
+    const char        * fullname;
+    hb_preset_index_t * path;
+
+    fullname  = ghb_dict_get_string(ud->settings, "PresetFullName");
+    if (fullname == NULL)
     {
-        GtkWindow         *hb_window;
-        GtkWidget         *dialog;
-        gboolean           is_folder;
-        hb_preset_index_t *path;
+        return;
+    }
+    path = hb_preset_search_index(fullname, 0);
+    if (path == NULL)
+    {
+        return;
+    }
 
-        gtk_tree_model_get(store, &iter, 0, &preset, -1);
+    GtkWindow       * hb_window;
+    GtkWidget       * dialog;
+    gboolean          is_folder;
+    GtkResponseType   response;
+    const char      * name;
 
-        path      = ghb_tree_get_index(store, &iter);
-        is_folder = preset_is_folder(path);
-        hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-        dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
-                            GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
-                            _("Confirm deletion of %s:\n\n%s"),
-                            is_folder ? _("folder") : _("preset"),
-                            preset);
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
-        if (response == GTK_RESPONSE_YES)
+    name  = ghb_dict_get_string(ud->settings, "PresetName");
+    is_folder = preset_is_folder(path);
+    hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    dialog = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
+                        GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
+                        _("Confirm deletion of %s:\n\n%s"),
+                        is_folder ? _("folder") : _("preset"),
+                        name);
+    response = gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+    if (response == GTK_RESPONSE_YES)
+    {
+        GtkTreeView      * treeview;
+        GtkTreeSelection * selection;
+        gboolean           valid = TRUE;
+        hb_value_t       * preset;
+
+
+        // Determine which preset to highlight after deletion done
+        hb_preset_index_t new_path = *path;
+        // Try next
+        new_path.index[path->depth - 1] = path->index[path->depth - 1] + 1;
+        preset = hb_preset_get(&new_path);
+        if (preset == NULL)
         {
-            GtkTreeIter nextIter = iter;
-            gboolean    valid    = TRUE;
-
-            // Determine which preset to highlight after deletion done
-            if (!gtk_tree_model_iter_next(store, &nextIter))
+            // Try previous
+            new_path.index[path->depth - 1] =
+                path->index[path->depth - 1] - 1;
+            preset = hb_preset_get(&new_path);
+            if (preset == NULL)
             {
-                nextIter = iter;
-                if (!gtk_tree_model_iter_previous(store, &nextIter))
-                {
-                    nextIter = iter;
-                    if (!gtk_tree_model_iter_parent(store, &nextIter, &iter))
-                    {
-                        nextIter = iter;
-                        valid = gtk_tree_model_get_iter_first(store, &nextIter);
-                    }
-                }
-            }
-
-            // Remove the selected item
-            // First unselect it so that selecting the new item works properly
-            gtk_tree_selection_unselect_iter(selection, &iter);
-            if (hb_preset_delete(path) >= 0)
-            {
-                store_presets();
-                presets_list_remove(ud, path);
-                ghb_presets_menu_reinit(ud);
-            }
-            if (valid)
-            {
-                hb_preset_index_t *path;
-
-                path = ghb_tree_get_index(store, &nextIter);
-                select_preset2(ud, path);
-                free(path);
+                valid = FALSE;
             }
         }
-        free(path);
-        g_free(preset);
+
+        // Remove the selected item
+        // First unselect it so that selecting the new item works properly
+        treeview  = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
+        selection = gtk_tree_view_get_selection(treeview);
+        gtk_tree_selection_unselect_all(selection);
+
+        if (hb_preset_delete(path) >= 0)
+        {
+            store_presets();
+            presets_list_remove(ud, path);
+            ghb_presets_menu_reinit(ud);
+        }
+        if (valid)
+        {
+            select_preset2(ud, &new_path);
+        }
     }
+    free(path);
 }
 
 // controls where valid drop locations are
@@ -2650,9 +2655,7 @@ ghb_get_current_preset(signal_user_data_t *ud)
 G_MODULE_EXPORT void
 presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_t *ud)
 {
-    GSimpleAction     * action;
     hb_preset_index_t * path;
-    gboolean            sensitive = FALSE;
 
     path   = get_selected_path(ud);
     if (path != NULL)
@@ -2681,12 +2684,8 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
                                      G_ACTION_MAP(ud->app), "preset-reset"));
             g_simple_action_set_enabled(action, FALSE);
         }
-        sensitive = TRUE;
         free(path);
     }
-    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
-                                                        "preset-remove"));
-    g_simple_action_set_enabled(action, sensitive);
 }
 
 void
