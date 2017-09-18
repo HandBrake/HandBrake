@@ -572,10 +572,10 @@ set_preset_menu_button_label(signal_user_data_t *ud, hb_preset_index_t *path)
 
     dict = hb_preset_get(path);
     type = ghb_dict_get_int(dict, "Type");
-    fullname = preset_get_fullname(path, " > ");
+    fullname = preset_get_fullname(path, " <span alpha=\"70%\">></span> ");
     label = GTK_LABEL(GHB_WIDGET(ud->builder, "presets_menu_button_label"));
     text = g_strdup_printf("%s%s", type ? "Custom" : "Official", fullname);
-    gtk_label_set_text(label, text);
+    gtk_label_set_markup(label, text);
     free(fullname);
     free(text);
 }
@@ -1141,12 +1141,25 @@ get_selected_path(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-preset_select_action_cb(GSimpleAction *action, GVariant *value,
+preset_select_action_cb(GSimpleAction *action, GVariant *param,
                         signal_user_data_t *ud)
 {
-    const char        * preset_path = g_variant_get_string(value, NULL);
+    const char        * preset_path = g_variant_get_string(param, NULL);
 
     ghb_select_preset(ud, preset_path);
+}
+
+G_MODULE_EXPORT void
+preset_reset_action_cb(GSimpleAction *action, GVariant *param,
+                       signal_user_data_t *ud)
+{
+    const char * preset_path;
+
+    preset_path  = ghb_dict_get_string(ud->settings, "PresetFullName");
+    if (preset_path != NULL)
+    {
+        ghb_select_preset(ud, preset_path);
+    }
 }
 
 void
@@ -2654,7 +2667,19 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
             free(fullname);
             ghb_set_current_title_settings(ud);
             ghb_load_post_settings(ud);
+        }
+        if (!ghb_dict_get_bool(dict, "Folder"))
+        {
+            GtkLabel      * label;
+            GSimpleAction * action;
+
             set_preset_menu_button_label(ud, path);
+            label = GTK_LABEL(GHB_WIDGET(ud->builder,
+                                         "preset_selection_modified_label"));
+            gtk_label_set_markup(label, "");
+            action = G_SIMPLE_ACTION(g_action_map_lookup_action(
+                                     G_ACTION_MAP(ud->app), "preset-reset"));
+            g_simple_action_set_enabled(action, FALSE);
         }
         sensitive = TRUE;
         free(path);
@@ -2667,14 +2692,24 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
 void
 ghb_clear_presets_selection(signal_user_data_t *ud)
 {
-    GtkTreeView      *treeview;
-    GtkTreeSelection *selection;
+    GtkTreeView      * treeview;
+    GtkTreeSelection * selection;
+    GtkLabel         * label;
+    GSimpleAction    * action;
 
     if (ud->dont_clear_presets) return;
     treeview  = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
-    selection = gtk_tree_view_get_selection (treeview);
-    gtk_tree_selection_unselect_all (selection);
+    selection = gtk_tree_view_get_selection(treeview);
+    gtk_tree_selection_unselect_all(selection);
     ghb_dict_set_bool(ud->settings, "preset_modified", TRUE);
+
+    label = GTK_LABEL(GHB_WIDGET(ud->builder,
+                                 "preset_selection_modified_label"));
+    gtk_label_set_markup(label, "<u><i>Modified</i></u>");
+
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
+                                                        "preset-reset"));
+    g_simple_action_set_enabled(action, TRUE);
 }
 
 G_MODULE_EXPORT void

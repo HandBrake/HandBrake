@@ -1584,6 +1584,36 @@ This is often the feature title of a DVD.</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="preset_selection_modified_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="width-chars">10</property>
+                    <property name="label" translatable="yes"></property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="preset_selection_reset">
+                    <property name="label" translatable="yes">Reset</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="tooltip_text" translatable="yes">Reset the current title to default Preset values</property>
+                    <property name="receives_default">True</property>
+                    <property name="halign">end</property>
+                    <property name="action-name">app.preset-reset</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
