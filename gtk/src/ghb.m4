@@ -1217,6 +1217,7 @@ Activity</property>
                     <child>
                       <object class="GtkLabel" id="volume_label">
                         <property name="visible">True</property>
+                        <property name="max-width-chars">60</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="halign">start</property>
@@ -1318,14 +1319,14 @@ This is often the feature title of a DVD.</property>
                         <signal name="changed" handler="title_changed_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="angle_label">
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
                         <property name="label" translatable="yes">Angle:</property>
@@ -1339,7 +1340,7 @@ This is often the feature title of a DVD.</property>
                     <child>
                       <object class="GtkSpinButton" id="angle">
                         <property name="width-chars">3</property>
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">For multi-angle DVD's, select the desired angle to encode.</property>
@@ -1366,7 +1367,7 @@ This is often the feature title of a DVD.</property>
                         <signal name="clicked" handler="title_reset_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
+                        <property name="expand">True</property>
                         <property name="fill">True</property>
                         <property name="position">3</property>
                       </packing>
@@ -1483,7 +1484,7 @@ This is often the feature title of a DVD.</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="halign">start</property>
                             <property name="label" translatable="yes">hh:mm:ss</property>
-                            <property name="width_chars">8</property>
+                            <property name="width-chars">8</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2747,7 +2748,7 @@ Telecining is a process that adjusts film framerates that are 24fps to NTSC vide
                                 <property name="tooltip_text" translatable="yes">Custom detelecine filter string format
 
 JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
-                                <property name="width_chars">8</property>
+                                <property name="width-chars">8</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                                 <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
@@ -2820,7 +2821,7 @@ to be interlaced will be deinterlaced.</property>
 
 Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:
 Block Thresh: Block Width: Block Height</property>
-                                <property name="width_chars">8</property>
+                                <property name="width-chars">8</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                                 <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
@@ -2926,7 +2927,7 @@ The deinterlace filter is a classic YADIF deinterlacer.
                               <object class="GtkEntry" id="PictureDeinterlaceCustom">
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes"></property>
-                                <property name="width_chars">8</property>
+                                <property name="width-chars">8</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                                 <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
@@ -3117,7 +3118,7 @@ Using this filter on such sources can result in smaller file sizes.</property>
                                 <property name="tooltip_text" translatable="yes">Custom denoise filter string format
 
 SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
-                                <property name="width_chars">8</property>
+                                <property name="width-chars">8</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                                 <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
@@ -3251,7 +3252,7 @@ high frequency components in the video.</property>
                                 <property name="tooltip_text" translatable="yes">Custom denoise filter string format
 
 SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
-                                <property name="width_chars">8</property>
+                                <property name="width-chars">8</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
                                 <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
@@ -6526,7 +6527,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
                             <property name="activates_default">False</property>
-                            <property name="width_chars">50</property>
+                            <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
@@ -6563,7 +6564,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
                             <property name="activates_default">False</property>
-                            <property name="width_chars">50</property>
+                            <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
@@ -6600,7 +6601,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
                             <property name="activates_default">False</property>
-                            <property name="width_chars">50</property>
+                            <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
@@ -6637,7 +6638,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
                             <property name="activates_default">False</property>
-                            <property name="width_chars">50</property>
+                            <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
@@ -6674,7 +6675,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
                             <property name="activates_default">False</property>
-                            <property name="width_chars">50</property>
+                            <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
@@ -6711,7 +6712,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
                             <property name="activates_default">False</property>
-                            <property name="width_chars">50</property>
+                            <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
@@ -6748,7 +6749,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                             <property name="max_length">80</property>
                             <property name="activates_default">False</property>
-                            <property name="width_chars">50</property>
+                            <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
                             <property name="primary_icon_activatable">False</property>
                             <property name="secondary_icon_activatable">False</property>
@@ -7573,7 +7574,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="activates_default">True</property>
-                                <property name="width_chars">40</property>
+                                <property name="width-chars">40</property>
                                 <property name="truncate_multiline">True</property>
                                 <property name="primary_icon_activatable">False</property>
                                 <property name="secondary_icon_activatable">False</property>
@@ -8240,7 +8241,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="max_length">40</property>
                     <property name="activates_default">True</property>
-                    <property name="width_chars">30</property>
+                    <property name="width-chars">30</property>
                     <property name="truncate_multiline">True</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
@@ -8403,7 +8404,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="max_length">40</property>
                     <property name="activates_default">True</property>
-                    <property name="width_chars">30</property>
+                    <property name="width-chars">30</property>
                     <property name="truncate_multiline">True</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
@@ -9070,117 +9071,6 @@ filter_output([
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="icon_name">gtk-add</property>
-  </object>
-  <object class="GtkDialog" id="tweak_dialog">
-    <property name="can_focus">False</property>
-    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <property name="border_width">5</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">dialog</property>
-    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox7">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area7">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="tweak_cancel">
-                <property name="label" translatable="yes">Cancel</property>
-                <property name="image">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="tweak_ok">
-                <property name="label" translatable="yes">OK</property>
-                <property name="image">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="hbox9">
-            <property name="orientation">horizontal</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <child>
-              <object class="GtkLabel" id="label33">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label" translatable="yes">Setting:</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="tweak_setting">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="max_length">40</property>
-                <property name="activates_default">True</property>
-                <property name="width_chars">30</property>
-                <property name="truncate_multiline">True</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">tweak_cancel</action-widget>
-      <action-widget response="-5">tweak_ok</action-widget>
-    </action-widgets>
   </object>
   <object class="GtkDialog" id="subtitle_dialog">
     <property name="transient_for">hb_window</property>
@@ -9935,7 +9825,7 @@ weather-clear</property>
                         <property name="halign">start</property>
                         <property name="label" translatable="yes">00.0</property>
                         <property name="use_markup">True</property>
-                        <property name="width_chars">4</property>
+                        <property name="width-chars">4</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -10025,7 +9915,7 @@ audio-volume-medium</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">0dB</property>
                     <property name="use_markup">True</property>
-                    <property name="width_chars">6</property>
+                    <property name="width-chars">6</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -10076,7 +9966,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Off</property>
                     <property name="use_markup">True</property>
-                    <property name="width_chars">4</property>
+                    <property name="width-chars">4</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
