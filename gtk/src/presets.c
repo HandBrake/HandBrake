@@ -566,7 +566,9 @@ static void
 set_preset_menu_button_label(signal_user_data_t *ud, hb_preset_index_t *path)
 {
     char              * fullname, * text;
+    const char        * description;
     GtkLabel          * label;
+    GtkWidget         * widget;
     GhbValue          * dict;
     int                 type;
 
@@ -578,6 +580,10 @@ set_preset_menu_button_label(signal_user_data_t *ud, hb_preset_index_t *path)
     gtk_label_set_markup(label, text);
     free(fullname);
     free(text);
+
+    description = ghb_dict_get_string(dict, "PresetDescription");
+    widget = GHB_WIDGET(ud->builder, "presets_menu_button");
+    gtk_widget_set_tooltip_text(widget, description);
 }
 
 static void

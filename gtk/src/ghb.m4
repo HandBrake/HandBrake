@@ -883,7 +883,7 @@ libx264 authors:
                     </child>
                     <child>
                       <object class="GtkCheckMenuItem" id="show_presets">
-                        <property name="label" translatable="yes">_Show Presets</property>
+                        <property name="label" translatable="yes">Presets _List</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
