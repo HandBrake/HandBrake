@@ -91,7 +91,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// </param>
         public static void ExportPreset(string filename, PresetTransportContainer container)
         {
-            string preset = JsonConvert.SerializeObject(container, Formatting.Indented);
+            string preset = JsonConvert.SerializeObject(container, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             using (StreamWriter writer = new StreamWriter(filename))
             {
                 writer.Write(preset);
