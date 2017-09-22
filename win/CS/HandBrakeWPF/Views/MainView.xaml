@@ -22,7 +22,6 @@
 
         <Style TargetType="Button">
             <Setter Property="Padding" Value="8,2" />
-            <Setter Property="FontSize" Value="11.5" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="MinHeight" Value="22" />
         </Style>
@@ -360,50 +359,10 @@
                         </Button.Content>
 
                         <Button.ContextMenu>
-                            <ContextMenu x:Name="PresetSelectContextMenu" 
-                                         PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}" 
-                                         ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}">
+                            <ContextMenu x:Name="PresetSelectContextMenu" ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}">
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
-                    
-                    <!--<ComboBox ItemsSource="{Binding PresetsCategories}" SelectedItem="{Binding SelectedPresetCategory}" Width="150" DisplayMemberPath="Category"  Margin="5,0,0,0" VerticalAlignment="Center" />
-                    <ComboBox ItemsSource="{Binding CategoryPresets}" SelectedItem="{Binding SelectedPreset}" Width="250" Margin="10,0,0,0" VerticalAlignment="Center">
-                        <ComboBox.Resources>
-                            <Style TargetType="ToolTip">
-                                <Style.Resources>
-                                    <Style TargetType="ContentPresenter">
-                                        <Style.Resources>
-                                            <Style TargetType="TextBlock">
-                                                <Setter Property="TextWrapping" Value="Wrap" />
-                                            </Style>
-                                        </Style.Resources>
-                                    </Style>
-                                </Style.Resources>
-                                <Setter Property="MaxWidth" Value="400" />
-                            </Style>
-                        </ComboBox.Resources>
-                        
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="1500">
-                                    <StackPanel.Resources>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="FontStyle" Value="Normal" />
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Path=IsDefault}" Value="True">
-                                                    <Setter Property="FontStyle" Value="Italic" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-
-                                    </StackPanel.Resources>
-                                    <TextBlock Text="{Binding Name}" />
-                                    <TextBlock Text="(Default)" Visibility="{Binding IsDefault, Converter={StaticResource boolToVisConverter}}" Margin="5,0,0,0" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>-->
 
                     <Button Content="Reload" cal:Message.Attach="[Event Click] = [Action PresetSelect]"  Margin="15,0,0,0" VerticalAlignment="Center" />
                     <Button Content="Save Custom Preset" cal:Message.Attach="[Event Click] = [Action PresetAdd]"  Margin="5,0,0,0" VerticalAlignment="Center" />
@@ -422,7 +381,7 @@
                         </Button.Content>
 
                         <Button.ContextMenu>
-                            <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}">
+                            <ContextMenu x:Name="MainContextMenu">
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
                                 <Separator />
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />

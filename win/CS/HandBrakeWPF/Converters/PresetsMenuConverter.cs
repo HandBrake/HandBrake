@@ -79,6 +79,7 @@ namespace HandBrakeWPF.Converters
                 if (preset.IsDefault)
                 {
                     newMeuItem.FontStyle = FontStyles.Italic;
+                    newMeuItem.FontSize = 14;
                 }
 
                 groupedMenu[preset.Category].Items.Add(newMeuItem);
@@ -92,6 +93,7 @@ namespace HandBrakeWPF.Converters
                 if (preset.IsDefault)
                 {
                     newMeuItem.FontStyle = FontStyles.Italic;
+                    newMeuItem.FontSize = 14;
                 }
 
                 group.Items.Add(newMeuItem);
