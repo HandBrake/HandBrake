@@ -510,9 +510,6 @@
   <data name="QueueView_Hibernate" xml:space="preserve">
     <value>Hibernate</value>
   </data>
-  <data name="QueueView_Import" xml:space="preserve">
-    <value>Import Queue</value>
-  </data>
   <data name="QueueView_LockSystem" xml:space="preserve">
     <value>Lock System</value>
   </data>
@@ -979,5 +976,11 @@ This will not affect your current settings in the Subtitle tab.</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
     <value>Delete Preset</value>
+  </data>
+  <data name="Preset_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Preset_Official" xml:space="preserve">
+    <value>Official</value>
   </data>
 </root>

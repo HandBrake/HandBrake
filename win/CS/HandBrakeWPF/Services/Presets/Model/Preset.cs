@@ -13,6 +13,7 @@ namespace HandBrakeWPF.Services.Presets.Model
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Presets.Interfaces;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -75,6 +76,15 @@ namespace HandBrakeWPF.Services.Presets.Model
         /// Reflects the visual state of this preset.
         /// </summary>
         public bool IsExpanded { get; set; }
+
+        public string DisplayValue
+        {
+            get
+            {
+                string globalCateogry = this.IsBuildIn ? ResourcesUI.Preset_Official : ResourcesUI.Preset_Custom;
+                return string.Format("{0} > {1} > {2}", globalCateogry, this.Category, this.Name);
+            }
+        }
 
         public bool IsSelected
         {

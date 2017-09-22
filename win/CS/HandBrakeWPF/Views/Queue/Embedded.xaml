@@ -72,7 +72,6 @@
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearAll}" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearSelected}" />                 
                     <Separator />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:ResourcesUI.QueueView_Import}" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" />
                 </ContextMenu>
             </ListBox.ContextMenu>

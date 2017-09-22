@@ -104,7 +104,6 @@
                     <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearAll}" Header="{x:Static Properties:ResourcesUI.QueueView_ClearAll}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearSelected}" Header="{x:Static Properties:ResourcesUI.QueueView_ClearSelected}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     <Separator Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.Import}" Header="{x:Static Properties:ResourcesUI.QueueView_Import}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.Export}" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                 </MenuItem>
 
@@ -346,7 +345,29 @@
             <StackPanel Grid.Row="1" Orientation="Vertical"  Margin="10,5,10,5">
                 <Label Content="Presets" FontWeight="Bold" VerticalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" Margin="8,0,0,0" Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
-                    <ComboBox ItemsSource="{Binding PresetsCategories}" SelectedItem="{Binding SelectedPresetCategory}" Width="150" DisplayMemberPath="Category"  Margin="5,0,0,0" VerticalAlignment="Center" />
+
+                    <Button x:Name="SelectPresetsButton"  Margin="15,0,0,0" VerticalAlignment="Center" Click="SelectPreset_OnClick" Width="350">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
+                                <TextBlock Margin="0,0,5,0" Padding="0"
+                                           VerticalAlignment="Center" Width="315"
+                                           Text="{Binding SelectedPreset.DisplayValue}" />
+
+                                <Path Height="8" Margin="2,0,0,1" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                      Data="M 0 0 L 4 4 L 0 8 Z"
+                                      Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrowSelectPreset" />
+                            </StackPanel>
+                        </Button.Content>
+
+                        <Button.ContextMenu>
+                            <ContextMenu x:Name="PresetSelectContextMenu" 
+                                         PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}" 
+                                         ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}">
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
+                    
+                    <!--<ComboBox ItemsSource="{Binding PresetsCategories}" SelectedItem="{Binding SelectedPresetCategory}" Width="150" DisplayMemberPath="Category"  Margin="5,0,0,0" VerticalAlignment="Center" />
                     <ComboBox ItemsSource="{Binding CategoryPresets}" SelectedItem="{Binding SelectedPreset}" Width="250" Margin="10,0,0,0" VerticalAlignment="Center">
                         <ComboBox.Resources>
                             <Style TargetType="ToolTip">
@@ -382,7 +403,7 @@
                                 </StackPanel>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
-                    </ComboBox>
+                    </ComboBox>-->
 
                     <Button Content="Reload" cal:Message.Attach="[Event Click] = [Action PresetSelect]"  Margin="15,0,0,0" VerticalAlignment="Center" />
                     <Button Content="Save Custom Preset" cal:Message.Attach="[Event Click] = [Action PresetAdd]"  Margin="5,0,0,0" VerticalAlignment="Center" />

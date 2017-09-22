@@ -1754,6 +1754,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string Preset_Custom {
+            get {
+                return ResourceManager.GetString("Preset_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export to file.
         /// </summary>
         public static string Preset_Export {
@@ -1768,6 +1777,15 @@ namespace HandBrakeWPF.Properties {
         public static string Preset_Import {
             get {
                 return ResourceManager.GetString("Preset_Import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Official.
+        /// </summary>
+        public static string Preset_Official {
+            get {
+                return ResourceManager.GetString("Preset_Official", resourceCulture);
             }
         }
         
@@ -1904,15 +1922,6 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_Hibernate {
             get {
                 return ResourceManager.GetString("QueueView_Hibernate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Import Queue.
-        /// </summary>
-        public static string QueueView_Import {
-            get {
-                return ResourceManager.GetString("QueueView_Import", resourceCulture);
             }
         }
         

@@ -153,7 +153,6 @@
                             <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearCompleted}" />
                             <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearQueue}" />
                             <Separator />
-                            <!--<MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:ResourcesUI.QueueView_Import}" />-->
                             <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" />
 
                         </MenuItem>
@@ -199,7 +198,6 @@
                     <MenuItem Header="{x:Static Properties:ResourcesUI.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" />
                     <MenuItem Header="{x:Static Properties:ResourcesUI.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" />
                     <Separator />
-                    <!--<MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:ResourcesUI.QueueView_Import}" />-->
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" />
                 </ContextMenu>
             </ListBox.ContextMenu>

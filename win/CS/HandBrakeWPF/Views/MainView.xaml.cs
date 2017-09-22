@@ -87,6 +87,17 @@ namespace HandBrakeWPF.Views
             }
         }
 
+        private void SelectPreset_OnClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            if (button != null && button.ContextMenu != null)
+            {
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Right;
+                button.ContextMenu.IsOpen = true;
+            }
+        }
+
         private void ToolBarLoaded(object sender, RoutedEventArgs e)
         {
             ToolBar toolBar = sender as ToolBar;
