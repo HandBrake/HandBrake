@@ -458,7 +458,7 @@ typedef enum
 
 /******************************************************************************
  * hb_job_t: settings to be filled by the UI
- * Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_job_s.cs when changing this struct
+ * Update win/CS/HandBrake.ApplicationServices/HandBrake.Interop/HandBrakeInterop/HbLib/hb_job_s.cs when changing this struct
  *****************************************************************************/
 struct hb_job_s
 {
@@ -504,8 +504,8 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_VP9   0x0000080
 #define HB_VCODEC_FFMPEG_MASK  0x00000F0
 #define HB_VCODEC_QSV_H264     0x0000100
-#define HB_VCODEC_NVENC_H264    0x0000110
-#define HB_VCODEC_NVENC_HEVC    0x0000120
+#define HB_VCODEC_H264_NVENC    0x0000110
+#define HB_VCODEC_HEVC_NVENC    0x0000120
 #define HB_VCODEC_QSV_H265_8BIT     0x0000200
 #define HB_VCODEC_QSV_H265_10BIT    0x0000400
 #define HB_VCODEC_QSV_H265_MASK     0x0000600
