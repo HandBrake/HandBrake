@@ -2362,7 +2362,6 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         gtk_range_set_range(GTK_RANGE(widget), 1, preview_count);
 
         ghb_reset_preview_image(ud);
-        //ghb_preview_set_visible(ud);
     }
 }
 

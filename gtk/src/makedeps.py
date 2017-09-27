@@ -12,8 +12,6 @@ dep_map = (
     DepEntry("title", "end_point", "none", True, False),
     DepEntry("title", "angle", "none", True, False),
     DepEntry("title", "angle_label", "1", True, False),
-    DepEntry("use_dvdnav", "angle", "0", True, True),
-    DepEntry("use_dvdnav", "angle_label", "0", True, True),
     DepEntry("angle_count", "angle", "1", True, True),
     DepEntry("angle_count", "angle_label", "1", True, True),
     DepEntry("vquality_type_bitrate", "VideoAvgBitrate", "1", False, False),
