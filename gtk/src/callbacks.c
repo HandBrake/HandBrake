@@ -1175,15 +1175,17 @@ check_chapter_markers(signal_user_data_t *ud)
 void
 ghb_load_settings(signal_user_data_t * ud)
 {
-    const char *fullname;
-    gboolean preset_modified;
-    static gboolean busy = FALSE;
+    const char      * fullname;
+    int               type;
+    gboolean          preset_modified;
+    static gboolean   busy = FALSE;
 
     if (busy)
         return;
     busy = TRUE;
 
-    fullname = ghb_dict_get_string(ud->settings, "PresetFullName");
+    fullname        = ghb_dict_get_string(ud->settings, "PresetFullName");
+    type            = ghb_dict_get_int(ud->settings, "Type");
     preset_modified = ghb_dict_get_bool(ud->settings, "preset_modified");
     if (preset_modified)
     {
@@ -1192,7 +1194,7 @@ ghb_load_settings(signal_user_data_t * ud)
     else
     {
         ghb_dict_set_bool(ud->settings, "preset_reload", TRUE);
-        ghb_select_preset(ud, fullname);
+        ghb_select_preset(ud, fullname, type);
         ghb_dict_set_bool(ud->settings, "preset_reload", FALSE);
     }
 

@@ -147,15 +147,6 @@ conjunction with the "Forced" option.</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkMenuItem" id="presets_window_new_folder">
-                        <property name="label" translatable="yes">_New Folder</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="action-name">app.preset-folder</property>
-                      </object>
-                    </child>
-                    <child>
                       <object class="GtkMenuItem" id="presets_window_export">
                         <property name="label" translatable="yes">_Export</property>
                         <property name="visible">True</property>
@@ -956,15 +947,6 @@ libx264 authors:
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="action-name">app.preset-default</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="presets_new_folder">
-                        <property name="label" translatable="yes">_New Folder</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="action-name">app.preset-folder</property>
                       </object>
                     </child>
                     <child>
@@ -8378,23 +8360,91 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
             <property name="can_focus">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <child>
-              <object class="GtkBox" id="hbox41">
-                <property name="orientation">horizontal</property>
+              <object class="GtkGrid" id="preset_save_name_table">
                 <property name="visible">True</property>
+                <property name="row-spacing">2</property>
+                <property name="column-spacing">6</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <child>
+                  <object class="GtkLabel" id="preset_save_category_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Category:</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="PresetCategory">
+                    <property name="valign">GTK_ALIGN_CENTER</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Set the category that this preset will be shown under.</property>
+                    <signal name="changed" handler="preset_category_changed_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="PresetCategoryEntryLabel">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Category Name:</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="left_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="PresetCategoryName">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="max_length">40</property>
+                    <property name="activates_default">True</property>
+                    <property name="width-chars">30</property>
+                    <property name="truncate_multiline">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <signal name="changed" handler="preset_category_changed_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="left_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkLabel" id="label64">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="halign">start</property>
+                    <property name="halign">end</property>
                     <property name="label" translatable="yes">Preset Name:</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="left_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -8408,11 +8458,13 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                     <property name="truncate_multiline">True</property>
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
+                    <signal name="changed" handler="preset_name_changed_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="top_attach">2</property>
+                    <property name="left_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>

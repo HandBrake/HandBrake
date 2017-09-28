@@ -861,8 +861,6 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 preset_default_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
-preset_folder_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
-G_MODULE_EXPORT void
 preset_export_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 preset_import_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
@@ -904,7 +902,6 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "preset-save",    preset_save_action_cb           },
         { "preset-remove",  preset_remove_action_cb         },
         { "preset-default", preset_default_action_cb        },
-        { "preset-folder",  preset_folder_action_cb         },
         { "preset-export",  preset_export_action_cb         },
         { "preset-import",  preset_import_action_cb         },
         { "presets-reload", presets_reload_action_cb        },
@@ -940,7 +937,7 @@ ghb_idle_ui_init(signal_user_data_t *ud)
 
     if (arg_preset != NULL)
     {
-        ghb_select_preset(ud, arg_preset);
+        ghb_select_preset(ud, arg_preset, HB_PRESET_TYPE_ALL);
     }
     else
     {

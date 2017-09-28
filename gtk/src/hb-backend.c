@@ -457,6 +457,8 @@ static void video_level_opts_set(signal_user_data_t *ud, const gchar *name,
                                  void *opts, const void* data);
 static void container_opts_set(signal_user_data_t *ud, const gchar *name,
                                void *opts, const void* data);
+static void preset_category_opts_set(signal_user_data_t *ud, const gchar *name,
+                                     void *opts, const void* data);
 static void filter_opts_set(signal_user_data_t *ud, const gchar *name,
                            void *opts, const void* data);
 static void deint_opts_set(signal_user_data_t *ud, const gchar *name,
@@ -747,6 +749,12 @@ combo_name_map_t combo_name_map[] =
         "FileFormat",
         NULL,
         container_opts_set,
+        NULL
+    },
+    {
+        "PresetCategory",
+        NULL,
+        preset_category_opts_set,
         NULL
     },
     {NULL, NULL, NULL, NULL}
@@ -1897,6 +1905,70 @@ container_opts_set(signal_user_data_t *ud, const gchar *name,
                            -1);
         g_free(str);
     }
+}
+
+static void
+preset_category_opts_set(signal_user_data_t *ud, const gchar *name,
+                         void *opts, const void* data)
+{
+    (void)opts; // Silence "unused variable" warning
+    (void)data; // Silence "unused variable" warning
+    GtkTreeIter     iter;
+    GtkListStore  * store;
+    gint            ii, jj, count;
+    hb_value_t    * presets;
+    GtkComboBox   * combo;
+    char         ** categories;
+
+    presets = hb_presets_get();
+    count   = hb_value_array_len(presets);
+
+    combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
+    store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
+    gtk_list_store_clear(store);
+
+    categories = calloc(count + 1, sizeof(char*));
+    for (ii = 0, jj = 0; ii < count; ii++)
+    {
+        const char * name;
+        hb_value_t * folder = hb_value_array_get(presets, ii);
+
+        if (!hb_value_get_bool(hb_dict_get(folder, "Folder")))
+        {
+            // Only list folders
+            continue;
+        }
+
+        name = hb_value_get_string(hb_dict_get(folder, "PresetName"));
+        if (name == NULL || name[0] == 0)
+        {
+            continue;
+        }
+
+        if (g_strv_contains((const char**)categories, name))
+        {
+            // Category is already in the list
+            continue;
+        }
+
+        categories[jj++] = g_strdup(name);
+        gtk_list_store_append(store, &iter);
+        gtk_list_store_set(store, &iter,
+                           0, name,
+                           1, TRUE,
+                           2, name,
+                           3, (gdouble)ii,
+                           -1);
+    }
+    g_strfreev(categories);
+
+    gtk_list_store_append(store, &iter);
+    gtk_list_store_set(store, &iter,
+                       0, "Add New Category",
+                       1, TRUE,
+                       2, "new",
+                       3, -1.0,
+                       -1);
 }
 
 const hb_container_t*

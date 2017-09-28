@@ -65,6 +65,8 @@ dep_map = (
     DepEntry("VideoEncoder", "x264_box", "x264|x264_10bit", False, True),
     DepEntry("x264UseAdvancedOptions", "x264_box", "0", True, False),
     DepEntry("auto_name", "autoname_box", "1", False, False),
+    DepEntry("PresetCategory", "PresetCategoryName", "new", False, True),
+    DepEntry("PresetCategory", "PresetCategoryEntryLabel", "new", False, True),
     )
 
 def main():

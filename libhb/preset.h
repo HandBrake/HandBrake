@@ -14,6 +14,10 @@
 
 #define HB_MAX_PRESET_FOLDER_DEPTH  8
 
+#define HB_PRESET_TYPE_OFFICIAL 0
+#define HB_PRESET_TYPE_CUSTOM   1
+#define HB_PRESET_TYPE_ALL      2
+
 typedef struct hb_preset_index_s hb_preset_index_t;
 
 // A preset index is a list of indexes that specifies a path to a
@@ -160,9 +164,11 @@ void hb_sanitize_audio_settings(const hb_title_t * title,
 // in the name will be performed.
 //
 // I assume that the actual preset name does not include any '/'
-hb_preset_index_t * hb_preset_search_index(const char *name, int recurse);
-hb_value_t        * hb_preset_search(const char *name, int recurse);
-char              * hb_preset_search_json(const char *name, int recurse);
+hb_preset_index_t * hb_preset_search_index(const char *name,
+                                           int recurse, int type);
+hb_value_t        * hb_preset_search(const char *name, int recurse, int type);
+char              * hb_preset_search_json(const char *name,
+                                          int recurs, int typee);
 
 hb_value_t * hb_presets_get_folder_children(const hb_preset_index_t *path);
 hb_value_t * hb_preset_get(const hb_preset_index_t *path);

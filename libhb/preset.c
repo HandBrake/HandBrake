@@ -73,16 +73,24 @@ typedef struct
 {
     preset_do_context_t  do_ctx;
     const char          *name;
+    int                  type;
     int                  recurse;
     int                  last_match_idx;
 } preset_search_context_t;
 
 typedef int (*preset_do_f)(hb_value_t *preset, preset_do_context_t *ctx);
 
-static int preset_cmp_idx(hb_value_t *preset, int idx, const char *name)
+static int preset_cmp_idx(hb_value_t *preset, int idx,
+                          const char *name, int type)
 {
     const char *next, *preset_name;
     int  ii, len;
+
+    if (type != HB_PRESET_TYPE_ALL &&
+        type != hb_value_get_int(hb_dict_get(preset, "Type")))
+    {
+        return PRESET_DO_NEXT;
+    }
 
     // Strip leading '/'
     if (name[0] == '/')
@@ -134,10 +142,10 @@ static int do_preset_search(hb_value_t *preset, preset_do_context_t *do_ctx)
         idx -= ctx->last_match_idx;
     }
 
-    result = preset_cmp_idx(preset, idx, ctx->name);
+    result = preset_cmp_idx(preset, idx, ctx->name, ctx->type);
     if (ctx->recurse && result == PRESET_DO_SKIP)
     {
-        result = preset_cmp_idx(preset, 0, ctx->name);
+        result = preset_cmp_idx(preset, 0, ctx->name, ctx->type);
         ctx->last_match_idx = idx;
     }
     if (result == PRESET_DO_PARTIAL)
@@ -168,7 +176,7 @@ static int do_preset_clean(hb_value_t *preset, preset_do_context_t *do_ctx)
 
 static int do_delete_builtin(hb_value_t *preset, preset_do_context_t *ctx)
 {
-    if (hb_value_get_int(hb_dict_get(preset, "Type")) == 0)
+    if (hb_value_get_int(hb_dict_get(preset, "Type")) == HB_PRESET_TYPE_OFFICIAL)
         return PRESET_DO_DELETE;
     return PRESET_DO_NEXT;
 }
@@ -259,7 +267,7 @@ static int presets_do(preset_do_f do_func, hb_value_t *preset,
 hb_preset_index_t* hb_preset_index_init(const int *index, int depth)
 {
     hb_preset_index_t *path;
-    path = malloc(sizeof(hb_preset_index_t));
+    path = calloc(1, sizeof(hb_preset_index_t));
     path->depth = depth;
     if (index != NULL)
         memcpy(path->index, index, depth * sizeof(int));
@@ -3209,13 +3217,15 @@ char * hb_presets_builtin_get_json(void)
 // I assume that the actual preset name does not include any '/'
 //
 // A reference to the preset is returned
-static hb_preset_index_t * preset_lookup_path(const char *name, int recurse)
+static hb_preset_index_t * preset_lookup_path(const char *name,
+                                              int recurse, int type)
 {
     preset_search_context_t ctx;
     int result;
 
     ctx.do_ctx.path.depth = 1;
     ctx.name = name;
+    ctx.type = type;
     ctx.recurse = recurse;
     ctx.last_match_idx = -1;
     result = presets_do(do_preset_search, hb_presets,
@@ -3236,24 +3246,25 @@ static hb_preset_index_t * preset_lookup_path(const char *name, int recurse)
 // I assume that the actual preset name does not include any '/'
 //
 // A copy of the preset is returned
-hb_preset_index_t * hb_preset_search_index(const char *name, int recurse)
+hb_preset_index_t * hb_preset_search_index(const char *name,
+                                           int recurse, int type)
 {
-    return preset_lookup_path(name, recurse);
+    return preset_lookup_path(name, recurse, type);
 }
 
-hb_value_t * hb_preset_search(const char *name, int recurse)
+hb_value_t * hb_preset_search(const char *name, int recurse, int type)
 {
-    hb_preset_index_t *path = preset_lookup_path(name, recurse);
+    hb_preset_index_t *path = preset_lookup_path(name, recurse, type);
     hb_value_t *preset = hb_preset_get(path);
     free(path);
     return preset;
 }
 
-char * hb_preset_search_json(const char *name, int recurse)
+char * hb_preset_search_json(const char *name, int recurse, int type)
 {
     hb_value_t * preset;
     char *json;
-    preset = hb_preset_search(name, recurse);
+    preset = hb_preset_search(name, recurse, type);
     if (preset == NULL)
         return NULL;
     json = hb_value_get_json(preset);

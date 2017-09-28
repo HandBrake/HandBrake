@@ -3260,7 +3260,8 @@ static hb_dict_t * PreparePreset(const char *preset_name)
 
     if (preset_name != NULL)
     {
-        preset = hb_preset_search(preset_name, 1 /*recurse*/);
+        preset = hb_preset_search(preset_name, 1 /*recurse*/,
+                                  HB_PRESET_TYPE_ALL);
         if (preset == NULL)
         {
             fprintf(stderr, "Invalid preset %s\n"
