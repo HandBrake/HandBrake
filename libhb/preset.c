@@ -2223,6 +2223,190 @@ void hb_presets_clean(hb_value_t *preset)
     presets_clean(preset, hb_preset_template);
 }
 
+static char * fix_name_collisions(hb_value_t * list, const char * name)
+{
+    char * new_name = strdup(name);
+    int    ii, jj, count;
+
+    count = hb_value_array_len(list);
+    for (ii = 0, jj = 0; ii < count; ii++)
+    {
+        hb_value_t * item = hb_value_array_get(list, ii);
+        const char * preset_name;
+
+        preset_name = hb_dict_get_string(item, "PresetName");
+        if (!strcmp(new_name, preset_name))
+        {
+            // Collision, add a number and try again
+            free(new_name);
+            new_name = hb_strdup_printf("%s - %d", name, jj++);
+            ii = -1;
+        }
+    }
+    return new_name;
+}
+
+static void import_folder_hierarchy_29_0_0(const char * name,
+                                    hb_value_t * new_list, hb_value_t * folder)
+{
+    hb_value_t * list = hb_dict_get(folder, "ChildrenArray");
+    int          ii, count;
+
+    count = hb_value_array_len(list);
+    for (ii = 0; ii < count;)
+    {
+        hb_value_t * item = hb_value_array_get(list, ii);
+
+        if (hb_dict_get_bool(item, "Folder"))
+        {
+            const char * folder_name;
+            char       * new_name;
+            int          pos = hb_value_array_len(new_list);
+
+            folder_name = hb_dict_get_string(item, "PresetName");
+            new_name = hb_strdup_printf("%s - %s", name, folder_name);
+            import_folder_hierarchy_29_0_0(new_name, new_list, item);
+
+            hb_value_t * children = hb_dict_get(item, "ChildrenArray");
+            if (hb_value_array_len(children) > 0)
+            {
+                // If the folder has any children, move it to the
+                // top level folder list.
+                char * unique_name = fix_name_collisions(new_list, new_name);
+                hb_dict_set_string(item, "PresetName", unique_name);
+                hb_value_incref(item);
+                hb_value_array_remove(list, ii);
+                hb_value_array_insert(new_list, pos, item);
+                free(unique_name);
+            }
+            else
+            {
+                hb_value_array_remove(list, ii);
+            }
+            free(new_name);
+        }
+        else
+        {
+            ii++;
+        }
+    }
+}
+
+static hb_value_t * import_hierarchy_29_0_0(hb_value_t *presets)
+{
+    hb_value_t * list = presets;
+    hb_value_t * my_presets = NULL;
+    hb_value_t * my_presets_list;
+    hb_value_t * new_list;
+    int          ii, count;
+
+    if (hb_value_type(presets) == HB_VALUE_TYPE_DICT &&
+        hb_dict_get(presets, "VersionMajor") != NULL)
+    {
+        // A packaged preset list
+        list = hb_dict_get(presets, "PresetList");
+    }
+
+    // Copy official presets to new list
+    new_list = hb_value_array_init();
+    count = hb_value_array_len(list);
+    for (ii = 0; ii < count; ii++)
+    {
+        hb_value_t * item = hb_value_array_get(list, ii);
+        if (hb_dict_get_int(item, "Type") != HB_PRESET_TYPE_OFFICIAL)
+        {
+            continue;
+        }
+        hb_value_array_append(new_list, hb_value_dup(item));
+    }
+
+    // First process any custom folder named "My Presets".
+    // Any existing "My Presets" folder is sanitized for subfolders.
+    // If "My Presets" doesn't exist, one is created.
+    count = hb_value_array_len(list);
+    for (ii = 0; ii < count; ii++)
+    {
+        hb_value_t * item = hb_value_array_get(list, ii);
+
+        if (hb_dict_get_int(item, "Type") == HB_PRESET_TYPE_OFFICIAL)
+        {
+            // Skip official presets.  The don't need to be restructured.
+            continue;
+        }
+        if (hb_dict_get_bool(item, "Folder"))
+        {
+            int          pos = hb_value_array_len(new_list);
+            const char * name = hb_dict_get_string(item, "PresetName");
+            if (strcmp(name, "My Presets"))
+            {
+                continue;
+            }
+            import_folder_hierarchy_29_0_0(name, new_list, item);
+
+            my_presets = hb_value_dup(item);
+            hb_value_array_insert(new_list, pos, my_presets);
+            hb_value_array_remove(list, ii);
+            break;
+        }
+    }
+    if (my_presets == NULL)
+    {
+        my_presets = hb_dict_init();
+        hb_dict_set_string(my_presets, "PresetName", "My Presets");
+        hb_dict_set(my_presets, "ChildrenArray", hb_value_array_init());
+        hb_dict_set_int(my_presets, "Type", HB_PRESET_TYPE_CUSTOM);
+        hb_dict_set_bool(my_presets, "Folder", 1);
+        hb_value_array_append(new_list, my_presets);
+    }
+    my_presets_list = hb_dict_get(my_presets, "ChildrenArray");
+
+    // Sanitize all other custom folders
+    count = hb_value_array_len(list);
+    for (ii = 0; ii < count; ii++)
+    {
+        hb_value_t * item = hb_value_array_get(list, ii);
+
+        if (hb_dict_get_int(item, "Type") == HB_PRESET_TYPE_OFFICIAL)
+        {
+            // Skip official presets.  The don't need to be restructured.
+            continue;
+        }
+        if (hb_dict_get_bool(item, "Folder"))
+        {
+            int          pos  = hb_value_array_len(new_list);
+            const char * name = hb_dict_get_string(item, "PresetName");
+            import_folder_hierarchy_29_0_0(name, new_list, item);
+
+            hb_value_t * children = hb_dict_get(item, "ChildrenArray");
+            if (hb_value_array_len(children) > 0)
+            {
+                // If the folder has any children, move it to the
+                // top level folder list.
+                char * unique_name = fix_name_collisions(new_list, name);
+                hb_dict_set_string(item, "PresetName", unique_name);
+                hb_value_array_insert(new_list, pos, hb_value_dup(item));
+                free(unique_name);
+            }
+        }
+        else
+        {
+            hb_value_array_append(my_presets_list, hb_value_dup(item));
+        }
+    }
+
+    if (hb_value_type(presets) == HB_VALUE_TYPE_DICT &&
+        hb_dict_get(presets, "VersionMajor") != NULL)
+    {
+        // A packaged preset list
+        hb_dict_set(presets, "PresetList", new_list);
+    }
+    else
+    {
+        presets = new_list;
+    }
+    return hb_value_dup(presets);
+}
+
 static void import_video_scaler_25_0_0(hb_value_t *preset)
 {
     hb_dict_set(preset, "VideoScaler", hb_value_string("swscale"));
@@ -3016,7 +3200,15 @@ int hb_presets_import(const hb_value_t *in, hb_value_t **out)
     dup = hb_value_dup(in);
     hb_presets_version(dup, &ctx.major, &ctx.minor, &ctx.micro);
     presets_do(do_preset_import, dup, (preset_do_context_t*)&ctx);
-    if (ctx.result)
+    if (cmpVersion(ctx.major, ctx.minor, ctx.micro, 29, 0, 0) <= 0)
+    {
+        hb_value_t * tmp;
+
+        tmp  = import_hierarchy_29_0_0(dup);
+        *out = hb_presets_update_version(tmp);
+        hb_value_free(&tmp);
+    }
+    else if (ctx.result)
     {
         *out = hb_presets_update_version(dup);
     }

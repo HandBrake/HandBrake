@@ -159,4 +159,10 @@ char      * hb_dict_to_encopts(const hb_dict_t * dict);
 #define hb_dict_get_double(dict, key) hb_value_get_double(hb_dict_get(dict, key))
 #define hb_dict_get_bool(dict, key) hb_value_get_bool(hb_dict_get(dict, key))
 
+#define hb_dict_set_string(dict, key, val) hb_dict_set(dict, key, hb_value_string(val))
+#define hb_dict_set_int(dict, key, val) hb_dict_set(dict, key, hb_value_int(val))
+#define hb_dict_set_double(dict, key, val) hb_dict_set(dict, key, hb_value_double(val))
+#define hb_dict_set_bool(dict, key, val) hb_dict_set(dict, key, hb_value_bool(val))
+
+
 #endif // !defined(HB_DICT_H)
