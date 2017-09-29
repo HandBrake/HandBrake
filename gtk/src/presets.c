@@ -144,33 +144,6 @@ dump_preset_indices(const gchar *msg, hb_preset_index_t *path)
 }
 #endif
 
-static gint
-preset_tree_depth(GhbValue *dict)
-{
-    if (ghb_dict_get_bool(dict, "Folder"))
-    {
-        gint      depth = 0;
-        gint      count, ii;
-        GhbValue *presets;
-
-        presets = ghb_dict_get(dict, "ChildrenArray");
-        count   = ghb_array_len(presets);
-        for (ii = 0; ii < count; ii++)
-        {
-            gint tmp;
-
-            dict  = ghb_array_get(presets, ii);
-            tmp   = preset_tree_depth(dict);
-            depth = MAX(depth, tmp);
-        }
-        return depth + 1;
-    }
-    else
-    {
-        return 1;
-    }
-}
-
 void
 ghb_presets_list_show_default(signal_user_data_t *ud)
 {
@@ -2354,7 +2327,6 @@ presets_drag_motion_cb(
     gint                     src_ptype, dst_ptype;
     gboolean                 src_folder, dst_folder;
     GhbValue                *src_preset, *dst_preset;
-    gint                     tree_depth, ii;
     GtkWidget               *widget;
 
     widget = gtk_drag_get_source_widget(ctx);
@@ -2364,7 +2336,7 @@ presets_drag_motion_cb(
     // Get the type of the object being dragged
     srctv  = GTK_TREE_VIEW(gtk_drag_get_source_widget(ctx));
     select = gtk_tree_view_get_selection(srctv);
-    gtk_tree_selection_get_selected (select, &model, &iter);
+    gtk_tree_selection_get_selected(select, &model, &iter);
     path   = ghb_tree_get_index(model, &iter);
 
     src_preset = hb_preset_get(path);
@@ -2375,12 +2347,8 @@ presets_drag_motion_cb(
         return TRUE;
     }
 
-    tree_depth = preset_tree_depth(src_preset);
     src_ptype  = ghb_dict_get_int(src_preset, "Type");
     src_folder = ghb_dict_get_bool(src_preset, "Folder");
-
-    if (src_folder && tree_depth == 1)
-        tree_depth = 2;
 
     // The rest checks that the destination is a valid position
     // in the list.
@@ -2393,52 +2361,79 @@ presets_drag_motion_cb(
     // Don't allow repositioning of builtin presets
     if (src_ptype != HB_PRESET_TYPE_CUSTOM)
     {
+        gtk_tree_view_set_drag_dest_row(tv, NULL, drop_pos);
         gdk_drag_status(ctx, 0, time);
+        gtk_tree_path_free(treepath);
         return TRUE;
     }
 
-    int len = gtk_tree_path_get_depth(treepath);
-    if (len+tree_depth-1 >= MAX_NESTED_PRESET)
-    {
-        if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
-            drop_pos = GTK_TREE_VIEW_DROP_BEFORE;
-        if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
-            drop_pos = GTK_TREE_VIEW_DROP_AFTER;
-    }
-    for (ii = len+tree_depth-1; ii > MAX_NESTED_PRESET; ii--)
-        gtk_tree_path_up(treepath);
     path = ghb_tree_path_get_index(treepath);
-
     dst_preset = hb_preset_get(path);
     free(path);
-    if (dst_preset != NULL)
+    if (dst_preset == NULL)
     {
-        dst_ptype = ghb_dict_get_int(dst_preset, "Type");
-        dst_folder = ghb_dict_get_bool(dst_preset, "Folder");
+        gdk_drag_status(ctx, 0, time);
+        gtk_tree_path_free(treepath);
+        return TRUE;
     }
-    else
-    {
-        dst_ptype = HB_PRESET_TYPE_CUSTOM;
-        dst_folder = FALSE;
-    }
+
+    dst_ptype = ghb_dict_get_int(dst_preset, "Type");
+    dst_folder = ghb_dict_get_bool(dst_preset, "Folder");
 
     // Don't allow mixing custom presets in the builtins
     if (dst_ptype != HB_PRESET_TYPE_CUSTOM)
     {
+        gtk_tree_view_set_drag_dest_row(tv, NULL, drop_pos);
         gdk_drag_status(ctx, 0, time);
+        gtk_tree_path_free(treepath);
         return TRUE;
     }
 
-    // Only allow *drop into* for folders
-    if (!dst_folder)
+    // Don't allow dropping source folder before/after a non-folder
+    if (src_folder && !dst_folder)
     {
-        if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
-            drop_pos = GTK_TREE_VIEW_DROP_BEFORE;
-        if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
-            drop_pos = GTK_TREE_VIEW_DROP_AFTER;
+        gtk_tree_path_up(treepath);
+        path = ghb_tree_path_get_index(treepath);
+        dst_preset = hb_preset_get(path);
+        free(path);
+        if (dst_preset == NULL)
+        {
+            gdk_drag_status(ctx, 0, time);
+            gtk_tree_path_free(treepath);
+            return TRUE;
+        }
+
+        dst_ptype = ghb_dict_get_int(dst_preset, "Type");
+        dst_folder = ghb_dict_get_bool(dst_preset, "Folder");
+        drop_pos = GTK_TREE_VIEW_DROP_AFTER;
     }
 
-    len = gtk_tree_path_get_depth(treepath);
+    // Don't allow dropping a source folder into another folder
+    if ((src_folder || !dst_folder) &&
+        drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
+    {
+        drop_pos = GTK_TREE_VIEW_DROP_BEFORE;
+    }
+    if ((src_folder || !dst_folder) &&
+        drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
+    {
+        drop_pos = GTK_TREE_VIEW_DROP_AFTER;
+    }
+
+    // Don't allow dropping a non-folder before a folder
+    if (!src_folder && dst_folder && drop_pos == GTK_TREE_VIEW_DROP_BEFORE)
+    {
+        gtk_tree_view_set_drag_dest_row(tv, NULL, drop_pos);
+        gdk_drag_status(ctx, 0, time);
+        gtk_tree_path_free(treepath);
+        return TRUE;
+    }
+
+    if (!src_folder && dst_folder && drop_pos == GTK_TREE_VIEW_DROP_AFTER)
+    {
+        drop_pos = GTK_TREE_VIEW_DROP_INTO_OR_AFTER;
+    }
+
     gtk_tree_view_set_drag_dest_row(tv, treepath, drop_pos);
     gtk_tree_path_free(treepath);
     gdk_drag_status(ctx, GDK_ACTION_MOVE, time);
@@ -2486,116 +2481,132 @@ presets_drag_cb(
             dst_treepath = gtk_tree_path_new_from_indices(0, -1);
         }
     }
-    if (dst_treepath)
+    if (dst_treepath == NULL)
     {
-        GtkTreeView       *src_widget;
-        GtkTreeModel      *src_model;
-        GtkTreeSelection  *select;
-        gint               tree_depth, ii;
-        hb_preset_index_t *dst_path, *src_path;
-        hb_value_t        *src_preset;
+        return;
+    }
 
-        src_widget = GTK_TREE_VIEW(gtk_drag_get_source_widget(dc));
-        select     = gtk_tree_view_get_selection (src_widget);
-        gtk_tree_selection_get_selected(select, &src_model, &src_iter);
+    GtkTreeView       *src_widget;
+    GtkTreeModel      *src_model;
+    GtkTreeSelection  *select;
+    hb_preset_index_t *dst_path, *src_path;
 
-        src_path   = ghb_tree_get_index(src_model, &src_iter);
-        src_ptype  = preset_get_type(src_path);
-        src_folder = preset_is_folder(src_path);
+    src_widget = GTK_TREE_VIEW(gtk_drag_get_source_widget(dc));
+    select     = gtk_tree_view_get_selection (src_widget);
+    gtk_tree_selection_get_selected(select, &src_model, &src_iter);
 
-        // Don't allow repositioning of builtin presets
-        if (src_ptype != HB_PRESET_TYPE_CUSTOM)
-        {
-            free(src_path);
-            return;
-        }
+    src_path   = ghb_tree_get_index(src_model, &src_iter);
+    src_ptype  = preset_get_type(src_path);
+    src_folder = preset_is_folder(src_path);
 
-        src_preset = hb_preset_get(src_path);
-        tree_depth = preset_tree_depth(src_preset);
-        if (src_folder && tree_depth == 1)
-            tree_depth = 2;
+    // Don't allow repositioning of builtin presets
+    if (src_ptype != HB_PRESET_TYPE_CUSTOM)
+    {
+        free(src_path);
+        gtk_tree_path_free(dst_treepath);
+        return;
+    }
 
+    dst_path = ghb_tree_path_get_index(dst_treepath);
+    dst_folder = preset_is_folder(dst_path);
+
+    // Don't allow allow dropping source folders after/before non-folders
+    if (src_folder && !dst_folder)
+    {
+        gtk_tree_path_up(dst_treepath);
         dst_path = ghb_tree_path_get_index(dst_treepath);
-        if (dst_path->depth + tree_depth - 1 >= MAX_NESTED_PRESET)
-        {
-            if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
-                drop_pos = GTK_TREE_VIEW_DROP_BEFORE;
-            else if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
-                drop_pos = GTK_TREE_VIEW_DROP_AFTER;
-        }
-
-        for (ii = dst_path->depth + tree_depth-1; ii > MAX_NESTED_PRESET; ii--)
-        {
-            gtk_tree_path_up(dst_treepath);
-            dst_path->depth--;
-        }
-
         dst_folder = preset_is_folder(dst_path);
 
-        // Only allow *drop into* for folders
-        if (!dst_folder)
-        {
-            if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
-                drop_pos = GTK_TREE_VIEW_DROP_BEFORE;
-            else if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
-                drop_pos = GTK_TREE_VIEW_DROP_AFTER;
-        }
-        free(dst_path);
-        if (gtk_tree_model_get_iter(dst_model, &dst_iter, dst_treepath))
-        {
-            GtkTreeIter iter;
-
-            // Insert new empty row in UI preset list
-            // This logic determines the final position of the preset,
-            // i.e. before, after or inside the target entry.
-            // So the dst_path to move the preset to must be computed
-            // after moving the entry in the UI list
-            switch (drop_pos)
-            {
-                case GTK_TREE_VIEW_DROP_BEFORE:
-                    gtk_tree_store_insert_before(GTK_TREE_STORE(dst_model),
-                                                &iter, NULL, &dst_iter);
-                    break;
-
-                case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
-                    gtk_tree_store_insert(GTK_TREE_STORE(dst_model),
-                                                &iter, &dst_iter, 0);
-                    break;
-
-                case GTK_TREE_VIEW_DROP_AFTER:
-                    gtk_tree_store_insert_after(GTK_TREE_STORE(dst_model),
-                                                &iter, NULL, &dst_iter);
-                    break;
-
-                case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
-                    gtk_tree_store_insert_after(GTK_TREE_STORE(dst_model),
-                                                &iter, &dst_iter, NULL);
-                    break;
-
-                default:
-                    break;
-            }
-
-            // Move source preset at the desired location
-            dst_path = ghb_tree_get_index(dst_model, &iter);
-            hb_preset_move(src_path, dst_path);
-            free(dst_path);
-
-            // Remove the old entry in the UI list
-            gtk_tree_store_remove(GTK_TREE_STORE(src_model), &src_iter);
-
-            // UI elements were shuffled again.  recompute dst_path
-            dst_path = ghb_tree_get_index(dst_model, &iter);
-            presets_list_update_item(ud, dst_path, TRUE);
-            select_preset2(ud, dst_path);
-            free(dst_path);
-
-            store_presets();
-            ghb_presets_menu_reinit(ud);
-        }
-        gtk_tree_path_free(dst_treepath);
-        free(src_path);
+        drop_pos = GTK_TREE_VIEW_DROP_AFTER;
     }
+
+    // Don't allow dropping folders into other folders, only before/after
+    if (src_folder && dst_folder)
+    {
+        if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
+            drop_pos = GTK_TREE_VIEW_DROP_BEFORE;
+        else if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
+            drop_pos = GTK_TREE_VIEW_DROP_AFTER;
+    }
+
+    if (!src_folder && dst_folder)
+    {
+        // Don't allow dropping preset before a folder
+        if (drop_pos == GTK_TREE_VIEW_DROP_BEFORE)
+        {
+            free(src_path);
+            free(dst_path);
+            gtk_tree_path_free(dst_treepath);
+            return;
+        }
+        // Don't allow dropping preset after a folder, only into
+        if (drop_pos == GTK_TREE_VIEW_DROP_AFTER)
+            drop_pos = GTK_TREE_VIEW_DROP_INTO_OR_AFTER;
+    }
+
+    // Don't allow dropping into non-folder items
+    if (!dst_folder)
+    {
+        if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE)
+            drop_pos = GTK_TREE_VIEW_DROP_BEFORE;
+        else if (drop_pos == GTK_TREE_VIEW_DROP_INTO_OR_AFTER)
+            drop_pos = GTK_TREE_VIEW_DROP_AFTER;
+    }
+    free(dst_path);
+    if (gtk_tree_model_get_iter(dst_model, &dst_iter, dst_treepath))
+    {
+        GtkTreeIter iter;
+
+        // Insert new empty row in UI preset list
+        // This logic determines the final position of the preset,
+        // i.e. before, after or inside the target entry.
+        // So the dst_path to move the preset to must be computed
+        // after moving the entry in the UI list
+        switch (drop_pos)
+        {
+            case GTK_TREE_VIEW_DROP_BEFORE:
+                gtk_tree_store_insert_before(GTK_TREE_STORE(dst_model),
+                                            &iter, NULL, &dst_iter);
+                break;
+
+            case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
+                gtk_tree_store_insert(GTK_TREE_STORE(dst_model),
+                                            &iter, &dst_iter, 0);
+                break;
+
+            case GTK_TREE_VIEW_DROP_AFTER:
+                gtk_tree_store_insert_after(GTK_TREE_STORE(dst_model),
+                                            &iter, NULL, &dst_iter);
+                break;
+
+            case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
+                gtk_tree_store_insert_after(GTK_TREE_STORE(dst_model),
+                                            &iter, &dst_iter, NULL);
+                break;
+
+            default:
+                break;
+        }
+
+        // Move source preset at the desired location
+        dst_path = ghb_tree_get_index(dst_model, &iter);
+        hb_preset_move(src_path, dst_path);
+        free(dst_path);
+
+        // Remove the old entry in the UI list
+        gtk_tree_store_remove(GTK_TREE_STORE(src_model), &src_iter);
+
+        // UI elements were shuffled again.  recompute dst_path
+        dst_path = ghb_tree_get_index(dst_model, &iter);
+        presets_list_update_item(ud, dst_path, TRUE);
+        select_preset2(ud, dst_path);
+        free(dst_path);
+
+        store_presets();
+        ghb_presets_menu_reinit(ud);
+    }
+    gtk_tree_path_free(dst_treepath);
+    free(src_path);
 }
 
 void
