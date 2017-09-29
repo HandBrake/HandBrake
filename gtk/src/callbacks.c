@@ -1240,33 +1240,38 @@ ghb_load_post_settings(signal_user_data_t * ud)
 static void
 show_scan_progress(signal_user_data_t *ud)
 {
-    GtkWidget      * source_info;
+    GtkWidget      * widget;
     GtkProgressBar * progress;
     GtkLabel       * label;
 
+    widget = GHB_WIDGET(ud->builder, "SourceInfoBox");
+    gtk_widget_hide(widget);
+
+    widget = GHB_WIDGET(ud->builder, "SourceScanBox");
+    gtk_widget_show(widget);
+
     progress = GTK_PROGRESS_BAR(GHB_WIDGET(ud->builder, "scan_prog"));
     gtk_progress_bar_set_fraction(progress, 0);
-    gtk_widget_show(GTK_WIDGET(progress));
 
-    label = GTK_LABEL(GHB_WIDGET(ud->builder, "volume_label"));
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "source_scan_label"));
     gtk_label_set_text( label, _("Scanning ...") );
 
-    source_info = GHB_WIDGET(ud->builder, "SourceInfoBox");
-    gtk_widget_hide(source_info);
 }
 
 static void
 hide_scan_progress(signal_user_data_t *ud)
 {
-    GtkWidget      * source_info;
+    GtkWidget      * widget;
     GtkProgressBar * progress;
 
     progress = GTK_PROGRESS_BAR(GHB_WIDGET(ud->builder, "scan_prog"));
     gtk_progress_bar_set_fraction(progress, 1.0);
-    gtk_widget_hide(GTK_WIDGET(progress));
 
-    source_info = GHB_WIDGET(ud->builder, "SourceInfoBox");
-    gtk_widget_show(source_info);
+    widget = GHB_WIDGET(ud->builder, "SourceScanBox");
+    gtk_widget_hide(widget);
+
+    widget = GHB_WIDGET(ud->builder, "SourceInfoBox");
+    gtk_widget_show(widget);
 }
 
 static void
@@ -3626,7 +3631,7 @@ ghb_backend_events(signal_user_data_t *ud)
         GtkLabel *label;
 
         scan_prog = GTK_PROGRESS_BAR(GHB_WIDGET (ud->builder, "scan_prog"));
-        label = GTK_LABEL(GHB_WIDGET (ud->builder, "volume_label"));
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "source_scan_label"));
 
         if (status.scan.title_cur == 0)
         {
@@ -3644,7 +3649,7 @@ ghb_backend_events(signal_user_data_t *ud)
                     status.scan.preview_cur);
 
         }
-        gtk_label_set_text (label, status_str);
+        gtk_label_set_text(label, status_str);
         g_free(status_str);
         if (status.scan.title_count > 0)
         {
@@ -3750,7 +3755,7 @@ ghb_backend_events(signal_user_data_t *ud)
     {
         // This needs to be in scanning and working since scanning
         // happens fast enough that it can be missed
-        gtk_label_set_text (work_status, _("Scanning ..."));
+        gtk_label_set_text(work_status, _("Scanning ..."));
         gtk_progress_bar_set_fraction (progress, 0);
     }
     else if (status.queue.state & GHB_STATE_SCANDONE)

@@ -1176,6 +1176,7 @@ Activity</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="margin-start">12</property>
                 <property name="margin-end">12</property>
+                <property name="margin-bottom">6</property>
                 <child>
                   <object class="GtkBox" id="SourceInfoBox">
                     <property name="orientation">horizontal</property>
@@ -1235,11 +1236,43 @@ Activity</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkProgressBar" id="scan_prog">
-                    <property name="height_request">10</property>
+                  <object class="GtkBox" id="SourceScanBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="visible">False</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">center</property>
+                    <property name="spacing">6</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <child>
+                      <object class="GtkLabel" id="source_scan_label">
+                        <property name="visible">True</property>
+                        <property name="width-chars">40</property>
+                        <property name="can_focus">False</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="halign">start</property>
+                        <property name="xalign">0</property>
+                        <property name="margin-end">12</property>
+                        <property name="label" translatable="yes">Scanning...</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkProgressBar" id="scan_prog">
+                        <property name="visible">True</property>
+                        <property name="height_request">10</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -1506,7 +1539,7 @@ This is often the feature title of a DVD.</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="margin-start">12</property>
                 <property name="margin-end">12</property>
-                <property name="margin-top">12</property>
+                <property name="margin-top">6</property>
                 <property name="spacing">5</property>
                 <child>
                   <object class="GtkLabel" id="preset_selection_label">
@@ -1619,7 +1652,7 @@ Modifications will be discarded.</property>
             <property name="transition-duration">400</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin-top">12</property>
+            <property name="margin-top">6</property>
             <child>
               <object class="GtkBox" id="settings_tab">
                 <property name="orientation">vertical</property>
