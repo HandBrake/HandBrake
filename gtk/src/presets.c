@@ -1234,6 +1234,7 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                                                     preset_path);
                     g_menu_append(submenu, name, detail_action);
                     free(preset_path);
+                    free(detail_action);
                 }
                 if (type == 1 &&
                     g_strv_contains((const char**)official_names, folder_name))
@@ -1253,6 +1254,7 @@ ghb_presets_menu_init(signal_user_data_t *ud)
         g_menu_append_section(menu, type ? "Custom" : "Official",
                               G_MENU_MODEL(section));
     }
+    g_free(path);
     g_strfreev(official_names);
 
     GtkMenuButton * mb;
