@@ -31,6 +31,7 @@ FFMPEG.CONFIGURE.extra = \
     --disable-ffserver \
     --disable-avdevice \
     --disable-muxers \
+    --enable-nvenc \
     --disable-network \
     --disable-hwaccels \
     --disable-vaapi \
