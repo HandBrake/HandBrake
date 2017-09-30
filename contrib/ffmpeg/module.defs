@@ -30,7 +30,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-avdevice \
     --disable-muxers \
     --disable-network \
-    --disable-hwaccels \
     --disable-vaapi \
     --disable-vdpau \
     --disable-encoders \
