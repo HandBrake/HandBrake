@@ -9,13 +9,13 @@
 
 namespace HandBrakeWPF.Extensions
 {
-    using System.Text;
+    using System.Globalization;
 
     /// <summary>
     /// String Extensions
     /// </summary>
     public static class StringExtensions
-    {
+    { 
         /// <summary>
         /// Change the input string to title case
         /// </summary>
@@ -23,19 +23,8 @@ namespace HandBrakeWPF.Extensions
         /// <returns>the input string in title case</returns>
         public static string ToTitleCase(this string input)
         {
-            string[] tokens = input.Split(' ');
-            StringBuilder sb = new StringBuilder(input.Length);
-            foreach (string s in tokens)
-            {
-                if (!string.IsNullOrEmpty(s))
-                {
-                    sb.Append(s[0].ToString().ToUpper());
-                    sb.Append(s.Substring(1).ToLower());
-                    sb.Append(" ");
-                }
-            }
-
-            return sb.ToString().Trim();
+            TextInfo textInfo = new CultureInfo(CultureInfo.CurrentCulture.Name, false).TextInfo;
+            return textInfo.ToTitleCase(input);
         }
     }
 }
