@@ -230,9 +230,11 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
         case HB_VCODEC_QSV_H264:        
         case HB_VCODEC_QSV_H265:
         case HB_VCODEC_QSV_H265_10BIT:
-        case HB_VCODEC_H264_NVENC:           
-            w = hb_get_work(h, WORK_ENCQSV);
-            break;
+        w = hb_get_work(h, WORK_ENCQSV);
+        break;
+        case HB_VCODEC_H264_NVENC:   
+            w = hb_get_work(h, WORK_H264_NVENC);
+            break;        
         case HB_VCODEC_THEORA:
             w = hb_get_work(h, WORK_ENCTHEORA);
             break;
@@ -241,9 +243,11 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
+        w = hb_get_work(h, WORK_ENCX265);
+        break;        
         case HB_VCODEC_HEVC_NVENC:
-            w = hb_get_work(h, WORK_ENCX265);
-            break;        
+        w = hb_get_work(h, WORK_HEVC_NVENC);
+        break;
 #endif
         default:
             hb_error("Unknown video codec (0x%x)", vcodec );
