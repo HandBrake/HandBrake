@@ -214,6 +214,7 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_QSV_H264:
+        case HB_VCODEC_H264_NVENC:
             track->st->codecpar->codec_id = AV_CODEC_ID_H264;
 
             /* Taken from x264 muxers.c */
@@ -331,6 +332,7 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_X265_16BIT:
         case HB_VCODEC_QSV_H265:
         case HB_VCODEC_QSV_H265_10BIT:
+        case HB_VCODEC_HEVC_NVENC:
             track->st->codecpar->codec_id  = AV_CODEC_ID_HEVC;
             track->st->codecpar->codec_tag = MKTAG('h','v','c','1');
 
