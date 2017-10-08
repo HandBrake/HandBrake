@@ -30,14 +30,14 @@ FFMPEG.CONFIGURE.extra = \
     --disable-ffprobe \
     --disable-ffserver \
     --disable-avdevice \
-    --disable-muxers \
-    --enable-nvenc \
+    --disable-muxers \    
     --disable-network \
     --disable-hwaccels \
     --disable-vaapi \
     --disable-vdpau \
     --disable-encoders \
     --enable-avresample \
+    --enable-nvenc \
     --enable-libmp3lame \
     --enable-encoder=aac \
     --enable-encoder=ac3 \
@@ -45,9 +45,9 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=flac \
     --enable-encoder=mpeg2video \
     --enable-encoder=mpeg4 \
+    --enable-encoder=libmp3lame \
     --enable-encoder=h264_nvenc \
     --enable-encoder=hevc_nvenc \
-    --enable-encoder=libmp3lame \
     --enable-libopus \
     --enable-encoder=libopus \
     --enable-libvpx \
