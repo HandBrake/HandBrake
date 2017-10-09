@@ -1557,7 +1557,7 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
     return error ? HB_QSV_PARAM_BAD_VALUE : HB_QSV_PARAM_OK;
 }
 
-int hb_qsv_profile_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char *profile_key)
+int hb_qsv_profile_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char *profile_key, const int codec)
 {
     hb_triplet_t *profile = NULL;
     if (profile_key != NULL && *profile_key && strcasecmp(profile_key, "auto"))
@@ -1589,6 +1589,15 @@ int hb_qsv_profile_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char 
             return -1;
         }
         param->videoParam->mfx.CodecProfile = profile->value;
+    }
+    /* HEVC 10 bits defautls to Main 10 */
+    else if (((profile_key != NULL && !strcasecmp(profile_key, "auto")) || profile_key == NULL) && 
+              codec == HB_VCODEC_QSV_H265_10BIT &&
+              param->videoParam->mfx.CodecId == MFX_CODEC_HEVC &&
+              qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G6)
+    {
+         profile = &hb_qsv_h265_profiles[1];
+         param->videoParam->mfx.CodecProfile = profile->value;
     }
     return 0;
 }

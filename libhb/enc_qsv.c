@@ -864,7 +864,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->mfx.FrameInfo.Height        = job->qsv.enc_info.align_height;
 
     // parse user-specified codec profile and level
-    if (hb_qsv_profile_parse(&pv->param, pv->qsv_info, job->encoder_profile))
+    if (hb_qsv_profile_parse(&pv->param, pv->qsv_info, job->encoder_profile, job->vcodec))
     {
         hb_error("encqsvInit: bad profile %s", job->encoder_profile);
         return -1;
