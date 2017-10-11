@@ -310,11 +310,11 @@
     window.contentView = view;
 
     if (window.isVisible)
-        {
+    {
             view.hidden = YES;
 
             [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-                if ([context respondsToSelector:@selector(setAllowsImplicitAnimation:)])
+                if ([context respondsToSelector:@selector(setAllowsImplicitAnimation:)] && NSClassFromString(@"NSVisualEffectView"))
                 {
                     context.allowsImplicitAnimation = YES;
                 }
