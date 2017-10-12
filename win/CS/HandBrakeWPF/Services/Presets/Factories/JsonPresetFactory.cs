@@ -347,9 +347,20 @@ namespace HandBrakeWPF.Services.Presets.Factories
                     preset.Task.VideoTunes.Add(new VideoTune(item, item));
                 }
             }
-            preset.Task.Framerate = importedPreset.VideoFramerate == "auto" || importedPreset.VideoFramerate == "Same as source" || string.IsNullOrEmpty(importedPreset.VideoFramerate)
-                                 ? (double?)null
-                                 : double.Parse(importedPreset.VideoFramerate, CultureInfo.InvariantCulture);
+
+            if (importedPreset.VideoFramerate == "auto" || importedPreset.VideoFramerate == "Same as source" || string.IsNullOrEmpty(importedPreset.VideoFramerate))
+            {
+                preset.Task.Framerate = null;
+            }
+            else
+            {
+                double parsedFramerate;
+                if (double.TryParse(importedPreset.VideoFramerate, NumberStyles.Any, CultureInfo.CurrentCulture, out parsedFramerate) || double.TryParse(importedPreset.VideoFramerate, NumberStyles.Any, CultureInfo.InvariantCulture, out parsedFramerate))
+                {
+                    preset.Task.Framerate = parsedFramerate;
+                }              
+            }
+
             string parsedValue = importedPreset.VideoFramerateMode;
             switch (parsedValue)
             {
