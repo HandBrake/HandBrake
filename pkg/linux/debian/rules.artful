@@ -79,7 +79,7 @@ binary-arch: build install
 	dh_shlibdeps -a
 	dh_gencontrol -a $(FORCEVERSION)
 	dh_md5sums -a
-	dh_builddeb -a --destdir=$(PKGDESTDIR) -- -Zbzip2
+	dh_builddeb -a --destdir=$(PKGDESTDIR) -- -Zxz
 
 binary: binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install 
