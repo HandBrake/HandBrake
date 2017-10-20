@@ -1,12 +1,29 @@
-### Please describe the problem or feature request in detail:
+### Description of problem or feature request
 
-### What are the steps to reproduce this problem: 
+Description here.
 
-### What version of HandBrake you are running:
+### Steps to reproduce the problem
 
-### What operating system and version and you running (e.g. OSX 10.11,  Windows 7, Ubuntu 14):
+Steps here.
 
-### Was there any error message or error dialog, if so please detail or provide screenshots: 
+### HandBrake version (e.g., 1.0.0)
 
-### Please provide the full activity log for the encode or scan attempt. You may attach the log as a file, post a pastebin URL to the log, or place the log inline below:
-```  Place your log in-between these back-ticks ```
+HandBrake version here.
+
+### Operating system and version (e.g., Ubuntu 16.04 LTS, macOS 10.3 High Sierra, Windows 10 Creators Update):
+
+OS and version here.
+
+### Error message text or screenshot
+
+Type or paste text and/or drag and drop image.
+
+### HandBrake Activity Log *REQUIRED* (see https://handbrake.fr/docs/en/latest/help/activity-log.html)
+
+Drag and drop file or...
+
+~~~
+
+Paste log text between these markers.
+
+~~~
