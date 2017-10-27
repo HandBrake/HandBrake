@@ -58,6 +58,7 @@
 
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
+static int     json                = 0;
 static int     align_av_start      = -1;
 static int     dvdnav              = 1;
 static char *  input               = NULL;
@@ -717,13 +718,27 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
 
 static void PrintTitleSetInfo( hb_title_set_t * title_set )
 {
-    int i;
-    hb_title_t * title;
-
-    for( i = 0; i < hb_list_count( title_set->list_title ); i++ )
+    if (json)
     {
-        title = hb_list_item( title_set->list_title, i );
-        PrintTitleInfo( title, title_set->feature );
+        hb_dict_t * title_set_dict;
+        char      * title_set_json;
+
+        title_set_dict = hb_title_set_to_dict(title_set);
+        title_set_json = hb_value_get_json(title_set_dict);
+        hb_value_free(title_set_dict);
+        fprintf(stderr, title_set_json);
+        free(title_set_json);
+    }
+    else
+    {
+        int i;
+        hb_title_t * title;
+
+        for( i = 0; i < hb_list_count( title_set->list_title ); i++ )
+        {
+            title = hb_list_item( title_set->list_title, i );
+            PrintTitleInfo( title, title_set->feature );
+        }
     }
 }
 
@@ -2202,6 +2217,7 @@ static int ParseOptions( int argc, char ** argv )
             { "pfr",         no_argument,       &cfr,    2 },
             { "audio-copy-mask", required_argument, NULL, ALLOWED_AUDIO_COPY },
             { "audio-fallback",  required_argument, NULL, AUDIO_FALLBACK },
+            { "json",        no_argument,       &json,   1},
             { 0, 0, 0, 0 }
           };
 
