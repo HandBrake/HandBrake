@@ -21,7 +21,7 @@ $(PKG.cli.dmg): | $(STAGE.out.cli/)
 $(PKG.gui.dmg): | $(dir $(PKG.gui.dmg))
 $(PKG.gui.dmg): | $(STAGE.out.gui/)
 ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
-	hdiutil create -srcfolder $(STAGE.out.gui/) -format UDRO -mode 755 \
+	hdiutil create -srcfolder $(STAGE.out.gui/) -fs HFS+ -format UDRO -mode 755 \
 	    -volname $(basename $(notdir $@)) \
 	    -ov $(PKG.gui.tmp.dmg)
 	hdiutil convert -format UDBZ -o $@ $(PKG.gui.tmp.dmg)
