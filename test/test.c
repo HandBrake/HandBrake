@@ -725,8 +725,8 @@ static void PrintTitleSetInfo( hb_title_set_t * title_set )
 
         title_set_dict = hb_title_set_to_dict(title_set);
         title_set_json = hb_value_get_json(title_set_dict);
-        hb_value_free(title_set_dict);
-        fprintf(stderr, title_set_json);
+        hb_value_free(&title_set_dict);
+        fprintf(stderr, "JSON Title Set: %s\n", title_set_json);
         free(title_set_json);
     }
     else
