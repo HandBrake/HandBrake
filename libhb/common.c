@@ -5302,9 +5302,9 @@ const char * hb_subsource_name( int source )
         case SRTSUB:
             return "SRT";
         case CC608SUB:
-            return "CC";
+            return "CC608";
         case CC708SUB:
-            return "CC";
+            return "CC708";
         case UTF8SUB:
             return "UTF-8";
         case TX3GSUB:

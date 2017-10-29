@@ -1293,19 +1293,23 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
     sprintf(audio->config.lang.description, "%s (%s)",
             audio->config.lang.simple, codec_name);
 
-    switch (audio->config.lang.type)
+    if (audio->config.lang.attributes & HB_AUDIO_ATTR_VISUALLY_IMPAIRED)
     {
-        case 2:
-            strcat(audio->config.lang.description, " (Visually Impaired)");
-            break;
-        case 3:
-            strcat(audio->config.lang.description, " (Director's Commentary 1)");
-            break;
-        case 4:
-            strcat(audio->config.lang.description, " (Director's Commentary 2)");
-            break;
-        default:
-            break;
+        strncat(audio->config.lang.description, " (Visually Impaired)",
+                sizeof(audio->config.lang.description) - 
+                strlen(audio->config.lang.description) - 1);
+    }
+    if (audio->config.lang.attributes & HB_AUDIO_ATTR_COMMENTARY)
+    {
+        strncat(audio->config.lang.description, " (Director's Commentary 1)",
+                sizeof(audio->config.lang.description) - 
+                strlen(audio->config.lang.description) - 1);
+    }
+    if (audio->config.lang.attributes & HB_AUDIO_ATTR_ALT_COMMENTARY)
+    {
+        strncat(audio->config.lang.description, " (Director's Commentary 2)",
+                sizeof(audio->config.lang.description) - 
+                strlen(audio->config.lang.description) - 1);
     }
 
     if (audio->config.in.channel_layout)

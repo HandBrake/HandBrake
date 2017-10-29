@@ -821,6 +821,19 @@ static void lang_list_remove(hb_value_array_t *list, const char *lang)
     }
 }
 
+static void show_progress_json(hb_state_t * state)
+{
+    hb_dict_t * state_dict;
+    char      * state_json;
+
+    state_dict = hb_state_to_dict(state);
+    state_json = hb_value_get_json(state_dict);
+    hb_value_free(&state_dict);
+    fprintf(stderr, "Progress: %s\n", state_json);
+    free(state_json);
+    fflush(stderr);
+}
+
 static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 {
     hb_state_t s;
@@ -835,6 +848,11 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 #define p s.param.scanning
         case HB_STATE_SCANNING:
             /* Show what title is currently being scanned */
+            if (json)
+            {
+                show_progress_json(&s);
+                break;
+            }
             if (p.preview_cur)
             {
                 fprintf(stderr, "%sScanning title %d of %d, preview %d, %.2f %%",
@@ -956,6 +974,11 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 
 #define p s.param.working
         case HB_STATE_SEARCHING:
+            if (json)
+            {
+                show_progress_json(&s);
+                break;
+            }
             fprintf( stdout, "%sEncoding: task %d of %d, Searching for start time, %.2f %%",
                      stdout_sep, p.pass, p.pass_count, 100.0 * p.progress );
             if( p.seconds > -1 )
@@ -967,6 +990,11 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
             break;
 
         case HB_STATE_WORKING:
+            if (json)
+            {
+                show_progress_json(&s);
+                break;
+            }
             fprintf( stdout, "%sEncoding: task %d of %d, %.2f %%",
                      stdout_sep, p.pass, p.pass_count, 100.0 * p.progress );
             if( p.seconds > -1 )
@@ -982,6 +1010,11 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 #define p s.param.muxing
         case HB_STATE_MUXING:
         {
+            if (json)
+            {
+                show_progress_json(&s);
+                break;
+            }
             if (show_mux_warning)
             {
                 fprintf( stdout, "%sMuxing: this may take awhile...", stdout_sep );
@@ -995,6 +1028,10 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 #define p s.param.workdone
         case HB_STATE_WORKDONE:
             /* Print error if any, then exit */
+            if (json)
+            {
+                show_progress_json(&s);
+            }
             switch( p.error )
             {
                 case HB_ERROR_NONE:
@@ -2244,6 +2281,18 @@ static int ParseOptions( int argc, char ** argv )
                 ShowHelp();
                 return 1;
             case VERSION:
+                if (json)
+                {
+                    hb_dict_t * version_dict;
+                    char      * version_json;
+
+                    version_dict = hb_version_dict();
+                    version_json = hb_value_get_json(version_dict);
+                    hb_value_free(&version_dict);
+                    fprintf(stderr, "Version: %s\n", version_json);
+                    free(version_json);
+                    return 1;
+                }
                 printf("HandBrake %s\n", hb_get_version(NULL));
                 return 1;
             case DESCRIBE:

@@ -1237,7 +1237,7 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
                     subtitle->source      = CC608SUB;
                     subtitle->config.dest = PASSTHRUSUB;
                     subtitle->codec       = WORK_DECCC608;
-                    subtitle->type        = 5;
+                    subtitle->attributes  = HB_SUBTITLE_ATTR_CC;
 
                     /*
                      * The language of the subtitles will be the same as the
