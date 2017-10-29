@@ -1223,6 +1223,9 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
                     case AV_CODEC_ID_MP2:
                         codec_name = "MPEG";
                         break;
+                    case AV_CODEC_ID_MP2:
+                        codec_name = "MP2";
+                        break;
                     case AV_CODEC_ID_MP3:
                         codec_name = "MP3";
                         break;
@@ -1265,6 +1268,9 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
                     break;
                 case HB_ACODEC_FFFLAC:
                     codec_name = "FLAC";
+                    break;
+                case HB_ACODEC_MP2:
+                    codec_name = "MP2";
                     break;
                 case HB_ACODEC_MP3:
                     codec_name = "MP3";

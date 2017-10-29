@@ -101,6 +101,19 @@ DQ
                             <outlet property="nextKeyView" destination="oiD-QI-wly" id="1gO-sY-HNE"/>
                         </connections>
                     </button>
+                    <!-- MP2 PASSTHROUGH TODO IDs <button translatesAutoresizingMaskIntoConstraints="NO" id="mp2-00-000"> 
+                        <rect key="frame" x="575" y="412" width="46" height="18"/>
+                        <string key="toolTip">Enable this if your playback device supports MP2. This permits MP2 passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <buttonCell key="cell" type="check" title="MP2" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="mp2-11-000">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <accessibilityConnection property="title" destination="mp2-22-000" id="mp2-22-111"/> 
+                            <binding destination="-2" name="value" keyPath="self.settings.allowMP2Passthru" id="mp2-33-000"/> 
+                            <outlet property="nextKeyView" destination="mp2-44-000" id="mp2-44-111"/> 
+                        </connections>
+                    </button> -->
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="vUx-OV-W5T">
                         <rect key="frame" x="575" y="412" width="46" height="18"/>
                         <string key="toolTip">Enable this if your playback device supports MP3. This permits MP3 passthru to be selected when automatic passthru selecion is enabled.</string>
@@ -757,6 +770,7 @@ Gw
                     <constraint firstItem="BK7-c4-kkk" firstAttribute="leading" secondItem="0HY-xB-cvO" secondAttribute="leading" id="N4x-g8-IIS"/>
                     <constraint firstItem="RtZ-Cz-5mG" firstAttribute="leading" secondItem="ZP2-Cp-K5w" secondAttribute="leading" constant="20" id="R53-5h-0vJ"/>
                     <constraint firstAttribute="bottom" secondItem="sC2-52-liU" secondAttribute="bottom" constant="20" id="RRW-Y5-912"/>
+                    <!-- <constraint firstItem="mp2-00-111" firstAttribute="leading" secondItem="mp2-00-222" secondAttribute="trailing" constant="8" id="mp2-00-333"/> -->
                     <constraint firstItem="vUx-OV-W5T" firstAttribute="leading" secondItem="l4i-pd-Cbk" secondAttribute="trailing" constant="8" id="RmT-3c-K9e"/>
                     <constraint firstItem="aTC-39-h6S" firstAttribute="top" secondItem="oiD-QI-wly" secondAttribute="bottom" constant="8" id="SNx-1k-9Uf"/>
                     <constraint firstItem="BK7-c4-kkk" firstAttribute="top" secondItem="0HY-xB-cvO" secondAttribute="bottom" constant="6" id="VVW-dq-3ff"/>
@@ -772,6 +786,7 @@ Gw
                     <constraint firstItem="hGL-Ew-UVJ" firstAttribute="top" secondItem="LdN-Cx-ZJY" secondAttribute="bottom" constant="74" id="e7V-pM-tjy"/>
                     <constraint firstItem="M11-Ls-RrL" firstAttribute="leading" secondItem="N4q-sT-WgW" secondAttribute="leading" id="fBT-WX-Q5Z"/>
                     <constraint firstAttribute="trailing" secondItem="hGL-Ew-UVJ" secondAttribute="trailing" constant="20" id="glz-Tw-AyY"/>
+                    <!-- <constraint firstItem="mp2-00-333" firstAttribute="baseline" secondItem="mp2-00-444" secondAttribute="baseline" id="mp2-00-555"/> -->
                     <constraint firstItem="vUx-OV-W5T" firstAttribute="baseline" secondItem="l4i-pd-Cbk" secondAttribute="baseline" id="j0t-pv-Wfy"/>
                     <constraint firstItem="E93-Md-aWa" firstAttribute="top" secondItem="fgl-Ev-ELt" secondAttribute="bottom" constant="6" id="jeE-jg-jxu"/>
                     <constraint firstItem="hGL-Ew-UVJ" firstAttribute="top" secondItem="RtZ-Cz-5mG" secondAttribute="bottom" constant="8" id="jhe-0p-LYz"/>

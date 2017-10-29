@@ -7,6 +7,7 @@
             "copy:dtshd",
             "copy:eac3",
             "copy:flac",
+            "copy:mp2",
             "copy:mp3",
             "copy:truehd"
         ],

@@ -341,6 +341,10 @@
     {
         job->acodec_copy_mask |= HB_ACODEC_DCA_PASS;
     }
+    if (audioDefaults.allowMP2Passthru)
+    {
+        job->acodec_copy_mask |= HB_ACODEC_MP2_PASS;
+    }
     if (audioDefaults.allowMP3Passthru)
     {
         job->acodec_copy_mask |= HB_ACODEC_MP3_PASS;

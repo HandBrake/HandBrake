@@ -412,6 +412,9 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
             {
                 default:
                     break;
+                case HB_ACODEC_MP2_PASS:
+                    ghb_dict_set_bool(settings, "AudioAllowMP2Pass", 1);
+                    break;
                 case HB_ACODEC_LAME:
                 case HB_ACODEC_MP3_PASS:
                     ghb_dict_set_bool(settings, "AudioAllowMP3Pass", 1);
@@ -1594,6 +1597,10 @@ ghb_remove_old_queue_file(int pid)
 GhbValue* ghb_create_copy_mask(GhbValue *settings)
 {
     GhbValue *copy_mask = ghb_array_new();
+    if (ghb_dict_get_bool(settings, "AudioAllowMP2Pass"))
+    {
+        ghb_array_append(copy_mask, ghb_string_value_new("copy:mp2"));
+    }
     if (ghb_dict_get_bool(settings, "AudioAllowMP3Pass"))
     {
         ghb_array_append(copy_mask, ghb_string_value_new("copy:mp3"));

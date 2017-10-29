@@ -341,7 +341,7 @@ namespace HandBrakeWPF.Model.Audio
                     || this.Encoder == AudioEncoder.DtsHDPassthrough || this.Encoder == AudioEncoder.AacPassthru
                     || this.Encoder == AudioEncoder.Mp3Passthru || this.Encoder == AudioEncoder.Passthrough ||
                     this.Encoder == AudioEncoder.EAc3Passthrough || this.Encoder == AudioEncoder.TrueHDPassthrough
-                    || this.Encoder == AudioEncoder.FlacPassthru)
+                    || this.Encoder == AudioEncoder.FlacPassthru || this.Encoder == AudioEncoder.Mp2Passthru)
                 {
                     return true;
                 }
