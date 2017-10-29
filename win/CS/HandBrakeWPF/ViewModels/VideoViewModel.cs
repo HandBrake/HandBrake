@@ -506,9 +506,21 @@ namespace HandBrakeWPF.ViewModels
 
                     this.Task.VideoEncoder = value;
                     this.NotifyOfPropertyChange(() => this.SelectedVideoEncoder);
-                    HandleEncoderChange(this.Task.VideoEncoder);
+                    this.HandleEncoderChange(this.Task.VideoEncoder);
+                    this.HandleRFChange();
                 }
             }
+        }
+
+        private void HandleRFChange()
+        {
+            double displayRF = this.DisplayRF;
+            if (displayRF > this.QualityMax || displayRF < this.QualityMin)
+            {
+                displayRF = this.qualityMax / 2;
+            }
+
+            this.SetRF(displayRF);
         }
 
         /// <summary>
@@ -923,8 +935,6 @@ namespace HandBrakeWPF.ViewModels
                     this.ShowPeakFramerate = true;
                     break;
             }
-
-            this.SetRF(preset.Task.Quality);
          
             this.TwoPass = preset.Task.TwoPass;
             this.TurboFirstPass = preset.Task.TurboFirstPass;
@@ -933,29 +943,28 @@ namespace HandBrakeWPF.ViewModels
          
             this.NotifyOfPropertyChange(() => this.Task);
 
-            if (preset.Task != null)
+            this.HandleEncoderChange(preset.Task.VideoEncoder);
+            this.SetQualitySliderBounds();
+            this.SetRF(preset.Task.Quality);
+
+            HBVideoEncoder encoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == EnumHelper<VideoEncoder>.GetShortName(preset.Task.VideoEncoder));
+            if (encoder != null)
             {
-                this.HandleEncoderChange(preset.Task.VideoEncoder);
-
-                HBVideoEncoder encoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == EnumHelper<VideoEncoder>.GetShortName(preset.Task.VideoEncoder));
-                if (encoder != null)
+                if (preset.Task.VideoEncoder == VideoEncoder.X264 || preset.Task.VideoEncoder == VideoEncoder.X264_10
+                    || preset.Task.VideoEncoder == VideoEncoder.X265 || preset.Task.VideoEncoder == VideoEncoder.X265_10 || preset.Task.VideoEncoder == VideoEncoder.X265_12
+                    || preset.Task.VideoEncoder == VideoEncoder.QuickSync || preset.Task.VideoEncoder == VideoEncoder.QuickSyncH265 || preset.Task.VideoEncoder == VideoEncoder.QuickSyncH26510b)
                 {
-                    if (preset.Task.VideoEncoder == VideoEncoder.X264 || preset.Task.VideoEncoder == VideoEncoder.X264_10 
-                        || preset.Task.VideoEncoder == VideoEncoder.X265 || preset.Task.VideoEncoder == VideoEncoder.X265_10 || preset.Task.VideoEncoder == VideoEncoder.X265_12 
-                        || preset.Task.VideoEncoder == VideoEncoder.QuickSync || preset.Task.VideoEncoder == VideoEncoder.QuickSyncH265 || preset.Task.VideoEncoder == VideoEncoder.QuickSyncH26510b)
-                    {
-                        this.VideoLevel = preset.Task.VideoLevel != null ? preset.Task.VideoLevel.Clone() : this.VideoLevels.FirstOrDefault();
-                        this.VideoProfile = preset.Task.VideoProfile != null ? preset.Task.VideoProfile.Clone() : this.VideoProfiles.FirstOrDefault();
-                        this.VideoPresetValue = preset.Task.VideoPreset != null ? this.VideoPresets.IndexOf(preset.Task.VideoPreset) : 0;
-                        this.FastDecode = preset.Task.VideoTunes != null && preset.Task.VideoTunes.Contains(VideoTune.FastDecode);
-                        this.VideoTune = (preset.Task.VideoTunes != null && preset.Task.VideoTunes.Any() ? preset.Task.VideoTunes.FirstOrDefault(t => !Equals(t, VideoTune.FastDecode)) : this.VideoTunes.FirstOrDefault())
-                                         ?? VideoTune.None;
-                    }
+                    this.VideoLevel = preset.Task.VideoLevel != null ? preset.Task.VideoLevel.Clone() : this.VideoLevels.FirstOrDefault();
+                    this.VideoProfile = preset.Task.VideoProfile != null ? preset.Task.VideoProfile.Clone() : this.VideoProfiles.FirstOrDefault();
+                    this.VideoPresetValue = preset.Task.VideoPreset != null ? this.VideoPresets.IndexOf(preset.Task.VideoPreset) : 0;
+                    this.FastDecode = preset.Task.VideoTunes != null && preset.Task.VideoTunes.Contains(VideoTune.FastDecode);
+                    this.VideoTune = (preset.Task.VideoTunes != null && preset.Task.VideoTunes.Any() ? preset.Task.VideoTunes.FirstOrDefault(t => !Equals(t, VideoTune.FastDecode)) : this.VideoTunes.FirstOrDefault())
+                                     ?? VideoTune.None;
                 }
-
-                this.ExtraArguments = preset.Task.ExtraAdvancedArguments;
-                this.UseAdvancedTab = this.IsAdvancedTabOptionEnabled && preset.Task.ShowAdvancedTab;
             }
+
+            this.ExtraArguments = preset.Task.ExtraAdvancedArguments;
+            this.UseAdvancedTab = this.IsAdvancedTabOptionEnabled && preset.Task.ShowAdvancedTab;
         }
 
         /// <summary>
@@ -967,6 +976,7 @@ namespace HandBrakeWPF.ViewModels
         public void UpdateTask(EncodeTask task)
         {
             this.Task = task;
+            this.SetQualitySliderBounds();
             this.SetRF(task.Quality);
 
             this.ShowPeakFramerate = this.IsPeakFramerate;
@@ -1236,9 +1246,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void SetRF(double? quality)
         {
-            double cqStep = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
+            double cqStep = this.userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step);
             double rfValue = 0;
-            this.SetQualitySliderBounds();
             switch (this.SelectedVideoEncoder)
             {
                 case VideoEncoder.FFMpeg:
@@ -1420,7 +1429,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => SelectedFramerate);
                 this.UseAdvancedTab = false;
             }
-
+            
             // Cleanup Extra Arguments
             // Load the cached arguments. Saves the user from resetting when switching encoders.
             string result;
