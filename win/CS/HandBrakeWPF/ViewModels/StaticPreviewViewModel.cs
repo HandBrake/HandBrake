@@ -14,6 +14,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Runtime.ExceptionServices;
     using System.Threading;
     using System.Windows;
@@ -23,6 +24,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Services.Scan.Interfaces;
@@ -560,6 +562,22 @@ namespace HandBrakeWPF.ViewModels
             encodeTask.IsPreviewEncode = true;
             encodeTask.PreviewEncodeStartAt = this.SelectedPreviewImage + 1;  
             encodeTask.PreviewEncodeDuration = this.Duration;
+
+            SubtitleTrack scanTrack = null;
+            foreach (var track in encodeTask.SubtitleTracks)
+            {
+                if (track.SourceTrack != null && track.SourceTrack.SubtitleType == SubtitleType.ForeignAudioSearch)
+                {
+                    scanTrack = track;
+                    break;
+                }
+            }
+
+            if (scanTrack != null)
+            {
+                encodeTask.SubtitleTracks.Remove(scanTrack);
+            }
+
             QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create(), this.ScannedSource.ScanPath);
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
