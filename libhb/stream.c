@@ -5358,6 +5358,11 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     if (st->disposition & AV_DISPOSITION_DEFAULT)
     {
         subtitle->config.default_track = 1;
+        subtitle->attributes |= HB_SUBTITLE_ATTR_DEFAULT;
+    }
+    if (st->disposition & AV_DISPOSITION_FORCED)
+    {
+        subtitle->attributes |= HB_SUBTITLE_ATTR_FORCED;
     }
 
     subtitle->track = hb_list_count(title->list_subtitle);

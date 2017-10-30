@@ -894,6 +894,7 @@ struct hb_chapter_s
 #define HB_SUBTITLE_ATTR_WIDE       0x0080
 #define HB_SUBTITLE_ATTR_LETTERBOX  0x0100
 #define HB_SUBTITLE_ATTR_PANSCAN    0x0200
+#define HB_SUBTITLE_ATTR_DEFAULT    0x0400
 
 struct hb_subtitle_s
 {
