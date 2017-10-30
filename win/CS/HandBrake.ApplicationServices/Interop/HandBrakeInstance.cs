@@ -268,7 +268,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// An image with the requested preview.
         /// </returns>
         [HandleProcessCorruptedStateExceptions]
-        public Bitmap GetPreview(PreviewSettings settings, int previewNumber)
+        public Bitmap GetPreview(PreviewSettings settings, int previewNumber, int deinterlace)
         {
             SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == settings.TitleNumber);
 
@@ -293,7 +293,7 @@ namespace HandBrake.ApplicationServices.Interop
             };
 
             // Fetch the image data from LibHb
-            IntPtr resultingImageStuct = HBFunctions.hb_get_preview2(this.hbHandle, settings.TitleNumber, previewNumber, ref uiGeometry, 0);
+            IntPtr resultingImageStuct = HBFunctions.hb_get_preview2(this.hbHandle, settings.TitleNumber, previewNumber, ref uiGeometry, deinterlace);
             hb_image_s image = InteropUtilities.ToStructureFromPtr<hb_image_s>(resultingImageStuct);
 
             // Copy the filled image buffer to a managed array.

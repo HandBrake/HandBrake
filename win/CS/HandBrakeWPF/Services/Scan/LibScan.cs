@@ -19,6 +19,7 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrake.ApplicationServices.Interop.Interfaces;
     using HandBrake.ApplicationServices.Interop.Json.Scan;
     using HandBrake.ApplicationServices.Interop.Model;
+    using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Interop.Model.Preview;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Logging;
@@ -206,7 +207,13 @@ namespace HandBrakeWPF.Services.Scan
                                                    PixelAspectY = job.PixelAspectY
                                                };
 
-                bitmapImage = BitmapUtilities.ConvertToBitmapImage(this.instance.GetPreview(settings, preview));
+                int deinterlaceOn = 0;
+                if (job.DeinterlaceFilter != DeinterlaceFilter.Off)
+                {
+                    deinterlaceOn = 1;
+                }
+                
+                bitmapImage = BitmapUtilities.ConvertToBitmapImage(this.instance.GetPreview(settings, preview, deinterlaceOn));
             }
             catch (AccessViolationException e)
             {
