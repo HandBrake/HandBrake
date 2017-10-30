@@ -1279,6 +1279,8 @@ static void ShowHelp()
 "\n"
 "   -h, --help              Print help\n"
 "   --version               Print version\n"
+"   --json                  Log title, progress, and version info in\n"
+"                           JSON format\n"
 "   -v, --verbose[=number]  Be verbose (optional argument: logging level)\n"
 "   -Z. --preset <string>   Select preset by name (case-sensitive)\n"
 "                           Enclose names containing spaces in double quotation\n"
@@ -2092,6 +2094,7 @@ static int ParseOptions( int argc, char ** argv )
     #define FILTER_UNSHARP_TUNE  313
     #define FILTER_LAPSHARP      314
     #define FILTER_LAPSHARP_TUNE 315
+    #define JSON_LOGGING         316
 
     for( ;; )
     {
@@ -2254,7 +2257,7 @@ static int ParseOptions( int argc, char ** argv )
             { "pfr",         no_argument,       &cfr,    2 },
             { "audio-copy-mask", required_argument, NULL, ALLOWED_AUDIO_COPY },
             { "audio-fallback",  required_argument, NULL, AUDIO_FALLBACK },
-            { "json",        no_argument,       &json,   1},
+            { "json",        no_argument,       NULL,    JSON_LOGGING },
             { 0, 0, 0, 0 }
           };
 
@@ -2281,23 +2284,23 @@ static int ParseOptions( int argc, char ** argv )
                 ShowHelp();
                 return 1;
             case VERSION:
-                if (json)
-                {
-                    hb_dict_t * version_dict;
-                    char      * version_json;
-
-                    version_dict = hb_version_dict();
-                    version_json = hb_value_get_json(version_dict);
-                    hb_value_free(&version_dict);
-                    fprintf(stderr, "Version: %s\n", version_json);
-                    free(version_json);
-                    return 1;
-                }
                 printf("HandBrake %s\n", hb_get_version(NULL));
                 return 1;
             case DESCRIBE:
                 printf("%s\n", hb_get_full_description());
                 return 1;
+            case JSON_LOGGING:
+            {
+                hb_dict_t * version_dict;
+                char      * version_json;
+
+                version_dict = hb_version_dict();
+                version_json = hb_value_get_json(version_dict);
+                hb_value_free(&version_dict);
+                fprintf(stderr, "Version: %s\n", version_json);
+                free(version_json);
+                json = 1;
+            } break;
             case 'v':
                 if( optarg != NULL )
                 {
