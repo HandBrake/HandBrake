@@ -318,22 +318,34 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     for (ii = 0; ii < hb_list_count(title->list_audio); ii++)
     {
         const char * codec_name;
+        char         channel_layout_name[64];
+        int          channel_count, lfe_count;
         hb_dict_t  * audio_dict;
         hb_audio_t * audio = hb_list_item(title->list_audio, ii);
 
         codec_name = hb_audio_decoder_get_name(audio->config.in.codec,
                                                audio->config.in.codec_param);
+        hb_layout_get_name(channel_layout_name, sizeof(channel_layout_name),
+                           audio->config.in.channel_layout);
+        channel_count = hb_layout_get_discrete_channel_count(
+                                     audio->config.in.channel_layout);
+        lfe_count     = hb_layout_get_low_freq_channel_count(
+                                     audio->config.in.channel_layout);
+
 
         audio_dict = json_pack_ex(&error, 0,
-        "{s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
-            "Description",      hb_value_string(audio->config.lang.description),
-            "Language",         hb_value_string(audio->config.lang.simple),
-            "LanguageCode",     hb_value_string(audio->config.lang.iso639_2),
-            "Attributes",       hb_value_int(audio->config.lang.attributes),
-            "Codec",            hb_value_string(codec_name),
-            "SampleRate",       hb_value_int(audio->config.in.samplerate),
-            "BitRate",          hb_value_int(audio->config.in.bitrate),
-            "ChannelLayout",    hb_value_int(audio->config.in.channel_layout));
+        "{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
+            "Description",       hb_value_string(audio->config.lang.description),
+            "Language",          hb_value_string(audio->config.lang.simple),
+            "LanguageCode",      hb_value_string(audio->config.lang.iso639_2),
+            "Attributes",        hb_value_int(audio->config.lang.attributes),
+            "Codec",             hb_value_string(codec_name),
+            "SampleRate",        hb_value_int(audio->config.in.samplerate),
+            "BitRate",           hb_value_int(audio->config.in.bitrate),
+            "ChannelLayout",     hb_value_int(audio->config.in.channel_layout),
+            "ChannelLayoutName", hb_value_string(channel_layout_name),
+            "ChannelCount",      hb_value_int(channel_count),
+            "LFECount",          hb_value_int(lfe_count));
         if (audio_dict == NULL)
         {
             hb_error("json pack failure: %s", error.text);

@@ -395,6 +395,10 @@ const char*         hb_mixdown_get_short_name(int mixdown);
 const char*         hb_mixdown_sanitize_name(const char *name);
 const hb_mixdown_t* hb_mixdown_get_next(const hb_mixdown_t *last);
 
+void                hb_layout_get_name(char * name, int size, int64_t layout);
+int                 hb_layout_get_discrete_channel_count(int64_t layout);
+int                 hb_layout_get_low_freq_channel_count(int64_t layout);
+
 int                 hb_video_encoder_get_default(int muxer);
 hb_encoder_t*       hb_video_encoder_get_from_codec(int codec);
 int                 hb_video_encoder_get_from_name(const char *name);
