@@ -22,7 +22,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the channel layout.
         /// </summary>
-        public int ChannelLayout { get; set; }
+        public long ChannelLayout { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
