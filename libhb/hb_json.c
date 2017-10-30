@@ -359,12 +359,14 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     hb_dict_t * subtitle_list = hb_value_array_init();
     for (ii = 0; ii < hb_list_count(title->list_subtitle); ii++)
     {
+        const char * format;
         hb_dict_t *subtitle_dict;
         hb_subtitle_t *subtitle = hb_list_item(title->list_subtitle, ii);
 
+        format = subtitle->format == PICTURESUB ? "bitmap" : "text";
         subtitle_dict = json_pack_ex(&error, 0,
             "{s:o, s:o, s:o, s:o, s:o}",
-            "Format",       hb_value_int(subtitle->format),
+            "Format",       hb_value_string(format),
             "Source",       hb_value_string(hb_subsource_name(subtitle->source)),
             "Attributes",   hb_value_int(subtitle->attributes),
             "Language",     hb_value_string(subtitle->lang),
