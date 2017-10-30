@@ -347,7 +347,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         hb_subtitle_t *subtitle = hb_list_item(title->list_subtitle, ii);
 
         subtitle_dict = json_pack_ex(&error, 0,
-            "{s:o, s:o, s:o, s:o}",
+            "{s:o, s:o, s:o, s:o, s:o}",
             "Format",       hb_value_int(subtitle->format),
             "Source",       hb_value_string(hb_subsource_name(subtitle->source)),
             "Attributes",   hb_value_int(subtitle->attributes),
