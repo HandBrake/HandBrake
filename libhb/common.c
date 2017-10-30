@@ -2532,6 +2532,31 @@ int hb_autopassthru_get_encoder(int in_codec, int copy_mask, int fallback,
                                                      fallback_result;
 }
 
+const char* hb_audio_decoder_get_name(int codec, int codec_param)
+{
+    if (codec & HB_ACODEC_FF_MASK)
+    {
+        AVCodec * codec;
+
+        codec = avcodec_find_decoder(codec_param);
+        if (codec != NULL)
+        {
+            return codec->name;
+        }
+    }
+    else
+    {
+        switch (codec)
+        {
+            case HB_ACODEC_LPCM:
+                return "pcm_dvd";
+            default:
+                break;
+        }
+    }
+    return "unknown";
+}
+
 hb_container_t* hb_container_get_from_format(int format)
 {
     int i;

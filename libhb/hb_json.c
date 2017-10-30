@@ -317,8 +317,12 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     hb_dict_t * audio_list = hb_value_array_init();
     for (ii = 0; ii < hb_list_count(title->list_audio); ii++)
     {
-        hb_dict_t *audio_dict;
-        hb_audio_t *audio = hb_list_item(title->list_audio, ii);
+        const char * codec_name;
+        hb_dict_t  * audio_dict;
+        hb_audio_t * audio = hb_list_item(title->list_audio, ii);
+
+        codec_name = hb_audio_decoder_get_name(audio->config.in.codec,
+                                               audio->config.in.codec_param);
 
         audio_dict = json_pack_ex(&error, 0,
         "{s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
@@ -326,7 +330,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
             "Language",         hb_value_string(audio->config.lang.simple),
             "LanguageCode",     hb_value_string(audio->config.lang.iso639_2),
             "Attributes",       hb_value_int(audio->config.lang.attributes),
-            "Codec",            hb_value_int(audio->config.in.codec),
+            "Codec",            hb_value_string(codec_name),
             "SampleRate",       hb_value_int(audio->config.in.samplerate),
             "BitRate",          hb_value_int(audio->config.in.bitrate),
             "ChannelLayout",    hb_value_int(audio->config.in.channel_layout));

@@ -421,6 +421,8 @@ const char*         hb_audio_encoder_get_long_name(int encoder);
 const char*         hb_audio_encoder_sanitize_name(const char *name);
 const hb_encoder_t* hb_audio_encoder_get_next(const hb_encoder_t *last);
 
+const char*         hb_audio_decoder_get_name(int codec, int codec_param);
+
 /*
  * Not typically used by the UIs
  * (set hb_job_t.acodec_copy_mask, hb_job_t.acodec_fallback instead).
