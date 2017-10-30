@@ -831,9 +831,19 @@ static int avformatInit( hb_mux_object_t * m )
                 'A','r','i','a','l'         // Font name
             };
 
-            int width, height = 60;
-            width = job->width * job->par.num / job->par.den;
-            track->st->codecpar->width = width;
+            int width, height, font_size;
+            width     = job->width * job->par.num / job->par.den;
+            font_size = 24 * job->height / 576;
+            if (font_size < 12)
+            {
+                font_size = 12;
+            }
+            else if (font_size > 128)
+            {
+                font_size = 128;
+            }
+            height = 3 * font_size;
+            track->st->codecpar->width  = width;
             track->st->codecpar->height = height;
             properties[14] = height >> 8;
             properties[15] = height & 0xff;
@@ -1258,8 +1268,9 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                      * Copy the subtitle into buffer stripping markup and
                      * creating style atoms for them.
                      */
-                    hb_muxmp4_process_subtitle_style(buf->data, &buffer,
-                                                     &styleatom, &stylesize );
+                    hb_muxmp4_process_subtitle_style(
+                        job->height, buf->data, &buffer,
+                        &styleatom, &stylesize );
 
                     if (buffer != NULL)
                     {
