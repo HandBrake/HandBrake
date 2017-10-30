@@ -833,15 +833,16 @@ static int avformatInit( hb_mux_object_t * m )
 
             int width, height, font_size;
             width     = job->width * job->par.num / job->par.den;
-            font_size = 24 * job->height / 576;
+            font_size = 0.05 * job->height;
             if (font_size < 12)
             {
                 font_size = 12;
             }
-            else if (font_size > 128)
+            else if (font_size > 255)
             {
-                font_size = 128;
+                font_size = 255;
             }
+            properties[25] = font_size;
             height = 3 * font_size;
             track->st->codecpar->width  = width;
             track->st->codecpar->height = height;

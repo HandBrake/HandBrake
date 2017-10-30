@@ -773,14 +773,14 @@ static int update_style_atoms(style_context_t *ctx, int stop)
     style_entry[4]  = 0;            // font-ID msb
     style_entry[5]  = 1;            // font-ID lsb
     style_entry[6]  = face;         // face-style-flags
-    font_size       = 24 * ctx->height / 576;
+    font_size       = 0.05 * ctx->height;
     if (font_size < 12)
     {
         font_size = 12;
     }
-    else if (font_size > 128)
+    else if (font_size > 255)
     {
-        font_size = 128;
+        font_size = 255;
     }
     style_entry[7]  = font_size;    // font-size
     style_entry[8]  = (ctx->current_style.fg_rgb >> 16) & 0xff; // r
