@@ -5152,6 +5152,11 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
             break;
     }
 
+    if (st->disposition & AV_DISPOSITION_DEFAULT)
+    {
+        audio->config.lang.attributes |= HB_AUDIO_ATTR_DEFAULT;
+    }
+
     set_audio_description(audio,
                           lang_for_code2(tag != NULL ? tag->value : "und"));
     hb_list_add(title->list_audio, audio);
