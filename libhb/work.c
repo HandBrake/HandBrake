@@ -474,6 +474,8 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
                 case HB_VCODEC_QSV_H265_10BIT:
+                case HB_VCODEC_FFMPEG_H264:
+                case HB_VCODEC_FFMPEG_H265:
                     hb_log("     + profile: %s", job->encoder_profile);
                 default:
                     break;
@@ -488,6 +490,8 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
                 case HB_VCODEC_QSV_H265_10BIT:
+                case HB_VCODEC_FFMPEG_H264:
+                case HB_VCODEC_FFMPEG_H265:
                     hb_log("     + level:   %s", job->encoder_level);
                 default:
                     break;
