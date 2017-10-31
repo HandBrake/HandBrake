@@ -9,9 +9,12 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url =  https://download.handbrake.fr/handbrake/contrib/libav-12.2.tar.gz
-FFMPEG.FETCH.url += https://libav.org/releases/libav-12.2.tar.gz
-FFMPEG.FETCH.sha256 = 49c3ccda32458192c00ab25b30f4d1a6a4772b83458cbbf3a25b210d0688f55c
+FFMPEG.FETCH.url = http://www.ffmpeg.org/releases/ffmpeg-3.4.tar.gz
+FFMPEG.FETCH.url += https://download.handbrake.fr/handbrake/contrib/ffmpeg-3.4.tar.gz
+FFMPEG.FETCH.sha256 = 6ed03b00404a3923e3c2f560248a9c9ad79fbaaee26d723f74aae6b31fe2bae6
+## FFMPEG.FETCH.url =  https://download.handbrake.fr/handbrake/contrib/libav-12.2.tar.gz
+## FFMPEG.FETCH.url += https://libav.org/releases/libav-12.2.tar.gz
+## FFMPEG.FETCH.sha256 = 49c3ccda32458192c00ab25b30f4d1a6a4772b83458cbbf3a25b210d0688f55c
 
 FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =
@@ -19,21 +22,39 @@ FFMPEG.CONFIGURE.build =
 FFMPEG.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 FFMPEG.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 
+# To build with nvenc: 
+# See <https://dwijaybane.wordpress.com/2017/07/19/ffmpeg-with-nvidia-acceleration-on-ubuntu-16-04-nvenc-sdk/>
+# 1) Copy NVENC SDK's Video_Codec_SDK_8.0.14/Samples/common/inc/*.h to /usr/local/include/
+# 2) Build cudautils
+#    wget http://developer.download.nvidia.com/compute/redist/ffmpeg/1511-patch/cudautils.zip
+#    Copy cudautils.h and libcudautils.a are in their respective /usr/local/[include|lib]/
+
 FFMPEG.CONFIGURE.extra = \
     --enable-gpl \
     --disable-doc \
     --disable-bsfs \
     --enable-bsf=aac_adtstoasc \
-    --disable-avconv \
-    --disable-avplay \
-    --disable-avprobe \
-    --disable-avdevice \
-    --disable-muxers \
-    --disable-network \
     --disable-vaapi \
     --disable-vdpau \
+    --disable-network \
+    --disable-programs \
+    --disable-ffmpeg \
+    --disable-ffplay \
+    --disable-ffprobe \
+    --disable-ffserver \
+    --disable-avdevice \
+    --disable-muxers \
+    --disable-decoder=crystalhd \
+    --disable-decoder=h264_crystalhd \
+    --disable-decoder=mpeg2_crystalhd \
+    --disable-decoder=mpeg4_crystalhd \
+    --disable-decoder=msmpeg4_crystalhd \
+    --disable-decoder=vc1_crystalhd \
+    --disable-decoder=wmv3_crystalhd \
     --disable-encoders \
+    --enable-avresample \
     --enable-nvenc \
+    --enable-libx264 \
     --enable-libmp3lame \
     --enable-encoder=aac \
     --enable-encoder=ac3 \
