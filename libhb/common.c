@@ -294,7 +294,7 @@ static int hb_video_encoder_is_enabled(int encoder)
         case HB_VCODEC_FFMPEG_H264:
         case HB_VCODEC_FFMPEG_H265:
         {
-            return 1; // TODO check hardware (possible to just see if the driver exists and toggle off that?)
+            return hb_av_encoder_present(encoder);
         }
         default:
             return 0;
@@ -1369,10 +1369,10 @@ const char* hb_video_quality_get_name(uint32_t codec)
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
-        case HB_VCODEC_FFMPEG_H264:
-        case HB_VCODEC_FFMPEG_H265:
             return "RF";
 
+        case HB_VCODEC_FFMPEG_H264:
+        case HB_VCODEC_FFMPEG_H265:
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
             return "CQ";
@@ -1461,17 +1461,19 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         return hb_qsv_profile_get_names(encoder);
     }
 #endif
+    if (encoder & HB_VCODEC_FFMPEG_MASK)
+    {
+        return hb_av_profile_get_names(encoder);
+    }
 
     switch (encoder)
     {
         case HB_VCODEC_X264_8BIT:
-        case HB_VCODEC_FFMPEG_H264:
             return hb_h264_profile_names_8bit;
         case HB_VCODEC_X264_10BIT:
             return hb_h264_profile_names_10bit;
 
         case HB_VCODEC_X265_8BIT:
-        case HB_VCODEC_FFMPEG_H265:
             return hb_h265_profile_names_8bit;
         case HB_VCODEC_X265_10BIT:
             return hb_h265_profile_names_10bit;
@@ -1493,12 +1495,15 @@ const char* const* hb_video_encoder_get_levels(int encoder)
         return hb_qsv_level_get_names(encoder);
     }
 #endif
+    if (encoder & HB_VCODEC_FFMPEG_MASK)
+    {
+        return hb_av_level_get_names(encoder);
+    }
 
     switch (encoder)
     {
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
-        case HB_VCODEC_FFMPEG_H264:
             return hb_h264_level_names;
 
         default:
