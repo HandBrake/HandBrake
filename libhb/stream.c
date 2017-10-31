@@ -1930,7 +1930,6 @@ static void set_audio_description(hb_audio_t *audio, iso639_lang_t *lang)
               strlen( lang->native_name ) ? lang->native_name : lang->eng_name );
     snprintf( audio->config.lang.iso639_2,
               sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2 );
-    audio->config.lang.attributes = HB_AUDIO_ATTR_NONE;
 }
 
 // Sort specifies the index in the audio list where you would
