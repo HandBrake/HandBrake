@@ -162,6 +162,55 @@ char* hb_get_state_json( hb_handle_t * h )
     return json_state;
 }
 
+hb_dict_t * hb_audio_attributes_to_dict(uint32_t attributes)
+{
+    json_error_t error;
+    hb_dict_t * dict;
+
+    dict = json_pack_ex(&error, 0,
+        "{s:o, s:o, s:o, s:o, s:o, s:o}",
+        "Normal",           hb_value_bool(attributes & HB_AUDIO_ATTR_NORMAL),
+        "VisuallyImpaired", hb_value_bool(attributes &
+                                          HB_AUDIO_ATTR_VISUALLY_IMPAIRED),
+        "Commentary",       hb_value_bool(attributes &
+                                          HB_AUDIO_ATTR_COMMENTARY),
+        "AltCommentary",    hb_value_bool(attributes &
+                                          HB_AUDIO_ATTR_ALT_COMMENTARY),
+        "Secondary",        hb_value_bool(attributes & HB_AUDIO_ATTR_SECONDARY),
+        "Default",          hb_value_bool(attributes & HB_AUDIO_ATTR_DEFAULT));
+    if (dict == NULL)
+    {
+        hb_error("json pack failure: %s", error.text);
+    }
+    return dict;
+}
+
+hb_dict_t * hb_subtitle_attributes_to_dict(uint32_t attributes)
+{
+    json_error_t error;
+    hb_dict_t * dict;
+
+    dict = json_pack_ex(&error, 0,
+        "{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
+        "Normal",        hb_value_bool(attributes & HB_SUBTITLE_ATTR_NORMAL),
+        "Large",         hb_value_bool(attributes & HB_SUBTITLE_ATTR_LARGE),
+        "Children",      hb_value_bool(attributes & HB_SUBTITLE_ATTR_CHILDREN),
+        "ClosedCaption", hb_value_bool(attributes & HB_SUBTITLE_ATTR_CC),
+        "Forced",        hb_value_bool(attributes & HB_SUBTITLE_ATTR_FORCED),
+        "Commentary",    hb_value_bool(attributes &
+                                       HB_SUBTITLE_ATTR_COMMENTARY),
+        "4By3",          hb_value_bool(attributes & HB_SUBTITLE_ATTR_4_3),
+        "Wide",          hb_value_bool(attributes & HB_SUBTITLE_ATTR_WIDE),
+        "Letterbox",     hb_value_bool(attributes & HB_SUBTITLE_ATTR_LETTERBOX),
+        "PanScan",       hb_value_bool(attributes & HB_SUBTITLE_ATTR_PANSCAN),
+        "Default",       hb_value_bool(attributes & HB_SUBTITLE_ATTR_DEFAULT));
+    if (dict == NULL)
+    {
+        hb_error("json pack failure: %s", error.text);
+    }
+    return dict;
+}
+
 static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
 {
     hb_dict_t *dict;
@@ -320,7 +369,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         const char * codec_name;
         char         channel_layout_name[64];
         int          channel_count, lfe_count;
-        hb_dict_t  * audio_dict;
+        hb_dict_t  * audio_dict, * attributes;
         hb_audio_t * audio = hb_list_item(title->list_audio, ii);
 
         codec_name = hb_audio_decoder_get_name(audio->config.in.codec,
@@ -333,12 +382,13 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
                                      audio->config.in.channel_layout);
 
 
+        attributes = hb_audio_attributes_to_dict(audio->config.lang.attributes);
         audio_dict = json_pack_ex(&error, 0,
         "{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
             "Description",       hb_value_string(audio->config.lang.description),
             "Language",          hb_value_string(audio->config.lang.simple),
             "LanguageCode",      hb_value_string(audio->config.lang.iso639_2),
-            "Attributes",        hb_value_int(audio->config.lang.attributes),
+            "Attributes",        attributes,
             "Codec",             hb_value_string(codec_name),
             "SampleRate",        hb_value_int(audio->config.in.samplerate),
             "BitRate",           hb_value_int(audio->config.in.bitrate),
@@ -356,19 +406,20 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     hb_dict_set(dict, "AudioList", audio_list);
 
     // process subtitle list
-    hb_dict_t * subtitle_list = hb_value_array_init();
+    hb_value_array_t * subtitle_list = hb_value_array_init();
     for (ii = 0; ii < hb_list_count(title->list_subtitle); ii++)
     {
-        const char * format;
-        hb_dict_t *subtitle_dict;
-        hb_subtitle_t *subtitle = hb_list_item(title->list_subtitle, ii);
+        const char    * format;
+        hb_dict_t     * subtitle_dict, * attributes;
+        hb_subtitle_t * subtitle = hb_list_item(title->list_subtitle, ii);
 
         format = subtitle->format == PICTURESUB ? "bitmap" : "text";
+        attributes = hb_subtitle_attributes_to_dict(subtitle->attributes);
         subtitle_dict = json_pack_ex(&error, 0,
             "{s:o, s:o, s:o, s:o, s:o}",
             "Format",       hb_value_string(format),
             "Source",       hb_value_string(hb_subsource_name(subtitle->source)),
-            "Attributes",   hb_value_int(subtitle->attributes),
+            "Attributes",   attributes,
             "Language",     hb_value_string(subtitle->lang),
             "LanguageCode", hb_value_string(subtitle->iso639_2));
         if (subtitle_dict == NULL)
