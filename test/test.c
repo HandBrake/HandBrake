@@ -726,7 +726,7 @@ static void PrintTitleSetInfo( hb_title_set_t * title_set )
         title_set_dict = hb_title_set_to_dict(title_set);
         title_set_json = hb_value_get_json(title_set_dict);
         hb_value_free(&title_set_dict);
-        fprintf(stderr, "JSON Title Set: %s\n", title_set_json);
+        fprintf(stdout, "JSON Title Set: %s\n", title_set_json);
         free(title_set_json);
     }
     else
@@ -829,7 +829,7 @@ static void show_progress_json(hb_state_t * state)
     state_dict = hb_state_to_dict(state);
     state_json = hb_value_get_json(state_dict);
     hb_value_free(&state_dict);
-    fprintf(stderr, "Progress: %s\n", state_json);
+    fprintf(stdout, "Progress: %s\n", state_json);
     free(state_json);
     fflush(stderr);
 }
@@ -2297,7 +2297,7 @@ static int ParseOptions( int argc, char ** argv )
                 version_dict = hb_version_dict();
                 version_json = hb_value_get_json(version_dict);
                 hb_value_free(&version_dict);
-                fprintf(stderr, "Version: %s\n", version_json);
+                fprintf(stdout, "Version: %s\n", version_json);
                 free(version_json);
                 json = 1;
             } break;
