@@ -228,7 +228,7 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
      * Settings which can't be overriden in the encodeer_options string
      * (muxer-specific settings, resolution, ratecontrol, etc.).
      */
-    param->bRepeatHeaders = 0;
+    param->bRepeatHeaders = job->inline_parameter_sets;
     param->sourceWidth    = job->width;
     param->sourceHeight   = job->height;
 

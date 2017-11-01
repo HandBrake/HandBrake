@@ -59,6 +59,7 @@
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
 static int     json                = 0;
+static int     inline_parameter_sets = -1;
 static int     align_av_start      = -1;
 static int     dvdnav              = 1;
 static char *  input               = NULL;
@@ -1358,6 +1359,9 @@ static void ShowHelp()
 "       --align-av          Add audio silence or black video frames to start\n"
 "                           of streams so that all streams start at exactly\n"
 "                           the same time\n"
+"   --inline-parameter-sets Create adaptive streaming compatible output.\n"
+"                           Inserts parameter sets (SPS and PPS) inline\n"
+"                           in the video stream before each IDR.\n"
 "\n"
 "\n"
 "Video Options ----------------------------------------------------------------\n"
@@ -2130,6 +2134,8 @@ static int ParseOptions( int argc, char ** argv )
             { "angle",       required_argument, NULL,    ANGLE },
             { "markers",     optional_argument, NULL,    'm' },
             { "no-markers",  no_argument,       &chapter_markers, 0 },
+            { "inline-parameter-sets", no_argument, &inline_parameter_sets, 1 },
+            { "no-inline-parameter-sets", no_argument, &inline_parameter_sets, 0 },
             { "align-av",    no_argument,       &align_av_start, 1 },
             { "no-align-av", no_argument,       &align_av_start, 0 },
             { "audio-lang-list", required_argument, NULL, AUDIO_LANG_LIST },
@@ -3370,6 +3376,11 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     if (align_av_start != -1)
     {
         hb_dict_set(preset, "AlignAVStart", hb_value_bool(align_av_start));
+    }
+    if (inline_parameter_sets != -1)
+    {
+        hb_dict_set(preset, "InlineParameterSets",
+                    hb_value_bool(inline_parameter_sets));
     }
     hb_value_array_t *subtitle_lang_array;
     subtitle_lang_array = hb_dict_get(preset, "SubtitleLanguageList");

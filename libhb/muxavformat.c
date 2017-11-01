@@ -215,6 +215,14 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_QSV_H264:
             track->st->codecpar->codec_id = AV_CODEC_ID_H264;
+            if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
+            {
+                track->st->codecpar->codec_tag = MKTAG('a','v','c','3');
+            }
+            else
+            {
+                track->st->codecpar->codec_tag = MKTAG('a','v','c','1');
+            }
 
             /* Taken from x264 muxers.c */
             priv_size = 5 + 1 + 2 + job->config.h264.sps_length + 1 + 2 +
@@ -332,7 +340,14 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_QSV_H265:
         case HB_VCODEC_QSV_H265_10BIT:
             track->st->codecpar->codec_id  = AV_CODEC_ID_HEVC;
-            track->st->codecpar->codec_tag = MKTAG('h','v','c','1');
+            if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
+            {
+                track->st->codecpar->codec_tag = MKTAG('h','e','v','1');
+            }
+            else
+            {
+                track->st->codecpar->codec_tag = MKTAG('h','v','c','1');
+            }
 
             if (job->config.h265.headers_length > 0)
             {

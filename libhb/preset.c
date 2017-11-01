@@ -1722,6 +1722,9 @@ int hb_preset_apply_mux(const hb_dict_t *preset, hb_dict_t *job_dict)
     hb_dict_set(dest_dict, "AlignAVStart",
                 hb_value_xform(hb_dict_get(preset, "AlignAVStart"),
                                HB_VALUE_TYPE_BOOL));
+    hb_dict_set(dest_dict, "InlineParameterSets",
+                hb_value_xform(hb_dict_get(preset, "InlineParameterSets"),
+                               HB_VALUE_TYPE_BOOL));
     if (mux & HB_MUX_MASK_MP4)
     {
         hb_dict_t *mp4_dict = hb_dict_init();
