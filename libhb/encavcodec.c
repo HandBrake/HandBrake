@@ -226,7 +226,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     
     bit_rate_ceiling = (int64_t)job->width * (int64_t)job->height * (int64_t)fps.num / (int64_t)fps.den;
     bit_rate_avgusr = ( 0 < job->vbitrate ) ? 1000 * (int64_t)job->vbitrate : -1;
-    hb_log( "encavcodec: bit_rate.0 ceiling %ld by %d x %d * %d/%d; user %d", bit_rate_ceiling, job->width, job->height, fps.num, fps.den, bit_rate_avgusr);
+    hb_log( "encavcodec: bit_rate.0 ceiling %ld by %d x %d * %d/%d; user %ld", bit_rate_ceiling, job->width, job->height, fps.num, fps.den, bit_rate_avgusr);
 
     if (job->vquality != HB_INVALID_VIDEO_QUALITY)
     {
@@ -325,12 +325,22 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             snprintf(quality, 7, "%.2f", job->vquality);
             av_dict_set( &av_opts, "rc", "vbr", 0 );
             av_dict_set( &av_opts, "cq", quality, 0 );
+
+            // further Advanced Quality Settings in Constant Quality Mode
+            av_dict_set( &av_opts, "init_qpP", "1", 0 );
+            av_dict_set( &av_opts, "init_qpB", "1", 0 );
+            av_dict_set( &av_opts, "init_qpI", "1", 0 );
+            av_dict_set( &av_opts, "rc-lookahead", "32", 0 ); // also adds b-frames (h264 only it seems for now)
+            av_dict_set( &av_opts, "spatial_aq", "1", 0 );
+            // av_dict_set( &av_opts, "temporal_aq", "1", 0 ); // only for h264, either spatial or temporal
+            av_dict_set( &av_opts, "aq-strength", "8", 0 ); // default
+
             //This value was chosen to make the bitrate high enough
             //for nvenc to "turn off" the maximum bitrate feature
             //that is normally applied to constant quality.
             context->bit_rate = bit_rate_ceiling;
             hb_log( "encavcodec: bit_rate.4 %ld", context->bit_rate);
-            hb_log( "encavcodec: encoding at rc=vbr CQ %.2f", job->vquality );
+            hb_log( "encavcodec: encoding at rc=vbr CQ %.2f, rc-lookahead 32, init_qp 1, spatial_aq 1, aq-strength 8", job->vquality );
         }
         else
         {
