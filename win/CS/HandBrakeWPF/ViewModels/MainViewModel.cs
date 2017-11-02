@@ -2610,6 +2610,8 @@ namespace HandBrakeWPF.ViewModels
                     }
 
                     this.ProgramStatusLabel = Resources.Main_QueueFinished + errorDesc;
+                    this.WindowTitle = Resources.HandBrake_Title;
+                    this.notifyIconService.SetTooltip(this.WindowTitle);
 
                     if (this.windowsSeven.IsWindowsSeven)
                     {
