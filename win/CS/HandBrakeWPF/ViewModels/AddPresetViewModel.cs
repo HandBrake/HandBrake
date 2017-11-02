@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -35,38 +36,19 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class AddPresetViewModel : ViewModelBase, IAddPresetViewModel
     {
-        /// <summary>
-        /// Backing field for the Preset Service
-        /// </summary>
         private readonly IPresetService presetService;
-
-        /// <summary>
-        /// Backing field for the error service
-        /// </summary>
         private readonly IErrorService errorService;
-
-        /// <summary>
-        /// The window manager.
-        /// </summary>
         private readonly IWindowManager windowManager;
-
-        /// <summary>
-        /// Backing fields for Selected Picture settings mode.
-        /// </summary>
         private PresetPictureSettingsMode selectedPictureSettingMode;
-
-        /// <summary>
-        /// Backging field for show custom inputs
-        /// </summary>
         private bool showCustomInputs;
-
-        /// <summary>
-        /// The source.
-        /// </summary>
         private Title selectedTitle;
 
         private IAudioDefaultsViewModel audioDefaultsViewModel;
         private ISubtitlesDefaultsViewModel subtitlesDefaultsViewModel;
+
+        private PresetDisplayCategory selectedPresetCategory;
+        private readonly PresetDisplayCategory addNewCategory = new PresetDisplayCategory(ResourcesUI.AddPresetView_AddNewCategory, true, null);
+        private bool canAddNewPresetCategory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AddPresetViewModel"/> class.
@@ -85,9 +67,11 @@ namespace HandBrakeWPF.ViewModels
             this.presetService = presetService;
             this.errorService = errorService;
             this.windowManager = windowManager;
-            this.Title = "Add Preset";
+            this.Title = ResourcesUI.AddPresetView_AddPreset;
             this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName };
             this.PictureSettingsModes = EnumHelper<PresetPictureSettingsMode>.GetEnumList();
+            this.PresetCategories = presetService.GetPresetCategories(true).Union(new List<PresetDisplayCategory> { addNewCategory }).ToList();
+            this.SelectedPresetCategory = this.PresetCategories.FirstOrDefault(n => n.Category == PresetService.UserPresetCatgoryName);
         }
 
         /// <summary>
@@ -123,6 +107,58 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.showCustomInputs = value;
                 this.NotifyOfPropertyChange(() => this.ShowCustomInputs);
+            }
+        }
+
+        public List<PresetDisplayCategory> PresetCategories { get; set; }
+
+        public PresetDisplayCategory SelectedPresetCategory
+        {
+            get
+            {
+                return this.selectedPresetCategory;
+            }
+            set
+            {
+                this.selectedPresetCategory = value;
+                this.CanAddNewPresetCategory = Equals(value, this.addNewCategory);
+
+                if (this.selectedPresetCategory != null
+                    && !object.Equals(this.selectedPresetCategory, this.addNewCategory))
+                {
+                    this.PresetCategory = this.selectedPresetCategory.Category;
+                }
+                else
+                {
+                    this.PresetCategory = PresetService.UserPresetCatgoryName;
+                }
+            }
+        }
+
+        public string PresetCategory
+        {
+            get
+            {
+                return this.Preset.Category;
+            }
+            set
+            {
+                this.Preset.Category = value;
+                this.NotifyOfPropertyChange(() => this.PresetCategory);
+            }
+        }
+
+        public bool CanAddNewPresetCategory
+        {
+            get
+            {
+                return this.canAddNewPresetCategory;
+            }
+            set
+            {
+                if (value == this.canAddNewPresetCategory) return;
+                this.canAddNewPresetCategory = value;
+                this.NotifyOfPropertyChange();
             }
         }
 

@@ -18,16 +18,17 @@ namespace HandBrakeWPF.Services.Presets.Model
         private bool isSelected;
         private bool isExpanded;
 
-        public PresetDisplayCategory(string category, BindingList<Preset> presets)
+        public PresetDisplayCategory(string category, bool isBuildIn, BindingList<Preset> presets)
         {
+            this.IsBuiltIn = isBuildIn;
             this.Category = category;
             this.Presets = presets;
         }
 
         public string Category { get; private set; }
         public BindingList<Preset> Presets { get; private set; }
-
         public string Description => this.Category;
+        public bool IsBuiltIn { get; }
 
         public bool IsExpanded
         {

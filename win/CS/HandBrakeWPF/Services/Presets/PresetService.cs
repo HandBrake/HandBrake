@@ -144,7 +144,7 @@ namespace HandBrakeWPF.Services.Presets
                 else if (!string.IsNullOrEmpty(preset.Category))
                 {
                     // Otherwise, if we have category but it doesn't exist, create it.
-                    this.presets.Add(new PresetDisplayCategory(preset.Category, new BindingList<Preset> { preset }));
+                    this.presets.Add(new PresetDisplayCategory(preset.Category, preset.IsBuildIn, new BindingList<Preset> { preset }));
                 }
                 else
                 {
@@ -574,6 +574,28 @@ namespace HandBrakeWPF.Services.Presets
                     category.IsExpanded = true;
                 }
             }
+        }
+
+        public IList<PresetDisplayCategory> GetPresetCategories(bool userCategoriesOnly)
+        {
+            List<PresetDisplayCategory> categoriesList = new List<PresetDisplayCategory>();
+
+            foreach (var item in this.Presets)
+            {
+                PresetDisplayCategory category = item as PresetDisplayCategory;
+                if (category != null)
+                {
+                    if (userCategoriesOnly && category.IsBuiltIn)
+                    {
+                        continue;
+                    }
+                   
+                        categoriesList.Add(category);
+                   
+                }
+            }
+
+            return categoriesList;
         }
 
         #endregion

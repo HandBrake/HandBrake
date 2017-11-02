@@ -79,11 +79,29 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to -- Add New Category --.
+        /// </summary>
+        public static string AddPresetView_AddNewCategory {
+            get {
+                return ResourceManager.GetString("AddPresetView_AddNewCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Preset.
         /// </summary>
         public static string AddPresetView_AddPreset {
             get {
                 return ResourceManager.GetString("AddPresetView_AddPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Category.
+        /// </summary>
+        public static string AddPresetView_Category {
+            get {
+                return ResourceManager.GetString("AddPresetView_Category", resourceCulture);
             }
         }
         

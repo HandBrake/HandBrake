@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.Services.Presets.Interfaces
 {
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
     using HandBrake.ApplicationServices.Model;
@@ -44,6 +45,14 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// Load the state of the Preset Treeview.
         /// </summary>
         void LoadCategoryStates();
+
+        /// <summary>
+        /// Get a list of preset categories.
+        /// </summary>
+        /// <returns>
+        /// String list.
+        /// </returns>
+        IList<PresetDisplayCategory> GetPresetCategories(bool userCategoriesOnly);
 
         /// <summary>
         /// Add a new preset to the system
