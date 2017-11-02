@@ -1,0 +1,85 @@
+Nvenc patch on Handbrake using libav12.2
+
+Note: I am working w/ ffmpeg 3.4 and all features incl. hevc encoding
+      are working without flaws.
+      Only the common 'Invalid nal size' issue w/ h264 remains
+      in playback.
+
+ffmpeg's nvenc version is more up-to-date and closer to the Nvenc spec,
+libav's version is sort of outdated.
+
+While performing this more 'academic' task, it seems that the overall
+ffmpeg code is in much better shape, i.e. re-factored code, more modularized,
+better error handling. The worst seems to be for libav that contributors
+often simply copy/paste ffmpeg patches against it (like this here),
+where incompatibilities may exist and therefor bugs beign introduced.
+
+Tested:
+
+- Vanilla libav12.2
+  - hevc muxer error: 'muxavformat: avformat_write_header failed!'
+    from within libavformat/mux.c
+        [01:41:34] encavcodecInit: Trying avcodec option preset = hq
+        [01:41:34] encavcodecInit: Trying avcodec option rc = vbr
+        [01:41:34] encavcodecInit: Trying avcodec option cq = 28.00
+        [01:41:34] encavcodecInit: Trying avcodec option init_qpP = 1
+        [01:41:34] encavcodecInit: Trying avcodec option init_qpB = 1
+        [01:41:34] encavcodecInit: Trying avcodec option init_qpI = 1
+        [01:41:34] encavcodecInit: Trying avcodec option rc-lookahead = 32
+        [01:41:34] encavcodecInit: Trying avcodec option spatial_aq = 1
+        [01:41:34] encavcodecInit: Trying avcodec option aq-strength = 8
+        [hevc_nvenc @ 0x7ff6500c5700] Device 0 [GeForce GTX 950] supports NVENC
+        [hevc_nvenc @ 0x7ff6500c5700] The variable bitrate rate-control requires the 'qmin' and/or 'qmax' option set.
+        [01:41:34] encavcodecInit: Unknown avcodec option cq ( = 28.00 )
+        [01:41:34] encavcodecInit: Unknown avcodec option init_qpP ( = 1 )
+        [01:41:34] encavcodecInit: Unknown avcodec option init_qpB ( = 1 )
+        [01:41:34] encavcodecInit: Unknown avcodec option init_qpI ( = 1 )
+        [01:41:34] encavcodecInit: Unknown avcodec option rc-lookahead ( = 32 )
+        [01:41:34] encavcodecInit: Unknown avcodec option spatial_aq ( = 1 )
+        [01:41:34] encavcodecInit: Unknown avcodec option aq-strength ( = 8 )
+        [01:41:34] muxavformat: avformat_write_header failed!
+        [01:41:34] work: average encoding speed for job is 0.000000 fps
+
+  - h264 encoding/muxer result is visibel has same
+    player MKV issues 'Invalid nal size' as w/ ffmpeg3.4
+
+  - most enhanced Nvenc params not supported in ffmpeg,
+    - mostly: adaptive constant quality
+    - visible in above log snippet
+
+- Patched libav12.2: Using ffmpeg3.4 nvenc and cuda set
+  - hevc muxer error: 'muxavformat: avformat_write_header failed!'
+    from within libavformat/mux.c, same as w/ vanilla12.2
+        [02:05:44] encavcodecInit: Trying avcodec option preset = medium
+        [02:05:44] encavcodecInit: Trying avcodec option profile = main
+        [02:05:44] encavcodecInit: Trying avcodec option rc = vbr
+        [02:05:44] encavcodecInit: Trying avcodec option cq = 28.00
+        [02:05:44] encavcodecInit: Trying avcodec option init_qpP = 1
+        [02:05:44] encavcodecInit: Trying avcodec option init_qpB = 1
+        [02:05:44] encavcodecInit: Trying avcodec option init_qpI = 1
+        [02:05:44] encavcodecInit: Trying avcodec option rc-lookahead = 32
+        [02:05:44] encavcodecInit: Trying avcodec option spatial_aq = 1
+        [02:05:44] encavcodecInit: Trying avcodec option aq-strength = 8
+        [hevc_nvenc @ 0x7f0e90037aa0] Nvenc: Loaded version 8.0
+        [hevc_nvenc @ 0x7f0e90037aa0] Nvenc initialized successfully
+        [hevc_nvenc @ 0x7f0e90037aa0] 1 CUDA capable devices found
+        [hevc_nvenc @ 0x7f0e90037aa0] [ GPU #0 - < GeForce GTX 950 > has Compute SM 5.2 ]
+        [hevc_nvenc @ 0x7f0e90037aa0] supports NVENC
+        [hevc_nvenc @ 0x7f0e90037aa0] Using global_quality with nvenc is deprecated. Use qp instead.
+        [hevc_nvenc @ 0x7f0e90037aa0] Nvenc: quality 28.000000
+        [hevc_nvenc @ 0x7f0e90037aa0] Nvenc: cqp 3304
+        [hevc_nvenc @ 0x7f0e90037aa0] Nvenc: avg bit_rate 47875324
+        [hevc_nvenc @ 0x7f0e90037aa0] Nvenc: rc >= 0
+        [hevc_nvenc @ 0x7f0e90037aa0] Nvenc: set_vbr def qp_i_p 26
+        [hevc_nvenc @ 0x7f0e90037aa0] Nvenc: set_vbr rcqp qp_inter_p 1
+        [hevc_nvenc @ 0x7f0e90037aa0] Nvenc: set_vbr rcqp qp_intra_p 1
+        [hevc_nvenc @ 0x7f0e90037aa0] Nvenc: set_vbr rcqp qp_inter_p 1
+        [hevc_nvenc @ 0x7f0e90037aa0] Nvenc: AQ enabled.
+        [hevc_nvenc @ 0x7f0e90037aa0] Lookahead enabled: depth 32, scenecut enabled, B-adapt disabled.
+        [02:05:44] muxavformat: avformat_write_header failed!
+
+  - h264 OK, same as w/ vanilla libav12.2
+
+  - gained enhanced Nvenc options from new ffmpeg files,
+    see above snippet
+
