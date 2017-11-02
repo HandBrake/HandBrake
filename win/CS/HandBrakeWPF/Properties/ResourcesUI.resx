@@ -984,7 +984,7 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Official</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
-    <value>Category</value>
+    <value>Category:</value>
   </data>
   <data name="AddPresetView_AddNewCategory" xml:space="preserve">
     <value>-- Add New Category --</value>

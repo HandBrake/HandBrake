@@ -97,7 +97,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Category.
+        ///   Looks up a localized string similar to Category:.
         /// </summary>
         public static string AddPresetView_Category {
             get {
