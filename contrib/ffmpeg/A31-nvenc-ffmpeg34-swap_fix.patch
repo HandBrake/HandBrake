@@ -1,0 +1,144 @@
+diff -Nur b/libavcodec/nvenc.c c/libavcodec/nvenc.c
+--- b/libavcodec/nvenc.c	2017-10-15 17:59:37.000000000 +0200
++++ c/libavcodec/nvenc.c	2017-11-01 23:42:02.577064543 +0100
+@@ -21,16 +21,21 @@
+ 
+ #include "config.h"
+ 
++#include "libavutil/mem.h"
+ #include "nvenc.h"
+ 
++#include "libavutil/common.h"
+ #include "libavutil/hwcontext_cuda.h"
+ #include "libavutil/hwcontext.h"
+ #include "libavutil/imgutils.h"
+ #include "libavutil/avassert.h"
+-#include "libavutil/mem.h"
++// #include "libavutil/mem.h"
+ #include "libavutil/pixdesc.h"
++#include "avcodec.h"
+ #include "internal.h"
+ 
++#define AVERROR_EXTERNAL AVERROR(ENOSYS)
++
+ #define NVENC_CAP 0x30
+ #define IS_CBR(rc) (rc == NV_ENC_PARAMS_RC_CBR ||             \
+                     rc == NV_ENC_PARAMS_RC_CBR_LOWDELAY_HQ || \
+@@ -42,8 +47,8 @@
+     AV_PIX_FMT_P010,
+     AV_PIX_FMT_YUV444P,
+     AV_PIX_FMT_YUV444P16,
+-    AV_PIX_FMT_0RGB32,
+-    AV_PIX_FMT_0BGR32,
++    // AV_PIX_FMT_0RGB32,
++    // AV_PIX_FMT_0BGR32,
+     AV_PIX_FMT_CUDA,
+     AV_PIX_FMT_NONE
+ };
+@@ -73,7 +78,7 @@
+     { NV_ENC_ERR_ENCODER_NOT_INITIALIZED,  AVERROR(EINVAL),  "encoder not initialized"  },
+     { NV_ENC_ERR_UNSUPPORTED_PARAM,        AVERROR(ENOSYS),  "unsupported param"        },
+     { NV_ENC_ERR_LOCK_BUSY,                AVERROR(EAGAIN),  "lock busy"                },
+-    { NV_ENC_ERR_NOT_ENOUGH_BUFFER,        AVERROR_BUFFER_TOO_SMALL, "not enough buffer"},
++    { NV_ENC_ERR_NOT_ENOUGH_BUFFER,        AVERROR(ENOBUFS), "not enough buffer"},
+     { NV_ENC_ERR_INVALID_VERSION,          AVERROR(EINVAL),  "invalid version"          },
+     { NV_ENC_ERR_MAP_FAILED,               AVERROR(EIO),     "map failed"               },
+     { NV_ENC_ERR_NEED_MORE_INPUT,          AVERROR(EAGAIN),  "need more input"          },
+@@ -437,18 +442,14 @@
+         return AVERROR_BUG;
+     }
+ 
+-    if (avctx->pix_fmt == AV_PIX_FMT_CUDA || avctx->hw_frames_ctx || avctx->hw_device_ctx) {
++    if (avctx->pix_fmt == AV_PIX_FMT_CUDA || avctx->hw_frames_ctx) {
+         AVHWFramesContext   *frames_ctx;
+-        AVHWDeviceContext   *hwdev_ctx;
+         AVCUDADeviceContext *device_hwctx;
+         int ret;
+ 
+         if (avctx->hw_frames_ctx) {
+             frames_ctx = (AVHWFramesContext*)avctx->hw_frames_ctx->data;
+             device_hwctx = frames_ctx->device_ctx->hwctx;
+-        } else if (avctx->hw_device_ctx) {
+-            hwdev_ctx = (AVHWDeviceContext*)avctx->hw_device_ctx->data;
+-            device_hwctx = hwdev_ctx->hwctx;
+         } else {
+             return AVERROR(EINVAL);
+         }
+@@ -1170,10 +1171,10 @@
+         return NV_ENC_BUFFER_FORMAT_YUV444_PL;
+     case AV_PIX_FMT_YUV444P16:
+         return NV_ENC_BUFFER_FORMAT_YUV444_10BIT;
+-    case AV_PIX_FMT_0RGB32:
+-        return NV_ENC_BUFFER_FORMAT_ARGB;
+-    case AV_PIX_FMT_0BGR32:
+-        return NV_ENC_BUFFER_FORMAT_ABGR;
++    //case AV_PIX_FMT_0RGB32:
++    //    return NV_ENC_BUFFER_FORMAT_ARGB;
++    //case AV_PIX_FMT_0BGR32:
++    //    return NV_ENC_BUFFER_FORMAT_ABGR;
+     default:
+         return NV_ENC_BUFFER_FORMAT_UNDEFINED;
+     }
+@@ -1346,10 +1347,14 @@
+         p_nvenc->nvEncEncodePicture(ctx->nvencoder, &params);
+     }
+ 
+-    av_fifo_freep(&ctx->timestamp_list);
+-    av_fifo_freep(&ctx->output_surface_ready_queue);
+-    av_fifo_freep(&ctx->output_surface_queue);
+-    av_fifo_freep(&ctx->unused_surface_queue);
++    av_fifo_free(ctx->timestamp_list);
++    av_fifo_free(ctx->output_surface_ready_queue);
++    av_fifo_free(ctx->output_surface_queue);
++    av_fifo_free(ctx->unused_surface_queue);
++    ctx->timestamp_list=NULL;
++    ctx->output_surface_ready_queue=NULL;
++    ctx->output_surface_queue=NULL;
++    ctx->unused_surface_queue=NULL;
+ 
+     if (ctx->surfaces && avctx->pix_fmt == AV_PIX_FMT_CUDA) {
+         for (i = 0; i < ctx->nb_surfaces; ++i) {
+@@ -1721,7 +1726,7 @@
+         goto error;
+     }
+ 
+-    if (res = ff_alloc_packet2(avctx, pkt, lock_params.bitstreamSizeInBytes,0)) {
++    if (res = ff_alloc_packet(pkt, lock_params.bitstreamSizeInBytes)) {
+         p_nvenc->nvEncUnlockBitstream(ctx->nvencoder, tmpoutsurf->output_surface);
+         goto error;
+     }
+@@ -1769,8 +1774,8 @@
+ FF_ENABLE_DEPRECATION_WARNINGS
+ #endif
+ 
+-    ff_side_data_set_encoder_stats(pkt,
+-        (lock_params.frameAvgQP - 1) * FF_QP2LAMBDA, NULL, 0, pict_type);
++    // ff_side_data_set_encoder_stats(pkt,
++    //     (lock_params.frameAvgQP - 1) * FF_QP2LAMBDA, NULL, 0, pict_type);
+ 
+     res = nvenc_set_timestamp(avctx, &lock_params, pkt);
+     if (res < 0)
+diff -Nur b/libavcodec/nvenc_h264.c c/libavcodec/nvenc_h264.c
+--- b/libavcodec/nvenc_h264.c	2017-10-15 17:59:37.000000000 +0200
++++ c/libavcodec/nvenc_h264.c	2017-11-01 23:47:55.727071966 +0100
+@@ -23,6 +23,8 @@
+ 
+ #include "nvenc.h"
+ 
++#define AV_OPT_TYPE_BOOL AV_OPT_TYPE_INT
++
+ #define OFFSET(x) offsetof(NvencContext, x)
+ #define VE AV_OPT_FLAG_VIDEO_PARAM | AV_OPT_FLAG_ENCODING_PARAM
+ static const AVOption options[] = {
+diff -Nur b/libavcodec/nvenc_hevc.c c/libavcodec/nvenc_hevc.c
+--- b/libavcodec/nvenc_hevc.c	2017-10-15 17:59:37.000000000 +0200
++++ c/libavcodec/nvenc_hevc.c	2017-11-01 23:47:59.307092368 +0100
+@@ -23,6 +23,8 @@
+ 
+ #include "nvenc.h"
+ 
++#define AV_OPT_TYPE_BOOL AV_OPT_TYPE_INT
++
+ #define OFFSET(x) offsetof(NvencContext, x)
+ #define VE AV_OPT_FLAG_VIDEO_PARAM | AV_OPT_FLAG_ENCODING_PARAM
+ static const AVOption options[] = {
