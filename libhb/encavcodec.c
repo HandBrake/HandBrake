@@ -240,7 +240,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             //for libvpx to "turn off" the maximum bitrate feature
             //that is normally applied to constant quality.
             context->bit_rate = bit_rate_ceiling;
-            hb_log( "encavcodec: bit_rate.1 %ld", context->bit_rate);
+            hb_log( "encavcodec: bit_rate.1 %ld", (int64_t)context->bit_rate);
         }
     }
 
@@ -291,7 +291,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     {
         /* Average bitrate */
         context->bit_rate = bit_rate_avgusr;
-        hb_log( "encavcodec: bit_rate.2 %ld", context->bit_rate);
+        hb_log( "encavcodec: bit_rate.2 %ld", (int64_t)context->bit_rate);
         // ffmpeg's mpeg2 encoder requires that the bit_rate_tolerance be >=
         // bitrate * fps
         context->bit_rate_tolerance = context->bit_rate * av_q2d(fps) + 1;
@@ -314,7 +314,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             //for libvpx to "turn off" the maximum bitrate feature
             //that is normally applied to constant quality.
             context->bit_rate = bit_rate_ceiling;
-            hb_log( "encavcodec: bit_rate.3 %ld by %d x %d * %d/%d (user: %d kbps))", context->bit_rate, job->width, job->height, fps.num, fps.den, job->vbitrate);
+            hb_log( "encavcodec: bit_rate.3 %ld by %d x %d * %d/%d (user: %d kbps))", (int64_t)context->bit_rate, job->width, job->height, fps.num, fps.den, job->vbitrate);
             hb_log( "encavcodec: encoding at CQ %.2f", job->vquality );
         }
         //Set constant quality for nvenc
@@ -339,7 +339,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             //for nvenc to "turn off" the maximum bitrate feature
             //that is normally applied to constant quality.
             context->bit_rate = bit_rate_ceiling;
-            hb_log( "encavcodec: bit_rate.4 %ld", context->bit_rate);
+            hb_log( "encavcodec: bit_rate.4 %ld", (int64_t)context->bit_rate);
             hb_log( "encavcodec: encoding at rc=vbr CQ %.2f, rc-lookahead 32, init_qp 1, spatial_aq 1, aq-strength 8", job->vquality );
         }
         else
