@@ -719,6 +719,7 @@ typedef struct style_context_s
     int                   style_atom_count;
     hb_subtitle_style_t   current_style;
     int                   style_start;
+    int                   height;
 } style_context_t;
 
 static int check_realloc_output(struct output_buf_s * output, int size)
@@ -748,6 +749,7 @@ static int update_style_atoms(style_context_t *ctx, int stop)
 {
     uint8_t * style_entry;
     uint8_t   face = 0;
+    int       font_size;
     int       pos  = 10 + (12 * ctx->style_atom_count);
     int       size = 10 + (12 * (ctx->style_atom_count + 1));
 
@@ -768,10 +770,19 @@ static int update_style_atoms(style_context_t *ctx, int stop)
     style_entry[1]  = ctx->style_start & 0xff;
     style_entry[2]  = (stop >> 8) & 0xff;               // endChar
     style_entry[3]  = stop & 0xff;
-    style_entry[4]  = 0;    // font-ID msb
-    style_entry[5]  = 1;    // font-ID lsb
-    style_entry[6]  = face; // face-style-flags
-    style_entry[7]  = 24;   // font-size
+    style_entry[4]  = 0;            // font-ID msb
+    style_entry[5]  = 1;            // font-ID lsb
+    style_entry[6]  = face;         // face-style-flags
+    font_size       = 0.05 * ctx->height;
+    if (font_size < 12)
+    {
+        font_size = 12;
+    }
+    else if (font_size > 255)
+    {
+        font_size = 255;
+    }
+    style_entry[7]  = font_size;    // font-size
     style_entry[8]  = (ctx->current_style.fg_rgb >> 16) & 0xff; // r
     style_entry[9]  = (ctx->current_style.fg_rgb >> 8)  & 0xff; // g
     style_entry[10] = (ctx->current_style.fg_rgb)       & 0xff; // b
@@ -821,10 +832,11 @@ static void style_context_init(style_context_t *ctx)
  * Copy the input to output removing markup and adding markup to the style
  * atom where appropriate.
  */
-void hb_muxmp4_process_subtitle_style(uint8_t *input,
-                                      uint8_t **out_buf,
-                                      uint8_t **out_style_atoms,
-                                      uint16_t *stylesize)
+void hb_muxmp4_process_subtitle_style(int        height,
+                                      uint8_t  * input,
+                                      uint8_t ** out_buf,
+                                      uint8_t ** out_style_atoms,
+                                      uint16_t * stylesize)
 {
     uint16_t              utf8_count = 0; // utf8 count from start of subtitle
     int                   consumed, in_pos = 0, out_pos = 0, len, ii;
@@ -841,6 +853,7 @@ void hb_muxmp4_process_subtitle_style(uint8_t *input,
     *stylesize       = 0;
 
     style_context_init(&ctx);
+    ctx.height = height;
     hb_ssa_style_init(&style);
 
     // Skip past the SSA preamble
