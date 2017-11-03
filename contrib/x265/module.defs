@@ -34,7 +34,7 @@ X265.SOURCE.libs = \
 
 ifeq (darwin, $(BUILD.system))
     define X265.LINK
-        libtool -static -o libx265.a $(X265.SOURCE.libs)
+        libtool -static -o $@ $(X265.SOURCE.libs)
     endef
 else
     X265.arscript = $(X265.BUILD.dir)/script.ar
