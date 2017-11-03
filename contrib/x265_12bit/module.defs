@@ -1,0 +1,49 @@
+__deps__ := YASM CMAKE
+$(eval $(call import.MODULE.defs,X265_12,x265_12,$(__deps__),x265))
+$(eval $(call import.CONTRIB.defs,X265_12))
+
+X265_12.FETCH.url     = https://download.handbrake.fr/contrib/x265_2.5.tar.gz
+X265_12.FETCH.url    += https://bitbucket.org/multicoreware/x265/downloads/x265_2.5.tar.gz
+X265_12.FETCH.url    += https://download.videolan.org/pub/videolan/x265/x265_2.5.tar.gz
+X265_12.FETCH.sha256  = 2e53259b504a7edb9b21b9800163b1ff4c90e60c74e23e7001d423c69c5d3d17
+
+# Silence "warning: overriding recipe for target" messages
+X265_12.FETCH.target =
+
+X265_12.build_dir             = 12bit
+X265_12.CONFIGURE.exe         = cmake
+X265_12.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265_12.CONFIGURE.prefix)"
+X265_12.CONFIGURE.deps        =
+X265_12.CONFIGURE.static      =
+X265_12.CONFIGURE.shared      = -DENABLE_SHARED=OFF
+X265_12.CONFIGURE.extra       = -DENABLE_CLI=OFF -DHIGH_BIT_DEPTH=ON -DENABLE_LIBNUMA=OFF -DEXPORT_C_API=OFF -DMAIN12=ON
+
+ifneq (none,$(X265_12.GCC.g))
+    X265_12.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+endif
+
+ifeq (1,$(BUILD.cross))
+    ifeq (mingw,$(BUILD.system))
+        X265_12.CONFIGURE.extra += -DWIN32=ON
+    endif
+    X265_12.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(X265_12.CONFIGURE.host)"
+    X265_12.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.build)"
+else
+    X265_12.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.host)"
+    ifeq (1,$(FEATURE.local_yasm))
+        X265_12.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+        X265_12.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
+    endif
+endif
+
+## find CMakeLists.txt
+X265_12.CONFIGURE.extra += "$(call fn.ABSOLUTE,$(X265_12.EXTRACT.dir/)source/)"
+
+X265_12.INSTALL.make = $(MV.exe)
+X265_12.INSTALL.args.dir = cd $(1);
+X265_12.INSTALL.extra = libx265.a libx265_main12.a
+X265_12.INSTALL.args = @dir !make !extra
+
+# Override operations that are not needed
+X265_12.EXTRACT = $(TOUCH.exe) $@
+X265_12.PATCH = $(TOUCH.exe) $@

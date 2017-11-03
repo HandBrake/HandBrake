@@ -74,6 +74,9 @@ endif
 
 ifeq (1,$(FEATURE.x265))
     MODULES += contrib/x265
+    MODULES += contrib/x265_8bit
+    MODULES += contrib/x265_10bit
+    MODULES += contrib/x265_12bit
 endif
 
 MODULES += contrib/ffmpeg
