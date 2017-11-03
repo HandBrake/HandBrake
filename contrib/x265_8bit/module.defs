@@ -7,9 +7,6 @@ X265_8.FETCH.url    += https://bitbucket.org/multicoreware/x265/downloads/x265_2
 X265_8.FETCH.url    += https://download.videolan.org/pub/videolan/x265/x265_2.5.tar.gz
 X265_8.FETCH.sha256  = 2e53259b504a7edb9b21b9800163b1ff4c90e60c74e23e7001d423c69c5d3d17
 
-# Silence "warning: overriding recipe for target" messages
-X265_8.FETCH.target =
-
 X265_8.build_dir             = 8bit
 X265_8.CONFIGURE.exe         = cmake
 X265_8.CONFIGURE.args.prefix = -DCMAKE_INSTALL_PREFIX="$(X265_8.CONFIGURE.prefix)"

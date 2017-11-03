@@ -7,6 +7,9 @@ X265.FETCH.url    += https://bitbucket.org/multicoreware/x265/downloads/x265_2.5
 X265.FETCH.url    += https://download.videolan.org/pub/videolan/x265/x265_2.5.tar.gz
 X265.FETCH.sha256  = 2e53259b504a7edb9b21b9800163b1ff4c90e60c74e23e7001d423c69c5d3d17
 
+# Silence "warning: overriding recipe for target" messages
+X265.FETCH.target =
+
 X265.INSTALL.args.dir = -j 1 -C $(X265.BUILD.dir)/8bit install;
 X265.INSTALL.extra = $(CP.exe) $(X265.BUILD.dir)/libx265.a $(CONTRIB.build/)lib
 X265.INSTALL.args = !make @dir !extra
@@ -26,7 +29,8 @@ X265.OSL.libs  = x265
 X265.OSL.files = $(foreach i,$(X265.OSL.libs),$(call fn.ABSOLUTE,$(CONTRIB.build/)lib/lib$(i).a))
 
 # Override operations that are not needed
-X265.FETCH = $(TOUCH.exe) $@
+X265.FETCH =
+X265.VERIFY = $(TOUCH.exe) $@
 X265.EXTRACT = $(TOUCH.exe) $@
 X265.PATCH = $(TOUCH.exe) $@
 X265.CONFIGURE = $(TOUCH.exe) $@

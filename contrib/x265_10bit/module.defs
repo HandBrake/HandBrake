@@ -45,6 +45,6 @@ X265_10.INSTALL.extra = libx265.a libx265_main10.a
 X265_10.INSTALL.args = @dir !make !extra
 
 # Override operations that are not needed
-X265_10.FETCH = $(TOUCH.exe) $@
+X265_10.FETCH =
 X265_10.EXTRACT = $(TOUCH.exe) $@
 X265_10.PATCH = $(TOUCH.exe) $@
