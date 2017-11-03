@@ -44,6 +44,3 @@ X265_8.INSTALL.args.dir = cd $(1);
 X265_8.INSTALL.extra = libx265.a libx265_main.a
 X265_8.INSTALL.args = @dir !make !extra
 
-# Override operations that are not needed
-X265_8.EXTRACT = $(TOUCH.exe) $@
-X265_8.PATCH = $(TOUCH.exe) $@

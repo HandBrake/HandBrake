@@ -1,4 +1,4 @@
-__deps__ := YASM CMAKE
+__deps__ := YASM CMAKE X265_8
 $(eval $(call import.MODULE.defs,X265_12,x265_12,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_12))
 
@@ -45,5 +45,6 @@ X265_12.INSTALL.extra = libx265.a libx265_main12.a
 X265_12.INSTALL.args = @dir !make !extra
 
 # Override operations that are not needed
+X265_12.FETCH = $(TOUCH.exe) $@
 X265_12.EXTRACT = $(TOUCH.exe) $@
 X265_12.PATCH = $(TOUCH.exe) $@
