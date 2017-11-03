@@ -342,27 +342,8 @@ typedef void (^HBCoreCleanupHandler)(void);
         // Create an CGImageRef and copy the libhb image into it.
         // The image data returned by hb_get_preview2 is 4 bytes per pixel, BGRA format.
         // Alpha is ignored.
-        CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNone;
-        CFMutableDataRef imgData = CFDataCreateMutable(kCFAllocatorDefault, 3 * image->width * image->height);
-        CGDataProviderRef provider = CGDataProviderCreateWithCFData(imgData);
-        CGColorSpaceRef colorSpace = copyColorSpace(title.hb_title->color_prim,
-                                                    title.hb_title->color_transfer,
-                                                    title.hb_title->color_matrix);
-
-        img = CGImageCreate(image->width,
-                            image->height,
-                            8,
-                            24,
-                            image->width * 3,
-                            colorSpace,
-                            bitmapInfo,
-                            provider,
-                            NULL,
-                            NO,
-                            kCGRenderingIntentDefault);
-        CGColorSpaceRelease(colorSpace);
-        CGDataProviderRelease(provider);
-        CFRelease(imgData);
+        CFMutableDataRef imgData = CFDataCreateMutable(kCFAllocatorDefault, 0);
+        CFDataSetLength(imgData, 3 * image->width * image->height);
 
         UInt8 *src_line = image->data;
         UInt8 *dst = CFDataGetMutableBytePtr(imgData);
@@ -378,6 +359,29 @@ typedef void (^HBCoreCleanupHandler)(void);
             }
             src_line += image->plane[0].stride;
         }
+
+        CGDataProviderRef provider = CGDataProviderCreateWithCFData(imgData);
+
+        CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaNone;
+        CGColorSpaceRef colorSpace = copyColorSpace(title.hb_title->color_prim,
+                                                    title.hb_title->color_transfer,
+                                                    title.hb_title->color_matrix);
+
+        img = CGImageCreate(image->width,
+                            image->height,
+                            8,
+                            24,
+                            image->width * 3,
+                            colorSpace,
+                            bitmapInfo,
+                            provider,
+                            NULL,
+                            NO,
+                            kCGRenderingIntentDefault);
+
+        CGColorSpaceRelease(colorSpace);
+        CGDataProviderRelease(provider);
+        CFRelease(imgData);
 
         hb_image_close(&image);
     }
