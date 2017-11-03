@@ -2,12 +2,6 @@ $(eval $(call import.MODULE.rules,X265))
 $(eval $(call import.CONTRIB.rules,X265))
 
 $(X265.BUILD.dir)/libx265.a: $(X265.deps)
-	echo "CREATE $@" > script.ar
-	echo "ADDLIB $(X265.BUILD.dir)/8bit/libx265_main.a" >> script.ar
-	echo "ADDLIB $(X265.BUILD.dir)/10bit/libx265_main10.a" >> script.ar
-	echo "ADDLIB $(X265.BUILD.dir)/12bit/libx265_main12.a" >> script.ar
-	echo "SAVE" >> script.ar
-	echo "END" >> script.ar
-	$(AR.exe) -M < script.ar
+	$(X265.LINK)
 
 $(X265.INSTALL.target): $(X265.BUILD.dir)/libx265.a
