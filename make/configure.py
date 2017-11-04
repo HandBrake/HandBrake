@@ -775,7 +775,7 @@ class RepoProbe( ShellProbe ):
                     self.session = in_file.readlines()
                 if self.session:
                     self._parseSession()
-            if self.rev != 0:
+            if self.hash is not empty and self.hash is not 'deadbeaf':
                 cfg.infof( '(pass)\n' )
             else:
                 cfg.infof( '(fail)\n' )
