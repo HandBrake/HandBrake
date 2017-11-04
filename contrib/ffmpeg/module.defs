@@ -22,13 +22,6 @@ FFMPEG.CONFIGURE.build =
 FFMPEG.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 FFMPEG.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 
-# To build with nvenc: 
-# See <https://dwijaybane.wordpress.com/2017/07/19/ffmpeg-with-nvidia-acceleration-on-ubuntu-16-04-nvenc-sdk/>
-# 1) Copy NVENC SDK's Video_Codec_SDK_8.0.14/Samples/common/inc/*.h to /usr/local/include/
-# 2) Build cudautils
-#    wget http://developer.download.nvidia.com/compute/redist/ffmpeg/1511-patch/cudautils.zip
-#    Copy cudautils.h and libcudautils.a are in their respective /usr/local/[include|lib]/
-
 FFMPEG.CONFIGURE.extra = \
     --enable-gpl \
     --disable-doc \
