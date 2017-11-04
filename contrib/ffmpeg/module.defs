@@ -47,7 +47,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-encoders \
     --enable-avresample \
     --enable-nvenc \
-    --enable-libx264 \
     --enable-libmp3lame \
     --enable-encoder=aac \
     --enable-encoder=ac3 \
