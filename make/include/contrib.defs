@@ -199,6 +199,10 @@ define import.CONTRIB.defs
         $$(RM.exe) -f $$($(1).BUILD.target)
     endef
 
+    define $(1).XCLEAN
+	    $$(RM.exe) -fr $$($(1).build/)
+    endef
+
     ##
     ## other values used to aid prerequisite dirs and cleanup
     ##
@@ -341,7 +345,7 @@ $($(1).name).clean:
 ## target: xclean
 ##
 $($(1).name).xclean: $($(1).name).uninstall
-	$$(RM.exe) -fr $$($(1).build/)
+	-$$($(1).XCLEAN)
 
 ##
 ## alias: module name is same as build

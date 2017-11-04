@@ -48,3 +48,4 @@ X265_12.INSTALL.args = @dir !make !extra
 X265_12.FETCH =
 X265_12.EXTRACT = $(TOUCH.exe) $@
 X265_12.PATCH = $(TOUCH.exe) $@
+X265.XCLEAN =
