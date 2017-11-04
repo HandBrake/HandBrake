@@ -44,8 +44,5 @@ $(STAGE.out.gui/):
 	$(MKDIR.exe) -p $@
 ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
 	$(CP.exe) -R $(XCODE.symroot)/HandBrake.app $(STAGE.out.gui/)
-	$(LIPO.exe) -thin $(BUILD.arch) \
-	    $(SRC/)macosx/Growl.framework/Versions/A/Growl \
-	    -output $(STAGE.out.gui/)HandBrake.app/Contents/Frameworks/Growl.framework/Versions/A/Growl
 	$(call STAGE.doc,$(STAGE.out.gui/))
 endif
