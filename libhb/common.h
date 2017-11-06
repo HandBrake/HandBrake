@@ -563,6 +563,7 @@ struct hb_job_s
 #define HB_COLR_TRA_BT2020_10    14
 #define HB_COLR_TRA_BT2020_12    15
 #define HB_COLR_TRA_SMPTEST2084  16
+#define HB_COLR_TRA_ARIB_STD_B67 18 //known as "Hybrid log-gamma"
 // 0, 3-6, 8-15, 17-65535: reserved/not implemented
 #define HB_COLR_MAT_BT709        1
 #define HB_COLR_MAT_UNDEF        2
