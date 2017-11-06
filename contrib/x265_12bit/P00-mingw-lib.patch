@@ -1,0 +1,11 @@
+--- x265_2.5/source/x265-extras.h.orig	2017-07-13 07:20:07.000000000 -0400
++++ x265_2.5/source/x265-extras.h	2017-07-31 13:20:23.000000000 -0400
+@@ -33,7 +33,7 @@
+ extern "C" {
+ #endif
+ 
+-#if _WIN32
++#ifdef X265_API_IMPORTS
+ #define LIBAPI __declspec(dllexport)
+ #else
+ #define LIBAPI

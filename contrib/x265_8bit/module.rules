@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,X265_8))
+$(eval $(call import.CONTRIB.rules,X265_8))

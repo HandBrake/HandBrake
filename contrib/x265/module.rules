@@ -1,2 +1,7 @@
 $(eval $(call import.MODULE.rules,X265))
 $(eval $(call import.CONTRIB.rules,X265))
+
+$(X265.BUILD.dir)/libx265.a: $(X265.deps) $(X265.BUILD.target)
+	$(X265.LINK)
+
+$(X265.INSTALL.target): $(X265.BUILD.dir)/libx265.a

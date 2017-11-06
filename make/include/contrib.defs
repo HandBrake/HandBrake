@@ -18,10 +18,11 @@ define import.CONTRIB.defs
     ##
     ## common values useful across targets
     ##
-    $(1).src/   = $$(SRC/)contrib/$($(1).name)/
-    $(1).build/ = $$(CONTRIB.build/)$($(1).name)/
+    $(1).src/   = $$(SRC/)contrib/$($(1).dir)/
+    $(1).build/ = $$(CONTRIB.build/)$($(1).dir)/
     ## add prerequisites and autotool modules for all contribs
     $(1).deps   = $$(foreach n,$($(1).prerequisites) $(if $(filter $1,$(AUTOTOOL_MODULES)),,$(AUTOTOOL_MODULES)),$$($$n.INSTALL.target))
+    $(1).build_dir =
 
     ##
     ## target: fetch
@@ -40,7 +41,7 @@ define import.CONTRIB.defs
     ##
     ## target: verify
     ##
-    $(1).VERIFY.target = $$($(1).build/).stamp.verify
+    $(1).VERIFY.target = $$($(1).build/).stamp.$$($(1).name).verify
     define $(1).VERIFY
         $$(DF.VERIFY.exe) --config $(BUILD/)distfile.cfg $$(if $$($(1).FETCH.sha256),--sha256 $$($(1).FETCH.sha256)) $$($(1).FETCH.distfile)
         $$(TOUCH.exe) $$@
@@ -51,7 +52,7 @@ define import.CONTRIB.defs
     ##
     $(1).EXTRACT.tarbase = $$(strip $$(foreach x,tar.bz2 tar.gz,$$(patsubst %.$$(x),%,$$(filter %.$$(x),$$($(1).FETCH.basename)))))
     $(1).EXTRACT.dir/    = $$($(1).build/)$$($(1).EXTRACT.tarbase)/
-    $(1).EXTRACT.target  = $$($(1).build/).stamp.extract
+    $(1).EXTRACT.target  = $$($(1).build/).stamp.$$($(1).name).extract
     define $(1).EXTRACT
         $$(RM.exe) -fr $$($(1).EXTRACT.dir/)
         $$(TAR.exe) xfC $$($(1).FETCH.distfile) $$($(1).build/)
@@ -71,7 +72,7 @@ define import.CONTRIB.defs
 
     endef
 
-    $(1).PATCH.target = $$($(1).build/).stamp.patch
+    $(1).PATCH.target = $$($(1).build/).stamp.$$($(1).name).patch
     define $(1).PATCH
         $$(foreach p,$$($(1).PATCH.srcs),$$(call $(1).PATCH.item,$$($(1).EXTRACT.dir/),$$(p)))
         $$(TOUCH.exe) $$@
@@ -81,7 +82,7 @@ define import.CONTRIB.defs
     ## target: configure
     ##
     $(1).CONFIGURE.sete       = set -e;
-    $(1).CONFIGURE.dir        = $$($(1).EXTRACT.dir/)
+    $(1).CONFIGURE.dir        = $$($(1).EXTRACT.dir/)$$($(1).build_dir)
     $(1).CONFIGURE.bootstrap  =
     $(1).CONFIGURE.exe        = ./configure
     $(1).CONFIGURE.host       = $$(CONTRIB.host)
@@ -92,7 +93,7 @@ define import.CONTRIB.defs
     $(1).CONFIGURE.static     = --enable-static
     $(1).CONFIGURE.extra      =
 
-    $(1).CONFIGURE.args.dir    = cd $$(1);
+    $(1).CONFIGURE.args.dir    = $$(MKDIR.exe) -p $$(1); cd $$(1);
     $(1).CONFIGURE.args.host   = --host=$$(1)
     $(1).CONFIGURE.args.build  = --build=$$(1)
     $(1).CONFIGURE.args.prefix = --prefix=$$(1)
@@ -124,7 +125,7 @@ define import.CONTRIB.defs
     $(1).CONFIGURE.env.args = !CC !CFLAGS !CXX !CXXFLAGS !CPPFLAGS !LD !LDFLAGS !PKG_CONFIG_PATH !LOCAL_PATH !CROSS
     $(1).CONFIGURE.env = $$(call fn.ARGS,$(1).CONFIGURE.env,$$($(1).CONFIGURE.env.args))
 
-    $(1).CONFIGURE.target = $$($(1).build/).stamp.configure
+    $(1).CONFIGURE.target = $$($(1).build/).stamp.$$($(1).name).configure
     define $(1).CONFIGURE
         $$(call fn.ARGS,$(1).CONFIGURE,$$($(1).CONFIGURE.args))
         $$(TOUCH.exe) $$@
@@ -135,14 +136,14 @@ define import.CONTRIB.defs
     ##
     $(1).BUILD.env      =
     $(1).BUILD.make     = $$(MAKE)
-    $(1).BUILD.dir      = $$($(1).EXTRACT.dir/)
+    $(1).BUILD.dir      = $$($(1).EXTRACT.dir/)$$($(1).build_dir)
     $(1).BUILD.extra    =
     $(1).BUILD.ntargets =
 
     $(1).BUILD.args = !env !make @dir !extra !ntargets
     $(1).BUILD.args.dir = -C $$(1)
 
-    $(1).BUILD.target = $$($(1).build/).stamp.build
+    $(1).BUILD.target = $$($(1).build/).stamp.$$($(1).name).build
     define $(1).BUILD
         $$(call fn.ARGS,$(1).BUILD,$$($(1).BUILD.args))
         $$(TOUCH.exe) $$@
@@ -152,7 +153,7 @@ define import.CONTRIB.defs
     ## target: install
     ##
     $(1).INSTALL.make     = $$(MAKE)
-    $(1).INSTALL.dir      = $$($(1).EXTRACT.dir/)
+    $(1).INSTALL.dir      = $$($(1).EXTRACT.dir/)$$($(1).build_dir)
     $(1).INSTALL.extra    =
     $(1).INSTALL.ntargets =
 
@@ -160,7 +161,7 @@ define import.CONTRIB.defs
     $(1).INSTALL.args.dir = -j 1 -C $$(1) install
 
     $(1).INSTALL.mkdirs = $$(CONTRIB.build/)lib/ $$(CONTRIB.build/)include/
-    $(1).INSTALL.target = $$($(1).build/).stamp.install
+    $(1).INSTALL.target = $$($(1).build/).stamp.$$($(1).name).install
     define $(1).INSTALL
         $$(call fn.ARGS,$(1).INSTALL,$$($(1).INSTALL.args))
         $$(TOUCH.exe) $$@
@@ -170,7 +171,7 @@ define import.CONTRIB.defs
     ## target: uninstall
     ##
     $(1).UNINSTALL.make     = $$(MAKE)
-    $(1).UNINSTALL.dir      = $$($(1).EXTRACT.dir/)
+    $(1).UNINSTALL.dir      = $$($(1).EXTRACT.dir/)$$($(1).build_dir)
     $(1).UNINSTALL.extra    =
     $(1).UNINSTALL.ntargets = uninstall
 
@@ -186,7 +187,7 @@ define import.CONTRIB.defs
     ## target: clean
     ##
     $(1).CLEAN.make     = $$(MAKE)
-    $(1).CLEAN.dir      = $$($(1).EXTRACT.dir/)
+    $(1).CLEAN.dir      = $$($(1).EXTRACT.dir/)$$($(1).build_dir)
     $(1).CLEAN.extra    =
     $(1).CLEAN.ntargets = clean
 
@@ -196,6 +197,10 @@ define import.CONTRIB.defs
     define $(1).CLEAN
         $$(call fn.ARGS,$(1).CLEAN,$$($(1).CLEAN.args))
         $$(RM.exe) -f $$($(1).BUILD.target)
+    endef
+
+    define $(1).XCLEAN
+	    $$(RM.exe) -fr $$($(1).build/)
     endef
 
     ##
@@ -340,7 +345,7 @@ $($(1).name).clean:
 ## target: xclean
 ##
 $($(1).name).xclean: $($(1).name).uninstall
-	$$(RM.exe) -fr $$($(1).build/)
+	-$$($(1).XCLEAN)
 
 ##
 ## alias: module name is same as build

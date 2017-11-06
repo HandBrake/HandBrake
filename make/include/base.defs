@@ -12,6 +12,13 @@ define import.MODULE.defs
     ## module name (lowercase)
     $(1).name = $(2)
 
+    ## module build directory
+    ifeq (,$(4))
+        $(1).dir = $(2)
+    else
+        $(1).dir = $(4)
+    endif
+
     ## list of prerequisite modules (uppercase)
     $(1).prerequisites = $(3)
 
