@@ -9,9 +9,12 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url =  https://download.handbrake.fr/handbrake/contrib/libav-12.2.tar.gz
-FFMPEG.FETCH.url += https://libav.org/releases/libav-12.2.tar.gz
-FFMPEG.FETCH.sha256 = 49c3ccda32458192c00ab25b30f4d1a6a4772b83458cbbf3a25b210d0688f55c
+FFMPEG.FETCH.url = http://www.ffmpeg.org/releases/ffmpeg-3.4.tar.gz
+FFMPEG.FETCH.url += https://download.handbrake.fr/handbrake/contrib/ffmpeg-3.4.tar.gz
+FFMPEG.FETCH.sha256 = 6ed03b00404a3923e3c2f560248a9c9ad79fbaaee26d723f74aae6b31fe2bae6
+## FFMPEG.FETCH.url =  https://download.handbrake.fr/handbrake/contrib/libav-12.2.tar.gz
+## FFMPEG.FETCH.url += https://libav.org/releases/libav-12.2.tar.gz
+## FFMPEG.FETCH.sha256 = 49c3ccda32458192c00ab25b30f4d1a6a4772b83458cbbf3a25b210d0688f55c
 
 FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =
@@ -24,16 +27,26 @@ FFMPEG.CONFIGURE.extra = \
     --disable-doc \
     --disable-bsfs \
     --enable-bsf=aac_adtstoasc \
-    --disable-avconv \
-    --disable-avplay \
-    --disable-avprobe \
-    --disable-avdevice \
-    --disable-muxers \
-    --disable-network \
-    --disable-hwaccels \
     --disable-vaapi \
     --disable-vdpau \
+    --disable-network \
+    --disable-programs \
+    --disable-ffmpeg \
+    --disable-ffplay \
+    --disable-ffprobe \
+    --disable-ffserver \
+    --disable-avdevice \
+    --disable-muxers \
+    --disable-decoder=crystalhd \
+    --disable-decoder=h264_crystalhd \
+    --disable-decoder=mpeg2_crystalhd \
+    --disable-decoder=mpeg4_crystalhd \
+    --disable-decoder=msmpeg4_crystalhd \
+    --disable-decoder=vc1_crystalhd \
+    --disable-decoder=wmv3_crystalhd \
     --disable-encoders \
+    --enable-avresample \
+    --enable-nvenc \
     --enable-libmp3lame \
     --enable-encoder=aac \
     --enable-encoder=ac3 \
@@ -42,6 +55,8 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=mpeg2video \
     --enable-encoder=mpeg4 \
     --enable-encoder=libmp3lame \
+    --enable-encoder=h264_nvenc \
+    --enable-encoder=hevc_nvenc \
     --enable-libopus \
     --enable-encoder=libopus \
     --enable-libvpx \
