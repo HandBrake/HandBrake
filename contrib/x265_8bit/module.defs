@@ -42,4 +42,4 @@ X265_8.INSTALL.extra = libx265.a libx265_main.a
 X265_8.INSTALL.args = @dir !make !extra
 
 # Override operations that are not needed
-X265.XCLEAN =
+X265_8.XCLEAN =
