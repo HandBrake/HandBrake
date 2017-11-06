@@ -19,20 +19,52 @@
  */
 hb_dict_t* hb_state_to_dict( hb_state_t * state)
 {
+    const char * state_s;
     hb_dict_t *dict = NULL;
     json_error_t error;
 
     switch (state->state)
     {
     case HB_STATE_IDLE:
+        state_s = "IDLE";
+        break;
+    case HB_STATE_SCANNING:
+        state_s = "SCANNING";
+        break;
+    case HB_STATE_SCANDONE:
+        state_s = "SCANDONE";
+        break;
+    case HB_STATE_WORKING:
+        state_s = "WORKING";
+        break;
+    case HB_STATE_PAUSED:
+        state_s = "PAUSED";
+        break;
+    case HB_STATE_SEARCHING:
+        state_s = "SEARCHING";
+        break;
+    case HB_STATE_WORKDONE:
+        state_s = "WORKDONE";
+        break;
+    case HB_STATE_MUXING:
+        state_s = "MUXING";
+        break;
+    default:
+        state_s = "UNKNOWN";
+        break;
+    }
+
+    switch (state->state)
+    {
+    case HB_STATE_IDLE:
         dict = json_pack_ex(&error, 0, "{s:o}",
-                    "State", hb_value_int(state->state));
+                    "State", hb_value_string(state_s));
         break;
     case HB_STATE_SCANNING:
     case HB_STATE_SCANDONE:
         dict = json_pack_ex(&error, 0,
             "{s:o, s{s:o, s:o, s:o, s:o, s:o}}",
-            "State", hb_value_int(state->state),
+            "State", hb_value_string(state_s),
             "Scanning",
                 "Progress",     hb_value_double(state->param.scanning.progress),
                 "Preview",      hb_value_int(state->param.scanning.preview_cur),
@@ -45,7 +77,7 @@ hb_dict_t* hb_state_to_dict( hb_state_t * state)
     case HB_STATE_SEARCHING:
         dict = json_pack_ex(&error, 0,
             "{s:o, s{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}}",
-            "State", hb_value_int(state->state),
+            "State", hb_value_string(state_s),
             "Working",
                 "Progress",     hb_value_double(state->param.working.progress),
                 "PassID",       hb_value_int(state->param.working.pass_id),
@@ -61,25 +93,55 @@ hb_dict_t* hb_state_to_dict( hb_state_t * state)
     case HB_STATE_WORKDONE:
         dict = json_pack_ex(&error, 0,
             "{s:o, s{s:o}}",
-            "State", hb_value_int(state->state),
+            "State", hb_value_string(state_s),
             "WorkDone",
                 "Error",    hb_value_int(state->param.workdone.error));
         break;
     case HB_STATE_MUXING:
         dict = json_pack_ex(&error, 0,
             "{s:o, s{s:o}}",
-            "State", hb_value_int(state->state),
+            "State", hb_value_string(state_s),
             "Muxing",
                 "Progress", hb_value_double(state->param.muxing.progress));
         break;
     default:
-        hb_error("hb_state_to_json: unrecognized state %d", state->state);
+        dict = json_pack_ex(&error, 0, "{s:o}",
+                    "State", hb_value_string(state_s));
+        hb_error("hb_state_to_dict: unrecognized state %d", state->state);
         break;
     }
     if (dict == NULL)
     {
         hb_error("json pack failure: %s", error.text);
     }
+    return dict;
+}
+
+hb_dict_t * hb_version_dict()
+{
+    hb_dict_t * dict;
+    json_error_t error;
+
+    dict = json_pack_ex(&error, 0,
+        "{s:o, s:o, s:o, s{s:o, s:o, s:o}, s:o, s:o, s:o, s:o, s:o}",
+        "Name",          hb_value_string(HB_PROJECT_NAME),
+        "Official",      hb_value_bool(HB_PROJECT_REPO_OFFICIAL),
+        "Type",          hb_value_string(HB_PROJECT_REPO_TYPE),
+        "Version",
+            "Major",     hb_value_int(HB_PROJECT_VERSION_MAJOR),
+            "Minor",     hb_value_int(HB_PROJECT_VERSION_MINOR),
+            "Point",     hb_value_int(HB_PROJECT_VERSION_POINT),
+        "VersionString", hb_value_string(HB_PROJECT_VERSION),
+        "RepoHash",      hb_value_string(HB_PROJECT_REPO_HASH),
+        "RepoDate",      hb_value_string(HB_PROJECT_REPO_DATE),
+        "System",        hb_value_string(HB_PROJECT_BUILD_SYSTEMF),
+        "Arch",          hb_value_string(HB_PROJECT_BUILD_ARCH));
+    if (dict == NULL)
+    {
+        hb_error("json pack failure: %s", error.text);
+        return NULL;
+    }
+
     return dict;
 }
 
@@ -98,6 +160,55 @@ char* hb_get_state_json( hb_handle_t * h )
     hb_value_free(&dict);
 
     return json_state;
+}
+
+hb_dict_t * hb_audio_attributes_to_dict(uint32_t attributes)
+{
+    json_error_t error;
+    hb_dict_t * dict;
+
+    dict = json_pack_ex(&error, 0,
+        "{s:o, s:o, s:o, s:o, s:o, s:o}",
+        "Normal",           hb_value_bool(attributes & HB_AUDIO_ATTR_NORMAL),
+        "VisuallyImpaired", hb_value_bool(attributes &
+                                          HB_AUDIO_ATTR_VISUALLY_IMPAIRED),
+        "Commentary",       hb_value_bool(attributes &
+                                          HB_AUDIO_ATTR_COMMENTARY),
+        "AltCommentary",    hb_value_bool(attributes &
+                                          HB_AUDIO_ATTR_ALT_COMMENTARY),
+        "Secondary",        hb_value_bool(attributes & HB_AUDIO_ATTR_SECONDARY),
+        "Default",          hb_value_bool(attributes & HB_AUDIO_ATTR_DEFAULT));
+    if (dict == NULL)
+    {
+        hb_error("json pack failure: %s", error.text);
+    }
+    return dict;
+}
+
+hb_dict_t * hb_subtitle_attributes_to_dict(uint32_t attributes)
+{
+    json_error_t error;
+    hb_dict_t * dict;
+
+    dict = json_pack_ex(&error, 0,
+        "{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
+        "Normal",        hb_value_bool(attributes & HB_SUBTITLE_ATTR_NORMAL),
+        "Large",         hb_value_bool(attributes & HB_SUBTITLE_ATTR_LARGE),
+        "Children",      hb_value_bool(attributes & HB_SUBTITLE_ATTR_CHILDREN),
+        "ClosedCaption", hb_value_bool(attributes & HB_SUBTITLE_ATTR_CC),
+        "Forced",        hb_value_bool(attributes & HB_SUBTITLE_ATTR_FORCED),
+        "Commentary",    hb_value_bool(attributes &
+                                       HB_SUBTITLE_ATTR_COMMENTARY),
+        "4By3",          hb_value_bool(attributes & HB_SUBTITLE_ATTR_4_3),
+        "Wide",          hb_value_bool(attributes & HB_SUBTITLE_ATTR_WIDE),
+        "Letterbox",     hb_value_bool(attributes & HB_SUBTITLE_ATTR_LETTERBOX),
+        "PanScan",       hb_value_bool(attributes & HB_SUBTITLE_ATTR_PANSCAN),
+        "Default",       hb_value_bool(attributes & HB_SUBTITLE_ATTR_DEFAULT));
+    if (dict == NULL)
+    {
+        hb_error("json pack failure: %s", error.text);
+    }
+    return dict;
 }
 
 static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
@@ -255,18 +366,37 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     hb_dict_t * audio_list = hb_value_array_init();
     for (ii = 0; ii < hb_list_count(title->list_audio); ii++)
     {
-        hb_dict_t *audio_dict;
-        hb_audio_t *audio = hb_list_item(title->list_audio, ii);
+        const char * codec_name;
+        char         channel_layout_name[64];
+        int          channel_count, lfe_count;
+        hb_dict_t  * audio_dict, * attributes;
+        hb_audio_t * audio = hb_list_item(title->list_audio, ii);
 
+        codec_name = hb_audio_decoder_get_name(audio->config.in.codec,
+                                               audio->config.in.codec_param);
+        hb_layout_get_name(channel_layout_name, sizeof(channel_layout_name),
+                           audio->config.in.channel_layout);
+        channel_count = hb_layout_get_discrete_channel_count(
+                                     audio->config.in.channel_layout);
+        lfe_count     = hb_layout_get_low_freq_channel_count(
+                                     audio->config.in.channel_layout);
+
+
+        attributes = hb_audio_attributes_to_dict(audio->config.lang.attributes);
         audio_dict = json_pack_ex(&error, 0,
-        "{s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
-            "Description",      hb_value_string(audio->config.lang.description),
-            "Language",         hb_value_string(audio->config.lang.simple),
-            "LanguageCode",     hb_value_string(audio->config.lang.iso639_2),
-            "Codec",            hb_value_int(audio->config.in.codec),
-            "SampleRate",       hb_value_int(audio->config.in.samplerate),
-            "BitRate",          hb_value_int(audio->config.in.bitrate),
-            "ChannelLayout",    hb_value_int(audio->config.in.channel_layout));
+        "{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
+            "Description",       hb_value_string(audio->config.lang.description),
+            "Language",          hb_value_string(audio->config.lang.simple),
+            "LanguageCode",      hb_value_string(audio->config.lang.iso639_2),
+            "Attributes",        attributes,
+            "Codec",             hb_value_int(audio->config.in.codec),
+            "CodecName",         hb_value_string(codec_name),
+            "SampleRate",        hb_value_int(audio->config.in.samplerate),
+            "BitRate",           hb_value_int(audio->config.in.bitrate),
+            "ChannelLayout",     hb_value_int(audio->config.in.channel_layout),
+            "ChannelLayoutName", hb_value_string(channel_layout_name),
+            "ChannelCount",      hb_value_int(channel_count),
+            "LFECount",          hb_value_int(lfe_count));
         if (audio_dict == NULL)
         {
             hb_error("json pack failure: %s", error.text);
@@ -277,16 +407,21 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
     hb_dict_set(dict, "AudioList", audio_list);
 
     // process subtitle list
-    hb_dict_t * subtitle_list = hb_value_array_init();
+    hb_value_array_t * subtitle_list = hb_value_array_init();
     for (ii = 0; ii < hb_list_count(title->list_subtitle); ii++)
     {
-        hb_dict_t *subtitle_dict;
-        hb_subtitle_t *subtitle = hb_list_item(title->list_subtitle, ii);
+        const char    * format;
+        hb_dict_t     * subtitle_dict, * attributes;
+        hb_subtitle_t * subtitle = hb_list_item(title->list_subtitle, ii);
 
+        format = subtitle->format == PICTURESUB ? "bitmap" : "text";
+        attributes = hb_subtitle_attributes_to_dict(subtitle->attributes);
         subtitle_dict = json_pack_ex(&error, 0,
-            "{s:o, s:o, s:o, s:o}",
-            "Format",       hb_value_int(subtitle->format),
+            "{s:o, s:o, s:o, s:o, s:o, s:o}",
+            "Format",       hb_value_string(format),
             "Source",       hb_value_int(subtitle->source),
+            "SourceName",   hb_value_string(hb_subsource_name(subtitle->source)),
+            "Attributes",   attributes,
             "Language",     hb_value_string(subtitle->lang),
             "LanguageCode", hb_value_string(subtitle->iso639_2));
         if (subtitle_dict == NULL)

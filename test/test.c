@@ -58,6 +58,7 @@
 
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
+static int     json                = 0;
 static int     align_av_start      = -1;
 static int     dvdnav              = 1;
 static char *  input               = NULL;
@@ -717,13 +718,27 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
 
 static void PrintTitleSetInfo( hb_title_set_t * title_set )
 {
-    int i;
-    hb_title_t * title;
-
-    for( i = 0; i < hb_list_count( title_set->list_title ); i++ )
+    if (json)
     {
-        title = hb_list_item( title_set->list_title, i );
-        PrintTitleInfo( title, title_set->feature );
+        hb_dict_t * title_set_dict;
+        char      * title_set_json;
+
+        title_set_dict = hb_title_set_to_dict(title_set);
+        title_set_json = hb_value_get_json(title_set_dict);
+        hb_value_free(&title_set_dict);
+        fprintf(stdout, "JSON Title Set: %s\n", title_set_json);
+        free(title_set_json);
+    }
+    else
+    {
+        int i;
+        hb_title_t * title;
+
+        for( i = 0; i < hb_list_count( title_set->list_title ); i++ )
+        {
+            title = hb_list_item( title_set->list_title, i );
+            PrintTitleInfo( title, title_set->feature );
+        }
     }
 }
 
@@ -806,6 +821,19 @@ static void lang_list_remove(hb_value_array_t *list, const char *lang)
     }
 }
 
+static void show_progress_json(hb_state_t * state)
+{
+    hb_dict_t * state_dict;
+    char      * state_json;
+
+    state_dict = hb_state_to_dict(state);
+    state_json = hb_value_get_json(state_dict);
+    hb_value_free(&state_dict);
+    fprintf(stdout, "Progress: %s\n", state_json);
+    free(state_json);
+    fflush(stderr);
+}
+
 static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 {
     hb_state_t s;
@@ -820,6 +848,11 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 #define p s.param.scanning
         case HB_STATE_SCANNING:
             /* Show what title is currently being scanned */
+            if (json)
+            {
+                show_progress_json(&s);
+                break;
+            }
             if (p.preview_cur)
             {
                 fprintf(stderr, "%sScanning title %d of %d, preview %d, %.2f %%",
@@ -941,6 +974,11 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 
 #define p s.param.working
         case HB_STATE_SEARCHING:
+            if (json)
+            {
+                show_progress_json(&s);
+                break;
+            }
             fprintf( stdout, "%sEncoding: task %d of %d, Searching for start time, %.2f %%",
                      stdout_sep, p.pass, p.pass_count, 100.0 * p.progress );
             if( p.seconds > -1 )
@@ -952,6 +990,11 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
             break;
 
         case HB_STATE_WORKING:
+            if (json)
+            {
+                show_progress_json(&s);
+                break;
+            }
             fprintf( stdout, "%sEncoding: task %d of %d, %.2f %%",
                      stdout_sep, p.pass, p.pass_count, 100.0 * p.progress );
             if( p.seconds > -1 )
@@ -967,6 +1010,11 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 #define p s.param.muxing
         case HB_STATE_MUXING:
         {
+            if (json)
+            {
+                show_progress_json(&s);
+                break;
+            }
             if (show_mux_warning)
             {
                 fprintf( stdout, "%sMuxing: this may take awhile...", stdout_sep );
@@ -980,6 +1028,10 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
 #define p s.param.workdone
         case HB_STATE_WORKDONE:
             /* Print error if any, then exit */
+            if (json)
+            {
+                show_progress_json(&s);
+            }
             switch( p.error )
             {
                 case HB_ERROR_NONE:
@@ -1227,6 +1279,8 @@ static void ShowHelp()
 "\n"
 "   -h, --help              Print help\n"
 "   --version               Print version\n"
+"   --json                  Log title, progress, and version info in\n"
+"                           JSON format\n"
 "   -v, --verbose[=number]  Be verbose (optional argument: logging level)\n"
 "   -Z. --preset <string>   Select preset by name (case-sensitive)\n"
 "                           Enclose names containing spaces in double quotation\n"
@@ -2040,6 +2094,7 @@ static int ParseOptions( int argc, char ** argv )
     #define FILTER_UNSHARP_TUNE  313
     #define FILTER_LAPSHARP      314
     #define FILTER_LAPSHARP_TUNE 315
+    #define JSON_LOGGING         316
 
     for( ;; )
     {
@@ -2202,6 +2257,7 @@ static int ParseOptions( int argc, char ** argv )
             { "pfr",         no_argument,       &cfr,    2 },
             { "audio-copy-mask", required_argument, NULL, ALLOWED_AUDIO_COPY },
             { "audio-fallback",  required_argument, NULL, AUDIO_FALLBACK },
+            { "json",        no_argument,       NULL,    JSON_LOGGING },
             { 0, 0, 0, 0 }
           };
 
@@ -2233,6 +2289,18 @@ static int ParseOptions( int argc, char ** argv )
             case DESCRIBE:
                 printf("%s\n", hb_get_full_description());
                 return 1;
+            case JSON_LOGGING:
+            {
+                hb_dict_t * version_dict;
+                char      * version_json;
+
+                version_dict = hb_version_dict();
+                version_json = hb_value_get_json(version_dict);
+                hb_value_free(&version_dict);
+                fprintf(stdout, "Version: %s\n", version_json);
+                free(version_json);
+                json = 1;
+            } break;
             case 'v':
                 if( optarg != NULL )
                 {

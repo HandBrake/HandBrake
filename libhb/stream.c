@@ -1930,7 +1930,6 @@ static void set_audio_description(hb_audio_t *audio, iso639_lang_t *lang)
               strlen( lang->native_name ) ? lang->native_name : lang->eng_name );
     snprintf( audio->config.lang.iso639_2,
               sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2 );
-    audio->config.lang.type = 0;
 }
 
 // Sort specifies the index in the audio list where you would
@@ -5152,6 +5151,11 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
             break;
     }
 
+    if (st->disposition & AV_DISPOSITION_DEFAULT)
+    {
+        audio->config.lang.attributes |= HB_AUDIO_ATTR_DEFAULT;
+    }
+
     set_audio_description(audio,
                           lang_for_code2(tag != NULL ? tag->value : "und"));
     hb_list_add(title->list_audio, audio);
@@ -5358,6 +5362,11 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     if (st->disposition & AV_DISPOSITION_DEFAULT)
     {
         subtitle->config.default_track = 1;
+        subtitle->attributes |= HB_SUBTITLE_ATTR_DEFAULT;
+    }
+    if (st->disposition & AV_DISPOSITION_FORCED)
+    {
+        subtitle->attributes |= HB_SUBTITLE_ATTR_FORCED;
     }
 
     subtitle->track = hb_list_count(title->list_subtitle);

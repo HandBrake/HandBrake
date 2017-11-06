@@ -35,6 +35,7 @@ char       * hb_get_preview_params_json(int title_idx, int preview_idx,
                             int deinterlace, hb_geometry_settings_t *settings);
 char       * hb_get_preview_json(hb_handle_t * h, const char *json_param);
 void         hb_json_job_scan( hb_handle_t * h, const char * json_job );
+hb_dict_t  * hb_version_dict(void);
 
 #ifdef __cplusplus
 }

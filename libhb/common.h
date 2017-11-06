@@ -395,6 +395,10 @@ const char*         hb_mixdown_get_short_name(int mixdown);
 const char*         hb_mixdown_sanitize_name(const char *name);
 const hb_mixdown_t* hb_mixdown_get_next(const hb_mixdown_t *last);
 
+void                hb_layout_get_name(char * name, int size, int64_t layout);
+int                 hb_layout_get_discrete_channel_count(int64_t layout);
+int                 hb_layout_get_low_freq_channel_count(int64_t layout);
+
 int                 hb_video_encoder_get_default(int muxer);
 hb_encoder_t*       hb_video_encoder_get_from_codec(int codec);
 int                 hb_video_encoder_get_from_name(const char *name);
@@ -420,6 +424,8 @@ const char*         hb_audio_encoder_get_short_name(int encoder);
 const char*         hb_audio_encoder_get_long_name(int encoder);
 const char*         hb_audio_encoder_sanitize_name(const char *name);
 const hb_encoder_t* hb_audio_encoder_get_next(const hb_encoder_t *last);
+
+const char*         hb_audio_decoder_get_name(int codec, int codec_param);
 
 /*
  * Not typically used by the UIs
@@ -731,6 +737,14 @@ struct hb_job_s
 /* define an invalid VBR quality compatible with all VBR-capable codecs */
 #define HB_INVALID_AUDIO_QUALITY (-3.)
 
+#define HB_AUDIO_ATTR_NONE              0x00
+#define HB_AUDIO_ATTR_NORMAL            0x01
+#define HB_AUDIO_ATTR_VISUALLY_IMPAIRED 0x02
+#define HB_AUDIO_ATTR_COMMENTARY        0x04
+#define HB_AUDIO_ATTR_ALT_COMMENTARY    0x08
+#define HB_AUDIO_ATTR_SECONDARY         0x10
+#define HB_AUDIO_ATTR_DEFAULT           0x20
+
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_audio_config_s.cs when changing this struct
 struct hb_audio_config_s
 {
@@ -796,13 +810,7 @@ struct hb_audio_config_s
         PRIVATE char description[1024];
         PRIVATE char simple[1024];
         PRIVATE char iso639_2[4];
-#define HB_AUDIO_TYPE_NONE              0
-#define HB_AUDIO_TYPE_NORMAL            1
-#define HB_AUDIO_TYPE_VISUALLY_IMPAIRED 2
-#define HB_AUDIO_TYPE_COMMENTARY        3
-#define HB_AUDIO_TYPE_ALT_COMMENTARY    4
-#define HB_AUDIO_TYPE_BD_SECONDARY      5
-        PRIVATE uint8_t type; /* normal, visually impaired, director's commentary */
+        PRIVATE uint32_t attributes; /* normal, visually impaired, director's commentary */
     } lang;
 };
 
@@ -881,6 +889,20 @@ struct hb_chapter_s
  *
  * Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_subtitle_s.cs when changing this struct
  */
+
+#define HB_SUBTITLE_ATTR_UNKNOWN    0x0000
+#define HB_SUBTITLE_ATTR_NORMAL     0x0001
+#define HB_SUBTITLE_ATTR_LARGE      0x0002
+#define HB_SUBTITLE_ATTR_CHILDREN   0x0004
+#define HB_SUBTITLE_ATTR_CC         0x0008
+#define HB_SUBTITLE_ATTR_FORCED     0x0010
+#define HB_SUBTITLE_ATTR_COMMENTARY 0x0020
+#define HB_SUBTITLE_ATTR_4_3        0x0040
+#define HB_SUBTITLE_ATTR_WIDE       0x0080
+#define HB_SUBTITLE_ATTR_LETTERBOX  0x0100
+#define HB_SUBTITLE_ATTR_PANSCAN    0x0200
+#define HB_SUBTITLE_ATTR_DEFAULT    0x0400
+
 struct hb_subtitle_s
 {
     int  id;
@@ -893,7 +915,7 @@ struct hb_subtitle_s
     enum subsource { VOBSUB, SRTSUB, CC608SUB, /*unused*/CC708SUB, UTF8SUB, TX3GSUB, SSASUB, PGSSUB } source;
     char lang[1024];
     char iso639_2[4];
-    uint8_t type; /* Closed Caption, Childrens, Directors etc */
+    uint32_t attributes; /* Closed Caption, Childrens, Directors etc */
     
     // Color lookup table for VOB subtitle tracks. Each entry is in YCbCr format.
     // Must be filled out by the demuxer for VOB subtitle tracks.

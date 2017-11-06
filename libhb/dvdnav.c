@@ -349,55 +349,72 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
     subtitle->substream_type = 0x20 + position;
     subtitle->codec          = WORK_DECVOBSUB;
 
-    subtitle->type = lang_extension;
-
     memcpy(subtitle->palette, palette, 16 * sizeof(uint32_t));
     subtitle->palette_set = 1;
 
     switch (lang_extension)
     {
+        case 1:
+            subtitle->attributes = HB_SUBTITLE_ATTR_NORMAL;
+            break;
         case 2:
+            subtitle->attributes = HB_SUBTITLE_ATTR_LARGE;
             strcat(subtitle->lang, " Large Type");
             break;
         case 3:
+            subtitle->attributes = HB_SUBTITLE_ATTR_CHILDREN;
             strcat(subtitle->lang, " Children");
             break;
         case 5:
+            subtitle->attributes = HB_SUBTITLE_ATTR_CC;
             strcat(subtitle->lang, " Closed Caption");
             break;
         case 6:
+            subtitle->attributes = HB_SUBTITLE_ATTR_CC | HB_SUBTITLE_ATTR_LARGE;
             strcat(subtitle->lang, " Closed Caption, Large Type");
             break;
         case 7:
+            subtitle->attributes = HB_SUBTITLE_ATTR_CC |
+                                   HB_SUBTITLE_ATTR_CHILDREN;
             strcat(subtitle->lang, " Closed Caption, Children");
             break;
         case 9:
+            subtitle->attributes = HB_SUBTITLE_ATTR_FORCED;
             strcat(subtitle->lang, " Forced");
             break;
         case 13:
+            subtitle->attributes = HB_SUBTITLE_ATTR_COMMENTARY;
             strcat(subtitle->lang, " Director's Commentary");
             break;
         case 14:
+            subtitle->attributes = HB_SUBTITLE_ATTR_COMMENTARY |
+                                   HB_SUBTITLE_ATTR_LARGE;
             strcat(subtitle->lang, " Director's Commentary, Large Type");
             break;
         case 15:
+            subtitle->attributes = HB_SUBTITLE_ATTR_COMMENTARY |
+                                   HB_SUBTITLE_ATTR_CHILDREN;
             strcat(subtitle->lang, " Director's Commentary, Children");
         default:
+            subtitle->attributes = HB_SUBTITLE_ATTR_UNKNOWN;
             break;
     }
-
     switch (style)
     {
         case HB_VOBSUB_STYLE_4_3:
+            subtitle->attributes |= HB_SUBTITLE_ATTR_4_3;
             strcat(subtitle->lang, " (4:3)");
             break;
         case HB_VOBSUB_STYLE_WIDE:
+            subtitle->attributes |= HB_SUBTITLE_ATTR_WIDE;
             strcat(subtitle->lang, " (Wide Screen)");
             break;
         case HB_VOBSUB_STYLE_LETTERBOX:
+            subtitle->attributes |= HB_SUBTITLE_ATTR_LETTERBOX;
             strcat(subtitle->lang, " (Letterbox)");
             break;
         case HB_VOBSUB_STYLE_PANSCAN:
+            subtitle->attributes |= HB_SUBTITLE_ATTR_PANSCAN;
             strcat(subtitle->lang, " (Pan & Scan)");
             break;
     }
@@ -685,6 +702,24 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
         {
             continue;
         }
+        switch ( lang_extension )
+        {
+            case 1:
+                audio->config.lang.attributes = HB_AUDIO_ATTR_NORMAL;
+                break;
+            case 2:
+                audio->config.lang.attributes = HB_AUDIO_ATTR_VISUALLY_IMPAIRED;
+                break;
+            case 3:
+                audio->config.lang.attributes = HB_AUDIO_ATTR_COMMENTARY;
+                break;
+            case 4:
+                audio->config.lang.attributes = HB_AUDIO_ATTR_ALT_COMMENTARY;
+                break;
+            default:
+                audio->config.lang.attributes = HB_AUDIO_ATTR_NONE;
+                break;
+        }
 
         /* Check for duplicate tracks */
         audio_tmp = NULL;
@@ -706,7 +741,6 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
 
         lang = lang_for_code( lang_code );
 
-        audio->config.lang.type = lang_extension;
 
         snprintf( audio->config.lang.simple,
                   sizeof( audio->config.lang.simple ), "%s",

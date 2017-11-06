@@ -2040,6 +2040,22 @@ const hb_mixdown_t* hb_mixdown_get_next(const hb_mixdown_t *last)
     return ((hb_mixdown_internal_t*)last)->next;
 }
 
+void hb_layout_get_name(char * name, int size, int64_t layout)
+{
+    av_get_channel_layout_string(name, size, 0, layout);
+}
+
+int hb_layout_get_discrete_channel_count(int64_t layout)
+{
+    return av_get_channel_layout_nb_channels(layout);
+}
+
+int hb_layout_get_low_freq_channel_count(int64_t layout)
+{
+    return !!(layout & AV_CH_LOW_FREQUENCY) +
+           !!(layout & AV_CH_LOW_FREQUENCY_2);
+}
+
 int hb_video_encoder_get_default(int muxer)
 {
     if (!(muxer & HB_MUX_MASK))
@@ -2530,6 +2546,31 @@ int hb_autopassthru_get_encoder(int in_codec, int copy_mask, int fallback,
     }
     return (out_codec_result != HB_ACODEC_INVALID) ? out_codec_result :
                                                      fallback_result;
+}
+
+const char* hb_audio_decoder_get_name(int codec, int codec_param)
+{
+    if (codec & HB_ACODEC_FF_MASK)
+    {
+        AVCodec * codec;
+
+        codec = avcodec_find_decoder(codec_param);
+        if (codec != NULL)
+        {
+            return codec->name;
+        }
+    }
+    else
+    {
+        switch (codec)
+        {
+            case HB_ACODEC_LPCM:
+                return "pcm_dvd";
+            default:
+                break;
+        }
+    }
+    return "unknown";
 }
 
 hb_container_t* hb_container_get_from_format(int format)
@@ -5302,9 +5343,9 @@ const char * hb_subsource_name( int source )
         case SRTSUB:
             return "SRT";
         case CC608SUB:
-            return "CC";
+            return "CC608";
         case CC708SUB:
-            return "CC";
+            return "CC708";
         case UTF8SUB:
             return "UTF-8";
         case TX3GSUB:
