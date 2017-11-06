@@ -39,6 +39,11 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         public Color Color { get; set; }
 
         /// <summary>
+        /// Gets or sets the input file container.
+        /// </summary>
+        public string Container { get; set; }
+
+        /// <summary>
         /// Gets or sets the cropping values
         /// </summary>
         public List<int> Crop { get; set; }

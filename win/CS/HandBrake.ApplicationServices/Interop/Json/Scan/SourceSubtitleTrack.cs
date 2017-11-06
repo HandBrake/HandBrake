@@ -17,7 +17,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the format.
         /// </summary>
-        public int Format { get; set; }
+        public string Format { get; set; }
 
         /// <summary>
         /// Gets or sets the language.
@@ -33,5 +33,12 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// Gets or sets the source.
         /// </summary>
         public int Source { get; set; }
+
+        public string SourceName { get; set; }
+
+        /// <summary>
+        /// Gets or sets subtitle attribute information.
+        /// </summary>
+        public SubtitleAttributes Attributes { get; set; }
     }
 }

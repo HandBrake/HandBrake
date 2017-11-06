@@ -483,14 +483,16 @@ namespace HandBrake.ApplicationServices.Interop
                 state = JsonConvert.DeserializeObject<JsonState>(statusJson);
             }
 
-            if (state != null && (state.State == NativeConstants.HB_STATE_SCANNING || state.State == NativeConstants.HB_STATE_SEARCHING))
+            TaskState taskState = state != null ? TaskState.FromRepositoryValue(state.State) : null;
+
+            if (taskState != null && (taskState == TaskState.Scanning || taskState == TaskState.Searching))
             {
                 if (this.ScanProgress != null && state.Scanning != null)
                 {
                     this.ScanProgress(this, new ScanProgressEventArgs(state.Scanning.Progress, state.Scanning.Preview, state.Scanning.PreviewCount, state.Scanning.Title, state.Scanning.TitleCount));
                 }
             }
-            else if (state != null && state.State == NativeConstants.HB_STATE_SCANDONE)
+            else if (taskState != null && taskState == TaskState.ScanDone)
             {
                 this.scanPollTimer.Stop();
 
@@ -531,17 +533,19 @@ namespace HandBrake.ApplicationServices.Interop
 
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 
-            if (state != null && (state.State == NativeConstants.HB_STATE_WORKING || state.State == NativeConstants.HB_STATE_MUXING || state.State == NativeConstants.HB_STATE_SEARCHING))
+            TaskState taskState = state != null ? TaskState.FromRepositoryValue(state.State) : null;
+
+            if (taskState != null && (taskState == TaskState.Working || taskState == TaskState.Muxing || taskState == TaskState.Searching))
             {
                 if (this.EncodeProgress != null)
                 {
                     var progressEventArgs = new EncodeProgressEventArgs(state.Working.Progress, state.Working.Rate, state.Working.RateAvg, new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds),
-                        state.Working.PassID, state.Working.Pass, state.Working.PassCount, state.State == NativeConstants.HB_STATE_MUXING, state.State == NativeConstants.HB_STATE_SEARCHING);
+                        state.Working.PassID, state.Working.Pass, state.Working.PassCount, taskState == TaskState.Muxing, taskState == TaskState.Searching);
 
                     this.EncodeProgress(this, progressEventArgs);
                 }
             }
-            else if (state != null && state.State == NativeConstants.HB_STATE_WORKDONE)
+            else if (taskState != null && taskState == TaskState.WorkDone)
             {
                 this.encodePollTimer.Stop();
 

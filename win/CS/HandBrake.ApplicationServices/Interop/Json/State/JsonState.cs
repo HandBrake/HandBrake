@@ -32,6 +32,6 @@ namespace HandBrake.ApplicationServices.Interop.Json.State
         /// <summary>
         /// Gets or sets the state.
         /// </summary>
-        public int State { get; set; }
+        public string State { get; set; }
     }
 }

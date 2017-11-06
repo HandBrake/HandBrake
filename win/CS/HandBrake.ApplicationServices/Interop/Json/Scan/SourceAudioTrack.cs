@@ -22,7 +22,7 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// <summary>
         /// Gets or sets the channel layout.
         /// </summary>
-        public long ChannelLayout { get; set; }
+        public int ChannelLayout { get; set; }
 
         /// <summary>
         /// Gets or sets the description.
@@ -48,5 +48,15 @@ namespace HandBrake.ApplicationServices.Interop.Json.Scan
         /// Gets or sets the codec.
         /// </summary>
         public int Codec { get; set; }
+
+        public string CodecName { get; set; }
+
+        public long LFECount { get; set; }
+
+        public string ChannelLayoutName { get; set; }
+
+        public int ChannelCount { get; set; }
+
+        public AudioAttributes Attributes { get; set; }
     }
 }

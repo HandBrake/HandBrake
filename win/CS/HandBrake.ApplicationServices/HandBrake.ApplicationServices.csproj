@@ -107,6 +107,8 @@
     <Compile Include="Interop\Json\Presets\PresetCategory.cs" />
     <Compile Include="Interop\Json\Presets\PresetTransportContainer.cs" />
     <Compile Include="Interop\Json\Queue\Task.cs" />
+    <Compile Include="Interop\Json\Scan\AudioAttributes.cs" />
+    <Compile Include="Interop\Json\Scan\SubtitleAttributes.cs" />
     <Compile Include="Interop\Json\Shared\PAR.cs" />
     <Compile Include="Interop\Json\Encode\Audio.cs" />
     <Compile Include="Interop\Json\Encode\AudioTrack.cs" />
@@ -125,6 +127,7 @@
     <Compile Include="Interop\Json\Encode\SubtitleTrack.cs" />
     <Compile Include="Interop\Json\Encode\Video.cs" />
     <Compile Include="Interop\Factories\AnamorphicFactory.cs" />
+    <Compile Include="Interop\Json\State\TaskState.cs" />
     <Compile Include="Interop\Model\Encoding\CombDetect.cs" />
     <Compile Include="Interop\Model\Encoding\DeinterlaceFilter.cs" />
     <Compile Include="Interop\Model\Encoding\HBPresetTune.cs" />
