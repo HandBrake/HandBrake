@@ -1,0 +1,288 @@
+--- a/libavcodec/nvenc.c	2017-10-15 17:59:37.000000000 +0200
++++ b/libavcodec/nvenc.c	2017-10-31 16:36:19.987400525 +0100
+@@ -144,7 +144,7 @@
+     if (err != NV_ENC_SUCCESS)
+         return nvenc_print_error(avctx, err, "Failed to query nvenc max version");
+ 
+-    av_log(avctx, AV_LOG_VERBOSE, "Loaded Nvenc version %d.%d\n", nvenc_max_ver >> 4, nvenc_max_ver & 0xf);
++    av_log(avctx, AV_LOG_VERBOSE, "Nvenc: Loaded version %d.%d\n", nvenc_max_ver >> 4, nvenc_max_ver & 0xf);
+ 
+     if ((NVENCAPI_MAJOR_VERSION << 4 | NVENCAPI_MINOR_VERSION) > nvenc_max_ver) {
+         av_log(avctx, AV_LOG_ERROR, "Driver does not support the required nvenc API version. "
+@@ -247,39 +247,39 @@
+ 
+     ret = nvenc_check_codec_support(avctx);
+     if (ret < 0) {
+-        av_log(avctx, AV_LOG_VERBOSE, "Codec not supported\n");
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: Codec not supported\n");
+         return ret;
+     }
+ 
+     ret = nvenc_check_cap(avctx, NV_ENC_CAPS_SUPPORT_YUV444_ENCODE);
+     if (IS_YUV444(ctx->data_pix_fmt) && ret <= 0) {
+-        av_log(avctx, AV_LOG_VERBOSE, "YUV444P not supported\n");
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: YUV444P not supported\n");
+         return AVERROR(ENOSYS);
+     }
+ 
+     ret = nvenc_check_cap(avctx, NV_ENC_CAPS_SUPPORT_LOSSLESS_ENCODE);
+     if (ctx->preset >= PRESET_LOSSLESS_DEFAULT && ret <= 0) {
+-        av_log(avctx, AV_LOG_VERBOSE, "Lossless encoding not supported\n");
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: Lossless encoding not supported\n");
+         return AVERROR(ENOSYS);
+     }
+ 
+     ret = nvenc_check_cap(avctx, NV_ENC_CAPS_WIDTH_MAX);
+     if (ret < avctx->width) {
+-        av_log(avctx, AV_LOG_VERBOSE, "Width %d exceeds %d\n",
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: Width %d exceeds %d\n",
+                avctx->width, ret);
+         return AVERROR(ENOSYS);
+     }
+ 
+     ret = nvenc_check_cap(avctx, NV_ENC_CAPS_HEIGHT_MAX);
+     if (ret < avctx->height) {
+-        av_log(avctx, AV_LOG_VERBOSE, "Height %d exceeds %d\n",
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: Height %d exceeds %d\n",
+                avctx->height, ret);
+         return AVERROR(ENOSYS);
+     }
+ 
+     ret = nvenc_check_cap(avctx, NV_ENC_CAPS_NUM_MAX_BFRAMES);
+     if (ret < avctx->max_b_frames) {
+-        av_log(avctx, AV_LOG_VERBOSE, "Max B-frames %d exceed %d\n",
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: Max B-frames %d exceed %d\n",
+                avctx->max_b_frames, ret);
+ 
+         return AVERROR(ENOSYS);
+@@ -288,26 +288,26 @@
+     ret = nvenc_check_cap(avctx, NV_ENC_CAPS_SUPPORT_FIELD_ENCODING);
+     if (ret < 1 && avctx->flags & AV_CODEC_FLAG_INTERLACED_DCT) {
+         av_log(avctx, AV_LOG_VERBOSE,
+-               "Interlaced encoding is not supported. Supported level: %d\n",
++               "Nvenc: Interlaced encoding is not supported. Supported level: %d\n",
+                ret);
+         return AVERROR(ENOSYS);
+     }
+ 
+     ret = nvenc_check_cap(avctx, NV_ENC_CAPS_SUPPORT_10BIT_ENCODE);
+     if (IS_10BIT(ctx->data_pix_fmt) && ret <= 0) {
+-        av_log(avctx, AV_LOG_VERBOSE, "10 bit encode not supported\n");
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: 10 bit encode not supported\n");
+         return AVERROR(ENOSYS);
+     }
+ 
+     ret = nvenc_check_cap(avctx, NV_ENC_CAPS_SUPPORT_LOOKAHEAD);
+     if (ctx->rc_lookahead > 0 && ret <= 0) {
+-        av_log(avctx, AV_LOG_VERBOSE, "RC lookahead not supported\n");
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: RC lookahead not supported\n");
+         return AVERROR(ENOSYS);
+     }
+ 
+     ret = nvenc_check_cap(avctx, NV_ENC_CAPS_SUPPORT_TEMPORAL_AQ);
+     if (ctx->temporal_aq > 0 && ret <= 0) {
+-        av_log(avctx, AV_LOG_VERBOSE, "Temporal AQ not supported\n");
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: Temporal AQ not supported\n");
+         return AVERROR(ENOSYS);
+     }
+ 
+@@ -344,20 +344,20 @@
+     cu_res = dl_fn->cuda_dl->cuDeviceGet(&cu_device, idx);
+     if (cu_res != CUDA_SUCCESS) {
+         av_log(avctx, AV_LOG_ERROR,
+-               "Cannot access the CUDA device %d\n",
++               "Nvenc: Cannot access the CUDA device %d\n",
+                idx);
+         return -1;
+     }
+ 
+     cu_res = dl_fn->cuda_dl->cuDeviceGetName(name, sizeof(name), cu_device);
+     if (cu_res != CUDA_SUCCESS) {
+-        av_log(avctx, AV_LOG_ERROR, "cuDeviceGetName failed on device %d\n", idx);
++        av_log(avctx, AV_LOG_ERROR, "Nvenc: cuDeviceGetName failed on device %d\n", idx);
+         return -1;
+     }
+ 
+     cu_res = dl_fn->cuda_dl->cuDeviceComputeCapability(&major, &minor, cu_device);
+     if (cu_res != CUDA_SUCCESS) {
+-        av_log(avctx, AV_LOG_ERROR, "cuDeviceComputeCapability failed on device %d\n", idx);
++        av_log(avctx, AV_LOG_ERROR, "Nvenc: cuDeviceComputeCapability failed on device %d\n", idx);
+         return -1;
+     }
+ 
+@@ -372,7 +372,7 @@
+ 
+     cu_res = dl_fn->cuda_dl->cuCtxCreate(&ctx->cu_context_internal, 0, cu_device);
+     if (cu_res != CUDA_SUCCESS) {
+-        av_log(avctx, AV_LOG_FATAL, "Failed creating CUDA context for NVENC: 0x%x\n", (int)cu_res);
++        av_log(avctx, AV_LOG_FATAL, "Nvenc: Failed creating CUDA context for NVENC: 0x%x\n", (int)cu_res);
+         goto fail;
+     }
+ 
+@@ -380,7 +380,7 @@
+ 
+     cu_res = dl_fn->cuda_dl->cuCtxPopCurrent(&dummy);
+     if (cu_res != CUDA_SUCCESS) {
+-        av_log(avctx, AV_LOG_FATAL, "Failed popping CUDA context: 0x%x\n", (int)cu_res);
++        av_log(avctx, AV_LOG_FATAL, "Nvenc: Failed popping CUDA context: 0x%x\n", (int)cu_res);
+         goto fail2;
+     }
+ 
+@@ -564,12 +564,14 @@
+             rc->constQP.qpIntra = rc->constQP.qpInterP;
+             rc->constQP.qpInterB = rc->constQP.qpInterP;
+         }
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: set_constqp qp_p %d\n", rc->constQP.qpInterP);
+     } else if (ctx->cqp >= 0) {
+         rc->constQP.qpInterP = rc->constQP.qpInterB = rc->constQP.qpIntra = ctx->cqp;
+         if (avctx->b_quant_factor != 0.0)
+             rc->constQP.qpInterB = av_clip(ctx->cqp * fabs(avctx->b_quant_factor) + avctx->b_quant_offset + 0.5, 0, 51);
+         if (avctx->i_quant_factor != 0.0)
+             rc->constQP.qpIntra = av_clip(ctx->cqp * fabs(avctx->i_quant_factor) + avctx->i_quant_offset + 0.5, 0, 51);
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: set_constqp cqp %d\n", rc->constQP.qpInterP);
+     }
+ 
+     avctx->qmin = -1;
+@@ -595,6 +597,7 @@
+         rc->maxQP.qpIntra = avctx->qmax;
+ 
+         qp_inter_p = (avctx->qmax + 3 * avctx->qmin) / 4; // biased towards Qmin
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: set_vbr min/max [%d..%d] qp_i_p %d\n", avctx->qmin, avctx->qmax, qp_inter_p);
+     } else if (avctx->qmin >= 0) {
+         rc->enableMinQP = 1;
+ 
+@@ -603,8 +606,10 @@
+         rc->minQP.qpIntra = avctx->qmin;
+ 
+         qp_inter_p = avctx->qmin;
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: set_vbr min [%d] qp_i_p %d\n", avctx->qmin, qp_inter_p);
+     } else {
+         qp_inter_p = 26; // default to 26
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: set_vbr def qp_i_p %d\n", qp_inter_p);
+     }
+ 
+     rc->enableInitialRCQP = 1;
+@@ -614,6 +619,7 @@
+     } else {
+         rc->initialRCQP.qpInterP = ctx->init_qp_p;
+     }
++    av_log(avctx, AV_LOG_VERBOSE, "Nvenc: set_vbr rcqp qp_inter_p %d\n", rc->initialRCQP.qpInterP);
+ 
+     if (ctx->init_qp_i < 0) {
+         if (avctx->i_quant_factor != 0.0 && avctx->b_quant_factor != 0.0) {
+@@ -625,6 +631,7 @@
+     } else {
+         rc->initialRCQP.qpIntra = ctx->init_qp_i;
+     }
++    av_log(avctx, AV_LOG_VERBOSE, "Nvenc: set_vbr rcqp qp_intra_p %d\n", rc->initialRCQP.qpInterP);
+ 
+     if (ctx->init_qp_b < 0) {
+         if (avctx->i_quant_factor != 0.0 && avctx->b_quant_factor != 0.0) {
+@@ -636,6 +643,7 @@
+     } else {
+         rc->initialRCQP.qpInterB = ctx->init_qp_b;
+     }
++    av_log(avctx, AV_LOG_VERBOSE, "Nvenc: set_vbr rcqp qp_inter_p %d\n", rc->initialRCQP.qpInterP);
+ }
+ 
+ static av_cold void set_lossless(AVCodecContext *avctx)
+@@ -650,6 +658,7 @@
+ 
+     avctx->qmin = -1;
+     avctx->qmax = -1;
++    av_log(avctx, AV_LOG_VERBOSE, "Nvenc: set_lossless\n");
+ }
+ 
+ static void nvenc_override_rate_control(AVCodecContext *avctx)
+@@ -732,16 +741,24 @@
+     if (ctx->cqp < 0 && avctx->global_quality > 0)
+         ctx->cqp = avctx->global_quality;
+ 
++    av_log(avctx, AV_LOG_VERBOSE, "Nvenc: quality %lf\n", ctx->quality);
++    av_log(avctx, AV_LOG_VERBOSE, "Nvenc: cqp %d\n", ctx->cqp);
++
+     if (avctx->bit_rate > 0) {
+         ctx->encode_config.rcParams.averageBitRate = avctx->bit_rate;
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: avg bit_rate %ld\n", avctx->bit_rate);
+     } else if (ctx->encode_config.rcParams.averageBitRate > 0) {
+         ctx->encode_config.rcParams.maxBitRate = ctx->encode_config.rcParams.averageBitRate;
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: max bit_rate.1 %d\n", ctx->encode_config.rcParams.maxBitRate);
+     }
+ 
+-    if (avctx->rc_max_rate > 0)
++    if (avctx->rc_max_rate > 0) {
+         ctx->encode_config.rcParams.maxBitRate = avctx->rc_max_rate;
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: max bit_rate.2 %d\n", ctx->encode_config.rcParams.maxBitRate);
++    }
+ 
+     if (ctx->rc < 0) {
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: rc < 0\n");
+         if (ctx->flags & NVENC_ONE_PASS)
+             ctx->twopass = 0;
+         if (ctx->flags & NVENC_TWO_PASSES)
+@@ -778,8 +795,10 @@
+     if (ctx->flags & NVENC_LOSSLESS) {
+         set_lossless(avctx);
+     } else if (ctx->rc >= 0) {
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: rc >= 0\n");
+         nvenc_override_rate_control(avctx);
+     } else {
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: vbr\n");
+         ctx->encode_config.rcParams.rateControlMode = NV_ENC_PARAMS_RC_VBR;
+         set_vbr(avctx);
+     }
+@@ -793,12 +812,12 @@
+     if (ctx->aq) {
+         ctx->encode_config.rcParams.enableAQ   = 1;
+         ctx->encode_config.rcParams.aqStrength = ctx->aq_strength;
+-        av_log(avctx, AV_LOG_VERBOSE, "AQ enabled.\n");
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: AQ enabled.\n");
+     }
+ 
+     if (ctx->temporal_aq) {
+         ctx->encode_config.rcParams.enableTemporalAQ = 1;
+-        av_log(avctx, AV_LOG_VERBOSE, "Temporal AQ enabled.\n");
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: Temporal AQ enabled.\n");
+     }
+ 
+     if (ctx->rc_lookahead > 0) {
+@@ -823,7 +842,7 @@
+ 
+     if (ctx->strict_gop) {
+         ctx->encode_config.rcParams.strictGOPTarget = 1;
+-        av_log(avctx, AV_LOG_VERBOSE, "Strict GOP target enabled.\n");
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: Strict GOP target enabled.\n");
+     }
+ 
+     if (ctx->nonref_p)
+@@ -897,18 +916,22 @@
+         case NV_ENC_H264_PROFILE_BASELINE:
+             cc->profileGUID = NV_ENC_H264_PROFILE_BASELINE_GUID;
+             avctx->profile = FF_PROFILE_H264_BASELINE;
++            av_log(avctx, AV_LOG_VERBOSE, "Nvenc: profile baseline\n");
+             break;
+         case NV_ENC_H264_PROFILE_MAIN:
+             cc->profileGUID = NV_ENC_H264_PROFILE_MAIN_GUID;
+             avctx->profile = FF_PROFILE_H264_MAIN;
++            av_log(avctx, AV_LOG_VERBOSE, "Nvenc: profile main\n");
+             break;
+         case NV_ENC_H264_PROFILE_HIGH:
+             cc->profileGUID = NV_ENC_H264_PROFILE_HIGH_GUID;
+             avctx->profile = FF_PROFILE_H264_HIGH;
++            av_log(avctx, AV_LOG_VERBOSE, "Nvenc: profile high\n");
+             break;
+         case NV_ENC_H264_PROFILE_HIGH_444P:
+             cc->profileGUID = NV_ENC_H264_PROFILE_HIGH_444_GUID;
+             avctx->profile = FF_PROFILE_H264_HIGH_444_PREDICTIVE;
++            av_log(avctx, AV_LOG_VERBOSE, "Nvenc: profile high444p\n");
+             break;
+         }
+     }
+@@ -922,6 +945,7 @@
+     h264->chromaFormatIDC = avctx->profile == FF_PROFILE_H264_HIGH_444_PREDICTIVE ? 3 : 1;
+ 
+     h264->level = ctx->level;
++    av_log(avctx, AV_LOG_VERBOSE, "Nvenc: level %d\n", ctx->level);
+ 
+     if (ctx->coder >= 0)
+         h264->entropyCodingMode = ctx->coder;
