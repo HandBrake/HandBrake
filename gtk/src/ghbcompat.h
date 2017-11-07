@@ -26,6 +26,7 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdk.h>
+#include <string.h>
 
 static inline PangoFontDescription* ghb_widget_get_font(GtkWidget *widget)
 {
@@ -80,6 +81,28 @@ static inline void ghb_monitor_get_size(GdkWindow *window, gint *w, gint *h)
         *w = gdk_screen_get_width(ss);
         *h = gdk_screen_get_height(ss);
     }
+#endif
+}
+
+static inline gboolean ghb_strv_contains(const char ** strv, const char * str)
+{
+#if GLIB_CHECK_VERSION(2, 44, 0)
+    return g_strv_contains(strv, str);
+#else
+    int ii;
+
+    if (strv == NULL)
+    {
+        return FALSE;
+    }
+    for (ii = 0; strv[ii] != NULL; ii++)
+    {
+        if (!strcmp(strv[ii], str))
+        {
+            return TRUE;
+        }
+    }
+    return FALSE;
 #endif
 }
 

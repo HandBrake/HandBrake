@@ -1945,7 +1945,7 @@ preset_category_opts_set(signal_user_data_t *ud, const gchar *name,
             continue;
         }
 
-        if (g_strv_contains((const char**)categories, name))
+        if (ghb_strv_contains((const char**)categories, name))
         {
             // Category is already in the list
             continue;

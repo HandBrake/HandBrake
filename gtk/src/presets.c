@@ -1237,7 +1237,7 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                     free(detail_action);
                 }
                 if (type == 1 &&
-                    g_strv_contains((const char**)official_names, folder_name))
+                    ghb_strv_contains((const char**)official_names, folder_name))
                 {
                     menu_item_name = g_strdup_printf("My %s", folder_name);
                 }
