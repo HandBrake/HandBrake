@@ -1015,6 +1015,7 @@ struct hb_title_s
 
     int           preview_count;
     int           has_resolution_change;
+    enum { HB_ROTATION_0, HB_ROTATION_90, HB_ROTATION_180, HB_ROTATION_270 } rotation;
     hb_geometry_t geometry;
     hb_rational_t dar;             // aspect ratio for the title's video
     hb_rational_t container_dar;   // aspect ratio from container (0 if none)
