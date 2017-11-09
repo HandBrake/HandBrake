@@ -5553,6 +5553,8 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                     {
                         int rotation = av_display_rotation_get((int32_t *)sd.data);
                         switch (rotation) {
+                            case 0:
+                                title->rotation = HB_ROTATION_0;
                             case 90:
                                 title->rotation = HB_ROTATION_90;
                                 break;
