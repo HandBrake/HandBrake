@@ -718,10 +718,14 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
              */
             case NAL_SPS:
             case NAL_PPS:
-                continue;
+                if (!job->inline_parameter_sets)
+                {
+                    continue;
+                }
+                break;
 
-            case NAL_SLICE:
             case NAL_SLICE_IDR:
+            case NAL_SLICE:
             case NAL_SEI:
             default:
                 break;

@@ -614,6 +614,11 @@ struct hb_job_s
     int             mux;
     char          * file;
 
+    int             inline_parameter_sets;
+                                        // Put h.264/h.265 SPS and PPS
+                                        // inline in the stream. This
+                                        // is necessary when constructing
+                                        // adaptive streaming dash files.
     int             align_av_start;     // align A/V stream start times.
                                         // This is used to work around mp4
                                         // players that do not support edit

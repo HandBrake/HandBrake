@@ -38,6 +38,7 @@
         "FileFormat": "mp4",
         "Folder": false,
         "FolderOpen": false,
+        "InlineParameterSets": false,
         "Mp4HttpOptimize": false,
         "Mp4iPodCompatible": false,
         "PictureAutoCrop": true,

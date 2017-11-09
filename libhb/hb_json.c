@@ -525,8 +525,9 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     "{"
     // SequenceID
     "s:o,"
-    // Destination {Mux, AlignAVStart, ChapterMarkers, ChapterList}
-    "s:{s:o, s:o, s:o, s:[]},"
+    // Destination {Mux, InlineParameterSets, AlignAVStart,
+    //              ChapterMarkers, ChapterList}
+    "s:{s:o, s:o, s:o, s:o, s:[]},"
     // Source {Path, Title, Angle}
     "s:{s:o, s:o, s:o,},"
     // PAR {Num, Den}
@@ -545,6 +546,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         "SequenceID",           hb_value_int(job->sequence_id),
         "Destination",
             "Mux",              hb_value_int(job->mux),
+            "InlineParameterSets", hb_value_bool(job->inline_parameter_sets),
             "AlignAVStart",     hb_value_bool(job->align_av_start),
             "ChapterMarkers",   hb_value_bool(job->chapter_markers),
             "ChapterList",
@@ -986,9 +988,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     "{"
     // SequenceID
     "s:i,"
-    // Destination {File, Mux, ChapterMarkers, ChapterList,
+    // Destination {File, Mux, InlineParameterSets, AlignAVStart,
+    //              ChapterMarkers, ChapterList,
     //              Mp4Options {Mp4Optimize, IpodAtom}}
-    "s:{s?s, s:o, s?b, s:b, s?o s?{s?b, s?b}},"
+    "s:{s?s, s:o, s?b, s?b, s:b, s?o s?{s?b, s?b}},"
     // Source {Angle, Range {Type, Start, End, SeekPoints}}
     "s:{s?i, s?{s:s, s?I, s?I, s?I}},"
     // PAR {Num, Den}
@@ -1013,6 +1016,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         "Destination",
             "File",                 unpack_s(&destfile),
             "Mux",                  unpack_o(&mux),
+            "InlineParameterSets",  unpack_b(&job->inline_parameter_sets),
             "AlignAVStart",         unpack_b(&job->align_av_start),
             "ChapterMarkers",       unpack_b(&job->chapter_markers),
             "ChapterList",          unpack_o(&chapter_list),

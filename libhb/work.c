@@ -354,6 +354,10 @@ void hb_display_job_info(hb_job_t *job)
             break;
     }
 
+    if (job->inline_parameter_sets)
+    {
+        hb_log("     + optimized for adaptive streaming (inline parameter sets)");
+    }
     if( job->chapter_markers )
     {
         hb_log( "     + chapter markers" );
