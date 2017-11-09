@@ -935,8 +935,8 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     if (pv->qsv.decode &&
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
     {
-        out = hb_frame_buffer_init(frame->format, frame->width, frame->height);
-        hb_avframe_set_video_buffer_flags(buf, frame, (AVRational){1,1});
+        out = hb_frame_buffer_init(pv->frame->format, pv->frame->width, pv->frame->height);
+        hb_avframe_set_video_buffer_flags(out, pv->frame, (AVRational){1,1});
 
         out->qsv_details.qsv_atom = pv->frame->data[2];
         out->qsv_details.ctx      = pv->job->qsv.ctx;
