@@ -36,3 +36,7 @@ struct SwsContext*
 hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
                    int dstW, int dstH, enum AVPixelFormat dstFormat,
                    int flags, int colorspace);
+
+hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base);
+void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
+                                       AVRational time_base);

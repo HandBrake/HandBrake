@@ -40,6 +40,9 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
+#include "libavfilter/avfilter.h"
+#include "libavfilter/buffersrc.h"
+#include "libavfilter/buffersink.h"
 #include "lang.h"
 #include "audio_resample.h"
 
@@ -93,6 +96,18 @@ struct reordered_data_s
 #define REORDERED_HASH_SZ   (2 << 7)
 #define REORDERED_HASH_MASK (REORDERED_HASH_SZ - 1)
 
+struct video_filters_s
+{
+    AVFilterGraph   * graph;
+    AVFilterContext * last;
+    AVFilterContext * input;
+    AVFilterContext * output;
+
+    int               width;
+    int               height;
+    int               pix_fmt;
+};
+
 struct hb_work_private_s
 {
     hb_job_t             * job;
@@ -119,11 +134,7 @@ struct hb_work_private_s
     int64_t                sequence;
     int                    last_scr_sequence;
     int                    last_chapter;
-    struct SwsContext    * sws_context; // if we have to rescale or convert color space
-
-    int                    sws_width;
-    int                    sws_height;
-    int                    sws_pix_fmt;
+    struct video_filters_s video_filters;
 
     hb_audio_t           * audio;
     hb_audio_resample_t  * resample;
@@ -322,6 +333,25 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
  ***********************************************************************
  *
  **********************************************************************/
+static void close_video_filters(hb_work_private_t *pv)
+{
+    if (pv->video_filters.input != NULL)
+    {
+        avfilter_free(pv->video_filters.input);
+        pv->video_filters.input = NULL;
+    }
+    if (pv->video_filters.output != NULL)
+    {
+        avfilter_free(pv->video_filters.output);
+        pv->video_filters.output = NULL;
+    }
+    if (pv->video_filters.graph != NULL)
+    {
+        avfilter_graph_free(&pv->video_filters.graph);
+    }
+    pv->video_filters.last = NULL;
+}
+
 static void closePrivData( hb_work_private_t ** ppv )
 {
     hb_work_private_t * pv = *ppv;
@@ -336,10 +366,7 @@ static void closePrivData( hb_work_private_t ** ppv )
                     pv->context->codec->name, pv->nframes, pv->decode_errors);
         }
         av_frame_free(&pv->frame);
-        if ( pv->sws_context )
-        {
-            sws_freeContext( pv->sws_context );
-        }
+        close_video_filters(pv);
         if ( pv->parser )
         {
             av_parser_close(pv->parser);
@@ -835,146 +862,6 @@ reordered_hash_add(hb_work_private_t * pv, reordered_data_t * reordered)
  * General purpose video decoder using libavcodec
  */
 
-static uint8_t *copy_plane( uint8_t *dst, uint8_t* src, int dstride, int sstride,
-                            int h )
-{
-    if ( dstride == sstride )
-    {
-        memcpy( dst, src, dstride * h );
-        return dst + dstride * h;
-    }
-    int lbytes = dstride <= sstride? dstride : sstride;
-    while ( --h >= 0 )
-    {
-        memcpy( dst, src, lbytes );
-        src += sstride;
-        dst += dstride;
-    }
-    return dst;
-}
-
-// copy one video frame into an HB buf. If the frame isn't in our color space
-// or at least one of its dimensions is odd, use sws_scale to convert/rescale it.
-// Otherwise just copy the bits.
-static hb_buffer_t *copy_frame( hb_work_private_t *pv )
-{
-    AVCodecContext *context = pv->context;
-    int w, h;
-    if ( ! pv->job )
-    {
-        // HandBrake's video pipeline uses yuv420 color.  This means all
-        // dimensions must be even.  So we must adjust the dimensions
-        // of incoming video if not even.
-        w = context->width & ~1;
-        h = context->height & ~1;
-    }
-    else
-    {
-        w = pv->job->title->geometry.width;
-        h = pv->job->title->geometry.height;
-    }
-
-    reordered_data_t * reordered = NULL;
-    hb_buffer_t      * out = hb_video_buffer_init( w, h );
-
-    if (pv->frame->pts != AV_NOPTS_VALUE)
-    {
-        reordered = reordered_hash_rem(pv, pv->frame->pts);
-    }
-    if (reordered != NULL)
-    {
-        out->s.scr_sequence   = reordered->scr_sequence;
-        out->s.start          = reordered->pts;
-        out->s.new_chap       = reordered->new_chap;
-        pv->last_scr_sequence = reordered->scr_sequence;
-        pv->last_chapter      = reordered->new_chap;
-        free(reordered);
-    }
-    else
-    {
-        out->s.scr_sequence   = pv->last_scr_sequence;
-        out->s.start          = AV_NOPTS_VALUE;
-    }
-    if (out->s.new_chap > 0 && out->s.new_chap == pv->new_chap)
-    {
-        pv->new_chap = 0;
-    }
-    // It is possible that the buffer with new_chap gets dropped
-    // by the decoder.  So also check if the output buffer is after
-    // the new_chap in the timeline.
-    if (pv->new_chap > 0 &&
-        (out->s.scr_sequence > pv->chap_scr ||
-         (out->s.scr_sequence == pv->chap_scr && out->s.start > pv->chap_time)))
-    {
-        out->s.new_chap = pv->new_chap;
-        pv->new_chap    = 0;
-    }
-
-#ifdef USE_QSV
-    // no need to copy the frame data when decoding with QSV to opaque memory
-    if (pv->qsv.decode &&
-        pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
-    {
-        out->qsv_details.qsv_atom = pv->frame->data[2];
-        out->qsv_details.ctx      = pv->job->qsv.ctx;
-        return out;
-    }
-#endif
-
-    uint8_t *dst = out->data;
-
-    if (context->pix_fmt != AV_PIX_FMT_YUV420P || w != context->width ||
-        h != context->height)
-    {
-        // have to convert to our internal color space and/or rescale
-        uint8_t * data[4];
-        int       stride[4];
-        hb_picture_fill(data, stride, out);
-
-        if (pv->sws_context == NULL            ||
-            pv->sws_width   != context->width  ||
-            pv->sws_height  != context->height ||
-            pv->sws_pix_fmt != context->pix_fmt)
-        {
-            if (pv->sws_context != NULL)
-                sws_freeContext(pv->sws_context);
-
-            hb_geometry_t geometry = {context->width, context->height};
-            int color_matrix = get_color_matrix(context->colorspace, geometry);
-
-            pv->sws_context = hb_sws_get_context(context->width,
-                                                 context->height,
-                                                 context->pix_fmt,
-                                                 w, h, AV_PIX_FMT_YUV420P,
-                                                 SWS_LANCZOS|SWS_ACCURATE_RND,
-                                                 hb_ff_get_colorspace(color_matrix));
-            pv->sws_width   = context->width;
-            pv->sws_height  = context->height;
-            pv->sws_pix_fmt = context->pix_fmt;
-        }
-        sws_scale(pv->sws_context,
-                  (const uint8_t* const *)pv->frame->data,
-                  pv->frame->linesize, 0, context->height, data, stride);
-    }
-    else
-    {
-        w = out->plane[0].stride;
-        h = out->plane[0].height;
-        dst = out->plane[0].data;
-        copy_plane( dst, pv->frame->data[0], w, pv->frame->linesize[0], h );
-        w = out->plane[1].stride;
-        h = out->plane[1].height;
-        dst = out->plane[1].data;
-        copy_plane( dst, pv->frame->data[1], w, pv->frame->linesize[1], h );
-        w = out->plane[2].stride;
-        h = out->plane[2].height;
-        dst = out->plane[2].data;
-        copy_plane( dst, pv->frame->data[2], w, pv->frame->linesize[2], h );
-    }
-
-    return out;
-}
-
 // send cc_buf to the CC decoder(s)
 static void cc_send_to_decoder(hb_work_private_t *pv, hb_buffer_t *buf)
 {
@@ -1035,23 +922,397 @@ static hb_buffer_t * cc_fill_buffer(hb_work_private_t *pv, uint8_t *cc, int size
     return buf;
 }
 
-static int get_frame_type(int type)
+// copy one video frame into an HB buf. If the frame isn't in our color space
+// or at least one of its dimensions is odd, use sws_scale to convert/rescale it.
+// Otherwise just copy the bits.
+static hb_buffer_t *copy_frame( hb_work_private_t *pv )
 {
-    switch (type)
+    reordered_data_t * reordered = NULL;
+    hb_buffer_t      * out;
+
+#ifdef USE_QSV
+    // no need to copy the frame data when decoding with QSV to opaque memory
+    if (pv->qsv.decode &&
+        pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
     {
-        case AV_PICTURE_TYPE_B:
-            return HB_FRAME_B;
+        out = hb_frame_buffer_init(frame->format, frame->width, frame->height);
+        hb_avframe_set_video_buffer_flags(buf, frame, (AVRational){1,1});
 
-        case AV_PICTURE_TYPE_S:
-        case AV_PICTURE_TYPE_P:
-        case AV_PICTURE_TYPE_SP:
-            return HB_FRAME_P;
+        out->qsv_details.qsv_atom = pv->frame->data[2];
+        out->qsv_details.ctx      = pv->job->qsv.ctx;
+    }
+    else
+#endif
+    {
+        out = hb_avframe_to_video_buffer(pv->frame, (AVRational){1,1});
+    }
 
-        case AV_PICTURE_TYPE_BI:
-        case AV_PICTURE_TYPE_SI:
-        case AV_PICTURE_TYPE_I:
-        default:
-            return HB_FRAME_I;
+    if (pv->frame->pts != AV_NOPTS_VALUE)
+    {
+        reordered = reordered_hash_rem(pv, pv->frame->pts);
+    }
+    if (reordered != NULL)
+    {
+        out->s.scr_sequence   = reordered->scr_sequence;
+        out->s.start          = reordered->pts;
+        out->s.new_chap       = reordered->new_chap;
+        pv->last_scr_sequence = reordered->scr_sequence;
+        pv->last_chapter      = reordered->new_chap;
+        free(reordered);
+    }
+    else
+    {
+        out->s.scr_sequence   = pv->last_scr_sequence;
+        out->s.start          = AV_NOPTS_VALUE;
+    }
+
+    double  frame_dur = pv->duration;
+    if (pv->frame->repeat_pict)
+    {
+        frame_dur += pv->frame->repeat_pict * pv->field_duration;
+    }
+    if (out->s.start == AV_NOPTS_VALUE)
+    {
+        out->s.start = pv->next_pts;
+    }
+    else
+    {
+        pv->next_pts = out->s.start;
+    }
+    if (pv->next_pts != (int64_t)AV_NOPTS_VALUE)
+    {
+        pv->next_pts += frame_dur;
+        out->s.stop   = pv->next_pts;
+    }
+    out->s.duration  = frame_dur;
+
+    if (out->s.new_chap > 0 && out->s.new_chap == pv->new_chap)
+    {
+        pv->new_chap = 0;
+    }
+    // It is possible that the buffer with new_chap gets dropped
+    // by the decoder.  So also check if the output buffer is after
+    // the new_chap in the timeline.
+    if (pv->new_chap > 0 &&
+        (out->s.scr_sequence > pv->chap_scr ||
+         (out->s.scr_sequence == pv->chap_scr && out->s.start > pv->chap_time)))
+    {
+        out->s.new_chap = pv->new_chap;
+        pv->new_chap    = 0;
+    }
+
+    // Check for CC data
+    AVFrameSideData *sd;
+    sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_A53_CC);
+    if (sd != NULL)
+    {
+        if (!pv->job && pv->title && sd->size > 0)
+        {
+            hb_subtitle_t *subtitle;
+            int i = 0;
+
+            while ((subtitle = hb_list_item(pv->title->list_subtitle, i++)))
+            {
+                /*
+                 * Let's call them 608 subs for now even if they aren't,
+                 * since they are the only types we grok.
+                 */
+                if (subtitle->source == CC608SUB)
+                {
+                    break;
+                }
+            }
+            if (subtitle == NULL)
+            {
+                iso639_lang_t * lang;
+                hb_audio_t    * audio;
+
+                subtitle        = calloc(sizeof( hb_subtitle_t ), 1);
+                subtitle->track = hb_list_count(pv->title->list_subtitle);
+                subtitle->id          = 0;
+                subtitle->format      = TEXTSUB;
+                subtitle->source      = CC608SUB;
+                subtitle->config.dest = PASSTHRUSUB;
+                subtitle->codec       = WORK_DECCC608;
+                subtitle->attributes  = HB_SUBTITLE_ATTR_CC;
+
+                /*
+                 * The language of the subtitles will be the same as the
+                 * first audio track, i.e. the same as the video.
+                 */
+                audio = hb_list_item(pv->title->list_audio, 0);
+                if (audio != NULL)
+                {
+                    lang = lang_for_code2( audio->config.lang.iso639_2 );
+                } else {
+                    lang = lang_for_code2( "und" );
+                }
+                snprintf(subtitle->lang, sizeof(subtitle->lang),
+                         "%s, Closed Caption [%s]",
+                         strlen(lang->native_name) ? lang->native_name :
+                                                     lang->eng_name,
+                         hb_subsource_name(subtitle->source));
+                snprintf(subtitle->iso639_2, sizeof(subtitle->iso639_2),
+                         "%s", lang->iso639_2);
+
+                hb_list_add(pv->title->list_subtitle, subtitle);
+            }
+        }
+        if (pv->list_subtitle != NULL && sd->size > 0)
+        {
+            hb_buffer_t *cc_buf;
+            cc_buf = cc_fill_buffer(pv, sd->data, sd->size);
+            if (cc_buf != NULL)
+            {
+                cc_buf->s.start        = out->s.start;
+                cc_buf->s.scr_sequence = out->s.scr_sequence;
+            }
+            cc_send_to_decoder(pv, cc_buf);
+        }
+    }
+
+    return out;
+}
+
+static AVFilterContext * append_filter(hb_work_private_t * pv,
+                                       const char * name, const char * args)
+{
+    AVFilterContext * filter;
+    int               result;
+
+    result = avfilter_graph_create_filter(&filter, avfilter_get_by_name(name),
+                                          name, args, NULL,
+                                          pv->video_filters.graph);
+    if (result < 0)
+    {
+        return NULL;
+    }
+    if (pv->video_filters.last != NULL)
+    {
+        result = avfilter_link(pv->video_filters.last, 0, filter, 0);
+        if (result < 0)
+        {
+            avfilter_free(filter);
+            return NULL;
+        }
+    }
+    pv->video_filters.last = filter;
+
+    return filter;
+}
+
+int reinit_video_filters(hb_work_private_t * pv)
+{
+    char            * sws_flags;
+    int               result;
+    AVFilterContext * avfilter;
+    char            * graph_str = NULL, * filter_str;
+    AVFilterInOut   * in = NULL, * out = NULL;
+    int               orig_width;
+    int               orig_height;
+
+#ifdef USE_QSV
+    if (pv->qsv.decode &&
+        pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
+    {
+        // Can't use software filters when decoding with QSV opaque memory
+        return;
+    }
+#endif
+    if (!pv->job)
+    {
+        // HandBrake's video pipeline uses yuv420 color.  This means all
+        // dimensions must be even.  So we must adjust the dimensions
+        // of incoming video if not even.
+        orig_width = pv->context->width & ~1;
+        orig_height = pv->context->height & ~1;
+    }
+    else
+    {
+        if (pv->title->rotation == HB_ROTATION_90 ||
+            pv->title->rotation == HB_ROTATION_270)
+        {
+            orig_width = pv->job->title->geometry.height;
+            orig_height = pv->job->title->geometry.width;
+        }
+        else
+        {
+            orig_width = pv->job->title->geometry.width;
+            orig_height = pv->job->title->geometry.height;
+        }
+    }
+
+    if (AV_PIX_FMT_YUV420P == pv->frame->format  &&
+        orig_width         == pv->frame->width   &&
+        orig_height        == pv->frame->height  &&
+        HB_ROTATION_0      == pv->title->rotation)
+    {
+        // No filtering required.
+        close_video_filters(pv);
+        return 0;
+    }
+
+    if (pv->video_filters.graph   != NULL              &&
+        pv->video_filters.width   == pv->frame->width  &&
+        pv->video_filters.height  == pv->frame->height &&
+        pv->video_filters.pix_fmt == pv->frame->format)
+    {
+        // Current filter settings are good
+        return 0;
+    }
+
+    pv->video_filters.width   = pv->frame->width;
+    pv->video_filters.height  = pv->frame->height;
+    pv->video_filters.pix_fmt = pv->frame->format;
+
+    // New filter required, create filter graph
+    close_video_filters(pv);
+    pv->video_filters.graph = avfilter_graph_alloc();
+    if (pv->video_filters.graph == NULL)
+    {
+        hb_log("reinit_video_filters: avfilter_graph_alloc failed");
+        goto fail;
+    }
+    sws_flags = hb_strdup_printf("flags=%d", SWS_LANCZOS|SWS_ACCURATE_RND);
+    // avfilter_graph_free uses av_free to release scale_sws_opts.  Due
+    // to the hacky implementation of av_free/av_malloc on windows,
+    // you must av_malloc anything that is av_free'd.
+    pv->video_filters.graph->scale_sws_opts = av_malloc(strlen(sws_flags) + 1);
+    strcpy(pv->video_filters.graph->scale_sws_opts, sws_flags);
+    free(sws_flags);
+
+    int clock_min, clock_max, clock;
+    hb_rational_t vrate;
+
+    hb_video_framerate_get_limits(&clock_min, &clock_max, &clock);
+    vrate.num = clock;
+    vrate.den = pv->duration * (clock / 90000.);
+
+    if (AV_PIX_FMT_YUV420P != pv->frame->format ||
+        orig_width         != pv->frame->width  ||
+        orig_height        != pv->frame->height)
+    {
+
+        filter_str = hb_strdup_printf(
+                        "scale='w=%d:h=%d:flags=lanczos+accurate_rnd',"
+                        "format='pix_fmts=yuv420p'",
+                        orig_width, orig_height);
+        graph_str = hb_append_filter_string(graph_str, filter_str);
+        free(filter_str);
+    }
+    if (pv->title->rotation != HB_ROTATION_0)
+    {
+        switch (pv->title->rotation)
+        {
+            case HB_ROTATION_90:
+                filter_str = "transpose='dir=cclock'";
+                break;
+            case HB_ROTATION_180:
+                filter_str = "hflip,vflip";
+                break;
+            case HB_ROTATION_270:
+                filter_str = "transpose='dir=clock'";
+                break;
+            default:
+                hb_log("reinit_video_filters: Unknown rotation, failed");
+                goto fail;
+        }
+        graph_str = hb_append_filter_string(graph_str, filter_str);
+    }
+
+    // Build filter input
+    filter_str = hb_strdup_printf(
+                "width=%d:height=%d:pix_fmt=%d:sar=%d/%d:"
+                "time_base=%d/%d:frame_rate=%d/%d",
+                pv->frame->width, pv->frame->height,
+                pv->frame->format,
+                pv->frame->sample_aspect_ratio.num,
+                pv->frame->sample_aspect_ratio.den,
+                1, 1, vrate.num, vrate.den);
+
+    avfilter = append_filter(pv, "buffer", filter_str);
+    free(filter_str);
+    if (avfilter == NULL)
+    {
+        hb_error("reinit_video_filters: failed to create buffer source filter");
+        goto fail;
+    }
+    pv->video_filters.input = avfilter;
+
+    // Build the filter graph
+    result = avfilter_graph_parse2(pv->video_filters.graph,
+                                   graph_str, &in, &out);
+    if (result < 0 || in == NULL || out == NULL)
+    {
+        hb_error("reinit_video_filters: avfilter_graph_parse2 failed (%s)",
+                 graph_str);
+        goto fail;
+    }
+
+    // Link input to filter graph
+    result = avfilter_link(pv->video_filters.last, 0, in->filter_ctx, 0);
+    if (result < 0)
+    {
+        goto fail;
+    }
+    pv->video_filters.last  = out->filter_ctx;
+
+    // Build filter output and append to filter graph
+    avfilter = append_filter(pv, "buffersink", NULL);
+    if (avfilter == NULL)
+    {
+        hb_error("reinit_video_filters: failed to create buffer output filter");
+        goto fail;
+    }
+    pv->video_filters.output = avfilter;
+
+    result = avfilter_graph_config(pv->video_filters.graph, NULL);
+    if (result < 0)
+    {
+        hb_error("reinit_video_filters: failed to configure filter graph");
+        goto fail;
+    }
+
+    free(graph_str);
+    avfilter_inout_free(&in);
+    avfilter_inout_free(&out);
+    return 0;
+
+fail:
+    free(graph_str);
+    avfilter_inout_free(&in);
+    avfilter_inout_free(&out);
+    close_video_filters(pv);
+
+    return 1;
+}
+
+static void filter_video(hb_work_private_t *pv)
+{
+    reinit_video_filters(pv);
+    if (pv->video_filters.graph != NULL)
+    {
+        int result;
+
+        av_buffersrc_add_frame(pv->video_filters.input, pv->frame);
+        result = av_buffersink_get_frame(pv->video_filters.output, pv->frame);
+        while (result >= 0)
+        {
+            hb_buffer_t * buf = copy_frame(pv);
+            hb_buffer_list_append(&pv->list, buf);
+            av_frame_unref(pv->frame);
+            ++pv->nframes;
+
+            result = av_buffersink_get_frame(pv->video_filters.output,
+                                             pv->frame);
+        }
+    }
+    else
+    {
+        hb_buffer_t * buf = copy_frame(pv);
+        hb_buffer_list_append(&pv->list, buf);
+        av_frame_unref(pv->frame);
+        ++pv->nframes;
     }
 }
 
@@ -1147,141 +1408,9 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
         }
         got_picture = 1;
 
-        uint16_t flags = 0;
-
-        // ffmpeg makes it hard to attach a pts to a frame. if the MPEG ES
-        // packet had a pts we handed it to av_parser_parse (if the packet had
-        // no pts we set it to AV_NOPTS_VALUE, but before the parse we can't
-        // distinguish between the start of a video frame with no pts & an
-        // intermediate packet of some frame which never has a pts). we hope
-        // that when parse returns the frame to us the pts we originally
-        // handed it will be in parser->pts. we put this pts into avp.pts so
-        // that when avcodec_receive_frame finally gets around to allocating an
-        // AVFrame to hold the decoded frame, avcodec_default_get_buffer can
-        // stuff that pts into the it. if all of these relays worked at this
-        // point frame.pts should hold the frame's pts from the original data
-        // stream or AV_NOPTS_VALUE if it didn't have one. in the latter case
-        // we generate the next pts in sequence for it.
-
         // recompute the frame/field duration, because sometimes it changes
         compute_frame_duration( pv );
-
-        double  frame_dur = pv->duration;
-        if ( pv->frame->repeat_pict )
-        {
-            frame_dur += pv->frame->repeat_pict * pv->field_duration;
-        }
-        hb_buffer_t * out = copy_frame( pv );
-        if (out->s.start == AV_NOPTS_VALUE)
-        {
-            out->s.start = pv->next_pts;
-        }
-        else
-        {
-            pv->next_pts = out->s.start;
-        }
-        if (pv->next_pts != (int64_t)AV_NOPTS_VALUE)
-        {
-            pv->next_pts += frame_dur;
-            out->s.stop   = pv->next_pts;
-        }
-
-        if ( pv->frame->top_field_first )
-        {
-            flags |= PIC_FLAG_TOP_FIELD_FIRST;
-        }
-        if ( !pv->frame->interlaced_frame )
-        {
-            flags |= PIC_FLAG_PROGRESSIVE_FRAME;
-        }
-        if ( pv->frame->repeat_pict == 1 )
-        {
-            flags |= PIC_FLAG_REPEAT_FIRST_FIELD;
-        }
-        if ( pv->frame->repeat_pict == 2 )
-        {
-            flags |= PIC_FLAG_REPEAT_FRAME;
-        }
-        int frametype = get_frame_type(pv->frame->pict_type);
-
-        // Check for CC data
-        AVFrameSideData *sd;
-        sd = av_frame_get_side_data(pv->frame, AV_FRAME_DATA_A53_CC);
-        if (sd != NULL)
-        {
-            if (!pv->job && pv->title && sd->size > 0)
-            {
-                hb_subtitle_t *subtitle;
-                int i = 0;
-
-                while ((subtitle = hb_list_item(pv->title->list_subtitle, i++)))
-                {
-                    /*
-                     * Let's call them 608 subs for now even if they aren't,
-                     * since they are the only types we grok.
-                     */
-                    if (subtitle->source == CC608SUB)
-                    {
-                        break;
-                    }
-                }
-                if (subtitle == NULL)
-                {
-                    iso639_lang_t * lang;
-                    hb_audio_t    * audio;
-
-                    subtitle        = calloc(sizeof( hb_subtitle_t ), 1);
-                    subtitle->track = hb_list_count(pv->title->list_subtitle);
-                    subtitle->id          = 0;
-                    subtitle->format      = TEXTSUB;
-                    subtitle->source      = CC608SUB;
-                    subtitle->config.dest = PASSTHRUSUB;
-                    subtitle->codec       = WORK_DECCC608;
-                    subtitle->attributes  = HB_SUBTITLE_ATTR_CC;
-
-                    /*
-                     * The language of the subtitles will be the same as the
-                     * first audio track, i.e. the same as the video.
-                     */
-                    audio = hb_list_item(pv->title->list_audio, 0);
-                    if (audio != NULL)
-                    {
-                        lang = lang_for_code2( audio->config.lang.iso639_2 );
-                    } else {
-                        lang = lang_for_code2( "und" );
-                    }
-                    snprintf(subtitle->lang, sizeof(subtitle->lang),
-                             "%s, Closed Caption [%s]",
-                             strlen(lang->native_name) ? lang->native_name :
-                                                         lang->eng_name,
-                             hb_subsource_name(subtitle->source));
-                    snprintf(subtitle->iso639_2, sizeof(subtitle->iso639_2),
-                             "%s", lang->iso639_2);
-
-                    hb_list_add(pv->title->list_subtitle, subtitle);
-                }
-            }
-            if (pv->list_subtitle != NULL && sd->size > 0)
-            {
-                hb_buffer_t *cc_buf;
-                cc_buf = cc_fill_buffer(pv, sd->data, sd->size);
-                if (cc_buf != NULL)
-                {
-                    cc_buf->s.start        = out->s.start;
-                    cc_buf->s.scr_sequence = out->s.scr_sequence;
-                }
-                cc_send_to_decoder(pv, cc_buf);
-            }
-        }
-
-        av_frame_unref(pv->frame);
-
-        out->s.duration  = frame_dur;
-        out->s.flags     = flags;
-        out->s.frametype = frametype;
-
-        hb_buffer_list_append(&pv->list, out);
-        ++pv->nframes;
+        filter_video(pv);
     } while (ret >= 0);
 
     if ( global_verbosity_level <= 1 )
@@ -1893,14 +2022,29 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         return 0;
 
     info->bitrate = pv->context->bit_rate;
-    // HandBrake's video pipeline uses yuv420 color.  This means all
-    // dimensions must be even.  So we must adjust the dimensions
-    // of incoming video if not even.
-    info->geometry.width = pv->context->width & ~1;
-    info->geometry.height = pv->context->height & ~1;
+    if (w->title->rotation == HB_ROTATION_90 ||
+        w->title->rotation == HB_ROTATION_270)
+    {
+        // HandBrake's video pipeline uses yuv420 color.  This means all
+        // dimensions must be even.  So we must adjust the dimensions
+        // of incoming video if not even.
+        info->geometry.width = pv->context->height & ~1;
+        info->geometry.height = pv->context->width & ~1;
 
-    info->geometry.par.num = pv->context->sample_aspect_ratio.num;
-    info->geometry.par.den = pv->context->sample_aspect_ratio.den;
+        info->geometry.par.num = pv->context->sample_aspect_ratio.den;
+        info->geometry.par.den = pv->context->sample_aspect_ratio.num;
+    }
+    else
+    {
+        // HandBrake's video pipeline uses yuv420 color.  This means all
+        // dimensions must be even.  So we must adjust the dimensions
+        // of incoming video if not even.
+        info->geometry.width = pv->context->width & ~1;
+        info->geometry.height = pv->context->height & ~1;
+
+        info->geometry.par.num = pv->context->sample_aspect_ratio.num;
+        info->geometry.par.den = pv->context->sample_aspect_ratio.den;
+    }
 
     compute_frame_duration( pv );
     info->rate.num = clock;

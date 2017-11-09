@@ -401,62 +401,6 @@ static void fill_frame(hb_filter_private_t * pv,
     frame->top_field_first  = !!(buf->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
 }
 
-static hb_buffer_t* avframe_to_buffer(hb_filter_private_t * pv, AVFrame *frame)
-{
-    hb_buffer_t * buf;
-
-    buf = hb_frame_buffer_init(frame->format, frame->width, frame->height);
-    if (buf == NULL)
-    {
-        return NULL;
-    }
-
-    int pp;
-    for (pp = 0; pp < 3; pp++)
-    {
-        int yy;
-        int width     = buf->plane[pp].width;
-        int stride    = buf->plane[pp].stride;
-        int height    = buf->plane[pp].height;
-        int linesize  = frame->linesize[pp];
-        uint8_t * dst = buf->plane[pp].data;
-        uint8_t * src = frame->data[pp];
-
-        for (yy = 0; yy < height; yy++)
-        {
-            memcpy(dst, src, width);
-            dst += stride;
-            src += linesize;
-        }
-    }
-    buf->s.start = av_rescale_q(frame->pts, pv->out_time_base,
-                                (AVRational){1, 90000});
-    buf->s.duration = frame->reordered_opaque;
-
-    if (frame->top_field_first)
-    {
-        buf->s.flags |= PIC_FLAG_TOP_FIELD_FIRST;
-    }
-    if (!frame->interlaced_frame)
-    {
-        buf->s.flags |= PIC_FLAG_PROGRESSIVE_FRAME;
-    }
-    else
-    {
-        buf->s.combed = HB_COMB_HEAVY;
-    }
-    if (frame->repeat_pict == 1)
-    {
-        buf->s.flags |= PIC_FLAG_REPEAT_FIRST_FIELD;
-    }
-    if (frame->repeat_pict == 2)
-    {
-        buf->s.flags |= PIC_FLAG_REPEAT_FRAME;
-    }
-
-    return buf;
-}
-
 static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
 {
     int                result;
@@ -473,7 +417,8 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
     result = av_buffersink_get_frame(pv->output, pv->frame);
     while (result >= 0)
     {
-        hb_buffer_t * buf = avframe_to_buffer(pv, pv->frame);
+        hb_buffer_t * buf = hb_avframe_to_video_buffer(pv->frame,
+                                                       pv->out_time_base);
         hb_buffer_list_append(&pv->list, buf);
         av_frame_unref(pv->frame);
 
@@ -793,5 +738,33 @@ void hb_avfilter_combine( hb_list_t * list )
         }
         ii++;
     }
+}
+
+char * hb_append_filter_string(char * graph_str, char * filter_str)
+{
+    char * tmp;
+    int    size = 1, len = 0;
+
+    if (graph_str != NULL)
+    {
+        len = strlen(graph_str);
+        size += len + 1;
+    }
+    if (filter_str != NULL)
+    {
+        size += strlen(filter_str);
+    }
+    tmp = realloc(graph_str, size);
+    if (tmp == NULL)
+    {
+        return graph_str;
+    }
+    graph_str = tmp;
+    if (len > 0)
+    {
+        graph_str[len++] = ',';
+    }
+    strcpy(&graph_str[len], filter_str);
+    return graph_str;
 }
 
