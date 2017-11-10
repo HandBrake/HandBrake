@@ -155,7 +155,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     }
 
     [self.categories selectItemWithTag:2];
-
+    [self selectCategoryFromMenu:self.categories.selectedItem];
 }
 
 - (IBAction)selectCategoryFromMenu:(NSMenuItem *)sender
