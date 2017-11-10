@@ -749,6 +749,9 @@ struct hb_job_s
 #define HB_AUDIO_ATTR_ALT_COMMENTARY    0x08
 #define HB_AUDIO_ATTR_SECONDARY         0x10
 #define HB_AUDIO_ATTR_DEFAULT           0x20
+// This mask should contain all attributes that are allowed for default
+// audio track selection
+#define HB_AUDIO_ATTR_REGULAR_MASK      0x21
 
 // Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_audio_config_s.cs when changing this struct
 struct hb_audio_config_s

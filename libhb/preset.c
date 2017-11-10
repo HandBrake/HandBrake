@@ -405,7 +405,7 @@ static int find_audio_track(const hb_title_t *title,
         // allow any audio track type
         if ((behavior == 2 ||
              audio->lang.attributes == HB_AUDIO_ATTR_NONE ||
-             audio->lang.attributes == HB_AUDIO_ATTR_NORMAL) &&
+             (audio->lang.attributes & HB_AUDIO_ATTR_REGULAR_MASK)) &&
             (!strcmp(lang, audio->lang.iso639_2) || !strcmp(lang, "und")))
         {
             return ii;
