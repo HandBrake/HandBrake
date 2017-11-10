@@ -15,6 +15,7 @@
 #import "HBPreset.h"
 #import "HBMutablePreset.h"
 
+#import "HBSummaryViewController.h"
 #import "HBPictureViewController.h"
 #import "HBFiltersViewController.h"
 #import "HBVideoController.h"
@@ -98,9 +99,12 @@
     IBOutlet NSDrawer            * fPresetDrawer;
 }
 
+@property (nonatomic, strong) HBSummaryViewController *summaryController;
+@property (nonatomic, strong) IBOutlet NSTabViewItem *summaryTab;
+
 @property (nonatomic, weak) IBOutlet HBToolbarBadgedItem *showQueueToolbarItem;
 
-@property (unsafe_unretained) IBOutlet NSView *openTitleView;
+@property (nonatomic, unsafe_unretained) IBOutlet NSView *openTitleView;
 @property (nonatomic, readwrite) BOOL scanSpecificTitle;
 @property (nonatomic, readwrite) NSInteger scanSpecificTitleIdx;
 
@@ -241,6 +245,10 @@
     [fPresetDrawer setContentView:[fPresetsView view]];
     fPresetsView.delegate = self;
     [[fPresetDrawer contentView] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+
+    // Set up the summary view
+    self.summaryController = [[HBSummaryViewController alloc] init];
+    self.summaryTab.view = self.summaryController.view;
 
     // Set up the chapters title view
     fChapterTitlesController = [[HBChapterTitlesController alloc] init];
@@ -795,6 +803,7 @@
     job.undo = self.window.undoManager;
 
     // Set the jobs info to the view controllers
+    self.summaryController.job = job;
     fPictureViewController.picture = job.picture;
     fFiltersViewController.filters = job.filters;
     fVideoController.video = job.video;

@@ -85,6 +85,8 @@
 		A916C9991C8449E200C7B560 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 273F20BD14ADC09F0021BE6D /* main.mm */; };
 		A916C99A1C8449FB00C7B560 /* HBHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C9F88819A733FE00DC8923 /* HBHUDView.m */; };
 		A916C99B1C844A0800C7B560 /* HBQueueOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9EA43671A2210C400785E95 /* HBQueueOutlineView.m */; };
+		A919430D1FB5E2FE001E9BB0 /* HBSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A919430B1FB5E2FE001E9BB0 /* HBSummaryViewController.m */; };
+		A91943111FB5E39E001E9BB0 /* HBSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A919430F1FB5E39E001E9BB0 /* HBSummaryViewController.xib */; };
 		A91AD3401FB5D2FC00AEA822 /* HBAddCategoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91AD33E1FB5D2FC00AEA822 /* HBAddCategoryController.m */; };
 		A91AD3441FB5D9A500AEA822 /* HBAddCategoryController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91AD3421FB5D9A500AEA822 /* HBAddCategoryController.xib */; };
 		A91AD3471FB5D9AA00AEA822 /* AddPreset.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91AD3451FB5D9AA00AEA822 /* AddPreset.xib */; };
@@ -420,6 +422,9 @@
 		A91806701A4807B000FC9BED /* HBRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBRange.m; sourceTree = "<group>"; };
 		A9181CB01BD76F8400E5C8B0 /* HBSubtitlesTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesTrack.h; sourceTree = "<group>"; };
 		A9181CB11BD76F8400E5C8B0 /* HBSubtitlesTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesTrack.m; sourceTree = "<group>"; };
+		A919430A1FB5E2FE001E9BB0 /* HBSummaryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBSummaryViewController.h; sourceTree = "<group>"; };
+		A919430B1FB5E2FE001E9BB0 /* HBSummaryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBSummaryViewController.m; sourceTree = "<group>"; };
+		A91943101FB5E39E001E9BB0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/HBSummaryViewController.xib; sourceTree = "<group>"; };
 		A91AD33D1FB5D2FC00AEA822 /* HBAddCategoryController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAddCategoryController.h; sourceTree = "<group>"; };
 		A91AD33E1FB5D2FC00AEA822 /* HBAddCategoryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBAddCategoryController.m; sourceTree = "<group>"; };
 		A91AD3431FB5D9A500AEA822 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/HBAddCategoryController.xib; sourceTree = "<group>"; };
@@ -1192,6 +1197,9 @@
 			children = (
 				A9CF25F51990D6820023F727 /* HBPresetsViewController.h */,
 				A9CF25F61990D6820023F727 /* HBPresetsViewController.m */,
+				A919430A1FB5E2FE001E9BB0 /* HBSummaryViewController.h */,
+				A919430B1FB5E2FE001E9BB0 /* HBSummaryViewController.m */,
+				A919430F1FB5E39E001E9BB0 /* HBSummaryViewController.xib */,
 				A99F40CC1B624E7E00750170 /* HBPictureViewController.h */,
 				A99F40CD1B624E7E00750170 /* HBPictureViewController.m */,
 				A91485FC1F61296100374C12 /* HBFiltersViewController.h */,
@@ -1485,6 +1493,7 @@
 				A9E1468216BC2AD800C307BC /* PlayTemplate.pdf in Resources */,
 				A91AD3441FB5D9A500AEA822 /* HBAddCategoryController.xib in Resources */,
 				A96664BB1CCE493D00DA4A57 /* HBEncodingProgressHUDController.xib in Resources */,
+				A91943111FB5E39E001E9BB0 /* HBSummaryViewController.xib in Resources */,
 				A9E1468316BC2AD800C307BC /* PrevTemplate.pdf in Resources */,
 				A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */,
 				A91485FF1F612A8A00374C12 /* HBFiltersViewController.xib in Resources */,
@@ -1557,6 +1566,7 @@
 				A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */,
 				A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */,
 				A96664BA1CCE493D00DA4A57 /* HBEncodingProgressHUDController.m in Sources */,
+				A919430D1FB5E2FE001E9BB0 /* HBSummaryViewController.m in Sources */,
 				A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */,
 				A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */,
 				A93B49221DA3AA6900DD70A3 /* HBToolbarBadgedItem.m in Sources */,
@@ -1735,6 +1745,14 @@
 				A91485FB1F61291F00374C12 /* English */,
 			);
 			name = HBFiltersViewController.xib;
+			sourceTree = "<group>";
+		};
+		A919430F1FB5E39E001E9BB0 /* HBSummaryViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A91943101FB5E39E001E9BB0 /* English */,
+			);
+			name = HBSummaryViewController.xib;
 			sourceTree = "<group>";
 		};
 		A91AD3421FB5D9A500AEA822 /* HBAddCategoryController.xib */ = {

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13189.4" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13189.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
+        <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -32,6 +33,7 @@
                 <outlet property="fVideoTab" destination="1477" id="hFY-kK-afW"/>
                 <outlet property="openTitleView" destination="lZQ-gl-3wX" id="Wh6-fB-pWi"/>
                 <outlet property="showQueueToolbarItem" destination="HCx-ku-nF7" id="CC6-Yu-j7N"/>
+                <outlet property="summaryTab" destination="BA0-eg-2Ka" id="wh5-Js-weO"/>
                 <outlet property="window" destination="21" id="qib-ZH-aNm"/>
             </connections>
         </customObject>
@@ -40,71 +42,61 @@
         <window title="HandBrake" allowsToolTipsWhenApplicationIsInactive="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="HBMainWindow" animationBehavior="default" id="21" userLabel="MainWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="41" y="572" width="920" height="568"/>
+            <rect key="contentRect" x="41" y="572" width="920" height="562"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1178"/>
-            <value key="minSize" type="size" width="920" height="568"/>
-            <view key="contentView" id="2" customClass="HBFocusRingView">
-                <rect key="frame" x="0.0" y="0.0" width="920" height="568"/>
+            <view key="contentView" misplaced="YES" id="2" customClass="HBFocusRingView">
+                <rect key="frame" x="0.0" y="0.0" width="920" height="562"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1123">
-                        <rect key="frame" x="18" y="2" width="711" height="28"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="4846">
-                            <font key="font" metaFont="smallSystem"/>
-                            <string key="title">DO NOT TRANSLATE THIS NIB FILE,
-</string>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <progressIndicator wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" style="bar" id="1373">
-                        <rect key="frame" x="18" y="-26" width="884" height="20"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    </progressIndicator>
-                    <tabView controlSize="small" initialItem="1477" id="1474" customClass="HBTabView">
-                        <rect key="frame" x="13" y="27" width="894" height="357"/>
+                    <tabView misplaced="YES" controlSize="small" initialItem="1477" id="1474" customClass="HBTabView">
+                        <rect key="frame" x="13" y="82" width="894" height="377"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <tabViewItems>
+                            <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
+                                <view key="view" id="BjX-E2-6tb">
+                                    <rect key="frame" x="10" y="29" width="874" height="335"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                            </tabViewItem>
                             <tabViewItem label="Video" identifier="1" id="1477">
                                 <view key="view" id="1478">
-                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="339"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Dimensions" identifier="2" id="eij-Sn-QmJ" userLabel="PictureTab">
                                 <view key="view" id="nvx-9b-6fF">
-                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="339"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Filters" identifier="" id="0UB-bG-kwS">
                                 <view key="view" id="JAj-E3-Cq2">
-                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="339"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Audio" identifier="3" id="1475">
                                 <view key="view" id="1476">
-                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="339"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Subtitles" identifier="4" id="5194">
                                 <view key="view" id="5195">
-                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="339"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Chapters" identifier="5" id="1989">
                                 <view key="view" id="1990">
-                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="339"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Advanced" identifier="6" id="2015">
                                 <view key="view" id="2016">
-                                    <rect key="frame" x="10" y="25" width="874" height="319"/>
+                                    <rect key="frame" x="10" y="25" width="874" height="339"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -114,7 +106,7 @@
                         </connections>
                     </tabView>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1538">
-                        <rect key="frame" x="20" y="540" width="54" height="14"/>
+                        <rect key="frame" x="20" y="534" width="54" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Source:" id="4905">
                             <font key="font" metaFont="smallSystemBold"/>
@@ -122,8 +114,8 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1540">
-                        <rect key="frame" x="17" y="511" width="35" height="14"/>
+                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1540">
+                        <rect key="frame" x="17" y="504" width="35" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Title:" id="4907">
                             <font key="font" metaFont="smallSystem"/>
@@ -134,8 +126,8 @@
                             <binding destination="-2" name="textColor" keyPath="self.labelColor" id="cpH-Kt-lRM"/>
                         </connections>
                     </textField>
-                    <popUpButton toolTip="Source range selection. By default, all chapters are selected and the entire source is encoded." verticalHuggingPriority="750" id="5513">
-                        <rect key="frame" x="503" y="506" width="84" height="22"/>
+                    <popUpButton toolTip="Source range selection. By default, all chapters are selected and the entire source is encoded." verticalHuggingPriority="750" misplaced="YES" id="5513">
+                        <rect key="frame" x="503" y="499" width="84" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="5514">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -153,8 +145,8 @@
                             <binding destination="-2" name="content" keyPath="self.job.range.types" id="jpv-yJ-Fca"/>
                         </connections>
                     </popUpButton>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5180">
-                        <rect key="frame" x="401" y="511" width="46" height="14"/>
+                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="5180">
+                        <rect key="frame" x="401" y="504" width="46" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Angle:" id="5185">
                             <font key="font" metaFont="smallSystem"/>
@@ -171,7 +163,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1552">
-                        <rect key="frame" x="17" y="458" width="48" height="14"/>
+                        <rect key="frame" x="17" y="46" width="48" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Save as:" id="4913">
                             <font key="font" metaFont="smallSystem"/>
@@ -182,8 +174,8 @@
                             <binding destination="-2" name="textColor" keyPath="self.labelColor" id="cNL-U3-HcC"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1553">
-                        <rect key="frame" x="780" y="511" width="65" height="14"/>
+                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1553">
+                        <rect key="frame" x="780" y="504" width="65" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Duration:" id="4914">
                             <font key="font" metaFont="smallSystem"/>
@@ -198,8 +190,8 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField toolTip="Duration of the selected source range in Hours:Minutes:Seconds." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1554">
-                        <rect key="frame" x="842" y="511" width="60" height="14"/>
+                    <textField toolTip="Duration of the selected source range in Hours:Minutes:Seconds." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1554">
+                        <rect key="frame" x="842" y="504" width="60" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" alignment="right" title="00:00:00" id="4915">
                             <font key="font" metaFont="smallSystem"/>
@@ -216,48 +208,8 @@
                             <binding destination="-2" name="value" keyPath="self.job.range.duration" id="I4g-Nz-YXQ"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1555">
-                        <rect key="frame" x="20" y="486" width="70" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Destination" id="4916">
-                            <font key="font" metaFont="smallSystemBold"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <popUpButton toolTip="Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility." verticalHuggingPriority="750" id="1557">
-                        <rect key="frame" x="76" y="398" width="177" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1559" id="4918">
-                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                            <menu key="menu" title="OtherViews" id="1558">
-                                <items>
-                                    <menuItem state="on" id="1559"/>
-                                </items>
-                            </menu>
-                        </popUpButtonCell>
-                        <connections>
-                            <accessibilityConnection property="title" destination="1556" id="IXx-KY-Mo3"/>
-                            <binding destination="-2" name="enabled" keyPath="self.job" id="GHf-iI-Xg0">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSIsNotNil</string>
-                                </dictionary>
-                            </binding>
-                            <binding destination="-2" name="selectedValue" keyPath="self.job.container" previousBinding="aNr-1N-DaN" id="lwk-pF-rbW">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">HBContainerTransformer</string>
-                                </dictionary>
-                            </binding>
-                            <binding destination="-2" name="content" keyPath="self.job.containers" id="aNr-1N-DaN"/>
-                        </connections>
-                    </popUpButton>
-                    <box verticalHuggingPriority="750" boxType="separator" id="1623">
-                        <rect key="frame" x="98" y="490" width="802" height="5"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    </box>
                     <textField toolTip="Source file name." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1539">
-                        <rect key="frame" x="70" y="540" width="310" height="14"/>
+                        <rect key="frame" x="70" y="533" width="310" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES" heightSizable="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingMiddle" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" id="4906">
                             <font key="font" metaFont="smallSystem"/>
@@ -269,7 +221,7 @@
                         </connections>
                     </textField>
                     <textField toolTip="File name. This is what your new video will be named." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1561">
-                        <rect key="frame" x="71" y="455" width="374" height="19"/>
+                        <rect key="frame" x="71" y="43" width="374" height="19"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="4919">
                             <font key="font" metaFont="smallSystem"/>
@@ -286,8 +238,8 @@
                             <binding destination="-2" name="value" keyPath="self.job.outputFileName" id="NAL-fw-AF5"/>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="First second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5491">
-                        <rect key="frame" x="592" y="492" width="54" height="19"/>
+                    <textField hidden="YES" toolTip="First second to encode." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="5491">
+                        <rect key="frame" x="592" y="485" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5492">
                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Fdv-uE-tUA">
@@ -312,8 +264,8 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="First frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5521">
-                        <rect key="frame" x="649" y="492" width="54" height="19"/>
+                    <textField hidden="YES" toolTip="First frame to encode." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="5521">
+                        <rect key="frame" x="649" y="485" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5522">
                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Wpt-92-R1O">
@@ -338,8 +290,8 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="Last second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5493">
-                        <rect key="frame" x="707" y="492" width="54" height="19"/>
+                    <textField hidden="YES" toolTip="Last second to encode." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="5493">
+                        <rect key="frame" x="707" y="485" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5494">
                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="tD5-HN-B7h">
@@ -364,8 +316,8 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="Last frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5523">
-                        <rect key="frame" x="769" y="492" width="54" height="19"/>
+                    <textField hidden="YES" toolTip="Last frame to encode." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="5523">
+                        <rect key="frame" x="769" y="485" width="54" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5524">
                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="WrK-kN-ZN0">
@@ -391,7 +343,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1627">
-                        <rect key="frame" x="20" y="430" width="45" height="14"/>
+                        <rect key="frame" x="20" y="472" width="45" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Preset:" id="4923">
                             <font key="font" metaFont="smallSystemBold"/>
@@ -399,12 +351,12 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <box verticalHuggingPriority="750" boxType="separator" id="1628">
-                        <rect key="frame" x="292" y="434" width="608" height="5"/>
+                    <box verticalHuggingPriority="750" misplaced="YES" boxType="separator" id="1628">
+                        <rect key="frame" x="292" y="476" width="608" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
                     <textField toolTip="Selected preset name." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1882">
-                        <rect key="frame" x="69" y="430" width="217" height="14"/>
+                        <rect key="frame" x="69" y="472" width="217" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="4924">
                             <font key="font" metaFont="smallSystemBold"/>
@@ -415,79 +367,16 @@
                             <binding destination="-2" name="value" keyPath="self.job.presetName" id="W9D-4K-e1F"/>
                         </connections>
                     </textField>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1556">
-                        <rect key="frame" x="21" y="403" width="53" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="4917">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <binding destination="-2" name="textColor" keyPath="self.labelColor" id="j6q-iC-kqw"/>
-                        </connections>
-                    </textField>
                     <box verticalHuggingPriority="750" boxType="separator" id="3205">
-                        <rect key="frame" x="391" y="543" width="509" height="5"/>
+                        <rect key="frame" x="391" y="537" width="509" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     </box>
                     <progressIndicator hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" controlSize="small" style="bar" id="3203">
-                        <rect key="frame" x="391" y="542" width="510" height="12"/>
+                        <rect key="frame" x="391" y="536" width="510" height="12"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     </progressIndicator>
-                    <button id="4579">
-                        <rect key="frame" x="269" y="401" width="102" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
-                        <buttonCell key="cell" type="check" title="Web Optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="4927">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="-2" name="value" keyPath="self.job.mp4HttpOptimize" id="k6d-kB-gvH"/>
-                            <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" id="5Ru-HP-Pjj">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                </dictionary>
-                            </binding>
-                        </connections>
-                    </button>
-                    <button misplaced="YES" id="4967">
-                        <rect key="frame" x="496" y="401" width="126" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <string key="toolTip">Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility.</string>
-                        <buttonCell key="cell" type="check" title="iPod 5G Support" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="4968">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="-2" name="value" keyPath="self.job.mp4iPodCompatible" id="Wze-yP-0B0"/>
-                            <binding destination="-2" name="hidden" keyPath="self.job.mp4iPodCompatibleEnabled" id="uSs-Xh-6ng">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                </dictionary>
-                            </binding>
-                        </connections>
-                    </button>
-                    <button misplaced="YES" id="sdn-Gd-gTV">
-                        <rect key="frame" x="382" y="401" width="107" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <string key="toolTip">Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</string>
-                        <buttonCell key="cell" type="check" title="Align A/V Start" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="mvs-91-C88">
-                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                            <font key="font" metaFont="smallSystem"/>
-                        </buttonCell>
-                        <connections>
-                            <binding destination="-2" name="value" keyPath="self.job.alignAVStart" id="sxJ-8V-e06"/>
-                            <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" id="ZrC-0O-04k">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                </dictionary>
-                            </binding>
-                        </connections>
-                    </button>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="5505">
-                        <rect key="frame" x="648" y="510" width="56" height="15"/>
+                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="5505">
+                        <rect key="frame" x="648" y="503" width="56" height="15"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="through" id="5506">
                             <font key="font" metaFont="smallSystem"/>
@@ -502,8 +391,8 @@
                             </binding>
                         </connections>
                     </textField>
-                    <popUpButton toolTip="First chapter to encode." verticalHuggingPriority="750" id="1545">
-                        <rect key="frame" x="589" y="506" width="60" height="22"/>
+                    <popUpButton toolTip="First chapter to encode." verticalHuggingPriority="750" misplaced="YES" id="1545">
+                        <rect key="frame" x="589" y="499" width="60" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1547" id="4910">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -525,8 +414,8 @@
                             </binding>
                         </connections>
                     </popUpButton>
-                    <popUpButton toolTip="Last chapter to encode." verticalHuggingPriority="750" id="1548">
-                        <rect key="frame" x="704" y="506" width="60" height="22"/>
+                    <popUpButton toolTip="Last chapter to encode." verticalHuggingPriority="750" misplaced="YES" id="1548">
+                        <rect key="frame" x="704" y="499" width="60" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1550" id="4911">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -548,8 +437,8 @@
                             </binding>
                         </connections>
                     </popUpButton>
-                    <popUpButton toolTip="Video angle to encode. Only applicable to multi-angle DVD and Blu-ray." verticalHuggingPriority="750" id="5181">
-                        <rect key="frame" x="450" y="506" width="44" height="22"/>
+                    <popUpButton toolTip="Video angle to encode. Only applicable to multi-angle DVD and Blu-ray." verticalHuggingPriority="750" misplaced="YES" id="5181">
+                        <rect key="frame" x="450" y="499" width="44" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="5184" id="5182">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -583,8 +472,8 @@ IA
                             </binding>
                         </connections>
                     </popUpButton>
-                    <popUpButton verticalHuggingPriority="750" id="1541">
-                        <rect key="frame" x="53" y="506" width="319" height="22"/>
+                    <popUpButton verticalHuggingPriority="750" misplaced="YES" id="1541">
+                        <rect key="frame" x="53" y="499" width="319" height="22"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <string key="toolTip">Title, or video clip, to encode. The longest title is selected by default.
 
@@ -608,7 +497,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </popUpButton>
                     <pathControl verticalHuggingPriority="750" misplaced="YES" allowsExpansionToolTips="YES" id="PJi-21-hie">
-                        <rect key="frame" x="506" y="455" width="328" height="20"/>
+                        <rect key="frame" x="506" y="43" width="328" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <pathCell key="cell" controlSize="small" selectable="YES" alignment="left" id="5Bk-66-HFW">
                             <font key="font" metaFont="smallSystem"/>
@@ -619,7 +508,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </pathControl>
                     <button toolTip="Browse to select a new destination path for your encode." verticalHuggingPriority="750" misplaced="YES" id="1562">
-                        <rect key="frame" x="831" y="450" width="74" height="28"/>
+                        <rect key="frame" x="831" y="38" width="74" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="push" title="Browse…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="4920">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -636,7 +525,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="gfs-4j-YSE">
-                        <rect key="frame" x="458" y="458" width="40" height="14"/>
+                        <rect key="frame" x="458" y="46" width="40" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="To:" id="rfK-nQ-Aq2">
                             <font key="font" metaFont="smallSystem"/>
@@ -647,6 +536,44 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <binding destination="-2" name="textColor" keyPath="self.labelColor" id="dvP-fr-nOv"/>
                         </connections>
                     </textField>
+                    <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1sh-mY-niN">
+                        <rect key="frame" x="16" y="70" width="80" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Destination:" id="jOz-uF-e6M">
+                            <font key="font" metaFont="smallSystemBold"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <box verticalHuggingPriority="750" misplaced="YES" boxType="separator" id="toi-Hh-ZsU">
+                        <rect key="frame" x="95" y="74" width="805" height="5"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    </box>
+                    <box autoresizesSubviews="NO" misplaced="YES" borderType="line" title="Box" titlePosition="noTitle" id="d0E-xw-bxh">
+                        <rect key="frame" x="-7" y="-63" width="934" height="92"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="idQ-Ti-X2a">
+                            <rect key="frame" x="1" y="1" width="932" height="90"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <progressIndicator wantsLayer="YES" verticalHuggingPriority="750" misplaced="YES" maxValue="1" bezeled="NO" style="bar" id="1373">
+                                    <rect key="frame" x="24" y="29" width="884" height="20"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                </progressIndicator>
+                                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1123">
+                                    <rect key="frame" x="24" y="54" width="711" height="28"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" id="4846">
+                                        <font key="font" metaFont="smallSystem"/>
+                                        <string key="title">DO NOT TRANSLATE THIS NIB FILE,
+</string>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                            </subviews>
+                        </view>
+                    </box>
                 </subviews>
             </view>
             <toolbar key="toolbar" implicitIdentifier="E92CA47A-01F7-432A-A61C-28FE4D58C2CD" explicitIdentifier="HBMainWindowToolbar" displayMode="iconAndLabel" sizeMode="regular" id="7g3-gy-bUl">
@@ -682,7 +609,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         <popUpButton key="view" misplaced="YES" imageHugsTitle="YES" id="pJJ-0V-TQq">
                             <rect key="frame" x="28" y="14" width="58" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addqueue" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="QCi-1O-Msg">
@@ -749,7 +676,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="1565" y="36"/>
+            <point key="canvasLocation" x="1565" y="13"/>
         </window>
         <drawer trailingOffset="15" id="1841" userLabel="PresetsDrawer">
             <size key="contentSize" width="240" height="550"/>
