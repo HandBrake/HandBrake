@@ -9,10 +9,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class HBPreset;
+@class HBPresetsManager;
 
 @interface HBAddPresetController : NSWindowController
 
-- (instancetype)initWithPreset:(HBPreset *)preset customWidth:(int)customWidth customHeight:(int)customHeight defaultToCustom:(BOOL)defaultToCustom;
+- (instancetype)initWithPreset:(HBPreset *)preset presetManager:(HBPresetsManager *)manager customWidth:(int)customWidth customHeight:(int)customHeight defaultToCustom:(BOOL)defaultToCustom;
 
 @property (nonatomic, readonly) HBPreset *preset;
 

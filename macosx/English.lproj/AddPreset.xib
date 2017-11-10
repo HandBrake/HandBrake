@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13122.17" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13122.17"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBAddPresetController">
             <connections>
+                <outlet property="categories" destination="bma-pS-phM" id="H9g-7F-uan"/>
                 <outlet property="desc" destination="8kl-Sh-Gh7" id="Go1-hY-VFV"/>
                 <outlet property="name" destination="aKg-n4-OUS" id="FXa-ee-AN8"/>
                 <outlet property="picHeight" destination="Mga-dS-8BF" id="blD-Jx-MtN"/>
@@ -23,14 +24,14 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="New Preset" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="dbZ-Wo-9nG" userLabel="AddPresetPanel">
             <windowStyleMask key="styleMask" titled="YES" resizable="YES"/>
-            <rect key="contentRect" x="421" y="536" width="480" height="229"/>
+            <rect key="contentRect" x="421" y="536" width="480" height="239"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
-            <view key="contentView" id="AcO-9f-fnb">
-                <rect key="frame" x="0.0" y="0.0" width="480" height="229"/>
+            <view key="contentView" misplaced="YES" id="AcO-9f-fnb">
+                <rect key="frame" x="0.0" y="0.0" width="480" height="239"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Wy7-cF-tGv">
-                        <rect key="frame" x="18" y="193" width="75" height="14"/>
+                        <rect key="frame" x="18" y="211" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Preset Name:" id="jhj-Et-ncF">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -62,7 +63,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="zDq-QP-LAu">
-                        <rect key="frame" x="18" y="168" width="75" height="14"/>
+                        <rect key="frame" x="18" y="186" width="75" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Description:" id="hc8-1h-Jye">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -96,7 +97,7 @@ Gw
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="249" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8kl-Sh-Gh7">
-                        <rect key="frame" x="99" y="144" width="361" height="38"/>
+                        <rect key="frame" x="99" y="162" width="361" height="38"/>
                         <string key="toolTip">Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list.</string>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="38" id="2sm-hv-l5W"/>
@@ -121,7 +122,7 @@ Gw
                         </connections>
                     </button>
                     <textField toolTip="Enter a name for the new preset. This name will be displayed in the presets list." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aKg-n4-OUS">
-                        <rect key="frame" x="99" y="190" width="361" height="19"/>
+                        <rect key="frame" x="99" y="208" width="361" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="xe0-bj-f3Z">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -222,6 +223,42 @@ Source maximum uses the full dimensions of each source.</string>
                             <action selector="openUserGuide:" target="-2" id="CPW-1S-pHx"/>
                         </connections>
                     </button>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="f1M-Sg-uDB">
+                        <rect key="frame" x="18" y="138" width="75" height="14"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Category:" id="IyE-Lz-32s">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <popUpButton verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bma-pS-phM">
+                        <rect key="frame" x="96" y="133" width="175" height="22"/>
+                        <string key="toolTip">Picture Size controls how video dimensions are applied when selecting the preset.
+
+None uses the currently set dimensions.
+
+Custom allows you to set a maximum width and/or height.
+
+Source maximum uses the full dimensions of each source.</string>
+                        <popUpButtonCell key="cell" type="push" title="New Category…" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Sf8-HP-mhE" id="mZR-uO-YA8">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                            <menu key="menu" title="OtherViews" id="tQ1-PN-kvh">
+                                <items>
+                                    <menuItem title="New Category…" id="Sf8-HP-mhE">
+                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                        <connections>
+                                            <action selector="showNewCategoryWindow:" target="-2" id="a4V-O5-hXQ"/>
+                                        </connections>
+                                    </menuItem>
+                                    <menuItem isSeparatorItem="YES" id="WiF-0h-rb4"/>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <accessibilityConnection property="title" destination="f1M-Sg-uDB" id="cMn-eW-Mml"/>
+                        </connections>
+                    </popUpButton>
                 </subviews>
                 <constraints>
                     <constraint firstItem="fLU-xs-0du" firstAttribute="baseline" secondItem="Y03-Ts-ZA4" secondAttribute="baseline" id="0EW-fw-JLy"/>
@@ -230,17 +267,21 @@ Source maximum uses the full dimensions of each source.</string>
                     <constraint firstItem="aez-2b-JXx" firstAttribute="top" secondItem="z6B-ig-ouq" secondAttribute="bottom" constant="10" id="4Z4-Zb-Xaa"/>
                     <constraint firstItem="H9n-64-GXz" firstAttribute="centerY" secondItem="z6B-ig-ouq" secondAttribute="centerY" constant="3" id="5tq-QZ-6b1"/>
                     <constraint firstItem="H9n-64-GXz" firstAttribute="leading" secondItem="z6B-ig-ouq" secondAttribute="trailing" constant="1" id="7Vw-nX-giB"/>
+                    <constraint firstItem="f1M-Sg-uDB" firstAttribute="leading" secondItem="Wy7-cF-tGv" secondAttribute="leading" id="8Er-0i-D3o"/>
                     <constraint firstItem="Y03-Ts-ZA4" firstAttribute="top" secondItem="nWJ-0b-fUA" secondAttribute="bottom" constant="8" id="8xO-Rb-whc"/>
-                    <constraint firstItem="z6B-ig-ouq" firstAttribute="top" secondItem="8kl-Sh-Gh7" secondAttribute="bottom" constant="24" id="Ctr-hQ-r5q"/>
                     <constraint firstAttribute="trailing" secondItem="H9n-64-GXz" secondAttribute="trailing" constant="52" id="E4M-1Z-GXf"/>
                     <constraint firstAttribute="trailing" secondItem="aKg-n4-OUS" secondAttribute="trailing" constant="20" id="Hax-Id-7bg"/>
                     <constraint firstAttribute="bottom" secondItem="AWD-QF-ZQB" secondAttribute="bottom" constant="20" id="INj-Gy-SO5"/>
+                    <constraint firstItem="bma-pS-phM" firstAttribute="top" secondItem="8kl-Sh-Gh7" secondAttribute="bottom" constant="8" id="JYL-Ce-WbQ"/>
+                    <constraint firstItem="bma-pS-phM" firstAttribute="leading" secondItem="f1M-Sg-uDB" secondAttribute="trailing" constant="8" id="Jyh-Yw-1Z8"/>
                     <constraint firstItem="aKg-n4-OUS" firstAttribute="leading" secondItem="Wy7-cF-tGv" secondAttribute="trailing" constant="8" id="LmP-Ky-GD4"/>
+                    <constraint firstItem="f1M-Sg-uDB" firstAttribute="width" secondItem="Wy7-cF-tGv" secondAttribute="width" id="Lnc-rr-Ctp"/>
                     <constraint firstItem="ubZ-rD-tIS" firstAttribute="baseline" secondItem="nWJ-0b-fUA" secondAttribute="baseline" id="M63-1o-d03"/>
                     <constraint firstItem="YVc-5E-NjK" firstAttribute="leading" secondItem="Wy7-cF-tGv" secondAttribute="leading" id="MIg-nV-B3M"/>
                     <constraint firstItem="gOg-oO-8ar" firstAttribute="leading" secondItem="z6B-ig-ouq" secondAttribute="trailing" constant="6" id="Mbf-ar-zbc"/>
                     <constraint firstItem="zDq-QP-LAu" firstAttribute="leading" secondItem="Wy7-cF-tGv" secondAttribute="leading" id="NgL-7U-KIJ"/>
                     <constraint firstItem="z6B-ig-ouq" firstAttribute="leading" secondItem="Wpk-WC-aVk" secondAttribute="trailing" constant="8" id="OwF-Ej-M37"/>
+                    <constraint firstItem="bma-pS-phM" firstAttribute="baseline" secondItem="f1M-Sg-uDB" secondAttribute="baseline" id="PH8-7Q-ncB"/>
                     <constraint firstItem="aKg-n4-OUS" firstAttribute="baseline" secondItem="Wy7-cF-tGv" secondAttribute="baseline" id="PUN-iB-1NP"/>
                     <constraint firstAttribute="bottom" secondItem="fLU-xs-0du" secondAttribute="bottom" constant="20" id="S8Z-g9-Gqs"/>
                     <constraint firstItem="nWJ-0b-fUA" firstAttribute="top" secondItem="aez-2b-JXx" secondAttribute="bottom" constant="10" id="SxY-XJ-yut"/>
@@ -260,6 +301,7 @@ Source maximum uses the full dimensions of each source.</string>
                     <constraint firstItem="Wpk-WC-aVk" firstAttribute="width" secondItem="YVc-5E-NjK" secondAttribute="width" id="mF0-Ky-Lla"/>
                     <constraint firstItem="aez-2b-JXx" firstAttribute="leading" secondItem="YVc-5E-NjK" secondAttribute="trailing" constant="8" id="mcI-hC-pLd"/>
                     <constraint firstItem="8kl-Sh-Gh7" firstAttribute="trailing" secondItem="aKg-n4-OUS" secondAttribute="trailing" id="mfh-7S-iAZ"/>
+                    <constraint firstItem="z6B-ig-ouq" firstAttribute="top" secondItem="bma-pS-phM" secondAttribute="bottom" constant="16" id="pqI-Ve-N4y"/>
                     <constraint firstItem="YVc-5E-NjK" firstAttribute="width" secondItem="ubZ-rD-tIS" secondAttribute="width" id="qKt-0Q-nbW"/>
                     <constraint firstItem="8kl-Sh-Gh7" firstAttribute="top" secondItem="aKg-n4-OUS" secondAttribute="bottom" constant="8" id="rE9-pC-SEc"/>
                     <constraint firstItem="zDq-QP-LAu" firstAttribute="top" secondItem="8kl-Sh-Gh7" secondAttribute="top" id="rek-Ct-2lN"/>
@@ -270,7 +312,7 @@ Source maximum uses the full dimensions of each source.</string>
             <connections>
                 <outlet property="delegate" destination="-2" id="YgD-Uk-vtp"/>
             </connections>
-            <point key="canvasLocation" x="93" y="126"/>
+            <point key="canvasLocation" x="93" y="130.5"/>
         </window>
     </objects>
 </document>

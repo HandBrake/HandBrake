@@ -6,8 +6,13 @@
 
 #import "HBAddPresetController.h"
 
+#import "HBAddCategoryController.h"
+
 #import "HBAudioDefaultsController.h"
 #import "HBSubtitlesDefaultsController.h"
+
+#import "HBPresetsManager.h"
+#import "HBPreset.h"
 
 @import HandBrakeKit;
 
@@ -22,6 +27,8 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 @property (unsafe_unretained) IBOutlet NSTextField *name;
 @property (unsafe_unretained) IBOutlet NSTextField *desc;
 
+@property (unsafe_unretained) IBOutlet NSPopUpButton *categories;
+
 @property (unsafe_unretained) IBOutlet NSPopUpButton *picSettingsPopUp;
 @property (unsafe_unretained) IBOutlet NSTextField *picWidth;
 @property (unsafe_unretained) IBOutlet NSTextField *picHeight;
@@ -29,6 +36,10 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 
 @property (nonatomic, strong) HBPreset *preset;
 @property (nonatomic, strong) HBMutablePreset *mutablePreset;
+
+@property (nonatomic, strong) HBPreset *selectedCategory;
+
+@property (nonatomic, strong) HBPresetsManager *manager;
 
 @property (nonatomic) int width;
 @property (nonatomic) int height;
@@ -42,13 +53,14 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 
 @implementation HBAddPresetController
 
-- (instancetype)initWithPreset:(HBPreset *)preset customWidth:(int)customWidth customHeight:(int)customHeight defaultToCustom:(BOOL)defaultToCustom
+- (instancetype)initWithPreset:(HBPreset *)preset presetManager:(HBPresetsManager *)manager customWidth:(int)customWidth customHeight:(int)customHeight defaultToCustom:(BOOL)defaultToCustom
 {
     self = [super initWithWindowNibName:@"AddPreset"];
     if (self)
     {
         NSParameterAssert(preset);
         _mutablePreset = [preset mutableCopy];
+        _manager = manager;
         _width = customWidth;
         _height = customHeight;
         _defaultToCustom = defaultToCustom;
@@ -58,6 +70,17 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 
 - (void)windowDidLoad {
     [super windowDidLoad];
+
+    // Build the categories menu, and select the first
+    [self buildCategoriesMenu];
+    if ([self.categories selectItemWithTag:2] == NO)
+    {
+        HBPreset *category = [[HBPreset alloc] initWithCategoryName:@"My Presets" builtIn:NO];
+        [self.manager addPreset:category];
+        NSMenuItem *item = [self buildMenuItemWithCategory:category];
+        [self.categories.menu insertItem:item atIndex:2];
+        [self.categories selectItemWithTag:2];
+    }
 
     // Populate the preset picture settings popup.
     // Use [NSMenuItem tag] to store preset values for each option.
@@ -85,6 +108,59 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     [self.picWidth setIntValue:self.width];
     [self.picHeight setIntValue:self.height];
     [self addPresetPicDropdownChanged:nil];
+}
+
+/**
+ *  Adds the presets list to the menu.
+ */
+- (void)buildCategoriesMenu
+{
+    for (HBPreset *preset in self.manager.root.children)
+    {
+        if (preset.isBuiltIn == NO && preset.isLeaf == NO)
+        {
+            [self.categories.menu addItem:[self buildMenuItemWithCategory:preset]];
+        }
+    }
+}
+
+- (NSMenuItem *)buildMenuItemWithCategory:(HBPreset *)preset
+{
+    NSMenuItem *item = [[NSMenuItem alloc] init];
+    item.title = preset.name;
+    item.toolTip = preset.presetDescription;
+    item.tag = 2;
+
+    item.action = @selector(selectCategoryFromMenu:);
+    item.representedObject = preset;
+
+    return item;
+}
+
+- (IBAction)showNewCategoryWindow:(id)sender
+{
+    HBAddCategoryController *addCategoryController = [[HBAddCategoryController alloc] initWithPresetManager:self.manager];
+
+    [NSApp beginSheet:addCategoryController.window modalForWindow:self.window modalDelegate:self didEndSelector:@selector(categorySheetDidEnd:returnCode:contextInfo:) contextInfo:(void *)CFBridgingRetain(addCategoryController)];
+}
+
+- (void)categorySheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+    HBAddCategoryController *addCategoryController = (HBAddCategoryController *)CFBridgingRelease(contextInfo);
+
+    if (returnCode == NSModalResponseOK)
+    {
+        NSMenuItem *item = [self buildMenuItemWithCategory:addCategoryController.category];
+        [self.categories.menu insertItem:item atIndex:2];
+    }
+
+    [self.categories selectItemWithTag:2];
+
+}
+
+- (IBAction)selectCategoryFromMenu:(NSMenuItem *)sender
+{
+    self.selectedCategory = sender.representedObject;
 }
 
 - (IBAction)addPresetPicDropdownChanged:(id)sender
@@ -175,6 +251,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
         [newPreset cleanUp];
 
         self.preset = [newPreset copy];
+        [self.selectedCategory insertObject:self.preset inChildrenAtIndex:0];
 
         [self.window orderOut:nil];
         [NSApp endSheet:self.window returnCode:NSModalResponseContinue];

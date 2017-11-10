@@ -1424,6 +1424,7 @@
 
     // Show the add panel
     HBAddPresetController *addPresetController = [[HBAddPresetController alloc] initWithPreset:[self createPresetFromCurrentSettings]
+                                                                                 presetManager:presetManager
                                                                                    customWidth:self.job.picture.width
                                                                                   customHeight:self.job.picture.height
                                                                                defaultToCustom:defaultToCustom];
@@ -1433,12 +1434,7 @@
 
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-    HBAddPresetController *addPresetController = (HBAddPresetController *)CFBridgingRelease(contextInfo);
-
-    if (returnCode == NSModalResponseContinue)
-    {
-        [presetManager addPreset:addPresetController.preset];
-    }
+    __unused HBAddPresetController *addPresetController = (HBAddPresetController *)CFBridgingRelease(contextInfo);
 }
 
 - (HBPreset *)createPresetFromCurrentSettings

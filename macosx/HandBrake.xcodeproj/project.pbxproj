@@ -85,6 +85,9 @@
 		A916C9991C8449E200C7B560 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 273F20BD14ADC09F0021BE6D /* main.mm */; };
 		A916C99A1C8449FB00C7B560 /* HBHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C9F88819A733FE00DC8923 /* HBHUDView.m */; };
 		A916C99B1C844A0800C7B560 /* HBQueueOutlineView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9EA43671A2210C400785E95 /* HBQueueOutlineView.m */; };
+		A91AD3401FB5D2FC00AEA822 /* HBAddCategoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91AD33E1FB5D2FC00AEA822 /* HBAddCategoryController.m */; };
+		A91AD3441FB5D9A500AEA822 /* HBAddCategoryController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91AD3421FB5D9A500AEA822 /* HBAddCategoryController.xib */; };
+		A91AD3471FB5D9AA00AEA822 /* AddPreset.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91AD3451FB5D9AA00AEA822 /* AddPreset.xib */; };
 		A91AFD0C1A948827009BECED /* HBOutputFileWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A91AFD0B1A948827009BECED /* HBOutputFileWriter.m */; };
 		A91CE27D1C7DA7320068F46F /* HBCore.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DEC8731A23C87500C79B48 /* HBCore.m */; };
 		A91CE27F1C7DA7320068F46F /* HBTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = A971281E1A2C75180088C076 /* HBTitle.m */; };
@@ -237,7 +240,6 @@
 		A9E1468216BC2AD800C307BC /* PlayTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467E16BC2AD800C307BC /* PlayTemplate.pdf */; };
 		A9E1468316BC2AD800C307BC /* PrevTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467F16BC2AD800C307BC /* PrevTemplate.pdf */; };
 		A9E165521C523016003EF30E /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E165511C523016003EF30E /* libavfilter.a */; };
-		A9E2FD2B1A21BC6F000E8D3F /* AddPreset.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9E2FD291A21BC6F000E8D3F /* AddPreset.xib */; };
 		A9F217E61E2F934C00C10C6E /* container-migration.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9F217E51E2F934C00C10C6E /* container-migration.plist */; };
 		A9F2EB6F196F12C800066546 /* Audio.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9F2EB6D196F12C800066546 /* Audio.xib */; };
 		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
@@ -418,6 +420,10 @@
 		A91806701A4807B000FC9BED /* HBRange.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBRange.m; sourceTree = "<group>"; };
 		A9181CB01BD76F8400E5C8B0 /* HBSubtitlesTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesTrack.h; sourceTree = "<group>"; };
 		A9181CB11BD76F8400E5C8B0 /* HBSubtitlesTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesTrack.m; sourceTree = "<group>"; };
+		A91AD33D1FB5D2FC00AEA822 /* HBAddCategoryController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAddCategoryController.h; sourceTree = "<group>"; };
+		A91AD33E1FB5D2FC00AEA822 /* HBAddCategoryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBAddCategoryController.m; sourceTree = "<group>"; };
+		A91AD3431FB5D9A500AEA822 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/HBAddCategoryController.xib; sourceTree = "<group>"; };
+		A91AD3461FB5D9AA00AEA822 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AddPreset.xib; sourceTree = "<group>"; };
 		A91AFD0A1A948827009BECED /* HBOutputFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBOutputFileWriter.h; sourceTree = "<group>"; };
 		A91AFD0B1A948827009BECED /* HBOutputFileWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBOutputFileWriter.m; sourceTree = "<group>"; };
 		A91AFD0D1A949472009BECED /* HBJobOutputFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBJobOutputFileWriter.h; sourceTree = "<group>"; };
@@ -571,7 +577,6 @@
 		A9E165511C523016003EF30E /* libavfilter.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavfilter.a; path = external/contrib/lib/libavfilter.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAddPresetController.h; sourceTree = "<group>"; };
 		A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAddPresetController.m; sourceTree = "<group>"; };
-		A9E2FD2A1A21BC6F000E8D3F /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = AddPreset.xib; sourceTree = "<group>"; };
 		A9E66D6E1A67A2A8007B641D /* HBDistributedArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HBDistributedArray.h; path = ../HBDistributedArray.h; sourceTree = "<group>"; };
 		A9E66D6F1A67A2A8007B641D /* HBDistributedArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HBDistributedArray.m; path = ../HBDistributedArray.m; sourceTree = "<group>"; };
 		A9EA43661A2210C400785E95 /* HBQueueOutlineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBQueueOutlineView.h; sourceTree = "<group>"; };
@@ -867,7 +872,6 @@
 				A92268791A6E569B00A8D5C5 /* MainWindow.xib */,
 				A9C1839B1A716BCC00C897C2 /* HBTitleSelection.xib */,
 				A9CF25EF1990D62C0023F727 /* Presets.xib */,
-				A9E2FD291A21BC6F000E8D3F /* AddPreset.xib */,
 				A99F40D11B624EA500750170 /* HBPictureViewController.xib */,
 				A91485FA1F61291F00374C12 /* HBFiltersViewController.xib */,
 				A93E0ED51972958C00FD67FB /* Video.xib */,
@@ -1171,6 +1175,10 @@
 				A901C2411BC7CFFD00D77735 /* Preview */,
 				A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */,
 				A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */,
+				A91AD3451FB5D9AA00AEA822 /* AddPreset.xib */,
+				A91AD33D1FB5D2FC00AEA822 /* HBAddCategoryController.h */,
+				A91AD33E1FB5D2FC00AEA822 /* HBAddCategoryController.m */,
+				A91AD3421FB5D9A500AEA822 /* HBAddCategoryController.xib */,
 				273F209B14ADBE670021BE6D /* HBOutputPanelController.h */,
 				273F209C14ADBE670021BE6D /* HBOutputPanelController.m */,
 				273F209F14ADBE670021BE6D /* HBPreferencesController.h */,
@@ -1457,7 +1465,6 @@
 				A9F2EB6F196F12C800066546 /* Audio.xib in Resources */,
 				A9CF25F11990D62C0023F727 /* Presets.xib in Resources */,
 				A9C1839D1A716BCC00C897C2 /* HBTitleSelection.xib in Resources */,
-				A9E2FD2B1A21BC6F000E8D3F /* AddPreset.xib in Resources */,
 				273F218A14ADDDA10021BE6D /* AdvancedView.xib in Resources */,
 				273F218B14ADDDA10021BE6D /* InfoPlist.strings in Resources */,
 				A932E26C1988334B0047D13E /* AudioDefaults.xib in Resources */,
@@ -1474,7 +1481,9 @@
 				3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */,
 				A9E1468016BC2AD800C307BC /* NextTemplate.pdf in Resources */,
 				A9E1468116BC2AD800C307BC /* PauseTemplate.pdf in Resources */,
+				A91AD3471FB5D9AA00AEA822 /* AddPreset.xib in Resources */,
 				A9E1468216BC2AD800C307BC /* PlayTemplate.pdf in Resources */,
+				A91AD3441FB5D9A500AEA822 /* HBAddCategoryController.xib in Resources */,
 				A96664BB1CCE493D00DA4A57 /* HBEncodingProgressHUDController.xib in Resources */,
 				A9E1468316BC2AD800C307BC /* PrevTemplate.pdf in Resources */,
 				A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */,
@@ -1551,6 +1560,7 @@
 				A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */,
 				A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */,
 				A93B49221DA3AA6900DD70A3 /* HBToolbarBadgedItem.m in Sources */,
+				A91AD3401FB5D2FC00AEA822 /* HBAddCategoryController.m in Sources */,
 				A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */,
 				A98036CD1CCA91DD007661AA /* HBAVPlayer.m in Sources */,
 				A9BC24C91A69293E007DC41A /* HBAttributedStringAdditions.m in Sources */,
@@ -1727,6 +1737,22 @@
 			name = HBFiltersViewController.xib;
 			sourceTree = "<group>";
 		};
+		A91AD3421FB5D9A500AEA822 /* HBAddCategoryController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A91AD3431FB5D9A500AEA822 /* English */,
+			);
+			name = HBAddCategoryController.xib;
+			sourceTree = "<group>";
+		};
+		A91AD3451FB5D9AA00AEA822 /* AddPreset.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A91AD3461FB5D9AA00AEA822 /* English */,
+			);
+			name = AddPreset.xib;
+			sourceTree = "<group>";
+		};
 		A92268791A6E569B00A8D5C5 /* MainWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1805,14 +1831,6 @@
 				A9DC6C55196F0517002AE6B4 /* English */,
 			);
 			name = Subtitles.xib;
-			sourceTree = "<group>";
-		};
-		A9E2FD291A21BC6F000E8D3F /* AddPreset.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A9E2FD2A1A21BC6F000E8D3F /* English */,
-			);
-			name = AddPreset.xib;
 			sourceTree = "<group>";
 		};
 		A9F2EB6D196F12C800066546 /* Audio.xib */ = {
