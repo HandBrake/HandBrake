@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBPresetsViewController.h"
+#import "HBAddCategoryController.h"
 
 @import HandBrakeKit.HBPresetsManager;
 @import HandBrakeKit.HBPreset;
@@ -228,14 +229,14 @@
 
 - (IBAction)insertCategory:(id)sender
 {
-    NSIndexPath *selectionIndexPath = [self.treeController selectionIndexPath];
-    if (!selectionIndexPath || [[[self.treeController selectedObjects] firstObject] isBuiltIn])
-    {
-        selectionIndexPath = [NSIndexPath indexPathWithIndex:self.presets.root.children.count];
-    }
+    HBAddCategoryController *addCategoryController = [[HBAddCategoryController alloc] initWithPresetManager:self.presets];
 
-    HBPreset *node = [[HBPreset alloc] initWithCategoryName:@"New Category" builtIn:NO];
-    [self.treeController insertObject:node atArrangedObjectIndexPath:selectionIndexPath];
+    NSModalResponse returnCode = [NSApp runModalForWindow:addCategoryController.window];
+    if (returnCode == NSModalResponseOK)
+    {
+        NSIndexPath *indexPath = [self.presets indexPathOfPreset:addCategoryController.category];
+        [self.treeController setSelectionIndexPath:indexPath];
+    }
 }
 
 - (IBAction)setDefault:(id)sender
