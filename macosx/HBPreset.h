@@ -17,11 +17,11 @@ typedef NS_ENUM(NSUInteger, HBPresetFormat) {
  *  HBPreset
  *  Stores a preset dictionary.
  *
- *  An instance of HBPreset can be an actual preset or a folder.
+ *  An instance of HBPreset can be an actual preset or a category.
  */
 @interface HBPreset : HBTreeNode <NSCopying, NSMutableCopying>
 
-- (instancetype)initWithFolderName:(NSString *)title builtIn:(BOOL)builtIn;
+- (instancetype)initWithCategoryName:(NSString *)title builtIn:(BOOL)builtIn;
 - (instancetype)initWithName:(NSString *)title content:(NSDictionary *)content builtIn:(BOOL)builtIn;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict;

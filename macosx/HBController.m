@@ -1476,9 +1476,9 @@
     [fPresetsView setSelection:_currentPreset];
 }
 
-- (IBAction)insertFolder:(id)sender
+- (IBAction)insertCategory:(id)sender
 {
-    [fPresetsView insertFolder:sender];
+    [fPresetsView insertCategory:sender];
 }
 
 - (IBAction)selectPresetFromMenu:(id)sender

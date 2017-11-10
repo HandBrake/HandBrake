@@ -52,7 +52,7 @@
 @property (nonatomic, strong) NSArray *dragNodesArray;
 
 /**
- *  The status (expanded or not) of the folders.
+ *  The status (expanded or not) of the categories.
  */
 @property (nonatomic, strong) NSMutableArray *expandedNodes;
 
@@ -117,7 +117,7 @@
 
 - (IBAction)exportPreset:(id)sender
 {
-    // Find the current selection, it can be a folder too.
+    // Find the current selection, it can be a category too.
     HBPreset *selectedPreset = [[[self.treeController selectedObjects] firstObject] copy];
 
     // Open a panel to let the user choose where and how to save the export file
@@ -226,7 +226,7 @@
     }
 }
 
-- (IBAction)insertFolder:(id)sender
+- (IBAction)insertCategory:(id)sender
 {
     NSIndexPath *selectionIndexPath = [self.treeController selectionIndexPath];
     if (!selectionIndexPath || [[[self.treeController selectedObjects] firstObject] isBuiltIn])
@@ -234,7 +234,7 @@
         selectionIndexPath = [NSIndexPath indexPathWithIndex:self.presets.root.children.count];
     }
 
-    HBPreset *node = [[HBPreset alloc] initWithFolderName:@"New Folder" builtIn:NO];
+    HBPreset *node = [[HBPreset alloc] initWithCategoryName:@"New Category" builtIn:NO];
     [self.treeController insertObject:node atArrangedObjectIndexPath:selectionIndexPath];
 }
 

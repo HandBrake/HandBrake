@@ -28,7 +28,7 @@
 - (void)deselect;
 - (void)setSelection:(HBPreset *)preset;
 
-- (IBAction)insertFolder:(id)sender;
+- (IBAction)insertCategory:(id)sender;
 
 @property (nonatomic, readonly, weak) HBPreset *selectedPreset;
 @property (nonatomic, readonly) NSUInteger indexOfSelectedItem;

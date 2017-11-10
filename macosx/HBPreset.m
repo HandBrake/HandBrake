@@ -68,7 +68,7 @@
     return self;
 }
 
-- (instancetype)initWithFolderName:(NSString *)title builtIn:(BOOL)builtIn;
+- (instancetype)initWithCategoryName:(NSString *)title builtIn:(BOOL)builtIn;
 {
     self = [self init];
     if (self)
@@ -90,7 +90,7 @@
 
     if ([dict[@"Folder"] boolValue])
     {
-        self = [self initWithFolderName:name builtIn:builtIn];
+        self = [self initWithCategoryName:name builtIn:builtIn];
 
         for (NSDictionary *childDict in [dict[@"ChildrenArray"] reverseObjectEnumerator])
         {
@@ -175,7 +175,7 @@
     // Convert the array to a HBPreset tree.
     if (presetsArray.count)
     {
-        self = [self initWithFolderName:@"Imported Presets" builtIn:NO];
+        self = [self initWithCategoryName:@"Imported Presets" builtIn:NO];
 
         if (self)
         {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <development version="8000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -320,9 +320,9 @@
                                     <action selector="showAddPresetPanel:" target="-1" id="83j-3C-fCg"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="New Folder" tag="-1" keyEquivalent="N" id="wvb-60-cWL">
+                            <menuItem title="New Category" tag="-1" keyEquivalent="N" id="wvb-60-cWL">
                                 <connections>
-                                    <action selector="insertFolder:" target="-1" id="HpS-UY-h3l"/>
+                                    <action selector="insertCategory:" target="-1" id="JL7-bI-H97"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" tag="-1" id="1954">

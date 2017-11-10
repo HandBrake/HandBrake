@@ -28,7 +28,7 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
     if (self)
     {
         // Init the root of the tree, it won't never be shown in the UI
-        _root = [[HBPreset alloc] initWithFolderName:@"Root" builtIn:YES];
+        _root = [[HBPreset alloc] initWithCategoryName:@"Root" builtIn:YES];
         _root.delegate = self;
     }
     return self;
@@ -359,7 +359,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
 #pragma mark - Built In Generation
 
 /**
- * Built-in preset folders at the root of the hierarchy
+ * Built-in preset categories at the root of the hierarchy
  */
 - (void)generateBuiltInPresets
 {
