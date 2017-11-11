@@ -166,6 +166,25 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     _outputFileName = [outputFileName copy];
 }
 
+- (BOOL)validateOutputFileName:(id *)ioValue error:(NSError * __autoreleasing *)outError
+{
+    BOOL retval = YES;
+
+    if (nil != *ioValue)
+    {
+        NSString *value = *ioValue;
+
+        if ([value rangeOfString:@"/"].location != NSNotFound)
+        {
+            *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid name", nil),
+                                                                              NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The file name can't contain the / character.", nil)}];
+            return NO;
+        }
+    }
+
+    return retval;
+}
+
 - (NSURL *)completeOutputURL
 {
     return [self.outputURL URLByAppendingPathComponent:self.outputFileName];

@@ -1117,9 +1117,11 @@
  */
 - (IBAction)addToQueue:(id)sender
 {
-    [self.window HB_endEditing];
-    [self runDestinationAlerts:self.job
-                didEndSelector:@selector(overwriteAddToQueueAlertDone:returnCode:contextInfo:)];
+    if ([self.window HB_endEditing])
+    {
+        [self runDestinationAlerts:self.job
+                    didEndSelector:@selector(overwriteAddToQueueAlertDone:returnCode:contextInfo:)];
+    }
 }
 
 /**
@@ -1166,9 +1168,11 @@
     }
     else
     {
-        [self.window HB_endEditing];
-        [self runDestinationAlerts:self.job
-                    didEndSelector:@selector(overWriteAlertDone:returnCode:contextInfo:)];
+        if ([self.window HB_endEditing])
+        {
+            [self runDestinationAlerts:self.job
+                        didEndSelector:@selector(overWriteAlertDone:returnCode:contextInfo:)];
+        }
     }
 }
 

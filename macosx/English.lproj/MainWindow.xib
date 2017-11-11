@@ -235,7 +235,11 @@
                                     <string key="NSValueTransformerName">NSIsNotNil</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="-2" name="value" keyPath="self.job.outputFileName" id="NAL-fw-AF5"/>
+                            <binding destination="-2" name="value" keyPath="self.job.outputFileName" id="SgW-Bn-bwW">
+                                <dictionary key="options">
+                                    <bool key="NSValidatesImmediately" value="YES"/>
+                                </dictionary>
+                            </binding>
                         </connections>
                     </textField>
                     <textField hidden="YES" toolTip="First second to encode." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="5491">
