@@ -176,8 +176,11 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         if ([value rangeOfString:@"/"].location != NSNotFound)
         {
-            *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid name", nil),
-                                                                              NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The file name can't contain the / character.", nil)}];
+            if (outError)
+            {
+                *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid name", nil),
+                                                                                  NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The file name can't contain the / character.", nil)}];
+            }
             return NO;
         }
     }
