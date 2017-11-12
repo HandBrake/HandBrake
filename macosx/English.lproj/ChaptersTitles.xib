@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <development version="8000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBChapterTitlesController">
@@ -69,7 +70,7 @@
                         <rect key="frame" x="1" y="0.0" width="884" height="263"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="16" headerView="0rK-Rs-NTb" viewBased="YES" id="InF-gR-Lia">
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="16" headerView="0rK-Rs-NTb" viewBased="YES" id="InF-gR-Lia">
                                 <rect key="frame" x="0.0" y="0.0" width="884" height="240"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
@@ -93,9 +94,10 @@
                                                 <rect key="frame" x="1" y="1" width="76" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="9mL-8S-7Nl">
-                                                        <rect key="frame" x="0.0" y="3" width="84" height="14"/>
-                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="G9p-Cg-wyC">
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9mL-8S-7Nl">
+                                                        <rect key="frame" x="1" y="2" width="74" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="Chapter" id="G9p-Cg-wyC">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -105,10 +107,6 @@
                                                         </connections>
                                                     </textField>
                                                 </subviews>
-                                                <constraints>
-                                                    <constraint firstAttribute="bottom" secondItem="9mL-8S-7Nl" secondAttribute="bottom" constant="3" id="Vjh-cp-7Jd"/>
-                                                    <constraint firstItem="9mL-8S-7Nl" firstAttribute="leading" secondItem="xTN-ym-UFK" secondAttribute="leading" constant="2" id="pSw-cC-cvN"/>
-                                                </constraints>
                                                 <connections>
                                                     <outlet property="textField" destination="9mL-8S-7Nl" id="eLt-na-ejF"/>
                                                 </connections>
@@ -139,9 +137,10 @@
                                                 <rect key="frame" x="80" y="1" width="84" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="4HO-kO-Qtr">
-                                                        <rect key="frame" x="0.0" y="3" width="84" height="14"/>
-                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="Vmq-zJ-NEA">
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4HO-kO-Qtr">
+                                                        <rect key="frame" x="1" y="2" width="82" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Duration" id="Vmq-zJ-NEA">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -151,10 +150,6 @@
                                                         </connections>
                                                     </textField>
                                                 </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="4HO-kO-Qtr" firstAttribute="centerX" secondItem="AVw-G2-Zyi" secondAttribute="centerX" id="XEw-X9-ZcZ"/>
-                                                    <constraint firstAttribute="bottom" secondItem="4HO-kO-Qtr" secondAttribute="bottom" constant="3" id="jD8-P2-VDl"/>
-                                                </constraints>
                                                 <connections>
                                                     <outlet property="textField" destination="4HO-kO-Qtr" id="iex-iJ-sA2"/>
                                                 </connections>
@@ -185,12 +180,10 @@
                                                 <rect key="frame" x="167" y="1" width="715" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="rpj-MP-nnZ">
-                                                        <rect key="frame" x="0.0" y="0.0" width="715" height="17"/>
-                                                        <constraints>
-                                                            <constraint firstAttribute="height" constant="17" id="o2t-lQ-cWD"/>
-                                                        </constraints>
-                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Table View Cell" id="UjY-nz-uSt">
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rpj-MP-nnZ">
+                                                        <rect key="frame" x="0.0" y="1" width="715" height="15"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Title" id="UjY-nz-uSt">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -201,11 +194,6 @@
                                                         </connections>
                                                     </textField>
                                                 </subviews>
-                                                <constraints>
-                                                    <constraint firstItem="rpj-MP-nnZ" firstAttribute="centerX" secondItem="yZu-QP-dyq" secondAttribute="centerX" id="Dx4-rQ-TQm"/>
-                                                    <constraint firstItem="rpj-MP-nnZ" firstAttribute="leading" secondItem="yZu-QP-dyq" secondAttribute="leading" constant="2" id="SLO-o4-IZz"/>
-                                                    <constraint firstItem="rpj-MP-nnZ" firstAttribute="centerY" secondItem="yZu-QP-dyq" secondAttribute="centerY" id="eQZ-La-EGl"/>
-                                                </constraints>
                                                 <connections>
                                                     <outlet property="textField" destination="rpj-MP-nnZ" id="fwU-RB-S1Z"/>
                                                 </connections>
@@ -249,10 +237,12 @@
                 <constraint firstItem="7Xf-c0-jsr" firstAttribute="baseline" secondItem="Ron-3B-rYg" secondAttribute="baseline" id="Pv3-Vo-6c3"/>
                 <constraint firstAttribute="bottom" secondItem="lqY-aE-MZi" secondAttribute="bottom" constant="20" symbolic="YES" id="epW-QY-9Za"/>
                 <constraint firstItem="Ron-3B-rYg" firstAttribute="top" secondItem="qs9-Xl-pXA" secondAttribute="top" constant="10" id="got-Hc-hGi"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="7Xf-c0-jsr" secondAttribute="trailing" constant="20" symbolic="YES" id="rjt-Gt-E6N"/>
+                <constraint firstItem="Ron-3B-rYg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="qs9-Xl-pXA" secondAttribute="leading" constant="20" symbolic="YES" id="tOF-UT-Nnf"/>
                 <constraint firstItem="7Xf-c0-jsr" firstAttribute="leading" secondItem="lqY-aE-MZi" secondAttribute="leading" id="xvS-rd-BVF"/>
                 <constraint firstItem="7Xf-c0-jsr" firstAttribute="leading" secondItem="qs9-Xl-pXA" secondAttribute="leading" constant="20" symbolic="YES" id="zIR-UV-LXe"/>
             </constraints>
-            <point key="canvasLocation" x="268" y="396"/>
+            <point key="canvasLocation" x="389" y="32"/>
         </view>
         <userDefaultsController representsSharedInstance="YES" id="coy-s6-QLx"/>
         <arrayController objectClassName="HBChapter" editable="NO" id="Gv0-qM-nu4">

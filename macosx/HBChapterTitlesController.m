@@ -6,8 +6,7 @@
    
 #import "HBChapterTitlesController.h"
 
-@import HandBrakeKit.HBChapter;
-@import HandBrakeKit.HBJob;
+@import HandBrakeKit;
 
 @interface NSArray (HBCSVAdditions)
 
@@ -181,6 +180,12 @@
     self.chapterTitles = job.chapterTitles;
 }
 
+- (void)loadView
+{
+    [super loadView];
+    self.table.doubleAction = @selector(doubleClickAction:);
+}
+
 /**
  * Method to edit the next chapter when the user presses Return.
  * We queue the action on the runloop to avoid interfering
@@ -215,6 +220,20 @@
     {
         [chapterTable selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
         [chapterTable editColumn:column row:row withEvent:nil select:YES];
+    }
+}
+
+- (IBAction)doubleClickAction:(NSTableView *)sender
+{
+    if (sender.clickedRow > -1) {
+        NSTableColumn *column = sender.tableColumns[sender.clickedColumn];
+        if ([column.identifier isEqualToString:@"title"]) {
+            // edit the cell
+            [sender editColumn:sender.clickedColumn
+                           row:sender.clickedRow
+                     withEvent:nil
+                        select:YES];
+        }
     }
 }
 
