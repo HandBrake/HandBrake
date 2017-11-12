@@ -1704,6 +1704,7 @@ int hb_global_init()
 #ifdef __APPLE__
     hb_register(&hb_encca_aac);
     hb_register(&hb_encca_haac);
+    hb_register(&hb_encvt);
 #endif
     hb_register(&hb_enctheora);
     hb_register(&hb_encvorbis);

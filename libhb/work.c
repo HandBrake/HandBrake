@@ -227,6 +227,10 @@ hb_work_object_t* hb_video_encoder(hb_handle_t *h, int vcodec)
         case HB_VCODEC_X264_10BIT:
             w = hb_get_work(h, WORK_ENCX264);
             break;
+	    case HB_VCODEC_VT_H264:
+        case HB_VCODEC_VT_H265:
+	        w = hb_get_work(h, WORK_ENCVT);
+	        break;
         case HB_VCODEC_QSV_H264:
         case HB_VCODEC_QSV_H265:
         case HB_VCODEC_QSV_H265_10BIT:

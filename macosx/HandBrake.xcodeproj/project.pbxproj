@@ -64,6 +64,12 @@
 		27D6C77314B102DA00B785E4 /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C74014B102DA00B785E4 /* libxml2.a */; };
 		3490BCB41614CF8D002A5AD7 /* HandBrake.icns in Resources */ = {isa = PBXBuildFile; fileRef = 3490BCB31614CF8D002A5AD7 /* HandBrake.icns */; };
 		6F0D69A91AD0683100A39DCA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F204014ADBC210021BE6D /* Foundation.framework */; };
+		A61A8F47183F87BC0015C99B /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A61A8F46183F87BC0015C99B /* VideoToolbox.framework */; };
+		A61A8F49183F87CB0015C99B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A61A8F48183F87CB0015C99B /* CoreMedia.framework */; };
+		A61A8F4B183F87D40015C99B /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A61A8F4A183F87D40015C99B /* CoreVideo.framework */; };
+		A61A8F4C183F87EC0015C99B /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A61A8F46183F87BC0015C99B /* VideoToolbox.framework */; };
+		A61A8F4D183F87F60015C99B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A61A8F48183F87CB0015C99B /* CoreMedia.framework */; };
+		A61A8F4E183F87FD0015C99B /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A61A8F4A183F87D40015C99B /* CoreVideo.framework */; };
 		A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
 		A900E6BE1D7B1B6800CB6C0A /* libopus.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A900E6BC1D7B1B4800CB6C0A /* libopus.a */; };
 		A903C5601CCE78060026B0ED /* NSWindow+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A903C55F1CCE78060026B0ED /* NSWindow+HBAdditions.m */; };
@@ -246,6 +252,9 @@
 		A9F2EB6F196F12C800066546 /* Audio.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9F2EB6D196F12C800066546 /* Audio.xib */; };
 		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
 		A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F7102519A475EC00F61301 /* HBDockTile.m */; };
+		B910BC0C1F439B4A00F676BF /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A61A8F4A183F87D40015C99B /* CoreVideo.framework */; };
+		B910BC0D1F439B4A00F676BF /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A61A8F48183F87CB0015C99B /* CoreMedia.framework */; };
+		B910BC0E1F439B4A00F676BF /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A61A8F46183F87BC0015C99B /* VideoToolbox.framework */; };
 		D86C9DD51C6D372500F06F1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D86C9DD41C6D372500F06F1B /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -402,6 +411,9 @@
 		3490BCB31614CF8D002A5AD7 /* HandBrake.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = HandBrake.icns; sourceTree = "<group>"; };
 		46AB433315F98A2B009C0961 /* DockTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DockTextField.h; sourceTree = "<group>"; };
 		46AB433415F98A2B009C0961 /* DockTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DockTextField.m; sourceTree = "<group>"; };
+		A61A8F46183F87BC0015C99B /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		A61A8F48183F87CB0015C99B /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		A61A8F4A183F87D40015C99B /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		A900E6BC1D7B1B4800CB6C0A /* libopus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopus.a; path = external/contrib/lib/libopus.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A903C55E1CCE78060026B0ED /* NSWindow+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+HBAdditions.h"; sourceTree = "<group>"; };
 		A903C55F1CCE78060026B0ED /* NSWindow+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+HBAdditions.m"; sourceTree = "<group>"; };
@@ -606,6 +618,9 @@
 				A9ABD1A91E2A0F8200EC8B65 /* CoreGraphics.framework in Frameworks */,
 				A9ABD1A71E2A0F7500EC8B65 /* CoreText.framework in Frameworks */,
 				A9E165521C523016003EF30E /* libavfilter.a in Frameworks */,
+				A61A8F4B183F87D40015C99B /* CoreVideo.framework in Frameworks */,
+				A61A8F49183F87CB0015C99B /* CoreMedia.framework in Frameworks */,
+				A61A8F47183F87BC0015C99B /* VideoToolbox.framework in Frameworks */,
 				273F203014ADB9790021BE6D /* AudioToolbox.framework in Frameworks */,
 				273F203314ADB9F00021BE6D /* CoreServices.framework in Frameworks */,
 				273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */,
@@ -645,6 +660,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				273F203C14ADBC210021BE6D /* Cocoa.framework in Frameworks */,
+				A61A8F4E183F87FD0015C99B /* CoreVideo.framework in Frameworks */,
+				A61A8F4D183F87F60015C99B /* CoreMedia.framework in Frameworks */,
+				A61A8F4C183F87EC0015C99B /* VideoToolbox.framework in Frameworks */,
 				273F21C114ADE7A20021BE6D /* Growl.framework in Frameworks */,
 				273F20C814ADC4FF0021BE6D /* QTKit.framework in Frameworks */,
 				A9E1467B16BC2ABD00C307BC /* QuartzCore.framework in Frameworks */,
@@ -663,6 +681,9 @@
 				A91119A21C7DD58B001C463C /* Cocoa.framework in Frameworks */,
 				A9736F1F1C7DA667008F1D18 /* Foundation.framework in Frameworks */,
 				A91CE2B21C7DAB550068F46F /* AudioToolbox.framework in Frameworks */,
+				B910BC0C1F439B4A00F676BF /* CoreVideo.framework in Frameworks */,
+				B910BC0D1F439B4A00F676BF /* CoreMedia.framework in Frameworks */,
+				B910BC0E1F439B4A00F676BF /* VideoToolbox.framework in Frameworks */,
 				A91CE2D41C7DABE40068F46F /* libiconv.tbd in Frameworks */,
 				A91CE2D21C7DABDA0068F46F /* libz.tbd in Frameworks */,
 				A91CE2D01C7DABCE0068F46F /* libbz2.tbd in Frameworks */,
@@ -796,6 +817,9 @@
 				A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */,
 				A91CE2CC1C7DABBC0068F46F /* libvorbisfile.a */,
 				A9B34D74197696FE00871B7D /* DiskArbitration.framework */,
+				A61A8F4A183F87D40015C99B /* CoreVideo.framework */,
+				A61A8F48183F87CB0015C99B /* CoreMedia.framework */,
+				A61A8F46183F87BC0015C99B /* VideoToolbox.framework */,
 				273F202F14ADB9790021BE6D /* AudioToolbox.framework */,
 				273F203B14ADBC210021BE6D /* Cocoa.framework */,
 				273F203214ADB9F00021BE6D /* CoreServices.framework */,
