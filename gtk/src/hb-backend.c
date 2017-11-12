@@ -3207,9 +3207,12 @@ ghb_log_level_set(int level)
 void
 ghb_backend_close()
 {
-    hb_close(&h_live);
-    hb_close(&h_queue);
-    hb_close(&h_scan);
+    if (h_live != NULL)
+        hb_close(&h_live);
+    if (h_queue != NULL)
+        hb_close(&h_queue);
+    if (h_scan != NULL)
+        hb_close(&h_scan);
     hb_global_close();
 }
 

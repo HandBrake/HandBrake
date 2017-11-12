@@ -1343,21 +1343,24 @@ main(int argc, char *argv[])
     ghb_backend_close();
 
     // Remove stderr redirection
-    g_source_remove(ud->stderr_src_id);
+    if (ud->stderr_src_id > 0)
+        g_source_remove(ud->stderr_src_id);
     ghb_value_free(&ud->queue);
     ghb_value_free(&ud->settings_array);
     ghb_value_free(&ud->prefs);
     ghb_value_free(&ud->globals);
     ghb_value_free(&ud->x264_priv);
 
-    g_io_channel_unref(ud->activity_log);
+    if (ud->activity_log != NULL)
+        g_io_channel_unref(ud->activity_log);
     ghb_settings_close();
     ghb_resource_free();
 #if !defined(_WIN32)
     notify_uninit();
 #endif
 
-    g_object_unref(ud->builder);
+    if (ud->builder != NULL)
+        g_object_unref(ud->builder);
 
     g_free(ud->current_dvd_device);
     g_free(ud);
