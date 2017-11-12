@@ -81,6 +81,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
         [self.categories.menu insertItem:item atIndex:2];
         [self.categories selectItemWithTag:2];
     }
+    self.selectedCategory = self.categories.selectedItem.representedObject;
 
     // Populate the preset picture settings popup.
     // Use [NSMenuItem tag] to store preset values for each option.
