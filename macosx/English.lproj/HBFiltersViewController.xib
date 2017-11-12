@@ -19,7 +19,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="1a5-Yb-uwn">
-                    <rect key="frame" x="45" y="298" width="71" height="14"/>
+                    <rect key="frame" x="45" y="303" width="71" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Detelecine:" id="vTS-MJ-8nt">
                         <font key="font" metaFont="smallSystem"/>
@@ -31,7 +31,7 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="Mwp-XS-2tc">
-                    <rect key="frame" x="242" y="298" width="60" height="14"/>
+                    <rect key="frame" x="242" y="303" width="60" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="DvX-m9-Q6u">
                         <font key="font" metaFont="smallSystem"/>
@@ -48,7 +48,7 @@
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DER-tS-cLx">
-                    <rect key="frame" x="119" y="293" width="114" height="22"/>
+                    <rect key="frame" x="119" y="298" width="114" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="OXp-Ux-Kwq">
@@ -73,7 +73,7 @@
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ipJ-z3-XnJ">
-                    <rect key="frame" x="308" y="295" width="108" height="19"/>
+                    <rect key="frame" x="308" y="300" width="108" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Custom Detelecine parameters.
 
@@ -96,7 +96,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="N8y-at-fwU">
-                    <rect key="frame" x="464" y="298" width="64" height="14"/>
+                    <rect key="frame" x="464" y="304" width="64" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deblock:" id="gKq-xF-AZE">
                         <font key="font" metaFont="smallSystem"/>
@@ -108,7 +108,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="xGD-5W-CDB">
-                    <rect key="frame" x="52" y="80" width="64" height="14"/>
+                    <rect key="frame" x="52" y="85" width="64" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Rotate:" id="1nr-nE-3a6">
                         <font key="font" metaFont="smallSystem"/>
@@ -120,7 +120,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="peM-dW-Ef8">
-                    <rect key="frame" x="527" y="298" width="31" height="14"/>
+                    <rect key="frame" x="527" y="304" width="31" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="Off" id="CIX-Cq-deK">
                         <font key="font" metaFont="smallSystem"/>
@@ -136,7 +136,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </textField>
                 <slider toolTip="Deblock reduces blocky artifacts caused by low quality video compression." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VHj-6u-NVp">
-                    <rect key="frame" x="559" y="295" width="104" height="18"/>
+                    <rect key="frame" x="559" y="301" width="104" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="15" doubleValue="3" tickMarkPosition="below" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="linear" id="L61-gd-9Qf"/>
                     <connections>
@@ -150,7 +150,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </slider>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="9hM-c1-7hB">
-                    <rect key="frame" x="467" y="224" width="61" height="14"/>
+                    <rect key="frame" x="467" y="230" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denoise:" id="Rxe-Xm-vXj">
                         <font key="font" metaFont="smallSystem"/>
@@ -162,7 +162,7 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ins-7X-kbN">
-                    <rect key="frame" x="531" y="219" width="113" height="22"/>
+                    <rect key="frame" x="531" y="225" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.
 
@@ -191,7 +191,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="k1h-3F-Xh0">
-                    <rect key="frame" x="648" y="224" width="61" height="14"/>
+                    <rect key="frame" x="648" y="230" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="8am-ve-1Xl">
                         <font key="font" metaFont="smallSystem"/>
@@ -208,7 +208,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </connections>
                 </textField>
                 <popUpButton toolTip="Denoise filter preset. Sets the strength of the filter." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cTy-PO-BSd">
-                    <rect key="frame" x="712" y="219" width="113" height="22"/>
+                    <rect key="frame" x="712" y="225" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="eym-Bg-FVe">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -232,7 +232,7 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1XQ-md-5cQ">
-                    <rect key="frame" x="712" y="193" width="113" height="22"/>
+                    <rect key="frame" x="712" y="199" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
 
@@ -269,7 +269,7 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="O3I-G6-dfv">
-                    <rect key="frame" x="648" y="196" width="61" height="14"/>
+                    <rect key="frame" x="648" y="202" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="KiY-kz-54k">
                         <font key="font" metaFont="smallSystem"/>
@@ -286,7 +286,7 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZR9-YG-pfn">
-                    <rect key="frame" x="715" y="196" width="107" height="19"/>
+                    <rect key="frame" x="715" y="202" width="107" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Custom Denoise parameters.
 
@@ -312,7 +312,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="A6i-ft-02b">
-                    <rect key="frame" x="675" y="196" width="34" height="14"/>
+                    <rect key="frame" x="675" y="202" width="34" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="tje-4P-jKt">
                         <font key="font" metaFont="smallSystem"/>
@@ -329,7 +329,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="xKf-yr-nCk">
-                    <rect key="frame" x="48" y="152" width="68" height="14"/>
+                    <rect key="frame" x="48" y="157" width="68" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deinterlace:" id="VsK-mC-9Pj">
                         <font key="font" metaFont="smallSystem"/>
@@ -341,7 +341,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="C83-aJ-v3x">
-                    <rect key="frame" x="253" y="126" width="49" height="14"/>
+                    <rect key="frame" x="253" y="131" width="49" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="n6U-tH-vo0">
                         <font key="font" metaFont="smallSystem"/>
@@ -358,7 +358,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xct-UB-bKm">
-                    <rect key="frame" x="119" y="147" width="114" height="22"/>
+                    <rect key="frame" x="119" y="152" width="114" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Deinterlace removes comb artifacts from the picture.
 
@@ -386,7 +386,7 @@ Decomb switches between multiple interpolation algorithms for speed and quality.
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r64-vI-ymx">
-                    <rect key="frame" x="308" y="123" width="108" height="19"/>
+                    <rect key="frame" x="308" y="128" width="108" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Custom Deinterlace parameters.
 
@@ -412,7 +412,7 @@ Decomb default: mode=7</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="9Uz-PL-igg">
-                    <rect key="frame" x="242" y="152" width="61" height="14"/>
+                    <rect key="frame" x="242" y="157" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="zvZ-ZX-yKE">
                         <font key="font" metaFont="smallSystem"/>
@@ -429,7 +429,7 @@ Decomb default: mode=7</string>
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6nG-zk-FMo">
-                    <rect key="frame" x="306" y="147" width="113" height="22"/>
+                    <rect key="frame" x="306" y="152" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Deinterlace filter preset.
 
@@ -462,7 +462,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </popUpButton>
                 <popUpButton toolTip="Rotate the picture clockwise in 90 degree increments." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dsH-ZQ-dBs">
-                    <rect key="frame" x="119" y="75" width="66" height="22"/>
+                    <rect key="frame" x="119" y="80" width="66" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" title="0°" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="eZj-V7-e0o" id="ee3-w2-XRX">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -487,7 +487,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </popUpButton>
                 <button toolTip="Flips (mirrors) the picture on the horizontal axis." fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IWV-25-FSC">
-                    <rect key="frame" x="187" y="77" width="58" height="20"/>
+                    <rect key="frame" x="187" y="82" width="58" height="20"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Flip" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Tvl-40-1Tc">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -503,7 +503,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="Mg1-Yq-F9S">
-                    <rect key="frame" x="8" y="224" width="108" height="14"/>
+                    <rect key="frame" x="8" y="229" width="108" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Interlace Detection:" id="xHD-vC-ePQ">
                         <font key="font" metaFont="smallSystem"/>
@@ -515,7 +515,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="RZE-gp-SB7">
-                    <rect key="frame" x="239" y="225" width="63" height="14"/>
+                    <rect key="frame" x="239" y="230" width="63" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="Da7-pY-5vu">
                         <font key="font" metaFont="smallSystem"/>
@@ -532,7 +532,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </textField>
                 <popUpButton toolTip="Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IQG-Nn-HTb">
-                    <rect key="frame" x="119" y="219" width="114" height="22"/>
+                    <rect key="frame" x="119" y="224" width="114" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="nfb-CJ-1J3">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -556,7 +556,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rPg-F2-gtl">
-                    <rect key="frame" x="308" y="222" width="108" height="19"/>
+                    <rect key="frame" x="308" y="227" width="108" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Custom Interlace Detection parameters.
 
@@ -578,7 +578,7 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="ZIa-hr-ytV">
-                    <rect key="frame" x="467" y="150" width="61" height="14"/>
+                    <rect key="frame" x="467" y="156" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Sharpen:" id="Gg8-cE-gaL">
                         <font key="font" metaFont="smallSystem"/>
@@ -590,7 +590,7 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pYa-Af-F47">
-                    <rect key="frame" x="531" y="145" width="113" height="22"/>
+                    <rect key="frame" x="531" y="151" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
 
@@ -619,7 +619,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="cJD-9a-3Xh">
-                    <rect key="frame" x="648" y="150" width="61" height="14"/>
+                    <rect key="frame" x="648" y="156" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="1zF-s5-Lic">
                         <font key="font" metaFont="smallSystem"/>
@@ -636,7 +636,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </textField>
                 <popUpButton toolTip="Sharpen filter preset. Sets the strength of the filter." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bac-vC-bD4">
-                    <rect key="frame" x="712" y="145" width="113" height="22"/>
+                    <rect key="frame" x="712" y="151" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="lvS-Ow-PNp">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -660,7 +660,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6he-FC-h6S">
-                    <rect key="frame" x="712" y="118" width="113" height="22"/>
+                    <rect key="frame" x="712" y="124" width="113" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
 
@@ -695,7 +695,7 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="8RO-OY-HTu">
-                    <rect key="frame" x="648" y="123" width="61" height="14"/>
+                    <rect key="frame" x="648" y="129" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="oqh-kd-lEw">
                         <font key="font" metaFont="smallSystem"/>
@@ -712,7 +712,7 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="Hht-Rt-VA0">
-                    <rect key="frame" x="715" y="121" width="107" height="19"/>
+                    <rect key="frame" x="715" y="127" width="107" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Custom Sharpen parameters.
 
@@ -738,7 +738,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="JrA-qB-1JA">
-                    <rect key="frame" x="675" y="123" width="34" height="14"/>
+                    <rect key="frame" x="675" y="129" width="34" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="N6B-kA-kMA">
                         <font key="font" metaFont="smallSystem"/>
@@ -755,10 +755,10 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </textField>
                 <box horizontalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="vGC-rP-QgC">
-                    <rect key="frame" x="435" y="20" width="5" height="295"/>
+                    <rect key="frame" x="435" y="20" width="5" height="299"/>
                 </box>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="ns7-Ww-hmX">
-                    <rect key="frame" x="464" y="77" width="64" height="14"/>
+                    <rect key="frame" x="464" y="83" width="64" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Color:" id="uDH-ts-vs5">
                         <font key="font" metaFont="smallSystem"/>
@@ -770,7 +770,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                     </connections>
                 </textField>
                 <button toolTip="Grayscale removes the color component of the video. Often referred to as Black &amp; White video." fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Psx-nN-XiT">
-                    <rect key="frame" x="531" y="75" width="103" height="18"/>
+                    <rect key="frame" x="531" y="81" width="103" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <buttonCell key="cell" type="check" title="Grayscale" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="h7g-eE-vgv">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -789,7 +789,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="vGC-rP-QgC" secondAttribute="bottom" constant="20" id="euk-k6-dnY"/>
                 <constraint firstItem="vGC-rP-QgC" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="oND-Rz-7bu"/>
-                <constraint firstItem="vGC-rP-QgC" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="20" id="scq-L0-WGT"/>
+                <constraint firstItem="vGC-rP-QgC" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="scq-L0-WGT"/>
             </constraints>
             <point key="canvasLocation" x="125.5" y="189.5"/>
         </customView>

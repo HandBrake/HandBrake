@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13122.17" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13122.17"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -216,7 +216,7 @@ DQ
                         </textFieldCell>
                     </textField>
                     <segmentedControl verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="N4q-sT-WgW">
-                        <rect key="frame" x="18" y="51" width="53" height="21"/>
+                        <rect key="frame" x="18" y="51" width="54" height="21"/>
                         <segmentedCell key="cell" controlSize="small" borderStyle="border" alignment="left" style="rounded" trackingMode="momentary" id="otA-K4-TxM">
                             <font key="font" metaFont="smallSystem"/>
                             <segments>
@@ -605,7 +605,7 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                         </tableHeaderView>
                     </scrollView>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="uF5-6E-EIe">
-                        <rect key="frame" x="79" y="54" width="246" height="18"/>
+                        <rect key="frame" x="80" y="53" width="246" height="18"/>
                         <string key="toolTip">Only the primary audio track will be encoded with the full encoder list. All additional audio tracks will be encoded with first encoder only.</string>
                         <buttonCell key="cell" type="check" title="Use only first encoder for secondary audio" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="66v-2g-DHn">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -740,7 +740,6 @@ Gw
                     <constraint firstAttribute="trailing" secondItem="os0-Jl-OXF" secondAttribute="trailing" constant="88" id="4bS-Yo-TSN"/>
                     <constraint firstItem="fgl-Ev-ELt" firstAttribute="top" secondItem="fzd-MO-xaB" secondAttribute="bottom" constant="6" id="66e-Qk-ajP"/>
                     <constraint firstItem="os0-Jl-OXF" firstAttribute="baseline" secondItem="vUx-OV-W5T" secondAttribute="baseline" id="7N7-5F-zWF"/>
-                    <constraint firstItem="uF5-6E-EIe" firstAttribute="baseline" secondItem="N4q-sT-WgW" secondAttribute="baseline" id="8Xr-a4-1RY"/>
                     <constraint firstItem="M11-Ls-RrL" firstAttribute="top" secondItem="N4q-sT-WgW" secondAttribute="bottom" constant="15" id="AOo-Sb-GZW"/>
                     <constraint firstAttribute="trailing" secondItem="sC2-52-liU" secondAttribute="trailing" constant="20" id="B62-ty-pmI"/>
                     <constraint firstItem="Jsz-Er-bsF" firstAttribute="width" secondItem="fPg-3n-1TN" secondAttribute="width" id="DTG-Dg-ju5"/>
@@ -777,6 +776,7 @@ Gw
                     <constraint firstItem="E93-Md-aWa" firstAttribute="top" secondItem="fgl-Ev-ELt" secondAttribute="bottom" constant="6" id="jeE-jg-jxu"/>
                     <constraint firstItem="hGL-Ew-UVJ" firstAttribute="top" secondItem="RtZ-Cz-5mG" secondAttribute="bottom" constant="8" id="jhe-0p-LYz"/>
                     <constraint firstItem="Tth-IR-7cU" firstAttribute="leading" secondItem="l4i-pd-Cbk" secondAttribute="leading" id="mrj-X0-EFm"/>
+                    <constraint firstItem="uF5-6E-EIe" firstAttribute="centerY" secondItem="N4q-sT-WgW" secondAttribute="centerY" id="nJR-6O-xLy"/>
                     <constraint firstItem="IxI-o9-jMs" firstAttribute="top" secondItem="E93-Md-aWa" secondAttribute="bottom" constant="6" id="pR6-Bh-P94"/>
                     <constraint firstItem="aTC-39-h6S" firstAttribute="leading" secondItem="Jsz-Er-bsF" secondAttribute="trailing" constant="8" id="pV4-BK-VLF"/>
                     <constraint firstItem="fzd-MO-xaB" firstAttribute="top" secondItem="vUx-OV-W5T" secondAttribute="bottom" constant="6" id="rMw-EM-QAG"/>

@@ -20,7 +20,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <button toolTip="Add a chapter markers track to the video." translatesAutoresizingMaskIntoConstraints="NO" id="7Xf-c0-jsr">
-                    <rect key="frame" x="17" y="294" width="146" height="18"/>
+                    <rect key="frame" x="17" y="288" width="146" height="18"/>
                     <buttonCell key="cell" type="check" title="Create chapter markers" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="lJL-wX-DVP">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -35,7 +35,7 @@
                     </connections>
                 </button>
                 <button toolTip="Import a list of chapter names from a CSV file." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ron-3B-rYg">
-                    <rect key="frame" x="671" y="288" width="121" height="28"/>
+                    <rect key="frame" x="671" y="282" width="121" height="28"/>
                     <buttonCell key="cell" type="push" title="Import Chapters…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PM3-Ue-0kW">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -50,7 +50,7 @@
                     </connections>
                 </button>
                 <button toolTip="Export the list of chapter names to a CSV file." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3SP-6e-RPS">
-                    <rect key="frame" x="790" y="288" width="121" height="28"/>
+                    <rect key="frame" x="790" y="282" width="121" height="28"/>
                     <buttonCell key="cell" type="push" title="Export Chapters…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="h0O-zg-OF9">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -65,13 +65,13 @@
                     </connections>
                 </button>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="18" horizontalPageScroll="0.0" verticalLineScroll="18" verticalPageScroll="0.0" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lqY-aE-MZi">
-                    <rect key="frame" x="20" y="20" width="886" height="264"/>
+                    <rect key="frame" x="20" y="20" width="886" height="258"/>
                     <clipView key="contentView" id="3Pi-zz-fFg">
-                        <rect key="frame" x="1" y="0.0" width="884" height="263"/>
+                        <rect key="frame" x="1" y="0.0" width="884" height="257"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="16" headerView="0rK-Rs-NTb" viewBased="YES" id="InF-gR-Lia">
-                                <rect key="frame" x="0.0" y="0.0" width="884" height="240"/>
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="234"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -236,7 +236,7 @@
                 <constraint firstItem="3SP-6e-RPS" firstAttribute="leading" secondItem="Ron-3B-rYg" secondAttribute="trailing" constant="8" symbolic="YES" id="Eq4-Bh-pEN"/>
                 <constraint firstItem="7Xf-c0-jsr" firstAttribute="baseline" secondItem="Ron-3B-rYg" secondAttribute="baseline" id="Pv3-Vo-6c3"/>
                 <constraint firstAttribute="bottom" secondItem="lqY-aE-MZi" secondAttribute="bottom" constant="20" symbolic="YES" id="epW-QY-9Za"/>
-                <constraint firstItem="Ron-3B-rYg" firstAttribute="top" secondItem="qs9-Xl-pXA" secondAttribute="top" constant="10" id="got-Hc-hGi"/>
+                <constraint firstItem="Ron-3B-rYg" firstAttribute="top" secondItem="qs9-Xl-pXA" secondAttribute="top" constant="16" id="got-Hc-hGi"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="7Xf-c0-jsr" secondAttribute="trailing" constant="20" symbolic="YES" id="rjt-Gt-E6N"/>
                 <constraint firstItem="Ron-3B-rYg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="qs9-Xl-pXA" secondAttribute="leading" constant="20" symbolic="YES" id="tOF-UT-Nnf"/>
                 <constraint firstItem="7Xf-c0-jsr" firstAttribute="leading" secondItem="lqY-aE-MZi" secondAttribute="leading" id="xvS-rd-BVF"/>

@@ -18,9 +18,11 @@
             <rect key="frame" x="0.0" y="0.0" width="871" height="366"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <popUpButton toolTip="Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility." verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="txV-1R-WoD">
-                    <rect key="frame" x="73" y="325" width="177" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <popUpButton toolTip="Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="txV-1R-WoD">
+                    <rect key="frame" x="66" y="332" width="136" height="22"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="JWl-qc-DOw"/>
+                    </constraints>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="4NR-1i-weK" id="tqd-2J-YTU">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -45,18 +47,16 @@
                         <binding destination="-2" name="content" keyPath="self.job.containers" id="jJg-8o-rNS"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-UY-4al">
-                    <rect key="frame" x="18" y="330" width="53" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-UY-4al">
+                    <rect key="frame" x="18" y="336" width="45" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="RXJ-DZ-4mh">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lUi-Oc-208">
-                    <rect key="frame" x="73" y="305" width="102" height="18"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="lUi-Oc-208">
+                    <rect key="frame" x="66" y="312" width="103" height="18"/>
                     <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
                     <buttonCell key="cell" type="check" title="Web Optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="wcc-5d-Dgj">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -76,9 +76,8 @@
                         </binding>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fPv-Vw-I89">
-                    <rect key="frame" x="73" y="287" width="107" height="18"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="fPv-Vw-I89">
+                    <rect key="frame" x="66" y="294" width="100" height="18"/>
                     <string key="toolTip">Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</string>
                     <buttonCell key="cell" type="check" title="Align A/V Start" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="De0-Je-MAm">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -98,9 +97,8 @@
                         </binding>
                     </connections>
                 </button>
-                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QKv-GR-d2g">
-                    <rect key="frame" x="73" y="269" width="126" height="18"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="QKv-GR-d2g">
+                    <rect key="frame" x="66" y="276" width="109" height="18"/>
                     <string key="toolTip">Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility.</string>
                     <buttonCell key="cell" type="check" title="iPod 5G Support" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zz5-qY-GSA">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -120,8 +118,81 @@
                         </binding>
                     </connections>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GCn-2c-Fql">
+                    <rect key="frame" x="18" y="249" width="45" height="14"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Tracks:" id="3mF-Bb-Gon">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0kh-Uy-Yo3">
+                    <rect key="frame" x="18" y="177" width="45" height="14"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Filters:" id="OCw-f6-uA0">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="yRE-5c-FhX">
+                    <rect key="frame" x="66" y="207" width="174" height="56"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="170" id="I7F-Rh-oaP"/>
+                    </constraints>
+                    <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" id="xzc-qg-AMn">
+                        <font key="font" metaFont="smallSystem"/>
+                        <string key="title">Multiline Label Multiline Label
+Multiline Label Multiline Label</string>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="BHq-Mt-3eA">
+                    <rect key="frame" x="66" y="149" width="174" height="42"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="170" id="WSX-hR-Kco"/>
+                    </constraints>
+                    <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="Multiline Label Multiline Label Multiline Label" id="RIB-ME-Yhh">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m5a-0z-QQ4">
+                    <rect key="frame" x="254" y="16" width="597" height="334"/>
+                </customView>
             </subviews>
-            <point key="canvasLocation" x="424" y="193"/>
+            <constraints>
+                <constraint firstItem="m5a-0z-QQ4" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="2Lv-KO-aKx"/>
+                <constraint firstItem="0kh-Uy-Yo3" firstAttribute="width" secondItem="bpr-UY-4al" secondAttribute="width" id="3C6-tC-wvc"/>
+                <constraint firstItem="bpr-UY-4al" firstAttribute="baseline" secondItem="txV-1R-WoD" secondAttribute="baseline" id="5R4-0i-jLq"/>
+                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QKv-GR-d2g" secondAttribute="trailing" constant="16" id="8XE-8g-Ufn"/>
+                <constraint firstItem="QKv-GR-d2g" firstAttribute="top" secondItem="fPv-Vw-I89" secondAttribute="bottom" constant="6" id="9NP-48-LS7"/>
+                <constraint firstItem="lUi-Oc-208" firstAttribute="leading" secondItem="txV-1R-WoD" secondAttribute="leading" id="BPd-g8-Zr2"/>
+                <constraint firstItem="QKv-GR-d2g" firstAttribute="leading" secondItem="txV-1R-WoD" secondAttribute="leading" id="E60-lK-Qyk"/>
+                <constraint firstAttribute="trailing" secondItem="m5a-0z-QQ4" secondAttribute="trailing" constant="20" id="GYQ-6W-S3N"/>
+                <constraint firstItem="GCn-2c-Fql" firstAttribute="width" secondItem="bpr-UY-4al" secondAttribute="width" id="HE8-Du-yhU"/>
+                <constraint firstItem="txV-1R-WoD" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="trailing" constant="8" symbolic="YES" id="I9H-1U-iqt"/>
+                <constraint firstItem="BHq-Mt-3eA" firstAttribute="top" secondItem="yRE-5c-FhX" secondAttribute="bottom" constant="16" id="IVl-m1-yLo"/>
+                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" secondItem="yRE-5c-FhX" secondAttribute="trailing" constant="16" id="J92-rN-Hgk"/>
+                <constraint firstItem="yRE-5c-FhX" firstAttribute="leading" secondItem="GCn-2c-Fql" secondAttribute="trailing" constant="7" id="Ok2-zj-HHS"/>
+                <constraint firstItem="yRE-5c-FhX" firstAttribute="top" secondItem="QKv-GR-d2g" secondAttribute="bottom" constant="16" id="Tvz-KM-RdC"/>
+                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lUi-Oc-208" secondAttribute="trailing" constant="16" id="U1G-nS-bR0"/>
+                <constraint firstItem="bpr-UY-4al" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="VFQ-Vg-ESJ"/>
+                <constraint firstItem="0kh-Uy-Yo3" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="ZSW-w5-hfn"/>
+                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fPv-Vw-I89" secondAttribute="trailing" constant="16" id="bWj-yH-VEO"/>
+                <constraint firstItem="fPv-Vw-I89" firstAttribute="top" secondItem="lUi-Oc-208" secondAttribute="bottom" constant="6" id="bxR-uJ-u4M"/>
+                <constraint firstItem="lUi-Oc-208" firstAttribute="top" secondItem="txV-1R-WoD" secondAttribute="bottom" constant="8" id="cJz-xA-oz4"/>
+                <constraint firstItem="BHq-Mt-3eA" firstAttribute="leading" secondItem="0kh-Uy-Yo3" secondAttribute="trailing" constant="7" id="dZN-9S-z89"/>
+                <constraint firstItem="GCn-2c-Fql" firstAttribute="top" secondItem="yRE-5c-FhX" secondAttribute="top" id="jTa-bA-Weo"/>
+                <constraint firstItem="0kh-Uy-Yo3" firstAttribute="top" secondItem="BHq-Mt-3eA" secondAttribute="top" id="nwz-Xj-cMt"/>
+                <constraint firstAttribute="bottom" secondItem="m5a-0z-QQ4" secondAttribute="bottom" constant="16" id="ouA-jz-Qs8"/>
+                <constraint firstItem="bpr-UY-4al" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="ptr-Mh-cla"/>
+                <constraint firstItem="fPv-Vw-I89" firstAttribute="leading" secondItem="txV-1R-WoD" secondAttribute="leading" id="qmb-hk-LYc"/>
+                <constraint firstItem="GCn-2c-Fql" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="utH-I5-f9B"/>
+                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="txV-1R-WoD" secondAttribute="trailing" constant="16" id="vr4-76-FcH"/>
+            </constraints>
+            <point key="canvasLocation" x="423.5" y="193"/>
         </customView>
     </objects>
 </document>
