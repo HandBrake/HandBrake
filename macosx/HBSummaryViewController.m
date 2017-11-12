@@ -5,10 +5,14 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBSummaryViewController.h"
+#import "HBPreviewView.h"
+#import "HBPreviewGenerator.h"
 
-@import HandBrakeKit.HBJob;
+@import HandBrakeKit;
 
 @interface HBSummaryViewController ()
+
+@property (strong) IBOutlet HBPreviewView *previewView;
 
 @end
 
@@ -16,7 +20,25 @@
 
 - (void)loadView {
     [super loadView];
-    // Do view setup here.
+    self.previewView.showShadow = NO;
 }
+
+- (void)setGenerator:(HBPreviewGenerator *)generator
+{
+    _generator = generator;
+
+    if (generator)
+    {
+        NSUInteger index = generator.imagesCount > 1 ? 1 : 0;
+        CGImageRef fPreviewImage = [generator copyImageAtIndex:index shouldCache:NO];
+        self.previewView.image = fPreviewImage;
+        CFRelease(fPreviewImage);
+    }
+    else
+    {
+        self.previewView.image = nil;
+    }
+}
+
 
 @end

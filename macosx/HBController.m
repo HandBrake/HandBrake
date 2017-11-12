@@ -813,7 +813,9 @@
 
     if (job)
     {
-        fPreviewController.generator = [[HBPreviewGenerator alloc] initWithCore:self.core job:job];
+        HBPreviewGenerator *generator = [[HBPreviewGenerator alloc] initWithCore:self.core job:job];
+        fPreviewController.generator = generator;
+        self.summaryController.generator = generator;
 
         HBTitle *title = job.title;
 
@@ -830,6 +832,7 @@
     else
     {
         fPreviewController.generator = nil;
+        self.summaryController.generator = nil;
     }
     fPreviewController.picture = job.picture;
 

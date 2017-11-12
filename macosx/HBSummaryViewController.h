@@ -7,9 +7,15 @@
 #import <Cocoa/Cocoa.h>
 
 @class HBJob;
+@class HBPreviewGenerator;
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface HBSummaryViewController : NSViewController
 
-@property (nonatomic, readwrite, weak) HBJob *job;
+@property (nonatomic, readwrite, weak, nullable) HBJob *job;
+@property (nonatomic, readwrite, weak, nullable) HBPreviewGenerator *generator;
 
 @end
+
+NS_ASSUME_NONNULL_END

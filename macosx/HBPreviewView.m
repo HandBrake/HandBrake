@@ -118,6 +118,11 @@
     [self _updatePreviewLayout];
 }
 
+- (void)setShowShadow:(BOOL)showShadow
+{
+    _backLayer.shadowOpacity = showShadow ? 0.5f : 0;
+}
+
 - (void)setFrame:(NSRect)newRect {
     // A change in size has required the view to be invalidated.
     if ([self inLiveResize]) {

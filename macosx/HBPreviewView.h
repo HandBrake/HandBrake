@@ -41,6 +41,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite) BOOL showBorder;
 
 /**
+ *  If enabled, the view will show a shadow around the image.
+ */
+@property (nonatomic, readwrite) BOOL showShadow;
+
+/**
  * Given the size of the preview image to be shown, returns the best possible
  * size for the view.
  */

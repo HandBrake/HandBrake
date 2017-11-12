@@ -9,6 +9,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSummaryViewController">
             <connections>
+                <outlet property="previewView" destination="m5a-0z-QQ4" id="1G9-3A-dM4"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -158,7 +159,7 @@ Multiline Label Multiline Label</string>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m5a-0z-QQ4">
+                <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m5a-0z-QQ4" customClass="HBPreviewView">
                     <rect key="frame" x="254" y="16" width="597" height="334"/>
                 </customView>
             </subviews>
