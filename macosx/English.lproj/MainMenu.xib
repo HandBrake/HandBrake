@@ -260,31 +260,43 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <menu key="submenu" title="View" id="ndG-Ig-Yol">
                         <items>
-                            <menuItem title="Video" keyEquivalent="1" id="9ie-b7-RaS">
+                            <menuItem title="Summary" keyEquivalent="1" id="9ie-b7-RaS">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="showTabView:" target="-1" id="MZT-Vf-Djg"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Picture" tag="1" keyEquivalent="2" id="Jef-U4-eQT">
+                            <menuItem title="Dimension" tag="1" keyEquivalent="2" id="shS-hb-XSI">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="showTabView:" target="-1" id="qjF-UK-qbp"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Video" tag="2" keyEquivalent="3" id="6rE-SM-AGi">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="showTabView:" target="-1" id="Ajm-EU-vqU"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Picture" tag="3" keyEquivalent="4" id="Jef-U4-eQT">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="showTabView:" target="-1" id="tzG-5g-Iv2"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Audio" tag="2" keyEquivalent="3" id="brQ-mu-8JM">
+                            <menuItem title="Audio" tag="4" keyEquivalent="5" id="brQ-mu-8JM">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="showTabView:" target="-1" id="efj-Q8-kdm"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Subtitles" tag="3" keyEquivalent="4" id="Csx-2S-iUe">
+                            <menuItem title="Subtitles" tag="5" keyEquivalent="6" id="Csx-2S-iUe">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="showTabView:" target="-1" id="yOQ-JB-fED"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Chapters" tag="4" keyEquivalent="5" id="lCU-PH-gal">
+                            <menuItem title="Chapters" tag="6" keyEquivalent="7" id="lCU-PH-gal">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="showTabView:" target="-1" id="TgH-ML-j69"/>
