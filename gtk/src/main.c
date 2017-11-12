@@ -1272,13 +1272,25 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     gtk_widget_show(ghb_window);
 }
 
+extern G_MODULE_EXPORT void
+ghb_open_file_cb(GApplication *app, gpointer pfiles, gint nfiles,
+                 gchar *hint, signal_user_data_t * ud)
+{
+    GFile ** files = pfiles;
+
+    if (nfiles < 1)
+        return;
+
+    if (dvd_device == NULL)
+    {
+        dvd_device = g_file_get_path(files[0]);
+    }
+    ghb_activate_cb(app, ud);
+}
+
 int
 main(int argc, char *argv[])
 {
-    //signal_user_data_t *ud;
-    GError *error = NULL;
-    GOptionContext *context;
-
 #if defined(_WIN32)
     // Tell gdk pixbuf where it's loader config file is.
     _putenv_s("GDK_PIXBUF_MODULE_FILE", "ghb.exe.local/loaders.cache");
@@ -1291,24 +1303,6 @@ main(int argc, char *argv[])
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
     textdomain(GETTEXT_PACKAGE);
 #endif
-
-    context = g_option_context_new(_("- Transcode media formats"));
-    g_option_context_add_main_entries(context, entries, GETTEXT_PACKAGE);
-    g_option_context_add_group(context, gtk_get_option_group(TRUE));
-#if defined(_ENABLE_GST)
-    g_option_context_add_group(context, gst_init_get_option_group());
-#endif
-    g_option_context_parse(context, &argc, &argv, &error);
-    if (error != NULL)
-    {
-        g_warning("%s: %s", G_STRFUNC, error->message);
-        g_clear_error(&error);
-    }
-    g_option_context_free(context);
-    if (argc > 1 && dvd_device == NULL && argv[1][0] != '-')
-    {
-        dvd_device = argv[1];
-    }
 
 #if defined(_WIN32)
     if (win32_console)
@@ -1336,8 +1330,16 @@ main(int argc, char *argv[])
     ghb_ui_register_resource();
     ud = g_malloc0(sizeof(signal_user_data_t));
     ud->app = gtk_application_new("org.handbrake.ghb",
-                                  G_APPLICATION_FLAGS_NONE);
+                                  G_APPLICATION_HANDLES_OPEN);
+    // Connect application signals
     g_signal_connect(ud->app, "activate", (GCallback)ghb_activate_cb, ud);
+    g_signal_connect(ud->app, "open", (GCallback)ghb_open_file_cb, ud);
+    // Set application options
+    g_application_add_main_option_entries(G_APPLICATION(ud->app), entries);
+#if defined(_ENABLE_GST)
+    g_application_add_option_group(G_APPLICATION(ud->app),
+                                   gst_init_get_option_group());
+#endif
     status = g_application_run(G_APPLICATION(ud->app), argc, argv);
 
     ghb_backend_close();
