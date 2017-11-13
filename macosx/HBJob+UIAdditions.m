@@ -619,6 +619,250 @@ static NSDictionary            *shortHeightAttr;
     return attrString;
 }
 
+#pragma mark - Short descriptions
+
+- (NSString *)videoShortDescription
+{
+    NSMutableString *info = [NSMutableString string];
+
+    const char *encoderName = hb_video_encoder_get_name(self.video.encoder);
+    [info appendString:encoderName ? @(encoderName) : NSLocalizedString(@"Unknown", nil)];
+
+    [info appendString:@", "];
+
+    if (self.video.frameRate == 0)
+    {
+        if (self.video.frameRateMode == 0)
+        {
+            // we are using same as source with vfr
+            [info appendFormat:NSLocalizedString(@"VFR", nil)];
+        }
+        else
+        {
+            [info appendFormat:NSLocalizedString(@"CRF", nil)];
+        }
+    }
+    else
+    {
+        // we have a specified, constant framerate
+        const char *frameRate = hb_video_framerate_get_name(self.video.frameRate);
+        if (frameRate)
+        {
+            [info appendString:@(frameRate)];
+        }
+        if (self.video.frameRateMode == 0)
+        {
+            [info appendString:@" FPS PFR"];
+        }
+        else
+        {
+            [info appendString:@" FPS CFR"];
+        }
+    }
+
+    return info;
+}
+
+- (NSString *)audioShortDescription
+{
+    NSMutableString *info = [NSMutableString string];
+
+    NSUInteger index = 0;
+    for (HBAudioTrack *audioTrack in self.audio.tracks)
+    {
+        if (audioTrack.isEnabled)
+        {
+            const char *encoder = hb_audio_encoder_get_name(audioTrack.encoder);
+            if (encoder)
+            {
+                [info appendString:@(encoder)];
+            }
+
+            if ((audioTrack.encoder  & HB_ACODEC_PASS_FLAG) == 0)
+            {
+                const char *mixdown = hb_mixdown_get_name(audioTrack.mixdown);
+                if (mixdown)
+                {
+                    [info appendString:@", "];
+                    [info appendString:@(mixdown)];
+                }
+            }
+
+            [info appendString:@"\n"];
+        }
+
+        if (index == 1) {
+            break;
+        }
+        index += 1;
+    }
+
+    if (self.audio.tracks.count > 3)
+    {
+        NSUInteger count = self.audio.tracks.count - 3;
+        if (count == 1)
+        {
+            [info appendString:NSLocalizedString(@"+ 1 additional audio track", nil)];
+        }
+        else
+        {
+            [info appendFormat:NSLocalizedString(@"+ %lu additional audio tracks", nil), (unsigned long)count];
+        }
+    }
+
+    if ([info hasSuffix:@"\n"])
+    {
+        [info deleteCharactersInRange:NSMakeRange(info.length - 1, 1)];
+    }
+
+    return info;
+}
+
+- (NSString *)subtitlesShortDescription
+{
+    NSMutableString *info = [NSMutableString string];
+
+    for (HBSubtitlesTrack *track in self.subtitles.tracks)
+    {
+        // Ignore the none track.
+        if (track.isEnabled)
+        {
+            // remember that index 0 of Subtitles can contain "Foreign Audio Search
+            [info appendString:self.subtitles.sourceTracks[track.sourceTrackIdx][@"keySubTrackName"]];
+
+            if (track.burnedIn)
+            {
+                [info appendString:NSLocalizedString(@", Burned", nil)];
+            }
+
+            [info appendString:@"\n"];
+        }
+    }
+
+    if ([info hasSuffix:@"\n"])
+    {
+        [info deleteCharactersInRange:NSMakeRange(info.length - 1, 1)];
+    }
+
+    return info;
+}
+
+- (NSString *)shortDescription
+{
+    NSMutableString *info = [NSMutableString string];
+
+    [info appendString:[self videoShortDescription]];
+
+    NSString *audioInfo = [self audioShortDescription];
+    if (audioInfo.length)
+    {
+        [info appendString:@"\n"];
+        [info appendString:audioInfo];
+    }
+
+    NSString *subtitlesInfo = [self subtitlesShortDescription];
+    if (subtitlesInfo.length)
+    {
+        [info appendString:@"\n"];
+        [info appendString:subtitlesInfo];
+    }
+
+    if (self.chaptersEnabled && self.chapterTitles.count > 1)
+    {
+        [info appendString:@"\n"];
+        [info appendString:NSLocalizedString(@"Chapter Markers", nil)];
+    }
+
+    return info;
+}
+
+- (NSString *)filtersShortDescription
+{
+    NSMutableString *summary = [NSMutableString string];
+    HBFilters *filters = self.filters;
+
+    // Detelecine
+    if (![filters.detelecine isEqualToString:@"off"])
+    {
+        [summary appendString:NSLocalizedString(@"Detelecine", nil)];
+        [summary appendString:@", "];
+    }
+
+    // Comb detect
+    if (![filters.combDetection isEqualToString:@"off"])
+    {
+        [summary appendString:NSLocalizedString(@"Comb Detect", nil)];
+        [summary appendString:@", "];
+    }
+
+    // Deinterlace
+    if (![filters.deinterlace isEqualToString:@"off"])
+    {
+        // Deinterlace or Decomb
+        NSString *type = [[[HBFilters deinterlaceTypesDict] allKeysForObject:filters.deinterlace] firstObject];
+        if (type)
+        {
+            [summary appendString:type];
+            [summary appendString:@", "];
+        }
+    }
+
+    // Deblock
+    if (filters.deblock > 0)
+    {
+        [summary appendString:NSLocalizedString(@"Deblock", nil)];
+        [summary appendString:@", "];
+    }
+
+    // Denoise
+    if (![filters.denoise isEqualToString:@"off"])
+    {
+        NSString *type = [[[HBFilters denoiseTypesDict] allKeysForObject:filters.denoise] firstObject];
+        if (type)
+        {
+            [summary appendString:type];
+            [summary appendString:@", "];
+        }
+    }
+
+    // Sharpen
+    if (![filters.sharpen isEqualToString:@"off"])
+    {
+        NSString *type = [[[HBFilters sharpenTypesDict] allKeysForObject:filters.sharpen] firstObject];
+        if (type)
+        {
+            [summary appendString:type];
+            [summary appendString:@", "];
+        }
+    }
+
+    // Grayscale
+    if (filters.grayscale)
+    {
+        [summary appendString:NSLocalizedString(@"Grayscale", nil)];
+        [summary appendString:@", "];
+    }
+
+    // Rotation
+    if (filters.rotate)
+    {
+        [summary appendString:NSLocalizedString(@"Rotation", nil)];
+        [summary appendString:@", "];
+    }
+
+    if ([summary hasSuffix:@", "])
+    {
+        [summary deleteCharactersInRange:NSMakeRange(summary.length - 2, 2)];
+    }
+
+    if (summary.length == 0)
+    {
+        [summary appendString:NSLocalizedString(@"None", nil)];
+    }
+
+    return summary;
+}
+
 @end
 
 @implementation HBContainerTransformer

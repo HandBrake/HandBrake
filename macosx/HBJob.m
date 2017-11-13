@@ -103,11 +103,11 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     // Chapter Markers
     self.chaptersEnabled = [preset[@"ChapterMarkers"] boolValue];
 
-    [self.picture applyPreset:preset jobSettings:jobSettings];
-    [self.filters applyPreset:preset jobSettings:jobSettings];
     [self.audio applyPreset:preset jobSettings:jobSettings];
     [self.subtitles applyPreset:preset jobSettings:jobSettings];
     [self.video applyPreset:preset jobSettings:jobSettings];
+    [self.picture applyPreset:preset jobSettings:jobSettings];
+    [self.filters applyPreset:preset jobSettings:jobSettings];
 }
 
 - (void)writeToPreset:(HBMutablePreset *)preset

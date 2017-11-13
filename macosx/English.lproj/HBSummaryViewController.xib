@@ -9,7 +9,9 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSummaryViewController">
             <connections>
+                <outlet property="filtersLabel" destination="BHq-Mt-3eA" id="EGb-du-wYa"/>
                 <outlet property="previewView" destination="m5a-0z-QQ4" id="1G9-3A-dM4"/>
+                <outlet property="tracksLabel" destination="yRE-5c-FhX" id="iAo-rN-HdQ"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
             </connections>
         </customObject>
@@ -128,7 +130,7 @@
                     </textFieldCell>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0kh-Uy-Yo3">
-                    <rect key="frame" x="18" y="177" width="45" height="14"/>
+                    <rect key="frame" x="18" y="219" width="45" height="14"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Filters:" id="OCw-f6-uA0">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -136,24 +138,22 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="yRE-5c-FhX">
-                    <rect key="frame" x="66" y="207" width="174" height="56"/>
+                    <rect key="frame" x="66" y="249" width="174" height="14"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="170" id="I7F-Rh-oaP"/>
                     </constraints>
-                    <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" id="xzc-qg-AMn">
+                    <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="xzc-qg-AMn">
                         <font key="font" metaFont="smallSystem"/>
-                        <string key="title">Multiline Label Multiline Label
-Multiline Label Multiline Label</string>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="BHq-Mt-3eA">
-                    <rect key="frame" x="66" y="149" width="174" height="42"/>
+                    <rect key="frame" x="66" y="219" width="174" height="14"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="170" id="WSX-hR-Kco"/>
                     </constraints>
-                    <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="Multiline Label Multiline Label Multiline Label" id="RIB-ME-Yhh">
+                    <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="RIB-ME-Yhh">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -193,7 +193,7 @@ Multiline Label Multiline Label</string>
                 <constraint firstItem="GCn-2c-Fql" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="utH-I5-f9B"/>
                 <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="txV-1R-WoD" secondAttribute="trailing" constant="16" id="vr4-76-FcH"/>
             </constraints>
-            <point key="canvasLocation" x="423.5" y="193"/>
+            <point key="canvasLocation" x="249" y="22"/>
         </customView>
     </objects>
 </document>

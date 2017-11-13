@@ -169,7 +169,7 @@
     if (imageSize.width > 0 && imageSize.height > 0) {
         NSSize imageScaledSize = imageSize;
 
-        if (self.window.backingScaleFactor != 1.0)
+        if (self.window && self.window.backingScaleFactor != 1.0)
         {
             // HiDPI mode usually display everything
             // with douple pixel count, but we don't

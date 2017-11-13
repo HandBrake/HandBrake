@@ -136,10 +136,10 @@ NSString *keyAudioTrackLanguageIsoCode = @"keyAudioTrackLanguageIsoCode";
     if (!(self.undo.isUndoing || self.undo.isRedoing) && !self.validating)
     {
         self.validating = YES;
-        [self.delegate encoderChanged];
         self.mixdown = [self sanatizeMixdownValue:self.mixdown];
         self.sampleRate = [self sanatizeSamplerateValue:self.sampleRate];
         self.bitRate = [self sanatizeBitrateValue:self.bitRate];
+        [self.delegate encoderChanged];
         self.validating = NO;
     }
 }

@@ -665,6 +665,7 @@ fail:
     }
 
     self.notificationsEnabled = YES;
+    [self postChangedNotification];
 }
 
 @end

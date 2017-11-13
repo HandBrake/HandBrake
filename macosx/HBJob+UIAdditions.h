@@ -16,6 +16,9 @@
 
 @property (nonatomic, readonly) NSAttributedString *attributedDescription;
 
+@property (nonatomic, readonly) NSString *shortDescription;
+@property (nonatomic, readonly) NSString *filtersShortDescription;
+
 @end
 
 @interface HBContainerTransformer : NSValueTransformer
