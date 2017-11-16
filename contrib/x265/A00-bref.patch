@@ -1,0 +1,25 @@
+# HG changeset patch
+# User John Stebbins <jstebbins.hb@gmail.com>
+# Date 1510861637 28800
+#      Thu Nov 16 11:47:17 2017 -0800
+# Branch stable
+# Node ID 5b61fc79bfa2d2bf85f8796001d711e5eed1fa1c
+# Parent  0b3ba15b33eaed5681f639697024525e9460bb31
+encoder: expose BREF slice type in pic_out sliceType
+
+The AppleTV 4K requires accurate frame dependency information in the
+mp4 sdtp box in order to play 2160p60 content.
+
+diff -r 0b3ba15b33ea -r 5b61fc79bfa2 source/encoder/encoder.cpp
+--- a/source/encoder/encoder.cpp	Tue Sep 05 11:21:24 2017 +0530
++++ b/source/encoder/encoder.cpp	Thu Nov 16 11:47:17 2017 -0800
+@@ -857,6 +857,9 @@
+                 pic_out->pts = outFrame->m_pts;
+                 pic_out->dts = outFrame->m_dts;
+                 pic_out->sliceType = outFrame->m_lowres.sliceType;
++                if (pic_out->sliceType == X265_TYPE_B &&
++                    IS_REFERENCED(outFrame))
++                    pic_out->sliceType = X265_TYPE_BREF;
+                 pic_out->planes[0] = recpic->m_picOrg[0];
+                 pic_out->stride[0] = (int)(recpic->m_stride * sizeof(pixel));
+                 if (m_param->internalCsp != X265_CSP_I400)

@@ -425,16 +425,19 @@ static hb_buffer_t* nal_encode(hb_work_object_t *w,
             buf->s.frametype = HB_FRAME_IDR;
             break;
         case X265_TYPE_P:
+            buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
             buf->s.frametype = HB_FRAME_P;
             break;
         case X265_TYPE_B:
             buf->s.frametype = HB_FRAME_B;
             break;
         case X265_TYPE_BREF:
+            buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
             buf->s.frametype = HB_FRAME_BREF;
             break;
         case X265_TYPE_I:
         default:
+            buf->s.flags |= HB_FLAG_FRAMETYPE_REF;
             buf->s.frametype = HB_FRAME_I;
             break;
     }
