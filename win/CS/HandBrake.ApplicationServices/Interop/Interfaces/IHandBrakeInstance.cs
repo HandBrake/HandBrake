@@ -98,12 +98,12 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// The index of the preview to get (0-based).
         /// </param>
         /// <param name="deinterlace">
-        /// Enable basic deinterlace of preview images. 1 = on. 0 = off.
+        /// True to enable basic deinterlace of preview images.
         /// </param>
         /// <returns>
         /// An image with the requested preview.
         /// </returns>
-        Bitmap GetPreview(PreviewSettings job, int previewNumber, int deinterlace);
+        Bitmap GetPreview(PreviewSettings job, int previewNumber, bool deinterlace);
 
         /// <summary>
         /// Pauses the current encode.

@@ -16,6 +16,7 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Interfaces;
+    using HandBrake.ApplicationServices.Interop.Json.State;
     using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Services.Logging;
     using HandBrake.ApplicationServices.Services.Logging.Interfaces;
@@ -183,8 +184,8 @@ namespace HandBrakeWPF.Services.Encode
                 TaskCount = e.PassCount,
                 ElapsedTime = DateTime.Now - this.startTime, 
                 PassId = e.PassId,
-                IsMuxing = e.IsMuxing,
-                IsSearching = e.IsSearching
+                IsMuxing = e.StateCode == TaskState.Muxing.Code,
+                IsSearching = e.StateCode == TaskState.Searching.Code
             };
 
             this.InvokeEncodeStatusChanged(args);

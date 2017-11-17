@@ -40,13 +40,10 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
         /// <param name="passCount">
         /// The pass count.
         /// </param>
-        /// <param name="isMuxing">
-        /// A flag to indicate we are muxing.
+        /// <param name="stateCode">
+        /// The code for the state the encode process is in.
         /// </param>
-        /// <param name="isSearching">
-        /// Gets a value indicating that we are in the searching process.
-        /// </param>
-        public EncodeProgressEventArgs(double fractionComplete, double currentFrameRate, double averageFrameRate, TimeSpan estimatedTimeLeft, int passId, int pass, int passCount, bool isMuxing, bool isSearching)
+        public EncodeProgressEventArgs(double fractionComplete, double currentFrameRate, double averageFrameRate, TimeSpan estimatedTimeLeft, int passId, int pass, int passCount, string stateCode)
         {
             this.FractionComplete = fractionComplete;
             this.CurrentFrameRate = currentFrameRate;
@@ -55,8 +52,7 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
             this.PassId = passId;
             this.Pass = pass;
             this.PassCount = passCount;
-            this.IsMuxing = isMuxing;
-            this.IsSearching = isSearching;
+            this.StateCode = stateCode;
         }
 
         /// <summary>
@@ -101,14 +97,9 @@ namespace HandBrake.ApplicationServices.Interop.EventArgs
         public int PassCount { get; private set; }
 
         /// <summary>
-        /// Gets a value indicating that we are in the muxing process.
+        /// Gets the state code of the encode process.
         /// </summary>
-        public bool IsMuxing { get; private set; }
-
-        /// <summary>
-        /// Gets a value indicating that we are in the searching process.
-        /// </summary>
-        public bool IsSearching { get; }
+        public string StateCode { get; }
 
         /// <summary>
         /// Gets a value indicating that we are doing a subtitle scan pass.
