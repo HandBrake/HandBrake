@@ -83,6 +83,11 @@ namespace HandBrake.ApplicationServices.Interop
         private JsonScanObject titles;
 
         /// <summary>
+        /// The raw JSON for the titles list.
+        /// </summary>
+        private string titlesJson;
+
+        /// <summary>
         /// The index of the default title.
         /// </summary>
         private int featureTitle;
@@ -150,6 +155,17 @@ namespace HandBrake.ApplicationServices.Interop
             get
             {
                 return this.titles;
+            }
+        }
+
+        /// <summary>
+        /// Gets the raw JSON for the list of titles on this instance.
+        /// </summary>
+        public string TitlesJson
+        {
+            get
+            {
+                return this.titlesJson;
             }
         }
 
@@ -360,7 +376,17 @@ namespace HandBrake.ApplicationServices.Interop
             };
 
             string encode = JsonConvert.SerializeObject(encodeObject, Formatting.Indented, settings);
-            HBFunctions.hb_add_json(this.hbHandle, InteropUtilities.ToUtf8PtrFromString(encode));
+            this.StartEncode(encode);
+        }
+
+        /// <summary>
+        /// Starts an encode with the given job JSON.
+        /// </summary>
+        /// <param name="encodeJson">The JSON for the job to start.</param>
+        [HandleProcessCorruptedStateExceptions]
+        public void StartEncode(string encodeJson)
+        {
+            HBFunctions.hb_add_json(this.hbHandle, InteropUtilities.ToUtf8PtrFromString(encodeJson));
             HBFunctions.hb_start(this.hbHandle);
 
             this.encodePollTimer = new Timer();
@@ -497,8 +523,8 @@ namespace HandBrake.ApplicationServices.Interop
                 this.scanPollTimer.Stop();
 
                 var jsonMsg = HBFunctions.hb_get_title_set_json(this.hbHandle);
-                string scanJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
-                this.log.LogMessage(scanJson, LogMessageType.Progress, LogLevel.Trace);
+                this.titlesJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
+                this.log.LogMessage(this.titlesJson, LogMessageType.Progress, LogLevel.Trace);
 
                 if (string.IsNullOrEmpty(scanJson))
                 {
@@ -506,7 +532,7 @@ namespace HandBrake.ApplicationServices.Interop
                 }
                 else
                 {
-                    this.titles = JsonConvert.DeserializeObject<JsonScanObject>(scanJson);
+                    this.titles = JsonConvert.DeserializeObject<JsonScanObject>(this.titlesJson);
                     if (this.titles != null)
                     {
                         this.featureTitle = this.titles.MainFeature;
