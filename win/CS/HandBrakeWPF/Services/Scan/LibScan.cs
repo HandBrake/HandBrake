@@ -207,13 +207,7 @@ namespace HandBrakeWPF.Services.Scan
                                                    PixelAspectY = job.PixelAspectY
                                                };
 
-                int deinterlaceOn = 0;
-                if (job.DeinterlaceFilter != DeinterlaceFilter.Off)
-                {
-                    deinterlaceOn = 1;
-                }
-                
-                bitmapImage = BitmapUtilities.ConvertToBitmapImage(this.instance.GetPreview(settings, preview, deinterlaceOn));
+                bitmapImage = BitmapUtilities.ConvertToBitmapImage(this.instance.GetPreview(settings, preview, job.DeinterlaceFilter != DeinterlaceFilter.Off));
             }
             catch (AccessViolationException e)
             {

@@ -262,7 +262,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Stops an ongoing scan.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions] 
+        [HandleProcessCorruptedStateExceptions]
         public void StopScan()
         {
             HBFunctions.hb_scan_stop(this.hbHandle);
@@ -280,28 +280,31 @@ namespace HandBrake.ApplicationServices.Interop
         /// <param name="previewNumber">
         /// The index of the preview to get (0-based).
         /// </param>
+        /// <param name="deinterlace">
+        /// True to enable basic deinterlace of preview images.
+        /// </param>
         /// <returns>
         /// An image with the requested preview.
         /// </returns>
         [HandleProcessCorruptedStateExceptions]
-        public Bitmap GetPreview(PreviewSettings settings, int previewNumber, int deinterlace)
+        public Bitmap GetPreview(PreviewSettings settings, int previewNumber, bool deinterlace)
         {
             SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == settings.TitleNumber);
 
             // Create the Expected Output Geometry details for libhb.
             hb_geometry_settings_s uiGeometry = new hb_geometry_settings_s
             {
-                crop = new[] { settings.Cropping.Top, settings.Cropping.Bottom, settings.Cropping.Left, settings.Cropping.Right }, 
+                crop = new[] { settings.Cropping.Top, settings.Cropping.Bottom, settings.Cropping.Left, settings.Cropping.Right },
                 itu_par = 0,
                 keep = (int)AnamorphicFactory.KeepSetting.HB_KEEP_WIDTH + (settings.KeepDisplayAspect ? 0x04 : 0), // TODO Keep Width?
-                maxWidth = settings.MaxWidth, 
-                maxHeight = settings.MaxHeight, 
-                mode = (int)(hb_anamorphic_mode_t)settings.Anamorphic, 
-                modulus = settings.Modulus ?? 16, 
+                maxWidth = settings.MaxWidth,
+                maxHeight = settings.MaxHeight,
+                mode = (int)(hb_anamorphic_mode_t)settings.Anamorphic,
+                modulus = settings.Modulus ?? 16,
                 geometry = new hb_geometry_s
                 {
-                    height = settings.Height, 
-                    width = settings.Width, 
+                    height = settings.Height,
+                    width = settings.Width,
                     par = settings.Anamorphic != Anamorphic.Custom
                         ? new hb_rational_t { den = title.Geometry.PAR.Den, num = title.Geometry.PAR.Num }
                         : new hb_rational_t { den = settings.PixelAspectY, num = settings.PixelAspectX }
@@ -309,7 +312,7 @@ namespace HandBrake.ApplicationServices.Interop
             };
 
             // Fetch the image data from LibHb
-            IntPtr resultingImageStuct = HBFunctions.hb_get_preview2(this.hbHandle, settings.TitleNumber, previewNumber, ref uiGeometry, deinterlace);
+            IntPtr resultingImageStuct = HBFunctions.hb_get_preview2(this.hbHandle, settings.TitleNumber, previewNumber, ref uiGeometry, deinterlace ? 1 : 0);
             hb_image_s image = InteropUtilities.ToStructureFromPtr<hb_image_s>(resultingImageStuct);
 
             // Copy the filled image buffer to a managed array.
@@ -409,7 +412,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Pauses the current encode.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions] 
+        [HandleProcessCorruptedStateExceptions]
         public void PauseEncode()
         {
             HBFunctions.hb_pause(this.hbHandle);
@@ -418,7 +421,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Resumes a paused encode.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions] 
+        [HandleProcessCorruptedStateExceptions]
         public void ResumeEncode()
         {
             HBFunctions.hb_resume(this.hbHandle);
@@ -427,7 +430,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// <summary>
         /// Stops the current encode.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions] 
+        [HandleProcessCorruptedStateExceptions]
         public void StopEncode()
         {
             HBFunctions.hb_stop(this.hbHandle);
@@ -526,7 +529,7 @@ namespace HandBrake.ApplicationServices.Interop
                 this.titlesJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
                 this.log.LogMessage(this.titlesJson, LogMessageType.Progress, LogLevel.Trace);
 
-                if (string.IsNullOrEmpty(scanJson))
+                if (string.IsNullOrEmpty(this.titlesJson))
                 {
                     this.log.LogMessage("Scan Error: No Scan Data Returned.", LogMessageType.API, LogLevel.Error);
                 }
@@ -566,7 +569,7 @@ namespace HandBrake.ApplicationServices.Interop
                 if (this.EncodeProgress != null)
                 {
                     var progressEventArgs = new EncodeProgressEventArgs(state.Working.Progress, state.Working.Rate, state.Working.RateAvg, new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds),
-                        state.Working.PassID, state.Working.Pass, state.Working.PassCount, taskState == TaskState.Muxing, taskState == TaskState.Searching);
+                        state.Working.PassID, state.Working.Pass, state.Working.PassCount, taskState.Code);
 
                     this.EncodeProgress(this, progressEventArgs);
                 }
