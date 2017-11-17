@@ -244,6 +244,16 @@ namespace HandBrake.ApplicationServices.Interop
             return Mixdowns.SingleOrDefault(m => m.ShortName == shortName);
         }
 
+		/// <summary>
+		/// Gets the mixdown with the specified ID.
+		/// </summary>
+		/// <param name="id">The mixdown ID.</param>
+		/// <returns>The requested mixdown.</returns>
+	    public static HBMixdown GetMixdown(int id)
+	    {
+		    return Mixdowns.SingleOrDefault(m => m.Id == id);
+	    }
+
         /// <summary>
         /// Gets the container with the specified short name.
         /// </summary>
@@ -488,6 +498,17 @@ namespace HandBrake.ApplicationServices.Interop
             int defaultMixdown = HBFunctions.hb_mixdown_get_default((uint)encoder.Id, layout);
             return Mixdowns.Single(m => m.Id == defaultMixdown);
         }
+
+		/// <summary>
+		/// Sanitizes the given sample rate for the given encoder.
+		/// </summary>
+		/// <param name="encoder">The encoder.</param>
+		/// <param name="sampleRate">The sample rate to sanitize.</param>
+		/// <returns>The sanitized sample rate.</returns>
+	    public static int SanitizeSampleRate(HBAudioEncoder encoder, int sampleRate)
+	    {
+		    return HBFunctions.hb_audio_samplerate_find_closest(sampleRate, (uint)encoder.Id);
+	    }
 
         /// <summary>
         /// Gets the bitrate limits for the given audio codec, sample rate and mixdown.

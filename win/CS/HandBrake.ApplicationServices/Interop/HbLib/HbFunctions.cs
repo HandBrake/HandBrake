@@ -201,6 +201,8 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_audio_samplerate_get_next", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_audio_samplerate_get_next(IntPtr last);
 
+        [DllImport("hb", EntryPoint = "hb_audio_samplerate_find_closest", CallingConvention = CallingConvention.Cdecl)]
+	    public static extern int hb_audio_samplerate_find_closest(int samplerate, uint codec);
 
         [DllImport("hb", EntryPoint = "hb_audio_bitrate_get_best", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_audio_bitrate_get_best(uint codec, int bitrate, int samplerate, int mixdown);
