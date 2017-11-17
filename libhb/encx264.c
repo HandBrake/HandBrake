@@ -701,6 +701,7 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
              frames we only get the duration of the first which will
              eventually screw up the muxer & decoder. */
     int i;
+    buf->s.flags &= ~HB_FLAG_FRAMETYPE_REF;
     for( i = 0; i < i_nal; i++ )
     {
         int size = nal[i].i_payload;
@@ -737,11 +738,7 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
          * Also, since libx264 doesn't tell us when B-frames are
          * themselves reference frames, figure it out on our own.
          */
-        if (nal[i].i_ref_idc == NAL_PRIORITY_DISPOSABLE)
-        {
-            buf->s.flags &= ~HB_FLAG_FRAMETYPE_REF;
-        }
-        else
+        if (nal[i].i_ref_idc != NAL_PRIORITY_DISPOSABLE)
         {
             if (buf->s.frametype == HB_FRAME_B)
             {
