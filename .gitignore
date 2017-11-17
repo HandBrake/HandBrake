@@ -1,6 +1,7 @@
 # Visual Studio
 win/CS/*/bin
 win/CS/*/obj
+win/CS/.vs
 win/CS/**/*.suo
 win/CS/*.VC.opendb
 win/CS/*.VC.db
