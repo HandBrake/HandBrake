@@ -717,13 +717,13 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
                 goto skip_preview;
             }
 
+            packets++;
             if (buf->size <= 0)
             {
-                hb_log( "Warning: Could not read data for preview %d, skipped", i + 1 );
-                abort = 1;
-                goto skip_preview;
+                // Ignore "null" frames
+                hb_buffer_close(&buf);
+                continue;
             }
-            packets++;
 
             (hb_demux[title->demuxer])(buf, &list_es, 0 );
 
