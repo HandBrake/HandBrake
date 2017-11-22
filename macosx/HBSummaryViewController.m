@@ -45,16 +45,17 @@
 
 - (void)setJob:(HBJob *)job
 {
-    _job = job;
     if (job)
     {
+        _job = job;
         [self addJobObservers];
         [self updateLabels];
     }
     else
     {
-        [self resetLabels];
         [self removeJobObservers];
+        [self resetLabels];
+        _job = job;
     }
 }
 
