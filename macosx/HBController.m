@@ -159,26 +159,7 @@
 
         _scanSpecificTitleIdx = 1;
 
-        // Check to see if the last destination has been set, use if so, if not, use Movies
-#ifdef __SANDBOX_ENABLED__
-        NSData *bookmark = [[NSUserDefaults standardUserDefaults] objectForKey:@"HBLastDestinationDirectoryBookmark"];
-        if (bookmark)
-        {
-            _currentDestination = [HBUtilities URLFromBookmark:bookmark];
-        }
-#else
-        _currentDestination = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectoryURL"];
-#endif
-
-        if (!_currentDestination)
-        {
-            _currentDestination = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES) firstObject]
-                                             isDirectory:YES];
-        }
-
-#ifdef __SANDBOX_ENABLED__
-        [_currentDestination startAccessingSecurityScopedResource];
-#endif
+        self.currentDestination = [HBUtilities defaultOutputFolderForJob:nil];
     }
 
     return self;
@@ -186,7 +167,22 @@
 
 - (void)dealloc
 {
+    self.currentDestination = nil; // Yes, sometimes it is needed even if using ARC, this is one of the cases
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)setCurrentDestination:(NSURL *)newValue
+{
+    if (NO == [_currentDestination isEqual:newValue])
+    {
+#ifdef __SANDBOX_ENABLED__
+        [_currentDestination stopAccessingSecurityScopedResource];
+#endif
+        _currentDestination = newValue;
+#ifdef __SANDBOX_ENABLED__
+        [_currentDestination startAccessingSecurityScopedResource];
+#endif
+    }
 }
 
 - (void)windowDidLoad
@@ -740,6 +736,7 @@
     }
 
     HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:self.currentPreset];
+    self.currentDestination = [HBUtilities defaultOutputFolderForJob:job];
     job.outputURL = self.currentDestination;
 
     // If the source is not a stream, and autonaming is disabled,
@@ -1236,6 +1233,7 @@
     for (HBTitle *title in titles)
     {
         HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:preset];
+        self.currentDestination = [HBUtilities defaultOutputFolderForJob:job];
         job.outputURL = self.currentDestination;
         job.outputFileName = [HBUtilities defaultNameForJob:job];
         job.title = nil;

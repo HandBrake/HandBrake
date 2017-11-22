@@ -13,6 +13,13 @@ typedef NS_ENUM(NSUInteger, HBDoneAction) {
     HBDoneActionShutDown = 5,
 };
 
+typedef NS_ENUM(NSUInteger, HBDefaultOutputFolderSelection) {
+    HBDefaultOutputFolderLastUsed = 0,
+    HBDefaultOutputFolderMovies = 1,
+    HBDefaultOutputFolderDesktop = 2,
+    HBDefaultOutputFolderInput = 3,
+};
+
 @interface HBPreferencesController : NSWindowController <NSToolbarDelegate>
 
 + (void)registerUserDefaults;

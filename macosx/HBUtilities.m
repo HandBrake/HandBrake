@@ -9,6 +9,7 @@
 
 #import "HBTitle.h"
 #import "HBJob.h"
+#import "HBPreferencesController.h"
 
 #include "common.h"
 #include "lang.h"
@@ -172,7 +173,8 @@
     HBTitle *title = job.title;
 
     // Generate a new file name
-    NSString *fileName = [HBUtilities automaticNameForSource:title.name
+    NSString *fileName = [HBUtilities automaticNameForInput:job.fileURL
+                                                     source:title.name
                                                        title:title.index
                                                     chapters:NSMakeRange(job.range.chapterStart + 1, job.range.chapterStop + 1)
                                                      quality:job.video.qualityType ? job.video.quality : 0
@@ -222,12 +224,13 @@
     return fileName;
 }
 
-+ (NSString *)automaticNameForSource:(NSString *)sourceName
-                               title:(NSUInteger)title
-                            chapters:(NSRange)chaptersRange
-                             quality:(double)quality
-                             bitrate:(int)bitrate
-                          videoCodec:(uint32_t)codec
++ (NSString *)automaticNameForInput:(NSURL *)fileURL
+                             source:(NSString *)sourceName
+                              title:(NSUInteger)title
+                           chapters:(NSRange)chaptersRange
+                            quality:(double)quality
+                            bitrate:(int)bitrate
+                         videoCodec:(uint32_t)codec
 {
     NSMutableString *name = [[NSMutableString alloc] init];
     // The format array contains the tokens as NSString
@@ -253,6 +256,10 @@
                 sourceName = [sourceName capitalizedString];
             }
             [name appendString:sourceName];
+        }
+        else if ([formatKey isEqualToString:@"{Input}"])
+        {
+            [name appendFormat:@"%@", fileURL.lastPathComponent.stringByDeletingPathExtension];
         }
         else if ([formatKey isEqualToString:@"{Title}"])
         {
@@ -308,6 +315,46 @@
     }
 
     return [name copy];
+}
+
++ (NSURL *)defaultOutputFolderForJob:(HBJob * __nullable)job
+{
+    NSURL *destination = nil;
+    HBDefaultOutputFolderSelection defaultOption = (HBDefaultOutputFolderSelection)[[NSUserDefaults standardUserDefaults] integerForKey:@"DefaultOutputFolder"];
+    
+    if (defaultOption == HBDefaultOutputFolderLastUsed)
+    {
+#ifdef __SANDBOX_ENABLED__
+        NSData *bookmark = [[NSUserDefaults standardUserDefaults] objectForKey:@"HBLastDestinationDirectoryBookmark"];
+        if (bookmark)
+        {
+            destination = [HBUtilities URLFromBookmark:bookmark];
+        }
+#else
+        destination = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectoryURL"];
+#endif
+        if (!destination)
+        {
+            destination = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES) firstObject]
+                                     isDirectory:YES];
+        }
+    }
+    else if (defaultOption == HBDefaultOutputFolderMovies)
+    {
+        destination = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES) firstObject]
+                                 isDirectory:YES];
+    }
+    else if (defaultOption == HBDefaultOutputFolderDesktop)
+    {
+        destination = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, NSUserDomainMask, YES) firstObject]
+                                 isDirectory:YES];
+    }
+    else if (defaultOption == HBDefaultOutputFolderInput && job)
+    {
+        destination = [NSURL fileURLWithPath:[NSString stringWithUTF8String:job.fileURL.fileSystemRepresentation].stringByDeletingLastPathComponent isDirectory:YES];
+    }
+    
+    return destination;
 }
 
 + (NSString *)isoCodeForNativeLang:(NSString *)language

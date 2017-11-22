@@ -41,11 +41,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)automaticExtForJob:(HBJob *)job;
 + (NSString *)defaultNameForJob:(HBJob *)job;
 
++ (NSURL *)defaultOutputFolderForJob:(HBJob * __nullable)job;
+
 /**
  *  Generates a file name automatically based on the inputs,
  *  it can be configured with NSUserDefaults.
  *
- *  @param sourceName    the name of the source file
+ *  @param fileURL       the file URL of the source file
+ *  @param sourceName    the name of the source
  *  @param title         the title number
  *  @param chaptersRange the selected chapters range
  *  @param quality       the video encoder quality
@@ -54,7 +57,8 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @return a NSString containing the required info
  */
-+ (NSString *)automaticNameForSource:(NSString *)sourceName
++ (NSString *)automaticNameForInput:(NSURL*)fileURL
+                             source:(NSString *)sourceName
                                title:(NSUInteger)title
                             chapters:(NSRange)chaptersRange
                              quality:(double)quality
