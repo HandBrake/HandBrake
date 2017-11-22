@@ -354,6 +354,10 @@ void hb_display_job_info(hb_job_t *job)
             break;
     }
 
+    if (job->align_av_start)
+    {
+        hb_log("     + align initial A/V stream timestamps");
+    }
     if (job->inline_parameter_sets)
     {
         hb_log("     + optimized for adaptive streaming (inline parameter sets)");
