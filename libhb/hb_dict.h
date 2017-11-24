@@ -119,7 +119,7 @@ void         hb_value_decref(hb_value_t *value);
 void         hb_value_free(hb_value_t **value);
 
 /* Create new hb_value_t */
-hb_value_t * hb_value_null();
+hb_value_t * hb_value_null(void);
 hb_value_t * hb_value_string(const char *value);
 hb_value_t * hb_value_int(json_int_t value);
 hb_value_t * hb_value_double(double value);

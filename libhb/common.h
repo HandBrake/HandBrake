@@ -127,7 +127,7 @@ void hb_buffer_list_close(hb_buffer_list_t *list);
 int hb_buffer_list_count(hb_buffer_list_t *list);
 int hb_buffer_list_size(hb_buffer_list_t *list);
 
-hb_list_t * hb_list_init();
+hb_list_t * hb_list_init(void);
 int         hb_list_count( const hb_list_t * );
 void        hb_list_add( hb_list_t *, void * );
 void        hb_list_insert( hb_list_t * l, int pos, void * p );
@@ -179,7 +179,7 @@ hb_attachment_t *hb_attachment_copy(const hb_attachment_t *src);
 hb_list_t *hb_attachment_list_copy(const hb_list_t *src);
 void hb_attachment_close(hb_attachment_t **attachment);
 
-hb_metadata_t * hb_metadata_init();
+hb_metadata_t * hb_metadata_init(void);
 hb_metadata_t * hb_metadata_copy(const hb_metadata_t *src);
 void hb_metadata_close(hb_metadata_t **metadata);
 void hb_metadata_set_name( hb_metadata_t *metadata, const char *name );
@@ -331,7 +331,7 @@ struct hb_subtitle_config_s
  *
  */
 
-void hb_common_global_init();
+void hb_common_global_init(void);
 
 int              hb_video_framerate_get_from_name(const char *name);
 const char*      hb_video_framerate_get_name(int framerate);
@@ -374,8 +374,8 @@ void  hb_audio_compression_get_limits(uint32_t codec, float *low, float *high, f
 float hb_audio_compression_get_best(uint32_t codec, float compression);
 float hb_audio_compression_get_default(uint32_t codec);
 
-int                hb_audio_dither_get_default();
-int                hb_audio_dither_get_default_method(); // default method, if enabled && supported
+int                hb_audio_dither_get_default(void);
+int                hb_audio_dither_get_default_method(void); // default method, if enabled && supported
 int                hb_audio_dither_is_supported(uint32_t codec);
 int                hb_audio_dither_get_from_name(const char *name);
 const char*        hb_audio_dither_get_description(int method);

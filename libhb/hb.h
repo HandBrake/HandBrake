@@ -34,7 +34,7 @@ hb_handle_t * hb_init( int verbose );
 void          hb_log_level_set(hb_handle_t *h, int level);
 
 /* hb_get_version() */
-const char  * hb_get_full_description();
+const char  * hb_get_full_description(void);
 const char  * hb_get_version( hb_handle_t * );
 int           hb_get_build( hb_handle_t * );
 
@@ -133,10 +133,10 @@ void          hb_close( hb_handle_t ** );
 
 /* hb_global_init()
    Performs process initialization. */
-int           hb_global_init();
+int           hb_global_init(void);
 /* hb_global_close()
    Performs final cleanup for the process. */
-void          hb_global_close();
+void          hb_global_close(void);
 
 /* hb_get_instance_id()
    Return the unique instance id of an libhb instance created by hb_init. */

@@ -42,21 +42,21 @@ enum hb_cpu_platform
     HB_CPU_PLATFORM_INTEL_SKL,
     HB_CPU_PLATFORM_INTEL_KBL,
 };
-int         hb_get_cpu_count();
-int         hb_get_cpu_platform();
-const char* hb_get_cpu_name();
-const char* hb_get_cpu_platform_name();
+int         hb_get_cpu_count(void);
+int         hb_get_cpu_platform(void);
+const char* hb_get_cpu_name(void);
+const char* hb_get_cpu_platform_name(void);
 
 /************************************************************************
  * Utils
  ***********************************************************************/
 // provide time in ms
-uint64_t hb_get_date();
+uint64_t hb_get_date(void);
 // provide time in us
-uint64_t hb_get_time_us();
+uint64_t hb_get_time_us(void);
 
 void     hb_snooze( int delay );
-int      hb_platform_init();
+int      hb_platform_init(void);
 
 #ifdef SYS_MINGW
 typedef struct
