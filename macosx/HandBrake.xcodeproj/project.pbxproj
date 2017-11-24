@@ -186,6 +186,7 @@
 		A932E26C1988334B0047D13E /* AudioDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A932E26A1988334B0047D13E /* AudioDefaults.xib */; };
 		A9350F501CCA7F490089F970 /* HBQTKitPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A9350F4E1CCA7C3B0089F970 /* HBQTKitPlayer.m */; };
 		A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */; };
+		A939DD8B1FC8826A00135F2A /* HBPresetsMenuBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */; };
 		A93B49221DA3AA6900DD70A3 /* HBToolbarBadgedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A93B49211DA3AA6900DD70A3 /* HBToolbarBadgedItem.m */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
 		A93E0ED71972958C00FD67FB /* Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = A93E0ED51972958C00FD67FB /* Video.xib */; };
@@ -453,6 +454,8 @@
 		A9350F4D1CCA7C3B0089F970 /* HBQTKitPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBQTKitPlayer.h; sourceTree = "<group>"; };
 		A9350F4E1CCA7C3B0089F970 /* HBQTKitPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBQTKitPlayer.m; sourceTree = "<group>"; };
 		A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
+		A939DD891FC8826A00135F2A /* HBPresetsMenuBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPresetsMenuBuilder.h; sourceTree = "<group>"; };
+		A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBPresetsMenuBuilder.m; sourceTree = "<group>"; };
 		A93B0DF61C804CF50051A3FA /* NSDictionary+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+HBAdditions.h"; sourceTree = "<group>"; };
 		A93B0DF71C804CF50051A3FA /* NSDictionary+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+HBAdditions.m"; sourceTree = "<group>"; };
 		A93B49201DA3AA6900DD70A3 /* HBToolbarBadgedItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBToolbarBadgedItem.h; sourceTree = "<group>"; };
@@ -1188,6 +1191,8 @@
 				273F209C14ADBE670021BE6D /* HBOutputPanelController.m */,
 				273F209F14ADBE670021BE6D /* HBPreferencesController.h */,
 				273F20A014ADBE670021BE6D /* HBPreferencesController.m */,
+				A939DD891FC8826A00135F2A /* HBPresetsMenuBuilder.h */,
+				A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1571,6 +1576,7 @@
 				A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */,
 				A93B49221DA3AA6900DD70A3 /* HBToolbarBadgedItem.m in Sources */,
 				A91AD3401FB5D2FC00AEA822 /* HBAddCategoryController.m in Sources */,
+				A939DD8B1FC8826A00135F2A /* HBPresetsMenuBuilder.m in Sources */,
 				A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */,
 				A98036CD1CCA91DD007661AA /* HBAVPlayer.m in Sources */,
 				A9BC24C91A69293E007DC41A /* HBAttributedStringAdditions.m in Sources */,

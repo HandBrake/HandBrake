@@ -9,6 +9,7 @@
 #import "HBUtilities.h"
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
+#import "HBPresetsMenuBuilder.h"
 
 #import "HBPreferencesController.h"
 #import "HBQueueController.h"
@@ -23,6 +24,7 @@
 @interface HBAppDelegate ()
 
 @property (nonatomic, strong) HBPresetsManager *presetsManager;
+@property (nonatomic, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
 @property (unsafe_unretained) IBOutlet NSMenu *presetsMenu;
 
 @property (nonatomic, strong) HBPreferencesController *preferencesController;
@@ -80,9 +82,12 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
-    [self buildPresetsMenu];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(buildPresetsMenu) name:HBPresetsChangedNotification object:nil];
+    self.presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsMenu
+                                                                  action:@selector(selectPresetFromMenu:)
+                                                                    size:[NSFont systemFontSize]
+                                                          presetsManager:self.presetsManager];
+    [self.presetsMenuBuilder build];
 
     // Get the number of HandBrake instances currently running
     NSUInteger instances = [NSRunningApplication runningApplicationsWithBundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]].count;
@@ -285,68 +290,6 @@
 }
 
 #pragma mark - Presets Menu actions
-
-/**
- *  Adds the presets list to the menu.
- */
-- (void)buildPresetsMenu
-{
-    // First we remove all the preset menu items
-    // inserted previously
-    NSArray *menuItems = [self.presetsMenu.itemArray copy];
-    for (NSMenuItem *item in menuItems)
-    {
-        if (item.tag != -1)
-        {
-            [self.presetsMenu removeItem:item];
-        }
-    }
-
-    BOOL builtInSeparatorInserted = NO;
-    for (HBPreset *preset in self.presetsManager.root.children)
-    {
-        if (preset.isBuiltIn == NO && builtInSeparatorInserted == NO)
-        {
-            [self.presetsMenu addItem:[NSMenuItem separatorItem]];
-            builtInSeparatorInserted = YES;
-        }
-        [self.presetsMenu addItem:[self buildMenuItemWithPreset:preset]];
-    }
-}
-
-- (NSMenuItem *)buildMenuItemWithPreset:(HBPreset *)preset
-{
-    NSMenuItem *item = [[NSMenuItem alloc] init];
-    item.title = preset.name;
-    item.toolTip = preset.presetDescription;
-    item.tag = 2;
-
-    if (preset.isLeaf)
-    {
-        item.action = @selector(selectPresetFromMenu:);
-        item.representedObject = preset;
-
-        // Make the default preset font bold.
-        if ([preset isEqualTo:self.presetsManager.defaultPreset])
-        {
-            NSAttributedString *newTitle = [[NSAttributedString alloc] initWithString:preset.name
-                                                                           attributes:@{NSFontAttributeName: [NSFont boldSystemFontOfSize:14]}];
-            [item setAttributedTitle:newTitle];
-        }
-    }
-    else
-    {
-        NSMenu *menu = [[NSMenu alloc] init];
-        for (HBPreset *childPreset in preset.children)
-        {
-            [menu addItem:[self buildMenuItemWithPreset:childPreset]];
-        }
-
-        item.submenu = menu;
-    }
-
-    return item;
-}
 
 /**
  * We use this method to recreate new, updated factory presets

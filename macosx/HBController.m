@@ -14,6 +14,7 @@
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
 #import "HBMutablePreset.h"
+#import "HBPresetsMenuBuilder.h"
 
 #import "HBSummaryViewController.h"
 #import "HBPictureViewController.h"
@@ -98,6 +99,9 @@
     
     IBOutlet NSDrawer            * fPresetDrawer;
 }
+
+@property (nonatomic, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
+@property (nonatomic, strong) IBOutlet NSPopUpButton *presetsPopup;
 
 @property (nonatomic, strong) HBSummaryViewController *summaryController;
 @property (nonatomic, strong) IBOutlet NSTabViewItem *summaryTab;
@@ -282,7 +286,14 @@
                                                               forKeyPath:@"values.HBShowAdvancedTab"
                                                                  options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                                                                  context:NULL];
-    
+
+
+    self.presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsPopup.menu
+                                                                  action:@selector(selectPresetFromMenu:)
+                                                                    size:[NSFont smallSystemFontSize]
+                                                          presetsManager:presetManager];
+    [self.presetsMenuBuilder build];
+
     [self.window recalculateKeyViewLoop];
 }
 

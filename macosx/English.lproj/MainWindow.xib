@@ -32,6 +32,7 @@
                 <outlet property="fSubtitlesTab" destination="5194" id="PF0-qx-Iu4"/>
                 <outlet property="fVideoTab" destination="1477" id="hFY-kK-afW"/>
                 <outlet property="openTitleView" destination="lZQ-gl-3wX" id="Wh6-fB-pWi"/>
+                <outlet property="presetsPopup" destination="bWH-Lp-mKY" id="vot-gQ-hLV"/>
                 <outlet property="showQueueToolbarItem" destination="HCx-ku-nF7" id="CC6-Yu-j7N"/>
                 <outlet property="summaryTab" destination="BA0-eg-2Ka" id="wh5-Js-weO"/>
                 <outlet property="window" destination="21" id="qib-ZH-aNm"/>
@@ -54,7 +55,7 @@
                         <tabViewItems>
                             <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
                                 <view key="view" id="BjX-E2-6tb">
-                                    <rect key="frame" x="10" y="25" width="874" height="339"/>
+                                    <rect key="frame" x="10" y="29" width="874" height="335"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -356,21 +357,9 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" misplaced="YES" boxType="separator" id="1628">
-                        <rect key="frame" x="292" y="476" width="608" height="5"/>
+                        <rect key="frame" x="283" y="476" width="617" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
-                    <textField toolTip="Selected preset name." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1882">
-                        <rect key="frame" x="69" y="472" width="217" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" id="4924">
-                            <font key="font" metaFont="smallSystemBold"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <binding destination="-2" name="value" keyPath="self.job.presetName" id="W9D-4K-e1F"/>
-                        </connections>
-                    </textField>
                     <box verticalHuggingPriority="750" boxType="separator" id="3205">
                         <rect key="frame" x="391" y="537" width="509" height="5"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -578,6 +567,30 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             </subviews>
                         </view>
                     </box>
+                    <popUpButton verticalHuggingPriority="750" misplaced="YES" id="bWH-Lp-mKY">
+                        <rect key="frame" x="68" y="467" width="210" height="22"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <popUpButtonCell key="cell" type="push" title="Selected Preset" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="4hk-61-M1H">
+                            <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                            <menu key="menu" id="X2f-Tk-x0c">
+                                <items>
+                                    <menuItem title="Selected Preset" state="on" hidden="YES" id="OYP-3T-FnA">
+                                        <connections>
+                                            <binding destination="-2" name="title" keyPath="self.job.presetName" id="vO4-JB-o7Q"/>
+                                        </connections>
+                                    </menuItem>
+                                </items>
+                            </menu>
+                        </popUpButtonCell>
+                        <connections>
+                            <binding destination="-2" name="enabled" keyPath="self.job" id="1XP-x4-0GV">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSIsNotNil</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </popUpButton>
                 </subviews>
             </view>
             <toolbar key="toolbar" implicitIdentifier="E92CA47A-01F7-432A-A61C-28FE4D58C2CD" explicitIdentifier="HBMainWindowToolbar" displayMode="iconAndLabel" sizeMode="regular" id="7g3-gy-bUl">
@@ -613,7 +626,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         <popUpButton key="view" misplaced="YES" imageHugsTitle="YES" id="pJJ-0V-TQq">
                             <rect key="frame" x="28" y="14" width="58" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addqueue" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="QCi-1O-Msg">
