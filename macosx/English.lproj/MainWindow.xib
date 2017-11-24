@@ -621,12 +621,12 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="A5F62853-5047-43C2-AD64-73654B0E34B2" label="Add Titles To Queue" paletteLabel="Add Titles To Queue" image="addqueue" id="38K-hd-P5J">
                         <nil key="toolTip"/>
-                        <size key="minSize" width="58" height="32"/>
+                        <size key="minSize" width="58" height="25"/>
                         <size key="maxSize" width="58" height="32"/>
                         <popUpButton key="view" misplaced="YES" imageHugsTitle="YES" id="pJJ-0V-TQq">
                             <rect key="frame" x="28" y="14" width="58" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addqueue" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="QCi-1O-Msg">
@@ -670,9 +670,19 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <action selector="showOutputPanel:" target="-1" id="TxI-PX-wlm"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="44A85DDE-F1ED-47FD-9A02-6B6DDF515FD8" label="Toggle Presets" paletteLabel="Toggle Presets" toolTip="Open/Close Presets List" tag="-1" image="presets" id="9ll-Jg-YAB">
+                    <toolbarItem implicitItemIdentifier="27166A18-3AC0-4FD9-B76C-B1702BA05D47" label="Presets" paletteLabel="Toggle Presets" toolTip="Open/Close Presets List" image="presets" id="qhv-9l-2FH">
+                        <size key="minSize" width="32" height="32"/>
+                        <size key="maxSize" width="32" height="32"/>
+                        <button key="view" verticalHuggingPriority="750" misplaced="YES" id="kdj-uK-UE0">
+                            <rect key="frame" x="27" y="14" width="32" height="32"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="presets" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="b1r-Ra-EmB">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
                         <connections>
-                            <action selector="toggleDrawer:" target="-2" id="YN2-RM-4ss"/>
+                            <action selector="toggleDrawer:" target="-2" id="mhX-ic-osi"/>
                         </connections>
                     </toolbarItem>
                 </allowedToolbarItems>
@@ -687,7 +697,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <toolbarItem reference="wjB-Tl-5qq"/>
                     <toolbarItem reference="dK4-jt-v4K"/>
                     <toolbarItem reference="p7Q-L3-zcW"/>
-                    <toolbarItem reference="9ll-Jg-YAB"/>
+                    <toolbarItem reference="qhv-9l-2FH"/>
                 </defaultToolbarItems>
             </toolbar>
             <connections>

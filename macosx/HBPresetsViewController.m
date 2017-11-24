@@ -81,6 +81,11 @@
 {
     [super loadView];
 
+    if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_10)
+    {
+        self.view.appearance = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
+    }
+
     // drag and drop support
 	[self.outlineView registerForDraggedTypes:@[kHandBrakePresetPBoardType]];
 

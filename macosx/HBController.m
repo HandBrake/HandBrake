@@ -33,7 +33,7 @@
 
 @import HandBrakeKit;
 
-@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDrawerDelegate, NSDraggingDestination>
+@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDrawerDelegate, NSDraggingDestination, NSPopoverDelegate>
 {
     IBOutlet NSTabView *fMainTabView;
 
@@ -102,6 +102,8 @@
 
 @property (nonatomic, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
 @property (nonatomic, strong) IBOutlet NSPopUpButton *presetsPopup;
+
+@property (nonatomic, strong) NSPopover *presetsPopover;
 
 @property (nonatomic, strong) HBSummaryViewController *summaryController;
 @property (nonatomic, strong) IBOutlet NSTabViewItem *summaryTab;
@@ -210,11 +212,14 @@
     [fScanIndicator setUsesThreadedAnimation:NO];
     [fRipIndicator setUsesThreadedAnimation:NO];
 
-    NSSize drawerSize = NSSizeFromString([[NSUserDefaults standardUserDefaults]
-                                          stringForKey:@"HBDrawerSize"]);
-    if (drawerSize.width > 0)
+    if (NSAppKitVersionNumber < NSAppKitVersionNumber10_10)
     {
-        [fPresetDrawer setContentSize: drawerSize];
+        NSSize drawerSize = NSSizeFromString([[NSUserDefaults standardUserDefaults]
+                                              stringForKey:@"HBDrawerSize"]);
+        if (drawerSize.width > 0)
+        {
+            [fPresetDrawer setContentSize: drawerSize];
+        }
     }
 
     // Show/Hide the Presets drawer upon launch based
@@ -244,11 +249,29 @@
     [self.window registerForDraggedTypes:@[NSFilenamesPboardType]];
     [fMainTabView registerForDraggedTypes:@[NSFilenamesPboardType]];
 
-    // Set up the preset drawer
     fPresetsView = [[HBPresetsViewController alloc] initWithPresetManager:presetManager];
-    [fPresetDrawer setContentView:[fPresetsView view]];
     fPresetsView.delegate = self;
-    [[fPresetDrawer contentView] setAutoresizingMask:( NSViewWidthSizable | NSViewHeightSizable )];
+
+    if (NSAppKitVersionNumber < NSAppKitVersionNumber10_10)
+    {
+        // Set up the preset drawer
+        [fPresetDrawer setContentView:[fPresetsView view]];
+        [[fPresetDrawer contentView] setAutoresizingMask:(NSViewWidthSizable | NSViewHeightSizable)];
+    }
+    else
+    {
+        // Set up the presets popover
+        self.presetsPopover = [[NSPopover alloc] init];
+
+        self.presetsPopover.contentViewController = fPresetsView;
+        self.presetsPopover.contentSize = NSMakeSize(230, 600);
+        self.presetsPopover.animates = YES;
+
+        // AppKit will close the popover when the user interacts with a user interface element outside the popover.
+        // note that interacting with menus or panels that become key only when needed will not cause a transient popover to close.
+        self.presetsPopover.behavior = NSPopoverBehaviorSemitransient;
+        self.presetsPopover.delegate = self;
+    }
 
     // Set up the summary view
     self.summaryController = [[HBSummaryViewController alloc] init];
@@ -1344,18 +1367,42 @@
 
 #pragma mark -  Presets
 
+- (BOOL)popoverShouldDetach:(NSPopover *)popover
+{
+    if (popover == self.presetsPopover) {
+        return YES;
+    }
+
+    return NO;
+}
+
 - (IBAction)toggleDrawer:(id)sender
 {
-    if (fPresetDrawer.state == NSDrawerClosedState)
+    if (self.presetsPopover)
     {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HBDefaultPresetsDrawerShow"];
+        if (!self.presetsPopover.isShown)
+        {
+            NSView *target = [sender isKindOfClass:[NSView class]] ? (NSView *)sender : self.window.contentView;
+            [self.presetsPopover showRelativeToRect:target.bounds ofView:target preferredEdge:NSMaxYEdge];
+        }
+        else
+        {
+            [self.presetsPopover close];
+        }
     }
     else
     {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"HBDefaultPresetsDrawerShow"];
-    }
+        if (fPresetDrawer.state == NSDrawerClosedState)
+        {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HBDefaultPresetsDrawerShow"];
+        }
+        else
+        {
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"HBDefaultPresetsDrawerShow"];
+        }
 
-    [fPresetDrawer toggle:self];
+        [fPresetDrawer toggle:self];
+    }
 }
 
 - (void)setCurrentPreset:(HBPreset *)currentPreset
