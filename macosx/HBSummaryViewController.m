@@ -10,20 +10,44 @@
 
 @import HandBrakeKit;
 
+static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
+
 @interface HBSummaryViewController ()
 
 @property (strong) IBOutlet HBPreviewView *previewView;
 @property (strong) IBOutlet NSTextField *tracksLabel;
 @property (strong) IBOutlet NSTextField *filtersLabel;
+@property (strong) IBOutlet NSTextField *dimensionLabel;
+
+@property (nonatomic) BOOL tracksReloadInQueue;
+@property (nonatomic) BOOL filtersReloadInQueue;
+@property (nonatomic) BOOL pictureReloadInQueue;
+
+@property (nonatomic) BOOL visible;
 
 @end
 
 @implementation HBSummaryViewController
 
-- (void)loadView {
+- (void)loadView
+{
     [super loadView];
     self.previewView.showShadow = NO;
     [self resetLabels];
+}
+
+- (void)viewDidAppear
+{
+    self.visible = YES;
+    if (self.pictureReloadInQueue || self.previewView.image == NULL)
+    {
+        [self updatePicture];
+    }
+}
+
+- (void)viewDidDisappear
+{
+    self.visible = NO;
 }
 
 - (void)setGenerator:(HBPreviewGenerator *)generator
@@ -32,10 +56,7 @@
 
     if (generator)
     {
-        NSUInteger index = generator.imagesCount > 1 ? 1 : 0;
-        CGImageRef fPreviewImage = [generator copyImageAtIndex:index shouldCache:NO];
-        self.previewView.image = fPreviewImage;
-        CFRelease(fPreviewImage);
+        [self updatePicture];
     }
     else
     {
@@ -47,9 +68,11 @@
 {
     if (job)
     {
+        [self removeJobObservers];
         _job = job;
         [self addJobObservers];
-        [self updateLabels];
+        [self updateTracksLabel];
+        [self updateFiltersLabel];
     }
     else
     {
@@ -59,51 +82,179 @@
     }
 }
 
+#pragma mark - KVO
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == HBSummaryViewControllerContext)
+    {
+        if ([keyPath isEqualToString:@"audio.tracks"])
+        {
+            if ([change[@"kind"] integerValue] == NSKeyValueChangeInsertion)
+            {
+                [self addAudioTracksObservers:change[@"new"]];
+            }
+            else if ([change[@"kind"] integerValue]== NSKeyValueChangeRemoval)
+            {
+                [self removeAudioTracksObservers:change[@"old"]];
+            }
+        }
+        else if ([keyPath isEqualToString:@"subtitles.tracks"])
+        {
+            if ([change[@"kind"] integerValue] == NSKeyValueChangeInsertion)
+            {
+                [self addSubtitlesTracksObservers:change[@"new"]];
+            }
+            else if ([change[@"kind"] integerValue]== NSKeyValueChangeRemoval)
+            {
+                [self removeSubtitlesTracksObservers:change[@"old"]];
+            }
+        }
+
+        [self updateTracks:nil];
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)addAudioTracksObservers:(NSArray<HBAudioTrack *> *)tracks
+{
+    for (HBAudioTrack *track in tracks)
+    {
+        [track addObserver:self forKeyPath:@"encoder" options:0 context:HBSummaryViewControllerContext];
+        [track addObserver:self forKeyPath:@"mixdown" options:0 context:HBSummaryViewControllerContext];
+    }
+}
+
+- (void)removeAudioTracksObservers:(NSArray<HBAudioTrack *> *)tracks
+{
+    for (HBAudioTrack *track in tracks)
+    {
+        [track removeObserver:self forKeyPath:@"encoder"];
+        [track removeObserver:self forKeyPath:@"mixdown"];
+    }
+}
+
+- (void)addSubtitlesTracksObservers:(NSArray<HBSubtitlesTrack *> *)tracks
+{
+    for (HBSubtitlesTrack *track in tracks)
+    {
+        [track addObserver:self forKeyPath:@"burnedIn" options:0 context:HBSummaryViewControllerContext];
+    }
+}
+
+- (void)removeSubtitlesTracksObservers:(NSArray<HBSubtitlesTrack *> *)tracks
+{
+    for (HBSubtitlesTrack *track in tracks)
+    {
+        [track removeObserver:self forKeyPath:@"burnedIn"];
+    }
+}
+
+- (void)addJobObservers
+{
+    if (_job)
+    {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePicture:) name:HBPictureChangedNotification object:_job.picture];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFilters:) name:HBFiltersChangedNotification object:_job.filters];
+
+        [_job addObserver:self forKeyPath:@"video.encoder" options:0 context:HBSummaryViewControllerContext];
+        [_job addObserver:self forKeyPath:@"video.frameRate" options:0 context:HBSummaryViewControllerContext];
+        [_job addObserver:self forKeyPath:@"video.frameRateMode" options:0 context:HBSummaryViewControllerContext];
+        [_job addObserver:self forKeyPath:@"container" options:0 context:HBSummaryViewControllerContext];
+        [_job addObserver:self forKeyPath:@"chaptersEnabled" options:0 context:HBSummaryViewControllerContext];
+        [_job addObserver:self forKeyPath:@"audio.tracks" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:HBSummaryViewControllerContext];
+        [_job addObserver:self forKeyPath:@"subtitles.tracks" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:HBSummaryViewControllerContext];
+
+        [self addAudioTracksObservers:_job.audio.tracks];
+        [self addSubtitlesTracksObservers:_job.subtitles.tracks];
+    }
+}
+
 - (void)removeJobObservers
 {
-    if (self.job)
+    if (_job)
     {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBContainerChangedNotification object:_job];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:HBPictureChangedNotification object:_job.picture];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:HBFiltersChangedNotification object:_job.filters];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBVideoChangedNotification object:_job.video];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBAudioChangedNotification object:_job.audio];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBChaptersChangedNotification object:_job];
+
+        [_job removeObserver:self forKeyPath:@"video.encoder"];
+        [_job removeObserver:self forKeyPath:@"video.frameRate"];
+        [_job removeObserver:self forKeyPath:@"video.frameRateMode"];
+        [_job removeObserver:self forKeyPath:@"container"];
+        [_job removeObserver:self forKeyPath:@"chaptersEnabled"];
+        [_job removeObserver:self forKeyPath:@"audio.tracks"];
+        [_job removeObserver:self forKeyPath:@"subtitles.tracks"];
+
+        [self removeAudioTracksObservers:_job.audio.tracks];
+        [self removeSubtitlesTracksObservers:_job.subtitles.tracks];
     }
 }
 
 - (void)updateTracks:(NSNotification *)notification
 {
-    self.tracksLabel.stringValue = self.job.shortDescription;
+    if (self.tracksReloadInQueue == NO)
+    {
+        [[NSRunLoop mainRunLoop] performSelector:@selector(updateTracksLabel) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
+        self.tracksReloadInQueue = YES;
+    }
 }
 
 - (void)updateFilters:(NSNotification *)notification
 {
-    self.filtersLabel.stringValue = self.job.filtersShortDescription;
+    if (self.filtersReloadInQueue == NO)
+    {
+        [[NSRunLoop mainRunLoop] performSelector:@selector(updateFiltersLabel) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
+        self.filtersReloadInQueue = YES;
+    }
+}
+
+- (void)updatePicture:(NSNotification *)notification
+{
+    // Enquee the reload call on the main runloop
+    // to avoid reloading the same image multiple times.
+    if (self.pictureReloadInQueue == NO)
+    {
+        [[NSRunLoop mainRunLoop] performSelector:@selector(updatePicture) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
+        self.pictureReloadInQueue = YES;
+    }
 }
 
 - (void)resetLabels
 {
     self.tracksLabel.stringValue = NSLocalizedString(@"None", nil);
     self.filtersLabel.stringValue = NSLocalizedString(@"None", nil);
+    self.dimensionLabel.stringValue = NSLocalizedString(@"None", nil);
+    self.tracksReloadInQueue = NO;
+    self.filtersReloadInQueue = NO;
+    self.pictureReloadInQueue = NO;
 }
 
-- (void)updateLabels
+- (void)updateTracksLabel
 {
     self.tracksLabel.stringValue = self.job.shortDescription;
-    self.filtersLabel.stringValue = self.job.filtersShortDescription;
+    self.tracksReloadInQueue = NO;
 }
 
-- (void)addJobObservers
+- (void)updateFiltersLabel
 {
-    if (self.job)
+    self.filtersLabel.stringValue = self.job.filtersShortDescription;
+    self.filtersReloadInQueue = NO;
+}
+
+- (void)updatePicture
+{
+    if (self.visible && self.generator)
     {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTracks:) name:HBContainerChangedNotification object:_job];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTracks:) name:HBPictureChangedNotification object:_job.picture];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFilters:) name:HBFiltersChangedNotification object:_job.filters];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTracks:) name:HBVideoChangedNotification object:_job.video];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTracks:) name:HBAudioChangedNotification object:_job.audio];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTracks:) name:HBChaptersChangedNotification object:_job];
+        NSUInteger index = self.generator.imagesCount > 1 ? 1 : 0;
+        CGImageRef fPreviewImage = [self.generator copyImageAtIndex:index shouldCache:NO];
+        self.previewView.image = fPreviewImage;
+        CFRelease(fPreviewImage);
+        self.pictureReloadInQueue = NO;
+
+        self.dimensionLabel.stringValue = self.job.picture.shortInfo;
     }
 }
 

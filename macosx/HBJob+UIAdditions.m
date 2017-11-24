@@ -722,6 +722,7 @@ static NSDictionary            *shortHeightAttr;
 {
     NSMutableString *info = [NSMutableString string];
 
+    NSUInteger index = 0;
     for (HBSubtitlesTrack *track in self.subtitles.tracks)
     {
         // Ignore the none track.
@@ -736,6 +737,24 @@ static NSDictionary            *shortHeightAttr;
             }
 
             [info appendString:@"\n"];
+        }
+
+        if (index == 1) {
+            break;
+        }
+        index += 1;
+    }
+
+    if (self.subtitles.tracks.count > 3)
+    {
+        NSUInteger count = self.subtitles.tracks.count - 3;
+        if (count == 1)
+        {
+            [info appendString:NSLocalizedString(@"+ 1 additional subtitles track", nil)];
+        }
+        else
+        {
+            [info appendFormat:NSLocalizedString(@"+ %lu additional subtitles tracks", nil), (unsigned long)count];
         }
     }
 

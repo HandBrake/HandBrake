@@ -20,7 +20,7 @@
 
 #define NONE_TRACK_INDEX 0
 
-NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
+NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotification";
 
 @interface HBAudio () <HBAudioTrackDataSource, HBAudioTrackDelegate>
 
@@ -224,7 +224,7 @@ NSString *HBAudioChangedNotification = @"HBAudioChangedNotification";
 
 - (void)encoderChanged
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBAudioChangedNotification object:self];
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBAudioEncoderChangedNotification object:self];
 }
 
 #pragma mark - NSCopying

@@ -9,6 +9,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSummaryViewController">
             <connections>
+                <outlet property="dimensionLabel" destination="Jaw-pH-rhf" id="L85-25-Ec7"/>
                 <outlet property="filtersLabel" destination="BHq-Mt-3eA" id="EGb-du-wYa"/>
                 <outlet property="previewView" destination="m5a-0z-QQ4" id="1G9-3A-dM4"/>
                 <outlet property="tracksLabel" destination="yRE-5c-FhX" id="iAo-rN-HdQ"/>
@@ -123,7 +124,7 @@
                 </button>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GCn-2c-Fql">
                     <rect key="frame" x="18" y="249" width="45" height="14"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Tracks:" id="3mF-Bb-Gon">
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Tracks:" id="3mF-Bb-Gon">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -131,7 +132,7 @@
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0kh-Uy-Yo3">
                     <rect key="frame" x="18" y="219" width="45" height="14"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Filters:" id="OCw-f6-uA0">
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Filters:" id="OCw-f6-uA0">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -162,15 +163,36 @@
                 <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m5a-0z-QQ4" customClass="HBPreviewView">
                     <rect key="frame" x="254" y="16" width="597" height="334"/>
                 </customView>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Jgq-K8-z3W">
+                    <rect key="frame" x="18" y="189" width="45" height="14"/>
+                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Size:" id="B4a-co-0ly">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="Jaw-pH-rhf">
+                    <rect key="frame" x="66" y="189" width="174" height="14"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="170" id="x6E-oo-KCt"/>
+                    </constraints>
+                    <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="xmy-Jl-mR4">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <constraints>
                 <constraint firstItem="m5a-0z-QQ4" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="2Lv-KO-aKx"/>
                 <constraint firstItem="0kh-Uy-Yo3" firstAttribute="width" secondItem="bpr-UY-4al" secondAttribute="width" id="3C6-tC-wvc"/>
                 <constraint firstItem="bpr-UY-4al" firstAttribute="baseline" secondItem="txV-1R-WoD" secondAttribute="baseline" id="5R4-0i-jLq"/>
                 <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QKv-GR-d2g" secondAttribute="trailing" constant="16" id="8XE-8g-Ufn"/>
+                <constraint firstItem="Jgq-K8-z3W" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="9F0-cz-tgC"/>
                 <constraint firstItem="QKv-GR-d2g" firstAttribute="top" secondItem="fPv-Vw-I89" secondAttribute="bottom" constant="6" id="9NP-48-LS7"/>
                 <constraint firstItem="lUi-Oc-208" firstAttribute="leading" secondItem="txV-1R-WoD" secondAttribute="leading" id="BPd-g8-Zr2"/>
                 <constraint firstItem="QKv-GR-d2g" firstAttribute="leading" secondItem="txV-1R-WoD" secondAttribute="leading" id="E60-lK-Qyk"/>
+                <constraint firstItem="Jaw-pH-rhf" firstAttribute="top" secondItem="BHq-Mt-3eA" secondAttribute="bottom" constant="16" id="Enc-zm-i04"/>
                 <constraint firstAttribute="trailing" secondItem="m5a-0z-QQ4" secondAttribute="trailing" constant="20" id="GYQ-6W-S3N"/>
                 <constraint firstItem="GCn-2c-Fql" firstAttribute="width" secondItem="bpr-UY-4al" secondAttribute="width" id="HE8-Du-yhU"/>
                 <constraint firstItem="txV-1R-WoD" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="trailing" constant="8" symbolic="YES" id="I9H-1U-iqt"/>
@@ -182,9 +204,12 @@
                 <constraint firstItem="bpr-UY-4al" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="VFQ-Vg-ESJ"/>
                 <constraint firstItem="0kh-Uy-Yo3" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="ZSW-w5-hfn"/>
                 <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="fPv-Vw-I89" secondAttribute="trailing" constant="16" id="bWj-yH-VEO"/>
+                <constraint firstItem="Jaw-pH-rhf" firstAttribute="leading" secondItem="Jgq-K8-z3W" secondAttribute="trailing" constant="7" id="beE-wT-2DH"/>
                 <constraint firstItem="fPv-Vw-I89" firstAttribute="top" secondItem="lUi-Oc-208" secondAttribute="bottom" constant="6" id="bxR-uJ-u4M"/>
                 <constraint firstItem="lUi-Oc-208" firstAttribute="top" secondItem="txV-1R-WoD" secondAttribute="bottom" constant="8" id="cJz-xA-oz4"/>
                 <constraint firstItem="BHq-Mt-3eA" firstAttribute="leading" secondItem="0kh-Uy-Yo3" secondAttribute="trailing" constant="7" id="dZN-9S-z89"/>
+                <constraint firstItem="Jgq-K8-z3W" firstAttribute="top" secondItem="Jaw-pH-rhf" secondAttribute="top" id="gFS-AW-Tdp"/>
+                <constraint firstItem="Jgq-K8-z3W" firstAttribute="width" secondItem="bpr-UY-4al" secondAttribute="width" id="j4u-XL-c2Z"/>
                 <constraint firstItem="GCn-2c-Fql" firstAttribute="top" secondItem="yRE-5c-FhX" secondAttribute="top" id="jTa-bA-Weo"/>
                 <constraint firstItem="0kh-Uy-Yo3" firstAttribute="top" secondItem="BHq-Mt-3eA" secondAttribute="top" id="nwz-Xj-cMt"/>
                 <constraint firstAttribute="bottom" secondItem="m5a-0z-QQ4" secondAttribute="bottom" constant="16" id="ouA-jz-Qs8"/>
@@ -193,7 +218,7 @@
                 <constraint firstItem="GCn-2c-Fql" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="utH-I5-f9B"/>
                 <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="txV-1R-WoD" secondAttribute="trailing" constant="16" id="vr4-76-FcH"/>
             </constraints>
-            <point key="canvasLocation" x="249" y="22"/>
+            <point key="canvasLocation" x="14" y="25"/>
         </customView>
     </objects>
 </document>

@@ -89,6 +89,11 @@
     return sizeInfo;
 }
 
+- (NSString *)shortInfo
+{
+    return [NSString stringWithFormat:@"%dx%d storage, %dx%d display", self.width, self.height, self.displayWidth, self.height];
+}
+
 - (NSString *)sourceInfo
 {
     NSString *sizeInfo = @"";

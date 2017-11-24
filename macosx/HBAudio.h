@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString *HBAudioChangedNotification;
+extern NSString *HBAudioEncoderChangedNotification;
 
 @interface HBAudio : NSObject <NSSecureCoding, NSCopying>
 
