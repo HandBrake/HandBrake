@@ -100,6 +100,8 @@
     IBOutlet NSDrawer            * fPresetDrawer;
 }
 
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomConstrain;
+
 @property (nonatomic, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
 @property (nonatomic, strong) IBOutlet NSPopUpButton *presetsPopup;
 
@@ -134,6 +136,8 @@
 @property (nonatomic, readwrite) NSColor *labelColor;
 
 @end
+
+#define WINDOW_HEIGHT_OFFSET 48
 
 @implementation HBController
 
@@ -229,19 +233,6 @@
         [fPresetDrawer open:self];
     }
 
-    // Align the start / stop widgets with the chapter popups
-    NSPoint startPoint = [fSrcChapterStartPopUp frame].origin;
-    startPoint.y += 2;
-
-    NSPoint endPoint = [fSrcChapterEndPopUp frame].origin;
-    endPoint.y += 2;
-
-    [fSrcTimeStartEncodingField setFrameOrigin:startPoint];
-    [fSrcTimeEndEncodingField setFrameOrigin:endPoint];
-
-    [fSrcFrameStartEncodingField setFrameOrigin:startPoint];
-    [fSrcFrameEndEncodingField setFrameOrigin:endPoint];
-
     // Bottom
     [fStatusField setStringValue:@""];
 
@@ -316,6 +307,8 @@
                                                                     size:[NSFont smallSystemFontSize]
                                                           presetsManager:presetManager];
     [self.presetsMenuBuilder build];
+
+    self.bottomConstrain.constant = -WINDOW_HEIGHT_OFFSET;
 
     [self.window recalculateKeyViewLoop];
 }
@@ -1037,9 +1030,6 @@
     self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : nil;
 }
 
-#define WINDOW_HEIGHT 591
-#define WINDOW_HEIGHT_OFFSET 36
-
 - (void)setQueueInfo:(NSString *)info progress:(double)progress hidden:(BOOL)hidden
 {
     fStatusField.stringValue = info;
@@ -1049,13 +1039,11 @@
     {
         if (fRipIndicatorShown)
         {
-            NSRect frame = self.window.frame;
-            if (frame.size.width <= WINDOW_HEIGHT)
-                frame.size.width = WINDOW_HEIGHT;
-            frame.size.height += -WINDOW_HEIGHT_OFFSET;
-            frame.origin.y -= -WINDOW_HEIGHT_OFFSET;
-            [self.window setFrame:frame display:YES animate:YES];
-            fRipIndicatorShown = NO;
+            [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+                self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET;
+            } completionHandler:^{
+                fRipIndicatorShown = NO;
+            }];
 
             // Refresh the toolbar buttons
             [self.window.toolbar validateVisibleItems];
@@ -1067,13 +1055,11 @@
         // that now.
         if (!fRipIndicatorShown)
         {
-            NSRect frame = self.window.frame;
-            if (frame.size.width <= WINDOW_HEIGHT)
-                frame.size.width = WINDOW_HEIGHT;
-            frame.size.height += WINDOW_HEIGHT_OFFSET;
-            frame.origin.y -= WINDOW_HEIGHT_OFFSET;
-            [self.window setFrame:frame display:YES animate:YES];
-            fRipIndicatorShown = YES;
+            [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
+                self.bottomConstrain.animator.constant = 0;
+            } completionHandler:^{
+                fRipIndicatorShown = YES;
+            }];
 
             // Refresh the toolbar buttons
             [self.window.toolbar validateVisibleItems];
