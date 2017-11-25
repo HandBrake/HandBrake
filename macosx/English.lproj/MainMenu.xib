@@ -400,9 +400,9 @@
                             <menuItem isSeparatorItem="YES" id="2519">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Presets Drawer" keyEquivalent="t" id="1884">
+                            <menuItem title="Presets View" keyEquivalent="t" id="1884">
                                 <connections>
-                                    <action selector="toggleDrawer:" target="-1" id="pVD-TD-4r1"/>
+                                    <action selector="togglePresets:" target="-1" id="xcD-h2-Mhe"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Preview Window" id="5157">

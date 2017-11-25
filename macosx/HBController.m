@@ -96,15 +96,15 @@
     // User Preset
     HBPresetsManager             * presetManager;
     HBPresetsViewController      * fPresetsView;
-    
-    IBOutlet NSDrawer            * fPresetDrawer;
 }
 
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomConstrain;
 
 @property (nonatomic, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
 @property (nonatomic, strong) IBOutlet NSPopUpButton *presetsPopup;
+@property (nonatomic, strong) IBOutlet NSDrawer *presetsDrawer;
 
+@property (nonatomic, strong) IBOutlet NSToolbarItem *presetsItem;
 @property (nonatomic, strong) NSPopover *presetsPopover;
 
 @property (nonatomic, strong) HBSummaryViewController *summaryController;
@@ -216,23 +216,6 @@
     [fScanIndicator setUsesThreadedAnimation:NO];
     [fRipIndicator setUsesThreadedAnimation:NO];
 
-    if (NSAppKitVersionNumber < NSAppKitVersionNumber10_10)
-    {
-        NSSize drawerSize = NSSizeFromString([[NSUserDefaults standardUserDefaults]
-                                              stringForKey:@"HBDrawerSize"]);
-        if (drawerSize.width > 0)
-        {
-            [fPresetDrawer setContentSize: drawerSize];
-        }
-    }
-
-    // Show/Hide the Presets drawer upon launch based
-    // on user preference DefaultPresetsDrawerShow
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBDefaultPresetsDrawerShow"])
-    {
-        [fPresetDrawer open:self];
-    }
-
     // Bottom
     [fStatusField setStringValue:@""];
 
@@ -245,9 +228,28 @@
 
     if (NSAppKitVersionNumber < NSAppKitVersionNumber10_10)
     {
+        self.presetsDrawer = [[NSDrawer alloc] initWithContentSize:NSMakeSize(240, 550) preferredEdge:NSRectEdgeMaxX];
+        self.presetsDrawer.parentWindow = self.window;
+        self.presetsDrawer.delegate = self;
+        self.presetsDrawer.preferredEdge = NSRectEdgeMaxX;
+
         // Set up the preset drawer
-        [fPresetDrawer setContentView:[fPresetsView view]];
-        [[fPresetDrawer contentView] setAutoresizingMask:(NSViewWidthSizable | NSViewHeightSizable)];
+        self.presetsDrawer.contentView = fPresetsView.view;
+        self.presetsDrawer.contentView.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+
+        NSSize drawerSize = NSSizeFromString([[NSUserDefaults standardUserDefaults]
+                                              stringForKey:@"HBDrawerSize"]);
+        if (drawerSize.width > 0)
+        {
+            self.presetsDrawer.contentSize = drawerSize;
+        }
+
+        // Show/Hide the Presets drawer upon launch based
+        // on user preference DefaultPresetsDrawerShow
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBDefaultPresetsDrawerShow"])
+        {
+            [self.presetsDrawer open:self];
+        }
     }
     else
     {
@@ -1362,13 +1364,13 @@
     return NO;
 }
 
-- (IBAction)toggleDrawer:(id)sender
+- (IBAction)togglePresets:(id)sender
 {
     if (self.presetsPopover)
     {
         if (!self.presetsPopover.isShown)
         {
-            NSView *target = [sender isKindOfClass:[NSView class]] ? (NSView *)sender : self.window.contentView;
+            NSView *target = [sender isKindOfClass:[NSView class]] ? (NSView *)sender : self.presetsItem.view.window ? self.presetsItem.view : self.window.contentView;
             [self.presetsPopover showRelativeToRect:target.bounds ofView:target preferredEdge:NSMaxYEdge];
         }
         else
@@ -1378,7 +1380,7 @@
     }
     else
     {
-        if (fPresetDrawer.state == NSDrawerClosedState)
+        if (self.presetsDrawer.state == NSDrawerClosedState)
         {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HBDefaultPresetsDrawerShow"];
         }
@@ -1387,7 +1389,7 @@
             [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"HBDefaultPresetsDrawerShow"];
         }
 
-        [fPresetDrawer toggle:self];
+        [self.presetsDrawer toggle:self];
     }
 }
 

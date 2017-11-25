@@ -17,7 +17,6 @@
                 <outlet property="fFiltersTab" destination="0UB-bG-kwS" id="9at-ML-tDd"/>
                 <outlet property="fMainTabView" destination="1474" id="sl5-BZ-ymC"/>
                 <outlet property="fPictureTab" destination="eij-Sn-QmJ" id="Ccp-rO-nqD"/>
-                <outlet property="fPresetDrawer" destination="1841" id="LDc-Da-rl7"/>
                 <outlet property="fRipIndicator" destination="1373" id="an5-ng-etT"/>
                 <outlet property="fScanHorizontalLine" destination="3205" id="W26-Wu-2YJ"/>
                 <outlet property="fScanIndicator" destination="3203" id="cG1-SY-gbt"/>
@@ -33,6 +32,7 @@
                 <outlet property="fSubtitlesTab" destination="5194" id="PF0-qx-Iu4"/>
                 <outlet property="fVideoTab" destination="1477" id="hFY-kK-afW"/>
                 <outlet property="openTitleView" destination="lZQ-gl-3wX" id="Wh6-fB-pWi"/>
+                <outlet property="presetsItem" destination="qhv-9l-2FH" id="bEZ-nH-M9d"/>
                 <outlet property="presetsPopup" destination="bWH-Lp-mKY" id="vot-gQ-hLV"/>
                 <outlet property="showQueueToolbarItem" destination="HCx-ku-nF7" id="CC6-Yu-j7N"/>
                 <outlet property="summaryTab" destination="BA0-eg-2Ka" id="wh5-Js-weO"/>
@@ -43,6 +43,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="HandBrake" allowsToolTipsWhenApplicationIsInactive="NO" oneShot="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="HBMainWindow" animationBehavior="default" id="21" userLabel="MainWindow">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="41" y="572" width="920" height="610"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
@@ -53,7 +54,7 @@
                     <tabView controlSize="small" translatesAutoresizingMaskIntoConstraints="NO" id="1474" customClass="HBTabView">
                         <rect key="frame" x="13" y="116" width="894" height="390"/>
                         <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="374" id="Jdl-tV-liS"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="354" id="Jdl-tV-liS"/>
                         </constraints>
                         <tabViewItems>
                             <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
@@ -548,10 +549,10 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <progressIndicator wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="1373">
-                                    <rect key="frame" x="20" y="7" width="892" height="33"/>
+                                    <rect key="frame" x="24" y="7" width="884" height="33"/>
                                 </progressIndicator>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1123">
-                                    <rect key="frame" x="18" y="43" width="896" height="28"/>
+                                    <rect key="frame" x="22" y="43" width="888" height="28"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="28" id="xDK-Ed-GEv"/>
                                     </constraints>
@@ -565,11 +566,11 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <constraints>
                                 <constraint firstItem="1373" firstAttribute="top" secondItem="1123" secondAttribute="bottom" constant="4" id="05I-yD-zGd"/>
                                 <constraint firstItem="1123" firstAttribute="top" secondItem="idQ-Ti-X2a" secondAttribute="top" constant="8" id="SEd-Ur-o24"/>
-                                <constraint firstAttribute="trailing" secondItem="1123" secondAttribute="trailing" constant="20" id="VYX-jz-5IE"/>
-                                <constraint firstItem="1123" firstAttribute="leading" secondItem="idQ-Ti-X2a" secondAttribute="leading" constant="20" id="W5K-34-8HI"/>
+                                <constraint firstAttribute="trailing" secondItem="1123" secondAttribute="trailing" constant="24" id="VYX-jz-5IE"/>
+                                <constraint firstItem="1123" firstAttribute="leading" secondItem="idQ-Ti-X2a" secondAttribute="leading" constant="24" id="W5K-34-8HI"/>
                                 <constraint firstAttribute="bottom" secondItem="1373" secondAttribute="bottom" constant="8" id="mrc-nZ-d8a"/>
-                                <constraint firstAttribute="trailing" secondItem="1373" secondAttribute="trailing" constant="20" id="pFB-8q-Iuf"/>
-                                <constraint firstItem="1373" firstAttribute="leading" secondItem="idQ-Ti-X2a" secondAttribute="leading" constant="20" id="uHd-le-njc"/>
+                                <constraint firstAttribute="trailing" secondItem="1373" secondAttribute="trailing" constant="24" id="pFB-8q-Iuf"/>
+                                <constraint firstItem="1373" firstAttribute="leading" secondItem="idQ-Ti-X2a" secondAttribute="leading" constant="24" id="uHd-le-njc"/>
                             </constraints>
                         </view>
                         <constraints>
@@ -756,7 +757,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             </buttonCell>
                         </button>
                         <connections>
-                            <action selector="toggleDrawer:" target="-2" id="mhX-ic-osi"/>
+                            <action selector="togglePresets:" target="-2" id="mhX-ic-osi"/>
                         </connections>
                     </toolbarItem>
                 </allowedToolbarItems>
@@ -779,15 +780,6 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
             </connections>
             <point key="canvasLocation" x="1565" y="37"/>
         </window>
-        <drawer trailingOffset="15" id="1841" userLabel="PresetsDrawer">
-            <size key="contentSize" width="240" height="550"/>
-            <size key="minContentSize" width="100" height="50"/>
-            <size key="maxContentSize" width="280" height="550"/>
-            <connections>
-                <outlet property="delegate" destination="-2" id="skU-2X-nDc"/>
-                <outlet property="parentWindow" destination="21" id="1842"/>
-            </connections>
-        </drawer>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
         <customView id="lZQ-gl-3wX" userLabel="Open Panel View">
             <rect key="frame" x="0.0" y="0.0" width="227" height="38"/>
