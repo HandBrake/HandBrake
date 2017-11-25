@@ -184,12 +184,13 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                 <constraint firstItem="b3V-8w-euU" firstAttribute="top" secondItem="Ybq-Zt-sta" secondAttribute="top" id="6P9-lr-Dic"/>
                 <constraint firstAttribute="trailing" secondItem="uad-bt-uKD" secondAttribute="trailing" constant="3" id="Awe-NX-Pxq"/>
                 <constraint firstItem="uad-bt-uKD" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="4" id="F4f-bv-59S"/>
-                <constraint firstAttribute="trailing" secondItem="Ybq-Zt-sta" secondAttribute="trailing" constant="137" id="MTA-L0-QDh"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ybq-Zt-sta" secondAttribute="trailing" constant="20" id="MTA-L0-QDh"/>
                 <constraint firstAttribute="bottom" secondItem="kfi-wq-mgV" secondAttribute="bottom" constant="4" id="Rsn-71-jKi"/>
                 <constraint firstItem="uad-bt-uKD" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="3" id="UV6-xv-JfW"/>
                 <constraint firstItem="kfi-wq-mgV" firstAttribute="top" secondItem="b3V-8w-euU" secondAttribute="top" id="Vji-my-7O6"/>
                 <constraint firstItem="kfi-wq-mgV" firstAttribute="top" secondItem="uad-bt-uKD" secondAttribute="bottom" constant="8" id="VuV-22-Ur9"/>
                 <constraint firstItem="b3V-8w-euU" firstAttribute="leading" secondItem="kfi-wq-mgV" secondAttribute="trailing" constant="-1" id="bhQ-Pb-gsQ"/>
+                <constraint firstItem="kfi-wq-mgV" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="3" id="dhx-Bz-GhP"/>
                 <constraint firstItem="Ybq-Zt-sta" firstAttribute="leading" secondItem="b3V-8w-euU" secondAttribute="trailing" constant="8" id="k1Z-q1-OXB"/>
             </constraints>
             <point key="canvasLocation" x="32" y="293.5"/>

@@ -29,14 +29,21 @@ static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
 
 @implementation HBSummaryViewController
 
+- (instancetype)init
+{
+    self = [super initWithNibName:@"HBSummaryViewController" bundle:nil];
+    return self;
+}
+
 - (void)loadView
 {
     [super loadView];
     self.previewView.showShadow = NO;
+    self.visible = YES;
     [self resetLabels];
 }
 
-- (void)viewDidAppear
+- (void)viewWillAppear
 {
     self.visible = YES;
     if (self.pictureReloadInQueue || self.previewView.image == NULL)
