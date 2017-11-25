@@ -193,16 +193,17 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void EncodeService_EncodeStatusChanged(object sender, EncodeProgressEventArgs e)
         {
-            this.Task = queueProcessor.LastProcessedJob.ScannedSourcePath;
+            this.Task = this.queueProcessor.LastProcessedJob.ScannedSourcePath;
 
-            // {0:00.00}%   FPS: {1:000.0}   Avg FPS: {2:000.0}   Time Remaining: {3}   Elapsed: {4:hh\:mm\:ss}
-            this.Progress = string.Format(
-                Resources.MainViewModel_EncodeStatusChanged_StatusLabel, 
-                e.PercentComplete, 
-                e.CurrentFrameRate, 
-                e.AverageFrameRate, 
-                e.EstimatedTimeLeft, 
-                e.ElapsedTime);
+            this.Progress =
+                string.Format(Resources.MiniViewModel_EncodeStatusChanged_StatusLabel,
+                    e.Task,
+                    e.TaskCount,
+                    e.PercentComplete,
+                    e.CurrentFrameRate,
+                    e.AverageFrameRate,
+                    e.EstimatedTimeLeft,
+                    e.ElapsedTime);
         }
     }
 }

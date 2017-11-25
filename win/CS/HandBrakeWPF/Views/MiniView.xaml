@@ -6,9 +6,9 @@
         SnapsToDevicePixels="True"
         UseLayoutRounding="True"
         Width="300"
-        Height="175"
+        Height="200"
         MinWidth="300"
-        MinHeight="175"
+        MinHeight="200"
         TextOptions.TextFormattingMode="Display" ShowActivated="True" ShowInTaskbar="True"
         WindowStyle="ToolWindow"
         x:Name="miniView"
@@ -21,6 +21,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <TextBlock Text="Status" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="5,0,10,5" Grid.Row="0" />
@@ -29,6 +30,6 @@
         <TextBlock Text="{Binding Progress}" Grid.Row="2" Margin="10,0,0,5" TextWrapping="WrapWithOverflow" />
         <TextBlock Text="{Binding QueueStatus}" Grid.Row="3" Margin="10,0,0,0" TextWrapping="WrapWithOverflow" />
 
-        <Button Content="Close" cal:Message.Attach="[Event Click] = [Action Close]" Grid.Row="3" HorizontalAlignment="Right" Margin="0,5,5,0" Padding="8,2" />
+        <Button Content="Close" cal:Message.Attach="[Event Click] = [Action Close]" Grid.Row="5" HorizontalAlignment="Right" Margin="0,5,5,5" Padding="8,2" />
     </Grid>
 </Window>

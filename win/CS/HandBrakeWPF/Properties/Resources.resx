@@ -864,4 +864,9 @@ Remaining Time: {4}</value>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
     <value>Please stop the current encode. If the problem persists, please restart HandBrake.</value>
   </data>
+  <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%
+FPS: {3:000.0},  Avg FPS: {4:000.0}
+Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}</value>
+  </data>
 </root>
