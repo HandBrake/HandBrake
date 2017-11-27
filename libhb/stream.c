@@ -107,7 +107,7 @@ typedef enum {
     ffmpeg
 } hb_stream_type_t;
 
-#define MAX_PS_PROBE_SIZE (5*1024*1024)
+#define MAX_PS_PROBE_SIZE (32*1024*1024)
 #define kMaxNumberPMTStreams 32
 
 typedef struct
