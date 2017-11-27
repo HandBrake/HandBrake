@@ -100,24 +100,24 @@ static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
     {
         if ([keyPath isEqualToString:@"audio.tracks"])
         {
-            if ([change[@"kind"] integerValue] == NSKeyValueChangeInsertion)
+            if ([change[NSKeyValueChangeKindKey] integerValue] == NSKeyValueChangeInsertion)
             {
-                [self addAudioTracksObservers:change[@"new"]];
+                [self addAudioTracksObservers:change[NSKeyValueChangeNewKey]];
             }
-            else if ([change[@"kind"] integerValue]== NSKeyValueChangeRemoval)
+            else if ([change[NSKeyValueChangeKindKey] integerValue]== NSKeyValueChangeRemoval)
             {
-                [self removeAudioTracksObservers:change[@"old"]];
+                [self removeAudioTracksObservers:change[NSKeyValueChangeOldKey]];
             }
         }
         else if ([keyPath isEqualToString:@"subtitles.tracks"])
         {
-            if ([change[@"kind"] integerValue] == NSKeyValueChangeInsertion)
+            if ([change[NSKeyValueChangeKindKey] integerValue] == NSKeyValueChangeInsertion)
             {
-                [self addSubtitlesTracksObservers:change[@"new"]];
+                [self addSubtitlesTracksObservers:change[NSKeyValueChangeNewKey]];
             }
-            else if ([change[@"kind"] integerValue]== NSKeyValueChangeRemoval)
+            else if ([change[NSKeyValueChangeKindKey] integerValue]== NSKeyValueChangeRemoval)
             {
-                [self removeSubtitlesTracksObservers:change[@"old"]];
+                [self removeSubtitlesTracksObservers:change[NSKeyValueChangeOldKey]];
             }
         }
         else if ([keyPath isEqualToString:@"container"] && change[NSKeyValueChangeNewKey] && NSAppKitVersionNumber >= NSAppKitVersionNumber10_10)
