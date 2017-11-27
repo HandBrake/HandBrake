@@ -14,10 +14,13 @@ static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
 
 @interface HBSummaryViewController ()
 
-@property (strong) IBOutlet HBPreviewView *previewView;
-@property (strong) IBOutlet NSTextField *tracksLabel;
-@property (strong) IBOutlet NSTextField *filtersLabel;
-@property (strong) IBOutlet NSTextField *dimensionLabel;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomOptionsConstrain;
+
+@property (nonatomic, strong) IBOutlet NSTextField *tracksLabel;
+@property (nonatomic, strong) IBOutlet NSTextField *filtersLabel;
+@property (nonatomic, strong) IBOutlet NSTextField *dimensionLabel;
+
+@property (nonatomic, strong) IBOutlet HBPreviewView *previewView;
 
 @property (nonatomic) BOOL tracksReloadInQueue;
 @property (nonatomic) BOOL filtersReloadInQueue;
@@ -117,7 +120,18 @@ static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
                 [self removeSubtitlesTracksObservers:change[@"old"]];
             }
         }
+        else if ([keyPath isEqualToString:@"container"] && change[NSKeyValueChangeNewKey] && NSAppKitVersionNumber >= NSAppKitVersionNumber10_10)
+        {
 
+            if ([change[NSKeyValueChangeNewKey] integerValue] & 0x030000)
+            {
+                self.bottomOptionsConstrain.active = YES;
+            }
+            else
+            {
+                self.bottomOptionsConstrain.active = NO;
+            }
+        }
         [self updateTracks:nil];
     }
     else
@@ -167,6 +181,7 @@ static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePicture:) name:HBPictureChangedNotification object:_job.picture];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFilters:) name:HBFiltersChangedNotification object:_job.filters];
 
+        [_job addObserver:self forKeyPath:@"container" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:HBSummaryViewControllerContext];
         [_job addObserver:self forKeyPath:@"video.encoder" options:0 context:HBSummaryViewControllerContext];
         [_job addObserver:self forKeyPath:@"video.frameRate" options:0 context:HBSummaryViewControllerContext];
         [_job addObserver:self forKeyPath:@"video.frameRateMode" options:0 context:HBSummaryViewControllerContext];
@@ -187,6 +202,7 @@ static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
         [[NSNotificationCenter defaultCenter] removeObserver:self name:HBPictureChangedNotification object:_job.picture];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:HBFiltersChangedNotification object:_job.filters];
 
+        [_job removeObserver:self forKeyPath:@"container"];
         [_job removeObserver:self forKeyPath:@"video.encoder"];
         [_job removeObserver:self forKeyPath:@"video.frameRate"];
         [_job removeObserver:self forKeyPath:@"video.frameRateMode"];
