@@ -532,12 +532,14 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
         out->s.duration = get_frame_duration(pv, frameno);
         out->s.stop     = out->s.stop + out->s.duration;
         // libav 12 deprecated context->coded_frame, so we can't determine
-        // the exact frame type any more.  Luckily for us, we really don't
-        // require it.
+        // the exact frame type any more. So until I can completely
+        // wire up ffmpeg with AV_PKT_DISPOSABLE_FRAME, all frames
+        // must be considered to potentially be reference frames
+        out->s.flags     = HB_FLAG_FRAMETYPE_REF;
         out->s.frametype = 0;
         if (pkt.flags & AV_PKT_FLAG_KEY)
         {
-            out->s.flags = HB_FLAG_FRAMETYPE_REF | HB_FLAG_FRAMETYPE_KEY;
+            out->s.flags |= HB_FLAG_FRAMETYPE_KEY;
             hb_chapter_dequeue(pv->chapter_queue, out);
         }
         out = process_delay_list(pv, out);
