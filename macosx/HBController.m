@@ -257,7 +257,7 @@
         self.presetsPopover = [[NSPopover alloc] init];
 
         self.presetsPopover.contentViewController = fPresetsView;
-        self.presetsPopover.contentSize = NSMakeSize(230, 600);
+        self.presetsPopover.contentSize = NSMakeSize(230, 580);
         self.presetsPopover.animates = YES;
 
         // AppKit will close the popover when the user interacts with a user interface element outside the popover.

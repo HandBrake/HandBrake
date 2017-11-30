@@ -863,7 +863,7 @@ static NSDictionary            *shortHeightAttr;
     }
 
     // Rotation
-    if (filters.rotate)
+    if (filters.rotate || filters.flip)
     {
         [summary appendString:NSLocalizedString(@"Rotation", nil)];
         [summary appendString:@", "];

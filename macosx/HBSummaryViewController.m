@@ -10,7 +10,12 @@
 
 @import HandBrakeKit;
 
-static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
+static void *HBSummaryViewControllerContainerContext = &HBSummaryViewControllerContainerContext;
+static void *HBSummaryViewControllerVideoContext = &HBSummaryViewControllerVideoContext;
+static void *HBSummaryViewControllerPictureContext = &HBSummaryViewControllerPictureContext;
+static void *HBSummaryViewControllerFiltersContext = &HBSummaryViewControllerFiltersContext;
+static void *HBSummaryViewControllerAudioContext = &HBSummaryViewControllerAudioContext;
+static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsContext;
 
 @interface HBSummaryViewController ()
 
@@ -96,43 +101,49 @@ static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == HBSummaryViewControllerContext)
+    if (context == HBSummaryViewControllerAudioContext)
     {
-        if ([keyPath isEqualToString:@"audio.tracks"])
+        if ([change[NSKeyValueChangeKindKey] integerValue] == NSKeyValueChangeInsertion)
         {
-            if ([change[NSKeyValueChangeKindKey] integerValue] == NSKeyValueChangeInsertion)
-            {
-                [self addAudioTracksObservers:change[NSKeyValueChangeNewKey]];
-            }
-            else if ([change[NSKeyValueChangeKindKey] integerValue]== NSKeyValueChangeRemoval)
-            {
-                [self removeAudioTracksObservers:change[NSKeyValueChangeOldKey]];
-            }
+            [self addAudioTracksObservers:change[NSKeyValueChangeNewKey]];
         }
-        else if ([keyPath isEqualToString:@"subtitles.tracks"])
+        else if ([change[NSKeyValueChangeKindKey] integerValue]== NSKeyValueChangeRemoval)
         {
-            if ([change[NSKeyValueChangeKindKey] integerValue] == NSKeyValueChangeInsertion)
-            {
-                [self addSubtitlesTracksObservers:change[NSKeyValueChangeNewKey]];
-            }
-            else if ([change[NSKeyValueChangeKindKey] integerValue]== NSKeyValueChangeRemoval)
-            {
-                [self removeSubtitlesTracksObservers:change[NSKeyValueChangeOldKey]];
-            }
-        }
-        else if ([keyPath isEqualToString:@"container"] && change[NSKeyValueChangeNewKey] && NSAppKitVersionNumber >= NSAppKitVersionNumber10_10)
-        {
-
-            if ([change[NSKeyValueChangeNewKey] integerValue] & 0x030000)
-            {
-                self.bottomOptionsConstrain.active = YES;
-            }
-            else
-            {
-                self.bottomOptionsConstrain.active = NO;
-            }
+            [self removeAudioTracksObservers:change[NSKeyValueChangeOldKey]];
         }
         [self updateTracks:nil];
+    }
+    else if (context == HBSummaryViewControllerSubsContext)
+    {
+        if ([change[NSKeyValueChangeKindKey] integerValue] == NSKeyValueChangeInsertion)
+        {
+            [self addSubtitlesTracksObservers:change[NSKeyValueChangeNewKey]];
+        }
+        else if ([change[NSKeyValueChangeKindKey] integerValue]== NSKeyValueChangeRemoval)
+        {
+            [self removeSubtitlesTracksObservers:change[NSKeyValueChangeOldKey]];
+        }
+        [self updateTracks:nil];
+    }
+    else if (context == HBSummaryViewControllerContainerContext && NSAppKitVersionNumber >= NSAppKitVersionNumber10_10 && change[NSKeyValueChangeNewKey])
+    {
+        if ([change[NSKeyValueChangeNewKey] integerValue] & 0x030000)
+        {
+            self.bottomOptionsConstrain.active = YES;
+        }
+        else
+        {
+            self.bottomOptionsConstrain.active = NO;
+        }
+        [self updateTracks:nil];
+    }
+    else if (context == HBSummaryViewControllerVideoContext)
+    {
+        [self updateTracks:nil];
+    }
+    else if (context == HBSummaryViewControllerFiltersContext)
+    {
+        [self updatePicture:nil];
     }
     else
     {
@@ -144,8 +155,8 @@ static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
 {
     for (HBAudioTrack *track in tracks)
     {
-        [track addObserver:self forKeyPath:@"encoder" options:0 context:HBSummaryViewControllerContext];
-        [track addObserver:self forKeyPath:@"mixdown" options:0 context:HBSummaryViewControllerContext];
+        [track addObserver:self forKeyPath:@"encoder" options:0 context:HBSummaryViewControllerAudioContext];
+        [track addObserver:self forKeyPath:@"mixdown" options:0 context:HBSummaryViewControllerAudioContext];
     }
 }
 
@@ -162,7 +173,7 @@ static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
 {
     for (HBSubtitlesTrack *track in tracks)
     {
-        [track addObserver:self forKeyPath:@"burnedIn" options:0 context:HBSummaryViewControllerContext];
+        [track addObserver:self forKeyPath:@"burnedIn" options:0 context:HBSummaryViewControllerSubsContext];
     }
 }
 
@@ -181,14 +192,16 @@ static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePicture:) name:HBPictureChangedNotification object:_job.picture];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFilters:) name:HBFiltersChangedNotification object:_job.filters];
 
-        [_job addObserver:self forKeyPath:@"container" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:HBSummaryViewControllerContext];
-        [_job addObserver:self forKeyPath:@"video.encoder" options:0 context:HBSummaryViewControllerContext];
-        [_job addObserver:self forKeyPath:@"video.frameRate" options:0 context:HBSummaryViewControllerContext];
-        [_job addObserver:self forKeyPath:@"video.frameRateMode" options:0 context:HBSummaryViewControllerContext];
-        [_job addObserver:self forKeyPath:@"container" options:0 context:HBSummaryViewControllerContext];
-        [_job addObserver:self forKeyPath:@"chaptersEnabled" options:0 context:HBSummaryViewControllerContext];
-        [_job addObserver:self forKeyPath:@"audio.tracks" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:HBSummaryViewControllerContext];
-        [_job addObserver:self forKeyPath:@"subtitles.tracks" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:HBSummaryViewControllerContext];
+        [_job addObserver:self forKeyPath:@"container" options:NSKeyValueObservingOptionInitial | NSKeyValueObservingOptionNew context:HBSummaryViewControllerContainerContext];
+        [_job addObserver:self forKeyPath:@"chaptersEnabled" options:0 context:HBSummaryViewControllerVideoContext];
+        [_job addObserver:self forKeyPath:@"video.encoder" options:0 context:HBSummaryViewControllerVideoContext];
+        [_job addObserver:self forKeyPath:@"video.frameRate" options:0 context:HBSummaryViewControllerVideoContext];
+        [_job addObserver:self forKeyPath:@"video.frameRateMode" options:0 context:HBSummaryViewControllerVideoContext];
+        [_job addObserver:self forKeyPath:@"filters.deinterlace" options:0 context:HBSummaryViewControllerFiltersContext];
+        [_job addObserver:self forKeyPath:@"filters.rotate" options:0 context:HBSummaryViewControllerFiltersContext];
+        [_job addObserver:self forKeyPath:@"filters.flip" options:0 context:HBSummaryViewControllerFiltersContext];
+        [_job addObserver:self forKeyPath:@"audio.tracks" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:HBSummaryViewControllerAudioContext];
+        [_job addObserver:self forKeyPath:@"subtitles.tracks" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:HBSummaryViewControllerSubsContext];
 
         [self addAudioTracksObservers:_job.audio.tracks];
         [self addSubtitlesTracksObservers:_job.subtitles.tracks];
@@ -203,11 +216,13 @@ static void *HBSummaryViewControllerContext = &HBSummaryViewControllerContext;
         [[NSNotificationCenter defaultCenter] removeObserver:self name:HBFiltersChangedNotification object:_job.filters];
 
         [_job removeObserver:self forKeyPath:@"container"];
+        [_job removeObserver:self forKeyPath:@"chaptersEnabled"];
         [_job removeObserver:self forKeyPath:@"video.encoder"];
         [_job removeObserver:self forKeyPath:@"video.frameRate"];
         [_job removeObserver:self forKeyPath:@"video.frameRateMode"];
-        [_job removeObserver:self forKeyPath:@"container"];
-        [_job removeObserver:self forKeyPath:@"chaptersEnabled"];
+        [_job removeObserver:self forKeyPath:@"filters.deinterlace"];
+        [_job removeObserver:self forKeyPath:@"filters.rotate"];
+        [_job removeObserver:self forKeyPath:@"filters.flip"];
         [_job removeObserver:self forKeyPath:@"audio.tracks"];
         [_job removeObserver:self forKeyPath:@"subtitles.tracks"];
 
