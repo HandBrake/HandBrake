@@ -125,15 +125,18 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
         }
         [self updateTracks:nil];
     }
-    else if (context == HBSummaryViewControllerContainerContext && NSAppKitVersionNumber >= NSAppKitVersionNumber10_10 && change[NSKeyValueChangeNewKey])
+    else if (context == HBSummaryViewControllerContainerContext)
     {
-        if ([change[NSKeyValueChangeNewKey] integerValue] & 0x030000)
+        if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_10 && change[NSKeyValueChangeNewKey])
         {
-            self.bottomOptionsConstrain.active = YES;
-        }
-        else
-        {
-            self.bottomOptionsConstrain.active = NO;
+            if ([change[NSKeyValueChangeNewKey] integerValue] & 0x030000)
+            {
+                self.bottomOptionsConstrain.active = YES;
+            }
+            else
+            {
+                self.bottomOptionsConstrain.active = NO;
+            }
         }
         [self updateTracks:nil];
     }
