@@ -978,10 +978,21 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         else
         {
             // introduced in API 1.1
+            // HEVC 10b has QP range as [-12;51] 
+            // with shift +12 needed to be in QSV's U16 range
+            unsigned int low_limit = 0;
+            unsigned int shift     = 0;
+
+            if (pv->param.videoParam->mfx.CodecProfile == MFX_PROFILE_HEVC_MAIN10)
+            {
+                low_limit = -12;
+                shift     = 12;
+            }
             pv->param.videoParam->mfx.RateControlMethod = MFX_RATECONTROL_CQP;
-            pv->param.videoParam->mfx.QPI = HB_QSV_CLIP3(0, 51, job->vquality + pv->param.rc.cqp_offsets[0]);
-            pv->param.videoParam->mfx.QPP = HB_QSV_CLIP3(0, 51, job->vquality + pv->param.rc.cqp_offsets[1]);
-            pv->param.videoParam->mfx.QPB = HB_QSV_CLIP3(0, 51, job->vquality + pv->param.rc.cqp_offsets[2]);
+            pv->param.videoParam->mfx.QPI = HB_QSV_CLIP3(low_limit, 51, job->vquality + pv->param.rc.cqp_offsets[0]) + shift;
+            pv->param.videoParam->mfx.QPP = HB_QSV_CLIP3(low_limit, 51, job->vquality + pv->param.rc.cqp_offsets[1]) + shift;
+            pv->param.videoParam->mfx.QPB = HB_QSV_CLIP3(low_limit, 51, job->vquality + pv->param.rc.cqp_offsets[2]) + shift;
+
             // CQP + ExtBRC can cause bad output
             pv->param.codingOption2.ExtBRC = MFX_CODINGOPTION_OFF;
         }
