@@ -9,6 +9,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPresetsViewController">
             <connections>
+                <outlet property="headerBottomConstraint" destination="jy6-AG-t3l" id="0Ar-a2-XjQ"/>
+                <outlet property="headerLabel" destination="jCz-Aw-giC" id="eh7-O4-fFD"/>
                 <outlet property="outlineView" destination="00W-tb-wgY" id="T3u-ix-uIb"/>
                 <outlet property="treeController" destination="ohT-Pp-wBT" id="YGP-sN-dS3"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="xR8-5v-xDQ"/>
@@ -21,16 +23,16 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <scrollView autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uad-bt-uKD">
-                    <rect key="frame" x="3" y="33" width="224" height="288"/>
+                    <rect key="frame" x="3" y="33" width="224" height="266"/>
                     <string key="toolTip">Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
 
 Overrides all encode settings. Settings may be further adjusted after selecting a preset.</string>
                     <clipView key="contentView" id="Rcx-jI-nnq">
-                        <rect key="frame" x="1" y="1" width="222" height="286"/>
+                        <rect key="frame" x="1" y="1" width="222" height="264"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" rowSizeStyle="automatic" viewBased="YES" indentationPerLevel="16" outlineTableColumn="jhC-ge-H1w" id="00W-tb-wgY">
-                                <rect key="frame" x="0.0" y="0.0" width="222" height="286"/>
+                                <rect key="frame" x="0.0" y="0.0" width="222" height="264"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -178,22 +180,33 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                         <binding destination="ohT-Pp-wBT" name="enabled" keyPath="canRemove" id="WNd-yX-UEH"/>
                     </connections>
                 </button>
+                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="jCz-Aw-giC">
+                    <rect key="frame" x="92" y="305" width="47" height="14"/>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Presets" id="r4V-6L-SO8">
+                        <font key="font" metaFont="smallSystemBold"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
             </subviews>
             <constraints>
                 <constraint firstItem="kfi-wq-mgV" firstAttribute="bottom" secondItem="b3V-8w-euU" secondAttribute="bottom" id="1dB-xo-p39"/>
                 <constraint firstItem="b3V-8w-euU" firstAttribute="top" secondItem="Ybq-Zt-sta" secondAttribute="top" id="6P9-lr-Dic"/>
                 <constraint firstAttribute="trailing" secondItem="uad-bt-uKD" secondAttribute="trailing" constant="3" id="Awe-NX-Pxq"/>
-                <constraint firstItem="uad-bt-uKD" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="4" id="F4f-bv-59S"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ybq-Zt-sta" secondAttribute="trailing" constant="20" id="MTA-L0-QDh"/>
+                <constraint firstItem="jCz-Aw-giC" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="NYS-NA-dEh"/>
                 <constraint firstAttribute="bottom" secondItem="kfi-wq-mgV" secondAttribute="bottom" constant="4" id="Rsn-71-jKi"/>
                 <constraint firstItem="uad-bt-uKD" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="3" id="UV6-xv-JfW"/>
                 <constraint firstItem="kfi-wq-mgV" firstAttribute="top" secondItem="b3V-8w-euU" secondAttribute="top" id="Vji-my-7O6"/>
                 <constraint firstItem="kfi-wq-mgV" firstAttribute="top" secondItem="uad-bt-uKD" secondAttribute="bottom" constant="8" id="VuV-22-Ur9"/>
+                <constraint firstItem="jCz-Aw-giC" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="6" id="WCV-tV-CtJ"/>
                 <constraint firstItem="b3V-8w-euU" firstAttribute="leading" secondItem="kfi-wq-mgV" secondAttribute="trailing" constant="-1" id="bhQ-Pb-gsQ"/>
                 <constraint firstItem="kfi-wq-mgV" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="3" id="dhx-Bz-GhP"/>
+                <constraint firstItem="uad-bt-uKD" firstAttribute="top" secondItem="jCz-Aw-giC" secondAttribute="bottom" constant="6" id="jy6-AG-t3l"/>
                 <constraint firstItem="Ybq-Zt-sta" firstAttribute="leading" secondItem="b3V-8w-euU" secondAttribute="trailing" constant="8" id="k1Z-q1-OXB"/>
+                <constraint firstItem="uad-bt-uKD" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" priority="250" constant="6" id="qPU-x9-bnh"/>
             </constraints>
-            <point key="canvasLocation" x="32" y="293.5"/>
+            <point key="canvasLocation" x="21" y="276"/>
         </customView>
         <treeController objectClassName="HBPreset" childrenKeyPath="children" leafKeyPath="isLeaf" id="ohT-Pp-wBT">
             <declaredKeys>

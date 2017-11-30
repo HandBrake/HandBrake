@@ -9,6 +9,8 @@
 @class HBPresetsManager;
 @class HBPreset;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol HBPresetsViewControllerDelegate <NSObject>
 
 - (void)selectionDidChange;
@@ -30,9 +32,12 @@
 
 - (IBAction)insertCategory:(id)sender;
 
-@property (nonatomic, readonly, weak) HBPreset *selectedPreset;
+@property (nonatomic, readonly) HBPreset *selectedPreset;
 @property (nonatomic, readonly) NSUInteger indexOfSelectedItem;
 
 @property (nonatomic, readwrite, getter=isEnabled) BOOL enabled;
+@property (nonatomic, readwrite) BOOL showHeader;
 
 @end
+
+NS_ASSUME_NONNULL_END

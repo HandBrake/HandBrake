@@ -253,6 +253,8 @@
     }
     else
     {
+        fPresetsView.showHeader = YES;
+
         // Set up the presets popover
         self.presetsPopover = [[NSPopover alloc] init];
 

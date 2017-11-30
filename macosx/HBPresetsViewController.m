@@ -7,8 +7,7 @@
 #import "HBPresetsViewController.h"
 #import "HBAddCategoryController.h"
 
-@import HandBrakeKit.HBPresetsManager;
-@import HandBrakeKit.HBPreset;
+@import HandBrakeKit;
 
 // drag and drop pasteboard type
 #define kHandBrakePresetPBoardType @"handBrakePresetPBoardType"
@@ -47,6 +46,9 @@
 @property (nonatomic, strong) HBPresetsManager *presets;
 @property (nonatomic, unsafe_unretained) IBOutlet NSTreeController *treeController;
 
+@property (nonatomic, strong) IBOutlet NSTextField *headerLabel;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint *headerBottomConstraint;
+
 /**
  *  Helper var for drag & drop
  */
@@ -62,8 +64,6 @@
 @end
 
 @implementation HBPresetsViewController
-
-@synthesize enabled = _enabled;
 
 - (instancetype)initWithPresetManager:(HBPresetsManager *)presetManager
 {
@@ -93,6 +93,9 @@
     [self expandNodes:[self.treeController.arrangedObjects childNodes]];
 
     [self.treeController setSelectionIndexPath:[self.presets indexPathOfPreset:self.presets.defaultPreset]];
+
+    // Update header state
+    self.showHeader = _showHeader;
 }
 
 - (BOOL)validateUserInterfaceItem:(id < NSValidatedUserInterfaceItem >)anItem
@@ -191,6 +194,28 @@
 }
 
 #pragma mark - UI Methods
+
+- (void)setShowHeader:(BOOL)showHeader
+{
+    _showHeader = showHeader;
+
+    self.headerLabel.hidden = !showHeader;
+    if (NSAppKitVersionNumber < NSAppKitVersionNumber10_10)
+    {
+        if (showHeader)
+        {
+            [self.view addConstraint:self.headerBottomConstraint];
+        }
+        else
+        {
+            [self.view removeConstraint:self.headerBottomConstraint];
+        }
+    }
+    else
+    {
+        self.headerBottomConstraint.active = showHeader;
+    }
+}
 
 - (IBAction)clicked:(id)sender
 {
