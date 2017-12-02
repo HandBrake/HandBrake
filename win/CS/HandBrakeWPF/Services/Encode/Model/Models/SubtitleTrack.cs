@@ -175,6 +175,16 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
                 this.NotifyOfPropertyChange(() => this.CanBeBurned);
                 this.NotifyOfPropertyChange(() => this.CanBeForced);
+
+                if (this.Forced && !this.CanBeForced)
+                {
+                    this.Forced = false;
+                }
+
+                if (this.Burned && !this.CanBeBurned)
+                {
+                    this.Forced = false;
+                }
             }
         }
 
