@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Retrieves git repository info for directory ${1} using command ${2}
 

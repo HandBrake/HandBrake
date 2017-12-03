@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Usage: tag-release.sh <release-ver> [<ref>]
 #

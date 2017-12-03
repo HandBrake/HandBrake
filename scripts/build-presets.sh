@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # usage: build-presets
 
 SELF="${BASH_SOURCE[0]}"

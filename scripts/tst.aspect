@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/usr/bin/env tcsh
 #
 # generate aspect ratio & cropping regression test data
 # from a set of HandBrake input files
