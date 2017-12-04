@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13156.6" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13156.6"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,7 +24,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="136" y="318" width="500" height="200"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <value key="minSize" type="size" width="212" height="107"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="500" height="200"/>
@@ -221,7 +221,7 @@
                             </connections>
                         </popUpButton>
                         <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="491">
-                            <rect key="frame" x="93" y="268" width="156" height="22"/>
+                            <rect key="frame" x="93" y="268" width="155" height="22"/>
                             <popUpButtonCell key="cell" type="push" title="Notification" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="2" imageScaling="proportionallyDown" inset="2" selectedItem="499" id="492">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -366,9 +366,8 @@
                             <constraints>
                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="46" id="JL9-J5-9Pf"/>
                             </constraints>
-                            <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" id="fIj-Tz-ghb">
+                            <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Note: these settings only apply to official presets. Custom presets may be configured using the Selection Behavior controls." id="fIj-Tz-ghb">
                                 <font key="font" metaFont="smallSystem"/>
-                                <string key="title">Note: these settings only to official presets. Language selection for custom presets may be configured in the Audio Defaults settings.</string>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                             </textFieldCell>
@@ -496,7 +495,7 @@
                             </connections>
                         </popUpButton>
                         <button toolTip="Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare)." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="398">
-                            <rect key="frame" x="102" y="126" width="218" height="18"/>
+                            <rect key="frame" x="102" y="126" width="219" height="18"/>
                             <buttonCell key="cell" type="check" title="Use libdvdnav (instead of libdvdread)" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="399">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -658,7 +657,7 @@
                             </connections>
                         </button>
                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ybi-46-yhY">
-                            <rect key="frame" x="102" y="235" width="253" height="18"/>
+                            <rect key="frame" x="102" y="235" width="254" height="18"/>
                             <string key="toolTip">Show the Advanced Options Panel for x264 settings.
 
 This setting is no longer supported and may be removed in a future version. Use at your own risk!</string>

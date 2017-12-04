@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,7 +25,7 @@
         <window title="New Preset" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="dbZ-Wo-9nG" userLabel="AddPresetPanel">
             <windowStyleMask key="styleMask" titled="YES" resizable="YES"/>
             <rect key="contentRect" x="421" y="536" width="480" height="239"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
             <view key="contentView" misplaced="YES" id="AcO-9f-fnb">
                 <rect key="frame" x="0.0" y="0.0" width="480" height="239"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -111,9 +111,9 @@ Gw
                             <accessibilityConnection property="title" destination="zDq-QP-LAu" id="meT-EW-QiO"/>
                         </connections>
                     </textField>
-                    <button toolTip="Audio Defaults control which audio track(s) and settings are used when the preset is selected." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aez-2b-JXx">
-                        <rect key="frame" x="94" y="68" width="156" height="28"/>
-                        <buttonCell key="cell" type="push" title="Edit Selection Behavior…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a0j-nw-n23">
+                    <button toolTip="Selection Behavior determines the track(s) and settings used when the preset is selected." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="aez-2b-JXx">
+                        <rect key="frame" x="94" y="68" width="132" height="28"/>
+                        <buttonCell key="cell" type="push" title="Selection Behavior…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a0j-nw-n23">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -184,9 +184,9 @@ Gw
                             </constraints>
                         </view>
                     </box>
-                    <button toolTip="Subtitles Defaults control which subtitles track(s) and settings are used when the preset is selected." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nWJ-0b-fUA">
-                        <rect key="frame" x="94" y="40" width="156" height="28"/>
-                        <buttonCell key="cell" type="push" title="Edit Selection Behavior…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LPX-Rc-KLa">
+                    <button toolTip="Selection Behavior determines the track(s) and settings used when the preset is selected." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nWJ-0b-fUA">
+                        <rect key="frame" x="94" y="40" width="132" height="28"/>
+                        <buttonCell key="cell" type="push" title="Selection Behavior…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="LPX-Rc-KLa">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -240,12 +240,12 @@ None uses the currently set dimensions.
 Custom allows you to set a maximum width and/or height.
 
 Source maximum uses the full dimensions of each source.</string>
-                        <popUpButtonCell key="cell" type="push" title="New Category…" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Sf8-HP-mhE" id="mZR-uO-YA8">
+                        <popUpButtonCell key="cell" type="push" title="New Category…" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Sf8-HP-mhE" id="mZR-uO-YA8">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                             <menu key="menu" title="OtherViews" id="tQ1-PN-kvh">
                                 <items>
-                                    <menuItem title="New Category…" id="Sf8-HP-mhE">
+                                    <menuItem title="New Category…" state="on" id="Sf8-HP-mhE">
                                         <modifierMask key="keyEquivalentModifierMask"/>
                                         <connections>
                                             <action selector="showNewCategoryWindow:" target="-2" id="a4V-O5-hXQ"/>

@@ -10,8 +10,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  HBAudioTrackPreset
- *  a KVO enabled class used in the Audio Defaults panels,
- *  automatically validates the values.
+ *  a KVO enabled class used in the Audio Defaults
+ *  (Selection Behavior) panels, automatically
+ *  validates the values.
  */
 @interface HBAudioTrackPreset : NSObject <NSSecureCoding, NSCopying>
 
