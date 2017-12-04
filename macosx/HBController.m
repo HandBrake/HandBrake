@@ -631,7 +631,7 @@
         else
         {
             // User chose to cancel the scan
-            [HBUtilities writeToActivityLog:"Cannot open physical dvd, scan cancelled"];
+            [HBUtilities writeToActivityLog:"Cannot open physical dvd, scan canceled"];
             canScan = NO;
         }
     }

@@ -239,7 +239,7 @@
 
 /**
  * This method will clear the queue of any encodes that are not still pending
- * this includes both successfully completed encodes as well as cancelled encodes
+ * this includes both successfully completed encodes as well as canceled encodes
  */
 - (void)removeCompletedJobs
 {
@@ -662,9 +662,9 @@
 
     self.currentLog = nil;
 
-    // Check to see if the encode state has not been cancelled
+    // Check to see if the encode state has not been canceled
     // to determine if we should send it to external app.
-    if (result != HBCoreResultCancelled)
+    if (result != HBCoreResultCanceled)
     {
         // Send to tagger
         [self sendToExternalApp:job];
@@ -675,7 +675,7 @@
         case HBCoreResultDone:
             job.state = HBJobStateCompleted;
             break;
-        case HBCoreResultCancelled:
+        case HBCoreResultCanceled:
             job.state = HBJobStateCanceled;
             break;
         default:
@@ -697,8 +697,8 @@
             info = NSLocalizedString(@"Encode Finished.", @"");
             [self jobCompletedAlerts:job result:result];
             break;
-        case HBCoreResultCancelled:
-            info = NSLocalizedString(@"Encode Cancelled.", @"");
+        case HBCoreResultCanceled:
+            info = NSLocalizedString(@"Encode Canceled.", @"");
             break;
         default:
             info = NSLocalizedString(@"Encode Failed.", @"");
@@ -1185,7 +1185,7 @@
 
     NSAlert *alert = [[NSAlert alloc] init];
     [alert setMessageText:NSLocalizedString(@"You are currently encoding. What would you like to do?", nil)];
-    [alert setInformativeText:NSLocalizedString(@"Your encode will be cancelled if you don't continue encoding.", nil)];
+    [alert setInformativeText:NSLocalizedString(@"Your encode will be canceled if you don't continue encoding.", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Continue Encoding", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Stop", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Continue", nil)];

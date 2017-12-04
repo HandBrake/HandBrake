@@ -38,7 +38,7 @@ typedef NS_ENUM(NSUInteger, HBState) {
 // These constants specify the result of a scan or encode.
 typedef NS_ENUM(NSUInteger, HBCoreResult) {
     HBCoreResultDone,
-    HBCoreResultCancelled,
+    HBCoreResultCanceled,
     HBCoreResultFailed,
 };
 

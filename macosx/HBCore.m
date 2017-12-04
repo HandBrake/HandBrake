@@ -311,7 +311,7 @@ typedef void (^HBCoreCleanupHandler)(void);
 - (void)cancelScan
 {
     hb_scan_stop(_hb_handle);
-    [HBUtilities writeToActivityLog:"%s scan cancelled", self.name.UTF8String];
+    [HBUtilities writeToActivityLog:"%s scan canceled", self.name.UTF8String];
 }
 
 #pragma mark - Preview images
@@ -463,7 +463,7 @@ typedef void (^HBCoreCleanupHandler)(void);
             [HBUtilities writeToActivityLog:"%s work done", self.name.UTF8String];
             break;
         case HB_ERROR_CANCELED:
-            result = HBCoreResultCancelled;
+            result = HBCoreResultCanceled;
             [HBUtilities writeToActivityLog:"%s work canceled", self.name.UTF8String];
             break;
         default:
