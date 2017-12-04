@@ -316,7 +316,7 @@
         }
     }
 
-    // Audio Defaults
+    // Audio Defaults (Selection Behavior)
     job->acodec_copy_mask = 0;
 
     HBAudioDefaults *audioDefaults = self.audio.defaults;
