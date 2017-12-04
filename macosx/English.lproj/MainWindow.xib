@@ -637,7 +637,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1554" firstAttribute="leading" secondItem="1553" secondAttribute="trailing" constant="4" id="F7e-S1-ofK"/>
                     <constraint firstItem="1548" firstAttribute="trailing" secondItem="5493" secondAttribute="trailing" id="FOi-gl-8CU"/>
                     <constraint firstItem="1561" firstAttribute="baseline" secondItem="gfs-4j-YSE" secondAttribute="baseline" id="HGj-mW-j31"/>
-                    <constraint firstItem="5505" firstAttribute="baseline" secondItem="1553" secondAttribute="baseline" id="IAD-5h-866"/>
+                    <constraint firstItem="1553" firstAttribute="firstBaseline" secondItem="5505" secondAttribute="baseline" id="IAD-5h-866"/>
                     <constraint firstItem="d0E-xw-bxh" firstAttribute="top" secondItem="1561" secondAttribute="bottom" constant="16" id="IJL-MH-5Jk"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1554" secondAttribute="trailing" constant="20" id="IkE-3r-B30"/>
                     <constraint firstItem="1541" firstAttribute="top" secondItem="1539" secondAttribute="bottom" constant="13" id="JKu-P6-MMV"/>
@@ -680,7 +680,6 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1474" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="qm5-es-UMl"/>
                     <constraint firstItem="5513" firstAttribute="baseline" secondItem="1540" secondAttribute="firstBaseline" id="rTF-gL-AHw"/>
                     <constraint firstItem="5493" firstAttribute="baseline" secondItem="5521" secondAttribute="baseline" id="rau-a9-VIU"/>
-                    <constraint firstItem="5513" firstAttribute="centerY" secondItem="1553" secondAttribute="centerY" id="uIj-6L-KkR"/>
                     <constraint firstItem="5513" firstAttribute="firstBaseline" secondItem="5491" secondAttribute="baseline" id="uzB-gd-5xg"/>
                     <constraint firstItem="1541" firstAttribute="leading" secondItem="1540" secondAttribute="trailing" constant="6" id="vAS-wg-SY2"/>
                     <constraint firstItem="1541" firstAttribute="baseline" secondItem="5180" secondAttribute="baseline" id="wJe-gN-ir1"/>
