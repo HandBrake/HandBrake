@@ -534,10 +534,10 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <progressIndicator wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="1373">
-                                    <rect key="frame" x="24" y="7" width="884" height="33"/>
+                                    <rect key="frame" x="24" y="15" width="884" height="17"/>
                                 </progressIndicator>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1123">
-                                    <rect key="frame" x="22" y="43" width="888" height="28"/>
+                                    <rect key="frame" x="22" y="35" width="888" height="28"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="28" id="xDK-Ed-GEv"/>
                                     </constraints>
@@ -550,10 +550,10 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             </subviews>
                             <constraints>
                                 <constraint firstItem="1373" firstAttribute="top" secondItem="1123" secondAttribute="bottom" constant="4" id="05I-yD-zGd"/>
-                                <constraint firstItem="1123" firstAttribute="top" secondItem="idQ-Ti-X2a" secondAttribute="top" constant="8" id="SEd-Ur-o24"/>
+                                <constraint firstItem="1123" firstAttribute="top" secondItem="idQ-Ti-X2a" secondAttribute="top" constant="16" id="SEd-Ur-o24"/>
                                 <constraint firstAttribute="trailing" secondItem="1123" secondAttribute="trailing" constant="24" id="VYX-jz-5IE"/>
                                 <constraint firstItem="1123" firstAttribute="leading" secondItem="idQ-Ti-X2a" secondAttribute="leading" constant="24" id="W5K-34-8HI"/>
-                                <constraint firstAttribute="bottom" secondItem="1373" secondAttribute="bottom" constant="8" id="mrc-nZ-d8a"/>
+                                <constraint firstAttribute="bottom" secondItem="1373" secondAttribute="bottom" constant="16" id="mrc-nZ-d8a"/>
                                 <constraint firstAttribute="trailing" secondItem="1373" secondAttribute="trailing" constant="24" id="pFB-8q-Iuf"/>
                                 <constraint firstItem="1373" firstAttribute="leading" secondItem="idQ-Ti-X2a" secondAttribute="leading" constant="24" id="uHd-le-njc"/>
                             </constraints>

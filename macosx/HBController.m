@@ -137,7 +137,8 @@
 
 @end
 
-#define WINDOW_HEIGHT_OFFSET 48
+#define WINDOW_HEIGHT_OFFSET_INIT 48
+#define WINDOW_HEIGHT_OFFSET      30
 
 @implementation HBController
 
@@ -312,7 +313,7 @@
                                                           presetsManager:presetManager];
     [self.presetsMenuBuilder build];
 
-    self.bottomConstrain.constant = -WINDOW_HEIGHT_OFFSET;
+    self.bottomConstrain.constant = -WINDOW_HEIGHT_OFFSET_INIT;
 
     [self.window recalculateKeyViewLoop];
 }
