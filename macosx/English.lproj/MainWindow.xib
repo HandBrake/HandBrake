@@ -350,8 +350,11 @@
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3205">
                         <rect key="frame" x="123" y="587" width="777" height="5"/>
                     </box>
-                    <progressIndicator hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" ambiguous="YES" maxValue="1" bezeled="NO" controlSize="small" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="3203">
+                    <progressIndicator hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" controlSize="small" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="3203">
                         <rect key="frame" x="392" y="584" width="510" height="12"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="510" id="QJ7-6q-bdK"/>
+                        </constraints>
                     </progressIndicator>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="5505">
                         <rect key="frame" x="667" y="553" width="20" height="14"/>
@@ -645,6 +648,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1538" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="KkG-gY-C8Q"/>
                     <constraint firstItem="1548" firstAttribute="baseline" secondItem="5493" secondAttribute="baseline" id="O5E-wM-4OR"/>
                     <constraint firstItem="1539" firstAttribute="centerY" secondItem="3205" secondAttribute="centerY" id="O7P-Hr-rDa"/>
+                    <constraint firstAttribute="trailing" secondItem="3203" secondAttribute="trailing" constant="18" id="PnZ-2e-abQ"/>
                     <constraint firstItem="5505" firstAttribute="leading" secondItem="5491" secondAttribute="trailing" constant="2" id="Pqo-aS-4ll"/>
                     <constraint firstAttribute="trailing" secondItem="3205" secondAttribute="trailing" constant="20" id="QkZ-Q7-VGX"/>
                     <constraint firstItem="5493" firstAttribute="leading" secondItem="5505" secondAttribute="trailing" constant="1" id="T3d-Cb-1TT"/>
