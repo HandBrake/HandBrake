@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,PKGCONFIG LIBXML2 FREETYPE))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
-LIBBLURAY.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libbluray-1.0.1.tar.bz2
-LIBBLURAY.FETCH.url    += https://download.videolan.org/pub/videolan/libbluray/1.0.1/libbluray-1.0.1.tar.bz2
-LIBBLURAY.FETCH.sha256  = 0f9f9a1db2f48cafc70ed2596ff3594b597e2027408f5f2be6191c245d67853a
+LIBBLURAY.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libbluray-1.0.2.tar.bz2
+LIBBLURAY.FETCH.url    += https://download.videolan.org/pub/videolan/libbluray/1.0.2/libbluray-1.0.2.tar.bz2
+LIBBLURAY.FETCH.sha256  = 6d9e7c4e416f664c330d9fa5a05ad79a3fb39b95adfc3fd6910cbed503b7aeff
 
 ifeq (none,$(LIBBLURAY.GCC.O))
 	LIBBLURAY.CONFIGURE.extra += --disable-optimizations
