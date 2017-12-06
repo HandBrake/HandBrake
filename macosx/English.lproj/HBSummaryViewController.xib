@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -107,7 +107,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="Jaw-pH-rhf">
-                    <rect key="frame" x="66" y="191" width="214" height="14"/>
+                    <rect key="frame" x="67" y="191" width="214" height="14"/>
                     <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="xmy-Jl-mR4">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -217,7 +217,7 @@
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Jaw-pH-rhf" secondAttribute="bottom" constant="8" id="U19-5y-ann"/>
                 <constraint firstItem="bpr-UY-4al" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="VFQ-Vg-ESJ"/>
                 <constraint firstItem="0kh-Uy-Yo3" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="ZSW-w5-hfn"/>
-                <constraint firstItem="Jaw-pH-rhf" firstAttribute="leading" secondItem="Jgq-K8-z3W" secondAttribute="trailing" constant="7" id="beE-wT-2DH"/>
+                <constraint firstItem="Jaw-pH-rhf" firstAttribute="leading" secondItem="Jgq-K8-z3W" secondAttribute="trailing" constant="8" id="beE-wT-2DH"/>
                 <constraint firstItem="BHq-Mt-3eA" firstAttribute="leading" secondItem="0kh-Uy-Yo3" secondAttribute="trailing" constant="8" id="dZN-9S-z89"/>
                 <constraint firstItem="9OK-03-grs" firstAttribute="leading" secondItem="txV-1R-WoD" secondAttribute="leading" id="f5M-zK-Y35"/>
                 <constraint firstItem="Jaw-pH-rhf" firstAttribute="top" secondItem="BHq-Mt-3eA" secondAttribute="bottom" constant="16" id="htU-Bs-Wje"/>
