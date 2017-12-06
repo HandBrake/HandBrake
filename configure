@@ -13,13 +13,18 @@ inpath()
     return 1
 }
 
-for p in python2.7 python2.6 python2.5 python2.4 python2 python
-do
-    if ( inpath $p ); then
-        exec $p `dirname $0`/make/configure.py "$@"
-        exit 0
-    fi
-done
+if ( inpath bash ); then
+    for p in python2.7 python2.6 python2.5 python2.4 python2 python
+    do
+        if ( inpath $p ); then
+            exec $p `dirname $0`/make/configure.py "$@"
+            exit 0
+        else
+            echo "ERROR: no suitable version of python found."
+        fi
+    done
+else
+    echo "ERROR: bash shell not found."
+fi
 
-echo "ERROR: no suitable version of python found."
 exit 1
