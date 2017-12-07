@@ -76,13 +76,19 @@
 - (BOOL)HB_endEditing;
 {
     BOOL success;
+    NSRange selectedRange = NSMakeRange(0, 0);
     id responder = self.firstResponder;
 
     // If we're dealing with the field editor, the real first responder is
     // its delegate.
-    if ((responder != nil) && [responder isKindOfClass:[NSTextView class]] && [(NSTextView*)responder isFieldEditor])
+    if ((responder != nil) && [responder isKindOfClass:[NSTextView class]] && [(NSTextView *)responder isFieldEditor])
     {
         responder = ([[responder delegate] isKindOfClass:[NSResponder class]]) ? [responder delegate] : nil;
+        if ([responder isKindOfClass:[NSTextField class]])
+        {
+            NSTextField *textField = (NSTextField *)responder;
+            selectedRange = textField.currentEditor.selectedRange;
+        }
     }
 
     success = [self makeFirstResponder:nil];
@@ -91,6 +97,11 @@
     if (success && responder != nil)
     {
         [self makeFirstResponder:responder];
+        if ([responder isKindOfClass:[NSTextField class]])
+        {
+            NSTextField *textField = (NSTextField *)responder;
+            textField.currentEditor.selectedRange = selectedRange;
+        }
     }
 
     return success;
