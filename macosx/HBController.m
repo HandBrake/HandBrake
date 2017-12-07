@@ -194,19 +194,6 @@
 {
     [self enableUI:NO];
 
-    /* For 64 bit builds, the threaded animation in the progress
-     * indicators conflicts with the animation in the advanced tab
-     * for reasons not completely clear. jbrjake found a note in the
-     * 10.5 dev notes regarding this possiblility. It was also noted
-     * that unless specified, setUsesThreadedAnimation defaults to true.
-     * So, at least for now we set the indicator animation to NO for
-     * both the scan and regular progress indicators for both 32 and 64 bit
-     * as it test out fine on both and there is no reason our progress indicators
-     * should require their own thread.
-     */
-    [fScanIndicator setUsesThreadedAnimation:NO];
-    [fRipIndicator setUsesThreadedAnimation:NO];
-
     // Bottom
     [fStatusField setStringValue:@""];
 
