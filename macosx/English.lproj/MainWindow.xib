@@ -4,7 +4,6 @@
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
-        <capability name="Alignment constraints to the first baseline" minToolsVersion="6.0"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -40,21 +39,21 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="41" y="572" width="920" height="610"/>
+            <rect key="contentRect" x="41" y="572" width="880" height="600"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="2" customClass="HBFocusRingView">
-                <rect key="frame" x="0.0" y="0.0" width="920" height="610"/>
+                <rect key="frame" x="0.0" y="0.0" width="880" height="600"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <tabView controlSize="small" translatesAutoresizingMaskIntoConstraints="NO" id="1474" customClass="HBTabView">
-                        <rect key="frame" x="13" y="116" width="894" height="389"/>
+                        <rect key="frame" x="13" y="116" width="854" height="379"/>
                         <constraints>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="354" id="Jdl-tV-liS"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="334" id="Jdl-tV-liS"/>
                         </constraints>
                         <tabViewItems>
                             <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
                                 <view key="view" id="BjX-E2-6tb">
-                                    <rect key="frame" x="10" y="29" width="874" height="347"/>
+                                    <rect key="frame" x="10" y="25" width="834" height="341"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -106,7 +105,7 @@
                         </connections>
                     </tabView>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1538">
-                        <rect key="frame" x="18" y="580" width="48" height="14"/>
+                        <rect key="frame" x="18" y="570" width="48" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Source:" id="4905">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -114,9 +113,9 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1540">
-                        <rect key="frame" x="18" y="550" width="33" height="14"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Title:" id="4907">
-                            <font key="font" metaFont="smallSystemBold"/>
+                        <rect key="frame" x="18" y="540" width="33" height="14"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Title:" id="4907">
+                            <font key="font" metaFont="systemBold" size="11"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -125,9 +124,9 @@
                         </connections>
                     </textField>
                     <popUpButton toolTip="Source range selection. By default, all chapters are selected and the entire source is encoded." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5513">
-                        <rect key="frame" x="524" y="546" width="84" height="22"/>
+                        <rect key="frame" x="524" y="536" width="84" height="22"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="78" id="AE2-gg-fra"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="78" id="Zs8-pX-H7V"/>
                         </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="5514">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -158,9 +157,9 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1553">
-                        <rect key="frame" x="752" y="551" width="57" height="14"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Duration:" id="4914">
-                            <font key="font" metaFont="smallSystemBold"/>
+                        <rect key="frame" x="752" y="540" width="57" height="14"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Duration:" id="4914">
+                            <font key="font" metaFont="systemBold" size="11"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -173,8 +172,8 @@
                         </connections>
                     </textField>
                     <textField toolTip="Duration of the selected source range in Hours:Minutes:Seconds." horizontalHuggingPriority="750" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1554">
-                        <rect key="frame" x="809" y="551" width="53" height="14"/>
-                        <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" alignment="right" title="00:00:00" id="4915">
+                        <rect key="frame" x="809" y="540" width="53" height="14"/>
+                        <textFieldCell key="cell" controlSize="small" selectable="YES" sendsActionOnEndEditing="YES" alignment="right" title="00:00:00" id="4915">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="0.76630436999999996" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
@@ -190,7 +189,7 @@
                         </connections>
                     </textField>
                     <textField toolTip="Source file name." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1539">
-                        <rect key="frame" x="68" y="580" width="44" height="14"/>
+                        <rect key="frame" x="68" y="570" width="44" height="14"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="xNw-RS-Hhf"/>
                         </constraints>
@@ -204,7 +203,7 @@
                         </connections>
                     </textField>
                     <textField toolTip="File name. This is what your new video will be named." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1561">
-                        <rect key="frame" x="76" y="91" width="382" height="19"/>
+                        <rect key="frame" x="76" y="91" width="342" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="4919">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -225,7 +224,7 @@
                         </connections>
                     </textField>
                     <textField hidden="YES" toolTip="First second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5491" userLabel="Time Start Encoding Field">
-                        <rect key="frame" x="613" y="547" width="54" height="19"/>
+                        <rect key="frame" x="613" y="537" width="54" height="19"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="54" id="siy-Fa-XFI"/>
                         </constraints>
@@ -253,7 +252,7 @@
                         </connections>
                     </textField>
                     <textField hidden="YES" toolTip="First frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5521" userLabel="Frame Start Encoding Field">
-                        <rect key="frame" x="613" y="547" width="54" height="19"/>
+                        <rect key="frame" x="613" y="537" width="54" height="19"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="54" id="uYc-eu-FMx"/>
                         </constraints>
@@ -281,7 +280,7 @@
                         </connections>
                     </textField>
                     <textField hidden="YES" toolTip="Last second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5493" userLabel="Time End Encoding Field">
-                        <rect key="frame" x="685" y="547" width="54" height="19"/>
+                        <rect key="frame" x="685" y="537" width="54" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5494">
                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="tD5-HN-B7h">
                                 <real key="minimum" value="0.0"/>
@@ -306,7 +305,7 @@
                         </connections>
                     </textField>
                     <textField hidden="YES" toolTip="Last frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5523" userLabel="Frame End Encoding Field">
-                        <rect key="frame" x="685" y="547" width="54" height="19"/>
+                        <rect key="frame" x="685" y="537" width="54" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5524">
                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="WrK-kN-ZN0">
                                 <real key="minimum" value="0.0"/>
@@ -331,27 +330,30 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1627">
-                        <rect key="frame" x="18" y="520" width="45" height="14"/>
+                        <rect key="frame" x="18" y="510" width="45" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Preset:" id="4923">
-                            <font key="font" metaFont="smallSystemBold"/>
+                            <font key="font" metaFont="systemBold" size="11"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="1628">
-                        <rect key="frame" x="281" y="524" width="619" height="5"/>
+                        <rect key="frame" x="281" y="514" width="579" height="5"/>
                     </box>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3205">
-                        <rect key="frame" x="123" y="585" width="777" height="5"/>
+                        <rect key="frame" x="123" y="575" width="737" height="5"/>
                     </box>
                     <progressIndicator hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" controlSize="small" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="3203">
-                        <rect key="frame" x="392" y="582" width="510" height="12"/>
+                        <rect key="frame" x="350" y="572" width="510" height="12"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="510" id="QJ7-6q-bdK"/>
                         </constraints>
                     </progressIndicator>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="5505">
-                        <rect key="frame" x="669" y="551" width="14" height="14"/>
+                        <rect key="frame" x="669" y="540" width="14" height="14"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="10" id="oZA-uv-S2L"/>
+                        </constraints>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title="–" id="5506">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -366,9 +368,9 @@
                         </connections>
                     </textField>
                     <popUpButton toolTip="First chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1545" userLabel="Chapter Start">
-                        <rect key="frame" x="610" y="546" width="60" height="22"/>
+                        <rect key="frame" x="610" y="536" width="60" height="22"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="54" id="vZd-Mh-LS2"/>
+                            <constraint firstAttribute="width" constant="54" id="LYd-Am-GKJ"/>
                         </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1547" id="4910">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -391,9 +393,9 @@
                         </connections>
                     </popUpButton>
                     <popUpButton toolTip="Last chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1548" userLabel="Chapter End">
-                        <rect key="frame" x="682" y="546" width="60" height="22"/>
+                        <rect key="frame" x="682" y="536" width="60" height="22"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="54" id="WE2-RM-vv1"/>
+                            <constraint firstAttribute="width" constant="54" id="zhJ-ur-lHA"/>
                         </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1550" id="4911">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -416,9 +418,9 @@
                         </connections>
                     </popUpButton>
                     <popUpButton toolTip="Video angle to encode. Only applicable to multi-angle DVD and Blu-ray." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5181">
-                        <rect key="frame" x="424" y="546" width="44" height="22"/>
+                        <rect key="frame" x="424" y="536" width="44" height="22"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="38" id="N2X-6I-cPa"/>
+                            <constraint firstAttribute="width" constant="38" id="xGF-g4-jWh"/>
                         </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="5184" id="5182">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -453,7 +455,7 @@ IA
                         </connections>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1541">
-                        <rect key="frame" x="52" y="546" width="318" height="22"/>
+                        <rect key="frame" x="52" y="536" width="318" height="22"/>
                         <string key="toolTip">Title, or video clip, to encode. The longest title is selected by default.
 
 Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature.</string>
@@ -479,7 +481,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </popUpButton>
                     <pathControl verticalHuggingPriority="750" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PJi-21-hie">
-                        <rect key="frame" x="506" y="91" width="328" height="20"/>
+                        <rect key="frame" x="466" y="91" width="328" height="20"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="328" id="Q5R-FC-z1x"/>
                         </constraints>
@@ -492,7 +494,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </pathControl>
                     <button toolTip="Browse to select a new destination path for your encode." horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1562">
-                        <rect key="frame" x="831" y="86" width="74" height="28"/>
+                        <rect key="frame" x="791" y="86" width="74" height="28"/>
                         <buttonCell key="cell" type="push" title="Browse…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="4920">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -508,7 +510,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="50" translatesAutoresizingMaskIntoConstraints="NO" id="gfs-4j-YSE">
-                        <rect key="frame" x="476" y="94" width="22" height="14"/>
+                        <rect key="frame" x="436" y="94" width="22" height="14"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="To:" id="rfK-nQ-Aq2">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -519,16 +521,16 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </textField>
                     <box autoresizesSubviews="NO" borderType="line" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="d0E-xw-bxh">
-                        <rect key="frame" x="-7" y="-4" width="934" height="81"/>
+                        <rect key="frame" x="-7" y="-4" width="894" height="81"/>
                         <view key="contentView" id="idQ-Ti-X2a">
-                            <rect key="frame" x="1" y="1" width="932" height="79"/>
+                            <rect key="frame" x="1" y="1" width="892" height="79"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <progressIndicator wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="1373">
-                                    <rect key="frame" x="24" y="15" width="884" height="17"/>
+                                    <rect key="frame" x="24" y="15" width="844" height="17"/>
                                 </progressIndicator>
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="3000" translatesAutoresizingMaskIntoConstraints="NO" id="1123">
-                                    <rect key="frame" x="22" y="35" width="888" height="28"/>
+                                    <rect key="frame" x="22" y="35" width="848" height="28"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="28" id="xDK-Ed-GEv"/>
                                     </constraints>
@@ -554,7 +556,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </constraints>
                     </box>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bWH-Lp-mKY">
-                        <rect key="frame" x="66" y="515" width="210" height="22"/>
+                        <rect key="frame" x="66" y="505" width="210" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="204" id="k4L-Sa-g4b"/>
                         </constraints>
@@ -580,9 +582,9 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="5180">
-                        <rect key="frame" x="380" y="550" width="41" height="14"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Angle:" id="5185">
-                            <font key="font" metaFont="smallSystemBold"/>
+                        <rect key="frame" x="380" y="540" width="41" height="14"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Angle:" id="5185">
+                            <font key="font" metaFont="systemBold" size="11"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -596,9 +598,9 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="4NG-AB-JWs">
-                        <rect key="frame" x="478" y="550" width="43" height="14"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Range:" id="IxV-PW-oYh">
-                            <font key="font" metaFont="smallSystemBold"/>
+                        <rect key="frame" x="478" y="540" width="43" height="14"/>
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Range:" id="IxV-PW-oYh">
+                            <font key="font" metaFont="systemBold" size="11"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -613,50 +615,55 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     </textField>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="5181" firstAttribute="baseline" secondItem="5180" secondAttribute="baseline" id="0WT-DF-xwh"/>
-                    <constraint firstItem="1548" firstAttribute="baseline" secondItem="5523" secondAttribute="baseline" id="1o2-Bi-1WX"/>
-                    <constraint firstItem="5513" firstAttribute="centerY" secondItem="1554" secondAttribute="centerY" id="1vC-eV-nkM"/>
+                    <constraint firstItem="5180" firstAttribute="leading" secondItem="1541" secondAttribute="trailing" constant="15" id="0Bt-0B-noA"/>
+                    <constraint firstItem="5491" firstAttribute="width" secondItem="1545" secondAttribute="width" id="18C-7M-Qr7"/>
                     <constraint firstItem="PJi-21-hie" firstAttribute="leading" secondItem="gfs-4j-YSE" secondAttribute="trailing" constant="10" id="2dV-0m-kAI"/>
                     <constraint firstItem="1539" firstAttribute="baseline" secondItem="1538" secondAttribute="baseline" id="3gB-bu-uWq"/>
-                    <constraint firstItem="5180" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="1541" secondAttribute="trailing" constant="15" id="3jj-9R-W0d"/>
-                    <constraint firstItem="1548" firstAttribute="leading" secondItem="5493" secondAttribute="leading" id="4IG-eQ-55R"/>
-                    <constraint firstItem="5491" firstAttribute="leading" secondItem="1545" secondAttribute="leading" id="8FJ-NN-iqQ"/>
+                    <constraint firstItem="5493" firstAttribute="baseline" secondItem="1548" secondAttribute="baseline" id="4Q1-FP-JWE"/>
+                    <constraint firstItem="1548" firstAttribute="baseline" secondItem="1553" secondAttribute="baseline" id="5U2-Lr-4Qc"/>
+                    <constraint firstItem="5180" firstAttribute="baseline" secondItem="5181" secondAttribute="baseline" id="7rI-Pr-24u"/>
+                    <constraint firstItem="5181" firstAttribute="leading" secondItem="5180" secondAttribute="trailing" constant="8" id="88n-hD-lCW"/>
                     <constraint firstItem="bWH-Lp-mKY" firstAttribute="baseline" secondItem="1627" secondAttribute="baseline" id="A8O-c5-J59"/>
                     <constraint firstItem="d0E-xw-bxh" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="-4" id="ANc-YO-rUk"/>
+                    <constraint firstItem="5505" firstAttribute="leading" secondItem="1545" secondAttribute="trailing" constant="4" id="AlP-tE-q8e"/>
+                    <constraint firstItem="5523" firstAttribute="leading" secondItem="1548" secondAttribute="leading" id="BFc-Em-mCW"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1554" secondAttribute="trailing" constant="20" id="CEn-JC-Lxm"/>
                     <constraint firstItem="1562" firstAttribute="baseline" secondItem="gfs-4j-YSE" secondAttribute="baseline" id="D6B-x1-Rm7"/>
-                    <constraint firstItem="5513" firstAttribute="baseline" secondItem="4NG-AB-JWs" secondAttribute="baseline" id="DBY-X8-nQP"/>
+                    <constraint firstItem="1553" firstAttribute="leading" secondItem="1548" secondAttribute="trailing" constant="15" id="DOO-4b-o8G"/>
+                    <constraint firstItem="5505" firstAttribute="baseline" secondItem="1548" secondAttribute="baseline" id="EGN-hl-cvN"/>
                     <constraint firstItem="3205" firstAttribute="leading" secondItem="1539" secondAttribute="trailing" constant="13" id="EOg-9m-BWr"/>
                     <constraint firstItem="gfs-4j-YSE" firstAttribute="leading" secondItem="1561" secondAttribute="trailing" constant="20" id="Eeg-iK-8sW"/>
                     <constraint firstAttribute="trailing" secondItem="1562" secondAttribute="trailing" constant="20" id="Evo-6G-PeG"/>
-                    <constraint firstItem="1554" firstAttribute="leading" secondItem="1553" secondAttribute="trailing" constant="4" id="F7e-S1-ofK"/>
-                    <constraint firstItem="1548" firstAttribute="trailing" secondItem="5493" secondAttribute="trailing" id="FOi-gl-8CU"/>
                     <constraint firstItem="1561" firstAttribute="baseline" secondItem="gfs-4j-YSE" secondAttribute="baseline" id="HGj-mW-j31"/>
-                    <constraint firstItem="1553" firstAttribute="firstBaseline" secondItem="5505" secondAttribute="baseline" id="IAD-5h-866"/>
+                    <constraint firstItem="5521" firstAttribute="width" secondItem="1545" secondAttribute="width" id="HK2-57-npO"/>
                     <constraint firstItem="d0E-xw-bxh" firstAttribute="top" secondItem="1561" secondAttribute="bottom" constant="16" id="IJL-MH-5Jk"/>
-                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1554" secondAttribute="trailing" constant="20" id="IkE-3r-B30"/>
                     <constraint firstItem="1541" firstAttribute="top" secondItem="1539" secondAttribute="bottom" constant="13" id="JKu-P6-MMV"/>
                     <constraint firstAttribute="trailing" secondItem="d0E-xw-bxh" secondAttribute="trailing" constant="-4" id="KQg-Rf-J0d"/>
                     <constraint firstItem="1538" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="KkG-gY-C8Q"/>
-                    <constraint firstItem="1548" firstAttribute="baseline" secondItem="5493" secondAttribute="baseline" id="O5E-wM-4OR"/>
+                    <constraint firstItem="5513" firstAttribute="leading" secondItem="4NG-AB-JWs" secondAttribute="trailing" constant="8" id="LaE-py-QST"/>
+                    <constraint firstItem="1554" firstAttribute="leading" secondItem="1553" secondAttribute="trailing" constant="4" id="Lrw-hs-Pdg"/>
+                    <constraint firstItem="3203" firstAttribute="top" secondItem="2" secondAttribute="top" constant="16" id="MDg-nr-Pos"/>
                     <constraint firstItem="1539" firstAttribute="centerY" secondItem="3205" secondAttribute="centerY" id="O7P-Hr-rDa"/>
-                    <constraint firstAttribute="trailing" secondItem="3203" secondAttribute="trailing" constant="18" id="PnZ-2e-abQ"/>
-                    <constraint firstItem="5505" firstAttribute="leading" secondItem="5491" secondAttribute="trailing" constant="4" id="Pqo-aS-4ll"/>
+                    <constraint firstAttribute="trailing" secondItem="3203" secondAttribute="trailing" constant="20" id="PnZ-2e-abQ"/>
                     <constraint firstAttribute="trailing" secondItem="3205" secondAttribute="trailing" constant="20" id="QkZ-Q7-VGX"/>
-                    <constraint firstItem="5493" firstAttribute="leading" secondItem="5505" secondAttribute="trailing" constant="4" id="T3d-Cb-1TT"/>
+                    <constraint firstItem="5491" firstAttribute="leading" secondItem="1545" secondAttribute="leading" id="Roc-GD-ttf"/>
+                    <constraint firstItem="5523" firstAttribute="width" secondItem="1548" secondAttribute="width" id="SQy-JH-Agm"/>
                     <constraint firstItem="1561" firstAttribute="leading" secondItem="1552" secondAttribute="trailing" constant="8" id="TLF-qk-2Eq"/>
                     <constraint firstItem="bWH-Lp-mKY" firstAttribute="top" secondItem="1541" secondAttribute="bottom" constant="13" id="Tex-Li-ACD"/>
+                    <constraint firstItem="5513" firstAttribute="baseline" secondItem="1545" secondAttribute="baseline" id="TiQ-ye-MeD"/>
                     <constraint firstItem="1539" firstAttribute="leading" secondItem="1538" secondAttribute="trailing" constant="6" id="Ue2-hw-ZPH"/>
                     <constraint firstItem="1562" firstAttribute="leading" secondItem="PJi-21-hie" secondAttribute="trailing" constant="2" id="UgJ-hP-CRv"/>
                     <constraint firstAttribute="bottom" secondItem="d0E-xw-bxh" secondAttribute="bottom" id="Unb-Sk-dKC"/>
-                    <constraint firstItem="5491" firstAttribute="baseline" secondItem="1545" secondAttribute="baseline" id="V1s-WC-STL"/>
                     <constraint firstItem="1627" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="VV8-Hu-yZk"/>
-                    <constraint firstItem="1545" firstAttribute="leading" secondItem="5513" secondAttribute="trailing" constant="8" symbolic="YES" id="VYv-xB-5lU"/>
+                    <constraint firstItem="4NG-AB-JWs" firstAttribute="leading" secondItem="5181" secondAttribute="trailing" constant="15" id="Xtb-eN-L1f"/>
                     <constraint firstItem="1540" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="YBA-8V-7wA"/>
+                    <constraint firstItem="5493" firstAttribute="width" secondItem="1548" secondAttribute="width" id="Z4Q-52-cXt"/>
                     <constraint firstAttribute="trailing" secondItem="1474" secondAttribute="trailing" constant="20" id="ZCa-qk-7Xv"/>
-                    <constraint firstItem="1553" firstAttribute="baseline" secondItem="1554" secondAttribute="baseline" id="bRf-Gk-M03"/>
+                    <constraint firstItem="4NG-AB-JWs" firstAttribute="baseline" secondItem="5513" secondAttribute="baseline" id="Zoh-0t-V3A"/>
+                    <constraint firstItem="1545" firstAttribute="leading" secondItem="5513" secondAttribute="trailing" constant="8" id="aLS-oh-XHW"/>
+                    <constraint firstItem="5491" firstAttribute="baseline" secondItem="1545" secondAttribute="baseline" id="anl-S6-LuT"/>
+                    <constraint firstItem="5521" firstAttribute="leading" secondItem="1545" secondAttribute="leading" id="cja-Gd-DHN"/>
                     <constraint firstItem="1561" firstAttribute="top" secondItem="1474" secondAttribute="bottom" constant="16" id="dN9-Oy-x6I"/>
-                    <constraint firstItem="5181" firstAttribute="leading" secondItem="5180" secondAttribute="trailing" constant="8" symbolic="YES" id="eLj-9B-zqH"/>
-                    <constraint firstItem="4NG-AB-JWs" firstAttribute="leading" secondItem="5181" secondAttribute="trailing" constant="15" id="elN-eT-exW"/>
                     <constraint firstItem="5493" firstAttribute="trailing" secondItem="5523" secondAttribute="trailing" id="fEO-qG-sc6"/>
                     <constraint firstItem="1474" firstAttribute="top" secondItem="bWH-Lp-mKY" secondAttribute="bottom" constant="16" id="fWK-a5-vqI"/>
                     <constraint firstItem="1538" firstAttribute="top" secondItem="2" secondAttribute="top" constant="16" id="fuA-H3-g7K"/>
@@ -665,23 +672,22 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="5523" firstAttribute="leading" secondItem="5493" secondAttribute="leading" id="gm6-wR-wHe"/>
                     <constraint firstItem="1628" firstAttribute="leading" secondItem="bWH-Lp-mKY" secondAttribute="trailing" constant="8" id="hxV-pb-HlV"/>
                     <constraint firstAttribute="trailing" secondItem="1628" secondAttribute="trailing" constant="20" id="k3w-7F-PJy"/>
-                    <constraint firstItem="5521" firstAttribute="leading" secondItem="1545" secondAttribute="leading" id="lHl-eR-GrT"/>
-                    <constraint firstItem="5181" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="427" id="lQH-Ps-Y4Y"/>
-                    <constraint firstItem="5513" firstAttribute="top" secondItem="3203" secondAttribute="bottom" constant="15" id="lh4-o3-opS"/>
-                    <constraint firstItem="1553" firstAttribute="leading" secondItem="5493" secondAttribute="trailing" constant="15" id="loK-nJ-aD6"/>
+                    <constraint firstItem="5523" firstAttribute="baseline" secondItem="1548" secondAttribute="baseline" id="kfY-mQ-JIb"/>
+                    <constraint firstItem="1541" firstAttribute="baseline" secondItem="5180" secondAttribute="baseline" id="l58-3I-TTV"/>
                     <constraint firstItem="1552" firstAttribute="baseline" secondItem="1561" secondAttribute="baseline" id="n18-gY-q1Z"/>
-                    <constraint firstItem="5521" firstAttribute="baseline" secondItem="1545" secondAttribute="baseline" id="oUt-oK-ID4"/>
-                    <constraint firstItem="5513" firstAttribute="baseline" secondItem="5521" secondAttribute="baseline" id="qNC-a2-F0F"/>
                     <constraint firstItem="1474" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="qm5-es-UMl"/>
-                    <constraint firstItem="5513" firstAttribute="baseline" secondItem="1540" secondAttribute="firstBaseline" id="rTF-gL-AHw"/>
                     <constraint firstItem="5493" firstAttribute="baseline" secondItem="5521" secondAttribute="baseline" id="rau-a9-VIU"/>
-                    <constraint firstItem="5513" firstAttribute="firstBaseline" secondItem="5491" secondAttribute="baseline" id="uzB-gd-5xg"/>
+                    <constraint firstItem="5181" firstAttribute="baseline" secondItem="4NG-AB-JWs" secondAttribute="baseline" id="tbj-bm-Nbs"/>
+                    <constraint firstItem="1548" firstAttribute="leading" secondItem="1545" secondAttribute="trailing" constant="18" id="uQR-fp-LdJ"/>
                     <constraint firstItem="1541" firstAttribute="leading" secondItem="1540" secondAttribute="trailing" constant="6" id="vAS-wg-SY2"/>
-                    <constraint firstItem="1541" firstAttribute="baseline" secondItem="5180" secondAttribute="baseline" id="wJe-gN-ir1"/>
+                    <constraint firstItem="1553" firstAttribute="baseline" secondItem="1554" secondAttribute="baseline" id="vEY-tK-ETq"/>
+                    <constraint firstItem="5493" firstAttribute="leading" secondItem="1548" secondAttribute="leading" id="vkn-JT-TK1"/>
+                    <constraint firstItem="5521" firstAttribute="baseline" secondItem="1545" secondAttribute="baseline" id="wAY-Q7-JGO"/>
                     <constraint firstItem="bWH-Lp-mKY" firstAttribute="centerY" secondItem="1628" secondAttribute="centerY" id="wqQ-KS-MuK"/>
+                    <constraint firstItem="1548" firstAttribute="leading" secondItem="5505" secondAttribute="trailing" constant="4" id="wvM-ZM-Lg5"/>
                     <constraint firstItem="1552" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="x7n-hu-WyG"/>
-                    <constraint firstItem="5513" firstAttribute="leading" secondItem="4NG-AB-JWs" secondAttribute="trailing" constant="8" id="xIa-Em-cbA"/>
                     <constraint firstItem="bWH-Lp-mKY" firstAttribute="leading" secondItem="1627" secondAttribute="trailing" constant="8" id="xar-Kr-fKk"/>
+                    <constraint firstItem="1545" firstAttribute="baseline" secondItem="5505" secondAttribute="baseline" id="xx3-IJ-4pD"/>
                 </constraints>
             </view>
             <toolbar key="toolbar" implicitIdentifier="E92CA47A-01F7-432A-A61C-28FE4D58C2CD" explicitIdentifier="HBMainWindowToolbar" displayMode="iconAndLabel" sizeMode="regular" id="7g3-gy-bUl">
@@ -716,7 +722,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         <popUpButton key="view" imageHugsTitle="YES" id="pJJ-0V-TQq">
                             <rect key="frame" x="28" y="14" width="58" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addqueue" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="QCi-1O-Msg">
@@ -797,43 +803,64 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
         </window>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
         <customView id="lZQ-gl-3wX" userLabel="Open Panel View">
-            <rect key="frame" x="0.0" y="0.0" width="227" height="38"/>
+            <rect key="frame" x="0.0" y="0.0" width="229" height="46"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <button toolTip="Scan only the specified title instead of all titles." fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DN4-48-aOI">
-                    <rect key="frame" x="28" y="9" width="114" height="18"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <buttonCell key="cell" type="check" title="Scan only title:" bezelStyle="regularSquare" imagePosition="left" inset="2" id="eQA-t2-FcV">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="system"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="-2" name="value" keyPath="self.scanSpecificTitle" id="bMP-E7-iZy"/>
-                    </connections>
-                </button>
-                <textField toolTip="Title to scan." verticalHuggingPriority="750" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3w9-Iu-3u2">
-                    <rect key="frame" x="148" y="7" width="50" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="0" drawsBackground="YES" id="6E4-AG-PEh">
-                        <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="WUJ-g0-wrL">
-                            <real key="minimum" value="0.0"/>
-                        </numberFormatter>
-                        <font key="font" metaFont="system"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.scanSpecificTitle" id="3aE-hX-Q0r"/>
-                        <binding destination="-2" name="value" keyPath="self.scanSpecificTitleIdx" id="EhO-SP-fUT">
-                            <dictionary key="options">
-                                <bool key="NSContinuouslyUpdatesValue" value="YES"/>
-                                <integer key="NSNullPlaceholder" value="0"/>
-                                <bool key="NSValidatesImmediately" value="YES"/>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="nHs-z7-brO">
+                    <rect key="frame" x="11" y="0.0" width="208" height="46"/>
+                    <subviews>
+                        <button toolTip="Scan only the specified title instead of all titles." translatesAutoresizingMaskIntoConstraints="NO" id="DN4-48-aOI">
+                            <rect key="frame" x="18" y="14" width="112" height="18"/>
+                            <buttonCell key="cell" type="check" title="Scan only title:" bezelStyle="regularSquare" imagePosition="left" inset="2" id="eQA-t2-FcV">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                            <connections>
+                                <binding destination="-2" name="value" keyPath="self.scanSpecificTitle" id="bMP-E7-iZy"/>
+                            </connections>
+                        </button>
+                        <textField toolTip="Title to scan." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3w9-Iu-3u2">
+                            <rect key="frame" x="136" y="12" width="52" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="52" id="BGA-yJ-Apd"/>
+                            </constraints>
+                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="0" drawsBackground="YES" id="6E4-AG-PEh">
+                                <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" groupingSize="0" minimumIntegerDigits="0" maximumIntegerDigits="42" id="WUJ-g0-wrL">
+                                    <real key="minimum" value="0.0"/>
+                                </numberFormatter>
+                                <font key="font" metaFont="system"/>
+                                <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                            <connections>
+                                <binding destination="-2" name="enabled" keyPath="self.scanSpecificTitle" id="3aE-hX-Q0r"/>
+                                <binding destination="-2" name="value" keyPath="self.scanSpecificTitleIdx" id="EhO-SP-fUT">
+                                    <dictionary key="options">
+                                        <bool key="NSContinuouslyUpdatesValue" value="YES"/>
+                                        <integer key="NSNullPlaceholder" value="0"/>
+                                        <bool key="NSValidatesImmediately" value="YES"/>
+                                    </dictionary>
+                                </binding>
+                            </connections>
+                        </textField>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="DN4-48-aOI" firstAttribute="leading" secondItem="nHs-z7-brO" secondAttribute="leading" constant="20" id="13C-tG-GpU"/>
+                        <constraint firstItem="DN4-48-aOI" firstAttribute="top" secondItem="nHs-z7-brO" secondAttribute="top" constant="16" id="JZd-2D-fiA"/>
+                        <constraint firstItem="DN4-48-aOI" firstAttribute="baseline" secondItem="3w9-Iu-3u2" secondAttribute="baseline" id="MeM-fz-C5e"/>
+                        <constraint firstAttribute="bottom" secondItem="DN4-48-aOI" secondAttribute="bottom" constant="16" id="gRD-Ah-zvX"/>
+                        <constraint firstAttribute="trailing" secondItem="3w9-Iu-3u2" secondAttribute="trailing" constant="20" id="tAR-eN-FSk"/>
+                        <constraint firstItem="3w9-Iu-3u2" firstAttribute="leading" secondItem="DN4-48-aOI" secondAttribute="trailing" constant="8" id="txm-vt-aJ8"/>
+                    </constraints>
+                </customView>
             </subviews>
+            <constraints>
+                <constraint firstItem="nHs-z7-brO" firstAttribute="top" secondItem="lZQ-gl-3wX" secondAttribute="top" id="Kvj-4E-aem"/>
+                <constraint firstItem="nHs-z7-brO" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="lZQ-gl-3wX" secondAttribute="leading" priority="750" constant="10" id="Q79-5U-xN5"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="nHs-z7-brO" secondAttribute="trailing" priority="750" constant="10" id="gma-1d-Ecc"/>
+                <constraint firstAttribute="bottom" secondItem="nHs-z7-brO" secondAttribute="bottom" id="kh1-nj-FYU"/>
+                <constraint firstItem="nHs-z7-brO" firstAttribute="centerX" secondItem="lZQ-gl-3wX" secondAttribute="centerX" id="mKh-Iz-BGz"/>
+            </constraints>
             <point key="canvasLocation" x="458.5" y="-571"/>
         </customView>
     </objects>
