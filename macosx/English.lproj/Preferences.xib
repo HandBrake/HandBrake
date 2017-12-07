@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,7 +24,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="136" y="318" width="500" height="200"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1058"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <value key="minSize" type="size" width="212" height="107"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="500" height="200"/>
@@ -355,11 +355,11 @@
             <point key="canvasLocation" x="487" y="-196"/>
         </customView>
         <customView id="235" userLabel="Audio">
-            <rect key="frame" x="0.0" y="0.0" width="500" height="143"/>
+            <rect key="frame" x="0.0" y="0.0" width="500" height="139"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="g8C-ES-TlL">
-                    <rect key="frame" x="51" y="0.0" width="398" height="143"/>
+                    <rect key="frame" x="51" y="0.0" width="398" height="139"/>
                     <subviews>
                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="mbd-FQ-sxW">
                             <rect key="frame" x="132" y="20" width="248" height="46"/>
@@ -426,7 +426,7 @@
                         <constraint firstItem="252" firstAttribute="bottom" secondItem="253" secondAttribute="bottom" id="AKG-0f-pEd"/>
                         <constraint firstItem="508" firstAttribute="bottom" secondItem="509" secondAttribute="bottom" id="CYq-h5-2hA"/>
                         <constraint firstItem="508" firstAttribute="leading" secondItem="509" secondAttribute="trailing" constant="8" id="DzV-HN-HdL"/>
-                        <constraint firstItem="252" firstAttribute="top" secondItem="g8C-ES-TlL" secondAttribute="top" constant="24" id="G5G-gX-HD4"/>
+                        <constraint firstItem="252" firstAttribute="top" secondItem="g8C-ES-TlL" secondAttribute="top" constant="20" id="G5G-gX-HD4"/>
                         <constraint firstAttribute="trailing" secondItem="253" secondAttribute="trailing" constant="20" id="Gfv-U2-a1x"/>
                         <constraint firstItem="509" firstAttribute="width" secondItem="252" secondAttribute="width" id="OQu-KV-dWA"/>
                         <constraint firstItem="mbd-FQ-sxW" firstAttribute="trailing" secondItem="508" secondAttribute="trailing" id="a9V-NH-c0Z"/>
@@ -447,11 +447,11 @@
             <point key="canvasLocation" x="507" y="-749"/>
         </customView>
         <customView id="236" userLabel="Advanced">
-            <rect key="frame" x="0.0" y="0.0" width="500" height="294"/>
+            <rect key="frame" x="0.0" y="0.0" width="500" height="292"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="4UU-uq-R9U">
-                    <rect key="frame" x="19" y="0.0" width="462" height="294"/>
+                    <rect key="frame" x="19" y="0.0" width="462" height="292"/>
                     <subviews>
                         <popUpButton toolTip="Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="363">
                             <rect key="frame" x="194" y="89" width="88" height="22"/>
@@ -734,7 +734,7 @@ This setting is no longer supported and may be removed in a future version. Use 
                         <constraint firstItem="Koh-5H-cdo" firstAttribute="leading" secondItem="PaR-zw-opS" secondAttribute="trailing" constant="7" id="Hd0-hx-WId"/>
                         <constraint firstItem="350" firstAttribute="baseline" secondItem="371" secondAttribute="baseline" id="KJC-CV-ZFy"/>
                         <constraint firstItem="Ndp-Xh-ohY" firstAttribute="top" secondItem="347" secondAttribute="bottom" constant="8" id="Kgc-7G-m3M"/>
-                        <constraint firstItem="jPa-4p-Y29" firstAttribute="top" secondItem="4UU-uq-R9U" secondAttribute="top" constant="22" id="Mib-9l-uBL"/>
+                        <constraint firstItem="jPa-4p-Y29" firstAttribute="top" secondItem="4UU-uq-R9U" secondAttribute="top" constant="20" id="Mib-9l-uBL"/>
                         <constraint firstItem="371" firstAttribute="top" secondItem="398" secondAttribute="bottom" constant="21" id="Mt3-Wx-Kuh"/>
                         <constraint firstItem="442" firstAttribute="width" secondItem="jPa-4p-Y29" secondAttribute="width" id="Pqh-h0-NeI"/>
                         <constraint firstItem="UXr-op-aKN" firstAttribute="leading" secondItem="480" secondAttribute="trailing" constant="7" id="TR5-Sj-PDx"/>
