@@ -61,6 +61,8 @@ else ifeq ($(BUILD.system),linux)
     TEST.GCC.l += pthread dl m
 else ifeq ($(BUILD.system),kfreebsd)
     TEST.GCC.l += pthread dl m
+else ifeq ($(BUILD.system),freebsd)
+    TEST.GCC.l += iconv pthread m
 else ifeq ($(BUILD.system),solaris)
     TEST.GCC.l += pthread nsl socket
 ifneq (,$(filter $(BUILD.release),2.10))

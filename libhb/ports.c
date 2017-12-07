@@ -844,7 +844,7 @@ static void attribute_align_thread hb_thread_func( void * _t )
 {
     hb_thread_t * t = (hb_thread_t *) _t;
 
-#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD )
+#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ )
     /* Set the thread priority */
     struct sched_param param;
     memset( &param, 0, sizeof( struct sched_param ) );
@@ -987,7 +987,7 @@ hb_lock_t * hb_lock_init()
 
     pthread_mutexattr_init(&mta);
 
-#if defined( SYS_CYGWIN ) || defined( SYS_FREEBSD )
+#if defined( SYS_CYGWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ )
     pthread_mutexattr_settype(&mta, PTHREAD_MUTEX_NORMAL);
 #endif
 

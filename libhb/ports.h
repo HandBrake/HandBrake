@@ -118,15 +118,20 @@ typedef struct hb_thread_s hb_thread_t;
 #elif defined( SYS_DARWIN )
 #  define HB_LOW_PRIORITY    0
 #  define HB_NORMAL_PRIORITY 31
-#elif defined( SYS_LINUX ) || defined( SYS_FREEBSD ) || defined ( SYS_SunOS ) || defined ( __FreeBSD_kernel__ )
-#  define HB_LOW_PRIORITY    0
-#  define HB_NORMAL_PRIORITY 0
 #elif defined( SYS_CYGWIN )
 #  define HB_LOW_PRIORITY    0
 #  define HB_NORMAL_PRIORITY 1
 #elif defined( SYS_MINGW )
 #  define HB_LOW_PRIORITY    0
 #  define HB_NORMAL_PRIORITY 0
+#endif
+
+#ifndef HB_LOW_PRIORITY
+#define HB_LOW_PRIORITY    0
+#endif
+
+#ifndef HB_NORMAL_PRIORITY
+#define HB_NORMAL_PRIORITY 0
 #endif
 
 typedef void (thread_func_t)(void *);

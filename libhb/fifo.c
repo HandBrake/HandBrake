@@ -13,7 +13,11 @@
 #endif
 
 #ifndef SYS_DARWIN
+#if defined( SYS_FREEBSD ) || defined ( __FreeBSD__ )
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
 #endif
 
 #define FIFO_TIMEOUT 200
@@ -391,7 +395,7 @@ hb_buffer_t * hb_buffer_init_internal( int size )
 
     if (size)
     {
-#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined( SYS_MINGW )
+#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined( SYS_MINGW )
         b->data  = malloc( b->alloc );
 #elif defined( SYS_CYGWIN )
         /* FIXME */
@@ -744,7 +748,7 @@ hb_image_t * hb_image_init(int pix_fmt, int width, int height)
     {
         return NULL;
     }
-#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined( SYS_MINGW )
+#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined( SYS_MINGW )
     image->data  = malloc(size);
 #elif defined( SYS_CYGWIN )
     /* FIXME */
@@ -785,7 +789,7 @@ hb_image_t * hb_buffer_to_image(hb_buffer_t *buf)
 {
     hb_image_t *image = calloc(1, sizeof(hb_image_t));
 
-#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined( SYS_MINGW )
+#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined( SYS_MINGW )
     image->data  = malloc( buf->size );
 #elif defined( SYS_CYGWIN )
     /* FIXME */
