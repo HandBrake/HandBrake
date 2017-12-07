@@ -19,3 +19,7 @@ endif
 ifeq (mingw,$(BUILD.system))
     LIBBLURAY.GCC.D += MINGW_HAS_SECURE_API=1
 endif
+
+ifeq (freebsd,$(BUILD.system))
+    LIBBLURAY.GCC.D += _XOPEN_SOURCE=700
+endif
