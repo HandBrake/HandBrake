@@ -78,16 +78,6 @@
     IBOutlet NSTextField         * fSrcDVD2Field;
     IBOutlet NSPopUpButton       * fSrcTitlePopUp;
 
-    // pts based start / stop
-    IBOutlet NSTextField         * fSrcTimeStartEncodingField;
-    IBOutlet NSTextField         * fSrcTimeEndEncodingField;
-    // frame based based start / stop
-    IBOutlet NSTextField         * fSrcFrameStartEncodingField;
-    IBOutlet NSTextField         * fSrcFrameEndEncodingField;
-
-    IBOutlet NSPopUpButton       * fSrcChapterStartPopUp;
-    IBOutlet NSPopUpButton       * fSrcChapterEndPopUp;
-
     // Bottom
     IBOutlet NSTextField         * fStatusField;
     IBOutlet NSProgressIndicator * fRipIndicator;
@@ -1044,11 +1034,8 @@
     {
         if (fRipIndicatorShown)
         {
-            [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-                self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET;
-            } completionHandler:^{
-                fRipIndicatorShown = NO;
-            }];
+            self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET;
+            fRipIndicatorShown = NO;
 
             // Refresh the toolbar buttons
             [self.window.toolbar validateVisibleItems];
@@ -1060,11 +1047,8 @@
         // that now.
         if (!fRipIndicatorShown)
         {
-            [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-                self.bottomConstrain.animator.constant = 0;
-            } completionHandler:^{
-                fRipIndicatorShown = YES;
-            }];
+            self.bottomConstrain.animator.constant = 0;
+            fRipIndicatorShown = YES;
 
             // Refresh the toolbar buttons
             [self.window.toolbar validateVisibleItems];

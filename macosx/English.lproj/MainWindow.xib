@@ -21,13 +21,7 @@
                 <outlet property="fRipIndicator" destination="1373" id="an5-ng-etT"/>
                 <outlet property="fScanHorizontalLine" destination="3205" id="W26-Wu-2YJ"/>
                 <outlet property="fScanIndicator" destination="3203" id="cG1-SY-gbt"/>
-                <outlet property="fSrcChapterEndPopUp" destination="1548" id="9V3-lu-BqX"/>
-                <outlet property="fSrcChapterStartPopUp" destination="1545" id="ZQk-wM-0mL"/>
                 <outlet property="fSrcDVD2Field" destination="1539" id="pxg-Wl-Mn7"/>
-                <outlet property="fSrcFrameEndEncodingField" destination="5523" id="0lZ-7S-OEo"/>
-                <outlet property="fSrcFrameStartEncodingField" destination="5521" id="iCh-Jo-pXi"/>
-                <outlet property="fSrcTimeEndEncodingField" destination="5493" id="QN5-jU-eed"/>
-                <outlet property="fSrcTimeStartEncodingField" destination="5491" id="2ln-oU-tgH"/>
                 <outlet property="fSrcTitlePopUp" destination="1541" id="glh-1k-i69"/>
                 <outlet property="fStatusField" destination="1123" id="mPD-cg-5dk"/>
                 <outlet property="fSubtitlesTab" destination="5194" id="PF0-qx-Iu4"/>
@@ -60,7 +54,7 @@
                         <tabViewItems>
                             <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
                                 <view key="view" id="BjX-E2-6tb">
-                                    <rect key="frame" x="10" y="25" width="874" height="351"/>
+                                    <rect key="frame" x="10" y="29" width="874" height="347"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -230,7 +224,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="First second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5491">
+                    <textField hidden="YES" toolTip="First second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5491" userLabel="Time Start Encoding Field">
                         <rect key="frame" x="613" y="547" width="54" height="19"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="54" id="siy-Fa-XFI"/>
@@ -258,7 +252,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="First frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5521">
+                    <textField hidden="YES" toolTip="First frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5521" userLabel="Frame Start Encoding Field">
                         <rect key="frame" x="613" y="547" width="54" height="19"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="54" id="uYc-eu-FMx"/>
@@ -286,7 +280,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="Last second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5493">
+                    <textField hidden="YES" toolTip="Last second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5493" userLabel="Time End Encoding Field">
                         <rect key="frame" x="685" y="547" width="54" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5494">
                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="tD5-HN-B7h">
@@ -311,7 +305,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <textField hidden="YES" toolTip="Last frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5523">
+                    <textField hidden="YES" toolTip="Last frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5523" userLabel="Frame End Encoding Field">
                         <rect key="frame" x="685" y="547" width="54" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5524">
                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="WrK-kN-ZN0">
@@ -371,7 +365,7 @@
                             </binding>
                         </connections>
                     </textField>
-                    <popUpButton toolTip="First chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1545">
+                    <popUpButton toolTip="First chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1545" userLabel="Chapter Start">
                         <rect key="frame" x="610" y="546" width="60" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="54" id="vZd-Mh-LS2"/>
@@ -396,7 +390,7 @@
                             </binding>
                         </connections>
                     </popUpButton>
-                    <popUpButton toolTip="Last chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1548">
+                    <popUpButton toolTip="Last chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1548" userLabel="Chapter End">
                         <rect key="frame" x="682" y="546" width="60" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="54" id="WE2-RM-vv1"/>
