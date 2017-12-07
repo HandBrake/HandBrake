@@ -1295,6 +1295,7 @@
             {
                 // Now that source is loaded and settings applied, delete the queue item from the queue
                 NSInteger index = [self.jobs indexOfObject:job];
+                job.state = HBJobStateReady;
                 [self removeQueueItemAtIndex:index];
             }
             else
