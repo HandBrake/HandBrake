@@ -989,4 +989,16 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="AddPresetView_AddNewCategory" xml:space="preserve">
     <value>-- Add New Category --</value>
   </data>
+  <data name="MainView_AddAll" xml:space="preserve">
+    <value>Add All</value>
+  </data>
+  <data name="MainView_AddCurrent" xml:space="preserve">
+    <value>Add Current</value>
+  </data>
+  <data name="MainView_AddSelection" xml:space="preserve">
+    <value>Add Selection</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Preset Options Context Menu</value>
+  </data>
 </root>

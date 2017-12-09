@@ -457,4 +457,7 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
   <data name="MainView_AlignAVStart" xml:space="preserve">
     <value>Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</value>
   </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Options to control presets.</value>
+  </data>
 </root>

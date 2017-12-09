@@ -128,7 +128,7 @@
                      ToolBarTray.IsLocked="True"
                      KeyboardNavigation.TabNavigation="Continue">
 
-                <Button Name="SelectSource" x:Uid="Choose Source" AutomationProperties.Name="Choose Source"
+                <Button Name="SelectSource" x:Uid="Choose Source" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_SourceOpen}"
                         cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
@@ -142,7 +142,7 @@
 
                 <Separator />
 
-                <Button Name="Start" AutomationProperties.Name="Start Encode"
+                <Button Name="Start" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_StartEncode}"
                         cal:Message.Attach="[Event Click] = [Action StartEncode]"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
@@ -157,7 +157,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Name="Stop" AutomationProperties.Name="Stop Encode"
+                <Button Name="Stop" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_Stop}"
                         cal:Message.Attach="[Event Click] = [Action StopEncode]"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
@@ -173,7 +173,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button Name="Pause" AutomationProperties.Name="Pause"
+                <Button Name="Pause" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_Pause}"
                         cal:Message.Attach="[Event Click] = [Action PauseEncode]"
                         Visibility="{Binding CanPause,
                                              Converter={StaticResource boolToVisConverter},
@@ -189,7 +189,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="Add to Queue">
+                <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_AddToQueue}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="Images/AddToQueue_small.png" />
@@ -205,9 +205,9 @@
                     </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Add Current" cal:Message.Attach="[Event Click] = [Action AddToQueue]" AutomationProperties.Name="Add Current" />
-                            <MenuItem Header="Add All" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]" AutomationProperties.Name="Add all to Queue" />
-                            <MenuItem Header="Add Selection" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" />
+                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddCurrent}" cal:Message.Attach="[Event Click] = [Action AddToQueue]" AutomationProperties.Name="Add Current" />
+                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddAll}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]" AutomationProperties.Name="Add all to Queue" />
+                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" />
                         </ContextMenu>
                     </Button.ContextMenu>
 
@@ -372,7 +372,9 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Margin="0,0,5,0" Padding="0"
                                        VerticalAlignment="Center"
-                                       Text="{x:Static Properties:ResourcesUI.MainView_Options}" />
+                                       Text="{x:Static Properties:ResourcesUI.MainView_Options}"
+                                       AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_PresetOptionsContextMenu}"
+                                           ToolTip="{x:Static Properties:ResourcesTooltips.MainView_PresetOptionsContextMenu}"/> 
 
                                 <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"

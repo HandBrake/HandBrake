@@ -19,7 +19,7 @@ namespace HandBrakeWPF.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class ResourcesTooltips {
@@ -65,9 +65,7 @@ namespace HandBrakeWPF.Properties {
         /// 
         ///NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
         ///
-        ///NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
-        ///
-        ///HQDN [rest of string was truncated]&quot;;.
+        ///NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter [rest of string was truncated]&quot;;.
         /// </summary>
         public static string FilterView_CustomDenoiseParams {
             get {
@@ -389,6 +387,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_PresetAdditionalOptions {
             get {
                 return ResourceManager.GetString("MainView_PresetAdditionalOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options to control presets..
+        /// </summary>
+        public static string MainView_PresetOptionsContextMenu {
+            get {
+                return ResourceManager.GetString("MainView_PresetOptionsContextMenu", resourceCulture);
             }
         }
         

@@ -655,6 +655,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add All.
+        /// </summary>
+        public static string MainView_AddAll {
+            get {
+                return ResourceManager.GetString("MainView_AddAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Current.
+        /// </summary>
+        public static string MainView_AddCurrent {
+            get {
+                return ResourceManager.GetString("MainView_AddCurrent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Selection.
+        /// </summary>
+        public static string MainView_AddSelection {
+            get {
+                return ResourceManager.GetString("MainView_AddSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to Queue.
         /// </summary>
         public static string MainView_AddToQueue {
@@ -849,6 +876,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_PresetManage {
             get {
                 return ResourceManager.GetString("MainView_PresetManage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preset Options Context Menu.
+        /// </summary>
+        public static string MainView_PresetOptionsContextMenu {
+            get {
+                return ResourceManager.GetString("MainView_PresetOptionsContextMenu", resourceCulture);
             }
         }
         
