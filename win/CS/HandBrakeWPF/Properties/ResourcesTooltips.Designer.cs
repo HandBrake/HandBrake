@@ -355,6 +355,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The end point for this range..
+        /// </summary>
+        public static string MainView_EndPoint {
+            get {
+                return ResourceManager.GetString("MainView_EndPoint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility..
         /// </summary>
         public static string MainView_IpodAtom {
@@ -425,6 +434,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_RemovePreset {
             get {
                 return ResourceManager.GetString("MainView_RemovePreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The start point for this range..
+        /// </summary>
+        public static string MainView_StartPoint {
+            get {
+                return ResourceManager.GetString("MainView_StartPoint", resourceCulture);
             }
         }
         

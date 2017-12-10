@@ -130,7 +130,7 @@
     <value>Advanced</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Angle</value>
+    <value>Angle: </value>
   </data>
   <data name="MainView_AudioTab" xml:space="preserve">
     <value>Audio</value>
@@ -148,10 +148,10 @@
     <value>Destination</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>Duration</value>
+    <value>Duration: </value>
   </data>
   <data name="MainView_File" xml:space="preserve">
-    <value>Save To</value>
+    <value>Save As:</value>
   </data>
   <data name="MainView_FiltersTab" xml:space="preserve">
     <value>Filters</value>
@@ -202,10 +202,10 @@
     <value>Subtitles</value>
   </data>
   <data name="MainView_through" xml:space="preserve">
-    <value>through</value>
+    <value> - </value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Title: </value>
   </data>
   <data name="MainView_Tools" xml:space="preserve">
     <value>Tools</value>
@@ -1000,5 +1000,8 @@ This will not affect your current settings in the Subtitle tab.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Preset Options Context Menu</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Range:</value>
   </data>
 </root>

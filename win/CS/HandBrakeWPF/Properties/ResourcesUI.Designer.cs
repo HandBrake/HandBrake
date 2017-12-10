@@ -709,7 +709,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Angle.
+        ///   Looks up a localized string similar to Angle: .
         /// </summary>
         public static string MainView_Angle {
             get {
@@ -772,7 +772,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duration.
+        ///   Looks up a localized string similar to Duration: .
         /// </summary>
         public static string MainView_Duration {
             get {
@@ -781,7 +781,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save To.
+        ///   Looks up a localized string similar to Save As:.
         /// </summary>
         public static string MainView_File {
             get {
@@ -925,6 +925,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Range:.
+        /// </summary>
+        public static string MainView_Range {
+            get {
+                return ResourceManager.GetString("MainView_Range", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string MainView_Remove {
@@ -1042,7 +1051,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to through.
+        ///   Looks up a localized string similar to  - .
         /// </summary>
         public static string MainView_through {
             get {
@@ -1051,7 +1060,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Title.
+        ///   Looks up a localized string similar to Title: .
         /// </summary>
         public static string MainView_Title {
             get {

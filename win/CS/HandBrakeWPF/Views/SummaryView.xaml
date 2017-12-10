@@ -39,6 +39,8 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="10" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="10" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -82,6 +84,14 @@
 
             <TextBlock Text="Filters:" FontWeight="Bold" Grid.Row="10" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding FiltersInfo}" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" TextWrapping="Wrap" />
+
+
+
+            <TextBlock Text="Size:" FontWeight="Bold" Grid.Row="12" Grid.Column="0" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding DimensionInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="12" Grid.Column="1" />
+
+            <TextBlock Text="Aspect:" FontSize="14" Grid.Row="13" Grid.Column="0" VerticalAlignment="Center" Visibility="Collapsed" />
+            <TextBlock Text="{Binding AspectInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="13" Grid.Column="1" Margin="5,0,0,0" Visibility="Collapsed" />
         </Grid>
 
         <!-- Column 2 -->
@@ -124,13 +134,6 @@
                         Background="Black" Opacity="0.75" Margin="0,5,0,10">
                     <TextBlock Text="{Binding PreviewInfo}" FontSize="14" Foreground="White" Padding="8,3" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}" />
                 </Border>
-
-                <TextBlock Text="Dimensions:" FontSize="14" FontFamily="Sergio Light" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-                <TextBlock Text="{Binding DimensionInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="1" Grid.Column="1" Margin="5,0,0,0" />
-
-                <TextBlock Text="Aspect:" FontSize="14" FontFamily="Sergio Light" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Visibility="Collapsed" />
-                <TextBlock Text="{Binding AspectInfo}" HorizontalAlignment="Left" VerticalAlignment="Center"  Grid.Row="2" Grid.Column="1" Margin="5,0,0,0" Visibility="Collapsed" />
-
             </Grid>
         </Grid>
 

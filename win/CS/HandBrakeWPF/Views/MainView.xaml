@@ -142,6 +142,44 @@
 
                 <Separator />
 
+                <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_AddToQueue}">
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="Images/AddToQueue_small.png" />
+                            <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:ResourcesUI.MainView_AddToQueue}" />
+                        </StackPanel>
+
+                        <Grid x:Name="dropdown" Background="Transparent" >
+                            <Path Height="5" Margin="2,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                  Data="M 0 0 L 4 4 L 8 0 Z"
+                                  Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrow" />
+                        </Grid>
+
+                    </StackPanel>
+                    <Button.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddCurrent}" cal:Message.Attach="[Event Click] = [Action AddToQueue]" AutomationProperties.Name="Add Current" />
+                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddAll}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]" AutomationProperties.Name="Add all to Queue" />
+                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" />
+                        </ContextMenu>
+                    </Button.ContextMenu>
+
+                </Button>
+
+                <Button Name="ShowQueue" AutomationProperties.Name="Show Queue" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="32"
+                               Height="32"
+                               SnapsToDevicePixels="True"
+                               Source="Images/Queue_small.png"/>
+                        <Label Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}"/>
+                    </StackPanel>
+                </Button>
+
+                <Separator />
+
                 <Button Name="Start" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_StartEncode}"
                         cal:Message.Attach="[Event Click] = [Action StartEncode]"
                         Visibility="{Binding IsEncoding,
@@ -186,42 +224,6 @@
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:ResourcesUI.MainView_Pause}"/>
-                    </StackPanel>
-                </Button>
-
-                <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_AddToQueue}">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="Images/AddToQueue_small.png" />
-                            <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:ResourcesUI.MainView_AddToQueue}" />
-                        </StackPanel>
-
-                        <Grid x:Name="dropdown" Background="Transparent" >
-                            <Path Height="5" Margin="2,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                  Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrow" />
-                        </Grid>
-
-                    </StackPanel>
-                    <Button.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddCurrent}" cal:Message.Attach="[Event Click] = [Action AddToQueue]" AutomationProperties.Name="Add Current" />
-                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddAll}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]" AutomationProperties.Name="Add all to Queue" />
-                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" />
-                        </ContextMenu>
-                    </Button.ContextMenu>
-
-                </Button>
-
-                <Button Name="ShowQueue" AutomationProperties.Name="Show Queue" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
-                               Height="32"
-                               SnapsToDevicePixels="True"
-                               Source="Images/Queue_small.png"/>
-                        <Label Margin="8,0,0,0"
-                               VerticalAlignment="Center"
-                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}"/>
                     </StackPanel>
                 </Button>
 
@@ -280,18 +282,18 @@
 
                         <Label Content="{x:Static Properties:ResourcesUI.MainView_Source}" FontWeight="Bold" Grid.Column="0" />
                         <TextBlock Text="{Binding Path=SourceLabel}" TextTrimming="CharacterEllipsis" Grid.Column="1" MaxWidth="400" />
-                        <TextBlock Text="{Binding SourceInfo}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="Gray" FontFamily="Segoe UI Light" Grid.Column="2" MaxWidth="400" />
+                        <TextBlock Text="{Binding SourceInfo}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DimGray" Grid.Column="2" MaxWidth="400" />
                     </Grid>
 
                     <StackPanel Orientation="Horizontal">
-                        <Label Margin="8,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Title}" />
+                        <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Title}" />
                         <ComboBox Name="Titles"
                                   MinWidth="100"
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding ScannedSource.Titles}"
                                   ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Title}"
                                   SelectedItem="{Binding Path=SelectedTitle}" />
-                        <Label Margin="8,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Angle}" />
+                        <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Angle}" />
 
                         <ComboBox Name="Angles"
                                   MinWidth="60"
@@ -299,6 +301,8 @@
                                   ItemsSource="{Binding Angles}"
                                   SelectedItem="{Binding SelectedAngle}"
                                   ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Angle}" />
+
+                        <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Range}" />
                         <ComboBox Name="PointToPointMode"
                                   MinWidth="80"
                                   Margin="8,0,0,0"
@@ -309,11 +313,13 @@
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding StartEndRangeItems}"
                                   SelectedItem="{Binding SelectedStartPoint}"
+                                  ToolTip="{x:Static Properties:ResourcesTooltips.MainView_StartPoint}"
                                   Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=true}" />
                         <Controls:TimeSpanBox  Number="{Binding SelectedStartPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding IsTimespanRange}"
+                                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_StartPoint}"
                                                MinWidth="80" Margin="8,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}" />
@@ -324,16 +330,18 @@
                                   Margin="4,0,0,0"
                                   ItemsSource="{Binding StartEndRangeItems}"
                                   SelectedItem="{Binding SelectedEndPoint}"
+                                  ToolTip="{x:Static Properties:ResourcesTooltips.MainView_EndPoint}"
                                   Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=true}" />
                         <Controls:TimeSpanBox  Number="{Binding SelectedEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding IsTimespanRange}"
+                                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_EndPoint}"
                                                MinWidth="80" Margin="8,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}" />
 
-                        <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
+                        <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" FontWeight="Bold" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
                         <Label Margin="4,0,0,0" Content="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
 
                     </StackPanel>
@@ -345,12 +353,12 @@
                 <Label Content="Presets" FontWeight="Bold" VerticalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" Margin="8,0,0,0" Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
 
-                    <Button x:Name="SelectPresetsButton"  Margin="15,0,0,0" VerticalAlignment="Center" Click="SelectPreset_OnClick" Width="350">
+                    <Button x:Name="SelectPresetsButton"  Margin="15,0,0,0" VerticalAlignment="Center" Click="SelectPreset_OnClick" Width="250">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
                                 <TextBlock Margin="0,0,5,0" Padding="0"
-                                           VerticalAlignment="Center" Width="315"
-                                           Text="{Binding SelectedPreset.DisplayValue}" />
+                                           VerticalAlignment="Center" Width="215"
+                                           Text="{Binding SelectedPreset.DisplayValue}" TextTrimming="CharacterEllipsis" />
 
                                 <Path Height="8" Margin="2,0,0,1" VerticalAlignment="Center" HorizontalAlignment="Center"
                                       Data="M 0 0 L 4 4 L 0 8 Z"
