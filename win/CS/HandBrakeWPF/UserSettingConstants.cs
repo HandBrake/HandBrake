@@ -149,7 +149,7 @@ namespace HandBrakeWPF
         /// <summary>
         /// The Show Preset Panel
         /// </summary>
-        public const string ShowPresetPanel = "ShowPresetPanel";
+        public const string ShowPresetPanel = "ShowPresetPanelOption";
 
         /// <summary>
         /// The reset when done action.
