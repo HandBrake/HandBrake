@@ -149,14 +149,7 @@
         fQueueController.controller = self;
 
         presetManager = manager;
-        if (manager.defaultPreset.isBuiltIn)
-        {
-            _currentPreset = [self presetByAddingDefaultLanguages:manager.defaultPreset];
-        }
-        else
-        {
-            _currentPreset = manager.defaultPreset;
-        }
+        _currentPreset = manager.defaultPreset;
 
         _scanSpecificTitleIdx = 1;
 
@@ -1378,43 +1371,6 @@
 
         _currentPreset = currentPreset;
     }
-
-    if (!(self.undoManager.isUndoing || self.undoManager.isRedoing))
-    {
-        // If the preset is one of the built in, set some additional options
-        if (_currentPreset.isBuiltIn)
-        {
-            _currentPreset = [self presetByAddingDefaultLanguages:_currentPreset];
-        }
-    }
-}
-
-- (HBPreset *)presetByAddingDefaultLanguages:(HBPreset *)preset
-{
-    HBMutablePreset *mutablePreset = [preset mutableCopy];
-    NSMutableArray<NSString *> *languages = [NSMutableArray array];
-
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"])
-    {
-        NSString *lang = [HBUtilities isoCodeForNativeLang:[[NSUserDefaults standardUserDefaults] stringForKey:@"AlternateLanguage"]];
-        if (lang)
-        {
-            [languages insertObject:lang atIndex:0];
-        }
-    }
-
-    if ([[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"])
-    {
-        NSString *lang = [HBUtilities isoCodeForNativeLang:[[NSUserDefaults standardUserDefaults] stringForKey:@"DefaultLanguage"]];
-        if (lang)
-        {
-             [languages insertObject:lang atIndex:0];
-        }
-    }
-
-    mutablePreset[@"AudioLanguageList"] = languages;
-
-    return mutablePreset;
 }
 
 - (void)setEdited:(BOOL)edited

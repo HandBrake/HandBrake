@@ -4,10 +4,8 @@
  */
 
 #import "HBPreferencesController.h"
-#import "HBLanguagesSelection.h"
 
 #define TOOLBAR_GENERAL     @"TOOLBAR_GENERAL"
-#define TOOLBAR_AUDIO       @"TOOLBAR_AUDIO"
 #define TOOLBAR_ADVANCED    @"TOOLBAR_ADVANCED"
 
 /**
@@ -23,7 +21,7 @@
 
 @interface HBPreferencesController () <NSTokenFieldDelegate>
 {
-    IBOutlet NSView         * fGeneralView, * fAudioView, * fAdvancedView;
+    IBOutlet NSView         * fGeneralView, * fAdvancedView;
     IBOutlet NSTextField    * fSendEncodeToAppField;
 }
 
@@ -39,8 +37,6 @@
 @property (unsafe_unretained) IBOutlet NSTokenField *builtInTokenField;
 @property (nonatomic, readonly, strong) NSArray *buildInFormatTokens;
 @property (nonatomic, strong) NSArray *matches;
-
-@property (nonatomic, strong) HBLanguagesSelection *languages;
 
 @end
 
@@ -59,7 +55,6 @@
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
         @"HBShowOpenPanelAtLaunch":         @YES,
-        @"DefaultLanguage":                 @"English",
         @"DefaultMpegExtension":            @"Auto",
         @"UseDvdNav":                       @"YES",
         @"HBDefaultPresetsDrawerShow":      @YES,
@@ -96,10 +91,7 @@
  */
 - (instancetype)init
 {
-    if (self = [super initWithWindowNibName:@"Preferences"])
-    {
-        _languages = [[HBLanguagesSelection alloc] init];
-    }
+    self = [super initWithWindowNibName:@"Preferences"];
     return self;
 }
 
@@ -151,12 +143,6 @@
                                          label:NSLocalizedString(@"General", @"Preferences General Toolbar Item")
                                          image:[NSImage imageNamed:@"settings"]];
     }
-    else if ( [ident isEqualToString:TOOLBAR_AUDIO] )
-    {
-        return [self toolbarItemWithIdentifier:ident
-                                         label:NSLocalizedString(@"Audio", @"Preferences Audio Toolbar Item")
-                                         image:[NSImage imageNamed:@"audio"]];
-    }
     else if ( [ident isEqualToString:TOOLBAR_ADVANCED] )
     {
         return [self toolbarItemWithIdentifier:ident
@@ -179,7 +165,7 @@
 
 - (NSArray *) toolbarAllowedItemIdentifiers: (NSToolbar *) toolbar
 {
-    return @[TOOLBAR_GENERAL, TOOLBAR_AUDIO, TOOLBAR_ADVANCED];
+    return @[TOOLBAR_GENERAL, TOOLBAR_ADVANCED];
 }
 
 /* Manage the send encode to xxx.app windows and field */
@@ -291,11 +277,7 @@
     if (sender)
     {
         NSString *identifier = [sender itemIdentifier];
-        if ([identifier isEqualToString:TOOLBAR_AUDIO])
-        {
-            view = fAudioView;
-        }
-        else if([identifier isEqualToString:TOOLBAR_ADVANCED])
+        if([identifier isEqualToString:TOOLBAR_ADVANCED])
         {
             view = fAdvancedView;
         }

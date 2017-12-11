@@ -11,7 +11,6 @@
             <connections>
                 <outlet property="builtInTokenField" destination="Tk3-Ig-fFI" id="DBp-1P-k9z"/>
                 <outlet property="fAdvancedView" destination="236" id="246"/>
-                <outlet property="fAudioView" destination="235" id="247"/>
                 <outlet property="fGeneralView" destination="233" id="245"/>
                 <outlet property="fSendEncodeToAppField" destination="448" id="456"/>
                 <outlet property="formatTokenField" destination="6aa-GX-TuM" id="DyQ-f3-zBJ"/>
@@ -353,98 +352,6 @@
                 <constraint firstItem="2nU-46-chy" firstAttribute="top" secondItem="233" secondAttribute="top" id="lro-oX-OdV"/>
             </constraints>
             <point key="canvasLocation" x="487" y="-196"/>
-        </customView>
-        <customView id="235" userLabel="Audio">
-            <rect key="frame" x="0.0" y="0.0" width="500" height="139"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <subviews>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="g8C-ES-TlL">
-                    <rect key="frame" x="51" y="0.0" width="398" height="139"/>
-                    <subviews>
-                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="mbd-FQ-sxW">
-                            <rect key="frame" x="132" y="20" width="248" height="46"/>
-                            <constraints>
-                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="46" id="JL9-J5-9Pf"/>
-                            </constraints>
-                            <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Note: these settings only apply to official presets. Custom presets may be configured using the Selection Behavior controls." id="fIj-Tz-ghb">
-                                <font key="font" metaFont="smallSystem"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                            </textFieldCell>
-                        </textField>
-                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="252">
-                            <rect key="frame" x="18" y="105" width="110" height="14"/>
-                            <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Native Language:" id="315">
-                                <font key="font" metaFont="smallSystem"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                            </textFieldCell>
-                        </textField>
-                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="509">
-                            <rect key="frame" x="18" y="74" width="110" height="14"/>
-                            <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Alternate Language:" id="510">
-                                <font key="font" metaFont="smallSystem"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                            </textFieldCell>
-                        </textField>
-                        <comboBox toolTip="Alternate Language. Secondary audio and subtitles language used when selecting an official preset." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="508">
-                            <rect key="frame" x="134" y="70" width="247" height="22"/>
-                            <comboBoxCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" numberOfVisibleItems="10" id="511">
-                                <font key="font" metaFont="smallSystem"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                            </comboBoxCell>
-                            <connections>
-                                <accessibilityConnection property="title" destination="509" id="PE7-MG-1ib"/>
-                                <binding destination="-2" name="content" keyPath="self.languages.languagesArray" id="l02-3Q-yhI"/>
-                                <binding destination="61" name="value" keyPath="values.AlternateLanguage" previousBinding="l02-3Q-yhI" id="M5z-5g-aQN"/>
-                            </connections>
-                        </comboBox>
-                        <comboBox toolTip="Native Language. Primary audio and subtitles language used when selecting an official preset." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="253">
-                            <rect key="frame" x="134" y="101" width="247" height="22"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="244" id="08J-n0-XqN"/>
-                            </constraints>
-                            <comboBoxCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="English" drawsBackground="YES" numberOfVisibleItems="10" id="316">
-                                <font key="font" metaFont="smallSystem"/>
-                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                            </comboBoxCell>
-                            <connections>
-                                <accessibilityConnection property="title" destination="252" id="hu3-YO-cRz"/>
-                                <binding destination="-2" name="content" keyPath="self.languages.languagesArray" id="xPC-Fg-O3G"/>
-                                <binding destination="61" name="value" keyPath="values.DefaultLanguage" previousBinding="xPC-Fg-O3G" id="I2t-Qy-TKa"/>
-                            </connections>
-                        </comboBox>
-                    </subviews>
-                    <constraints>
-                        <constraint firstItem="252" firstAttribute="leading" secondItem="g8C-ES-TlL" secondAttribute="leading" constant="20" id="1Uc-FP-Fz7"/>
-                        <constraint firstItem="253" firstAttribute="leading" secondItem="252" secondAttribute="trailing" constant="8" id="5RA-uv-hlp"/>
-                        <constraint firstItem="508" firstAttribute="width" secondItem="253" secondAttribute="width" id="743-TZ-SE8"/>
-                        <constraint firstAttribute="bottom" secondItem="mbd-FQ-sxW" secondAttribute="bottom" constant="20" symbolic="YES" id="9Yk-Dm-f6J"/>
-                        <constraint firstItem="252" firstAttribute="bottom" secondItem="253" secondAttribute="bottom" id="AKG-0f-pEd"/>
-                        <constraint firstItem="508" firstAttribute="bottom" secondItem="509" secondAttribute="bottom" id="CYq-h5-2hA"/>
-                        <constraint firstItem="508" firstAttribute="leading" secondItem="509" secondAttribute="trailing" constant="8" id="DzV-HN-HdL"/>
-                        <constraint firstItem="252" firstAttribute="top" secondItem="g8C-ES-TlL" secondAttribute="top" constant="20" id="G5G-gX-HD4"/>
-                        <constraint firstAttribute="trailing" secondItem="253" secondAttribute="trailing" constant="20" id="Gfv-U2-a1x"/>
-                        <constraint firstItem="509" firstAttribute="width" secondItem="252" secondAttribute="width" id="OQu-KV-dWA"/>
-                        <constraint firstItem="mbd-FQ-sxW" firstAttribute="trailing" secondItem="508" secondAttribute="trailing" id="a9V-NH-c0Z"/>
-                        <constraint firstItem="mbd-FQ-sxW" firstAttribute="top" secondItem="508" secondAttribute="bottom" constant="8" id="nap-cp-XiN"/>
-                        <constraint firstItem="509" firstAttribute="leading" secondItem="252" secondAttribute="leading" id="pLn-d3-d4N"/>
-                        <constraint firstItem="mbd-FQ-sxW" firstAttribute="leading" secondItem="508" secondAttribute="leading" id="u5s-Iu-ihl"/>
-                        <constraint firstItem="508" firstAttribute="top" secondItem="253" secondAttribute="bottom" constant="14" id="ydm-O7-1aR"/>
-                    </constraints>
-                </customView>
-            </subviews>
-            <constraints>
-                <constraint firstItem="g8C-ES-TlL" firstAttribute="top" secondItem="235" secondAttribute="top" id="Cjh-sZ-EAJ"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="g8C-ES-TlL" secondAttribute="trailing" priority="750" id="Eqr-f4-h3f"/>
-                <constraint firstItem="g8C-ES-TlL" firstAttribute="centerX" secondItem="235" secondAttribute="centerX" id="Gft-yL-QdT"/>
-                <constraint firstItem="g8C-ES-TlL" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="235" secondAttribute="leading" priority="750" id="fmv-un-o26"/>
-                <constraint firstAttribute="bottom" secondItem="g8C-ES-TlL" secondAttribute="bottom" id="ijo-kG-Cjj"/>
-            </constraints>
-            <point key="canvasLocation" x="507" y="-749"/>
         </customView>
         <customView id="236" userLabel="Advanced">
             <rect key="frame" x="0.0" y="0.0" width="500" height="292"/>
