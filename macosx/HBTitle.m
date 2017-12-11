@@ -231,7 +231,7 @@ extern NSString *keySubTrackType;
     if (!_chapters)
     {
         NSMutableArray<HBChapter *> *chapters = [NSMutableArray array];
-
+        uint64_t currentTime = 0;
         for (int i = 0; i < hb_list_count(self.hb_title->list_chapter); i++)
         {
             hb_chapter_t *chapter = hb_list_item(self.hb_title->list_chapter, i);
@@ -250,7 +250,9 @@ extern NSString *keySubTrackType;
 
                 [chapters addObject:[[HBChapter alloc] initWithTitle:title
                                                                index:i + 1
+                                                           timestamp:currentTime
                                                             duration:chapter->duration]];
+                currentTime += chapter->duration;
             }
         }
 

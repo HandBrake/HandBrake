@@ -56,3 +56,32 @@
 }
 
 @end
+
+@implementation HBTimeTransformer
+
++ (Class)transformedValueClass
+{
+    return [NSString class];
+}
+
+- (id)transformedValue:(id)value
+{
+    uint64_t duration = [value integerValue];
+    uint64_t hours    = duration / 90000 / 3600;
+    uint64_t minutes  = ((duration / 90000 ) % 3600) / 60;
+    uint64_t seconds  = (duration / 90000 ) % 60;
+
+    return [NSString stringWithFormat:@"%02llu:%02llu:%02llu", hours, minutes, seconds];
+}
+
++ (BOOL)allowsReverseTransformation
+{
+    return NO;
+}
+
+- (id)reverseTransformedValue:(id)value
+{
+    return nil;
+}
+
+@end

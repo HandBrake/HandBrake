@@ -194,7 +194,7 @@
 - (void)controlTextDidEndEditing:(NSNotification *)notification
 {
     NSTableView *chapterTable = self.table;
-    NSInteger column = 2;
+    NSInteger column = [self.table columnForView:[notification object]];
     NSInteger row = [self.table rowForView:[notification object]];
     NSInteger textMovement;
 

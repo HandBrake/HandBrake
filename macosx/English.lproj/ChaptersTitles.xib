@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -77,8 +77,8 @@
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn identifier="index" editable="NO" width="76" minWidth="40" maxWidth="1000" id="0iF-eL-NOC">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Chapter">
+                                    <tableColumn identifier="index" editable="NO" width="45" minWidth="40" maxWidth="1000" id="0iF-eL-NOC">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Index">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
@@ -91,13 +91,13 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="xTN-ym-UFK">
-                                                <rect key="frame" x="1" y="1" width="76" height="17"/>
+                                                <rect key="frame" x="1" y="1" width="45" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9mL-8S-7Nl">
-                                                        <rect key="frame" x="1" y="2" width="74" height="14"/>
+                                                        <rect key="frame" x="1" y="2" width="43" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="Chapter" id="G9p-Cg-wyC">
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" alignment="left" title="1" id="G9p-Cg-wyC">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -120,7 +120,54 @@
                                             </binding>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="duration" editable="NO" width="84" minWidth="10" maxWidth="3.4028234663852886e+38" id="QVB-Cw-DJD" userLabel="Timestamp">
+                                    <tableColumn identifier="timestamp" editable="NO" width="72" minWidth="10" maxWidth="3.4028234663852886e+38" id="NlF-th-Cg9" userLabel="Timestamp">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Start">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </tableHeaderCell>
+                                        <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="All-Bz-NLv">
+                                            <font key="font" metaFont="smallSystem"/>
+                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                        <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
+                                        <prototypeCellViews>
+                                            <tableCellView id="udT-y4-rGM">
+                                                <rect key="frame" x="49" y="1" width="72" height="17"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <subviews>
+                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="euR-W4-lv2">
+                                                        <rect key="frame" x="1" y="2" width="70" height="14"/>
+                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Timestamp" id="zaN-qY-tke">
+                                                            <font key="font" metaFont="smallSystem"/>
+                                                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                        <connections>
+                                                            <binding destination="udT-y4-rGM" name="value" keyPath="objectValue.timestamp" id="wta-eX-RPt">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBTimeTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                                <connections>
+                                                    <outlet property="textField" destination="euR-W4-lv2" id="aim-6V-EeA"/>
+                                                </connections>
+                                            </tableCellView>
+                                        </prototypeCellViews>
+                                        <connections>
+                                            <binding destination="Gv0-qM-nu4" name="value" keyPath="arrangedObjects.duration" id="few-rg-26q">
+                                                <dictionary key="options">
+                                                    <bool key="NSConditionallySetsEditable" value="YES"/>
+                                                </dictionary>
+                                            </binding>
+                                        </connections>
+                                    </tableColumn>
+                                    <tableColumn identifier="duration" editable="NO" width="69" minWidth="10" maxWidth="3.4028234663852886e+38" id="QVB-Cw-DJD">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Duration">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -134,11 +181,11 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="AVw-G2-Zyi">
-                                                <rect key="frame" x="80" y="1" width="84" height="17"/>
+                                                <rect key="frame" x="124" y="1" width="69" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4HO-kO-Qtr">
-                                                        <rect key="frame" x="1" y="2" width="82" height="14"/>
+                                                        <rect key="frame" x="1" y="2" width="67" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Duration" id="Vmq-zJ-NEA">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -146,7 +193,11 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                         <connections>
-                                                            <binding destination="AVw-G2-Zyi" name="value" keyPath="objectValue.duration" id="n18-Pn-gsL"/>
+                                                            <binding destination="AVw-G2-Zyi" name="value" keyPath="objectValue.duration" id="DF2-Dz-3dy">
+                                                                <dictionary key="options">
+                                                                    <string key="NSValueTransformerName">HBTimeTransformer</string>
+                                                                </dictionary>
+                                                            </binding>
                                                         </connections>
                                                     </textField>
                                                 </subviews>
@@ -163,7 +214,7 @@
                                             </binding>
                                         </connections>
                                     </tableColumn>
-                                    <tableColumn identifier="title" width="715" minWidth="77.217290000000006" maxWidth="1000" id="Z6H-lJ-ipr">
+                                    <tableColumn identifier="title" width="686" minWidth="77.217290000000006" maxWidth="1000" id="Z6H-lJ-ipr">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Title">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -177,11 +228,11 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="yZu-QP-dyq">
-                                                <rect key="frame" x="167" y="1" width="715" height="17"/>
+                                                <rect key="frame" x="196" y="1" width="686" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rpj-MP-nnZ">
-                                                        <rect key="frame" x="0.0" y="1" width="715" height="15"/>
+                                                        <rect key="frame" x="0.0" y="1" width="686" height="15"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" title="Title" id="UjY-nz-uSt">
                                                             <font key="font" metaFont="smallSystem"/>
@@ -215,7 +266,7 @@
                         </subviews>
                     </clipView>
                     <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="O2b-uL-5ea">
-                        <rect key="frame" x="-100" y="-100" width="488" height="15"/>
+                        <rect key="frame" x="1" y="241" width="884" height="16"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="yp0-pp-Yw7">
@@ -242,7 +293,7 @@
                 <constraint firstItem="7Xf-c0-jsr" firstAttribute="leading" secondItem="lqY-aE-MZi" secondAttribute="leading" id="xvS-rd-BVF"/>
                 <constraint firstItem="7Xf-c0-jsr" firstAttribute="leading" secondItem="qs9-Xl-pXA" secondAttribute="leading" constant="20" symbolic="YES" id="zIR-UV-LXe"/>
             </constraints>
-            <point key="canvasLocation" x="389" y="32"/>
+            <point key="canvasLocation" x="113" y="149"/>
         </view>
         <userDefaultsController representsSharedInstance="YES" id="coy-s6-QLx"/>
         <arrayController objectClassName="HBChapter" editable="NO" id="Gv0-qM-nu4">

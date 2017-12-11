@@ -17,3 +17,8 @@
 @property (nonatomic, readonly) BOOL framesSelected;
 
 @end
+
+#pragma mark - Value Trasformers
+
+@interface HBTimeTransformer : NSValueTransformer
+@end

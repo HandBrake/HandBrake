@@ -11,22 +11,19 @@
 
 - (instancetype)init
 {
-    self = [self initWithTitle:@"No Value" index:0 duration:0];
+    self = [self initWithTitle:@"No Value" index:0 timestamp:0 duration:0];
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title index:(NSUInteger)idx duration:(uint64_t)duration
+- (instancetype)initWithTitle:(NSString *)title index:(NSUInteger)idx timestamp:(uint64_t)timestamp duration:(uint64_t)duration
 {
     NSParameterAssert(title);
 
     self = [super init];
     if (self)
     {
-        uint64_t hours    = duration / 90000 / 3600;
-        uint64_t minutes  = ((duration / 90000 ) % 3600) / 60;
-        uint64_t seconds  = (duration / 90000 ) % 60;
-
-        _duration = [NSString stringWithFormat:@"%02llu:%02llu:%02llu", hours, minutes, seconds];
+        _timestamp = timestamp;
+        _duration = duration;
         _title = [title copy];
         _index = idx;
 
@@ -54,7 +51,8 @@
     if (copy)
     {
         copy->_title = [_title copy];
-        copy->_duration = [_duration copy];
+        copy->_timestamp = _timestamp;
+        copy->_duration = _duration;
         copy->_index = _index;
     }
 
@@ -74,7 +72,8 @@
     [coder encodeInt:1 forKey:@"HBChapterVersion"];
 
     encodeObject(_title);
-    encodeObject(_duration);
+    encodeInteger(_timestamp);
+    encodeInteger(_duration);
     encodeInteger(_index);
 }
 
@@ -85,7 +84,8 @@
     if (version == 1 && (self = [self init]))
     {
         decodeObjectOrFail(_title, NSString);
-        decodeObjectOrFail(_duration, NSString);
+        decodeInteger(_timestamp);
+        decodeInteger(_duration);
         decodeInteger(_index);
 
         return self;
