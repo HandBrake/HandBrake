@@ -89,15 +89,18 @@ extern NSString *keySubTrackType;
 {
     if (self.hb_title->type == HB_BD_TYPE)
     {
-        return [NSString stringWithFormat:@"%@ %d (%05d.MPLS) - %@",
-                 @(self.hb_title->name), self.hb_title->index, self.hb_title->playlist,
-                 self.timeCode];
+        return [NSString stringWithFormat:@"%d (%05d.MPLS) - %@",
+                 self.hb_title->index, self.hb_title->playlist, self.timeCode];
+    }
+    else if (self.hb_title->type == HB_DVD_TYPE)
+    {
+        return [NSString stringWithFormat:@"%d - %@",
+                self.hb_title->index, self.timeCode];
     }
     else
     {
-        return [NSString stringWithFormat:@"%@ %d - %@",
-                 @(self.hb_title->name), self.hb_title->index,
-                 self.timeCode];
+        return [NSString stringWithFormat:@"%d - %@ - %@",
+                self.hb_title->index, self.timeCode,  @(self.hb_title->name)];
     }
 }
 
@@ -129,7 +132,7 @@ extern NSString *keySubTrackType;
 
 - (NSString *)timeCode
 {
-    return [NSString stringWithFormat:@"%02dh%02dm%02ds",
+    return [NSString stringWithFormat:@"%02d:%02d:%02d",
             self.hb_title->hours, self.hb_title->minutes, self.hb_title->seconds];
 }
 
