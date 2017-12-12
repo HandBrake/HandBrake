@@ -15,3 +15,4 @@ Note: The Green Encode / Pause Icons are remakes by jamiemlaw
 
 - Presets2
 - Preview2
+- Preview3
