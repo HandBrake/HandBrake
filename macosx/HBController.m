@@ -120,8 +120,16 @@
 /// Whether the job has been edited after a preset was applied.
 @property (nonatomic) BOOL edited;
 
-///  The HBCore used for scanning.
+/// The HBCore used for scanning.
 @property (nonatomic, strong) HBCore *core;
+
+/// Whether the window is visible or occluded,
+/// useful to avoid updating the UI needlessly
+@property (nonatomic) BOOL visible;
+
+/// Queue progress info
+@property (nonatomic, copy) NSString *progressInfo;
+@property (nonatomic) double progress;
 
 @property (nonatomic, readwrite) NSColor *labelColor;
 
@@ -152,6 +160,13 @@
         _currentPreset = manager.defaultPreset;
 
         _scanSpecificTitleIdx = 1;
+
+        // Progress
+        _progressInfo = @"";
+        if (NSAppKitVersionNumber < NSAppKitVersionNumber10_10)
+        {
+            _visible = YES;
+        }
 
         // Check to see if the last destination has been set, use if so, if not, use Movies
 #ifdef __SANDBOX_ENABLED__
@@ -188,7 +203,7 @@
     [self enableUI:NO];
 
     // Bottom
-    [fStatusField setStringValue:@""];
+    [self updateProgress];
 
     // Register HBController's Window as a receiver for files/folders drag & drop operations
     [self.window registerForDraggedTypes:@[NSFilenamesPboardType]];
@@ -1000,6 +1015,25 @@
 
 #pragma mark - Queue progress
 
+- (void)windowDidChangeOcclusionState:(NSNotification *)notification
+{
+    if ([self.window occlusionState] & NSWindowOcclusionStateVisible)
+    {
+        self.visible = YES;
+        [self updateProgress];
+    }
+    else
+    {
+        self.visible = NO;
+    }
+}
+
+- (void)updateProgress
+{
+    fStatusField.stringValue = self.progressInfo;
+    fRipIndicator.doubleValue = self.progress;
+}
+
 - (void)setQueueState:(NSUInteger)count
 {
     self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : nil;
@@ -1007,8 +1041,13 @@
 
 - (void)setQueueInfo:(NSString *)info progress:(double)progress hidden:(BOOL)hidden
 {
-    fStatusField.stringValue = info;
-    fRipIndicator.doubleValue = progress;
+    self.progressInfo = info;
+    self.progress = progress;
+
+    if (_visible)
+    {
+        [self updateProgress];
+    }
 
     if (hidden)
     {

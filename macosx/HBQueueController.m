@@ -30,6 +30,13 @@
 
 @interface HBQueueController () <NSOutlineViewDataSource, HBQueueOutlineViewDelegate>
 
+/// Whether the window is visible or occluded,
+/// useful to avoid updating the UI needlessly
+@property (nonatomic) BOOL visible;
+
+// Progress
+@property (nonatomic, strong) NSString *progressInfo;
+
 @property (nonatomic, readonly) HBDockTile *dockTile;
 @property (nonatomic, readwrite) double dockIconProgress;
 
@@ -72,6 +79,13 @@
         // Init a separate instance of libhb for the queue
         _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
         _core.automaticallyPreventSleep = NO;
+
+        // Progress
+        _progressInfo = @"";
+        if (NSAppKitVersionNumber < NSAppKitVersionNumber10_10)
+        {
+            _visible = YES;
+        }
 
         // Load the queue from disk.
         _jobs = [[HBDistributedArray alloc] initWithURL:queueURL class:[HBJob class]];
@@ -495,6 +509,29 @@
     [self.jobs commit];
 }
 
+- (void)windowDidChangeOcclusionState:(NSNotification *)notification
+{
+    if ([self.window occlusionState] & NSWindowOcclusionStateVisible)
+    {
+        self.visible = YES;
+        self.progressTextField.stringValue = self.progressInfo;
+    }
+    else
+    {
+        self.visible = NO;
+    }
+}
+
+- (void)updateProgress:(NSString *)info progress:(double)progress hidden:(BOOL)hidden
+{
+    self.progressInfo = info;
+    if (self.visible)
+    {
+        self.progressTextField.stringValue = info;
+    }
+    [self.controller setQueueInfo:info progress:progress hidden:hidden];
+}
+
 /**
  *  Updates the queue status label.
  */
@@ -705,8 +742,7 @@
             [self jobCompletedAlerts:job result:result];
             break;
     }
-    self.progressTextField.stringValue = info;
-    [self.controller setQueueInfo:info progress:1.0 hidden:YES];
+    [self updateProgress:info progress:1.0 hidden:YES];
 
     // Restore dock icon
     [self.dockTile updateDockIcon:-1.0 withETA:@""];
@@ -723,9 +759,7 @@
     // Progress handler
     void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
     {
-        NSString *status = info;
-        self.progressTextField.stringValue = status;
-        [self.controller setQueueInfo:status progress:0 hidden:NO];
+        [self updateProgress:info progress:0 hidden:NO];
     };
 
     // Completion handler
@@ -783,9 +817,8 @@
             [self.dockTile updateDockIcon:1.0 withETA:@""];
         }
 
-        // Update text field
-        self.progressTextField.stringValue = info;
-        [self.controller setQueueInfo:info progress:progress.percent hidden:NO];
+        // Update UI
+        [self updateProgress:info progress:progress.percent hidden:NO];
     };
 
     // Completion handler
