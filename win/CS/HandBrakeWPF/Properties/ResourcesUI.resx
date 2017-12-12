@@ -1004,4 +1004,10 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="MainView_Range" xml:space="preserve">
     <value>Range:</value>
   </data>
+  <data name="MainView_ModifiedPreset" xml:space="preserve">
+    <value>(Modified)</value>
+  </data>
+  <data name="MainView_SelectedPreset" xml:space="preserve">
+    <value>Selected Preset:</value>
+  </data>
 </root>

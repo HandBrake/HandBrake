@@ -337,7 +337,15 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            if (preset.AudioTrackBehaviours.SelectedLangauges != this.AudioBehaviours.SelectedLangauges)
+            foreach (var language in preset.AudioTrackBehaviours.SelectedLangauges)
+            {
+                if (!this.AudioBehaviours.SelectedLangauges.Contains(language))
+                {
+                    return false;
+                }
+            }
+
+            if (preset.AudioTrackBehaviours.SelectedLangauges.Count != this.AudioBehaviours.SelectedLangauges.Count)
             {
                 return false;
             }

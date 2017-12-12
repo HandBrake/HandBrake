@@ -826,6 +826,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Modified).
+        /// </summary>
+        public static string MainView_ModifiedPreset {
+            get {
+                return ResourceManager.GetString("MainView_ModifiedPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Muxing: This may take a while....
         /// </summary>
         public static string MainView_Muxing {
@@ -957,6 +966,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_Searching {
             get {
                 return ResourceManager.GetString("MainView_Searching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected Preset:.
+        /// </summary>
+        public static string MainView_SelectedPreset {
+            get {
+                return ResourceManager.GetString("MainView_SelectedPreset", resourceCulture);
             }
         }
         

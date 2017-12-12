@@ -92,6 +92,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.IncludeChapterMarkers = value;
                 this.NotifyOfPropertyChange(() => this.IncludeChapterMarkers);
+                this.OnTabStatusChanged(null);
             }
         }
 

@@ -2122,6 +2122,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     // Tab Settings
                     this.isSettingPreset = true;
+                    this.IsModifiedPreset = false;
                     this.PictureSettingsViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.VideoViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.FiltersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
@@ -2268,6 +2269,16 @@ namespace HandBrakeWPF.ViewModels
 
             bool matchesPreset = this.PictureSettingsViewModel.MatchesPreset(this.selectedPreset);
 
+            if (!this.SummaryViewModel.MatchesPreset(this.selectedPreset))
+            {
+                matchesPreset = false;
+            }
+
+            if (!this.PictureSettingsViewModel.MatchesPreset(this.selectedPreset))
+            {
+                matchesPreset = false;
+            }
+
             if (!this.VideoViewModel.MatchesPreset(this.selectedPreset))
             {
                 matchesPreset = false;
@@ -2303,12 +2314,7 @@ namespace HandBrakeWPF.ViewModels
                 matchesPreset = false;
             }
 
-            if (!this.SummaryViewModel.MatchesPreset(this.selectedPreset))
-            {
-                matchesPreset = false;
-            }
-
-            this.IsModifiedPreset = matchesPreset;
+            this.IsModifiedPreset = !matchesPreset;
         }
 
         /// <summary>

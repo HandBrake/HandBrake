@@ -83,6 +83,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.CurrentTask.CustomDecomb = value;
                 this.NotifyOfPropertyChange(() => this.CustomDecomb);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -100,6 +101,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.CurrentTask.CustomDeinterlace = value;
                 this.NotifyOfPropertyChange(() => this.CustomDeinterlace);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -117,6 +119,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.CurrentTask.CustomDenoise = value;
                 this.NotifyOfPropertyChange(() => this.CustomDenoise);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -134,6 +137,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.CurrentTask.CustomDetelecine = value;
                 this.NotifyOfPropertyChange(() => this.CustomDetelecine);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -174,6 +178,7 @@ namespace HandBrakeWPF.ViewModels
                 this.CurrentTask.Deblock = value;
                 this.NotifyOfPropertyChange(() => this.DeblockValue);
                 this.NotifyOfPropertyChange(() => this.DeblockText);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -246,6 +251,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.CurrentTask.Grayscale = value;
                 this.NotifyOfPropertyChange(() => this.Grayscale);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -270,6 +276,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.ShowDecombCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceDecombCustom);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -288,8 +295,11 @@ namespace HandBrakeWPF.ViewModels
                 this.CurrentTask.CombDetect = value;
                 this.NotifyOfPropertyChange(() => this.SelectedCombDetectPreset);
 
+                if (value != CombDetect.Custom) this.CustomCombDetect = string.Empty;
+
                 // Show / Hide the Custom Control
                 this.NotifyOfPropertyChange(() => this.ShowCombDetectCustom);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -318,6 +328,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.CurrentTask.CustomCombDetect = value;
                 this.NotifyOfPropertyChange(() => this.CustomCombDetect);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -342,6 +353,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.ShowDecombCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceDecombCustom);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -368,6 +380,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -390,6 +403,7 @@ namespace HandBrakeWPF.ViewModels
                 this.ShowDetelecineCustom = this.CurrentTask.Detelecine == Detelecine.Custom;
                 if (value != Detelecine.Custom) this.CustomDetelecine = string.Empty;
                 this.NotifyOfPropertyChange(() => this.ShowDetelecineCustom);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -460,6 +474,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.ShowDecombCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDeinterlaceDecombCustom);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -492,6 +507,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.CurrentTask.DenoiseTune = value;
                 this.NotifyOfPropertyChange(() => this.SelectedDenoiseTune);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -516,6 +532,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -582,6 +599,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.CurrentTask.Rotation = value;
                 this.NotifyOfPropertyChange(() => this.SelectedRotation);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -599,6 +617,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.CurrentTask.FlipVideo = value;
                 this.NotifyOfPropertyChange(() => this.FlipVideo);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -651,6 +670,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.SelectedSharpenTune);
                 this.NotifyOfPropertyChange(() => this.SelectedSharpenPreset);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -667,6 +687,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedSharpenPreset);
                 this.NotifyOfPropertyChange(() => this.ShowSharpenTune);
                 this.NotifyOfPropertyChange(() => this.ShowSharpenCustom);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -681,6 +702,7 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.CurrentTask.SharpenTune) return;
                 this.CurrentTask.SharpenTune = value;
                 this.NotifyOfPropertyChange(() => this.SelectedSharpenTune);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -695,6 +717,7 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.CurrentTask.SharpenCustom) return;
                 this.CurrentTask.SharpenCustom = value;
                 this.NotifyOfPropertyChange(() => this.CustomSharpen);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -862,17 +885,17 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            if (preset.Task.CustomDecomb != this.CustomDecomb)
+            if ((preset.Task.CustomDecomb ?? string.Empty) != (this.CustomDecomb ?? string.Empty))
             {
                 return false;
             }
 
-            if (preset.Task.CustomDeinterlace != this.CustomDeinterlace)
+            if ((preset.Task.CustomDeinterlace ?? string.Empty) != (this.CustomDeinterlace ?? string.Empty))
             {
                 return false;
             }
 
-            if (preset.Task.CustomCombDetect != this.CustomCombDetect)
+            if ((preset.Task.CustomCombDetect ?? string.Empty) != (this.CustomCombDetect ?? string.Empty))
             {
                 return false;
             }
@@ -882,12 +905,12 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            if (preset.Task.DenoisePreset != this.SelectedDenoisePreset)
+            if (this.SelectedDenoise != Denoise.Off && preset.Task.DenoisePreset != this.SelectedDenoisePreset)
             {
                 return false;
             }
 
-            if (preset.Task.DenoiseTune != this.SelectedDenoiseTune)
+            if (this.SelectedDenoise != Denoise.Off && preset.Task.DenoiseTune != this.SelectedDenoiseTune)
             {
                 return false;
             }
@@ -897,17 +920,19 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            if (!Equals(preset.Task.SharpenPreset, this.SelectedSharpenPreset))
+            if (this.SelectedSharpen != Sharpen.Off && !Equals(preset.Task.SharpenPreset, this.SelectedSharpenPreset))
             {
                 return false;
             }
 
-            if (!Equals(preset.Task.SharpenTune, this.SelectedSharpenTune))
+            if (this.SelectedSharpen != Sharpen.Off && !Equals(preset.Task.SharpenTune, this.SelectedSharpenTune))
             {
                 return false;
             }
 
-            if (preset.Task.Deblock != this.DeblockValue)
+            int presetDeblock = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
+
+            if (presetDeblock != this.DeblockValue)
             {
                 return false;
             }

@@ -571,6 +571,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.Anamorphic = value;
                     this.NotifyOfPropertyChange(() => this.SelectedAnamorphicMode);
                     this.RecaulcatePictureSettingsProperties(ChangedPictureField.Anamorphic);
+                    this.OnTabStatusChanged(null);
                 }
             }
         }
@@ -590,6 +591,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.Modulus = value;
                 this.NotifyOfPropertyChange(() => this.SelectedModulus);
                 this.RecaulcatePictureSettingsProperties(ChangedPictureField.Modulus);
+                this.OnTabStatusChanged(null);
             }
         }
 

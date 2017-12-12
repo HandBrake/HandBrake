@@ -183,6 +183,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.NotifyOfPropertyChange(() => this.IsConstantFramerate);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -211,6 +212,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.NotifyOfPropertyChange(() => this.IsConstantQuantity);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -233,6 +235,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.NotifyOfPropertyChange(() => this.IsPeakFramerate);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -255,6 +258,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.NotifyOfPropertyChange(() => this.IsVariableFramerate);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -360,6 +364,7 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.RF);
                 this.NotifyOfPropertyChange(() => this.DisplayRF);
                 this.NotifyOfPropertyChange(() => this.IsLossless);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -380,6 +385,7 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.Task.VideoBitrate = value;
                 this.NotifyOfPropertyChange(() => this.VideoBitrate);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -408,6 +414,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.TwoPass = value;
                 this.NotifyOfPropertyChange(() => this.TwoPass);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -425,6 +432,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.TurboFirstPass = value;
                 this.NotifyOfPropertyChange(() => this.TurboFirstPass);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -489,6 +497,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.SelectedFramerate);
                 this.NotifyOfPropertyChange(() => this.Task);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -512,6 +521,7 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.SelectedVideoEncoder);
                     this.HandleEncoderChange(this.Task.VideoEncoder);
                     this.HandleRFChange();
+                    this.OnTabStatusChanged(null);
                 }
             }
         }
@@ -564,6 +574,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.ExtraAdvancedArguments = value;
                     this.NotifyOfPropertyChange(() => this.ExtraArguments);
                     this.NotifyOfPropertyChange(() => FullOptionsTooltip);
+                    this.OnTabStatusChanged(null);
                 }
             }
         }
@@ -694,6 +705,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.FastDecode);
                 this.NotifyOfPropertyChange(() => this.FullOptionsTooltip);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -711,6 +723,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.VideoPreset = value;
                 this.NotifyOfPropertyChange(() => this.VideoPreset);
                 this.NotifyOfPropertyChange(() => this.FullOptionsTooltip);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -791,6 +804,7 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.VideoTune);
                 this.NotifyOfPropertyChange(() => this.FullOptionsTooltip);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -808,6 +822,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.VideoProfile = value;
                 this.NotifyOfPropertyChange(() => this.VideoProfile);
                 this.NotifyOfPropertyChange(() => this.FullOptionsTooltip);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -825,6 +840,7 @@ namespace HandBrakeWPF.ViewModels
                 this.Task.VideoLevel = value;
                 this.NotifyOfPropertyChange(() => this.VideoLevel);
                 this.NotifyOfPropertyChange(() => this.FullOptionsTooltip);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -1046,6 +1062,16 @@ namespace HandBrakeWPF.ViewModels
                 {
                     return false;
                 }
+
+                if (preset.Task.TwoPass != this.Task.TwoPass)
+                {
+                    return false;
+                }
+
+                if (preset.Task.TurboFirstPass != this.Task.TurboFirstPass)
+                {
+                    return false;
+                }
             }
             else
             {
@@ -1053,16 +1079,6 @@ namespace HandBrakeWPF.ViewModels
                 {
                     return false;
                 }
-            }
-
-            if (preset.Task.TwoPass != this.Task.TwoPass)
-            {
-                return false;
-            }
-
-            if (preset.Task.TurboFirstPass != this.Task.TurboFirstPass)
-            {
-                return false;
             }
 
             if (this.Task.VideoEncoder == VideoEncoder.X264 || this.Task.VideoEncoder == VideoEncoder.X264_10
@@ -1084,7 +1100,15 @@ namespace HandBrakeWPF.ViewModels
                     }
                 }
 
-                if (preset.Task.VideoTunes != this.Task.VideoTunes)
+                foreach (VideoTune tune in preset.Task.VideoTunes)
+                {
+                    if (!this.Task.VideoTunes.Contains(tune))
+                    {
+                        return false;
+                    }
+                }
+
+                if (preset.Task.VideoTunes.Count != this.Task.VideoTunes.Count)
                 {
                     return false;
                 }

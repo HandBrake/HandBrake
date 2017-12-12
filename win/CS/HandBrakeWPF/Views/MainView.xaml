@@ -353,17 +353,26 @@
                 <Label Content="Presets" FontWeight="Bold" VerticalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" Margin="8,0,0,0" Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
 
-                    <Button x:Name="SelectPresetsButton"  Margin="15,0,0,0" VerticalAlignment="Center" Click="SelectPreset_OnClick" Width="250">
+                    <Button x:Name="SelectPresetsButton"  Margin="15,0,0,0" VerticalAlignment="Center" Click="SelectPreset_OnClick" Width="255">
                         <Button.Content>
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch">
-                                <TextBlock Margin="0,0,5,0" Padding="0"
-                                           VerticalAlignment="Center" Width="215"
+                            <Grid VerticalAlignment="Stretch" Width="235">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Margin="0,0,5,0" Padding="0" Grid.Column="0"
+                                           VerticalAlignment="Center" 
                                            Text="{Binding SelectedPreset.DisplayValue}" TextTrimming="CharacterEllipsis" />
 
-                                <Path Height="8" Margin="2,0,0,1" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                <TextBlock Text="(Modified)" Margin="0,0,5,0" FontStyle="Italic" VerticalAlignment="Center" Grid.Column="1"
+                                           Visibility="{Binding IsModifiedPreset, Converter={StaticResource boolToVisConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}"/>
+
+                                <Path Height="8" Margin="2,0,0,1" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="3"
                                       Data="M 0 0 L 4 4 L 0 8 Z"
                                       Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrowSelectPreset" />
-                            </StackPanel>
+                            </Grid>
                         </Button.Content>
 
                         <Button.ContextMenu>
@@ -407,9 +416,9 @@
                     </Button>
                 </StackPanel>
                 <StackPanel Margin="8,0,0,0" Orientation="Horizontal" Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
-                    <TextBlock Text="Selected Preset:" Margin="5,0,0,0" />
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.MainView_SelectedPreset}" Margin="5,0,0,0" />
                     <TextBlock Text="{Binding SelectedPreset.Name}" Margin="5,0,0,0" />
-                    <TextBlock Text="(Default)" Visibility="{Binding SelectedPreset.IsDefault, Converter={StaticResource boolToVisConverter}}" Margin="5,0,0,0" />
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.MainView_ModifiedPreset}" FontStyle="Italic" Visibility="{Binding IsModifiedPreset, Converter={StaticResource boolToVisConverter}}" Margin="5,0,0,0" />
                 </StackPanel>
                 
 

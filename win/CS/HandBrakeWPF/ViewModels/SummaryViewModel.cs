@@ -202,6 +202,7 @@ namespace HandBrakeWPF.ViewModels
                     this.SetExtension(string.Format(".{0}", this.Task.OutputFormat.ToString().ToLower()));
 
                     this.OnOutputFormatChanged(new OutputFormatChangedEventArgs(null));
+                    this.OnTabStatusChanged(null);
                 }
             }
         }
@@ -239,6 +240,7 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.Task.OptimizeMP4 = value;
                 this.NotifyOfPropertyChange(() => this.OptimizeMP4);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -259,6 +261,7 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.Task.IPod5GSupport = value;
                 this.NotifyOfPropertyChange(() => this.IPod5GSupport);
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -276,6 +279,7 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.Task.AlignAVStart = value;
                 this.NotifyOfPropertyChange(() => this.AlignAVStart);
+                this.OnTabStatusChanged(null);
             }
         }
 

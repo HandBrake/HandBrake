@@ -959,7 +959,7 @@ namespace HandBrakeWPF.ViewModels
 
         public bool MatchesPreset(Preset preset)
         {
-            return false;
+            return true;
         }
 
         /// <summary>
