@@ -141,13 +141,13 @@
     {
         return [self toolbarItemWithIdentifier:ident
                                          label:NSLocalizedString(@"General", @"Preferences General Toolbar Item")
-                                         image:[NSImage imageNamed:@"settings"]];
+                                         image:[NSImage imageNamed:NSImageNamePreferencesGeneral]];
     }
     else if ( [ident isEqualToString:TOOLBAR_ADVANCED] )
     {
         return [self toolbarItemWithIdentifier:ident
                                          label:NSLocalizedString(@"Advanced", @"Preferences Advanced Toolbar Item")
-                                         image:[NSImage imageNamed:@"advanced"]];
+                                         image:[NSImage imageNamed:NSImageNameAdvanced]];
     }
 
     return nil;
