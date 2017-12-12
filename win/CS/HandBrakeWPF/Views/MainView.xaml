@@ -512,6 +512,7 @@
                       VerticalAlignment="Stretch"
                       Header="Presets"
                       Margin="0,0,5,5"
+                      MaxWidth="270"
                       IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                       Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}">
 
@@ -541,7 +542,7 @@
                                         </Style.Triggers>
                                     </Style>
                                 </StackPanel.Resources>
-                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
                             </StackPanel>
                         </HierarchicalDataTemplate>
 
@@ -554,7 +555,7 @@
 
                     <TreeView x:Name="presetListTree" HorizontalAlignment="Stretch" AutomationProperties.Name="Presets List" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Presets}"
                               VerticalAlignment="Stretch" BorderThickness="0,0,0,1" BorderBrush="LightGray"
-                              ItemsSource="{Binding PresetsCategories}"
+                              ItemsSource="{Binding PresetsCategories}" MaxWidth="265"
                               helpers:TreeViewHelper.TreeViewSelectedItem="{Binding Path=SelectedPreset, Mode=TwoWay}"
                               PreviewMouseRightButtonDown="PresetListTree_OnPreviewMouseRightButtonDown">
 

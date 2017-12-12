@@ -8,7 +8,7 @@
         Title="{Data:Binding Path=MainViewModel.WindowTitle}"
         Width="1015"
         Height="675"
-        MinWidth="900"
+        MinWidth="1015"
         MinHeight="675"
         AllowDrop="True"
         SnapsToDevicePixels="True"
