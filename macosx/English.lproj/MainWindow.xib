@@ -53,7 +53,7 @@
                         <tabViewItems>
                             <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
                                 <view key="view" id="BjX-E2-6tb">
-                                    <rect key="frame" x="10" y="25" width="834" height="341"/>
+                                    <rect key="frame" x="10" y="29" width="834" height="337"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -115,7 +115,7 @@
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1540">
                         <rect key="frame" x="18" y="540" width="33" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Title:" id="4907">
-                            <font key="font" metaFont="systemBold" size="11"/>
+                            <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -159,7 +159,7 @@
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1553">
                         <rect key="frame" x="752" y="540" width="57" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Duration:" id="4914">
-                            <font key="font" metaFont="systemBold" size="11"/>
+                            <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -332,7 +332,7 @@
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1627">
                         <rect key="frame" x="18" y="510" width="45" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Preset:" id="4923">
-                            <font key="font" metaFont="systemBold" size="11"/>
+                            <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -584,7 +584,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="5180">
                         <rect key="frame" x="380" y="540" width="41" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Angle:" id="5185">
-                            <font key="font" metaFont="systemBold" size="11"/>
+                            <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -600,17 +600,12 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="4NG-AB-JWs">
                         <rect key="frame" x="478" y="540" width="43" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Range:" id="IxV-PW-oYh">
-                            <font key="font" metaFont="systemBold" size="11"/>
+                            <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <connections>
                             <binding destination="-2" name="textColor" keyPath="self.labelColor" id="NpP-Z0-hPs"/>
-                            <binding destination="5676" name="hidden" keyPath="values.UseDvdNav" id="Ag8-0e-Pok">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                </dictionary>
-                            </binding>
                         </connections>
                     </textField>
                 </subviews>
