@@ -220,11 +220,7 @@ namespace HandBrakeWPF.ViewModels
             IPopupWindowViewModel popup = new PopupWindowViewModel(this.AudioDefaultsViewModel, ResourcesUI.Preset_AudioDefaults_Title, ResourcesUI.AudioView_AudioDefaultsDescription);
             if (this.windowManager.ShowDialog(popup) == true)
             {
-                // Nothing to do yet, it's by reference. 
-            }
-            else
-            {
-                // Handle other case(s)
+                this.OnTabStatusChanged(null);
             }
         }
 
@@ -346,6 +342,11 @@ namespace HandBrakeWPF.ViewModels
             }
 
             if (preset.AudioTrackBehaviours.SelectedLangauges.Count != this.AudioBehaviours.SelectedLangauges.Count)
+            {
+                return false;
+            }
+
+            if (preset.AudioTrackBehaviours.BehaviourTracks.Count != this.AudioBehaviours.BehaviourTracks.Count)
             {
                 return false;
             }

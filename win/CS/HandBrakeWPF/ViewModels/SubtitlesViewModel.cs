@@ -428,11 +428,7 @@ namespace HandBrakeWPF.ViewModels
             IPopupWindowViewModel popup = new PopupWindowViewModel(this.SubtitleDefaultsViewModel, ResourcesUI.Preset_SubtitleDefaults_Title, ResourcesUI.SubtitleView_SubtitleDefaultsDescription);
             if (this.windowManager.ShowDialog(popup) == true)
             {
-                // Nothing to do yet, it's by reference. 
-            }
-            else
-            {
-                // Handle other case(s)
+                this.OnTabStatusChanged(null);
             }
         }
 
