@@ -164,7 +164,7 @@ namespace HandBrakeWPF
         /// <summary>
         /// The disable quick sync decoding.
         /// </summary>
-        public const string DisableQuickSyncDecoding = "DisableQuickSyncDecoding";
+        public const string EnableQuickSyncDecoding = "EnableQuickSyncDecoding";
 
         /// <summary>
         /// Setting indicating whether to use qsv decode for non qsv encoders

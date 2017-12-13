@@ -772,7 +772,7 @@
     <value>Priority Level:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Disable QuickSync Decoding</value>
+    <value>Enable QuickSync Decoding</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
     <value>Remove common punctuation</value>
@@ -882,7 +882,7 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Manage Preset</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>Use QSV Decoding for non QSV encoders.</value>
+    <value>Also Use QSV Decoding when not using a QuickSync encoder. (i.e. x265) </value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Low diskspace warning level (GB):</value>

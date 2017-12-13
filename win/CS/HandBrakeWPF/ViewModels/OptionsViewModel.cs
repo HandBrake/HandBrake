@@ -89,7 +89,7 @@ namespace HandBrakeWPF.ViewModels
         private bool removePunctuation;
         private bool resetWhenDoneAction;
 
-        private bool disableQuickSyncDecoding;
+        private bool enableQuickSyncDecoding;
         private bool showQueueInline;
         private bool pauseOnLowDiskspace;
         private long pauseOnLowDiskspaceLevel;
@@ -971,20 +971,20 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets a value indicating whether disable quick sync decoding.
         /// </summary>
-        public bool DisableQuickSyncDecoding
+        public bool EnableQuickSyncDecoding
         {
             get
             {
-                return this.disableQuickSyncDecoding;
+                return this.enableQuickSyncDecoding;
             }
             set
             {
-                if (value.Equals(this.disableQuickSyncDecoding))
+                if (value.Equals(this.enableQuickSyncDecoding))
                 {
                     return;
                 }
-                this.disableQuickSyncDecoding = value;
-                this.NotifyOfPropertyChange(() => this.DisableQuickSyncDecoding);
+                this.enableQuickSyncDecoding = value;
+                this.NotifyOfPropertyChange(() => this.EnableQuickSyncDecoding);
                 this.NotifyOfPropertyChange(() => this.IsUseQsvDecAvailable);
             }
         }
@@ -1012,7 +1012,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return IsQuickSyncAvailable && !this.DisableQuickSyncDecoding;
+                return IsQuickSyncAvailable && this.EnableQuickSyncDecoding;
             }
         }
 
@@ -1325,7 +1325,7 @@ namespace HandBrakeWPF.ViewModels
             // #############################
             // Video
             // #############################
-            this.DisableQuickSyncDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableQuickSyncDecoding);
+            this.EnableQuickSyncDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
             this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode);
             this.UseQSVDecodeForNonQSVEnc = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc);
 
@@ -1460,7 +1460,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.VLCPath, this.VLCPath);
 
             /* Video */
-            this.userSettingService.SetUserSetting(UserSettingConstants.DisableQuickSyncDecoding, this.DisableQuickSyncDecoding);
+            this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncDecoding, this.EnableQuickSyncDecoding);
             this.userSettingService.SetUserSetting(UserSettingConstants.ScalingMode, this.SelectedScalingMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.UseQSVDecodeForNonQSVEnc, this.UseQSVDecodeForNonQSVEnc);
 

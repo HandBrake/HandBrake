@@ -1465,7 +1465,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disable QuickSync Decoding.
+        ///   Looks up a localized string similar to Enable QuickSync Decoding.
         /// </summary>
         public static string Options_QsvDecode {
             get {
@@ -1474,7 +1474,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use QSV Decoding for non QSV encoders..
+        ///   Looks up a localized string similar to Also Use QSV Decoding when not using a QuickSync encoder. (i.e. x265) .
         /// </summary>
         public static string Options_QsvDecodeForNonFullPath {
             get {

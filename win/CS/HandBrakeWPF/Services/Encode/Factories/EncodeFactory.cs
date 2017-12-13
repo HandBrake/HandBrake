@@ -303,7 +303,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.Turbo = job.TurboFirstPass;
             }
 
-            video.QSV.Decode = SystemInfo.IsQsvAvailable && !configuration.DisableQuickSyncDecoding;
+            video.QSV.Decode = SystemInfo.IsQsvAvailable && configuration.EnableQuickSyncDecoding;
 
             // The use of the QSV decoder is configurable for non QSV encoders.
             if (video.QSV.Decode && job.VideoEncoder != VideoEncoder.QuickSync && job.VideoEncoder != VideoEncoder.QuickSyncH265)

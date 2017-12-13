@@ -22,7 +22,7 @@ namespace HandBrake.ApplicationServices.Model
         /// <summary>
         /// Gets or sets a value indicating whether disable quick sync decoding.
         /// </summary>
-        public bool DisableQuickSyncDecoding { get; set; }
+        public bool EnableQuickSyncDecoding { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether use qsv decode for non qsv enc.
