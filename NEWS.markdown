@@ -4,11 +4,28 @@
 
 ## All platforms
 
-#### General
- - New presets for YouTube and Vimeo
+### General
+- Add sdtp atom for better support with AppleTV 4K
+- New and Updated Presets:
+   - Presets for Vimeo and Youtube
+   - New 4K device presets for Apple TV, Chromecast, FireTV and Roku
+   - Expanded Matroska presets with more 4K options 
+   - Added new production video editing presets.
+
+### Video
+- Intel QuickSync: 
+  - 10bit H.265 Encoding support on Kaby Lake and newer.
+  - Encode Path now supports D3D11 allowing usage of QuickSync on systems with multiple GPU's.
+- Add support for the rotation flag that some containers have. This allows automatic rotation of video from phones.
+- Support for Adaptive Streaming (CLI Only.  Enabled with --inline-parameter-sets)
+- x265 10bit and x265 12bit encoders included in HandBrake. Separate dll files are no longer required. 
 
 ### Filters
- - New Sharpen / Unsharpen filter
+- New Sharpen / Unsharpen filter
+
+### Command line interface
+- "--arate=autio" is now acceptable CLI parameter. 
+- new --json option to output scan/status information in JSON format. Useful for scripting purposes. 
 
 ### Build system
 - Support for compiling on Windows under MSYS
@@ -16,33 +33,52 @@
 ### Third-party libraries
 - Updated libraries
   - libvpx 1.6.1 (VP8/VP9 video encoding)
-  - x265 2.4 (H.265/HEVC video encoding)
-  - libav 12.1 (decoding and filters)
+  - x265 2.6 (H.265/HEVC video encoding)
+  - libav 12.2 (decoding and filters)
+  - libvorbis 1.3.5
+  - libtheora 1.1.1
+  - libogg 1.3.2
+  - libass 0.13.7
+  - lame 3.99.5
+  - libopus 1.2.1
+  - libmfx (upstream API 1.23)
+  - plus a few others (zlib, libxml2, libiconv, libdvdread, libdvdnav, libbluray, freetype, harfbuzz, fdkaac, jass)
 
 ## Linux
-
-- Quicksync Video Encoder.
+- UI Design Changes
+  - Addition of a summary tab.
+  - In-line preset controls. Legacy preset bar is still available for this release only.
+  - Re-arranged the main UI slightly to allow for better down and to the right flow.
+- Quicksync Video Encoder enabled. (Requires specific Intel Driver)
 - New Preference to set the low disk space warning level.
+- Ubutu 17.1 Support. Dropped 15.04
 - Miscellaneous bug fixes
 
 ## Mac
-
+- UI Design Changes
+  - Addition of a summary tab.
+  - In-line preset controls. Legacy preset bar is still available for this release only.
+  - Re-arranged the main UI slightly to allow for better down and to the right flow.
+- Pause on Low-Disk Space level is now configurable. 
 - Miscellaneous bug fixes
 
 ## Windows
-- Intel QuickSync: 10bit Encoding support on Kaby Lake and newer.
-- Improvements to the presets bar
-  - Remember Tree state between sessions. 
-  - Place user presets on top.
+- UI Design Changes
+  - Addition of a summary tab.
+  - In-line preset controls. Legacy preset bar is still available but considered deprecated.
+  - Re-arranged the main UI slightly to allow for better down and to the right flow.
 - Pause on Low-Disk Space level is now configurable. 
 - Per-Monitor DPI Awareness
-- Support for running HandBrake in a portable mode.
+- Support for running HandBrake in a portable mode. (see included portable.ini.template)
 - Status and Notifications
   - Option to play sound (mp3, wav) when a single encode or queue completes.
   - Option Show progress / pass / passcount in the Application title / Task Tray icon tooltip.
   - More granular progress reporting (For muxing and search for start of file states)
 - Improvements to Audio Defaults. Dropdowns are now context aware and range limited with better defaulting of options.
-- Miscellaneous bug fixes
+- Custom Anamorphic is back
+- Miscellaneous bug fixes and UI consistency tweaks.
+  - Several fixes to the static preview window where still previews would not render correctly.
+
 
 
 
