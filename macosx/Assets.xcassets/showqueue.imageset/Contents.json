@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "showqueue.png",
+      "filename" : "ShowQueue2.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "showqueue@2x.png",
+      "filename" : "ShowQueue2@2x.png",
       "scale" : "2x"
     },
     {
