@@ -237,9 +237,14 @@ namespace HandBrakeWPF
         public const string ShowStatusInTitleBar = "ShowStatusInTitleBar";
 
         /// <summary>
-        /// Setting to turn on/off the ability to play a sound when an encode or queue is done.
+        /// Setting to turn on/off the ability to play a sound when an encodeis done.
         /// </summary>
         public static string PlaySoundWhenDone = "PlaySoundWhenDone";
+
+        /// <summary>
+        /// Setting to turn on/off the ability to play a sound when a queue is completed.
+        /// </summary>
+        public static string PlaySoundWhenQueueDone = "PlaySoundWhenQueueDone";
 
         /// <summary>
         /// Setting to store the file to play when done.

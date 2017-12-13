@@ -97,8 +97,8 @@ namespace HandBrakeWPF.ViewModels
         private bool showStatusInTitleBar;
 
         private string whenDoneAudioFile;
-
         private bool playSoundWhenDone;
+        private bool playSoundWhenQueueDone;
 
         #endregion
 
@@ -415,6 +415,20 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.playSoundWhenDone) return;
                 this.playSoundWhenDone = value;
                 this.NotifyOfPropertyChange(() => this.PlaySoundWhenDone);
+            }
+        }
+
+        public bool PlaySoundWhenQueueDone
+        {
+            get
+            {
+                return this.playSoundWhenQueueDone;
+            }
+            set
+            {
+                if (value == this.playSoundWhenQueueDone) return;
+                this.playSoundWhenQueueDone = value;
+                this.NotifyOfPropertyChange(() => this.PlaySoundWhenQueueDone);
             }
         }
 
@@ -1269,6 +1283,7 @@ namespace HandBrakeWPF.ViewModels
             this.WhenDoneAudioFile = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile)) ?? string.Empty;
             this.WhenDoneAudioFileFullPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
             this.PlaySoundWhenDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone);
+            this.PlaySoundWhenQueueDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenQueueDone);
 
             // #############################
             // Output Settings
@@ -1429,6 +1444,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowStatusInTitleBar, this.ShowStatusInTitleBar);
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenDone, this.PlaySoundWhenDone);
+            this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenQueueDone, this.PlaySoundWhenQueueDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenDoneAudioFile, this.WhenDoneAudioFileFullPath);
 
             /* Output Files */

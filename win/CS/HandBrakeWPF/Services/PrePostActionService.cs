@@ -105,6 +105,11 @@ namespace HandBrakeWPF.Services
                 this.SendToApplication(e.FileName);
             }
 
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone))
+            {
+                this.PlayWhenDoneSound();
+            }
+
             // Allow the system to sleep again.
             Execute.OnUIThread(() =>
             {
@@ -131,16 +136,9 @@ namespace HandBrakeWPF.Services
                 return;
             }
 
-            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone))
+            if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenQueueDone))
             {
-                string filePath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
-                if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
-                {
-                    var uri = new Uri(filePath, UriKind.RelativeOrAbsolute);
-                    var player = new MediaPlayer();
-                    player.Open(uri);
-                    player.Play();
-                }
+                this.PlayWhenDoneSound();
             }
 
             if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction) == "Do nothing")
@@ -203,6 +201,18 @@ namespace HandBrakeWPF.Services
                     new ProcessStartInfo(
                         this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo), args);
                 Process.Start(vlc);
+            }
+        }
+
+        private void PlayWhenDoneSound()
+        {
+            string filePath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
+            if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+            {
+                var uri = new Uri(filePath, UriKind.RelativeOrAbsolute);
+                var player = new MediaPlayer();
+                player.Open(uri);
+                player.Play();
             }
         }
     }

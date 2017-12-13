@@ -891,7 +891,7 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Show the encode status in the application title bar.</value>
   </data>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
-    <value>Play a sound when the queue or single encode completes:</value>
+    <value>Play a sound when each encode completes</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
     <value>Muxing: This may take a while...</value>
@@ -1009,5 +1009,8 @@ This will not affect your current settings in the Subtitle tab.</value>
   </data>
   <data name="MainView_SelectedPreset" xml:space="preserve">
     <value>Selected Preset:</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
+    <value>Play a sound when the queue completes</value>
   </data>
 </root>
