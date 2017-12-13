@@ -51,7 +51,7 @@
   - Re-arranged the main UI slightly to allow for better down and to the right flow.
 - Quicksync Video Encoder enabled. (Requires specific Intel Driver)
 - New Preference to set the low disk space warning level.
-- Ubutu 17.1 Support. Dropped 15.04
+- Ubuntu 17.1 Support. Dropped 15.04
 - Miscellaneous bug fixes
 
 ## Mac
