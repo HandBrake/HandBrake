@@ -13,6 +13,7 @@ Note: The Green Encode / Pause Icons are remakes by jamiemlaw
 
 # Icons by Bradley Sepos
 
-- Presets2
-- Preview2
-- Preview3
+- Presets 2
+- Preview 2
+- Preview 3
+- Source 2
