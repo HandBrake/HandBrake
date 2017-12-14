@@ -52,16 +52,16 @@ printf "Downloading [%02i/%02i] %s" "1" "${TOTAL}" "autoconf 2.69"
 curl https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz -o "autoconf-2.69.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 printf "Downloading [%02i/%02i] %s" "2" "${TOTAL}" "automake 1.15"
-curl https://ftp.gnu.org/gnu/automake/automake-1.15.tar.gz -o "automake-1.15.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+curl https://ftp.gnu.org/gnu/automake/automake-1.15.1.tar.gz -o "automake-1.15.1.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
-printf "Downloading [%02i/%02i] %s" "3" "${TOTAL}" "cmake 3.8.2"
-curl https://cmake.org/files/v3.8/cmake-3.8.2.tar.gz -o "cmake-3.8.2.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+printf "Downloading [%02i/%02i] %s" "3" "${TOTAL}" "cmake 3.9.6"
+curl https://cmake.org/files/v3.9/cmake-3.9.6.tar.gz -o "cmake-3.9.6.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 printf "Downloading [%02i/%02i] %s" "4" "${TOTAL}" "libtool 2.4.6"
 curl https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz -o "libtool-2.4.6.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
-printf "Downloading [%02i/%02i] %s" "5" "${TOTAL}" "pkg-config 0.29.1"
-curl https://pkg-config.freedesktop.org/releases/pkg-config-0.29.1.tar.gz -o "pkg-config-0.29.1.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+printf "Downloading [%02i/%02i] %s" "5" "${TOTAL}" "pkg-config 0.29.2"
+curl https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz -o "pkg-config-0.29.2.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 printf "Downloading [%02i/%02i] %s" "6" "${TOTAL}" "yasm 1.3.0"
 curl https://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz -o "yasm-1.3.0.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
@@ -81,25 +81,25 @@ echo -en "${CREL}"
 
 # automake
 cd "${TEMP_DIR}"
-printf "Building    [%02i/%02i] %s" "2" "${TOTAL}" "automake 1.15"
+printf "Building    [%02i/%02i] %s" "2" "${TOTAL}" "automake 1.15.1"
 sudo -v
-tar -xf automake-1.15.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-cd automake-1.15 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" >../automake-1.15.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >../automake-1.15.log 2>&1 || print_fail_and_exit
-${SUDO} make install >../automake-1.15.log 2>&1 || print_fail_and_exit
+tar -xf automake-1.15.1.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+cd automake-1.15.1 >/dev/null 2>&1 || print_fail_and_exit
+./configure --prefix="${PREFIX}" >../automake-1.15.1.log 2>&1 || print_fail_and_exit
+make --jobs="${MAKEJOBS}" >../automake-1.15.1.log 2>&1 || print_fail_and_exit
+${SUDO} make install >../automake-1.15.1.log 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 
 # cmake
 cd "${TEMP_DIR}"
-printf "Building    [%02i/%02i] %s\n" "3" "${TOTAL}" "cmake 3.8.2"
+printf "Building    [%02i/%02i] %s\n" "3" "${TOTAL}" "cmake 3.9.6"
 sudo -v
 echo "You may safely dismiss and ignore any prompt to install Java."
-tar -xf cmake-3.8.2.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-cd cmake-3.8.2 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" --no-qt-gui --system-curl >../cmake-3.8.2.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >../cmake-3.8.2.log 2>&1 || print_fail_and_exit
-${SUDO} make install >../cmake-3.8.2.log 2>&1 || print_fail_and_exit
+tar -xf cmake-3.9.6.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+cd cmake-3.9.6 >/dev/null 2>&1 || print_fail_and_exit
+./configure --prefix="${PREFIX}" --no-qt-gui --system-curl >../cmake-3.9.6.log 2>&1 || print_fail_and_exit
+make --jobs="${MAKEJOBS}" >../cmake-3.9.6.log 2>&1 || print_fail_and_exit
+${SUDO} make install >../cmake-3.9.6.log 2>&1 || print_fail_and_exit
 
 # libtool
 cd "${TEMP_DIR}"
@@ -114,13 +114,13 @@ echo -en "${CREL}"
 
 # pkg-config
 cd "${TEMP_DIR}"
-printf "Building    [%02i/%02i] %s" "5" "${TOTAL}" "pkg-config 0.29.1"
+printf "Building    [%02i/%02i] %s" "5" "${TOTAL}" "pkg-config 0.29.2"
 sudo -v
-tar -xf pkg-config-0.29.1.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-cd pkg-config-0.29.1 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" --with-internal-glib --disable-host-tool >../pkg-config-0.29.1.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >../pkg-config-0.29.1.log 2>&1 || print_fail_and_exit
-${SUDO} make install >../pkg-config-0.29.1.log 2>&1 || print_fail_and_exit
+tar -xf pkg-config-0.29.2.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+cd pkg-config-0.29.2 >/dev/null 2>&1 || print_fail_and_exit
+./configure --prefix="${PREFIX}" --with-internal-glib --disable-host-tool >../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
+make --jobs="${MAKEJOBS}" >../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
+${SUDO} make install >../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 
 # yasm
