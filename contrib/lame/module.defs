@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LAME,lame))
 $(eval $(call import.CONTRIB.defs,LAME))
 
-LAME.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/lame-3.99.5.tar.gz
-LAME.FETCH.url    += https://sourceforge.net/projects/lame/files/lame/3.99/lame-3.99.5.tar.gz
-LAME.FETCH.sha256  = 24346b4158e4af3bd9f2e194bb23eb473c75fb7377011523353196b19b9a23ff
+LAME.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/lame-3.100.tar.gz
+LAME.FETCH.url    += https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
+LAME.FETCH.sha256  = ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
 
 ifneq (none,$(FFMPEG.GCC.g))
 	LAME.CONFIGURE.extra += --enable-debug
