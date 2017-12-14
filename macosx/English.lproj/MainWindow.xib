@@ -39,7 +39,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="41" y="572" width="880" height="600"/>
+            <rect key="contentRect" x="41" y="572" width="882" height="600"/>
             <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <view key="contentView" id="2" customClass="HBFocusRingView">
                 <rect key="frame" x="0.0" y="0.0" width="882" height="600"/>
@@ -53,7 +53,7 @@
                         <tabViewItems>
                             <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
                                 <view key="view" id="BjX-E2-6tb">
-                                    <rect key="frame" x="10" y="25" width="836" height="341"/>
+                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -568,11 +568,17 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <font key="font" metaFont="smallSystem"/>
                             <menu key="menu" id="X2f-Tk-x0c">
                                 <items>
-                                    <menuItem title="Selected Preset" state="on" hidden="YES" id="OYP-3T-FnA">
+                                    <menuItem title="Selected Preset" state="on" id="OYP-3T-FnA">
                                         <connections>
                                             <binding destination="-2" name="title" keyPath="self.job.presetName" id="vO4-JB-o7Q"/>
                                         </connections>
                                     </menuItem>
+                                    <menuItem title="New Preset…" id="nmZ-D3-Tl9">
+                                        <connections>
+                                            <action selector="showAddPresetPanel:" target="-2" id="4aq-W2-V8l"/>
+                                        </connections>
+                                    </menuItem>
+                                    <menuItem isSeparatorItem="YES" id="oD9-5q-EMm"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
