@@ -95,14 +95,14 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
 
     # versions
     local CONFIG_VER BINUTILS_VER MINGW_W64_VER GMP_VER MPFR_VER MPC_VER ISL_VER GCC_VER
-    CONFIG_VER="7d3d27b"  # config.guess 2017-05-27
-    BINUTILS_VER="2.28"
-    MINGW_W64_VER="5.0.2"
+    CONFIG_VER="64198f1"  # config.guess 2017-11-07
+    BINUTILS_VER="2.29.1"
+    MINGW_W64_VER="5.0.3"
     GMP_VER="6.1.2"
-    MPFR_VER="3.1.5"
+    MPFR_VER="3.1.6"
     MPC_VER="1.0.3"
     ISL_VER="0.18"
-    GCC_VER="7.1.0"
+    GCC_VER="7.2.0"
 
     # filenames
     local CONFIG_PKG BINUTILS_PKG MINGW_W64_PKG GMP_PKG MPFR_PKG MPC_PKG ISL_PKG GCC_PKG PKGS
@@ -113,7 +113,7 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     MPFR_PKG="mpfr-${MPFR_VER}.tar.gz"
     MPC_PKG="mpc-${MPC_VER}.tar.gz"
     ISL_PKG="isl-${ISL_VER}.tar.bz2"
-    GCC_PKG="gcc-${GCC_VER}.tar.bz2"
+    GCC_PKG="gcc-${GCC_VER}.tar.gz"
     PKGS=("${CONFIG_PKG}" "${BINUTILS_PKG}" "${MINGW_W64_PKG}" "${GMP_PKG}" "${MPFR_PKG}" "${MPC_PKG}" "${ISL_PKG}" "${GCC_PKG}")
 
     # urls
@@ -125,25 +125,25 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     MPFR_URLS=("https://ftp.gnu.org/gnu/mpfr/mpfr-${MPFR_VER}.tar.gz")
     MPC_URLS=("https://ftp.gnu.org/gnu/mpc/mpc-${MPC_VER}.tar.gz")
     ISL_URLS=("http://isl.gforge.inria.fr/isl-${ISL_VER}.tar.bz2")
-    GCC_URLS=("https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.bz2")
+    GCC_URLS=("https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VER}/gcc-${GCC_VER}.tar.gz")
     URLS_VARNAMES=('CONFIG_URLS' 'BINUTILS_URLS' 'MINGW_W64_URLS' 'GMP_URLS' 'MPFR_URLS' 'MPC_URLS' 'ISL_URLS' 'GCC_URLS')
 
     # checksums
     local CONFIG_SHA256 BINUTILS_SHA256 MINGW_W64_SHA256 GMP_SHA256 MPFR_SHA256 MPC_SHA256 ISL_SHA256 GCC_SHA256 CHECKSUMS
-    CONFIG_SHA256="4642c727613ca922197932520e663477c9c13038683a320fb36ade2c8d525404"
-    BINUTILS_SHA256="6297433ee120b11b4b0a1c8f3512d7d73501753142ab9e2daa13c5a3edd32a72"
-    MINGW_W64_SHA256="5f46e80ff1a9102a37a3453743dae9df98262cba7c45306549ef7432cfd92cfd"
+    CONFIG_SHA256="4aed1df62df9a8263cdfbe2f05bb6a47e7fda12e4e47e4c71bc16718940c2133"
+    BINUTILS_SHA256="1509dff41369fb70aed23682351b663b56db894034773e6dbf7d5d6071fc55cc"
+    MINGW_W64_SHA256="2a601db99ef579b9be69c775218ad956a24a09d7dabc9ff6c5bd60da9ccc9cb4"
     GMP_SHA256="5275bb04f4863a13516b2f39392ac5e272f5e1bb8057b18aec1c9b79d73d8fb2"
-    MPFR_SHA256="f4eb5070883aee3fd8b927751ea63ff95aebe24418cde852439ce74c3dd2513c"
+    MPFR_SHA256="569ceb418aa935317a79e93b87eeb3f956cab1a97dfb2f3b5fd8ac2501011d62"
     MPC_SHA256="617decc6ea09889fb08ede330917a00b16809b8db88c29c31bfbb49cbf88ecc3"
     ISL_SHA256="6b8b0fd7f81d0a957beb3679c81bbb34ccc7568d5682844d8924424a0dadcb1b"
-    GCC_SHA256="8a8136c235f64c6fef69cac0d73a46a1a09bb250776a050aec8f9fc880bebc17"
+    GCC_SHA256="0153a003d3b433459336a91610cca2995ee0fb3d71131bd72555f2231a6efcfc"
     CHECKSUMS=("${CONFIG_SHA256}" "${BINUTILS_SHA256}" "${MINGW_W64_SHA256}" "${GMP_SHA256}" "${MPFR_SHA256}" "${MPC_SHA256}" "${ISL_SHA256}" "${GCC_SHA256}")
 
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="3.0.1"
+    VERSION="3.1.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
