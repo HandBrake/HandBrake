@@ -2,8 +2,8 @@ __deps__ := BZIP ZLIB
 $(eval $(call import.MODULE.defs,FREETYPE,freetype,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FREETYPE))
 
-FREETYPE.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/freetype-2.8.tar.bz2
-FREETYPE.FETCH.url    += https://download.savannah.gnu.org/releases/freetype/freetype-2.8.tar.bz2
-FREETYPE.FETCH.sha256  = a3c603ed84c3c2495f9c9331fe6bba3bb0ee65e06ec331e0a0fb52158291b40b
+FREETYPE.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/freetype-2.8.1.tar.bz2
+FREETYPE.FETCH.url    += https://download.savannah.gnu.org/releases/freetype/freetype-2.8.1.tar.bz2
+FREETYPE.FETCH.sha256  = e5435f02e02d2b87bb8e4efdcaa14b1f78c9cf3ab1ed80f94b6382fb6acc7d78
 
 FREETYPE.CONFIGURE.extra = --with-harfbuzz=no --with-png=no
