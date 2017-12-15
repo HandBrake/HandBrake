@@ -277,12 +277,12 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <Label Content="{x:Static Properties:ResourcesUI.MainView_Source}" FontWeight="Bold" Grid.Column="0" />
-                        <TextBlock Text="{Binding Path=SourceLabel}" TextTrimming="CharacterEllipsis" Grid.Column="1" MaxWidth="400" />
-                        <TextBlock Text="{Binding SourceInfo}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DimGray" Grid.Column="2" MaxWidth="400" />
+                        <TextBlock Text="{Binding Path=SourceLabel}" TextTrimming="CharacterEllipsis" Grid.Column="1" MaxWidth="400"  />
+                        <TextBlock Text="{Binding SourceInfo}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DimGray" Grid.Column="2" Margin="15,0,0,0" MaxWidth="400" />
                     </Grid>
 
                     <StackPanel Orientation="Horizontal">

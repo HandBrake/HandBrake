@@ -104,12 +104,12 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top">
+            <Grid Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" MinHeight="26" />
-                    <RowDefinition Height="Auto" MinHeight="26" />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="32"/>
                 </Grid.RowDefinitions>
 
                 <Grid.ColumnDefinitions>
@@ -117,23 +117,33 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Image Source="{Binding PreviewImage}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,10,0" x:Name="previewImage" MouseMove="PreviewImage_OnMouseMove" MouseLeave="PreviewImage_OnMouseLeave" Panel.ZIndex="0" Grid.ColumnSpan="2"
+                <Image Source="{Binding PreviewImage}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,10,0" x:Name="previewImage" Panel.ZIndex="0" Grid.ColumnSpan="2"
                        MaxWidth="{Binding MaxWidth}" MaxHeight="{Binding MaxHeight}" />
 
-                <Border BorderThickness="1,1,1,1" CornerRadius="8,8,8,8"  VerticalAlignment="Center" HorizontalAlignment="Left"  Panel.ZIndex="1" cal:Message.Attach="[Event MouseDown] = [Action PreviousPreview]" Grid.ColumnSpan="2"
-                        Background="Black" Opacity="0.75" Margin="20,0,0,0" Visibility="{Binding IsPreviousPreviewControlVisible, Converter={StaticResource boolToVisConverter}}" >
-                    <TextBlock Text="&lt;" FontSize="30" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="8,3" Margin="0" />
+                <Border Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Margin="0,5,0,5">
+                    <TextBlock Text="{Binding PreviewInfo}" TextAlignment="Center" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}" />
                 </Border>
 
-                <Border BorderThickness="1,1,1,1" CornerRadius="8,8,8,8"  VerticalAlignment="Center" HorizontalAlignment="Right" Panel.ZIndex="1"  cal:Message.Attach="[Event MouseDown] = [Action NextPreview]" Grid.ColumnSpan="2"
-                        Background="Black" Opacity="0.75" Margin="0,0,20,0" Visibility="{Binding IsNextPreviewControlVisible, Converter={StaticResource boolToVisConverter}}">
-                    <TextBlock Text="&gt;" FontSize="30" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="8,3" Margin="0" />
-                </Border>
+                <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Center" Width="84" Visibility="{Binding IsPreviewControlsVisible, Converter={StaticResource boolToVisConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="42" />
+                        <ColumnDefinition Width="42" />
+                    </Grid.ColumnDefinitions>
+                    <Border BorderThickness="1,1,1,1" CornerRadius="4,0,0,4" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" cal:Message.Attach="[Event MouseDown] = [Action PreviousPreview]"
+                            Visibility="{Binding IsPreviousPreviewControlVisible,Converter={StaticResource boolToVisConverter}}"
+                            Background="Black" Opacity="0.5" Margin="0,0,0,0" >
+                        <TextBlock Text="&lt;" FontSize="16" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Center" Padding="16,1" Margin="0,0,0,4" />
+                    </Border>
 
-                <Border BorderThickness="1,1,1,1" CornerRadius="8,8,8,8"  VerticalAlignment="Bottom" HorizontalAlignment="Center"  Grid.ColumnSpan="2"
-                        Background="Black" Opacity="0.75" Margin="0,5,0,10">
-                    <TextBlock Text="{Binding PreviewInfo}" FontSize="14" Foreground="White" Padding="8,3" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}" />
-                </Border>
+                    <Border BorderThickness="1,1,1,1" CornerRadius="0,4,4,0" VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Column="1" cal:Message.Attach="[Event MouseDown] = [Action NextPreview]"
+                            Background="Black" Opacity="0.5" Margin="0,0,0,0" 
+                            Visibility="{Binding IsNextPreviewControlVisible,Converter={StaticResource boolToVisConverter}}" >
+                        <TextBlock Text="&gt;" FontSize="16" Foreground="White" Padding="16,1" VerticalAlignment="Center" TextAlignment="Center" HorizontalAlignment="Center"  Margin="0,0,0,4" />
+                    </Border>
+
+                </Grid>
+
+
             </Grid>
         </Grid>
 

@@ -46,7 +46,6 @@ namespace HandBrakeWPF.ViewModels
         private int selectedPreview = 2;
 
         private bool isPreviousPreviewControlVisible;
-
         private bool isNextPreviewControlVisible;
 
         public SummaryViewModel(IScan scanService, IUserSettingService userSettingService)
@@ -143,7 +142,6 @@ namespace HandBrakeWPF.ViewModels
 
         public string DimensionInfo { get; set; }
         public string AspectInfo { get; set; }
-
 
         public bool IsPreviewInfoVisible { get; set; }
         public string PreviewInfo { get; set; }
@@ -291,6 +289,7 @@ namespace HandBrakeWPF.ViewModels
             this.CurrentTitle = selectedTitle;
             this.Task = encodeTask;
             this.UpdateDisplayedInfo();
+            this.SetPreviewControlVisibility();
         }
 
         public void SetPreset(Preset currentPreset, EncodeTask encodeTask)
@@ -364,10 +363,7 @@ namespace HandBrakeWPF.ViewModels
             this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, maxPreview);
             this.NotifyOfPropertyChange(() => this.PreviewInfo);
 
-            if (this.selectedPreview == maxPreview)
-            {
-                this.IsNextPreviewControlVisible = false;
-            }
+            this.SetPreviewControlVisibility();
         }
 
         public void PreviousPreview()
@@ -378,17 +374,14 @@ namespace HandBrakeWPF.ViewModels
             this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, maxPreview);
             this.NotifyOfPropertyChange(() => this.PreviewInfo);
 
-            if (this.selectedPreview == 1)
-            {
-                this.IsPreviousPreviewControlVisible = false;
-            }
+            this.SetPreviewControlVisibility();
         }
 
-        public void SetPreviewControlVisibility(bool isPreviousVisible, bool isNextVisible)
+        public void SetPreviewControlVisibility()
         {
             if (this.selectedPreview > 1)
             {
-                this.IsPreviousPreviewControlVisible = isPreviousVisible;
+                this.IsPreviousPreviewControlVisible = true;
             }
             else
             {
@@ -397,7 +390,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.selectedPreview < this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount))
             {
-                this.IsNextPreviewControlVisible = isNextVisible;
+                this.IsNextPreviewControlVisible = true;
             }
             else
             {
