@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HBTitle : NSObject
 
 @property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *shortFormatDescription;
 @property (nonatomic, readonly, getter=isFeatured) BOOL featured;
 @property (nonatomic, readonly, getter=isStream) BOOL stream;
 

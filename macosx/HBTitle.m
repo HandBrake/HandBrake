@@ -73,7 +73,7 @@ extern NSString *keySubTrackType;
         // If the name is empty use file/directory name
         if (_name.length == 0)
         {
-            _name = [@(self.hb_title->path) lastPathComponent];
+            _name =  @(self.hb_title->path).lastPathComponent;
         }
     }
 
@@ -102,6 +102,49 @@ extern NSString *keySubTrackType;
         return [NSString stringWithFormat:@"%d - %@ - %@",
                 self.hb_title->index, self.timeCode,  @(self.hb_title->name)];
     }
+}
+
+- (NSString *)shortFormatDescription
+{
+    NSMutableString *format = [[NSMutableString alloc] init];
+
+    [format appendFormat:@"%dx%d", _hb_title->geometry.width, _hb_title->geometry.height];
+
+    if (_hb_title->geometry.par.num != 1 || _hb_title->geometry.par.den != 1)
+    {
+        [format appendFormat:@" (%dx%d)", _hb_title->geometry.width * _hb_title->geometry.par.num / _hb_title->geometry.par.den,
+         _hb_title->geometry.height];
+    }
+
+    [format appendString:@", "];
+
+    [format appendFormat:@"%.6g FPS", _hb_title->vrate.num / (double)_hb_title->vrate.den];
+
+    hb_list_t *audioList = _hb_title->list_audio;
+    int audioCount = hb_list_count(audioList);
+
+    if (audioCount > 1)
+    {
+        [format appendFormat:NSLocalizedString(@", %d audio tracks", nil), audioCount];
+    }
+    else if (audioCount == 1)
+    {
+        [format appendFormat:NSLocalizedString(@", 1 audio track", nil)];
+    }
+
+    hb_list_t *subList = _hb_title->list_subtitle;
+    int subCount = hb_list_count(subList);
+
+    if (subCount > 1)
+    {
+        [format appendFormat:NSLocalizedString(@", %d subtitles tracks", nil), subCount];
+    }
+    else if (subCount == 1)
+    {
+        [format appendFormat:NSLocalizedString(@", 1 subtitles track", nil)];
+    }
+
+    return format;
 }
 
 - (NSURL *)url

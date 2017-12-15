@@ -34,7 +34,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSData *)bookmarkFromURL:(NSURL *)url;
 + (nullable NSData *)bookmarkFromURL:(NSURL *)url options:(NSURLBookmarkCreationOptions)options;
 
-+ (NSString *)displayNameForURL:(NSURL *)URL;
 + (NSURL *)mediaURLFromURL:(NSURL *)URL;
 
 + (NSString *)automaticNameForJob:(HBJob *)job;

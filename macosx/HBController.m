@@ -595,7 +595,6 @@
     self.window.title = NSLocalizedString(@"HandBrake", nil);
 
     NSURL *mediaURL = [HBUtilities mediaURLFromURL:fileURL];
-    NSString *displayName = [HBUtilities displayNameForURL:fileURL];
 
     NSError *outError = NULL;
     BOOL suppressWarning = [[NSUserDefaults standardUserDefaults] boolForKey:@"suppressCopyProtectionAlert"];
@@ -650,10 +649,6 @@
                  {
                      [fSrcTitlePopUp addItemWithTitle:title.description];
                  }
-
-                 // Set Source Name at top of window with the browsedSourceDisplayName grokked right before -performScan
-                 fSrcDVD2Field.stringValue = displayName;
-
                  self.window.representedURL = mediaURL;
                  self.window.title = mediaURL.lastPathComponent;
              }
@@ -661,6 +656,16 @@
              {
                  // We display a message if a valid source was not chosen
                  fSrcDVD2Field.stringValue = NSLocalizedString(@"No Valid Source Found", @"");
+             }
+
+             // Set the last searched source directory in the prefs here
+             if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:mediaURL.URLByDeletingLastPathComponent.path])
+             {
+                 [[NSUserDefaults standardUserDefaults] setURL:mediaURL.URLByDeletingLastPathComponent.URLByDeletingLastPathComponent forKey:@"HBLastSourceDirectoryURL"];
+             }
+             else
+             {
+                 [[NSUserDefaults standardUserDefaults] setURL:mediaURL.URLByDeletingLastPathComponent forKey:@"HBLastSourceDirectoryURL"];
              }
 
              completionHandler(self.core.titles);
@@ -839,11 +844,15 @@
         // Update the title selection popup.
         [fSrcTitlePopUp selectItemWithTitle:title.description];
 
-        // If we are a stream type and a batch scan, grok the output file name from title->name upon title change
+        // Grok the output file name from title.name upon title change
         if (title.isStream && self.core.titles.count > 1)
         {
             // Change the source to read out the parent folder also
-            fSrcDVD2Field.stringValue = [NSString stringWithFormat:@"%@/%@", title.url.URLByDeletingLastPathComponent.lastPathComponent, title.name];
+            fSrcDVD2Field.stringValue = [NSString stringWithFormat:@"%@/%@, %@", title.url.URLByDeletingLastPathComponent.lastPathComponent, title.name, title.shortFormatDescription];
+        }
+        else
+        {
+            fSrcDVD2Field.stringValue = [NSString stringWithFormat:@"%@, %@", title.name, title.shortFormatDescription];
         }
     }
     else
@@ -897,9 +906,6 @@
     {
          if (result == NSFileHandlingPanelOKButton)
          {
-             // Set the last searched source directory in the prefs here
-            [[NSUserDefaults standardUserDefaults] setURL:panel.URL.URLByDeletingLastPathComponent forKey:@"HBLastSourceDirectoryURL"];
-
              NSInteger titleIdx = self.scanSpecificTitle ? self.scanSpecificTitleIdx : 0;
              [self openURL:panel.URL titleIndex:titleIdx];
          }
