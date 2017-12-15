@@ -426,6 +426,14 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.Task.HasCropping = value;
                 this.NotifyOfPropertyChange(() => this.IsCustomCrop);
+
+                if (!value && this.currentTitle != null)
+                {
+                    this.CropTop = currentTitle.AutoCropDimensions.Top;
+                    this.CropBottom = currentTitle.AutoCropDimensions.Bottom;
+                    this.CropLeft = currentTitle.AutoCropDimensions.Left;
+                    this.CropRight = currentTitle.AutoCropDimensions.Right;
+                }
             }
         }
 
