@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
+        <development version="8000" identifier="xcode"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -24,46 +25,42 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 </customView>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="Fn2-om-hEi" customClass="HBHUDView">
-                    <rect key="frame" x="280" y="40" width="80" height="26"/>
+                    <rect key="frame" x="284" y="40" width="72" height="26"/>
                     <subviews>
-                        <button toolTip="Toggle Play/Pause" translatesAutoresizingMaskIntoConstraints="NO" id="5po-M6-Hqa">
-                            <rect key="frame" x="44" y="5" width="24" height="18"/>
-                            <constraints>
-                                <constraint firstAttribute="width" constant="24" id="8M6-qp-Hbs"/>
-                                <constraint firstAttribute="height" constant="18" id="pHH-yR-lLG"/>
-                            </constraints>
+                        <button toolTip="Next Preview Image" translatesAutoresizingMaskIntoConstraints="NO" id="5po-M6-Hqa">
+                            <rect key="frame" x="38" y="4" width="30" height="20"/>
                             <buttonCell key="cell" type="square" title="›" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" id="Izx-9B-XA3">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system" size="18"/>
                             </buttonCell>
-                            <accessibility description="Play/Pause"/>
                             <connections>
                                 <action selector="next:" target="-2" id="IlJ-w9-A9q"/>
                             </connections>
                         </button>
-                        <button toolTip="Toggle Play/Pause" translatesAutoresizingMaskIntoConstraints="NO" id="1o6-MG-Jbu">
-                            <rect key="frame" x="12" y="6" width="24" height="16"/>
+                        <button toolTip="Previous Preview Image" translatesAutoresizingMaskIntoConstraints="NO" id="1o6-MG-Jbu">
+                            <rect key="frame" x="4" y="4" width="30" height="20"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="16" id="efr-28-vaL"/>
-                                <constraint firstAttribute="width" constant="24" id="tBw-VV-Jdp"/>
+                                <constraint firstAttribute="height" constant="20" id="efr-28-vaL"/>
+                                <constraint firstAttribute="width" constant="30" id="tBw-VV-Jdp"/>
                             </constraints>
                             <buttonCell key="cell" type="square" title="‹" bezelStyle="shadowlessSquare" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" id="EWx-of-C7c">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system" size="18"/>
                             </buttonCell>
-                            <accessibility description="Play/Pause"/>
                             <connections>
                                 <action selector="previous:" target="-2" id="UxL-j8-GeJ"/>
                             </connections>
                         </button>
                     </subviews>
                     <constraints>
+                        <constraint firstItem="5po-M6-Hqa" firstAttribute="height" secondItem="1o6-MG-Jbu" secondAttribute="height" id="UR8-Tu-NLF"/>
                         <constraint firstItem="1o6-MG-Jbu" firstAttribute="centerY" secondItem="5po-M6-Hqa" secondAttribute="centerY" id="aSW-vr-iFV"/>
-                        <constraint firstAttribute="trailing" secondItem="5po-M6-Hqa" secondAttribute="trailing" constant="12" id="esD-wC-uht"/>
-                        <constraint firstItem="5po-M6-Hqa" firstAttribute="leading" secondItem="1o6-MG-Jbu" secondAttribute="trailing" constant="8" id="gSU-gO-hbY"/>
+                        <constraint firstAttribute="trailing" secondItem="5po-M6-Hqa" secondAttribute="trailing" constant="4" id="esD-wC-uht"/>
+                        <constraint firstItem="5po-M6-Hqa" firstAttribute="leading" secondItem="1o6-MG-Jbu" secondAttribute="trailing" constant="4" id="gSU-gO-hbY"/>
                         <constraint firstAttribute="height" constant="26" id="sJO-EZ-FmV"/>
-                        <constraint firstItem="1o6-MG-Jbu" firstAttribute="leading" secondItem="Fn2-om-hEi" secondAttribute="leading" constant="12" id="tO0-TJ-Bm0"/>
-                        <constraint firstItem="1o6-MG-Jbu" firstAttribute="top" secondItem="Fn2-om-hEi" secondAttribute="top" constant="4" id="ysh-ll-QCP"/>
+                        <constraint firstItem="1o6-MG-Jbu" firstAttribute="leading" secondItem="Fn2-om-hEi" secondAttribute="leading" constant="4" id="tO0-TJ-Bm0"/>
+                        <constraint firstItem="5po-M6-Hqa" firstAttribute="width" secondItem="1o6-MG-Jbu" secondAttribute="width" id="x3p-eG-xS2"/>
+                        <constraint firstItem="1o6-MG-Jbu" firstAttribute="top" secondItem="Fn2-om-hEi" secondAttribute="top" constant="2" id="ysh-ll-QCP"/>
                     </constraints>
                 </customView>
             </subviews>

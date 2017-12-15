@@ -71,6 +71,7 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
         [self addJobObservers];
         [self updateTracksLabel];
         [self updateFiltersLabel];
+        [self updatePictureLabel];
     }
     else
     {
