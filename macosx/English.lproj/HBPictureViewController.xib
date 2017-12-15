@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,7 +21,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" id="Mke-9L-LvB">
-                    <rect key="frame" x="488" y="213" width="15" height="22"/>
+                    <rect key="frame" x="488" y="247" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="jWe-et-eOH">
                         <font key="font" metaFont="smallSystem"/>
@@ -46,7 +46,7 @@
                     </connections>
                 </stepper>
                 <matrix verticalHuggingPriority="750" misplaced="YES" allowsEmptySelection="NO" autosizesCells="NO" id="RTr-3u-52l">
-                    <rect key="frame" x="375" y="241" width="90" height="43"/>
+                    <rect key="frame" x="375" y="275" width="90" height="43"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Cropping mode.
 
@@ -87,7 +87,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </matrix>
                 <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="41c-48-2XJ">
-                    <rect key="frame" x="453" y="215" width="36" height="19"/>
+                    <rect key="frame" x="453" y="249" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CZs-y7-1JV">
                         <font key="font" metaFont="smallSystem"/>
@@ -119,7 +119,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </textField>
                 <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="1Z0-JT-vst">
-                    <rect key="frame" x="453" y="169" width="36" height="19"/>
+                    <rect key="frame" x="453" y="203" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="DzX-1f-HsP">
                         <font key="font" metaFont="smallSystem"/>
@@ -151,7 +151,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" id="r9l-cH-pFW">
-                    <rect key="frame" x="433" y="190" width="15" height="22"/>
+                    <rect key="frame" x="433" y="224" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Z4J-oE-seK">
                         <font key="font" metaFont="smallSystem"/>
@@ -176,7 +176,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </stepper>
                 <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="LTu-ic-Ty9">
-                    <rect key="frame" x="398" y="192" width="36" height="19"/>
+                    <rect key="frame" x="398" y="226" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XZs-gj-hoo">
                         <font key="font" metaFont="smallSystem"/>
@@ -208,7 +208,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" id="6W6-RI-fBx">
-                    <rect key="frame" x="488" y="167" width="15" height="22"/>
+                    <rect key="frame" x="488" y="201" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Fll-IT-6Ex">
                         <font key="font" metaFont="smallSystem"/>
@@ -233,7 +233,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </stepper>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="Bmd-c8-9hp">
-                    <rect key="frame" x="314" y="268" width="59" height="14"/>
+                    <rect key="frame" x="314" y="302" width="59" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Cropping:" id="haC-cO-jDm">
                         <font key="font" metaFont="smallSystem"/>
@@ -245,7 +245,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </textField>
                 <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="wsq-TS-cC6">
-                    <rect key="frame" x="512" y="192" width="36" height="19"/>
+                    <rect key="frame" x="512" y="226" width="36" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CIG-PU-RMT">
                         <font key="font" metaFont="smallSystem"/>
@@ -277,7 +277,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="LWv-Y9-b0S">
-                    <rect key="frame" x="98" y="211" width="54" height="19"/>
+                    <rect key="frame" x="98" y="245" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Display width. This is the number of pixels wide your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XYg-xi-ExT">
@@ -299,7 +299,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="nQe-Vq-Og2">
-                    <rect key="frame" x="180" y="211" width="54" height="19"/>
+                    <rect key="frame" x="180" y="245" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Display height. This is the number of pixels tall your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="0ho-7Y-adD">
@@ -320,7 +320,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="JC3-5O-BXA">
-                    <rect key="frame" x="98" y="184" width="54" height="19"/>
+                    <rect key="frame" x="98" y="218" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="w99-9Y-YN4">
@@ -343,7 +343,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="vOY-Ix-eha">
-                    <rect key="frame" x="14" y="186" width="78" height="14"/>
+                    <rect key="frame" x="14" y="220" width="78" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR:" id="gVj-RG-PcL">
                         <font key="font" metaFont="smallSystem"/>
@@ -355,9 +355,9 @@ Custom allows for manual settings.</string>
                     </connections>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" id="FwZ-6T-zJe">
-                    <rect key="frame" x="153" y="264" width="15" height="22"/>
+                    <rect key="frame" x="153" y="298" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="NP7-P2-Qga">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
@@ -372,7 +372,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </stepper>
                 <popUpButton verticalHuggingPriority="750" misplaced="YES" id="ns0-ar-I7c">
-                    <rect key="frame" x="95" y="121" width="54" height="22"/>
+                    <rect key="frame" x="95" y="155" width="54" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Ensure storage dimensions are multiples of this value. Higher values are only necessary for compatibility with certain legacy devices. Set to 2 unless you have a specific compatibility concern.</string>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" id="H0L-sP-ky8">
@@ -398,7 +398,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="9hH-As-JSa">
-                    <rect key="frame" x="98" y="266" width="56" height="19"/>
+                    <rect key="frame" x="98" y="300" width="56" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Video storage width. This is the number of pixels wide to be encoded. Storage width may differ from display width depending on anamorphic settings.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="fVv-0N-MQB">
@@ -424,7 +424,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="JBo-0E-AsU">
-                    <rect key="frame" x="18" y="152" width="74" height="14"/>
+                    <rect key="frame" x="18" y="186" width="74" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Anamorphic:" id="8vS-Mw-bny">
                         <font key="font" metaFont="smallSystem"/>
@@ -436,7 +436,7 @@ Custom allows for manual settings.</string>
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="uqQ-uA-3xF">
-                    <rect key="frame" x="173" y="269" width="10" height="14"/>
+                    <rect key="frame" x="173" y="303" width="10" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x" id="hN1-S9-zl8">
                         <font key="font" metaFont="smallSystem"/>
@@ -445,7 +445,7 @@ Custom allows for manual settings.</string>
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="IVk-ye-fOe">
-                    <rect key="frame" x="161" y="214" width="10" height="14"/>
+                    <rect key="frame" x="161" y="248" width="10" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x" id="uuL-JR-73C">
                         <font key="font" metaFont="smallSystem"/>
@@ -454,7 +454,7 @@ Custom allows for manual settings.</string>
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="sKT-h2-mAF">
-                    <rect key="frame" x="161" y="188" width="10" height="14"/>
+                    <rect key="frame" x="161" y="222" width="10" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x" id="cNr-IZ-H9j">
                         <font key="font" metaFont="smallSystem"/>
@@ -463,7 +463,7 @@ Custom allows for manual settings.</string>
                     </textFieldCell>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" misplaced="YES" id="w1f-3S-up0">
-                    <rect key="frame" x="95" y="147" width="83" height="22"/>
+                    <rect key="frame" x="95" y="181" width="83" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
@@ -497,7 +497,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="tHY-g2-oWj">
-                    <rect key="frame" x="18" y="126" width="74" height="14"/>
+                    <rect key="frame" x="18" y="160" width="74" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Modulus:" id="jXn-fo-wNU">
                         <font key="font" metaFont="smallSystem"/>
@@ -509,7 +509,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="9oG-zm-Y0W">
-                    <rect key="frame" x="18" y="268" width="74" height="14"/>
+                    <rect key="frame" x="18" y="302" width="74" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Storage Size:" id="L7V-2e-qf9">
                         <font key="font" metaFont="smallSystem"/>
@@ -521,7 +521,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="hei-Cd-vcN">
-                    <rect key="frame" x="14" y="214" width="78" height="14"/>
+                    <rect key="frame" x="14" y="248" width="78" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Display Size:" id="SPg-s0-Oh0">
                         <font key="font" metaFont="smallSystem"/>
@@ -532,20 +532,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Ghz-q6-1Y1"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="7ds-FA-XrD">
-                    <rect key="frame" x="18" y="305" width="74" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Source:" id="nrd-lP-SHD">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="eOt-6I-k6x"/>
-                    </connections>
-                </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="Hkl-7Z-J2e">
-                    <rect key="frame" x="187" y="266" width="56" height="19"/>
+                    <rect key="frame" x="187" y="300" width="56" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Video storage height. This is the number of pixels tall to be encoded. Storage height may differ from display height depending on anamorphic settings.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="ZHl-Y5-C5P">
@@ -571,7 +559,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="rFi-0b-3BX">
-                    <rect key="frame" x="180" y="184" width="54" height="19"/>
+                    <rect key="frame" x="180" y="218" width="54" height="19"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback.</string>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="QSZ-2r-Ydl">
@@ -591,22 +579,10 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="value" keyPath="self.picture.parHeight" id="Bwn-Hk-CGG"/>
                     </connections>
                 </textField>
-                <textField toolTip="Source dimensions in pixels." horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="ieR-o9-ztI">
-                    <rect key="frame" x="96" y="305" width="417" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="source size" id="mzN-4A-GZq">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="value" keyPath="self.picture.sourceInfo" id="7LZ-ep-EC2"/>
-                    </connections>
-                </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" id="2s0-5k-fjU">
-                    <rect key="frame" x="242" y="264" width="15" height="22"/>
+                    <rect key="frame" x="242" y="298" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <connections>
@@ -620,7 +596,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                     </connections>
                 </stepper>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" id="Ddg-4D-el9">
-                    <rect key="frame" x="547" y="190" width="15" height="22"/>
+                    <rect key="frame" x="547" y="224" width="15" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="QFM-0O-SjJ">
                         <font key="font" metaFont="smallSystem"/>
@@ -645,7 +621,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                     </connections>
                 </stepper>
                 <button misplaced="YES" id="6G0-MW-iVa">
-                    <rect key="frame" x="95" y="243" width="145" height="18"/>
+                    <rect key="frame" x="95" y="277" width="145" height="18"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Keep Aspect Ratio maintains the original display aspect of the source. Disabling this may result in a stretched or squeezed picture.</string>
                     <buttonCell key="cell" type="check" title="Keep Aspect Ratio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="hcF-CZ-p0E">

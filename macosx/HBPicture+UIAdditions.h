@@ -13,7 +13,6 @@
  *  UI enabled bindings
  */
 @property (nonatomic, readonly) NSString *info;
-@property (nonatomic, readonly) NSString *sourceInfo;
 @property (nonatomic, readonly) NSString *shortInfo;
 @property (nonatomic, readonly) NSString *summary;
 

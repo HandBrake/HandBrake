@@ -94,20 +94,6 @@
     return [NSString stringWithFormat:NSLocalizedString(@"%dx%d Storage, %dx%d Display", nil), self.width, self.height, self.displayWidth, self.height];
 }
 
-- (NSString *)sourceInfo
-{
-    NSString *sizeInfo = @"";
-
-    sizeInfo = [NSString stringWithFormat:@"%d x %d",  self.sourceWidth, self.sourceHeight];
-
-    if (self.sourceWidth != self.sourceDisplayWidth)
-    {
-        sizeInfo = [NSString stringWithFormat:@"%d x %d, Anamorphic: %d x %d", self.sourceWidth, self.sourceHeight, self.sourceDisplayWidth, self.sourceHeight];
-    }
-
-    return sizeInfo;
-}
-
 + (NSSet<NSString *> *)keyPathsForValuesAffectingSummary
 {
     return [NSSet setWithObjects:@"parWidth", @"parHeight", @"displayWidth", @"width", @"height",@"anamorphicMode", @"cropTop", @"cropBottom", @"cropLeft", @"cropRight", nil];
