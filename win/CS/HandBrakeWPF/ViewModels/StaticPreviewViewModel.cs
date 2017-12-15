@@ -173,7 +173,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     return;
                 }
-                this.height = value;
+                this.height = this.FixHeight(value);
                 this.NotifyOfPropertyChange(() => this.Height);
             }
         }
@@ -257,7 +257,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     return;
                 }
-                this.width = value;
+                this.width = this.FixWidth(value);
                 this.NotifyOfPropertyChange(() => this.Width);
             }
         }
@@ -450,7 +450,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         ///     The update preview frame.
         /// </summary>
-        [HandleProcessCorruptedStateExceptions] 
+        [HandleProcessCorruptedStateExceptions]
         public void UpdatePreviewFrame()
         {
             // Don't preview for small images.
@@ -492,26 +492,32 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="ea">
         /// The ea.
         /// </param>
-        public void PreviewSizeChanged(SizeChangedEventArgs ea)
+        public int FixWidth(int width)
         {
-            // TODO implement window size scaling here.
             Rect workArea = SystemParameters.WorkArea;
-            if (ea.NewSize.Width > workArea.Width)
+            if (width > workArea.Width)
             {
-                this.Width = (int)Math.Round(workArea.Width, 0) - 50;
-                this.Title = Resources.Preview_Scaled;
+                return (int)Math.Round(workArea.Width, 0) - 50;
             }
 
-            if (ea.NewSize.Height > workArea.Height)
-            {
-                this.Height = (int)Math.Round(workArea.Height, 0) - 50;
-                this.Title = Resources.Preview_Scaled;
-            }
+            return 100;
         }
+
+        public int FixHeight(int height)
+        {
+            Rect workArea = SystemParameters.WorkArea;
+            if (height > workArea.Height)
+            {
+                return (int)Math.Round(workArea.Height, 0) - 50;
+            }
+
+            return 100;
+        }
+
         #endregion
 
         #region Public Method - Live Preview 
-        
+
         #region Public Methods
 
         /// <summary>

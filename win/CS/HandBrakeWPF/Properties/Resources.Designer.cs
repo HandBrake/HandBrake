@@ -1423,7 +1423,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preview.
+        ///   Looks up a localized string similar to Preview {0}.
         /// </summary>
         public static string Preview {
             get {
@@ -1726,6 +1726,15 @@ namespace HandBrakeWPF.Properties {
         public static string StaticPreview_UnableToDeletePreview {
             get {
                 return ResourceManager.GetString("StaticPreview_UnableToDeletePreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview ({0}% actual size).
+        /// </summary>
+        public static string StaticPreviewView_Title {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_Title", resourceCulture);
             }
         }
         

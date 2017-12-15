@@ -9,7 +9,6 @@
              mc:Ignorable="d" SizeToContent="WidthAndHeight"
              TextOptions.TextFormattingMode="Display"
              WindowStartupLocation="CenterScreen"
-             cal:Message.Attach="[Event SizeChanged] = [Action PreviewSizeChanged($eventArgs)]"       
              Title="{Binding Title}">
 
     <Window.Resources>
@@ -21,7 +20,7 @@
             <TextBlock Text="No Preview Available" VerticalAlignment="Center" Padding="60,60,60,60" FontWeight="Bold" FontSize="25" Foreground="DarkGray" />
         </StackPanel>
 
-        <Image Source="{Binding PreviewImage}" MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" MouseWheel="PreviewImage_OnMouseWheel" />
+        <Image x:Name="previewImage" Source="{Binding PreviewImage}" MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" MouseWheel="PreviewImage_OnMouseWheel" />
 
 
         <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="8,8,8,8" Padding="8"

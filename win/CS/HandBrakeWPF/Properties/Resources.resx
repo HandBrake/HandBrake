@@ -467,7 +467,7 @@ Do you wish to proceed?</value>
     <value>The entered destination path contained illegal characters and will not be updated.</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Preview</value>
+    <value>Preview {0}</value>
   </data>
   <data name="Preview_Scaled" xml:space="preserve">
     <value>Preview (Scaled)</value>
@@ -868,5 +868,8 @@ Remaining Time: {4}</value>
     <value>Encoding: Pass {0} of {1},  {2:00.00}%
 FPS: {3:000.0},  Avg FPS: {4:000.0}
 Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}</value>
+  </data>
+  <data name="StaticPreviewView_Title" xml:space="preserve">
+    <value>Preview ({0}% actual size)</value>
   </data>
 </root>

@@ -9,6 +9,8 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using System.Windows.Media.Imaging;
+
     using HandBrakeWPF.Services.Scan.Model;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -33,6 +35,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// Gets or sets a value indicating whether is open.
         /// </summary>
         bool IsOpen { get; set; }
+
+        BitmapImage PreviewImage { get; }
 
         void PreviousPreview();
         void NextPreview();
