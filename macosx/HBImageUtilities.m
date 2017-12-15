@@ -147,6 +147,10 @@ CGColorSpaceRef copyColorSpace(int primaries, int transfer, int matrix)
             transferKey = CFSTR("SMPTE_ST_2084_PQ"); //kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ;
             break;
 
+        case HB_COLR_TRA_ARIB_STD_B67:
+            transferKey = CFSTR("ITU_R_2100_HLG"); //kCVImageBufferTransferFunction_ITU_R_2100_HLG;
+            break;
+
         case HB_COLR_TRA_BT709:
         default:
             transferKey = kCVImageBufferTransferFunction_ITU_R_709_2;
