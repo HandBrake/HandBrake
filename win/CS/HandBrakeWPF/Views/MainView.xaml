@@ -133,7 +133,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/Movies.png"/>
+                               Source="Images/Movies_small.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:ResourcesUI.MainView_SourceOpen}"/>
@@ -145,7 +145,7 @@
                 <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_AddToQueue}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Horizontal">
-                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="Images/AddToQueue.png" />
+                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="Images/AddToQueue_small.png" />
                             <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:ResourcesUI.MainView_AddToQueue}" />
                         </StackPanel>
 
@@ -171,7 +171,7 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/Queue.png"/>
+                               Source="Images/Queue_small.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}"/>
@@ -234,7 +234,7 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/picture.png"/>
+                               Source="Images/picture_small.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="Preview"/>
@@ -245,7 +245,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/ActivityWindow.png"/>
+                               Source="Images/ActivityWindow_small.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="Activity Log"/>
