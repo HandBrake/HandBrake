@@ -381,9 +381,9 @@
                         </Button.ContextMenu>
                     </Button>
 
-                    <Button Content="Reload" cal:Message.Attach="[Event Click] = [Action PresetSelect]"  Margin="15,0,0,0" VerticalAlignment="Center" />
-                    <Button Content="Save Custom Preset" cal:Message.Attach="[Event Click] = [Action PresetAdd]"  Margin="5,0,0,0" VerticalAlignment="Center" />
-
+                    <Button Content="{x:Static Properties:ResourcesUI.MainView_Reload}" cal:Message.Attach="[Event Click] = [Action PresetSelect]"  Margin="15,0,0,0" VerticalAlignment="Center" />
+                    <Button Content="{x:Static Properties:ResourcesUI.MainView_SaveNewPreset}" cal:Message.Attach="[Event Click] = [Action PresetAdd]"  Margin="5,0,0,0" VerticalAlignment="Center" />
+                    
                     <Button x:Name="MorePresetOptionsButton"  Margin="15,0,0,0" VerticalAlignment="Center" Click="MorePresetOptionsButton_OnClick">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">

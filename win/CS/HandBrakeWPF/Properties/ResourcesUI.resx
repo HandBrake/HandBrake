@@ -1013,4 +1013,10 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
     <value>Play a sound when the queue completes</value>
   </data>
+  <data name="MainView_Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="MainView_SaveNewPreset" xml:space="preserve">
+    <value>Save New Preset</value>
+  </data>
 </root>

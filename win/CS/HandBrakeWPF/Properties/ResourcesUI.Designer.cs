@@ -943,6 +943,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reload.
+        /// </summary>
+        public static string MainView_Reload {
+            get {
+                return ResourceManager.GetString("MainView_Reload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove.
         /// </summary>
         public static string MainView_Remove {
@@ -957,6 +966,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_ResetBuiltInPresets {
             get {
                 return ResourceManager.GetString("MainView_ResetBuiltInPresets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save New Preset.
+        /// </summary>
+        public static string MainView_SaveNewPreset {
+            get {
+                return ResourceManager.GetString("MainView_SaveNewPreset", resourceCulture);
             }
         }
         
