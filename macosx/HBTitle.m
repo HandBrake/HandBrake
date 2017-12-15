@@ -89,8 +89,8 @@ extern NSString *keySubTrackType;
 {
     if (self.hb_title->type == HB_BD_TYPE)
     {
-        return [NSString stringWithFormat:@"%d (%05d.MPLS) - %@",
-                 self.hb_title->index, self.hb_title->playlist, self.timeCode];
+        return [NSString stringWithFormat:@"%d - %@ - %05d.MPLS",
+                 self.hb_title->index, self.timeCode, self.hb_title->playlist];
     }
     else if (self.hb_title->type == HB_DVD_TYPE)
     {
