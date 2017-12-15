@@ -145,7 +145,7 @@
                 <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_AddToQueue}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Horizontal">
-                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="Images/AddToQueue_small.png" />
+                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="Images/AddToQueue.png" />
                             <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:ResourcesUI.MainView_AddToQueue}" />
                         </StackPanel>
 
@@ -171,7 +171,7 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/Queue_small.png"/>
+                               Source="Images/Queue.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}"/>
@@ -234,7 +234,7 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/picture_small.png"/>
+                               Source="Images/picture.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="Preview"/>
