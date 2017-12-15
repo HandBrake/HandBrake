@@ -500,7 +500,7 @@ namespace HandBrakeWPF.ViewModels
                 return (int)Math.Round(workArea.Width, 0) - 50;
             }
 
-            return 100;
+            return width;
         }
 
         public int FixHeight(int height)
@@ -511,7 +511,7 @@ namespace HandBrakeWPF.ViewModels
                 return (int)Math.Round(workArea.Height, 0) - 50;
             }
 
-            return 100;
+            return height;
         }
 
         #endregion
