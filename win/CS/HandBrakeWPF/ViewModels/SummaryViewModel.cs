@@ -358,6 +358,11 @@ namespace HandBrakeWPF.ViewModels
         public void NextPreview()
         {
             int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+            if (this.selectedPreview == maxPreview)
+            {
+                return;
+            }
+
             this.selectedPreview = this.selectedPreview + 1;
             this.UpdatePreviewFrame();
             this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, maxPreview);
@@ -369,6 +374,11 @@ namespace HandBrakeWPF.ViewModels
         public void PreviousPreview()
         {
             int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+            if (this.selectedPreview <= 1)
+            {
+                return;
+            }
+
             this.selectedPreview = this.selectedPreview - 1;
             this.UpdatePreviewFrame();
             this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, maxPreview);

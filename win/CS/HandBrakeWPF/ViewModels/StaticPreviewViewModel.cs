@@ -426,6 +426,27 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public bool IsOpen { get; set; }
 
+        public void NextPreview()
+        {
+            int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+            if ((this.SelectedPreviewImage + 1) == maxPreview)
+            {
+                return;
+            }
+
+            this.SelectedPreviewImage = this.SelectedPreviewImage + 1;
+        }
+
+        public void PreviousPreview()
+        {
+            if (this.SelectedPreviewImage < 1)
+            {
+                return;
+            }
+
+            this.SelectedPreviewImage = this.SelectedPreviewImage - 1;
+        }
+
         /// <summary>
         ///     The update preview frame.
         /// </summary>
@@ -667,6 +688,7 @@ namespace HandBrakeWPF.ViewModels
             this.encodeService.Start(((QueueTask)state).Task, ((QueueTask)state).Configuration);
             this.userSettingService.SetUserSetting(UserSettingConstants.LastPreviewDuration, this.Duration);
         }
+
         #endregion
 
         #region Event Handlers

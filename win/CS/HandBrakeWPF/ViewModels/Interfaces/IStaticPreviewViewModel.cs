@@ -33,5 +33,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// Gets or sets a value indicating whether is open.
         /// </summary>
         bool IsOpen { get; set; }
+
+        void PreviousPreview();
+        void NextPreview();
     }
 }

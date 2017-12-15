@@ -19,5 +19,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         event EventHandler<OutputFormatChangedEventArgs> OutputFormatChanged;
         void SetContainer(OutputFormat container);
         void UpdateDisplayedInfo();
+
+        void PreviousPreview();
+        void NextPreview();
     }
 }

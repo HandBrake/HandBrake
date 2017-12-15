@@ -10,6 +10,9 @@
 namespace HandBrakeWPF.Views
 {
     using System.Windows.Controls;
+    using System.Windows.Input;
+
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
     /// Interaction logic for SummaryView.xaml
@@ -19,6 +22,18 @@ namespace HandBrakeWPF.Views
         public SummaryView()
         {
             this.InitializeComponent();
+        }
+
+        private void PreviewImage_OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta > 1)
+            {
+                ((ISummaryViewModel)this.DataContext).NextPreview();
+            }
+            else
+            {
+                ((ISummaryViewModel)this.DataContext).PreviousPreview();
+            }
         }
     }
 }

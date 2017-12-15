@@ -118,7 +118,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Image Source="{Binding PreviewImage}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,5,10,0" x:Name="previewImage" Panel.ZIndex="0" Grid.ColumnSpan="2"
-                       MaxWidth="{Binding MaxWidth}" MaxHeight="{Binding MaxHeight}" />
+                       MaxWidth="{Binding MaxWidth}" MaxHeight="{Binding MaxHeight}" MouseWheel="PreviewImage_OnMouseWheel" />
 
                 <Border Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Background="Transparent" Margin="0,5,0,5">
                     <TextBlock Text="{Binding PreviewInfo}" TextAlignment="Center" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}" />
@@ -129,6 +129,7 @@
                         <ColumnDefinition Width="42" />
                         <ColumnDefinition Width="42" />
                     </Grid.ColumnDefinitions>
+                    
                     <Border BorderThickness="1,1,1,1" CornerRadius="4,0,0,4" VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" cal:Message.Attach="[Event MouseDown] = [Action PreviousPreview]"
                             Visibility="{Binding IsPreviousPreviewControlVisible,Converter={StaticResource boolToVisConverter}}"
                             Background="Black" Opacity="0.5" Margin="0,0,0,0" >

@@ -21,7 +21,7 @@
             <TextBlock Text="No Preview Available" VerticalAlignment="Center" Padding="60,60,60,60" FontWeight="Bold" FontSize="25" Foreground="DarkGray" />
         </StackPanel>
 
-        <Image Source="{Binding PreviewImage}" MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" />
+        <Image Source="{Binding PreviewImage}" MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" MouseWheel="PreviewImage_OnMouseWheel" />
 
 
         <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="8,8,8,8" Padding="8"
@@ -63,10 +63,6 @@
                     <ProgressBar MinHeight="5" Maximum="100" Minimum="0" Value="{Binding PercentageValue}" Grid.Column="0" Grid.ColumnSpan="2" />
                     <TextBlock Margin="5,0,0,0" Text="{Binding Percentage}" Grid.Column="2" HorizontalAlignment="Right" Foreground="White" />
                 </Grid>
-
-
-
-
             </Grid>
 
         </Border>

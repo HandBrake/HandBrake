@@ -10,6 +10,9 @@
 namespace HandBrakeWPF.Views
 {
     using System.Windows;
+    using System.Windows.Input;
+
+    using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
     /// Interaction logic for StaticPreviewView.xaml
@@ -22,6 +25,18 @@ namespace HandBrakeWPF.Views
         public StaticPreviewView()
         {
             InitializeComponent();
+        }
+
+        private void PreviewImage_OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (e.Delta > 1)
+            {
+                ((IStaticPreviewViewModel)this.DataContext).NextPreview();
+            }
+            else
+            {
+                ((IStaticPreviewViewModel)this.DataContext).PreviousPreview();
+            }
         }
     }
 }
