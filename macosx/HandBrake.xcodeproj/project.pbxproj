@@ -183,6 +183,7 @@
 		A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A92268771A6E555500A8D5C5 /* HBAppDelegate.m */; };
 		A922687B1A6E569B00A8D5C5 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A92268791A6E569B00A8D5C5 /* MainWindow.xib */; };
 		A9294CC91DC4BBF7004D3415 /* HBJob+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A9294CC71DC4BBF7004D3415 /* HBJob+Private.h */; };
+		A92EC6EA1FE40FD90013511E /* HBPreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A92EC6E81FE40FD90013511E /* HBPreviewViewController.xib */; };
 		A932E26C1988334B0047D13E /* AudioDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A932E26A1988334B0047D13E /* AudioDefaults.xib */; };
 		A9350F501CCA7F490089F970 /* HBQTKitPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A9350F4E1CCA7C3B0089F970 /* HBQTKitPlayer.m */; };
 		A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */; };
@@ -218,6 +219,7 @@
 		A99F40CF1B624E7E00750170 /* HBPictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A99F40CD1B624E7E00750170 /* HBPictureViewController.m */; };
 		A99F40D31B624EA500750170 /* HBPictureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A99F40D11B624EA500750170 /* HBPictureViewController.xib */; };
 		A9A0CBE81CCEA3670045B3DF /* HBPlayerTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A0CBE61CCEA1D10045B3DF /* HBPlayerTrack.m */; };
+		A9A7E27C1FE2A0B5006BE79F /* HBPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A7E27A1FE2A0B5006BE79F /* HBPreviewViewController.m */; };
 		A9ABD1A61E2A0F0700EC8B65 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */; };
 		A9ABD1A71E2A0F7500EC8B65 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */; };
 		A9ABD1A91E2A0F8200EC8B65 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A81E2A0F8200EC8B65 /* CoreGraphics.framework */; };
@@ -446,6 +448,7 @@
 		A92268771A6E555500A8D5C5 /* HBAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAppDelegate.m; sourceTree = "<group>"; };
 		A922687A1A6E569B00A8D5C5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = MainWindow.xib; sourceTree = "<group>"; };
 		A9294CC71DC4BBF7004D3415 /* HBJob+Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBJob+Private.h"; sourceTree = "<group>"; };
+		A92EC6E91FE40FD90013511E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/HBPreviewViewController.xib; sourceTree = "<group>"; };
 		A932E26B1988334B0047D13E /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = AudioDefaults.xib; sourceTree = "<group>"; };
 		A932E26D198833920047D13E /* HBAudioDefaultsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioDefaultsController.h; sourceTree = "<group>"; };
 		A932E26E198833920047D13E /* HBAudioDefaultsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioDefaultsController.m; sourceTree = "<group>"; };
@@ -530,6 +533,8 @@
 		A99F40D21B624EA500750170 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = HBPictureViewController.xib; sourceTree = "<group>"; };
 		A9A0CBE51CCEA1D10045B3DF /* HBPlayerTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPlayerTrack.h; sourceTree = "<group>"; };
 		A9A0CBE61CCEA1D10045B3DF /* HBPlayerTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPlayerTrack.m; sourceTree = "<group>"; };
+		A9A7E2791FE2A0B5006BE79F /* HBPreviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreviewViewController.h; sourceTree = "<group>"; };
+		A9A7E27A1FE2A0B5006BE79F /* HBPreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBPreviewViewController.m; sourceTree = "<group>"; };
 		A9AA44781970664A00D7DEFC /* HBUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HBUtilities.h; path = ../HBUtilities.h; sourceTree = "<group>"; };
 		A9AA44791970664A00D7DEFC /* HBUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HBUtilities.m; path = ../HBUtilities.m; sourceTree = "<group>"; };
 		A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
@@ -1205,6 +1210,9 @@
 				A919430A1FB5E2FE001E9BB0 /* HBSummaryViewController.h */,
 				A919430B1FB5E2FE001E9BB0 /* HBSummaryViewController.m */,
 				A919430F1FB5E39E001E9BB0 /* HBSummaryViewController.xib */,
+				A9A7E2791FE2A0B5006BE79F /* HBPreviewViewController.h */,
+				A9A7E27A1FE2A0B5006BE79F /* HBPreviewViewController.m */,
+				A92EC6E81FE40FD90013511E /* HBPreviewViewController.xib */,
 				A99F40CC1B624E7E00750170 /* HBPictureViewController.h */,
 				A99F40CD1B624E7E00750170 /* HBPictureViewController.m */,
 				A91485FC1F61296100374C12 /* HBFiltersViewController.h */,
@@ -1510,6 +1518,7 @@
 				A9935213196F38A70069C6B7 /* ChaptersTitles.xib in Resources */,
 				A9F217E61E2F934C00C10C6E /* container-migration.plist in Resources */,
 				A9706CBA1AC1452800BAEAA8 /* ExceptionAlert.xib in Resources */,
+				A92EC6EA1FE40FD90013511E /* HBPreviewViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1571,6 +1580,7 @@
 				A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */,
 				A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */,
 				A96664BA1CCE493D00DA4A57 /* HBEncodingProgressHUDController.m in Sources */,
+				A9A7E27C1FE2A0B5006BE79F /* HBPreviewViewController.m in Sources */,
 				A919430D1FB5E2FE001E9BB0 /* HBSummaryViewController.m in Sources */,
 				A9BB0F2719A0ECE40079F1C1 /* HBHUDButtonCell.m in Sources */,
 				A9706CB71AC1437800BAEAA8 /* HBExceptionAlertController.m in Sources */,
@@ -1783,6 +1793,14 @@
 				A922687A1A6E569B00A8D5C5 /* English */,
 			);
 			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		A92EC6E81FE40FD90013511E /* HBPreviewViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A92EC6E91FE40FD90013511E /* English */,
+			);
+			name = HBPreviewViewController.xib;
 			sourceTree = "<group>";
 		};
 		A932E26A1988334B0047D13E /* AudioDefaults.xib */ = {
