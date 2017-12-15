@@ -5,7 +5,8 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBSummaryViewController.h"
-#import "HBPreviewView.h"
+
+#import "HBPreviewViewController.h"
 #import "HBPreviewGenerator.h"
 
 @import HandBrakeKit;
@@ -25,13 +26,13 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
 @property (nonatomic, strong) IBOutlet NSTextField *filtersLabel;
 @property (nonatomic, strong) IBOutlet NSTextField *dimensionLabel;
 
-@property (nonatomic, strong) IBOutlet HBPreviewView *previewView;
+@property (nonatomic, strong) IBOutlet NSView *previewView;
+
+@property (nonatomic, strong) HBPreviewViewController *previewViewController;
 
 @property (nonatomic) BOOL tracksReloadInQueue;
 @property (nonatomic) BOOL filtersReloadInQueue;
 @property (nonatomic) BOOL pictureReloadInQueue;
-
-@property (nonatomic) BOOL visible;
 
 @end
 
@@ -40,43 +41,25 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
 - (instancetype)init
 {
     self = [super initWithNibName:@"HBSummaryViewController" bundle:nil];
+    if (self)
+    {
+        _previewViewController = [[HBPreviewViewController alloc] init];
+    }
     return self;
 }
 
 - (void)loadView
 {
     [super loadView];
-    self.previewView.showShadow = NO;
-    self.visible = YES;
+    self.previewViewController.view.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+    self.previewViewController.view.frame = NSMakeRect(0, 0, self.previewView.frame.size.width, self.previewView.frame.size.height);
+    [self.previewView addSubview:self.previewViewController.view];
     [self resetLabels];
-}
-
-- (void)viewWillAppear
-{
-    self.visible = YES;
-    if (self.pictureReloadInQueue || self.previewView.image == NULL)
-    {
-        [self updatePicture];
-    }
-}
-
-- (void)viewDidDisappear
-{
-    self.visible = NO;
 }
 
 - (void)setGenerator:(HBPreviewGenerator *)generator
 {
-    _generator = generator;
-
-    if (generator)
-    {
-        [self updatePicture];
-    }
-    else
-    {
-        self.previewView.image = nil;
-    }
+    self.previewViewController.generator = generator;
 }
 
 - (void)setJob:(HBJob *)job
@@ -258,7 +241,7 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
     // to avoid reloading the same image multiple times.
     if (self.pictureReloadInQueue == NO)
     {
-        [[NSRunLoop mainRunLoop] performSelector:@selector(updatePicture) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
+        [[NSRunLoop mainRunLoop] performSelector:@selector(updatePictureLabel) target:self argument:nil order:0 modes:@[NSDefaultRunLoopMode]];
         self.pictureReloadInQueue = YES;
     }
 }
@@ -285,18 +268,11 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
     self.filtersReloadInQueue = NO;
 }
 
-- (void)updatePicture
+- (void)updatePictureLabel
 {
-    if (self.visible && self.generator)
-    {
-        NSUInteger index = self.generator.imagesCount > 1 ? 1 : 0;
-        CGImageRef fPreviewImage = [self.generator copyImageAtIndex:index shouldCache:NO];
-        self.previewView.image = fPreviewImage;
-        CFRelease(fPreviewImage);
-        self.pictureReloadInQueue = NO;
-
-        self.dimensionLabel.stringValue = self.job.picture.shortInfo;
-    }
+    self.pictureReloadInQueue = NO;
+    self.dimensionLabel.stringValue = self.job.picture.shortInfo;
+    [self.previewViewController update];
 }
 
 @end
