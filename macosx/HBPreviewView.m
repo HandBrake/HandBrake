@@ -165,19 +165,18 @@
 {
     // Set the picture size display fields below the Preview Picture
     NSSize imageSize = NSMakeSize(CGImageGetWidth(self.image), CGImageGetHeight(self.image));
+    CGFloat backingScaleFactor = 1.0;
 
     if (imageSize.width > 0 && imageSize.height > 0) {
-        NSSize imageScaledSize = imageSize;
 
-        if (self.window && self.window.backingScaleFactor != 1.0)
+        if (self.window)
         {
-            // HiDPI mode usually display everything
-            // with douple pixel count, but we don't
-            // want to double the size of the video
-            imageScaledSize.height /= self.window.backingScaleFactor;
-            imageScaledSize.width /= self.window.backingScaleFactor;
+            backingScaleFactor = self.window.backingScaleFactor;
         }
-
+        // HiDPI mode usually display everything
+        // with douple pixel count, but we don't
+        // want to double the size of the video
+        NSSize imageScaledSize = NSMakeSize(imageSize.width / backingScaleFactor, imageSize.height / backingScaleFactor);
         NSSize frameSize = self.frame.size;
 
         if (self.showBorder == YES)
@@ -225,7 +224,7 @@
         [NSAnimationContext endGrouping];
         
         // Update the proprierties
-        self.scale = self.pictureLayer.frame.size.width / imageSize.width;
+        self.scale = self.pictureLayer.frame.size.width / imageSize.width * backingScaleFactor;
         self.pictureFrame = self.pictureLayer.frame;
     }
 }
