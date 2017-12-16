@@ -190,6 +190,11 @@ void enctheoraClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
 
+    if (pv == NULL)
+    {
+        return;
+    }
+
     th_encode_free( pv->ctx );
 
     if( pv->file )
