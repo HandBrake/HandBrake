@@ -1322,7 +1322,7 @@
     if (job != self.currentJob)
     {
         job.state = HBJobStateWorking;
-        [self.controller openJob:job completionHandler:^(BOOL result) {
+        [self.controller openJob:[job copy] completionHandler:^(BOOL result) {
             [self.jobs beginTransaction];
             if (result)
             {
