@@ -232,6 +232,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         [[self.undo prepareWithInvocationTarget:self] setMp4HttpOptimize:_mp4HttpOptimize];
     }
     _mp4HttpOptimize = mp4HttpOptimize;
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBContainerChangedNotification object:self];
 }
 
 - (void)setAlignAVStart:(BOOL)alignAVStart
@@ -241,6 +243,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         [[self.undo prepareWithInvocationTarget:self] setAlignAVStart:_alignAVStart];
     }
     _alignAVStart = alignAVStart;
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBContainerChangedNotification object:self];
 }
 
 - (void)setMp4iPodCompatible:(BOOL)mp4iPodCompatible
@@ -250,6 +254,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         [[self.undo prepareWithInvocationTarget:self] setMp4iPodCompatible:_mp4iPodCompatible];
     }
     _mp4iPodCompatible = mp4iPodCompatible;
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:HBContainerChangedNotification object:self];
 }
 
 - (void)setChaptersEnabled:(BOOL)chaptersEnabled

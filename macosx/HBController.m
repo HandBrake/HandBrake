@@ -1003,9 +1003,6 @@
  */
 - (void)customSettingUsed
 {
-    // Deselect the currently selected Preset if there is one
-    [fPresetsView deselect];
-
     // Update the preset and file name only if we are not
     // undoing or redoing, because if so it's already stored
     // in the undo manager.
@@ -1013,7 +1010,10 @@
     if (!(undo.isUndoing || undo.isRedoing))
     {
         // Change UI to show "Custom" settings are being used
-        self.job.presetName = NSLocalizedString(@"Custom", @"");
+        if (![self.job.presetName hasSuffix:NSLocalizedString(@"(Modified)", nil)])
+        {
+            self.job.presetName = [NSString stringWithFormat:@"%@ %@", self.job.presetName, NSLocalizedString(@"(Modified)", nil)];
+        }
         self.edited = YES;
         [self updateFileName];
     }
