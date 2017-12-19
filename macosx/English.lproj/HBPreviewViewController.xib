@@ -33,6 +33,7 @@
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system" size="18"/>
                             </buttonCell>
+                            <accessibility description="Next Preview Image"/>
                             <connections>
                                 <action selector="next:" target="-2" id="IlJ-w9-A9q"/>
                             </connections>
@@ -47,6 +48,7 @@
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system" size="18"/>
                             </buttonCell>
+                            <accessibility description="Previous Preview Image"/>
                             <connections>
                                 <action selector="previous:" target="-2" id="UxL-j8-GeJ"/>
                             </connections>

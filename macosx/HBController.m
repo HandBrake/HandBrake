@@ -203,6 +203,7 @@
     [self enableUI:NO];
 
     // Bottom
+    fRipIndicator.hidden = YES;
     [self updateProgress];
 
     // Register HBController's Window as a receiver for files/folders drag & drop operations

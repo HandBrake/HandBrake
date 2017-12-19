@@ -111,6 +111,7 @@
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <accessibility description="Source file"/>
                     </textField>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1540">
                         <rect key="frame" x="18" y="540" width="33" height="14"/>
@@ -178,6 +179,7 @@
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" red="0.76630436999999996" green="0.0" blue="0.0" alpha="0.0" colorSpace="calibratedRGB"/>
                         </textFieldCell>
+                        <accessibility description="Duration"/>
                         <connections>
                             <accessibilityConnection property="title" destination="1553" id="N3l-Fy-ezT"/>
                             <binding destination="-2" name="hidden" keyPath="self.job" id="42H-WA-xrv">
@@ -209,7 +211,7 @@
                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
-                        <accessibility description="File Destination"/>
+                        <accessibility description="Output filename"/>
                         <connections>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="JXO-Eg-p84">
                                 <dictionary key="options">
@@ -336,6 +338,9 @@
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
+                        <connections>
+                            <binding destination="-2" name="textColor" keyPath="self.labelColor" id="kL0-6u-vGx"/>
+                        </connections>
                     </textField>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="1628">
                         <rect key="frame" x="281" y="514" width="581" height="5"/>
@@ -434,7 +439,6 @@
                                 </items>
                             </menu>
                         </popUpButtonCell>
-                        <accessibility description="Angle"/>
                         <connections>
                             <accessibilityConnection property="title" destination="5180" id="1bt-ea-b2b"/>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="pA6-GK-w84">
@@ -492,6 +496,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <font key="font" metaFont="smallSystem"/>
                             <url key="url" string="file://localhost/Applications/"/>
                         </pathCell>
+                        <accessibility description="Destination folder path"/>
                         <connections>
                             <binding destination="-2" name="value" keyPath="self.job.outputURL" id="FQU-UV-RCI"/>
                         </connections>
@@ -568,7 +573,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <font key="font" metaFont="smallSystem"/>
                             <menu key="menu" id="X2f-Tk-x0c">
                                 <items>
-                                    <menuItem title="Selected Preset" state="on" id="OYP-3T-FnA">
+                                    <menuItem title="Selected Preset" state="on" hidden="YES" id="OYP-3T-FnA">
                                         <connections>
                                             <binding destination="-2" name="title" keyPath="self.job.presetName" id="vO4-JB-o7Q"/>
                                         </connections>
@@ -582,6 +587,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                                 </items>
                             </menu>
                         </popUpButtonCell>
+                        <accessibility description="Preset selection"/>
                         <connections>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="1XP-x4-0GV">
                                 <dictionary key="options">
@@ -726,7 +732,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         <popUpButton key="view" imageHugsTitle="YES" id="pJJ-0V-TQq">
                             <rect key="frame" x="28" y="14" width="58" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addqueue" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="QCi-1O-Msg">
@@ -803,7 +809,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="1924" y="-86"/>
+            <point key="canvasLocation" x="2048" y="-183"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
         <customView id="lZQ-gl-3wX" userLabel="Open Panel View">

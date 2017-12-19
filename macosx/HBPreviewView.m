@@ -278,4 +278,25 @@
     return resultSize;
 }
 
+#pragma MARK: - Accessibility
+
+- (BOOL)isAccessibilityElement
+{
+    return YES;
+}
+
+- (NSAccessibilityRole)accessibilityRole
+{
+    return NSAccessibilityImageRole;
+}
+
+- (NSString *)accessibilityLabel
+{
+    if (self.image)
+    {
+        return [NSString stringWithFormat:NSLocalizedString(@"Previw Image Size: %zu x %zu, Scale: %.0f%%", nil), CGImageGetWidth(self.image), CGImageGetHeight(self.image), self.scale * 100];
+    }
+    return NSLocalizedString(@"No image", nil);
+}
+
 @end

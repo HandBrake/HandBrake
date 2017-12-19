@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -267,7 +267,6 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                         <menu key="menu" title="OtherViews" id="qey-Yo-9sX"/>
                     </popUpButtonCell>
                     <connections>
-                        <accessibilityConnection property="title" destination="9Uz-PL-igg" id="EXp-0c-TdS"/>
                         <binding destination="-2" name="hidden" keyPath="self.filters.deinterlaceEnabled" id="gBQ-b8-r6y">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -399,7 +398,7 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="ZIa-hr-ytV">
-                    <rect key="frame" x="57" y="72" width="61" height="14"/>
+                    <rect key="frame" x="55" y="72" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Sharpen:" id="Gg8-cE-gaL">
                         <font key="font" metaFont="smallSystem"/>
@@ -411,7 +410,7 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pYa-Af-F47">
-                    <rect key="frame" x="121" y="67" width="132" height="22"/>
+                    <rect key="frame" x="119" y="67" width="135" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
 
@@ -464,8 +463,8 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="9su-F2-NUw"/>
                     </popUpButtonCell>
+                    <accessibility description="Sharpen Preset"/>
                     <connections>
-                        <accessibilityConnection property="title" destination="cJD-9a-3Xh" id="RW3-7N-KNC"/>
                         <binding destination="-2" name="hidden" keyPath="self.filters.sharpenEnabled" id="dOr-yZ-hN1">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -509,7 +508,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </button>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="9hM-c1-7hB">
-                    <rect key="frame" x="57" y="98" width="61" height="14"/>
+                    <rect key="frame" x="55" y="98" width="61" height="14"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denoise:" id="Rxe-Xm-vXj">
                         <font key="font" metaFont="smallSystem"/>
@@ -521,7 +520,7 @@ Lapsharp sharpens using convolution kernels approximating Laplacian edge filters
                     </connections>
                 </textField>
                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ins-7X-kbN">
-                    <rect key="frame" x="121" y="93" width="132" height="22"/>
+                    <rect key="frame" x="119" y="93" width="135" height="22"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Denoise reduces or removes the appearance of noise and grain. This can improve compression efficiency and create higher quality video at smaller file sizes. Overly strong Denoise settings may damage picture quality by discarding detail.
 
@@ -574,8 +573,8 @@ HQDN3D is an adaptive low-pass filter, faster than NLMeans but less effective at
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="akB-JW-MPe"/>
                     </popUpButtonCell>
+                    <accessibility description="Denoise Preset"/>
                     <connections>
-                        <accessibilityConnection property="title" destination="k1h-3F-Xh0" id="uZo-JE-P2O"/>
                         <binding destination="-2" name="hidden" keyPath="self.filters.denoiseEnabled" id="XQe-ei-Bp1">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
@@ -613,6 +612,7 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="pIO-dE-81w"/>
                     </popUpButtonCell>
+                    <accessibility description="Denoise Tune"/>
                     <connections>
                         <binding destination="-2" name="selectedValue" keyPath="self.filters.denoiseTune" previousBinding="DIk-Cg-Tqu" id="aXQ-14-pzv">
                             <dictionary key="options">
@@ -708,6 +708,7 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
                         <font key="font" metaFont="smallSystem"/>
                         <menu key="menu" title="OtherViews" id="jmH-62-gce"/>
                     </popUpButtonCell>
+                    <accessibility description="Sharpen Tune"/>
                     <connections>
                         <binding destination="-2" name="selectedValue" keyPath="self.filters.sharpenTune" previousBinding="mHO-CG-hm4" id="Y2Z-ao-i8S">
                             <dictionary key="options">
