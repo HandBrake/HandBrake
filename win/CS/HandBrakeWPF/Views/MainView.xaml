@@ -33,6 +33,19 @@
             <Setter Property="Padding" Value="5,5" />
         </Style>
 
+        <Style TargetType="ToolTip">
+            <Style.Resources>
+                <Style TargetType="ContentPresenter">
+                    <Style.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                        </Style>
+                    </Style.Resources>
+                </Style>
+            </Style.Resources>
+            <Setter Property="MaxWidth" Value="500" />
+        </Style>
+
     </UserControl.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -257,7 +270,7 @@
         <!--  Main Body  -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="725"/>
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -268,47 +281,52 @@
             </Grid.RowDefinitions>
 
             <!--  Main Controls  -->
-            <StackPanel Orientation="Vertical" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
-                <!--  Source  -->
-                <StackPanel Margin="10,5,5,5"
+            <!--  Source  -->
+            <Grid Margin="10,5,5,5" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
-                    <Grid HorizontalAlignment="Stretch" Margin="0,0,10,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
 
-                        <Label Content="{x:Static Properties:ResourcesUI.MainView_Source}" FontWeight="Bold" Grid.Column="0" />
-                        <TextBlock Text="{Binding Path=SourceLabel}" TextTrimming="CharacterEllipsis" Grid.Column="1" MaxWidth="400"  />
-                        <TextBlock Text="{Binding SourceInfo}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DimGray" Grid.Column="2" Margin="15,0,0,0" MaxWidth="400" />
-                    </Grid>
+                <Grid HorizontalAlignment="Stretch" Margin="0,0,10,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                    <StackPanel Orientation="Horizontal">
-                        <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Title}" />
-                        <ComboBox Name="Titles"
+                    <Label Content="{x:Static Properties:ResourcesUI.MainView_Source}" FontWeight="Bold" Grid.Column="0" />
+                    <TextBlock Text="{Binding Path=SourceLabel}" ToolTip="{Binding Path=SourceLabel}" TextTrimming="CharacterEllipsis" MaxWidth="595" Grid.Column="1" />
+                    <TextBlock Text="{Binding SourceInfo}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DimGray" Grid.Column="2" Margin="15,0,0,0" MaxWidth="360" />
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                    <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Title}" />
+                    <ComboBox Name="Titles"
                                   MinWidth="100"
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding ScannedSource.Titles}"
                                   ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Title}"
                                   SelectedItem="{Binding Path=SelectedTitle}" />
-                        <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Angle}" />
+                    <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Angle}" />
 
-                        <ComboBox Name="Angles"
+                    <ComboBox Name="Angles"
                                   MinWidth="60"
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding Angles}"
                                   SelectedItem="{Binding SelectedAngle}"
                                   ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Angle}" />
 
-                        <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Range}" />
-                        <ComboBox Name="PointToPointMode"
+                    <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Range}" />
+                    <ComboBox Name="PointToPointMode"
                                   MinWidth="80"
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding RangeMode}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Range}"
                                   SelectedItem="{Binding SelectedPointToPoint}" />
-                        <ComboBox Name="StartPoint"
+                    <ComboBox Name="StartPoint"
                                   MinWidth="60"
                                   Margin="8,0,0,0"
                                   ItemsSource="{Binding StartEndRangeItems}"
@@ -317,15 +335,15 @@
                                   Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=true}" />
-                        <Controls:TimeSpanBox  Number="{Binding SelectedStartPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    <Controls:TimeSpanBox  Number="{Binding SelectedStartPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding IsTimespanRange}"
                                                ToolTip="{x:Static Properties:ResourcesTooltips.MainView_StartPoint}"
                                                MinWidth="80" Margin="8,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}" />
 
-                        <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_through}" />
-                        <ComboBox Name="EndPoint"
+                    <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_through}" />
+                    <ComboBox Name="EndPoint"
                                   MinWidth="60"
                                   Margin="4,0,0,0"
                                   ItemsSource="{Binding StartEndRangeItems}"
@@ -334,22 +352,21 @@
                                   Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=true}" />
-                        <Controls:TimeSpanBox  Number="{Binding SelectedEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    <Controls:TimeSpanBox  Number="{Binding SelectedEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding IsTimespanRange}"
                                                ToolTip="{x:Static Properties:ResourcesTooltips.MainView_EndPoint}"
                                                MinWidth="80" Margin="8,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}" />
 
-                        <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" FontWeight="Bold" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
-                        <Label Margin="4,0,0,0" Content="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
+                    <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" FontWeight="Bold" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
+                    <Label Margin="4,0,0,0" Content="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
 
-                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </Grid>
 
             <!--  Presets Options  -->
-            <StackPanel Grid.Row="1" Orientation="Vertical"  Margin="10,5,10,5">
+            <StackPanel Grid.Row="1" Orientation="Vertical"  Margin="10,5,10,5" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
                 <Label Content="Presets" FontWeight="Bold" VerticalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" Margin="8,0,0,0" Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
 
@@ -420,8 +437,6 @@
                     <TextBlock Text="{Binding SelectedPreset.Name}" Margin="5,0,0,0" />
                     <TextBlock Text="{x:Static Properties:ResourcesUI.MainView_ModifiedPreset}" FontStyle="Italic" Visibility="{Binding IsModifiedPreset, Converter={StaticResource boolToVisConverter}}" Margin="5,0,0,0" />
                 </StackPanel>
-                
-
             </StackPanel>
 
             <!--  Tab Control  -->

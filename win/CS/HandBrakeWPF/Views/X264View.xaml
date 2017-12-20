@@ -526,7 +526,7 @@
         
         <TextBox Grid.Row="3"
                  Margin="10,2,10, 2"
-                 MinHeight="50"
+                 MinHeight="42"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  Style="{StaticResource LongToolTipHolder}"

@@ -24,7 +24,8 @@ namespace HandBrakeWPF.Extensions
         public static string ToTitleCase(this string input)
         {
             TextInfo textInfo = new CultureInfo(CultureInfo.CurrentCulture.Name, false).TextInfo;
-            return textInfo.ToTitleCase(input);
+            return textInfo.ToTitleCase(input.ToLower());
+          
         }
     }
 }
