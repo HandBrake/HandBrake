@@ -90,6 +90,7 @@ void ghb_scale_configure(signal_user_data_t *ud, char *name, double val,
                          double min, double max, double step, double page,
                          int digits, gboolean inverted);
 void ghb_update_summary_info(signal_user_data_t *ud);
+void ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings);
 
 #endif // _CALLBACKS_H_
 

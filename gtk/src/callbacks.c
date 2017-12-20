@@ -2157,7 +2157,7 @@ ghb_update_summary_info(signal_user_data_t *ud)
 }
 
 void
-set_title_settings(signal_user_data_t *ud, GhbValue *settings)
+ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
 {
     int title_id, titleindex;
     const hb_title_t * title;
@@ -2285,13 +2285,12 @@ set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     g_free(dest);
 
     ghb_dict_set_int(settings, "preview_frame", 2);
-    ghb_update_summary_info(ud);
 }
 
 void
 ghb_set_current_title_settings(signal_user_data_t *ud)
 {
-    set_title_settings(ud, ud->settings);
+    ghb_set_title_settings(ud, ud->settings);
     ghb_update_summary_info(ud);
 }
 
@@ -2323,7 +2322,7 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
 
         title = hb_list_item(list, ii);
         ghb_dict_set_int(settings, "title", title ? title->index : -1);
-        set_title_settings(ud, settings);
+        ghb_set_title_settings(ud, settings);
         ghb_array_append(settings_array, settings);
     }
     if (titleindex < 0 || titleindex >= count)
@@ -2350,6 +2349,17 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     count = ghb_array_len(ud->settings_array);
     int idx = (titleindex >= 0 && titleindex < count) ? titleindex : 0;
+    if (ghb_dict_get_bool(ud->prefs, "SyncTitleSettings"))
+    {
+        GhbValue * preset   = ghb_settings_to_preset(ud->settings);
+        GhbValue * settings = ghb_array_get(ud->settings_array, idx);
+        if (preset != NULL)
+        {
+            ghb_preset_to_settings(settings, preset);
+            ghb_set_title_settings(ud, settings);
+        }
+        ghb_value_free(&preset);
+    }
     ud->settings = ghb_array_get(ud->settings_array, idx);
     ghb_load_settings(ud);
 
@@ -2370,19 +2380,7 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 
         ghb_reset_preview_image(ud);
     }
-}
-
-G_MODULE_EXPORT void
-title_reset_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-    int title_id, titleindex;
-    const hb_title_t *title;
-
-    title_id = ghb_dict_get_int(ud->settings, "title");
-    title = ghb_lookup_title(title_id, &titleindex);
-    (void)title; // Silence "unused variable" warning
-    load_all_titles(ud, titleindex);
-    ghb_load_settings(ud);
+    ghb_update_summary_info(ud);
 }
 
 G_MODULE_EXPORT void

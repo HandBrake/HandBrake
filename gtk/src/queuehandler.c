@@ -1837,8 +1837,14 @@ queue_add_all_action_cb(GSimpleAction *action, GVariant *param,
     GtkWidget *row;
     gint count, ii;
     int max_title_len = 0;
+    GhbValue * preset = NULL;
 
     list = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "title_add_multiple_list"));
+
+    if (ghb_dict_get_bool(ud->prefs, "SyncTitleSettings"))
+    {
+        preset = ghb_settings_to_preset(ud->settings);
+    }
 
     // Set up the list of titles
     count = ghb_array_len(ud->settings_array);
@@ -1859,6 +1865,11 @@ queue_add_all_action_cb(GSimpleAction *action, GVariant *param,
         chooser = GTK_FILE_CHOOSER(find_widget(row, "title_dir"));
 
         settings = ghb_array_get(ud->settings_array, ii);
+        if (preset != NULL)
+        {
+            ghb_preset_to_settings(settings, preset);
+            ghb_set_title_settings(ud, settings);
+        }
         title_id = ghb_dict_get_int(settings, "title");
         title = ghb_lookup_title(title_id, &titleindex);
         if (title != NULL)

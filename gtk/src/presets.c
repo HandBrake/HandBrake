@@ -1612,6 +1612,7 @@ ghb_settings_to_preset(GhbValue *settings)
 
     gboolean autoscale, br, constant;
 
+    ghb_dict_remove(preset, "title");
     ghb_dict_set_bool(preset, "Default", 0);
     ghb_dict_set_int(preset, "Type", HB_PRESET_TYPE_CUSTOM);
     if (!ghb_dict_get_bool(preset, "PictureWidthEnable"))

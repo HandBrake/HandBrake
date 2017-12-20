@@ -1371,22 +1371,6 @@ This is often the feature title of a DVD.</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
-                    <child>
-                      <object class="GtkButton" id="title_reset">
-                        <property name="label" translatable="yes">Reset All Titles</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">Apply current settings to all titles</property>
-                        <property name="receives_default">True</property>
-                        <property name="halign">end</property>
-                        <signal name="clicked" handler="title_reset_clicked_cb" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
                   </object>
                   <packing>
                     <property name="top_attach">0</property>
@@ -8071,6 +8055,27 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                           </object>
                           <packing>
                             <property name="top_attach">7</property>
+                            <property name="left_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="SyncTitleSettings">
+                            <property name="label" translatable="yes">Use the same settings for all titles in a batch</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">When checked, every title will use the same settings when adding a
+batch of titles to the queue.
+
+Uncheck this if you want to allow changing each title's settings independently.</property>
+                            <property name="halign">start</property>
+                            <property name="draw_indicator">True</property>
+                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="top_attach">8</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
