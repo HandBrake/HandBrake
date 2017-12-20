@@ -5463,7 +5463,7 @@ filter_output([
                     <child>
                       <object class="GtkBox" id="advanced_video_tab">
                         <property name="orientation">horizontal</property>
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <child>
