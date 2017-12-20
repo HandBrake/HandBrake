@@ -12,7 +12,7 @@ $(PKG.appcast): $(PKG.in/)appcast.xml.m4
 
 $(PKG.cli.dmg): | $(dir $(PKG.cli.dmg))
 $(PKG.cli.dmg): | $(STAGE.out.cli/)
-	hdiutil create -srcfolder $(STAGE.out.cli/) -format UDRO -mode 755 \
+	hdiutil create -srcfolder $(STAGE.out.cli/) -fs HFS+ -format UDRO -mode 755 \
 	    -volname $(basename $(notdir $@)) \
 	    -ov $(PKG.cli.tmp.dmg)
 	hdiutil convert -format UDBZ -o $@ $(PKG.cli.tmp.dmg)
