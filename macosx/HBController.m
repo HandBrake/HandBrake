@@ -1061,6 +1061,7 @@
         if (fRipIndicatorShown)
         {
             self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET;
+            fRipIndicator.hidden = YES;
             fRipIndicatorShown = NO;
 
             // Refresh the toolbar buttons
@@ -1075,6 +1076,7 @@
         {
             self.bottomConstrain.animator.constant = 0;
             fRipIndicatorShown = YES;
+            fRipIndicator.hidden = NO;
 
             // Refresh the toolbar buttons
             [self.window.toolbar validateVisibleItems];
