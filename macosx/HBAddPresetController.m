@@ -252,7 +252,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
         [newPreset cleanUp];
 
         self.preset = [newPreset copy];
-        [self.selectedCategory insertObject:self.preset inChildrenAtIndex:0];
+        [self.selectedCategory insertObject:self.preset inChildrenAtIndex:self.selectedCategory.countOfChildren];
 
         [self.window orderOut:nil];
         [NSApp endSheet:self.window returnCode:NSModalResponseContinue];

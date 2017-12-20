@@ -12,6 +12,9 @@
 // drag and drop pasteboard type
 #define kHandBrakePresetPBoardType @"handBrakePresetPBoardType"
 
+// KVO Context
+static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
+
 @interface HBPresetCellView : NSTableCellView
 @end
 
@@ -44,6 +47,7 @@
 @interface HBPresetsViewController () <NSOutlineViewDelegate>
 
 @property (nonatomic, strong) HBPresetsManager *presets;
+@property (nonatomic, readwrite) HBPreset *selectedPresetInternal;
 @property (nonatomic, unsafe_unretained) IBOutlet NSTreeController *treeController;
 
 @property (nonatomic, strong) IBOutlet NSTextField *headerLabel;
@@ -59,7 +63,8 @@
  */
 @property (nonatomic, strong) NSMutableArray *expandedNodes;
 
-@property (unsafe_unretained) IBOutlet NSOutlineView *outlineView;
+@property (nonatomic, unsafe_unretained) IBOutlet NSOutlineView *outlineView;
+
 
 @end
 
@@ -71,6 +76,7 @@
     if (self)
     {
         _presets = presetManager;
+        _selectedPresetInternal = presetManager.defaultPreset;
         _expandedNodes = [[NSArray arrayWithArray:[[NSUserDefaults standardUserDefaults]
                                                    objectForKey:@"HBPreviewViewExpandedStatus"]] mutableCopy];
     }
@@ -92,10 +98,29 @@
     // Re-expand the items
     [self expandNodes:[self.treeController.arrangedObjects childNodes]];
 
-    [self.treeController setSelectionIndexPath:[self.presets indexPathOfPreset:self.presets.defaultPreset]];
+    [self.treeController setSelectionIndexPath:[self.presets indexPathOfPreset:self.selectedPreset]];
 
     // Update header state
     self.showHeader = _showHeader;
+
+    [self.treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:HBPresetsViewControllerContext];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == HBPresetsViewControllerContext)
+    {
+        HBPreset *selectedNode = [[self.treeController selectedObjects] firstObject];
+        if (selectedNode && selectedNode.isLeaf && selectedNode != self.selectedPresetInternal)
+        {
+            self.selectedPresetInternal = selectedNode;
+            [self.delegate selectionDidChange];
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 - (BOOL)validateUserInterfaceItem:(id < NSValidatedUserInterfaceItem >)anItem
@@ -116,7 +141,6 @@
             return NO;
         }
     }
-
 
     return YES;
 }
@@ -272,15 +296,21 @@
 - (IBAction)setDefault:(id)sender
 {
     HBPreset *selectedNode = [[self.treeController selectedObjects] firstObject];
-    if ([[selectedNode valueForKey:@"isLeaf"] boolValue])
+    if (selectedNode.isLeaf)
     {
         self.presets.defaultPreset = selectedNode;
     }
 }
 
-- (void)deselect
+- (void)setSelectedPreset:(HBPreset *)selectedPreset
 {
-    [self.treeController setSelectionIndexPath:nil];
+    _selectedPresetInternal = selectedPreset;
+    [self setSelection:selectedPreset];
+}
+
+- (HBPreset *)selectedPreset
+{
+    return _selectedPresetInternal;
 }
 
 - (void)setSelection:(HBPreset *)preset
@@ -290,19 +320,6 @@
     if (idx)
     {
         [self.treeController setSelectionIndexPath:idx];
-    }
-}
-
-- (HBPreset *)selectedPreset
-{
-    HBPreset *selectedNode = [[self.treeController selectedObjects] firstObject];
-    if ([[selectedNode valueForKey:@"isLeaf"] boolValue])
-    {
-        return selectedNode;
-    }
-    else
-    {
-        return self.presets.defaultPreset;
     }
 }
 

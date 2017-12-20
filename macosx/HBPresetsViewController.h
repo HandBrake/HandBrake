@@ -27,13 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (IBAction)exportPreset:(id)sender;
 - (IBAction)importPreset:(id)sender;
 
-- (void)deselect;
-- (void)setSelection:(HBPreset *)preset;
-
 - (IBAction)insertCategory:(id)sender;
 
-@property (nonatomic, readonly) HBPreset *selectedPreset;
-@property (nonatomic, readonly) NSUInteger indexOfSelectedItem;
+@property (nonatomic, readwrite) HBPreset *selectedPreset;
 
 @property (nonatomic, readwrite, getter=isEnabled) BOOL enabled;
 @property (nonatomic, readwrite) BOOL showHeader;

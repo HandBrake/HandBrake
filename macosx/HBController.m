@@ -1363,7 +1363,10 @@
 
 - (void)selectionDidChange
 {
-    [self applyPreset:fPresetsView.selectedPreset];
+    if (fPresetsView.selectedPreset != self.currentPreset || self.edited)
+    {
+        [self applyPreset:fPresetsView.selectedPreset];
+    }
 }
 
 #pragma mark -  Presets
@@ -1507,7 +1510,7 @@
 - (IBAction)selectDefaultPreset:(id)sender
 {
     [self applyPreset:presetManager.defaultPreset];
-    [fPresetsView setSelection:_currentPreset];
+    fPresetsView.selectedPreset = presetManager.defaultPreset;
 }
 
 - (IBAction)insertCategory:(id)sender
@@ -1521,7 +1524,7 @@
     HBPreset *preset = [sender representedObject];
 
     [self applyPreset:preset];
-    [fPresetsView setSelection:preset];
+    fPresetsView.selectedPreset = preset;
 }
 
 @end
