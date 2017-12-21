@@ -141,10 +141,10 @@
 
                         <!--  Marker  -->
                         <Image Grid.Column="0"
-                               Width="16"
-                               Height="16"
-                               Margin="10,0,10,0"
-                               Source="Images/Movies.png" />
+                               Width="20"
+                               Height="20"
+                               Margin="5,0,5,0"
+                               Source="Images/Movies_small.png" />
 
                         <!--  Standard Subtitle Settings  -->
                         <Grid Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,8,0,8"

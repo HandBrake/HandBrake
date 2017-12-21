@@ -187,7 +187,7 @@
     <value>Show Queue</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
-    <value>Source</value>
+    <value>Source:</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
     <value>Start Encode</value>

@@ -1015,7 +1015,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Source.
+        ///   Looks up a localized string similar to Source:.
         /// </summary>
         public static string MainView_Source {
             get {

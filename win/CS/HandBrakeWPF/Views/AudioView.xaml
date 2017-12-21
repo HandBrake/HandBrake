@@ -145,10 +145,10 @@
 
                         <!--  Marker  -->
                         <Image Grid.Column="0" Grid.Row="0"
-                               Width="16"
-                               Height="16"
+                               Width="20"
+                               Height="20"
                                Margin="5,0,5,0"
-                               Source="Images/Movies.png" />
+                               Source="Images/Movies_small.png" />
 
                         <!--  Settings  -->
                         <Grid Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" Margin="0,5,0,5">
