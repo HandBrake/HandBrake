@@ -1116,7 +1116,7 @@ int reinit_video_filters(hb_work_private_t * pv)
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
     {
         // Can't use software filters when decoding with QSV opaque memory
-        return;
+        return 0;
     }
 #endif
     if (!pv->job)
@@ -1381,6 +1381,7 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
     av_packet_unref(&avp);
     if (ret < 0 && ret != AVERROR_EOF)
     {
+        ++pv->decode_errors;
         return 0;
     }
 
@@ -2067,8 +2068,9 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
         {
             case AV_CODEC_ID_HEVC:
             case AV_CODEC_ID_H264:
-                if (pv->context->pix_fmt == AV_PIX_FMT_YUV420P ||
-                    pv->context->pix_fmt == AV_PIX_FMT_YUVJ420P)
+                if (pv->context->pix_fmt == AV_PIX_FMT_YUV420P  ||
+                    pv->context->pix_fmt == AV_PIX_FMT_YUVJ420P ||
+                    pv->context->pix_fmt == AV_PIX_FMT_YUV420P10LE)
                 {
                     info->video_decode_support |= HB_DECODE_SUPPORT_QSV;
                 }
