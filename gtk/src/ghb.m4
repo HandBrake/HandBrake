@@ -1282,6 +1282,7 @@ Activity</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
+                <property name="row-homogeneous">True</property>
                 <property name="column_spacing">5</property>
                 <property name="hexpand">True</property>
                 <property name="halign">GTK_ALIGN_FILL</property>
@@ -1619,7 +1620,6 @@ This is often the feature title of a DVD.</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="margin-end">12</property>
-                    <property name="margin-top">6</property>
                     <property name="spacing">5</property>
                     <child>
                       <object class="GtkMenuButton" id="presets_menu_button">
