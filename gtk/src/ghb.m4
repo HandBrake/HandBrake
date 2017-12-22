@@ -7058,6 +7058,23 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
               </packing>
             </child>
             <child>
+              <object class="GtkLabel" id="dest_to_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="halign">end</property>
+                <property name="margin-start">6</property>
+                <property name="margin-end">6</property>
+                <property name="use_markup">True</property>
+                <property name="label" translatable="yes">&lt;b&gt;To:&lt;/b&gt;</property>
+              </object>
+              <packing>
+                <property name="top_attach">0</property>
+                <property name="left_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkFileChooserButton" id="dest_dir">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
@@ -7069,7 +7086,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
               </object>
               <packing>
                 <property name="top_attach">0</property>
-                <property name="left_attach">2</property>
+                <property name="left_attach">3</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
