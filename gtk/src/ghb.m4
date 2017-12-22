@@ -8,6 +8,48 @@ filter_output([
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <menu id="presets-mm">
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Set De_fault</attribute>
+        <attribute name="action">app.preset-default</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Save</attribute>
+        <attribute name="action">app.preset-save</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Save _As</attribute>
+        <attribute name="action">app.preset-save-as</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Rename</attribute>
+        <attribute name="action">app.preset-rename</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Delete</attribute>
+        <attribute name="action">app.preset-remove</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">_Import</attribute>
+        <attribute name="action">app.preset-import</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Export</attribute>
+        <attribute name="action">app.preset-export</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="label" translatable="yes">Reset _Built-in Presets</attribute>
+        <attribute name="action">app.presets-reload</attribute>
+      </item>
+    </section>
+  </menu>
   <object class="GtkFileFilter" id="SourceFilterAVI"/>
   <object class="GtkFileFilter" id="SourceFilterAll"/>
   <object class="GtkFileFilter" id="SourceFilterEVO"/>
@@ -138,6 +180,15 @@ conjunction with the "Forced" option.</property>
                       </object>
                     </child>
                     <child>
+                      <object class="GtkMenuItem" id="presets_window_rename">
+                        <property name="label" translatable="yes">_Rename</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">app.preset-rename</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="presets_window_remove">
                         <property name="label" translatable="yes">_Delete</property>
                         <property name="visible">True</property>
@@ -148,20 +199,11 @@ conjunction with the "Forced" option.</property>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="presets_window_default">
-                        <property name="label" translatable="yes">_Make Default</property>
+                        <property name="label" translatable="yes">Set De_fault</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="action-name">app.preset-default</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="presets_window_export">
-                        <property name="label" translatable="yes">_Export</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="action-name">app.preset-export</property>
                       </object>
                     </child>
                     <child>
@@ -174,8 +216,17 @@ conjunction with the "Forced" option.</property>
                       </object>
                     </child>
                     <child>
+                      <object class="GtkMenuItem" id="presets_window_export">
+                        <property name="label" translatable="yes">_Export</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">app.preset-export</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="presets_window_restore">
-                        <property name="label" translatable="yes">_Reload Built-in Presets</property>
+                        <property name="label" translatable="yes">Reset _Built-in Presets</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -950,6 +1001,15 @@ libx264 authors:
                       </object>
                     </child>
                     <child>
+                      <object class="GtkMenuItem" id="presets_rename">
+                        <property name="label" translatable="yes">_Rename</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">app.preset-rename</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="presets_remove">
                         <property name="label" translatable="yes">_Delete</property>
                         <property name="visible">True</property>
@@ -960,20 +1020,11 @@ libx264 authors:
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="presets_default">
-                        <property name="label" translatable="yes">_Make Default</property>
+                        <property name="label" translatable="yes">Set De_fault</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="action-name">app.preset-default</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkMenuItem" id="presets_export">
-                        <property name="label" translatable="yes">_Export</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="action-name">app.preset-export</property>
                       </object>
                     </child>
                     <child>
@@ -986,8 +1037,17 @@ libx264 authors:
                       </object>
                     </child>
                     <child>
+                      <object class="GtkMenuItem" id="presets_export">
+                        <property name="label" translatable="yes">_Export</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">app.preset-export</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="presets_restore">
-                        <property name="label" translatable="yes">_Reload Built-in Presets</property>
+                        <property name="label" translatable="yes">Reset _Built-in Presets</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
@@ -1578,7 +1638,7 @@ This is often the feature title of a DVD.</property>
                     </child>
                     <child>
                       <object class="GtkLabel" id="preset_selection_modified_label">
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can_focus">False</property>
                         <property name="width-chars">10</property>
                         <property name="label" translatable="yes"></property>
@@ -1594,7 +1654,7 @@ This is often the feature title of a DVD.</property>
                     <child>
                       <object class="GtkButton" id="preset_selection_reload">
                         <property name="label" translatable="yes">Reload</property>
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">Reload the encoding settings for the currently selected preset.
     Modifications will be discarded.</property>
@@ -1611,7 +1671,7 @@ This is often the feature title of a DVD.</property>
                     <child>
                       <object class="GtkButton" id="preset_save_new">
                         <property name="label" translatable="yes">Save New Preset</property>
-                        <property name="visible">True</property>
+                        <property name="visible">False</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">Reload the encoding settings for the currently selected preset.
     Modifications will be discarded.</property>
@@ -1623,6 +1683,52 @@ This is often the feature title of a DVD.</property>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="preset_options_button">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="direction">down</property>
+                        <property name="menu-model">presets-mm</property>
+                        <child>
+                          <object class="GtkBox" id="presets_options_button_box">
+                            <property name="orientation">horizontal</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <child>
+                              <object class="GtkLabel" id="presets_options_button_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Options</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkImage" id="presets_options_button_arrow">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">pan-down-symbolic</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                   </object>
@@ -8403,6 +8509,118 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <action-widgets>
       <action-widget response="0">preset_folder_cancel</action-widget>
       <action-widget response="-5">preset_folder_ok</action-widget>
+    </action-widgets>
+  </object>
+  <object class="GtkDialog" id="preset_rename_dialog">
+    <property name="transient_for">hb_window</property>
+    <property name="can_focus">False</property>
+    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+    <property name="border_width">5</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="type_hint">dialog</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-preset-rename-box">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox" id="dialog-action_preset_rename_area">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="layout_style">end</property>
+            <child>
+              <object class="GtkButton" id="preset_rename_cancel">
+                <property name="label" translatable="yes">Cancel</property>
+                <property name="image">gtk-cancel</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="preset_rename_ok">
+                <property name="label" translatable="yes">OK</property>
+                <property name="image">gtk-ok</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="preset_rename_hbox">
+            <property name="orientation">horizontal</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <child>
+              <object class="GtkLabel" id="preset_rename_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Preset Name:</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="PresetReName">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="max_length">40</property>
+                <property name="activates_default">True</property>
+                <property name="width-chars">30</property>
+                <property name="truncate_multiline">True</property>
+                <property name="primary_icon_activatable">False</property>
+                <property name="secondary_icon_activatable">False</property>
+                <signal name="changed" handler="preset_name_changed_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="0">preset_rename_cancel</action-widget>
+      <action-widget response="-5">preset_rename_ok</action-widget>
     </action-widgets>
   </object>
   <object class="GtkDialog" id="preset_save_dialog">

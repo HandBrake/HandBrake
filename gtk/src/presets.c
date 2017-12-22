@@ -542,7 +542,8 @@ set_preset_menu_button_label(signal_user_data_t *ud, hb_preset_index_t *path)
     type = ghb_dict_get_int(dict, "Type");
     fullname = preset_get_fullname(path, " <span alpha=\"70%\">></span> ");
     label = GTK_LABEL(GHB_WIDGET(ud->builder, "presets_menu_button_label"));
-    text = g_strdup_printf("%s%s", type ? "Custom" : "Official", fullname);
+    text = g_strdup_printf("%s%s", type == HB_PRESET_TYPE_CUSTOM ?
+                                   "Custom" : "Official", fullname);
     gtk_label_set_markup(label, text);
     free(fullname);
     free(text);
@@ -585,6 +586,16 @@ select_preset2(signal_user_data_t *ud, hb_preset_index_t *path)
         gtk_tree_path_free(treepath);
     }
     set_preset_menu_button_label(ud, path);
+
+    int type = preset_get_type(path);
+    GSimpleAction * action;
+
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(
+                             G_ACTION_MAP(ud->app), "preset-rename"));
+    g_simple_action_set_enabled(action, type == HB_PRESET_TYPE_CUSTOM);
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(
+                             G_ACTION_MAP(ud->app), "preset-save"));
+    g_simple_action_set_enabled(action, type == HB_PRESET_TYPE_CUSTOM);
 }
 
 void
@@ -1189,7 +1200,7 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                 continue;
             }
 
-            if (type == 0)
+            if (type == HB_PRESET_TYPE_OFFICIAL)
             {
                 // Add folder name to list of official names
                 official_names[kk++] = g_strdup(folder_name);
@@ -1236,7 +1247,7 @@ ghb_presets_menu_init(signal_user_data_t *ud)
                     free(preset_path);
                     free(detail_action);
                 }
-                if (type == 1 &&
+                if (type == HB_PRESET_TYPE_CUSTOM &&
                     ghb_strv_contains((const char**)official_names, folder_name))
                 {
                     menu_item_name = g_strdup_printf("My %s", folder_name);
@@ -1251,7 +1262,9 @@ ghb_presets_menu_init(signal_user_data_t *ud)
             }
             g_string_free(folder_str, TRUE);
         }
-        g_menu_append_section(menu, type ? "Custom" : "Official",
+        g_menu_append_section(menu,
+                              type == HB_PRESET_TYPE_CUSTOM ?
+                              "Custom" : "Official",
                               G_MENU_MODEL(section));
     }
     g_free(path);
@@ -2066,6 +2079,56 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     hb_value_free(&dict);
 }
 
+G_MODULE_EXPORT void
+preset_rename_action_cb(GSimpleAction *action, GVariant *param,
+                        signal_user_data_t *ud)
+{
+    const gchar       * name;
+    const gchar       * fullname;
+    int                 type;
+    hb_preset_index_t * path;
+    GtkWidget         * dialog;
+    GtkEntry          * entry;
+    GhbValue          * dict;
+    GtkResponseType     response;
+
+    name      = ghb_dict_get_string(ud->settings, "PresetName");
+    type      = ghb_dict_get_int(ud->settings, "Type");
+    fullname  = ghb_dict_get_string(ud->settings, "PresetFullName");
+
+    if (type != HB_PRESET_TYPE_CUSTOM)
+    {
+        // Only allow renaming custom presets
+        return;
+    }
+    path = hb_preset_search_index(fullname, 0, type);
+
+    dialog   = GHB_WIDGET(ud->builder, "preset_rename_dialog");
+    entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetReName"));
+    gtk_entry_set_text(entry, name);
+
+    response = gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_hide(dialog);
+    if (response == GTK_RESPONSE_OK)
+    {
+        // save the new name
+        name = gtk_entry_get_text(entry);
+        dict = hb_preset_get(path);
+        if (dict != NULL)
+        {
+            ghb_dict_set_string(dict, "PresetName", name);
+            store_presets();
+        }
+
+        char * full = preset_get_fullname(path, "/");
+        ghb_dict_set_string(ud->settings, "PresetFullName", full);
+        ghb_dict_set_string(ud->settings, "PresetName", name);
+        free(full);
+        ghb_presets_menu_reinit(ud);
+        set_preset_menu_button_label(ud, path);
+    }
+}
+
 static void preset_save_action(signal_user_data_t *ud, gboolean as)
 {
     const char        * category = NULL;
@@ -2121,7 +2184,7 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
             {
                 continue;
             }
-            if (ghb_dict_get_int(dict, "Type") == 1)
+            if (ghb_dict_get_int(dict, "Type") == HB_PRESET_TYPE_CUSTOM)
             {
                 category = ghb_dict_get_string(dict, "PresetName");
                 break;
@@ -2737,6 +2800,15 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
             widget = GHB_WIDGET(ud->builder, "preset_save_new");
             gtk_widget_set_visible(widget, FALSE);
         }
+        int type = preset_get_type(path);
+        GSimpleAction * action;
+
+        action = G_SIMPLE_ACTION(g_action_map_lookup_action(
+                                 G_ACTION_MAP(ud->app), "preset-rename"));
+        g_simple_action_set_enabled(action, type == HB_PRESET_TYPE_CUSTOM);
+        action = G_SIMPLE_ACTION(g_action_map_lookup_action(
+                                 G_ACTION_MAP(ud->app), "preset-save"));
+        g_simple_action_set_enabled(action, type == HB_PRESET_TYPE_CUSTOM);
         free(path);
     }
 }
