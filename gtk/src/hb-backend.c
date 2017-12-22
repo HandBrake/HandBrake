@@ -3801,19 +3801,19 @@ ghb_get_display_aspect_string(int disp_width, int disp_height)
     gint iaspect = dar_width * 9 / dar_height;
     if (dar_width > 2 * dar_height)
     {
-        str = g_strdup_printf("%.2f : 1", (gdouble)dar_width / dar_height);
+        str = g_strdup_printf("%.2f:1", (gdouble)dar_width / dar_height);
     }
     else if (iaspect <= 16 && iaspect >= 15)
     {
-        str = g_strdup_printf("%.2f : 9", (gdouble)dar_width * 9 / dar_height);
+        str = g_strdup_printf("%.4g:9", (gdouble)dar_width * 9 / dar_height);
     }
     else if (iaspect <= 12 && iaspect >= 11)
     {
-        str = g_strdup_printf("%.2f : 3", (gdouble)dar_width * 3 / dar_height);
+        str = g_strdup_printf("%.4g:3", (gdouble)dar_width * 3 / dar_height);
     }
     else
     {
-        str = g_strdup_printf("%d : %d", dar_width, dar_height);
+        str = g_strdup_printf("%d:%d", dar_width, dar_height);
     }
     return str;
 }
