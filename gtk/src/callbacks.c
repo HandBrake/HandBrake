@@ -2141,7 +2141,8 @@ ghb_update_summary_info(signal_user_data_t *ud)
     display_aspect = ghb_get_display_aspect_string(display_width,
                                                    display_height);
     text = g_strdup_printf("%dx%d storage, %dx%d display\n"
-                           "%d:%d PAR, %s DAR",
+                           "%d:%d Pixel Aspect Ratio\n"
+                            "%s Display Aspect Ratio",
                            width, height, display_width, display_height,
                            par_width, par_height, display_aspect);
     widget = GHB_WIDGET(ud->builder, "dimensions_summary");
