@@ -129,6 +129,15 @@ conjunction with the "Forced" option.</property>
                       </object>
                     </child>
                     <child>
+                      <object class="GtkMenuItem" id="presets_window_save_as">
+                        <property name="label" translatable="yes">Save _As</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">app.preset-save-as</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="presets_window_remove">
                         <property name="label" translatable="yes">_Delete</property>
                         <property name="visible">True</property>
@@ -932,6 +941,15 @@ libx264 authors:
                       </object>
                     </child>
                     <child>
+                      <object class="GtkMenuItem" id="presets_save_as">
+                        <property name="label" translatable="yes">Save _As</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">app.preset-save-as</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="presets_remove">
                         <property name="label" translatable="yes">_Delete</property>
                         <property name="visible">True</property>
@@ -1564,6 +1582,7 @@ This is often the feature title of a DVD.</property>
                         <property name="can_focus">False</property>
                         <property name="width-chars">10</property>
                         <property name="label" translatable="yes"></property>
+                        <property name="label" translatable="yes">&lt;u&gt;&lt;i&gt;Modified&lt;/i&gt;&lt;/u&gt;</property>
                         <property name="use_markup">True</property>
                       </object>
                       <packing>
@@ -1587,6 +1606,23 @@ This is often the feature title of a DVD.</property>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="preset_save_new">
+                        <property name="label" translatable="yes">Save New Preset</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Reload the encoding settings for the currently selected preset.
+    Modifications will be discarded.</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">end</property>
+                        <property name="action-name">app.preset-save-as</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>

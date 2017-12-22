@@ -2066,9 +2066,7 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     hb_value_free(&dict);
 }
 
-G_MODULE_EXPORT void
-preset_save_action_cb(GSimpleAction *action, GVariant *param,
-                      signal_user_data_t *ud)
+static void preset_save_action(signal_user_data_t *ud, gboolean as)
 {
     const char        * category = NULL;
     const gchar       * name;
@@ -2078,6 +2076,7 @@ preset_save_action_cb(GSimpleAction *action, GVariant *param,
     int                 width, height;
     gboolean            autoscale;
     GtkWidget         * dialog;
+    GtkWidget         * widget;
     GtkEntry          * entry;
     GtkTextView       * tv;
     GhbValue          * dict;
@@ -2150,6 +2149,12 @@ preset_save_action_cb(GSimpleAction *action, GVariant *param,
     dialog   = GHB_WIDGET(ud->builder, "preset_save_dialog");
     entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
     gtk_entry_set_text(entry, name);
+
+    widget = GHB_WIDGET(ud->builder, "PresetName");
+    gtk_widget_set_sensitive(widget, as);
+    widget = GHB_WIDGET(ud->builder, "PresetCategory");
+    gtk_widget_set_sensitive(widget, as);
+
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
     if (response == GTK_RESPONSE_OK)
@@ -2177,6 +2182,20 @@ preset_save_action_cb(GSimpleAction *action, GVariant *param,
         settings_save(ud, category, name, desc);
         free(desc);
     }
+}
+
+G_MODULE_EXPORT void
+preset_save_action_cb(GSimpleAction *action, GVariant *param,
+                      signal_user_data_t *ud)
+{
+    preset_save_action(ud, FALSE);
+}
+
+G_MODULE_EXPORT void
+preset_save_as_action_cb(GSimpleAction *action, GVariant *param,
+                         signal_user_data_t *ud)
+{
+    preset_save_action(ud, TRUE);
 }
 
 static void
@@ -2704,18 +2723,18 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
         }
         if (!ghb_dict_get_bool(dict, "Folder"))
         {
-            GtkLabel      * label;
             GSimpleAction * action;
             GtkWidget     * widget;
 
             set_preset_menu_button_label(ud, path);
-            label = GTK_LABEL(GHB_WIDGET(ud->builder,
-                                         "preset_selection_modified_label"));
-            gtk_label_set_markup(label, "");
             action = G_SIMPLE_ACTION(g_action_map_lookup_action(
                                      G_ACTION_MAP(ud->app), "preset-reload"));
             g_simple_action_set_enabled(action, FALSE);
+            widget = GHB_WIDGET(ud->builder, "preset_selection_modified_label");
+            gtk_widget_set_visible(widget, FALSE);
             widget = GHB_WIDGET(ud->builder, "preset_selection_reload");
+            gtk_widget_set_visible(widget, FALSE);
+            widget = GHB_WIDGET(ud->builder, "preset_save_new");
             gtk_widget_set_visible(widget, FALSE);
         }
         free(path);
@@ -2727,7 +2746,6 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
 {
     GtkTreeView      * treeview;
     GtkTreeSelection * selection;
-    GtkLabel         * label;
     GSimpleAction    * action;
     GtkWidget        * widget;
 
@@ -2737,14 +2755,15 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
     gtk_tree_selection_unselect_all(selection);
     ghb_dict_set_bool(ud->settings, "preset_modified", TRUE);
 
-    label = GTK_LABEL(GHB_WIDGET(ud->builder,
-                                 "preset_selection_modified_label"));
-    gtk_label_set_markup(label, "<u><i>Modified</i></u>");
 
     action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
                                                         "preset-reload"));
     g_simple_action_set_enabled(action, TRUE);
+    widget = GHB_WIDGET(ud->builder, "preset_selection_modified_label");
+    gtk_widget_set_visible(widget, TRUE);
     widget = GHB_WIDGET(ud->builder, "preset_selection_reload");
+    gtk_widget_set_visible(widget, TRUE);
+    widget = GHB_WIDGET(ud->builder, "preset_save_new");
     gtk_widget_set_visible(widget, TRUE);
 }
 

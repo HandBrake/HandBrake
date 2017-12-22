@@ -863,6 +863,8 @@ show_activity_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
 G_MODULE_EXPORT void
 preset_save_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
+preset_save_as_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
 preset_remove_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 preset_default_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
@@ -906,6 +908,7 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "show-activity",  NULL,
           NULL, "false",    show_activity_action_cb         },
         { "preset-save",    preset_save_action_cb           },
+        { "preset-save-as", preset_save_as_action_cb        },
         { "preset-remove",  preset_remove_action_cb         },
         { "preset-default", preset_default_action_cb        },
         { "preset-export",  preset_export_action_cb         },
