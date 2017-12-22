@@ -162,6 +162,20 @@ conjunction with the "Forced" option.</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
+                      <object class="GtkMenuItem" id="presets_window_default">
+                        <property name="label" translatable="yes">Set De_fault</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">app.preset-default</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="presets_window_sep1">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="presets_window_save">
                         <property name="label" translatable="yes">_Save</property>
                         <property name="visible">True</property>
@@ -198,12 +212,8 @@ conjunction with the "Forced" option.</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkMenuItem" id="presets_window_default">
-                        <property name="label" translatable="yes">Set De_fault</property>
+                      <object class="GtkSeparatorMenuItem" id="presets_window_sep2">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="action-name">app.preset-default</property>
                       </object>
                     </child>
                     <child>
@@ -222,6 +232,11 @@ conjunction with the "Forced" option.</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="action-name">app.preset-export</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="presets_window_sep3">
+                        <property name="visible">True</property>
                       </object>
                     </child>
                     <child>
@@ -983,6 +998,20 @@ libx264 authors:
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
+                      <object class="GtkMenuItem" id="presets_default">
+                        <property name="label" translatable="yes">Set De_fault</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">app.preset-default</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="presets_sep1">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="presets_save">
                         <property name="label" translatable="yes">_Save</property>
                         <property name="visible">True</property>
@@ -1019,12 +1048,8 @@ libx264 authors:
                       </object>
                     </child>
                     <child>
-                      <object class="GtkMenuItem" id="presets_default">
-                        <property name="label" translatable="yes">Set De_fault</property>
+                      <object class="GtkSeparatorMenuItem" id="presets_sep2">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="action-name">app.preset-default</property>
                       </object>
                     </child>
                     <child>
@@ -1043,6 +1068,11 @@ libx264 authors:
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="action-name">app.preset-export</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="presets_sep3">
+                        <property name="visible">True</property>
                       </object>
                     </child>
                     <child>

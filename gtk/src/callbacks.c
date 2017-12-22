@@ -1862,8 +1862,6 @@ ghb_update_summary_info(signal_user_data_t *ud)
         gtk_label_set_text(GTK_LABEL(widget), "");
         widget = GHB_WIDGET(ud->builder, "dimensions_summary");
         gtk_label_set_text(GTK_LABEL(widget), "--");
-        widget = GHB_WIDGET(ud->builder, "aspect_summary");
-        gtk_label_set_text(GTK_LABEL(widget), "--");
         widget = GHB_WIDGET(ud->builder, "preview_button_image");
         gtk_image_set_from_icon_name(GTK_IMAGE(widget), "hb-icon", 128);
         return;
