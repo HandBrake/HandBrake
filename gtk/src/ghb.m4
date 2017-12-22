@@ -1845,7 +1845,7 @@ This is often the feature title of a DVD.</property>
                               <object class="GtkLabel" id="format_summary_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Format:&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">Format:</property>
                                 <property name="xalign">0</property>
                                 <property name="hexpand">False</property>
                                 <property name="use_markup">True</property>
@@ -1945,7 +1945,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                                 <property name="halign">start</property>
                                 <property name="use_markup">True</property>
                                 <property name="margin-top">12</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Duration:&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">Duration:</property>
                               </object>
                               <packing>
                                 <property name="top_attach">4</property>
@@ -1978,7 +1978,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                               <object class="GtkLabel" id="tracks_summary_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Tracks:&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">Tracks:</property>
                                 <property name="xalign">0</property>
                                 <property name="yalign">0</property>
                                 <property name="hexpand">False</property>
@@ -2018,7 +2018,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                               <object class="GtkLabel" id="filters_summary_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Filters:&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">Filters:</property>
                                 <property name="use_markup">True</property>
                                 <property name="xalign">0</property>
                                 <property name="yalign">0</property>
@@ -2058,7 +2058,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                               <object class="GtkLabel" id="dimensions_summary_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">&lt;b&gt;Size:&lt;/b&gt;</property>
+                                <property name="label" translatable="yes">Size:</property>
                                 <property name="use_markup">True</property>
                                 <property name="halign">start</property>
                                 <property name="xalign">0</property>
