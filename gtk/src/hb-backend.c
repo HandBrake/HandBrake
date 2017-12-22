@@ -1335,9 +1335,9 @@ ghb_init_combo_box(GtkComboBox *combo)
     {
         gtk_cell_layout_clear(GTK_CELL_LAYOUT(combo));
         cell = GTK_CELL_RENDERER(gtk_cell_renderer_text_new());
-        g_object_set(cell, "max-width-chars", 60, NULL);
+        g_object_set(cell, "max-width-chars", 80, NULL);
         g_object_set(cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
-        gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), cell, TRUE);
+        gtk_cell_layout_pack_start(GTK_CELL_LAYOUT(combo), cell, FALSE);
         gtk_cell_layout_set_attributes(GTK_CELL_LAYOUT(combo), cell,
             "markup", 0, "sensitive", 1, NULL);
     }
@@ -2051,16 +2051,51 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
 }
 
 gchar*
+ghb_create_source_label(const hb_title_t * title)
+{
+    char * volname;
+    char * source;
+
+    if (title != NULL && title->name != NULL && title->name[0] != 0)
+    {
+        volname = strdup(title->name);
+        if (title->type == HB_DVD_TYPE)
+        {
+            ghb_sanitize_volname(volname);
+        }
+        if (title->type == HB_BD_TYPE)
+        {
+            source = g_strdup_printf(_("%s - (%05d.MPLS)"),
+                                     volname, title->playlist);
+            g_free(volname);
+        }
+        else
+        {
+            source = volname;
+        }
+    }
+    else
+    {
+        source = g_strdup(_("No Title Found"));
+    }
+    return source;
+}
+
+gchar*
 ghb_create_title_label(const hb_title_t *title)
 {
     gchar *label;
 
+    if (title == NULL)
+    {
+        return g_strdup(_("No Title Found"));
+    }
     if (title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE)
     {
         if (title->duration != 0)
         {
             char *tmp;
-            tmp  = g_strdup_printf (_("%d - %02dh%02dm%02ds - %s"),
+            tmp  = g_strdup_printf (_("%3d - %02dh%02dm%02ds - %s"),
                 title->index, title->hours, title->minutes, title->seconds,
                 title->name);
             label = g_markup_escape_text(tmp, -1);
@@ -2069,7 +2104,7 @@ ghb_create_title_label(const hb_title_t *title)
         else
         {
             char *tmp;
-            tmp  = g_strdup_printf ("%d - %s",
+            tmp  = g_strdup_printf ("%3d - %s",
                                     title->index, title->name);
             label = g_markup_escape_text(tmp, -1);
             g_free(tmp);
@@ -2079,28 +2114,20 @@ ghb_create_title_label(const hb_title_t *title)
     {
         if (title->duration != 0)
         {
-            label = g_strdup_printf(_("%d (%05d.MPLS) - %02dh%02dm%02ds"),
-                title->index, title->playlist, title->hours,
-                title->minutes, title->seconds);
+            label = g_strdup_printf(_("%3d - %02dh%02dm%02ds - (%05d.MPLS)"),
+                                    title->index, title->hours, title->minutes,
+                                    title->seconds, title->playlist);
         }
         else
         {
-            label = g_strdup_printf(_("%d (%05d.MPLS) - Unknown Length"),
+            label = g_strdup_printf(_("%3d - (%05d.MPLS)"),
                 title->index, title->playlist);
         }
     }
     else
     {
-        if (title->duration != 0)
-        {
-            label  = g_strdup_printf(_("%d - %02dh%02dm%02ds"),
-                title->index, title->hours, title->minutes, title->seconds);
-        }
-        else
-        {
-            label  = g_strdup_printf(_("%d - Unknown Length"),
-                                    title->index);
-        }
+        label  = g_strdup_printf(_("%3d - %02dh%02dm%02ds"),
+            title->index, title->hours, title->minutes, title->seconds);
     }
     return label;
 }
@@ -4707,8 +4734,8 @@ ghb_get_preview_image(
     return preview;
 }
 
-static void
-sanitize_volname(gchar *name)
+void
+ghb_sanitize_volname(gchar *name)
 {
     gchar *a, *b;
 
@@ -4740,7 +4767,7 @@ ghb_dvd_volname(const gchar *device)
     if (name != NULL && name[0] != 0)
     {
         name = g_strdup(name);
-        sanitize_volname(name);
+        ghb_sanitize_volname(name);
         return name;
     }
     return NULL;

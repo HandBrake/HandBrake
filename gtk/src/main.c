@@ -795,6 +795,12 @@ const gchar *MyCSS =
     background-color: @gray32;      \n\
     color: @white;                  \n\
 }                                   \n\
+                                    \n\
+entry                               \n\
+{                                   \n\
+    margin: 0px 0px 0px 0px;        \n\
+    padding: 0px 0px 0px 0px;       \n\
+}                                   \n\
 "
 #if GTK_CHECK_VERSION(3, 20, 0)
 "                                   \n\

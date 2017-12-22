@@ -2706,6 +2706,7 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
         {
             GtkLabel      * label;
             GSimpleAction * action;
+            GtkWidget     * widget;
 
             set_preset_menu_button_label(ud, path);
             label = GTK_LABEL(GHB_WIDGET(ud->builder,
@@ -2714,6 +2715,8 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
             action = G_SIMPLE_ACTION(g_action_map_lookup_action(
                                      G_ACTION_MAP(ud->app), "preset-reload"));
             g_simple_action_set_enabled(action, FALSE);
+            widget = GHB_WIDGET(ud->builder, "preset_selection_reload");
+            gtk_widget_set_visible(widget, FALSE);
         }
         free(path);
     }
@@ -2726,6 +2729,7 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
     GtkTreeSelection * selection;
     GtkLabel         * label;
     GSimpleAction    * action;
+    GtkWidget        * widget;
 
     if (ud->dont_clear_presets) return;
     treeview  = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
@@ -2740,6 +2744,8 @@ ghb_clear_presets_selection(signal_user_data_t *ud)
     action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
                                                         "preset-reload"));
     g_simple_action_set_enabled(action, TRUE);
+    widget = GHB_WIDGET(ud->builder, "preset_selection_reload");
+    gtk_widget_set_visible(widget, TRUE);
 }
 
 G_MODULE_EXPORT void

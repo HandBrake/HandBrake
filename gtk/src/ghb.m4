@@ -1025,6 +1025,7 @@ libx264 authors:
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
+            <property name="halign">GTK_ALIGN_FILL</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <child>
               <object class="GtkToolbar" id="toolbar1">
@@ -1169,14 +1170,32 @@ Activity</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="hbox54">
-                <property name="orientation">horizontal</property>
+              <object class="GtkGrid" id="source_title_preset_grid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="hexpand">True</property>
+                <property name="column_spacing">5</property>
+                <property name="hexpand">True</property>
+                <property name="halign">GTK_ALIGN_FILL</property>
                 <property name="margin-start">12</property>
                 <property name="margin-end">12</property>
-                <property name="margin-bottom">6</property>
+                <property name="row-spacing">2</property>
+                <child>
+                  <object class="GtkLabel" id="label7">
+                    <property name="visible">True</property>
+                    <property name="justify">left</property>
+                    <property name="xalign">0</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Source:&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkBox" id="SourceInfoBox">
                     <property name="orientation">horizontal</property>
@@ -1185,20 +1204,7 @@ Activity</property>
                     <property name="spacing">6</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
-                      <object class="GtkLabel" id="label7">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Source:&lt;/b&gt;</property>
-                        <property name="use_markup">True</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="volume_label">
+                      <object class="GtkLabel" id="source_label">
                         <property name="visible">True</property>
                         <property name="max-width-chars">60</property>
                         <property name="can_focus">False</property>
@@ -1230,9 +1236,10 @@ Activity</property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
@@ -1241,6 +1248,8 @@ Activity</property>
                     <property name="visible">False</property>
                     <property name="can_focus">False</property>
                     <property name="spacing">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="halign">GTK_ALIGN_FILL</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <object class="GtkLabel" id="source_scan_label">
@@ -1275,38 +1284,23 @@ Activity</property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="top_attach">0</property>
+                    <property name="left_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkGrid" id="table7">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
-                <property name="column_spacing">5</property>
-                <property name="hexpand">True</property>
-                <property name="halign">GTK_ALIGN_FILL</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="row-spacing">2</property>
                 <child>
                   <object class="GtkLabel" id="label20">
                     <property name="visible">True</property>
+                    <property name="justify">left</property>
+                    <property name="xalign">0</property>
                     <property name="can_focus">False</property>
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Title:</property>
+                    <property name="use_markup">True</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Title:&lt;/b&gt;</property>
                   </object>
                   <packing>
-                    <property name="top_attach">0</property>
+                    <property name="top_attach">1</property>
                     <property name="left_attach">0</property>
                     <property name="width">1</property>
                     <property name="height">1</property>
@@ -1318,19 +1312,46 @@ Activity</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="hexpand">True</property>
-                    <property name="halign">GTK_ALIGN_FILL</property>
+                    <property name="hexpand">False</property>
+                    <property name="halign">start</property>
                     <property name="spacing">5</property>
                     <child>
                       <object class="GtkComboBox" id="title">
                         <property name="visible">True</property>
                         <property name="valign">GTK_ALIGN_CENTER</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">False</property>
                         <property name="halign">start</property>
+                        <property name="width-request">100</property>
+                        <property name="wrap-width">1</property>
+                        <property name="popup-fixed-width">False</property>
                         <property name="tooltip_text" translatable="yes">Set the title to encode.
 By default the longest title is chosen.
 This is often the feature title of a DVD.</property>
                         <property name="has_frame">False</property>
+                        <child>
+                          <object class="GtkFrame" id="title_frame">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="shadow_type">GTK_SHADOW_ETCHED_IN</property>
+                            <child>
+                              <object class="GtkLabel" id="title_label">
+                                <property name="width-chars">30</property>
+                                <property name="max-width-chars">30</property>
+                                <property name="ellipsize">end</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="margin-start">6</property>
+                                <property name="margin-end">6</property>
+                                <property name="halign">start</property>
+                                <property name="xalign">0.0</property>
+                                <property name="use_markup">True</property>
+                                <property name="label" translatable="yes">&lt;small&gt;No Titles&lt;/small&gt;</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                         <signal name="changed" handler="title_changed_cb" swapped="no"/>
                       </object>
                       <packing>
@@ -1344,7 +1365,9 @@ This is often the feature title of a DVD.</property>
                         <property name="visible">False</property>
                         <property name="can_focus">False</property>
                         <property name="halign">end</property>
-                        <property name="label" translatable="yes">Angle:</property>
+                        <property name="use_markup">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Angle:&lt;/b&gt;</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -1371,23 +1394,21 @@ This is often the feature title of a DVD.</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="top_attach">0</property>
-                    <property name="left_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox" id="chapter_box">
-                    <property name="halign">start</property>
-                    <property name="valign">center</property>
-                    <property name="orientation">horizontal</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="spacing">5</property>
+                    <child>
+                      <object class="GtkLabel" id="range_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="halign">end</property>
+                        <property name="use_markup">True</property>
+                        <property name="margin-start">6</property>
+                        <property name="label" translatable="yes">&lt;b&gt;Range:&lt;/b&gt;</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="GtkComboBox" id="PtoPType">
                         <property name="visible">True</property>
@@ -1399,12 +1420,12 @@ This is often the feature title of a DVD.</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkSpinButton" id="start_point">
-                        <property name="width-chars">10</property>
+                        <property name="width-chars">11</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1420,24 +1441,24 @@ This is often the feature title of a DVD.</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="label56">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">through</property>
+                        <property name="label" translatable="yes">-</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkSpinButton" id="end_point">
-                        <property name="width-chars">10</property>
+                        <property name="width-chars">11</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1453,49 +1474,7 @@ This is often the feature title of a DVD.</property>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkBox" id="hbox47">
-                        <property name="orientation">horizontal</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="spacing">7</property>
-                        <child>
-                          <object class="GtkLabel" id="label6">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">Duration:</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="title_duration">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="halign">start</property>
-                            <property name="label" translatable="yes">hh:mm:ss</property>
-                            <property name="width-chars">8</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">4</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                   </object>
@@ -1506,120 +1485,123 @@ This is often the feature title of a DVD.</property>
                     <property name="height">1</property>
                   </packing>
                 </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="preset_selection_box">
-                <property name="halign">start</property>
-                <property name="valign">center</property>
-                <property name="orientation">horizontal</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="margin-top">6</property>
-                <property name="spacing">5</property>
                 <child>
                   <object class="GtkLabel" id="preset_selection_label">
                     <property name="visible">True</property>
+                    <property name="justify">left</property>
+                    <property name="xalign">0</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">&lt;b&gt;Preset:&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
+                    <property name="top_attach">2</property>
+                    <property name="left_attach">0</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkMenuButton" id="presets_menu_button">
+                  <object class="GtkBox" id="preset_selection_box">
+                    <property name="halign">start</property>
+                    <property name="valign">center</property>
+                    <property name="orientation">horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="direction">right</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="margin-end">12</property>
+                    <property name="margin-top">6</property>
+                    <property name="spacing">5</property>
                     <child>
-                      <object class="GtkBox" id="presets_menu_button_box">
-                        <property name="orientation">horizontal</property>
+                      <object class="GtkMenuButton" id="presets_menu_button">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="direction">right</property>
                         <child>
-                          <object class="GtkLabel" id="presets_menu_button_label">
+                          <object class="GtkBox" id="presets_menu_button_box">
+                            <property name="orientation">horizontal</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="width-chars">50</property>
-                            <property name="xalign">0</property>
-                            <property name="label" translatable="yes">Choose Preset</property>
-                            <property name="use_markup">True</property>
+                            <child>
+                              <object class="GtkLabel" id="presets_menu_button_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="width-chars">50</property>
+                                <property name="xalign">0</property>
+                                <property name="label" translatable="yes">Choose Preset</property>
+                                <property name="use_markup">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkImage" id="presets_menu_button_arrow">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="icon_name">pan-end-symbolic</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
-                          <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkImage" id="presets_menu_button_arrow">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="icon_name">pan-end-symbolic</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
                         </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="preset_selection_modified_label">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="width-chars">10</property>
+                        <property name="label" translatable="yes"></property>
+                        <property name="use_markup">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="preset_selection_reload">
+                        <property name="label" translatable="yes">Reload</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Reload the encoding settings for the currently selected preset.
+    Modifications will be discarded.</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">end</property>
+                        <property name="action-name">app.preset-reload</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="preset_selection_modified_label">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="width-chars">10</property>
-                    <property name="label" translatable="yes"></property>
-                    <property name="use_markup">True</property>
-                  </object>
-                  <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton" id="preset_selection_reload">
-                    <property name="label" translatable="yes">Reload</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Reload the encoding settings for the currently selected preset.
-Modifications will be discarded.</property>
-                    <property name="receives_default">True</property>
-                    <property name="halign">end</property>
-                    <property name="action-name">app.preset-reload</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="top_attach">2</property>
+                    <property name="left_attach">1</property>
+                    <property name="width">1</property>
+                    <property name="height">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">1</property>
               </packing>
             </child>
           </object>
@@ -1783,6 +1765,44 @@ sync for broken players that do not honor MP4 edit lists.</property>
                               </packing>
                             </child>
                             <child>
+                              <object class="GtkLabel" id="label6">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="xalign">0</property>
+                                <property name="yalign">0</property>
+                                <property name="halign">start</property>
+                                <property name="use_markup">True</property>
+                                <property name="margin-top">12</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Duration:&lt;/b&gt;</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">4</property>
+                                <property name="left_attach">0</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="title_duration">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="halign">start</property>
+                                <property name="xalign">0</property>
+                                <property name="yalign">0</property>
+                                <property name="hexpand">False</property>
+                                <property name="label" translatable="yes">hh:mm:ss</property>
+                                <property name="margin-top">12</property>
+                                <property name="width-chars">8</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">4</property>
+                                <property name="left_attach">1</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
                               <object class="GtkLabel" id="tracks_summary_label">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
@@ -1794,7 +1814,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                                 <property name="use_markup">True</property>
                               </object>
                               <packing>
-                                <property name="top_attach">4</property>
+                                <property name="top_attach">5</property>
                                 <property name="left_attach">0</property>
                                 <property name="width">1</property>
                                 <property name="height">1</property>
@@ -1816,7 +1836,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                                 <property name="use_markup">True</property>
                               </object>
                               <packing>
-                                <property name="top_attach">4</property>
+                                <property name="top_attach">5</property>
                                 <property name="left_attach">1</property>
                                 <property name="width">1</property>
                                 <property name="height">8</property>
@@ -1834,7 +1854,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                                 <property name="margin-top">12</property>
                               </object>
                               <packing>
-                                <property name="top_attach">12</property>
+                                <property name="top_attach">13</property>
                                 <property name="left_attach">0</property>
                                 <property name="width">1</property>
                                 <property name="height">1</property>
@@ -1856,7 +1876,7 @@ sync for broken players that do not honor MP4 edit lists.</property>
                                 <property name="use_markup">True</property>
                               </object>
                               <packing>
-                                <property name="top_attach">12</property>
+                                <property name="top_attach">13</property>
                                 <property name="left_attach">1</property>
                                 <property name="width">1</property>
                                 <property name="height">4</property>
@@ -7009,7 +7029,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 <property name="halign">end</property>
                 <property name="margin-end">6</property>
                 <property name="use_markup">True</property>
-                <property name="label" translatable="yes">&lt;b&gt;Destination:&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;Save As:&lt;/b&gt;</property>
               </object>
               <packing>
                 <property name="top_attach">0</property>

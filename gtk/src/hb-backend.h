@@ -230,5 +230,7 @@ char * ghb_get_display_aspect_string(int disp_width, int disp_height);
 hb_handle_t* ghb_scan_handle(void);
 hb_handle_t* ghb_queue_handle(void);
 hb_handle_t* ghb_live_handle(void);
+void ghb_sanitize_volname(gchar *name);
+gchar* ghb_create_source_label(const hb_title_t * title);
 
 #endif // _HBBACKEND_H_

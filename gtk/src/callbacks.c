@@ -592,7 +592,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
         // If auto-naming is disabled, this will be the default filename.
         GString *str = g_string_new("");
         const gchar *vol_name;
-        vol_name = ghb_dict_get_string(settings, "volume_label");
+        vol_name = ghb_dict_get_string(settings, "volume");
         g_string_append_printf(str, "%s", vol_name);
         g_string_append_printf(str, ".%s", extension);
         filename = g_string_free(str, FALSE);
@@ -610,7 +610,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
             if (!strncmp(p, "{source}", strlen("{source}")))
             {
                 const gchar *vol_name;
-                vol_name = ghb_dict_get_string(settings, "volume_label");
+                vol_name = ghb_dict_get_string(settings, "volume");
                 g_string_append_printf(str, "%s", vol_name);
                 p += strlen("{source}");
             }
@@ -847,18 +847,18 @@ update_source_label(signal_user_data_t *ud, const gchar *source)
         label = get_file_label(filename);
     }
     g_free(filename);
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "volume_label");
+    GtkWidget *widget = GHB_WIDGET (ud->builder, "source_label");
     if (label != NULL)
     {
         gtk_label_set_text (GTK_LABEL(widget), label);
-        ghb_dict_set_string(ud->globals, "volume_label", label);
+        ghb_dict_set_string(ud->globals, "volume", label);
         g_free(label);
     }
     else
     {
         label = _("No Title Found");
         gtk_label_set_text (GTK_LABEL(widget), label);
-        ghb_dict_set_string(ud->globals, "volume_label", label);
+        ghb_dict_set_string(ud->globals, "volume", label);
         return FALSE;
     }
     return TRUE;
@@ -2169,6 +2169,7 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     if (title != NULL)
     {
         GhbValue *job_dict;
+        char * source_name;
 
         job_dict = hb_preset_job_init(ghb_scan_handle(), title_id, settings);
         ghb_dict_set(settings, "Job", job_dict);
@@ -2182,23 +2183,9 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         ghb_dict_set_int(settings, "source_width", title->geometry.width);
         ghb_dict_set_int(settings, "source_height", title->geometry.height);
         ghb_dict_set_string(settings, "source", title->path);
-        if (title->type == HB_STREAM_TYPE || title->type == HB_FF_STREAM_TYPE)
-        {
-            if (title->name != NULL && title->name[0] != 0)
-            {
-                ghb_dict_set_string(settings, "volume_label", title->name);
-            }
-            else
-            {
-                gchar *label = _("No Title Found");
-                ghb_dict_set_string(settings, "volume_label", label);
-            }
-        }
-        else
-        {
-            ghb_dict_set(settings, "volume_label", ghb_value_dup(
-                    ghb_dict_get_value(ud->globals, "volume_label")));
-        }
+        source_name = ghb_create_source_label(title);
+        ghb_dict_set_string(settings, "source_label", source_name);
+        ghb_dict_set_string(settings, "volume", source_name);
 
         int crop[4];
 
@@ -2268,6 +2255,11 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
                 title->metadata->long_description);
         }
         ghb_sanitize_audio_track_settings(settings);
+    }
+    else
+    {
+        ghb_dict_set_string(settings, "source_label", _("No Title Found"));
+        ghb_dict_set_string(settings, "volume", _("New Video"));
     }
 
     set_destination_settings(ud, settings);
@@ -2340,12 +2332,17 @@ static gboolean update_preview = FALSE;
 G_MODULE_EXPORT void
 title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
-    gint title_id, titleindex, count;
+    gint               title_id, titleindex, count;
     const hb_title_t * title;
+    GtkLabel         * title_label;
+    const char       * opt;
 
-    g_debug("title_changed_cb ()");
     title_id = ghb_widget_int(widget);
     title = ghb_lookup_title(title_id, &titleindex);
+
+    opt = ghb_create_title_label(title);
+    title_label = GTK_LABEL(GHB_WIDGET(ud->builder, "title_label"));
+    gtk_label_set_markup(title_label, opt);
 
     count = ghb_array_len(ud->settings_array);
     int idx = (titleindex >= 0 && titleindex < count) ? titleindex : 0;
@@ -3683,7 +3680,7 @@ ghb_backend_events(signal_user_data_t *ud)
         ghb_update_ui_combo_box(ud, "title", NULL, FALSE);
         load_all_titles(ud, titleindex);
 
-        label = GTK_LABEL(GHB_WIDGET (ud->builder, "volume_label"));
+        label = GTK_LABEL(GHB_WIDGET (ud->builder, "source_label"));
 
         ghb_clear_scan_state(GHB_STATE_SCANDONE);
         // Are there really any titles.
@@ -4502,8 +4499,6 @@ ghb_hbfd(signal_user_data_t *ud, gboolean hbfd)
     widget = GHB_WIDGET(ud->builder, "show_activity");
     gtk_widget_set_visible(widget, !hbfd);
 
-    widget = GHB_WIDGET(ud->builder, "chapter_box");
-    gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET(ud->builder, "container_box");
     gtk_widget_set_visible(widget, !hbfd);
     widget = GHB_WIDGET(ud->builder, "SettingsStackSwitcher");

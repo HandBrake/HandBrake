@@ -3,7 +3,7 @@
         "SkipDiskFreeCheck": false,
         "show_preview": false,
         "scan_source": "",
-        "volume_label": "New Video"
+        "volume": "New Video"
     },
     "OneTimeInitialization": {
         "title": "none"
@@ -53,7 +53,7 @@
         "start_point": 1.0,
         "start_frame": -1,
         "title_selected": false,
-        "volume_label": "New Video",
+        "source_label": "New Video",
         "chapter_list": [],
         "vquality_type_bitrate": false,
         "vquality_type_constant": false,
