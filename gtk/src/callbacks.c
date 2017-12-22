@@ -2140,18 +2140,15 @@ ghb_update_summary_info(signal_user_data_t *ud)
     par_width      = ghb_dict_get_int(ud->settings, "PicturePARWidth");
     par_height     = ghb_dict_get_int(ud->settings, "PicturePARHeight");
 
-    text = g_strdup_printf("%dx%d storage, %dx%d display",
-                           width, height, display_width, display_height);
-    widget = GHB_WIDGET(ud->builder, "dimensions_summary");
-    gtk_label_set_text(GTK_LABEL(widget), text);
-    g_free(text);
-
     display_aspect = ghb_get_display_aspect_string(display_width,
                                                    display_height);
-    text = g_strdup_printf("%d:%d PAR, %s DAR",
+    text = g_strdup_printf("%dx%d storage, %dx%d display\n"
+                           "%d:%d PAR, %s DAR",
+                           width, height, display_width, display_height,
                            par_width, par_height, display_aspect);
-    widget = GHB_WIDGET(ud->builder, "aspect_summary");
+    widget = GHB_WIDGET(ud->builder, "dimensions_summary");
     gtk_label_set_text(GTK_LABEL(widget), text);
+
     g_free(text);
     g_free(display_aspect);
 }

@@ -2024,6 +2024,44 @@ sync for broken players that do not honor MP4 edit lists.</property>
                                 <property name="height">4</property>
                               </packing>
                             </child>
+                            <child>
+                              <object class="GtkLabel" id="dimensions_summary_label">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Size:&lt;/b&gt;</property>
+                                <property name="use_markup">True</property>
+                                <property name="halign">start</property>
+                                <property name="xalign">0</property>
+                                <property name="yalign">0</property>
+                                <property name="hexpand">False</property>
+                                <property name="margin-top">12</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">14</property>
+                                <property name="left_attach">0</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="dimensions_summary">
+                                <property name="width_request">85</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="xalign">0</property>
+                                <property name="yalign">0</property>
+                                <property name="hexpand">False</property>
+                                <property name="margin-top">12</property>
+                                <property name="label" translatable="yes">--</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">14</property>
+                                <property name="left_attach">1</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -2056,82 +2094,6 @@ sync for broken players that do not honor MP4 edit lists.</property>
                                 <property name="expand">True</property>
                                 <property name="fill">True</property>
                                 <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkGrid" id="dimensions_summary_table">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="halign">center</property>
-                                <property name="valign">start</property>
-                                <property name="column-spacing">6</property>
-                                <child>
-                                  <object class="GtkLabel" id="dimensions_summary_label">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Dimensions:</property>
-                                    <property name="halign">start</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="top_attach">0</property>
-                                    <property name="left_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="dimensions_summary">
-                                    <property name="width_request">85</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="valign">start</property>
-                                    <property name="label" translatable="yes">--</property>
-                                  </object>
-                                  <packing>
-                                    <property name="top_attach">0</property>
-                                    <property name="left_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="aspect_summary_label">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="label" translatable="yes">Aspect Ratio:</property>
-                                    <property name="halign">start</property>
-                                    <property name="xalign">0</property>
-                                  </object>
-                                  <packing>
-                                    <property name="top_attach">1</property>
-                                    <property name="left_attach">0</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
-                                  </packing>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel" id="aspect_summary">
-                                    <property name="width_request">85</property>
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">False</property>
-                                    <property name="halign">start</property>
-                                    <property name="valign">start</property>
-                                    <property name="label" translatable="yes">--</property>
-                                  </object>
-                                  <packing>
-                                    <property name="top_attach">1</property>
-                                    <property name="left_attach">1</property>
-                                    <property name="width">1</property>
-                                    <property name="height">1</property>
-                                  </packing>
-                                </child>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
