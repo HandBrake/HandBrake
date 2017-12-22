@@ -2514,7 +2514,6 @@ title_angle_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
-    ghb_clear_presets_selection(ud);
     ghb_live_reset(ud);
 
     GhbValue *source = ghb_get_job_source_settings(ud->settings);
