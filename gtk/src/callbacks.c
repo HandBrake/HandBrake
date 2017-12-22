@@ -1812,7 +1812,7 @@ ghb_update_title_info(signal_user_data_t *ud)
     subtitle_count = hb_list_count(title->list_subtitle);
 
     text = g_strdup_printf(
-        "%dx%d (%dx%d), %s, %s FPS, %d Audio Track%s, %d Subtitle Track%s",
+        ", %dx%d (%dx%d), %s, %s FPS, %d Audio Track%s, %d Subtitle Track%s",
         geo->width, geo->height,
         geo->width * geo->par.num / geo->par.den, geo->height,
         aspect, rate,

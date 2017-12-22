@@ -1309,7 +1309,8 @@ Activity</property>
                     <property name="orientation">horizontal</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
+                    <property name="hexpand">True</property>
+                    <property name="spacing">0</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <child>
                       <object class="GtkLabel" id="source_label">
@@ -1319,7 +1320,6 @@ Activity</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="halign">start</property>
                         <property name="ellipsize">middle</property>
-                        <property name="margin-end">12</property>
                         <property name="label" translatable="yes">None</property>
                       </object>
                       <packing>
@@ -1331,9 +1331,10 @@ Activity</property>
                     <child>
                       <object class="GtkLabel" id="source_info_label">
                         <property name="visible">True</property>
+                        <property name="hexpand">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="halign">end</property>
+                        <property name="halign">start</property>
                         <property name="label" translatable="yes"></property>
                       </object>
                       <packing>
