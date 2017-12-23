@@ -8564,18 +8564,20 @@ Uncheck this if you want to allow changing each title's settings independently.<
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="preset_rename_hbox">
-            <property name="orientation">horizontal</property>
+          <object class="GtkBox" id="preset_rename_vbox">
+            <property name="orientation">vertical</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <child>
-              <object class="GtkLabel" id="preset_rename_label">
+              <object class="GtkLabel" id="preset_dialog_rename_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Preset Name:</property>
+                <property name="halign">start</property>
+                <property name="margin-bottom">12</property>
+                <property name="use_markup">True</property>
+                <property name="label" translatable="yes">&lt;span size="x-large"&gt;Rename Preset&lt;/span&gt;</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -8584,22 +8586,86 @@ Uncheck this if you want to allow changing each title's settings independently.<
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="PresetReName">
+              <object class="GtkBox" id="preset_rename_hbox">
+                <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="max_length">40</property>
-                <property name="activates_default">True</property>
-                <property name="width-chars">30</property>
-                <property name="truncate_multiline">True</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
-                <signal name="changed" handler="preset_name_changed_cb" swapped="no"/>
+                <property name="hexpand">True</property>
+                <property name="spacing">4</property>
+                <child>
+                  <object class="GtkLabel" id="preset_rename_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Name:</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="PresetReName">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="max_length">40</property>
+                    <property name="activates_default">True</property>
+                    <property name="width-chars">40</property>
+                    <property name="truncate_multiline">True</property>
+                    <property name="primary_icon_activatable">False</property>
+                    <property name="secondary_icon_activatable">False</property>
+                    <property name="hexpand">True</property>
+                    <signal name="changed" handler="preset_name_changed_cb" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="preset_rename_desc_frame">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="label_xalign">0</property>
+                <property name="shadow_type">etched-out</property>
+                <child>
+                  <object class="GtkTextView" id="PresetReDescription">
+                    <property name="margin-top">6</property>
+                    <property name="margin-bottom">4</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">4</property>
+                    <property name="height_request">60</property>
+                    <property name="visible">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="wrap_mode">word</property>
+                    <property name="accepts_tab">False</property>
+                  </object>
+                </child>
+                <child type="label">
+                  <object class="GtkLabel" id="preset_rename_desc_frame_label">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Description&lt;/b&gt;</property>
+                    <property name="use_markup">True</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="padding">10</property>
+                <property name="position">2</property>
               </packing>
             </child>
           </object>

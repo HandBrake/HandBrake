@@ -2089,6 +2089,7 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
     hb_preset_index_t * path;
     GtkWidget         * dialog;
     GtkEntry          * entry;
+    GtkTextView       * tv;
     GhbValue          * dict;
     GtkResponseType     response;
 
@@ -2103,6 +2104,10 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
     }
     path = hb_preset_search_index(fullname, 0, type);
 
+    ghb_ui_update(ud, "PresetReDescription",
+                  ghb_dict_get_value(ud->settings, "PresetDescription"));
+    tv = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "PresetReDescription"));
+
     dialog   = GHB_WIDGET(ud->builder, "preset_rename_dialog");
     entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetReName"));
     gtk_entry_set_text(entry, name);
@@ -2111,6 +2116,10 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
     gtk_widget_hide(dialog);
     if (response == GTK_RESPONSE_OK)
     {
+        GtkTextBuffer * buffer;
+        GtkTextIter     start, end;
+        char          * desc;
+
         // save the new name
         name = gtk_entry_get_text(entry);
         dict = hb_preset_get(path);
@@ -2119,6 +2128,12 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
             ghb_dict_set_string(dict, "PresetName", name);
             store_presets();
         }
+
+        buffer = gtk_text_view_get_buffer(tv);
+        gtk_text_buffer_get_bounds(buffer, &start, &end);
+        desc = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
+        ghb_dict_set_string(ud->settings, "PresetDescription", desc);
+        free(desc);
 
         char * full = preset_get_fullname(path, "/");
         ghb_dict_set_string(ud->settings, "PresetFullName", full);
