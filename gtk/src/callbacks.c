@@ -5814,14 +5814,15 @@ presets_window_configure_cb(
 {
     if (gtk_widget_get_visible(widget))
     {
-        gint w, h;
+        gint w, h, ww, wh;
         w = ghb_dict_get_int(ud->prefs, "presets_window_width");
         h = ghb_dict_get_int(ud->prefs, "presets_window_height");
 
-        if ( w != event->width || h != event->height )
+        gtk_window_get_size(GTK_WINDOW(widget), &ww, &wh);
+        if ( w != ww || h != wh )
         {
-            ghb_dict_set_int(ud->prefs, "presets_window_width", event->width);
-            ghb_dict_set_int(ud->prefs, "presets_window_height", event->height);
+            ghb_dict_set_int(ud->prefs, "presets_window_width", ww);
+            ghb_dict_set_int(ud->prefs, "presets_window_height", wh);
             ghb_pref_set(ud->prefs, "presets_window_width");
             ghb_pref_set(ud->prefs, "presets_window_height");
             ghb_prefs_store();
@@ -5838,14 +5839,15 @@ window_configure_cb(
 {
     if (gtk_widget_get_visible(widget))
     {
-        gint w, h;
+        gint w, h, ww, wh;
         w = ghb_dict_get_int(ud->prefs, "window_width");
         h = ghb_dict_get_int(ud->prefs, "window_height");
 
-        if ( w != event->width || h != event->height )
+        gtk_window_get_size(GTK_WINDOW(widget), &ww, &wh);
+        if ( w != ww || h != wh )
         {
-            ghb_dict_set_int(ud->prefs, "window_width", event->width);
-            ghb_dict_set_int(ud->prefs, "window_height", event->height);
+            ghb_dict_set_int(ud->prefs, "window_width", ww);
+            ghb_dict_set_int(ud->prefs, "window_height", wh);
             ghb_pref_set(ud->prefs, "window_width");
             ghb_pref_set(ud->prefs, "window_height");
             ghb_prefs_store();
