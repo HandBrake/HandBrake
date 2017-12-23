@@ -8864,6 +8864,23 @@ Uncheck this if you want to allow changing each title's settings independently.<
               </packing>
             </child>
             <child>
+              <object class="GtkCheckButton" id="PresetSetDefault">
+                <property name="label" translatable="yes">Default Preset</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text" translatable="yes">Make this the default Preset when HandBrake starts</property>
+                <property name="halign">start</property>
+                <property name="margin-bottom">12</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="preset_widget_changed_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkGrid" id="PicturePresetBox">
                 <property name="visible">True</property>
                 <property name="row-spacing">2</property>
@@ -8989,7 +9006,7 @@ Setting this to 0 means there is no maximum height.</property>
               <packing>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -9027,7 +9044,7 @@ Setting this to 0 means there is no maximum height.</property>
                 <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="padding">10</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>

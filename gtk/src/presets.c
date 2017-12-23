@@ -1833,7 +1833,7 @@ ghb_presets_load(signal_user_data_t *ud)
 
 static void
 settings_save(signal_user_data_t *ud, const char * category,
-              const char *name, const char * desc)
+              const char *name, const char * desc, gboolean set_def)
 {
     GhbValue          * preset, * new_preset;
     gboolean            def = FALSE;
@@ -1885,6 +1885,14 @@ settings_save(signal_user_data_t *ud, const char * category,
     }
     else
     {
+        // Check if the new preset is also the new default preset
+        if (set_def)
+        {
+            ghb_dict_set_bool(new_preset, "Default", set_def);
+            ghb_presets_list_clear_default(ud);
+            hb_presets_clear_default();
+        }
+
         // Adding a new preset
         // Append to the folder
         int index = hb_preset_append(folder_path, new_preset);
@@ -2167,7 +2175,7 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
     height    = ghb_dict_get_int(ud->settings, "PictureHeight");
     autoscale = ghb_dict_get_bool(ud->settings, "autoscale");
 
-
+    ghb_ui_update(ud, "PresetSetDefault", ghb_boolean_value(FALSE));
     ghb_ui_update(ud, "PictureWidthEnable", ghb_boolean_value(!autoscale));
     ghb_ui_update(ud, "PictureHeightEnable", ghb_boolean_value(!autoscale));
 
@@ -2232,6 +2240,8 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
     gtk_widget_set_sensitive(widget, as);
     widget = GHB_WIDGET(ud->builder, "PresetCategory");
     gtk_widget_set_sensitive(widget, as);
+    widget = GHB_WIDGET(ud->builder, "PresetSetDefault");
+    gtk_widget_set_visible(widget, as);
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
@@ -2240,6 +2250,7 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
         GtkTextBuffer * buffer;
         GtkTextIter     start, end;
         char          * desc;
+        gboolean        def;
 
         // save the preset
         name = gtk_entry_get_text(entry);
@@ -2257,7 +2268,8 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
         buffer = gtk_text_view_get_buffer(tv);
         gtk_text_buffer_get_bounds(buffer, &start, &end);
         desc = gtk_text_buffer_get_text(buffer, &start, &end, FALSE);
-        settings_save(ud, category, name, desc);
+        def = ghb_dict_get_bool(ud->settings, "PresetSetDefault");
+        settings_save(ud, category, name, desc, def);
         free(desc);
     }
 }
