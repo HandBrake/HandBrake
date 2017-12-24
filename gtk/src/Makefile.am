@@ -4,18 +4,36 @@ icons =	\
 	hb-icon.svg
 
 icons_dep =	\
-	hb-icon.svg \
-	hb-start.svg \
-	hb-pause.svg \
-	hb-stop.svg \
-	hb-add-queue.svg \
-	hb-showqueue.svg \
-	hb-picture.svg \
-	hb-activity.svg \
-	hb-source.svg \
-	hb-remove.svg \
-	hb-edit.svg \
-	hb-complete.svg
+	icons/24x24/apps/hb-remove.png \
+	icons/32x32/apps/hb-source.png \
+	icons/32x32/apps/hb-picture.png \
+	icons/32x32/apps/hb-add-queue.png \
+	icons/32x32/apps/hb-showqueue.png \
+	icons/32x32/apps/hb-activity.png \
+	icons/32x32/apps/hb-start.png \
+	icons/32x32/apps/hb-stop.png \
+	icons/32x32/apps/hb-pause.png \
+	icons/48x48/apps/hb-remove.png \
+	icons/64x64/apps/hb-source.png \
+	icons/64x64/apps/hb-picture.png \
+	icons/64x64/apps/hb-add-queue.png \
+	icons/64x64/apps/hb-showqueue.png \
+	icons/64x64/apps/hb-activity.png \
+	icons/64x64/apps/hb-start.png \
+	icons/64x64/apps/hb-stop.png \
+	icons/64x64/apps/hb-pause.png \
+	icons/scalable/apps/hb-source.svg \
+	icons/scalable/apps/hb-picture.svg \
+	icons/scalable/apps/hb-add-queue.svg \
+	icons/scalable/apps/hb-showqueue.svg \
+	icons/scalable/apps/hb-activity.svg \
+	icons/scalable/apps/hb-start.svg \
+	icons/scalable/apps/hb-stop.svg \
+	icons/scalable/apps/hb-pause.svg \
+	icons/scalable/apps/hb-remove.svg \
+	icons/scalable/apps/hb-complete.svg \
+	icons/scalable/apps/hb-edit.svg \
+	icons/scalable/apps/hb-icon.svg
 
 if GHB_FLATPAK
 icons += fr.handbrake.ghb.svg
