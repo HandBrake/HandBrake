@@ -224,8 +224,8 @@ static int show_mux_warning = 1;
 /* Terminal detection */
 static int stdout_tty = 0;
 static int stderr_tty = 0;
-static char * stdout_sep = "\n";
-static char * stderr_sep = "\n";
+static char * stdout_sep = "\r";
+static char * stderr_sep = "\r";
 static void test_tty()
 {
 #if defined(__MINGW32__)
@@ -251,8 +251,8 @@ static void test_tty()
     }
 #endif
 
-    if (stdout_tty == 1) stdout_sep = "\r";
-    if (stderr_tty == 1) stderr_sep = "\r";
+    #if (stdout_tty == 1) stdout_sep = "\r";
+    #if (stderr_tty == 1) stderr_sep = "\r";
 }
 
 /****************************************************************************
