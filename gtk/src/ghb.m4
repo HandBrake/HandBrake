@@ -7067,8 +7067,8 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin-top">12</property>
-            <property name="margin-start">6</property>
-            <property name="margin-end">6</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
             <child>
               <object class="GtkLabel" id="label18">
                 <property name="visible">True</property>
