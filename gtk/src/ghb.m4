@@ -8,48 +8,6 @@ filter_output([
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <menu id="presets-mm">
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">Set De_fault</attribute>
-        <attribute name="action">app.preset-default</attribute>
-      </item>
-    </section>
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">_Save</attribute>
-        <attribute name="action">app.preset-save</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Save _As</attribute>
-        <attribute name="action">app.preset-save-as</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Rename</attribute>
-        <attribute name="action">app.preset-rename</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Delete</attribute>
-        <attribute name="action">app.preset-remove</attribute>
-      </item>
-    </section>
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">_Import</attribute>
-        <attribute name="action">app.preset-import</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Export</attribute>
-        <attribute name="action">app.preset-export</attribute>
-      </item>
-    </section>
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">Reset _Built-in Presets</attribute>
-        <attribute name="action">app.presets-reload</attribute>
-      </item>
-    </section>
-  </menu>
   <object class="GtkFileFilter" id="SourceFilterAVI"/>
   <object class="GtkFileFilter" id="SourceFilterAll"/>
   <object class="GtkFileFilter" id="SourceFilterEVO"/>
@@ -1714,52 +1672,6 @@ This is often the feature title of a DVD.</property>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
                         <property name="position">4</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkMenuButton" id="preset_options_button">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="direction">down</property>
-                        <property name="menu-model">presets-mm</property>
-                        <child>
-                          <object class="GtkBox" id="presets_options_button_box">
-                            <property name="orientation">horizontal</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkLabel" id="presets_options_button_label">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="xalign">0</property>
-                                <property name="label" translatable="yes">Options</property>
-                                <property name="use_markup">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkImage" id="presets_options_button_arrow">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="icon_name">pan-down-symbolic</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">5</property>
                       </packing>
                     </child>
                   </object>
