@@ -65,7 +65,7 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Top">
                 <MenuItem Header="_File">
-                    <MenuItem Header="Choose Source" cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]" InputGestureText="Alt + O" />
+                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SourceOpen}" cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]" InputGestureText="Alt + O" />
                     <Separator />
                     <MenuItem Header="_Exit" cal:Message.Attach="[Event Click] = [Action ExitApplication]"  InputGestureText="Alt + F4" />
                 </MenuItem>
