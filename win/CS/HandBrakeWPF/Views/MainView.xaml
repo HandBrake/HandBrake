@@ -304,11 +304,25 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5,0,0">
                     <Label FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Title}" />
                     <ComboBox Name="Titles"
-                                  MinWidth="100"
-                                  Margin="17,0,0,0"
-                                  ItemsSource="{Binding ScannedSource.Titles}"
-                                  ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Title}"
-                                  SelectedItem="{Binding Path=SelectedTitle}" />
+                             Width="160"
+                             Margin="17,0,0,0"
+                             ItemsSource="{Binding ScannedSource.Titles}"
+                             ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Title}"
+                             SelectedItem="{Binding Path=SelectedTitle}" >
+
+                        <ComboBox.Style>
+                            <Style TargetType="{x:Type ComboBox}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Path=IsDropDownOpen, ElementName=Titles}" Value="True">
+                                        <Setter Property="DisplayMemberPath" Value="ItemDisplayText" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Path=IsDropDownOpen, ElementName=Titles}" Value="False">
+                                        <Setter Property="DisplayMemberPath" Value="ItemDisplayTextClosed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.Style>
+                    </ComboBox>
                     <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Angle}" />
 
                     <ComboBox Name="Angles"
