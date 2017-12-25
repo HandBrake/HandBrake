@@ -396,14 +396,7 @@ void EventLoop(hb_handle_t *h, hb_dict_t *preset_dict)
             }
         }
 #endif
-        if (stdout_tty == 0)
-        {
-            hb_snooze(2000);
-        }
-        else
-        {
-            hb_snooze(200);
-        }
+        hb_snooze(200);
 
         HandleEvents( h, preset_dict );
     }
