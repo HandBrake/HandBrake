@@ -179,20 +179,6 @@
 
                 </Button>
 
-                <Button Name="ShowQueue" AutomationProperties.Name="Show Queue" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="32"
-                               Height="32"
-                               SnapsToDevicePixels="True"
-                               Source="Images/Queue_small.png"/>
-                        <Label Margin="8,0,0,0"
-                               VerticalAlignment="Center"
-                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}"/>
-                    </StackPanel>
-                </Button>
-
-                <Separator />
-
                 <Button Name="Start" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_StartEncode}"
                         cal:Message.Attach="[Event Click] = [Action StartEncode]"
                         Visibility="{Binding IsEncoding,
@@ -242,7 +228,19 @@
 
                 <Separator />
 
-                <Button Name="Preview" AutomationProperties.Name="Preview Encode" cal:Message.Attach="[Event Click] = [Action OpenPreviewWindow]" >
+                <Button Name="ShowQueue" AutomationProperties.Name="Show Queue" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="32"
+                               Height="32"
+                               SnapsToDevicePixels="True"
+                               Source="Images/Queue_small.png"/>
+                        <Label Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Name="Preview" AutomationProperties.Name="Preview Picture Preview Window" cal:Message.Attach="[Event Click] = [Action OpenPreviewWindow]" >
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
@@ -250,7 +248,7 @@
                                Source="Images/picture_small.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Preview"/>
+                               Content="{x:Static Properties:ResourcesUI.MainView_ShowPreview}"/>
                     </StackPanel>
                 </Button>
 
