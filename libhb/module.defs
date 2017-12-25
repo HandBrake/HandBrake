@@ -64,6 +64,8 @@ else ifeq ($(BUILD.system),darwin)
     LIBHB.m += $(wildcard $(LIBHB.src/)platform/macosx/*.m)
 else ifeq ($(BUILD.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
+else ifeq ($(BUILD.system),freebsd)
+    LIBHB.GCC.D += SYS_FREEBSD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
 else ifeq ($(BUILD.system),mingw)
     LIBHB.GCC.D += SYS_MINGW
 ifneq ($(HAS.pthread),1)
@@ -76,13 +78,13 @@ else
     LIBHB.platform.D = SYS_UNKNOWN
 endif
 
-ifeq (1,$(FEATURE.qsv))    
+ifeq (1,$(FEATURE.qsv))
     LIBHB.GCC.D += USE_QSV HAVE_THREADS=1
-endif  
+endif
 
 ifeq (1,$(FEATURE.x265))
     LIBHB.GCC.D += USE_X265
-endif  
+endif
 
 ifeq (1,$(COMPAT.strtok_r))
     LIBHB.GCC.D += HB_NEED_STRTOK_R
