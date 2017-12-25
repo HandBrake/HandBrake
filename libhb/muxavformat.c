@@ -1197,10 +1197,12 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         {
             pkt.flags |= AV_PKT_FLAG_KEY;
         }
+#ifdef AV_PKT_FLAG_DISPOSABLE
         if (!(buf->s.flags & HB_FLAG_FRAMETYPE_REF))
         {
             pkt.flags |= AV_PKT_FLAG_DISPOSABLE;
         }
+#endif
     }
     else if (buf->s.frametype & HB_FRAME_MASK_KEY)
     {
