@@ -1006,6 +1006,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Preview.
+        /// </summary>
+        public static string MainView_ShowPreview {
+            get {
+                return ResourceManager.GetString("MainView_ShowPreview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Queue.
         /// </summary>
         public static string MainView_ShowQueue {
