@@ -101,6 +101,16 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         {
             hb_log("encavcodecInit: VP9 encoder");
         } break;
+        case AV_CODEC_ID_H264:
+        {
+            hb_log("encavcodecInit: H.264 hardware encoder");
+            break;
+        }
+        case AV_CODEC_ID_HEVC:
+        {
+            hb_log("encavcodecInit: H.265 hardware encoder");
+            break;
+        }
         default:
         {
             hb_error("encavcodecInit: unsupported encoder!");
@@ -110,6 +120,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     }
 
     codec = avcodec_find_encoder( w->codec_param  );
+    codec = avcodec_find_encoder_by_name("h264_nvenc");
+    if (!codec) 
+    {
+        codec = avcodec_find_encoder_by_name("nvenc_h264");
+    }
+
     if( !codec )
     {
         hb_log( "encavcodecInit: avcodec_find_encoder "

@@ -464,7 +464,7 @@ typedef enum
 
 /******************************************************************************
  * hb_job_t: settings to be filled by the UI
- * Update win/CS/HandBrake.Interop/HandBrakeInterop/HbLib/hb_job_s.cs when changing this struct
+ * Update win/CS/HandBrake.ApplicationServices/HandBrake.Interop/HandBrakeInterop/HbLib/hb_job_s.cs when changing this struct
  *****************************************************************************/
 struct hb_job_s
 {
@@ -509,6 +509,8 @@ struct hb_job_s
 #define HB_VCODEC_FFMPEG_VP8   0x0000040
 #define HB_VCODEC_FFMPEG_VP9   0x0000080
 #define HB_VCODEC_FFMPEG_MASK  0x00000F0
+#define HB_VCODEC_FFMPEG_H264  0x0040000
+#define HB_VCODEC_FFMPEG_H265  0x0050000
 #define HB_VCODEC_QSV_H264     0x0000100
 #define HB_VCODEC_QSV_H265_8BIT     0x0000200
 #define HB_VCODEC_QSV_H265_10BIT    0x0000400
@@ -519,14 +521,14 @@ struct hb_job_s
 #define HB_VCODEC_X264         HB_VCODEC_X264_8BIT
 #define HB_VCODEC_X264_10BIT   0x0020000
 #define HB_VCODEC_X264_MASK    0x0030000
-#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264_MASK|HB_VCODEC_QSV_H264)
+#define HB_VCODEC_H264_MASK    (HB_VCODEC_X264_MASK|HB_VCODEC_QSV_H264|HV_VCODEC_FFMPEG_H264)
 #define HB_VCODEC_X265_8BIT    0x0001000
 #define HB_VCODEC_X265         HB_VCODEC_X265_8BIT
 #define HB_VCODEC_X265_10BIT   0x0002000
 #define HB_VCODEC_X265_12BIT   0x0004000
 #define HB_VCODEC_X265_16BIT   0x0008000
 #define HB_VCODEC_X265_MASK    0x000F000
-#define HB_VCODEC_H265_MASK    (HB_VCODEC_X265_MASK|HB_VCODEC_QSV_H265_MASK)
+#define HB_VCODEC_H265_MASK    (HB_VCODEC_X265_MASK|HB_VCODEC_QSV_H265_MASK|HB_VCODEC_FFMPEG_H265)
 
 /* define an invalid CQ value compatible with all CQ-capable codecs */
 #define HB_INVALID_VIDEO_QUALITY (-1000.)

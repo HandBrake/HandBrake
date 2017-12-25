@@ -37,6 +37,7 @@ FFMPEG.CONFIGURE.extra = \
     --disable-vdpau \
     --disable-encoders \
     --enable-avresample \
+    --enable-nvenc \
     --enable-libmp3lame \
     --enable-encoder=aac \
     --enable-encoder=ac3 \
@@ -45,6 +46,8 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=mpeg2video \
     --enable-encoder=mpeg4 \
     --enable-encoder=libmp3lame \
+    --enable-encoder=h264_nvenc \
+    --enable-encoder=hevc_nvenc \
     --enable-libopus \
     --enable-encoder=libopus \
     --enable-libvpx \
