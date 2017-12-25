@@ -13,7 +13,7 @@ TEST.GCC.L = $(CONTRIB.build/)lib
 
 TEST.libs = $(LIBHB.a)
 
-TEST.GCC.l = \
+TEST.GCC.l = pthread \
         ass avresample avformat avcodec avfilter avutil mp3lame dvdnav \
         dvdread fribidi \
         samplerate swscale vpx theoraenc theoradec vorbis vorbisenc ogg x264 \
@@ -62,7 +62,7 @@ else ifeq ($(BUILD.system),linux)
 else ifeq ($(BUILD.system),kfreebsd)
     TEST.GCC.l += pthread dl m
 else ifeq ($(BUILD.system),freebsd)
-    TEST.GCC.l += iconv pthread m
+    TEST.GCC.l += pthread m
 else ifeq ($(BUILD.system),solaris)
     TEST.GCC.l += pthread nsl socket
 ifneq (,$(filter $(BUILD.release),2.10))
