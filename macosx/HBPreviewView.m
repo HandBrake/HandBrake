@@ -285,7 +285,7 @@
     return YES;
 }
 
-- (NSAccessibilityRole)accessibilityRole
+- (NSString *)accessibilityRole
 {
     return NSAccessibilityImageRole;
 }
