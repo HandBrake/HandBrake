@@ -330,21 +330,21 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "init_qpP", "1", 0 );
             av_dict_set( &av_opts, "init_qpB", "1", 0 );
             av_dict_set( &av_opts, "init_qpI", "1", 0 );
-            av_dict_set( &av_opts, "rc-lookahead", "32", 0 ); // also adds b-frames (h264 only it seems for now)
+            av_dict_set( &av_opts, "rc-lookahead", "16", 0 ); // also adds b-frames (h264 only it seems for now), max 32 causes errors
             if( w->codec_param == AV_CODEC_ID_HEVC ) {
                 av_dict_set( &av_opts, "spatial_aq", "1", 0 ); // oops, nvenc_hevc.c uses an underscore
             } else {
                 av_dict_set( &av_opts, "spatial-aq", "1", 0 ); // oops, nvenc_h264.c uses a dash
             }
             // av_dict_set( &av_opts, "temporal_aq", "1", 0 ); // only for h264, either spatial or temporal
-            av_dict_set( &av_opts, "aq-strength", "8", 0 ); // default
+            // av_dict_set( &av_opts, "aq-strength", "8", 0 ); // use default value
+            hb_log( "encavcodec: encoding at rc=vbr CQ %.2f, init_qp 1, rc-lookahead 16, spatial_aq 1, aq-strength default", job->vquality );
 
             //This value was chosen to make the bitrate high enough
             //for nvenc to "turn off" the maximum bitrate feature
             //that is normally applied to constant quality.
             context->bit_rate = bit_rate_ceiling;
             hb_log( "encavcodec: bit_rate.4 %ld", context->bit_rate);
-            hb_log( "encavcodec: encoding at rc=vbr CQ %.2f, rc-lookahead 32, init_qp 1, spatial_aq 1, aq-strength 8", job->vquality );
         }
         else
         {
