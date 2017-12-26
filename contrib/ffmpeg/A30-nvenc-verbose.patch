@@ -236,7 +236,7 @@
          ctx->encode_config.rcParams.enableAQ   = 1;
          ctx->encode_config.rcParams.aqStrength = ctx->aq_strength;
 -        av_log(avctx, AV_LOG_VERBOSE, "AQ enabled.\n");
-+        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: AQ enabled.\n");
++        av_log(avctx, AV_LOG_VERBOSE, "Nvenc: AQ enabled: Strength %d.\n", (int)ctx->encode_config.rcParams.aqStrength);
      }
  
      if (ctx->temporal_aq) {
