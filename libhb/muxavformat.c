@@ -1274,8 +1274,8 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     {
                         char errstr[64];
                         av_strerror(ret, errstr, sizeof(errstr));
-                        hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s' (empty_pkt)",
-                                 track->st->index, errstr);
+                        hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s' (empty_pkt, ret %d)",
+                                 track->st->index, errstr, ret);
                         *job->done_error = HB_ERROR_UNKNOWN;
                         *job->die = 1;
                         return -1;
@@ -1403,8 +1403,8 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     {
         char errstr[64];
         av_strerror(ret < 0 ? ret : m->oc->pb->error, errstr, sizeof(errstr));
-        hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s'",
-                 track->st->index, errstr);
+        hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s' (ret %d, pb-err %d)",
+                 track->st->index, errstr, ret, m->oc->pb->error);
         *job->done_error = HB_ERROR_UNKNOWN;
         *job->die = 1;
         return -1;
