@@ -464,7 +464,7 @@ typedef enum
 
 /******************************************************************************
  * hb_job_t: settings to be filled by the UI
- * Update win/CS/HandBrake.ApplicationServices/HandBrake.Interop/HandBrakeInterop/HbLib/hb_job_s.cs when changing this struct
+ * Update win/CS/HandBrake.ApplicationServices/Interop/HbLib/hb_job_s.cs when changing this struct
  *****************************************************************************/
 struct hb_job_s
 {
