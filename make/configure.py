@@ -1891,6 +1891,10 @@ int main()
             doc.add( 'HAS.regex', 1 )
         if strtok_r.fail:
             doc.add( 'COMPAT.strtok_r', 1 )
+
+    elif build.system == 'freebsd':
+        doc.add( 'HAS.pthread', 1 )
+
     else:
         doc.addBlank()
         if not strerror_r.fail:
@@ -1921,9 +1925,6 @@ int main()
     else:
         doc.add( 'GCC.sysroot', '' )
         doc.add( 'GCC.minver', '' )
-
-    if build.match( '*-*-freebsd*' ):
-        doc.add( 'HAS.pthread', 1 )
 
     if build.match( 'i?86-*' ):
         doc.add( 'LIBHB.GCC.D', 'ARCH_X86_32', append=True )
