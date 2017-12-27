@@ -5,9 +5,10 @@ endif
 $(eval $(call import.MODULE.defs,FRIBIDI,fribidi))
 $(eval $(call import.CONTRIB.defs,FRIBIDI))
 
-FRIBIDI.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/fribidi-0.19.7.tar.bz2
-FRIBIDI.FETCH.url    += https://fribidi.org/download/fribidi-0.19.7.tar.bz2
-FRIBIDI.FETCH.sha256  = 08222a6212bbc2276a2d55c3bf370109ae4a35b689acbc66571ad2a670595a8e
+FRIBIDI.FETCH.url      = https://download.handbrake.fr/handbrake/contrib/fribidi-0.19.7.tar.gz
+FRIBIDI.FETCH.url     += https://github.com/fribidi/fribidi/archive/0.19.7.tar.gz
+FRIBIDI.FETCH.sha256   = 3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8
+FRIBIDI.FETCH.basename = fribidi-0.19.7.tar.gz
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     FRIBIDI.CONFIGURE.extra = --with-glib=no
