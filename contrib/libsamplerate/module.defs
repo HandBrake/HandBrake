@@ -1,13 +1,14 @@
 $(eval $(call import.MODULE.defs,LIBSAMPLERATE,libsamplerate))
 $(eval $(call import.CONTRIB.defs,LIBSAMPLERATE))
 
-LIBSAMPLERATE.FETCH.url    = https://download.handbrake.fr/handbrake/contrib/libsamplerate-0.1.4.tar.gz
-LIBSAMPLERATE.FETCH.sha256 = 4b4af3ecaee05c8875a9b113c6a2f816f06f283fb882914e57b21c0b08b67b75
-LIBSAMPLERATE.EXTRACT.tarbase = libsamplerate
+# libsamplerate 0.1.9-31-g292789a
+LIBSAMPLERATE.FETCH.url    = https://download.handbrake.fr/handbrake/contrib/libsamplerate-02ebb9f0fc4d67cb3f1ac4c2283664340510fd68.tar.gz
+LIBSAMPLERATE.FETCH.url   += https://github.com/erikd/libsamplerate/archive/02ebb9f0fc4d67cb3f1ac4c2283664340510fd68.tar.gz
+LIBSAMPLERATE.FETCH.sha256 = 5fc80ce7cd961f09ac4274fe57e4cd563209d5b1c549d8ff2d82b7091835310c
+LIBSAMPLERATE.EXTRACT.basename = libsamplerate-02ebb9f0fc4d67cb3f1ac4c2283664340510fd68.tar.gz
+LIBSAMPLERATE.EXTRACT.tarbase  = libsamplerate-02ebb9f0fc4d67cb3f1ac4c2283664340510fd68
 
-# TODO: libsamplerate >= 0.1.8, tarbase unnecessary
-#LIBSAMPLERATE.FETCH.url = https://download.handbrake.fr/handbrake/contrib/libsamplerate-0.1.8.tar.gz
-#LIBSAMPLERATE.FETCH.md5 = 1c7fb25191b4e6e3628d198a66a84f47
+LIBSAMPLERATE.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;
 
 # Disable to avoid Carbon.h dependency on OSX
 LIBSAMPLERATE.CONFIGURE.extra = --disable-sndfile
