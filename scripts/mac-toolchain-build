@@ -38,6 +38,8 @@ if [[ ! -w "${PREFIX}" ]]; then
     fi
 fi
 PREFIX=$(cd "${PREFIX}" && pwd -P)
+PATH_ORIG="${PATH}"
+export PATH="${PREFIX}/bin${PATH:+:$PATH}"
 
 # temp dir
 TEMP_DIR=$(mktemp -d "${TMPDIR:-/tmp/}toolchain-XXXXXX")
@@ -142,4 +144,8 @@ if [[ "${PREFIX}" != "/usr/local" ]]; then
     echo "  add to your shell startup script (${HOME}/.bash_profile):"
     echo "    export PATH=\"${PREFIX}/bin:\${PATH}\""
 fi
+
+# restore original PATH
+PATH="${PATH_ORIG}"
+
 exit 0
