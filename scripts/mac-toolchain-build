@@ -146,6 +146,6 @@ if [[ "${PREFIX}" != "/usr/local" ]]; then
 fi
 
 # restore original PATH
-PATH="${PATH_ORIG}"
+export PATH="${PATH_ORIG}"
 
 exit 0
