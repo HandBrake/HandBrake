@@ -134,9 +134,9 @@ printf "Building    [%02i/%02i] %s" "6" "${TOTAL}" "nasm 2.13.02"
 [[ "${SUDO}" != "" ]] && ${SUDO} -v
 tar -xf nasm-2.13.02.tar.bz2 >/dev/null 2>&1 || print_fail_and_exit
 cd nasm-2.13.02 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" >../nasm-2.13.02.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >../nasm-2.13.02.log 2>&1 || print_fail_and_exit
-${SUDO} make install >../nasm-2.13.02.log 2>&1 || print_fail_and_exit
+./configure --prefix="${PREFIX}" --enable-sections --enable-lto >../nasm-2.13.02.log 2>&1 || print_fail_and_exit
+make --jobs="${MAKEJOBS}" AR=ar RANLIB=ranlib >>../nasm-2.13.02.log 2>&1 || print_fail_and_exit
+${SUDO} make install >>../nasm-2.13.02.log 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 
 # yasm
