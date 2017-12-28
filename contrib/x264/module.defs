@@ -2,7 +2,7 @@ $(eval $(call import.MODULE.defs,X264,x264,YASM PTHREADW32))
 $(eval $(call import.CONTRIB.defs,X264))
 
 X264.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/x264-snapshot-20160920-2245-stable.tar.bz2
-X264.FETCH.url    += https://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-20160920-2245-stable.tar.bz2
+X264.FETCH.url    += https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-20160920-2245-stable.tar.bz2
 X264.FETCH.sha256  = 6ba2d848eabbca0d9d2c2a12b263e02f856a81fce87fbc74df52a1097c88e39c
 
 X264.GCC.args.c_std =

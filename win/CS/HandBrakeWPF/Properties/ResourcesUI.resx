@@ -1019,4 +1019,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
     <value>Save New Preset</value>
   </data>
+  <data name="MainView_ShowPreview" xml:space="preserve">
+    <value>Show Preview</value>
+  </data>
 </root>

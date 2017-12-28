@@ -576,7 +576,7 @@ namespace HandBrakeWPF.ViewModels
 
             SubtitleTrack track = new SubtitleTrack
                                       {
-                                          SubtitleType = SubtitleType.VobSub,
+                                          SubtitleType = source.SubtitleType,
                                           SourceTrack = source,
                                       };
 

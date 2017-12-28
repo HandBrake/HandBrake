@@ -11,9 +11,13 @@ namespace HandBrakeWPF.Services.Scan.Model
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
 
     using HandBrake.ApplicationServices.Interop.Model;
+
+    using HandBrakeWPF.Model;
+    using HandBrakeWPF.Utilities;
 
     /// <summary>
     /// An object that represents a single Title of a DVD
@@ -122,6 +126,52 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// Gets or sets the Source Name
         /// </summary>
         public string SourceName { get; set; }
+
+        public string SourceDisplayName
+        {
+            get
+            {
+                switch (this.Type)
+                {
+                    case 0: // HB_DVD_TYPE
+                    case 1: // HB_BD_TYPE
+                    default:
+                        return string.Empty;
+                    case 2: // HB_STREAM_TYPE
+                    case 3: // HB_FF_STREAM_TYPE
+                        return Path.GetFileNameWithoutExtension(this.SourceName);
+                }
+            }
+        }
+
+        public string ItemDisplayText
+        {
+            get
+            {
+                return string.Format(
+                    "{0}{1} ({2:00}:{3:00}:{4:00}) {5}",
+                    this.TitleNumber,
+                    this.Playlist,
+                    this.Duration.Hours,
+                    this.Duration.Minutes,
+                    this.Duration.Seconds,
+                    this.SourceDisplayName);
+            }
+        }
+
+        public string ItemDisplayTextClosed
+        {
+            get
+            {
+                return string.Format(
+                    "{0}{1} ({2:00}:{3:00}:{4:00})",
+                    this.TitleNumber,
+                    this.Playlist,
+                    this.Duration.Hours,
+                    this.Duration.Minutes,
+                    this.Duration.Seconds);
+            }
+        }
 
         #endregion
 

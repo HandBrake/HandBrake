@@ -171,8 +171,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 if (this.sourceTrack != null)
                 {
                     this.Track = this.sourceTrack.ToString();
+                    this.SubtitleType = this.sourceTrack.SubtitleType;
                 }
-
+                
+                this.NotifyOfPropertyChange(() => this.SubtitleType);
                 this.NotifyOfPropertyChange(() => this.CanBeBurned);
                 this.NotifyOfPropertyChange(() => this.CanBeForced);
 
