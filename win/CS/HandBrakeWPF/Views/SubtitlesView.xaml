@@ -10,12 +10,14 @@
              xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
              xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             xmlns:subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
              d:DesignHeight="350"
              d:DesignWidth="500"
              mc:Ignorable="d"
              x:Name="subTab">
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="booleanToVisConverter" />
+        <subtitles:CanBurnSubtitleConverter x:Key="canBurnSubtitleConverter" />
 
         <Style x:Key="LongToolTip" TargetType="TextBlock">
             <Setter Property="Width" Value="400" />
@@ -102,7 +104,7 @@
 
         <!-- Row 2 -->
         <ListBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
-                 Margin="10,10,10,10"
+                 Margin="10,10,10,10" x:Name="subtitleListBox"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"
                  dd:DragDrop.IsDropTarget="True"
@@ -175,7 +177,14 @@
                             <CheckBox Grid.Column="3" Margin="5,0,5,0" VerticalAlignment="Center" IsEnabled="{Binding CanBeForced}" IsChecked="{Binding Forced}" />
                             
                             <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="Bold" Text="Burn In" />
-                            <CheckBox Grid.Column="5" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Burned}" IsEnabled="{Binding CanBeBurned}">
+                            <CheckBox Grid.Column="5" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Burned}" x:Name="burnInCheckbox">
+                                <CheckBox.IsEnabled>
+                                    <MultiBinding Converter="{StaticResource canBurnSubtitleConverter}">
+                                        <Binding Path="CanBeBurned" />
+                                        <Binding Path="SubtitleType" />
+                                        <Binding ElementName="subtitleListBox" Path="DataContext.Task"  />
+                                    </MultiBinding>
+                                </CheckBox.IsEnabled>
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
                                         <cal:ActionMessage MethodName="SetBurnedToFalseForAllExcept">

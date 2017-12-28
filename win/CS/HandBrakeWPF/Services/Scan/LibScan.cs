@@ -388,7 +388,8 @@ namespace HandBrakeWPF.Services.Scan
                         MainTitle = titles.MainFeature == title.Index,
                         Playlist = title.Type == 1 ? string.Format(" {0:d5}.MPLS", title.Playlist).Trim() : null,
                         FramerateNumerator = title.FrameRate.Num,
-                        FramerateDenominator = title.FrameRate.Den
+                        FramerateDenominator = title.FrameRate.Den,
+                        Type = title.Type
                     };
 
                 int currentTrack = 1;
