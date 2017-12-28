@@ -829,8 +829,8 @@ static int apply_encoder_preset(int vcodec, AVCodecContext *context, AVDictionar
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
             return apply_vpx_preset(av_opts, preset);
-        case HB_VCODEC_FFMPEG_H264:
-        case HB_VCODEC_FFMPEG_H265:
+        case HB_VCODEC_FFMPEG_H264_NVENC:
+        case HB_VCODEC_FFMPEG_H265_NVENC:
             av_dict_set( av_opts, "preset", preset, 0);
             break;
         default:
@@ -848,8 +848,8 @@ const char* const* hb_av_preset_get_names(int encoder)
         case HB_VCODEC_FFMPEG_VP9:
             return vpx_preset_names;
 
-        case HB_VCODEC_FFMPEG_H264:
-        case HB_VCODEC_FFMPEG_H265:
+        case HB_VCODEC_FFMPEG_H264_NVENC:
+        case HB_VCODEC_FFMPEG_H265_NVENC:
             return h26x_nvenc_preset_names;
 
         default:
@@ -861,9 +861,9 @@ const char* const* hb_av_profile_get_names(int encoder)
 {
     switch (encoder)
     {
-        case HB_VCODEC_FFMPEG_H264:
+        case HB_VCODEC_FFMPEG_H264_NVENC:
             return h264_nvenc_profile_names;
-        case HB_VCODEC_FFMPEG_H265:
+        case HB_VCODEC_FFMPEG_H265_NVENC:
             return h265_nvenc_profile_names;
 
         default:
@@ -875,8 +875,8 @@ const char* const* hb_av_level_get_names(int encoder)
 {
     switch (encoder)
     {
-        case HB_VCODEC_FFMPEG_H264:
-        case HB_VCODEC_FFMPEG_H265:
+        case HB_VCODEC_FFMPEG_H264_NVENC:
+        case HB_VCODEC_FFMPEG_H265_NVENC:
             return h26x_nvenc_level_names;
 
         default:
@@ -888,9 +888,9 @@ int hb_av_encoder_present(int encoder)
 {
     switch (encoder)
     {
-        case HB_VCODEC_FFMPEG_H264:
+        case HB_VCODEC_FFMPEG_H264_NVENC:
             return NULL != avcodec_find_encoder_by_name("h264_nvenc");
-        case HB_VCODEC_FFMPEG_H265:
+        case HB_VCODEC_FFMPEG_H265_NVENC:
             return NULL != avcodec_find_encoder_by_name("hevc_nvenc");
 
         default:
