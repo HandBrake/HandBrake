@@ -25,6 +25,7 @@
 void hb_avcodec_init(void);
 int  hb_avcodec_open(AVCodecContext *, AVCodec *, AVDictionary **, int);
 int  hb_avcodec_close(AVCodecContext *);
+int hb_avcodec_test_encoder(AVCodec *codec);
 int hb_av_encoder_present(int encoder);
 const char* const* hb_av_preset_get_names(int encoder);
 const char* const* hb_av_profile_get_names(int encoder);

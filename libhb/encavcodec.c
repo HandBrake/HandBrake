@@ -894,16 +894,20 @@ const char* const* hb_av_level_get_names(int encoder)
 
 int hb_av_encoder_present(int encoder)
 {
+    int err;
+    AVCodec *codec = NULL;
     switch (encoder)
     {
         case HB_VCODEC_FFMPEG_H264_NVENC:
-            return NULL != avcodec_find_encoder_by_name("h264_nvenc");
+            codec = avcodec_find_encoder_by_name("h264_nvenc");
+            break;
         case HB_VCODEC_FFMPEG_H265_NVENC:
-            return NULL != avcodec_find_encoder_by_name("hevc_nvenc");
-
-        default:
-            return 0;
+            codec = avcodec_find_encoder_by_name("hevc_nvenc");
+            break;
     }
+    err = hb_avcodec_test_encoder(codec);
+    hb_log("hb_av_encoder_present: test 0x%X, res %d", encoder, err);
+    return 0 == err;
 }
 
 
