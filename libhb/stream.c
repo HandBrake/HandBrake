@@ -5315,7 +5315,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
                         "subtitle colors likely to be wrong" );
             break;
         case AV_CODEC_ID_TEXT:
-        case AV_CODEC_ID_SRT:
+        case AV_CODEC_ID_SUBRIP:
             subtitle->format = TEXTSUB;
             subtitle->source = UTF8SUB;
             subtitle->config.dest = PASSTHRUSUB;
@@ -5888,7 +5888,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
             break;
     }
     if ( ffmpeg_pkt_codec == AV_CODEC_ID_TEXT ||
-         ffmpeg_pkt_codec == AV_CODEC_ID_SRT  ||
+         ffmpeg_pkt_codec == AV_CODEC_ID_SUBRIP  ||
          ffmpeg_pkt_codec == AV_CODEC_ID_MOV_TEXT ) {
         int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt.duration;
         int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv, 0 );
