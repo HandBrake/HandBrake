@@ -77,8 +77,8 @@ printf "Building    [%02i/%02i] %s" "1" "${TOTAL}" "autoconf 2.69"
 tar -xf autoconf-2.69.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd autoconf-2.69 >/dev/null 2>&1 || print_fail_and_exit
 ./configure --prefix="${PREFIX}" >../autoconf-2.69.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >../autoconf-2.69.log 2>&1 || print_fail_and_exit
-${SUDO} make install >../autoconf-2.69.log 2>&1 || print_fail_and_exit
+make --jobs="${MAKEJOBS}" >>../autoconf-2.69.log 2>&1 || print_fail_and_exit
+${SUDO} make install >>../autoconf-2.69.log 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 
 # automake
@@ -88,8 +88,8 @@ printf "Building    [%02i/%02i] %s" "2" "${TOTAL}" "automake 1.15.1"
 tar -xf automake-1.15.1.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd automake-1.15.1 >/dev/null 2>&1 || print_fail_and_exit
 ./configure --prefix="${PREFIX}" >../automake-1.15.1.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >../automake-1.15.1.log 2>&1 || print_fail_and_exit
-${SUDO} make install >../automake-1.15.1.log 2>&1 || print_fail_and_exit
+make --jobs="${MAKEJOBS}" >>../automake-1.15.1.log 2>&1 || print_fail_and_exit
+${SUDO} make install >>../automake-1.15.1.log 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 
 # cmake
@@ -100,8 +100,8 @@ echo "You may safely dismiss and ignore any prompt to install Java."
 tar -xf cmake-3.9.6.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd cmake-3.9.6 >/dev/null 2>&1 || print_fail_and_exit
 ./configure --prefix="${PREFIX}" --no-qt-gui --system-curl >../cmake-3.9.6.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >../cmake-3.9.6.log 2>&1 || print_fail_and_exit
-${SUDO} make install >../cmake-3.9.6.log 2>&1 || print_fail_and_exit
+make --jobs="${MAKEJOBS}" >>../cmake-3.9.6.log 2>&1 || print_fail_and_exit
+${SUDO} make install >>../cmake-3.9.6.log 2>&1 || print_fail_and_exit
 
 # libtool
 cd "${TEMP_DIR}"
@@ -110,8 +110,8 @@ printf "Building    [%02i/%02i] %s" "4" "${TOTAL}" "libtool 2.4.6"
 tar -xf libtool-2.4.6.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd libtool-2.4.6 >/dev/null 2>&1 || print_fail_and_exit
 ./configure --prefix="${PREFIX}" >../libtool-2.4.6.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >../libtool-2.4.6.log 2>&1 || print_fail_and_exit
-${SUDO} make install >../libtool-2.4.6.log 2>&1 || print_fail_and_exit
+make --jobs="${MAKEJOBS}" >>../libtool-2.4.6.log 2>&1 || print_fail_and_exit
+${SUDO} make install >>../libtool-2.4.6.log 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 
 # pkg-config
@@ -121,8 +121,8 @@ printf "Building    [%02i/%02i] %s" "5" "${TOTAL}" "pkg-config 0.29.2"
 tar -xf pkg-config-0.29.2.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd pkg-config-0.29.2 >/dev/null 2>&1 || print_fail_and_exit
 ./configure --prefix="${PREFIX}" --with-internal-glib --disable-host-tool >../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
-${SUDO} make install >../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
+make --jobs="${MAKEJOBS}" >>../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
+${SUDO} make install >>../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 
 # yasm
@@ -132,8 +132,8 @@ printf "Building    [%02i/%02i] %s" "6" "${TOTAL}" "yasm 1.3.0"
 tar -xf yasm-1.3.0.tar.gz >/dev/null 2>&1 || print_fail_and_exit
 cd yasm-1.3.0 >/dev/null 2>&1 || print_fail_and_exit
 ./configure --prefix="${PREFIX}" >../yasm-1.3.0.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >../yasm-1.3.0.log 2>&1 || print_fail_and_exit
-${SUDO} make install >../yasm-1.3.0.log 2>&1 || print_fail_and_exit
+make --jobs="${MAKEJOBS}" >>../yasm-1.3.0.log 2>&1 || print_fail_and_exit
+${SUDO} make install >>../yasm-1.3.0.log 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 
 # done
