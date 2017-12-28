@@ -128,14 +128,22 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         } break;
         case AV_CODEC_ID_H264:
         {
-            codec = avcodec_find_encoder_by_name("h264_nvenc");
-            hb_log("encavcodecInit: H.264 hardware encoder, found nvenc %d", NULL!=codec);
+            switch (job->vcodec) {
+                case HB_VCODEC_FFMPEG_H264_NVENC:
+                    codec = avcodec_find_encoder_by_name("h264_nvenc");
+                    hb_log("encavcodecInit: H.264 hardware encoder, found nvenc %d", NULL!=codec);
+                    break;
+            }
             break;
         }
         case AV_CODEC_ID_HEVC:
         {
-            codec = avcodec_find_encoder_by_name("hevc_nvenc");
-            hb_log("encavcodecInit: H.265 hardware encoder, found nvenc %d", NULL!=codec);
+            switch (job->vcodec) {
+                case HB_VCODEC_FFMPEG_H265_NVENC:
+                    codec = avcodec_find_encoder_by_name("hevc_nvenc");
+                    hb_log("encavcodecInit: H.265 hardware encoder, found nvenc %d", NULL!=codec);
+                    break;
+            }
             break;
         }
         default:
@@ -318,8 +326,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             hb_log( "encavcodec: encoding at CQ %.2f", job->vquality );
         }
         //Set constant quality for nvenc
-        else if ( w->codec_param == AV_CODEC_ID_H264 ||
-                  w->codec_param == AV_CODEC_ID_HEVC )
+        else if ( job->vcodec == HB_VCODEC_FFMPEG_H264_NVENC ||
+                  job->vcodec == HB_VCODEC_FFMPEG_H265_NVENC )
         {
             char quality[7];
             snprintf(quality, 7, "%.2f", job->vquality);
@@ -331,7 +339,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "init_qpB", "1", 0 );
             av_dict_set( &av_opts, "init_qpI", "1", 0 );
             av_dict_set( &av_opts, "rc-lookahead", "16", 0 ); // also adds b-frames (h264 only it seems for now), max 32 causes errors
-            if( w->codec_param == AV_CODEC_ID_HEVC ) {
+            if( job->vcodec == HB_VCODEC_FFMPEG_H265_NVENC ) {
                 av_dict_set( &av_opts, "spatial_aq", "1", 0 ); // oops, nvenc_hevc.c uses an underscore
             } else {
                 av_dict_set( &av_opts, "spatial-aq", "1", 0 ); // oops, nvenc_h264.c uses a dash
