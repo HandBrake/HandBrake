@@ -1524,6 +1524,7 @@ try:
         ranlib   = ToolProbe( 'RANLIB.exe',   'ranlib' )
         strip    = ToolProbe( 'STRIP.exe',    'strip' )
         tar      = ToolProbe( 'TAR.exe',      'gtar', 'tar' )
+        nasm     = ToolProbe( 'NASM.exe',     'nasm', abort=True, minversion=[2,13,0] )
         yasm     = ToolProbe( 'YASM.exe',     'yasm', abort=False, minversion=[1,2,0] )
         autoconf = ToolProbe( 'AUTOCONF.exe', 'autoconf', abort=False )
         automake = ToolProbe( 'AUTOMAKE.exe', 'automake', abort=False )
