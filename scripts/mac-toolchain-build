@@ -53,7 +53,7 @@ cd "${TEMP_DIR}"
 printf "Downloading [%02i/%02i] %s" "1" "${TOTAL}" "autoconf 2.69"
 curl https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz -o "autoconf-2.69.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
-printf "Downloading [%02i/%02i] %s" "2" "${TOTAL}" "automake 1.15"
+printf "Downloading [%02i/%02i] %s" "2" "${TOTAL}" "automake 1.15.1"
 curl https://ftp.gnu.org/gnu/automake/automake-1.15.1.tar.gz -o "automake-1.15.1.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 printf "Downloading [%02i/%02i] %s" "3" "${TOTAL}" "cmake 3.9.6"
