@@ -1892,11 +1892,10 @@ int main()
         if strtok_r.fail:
             doc.add( 'COMPAT.strtok_r', 1 )
 
-    elif build.system == 'freebsd':
-        doc.add( 'HAS.pthread', 1 )
-
     else:
         doc.addBlank()
+        if build.system == 'freebsd':
+            doc.add( 'HAS.pthread', 1 )
         if not strerror_r.fail:
             doc.add( 'HAS.strerror_r', 1 )
 
