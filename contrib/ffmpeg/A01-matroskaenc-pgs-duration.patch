@@ -13,19 +13,20 @@ Fixes mkvalidator error messages for PGS subtitles.
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/libavformat/matroskaenc.c b/libavformat/matroskaenc.c
-index 4ec474d..628300b 100644
+index dad6d6c..61ce0f7 100644
 --- a/libavformat/matroskaenc.c
 +++ b/libavformat/matroskaenc.c
-@@ -1487,7 +1487,8 @@ static int mkv_write_packet_internal(AVFormatContext *s, AVPacket *pkt)
-                                                    mkv_blockgroup_size(pkt->size));
-         duration = pkt->convergence_duration;
-         mkv_write_block(s, pb, MATROSKA_ID_BLOCK, pkt, 0);
--        put_ebml_uint(pb, MATROSKA_ID_BLOCKDURATION, duration);
-+        if (duration > 0)
-+            put_ebml_uint(pb, MATROSKA_ID_BLOCKDURATION, duration);
-         end_ebml_master(pb, blockgroup);
-     }
- 
+@@ -2396,7 +2396,8 @@ FF_ENABLE_DEPRECATION_WARNINGS
+ #endif
+             /* All subtitle blocks are considered to be keyframes. */
+             mkv_write_block(s, pb, MATROSKA_ID_BLOCK, pkt, 1);
+-            put_ebml_uint(pb, MATROSKA_ID_BLOCKDURATION, duration);
++            if (duration > 0)
++                put_ebml_uint(pb, MATROSKA_ID_BLOCKDURATION, duration);
+             end_ebml_master(pb, blockgroup);
+         }
+
+
 -- 
 1.9.3
 
