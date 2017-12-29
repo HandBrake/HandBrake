@@ -205,7 +205,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
     title = ghb_dict_get_int(uiDict, "title");
     start_point = ghb_dict_get_int(uiDict, "start_point");
     end_point = ghb_dict_get_int(uiDict, "end_point");
-    vol_name = ghb_dict_get_string(uiDict, "volume_label");
+    vol_name = ghb_dict_get_string(uiDict, "volume");
     dest = ghb_dict_get_string(uiDict, "destination");
     basename = g_path_get_basename(dest);
     escape = g_markup_escape_text(basename, -1);
