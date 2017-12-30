@@ -1138,7 +1138,7 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
             }
             if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
             {
-                nlmeans_prefilter(&pv->frame[f].plane[c], pv->prefilter[c]);
+                nlmeans_prefilter(&frame->plane[c], pv->prefilter[c]);
                 nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
                                  buf->plane[c].width, buf->plane[c].stride,
                                  buf->plane[c].height);
