@@ -151,7 +151,7 @@ static void * x264_lib_open_ubuntu_10bit(void)
 
 void hb_x264_global_init(void)
 {
-#if X264_BUILD < 155
+#if X264_BUILD < 153
     x264_apis[0].bit_depth                 = x264_bit_depth;
 #else
     x264_apis[0].bit_depth                 = X264_BIT_DEPTH;
@@ -214,7 +214,7 @@ void hb_x264_global_init(void)
 
     int ii;
     int dll_bitdepth = 0;
-#if X264_BUILD < 155
+#if X264_BUILD < 153
     int *pbit_depth                   = (int*)hb_dlsym(h, "x264_bit_depth");
     if (pbit_depth != NULL)
     {
@@ -222,7 +222,7 @@ void hb_x264_global_init(void)
     }
 #endif
     x264_apis[1].param_default        = hb_dlsym(h, "x264_param_default");
-#if X264_BUILD >= 155
+#if X264_BUILD >= 153
     if (x264_apis[1].param_default != NULL)
     {
         x264_param_t defaults;
@@ -359,7 +359,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         return 1;
     }
 
-#if X264_BUILD >= 155
+#if X264_BUILD >= 153
     param.i_bitdepth = bit_depth;
 #endif
 
