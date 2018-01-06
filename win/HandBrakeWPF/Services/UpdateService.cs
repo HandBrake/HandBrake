@@ -36,7 +36,7 @@ namespace HandBrakeWPF.Services
         /// </summary>
         private readonly IUserSettingService userSettingService;
 
-        #endregion
+        #endregion Constants and Fields
 
         #region Constructors and Destructors
 
@@ -51,7 +51,7 @@ namespace HandBrakeWPF.Services
             this.userSettingService = userSettingService;
         }
 
-        #endregion
+        #endregion Constructors and Destructors
 
         #region Public Methods
 
@@ -99,15 +99,15 @@ namespace HandBrakeWPF.Services
                         // Figure out which appcast we want to read.
                         string url =
                             VersionHelper.Is64Bit() || Environment.Is64BitOperatingSystem
-                                ? Constants.Appcast64
-                                : Constants.Appcast32;
+                                ? AppcastConstants.Appcast64
+                                : AppcastConstants.Appcast32;
 
                         if (VersionHelper.IsNightly())
                         {
                             url =
                             VersionHelper.Is64Bit() || Environment.Is64BitOperatingSystem
-                                ? Constants.AppcastUnstable64
-                                : Constants.AppcastUnstable32;
+                                ? AppcastConstants.AppcastUnstable64
+                                : AppcastConstants.AppcastUnstable32;
                         }
 
                         var currentBuild = HandBrakeUtils.Build;
@@ -140,14 +140,14 @@ namespace HandBrakeWPF.Services
 
                         // Validate the URL from the appcast is ours.
                         var info2 = new UpdateCheckInformation
-                            {
-                                NewVersionAvailable = latest > current,
-                                DescriptionUrl = reader.DescriptionUrl,
-                                DownloadFile = reader.DownloadFile,
-                                Build = reader.Build,
-                                Version = reader.Version,
-                                Signature = reader.Hash
-                            };
+                        {
+                            NewVersionAvailable = latest > current,
+                            DescriptionUrl = reader.DescriptionUrl,
+                            DownloadFile = reader.DownloadFile,
+                            Build = reader.Build,
+                            Version = reader.Version,
+                            Signature = reader.Hash
+                        };
 
                         callback(info2);
                     }
@@ -211,10 +211,10 @@ namespace HandBrakeWPF.Services
                            this.VerifyDownload(expectedSignature, tempPath)
                                ? new DownloadStatus { WasSuccessful = true, Message = "Download Complete." } :
                                  new DownloadStatus
-                                   {
-                                       WasSuccessful = false,
-                                       Message = "Download Failed.  Checksum Failed. Please visit the website to download this update."
-                                   });
+                                 {
+                                     WasSuccessful = false,
+                                     Message = "Download Failed.  Checksum Failed. Please visit the website to download this update."
+                                 });
                    }
                    catch (Exception exc)
                    {
@@ -256,8 +256,8 @@ namespace HandBrakeWPF.Services
                     publicKey = reader.ReadToEnd();
                 }
             }
-            
-            // Verify the file against the Signature. 
+
+            // Verify the file against the Signature.
             try
             {
                 byte[] file = File.ReadAllBytes(updateFile);
@@ -274,6 +274,6 @@ namespace HandBrakeWPF.Services
             }
         }
 
-        #endregion
+        #endregion Public Methods
     }
 }

@@ -12,7 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
 
     using Caliburn.Micro;
-
+    using HandBrake.Model.Prompts;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets;
@@ -78,20 +78,20 @@ namespace HandBrakeWPF.ViewModels
                 this.errorService.ShowMessageBox(
                     Resources.AddPresetViewModel_PresetMustProvideName,
                     Resources.Error,
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error);
+                    DialogButtonType.OK,
+                    DialogType.Error);
                 return;
             }
 
             if (this.presetService.CheckIfPresetExists(this.Preset.Name))
             {
-                MessageBoxResult result =
+                var result =
                     this.errorService.ShowMessageBox(
                         Resources.AddPresetViewModel_PresetWithSameNameOverwriteWarning,
                         Resources.Error,
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Error);
-                if (result == MessageBoxResult.No)
+                        DialogButtonType.YesNo,
+                        DialogType.Error);
+                if (result == DialogResult.No)
                 {
                     return;
                 }

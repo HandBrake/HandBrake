@@ -10,8 +10,9 @@
 namespace HandBrakeWPF.Services
 {
     using System;
-    using System.Windows;
     using Caliburn.Micro;
+    using HandBrake;
+    using HandBrake.Model.Prompts;
     using Interfaces;
     using ViewModels.Interfaces;
 
@@ -73,7 +74,7 @@ namespace HandBrakeWPF.Services
         }
 
         /// <summary>
-        /// Show a Message Box. 
+        /// Show a Message Box.
         /// It is good practice to use this, so that if we ever introduce unit testing, the message boxes won't cause issues.
         /// </summary>
         /// <param name="message">
@@ -85,15 +86,15 @@ namespace HandBrakeWPF.Services
         /// <param name="buttons">
         /// The buttons.
         /// </param>
-        /// <param name="image">
-        /// The image.
+        /// <param name="type">
+        /// The type.
         /// </param>
         /// <returns>
         /// The MessageBoxResult Object
         /// </returns>
-        public MessageBoxResult ShowMessageBox(string message, string header, MessageBoxButton buttons, MessageBoxImage image)
+        public DialogResult ShowMessageBox(string message, string header, DialogButtonType buttons, DialogType type)
         {
-            return MessageBox.Show(message, header, buttons, image);
+            return HandBrakeServices.Current.Dialog.Show(message, header, buttons, type);
         }
     }
 }

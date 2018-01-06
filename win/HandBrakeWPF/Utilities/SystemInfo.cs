@@ -11,23 +11,19 @@ namespace HandBrakeWPF.Utilities
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Management;
     using System.Windows.Forms;
 
-    using HandBrake.CoreLibrary.Interop.HbLib;
-
+    using HandBrake.Utilities;
     using Microsoft.Win32;
 
     /// <summary>
     /// The System Information.
     /// </summary>
-    public class SystemInfo
+    public class SystemInfo : ISystemInfo
     {
-        /// <summary>
-        /// Gets the total physical ram in a system
-        /// </summary>
-        /// <returns>The total memory in the system</returns>
-        public static ulong TotalPhysicalMemory
+        public ulong TotalPhysicalMemory
         {
             get
             {
@@ -39,33 +35,17 @@ namespace HandBrakeWPF.Utilities
             }
         }
 
-        /// <summary>
-        /// Gets the number of CPU Cores
-        /// </summary>
-        /// <returns>Object</returns>
-        public static object GetCpuCount
+        public string CPUInformation
         {
             get
             {
                 RegistryKey regKey = Registry.LocalMachine;
                 regKey = regKey.OpenSubKey("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0");
-                return regKey == null ? 0 : regKey.GetValue("ProcessorNameString");
+                return regKey == null ? string.Empty : regKey.GetValue("ProcessorNameString")?.ToString();
             }
         }
 
-        /// <summary>
-        /// Gets the System screen size information.
-        /// </summary>
-        /// <returns>System.Windows.Forms.Scree</returns>
-        public static Screen ScreenBounds
-        {
-            get { return Screen.PrimaryScreen; }
-        }
-
-      /// <summary>
-        /// Gets the get gpu driver version.
-        /// </summary>
-        public static List<string> GetGPUInfo
+        public List<string> GPUInfo
         {
             get
             {
@@ -110,5 +90,18 @@ namespace HandBrakeWPF.Utilities
                 return gpuInfo;
             }
         }
+
+        public Size ScreenBounds
+        {
+            get
+            {
+                var screen = Screen.PrimaryScreen;
+                return new Size(screen.Bounds.Width, screen.Bounds.Height);
+            }
+        }
+
+        public string InstallLocation => Application.StartupPath;
+
+        public string AppDataLocation => Application.UserAppDataPath;
     }
 }

@@ -18,7 +18,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
 
     using Caliburn.Micro;
-
+    using HandBrake.Model.Prompts;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -50,7 +50,7 @@ namespace HandBrakeWPF.ViewModels
 
         private bool isQueueRunning;
 
-        #endregion
+        #endregion Constants and Fields
 
         #region Constructors and Destructors
 
@@ -61,10 +61,10 @@ namespace HandBrakeWPF.ViewModels
         /// The user Setting Service.
         /// </param>
         /// <param name="queueProcessor">
-        /// The Queue Processor Service 
+        /// The Queue Processor Service
         /// </param>
         /// <param name="errorService">
-        /// The Error Service 
+        /// The Error Service
         /// </param>
         public QueueViewModel(IUserSettingService userSettingService, IQueueProcessor queueProcessor, IErrorService errorService)
         {
@@ -77,11 +77,11 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedItems = new BindingList<QueueTask>();
             this.DisplayName = "Queue";
             this.IsQueueRunning = false;
-            
+
             this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction);
         }
 
-        #endregion
+        #endregion Constructors and Destructors
 
         #region Properties
 
@@ -168,7 +168,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public BindingList<QueueTask> SelectedItems { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Public Methods
 
@@ -210,9 +210,9 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Clear()
         {
-            MessageBoxResult result = this.errorService.ShowMessageBox(
-                Resources.QueueViewModel_ClearQueueConfrimation, Resources.Confirm, MessageBoxButton.YesNo, MessageBoxImage.Warning);
-            if (result == MessageBoxResult.Yes)
+            var result = this.errorService.ShowMessageBox(
+                Resources.QueueViewModel_ClearQueueConfrimation, Resources.Confirm, DialogButtonType.YesNo, DialogType.Warning);
+            if (result == DialogResult.Yes)
             {
                 this.queueProcessor.Clear();
             }
@@ -269,7 +269,7 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = false;
 
-            MessageBox.Show(Resources.QueueViewModel_QueuePauseNotice, Resources.QueueViewModel_Queue, 
+            MessageBox.Show(Resources.QueueViewModel_QueuePauseNotice, Resources.QueueViewModel_Queue,
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -289,14 +289,14 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void RemoveSelectedJobs()
         {
-            MessageBoxResult result =
+            var result =
                   this.errorService.ShowMessageBox(
                       Resources.QueueViewModel_DelSelectedJobConfirmation,
                       Resources.Question,
-                      MessageBoxButton.YesNo,
-                      MessageBoxImage.Question);
+                      DialogButtonType.YesNo,
+                      DialogType.Question);
 
-            if (result == MessageBoxResult.No)
+            if (result == DialogResult.No)
             {
                 return;
             }
@@ -324,14 +324,14 @@ namespace HandBrakeWPF.ViewModels
 
             if (task.Status == QueueItemStatus.InProgress)
             {
-                MessageBoxResult result =
+                var result =
                     this.errorService.ShowMessageBox(
-                        Resources.QueueViewModel_JobCurrentlyRunningWarning, 
-                        Resources.Warning, 
-                        MessageBoxButton.YesNo, 
-                        MessageBoxImage.Question);
+                        Resources.QueueViewModel_JobCurrentlyRunningWarning,
+                        Resources.Warning,
+                        DialogButtonType.YesNo,
+                        DialogType.Question);
 
-                if (result == MessageBoxResult.Yes)
+                if (result == DialogResult.Yes)
                 {
                     this.queueProcessor.EncodeService.Stop();
                     this.queueProcessor.Remove(task);
@@ -376,7 +376,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.queueProcessor.Count == 0 || !this.QueueTasks.Any(a => a.Status == QueueItemStatus.Waiting || a.Status == QueueItemStatus.InProgress))
             {
                 this.errorService.ShowMessageBox(
-                    Resources.QueueViewModel_NoPendingJobs, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                    Resources.QueueViewModel_NoPendingJobs, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
@@ -384,7 +384,7 @@ namespace HandBrakeWPF.ViewModels
             if (firstOrDefault != null && !DriveUtilities.HasMinimumDiskSpace(firstOrDefault.Task.Destination,
                     this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel)))
             {
-                this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
@@ -401,12 +401,12 @@ namespace HandBrakeWPF.ViewModels
         public void Export()
         {
             SaveFileDialog dialog = new SaveFileDialog
-                {
-                    Filter = "Json (*.json)|*.json", 
-                    OverwritePrompt = true, 
-                    DefaultExt = ".json", 
-                    AddExtension = true
-                };
+            {
+                Filter = "Json (*.json)|*.json",
+                OverwritePrompt = true,
+                DefaultExt = ".json",
+                AddExtension = true
+            };
 
             if (dialog.ShowDialog() == true)
             {
@@ -434,13 +434,13 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void EditJob(QueueTask task)
         {
-            MessageBoxResult result = this.errorService.ShowMessageBox(
-                Resources.QueueViewModel_EditConfrimation, 
-                "Modify Job?", 
-                MessageBoxButton.YesNo, 
-                MessageBoxImage.Question);
+            var result = this.errorService.ShowMessageBox(
+                Resources.QueueViewModel_EditConfrimation,
+                "Modify Job?",
+                DialogButtonType.YesNo,
+                DialogType.Question);
 
-            if (result != MessageBoxResult.Yes)
+            if (result != DialogResult.Yes)
             {
                 return;
             }
@@ -469,7 +469,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Public Methods
 
         #region Methods
 
@@ -537,7 +537,6 @@ namespace HandBrakeWPF.ViewModels
                     if (directory != null && Directory.Exists(directory))
                     {
                         Process.Start(directory);
-
                     }
                 }
             }
@@ -661,7 +660,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.JobStatus = Resources.QueueViewModel_QueueStarted;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-            this.IsQueueRunning = true; 
+            this.IsQueueRunning = true;
         }
 
         private void QueueProcessor_QueuePaused(object sender, EventArgs e)
@@ -671,6 +670,6 @@ namespace HandBrakeWPF.ViewModels
             this.IsQueueRunning = false;
         }
 
-        #endregion
+        #endregion Methods
     }
 }

@@ -11,6 +11,9 @@
 namespace HandBrakeWPF.Utilities
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
     using System.Runtime.InteropServices;
     using System.Windows.Threading;
 
@@ -194,6 +197,32 @@ namespace HandBrakeWPF.Utilities
         public static void SetUIThreadMarshaller(Action<Action> marshaller)
         {
             executor = marshaller;
+        }
+
+        /// <summary>
+        /// Gets the number of HandBrake instances running.
+        /// </summary>
+        public static int ProcessId
+        {
+            get
+            {
+                return Process.GetCurrentProcess().Id;
+            }
+        }
+
+        /// <summary>
+        /// The find hand brake instance ids.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="bool"/>. True if it's a running HandBrake instance.
+        /// </returns>
+        public static bool IsPidACurrentHandBrakeInstance(int id)
+        {
+            List<int> ids = Process.GetProcessesByName("HandBrake").Select(process => process.Id).ToList();
+            return ids.Contains(id);
         }
     }
 }

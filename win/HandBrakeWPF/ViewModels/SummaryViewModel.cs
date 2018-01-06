@@ -55,6 +55,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
+
         public event EventHandler<OutputFormatChangedEventArgs> OutputFormatChanged;
 
         public Preset Preset
@@ -129,7 +130,7 @@ namespace HandBrakeWPF.ViewModels
 
         #region DisplayProperties
 
-        public BitmapImage PreviewImage { get; set; }
+        public MemoryStream PreviewImage { get; set; }
         public bool PreviewNotAvailable { get; set; }
         public int MaxWidth { get; set; }
         public int MaxHeight { get; set; }
@@ -174,9 +175,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion DisplayProperties
 
-        #region Task Properties 
+        #region Task Properties
 
         /// <summary>
         /// Gets or sets SelectedOutputFormat.
@@ -185,7 +186,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.Task?.OutputFormat ?? OutputFormat.Mp4; 
+                return this.Task?.OutputFormat ?? OutputFormat.Mp4;
             }
 
             set
@@ -281,7 +282,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Task Properties
 
         public void SetSource(Source scannedSource, Title selectedTitle, Preset currentPreset, EncodeTask encodeTask)
         {
@@ -434,9 +435,11 @@ namespace HandBrakeWPF.ViewModels
                     case 0: // Auto
                         newExtension = MP4Helper.RequiresM4v(this.Task) ? ".m4v" : ".mp4";
                         break;
+
                     case 1: // MP4
                         newExtension = ".mp4";
                         break;
+
                     case 2: // M4v
                         newExtension = ".m4v";
                         break;
@@ -577,9 +580,9 @@ namespace HandBrakeWPF.ViewModels
                 desc.AppendLine(string.Format("+ {0} {1}", this.Task.AudioTracks.Count - 2, ResourcesUI.SummaryView_AdditionalAudioTracks));
             }
 
-            return desc.ToString().Trim();        
+            return desc.ToString().Trim();
         }
-        
+
         private string GetSubtitleDescription()
         {
             if (this.Task.AudioTracks.Count == 0)
@@ -655,10 +658,10 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            BitmapImage image = null;
+            MemoryStream image = null;
             try
             {
-                image = this.scanService.GetPreview(this.Task, this.selectedPreview - 1, HBConfigurationFactory.Create()); 
+                image = this.scanService.GetPreview(this.Task, this.selectedPreview - 1, HBConfigurationFactory.Create());
             }
             catch (Exception exc)
             {
@@ -670,8 +673,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.PreviewNotAvailable = false;
                 this.PreviewImage = image;
-                this.MaxWidth = (int)image.Width;
-                this.MaxHeight = (int)image.Height;
+                //this.MaxWidth = (int)image.Width;
+                //this.MaxHeight = (int)image.Height;
                 this.IsPreviewInfoVisible = true;
                 this.NotifyOfPropertyChange(() => this.IsPreviewInfoVisible);
                 this.NotifyOfPropertyChange(() => this.PreviewImage);
@@ -685,6 +688,6 @@ namespace HandBrakeWPF.ViewModels
             this.OutputFormatChanged?.Invoke(this, e);
         }
 
-        #endregion
+        #endregion Private Methods
     }
 }

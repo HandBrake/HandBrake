@@ -21,7 +21,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.CoreLibrary.Model;
     using HandBrake.CoreLibrary.Utilities;
-
+    using HandBrake.Model.Prompts;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -75,7 +75,7 @@ namespace HandBrakeWPF.ViewModels
         private int selectedVerbosity;
         private bool sendFileAfterEncode;
         private string sendFileTo;
-        private string sendFileToPath;       
+        private string sendFileToPath;
         private string vlcPath;
         private string whenDone;
         private BindingList<string> whenDoneOptions = new BindingList<string>();
@@ -100,7 +100,7 @@ namespace HandBrakeWPF.ViewModels
         private bool playSoundWhenDone;
         private bool playSoundWhenQueueDone;
 
-        #endregion
+        #endregion Constants and Fields
 
         #region Constructors and Destructors
 
@@ -132,7 +132,7 @@ namespace HandBrakeWPF.ViewModels
             this.UpdateMessage = "Click 'Check for Updates' to check for new versions";
         }
 
-        #endregion
+        #endregion Constructors and Destructors
 
         #region Window Properties
 
@@ -158,7 +158,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public IAboutViewModel AboutViewModel { get; set; }
 
-        #endregion
+        #endregion Window Properties
 
         #region Properties
 
@@ -432,7 +432,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion General
 
         #region Output Files
 
@@ -484,8 +484,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (this.IsValidAutonameFormat(value, false))
                 {
-                    this.autonameFormat = value;   
-                } 
+                    this.autonameFormat = value;
+                }
 
                 this.NotifyOfPropertyChange("AutonameFormat");
             }
@@ -575,7 +575,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Output Files
 
         #region Preview
 
@@ -596,7 +596,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Preview
 
         #region System and Logging
 
@@ -774,25 +774,31 @@ namespace HandBrakeWPF.ViewModels
                     case "Realtime":
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
                         break;
+
                     case "High":
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
                         break;
+
                     case "Above Normal":
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
                         break;
+
                     case "Normal":
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
                         break;
+
                     case "Low":
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
                         break;
+
                     default:
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
                         break;
                 }
             }
         }
-        #endregion
+
+        #endregion System and Logging
 
         #region Advanced
 
@@ -964,7 +970,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Advanced
 
         #region Video
 
@@ -1044,9 +1050,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Video
 
-        #endregion
+        #endregion Properties
 
         #region About HandBrake
 
@@ -1109,7 +1115,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion About HandBrake
 
         #region Public Methods
 
@@ -1234,7 +1240,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Public Methods
 
         /// <summary>
         /// Load User Settings
@@ -1577,8 +1583,8 @@ namespace HandBrakeWPF.ViewModels
                         this.errorService.ShowMessageBox(
                             ResourcesUI.OptionsView_InvalidFileFormatChars,
                             Resources.Error,
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Error);
+                            DialogButtonType.OK,
+                            DialogType.Error);
                     }
                     return false;
                 }

@@ -9,7 +9,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
-             xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
+             xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model;assembly=HandBrake.Data"
              AllowDrop="True"
              FontSize="11"
              cal:Message.Attach="[Event Loaded] = [Action Load]"
@@ -18,7 +18,7 @@
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="booleanConverter" />
-        <Converters:PresetsMenuConverter x:Key="presetsMenuConverter"/>
+        <Converters:PresetsMenuConverter x:Key="presetsMenuConverter" />
 
         <Style TargetType="Button">
             <Setter Property="Padding" Value="8,2" />
@@ -45,7 +45,6 @@
             </Style.Resources>
             <Setter Property="MaxWidth" Value="500" />
         </Style>
-
     </UserControl.Resources>
 
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -146,10 +145,10 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/Movies_small.png"/>
+                               Source="Images/Movies_small.png" />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_SourceOpen}"/>
+                               Content="{x:Static Properties:ResourcesUI.MainView_SourceOpen}" />
                     </StackPanel>
                 </Button>
 
@@ -162,12 +161,11 @@
                             <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:ResourcesUI.MainView_AddToQueue}" />
                         </StackPanel>
 
-                        <Grid x:Name="dropdown" Background="Transparent" >
+                        <Grid x:Name="dropdown" Background="Transparent">
                             <Path Height="5" Margin="2,2,2,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
                                   Fill="{DynamicResource GlyphBrush}" x:Name="dropdownArrow" />
                         </Grid>
-
                     </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu>
@@ -176,7 +174,6 @@
                             <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" />
                         </ContextMenu>
                     </Button.ContextMenu>
-
                 </Button>
 
                 <Button Name="Start" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_StartEncode}"
@@ -187,10 +184,10 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/Play.png"/>
+                               Source="Images/Play.png" />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{Binding StartLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_StartEncode}'}"/>
+                               Content="{Binding StartLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_StartEncode}'}" />
                     </StackPanel>
                 </Button>
 
@@ -203,10 +200,10 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/stop.png"/>
+                               Source="Images/stop.png" />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_Stop}"/>
+                               Content="{x:Static Properties:ResourcesUI.MainView_Stop}" />
                     </StackPanel>
                 </Button>
 
@@ -219,10 +216,10 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/Pause.png"/>
+                               Source="Images/Pause.png" />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_Pause}"/>
+                               Content="{x:Static Properties:ResourcesUI.MainView_Pause}" />
                     </StackPanel>
                 </Button>
 
@@ -233,22 +230,22 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/Queue_small.png"/>
+                               Source="Images/Queue_small.png" />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}"/>
+                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}" />
                     </StackPanel>
                 </Button>
 
-                <Button Name="Preview" AutomationProperties.Name="Preview Picture Preview Window" cal:Message.Attach="[Event Click] = [Action OpenPreviewWindow]" >
+                <Button Name="Preview" AutomationProperties.Name="Preview Picture Preview Window" cal:Message.Attach="[Event Click] = [Action OpenPreviewWindow]">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/picture_small.png"/>
+                               Source="Images/picture_small.png" />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_ShowPreview}"/>
+                               Content="{x:Static Properties:ResourcesUI.MainView_ShowPreview}" />
                     </StackPanel>
                 </Button>
 
@@ -256,10 +253,10 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/ActivityWindow_small.png"/>
+                               Source="Images/ActivityWindow_small.png" />
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Activity Log"/>
+                               Content="Activity Log" />
                     </StackPanel>
                 </Button>
             </ToolBar>
@@ -308,7 +305,7 @@
                              Margin="17,0,0,0"
                              ItemsSource="{Binding ScannedSource.Titles}"
                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Title}"
-                             SelectedItem="{Binding Path=SelectedTitle}" >
+                             SelectedItem="{Binding Path=SelectedTitle}">
 
                         <ComboBox.Style>
                             <Style TargetType="{x:Type ComboBox}">
@@ -373,7 +370,6 @@
 
                     <Label Margin="2,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" FontWeight="Bold" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
                     <Label Margin="0,0,0,0" Content="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
-
                 </StackPanel>
             </Grid>
 
@@ -392,11 +388,11 @@
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Margin="0,0,5,0" Padding="0" Grid.Column="0"
-                                           VerticalAlignment="Center" 
+                                           VerticalAlignment="Center"
                                            Text="{Binding SelectedPreset.DisplayValue}" TextTrimming="CharacterEllipsis" />
 
                                 <TextBlock Text="(Modified)" Margin="0,0,5,0" FontStyle="Italic" VerticalAlignment="Center" Grid.Column="1"
-                                           Visibility="{Binding IsModifiedPreset, Converter={StaticResource boolToVisConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}"/>
+                                           Visibility="{Binding IsModifiedPreset, Converter={StaticResource boolToVisConverter}, TargetNullValue=Collapsed, FallbackValue=Collapsed}" />
 
                                 <Path Height="8" Margin="2,0,0,1" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="3"
                                       Data="M 0 0 L 4 4 L 0 8 Z"
@@ -412,7 +408,7 @@
 
                     <Button Content="{x:Static Properties:ResourcesUI.MainView_Reload}" cal:Message.Attach="[Event Click] = [Action PresetSelect]"  Margin="15,0,0,0" VerticalAlignment="Center" />
                     <Button Content="{x:Static Properties:ResourcesUI.MainView_SaveNewPreset}" cal:Message.Attach="[Event Click] = [Action PresetAdd]"  Margin="5,0,0,0" VerticalAlignment="Center" />
-                    
+
                     <Button x:Name="MorePresetOptionsButton"  Margin="15,0,0,0" VerticalAlignment="Center" Click="MorePresetOptionsButton_OnClick" Visibility="Collapsed">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
@@ -420,7 +416,7 @@
                                        VerticalAlignment="Center"
                                        Text="{x:Static Properties:ResourcesUI.MainView_Options}"
                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_PresetOptionsContextMenu}"
-                                           ToolTip="{x:Static Properties:ResourcesTooltips.MainView_PresetOptionsContextMenu}"/> 
+                                           ToolTip="{x:Static Properties:ResourcesTooltips.MainView_PresetOptionsContextMenu}" />
 
                                 <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
@@ -492,7 +488,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Label Content="Queue" FontWeight="Bold" Grid.Row="0"/>
+                <Label Content="Queue" FontWeight="Bold" Grid.Row="0" />
                 <ContentControl x:Name="QueueViewModel" cal:View.Context="Embedded" Margin="5,0,0,0"  Grid.Row="1" />
             </Grid>
 
@@ -504,7 +500,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Label Margin="0,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_File}" FontWeight="Bold" />
@@ -522,10 +518,9 @@
                     <Button Name="DestinationBrowser"
                             Grid.Column="2"
                             Margin="10,0,0,0" FontWeight="Bold"
-                            Content="Browse" 
+                            Content="Browse"
                             ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Browse}"
-                            cal:Message.Attach="[Event Click] = [Action BrowseDestination]"
-                    />
+                            cal:Message.Attach="[Event Click] = [Action BrowseDestination]" />
                 </Grid>
             </StackPanel>
 
@@ -540,7 +535,6 @@
                       IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                       Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}">
 
-
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -550,18 +544,18 @@
                     <Grid.Resources>
 
                         <HierarchicalDataTemplate DataType="{x:Type loc:Preset}">
-                            <StackPanel Orientation="Horizontal" >
+                            <StackPanel Orientation="Horizontal">
                                 <StackPanel.Resources>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsDefault}" Value="True" >
+                                            <DataTrigger Binding="{Binding IsDefault}" Value="True">
                                                 <Setter Property="FontStyle" Value="Italic" />
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsDefault}" Value="False" >
+                                            <DataTrigger Binding="{Binding IsDefault}" Value="False">
                                                 <Setter Property="FontStyle" Value="Normal" />
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                <Setter Property="FontWeight" Value="Bold"/>
+                                                <Setter Property="FontWeight" Value="Bold" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -571,7 +565,7 @@
                         </HierarchicalDataTemplate>
 
                         <HierarchicalDataTemplate DataType="{x:Type loc:PresetDisplayCategory}" ItemsSource="{Binding Presets}">
-                            <StackPanel Orientation="Horizontal" >
+                            <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding Category}" FontSize="14" />
                             </StackPanel>
                         </HierarchicalDataTemplate>
@@ -588,14 +582,13 @@
                                 <Setter Property="HorizontalAlignment" Value="Stretch" />
                                 <Setter Property="Padding" Value="4" />
                                 <Setter Property="ToolTip" Value="{Binding Description}" />
-                                <Setter Property="ToolTipService.InitialShowDelay" Value="1500"/>
+                                <Setter Property="ToolTipService.InitialShowDelay" Value="1500" />
                                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                                 <EventSetter Event="TreeViewItem.Collapsed" Handler="PresetTreeviewItemCollasped" />
                                 <Style.Triggers>
                                     <Trigger Property="HasItems" Value="True">
                                         <Setter Property="Focusable" Value="false" />
                                     </Trigger>
-
                                 </Style.Triggers>
                             </Style>
                         </TreeView.ItemContainerStyle>
@@ -612,18 +605,16 @@
                                 <Separator />
                                 <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
                             </ContextMenu>
-
                         </TreeView.ContextMenu>
 
                         <i:Interaction.Triggers>
                             <commands:InputBindingTrigger>
                                 <commands:InputBindingTrigger.InputBinding>
-                                    <KeyBinding Key="Delete"/>
+                                    <KeyBinding Key="Delete" />
                                 </commands:InputBindingTrigger.InputBinding>
                                 <cal:ActionMessage MethodName="PresetRemove" />
                             </commands:InputBindingTrigger>
                         </i:Interaction.Triggers>
-
                     </TreeView>
 
                     <ToolBar Name="presetsToolBar"
@@ -632,16 +623,16 @@
                              VerticalAlignment="Stretch"
                              SnapsToDevicePixels="False"
                              UseLayoutRounding="False"
-                             ToolBar.OverflowMode="Never" 
+                             ToolBar.OverflowMode="Never"
                              Background="Transparent"
                              ToolBarTray.IsLocked="True"
                              Loaded="ToolBarLoaded"
-                             KeyboardNavigation.TabNavigation="Continue" >
+                             KeyboardNavigation.TabNavigation="Continue">
 
                         <ToolBar.Resources>
                             <Style TargetType="{x:Type ToolBarPanel}">
-                                <Setter Property="Orientation" Value="Vertical"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
+                                <Setter Property="Orientation" Value="Vertical" />
+                                <Setter Property="VerticalAlignment" Value="Center" />
                             </Style>
 
                             <Style BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="{x:Type Button}" />
@@ -653,13 +644,11 @@
                                     <StackPanel Orientation="Horizontal">
                                         <Image Width="20"
                                                Height="20"
-                                               Source="Images/add.png"
-                                        />
+                                               Source="Images/add.png" />
                                         <TextBlock Margin="2,0,0,0"
                                                    VerticalAlignment="Center"
                                                    Style="{StaticResource textBlockOrangeStyle}"
-                                                   Text="{x:Static Properties:ResourcesUI.Generic_Add}"
-                                        />
+                                                   Text="{x:Static Properties:ResourcesUI.Generic_Add}" />
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
@@ -670,13 +659,11 @@
                                         <Image Width="20"
                                                Height="20"
                                                Source="Images/remove.png"
-                                               SnapsToDevicePixels="True"
-                                        />
+                                               SnapsToDevicePixels="True" />
                                         <TextBlock Margin="2,0,0,0"
                                                    VerticalAlignment="Center"
                                                    Style="{StaticResource textBlockOrangeStyle}"
-                                                   Text="{x:Static Properties:ResourcesUI.MainView_Remove}"
-                                        />
+                                                   Text="{x:Static Properties:ResourcesUI.MainView_Remove}" />
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
@@ -688,13 +675,11 @@
                                             <Image Width="20"
                                                    Height="20"
                                                    Source="Images/Advanced.png"
-                                                   RenderOptions.BitmapScalingMode="HighQuality"
-                                            />
+                                                   RenderOptions.BitmapScalingMode="HighQuality" />
                                             <TextBlock Margin="2,0,0,0"
                                                        VerticalAlignment="Center"
                                                        Style="{StaticResource textBlockOrangeStyle}"
-                                                       Text="{x:Static Properties:ResourcesUI.MainView_Options}"
-                                            />
+                                                       Text="{x:Static Properties:ResourcesUI.MainView_Options}" />
                                         </StackPanel>
                                     </MenuItem.Header>
                                     <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
@@ -708,13 +693,10 @@
                                 </MenuItem>
                             </Menu>
                         </ToolBarOverflowPanel>
-
                     </ToolBar>
                 </Grid>
             </GroupBox>
         </Grid>
-        
-        
 
         <!-- Source Selection-->
         <Controls:SourceSelection x:Name="sourceSelection"
@@ -747,7 +729,6 @@
                              SubMessage="{Binding AlertWindowText}"
                              ActionText="OK"
                              DefaultAction="{Binding AlertWindowClose}">
-
         </Controls:AlertPanel>
 
         <!--  Status Bar  -->
@@ -761,7 +742,7 @@
                 <TextBlock Text="{Binding Path=ProgramStatusLabel}" TextTrimming="CharacterEllipsis" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_WhenDone}">
-                <Menu Background="Transparent" >
+                <Menu Background="Transparent">
                     <MenuItem>
                         <MenuItem.Header>
                             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" MinHeight="26">
@@ -782,7 +763,7 @@
                                   Header="{x:Static Properties:ResourcesUI.QueueView_Shutdown}" />
                         <MenuItem x:Name="suspend"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(suspend.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Suspend}"/>
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Suspend}" />
                         <MenuItem x:Name="hibernate"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(hibernate.Header)]"
                                   Header="{x:Static Properties:ResourcesUI.QueueView_Hibernate}" />
@@ -791,7 +772,7 @@
                                   Header="{x:Static Properties:ResourcesUI.QueueView_LockSystem}" />
                         <MenuItem x:Name="logoff"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(logoff.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Logoff}"/>
+                                  Header="{x:Static Properties:ResourcesUI.QueueView_Logoff}" />
                         <MenuItem x:Name="quit"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(quit.Header)]"
                                   Header="{x:Static Properties:ResourcesUI.QueueView_QuitHandBrake}" />
@@ -801,4 +782,3 @@
         </StatusBar>
     </Grid>
 </UserControl>
-

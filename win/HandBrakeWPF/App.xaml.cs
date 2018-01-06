@@ -34,6 +34,8 @@ namespace HandBrakeWPF
         /// </summary>
         public App()
         {
+            new WPFHandBrakeServices();
+
             Application.Current.Dispatcher.UnhandledException += this.Dispatcher_UnhandledException;
             AppDomain.CurrentDomain.UnhandledException +=
                 this.CurrentDomain_UnhandledException;
@@ -98,7 +100,8 @@ namespace HandBrakeWPF
         /// </param>
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Caliburn.Micro.Execute.OnUIThreadAsync(() => {
+            Caliburn.Micro.Execute.OnUIThreadAsync(() =>
+            {
                 if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
                 {
                     GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.0", (Exception)e.ExceptionObject);

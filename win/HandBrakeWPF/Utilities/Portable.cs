@@ -31,7 +31,9 @@ namespace HandBrakeWPF.Utilities
                 return; // Nothing to do.
             }
 
-            // Read the INI file     
+            DirectoryUtilities.GettingStorageDirectory += DirectoryUtilities_GettingStorageDirectory;
+
+            // Read the INI file
             if (File.Exists(portableFile))
             {
                 using (StreamReader fileReader = new StreamReader(portableFile))
@@ -142,6 +144,14 @@ namespace HandBrakeWPF.Utilities
             }
 
             return null;
+        }
+
+        private static void DirectoryUtilities_GettingStorageDirectory(object sender, HandBrake.EventArgs.DirectoryFetchingEventArgs e)
+        {
+            if (IsPortable())
+            {
+                e.Directory = GetStorageDirectory();
+            }
         }
     }
 }

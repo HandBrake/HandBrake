@@ -21,9 +21,9 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows.Input;
 
     using Caliburn.Micro;
-
+    using HandBrake;
     using HandBrake.CoreLibrary.Interop;
-
+    using HandBrake.Model.Prompts;
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.Menu;
     using HandBrakeWPF.EventArgs;
@@ -76,7 +76,6 @@ namespace HandBrakeWPF.ViewModels
         private readonly INotifyIconService notifyIconService;
         private readonly IUserSettingService userSettingService;
         private readonly IScan scanService;
-        private readonly Win7 windowsSeven = new Win7();
         private string windowName;
         private string sourceLabel;
         private string statusLabel;
@@ -101,7 +100,7 @@ namespace HandBrakeWPF.ViewModels
         private IPresetObject selectedPresetCategory;
         private bool isModifiedPreset;
 
-        #endregion
+        #endregion Private Variables and Services
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
@@ -124,7 +123,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         /// <param name="whenDoneService">
         /// The when Done Service.
-        /// *** Leave in Constructor. *** 
+        /// *** Leave in Constructor. ***
         /// </param>
         /// <param name="windowManager">
         /// The window Manager.
@@ -163,8 +162,8 @@ namespace HandBrakeWPF.ViewModels
         /// The Meta Data View Model
         /// </param>
         /// <param name="notifyIconService">Wrapper around the WinForms NotifyIcon for this app. </param>
-        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IPresetService presetService, 
-            IErrorService errorService, IUpdateService updateService, 
+        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IPresetService presetService,
+            IErrorService errorService, IUpdateService updateService,
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, ISummaryViewModel summaryViewModel,
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
             IX264ViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
@@ -218,18 +217,23 @@ namespace HandBrakeWPF.ViewModels
                 case "Realtime":
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
                     break;
+
                 case "High":
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
                     break;
+
                 case "Above Normal":
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
                     break;
+
                 case "Normal":
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
                     break;
+
                 case "Low":
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
                     break;
+
                 default:
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
                     break;
@@ -296,7 +300,7 @@ namespace HandBrakeWPF.ViewModels
 
         public ISummaryViewModel SummaryViewModel { get; set; }
 
-        #endregion
+        #endregion View Model Properties
 
         #region Properties
 
@@ -704,7 +708,7 @@ namespace HandBrakeWPF.ViewModels
                             ext = Path.GetExtension(value);
                             if (FileHelper.FilePathHasInvalidChars(value))
                             {
-                                this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                                this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, DialogButtonType.OK, DialogType.Error);
                                 return;
                             }
                         }
@@ -722,6 +726,7 @@ namespace HandBrakeWPF.ViewModels
                             case ".mkv":
                                 this.SummaryViewModel.SetContainer(OutputFormat.Mkv);
                                 break;
+
                             case ".mp4":
                             case ".m4v":
                                 this.SummaryViewModel.SetContainer(OutputFormat.Mp4);
@@ -924,7 +929,7 @@ namespace HandBrakeWPF.ViewModels
                         return;
                     }
 
-                    // Note this does not account for VFR. It's only a guesstimate. 
+                    // Note this does not account for VFR. It's only a guesstimate.
                     double estimatedTotalFrames = selectedTitle.Fps * selectedTitle.Duration.TotalSeconds;
 
                     this.SelectedStartPoint = 0;
@@ -1007,9 +1012,9 @@ namespace HandBrakeWPF.ViewModels
                                                         let driveInformation = item
                                                         select new SourceMenuItem
                                                         {
-                                                            Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel), 
-                                                            Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)), 
-                                                            Tag = item, 
+                                                            Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
+                                                            Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
+                                                            Tag = item,
                                                             IsDrive = true
                                                         })
                     {
@@ -1197,13 +1202,13 @@ namespace HandBrakeWPF.ViewModels
                     int parH = this.SelectedTitle.ParVal.Height;
                     int displayW = this.SelectedTitle.Resolution.Width * parW / parH;
 
-                    return string.Format("{0}x{1} ({2}x{3}), {4} FPS, {5} {6}, {7} {8}", 
-                        this.SelectedTitle.Resolution.Width, 
+                    return string.Format("{0}x{1} ({2}x{3}), {4} FPS, {5} {6}, {7} {8}",
+                        this.SelectedTitle.Resolution.Width,
                         this.SelectedTitle.Resolution.Height,
                         displayW,
-                        this.SelectedTitle.Resolution.Height, 
-                        Math.Round(this.SelectedTitle.Fps, 2), 
-                        this.SelectedTitle.AudioTracks.Count, 
+                        this.SelectedTitle.Resolution.Height,
+                        Math.Round(this.SelectedTitle.Fps, 2),
+                        this.SelectedTitle.AudioTracks.Count,
                         ResourcesUI.MainView_AudioTrackCount,
                         this.SelectedTitle.Subtitles.Count,
                         ResourcesUI.MainView_SubtitleTracksCount);
@@ -1213,16 +1218,16 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Properties
 
-        #region Commands 
+        #region Commands
 
         /// <summary>
         /// Gets or sets the queue command.
         /// </summary>
         public ICommand QueueCommand { get; set; }
 
-        #endregion
+        #endregion Commands
 
         #region Load and Shutdown Handling
 
@@ -1318,7 +1323,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueuePaused -= this.QueueProcessor_QueuePaused;
             this.queueProcessor.QueueCompleted -= this.QueueCompleted;
             this.queueProcessor.QueueChanged -= this.QueueChanged;
-          
+
             this.queueProcessor.JobProcessingStarted -= this.QueueProcessorJobProcessingStarted;
             this.queueProcessor.EncodeService.EncodeStatusChanged -= this.EncodeStatusChanged;
             this.userSettingService.SettingChanged -= this.UserSettingServiceSettingChanged;
@@ -1337,7 +1342,7 @@ namespace HandBrakeWPF.ViewModels
             this.SummaryViewModel.TabStatusChanged -= this.TabStatusChanged;
         }
 
-        #endregion
+        #endregion Load and Shutdown Handling
 
         #region Menu and Taskbar
 
@@ -1467,40 +1472,40 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.ScannedSource == null || string.IsNullOrEmpty(this.ScannedSource.ScanPath) || this.ScannedSource.Titles.Count == 0)
             {
-                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return false;
             }
 
             if (string.IsNullOrEmpty(this.CurrentTask.Destination))
             {
-                this.errorService.ShowMessageBox(Resources.Main_SetDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_SetDestination, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return false;
             }
 
             if (!DirectoryUtilities.IsWritable(Path.GetDirectoryName(this.CurrentTask.Destination), true, this.errorService))
             {
-                this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOrMissingDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOrMissingDirectory, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return false;
             }
 
             // Sanity check the filename
             if (!string.IsNullOrEmpty(this.Destination) && FileHelper.FilePathHasInvalidChars(this.Destination))
             {
-                this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 this.NotifyOfPropertyChange(() => this.Destination);
                 return false;
             }
 
             if (this.Destination == this.ScannedSource.ScanPath)
             {
-                this.errorService.ShowMessageBox(Resources.Main_SourceDestinationMatchError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_SourceDestinationMatchError, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 this.Destination = null;
                 return false;
             }
 
             if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.ToLower() == this.scannedSource.ScanPath.ToLower())
             {
-                this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return false;
             }
 
@@ -1512,7 +1517,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                this.errorService.ShowMessageBox(Resources.Main_DuplicateDestinationOnQueue, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
+                this.errorService.ShowMessageBox(Resources.Main_DuplicateDestinationOnQueue, Resources.Error, DialogButtonType.OK, DialogType.Warning);
                 return false;
             }
 
@@ -1531,13 +1536,13 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.ScannedSource == null || this.ScannedSource.Titles == null || this.ScannedSource.Titles.Count == 0)
             {
-                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
             if (!AutoNameHelper.IsAutonamingEnabled())
             {
-                this.errorService.ShowMessageBox(Resources.Main_TurnOnAutoFileNaming, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_TurnOnAutoFileNaming, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
@@ -1545,13 +1550,13 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (this.SubtitleViewModel.SubtitleBehaviours == null || this.SubtitleViewModel.SubtitleBehaviours.SelectedBehaviour == SubtitleBehaviourModes.None)
                 {
-                    System.Windows.MessageBoxResult result = this.errorService.ShowMessageBox(
+                    var result = this.errorService.ShowMessageBox(
                         Resources.Main_AutoAdd_AudioAndSubWarning,
                         Resources.Warning,
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Warning);
+                        DialogButtonType.YesNo,
+                        DialogType.Warning);
 
-                    if (result == MessageBoxResult.No)
+                    if (result == DialogResult.No)
                     {
                         return;
                     }
@@ -1572,13 +1577,13 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.ScannedSource == null || this.ScannedSource.Titles == null || this.ScannedSource.Titles.Count == 0)
             {
-                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
             if (!AutoNameHelper.IsAutonamingEnabled())
             {
-                this.errorService.ShowMessageBox(Resources.Main_TurnOnAutoFileNaming, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_TurnOnAutoFileNaming, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
@@ -1667,13 +1672,13 @@ namespace HandBrakeWPF.ViewModels
             // Otherwise, perform Santiy Checking then add to the queue and start if everything is ok.
             if (this.SelectedTitle == null)
             {
-                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
             if (string.IsNullOrEmpty(this.Destination))
             {
-                this.errorService.ShowMessageBox(Resources.Main_ChooseDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_ChooseDestination, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
@@ -1681,20 +1686,20 @@ namespace HandBrakeWPF.ViewModels
                 this.Destination,
                 this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel)))
             {
-                this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
             if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.ToLower() == this.scannedSource.ScanPath.ToLower())
             {
-                this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
             if (File.Exists(this.Destination))
             {
-                MessageBoxResult result = this.errorService.ShowMessageBox(Resources.Main_DestinationOverwrite, Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.No)
+                var result = this.errorService.ShowMessageBox(Resources.Main_DestinationOverwrite, Resources.Question, DialogButtonType.YesNo, DialogType.Question);
+                if (result == DialogResult.No)
                 {
                     return;
                 }
@@ -1704,7 +1709,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.AddToQueue())
             {
                 this.IsEncoding = true;
-                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));               
+                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
             }
         }
 
@@ -1773,7 +1778,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Pass on the "When Done" Action to the queue view model. 
+        /// Pass on the "When Done" Action to the queue view model.
         /// </summary>
         /// <param name="action">action</param>
         public void WhenDone(string action)
@@ -1781,29 +1786,9 @@ namespace HandBrakeWPF.ViewModels
             this.QueueViewModel?.WhenDone(action, true);
         }
 
-        #endregion
+        #endregion Menu and Taskbar
 
         #region Main Window Public Methods
-
-        /// <summary>
-        /// Support dropping a file onto the main window to scan.
-        /// </summary>
-        /// <param name="e">
-        /// The DragEventArgs.
-        /// </param>
-        public void FilesDroppedOnWindow(DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] fileNames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
-                if (fileNames != null && fileNames.Any() && (File.Exists(fileNames[0]) || Directory.Exists(fileNames[0])))
-                {
-                    this.StartScan(fileNames[0], 0);
-                }
-            }
-
-            e.Handled = true;
-        }
 
         /// <summary>
         /// The Destination Path
@@ -1812,11 +1797,11 @@ namespace HandBrakeWPF.ViewModels
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv", 
-                CheckPathExists = true, 
-                AddExtension = true, 
-                DefaultExt = ".mp4", 
-                OverwritePrompt = true, 
+                Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv",
+                CheckPathExists = true,
+                AddExtension = true,
+                DefaultExt = ".mp4",
+                OverwritePrompt = true,
             };
 
             string extension = Path.GetExtension(this.CurrentTask.Destination);
@@ -1841,7 +1826,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (saveFileDialog.FileName == this.ScannedSource.ScanPath)
                 {
-                    this.errorService.ShowMessageBox(Resources.Main_SourceDestinationMatchError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                    this.errorService.ShowMessageBox(Resources.Main_SourceDestinationMatchError, Resources.Error, DialogButtonType.OK, DialogType.Error);
                     this.Destination = null;
                     return;
                 }
@@ -1856,6 +1841,7 @@ namespace HandBrakeWPF.ViewModels
                         case ".mkv":
                             this.SummaryViewModel.SetContainer(OutputFormat.Mkv);
                             break;
+
                         case ".mp4":
                         case ".m4v":
                             this.SummaryViewModel.SetContainer(OutputFormat.Mp4);
@@ -1883,13 +1869,13 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else
                     {
-                        MessageBoxResult result =
+                        var result =
                             errorService.ShowMessageBox(
                                 string.Format(Resources.DirectoryUtils_CreateFolderMsg, directory),
                                 Resources.DirectoryUtils_CreateFolder,
-                                MessageBoxButton.YesNo,
-                                MessageBoxImage.Question);
-                        if (result == MessageBoxResult.Yes)
+                                DialogButtonType.YesNo,
+                                DialogType.Question);
+                        if (result == DialogResult.Yes)
                         {
                             Directory.CreateDirectory(directory);
                             Process.Start(directory);
@@ -1924,7 +1910,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.SelectedPreset == null)
             {
                 this.errorService.ShowMessageBox(
-                    Resources.Main_SelectPresetForUpdate, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Resources.Main_SelectPresetForUpdate, Resources.Main_NoPresetSelected, DialogButtonType.OK, DialogType.Warning);
 
                 return;
             }
@@ -1932,17 +1918,17 @@ namespace HandBrakeWPF.ViewModels
             if (this.selectedPreset.IsBuildIn)
             {
                 this.errorService.ShowMessageBox(
-                    Resources.Main_NoUpdateOfBuiltInPresets, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Resources.Main_NoUpdateOfBuiltInPresets, Resources.Main_NoPresetSelected, DialogButtonType.OK, DialogType.Warning);
                 return;
             }
 
-            if (this.errorService.ShowMessageBox(Resources.Main_PresetUpdateConfrimation, Resources.AreYouSure, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            if (this.errorService.ShowMessageBox(Resources.Main_PresetUpdateConfrimation, Resources.AreYouSure, DialogButtonType.YesNo, DialogType.Question) == DialogResult.Yes)
             {
                 this.selectedPreset.Update(new EncodeTask(this.CurrentTask), new AudioBehaviours(this.AudioViewModel.AudioBehaviours), new SubtitleBehaviours(this.SubtitleViewModel.SubtitleBehaviours));
                 this.presetService.Update(this.selectedPreset);
 
                 this.errorService.ShowMessageBox(
-                        Resources.Main_PresetUpdated, Resources.Updated, MessageBoxButton.OK, MessageBoxImage.Information);
+                        Resources.Main_PresetUpdated, Resources.Updated, DialogButtonType.OK, DialogType.Information);
             }
         }
 
@@ -1954,7 +1940,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.SelectedPreset == null)
             {
                 this.errorService.ShowMessageBox(
-                    Resources.Main_SelectPresetForUpdate, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Resources.Main_SelectPresetForUpdate, Resources.Main_NoPresetSelected, DialogButtonType.OK, DialogType.Warning);
 
                 return;
             }
@@ -1962,7 +1948,7 @@ namespace HandBrakeWPF.ViewModels
             if (this.selectedPreset.IsBuildIn)
             {
                 this.errorService.ShowMessageBox(
-                    Resources.Main_NoUpdateOfBuiltInPresets, Resources.Main_NoPresetSelected, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    Resources.Main_NoUpdateOfBuiltInPresets, Resources.Main_NoPresetSelected, DialogButtonType.OK, DialogType.Warning);
                 return;
             }
 
@@ -1972,7 +1958,7 @@ namespace HandBrakeWPF.ViewModels
             Preset preset = presetViewModel.Preset;
 
             this.NotifyOfPropertyChange(() => this.CategoryPresets);
-            this.selectedPreset = preset; // Reselect the preset      
+            this.selectedPreset = preset; // Reselect the preset
             this.NotifyOfPropertyChange(() => this.SelectedPreset);
         }
 
@@ -1986,22 +1972,22 @@ namespace HandBrakeWPF.ViewModels
                 if (this.selectedPreset.IsDefault)
                 {
                     this.errorService.ShowMessageBox(
-                      Resources.MainViewModel_CanNotDeleteDefaultPreset, 
-                      Resources.Warning, 
-                      MessageBoxButton.OK, 
-                      MessageBoxImage.Information);
+                      Resources.MainViewModel_CanNotDeleteDefaultPreset,
+                      Resources.Warning,
+                      DialogButtonType.OK,
+                      DialogType.Information);
 
                     return;
                 }
 
-                MessageBoxResult result =
+                var result =
                 this.errorService.ShowMessageBox(
-                   Resources.MainViewModel_PresetRemove_AreYouSure + this.selectedPreset.Name + " ?", 
-                   Resources.Question, 
-                   MessageBoxButton.YesNo, 
-                   MessageBoxImage.Question);
+                   Resources.MainViewModel_PresetRemove_AreYouSure + this.selectedPreset.Name + " ?",
+                   Resources.Question,
+                   DialogButtonType.YesNo,
+                   DialogType.Question);
 
-                if (result == MessageBoxResult.No)
+                if (result == DialogResult.No)
                 {
                     return;
                 }
@@ -2054,14 +2040,14 @@ namespace HandBrakeWPF.ViewModels
             if (this.selectedPreset != null && !this.selectedPreset.IsBuildIn)
             {
                 SaveFileDialog savefiledialog = new SaveFileDialog
-                                                {
-                                                    Filter = "json|*.json",
-                                                    CheckPathExists = true,
-                                                    AddExtension = true,
-                                                    DefaultExt = ".json",
-                                                    OverwritePrompt = true,
-                                                    FilterIndex = 0
-                                                };
+                {
+                    Filter = "json|*.json",
+                    CheckPathExists = true,
+                    AddExtension = true,
+                    DefaultExt = ".json",
+                    OverwritePrompt = true,
+                    FilterIndex = 0
+                };
 
                 savefiledialog.ShowDialog();
                 string filename = savefiledialog.FileName;
@@ -2089,7 +2075,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.SetDefaultPreset();
 
-            this.errorService.ShowMessageBox(Resources.Presets_ResetComplete, Resources.Presets_ResetHeader, MessageBoxButton.OK, MessageBoxImage.Information);
+            this.errorService.ShowMessageBox(Resources.Presets_ResetComplete, Resources.Presets_ResetHeader, DialogButtonType.OK, DialogType.Information);
         }
 
         public void PresetSelect()
@@ -2182,7 +2168,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Main Window Public Methods
 
         #region Private Methods
 
@@ -2210,7 +2196,7 @@ namespace HandBrakeWPF.ViewModels
                 this.CurrentTask = new EncodeTask(queueEditTask);
                 this.NotifyOfPropertyChange(() => this.CurrentTask);
                 this.HasSource = true;
-             
+
                 // Update the Main Window
                 this.NotifyOfPropertyChange(() => this.Destination);
                 this.SelectedAngle = this.CurrentTask.Angle;
@@ -2338,9 +2324,11 @@ namespace HandBrakeWPF.ViewModels
                 case PointToPointMode.Chapters:
                     output = this.SelectedTitle.CalculateDuration(this.SelectedStartPoint, this.SelectedEndPoint);
                     return string.Format("{0:00}:{1:00}:{2:00}", output.Hours, output.Minutes, output.Seconds);
+
                 case PointToPointMode.Seconds:
                     output = TimeSpan.FromSeconds(startEndDuration);
                     return string.Format("{0:00}:{1:00}:{2:00}", output.Hours, output.Minutes, output.Seconds);
+
                 case PointToPointMode.Frames:
                     startEndDuration = startEndDuration / selectedTitle.Fps;
                     output = TimeSpan.FromSeconds(Math.Round(startEndDuration, 2));
@@ -2394,7 +2382,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Private Methods
 
         #region Event Handlers
 
@@ -2503,7 +2491,7 @@ namespace HandBrakeWPF.ViewModels
         {
             int percent;
             int.TryParse(
-                Math.Round(e.PercentComplete).ToString(CultureInfo.InvariantCulture), 
+                Math.Round(e.PercentComplete).ToString(CultureInfo.InvariantCulture),
                 out percent);
 
             Execute.OnUIThread(
@@ -2544,9 +2532,9 @@ namespace HandBrakeWPF.ViewModels
                                 jobsPending);
                         }
 
-                        if (lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
+                        if (lastEncodePercentage != percent && HandBrakeServices.Current.TaskBar != null)
                         {
-                            this.windowsSeven.SetTaskBarProgress(percent);
+                            HandBrakeServices.Current.TaskBar.SetTaskBarProgress(percent);
                         }
 
                         lastEncodePercentage = percent;
@@ -2566,9 +2554,9 @@ namespace HandBrakeWPF.ViewModels
                         this.WindowTitle = Resources.HandBrake_Title;
                         this.notifyIconService.SetTooltip(this.WindowTitle);
 
-                        if (this.windowsSeven.IsWindowsSeven)
+                        if (HandBrakeServices.Current.TaskBar != null)
                         {
-                            this.windowsSeven.SetTaskBarProgressToNoProgress();
+                            HandBrakeServices.Current.TaskBar.DisableTaskBarProgress();
                         }
                     }
                 });
@@ -2619,9 +2607,9 @@ namespace HandBrakeWPF.ViewModels
                     this.WindowTitle = Resources.HandBrake_Title;
                     this.notifyIconService.SetTooltip(this.WindowTitle);
 
-                    if (this.windowsSeven.IsWindowsSeven)
+                    if (HandBrakeServices.Current.TaskBar != null)
                     {
-                        this.windowsSeven.SetTaskBarProgressToNoProgress();
+                        HandBrakeServices.Current.TaskBar.DisableTaskBarProgress();
                     }
                 });
         }
@@ -2681,7 +2669,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Handle the property changed event of the encode task. 
+        /// Handle the property changed event of the encode task.
         /// Allows the main window to respond to changes.
         /// </summary>
         /// <param name="sender">
@@ -2698,6 +2686,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Event Handlers
     }
 }

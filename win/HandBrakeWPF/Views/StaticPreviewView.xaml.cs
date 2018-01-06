@@ -64,23 +64,23 @@ namespace HandBrakeWPF.Views
 
         private void UpdateWindowTitle()
         {
-            BitmapImage image = ((IStaticPreviewViewModel)this.DataContext).PreviewImage;
+            var image = ((IStaticPreviewViewModel)this.DataContext).PreviewImage;
             if (image != null && this.previewImage != null && this.previewImage.ActualWidth > 0)
             {
-                double origWidth = Math.Round(image.Width, 0);
-                double origHeight = Math.Round(image.Height, 0);
+                //double origWidth = Math.Round(image.Width, 0);
+                //double origHeight = Math.Round(image.Height, 0);
 
-                double actualWidth = Math.Round(this.previewImage.ActualWidth, 0);
-                double actualHeight = Math.Round(this.previewImage.ActualHeight, 0);
+                //double actualWidth = Math.Round(this.previewImage.ActualWidth, 0);
+                //double actualHeight = Math.Round(this.previewImage.ActualHeight, 0);
 
-                double scaleW = actualWidth / origWidth;
-                double scaleH = actualHeight / origHeight;
+                //double scaleW = actualWidth / origWidth;
+                //double scaleH = actualHeight / origHeight;
 
-                double scaleFactor = Math.Min(scaleW, scaleH);
+                //double scaleFactor = Math.Min(scaleW, scaleH);
 
-                double scalePercentage = Math.Round(100 * scaleFactor, 0);
+                //double scalePercentage = Math.Round(100 * scaleFactor, 0);
 
-                this.Title = string.Format(Properties.Resources.StaticPreviewView_Title, scalePercentage);
+                //this.Title = string.Format(Properties.Resources.StaticPreviewView_Title, scalePercentage);
             }
             else
             {

@@ -76,10 +76,10 @@ namespace HandBrakeWPF.Views
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.G, ModifierKeys.Control | ModifierKeys.Shift)), new KeyGesture(Key.G, ModifierKeys.Control | ModifierKeys.Shift))); // Garbage Colleciton
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.F1, ModifierKeys.None)), new KeyGesture(Key.F1, ModifierKeys.None))); // Help
 
-            // Enable Windows 7 Taskbar progress indication.
+            // Enable Windows Taskbar progress indication.
             if (this.TaskbarItemInfo == null)
             {
-                this.TaskbarItemInfo = Win7.WindowsTaskbar;
+                this.TaskbarItemInfo = TaskBarService.WindowsTaskbar;
             }
         }
 
@@ -161,7 +161,7 @@ namespace HandBrakeWPF.Views
                 if (this.WindowState == WindowState.Minimized)
                 {
                     this.ShowInTaskbar = false;
-                    notifyIcon.Visible = true;      
+                    notifyIcon.Visible = true;
                 }
                 else if (this.WindowState == WindowState.Normal)
                 {

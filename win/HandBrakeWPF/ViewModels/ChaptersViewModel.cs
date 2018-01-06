@@ -18,7 +18,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows.Forms;
 
     using Caliburn.Micro;
-
+    using HandBrake.Model.Prompts;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -46,7 +46,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private List<Chapter> sourceChaptersList;
 
-        #endregion
+        #endregion Constants and Fields
 
         #region Constructors and Destructors
 
@@ -60,7 +60,7 @@ namespace HandBrakeWPF.ViewModels
         /// The user Setting Service.
         /// </param>
         /// <param name="errorService">
-        /// The Error Service 
+        /// The Error Service
         /// </param>
         public ChaptersViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IErrorService errorService)
         {
@@ -70,7 +70,7 @@ namespace HandBrakeWPF.ViewModels
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
-        #endregion
+        #endregion Constructors and Destructors
 
         #region Public Properties
 
@@ -110,7 +110,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Public Properties
 
         #region Properties
 
@@ -119,7 +119,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private ObservableCollection<Chapter> SourceChapterList { get; set; }
 
-        #endregion
+        #endregion Properties
 
         #region Public Methods
 
@@ -133,18 +133,18 @@ namespace HandBrakeWPF.ViewModels
         {
             string fileName = null;
             using (var saveFileDialog = new SaveFileDialog()
-                                        {
-                                            Filter = "Csv File|*.csv",
-                                            DefaultExt = "csv",
-                                            CheckPathExists = true,
-                                            OverwritePrompt = true
-                                        })
+            {
+                Filter = "Csv File|*.csv",
+                DefaultExt = "csv",
+                CheckPathExists = true,
+                OverwritePrompt = true
+            })
             {
                 var dialogResult = saveFileDialog.ShowDialog();
                 fileName = saveFileDialog.FileName;
 
                 // Exit early if the user cancelled or the filename is invalid
-                if (dialogResult != DialogResult.OK || string.IsNullOrWhiteSpace(fileName))
+                if (dialogResult != System.Windows.Forms.DialogResult.OK || string.IsNullOrWhiteSpace(fileName))
                     return;
             }
 
@@ -178,17 +178,17 @@ namespace HandBrakeWPF.ViewModels
             string filename = null;
             string fileExtension = null;
             using (var dialog = new OpenFileDialog()
-                    {
-                        Filter = string.Join("|", "All Supported Formats (*.csv;*.tsv,*.xml,*.txt)|*.csv;*.tsv;*.xml;*.txt", ChapterImporterCsv.FileFilter, ChapterImporterXml.FileFilter, ChapterImporterTxt.FileFilter),
-                        FilterIndex = 1,  // 1 based, the index value of the first filter entry is 1
-                        CheckFileExists = true
-                    })
+            {
+                Filter = string.Join("|", "All Supported Formats (*.csv;*.tsv,*.xml,*.txt)|*.csv;*.tsv;*.xml;*.txt", ChapterImporterCsv.FileFilter, ChapterImporterXml.FileFilter, ChapterImporterTxt.FileFilter),
+                FilterIndex = 1,  // 1 based, the index value of the first filter entry is 1
+                CheckFileExists = true
+            })
             {
                 var dialogResult = dialog.ShowDialog();
                 filename = dialog.FileName;
 
                 // Exit if the user didn't press the OK button or the file name is invalid
-                if (dialogResult != DialogResult.OK || string.IsNullOrWhiteSpace(filename))
+                if (dialogResult != System.Windows.Forms.DialogResult.OK || string.IsNullOrWhiteSpace(filename))
                     return;
 
                 // Retrieve the file extension after we've confirmed that the user selected something to open
@@ -204,18 +204,21 @@ namespace HandBrakeWPF.ViewModels
                 case ".tsv": // tab separated file
                     ChapterImporterCsv.Import(filename, ref importedChapters);
                     break;
+
                 case ".xml":
                     ChapterImporterXml.Import(filename, ref importedChapters);
                     break;
+
                 case ".txt":
                     ChapterImporterTxt.Import(filename, ref importedChapters);
                     break;
+
                 default:
                     throw new GeneralApplicationException(
                         Resources.ChaptersViewModel_UnsupportedFileFormatWarning,
                         string.Format(Resources.ChaptersViewModel_UnsupportedFileFormatMsg, fileExtension));
             }
-            
+
             // Exit early if no chapter information was extracted
             if (importedChapters == null || importedChapters.Count <= 0)
                 return;
@@ -238,7 +241,7 @@ namespace HandBrakeWPF.ViewModels
             // Now iterate over each chatper we have, and set it's name
             foreach (ChapterMarker item in this.Chapters)
             {
-                // If we don't have a chapter name for this chapter then 
+                // If we don't have a chapter name for this chapter then
                 // fallback to the value that is already set for the chapter
                 string chapterName = item.ChapterName;
 
@@ -356,7 +359,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Public Methods
 
         #region Private Methods
 
@@ -366,11 +369,11 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Validates any imported chapter information against the currently detected chapter information in the 
+        /// Validates any imported chapter information against the currently detected chapter information in the
         /// source media. If validation fails then an error message is returned via the out parameter <see cref="validationErrorMessage"/>
         /// </summary>
         /// <param name="importedChapters">The list of imported chapter information</param>
-        /// <param name="validationErrorMessage">In case of a validation error this variable will hold 
+        /// <param name="validationErrorMessage">In case of a validation error this variable will hold
         ///                                      a detailed message that can be presented to the user</param>
         /// <returns>True if there are no errors with imported chapters, false otherwise</returns>
         private bool ValidateImportedChapters(Dictionary<int, Tuple<string, TimeSpan>> importedChapters, out string validationErrorMessage)
@@ -383,9 +386,9 @@ namespace HandBrakeWPF.ViewModels
                 if (this.errorService.ShowMessageBox(
                         string.Format(Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg, this.Chapters.Count, importedChapters.Count),
                         Resources.ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning,
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question) !=
-                    MessageBoxResult.Yes)
+                        DialogButtonType.YesNo,
+                        DialogType.Question) !=
+                    HandBrake.Model.Prompts.DialogResult.Yes)
                 {
                     return false;
                 }
@@ -402,9 +405,9 @@ namespace HandBrakeWPF.ViewModels
                 if (this.errorService.ShowMessageBox(
                         Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg,
                         Resources.ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning,
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question) !=
-                    MessageBoxResult.Yes)
+                        DialogButtonType.YesNo,
+                        DialogType.Question) !=
+                    HandBrake.Model.Prompts.DialogResult.Yes)
                 {
                     return false;
                 }
@@ -414,6 +417,6 @@ namespace HandBrakeWPF.ViewModels
             return true;
         }
 
-        #endregion
+        #endregion Private Methods
     }
 }

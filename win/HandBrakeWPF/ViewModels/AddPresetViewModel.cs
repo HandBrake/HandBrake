@@ -16,7 +16,7 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
-
+    using HandBrake.Model.Prompts;
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
@@ -217,6 +217,7 @@ namespace HandBrakeWPF.ViewModels
                         this.CustomHeight = title.Resolution.Height;
                     }
                     break;
+
                 case Anamorphic.Automatic:
                     this.SelectedPictureSettingMode = PresetPictureSettingsMode.SourceMaximum;
                     break;
@@ -230,14 +231,14 @@ namespace HandBrakeWPF.ViewModels
         {
             if (string.IsNullOrEmpty(this.Preset.Name))
             {
-                this.errorService.ShowMessageBox(Resources.AddPresetViewModel_PresetMustProvideName, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.AddPresetViewModel_PresetMustProvideName, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
             if (this.presetService.CheckIfPresetExists(this.Preset.Name))
             {
-                MessageBoxResult result = this.errorService.ShowMessageBox(Resources.AddPresetViewModel_PresetWithSameNameOverwriteWarning, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Error);
-                if (result == MessageBoxResult.No)
+                var result = this.errorService.ShowMessageBox(Resources.AddPresetViewModel_PresetWithSameNameOverwriteWarning, Resources.Error, DialogButtonType.YesNo, DialogType.Error);
+                if (result == DialogResult.No)
                 {
                     return;
                 }
@@ -245,13 +246,13 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.SelectedPictureSettingMode == PresetPictureSettingsMode.SourceMaximum && this.selectedTitle == null)
             {
-                this.errorService.ShowMessageBox(Resources.AddPresetViewModel_YouMustFirstScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.AddPresetViewModel_YouMustFirstScanSource, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
             if (this.CustomWidth == null && this.CustomHeight == null && this.SelectedPictureSettingMode == PresetPictureSettingsMode.Custom)
             {
-                this.errorService.ShowMessageBox(Resources.AddPresetViewModel_CustomWidthHeightFieldsRequired, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.AddPresetViewModel_CustomWidthHeightFieldsRequired, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
@@ -282,8 +283,8 @@ namespace HandBrakeWPF.ViewModels
             bool added = this.presetService.Add(this.Preset);
             if (!added)
             {
-                this.errorService.ShowMessageBox(Resources.AddPresetViewModel_UnableToAddPreset, Resources.UnknownError, MessageBoxButton.OK,
-                                                 MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.AddPresetViewModel_UnableToAddPreset, Resources.UnknownError, DialogButtonType.OK,
+                                                 DialogType.Error);
             }
             else
             {
@@ -313,7 +314,7 @@ namespace HandBrakeWPF.ViewModels
         public void EditSubtitleDefaults()
         {
             IPopupWindowViewModel popup = new PopupWindowViewModel(this.subtitlesDefaultsViewModel, ResourcesUI.Preset_SubtitleDefaults_Title, ResourcesUI.Preset_SubtitleDefaults_SubText);
-            
+
             if (this.windowManager.ShowDialog(popup) == true)
             {
                 this.Preset.SubtitleTrackBehaviours = this.subtitlesDefaultsViewModel.SubtitleBehaviours.Clone();
@@ -321,7 +322,7 @@ namespace HandBrakeWPF.ViewModels
             else
             {
                 // Handle other case(s)
-            }     
+            }
         }
 
         /// <summary>

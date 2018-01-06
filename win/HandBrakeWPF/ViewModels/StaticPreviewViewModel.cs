@@ -21,7 +21,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows.Media.Imaging;
 
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
-
+    using HandBrake.Model.Prompts;
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -79,7 +79,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         ///     The preview image.
         /// </summary>
-        private BitmapImage previewImage;
+        private MemoryStream previewImage;
 
         /// <summary>
         ///     The selected preview image.
@@ -116,7 +116,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool useSystemDefaultPlayer;
 
-        #endregion
+        #endregion Fields
 
         #region Constructors and Destructors
 
@@ -154,7 +154,7 @@ namespace HandBrakeWPF.ViewModels
             this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration);
         }
 
-        #endregion
+        #endregion Constructors and Destructors
 
         #region Public Properties
 
@@ -181,7 +181,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         ///     Gets or sets the preview image.
         /// </summary>
-        public BitmapImage PreviewImage
+        public MemoryStream PreviewImage
         {
             get
             {
@@ -229,7 +229,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets the scanned source.
         /// </summary>
-        public Source ScannedSource { get; set; } 
+        public Source ScannedSource { get; set; }
 
         /// <summary>
         ///     Gets the total previews.
@@ -282,7 +282,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Public Properties
 
         #region LivePreviewProperties
 
@@ -399,7 +399,8 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets a value indicating whether can play.
         /// </summary>
         public bool CanPlay { get; set; }
-        #endregion
+
+        #endregion LivePreviewProperties
 
         #region Public Methods and Operators
 
@@ -466,7 +467,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            BitmapImage image = null;
+            MemoryStream image = null;
             try
             {
                 image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage, HBConfigurationFactory.Create());
@@ -480,8 +481,8 @@ namespace HandBrakeWPF.ViewModels
             if (image != null)
             {
                 PreviewNotAvailable = false;
-                this.Width = (int)Math.Ceiling(image.Width);
-                this.Height = (int)Math.Ceiling(image.Height);
+                //this.Width = (int)Math.Ceiling(image.Width);
+                //this.Height = (int)Math.Ceiling(image.Height);
                 this.PreviewImage = image;
             }
         }
@@ -514,9 +515,9 @@ namespace HandBrakeWPF.ViewModels
             return height;
         }
 
-        #endregion
+        #endregion Public Methods and Operators
 
-        #region Public Method - Live Preview 
+        #region Public Method - Live Preview
 
         #region Public Methods
 
@@ -529,7 +530,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Handle The Initialisation 
+        /// Handle The Initialisation
         /// </summary>
         public override void OnLoad()
         {
@@ -549,21 +550,21 @@ namespace HandBrakeWPF.ViewModels
             catch (Exception)
             {
                 this.IsEncoding = false;
-                this.errorService.ShowMessageBox(Resources.StaticPreview_UnableToDeletePreview, 
-                               Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.StaticPreview_UnableToDeletePreview,
+                               Resources.Error, DialogButtonType.OK, DialogType.Error);
             }
 
             if (this.Task == null || string.IsNullOrEmpty(Task.Source))
             {
-                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_ScanFirst, 
-                               Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_ScanFirst,
+                               Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
             EncodeTask encodeTask = new EncodeTask(this.Task)
             {
-                PreviewEncodeDuration = this.Duration, 
-                PreviewEncodeStartAt = this.SelectedPreviewImage, 
+                PreviewEncodeDuration = this.Duration,
+                PreviewEncodeStartAt = this.SelectedPreviewImage,
                 PointToPointMode = PointToPointMode.Preview
             };
 
@@ -587,7 +588,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Setup the encode task as a preview encode
             encodeTask.IsPreviewEncode = true;
-            encodeTask.PreviewEncodeStartAt = this.SelectedPreviewImage + 1;  
+            encodeTask.PreviewEncodeStartAt = this.SelectedPreviewImage + 1;
             encodeTask.PreviewEncodeDuration = this.Duration;
 
             SubtitleTrack scanTrack = null;
@@ -609,7 +610,7 @@ namespace HandBrakeWPF.ViewModels
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 
-        #endregion
+        #endregion Public Methods
 
         #region Private Methods
 
@@ -652,8 +653,8 @@ namespace HandBrakeWPF.ViewModels
                             }
                             else
                             {
-                                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_UnableToFindVLC, 
-                                                                 Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
+                                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_UnableToFindVLC,
+                                                                 Resources.Error, DialogButtonType.OK, DialogType.Warning);
                             }
                         }
 
@@ -666,8 +667,8 @@ namespace HandBrakeWPF.ViewModels
                 }
                 else
                 {
-                    this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_UnableToPlayFile, 
-                                 Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
+                    this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_UnableToPlayFile,
+                                 Resources.Error, DialogButtonType.OK, DialogType.Warning);
                 }
             }
         }
@@ -683,8 +684,8 @@ namespace HandBrakeWPF.ViewModels
             // Make sure we are not already encoding and if we are then display an error.
             if (encodeService.IsEncoding)
             {
-                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_AlreadyEncoding, 
-                               Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_AlreadyEncoding,
+                               Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
             }
 
@@ -695,7 +696,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.LastPreviewDuration, this.Duration);
         }
 
-        #endregion
+        #endregion Private Methods
 
         #region Event Handlers
 
@@ -734,7 +735,8 @@ namespace HandBrakeWPF.ViewModels
 
             this.PlayFile();
         }
-        #endregion
-        #endregion
+
+        #endregion Event Handlers
+        #endregion Public Method - Live Preview
     }
 }

@@ -29,6 +29,10 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -95,7 +99,6 @@
     </Reference>
     <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\gong-wpf-dragdrop.1.1.0\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -103,7 +106,6 @@
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <HintPath>..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
@@ -130,8 +132,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppcastConstants.cs" />
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
-    <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Commands\InputBindingTrigger.cs" />
     <Compile Include="Commands\Menu\QueueCommandParams.cs" />
     <Compile Include="Commands\Menu\QueueCommands.cs" />
@@ -139,7 +141,6 @@
     <Compile Include="Commands\PresetMenuSelectCommand.cs" />
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
     <Compile Include="Commands\SourceMenuCommand.cs" />
-    <Compile Include="Constants.cs" />
     <Compile Include="Controls\SplitButton\SplitMenuButton.cs" />
     <Compile Include="Controls\AlertPanel.xaml.cs">
       <DependentUpon>AlertPanel.xaml</DependentUpon>
@@ -162,29 +163,7 @@
     <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
     <Compile Include="Converters\Video\VideoOptionsTooltipConverter.cs" />
     <Compile Include="Converters\Video\ScalingConverter.cs" />
-    <Compile Include="EventArgs\OutputFormatChangedEventArgs.cs" />
-    <Compile Include="EventArgs\QueueCompletedEventArgs.cs" />
-    <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
-    <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
-    <Compile Include="EventArgs\TabStatusEventArgs.cs" />
-    <Compile Include="Exceptions\GeneralApplicationException.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Helpers\TreeViewHelper.cs" />
-    <Compile Include="Helpers\LogManager.cs" />
-    <Compile Include="Helpers\MP4Helper.cs" />
-    <Compile Include="Helpers\TimeSpanHelper.cs" />
-    <Compile Include="Helpers\Validate.cs" />
-    <Compile Include="Model\Audio\AudioBehaviourTrack.cs" />
-    <Compile Include="Model\Audio\AudioTrackDefaultsMode.cs" />
-    <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
-    <Compile Include="Model\Audio\AudioBehaviours.cs" />
-    <Compile Include="Model\DriveInformation.cs" />
-    <Compile Include="Model\Filters\FilterTune.cs" />
-    <Compile Include="Model\Filters\FilterPreset.cs" />
-    <Compile Include="Model\Picture\PresetPictureSettingsMode.cs" />
-    <Compile Include="Model\Subtitles\SubtitleBurnInBehaviourModes.cs" />
-    <Compile Include="Model\Subtitles\SubtitleBehaviourModes.cs" />
-    <Compile Include="Model\Subtitles\SubtitleBehaviours.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -200,99 +179,27 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Services\Encode\EncodeBase.cs" />
-    <Compile Include="Services\Encode\EventArgs\EncodeCompletedEventArgs.cs" />
-    <Compile Include="Services\Encode\EventArgs\EncodeProgressEventArgs.cs" />
-    <Compile Include="Services\Encode\Factories\EncodeFactory.cs" />
-    <Compile Include="Services\Encode\Factories\QueueFactory.cs" />
-    <Compile Include="Services\Encode\Factories\VideoLevelFactory.cs" />
-    <Compile Include="Services\Encode\Factories\VideoPresetFactory.cs" />
-    <Compile Include="Services\Encode\Factories\VideoProfileFactory.cs" />
-    <Compile Include="Services\Encode\Factories\VideoTuneFactory.cs" />
-    <Compile Include="Services\Encode\Interfaces\IEncode.cs" />
-    <Compile Include="Services\Encode\LibEncode.cs" />
-    <Compile Include="Services\Encode\Model\EncodeTask.cs" />
-    <Compile Include="Services\Encode\Model\Models\AllowedPassthru.cs" />
-    <Compile Include="Services\Encode\Model\Models\AudioEncoder.cs" />
-    <Compile Include="Services\Encode\Model\Models\AudioEncoderRateType.cs" />
-    <Compile Include="Services\Encode\Model\Models\AudioTrack.cs" />
-    <Compile Include="Services\Encode\Model\Models\ChapterMarker.cs" />
-    <Compile Include="Services\Encode\Model\Models\DenoisePreset.cs" />
-    <Compile Include="Services\Encode\Model\Models\DenoiseTune.cs" />
-    <Compile Include="Services\Encode\Model\Models\FramerateMode.cs" />
-    <Compile Include="Services\Encode\Model\Models\MetaData.cs" />
-    <Compile Include="Services\Encode\Model\Models\OutputFormat.cs" />
-    <Compile Include="Services\Encode\Model\Models\PointToPointMode.cs" />
-    <Compile Include="Services\Encode\Model\Models\SubtitleTrack.cs" />
-    <Compile Include="Services\Encode\Model\Models\SubtitleType.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoLevel.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoPreset.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoProfile.cs" />
-    <Compile Include="Services\Encode\Model\Models\Video\VideoTune.cs" />
     <Compile Include="Services\Interfaces\INotifyIconService.cs" />
-    <Compile Include="Services\Presets\Factories\JsonPresetFactory.cs" />
-    <Compile Include="Services\Presets\Interfaces\IPresetObject.cs" />
-    <Compile Include="Services\Presets\Model\PresetDisplayCategory.cs" />
-    <Compile Include="Services\Queue\Interfaces\IQueueProcessor.cs" />
-    <Compile Include="Helpers\FileHelper.cs" />
-    <Compile Include="Services\Presets\Model\Preset.cs" />
-    <Compile Include="Model\ScanMode.cs" />
-    <Compile Include="Factories\HBConfigurationFactory.cs" />
-    <Compile Include="Services\Presets\Interfaces\IPresetService.cs" />
-    <Compile Include="Services\Interfaces\IUserSettingService.cs" />
-    <Compile Include="Services\Presets\PresetService.cs" />
-    <Compile Include="Services\Queue\Model\QueueStats.cs" />
-    <Compile Include="Services\Queue\Model\QueueTaskContainer.cs" />
-    <Compile Include="Services\Queue\QueueProcessor.cs" />
-    <Compile Include="Services\Queue\Model\QueueItemStatus.cs" />
-    <Compile Include="Services\Queue\Model\QueueTask.cs" />
-    <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />
-    <Compile Include="Services\Scan\EventArgs\ScanProgressEventArgs.cs" />
-    <Compile Include="Services\Scan\Interfaces\IScan.cs" />
-    <Compile Include="Services\Scan\LibScan.cs" />
-    <Compile Include="Services\Scan\Model\Audio.cs" />
-    <Compile Include="Services\Scan\Model\Chapter.cs" />
-    <Compile Include="Services\Scan\Model\Source.cs" />
-    <Compile Include="Services\Scan\Model\Subtitle.cs" />
-    <Compile Include="Services\Scan\Model\Title.cs" />
     <Compile Include="Services\NotifyIconService.cs" />
-    <Compile Include="Services\UserSettingService.cs" />
+    <Compile Include="Services\SoundService.cs" />
+    <Compile Include="Services\SystemStateService.cs" />
     <Compile Include="Startup\StartupOptions.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\BitmapUtilities.cs" />
-    <Compile Include="Utilities\DelayedActionProcessor.cs" />
+    <Compile Include="Utilities\DialogService.cs" />
     <Compile Include="Utilities\DPIAwareness.cs" />
-    <Compile Include="Utilities\DriveUtilities.cs" />
-    <Compile Include="Utilities\EnumHelper.cs" />
-    <Compile Include="Utilities\ExtensionMethods.cs" />
-    <Compile Include="Utilities\GeneralUtilities.cs" />
-    <Compile Include="Utilities\HandBrakeApp.cs" />
-    <Compile Include="Utilities\Input\ChapterImporterCsv.cs" />
-    <Compile Include="Utilities\Input\ChapterImporterTxt.cs" />
-    <Compile Include="Utilities\Input\ChapterImporterXml.cs" />
-    <Compile Include="Utilities\Interfaces\INotifyPropertyChangedEx.cs" />
-    <Compile Include="Utilities\Output\CsvHelper.cs" />
+    <Compile Include="Utilities\ProcessIdentificationService.cs" />
     <Compile Include="Utilities\Portable.cs" />
-    <Compile Include="Utilities\DirectoryUtilities.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
+    <Compile Include="Utilities\TaskBarService.cs" />
     <Compile Include="Utilities\UwpDetect.cs" />
     <Compile Include="Utilities\Win32.cs" />
-    <Compile Include="Utilities\Win7.cs" />
-    <Compile Include="ViewModels\Interfaces\IManagePresetViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ISummaryViewModel.cs" />
     <Compile Include="ViewModels\ManagePresetViewModel.cs" />
     <Compile Include="ViewModels\AudioDefaultsViewModel.cs" />
     <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IAudioDefaultsViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />
     <Compile Include="Controls\SourceSelection.xaml.cs">
       <DependentUpon>SourceSelection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Interfaces\IMetaDataViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IPopupWindowViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IStaticPreviewViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IMiniViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ISubtitlesDefaultsViewModel.cs" />
     <Compile Include="ViewModels\MetaDataViewModel.cs" />
     <Compile Include="ViewModels\MiniViewModel.cs" />
     <Compile Include="ViewModels\PopupWindowViewModel.cs" />
@@ -338,19 +245,8 @@
     <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
     <Compile Include="Converters\Video\EncoderOptionsTooltipConverter.cs" />
     <Compile Include="Helpers\GrayscaleImage.cs" />
-    <Compile Include="Helpers\PictureSize.cs" />
-    <Compile Include="Model\OptionsTab.cs" />
-    <Compile Include="Model\SelectionTitle.cs" />
-    <Compile Include="Model\ShellWindow.cs" />
-    <Compile Include="Model\SourceMenuItem.cs" />
-    <Compile Include="Model\UpdateCheckInformation.cs" />
-    <Compile Include="Model\DownloadStatus.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />
-    <Compile Include="Services\Interfaces\IPrePostActionService.cs" />
     <Compile Include="Services\UpdateService.cs" />
-    <Compile Include="Services\PrePostActionService.cs" />
-    <Compile Include="ViewModels\Interfaces\IX264ViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IQueueSelectionViewModel.cs" />
     <Compile Include="ViewModels\QueueSelectionViewModel.cs" />
     <Compile Include="Views\QueueSelectionView.xaml.cs">
       <DependentUpon>QueueSelectionView.xaml</DependentUpon>
@@ -364,8 +260,6 @@
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\Interfaces\IShellViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ITitleSpecificViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\TitleSpecificViewModel.cs" />
     <Compile Include="Views\StaticPreviewView.xaml.cs">
@@ -377,40 +271,19 @@
     <Compile Include="Converters\QueueStatusToVisibilityConverter.cs" />
     <Compile Include="Converters\EnumComboConverter.cs" />
     <Compile Include="Converters\FullPathToFileNameConverter.cs" />
-    <Compile Include="Helpers\AdvancedChoicesHelper.cs" />
-    <Compile Include="Helpers\AutoNameHelper.cs" />
     <Compile Include="Helpers\ListBoxHelper.cs" />
-    <Compile Include="Helpers\QueueRecoveryHelper.cs" />
-    <Compile Include="Model\AdvancedChoice.cs" />
     <Compile Include="Services\ErrorService.cs" />
-    <Compile Include="Services\Interfaces\IErrorService.cs" />
     <Compile Include="Startup\AppBootstrapper.cs" />
-    <Compile Include="UserSettingConstants.cs" />
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AddPresetViewModel.cs" />
     <Compile Include="ViewModels\AudioViewModel.cs" />
     <Compile Include="ViewModels\X264ViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ITabInterface.cs" />
     <Compile Include="ViewModels\VideoViewModel.cs" />
     <Compile Include="ViewModels\FiltersViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IFiltersViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IVideoViewModel.cs" />
     <Compile Include="ViewModels\SubtitlesViewModel.cs" />
     <Compile Include="ViewModels\ChaptersViewModel.cs" />
     <Compile Include="ViewModels\PictureSettingsViewModel.cs" />
     <Compile Include="ViewModels\ErrorViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ISubtitlesViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IChaptersViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IPictureSettingsViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IAddPresetViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IAudioViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IQueueViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IErrorViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\ILogViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IAboutViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IMainViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IOptionsViewModel.cs" />
-    <Compile Include="ViewModels\Interfaces\IViewModelBase.cs" />
     <Compile Include="ViewModels\LogViewModel.cs" />
     <Compile Include="ViewModels\QueueViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
@@ -468,6 +341,7 @@
     <Compile Include="Views\VideoView.xaml.cs">
       <DependentUpon>VideoView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPFHandBrakeServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -499,9 +373,7 @@
     <None Include="Installer\MakeNightly64.nsi" />
     <AppDesigner Include="Properties\" />
     <EmbeddedResource Include="public.key" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
     <None Include="portable.ini.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -729,17 +601,27 @@
     <Resource Include="Views\Images\Movies_small.png" />
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta001\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta001\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta001\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\netstandard\HandBrake.CoreLibrary\HandBrake.CoreLibrary.csproj">
       <Project>{087a2ba8-bac2-4577-a46f-07ff9d420016}</Project>
       <Name>HandBrake.CoreLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HandBrake.Data\HandBrake.Data.csproj">
+      <Project>{630EF477-B1EC-47FF-8CE3-55D418C0E2A0}</Project>
+      <Name>HandBrake.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta004\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta004\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

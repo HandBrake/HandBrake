@@ -15,9 +15,8 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
 
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
-
+    using HandBrake.Helpers;
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
@@ -152,7 +151,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private bool weightedPFrames;
 
-        #endregion
+        #endregion Constants and Fields
 
         #region Constructors and Destructors
 
@@ -189,7 +188,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Constructors and Destructors
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
@@ -640,7 +639,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Properties
 
         #region Public Methods
 
@@ -692,6 +691,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "bframes":
                                 if (int.TryParse(optionValue, out parseInt))
                                 {
@@ -705,6 +705,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "b-adapt":
                                 newChoice =
                                     AdvancedChoicesHelper.AdaptiveBFrames.SingleOrDefault(
@@ -715,6 +716,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "direct":
                                 newChoice =
                                     AdvancedChoicesHelper.DirectPrediction.SingleOrDefault(
@@ -725,6 +727,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "weightp":
                                 if (optionValue == "0")
                                 {
@@ -736,6 +739,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "b-pyramid":
                                 newChoice =
                                     AdvancedChoicesHelper.PyramidalBFrames.SingleOrDefault(
@@ -746,6 +750,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "me":
                                 newChoice =
                                     AdvancedChoicesHelper.MotionEstimationMethod.SingleOrDefault(
@@ -756,6 +761,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "subme":
                             case "subq":
                                 if (int.TryParse(optionValue, out parseInt))
@@ -770,6 +776,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "merange":
                                 if (int.TryParse(optionValue, out parseInt))
                                 {
@@ -777,6 +784,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "analyse":
                                 newChoice =
                                     AdvancedChoicesHelper.Analysis.SingleOrDefault(
@@ -787,6 +795,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "8x8dct":
                                 if (optionValue == "0")
                                 {
@@ -798,6 +807,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "cabac":
                                 if (optionValue == "0")
                                 {
@@ -809,6 +819,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "trellis":
                                 if (int.TryParse(optionValue, out parseInt))
                                 {
@@ -822,6 +833,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "aq-strength":
                                 if (double.TryParse(optionValue, NumberStyles.Any, CultureInfo.InvariantCulture, out parseDouble) && parseDouble >= 0.0 &&
                                     parseDouble <= 2.0)
@@ -830,6 +842,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "psy-rd":
                                 subParts = optionValue.Split(',');
                                 if (subParts.Length == 2)
@@ -847,6 +860,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "no-dct-decimate":
                                 if (optionValue == "0")
                                 {
@@ -858,6 +872,7 @@ namespace HandBrakeWPF.ViewModels
                                 }
 
                                 break;
+
                             case "deblock":
                                 subParts = optionValue.Split(',');
                                 if (subParts.Length == 2)
@@ -893,7 +908,7 @@ namespace HandBrakeWPF.ViewModels
             this.AutomaticChange = false;
         }
 
-        #endregion
+        #endregion Public Methods
 
         #region Implemented Interfaces
 
@@ -906,7 +921,7 @@ namespace HandBrakeWPF.ViewModels
         /// The encoder.
         /// </param>
         public void SetEncoder(VideoEncoder encoder)
-        {   
+        {
         }
 
         /// <summary>
@@ -917,7 +932,7 @@ namespace HandBrakeWPF.ViewModels
             this.AdvancedOptionsString = string.Empty;
         }
 
-        #endregion
+        #endregion IAdvancedViewModel
 
         #region ITabInterface
 
@@ -983,9 +998,9 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.AdvancedOptionsString);
         }
 
-        #endregion
+        #endregion ITabInterface
 
-        #endregion
+        #endregion Implemented Interfaces
 
         #region Methods
 
@@ -1158,6 +1173,6 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.AdvancedOptionsString);
         }
 
-        #endregion
+        #endregion Methods
     }
 }

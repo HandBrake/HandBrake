@@ -9,10 +9,12 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System.IO;
+    using System.Linq;
     using System.Windows;
 
     using Caliburn.Micro;
-
+    using HandBrake.Model.Prompts;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -44,7 +46,7 @@ namespace HandBrakeWPF.ViewModels
 
         private bool isMainPanelEnabled;
 
-        #endregion
+        #endregion Constants and Fields
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellViewModel"/> class.
@@ -168,7 +170,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Properties
 
         /// <summary>
         /// The files dropped on window. Pass this through to the active view model.
@@ -178,7 +180,16 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void FilesDroppedOnWindow(DragEventArgs e)
         {
-            this.MainViewModel.FilesDroppedOnWindow(e);
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] fileNames = e.Data.GetData(DataFormats.FileDrop, true) as string[];
+                if (fileNames != null && fileNames.Any() && (File.Exists(fileNames[0]) || Directory.Exists(fileNames[0])))
+                {
+                    this.MainViewModel.StartScan(fileNames[0], 0);
+                }
+            }
+
+            e.Handled = true;
         }
 
         /// <summary>
@@ -192,14 +203,14 @@ namespace HandBrakeWPF.ViewModels
             IQueueProcessor processor = IoC.Get<IQueueProcessor>();
             if (processor != null && processor.EncodeService.IsEncoding)
             {
-                MessageBoxResult result =
+                var result =
                     this.errorService.ShowMessageBox(
                         Resources.ShellViewModel_CanClose,
                         Resources.Warning,
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Warning);
+                        DialogButtonType.YesNo,
+                        DialogType.Warning);
 
-                if (result == MessageBoxResult.Yes)
+                if (result == DialogResult.Yes)
                 {
                     processor.Stop();
                     if (this.MainViewModel != null)

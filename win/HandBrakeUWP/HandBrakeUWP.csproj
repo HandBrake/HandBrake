@@ -99,6 +99,7 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\ProcessIdentificationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -125,6 +126,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.5</Version>
+    </PackageReference>
+    <PackageReference Include="NETStandard.Library">
+      <Version>2.0.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>10.0.3</Version>
@@ -197,6 +201,10 @@
     <ProjectReference Include="..\..\netstandard\HandBrake.CoreLibrary\HandBrake.CoreLibrary.csproj">
       <Project>{087a2ba8-bac2-4577-a46f-07ff9d420016}</Project>
       <Name>HandBrake.CoreLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HandBrake.Data\HandBrake.Data.csproj">
+      <Project>{630ef477-b1ec-47ff-8ce3-55d418c0e2a0}</Project>
+      <Name>HandBrake.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
