@@ -287,7 +287,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// An image with the requested preview.
         /// </returns>
         [HandleProcessCorruptedStateExceptions]
-        public Bitmap GetPreview(PreviewSettings settings, int previewNumber, bool deinterlace)
+        public MemoryStream GetPreview(PreviewSettings settings, int previewNumber, bool deinterlace)
         {
             SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == settings.TitleNumber);
 
@@ -349,7 +349,19 @@ namespace HandBrake.ApplicationServices.Interop
             HBFunctions.hb_image_close(nativeJobPtrPtr);
             Marshal.FreeHGlobal(nativeJobPtrPtr);
 
-            return bitmap;
+            // Converts Bitmap into MemoryStream for transport.
+            var memoryStream = new MemoryStream();
+
+            try
+            {
+                bitmap.Save(memoryStream, ImageFormat.Bmp);
+            }
+            finally
+            {
+                bitmap.Dispose();
+            }
+
+            return memoryStream;
         }
 
         /// <summary>

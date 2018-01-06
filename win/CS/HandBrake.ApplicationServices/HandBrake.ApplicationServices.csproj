@@ -33,6 +33,6 @@
   <ItemGroup>
     <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-beta006" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.1.0-beta001" />
   </ItemGroup>
 </Project>

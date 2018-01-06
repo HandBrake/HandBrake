@@ -7,12 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-extern alias compat;
-
 namespace HandBrakeWPF.Utilities
 {
-    using compat::System.Drawing;
-    using compat::System.Drawing.Imaging;
     using System.IO;
     using System.Windows.Media.Imaging;
 
@@ -30,24 +26,15 @@ namespace HandBrakeWPF.Utilities
         /// <returns>
         /// The <see cref="BitmapImage"/>.
         /// </returns>
-        public static BitmapImage ConvertToBitmapImage(Bitmap bitmap)
+        public static BitmapImage ConvertToBitmapImage(MemoryStream bitmap)
         {
             // Create a Bitmap Image for display.
-            using (var memoryStream = new MemoryStream())
+            using (bitmap)
             {
-                try
-                {
-                    bitmap.Save(memoryStream, ImageFormat.Bmp);
-                }
-                finally
-                {
-                    bitmap.Dispose();
-                }
-
                 var wpfBitmap = new BitmapImage();
                 wpfBitmap.BeginInit();
                 wpfBitmap.CacheOption = BitmapCacheOption.OnLoad;
-                wpfBitmap.StreamSource = memoryStream;
+                wpfBitmap.StreamSource = bitmap;
                 wpfBitmap.EndInit();
                 wpfBitmap.Freeze();
 

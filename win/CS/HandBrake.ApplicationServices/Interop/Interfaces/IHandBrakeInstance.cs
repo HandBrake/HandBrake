@@ -10,7 +10,7 @@
 namespace HandBrake.ApplicationServices.Interop.Interfaces
 {
     using System;
-    using System.Drawing;
+    using System.IO;
 
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
@@ -44,7 +44,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// </summary>
         event EventHandler<ScanProgressEventArgs> ScanProgress;
 
-        #endregion
+        #endregion Events
 
         #region Properties
 
@@ -68,7 +68,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// </summary>
         int Build { get; }
 
-        #endregion
+        #endregion Properties
 
         #region Public Methods
 
@@ -103,7 +103,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// <returns>
         /// An image with the requested preview.
         /// </returns>
-        Bitmap GetPreview(PreviewSettings job, int previewNumber, bool deinterlace);
+        MemoryStream GetPreview(PreviewSettings job, int previewNumber, bool deinterlace);
 
         /// <summary>
         /// Pauses the current encode.
@@ -147,6 +147,6 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// </summary>
         void StopScan();
 
-        #endregion
+        #endregion Public Methods
     }
 }
