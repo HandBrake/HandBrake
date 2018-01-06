@@ -11,7 +11,7 @@
   Example with code signing:
     msbuild build.xml /p:Platform=x64 /t:Release /p:SignThumbprint=XYZ /p:SignTimestampServer=http://time.certum.pl/
     
-  Reuqires: libhb.dll to be in the release folder.
+  Requires: hb.dll to be in the win\CS\lib folder.
   
 -->
 <Project DefaultTargets="Nightly" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">

@@ -7,10 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+extern alias compat;
+
 namespace HandBrakeWPF.Utilities
 {
-    using System.Drawing;
-    using System.Drawing.Imaging;
+    using compat::System.Drawing;
+    using compat::System.Drawing.Imaging;
     using System.IO;
     using System.Windows.Media.Imaging;
 

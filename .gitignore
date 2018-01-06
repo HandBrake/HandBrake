@@ -35,3 +35,6 @@ gtk/depcomp
 gtk/install-sh
 gtk/ltmain.sh
 gtk/missing
+
+# HB Lib Reference
+/win/CS/Lib/hb.dll
