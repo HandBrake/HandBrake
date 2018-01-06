@@ -1,0 +1,52 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mwt="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+    xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton">
+
+    <Style TargetType="{x:Type splitButton:SplitMenuButton}" BasedOn="{StaticResource {x:Type Button}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type splitButton:SplitMenuButton}">
+                    <mwt:ButtonChrome x:Name="Chrome" Background="{TemplateBinding Control.Background}" BorderBrush="{TemplateBinding Control.BorderBrush}" 
+                                      RenderDefaulted="{TemplateBinding Button.IsDefaulted}" RenderMouseOver="{TemplateBinding UIElement.IsMouseOver}" 
+                                      RenderPressed="{TemplateBinding ButtonBase.IsPressed}" SnapsToDevicePixels="True">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" 
+                                              ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                              Margin="5,0,5,0" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" 
+                                              VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" />
+                            
+                            <Rectangle Grid.Column="1" Width="1" Fill="{TemplateBinding Foreground}" Opacity="0.4" Margin="0 4 0 4"/>
+                            
+                            <Grid x:Name="SplitElement" Grid.Column="2" Background="Transparent">
+                                <ContextMenuService.ContextMenu>
+                                    <ContextMenu ItemsSource="{Binding ItemSource, RelativeSource={RelativeSource TemplatedParent}}" Foreground="{TemplateBinding Foreground}" FlowDirection="{TemplateBinding FlowDirection}"/>
+                                </ContextMenuService.ContextMenu>
+                                <Path Data="M 0,0 L 8,0 L 4,4 Z" Fill="{TemplateBinding Foreground}" Margin="5 0 5 0" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                    </mwt:ButtonChrome>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="UIElement.IsKeyboardFocused" Value="True">
+                            <Setter Property="mwt:ButtonChrome.RenderDefaulted" TargetName="Chrome" Value="True" />
+                        </Trigger>
+                        <Trigger Property="ToggleButton.IsChecked" Value="True">
+                            <Setter Property="mwt:ButtonChrome.RenderPressed" TargetName="Chrome" Value="True" />
+                        </Trigger>
+                        <Trigger Property="UIElement.IsEnabled" Value="False">
+                            <Setter Property="Control.Foreground" Value="#FFADADAD" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

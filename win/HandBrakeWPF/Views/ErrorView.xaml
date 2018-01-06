@@ -1,0 +1,96 @@
+﻿<Window x:Class="HandBrakeWPF.Views.ErrorView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+        Title="{Binding Title}"
+        Width="680"
+        Height="380"
+        MinWidth="680"
+        MinHeight="380"
+        FontSize="11"
+        TextOptions.TextFormattingMode="Display"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  Header  -->
+        <StackPanel Grid.Row="0"
+                    Margin="0,0,0,0"
+                    Orientation="Horizontal">
+
+            <Image Width="64"
+                   Height="64"
+                   Margin="10,4,0,4"
+                   Source="Images/ErrorX.png" />
+            <Grid Margin="10,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Margin="0,5,0,0"
+                           FontWeight="Bold"
+                           Text="{Binding ErrorMessage}" />
+                <TextBlock Grid.Row="1"
+                           Margin="0,5,0,0"
+                           Text="{Binding Solution}" TextWrapping="Wrap" />
+
+                <TextBlock Grid.Row="2"
+                           Margin="0,0,0,2"
+                           VerticalAlignment="Bottom"
+                           FontWeight="Bold"
+                           Text="{x:Static Properties:ResourcesUI.ErrorView_ErrorDetails}" />
+            </Grid>
+        </StackPanel>
+
+        <!--  Details  -->
+        <TextBox Grid.Row="1"
+                 Margin="84,10,10,10"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 IsReadOnly="True"
+                 Text="{Binding Details}"
+                 TextWrapping="Wrap"
+                 VerticalScrollBarVisibility="Auto" />
+
+
+        <!--  Controls  -->
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="1"
+                    Margin="5"
+                    cal:Message.Attach="[Event Click] = [Action Copy]"
+                    Padding="8,2">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Image Grid.Column="0"
+                           Width="16"
+                           Height="16"
+                           Margin="0,0,5,0"
+                           Source="Images/copy.png" />
+                    <TextBlock Grid.Column="1" Text="{x:Static Properties:ResourcesUI.Generic_CopyToClipboard}" />
+                </Grid>
+            </Button>
+
+            <Button Grid.Column="2"
+                    Margin="0,5,10,5"
+                    cal:Message.Attach="[Event Click] = [Action Close]"
+                    Content="{x:Static Properties:ResourcesUI.Generic_Close}"
+                    Padding="8,2" />
+        </Grid>
+    </Grid>
+</Window>

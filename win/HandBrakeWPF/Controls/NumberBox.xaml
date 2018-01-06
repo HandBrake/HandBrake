@@ -1,0 +1,175 @@
+﻿<UserControl x:Class="HandBrakeWPF.Controls.NumberBox"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <Style x:Key="Arrow" TargetType="Polygon">
+            <Setter Property="Fill" Value="#333" />
+        </Style>
+        <!-- UpButton and DownButton are identical except for the border radius in the control template.
+			We can't pass that through so we need to duplicate the template. After a change is made from one button
+			template it should be copied to the other. -->
+        <Style x:Key="UpButton" TargetType="Button">
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Background" >
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                        <GradientStop Color="#EEE" Offset="0.4"/>
+                        <GradientStop Color="#BBB" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+							Name="border"
+							BorderThickness="1"
+							BorderBrush="#888"
+							CornerRadius="0,2,0,0"
+							Background="{TemplateBinding Background}">
+                            <ContentPresenter
+								Name="content"
+								HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF4788c8" />
+                                <Setter Property="Foreground" Value="#FF4788c8" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" >
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                                            <GradientStop Color="#CCC" Offset="0.4"/>
+                                            <GradientStop Color="#999" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="content" Property="RenderTransform" >
+                                    <Setter.Value>
+                                        <TranslateTransform Y="1.0" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsDefaulted" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF282828" />
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF282828" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.7" />
+                                <Setter Property="Foreground" Value="Gray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="DownButton" TargetType="Button">
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="Background" >
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                        <GradientStop Color="#EEE" Offset="0.4"/>
+                        <GradientStop Color="#BBB" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+							Name="border"
+							BorderThickness="1"
+							BorderBrush="#888"
+							CornerRadius="0,0,2,0"
+							Background="{TemplateBinding Background}">
+                            <ContentPresenter
+								Name="content"
+								HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF4788c8" />
+                                <Setter Property="Foreground" Value="#FF4788c8" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" >
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                                            <GradientStop Color="#CCC" Offset="0.4"/>
+                                            <GradientStop Color="#999" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="content" Property="RenderTransform" >
+                                    <Setter.Value>
+                                        <TranslateTransform Y="1.0" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsDefaulted" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF282828" />
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#FF282828" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.7" />
+                                <Setter Property="Foreground" Value="Gray" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TextBox
+			Name="numberBox"
+			Grid.Column="0"
+			GotFocus="NumberBoxGotFocus"
+			LostFocus="NumberBoxLostFocus"
+			PreviewTextInput="NumberBoxPreviewTextInput"
+			PreviewKeyDown="NumberBoxPreviewKeyDown"
+			PreviewMouseDown="NumberBoxPreviewMouseDown"
+			PreviewMouseUp="NumberBoxPreviewMouseUp"
+			TextChanged="NumberBoxTextChanged"
+			VerticalContentAlignment="Center"/>
+        <Grid
+			Name="incrementButtonsGrid"
+			Grid.Column="1"
+			Width="16">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Button  AutomationProperties.Name="Increase Number"
+				Style="{StaticResource UpButton}"
+				Grid.Row="0"
+				FontSize="4"
+				PreviewMouseLeftButtonDown="UpButtonMouseLeftButtonDown"
+				PreviewMouseLeftButtonUp="UpButtonMouseLeftButtonUp">
+                <Polygon
+					Style="{StaticResource Arrow}"
+					Points="4,0 0,4 8,4" />
+            </Button>
+            <Button  AutomationProperties.Name="Decrease Number"
+				Style="{StaticResource DownButton}"
+				Grid.Row="1"
+				FontSize="4"
+				PreviewMouseLeftButtonDown="DownButtonMouseLeftButtonDown"
+				PreviewMouseLeftButtonUp="DownButtonMouseLeftButtonUp">
+                <Polygon
+					Style="{StaticResource Arrow}"
+					Points="0,0 8,0 4,4" />
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

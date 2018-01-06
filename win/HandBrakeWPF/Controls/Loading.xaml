@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="HandBrakeWPF.Controls.Loading"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="Transparent"
+             Height="45"
+             Width="45">
+
+    <Viewbox Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Canvas RenderTransformOrigin="0.5,0.5"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center"
+              Width="120"
+              Height="120"
+              Loaded="CanvasLoaded"
+              Unloaded="CanvasUnloaded">
+
+                <Ellipse x:Name="circle0"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="0"
+                 Canvas.Top="0"
+                 Stretch="Fill"
+                 Fill="DarkOrange"
+                 Opacity="1.0" />
+
+                <Ellipse x:Name="circle1"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="0"
+                 Canvas.Top="0"
+                 Stretch="Fill"
+                 Fill="DarkOrange"
+                 Opacity="0.9" />
+
+                <Ellipse x:Name="circle2"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="0"
+                 Canvas.Top="0"
+                 Stretch="Fill"
+                 Fill="DarkOrange"
+                 Opacity="0.8" />
+
+                <Ellipse x:Name="circle3"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="0"
+                 Canvas.Top="0"
+                 Stretch="Fill"
+                 Fill="DarkOrange"
+                 Opacity="0.7" />
+
+                <Ellipse x:Name="circle4"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="0"
+                 Canvas.Top="0"
+                 Stretch="Fill"
+                 Fill="DarkOrange"
+                 Opacity="0.6" />
+
+                <Ellipse x:Name="circle5"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="0"
+                 Canvas.Top="0"
+                 Stretch="Fill"
+                 Fill="DarkOrange"
+                 Opacity="0.5" />
+
+                <Ellipse x:Name="circle6"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="0"
+                 Canvas.Top="0"
+                 Stretch="Fill"
+                 Fill="DarkOrange"
+                 Opacity="0.4" />
+
+                <Ellipse x:Name="circle7"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="0"
+                 Canvas.Top="0"
+                 Stretch="Fill"
+                 Fill="DarkOrange"
+                 Opacity="0.3" />
+
+                <Ellipse x:Name="circle8"
+                 Width="20"
+                 Height="20"
+                 Canvas.Left="0"
+                 Canvas.Top="0"
+                 Stretch="Fill"
+                 Fill="DarkOrange"
+                 Opacity="0.2" />
+
+                <Canvas.RenderTransform>
+                    <RotateTransform x:Name="rotate" Angle="0" />
+                </Canvas.RenderTransform>
+            </Canvas>
+        </Grid>
+    </Viewbox>
+</UserControl>
+

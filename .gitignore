@@ -1,18 +1,23 @@
 # Visual Studio
-win/CS/*/bin
-win/CS/*/obj
-win/CS/.vs
-win/CS/**/*.suo
-win/CS/*.VC.opendb
-win/CS/*.VC.db
-win/CS/**/*.Cache
-win/CS/**/*.user
-win/CS/packages/**/*
-win/CS/**/applicationhost.config
-win/CS/HandBrakeAppX/win32/**/*
-win/CS/HandBrakeAppX/bld/**/*
-win/CS/HandBrakeAppX/AppPackages/**/*
-win/CS/HandBrakeAppX/BundleArtifacts/**/*
+netstandard/*/bin
+netstandard/*/obj
+win/*/bin
+win/*/obj
+.vs
+*.suo
+*.VC.opendb
+*.VC.db
+netstandard/**/*.Cache
+netstandard/**/*.user
+netstandard/packages/**/*
+win/**/*.Cache
+win/**/*.user
+win/packages/**/*
+applicationhost.config
+win/HandBrakeAppX/win32/**/*
+win/HandBrakeAppX/bld/**/*
+win/HandBrakeAppX/AppPackages/**/*
+win/HandBrakeAppX/BundleArtifacts/**/*
 *.ide
 
 # Xcode user data
@@ -37,4 +42,4 @@ gtk/ltmain.sh
 gtk/missing
 
 # HB Lib Reference
-/win/CS/Lib/hb.dll
+/netstandard/lib/hb.dll

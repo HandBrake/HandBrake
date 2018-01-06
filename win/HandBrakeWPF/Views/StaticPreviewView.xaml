@@ -1,0 +1,70 @@
+﻿<Window x:Class="HandBrakeWPF.Views.StaticPreviewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             mc:Ignorable="d" SizeToContent="WidthAndHeight"
+             TextOptions.TextFormattingMode="Display"
+             WindowStartupLocation="CenterScreen"
+             Title="{Binding Title}">
+
+    <Window.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter" />
+    </Window.Resources>
+    <Grid>
+
+        <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="LightGray" Visibility="{Binding PreviewNotAvailable, Converter={StaticResource booleanToVisibilityConverter}}">
+            <TextBlock Text="No Preview Available" VerticalAlignment="Center" Padding="60,60,60,60" FontWeight="Bold" FontSize="25" Foreground="DarkGray" />
+        </StackPanel>
+
+        <Image x:Name="previewImage" Source="{Binding PreviewImage}" MaxWidth="{Binding Width}" MaxHeight="{Binding Height}" MouseWheel="PreviewImage_OnMouseWheel" />
+
+
+        <Border BorderBrush="WhiteSmoke" BorderThickness="1,1,1,1" CornerRadius="8,8,8,8" Padding="8"
+                VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20" MinWidth="400" Background="Black" Opacity="0.70">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Slider Maximum="{Binding TotalPreviews}" Minimum="0" 
+                Value="{Binding SelectedPreviewImage}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Stretch"
+                Background="Transparent" TickPlacement="TopLeft"
+                        Margin="0,0,0,5"
+                />
+
+                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left">
+                    <Button Content="{x:Static Properties:ResourcesUI.StaticPreviewView_LivePreview}" Padding="8,2" cal:Message.Attach="[Event Click] = [Action Play]" />
+                    <TextBlock Margin="10,0,5,0" VerticalAlignment="Center" Foreground="White" Text="{x:Static Properties:ResourcesUI.StaticPreviewView_Duration}" />
+                    <ComboBox Width="60"
+                      ItemsSource="{Binding AvailableDurations}"
+                      SelectedItem="{Binding Duration}" />
+
+                    <CheckBox VerticalAlignment="Center" Content="{x:Static Properties:ResourcesUI.StaticPreviewView_UseSystemDefault}" Foreground="White" Margin="10,0,0,0" IsChecked="{Binding UseSystemDefaultPlayer}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,5,0,0">
+
+                </StackPanel>
+
+                <Grid  Margin="0,10,10,0" Grid.Row="2" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="23*" />
+                        <ColumnDefinition Width="289*"/>
+                        <ColumnDefinition Width="Auto" MinWidth="50" />
+                    </Grid.ColumnDefinitions>
+                    <ProgressBar MinHeight="5" Maximum="100" Minimum="0" Value="{Binding PercentageValue}" Grid.Column="0" Grid.ColumnSpan="2" />
+                    <TextBlock Margin="5,0,0,0" Text="{Binding Percentage}" Grid.Column="2" HorizontalAlignment="Right" Foreground="White" />
+                </Grid>
+            </Grid>
+
+        </Border>
+
+    </Grid>
+</Window>
