@@ -17,7 +17,7 @@ namespace HandBrakeWPF.Utilities
     using System.Linq;
     using System.Reflection;
 
-    using HandBrake.ApplicationServices.Attributes;
+    using HandBrake.CoreLibrary.Attributes;
 
     /// <summary>
     /// Enum Helpers

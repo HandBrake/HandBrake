@@ -11,7 +11,7 @@ namespace HandBrakeWPF.Model.Subtitles
 {
     using System.ComponentModel.DataAnnotations;
 
-    using HandBrake.ApplicationServices.Attributes;
+    using HandBrake.CoreLibrary.Attributes;
 
     /// <summary>
     /// The subtitle behaviours modes.

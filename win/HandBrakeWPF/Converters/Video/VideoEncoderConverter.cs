@@ -15,14 +15,14 @@ namespace HandBrakeWPF.Converters.Video
     using System.Linq;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.CoreLibrary.Interop;
+    using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
     using HandBrakeWPF.Utilities;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using SystemInfo = HandBrake.ApplicationServices.Utilities.SystemInfo;
+    using SystemInfo = HandBrake.CoreLibrary.Utilities.SystemInfo;
 
     /// <summary>
     /// Video Encoder Converter

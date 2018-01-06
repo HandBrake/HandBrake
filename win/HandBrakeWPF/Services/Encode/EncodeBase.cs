@@ -14,9 +14,9 @@ namespace HandBrakeWPF.Services.Encode
     using System.Globalization;
     using System.IO;
 
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Logging;
-    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
+    using HandBrake.CoreLibrary.Model;
+    using HandBrake.CoreLibrary.Services.Logging;
+    using HandBrake.CoreLibrary.Services.Logging.Interfaces;
 
     using HandBrakeWPF.Utilities;
 

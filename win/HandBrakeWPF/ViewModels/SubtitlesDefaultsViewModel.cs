@@ -13,7 +13,7 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.CoreLibrary.Utilities;
 
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Services.Presets.Model;

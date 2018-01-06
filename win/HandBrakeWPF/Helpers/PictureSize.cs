@@ -9,9 +9,9 @@
 
 namespace HandBrakeWPF.Helpers
 {
-    using HandBrake.ApplicationServices.Interop.HbLib;
-    using HandBrake.ApplicationServices.Interop.Model;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.CoreLibrary.Interop.HbLib;
+    using HandBrake.CoreLibrary.Interop.Model;
+    using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
     /// <summary>
     /// The picture size Helpers

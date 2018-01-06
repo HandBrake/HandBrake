@@ -14,7 +14,7 @@ namespace HandBrakeWPF.Services.Scan.Model
     using System.IO;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Interop.Model;
+    using HandBrake.CoreLibrary.Interop.Model;
 
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Utilities;

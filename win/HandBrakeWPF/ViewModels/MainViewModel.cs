@@ -22,7 +22,7 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Interop;
+    using HandBrake.CoreLibrary.Interop;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.Menu;

@@ -12,9 +12,9 @@ namespace HandBrakeWPF.Helpers
     using System;
     using System.IO;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Services.Logging;
-    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
+    using HandBrake.CoreLibrary.Interop;
+    using HandBrake.CoreLibrary.Services.Logging;
+    using HandBrake.CoreLibrary.Services.Logging.Interfaces;
 
     using HandBrakeWPF.Utilities;
 
@@ -52,7 +52,7 @@ namespace HandBrakeWPF.Helpers
         /// <param name="e">
         /// The e.
         /// </param>
-        private static void HandBrakeUtils_ErrorLogged(object sender, HandBrake.ApplicationServices.Interop.EventArgs.MessageLoggedEventArgs e)
+        private static void HandBrakeUtils_ErrorLogged(object sender, HandBrake.CoreLibrary.Interop.EventArgs.MessageLoggedEventArgs e)
         {
         }
 
@@ -65,7 +65,7 @@ namespace HandBrakeWPF.Helpers
         /// <param name="e">
         /// The e.
         /// </param>
-        private static void HandBrakeUtils_MessageLogged(object sender, HandBrake.ApplicationServices.Interop.EventArgs.MessageLoggedEventArgs e)
+        private static void HandBrakeUtils_MessageLogged(object sender, HandBrake.CoreLibrary.Interop.EventArgs.MessageLoggedEventArgs e)
         {
         }
     }

@@ -15,13 +15,13 @@ namespace HandBrakeWPF.Services.Presets.Factories
     using System.Globalization;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.HbLib;
-    using HandBrake.ApplicationServices.Interop.Json.Presets;
-    using HandBrake.ApplicationServices.Interop.Model;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.CoreLibrary.Interop;
+    using HandBrake.CoreLibrary.Interop.HbLib;
+    using HandBrake.CoreLibrary.Interop.Json.Presets;
+    using HandBrake.CoreLibrary.Interop.Model;
+    using HandBrake.CoreLibrary.Interop.Model.Encoding;
+    using HandBrake.CoreLibrary.Model;
+    using HandBrake.CoreLibrary.Utilities;
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Filters;

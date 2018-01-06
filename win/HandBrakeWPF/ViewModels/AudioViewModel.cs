@@ -17,9 +17,9 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.CoreLibrary.Interop;
+    using HandBrake.CoreLibrary.Interop.Model.Encoding;
+    using HandBrake.CoreLibrary.Utilities;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Audio;

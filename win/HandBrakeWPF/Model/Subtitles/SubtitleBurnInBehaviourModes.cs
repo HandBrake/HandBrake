@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.Model.Subtitles
 {
-    using HandBrake.ApplicationServices.Attributes;
+    using HandBrake.CoreLibrary.Attributes;
 
     /// <summary>
     /// The subtitle behaviours modes.

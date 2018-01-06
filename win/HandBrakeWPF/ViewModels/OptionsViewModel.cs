@@ -19,8 +19,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.CoreLibrary.Model;
+    using HandBrake.CoreLibrary.Utilities;
 
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Properties;
@@ -33,7 +33,7 @@ namespace HandBrakeWPF.ViewModels
     using Ookii.Dialogs.Wpf;
 
     using Execute = Caliburn.Micro.Execute;
-    using SystemInfo = HandBrake.ApplicationServices.Utilities.SystemInfo;
+    using SystemInfo = HandBrake.CoreLibrary.Utilities.SystemInfo;
 
     /// <summary>
     /// The Options View Model

@@ -13,9 +13,9 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Globalization;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.Model;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.CoreLibrary.Interop;
+    using HandBrake.CoreLibrary.Interop.Model;
+    using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Helpers;

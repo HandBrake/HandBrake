@@ -14,7 +14,7 @@ namespace HandBrakeWPF.Utilities
     using System.IO;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.CoreLibrary.Utilities;
 
     /// <summary>
     /// A general Helper class for HandBrake GUI

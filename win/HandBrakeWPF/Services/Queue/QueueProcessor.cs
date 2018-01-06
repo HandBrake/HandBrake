@@ -16,10 +16,10 @@ namespace HandBrakeWPF.Services.Queue
     using System.Linq;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Logging;
-    using HandBrake.ApplicationServices.Services.Logging.Model;
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.CoreLibrary.Model;
+    using HandBrake.CoreLibrary.Services.Logging;
+    using HandBrake.CoreLibrary.Services.Logging.Model;
+    using HandBrake.CoreLibrary.Utilities;
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;

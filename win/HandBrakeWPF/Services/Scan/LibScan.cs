@@ -14,17 +14,17 @@ namespace HandBrakeWPF.Services.Scan
     using System.Diagnostics;
     using System.Windows.Media.Imaging;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.HbLib;
-    using HandBrake.ApplicationServices.Interop.Interfaces;
-    using HandBrake.ApplicationServices.Interop.Json.Scan;
-    using HandBrake.ApplicationServices.Interop.Model;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Interop.Model.Preview;
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Logging;
-    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
-    using HandBrake.ApplicationServices.Services.Logging.Model;
+    using HandBrake.CoreLibrary.Interop;
+    using HandBrake.CoreLibrary.Interop.HbLib;
+    using HandBrake.CoreLibrary.Interop.Interfaces;
+    using HandBrake.CoreLibrary.Interop.Json.Scan;
+    using HandBrake.CoreLibrary.Interop.Model;
+    using HandBrake.CoreLibrary.Interop.Model.Encoding;
+    using HandBrake.CoreLibrary.Interop.Model.Preview;
+    using HandBrake.CoreLibrary.Model;
+    using HandBrake.CoreLibrary.Services.Logging;
+    using HandBrake.CoreLibrary.Services.Logging.Interfaces;
+    using HandBrake.CoreLibrary.Services.Logging.Model;
 
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -34,7 +34,7 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrakeWPF.Utilities;
 
     using Chapter = HandBrakeWPF.Services.Scan.Model.Chapter;
-    using ScanProgressEventArgs = HandBrake.ApplicationServices.Interop.EventArgs.ScanProgressEventArgs;
+    using ScanProgressEventArgs = HandBrake.CoreLibrary.Interop.EventArgs.ScanProgressEventArgs;
     using Subtitle = HandBrakeWPF.Services.Scan.Model.Subtitle;
     using Title = HandBrakeWPF.Services.Scan.Model.Title;
 

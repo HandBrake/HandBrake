@@ -16,14 +16,14 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Services.Logging;
-    using HandBrake.ApplicationServices.Services.Logging.EventArgs;
-    using HandBrake.ApplicationServices.Services.Logging.Model;
+    using HandBrake.CoreLibrary.Services.Logging;
+    using HandBrake.CoreLibrary.Services.Logging.EventArgs;
+    using HandBrake.CoreLibrary.Services.Logging.Model;
 
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using ILog = HandBrake.ApplicationServices.Services.Logging.Interfaces.ILog;
+    using ILog = HandBrake.CoreLibrary.Services.Logging.Interfaces.ILog;
 
     /// <summary>
     /// The Log View Model

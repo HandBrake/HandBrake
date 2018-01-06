@@ -734,9 +734,9 @@
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.1.0-beta001\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\netstandard\HandBrake.ApplicationServices\HandBrake.ApplicationServices.csproj">
+    <ProjectReference Include="..\..\netstandard\HandBrake.CoreLibrary\HandBrake.CoreLibrary.csproj">
       <Project>{087a2ba8-bac2-4577-a46f-07ff9d420016}</Project>
-      <Name>HandBrake.ApplicationServices</Name>
+      <Name>HandBrake.CoreLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

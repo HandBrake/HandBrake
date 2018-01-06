@@ -13,14 +13,14 @@ namespace HandBrakeWPF.Services.Encode
     using System.Diagnostics;
     using System.IO;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.EventArgs;
-    using HandBrake.ApplicationServices.Interop.Interfaces;
-    using HandBrake.ApplicationServices.Interop.Json.State;
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Logging;
-    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
-    using HandBrake.ApplicationServices.Services.Logging.Model;
+    using HandBrake.CoreLibrary.Interop;
+    using HandBrake.CoreLibrary.Interop.EventArgs;
+    using HandBrake.CoreLibrary.Interop.Interfaces;
+    using HandBrake.CoreLibrary.Interop.Json.State;
+    using HandBrake.CoreLibrary.Model;
+    using HandBrake.CoreLibrary.Services.Logging;
+    using HandBrake.CoreLibrary.Services.Logging.Interfaces;
+    using HandBrake.CoreLibrary.Services.Logging.Model;
 
     using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Properties;

@@ -16,7 +16,7 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.CoreLibrary.Utilities;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Subtitles;

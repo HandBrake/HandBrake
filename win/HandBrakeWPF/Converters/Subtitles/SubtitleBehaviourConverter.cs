@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Converters.Subtitles
     using System.Linq;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.CoreLibrary.Utilities;
 
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Utilities;

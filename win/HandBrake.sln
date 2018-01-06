@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeTools", "HandBrake
 EndProject
 Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "HandBrakeAppX", "HandBrakeAppX\HandBrakeAppX.wapproj", "{4D25B075-B50C-4C10-A3E9-59EBC6DD44BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandBrake.ApplicationServices", "..\netstandard\HandBrake.ApplicationServices\HandBrake.ApplicationServices.csproj", "{087A2BA8-BAC2-4577-A46F-07FF9D420016}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandBrake.CoreLibrary", "..\netstandard\HandBrake.CoreLibrary\HandBrake.CoreLibrary.csproj", "{087A2BA8-BAC2-4577-A46F-07FF9D420016}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeUWP", "HandBrakeUWP\HandBrakeUWP.csproj", "{5E81D474-DC19-4F3F-B60A-0ADFDDA5EF96}"
 EndProject

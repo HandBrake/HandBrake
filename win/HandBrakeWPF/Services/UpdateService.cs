@@ -16,8 +16,8 @@ namespace HandBrakeWPF.Services
     using System.Reflection;
     using System.Security.Cryptography;
     using System.Threading;
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.CoreLibrary.Interop;
+    using HandBrake.CoreLibrary.Utilities;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;

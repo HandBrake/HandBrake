@@ -13,7 +13,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.CoreLibrary.Utilities;
 
     using HandBrakeWPF.Services.Scan.Model;
 

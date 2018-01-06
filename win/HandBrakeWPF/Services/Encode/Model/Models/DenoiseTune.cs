@@ -11,7 +11,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 {
     using System.ComponentModel.DataAnnotations;
 
-    using HandBrake.ApplicationServices.Attributes;
+    using HandBrake.CoreLibrary.Attributes;
 
     /// <summary>
     /// The denoise tune.

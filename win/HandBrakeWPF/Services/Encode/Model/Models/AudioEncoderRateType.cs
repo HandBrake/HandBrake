@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
-    using HandBrake.ApplicationServices.Attributes;
+    using HandBrake.CoreLibrary.Attributes;
 
     /// <summary>
     /// The audio encoder rate type.

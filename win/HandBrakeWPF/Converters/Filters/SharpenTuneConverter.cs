@@ -14,9 +14,9 @@ namespace HandBrakeWPF.Converters.Filters
     using System.Globalization;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.HbLib;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.CoreLibrary.Interop;
+    using HandBrake.CoreLibrary.Interop.HbLib;
+    using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
     using HandBrakeWPF.Model.Filters;
 
