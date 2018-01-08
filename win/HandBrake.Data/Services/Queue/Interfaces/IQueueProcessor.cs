@@ -11,7 +11,7 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
 {
     using System;
     using System.ComponentModel;
-
+    using System.IO;
     using HandBrakeWPF.Services.Queue.Model;
 
     using IEncode = Encode.Interfaces.IEncode;
@@ -44,7 +44,7 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// </summary>
         event EventHandler QueuePaused;
 
-        #endregion
+        #endregion Events
 
         #region Properties
 
@@ -79,12 +79,12 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// </summary>
         BindingList<QueueTask> Queue { get; }
 
-        #endregion
+        #endregion Properties
 
         #region Public Methods
 
         /// <summary>
-        /// Add a job to the Queue. 
+        /// Add a job to the Queue.
         /// This method is Thread Safe.
         /// </summary>
         /// <param name="job">
@@ -103,10 +103,10 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// <summary>
         /// Export the Queue the standardised JSON format.
         /// </summary>
-        /// <param name="exportPath">
-        /// The export path.
+        /// <param name="exportStream">
+        /// The export file stream.
         /// </param>
-        void ExportJson(string exportPath);
+        void ExportJson(Stream exportStream);
 
         /// <summary>
         /// Checks the current queue for an existing instance of the specified destination.
@@ -203,6 +203,6 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// </summary>
         void PauseEncode();
 
-        #endregion
+        #endregion Public Methods
     }
 }

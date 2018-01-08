@@ -23,14 +23,14 @@ namespace HandBrakeWPF.Services
 
         public override bool SupportsWindow => true;
 
-        public override void ShowDialog<TViewModel>(TViewModel viewmodel = default(TViewModel))
+        public override bool? ShowDialog<TViewModel>(TViewModel viewmodel = default(TViewModel))
         {
             if (viewmodel == null)
             {
                 viewmodel = IoC.Get<TViewModel>();
             }
 
-            this.WindowManager.ShowDialog(viewmodel);
+            return this.WindowManager.ShowDialog(viewmodel);
         }
 
         public override void ShowWindow<TViewModel>(TViewModel viewmodel = default(TViewModel))

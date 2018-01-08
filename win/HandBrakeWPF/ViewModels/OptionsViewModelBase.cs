@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OptionsViewModel.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="OptionsViewModelBase.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -30,7 +30,6 @@ namespace HandBrakeWPF.ViewModels
     using PlatformBindings;
     using PlatformBindings.Models.FileSystem;
     using PlatformBindings.Services;
-    using Execute = Caliburn.Micro.Execute;
     using SystemInfo = HandBrake.CoreLibrary.Utilities.SystemInfo;
 
     /// <summary>

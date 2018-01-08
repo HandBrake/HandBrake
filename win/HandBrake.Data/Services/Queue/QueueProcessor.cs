@@ -230,10 +230,10 @@ namespace HandBrakeWPF.Services.Queue
         /// <summary>
         /// Export the Queue the standardised JSON format.
         /// </summary>
-        /// <param name="exportPath">
-        /// The export Path.
+        /// <param name="exportSteam">
+        /// The export file stream.
         /// </param>
-        public void ExportJson(string exportPath)
+        public void ExportJson(Stream exportSteam)
         {
             List<QueueTask> jobs = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
             List<EncodeTask> workUnits = jobs.Select(job => job.Task).ToList();
@@ -241,7 +241,7 @@ namespace HandBrakeWPF.Services.Queue
 
             string json = QueueFactory.GetQueueJson(workUnits, config);
 
-            using (var strm = new StreamWriter(exportPath, false))
+            using (var strm = new StreamWriter(exportSteam))
             {
                 strm.Write(json);
                 strm.Close();

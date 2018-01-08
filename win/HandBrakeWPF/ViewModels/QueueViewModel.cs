@@ -14,9 +14,9 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
-    using System.Windows;
 
     using Caliburn.Micro;
+    using HandBrake;
     using HandBrake.Model.Prompts;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
@@ -26,10 +26,10 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using Microsoft.Win32;
     using PlatformBindings;
     using PlatformBindings.Models.FileSystem;
     using PlatformBindings.Models.FileSystem.Options;
+    using PlatformBindings.Services;
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -44,6 +44,8 @@ namespace HandBrakeWPF.ViewModels
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
         private readonly IQueueProcessor queueProcessor;
+        private readonly IOBindings ioService;
+
         private bool isEncoding;
         private string jobStatus;
         private string jobsPending;
@@ -72,6 +74,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService = userSettingService;
             this.queueProcessor = queueProcessor;
             this.errorService = errorService;
+            this.ioService = AppServices.Current?.IO;
+
             this.Title = Resources.QueueViewModel_Queue;
             this.JobsPending = Resources.QueueViewModel_NoEncodesPending;
             this.JobStatus = Resources.QueueViewModel_NoJobsPending;
@@ -270,8 +274,8 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = false;
 
-            MessageBox.Show(Resources.QueueViewModel_QueuePauseNotice, Resources.QueueViewModel_Queue,
-                MessageBoxButton.OK, MessageBoxImage.Information);
+            HandBrakeServices.Current.Dialog.Show(Resources.QueueViewModel_QueuePauseNotice, Resources.QueueViewModel_Queue,
+                DialogButtonType.OK, DialogType.Information);
         }
 
         /// <summary>
@@ -401,17 +405,16 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Export()
         {
-            SaveFileDialog dialog = new SaveFileDialog
-            {
-                Filter = "Json (*.json)|*.json",
-                OverwritePrompt = true,
-                DefaultExt = ".json",
-                AddExtension = true
-            };
+            var properties = new FileSavePickerProperties();
+            properties.FileTypes.Add(".json");
 
-            if (dialog.ShowDialog() == true)
+            var file = ioService?.Pickers?.SaveFile(properties)?.Result;
+            if (file != null)
             {
-                this.queueProcessor.ExportJson(dialog.FileName);
+                using (var filestream = file.OpenAsStream(true).Result)
+                {
+                    this.queueProcessor.ExportJson(filestream);
+                }
             }
         }
 
@@ -420,10 +423,13 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Import()
         {
-            OpenFileDialog dialog = new OpenFileDialog { Filter = "Json (*.json)|*.json", CheckFileExists = true };
-            if (dialog.ShowDialog() == true)
+            var properties = new FilePickerProperties();
+            properties.FileTypes.Add(".json");
+
+            var file = ioService?.Pickers?.PickFile(properties)?.Result;
+            if (file != null)
             {
-                this.queueProcessor.RestoreQueue(dialog.FileName);
+                this.queueProcessor.RestoreQueue(file.Path);
             }
         }
 
@@ -481,7 +487,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (task != null)
             {
-                this.OpenDirectory(task.Task.Destination);
+                this.OpenDirectory(task.Task.Destination.File);
             }
         }
 

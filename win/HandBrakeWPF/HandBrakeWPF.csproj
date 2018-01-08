@@ -218,6 +218,7 @@
     <Compile Include="ViewModels\MetaDataViewModel.cs" />
     <Compile Include="ViewModels\MiniViewModel.cs" />
     <Compile Include="ViewModels\PopupWindowViewModel.cs" />
+    <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="ViewModels\StaticPreviewViewModel.cs" />
     <Compile Include="ViewModels\SubtitlesDefaultsViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
@@ -276,7 +277,7 @@
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\ShellViewModelBase.cs" />
     <Compile Include="ViewModels\TitleSpecificViewModel.cs" />
     <Compile Include="Views\StaticPreviewView.xaml.cs">
       <DependentUpon>StaticPreviewView.xaml</DependentUpon>

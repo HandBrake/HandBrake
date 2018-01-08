@@ -9,8 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-
-    using Caliburn.Micro;
     using HandBrake.Model.Prompts;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -26,7 +24,6 @@ namespace HandBrakeWPF.ViewModels
     {
         private readonly IPresetService presetService;
         private readonly IErrorService errorService;
-        private readonly IWindowManager windowManager;
         private Preset existingPreset;
 
         /// <summary>
@@ -41,11 +38,10 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="windowManager">
         /// The window Manager.
         /// </param>
-        public ManagePresetViewModel(IPresetService presetService, IErrorService errorService, IWindowManager windowManager)
+        public ManagePresetViewModel(IPresetService presetService, IErrorService errorService)
         {
             this.presetService = presetService;
             this.errorService = errorService;
-            this.windowManager = windowManager;
             this.Title = "Manage Preset";
             this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName };
         }

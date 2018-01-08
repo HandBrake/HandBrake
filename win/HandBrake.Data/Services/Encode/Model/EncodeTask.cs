@@ -11,15 +11,13 @@ namespace HandBrakeWPF.Services.Encode.Model
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-
     using Caliburn.Micro;
 
     using HandBrake.CoreLibrary.Interop.Model;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
-
+    using HandBrake.Model;
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model.Models;
-    using PlatformBindings.Models.FileSystem;
     using AllowedPassthru = HandBrakeWPF.Services.Encode.Model.Models.AllowedPassthru;
     using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
     using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
@@ -198,7 +196,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// <summary>
         /// Gets or sets Destination.
         /// </summary>
-        public FileContainer Destination { get; set; }
+        public FileData Destination { get; set; }
 
         #endregion Destination
 

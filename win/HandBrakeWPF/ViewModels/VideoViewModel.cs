@@ -16,7 +16,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
 
     using Caliburn.Micro;
-
+    using HandBrake;
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
@@ -28,7 +28,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using Clipboard = System.Windows.Clipboard;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using FramerateMode = HandBrakeWPF.Services.Encode.Model.Models.FramerateMode;
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
@@ -68,7 +67,7 @@ namespace HandBrakeWPF.ViewModels
         private bool displayProfileControl;
         private Dictionary<string, string> encoderOptions = new Dictionary<string, string>();
 
-        #endregion
+        #endregion Constants and Fields
 
         #region Constructors and Destructors
 
@@ -95,7 +94,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SettingChanged += this.UserSettingServiceSettingChanged;
         }
 
-        #endregion
+        #endregion Constructors and Destructors
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
@@ -331,10 +330,12 @@ namespace HandBrakeWPF.ViewModels
                     case VideoEncoder.FFMpeg2:
                         this.Task.Quality = (32 - value);
                         break;
+
                     case VideoEncoder.VP8:
                     case VideoEncoder.VP9:
                         this.Task.Quality = (63 - value);
                         break;
+
                     case VideoEncoder.X264:
                     case VideoEncoder.X264_10:
                     case VideoEncoder.X265:
@@ -345,17 +346,20 @@ namespace HandBrakeWPF.ViewModels
                         rfValue = Math.Round(rfValue, 2);
                         this.Task.Quality = rfValue;
                         break;
+
                     case VideoEncoder.QuickSync:
                     case VideoEncoder.QuickSyncH265:
                         rfValue = 51.0 - value;
                         rfValue = Math.Round(rfValue, 0);
                         this.Task.Quality = rfValue;
                         break;
+
                     case VideoEncoder.QuickSyncH26510b:
                         rfValue = 63.0 - (value - 0);
                         rfValue = Math.Round(rfValue, 0);
                         this.Task.Quality = rfValue;
                         break;
+
                     case VideoEncoder.Theora:
                         Task.Quality = value;
                         break;
@@ -895,7 +899,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Public Properties
 
         #region Public Methods
 
@@ -946,10 +950,12 @@ namespace HandBrakeWPF.ViewModels
                 case FramerateMode.CFR:
                     this.IsConstantFramerate = true;
                     break;
+
                 case FramerateMode.VFR:
                     this.IsVariableFramerate = true;
                     this.ShowPeakFramerate = false;
                     break;
+
                 case FramerateMode.PFR:
                     this.IsPeakFramerate = true;
                     this.ShowPeakFramerate = true;
@@ -1150,10 +1156,10 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void CopyQuery()
         {
-            Clipboard.SetDataObject(this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 ? this.GetActualx264Query() : this.ExtraArguments);
+            HandBrakeServices.Current?.Clipboard?.Copy(this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 ? this.GetActualx264Query() : this.ExtraArguments);
         }
 
-        #endregion
+        #endregion Public Methods
 
         protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
         {
@@ -1174,15 +1180,18 @@ namespace HandBrakeWPF.ViewModels
                     this.QualityMin = 1;
                     this.QualityMax = 31;
                     break;
+
                 case VideoEncoder.QuickSync:
                 case VideoEncoder.QuickSyncH265:
                     this.QualityMin = 0;
                     this.QualityMax = 51;
                     break;
+
                 case VideoEncoder.QuickSyncH26510b:
                     this.QualityMin = 0;
                     this.QualityMax = 63;
                     break;
+
                 case VideoEncoder.X264:
                 case VideoEncoder.X264_10:
                 case VideoEncoder.X265:
@@ -1191,6 +1200,7 @@ namespace HandBrakeWPF.ViewModels
                     this.QualityMin = 0;
                     this.QualityMax = (int)(51 / userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step));
                     break;
+
                 case VideoEncoder.Theora:
                 case VideoEncoder.VP8:
                 case VideoEncoder.VP9:
@@ -1290,6 +1300,7 @@ namespace HandBrakeWPF.ViewModels
                         this.RF = 32 - cq;
                     }
                     break;
+
                 case VideoEncoder.VP8:
                 case VideoEncoder.VP9:
                     if (quality.HasValue)
@@ -1299,6 +1310,7 @@ namespace HandBrakeWPF.ViewModels
                         this.RF = 63 - cq;
                     }
                     break;
+
                 case VideoEncoder.X265:
                 case VideoEncoder.X265_10:
                 case VideoEncoder.X265_12:

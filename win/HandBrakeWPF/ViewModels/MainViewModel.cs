@@ -21,6 +21,7 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
     using HandBrake;
     using HandBrake.CoreLibrary.Interop;
+    using HandBrake.Model;
     using HandBrake.Model.Prompts;
     using HandBrake.Services.Interfaces;
     using HandBrake.Utilities.Interfaces;
@@ -157,7 +158,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="notifyIconService">Wrapper around the WinForms NotifyIcon for this app. </param>
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IPresetService presetService,
             IErrorService errorService, IUpdateService updateService,
-            IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, ISummaryViewModel summaryViewModel,
+            IPrePostActionService whenDoneService, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, ISummaryViewModel summaryViewModel,
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
             IX264ViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
             IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel, INotifyIconService notifyIconService)
@@ -684,7 +685,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets Destination.
         /// </summary>
-        public FileContainer Destination
+        public FileData Destination
         {
             get
             {
@@ -780,7 +781,7 @@ namespace HandBrakeWPF.ViewModels
                         if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) != null)
                         {
                             // TODO: Verify Valid
-                            this.Destination = AppServices.Current?.IO?.CreateFile(AutoNameHelper.AutoName(this.CurrentTask, this.SourceName, this.selectedPreset))?.Result;
+                            this.Destination.File = AppServices.Current?.IO?.CreateFile(AutoNameHelper.AutoName(this.CurrentTask, this.SourceName, this.selectedPreset))?.Result;
                         }
                     }
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
@@ -836,7 +837,7 @@ namespace HandBrakeWPF.ViewModels
                         this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
                     {
                         // TODO: Verify Valid
-                        this.Destination = AppServices.Current?.IO?.CreateFile(AutoNameHelper.AutoName(this.CurrentTask, this.SourceName, this.selectedPreset))?.Result;
+                        this.Destination.File = AppServices.Current?.IO?.CreateFile(AutoNameHelper.AutoName(this.CurrentTask, this.SourceName, this.selectedPreset))?.Result;
                     }
                 }
 
@@ -866,7 +867,7 @@ namespace HandBrakeWPF.ViewModels
                     this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat).Contains(Constants.Chapters))
                 {
                     // TODO: Verify Valid
-                    this.Destination = AppServices.Current?.IO?.CreateFile(AutoNameHelper.AutoName(this.CurrentTask, this.SourceName, this.selectedPreset))?.Result;
+                    this.Destination.File = AppServices.Current?.IO?.CreateFile(AutoNameHelper.AutoName(this.CurrentTask, this.SourceName, this.selectedPreset))?.Result;
                 }
 
                 if (this.SelectedStartPoint > this.SelectedEndPoint && this.SelectedPointToPoint == PointToPointMode.Chapters)
@@ -1289,7 +1290,9 @@ namespace HandBrakeWPF.ViewModels
             if (!string.IsNullOrEmpty(e.Extension))
             {
                 var newname = Path.ChangeExtension(this.Destination.Path, e.Extension);
-                var result = this.Destination.RenameAsync(newname).Result;
+                var result = this.Destination.File.RenameAsync(newname).Result;
+                // updates path.
+                this.Destination.Path = this.Destination.File.Path;
             }
 
             this.VideoViewModel.RefreshTask();
@@ -1643,7 +1646,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            if (this.Destination != null)
+            if (this.Destination == null)
             {
                 this.errorService.ShowMessageBox(Resources.Main_ChooseDestination, Resources.Error, DialogButtonType.OK, DialogType.Error);
                 return;
@@ -1780,7 +1783,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (Directory.Exists(Path.GetDirectoryName(this.CurrentTask.Destination.Path)))
                 {
-                    properties.SuggestedFile = this.CurrentTask.Destination;
+                    properties.SuggestedFile = this.CurrentTask.Destination.File;
                 }
             }
 
@@ -1799,7 +1802,7 @@ namespace HandBrakeWPF.ViewModels
                     return;
                 }
 
-                this.Destination = file;
+                this.Destination = new FileData(file);
 
                 // Set the Extension Dropdown. This will also set Mp4/m4v correctly.
                 switch (Path.GetExtension(file.Path))

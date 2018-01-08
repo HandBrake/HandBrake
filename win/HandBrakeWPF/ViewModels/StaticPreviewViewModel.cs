@@ -16,10 +16,11 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Runtime.ExceptionServices;
     using System.Threading;
-    using System.Windows;
 
+    using HandBrake;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.CoreLibrary.Model;
+    using HandBrake.Model;
     using HandBrake.Model.Prompts;
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
@@ -494,10 +495,10 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public int FixWidth(int width)
         {
-            Rect workArea = SystemParameters.WorkArea;
-            if (width > workArea.Width)
+            var screendimensions = HandBrakeServices.Current.SystemInfo.ScreenBounds;
+            if (width > screendimensions.Width)
             {
-                return (int)Math.Round(workArea.Width, 0) - 50;
+                return screendimensions.Width - 50;
             }
 
             return width;
@@ -505,10 +506,10 @@ namespace HandBrakeWPF.ViewModels
 
         public int FixHeight(int height)
         {
-            Rect workArea = SystemParameters.WorkArea;
-            if (height > workArea.Height)
+            var screendimensions = HandBrakeServices.Current.SystemInfo.ScreenBounds;
+            if (height > screendimensions.Height)
             {
-                return (int)Math.Round(workArea.Height, 0) - 50;
+                return screendimensions.Height - 50;
             }
 
             return height;
@@ -571,7 +572,7 @@ namespace HandBrakeWPF.ViewModels
             if (encodeTask.Destination == null)
             {
                 string filename = Path.ChangeExtension(Path.GetTempFileName(), encodeTask.OutputFormat == OutputFormat.Mkv ? "m4v" : "mkv");
-                encodeTask.Destination = AppServices.Current?.IO?.GetFile(filename)?.Result;
+                encodeTask.Destination = new FileData(AppServices.Current?.IO?.GetFile(filename)?.Result);
                 this.CurrentlyPlaying = filename;
             }
             else
@@ -586,7 +587,7 @@ namespace HandBrakeWPF.ViewModels
 
                 // This will throw an exception in most platforms if outside of the permissions boundary (Such as UWP).
                 // Can this be done with encodeTask.Destination.RenameAsync() ?
-                encodeTask.Destination = AppServices.Current?.IO?.CreateFile(previewFullPath)?.Result;
+                encodeTask.Destination = new FileData(AppServices.Current?.IO?.CreateFile(previewFullPath)?.Result);
                 this.CurrentlyPlaying = previewFullPath;
             }
 

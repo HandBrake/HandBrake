@@ -36,6 +36,9 @@ namespace HandBrake.Services.Interfaces
         /// <param name="viewmodel">
         /// Viewmodel to use for the Dialog.
         /// </param>
-        public abstract void ShowDialog<TViewModel>(TViewModel viewmodel = default(TViewModel));
+        /// <returns>
+        /// Response
+        /// </returns>
+        public abstract bool? ShowDialog<TViewModel>(TViewModel viewmodel = default(TViewModel));
     }
 }

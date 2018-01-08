@@ -11,8 +11,6 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
 
-    using Caliburn.Micro;
-
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -30,7 +28,7 @@ namespace HandBrakeWPF.ViewModels
         private MetaData metaData;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MetaDataViewModel"/> class. 
+        /// Initializes a new instance of the <see cref="MetaDataViewModel"/> class.
         /// </summary>
         /// <param name="windowManager">
         /// The window Manager.
@@ -38,7 +36,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public MetaDataViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        public MetaDataViewModel(IUserSettingService userSettingService)
         {
             this.Task = new EncodeTask();
         }
@@ -62,7 +60,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.MetaData = this.task.MetaData;
                 }
-               
+
                 this.NotifyOfPropertyChange(() => this.Task);
             }
         }

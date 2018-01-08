@@ -15,8 +15,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.Linq;
 
-    using Caliburn.Micro;
-
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Interop.HbLib;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
@@ -51,14 +49,14 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public FiltersViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        public FiltersViewModel(IUserSettingService userSettingService)
         {
             this.CurrentTask = new EncodeTask();
             this.DeblockValue = 4; // OFF
             this.SelectedDeinterlaceFilter = DeinterlaceFilter.Off;
         }
 
-        #endregion
+        #endregion Constructors and Destructors
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
@@ -660,6 +658,7 @@ namespace HandBrakeWPF.ViewModels
                         if (this.SelectedSharpenTune == null)
                             this.SelectedSharpenTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_LAPSHARP).FirstOrDefault(s => s.ShortName == "none"));
                         break;
+
                     case Sharpen.UnSharp:
                         if (this.SelectedSharpenPreset == null)
                             this.SelectedSharpenPreset = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_UNSHARP).FirstOrDefault(s => s.ShortName == "medium"));
@@ -745,9 +744,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Sharpen Filter
 
-        #endregion
+        #endregion Properties
 
         #region Implemented Interfaces
 
@@ -864,7 +863,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return false;
             }
-            
+
             if (preset.Task.DeinterlaceFilter != this.SelectedDeinterlaceFilter)
             {
                 return false;
@@ -975,13 +974,15 @@ namespace HandBrakeWPF.ViewModels
             this.CurrentTask = task;
         }
 
-        #endregion
+        #endregion Implemented Interfaces
 
         #region Private Methods
+
         protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
         {
             this.TabStatusChanged?.Invoke(this, e);
         }
-        #endregion
+
+        #endregion Private Methods
     }
 }

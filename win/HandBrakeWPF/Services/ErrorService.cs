@@ -13,6 +13,7 @@ namespace HandBrakeWPF.Services
     using Caliburn.Micro;
     using HandBrake;
     using HandBrake.Model.Prompts;
+    using HandBrake.Services.Interfaces;
     using Interfaces;
     using ViewModels.Interfaces;
 
@@ -21,6 +22,13 @@ namespace HandBrakeWPF.Services
     /// </summary>
     public class ErrorService : IErrorService
     {
+        private readonly ViewManagerBase viewManager;
+
+        public ErrorService()
+        {
+            this.viewManager = HandBrakeServices.Current?.ViewManager;
+        }
+
         /// <summary>
         /// Show an Exception Error Window
         /// </summary>
@@ -35,15 +43,14 @@ namespace HandBrakeWPF.Services
         /// </param>
         public void ShowError(string message, string solution, string details)
         {
-            IWindowManager windowManager = IoC.Get<IWindowManager>();
             IErrorViewModel errorViewModel = IoC.Get<IErrorViewModel>();
 
-            if (windowManager != null && errorViewModel != null)
+            if (this.viewManager != null && errorViewModel != null)
             {
                 errorViewModel.ErrorMessage = message;
                 errorViewModel.Solution = solution;
                 errorViewModel.Details = details;
-                windowManager.ShowDialog(errorViewModel);
+                this.viewManager.ShowDialog(errorViewModel);
             }
         }
 
@@ -61,15 +68,14 @@ namespace HandBrakeWPF.Services
         /// </param>
         public void ShowError(string message, string solution, Exception exception)
         {
-            IWindowManager windowManager = IoC.Get<IWindowManager>();
             IErrorViewModel errorViewModel = IoC.Get<IErrorViewModel>();
 
-            if (windowManager != null && errorViewModel != null)
+            if (this.viewManager != null && errorViewModel != null)
             {
                 errorViewModel.ErrorMessage = message;
                 errorViewModel.Solution = solution;
                 errorViewModel.Details = exception.ToString();
-                windowManager.ShowDialog(errorViewModel);
+                this.viewManager.ShowDialog(errorViewModel);
             }
         }
 

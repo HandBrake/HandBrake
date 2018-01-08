@@ -14,8 +14,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
-
-    using Caliburn.Micro;
     using HandBrake.Model.Prompts;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Properties;
@@ -61,7 +59,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="errorService">
         /// The Error Service
         /// </param>
-        public ChaptersViewModel(IWindowManager windowManager, IUserSettingService userSettingService, IErrorService errorService)
+        public ChaptersViewModel(IUserSettingService userSettingService, IErrorService errorService)
         {
             this.Task = new EncodeTask();
             this.errorService = errorService;

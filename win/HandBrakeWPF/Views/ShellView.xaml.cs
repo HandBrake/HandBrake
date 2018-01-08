@@ -19,7 +19,7 @@ namespace HandBrakeWPF.Views
     using System.Windows.Resources;
 
     using Caliburn.Micro;
-
+    using HandBrake;
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
@@ -122,12 +122,11 @@ namespace HandBrakeWPF.Views
         private void ShowMiniStatusDisplay(object sender, EventArgs e)
         {
             IMiniViewModel titleSpecificView = IoC.Get<IMiniViewModel>();
-            IWindowManager windowManager = IoC.Get<IWindowManager>();
             Execute.OnUIThread(
                 () =>
                 {
                     titleSpecificView.Activate();
-                    windowManager.ShowWindow(titleSpecificView);
+                    HandBrakeServices.Current?.ViewManager?.ShowWindow(titleSpecificView);
                 });
         }
 

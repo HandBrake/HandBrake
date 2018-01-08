@@ -13,9 +13,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-
-    using Caliburn.Micro;
-
+    using HandBrake;
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.CoreLibrary.Utilities;
@@ -39,7 +37,6 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class AudioViewModel : ViewModelBase, IAudioViewModel
     {
-        private readonly IWindowManager windowManager;
         private IEnumerable<Audio> sourceTracks;
         private Preset currentPreset;
 
@@ -54,9 +51,8 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public AudioViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
+        public AudioViewModel(IUserSettingService userSettingService)
         {
-            this.windowManager = windowManager;
             this.Task = new EncodeTask();
             this.AudioDefaultsViewModel = new AudioDefaultsViewModel(this.Task);
 
@@ -70,7 +66,7 @@ namespace HandBrakeWPF.ViewModels
             this.SourceTracks = new List<Audio>();
         }
 
-        #endregion
+        #endregion Constructors and Destructors
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
@@ -135,7 +131,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets the default audio behaviours. 
+        /// Gets the default audio behaviours.
         /// </summary>
         public AudioBehaviours AudioBehaviours
         {
@@ -145,7 +141,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Properties
 
         #region Public Methods
 
@@ -217,13 +213,13 @@ namespace HandBrakeWPF.ViewModels
         public void ShowAudioDefaults()
         {
             IPopupWindowViewModel popup = new PopupWindowViewModel(this.AudioDefaultsViewModel, ResourcesUI.Preset_AudioDefaults_Title, ResourcesUI.AudioView_AudioDefaultsDescription);
-            if (this.windowManager.ShowDialog(popup) == true)
+            if (HandBrakeServices.Current?.ViewManager?.ShowDialog(popup) == true)
             {
                 this.OnTabStatusChanged(null);
             }
         }
 
-        #endregion
+        #endregion Public Methods
 
         #region Implemented Interfaces
 
@@ -410,9 +406,10 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Implemented Interfaces
 
         #region Methods
+
         protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
         {
             this.TabStatusChanged?.Invoke(this, e);
@@ -446,9 +443,10 @@ namespace HandBrakeWPF.ViewModels
                             AudioBehaviourTrack template = this.AudioBehaviours.BehaviourTracks.FirstOrDefault();
                             if (this.CanAddTrack(template, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback))
                             {
-                                this.Task.AudioTracks.Add( template != null ? new AudioTrack(template, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback) : new AudioTrack { ScannedTrack = track });
+                                this.Task.AudioTracks.Add(template != null ? new AudioTrack(template, track, this.Task.AllowedPassthruOptions.AudioEncoderFallback) : new AudioTrack { ScannedTrack = track });
                             }
                             break;
+
                         case AudioTrackDefaultsMode.AllTracks:
                             foreach (AudioBehaviourTrack tmpl in this.AudioBehaviours.BehaviourTracks)
                             {
@@ -527,16 +525,18 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.AudioTracks.Add(new AudioTrack(track, sourceTrack, this.Task.AllowedPassthruOptions.AudioEncoderFallback));
                 }
             }
-           
+
             // Step 4, Handle the default selection behaviour.
             switch (this.AudioBehaviours.SelectedBehaviour)
             {
                 case AudioBehaviourModes.None:
                     this.Task.AudioTracks.Clear();
                     break;
+
                 case AudioBehaviourModes.FirstMatch: // Adding all remaining audio tracks
                     this.AddFirstForSelectedLanguages();
                     break;
+
                 case AudioBehaviourModes.AllMatching: // Add Langauges tracks for the additional languages selected, in-order.
                     this.AddAllRemainingForSelectedLanguages();
                     break;
@@ -621,6 +621,6 @@ namespace HandBrakeWPF.ViewModels
             return trackList;
         }
 
-        #endregion
+        #endregion Methods
     }
 }
