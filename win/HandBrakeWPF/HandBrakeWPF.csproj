@@ -221,6 +221,7 @@
     <Compile Include="ViewModels\StaticPreviewViewModel.cs" />
     <Compile Include="ViewModels\SubtitlesDefaultsViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
+    <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="Views\ManagePresetView.xaml.cs">
       <DependentUpon>ManagePresetView.xaml</DependentUpon>
     </Compile>
@@ -301,7 +302,7 @@
     <Compile Include="ViewModels\ErrorViewModel.cs" />
     <Compile Include="ViewModels\LogViewModel.cs" />
     <Compile Include="ViewModels\QueueViewModel.cs" />
-    <Compile Include="ViewModels\OptionsViewModel.cs" />
+    <Compile Include="ViewModels\OptionsViewModelBase.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
