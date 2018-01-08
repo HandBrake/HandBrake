@@ -7,15 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Commands
+namespace HandBrake.Commands
 {
     using System;
     using System.Windows.Input;
 
     using Caliburn.Micro;
 
-    using HandBrakeWPF.Model;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Model;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     ///     A Command to display the options window.

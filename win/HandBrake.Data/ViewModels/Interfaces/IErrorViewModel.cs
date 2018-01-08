@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels.Interfaces
+namespace HandBrake.ViewModels.Interfaces
 {
     /// <summary>
     /// The Error View Model Interface

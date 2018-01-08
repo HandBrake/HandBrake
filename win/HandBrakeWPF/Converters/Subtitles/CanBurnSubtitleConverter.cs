@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Subtitles
+namespace HandBrake.Converters.Subtitles
 {
     using System;
     using System.Globalization;
     using System.Windows.Data;
 
-    using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Encode.Model.Models;
+    using HandBrake.Services.Encode.Model;
+    using HandBrake.Services.Encode.Model.Models;
 
     public class CanBurnSubtitleConverter : IMultiValueConverter
     {

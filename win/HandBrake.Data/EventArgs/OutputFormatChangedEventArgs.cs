@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.EventArgs
+namespace HandBrake.EventArgs
 {
     using EventArgs = System.EventArgs;
 

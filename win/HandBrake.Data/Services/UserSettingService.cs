@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services
+namespace HandBrake.Services
 {
     using System;
     using System.IO;
@@ -17,11 +17,11 @@ namespace HandBrakeWPF.Services
 
     using HandBrake.CoreLibrary.Utilities;
     using HandBrake.Properties;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Utilities;
 
-    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
-    using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
+    using GeneralApplicationException = HandBrake.Exceptions.GeneralApplicationException;
+    using SettingChangedEventArgs = HandBrake.EventArgs.SettingChangedEventArgs;
 
     /// <summary>
     /// The User Setting Serivce

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode
+namespace HandBrake.Services.Encode
 {
     using System;
     using System.Diagnostics;
@@ -18,14 +18,14 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrake.CoreLibrary.Services.Logging;
     using HandBrake.CoreLibrary.Services.Logging.Interfaces;
 
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Utilities;
 
-    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
-    using EncodeCompletedStatus = HandBrakeWPF.Services.Encode.Interfaces.EncodeCompletedStatus;
-    using EncodeProgessStatus = HandBrakeWPF.Services.Encode.Interfaces.EncodeProgessStatus;
-    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
+    using EncodeCompletedEventArgs = HandBrake.Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeCompletedStatus = HandBrake.Services.Encode.Interfaces.EncodeCompletedStatus;
+    using EncodeProgessStatus = HandBrake.Services.Encode.Interfaces.EncodeProgessStatus;
+    using EncodeProgressEventArgs = HandBrake.Services.Encode.EventArgs.EncodeProgressEventArgs;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using GeneralApplicationException = HandBrake.Exceptions.GeneralApplicationException;
 
     /// <summary>
     /// A Base Class for the Encode Services.

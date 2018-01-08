@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -20,22 +20,22 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
-    using HandBrakeWPF.EventArgs;
+    using HandBrake.EventArgs;
     using HandBrake.Properties;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using FramerateMode = HandBrakeWPF.Services.Encode.Model.Models.FramerateMode;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
-    using VideoLevel = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoLevel;
-    using VideoPreset = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoPreset;
-    using VideoProfile = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoProfile;
-    using VideoTune = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoTune;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using FramerateMode = HandBrake.Services.Encode.Model.Models.FramerateMode;
+    using OutputFormat = HandBrake.Services.Encode.Model.Models.OutputFormat;
+    using SettingChangedEventArgs = HandBrake.EventArgs.SettingChangedEventArgs;
+    using VideoLevel = HandBrake.Services.Encode.Model.Models.Video.VideoLevel;
+    using VideoPreset = HandBrake.Services.Encode.Model.Models.Video.VideoPreset;
+    using VideoProfile = HandBrake.Services.Encode.Model.Models.Video.VideoProfile;
+    using VideoTune = HandBrake.Services.Encode.Model.Models.Video.VideoTune;
 
     /// <summary>
     /// The Video View Model

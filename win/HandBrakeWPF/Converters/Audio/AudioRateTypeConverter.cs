@@ -7,16 +7,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Audio
+namespace HandBrake.Converters.Audio
 {
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Windows.Data;
 
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Utilities;
 
-    using AudioEncoderRateType = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType;
+    using AudioEncoderRateType = HandBrake.Services.Encode.Model.Models.AudioEncoderRateType;
 
     /// <summary>
     /// The audio rate type converter.

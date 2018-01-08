@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Interfaces
+namespace HandBrake.Services.Interfaces
 {
     using System;
 
-    using HandBrakeWPF.Model;
+    using HandBrake.Model;
 
     /// <summary>
     /// An Interface for the Update Service

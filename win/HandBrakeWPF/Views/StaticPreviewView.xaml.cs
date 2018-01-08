@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Views
+namespace HandBrake.Views
 {
     using System;
     using System.Windows;
     using System.Windows.Input;
 
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// Interaction logic for StaticPreviewView.xaml

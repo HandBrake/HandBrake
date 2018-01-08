@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Subtitles
+namespace HandBrake.Converters.Subtitles
 {
     using System;
     using System.Collections.ObjectModel;
@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Converters.Subtitles
     using System.Text;
     using System.Windows.Data;
 
-    using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
+    using SubtitleTrack = HandBrake.Services.Encode.Model.Models.SubtitleTrack;
 
     /// <summary>
     /// Subtitle Queue Display Converter

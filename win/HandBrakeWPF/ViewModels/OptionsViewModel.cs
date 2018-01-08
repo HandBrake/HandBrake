@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.ComponentModel;
@@ -18,10 +18,10 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
     using HandBrake.Properties;
-    using HandBrakeWPF.Model;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Model;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
     using PlatformBindings.Models.FileSystem;
 
     public class OptionsViewModel : OptionsViewModelBase

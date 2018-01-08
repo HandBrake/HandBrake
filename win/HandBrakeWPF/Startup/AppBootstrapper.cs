@@ -7,26 +7,26 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Startup
+namespace HandBrake.Startup
 {
     using System;
     using System.Collections.Generic;
 
     using Caliburn.Micro;
 
-    using HandBrakeWPF.Services;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets;
-    using HandBrakeWPF.Services.Presets.Interfaces;
-    using HandBrakeWPF.Services.Queue;
-    using HandBrakeWPF.Services.Queue.Interfaces;
-    using HandBrakeWPF.Services.Scan;
-    using HandBrakeWPF.Services.Scan.Interfaces;
-    using HandBrakeWPF.ViewModels;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets;
+    using HandBrake.Services.Presets.Interfaces;
+    using HandBrake.Services.Queue;
+    using HandBrake.Services.Queue.Interfaces;
+    using HandBrake.Services.Scan;
+    using HandBrake.Services.Scan.Interfaces;
+    using HandBrake.ViewModels;
+    using HandBrake.ViewModels.Interfaces;
 
-    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
-    using LibEncode = HandBrakeWPF.Services.Encode.LibEncode;
+    using IEncode = HandBrake.Services.Encode.Interfaces.IEncode;
+    using LibEncode = HandBrake.Services.Encode.LibEncode;
 
     /// <summary>
     /// The Castle Bootstrapper

@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.EventArgs
+namespace HandBrake.EventArgs
 {
     using System;
 
-    using HandBrakeWPF.Services.Queue.Model;
+    using HandBrake.Services.Queue.Model;
 
     /// <summary>
     /// Queue Progress Event Args

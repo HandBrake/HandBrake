@@ -7,12 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Queue.Interfaces
+namespace HandBrake.Services.Queue.Interfaces
 {
     using System;
     using System.ComponentModel;
     using System.IO;
-    using HandBrakeWPF.Services.Queue.Model;
+    using HandBrake.Services.Queue.Model;
 
     using IEncode = Encode.Interfaces.IEncode;
 

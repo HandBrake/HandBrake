@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Commands.Menu
+namespace HandBrake.Commands.Menu
 {
     /// <summary>
     /// The queue command params.

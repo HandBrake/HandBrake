@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode.Model.Models
+namespace HandBrake.Services.Encode.Model.Models
 {
     using System;
 
@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
     using HandBrake.CoreLibrary.Utilities;
 
-    using HandBrakeWPF.Services.Scan.Model;
+    using HandBrake.Services.Scan.Model;
 
     /// <summary>
     /// Subtitle Information

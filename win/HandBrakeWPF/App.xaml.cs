@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF
+namespace HandBrake
 {
     using System;
     using System.IO;
@@ -17,12 +17,12 @@ namespace HandBrakeWPF
 
     using Caliburn.Micro;
 
-    using HandBrakeWPF.Startup;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Startup;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels;
+    using HandBrake.ViewModels.Interfaces;
     using PlatformBindings;
-    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
+    using GeneralApplicationException = HandBrake.Exceptions.GeneralApplicationException;
 
     /// <summary>
     /// Interaction logic for App.xaml

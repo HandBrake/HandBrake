@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Audio
+namespace HandBrake.Converters.Audio
 {
     using System;
     using System.Globalization;

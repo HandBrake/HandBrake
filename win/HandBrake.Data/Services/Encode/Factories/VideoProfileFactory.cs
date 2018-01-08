@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode.Factories
+namespace HandBrake.Services.Encode.Factories
 {
     /// <summary>
     /// The video profile factory.

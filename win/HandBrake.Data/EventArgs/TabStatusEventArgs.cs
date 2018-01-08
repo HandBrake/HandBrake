@@ -4,7 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.EventArgs
+namespace HandBrake.EventArgs
 {
     using System;
 

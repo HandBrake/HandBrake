@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Diagnostics;
@@ -19,8 +19,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.CoreLibrary.Services.Logging.EventArgs;
     using HandBrake.CoreLibrary.Services.Logging.Model;
 
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
 
     using ILog = HandBrake.CoreLibrary.Services.Logging.Interfaces.ILog;
 

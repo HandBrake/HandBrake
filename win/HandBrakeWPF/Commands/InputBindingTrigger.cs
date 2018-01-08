@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Commands
+namespace HandBrake.Commands
 {
     using System;
     using System.Diagnostics;

@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels.Interfaces
+namespace HandBrake.ViewModels.Interfaces
 {
-    using HandBrakeWPF.Model;
+    using HandBrake.Model;
 
     /// <summary>
     /// The Interface for the Shell View Model

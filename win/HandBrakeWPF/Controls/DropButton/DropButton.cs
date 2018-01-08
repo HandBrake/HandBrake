@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Controls.DropButton
+namespace HandBrake.Controls.DropButton
 {
     using System.Windows;
     using System.Windows.Controls;

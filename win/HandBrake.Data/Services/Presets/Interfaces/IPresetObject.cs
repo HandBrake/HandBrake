@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Presets.Interfaces
+namespace HandBrake.Services.Presets.Interfaces
 {
     public interface IPresetObject
     {      

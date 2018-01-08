@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters
+namespace HandBrake.Converters
 {
     using System;
     using System.Collections.Generic;
@@ -15,10 +15,10 @@ namespace HandBrakeWPF.Converters
     using System.Windows.Data;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.CoreLibrary.Model;
-    using HandBrakeWPF.Services.Queue.Model;
-    using HandBrakeWPF.Utilities;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
+    using HandBrake.Services.Queue.Model;
+    using HandBrake.Utilities;
+    using OutputFormat = HandBrake.Services.Encode.Model.Models.OutputFormat;
+    using PresetPictureSettingsMode = HandBrake.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>
     /// Enum Combo Converter

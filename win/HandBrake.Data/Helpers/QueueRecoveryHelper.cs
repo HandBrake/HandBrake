@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Helpers
+namespace HandBrake.Helpers
 {
     using System;
     using System.Collections.Generic;
@@ -20,11 +20,11 @@ namespace HandBrakeWPF.Helpers
     using HandBrake;
     using HandBrake.CoreLibrary.Utilities;
     using HandBrake.Model.Prompts;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Queue.Model;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Queue.Model;
+    using HandBrake.Utilities;
 
-    using IQueueProcessor = HandBrakeWPF.Services.Queue.Interfaces.IQueueProcessor;
+    using IQueueProcessor = HandBrake.Services.Queue.Interfaces.IQueueProcessor;
 
     /// <summary>
     /// Queue Recovery Helper

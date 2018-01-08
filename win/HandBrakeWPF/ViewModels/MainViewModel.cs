@@ -4,17 +4,17 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System.Windows.Input;
     using HandBrake.Properties;
-    using HandBrakeWPF.Commands.Menu;
-    using HandBrakeWPF.Model;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Interfaces;
-    using HandBrakeWPF.Services.Scan.Interfaces;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Commands.Menu;
+    using HandBrake.Model;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets.Interfaces;
+    using HandBrake.Services.Scan.Interfaces;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
 
     public class MainViewModel : MainViewModelBase
     {

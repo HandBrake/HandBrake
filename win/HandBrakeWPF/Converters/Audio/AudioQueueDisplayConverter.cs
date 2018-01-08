@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Audio
+namespace HandBrake.Converters.Audio
 {
     using System;
     using System.Collections.ObjectModel;
@@ -15,10 +15,10 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Text;
     using System.Windows.Data;
 
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Utilities;
 
-    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
-    using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
+    using AudioEncoder = HandBrake.Services.Encode.Model.Models.AudioEncoder;
+    using AudioTrack = HandBrake.Services.Encode.Model.Models.AudioTrack;
 
     /// <summary>
     /// Audio Queue Display Converter

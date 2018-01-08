@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services
+namespace HandBrake.Services
 {
     using System;
     using System.Diagnostics;
@@ -18,11 +18,11 @@ namespace HandBrakeWPF.Services
     using System.Threading;
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Utilities;
-    using HandBrakeWPF.Model;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Model;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Utilities;
 
-    using AppcastReader = HandBrakeWPF.Utilities.AppcastReader;
+    using AppcastReader = HandBrake.Utilities.AppcastReader;
 
     /// <summary>
     /// The Update Service

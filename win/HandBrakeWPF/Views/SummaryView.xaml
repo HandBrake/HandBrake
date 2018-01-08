@@ -1,10 +1,10 @@
-﻿<UserControl x:Class="HandBrakeWPF.Views.SummaryView"
+﻿<UserControl x:Class="HandBrake.Views.SummaryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
-             xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
+             xmlns:Properties="clr-namespace:HandBrake.Properties"
+             xmlns:converters="clr-namespace:HandBrake.Converters"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d"
              d:DesignHeight="400" d:DesignWidth="600">

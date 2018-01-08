@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode.Model.Models.Video
+namespace HandBrake.Services.Encode.Model.Models.Video
 {
-    using VideoPresetFactory = HandBrakeWPF.Services.Encode.Factories.VideoPresetFactory;
+    using VideoPresetFactory = HandBrake.Services.Encode.Factories.VideoPresetFactory;
 
     /// <summary>
     /// The video preset.

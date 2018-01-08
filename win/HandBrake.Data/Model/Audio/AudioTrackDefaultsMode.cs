@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model.Audio
+namespace HandBrake.Model.Audio
 {
     using HandBrake.CoreLibrary.Attributes;
 

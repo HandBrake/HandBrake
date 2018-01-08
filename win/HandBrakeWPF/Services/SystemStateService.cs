@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services
+namespace HandBrake.Services
 {
     using System.Diagnostics;
     using System.Windows.Forms;
     using Caliburn.Micro;
     using HandBrake.Utilities.Interfaces;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Utilities;
 
     public class SystemStateService : ISystemStateService
     {

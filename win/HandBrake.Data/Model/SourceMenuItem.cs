@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model
+namespace HandBrake.Model
 {
     using System.Collections.ObjectModel;
     using System.Windows.Input;

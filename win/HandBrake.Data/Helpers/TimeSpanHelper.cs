@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Helpers
+namespace HandBrake.Helpers
 {
     using System;
     using System.Globalization;

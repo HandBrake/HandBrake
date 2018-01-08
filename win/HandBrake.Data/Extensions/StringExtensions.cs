@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Extensions
+namespace HandBrake.Extensions
 {
     using System.Globalization;
 

@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels.Interfaces
+namespace HandBrake.ViewModels.Interfaces
 {
-    using HandBrakeWPF.Model.Subtitles;
+    using HandBrake.Model.Subtitles;
 
     /// <summary>
     /// The Subtiles View Model Interface

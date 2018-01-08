@@ -7,12 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
 
     using HandBrake.Properties;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.ViewModels.Interfaces;
     using PlatformBindings.Models;
 
     /// <summary>

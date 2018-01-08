@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Video
+namespace HandBrake.Converters.Video
 {
     using System;
     using System.Collections.Generic;
@@ -18,10 +18,10 @@ namespace HandBrakeWPF.Converters.Video
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Utilities;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using OutputFormat = HandBrake.Services.Encode.Model.Models.OutputFormat;
     using SystemInfo = HandBrake.CoreLibrary.Utilities.SystemInfo;
 
     /// <summary>

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Utilities.Output
+namespace HandBrake.Utilities.Output
 {
     /// <summary>
     /// Utilitiy functions for writing CSV files

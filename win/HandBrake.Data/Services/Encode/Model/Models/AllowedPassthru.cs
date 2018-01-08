@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode.Model.Models
+namespace HandBrake.Services.Encode.Model.Models
 {
     using System.Collections.Generic;
 

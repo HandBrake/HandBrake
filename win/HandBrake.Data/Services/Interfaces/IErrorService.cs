@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Interfaces
+namespace HandBrake.Services.Interfaces
 {
     using HandBrake.Model.Prompts;
     using System;

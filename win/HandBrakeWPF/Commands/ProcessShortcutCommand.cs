@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Commands
+namespace HandBrake.Commands
 {
     using System;
     using System.Windows.Input;
 
     using Caliburn.Micro;
     using HandBrake;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// Keyboard Shortcut Processor

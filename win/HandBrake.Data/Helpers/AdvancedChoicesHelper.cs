@@ -12,7 +12,7 @@ namespace HandBrake.Helpers
     using System.Collections.Generic;
     using System.Globalization;
 
-    using HandBrakeWPF.Model;
+    using HandBrake.Model;
 
     /// <summary>
     /// The advanced choices.

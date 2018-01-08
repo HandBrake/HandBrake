@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Filters
+namespace HandBrake.Converters.Filters
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace HandBrakeWPF.Converters.Filters
 
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
-    using DenoisePreset = HandBrakeWPF.Services.Encode.Model.Models.DenoisePreset;
+    using DenoisePreset = HandBrake.Services.Encode.Model.Models.DenoisePreset;
 
     /// <summary>
     /// The denoise preset converter.

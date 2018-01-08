@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters
+namespace HandBrake.Converters
 {
     using System;
     using System.Globalization;
     using System.Windows.Data;
     using HandBrake.CoreLibrary.Model;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Utilities;
 
     public class BitmapImageDataConverter : IValueConverter
     {

@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Views
+namespace HandBrake.Views
 {
     using System;
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
 
-    using HandBrakeWPF.ViewModels;
+    using HandBrake.ViewModels;
 
     /// <summary>
     /// Interaction logic for LogView.xaml

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -18,21 +18,21 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
     using HandBrake;
     using HandBrake.Model.Prompts;
-    using HandBrakeWPF.EventArgs;
+    using HandBrake.EventArgs;
     using HandBrake.Properties;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Queue.Interfaces;
-    using HandBrakeWPF.Services.Queue.Model;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Queue.Interfaces;
+    using HandBrake.Services.Queue.Model;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
 
     using PlatformBindings;
     using PlatformBindings.Models.FileSystem;
     using PlatformBindings.Models.FileSystem.Options;
     using PlatformBindings.Services;
-    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
-    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using EncodeCompletedEventArgs = HandBrake.Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeProgressEventArgs = HandBrake.Services.Encode.EventArgs.EncodeProgressEventArgs;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
     using HandBrake.Common;
 
     /// <summary>

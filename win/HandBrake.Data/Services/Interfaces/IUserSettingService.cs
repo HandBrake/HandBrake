@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Interfaces
+namespace HandBrake.Services.Interfaces
 {
-    using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
+    using SettingChangedEventArgs = HandBrake.EventArgs.SettingChangedEventArgs;
 
     /// <summary>
     /// The setting event handler.

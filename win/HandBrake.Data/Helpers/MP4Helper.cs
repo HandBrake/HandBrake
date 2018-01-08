@@ -7,12 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Helpers
+namespace HandBrake.Helpers
 {
     using System.Linq;
 
-    using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Encode.Model.Models;
+    using HandBrake.Services.Encode.Model;
+    using HandBrake.Services.Encode.Model.Models;
 
     /// <summary>
     /// The MP4 Format helper class

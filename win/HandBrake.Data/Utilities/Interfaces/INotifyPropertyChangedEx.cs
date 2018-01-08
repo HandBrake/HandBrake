@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Utilities.Interfaces
+namespace HandBrake.Utilities.Interfaces
 {
     using System.ComponentModel;
 

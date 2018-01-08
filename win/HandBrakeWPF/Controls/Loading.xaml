@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="HandBrakeWPF.Controls.Loading"
+﻿<UserControl x:Class="HandBrake.Controls.Loading"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="Transparent"

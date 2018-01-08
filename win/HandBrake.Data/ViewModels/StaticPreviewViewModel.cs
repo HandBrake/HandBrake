@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -22,22 +22,22 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.CoreLibrary.Model;
     using HandBrake.Model;
     using HandBrake.Model.Prompts;
-    using HandBrakeWPF.Factories;
+    using HandBrake.Factories;
     using HandBrake.Properties;
-    using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Queue.Model;
-    using HandBrakeWPF.Services.Scan.Interfaces;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services.Encode.Model.Models;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Queue.Model;
+    using HandBrake.Services.Scan.Interfaces;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.ViewModels.Interfaces;
     using PlatformBindings;
-    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
-    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
-    using LibEncode = HandBrakeWPF.Services.Encode.LibEncode;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
+    using EncodeCompletedEventArgs = HandBrake.Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeProgressEventArgs = HandBrake.Services.Encode.EventArgs.EncodeProgressEventArgs;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using IEncode = HandBrake.Services.Encode.Interfaces.IEncode;
+    using LibEncode = HandBrake.Services.Encode.LibEncode;
+    using OutputFormat = HandBrake.Services.Encode.Model.Models.OutputFormat;
+    using PointToPointMode = HandBrake.Services.Encode.Model.Models.PointToPointMode;
     using HandBrake.Common;
 
     /// <summary>

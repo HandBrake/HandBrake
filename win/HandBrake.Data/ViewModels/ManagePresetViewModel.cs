@@ -7,15 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using HandBrake.Model.Prompts;
     using HandBrake.Properties;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets;
-    using HandBrakeWPF.Services.Presets.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets;
+    using HandBrake.Services.Presets.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// The Add Preset View Model

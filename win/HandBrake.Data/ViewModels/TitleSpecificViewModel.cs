@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// The Title Specific View Model

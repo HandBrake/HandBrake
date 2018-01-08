@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF
+namespace HandBrake
 {
     /// <summary>
     /// Application Constants

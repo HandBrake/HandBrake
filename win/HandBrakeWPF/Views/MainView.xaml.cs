@@ -7,15 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Views
+namespace HandBrake.Views
 {
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
 
-    using HandBrakeWPF.ViewModels;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.ViewModels;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// Interaction logic for MainView.xaml

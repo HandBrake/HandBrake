@@ -7,15 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Queue.Model
+namespace HandBrake.Services.Queue.Model
 {
     using Caliburn.Micro;
 
     using HandBrake.CoreLibrary.Model;
 
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Utilities;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The QueueTask.

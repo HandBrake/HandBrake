@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="HandBrakeWPF.Controls.SourceSelection"
+﻿<UserControl x:Class="HandBrake.Controls.SourceSelection"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
-        xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
-        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties" x:Name="sourcePanel"
+        xmlns:controls="clr-namespace:HandBrake.Controls"
+        xmlns:Properties="clr-namespace:HandBrake.Properties" x:Name="sourcePanel"
        >
 
     <Grid Height="{Binding ElementName=sourcePanel, Path=ActualHeight}">

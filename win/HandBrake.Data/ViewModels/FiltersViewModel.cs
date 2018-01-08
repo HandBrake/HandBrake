@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -19,17 +19,17 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.CoreLibrary.Interop.HbLib;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Model.Filters;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.EventArgs;
+    using HandBrake.Model.Filters;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
 
-    using DenoisePreset = HandBrakeWPF.Services.Encode.Model.Models.DenoisePreset;
-    using DenoiseTune = HandBrakeWPF.Services.Encode.Model.Models.DenoiseTune;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using DenoisePreset = HandBrake.Services.Encode.Model.Models.DenoisePreset;
+    using DenoiseTune = HandBrake.Services.Encode.Model.Models.DenoiseTune;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Filters View Model

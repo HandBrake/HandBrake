@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services
+namespace HandBrake.Services
 {
     using System;
     using Caliburn.Micro;

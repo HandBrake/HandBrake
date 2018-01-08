@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Scan
+namespace HandBrake.Services.Scan
 {
     using System;
     using System.Collections.Generic;
@@ -25,16 +25,16 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrake.CoreLibrary.Services.Logging.Interfaces;
     using HandBrake.CoreLibrary.Services.Logging.Model;
 
-    using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Services.Scan.EventArgs;
-    using HandBrakeWPF.Services.Scan.Interfaces;
-    using HandBrakeWPF.Services.Scan.Model;
+    using HandBrake.Services.Encode.Model;
+    using HandBrake.Services.Encode.Model.Models;
+    using HandBrake.Services.Scan.EventArgs;
+    using HandBrake.Services.Scan.Interfaces;
+    using HandBrake.Services.Scan.Model;
 
-    using Chapter = HandBrakeWPF.Services.Scan.Model.Chapter;
+    using Chapter = HandBrake.Services.Scan.Model.Chapter;
     using ScanProgressEventArgs = HandBrake.CoreLibrary.Interop.EventArgs.ScanProgressEventArgs;
-    using Subtitle = HandBrakeWPF.Services.Scan.Model.Subtitle;
-    using Title = HandBrakeWPF.Services.Scan.Model.Title;
+    using Subtitle = HandBrake.Services.Scan.Model.Subtitle;
+    using Title = HandBrake.Services.Scan.Model.Title;
 
     /// <summary>
     /// Scan a Source

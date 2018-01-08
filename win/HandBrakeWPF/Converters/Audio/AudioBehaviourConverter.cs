@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Audio
+namespace HandBrake.Converters.Audio
 {
     using System;
     using System.ComponentModel;
@@ -15,8 +15,8 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Linq;
     using System.Windows.Data;
 
-    using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Model.Audio;
+    using HandBrake.Utilities;
 
     /// <summary>
     /// Audio Behaviour Converter

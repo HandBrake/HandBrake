@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Utilities
+namespace HandBrake.Utilities
 {
     using System.Windows.Shell;
     using HandBrake.Utilities.Interfaces;

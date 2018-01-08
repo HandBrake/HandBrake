@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Factories
+namespace HandBrake.Factories
 {
     using Caliburn.Micro;
 
     using HandBrake.CoreLibrary.Model;
 
-    using HandBrakeWPF.Services.Interfaces;
+    using HandBrake.Services.Interfaces;
 
     /// <summary>
     /// HBConfiguration Factory

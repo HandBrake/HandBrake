@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model
+namespace HandBrake.Model
 {
     /// <summary>
     /// ScanModeEnum

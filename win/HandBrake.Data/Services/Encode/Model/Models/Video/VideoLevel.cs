@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode.Model.Models.Video
+namespace HandBrake.Services.Encode.Model.Models.Video
 {
-    using VideoLevelFactory = HandBrakeWPF.Services.Encode.Factories.VideoLevelFactory;
+    using VideoLevelFactory = HandBrake.Services.Encode.Factories.VideoLevelFactory;
 
     /// <summary>
     /// The video level.

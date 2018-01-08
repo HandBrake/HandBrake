@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels.Interfaces
+namespace HandBrake.ViewModels.Interfaces
 {
-    using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Presets.Model;
+    using HandBrake.Model.Audio;
+    using HandBrake.Services.Encode.Model;
+    using HandBrake.Services.Presets.Model;
 
     /// <summary>
     /// The Audio View Model Interface

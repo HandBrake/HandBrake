@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Views.Queue
+namespace HandBrake.Views.Queue
 {
     using System.Windows.Controls;
 

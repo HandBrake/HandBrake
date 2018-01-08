@@ -7,12 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Commands.Menu
+namespace HandBrake.Commands.Menu
 {
     using System;
     using System.Windows.Input;
 
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// The queue commands.

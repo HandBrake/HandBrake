@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services
+namespace HandBrake.Services
 {
     using System;
     using System.Diagnostics;
@@ -15,12 +15,12 @@ namespace HandBrakeWPF.Services
     using Caliburn.Micro;
     using HandBrake;
     using HandBrake.Utilities.Interfaces;
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Queue.Interfaces;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.EventArgs;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Queue.Interfaces;
+    using HandBrake.ViewModels.Interfaces;
 
-    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeCompletedEventArgs = HandBrake.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using Execute = Caliburn.Micro.Execute;
 
     /// <summary>

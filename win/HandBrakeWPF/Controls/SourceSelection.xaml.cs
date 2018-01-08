@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Controls
+namespace HandBrake.Controls
 {
     using System.Diagnostics;
     using System.Windows.Controls;
     using System.Windows.Navigation;
 
-    using HandBrakeWPF.ViewModels;
+    using HandBrake.ViewModels;
 
     /// <summary>
     /// Interaction logic for SourceSelection.xaml

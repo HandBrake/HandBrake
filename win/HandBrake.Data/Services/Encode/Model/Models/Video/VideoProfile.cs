@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode.Model.Models.Video
+namespace HandBrake.Services.Encode.Model.Models.Video
 {
-    using VideoProfileFactory = HandBrakeWPF.Services.Encode.Factories.VideoProfileFactory;
+    using VideoProfileFactory = HandBrake.Services.Encode.Factories.VideoProfileFactory;
 
     /// <summary>
     /// The video profile.

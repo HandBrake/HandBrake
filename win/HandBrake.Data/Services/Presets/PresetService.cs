@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Presets
+namespace HandBrake.Services.Presets
 {
     using System;
     using System.Collections.Generic;
@@ -24,18 +24,18 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrake.CoreLibrary.Utilities;
     using HandBrake.Model.Prompts;
     using HandBrake.Properties;
-    using HandBrakeWPF.Factories;
-    using HandBrakeWPF.Model.Picture;
-    using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Factories;
-    using HandBrakeWPF.Services.Presets.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Factories;
+    using HandBrake.Model.Picture;
+    using HandBrake.Services.Encode.Model.Models;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets.Factories;
+    using HandBrake.Services.Presets.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Utilities;
 
     using Newtonsoft.Json;
     using PlatformBindings.Models.FileSystem;
-    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
+    using GeneralApplicationException = HandBrake.Exceptions.GeneralApplicationException;
 
     /// <summary>
     /// The preset service manages HandBrake's presets

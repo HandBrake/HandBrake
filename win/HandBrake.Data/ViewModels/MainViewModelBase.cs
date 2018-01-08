@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -27,34 +27,34 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Properties;
     using HandBrake.Services.Interfaces;
     using HandBrake.Utilities.Interfaces;
-    using HandBrakeWPF.Commands;
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Factories;
-    using HandBrakeWPF.Helpers;
-    using HandBrakeWPF.Model;
-    using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Model.Subtitles;
-    using HandBrakeWPF.Services.Encode.EventArgs;
-    using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Queue.Interfaces;
-    using HandBrakeWPF.Services.Queue.Model;
-    using HandBrakeWPF.Services.Scan.EventArgs;
-    using HandBrakeWPF.Services.Scan.Interfaces;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Startup;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Commands;
+    using HandBrake.EventArgs;
+    using HandBrake.Factories;
+    using HandBrake.Helpers;
+    using HandBrake.Model;
+    using HandBrake.Model.Audio;
+    using HandBrake.Model.Subtitles;
+    using HandBrake.Services.Encode.EventArgs;
+    using HandBrake.Services.Encode.Model;
+    using HandBrake.Services.Encode.Model.Models;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Queue.Interfaces;
+    using HandBrake.Services.Queue.Model;
+    using HandBrake.Services.Scan.EventArgs;
+    using HandBrake.Services.Scan.Interfaces;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.Startup;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
 
     using PlatformBindings;
     using PlatformBindings.Common;
     using PlatformBindings.Models.FileSystem;
     using Action = System.Action;
     using Execute = Caliburn.Micro.Execute;
-    using LogManager = HandBrakeWPF.Helpers.LogManager;
+    using LogManager = HandBrake.Helpers.LogManager;
 
     /// <summary>
     /// HandBrakes Main Window

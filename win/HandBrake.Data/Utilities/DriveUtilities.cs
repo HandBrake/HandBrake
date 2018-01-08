@@ -7,12 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Utilities
+namespace HandBrake.Utilities
 {
     using System.Collections.Generic;
     using System.IO;
 
-    using HandBrakeWPF.Model;
+    using HandBrake.Model;
 
     /// <summary>
     /// The drive utilities.

@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters
+namespace HandBrake.Converters
 {
     using System;
     using System.Globalization;
     using System.Windows;
     using System.Windows.Data;
-    using HandBrakeWPF.Services.Queue.Model;
+    using HandBrake.Services.Queue.Model;
 
     /// <summary>
     /// Boolean to Visibility Converter

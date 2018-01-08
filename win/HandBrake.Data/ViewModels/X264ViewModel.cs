@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -16,13 +16,13 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.Helpers;
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Model;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.EventArgs;
+    using HandBrake.Model;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.ViewModels.Interfaces;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Advanced View Model

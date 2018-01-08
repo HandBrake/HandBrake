@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model
+namespace HandBrake.Model
 {
     using Caliburn.Micro;
 
-    using HandBrakeWPF.Services.Scan.Model;
+    using HandBrake.Services.Scan.Model;
 
     /// <summary>
     /// A model for the multiple selection window for adding to the queue.

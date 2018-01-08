@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Presets.Model
+namespace HandBrake.Services.Presets.Model
 {
     using System.ComponentModel;
     using Caliburn.Micro;
-    using HandBrakeWPF.Services.Presets.Interfaces;
+    using HandBrake.Services.Presets.Interfaces;
 
     public class PresetDisplayCategory : PropertyChangedBase, IPresetObject
     {

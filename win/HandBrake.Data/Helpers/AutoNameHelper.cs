@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Helpers
+namespace HandBrake.Helpers
 {
     using System;
     using System.IO;
@@ -17,12 +17,12 @@ namespace HandBrakeWPF.Helpers
 
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
-    using HandBrakeWPF.Extensions;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
+    using HandBrake.Extensions;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets.Model;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using OutputFormat = HandBrake.Services.Encode.Model.Models.OutputFormat;
 
     /// <summary>
     /// The Destination AutoName Helper

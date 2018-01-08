@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model
+namespace HandBrake.Model
 {
     /// <summary>
     /// The Window that the shell view can display

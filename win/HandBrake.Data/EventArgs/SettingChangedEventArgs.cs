@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.EventArgs
+namespace HandBrake.EventArgs
 {
     /// <summary>
     /// The setting changed event args.

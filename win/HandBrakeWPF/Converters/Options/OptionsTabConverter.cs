@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Options
+namespace HandBrake.Converters.Options
 {
     using System;
     using System.Globalization;
     using System.Windows;
     using System.Windows.Data;
 
-    using HandBrakeWPF.Model;
+    using HandBrake.Model;
 
     /// <summary>
     /// The Options Tab Converter. Controls which tab is dispalyed.

@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Scan.Model
+namespace HandBrake.Services.Scan.Model
 {
     using System;
     using System.Xml.Serialization;
 
-    using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Services.Encode.Model.Models;
+    using HandBrake.Utilities;
 
     /// <summary>
     /// An object that represents a subtitle associated with a Title, in a DVD

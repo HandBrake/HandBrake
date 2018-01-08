@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Scan.Model
+namespace HandBrake.Services.Scan.Model
 {
     using System;
     using System.Collections.Generic;

@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Options
+namespace HandBrake.Converters.Options
 {
     using System;
     using System.Globalization;
     using System.Windows.Data;
 
-    using HandBrakeWPF.Model;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Model;
+    using HandBrake.Utilities;
 
     /// <summary>
     /// A Converter to get the Display Name of each options tab.

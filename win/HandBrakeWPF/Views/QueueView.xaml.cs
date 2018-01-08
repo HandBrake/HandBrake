@@ -7,15 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Views
+namespace HandBrake.Views
 {
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
 
-    using HandBrakeWPF.Services.Queue.Model;
-    using HandBrakeWPF.ViewModels;
+    using HandBrake.Services.Queue.Model;
+    using HandBrake.ViewModels;
 
     /// <summary>
     /// Interaction logic for VideoView

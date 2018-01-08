@@ -1,9 +1,9 @@
-﻿ <UserControl x:Class="HandBrakeWPF.Views.PictureSettingsView"
+﻿ <UserControl x:Class="HandBrake.Views.PictureSettingsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
-             xmlns:controls="clr-namespace:HandBrakeWPF.Controls"
-              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties">
+             xmlns:Converters="clr-namespace:HandBrake.Converters"
+             xmlns:controls="clr-namespace:HandBrake.Controls"
+              xmlns:Properties="clr-namespace:HandBrake.Properties">
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />

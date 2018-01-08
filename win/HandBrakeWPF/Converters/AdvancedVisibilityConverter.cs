@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters
+namespace HandBrake.Converters
 {
     using System;
     using System.Globalization;

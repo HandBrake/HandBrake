@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Queue
+namespace HandBrake.Converters.Queue
 {
     using System;
     using System.Globalization;
     using System.Windows.Data;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
-    using HandBrakeWPF.Services.Encode.Model;
+    using HandBrake.Services.Encode.Model;
 
     /// <summary>
     /// The picture settings desc conveter.

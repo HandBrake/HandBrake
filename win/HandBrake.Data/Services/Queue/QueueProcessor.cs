@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Queue
+namespace HandBrake.Services.Queue
 {
     using System;
     using System.Collections.Generic;
@@ -21,19 +21,19 @@ namespace HandBrakeWPF.Services.Queue
     using HandBrake.CoreLibrary.Services.Logging.Model;
     using HandBrake.CoreLibrary.Utilities;
     using HandBrake.Properties;
-    using HandBrakeWPF.Factories;
-    using HandBrakeWPF.Services.Encode.Factories;
-    using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Queue.Model;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Factories;
+    using HandBrake.Services.Encode.Factories;
+    using HandBrake.Services.Encode.Model;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Queue.Model;
+    using HandBrake.Utilities;
 
-    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeCompletedEventArgs = HandBrake.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using Execute = Caliburn.Micro.Execute;
-    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
-    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
-    using QueueCompletedEventArgs = HandBrakeWPF.EventArgs.QueueCompletedEventArgs;
-    using QueueProgressEventArgs = HandBrakeWPF.EventArgs.QueueProgressEventArgs;
+    using GeneralApplicationException = HandBrake.Exceptions.GeneralApplicationException;
+    using IEncode = HandBrake.Services.Encode.Interfaces.IEncode;
+    using QueueCompletedEventArgs = HandBrake.EventArgs.QueueCompletedEventArgs;
+    using QueueProgressEventArgs = HandBrake.EventArgs.QueueProgressEventArgs;
 
     /// <summary>
     /// The HandBrake Queue

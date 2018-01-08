@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Utilities
+namespace HandBrake.Utilities
 {
     using System.Linq.Expressions;
     using System.Reflection;

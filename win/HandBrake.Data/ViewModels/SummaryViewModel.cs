@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -19,18 +19,18 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.CoreLibrary.Model;
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Factories;
-    using HandBrakeWPF.Helpers;
+    using HandBrake.EventArgs;
+    using HandBrake.Factories;
+    using HandBrake.Helpers;
     using HandBrake.Properties;
-    using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Interfaces;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services.Encode.Model;
+    using HandBrake.Services.Encode.Model.Models;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Scan.Interfaces;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
 
     public class SummaryViewModel : ViewModelBase, ISummaryViewModel
     {

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Utilities.Input
+namespace HandBrake.Utilities.Input
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Utilities.Input
     using CsvHelper;
     using CsvHelper.Configuration;
     using HandBrake.Properties;
-    using HandBrakeWPF.Exceptions;
+    using HandBrake.Exceptions;
 
     /// <summary>
     /// Handles the importing of Chapter information from CSV files

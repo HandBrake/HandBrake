@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode.Model.Models
+namespace HandBrake.Services.Encode.Model.Models
 {
     using System;
     using System.Collections.Generic;
@@ -21,9 +21,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     using HandBrake.CoreLibrary.Interop.Model;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
-    using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Model.Audio;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.Utilities;
 
     using Newtonsoft.Json;
 
@@ -34,7 +34,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     {
         private int bitrate;
         private double drc;
-        private HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder encoder;
+        private HandBrake.Services.Encode.Model.Models.AudioEncoder encoder;
         private int gain;
         private string mixDown;
         private double sampleRate;
@@ -44,7 +44,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         private bool isDefault;
         private IEnumerable<int> bitrates;
         private IEnumerable<double> encoderQualityValues;
-        private HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType encoderRateType;
+        private HandBrake.Services.Encode.Model.Models.AudioEncoderRateType encoderRateType;
         private double? quality;
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         public AudioTrack()
         {
             // Default Values
-            this.Encoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.ffaac;
+            this.Encoder = HandBrake.Services.Encode.Model.Models.AudioEncoder.ffaac;
             this.MixDown = HandBrakeEncoderHelpers.Mixdowns.FirstOrDefault(m => m.ShortName == "dpl2")?.ShortName;
             this.SampleRate = 48;
             this.Bitrate = 160;
@@ -62,7 +62,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.TrackName = string.Empty;
 
             // Setup Backing Properties
-            this.EncoderRateType = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType.Bitrate;
+            this.EncoderRateType = HandBrake.Services.Encode.Model.Models.AudioEncoderRateType.Bitrate;
             this.SetupLimits();
         }
 
@@ -236,7 +236,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.NotifyOfPropertyChange(() => this.AudioEncoderRateTypes);
                 if (!this.AudioEncoderRateTypes.Contains(this.EncoderRateType))
                 {
-                    this.EncoderRateType = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType.Bitrate; // Default to bitrate.
+                    this.EncoderRateType = HandBrake.Services.Encode.Model.Models.AudioEncoderRateType.Bitrate; // Default to bitrate.
                 }
             }
         }
@@ -279,7 +279,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
                 if (!this.Quality.HasValue)
                 {
-                    HBAudioEncoder hbAudioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
+                    HBAudioEncoder hbAudioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrake.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
                     this.Quality = HandBrakeEncoderHelpers.GetDefaultQuality(hbAudioEncoder);
                 }
             }
@@ -333,7 +333,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             get
             {
-                return EnumHelper<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder>.GetDisplay(this.Encoder);
+                return EnumHelper<HandBrake.Services.Encode.Model.Models.AudioEncoder>.GetDisplay(this.Encoder);
             }
         }
 
@@ -345,8 +345,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             get
             {
-                if (this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.Ac3Passthrough || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.DtsPassthrough
-                    || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.DtsHDPassthrough)
+                if (this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.Ac3Passthrough || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.DtsPassthrough
+                    || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.DtsHDPassthrough)
                 {
                     return "Auto";
                 }
@@ -443,11 +443,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             get
             {
-                if (this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.Ac3Passthrough || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.DtsPassthrough
-                    || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.DtsHDPassthrough || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.AacPassthru
-                    || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.Mp3Passthru || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.Passthrough ||
-                    this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.EAc3Passthrough || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.TrueHDPassthrough
-                    || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.FlacPassthru)
+                if (this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.Ac3Passthrough || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.DtsPassthrough
+                    || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.DtsHDPassthrough || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.AacPassthru
+                    || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.Mp3Passthru || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.Passthrough ||
+                    this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.EAc3Passthrough || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.TrueHDPassthrough
+                    || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.FlacPassthru)
                 {
                     return true;
                 }
@@ -487,11 +487,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             get
             {
-                IList<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType> types = EnumHelper<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType>.GetEnumList().ToList();
-                HBAudioEncoder hbaenc = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
+                IList<HandBrake.Services.Encode.Model.Models.AudioEncoderRateType> types = EnumHelper<HandBrake.Services.Encode.Model.Models.AudioEncoderRateType>.GetEnumList().ToList();
+                HBAudioEncoder hbaenc = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrake.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
                 if (hbaenc == null || !hbaenc.SupportsQuality)
                 {
-                    types.Remove(HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType.Quality);
+                    types.Remove(HandBrake.Services.Encode.Model.Models.AudioEncoderRateType.Quality);
                 }
 
                 return types;
@@ -506,12 +506,12 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             get
             {
-                if (this.IsPassthru || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.ffflac || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.ffflac24)
+                if (this.IsPassthru || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.ffflac || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.ffflac24)
                 {
                     return false;
                 }
 
-                return Equals(this.EncoderRateType, HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType.Bitrate);
+                return Equals(this.EncoderRateType, HandBrake.Services.Encode.Model.Models.AudioEncoderRateType.Bitrate);
             }
         }
 
@@ -523,12 +523,12 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             get
             {
-                if (this.IsPassthru || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.ffflac || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.ffflac24)
+                if (this.IsPassthru || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.ffflac || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.ffflac24)
                 {
                     return false;
                 }
 
-                return Equals(this.EncoderRateType, HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType.Quality);
+                return Equals(this.EncoderRateType, HandBrake.Services.Encode.Model.Models.AudioEncoderRateType.Quality);
             }
         }
 
@@ -540,7 +540,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             get
             {
-                if (this.IsPassthru || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.ffflac || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.ffflac24)
+                if (this.IsPassthru || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.ffflac || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.ffflac24)
                 {
                     return false;
                 }
@@ -557,7 +557,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             get
             {
-                return this.IsPassthru || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.ffflac || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.ffflac24;
+                return this.IsPassthru || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.ffflac || this.Encoder == HandBrake.Services.Encode.Model.Models.AudioEncoder.ffflac24;
             }
         }
 
@@ -594,7 +594,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             int low = 32;
 
             // Based on the users settings, find the high and low bitrates.
-            HBAudioEncoder hbaenc = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
+            HBAudioEncoder hbaenc = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrake.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
             HBRate rate = HandBrakeEncoderHelpers.AudioSampleRates.FirstOrDefault(t => t.Name == this.SampleRate.ToString(CultureInfo.InvariantCulture));
             HBMixdown mixdown = this.mixDown != null ? HandBrakeEncoderHelpers.GetMixdown(this.mixDown) : HandBrakeEncoderHelpers.GetMixdown("dpl2");
 
@@ -622,7 +622,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// </summary>
         private void SetupQualityCompressionLimits()
         {
-            HBAudioEncoder hbAudioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
+            HBAudioEncoder hbAudioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<HandBrake.Services.Encode.Model.Models.AudioEncoder>.GetShortName(this.Encoder));
             if (hbAudioEncoder.SupportsQuality)
             {
                 RangeLimits limits = null;
@@ -667,7 +667,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             }
 
             // Default the audio quality value if it's out of range.
-            if (Equals(this.EncoderRateType, HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType.Quality))
+            if (Equals(this.EncoderRateType, HandBrake.Services.Encode.Model.Models.AudioEncoderRateType.Quality))
             {
                 if (this.Quality.HasValue && !this.encoderQualityValues.Contains(this.Quality.Value))
                 {

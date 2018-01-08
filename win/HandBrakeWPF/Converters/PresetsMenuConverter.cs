@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters
+namespace HandBrake.Converters
 {
     using System;
     using System.Collections.Generic;
@@ -16,9 +16,9 @@ namespace HandBrakeWPF.Converters
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
-    using HandBrakeWPF.Commands;
-    using HandBrakeWPF.Services.Presets.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
+    using HandBrake.Commands;
+    using HandBrake.Services.Presets.Interfaces;
+    using HandBrake.Services.Presets.Model;
 
     /// <summary>
     /// The presets menu converter.

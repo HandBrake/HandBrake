@@ -7,15 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Scan.Interfaces
+namespace HandBrake.Services.Scan.Interfaces
 {
     using System;
 
     using HandBrake.CoreLibrary.Model;
 
-    using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Scan.EventArgs;
-    using HandBrakeWPF.Services.Scan.Model;
+    using HandBrake.Services.Encode.Model;
+    using HandBrake.Services.Scan.EventArgs;
+    using HandBrake.Services.Scan.Model;
 
     /// <summary>
     /// Encode Progess Status

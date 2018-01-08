@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Filters
+namespace HandBrake.Converters.Filters
 {
     using System;
     using System.ComponentModel;
@@ -18,7 +18,7 @@ namespace HandBrakeWPF.Converters.Filters
     using HandBrake.CoreLibrary.Interop.HbLib;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
-    using HandBrakeWPF.Model.Filters;
+    using HandBrake.Model.Filters;
 
     public class SharpenPresetConverter : IMultiValueConverter
     {

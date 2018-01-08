@@ -7,19 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Linq;
 
-    using HandBrakeWPF.Model;
+    using HandBrake.Model;
     using HandBrake.Properties;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// The Queue Selection View Model

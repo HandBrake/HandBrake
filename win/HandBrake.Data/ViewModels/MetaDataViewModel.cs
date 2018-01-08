@@ -7,17 +7,17 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
 
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.EventArgs;
+    using HandBrake.Services.Encode.Model;
+    using HandBrake.Services.Encode.Model.Models;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// The meta data view model.

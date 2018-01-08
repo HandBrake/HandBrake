@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode.Model.Models.Video
+namespace HandBrake.Services.Encode.Model.Models.Video
 {
-    using VideoTuneFactory = HandBrakeWPF.Services.Encode.Factories.VideoTuneFactory;
+    using VideoTuneFactory = HandBrake.Services.Encode.Factories.VideoTuneFactory;
 
     /// <summary>
     /// The video tune.
@@ -62,7 +62,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models.Video
         /// The clone.
         /// </summary>
         /// <returns>
-        /// The <see cref="HandBrakeWPF.Services.Encode.Model.Models.Video.VideoProfile"/>.
+        /// The <see cref="HandBrake.Services.Encode.Model.Models.Video.VideoProfile"/>.
         /// </returns>
         public VideoTune Clone()
         {

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model.Filters
+namespace HandBrake.Model.Filters
 {
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
 

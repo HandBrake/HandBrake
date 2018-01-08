@@ -7,15 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters
+namespace HandBrake.Converters
 {
     using System;
     using System.Globalization;
     using System.Linq;
     using System.Windows.Data;
 
-    using HandBrakeWPF.Model;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Model;
+    using HandBrake.Utilities;
 
     public class OptionTabConverter : IValueConverter
     {

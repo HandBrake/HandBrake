@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -17,12 +17,12 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Utilities;
 
-    using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Encode.Model.Models;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Model.Audio;
+    using HandBrake.Services.Encode.Model;
+    using HandBrake.Services.Encode.Model.Models;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// The Audio View Model

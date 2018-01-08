@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode.Factories
+namespace HandBrake.Services.Encode.Factories
 {
     using System.Collections.Generic;
 
     using HandBrake.CoreLibrary.Interop.Json.Queue;
     using HandBrake.CoreLibrary.Model;
 
-    using HandBrakeWPF.Services.Encode.Model;
+    using HandBrake.Services.Encode.Model;
 
     using Newtonsoft.Json;
 

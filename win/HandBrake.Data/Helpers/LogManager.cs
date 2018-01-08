@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Helpers
+namespace HandBrake.Helpers
 {
     using System.IO;
 
@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Helpers
     using HandBrake.CoreLibrary.Services.Logging;
     using HandBrake.CoreLibrary.Services.Logging.Interfaces;
 
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Utilities;
 
     /// <summary>
     /// Tempory Class to Initialise the logging.

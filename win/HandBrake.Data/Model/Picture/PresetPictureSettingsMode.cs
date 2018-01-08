@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Model.Picture
+namespace HandBrake.Model.Picture
 {
     using HandBrake.CoreLibrary.Attributes;
 

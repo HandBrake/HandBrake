@@ -7,12 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels.Interfaces
+namespace HandBrake.ViewModels.Interfaces
 {
     using System;
 
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Services.Encode.Model.Models;
+    using HandBrake.EventArgs;
+    using HandBrake.Services.Encode.Model.Models;
 
     public interface ISummaryViewModel : ITabInterface
     {

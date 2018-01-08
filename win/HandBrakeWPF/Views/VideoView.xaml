@@ -1,11 +1,11 @@
-﻿<UserControl x:Class="HandBrakeWPF.Views.VideoView"
+﻿<UserControl x:Class="HandBrake.Views.VideoView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
-             xmlns:Video="clr-namespace:HandBrakeWPF.Converters.Video"
-             xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+             xmlns:Converters="clr-namespace:HandBrake.Converters"
+             xmlns:Video="clr-namespace:HandBrake.Converters.Video"
+             xmlns:Properties="clr-namespace:HandBrake.Properties"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" >
 

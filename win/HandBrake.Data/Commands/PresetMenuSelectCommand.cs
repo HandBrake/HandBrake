@@ -7,15 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Commands
+namespace HandBrake.Commands
 {
     using System;
     using System.Windows.Input;
 
     using Caliburn.Micro;
 
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// The preset menu select command.

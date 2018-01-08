@@ -6,7 +6,7 @@
 //   AppCast Constants
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace HandBrakeWPF
+namespace HandBrake
 {
     /// <summary>
     /// AppCast Constants

@@ -7,7 +7,7 @@
 //   Based of https://social.technet.microsoft.com/wiki/contents/articles/18188.wpf-treeview-selecteditem-twoway-mvvm-plus-expand-to-selected-and-close-all-others.aspx
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-namespace HandBrakeWPF.Helpers
+namespace HandBrake.Helpers
 {
     using System.Windows;
     using System.Windows.Controls;

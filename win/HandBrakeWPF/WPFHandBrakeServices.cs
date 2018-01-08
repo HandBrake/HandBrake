@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF
+namespace HandBrake
 {
     using HandBrake;
     using HandBrake.Services.Interfaces;
     using HandBrake.Utilities;
     using HandBrake.Utilities.Interfaces;
-    using HandBrakeWPF.Services;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Services;
+    using HandBrake.Utilities;
 
     public class WPFHandBrakeServices : HandBrakeServices
     {

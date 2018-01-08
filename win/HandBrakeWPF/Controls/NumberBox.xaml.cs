@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Controls
+namespace HandBrake.Controls
 {
     using System;
     using System.Globalization;

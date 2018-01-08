@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services
+namespace HandBrake.Services
 {
     using System;
     using System.Drawing;
@@ -18,7 +18,7 @@ namespace HandBrakeWPF.Services
     using Caliburn.Micro;
     using HandBrake;
     using HandBrake.Services.Interfaces;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.ViewModels.Interfaces;
 
     public class NotificationService : INotificationService
     {

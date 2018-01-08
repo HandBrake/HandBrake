@@ -7,17 +7,17 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Presets.Model
+namespace HandBrake.Services.Presets.Model
 {
     using Caliburn.Micro;
 
     using HandBrake.Properties;
-    using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Model.Subtitles;
-    using HandBrakeWPF.Services.Presets.Interfaces;
+    using HandBrake.Model.Audio;
+    using HandBrake.Model.Subtitles;
+    using HandBrake.Services.Presets.Interfaces;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using PresetPictureSettingsMode = HandBrake.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>
     /// A Preset for encoding with.

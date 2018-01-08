@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Audio
+namespace HandBrake.Converters.Audio
 {
     using System;
     using System.Collections.Generic;
@@ -18,11 +18,11 @@ namespace HandBrakeWPF.Converters.Audio
 
     using HandBrake.CoreLibrary.Interop;
 
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Utilities;
 
-    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
+    using AudioEncoder = HandBrake.Services.Encode.Model.Models.AudioEncoder;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using OutputFormat = HandBrake.Services.Encode.Model.Models.OutputFormat;
 
     /// <summary>
     /// Audio Encoder Converter

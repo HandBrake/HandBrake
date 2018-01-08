@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode.Model
+namespace HandBrake.Services.Encode.Model
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -16,21 +16,21 @@ namespace HandBrakeWPF.Services.Encode.Model
     using HandBrake.CoreLibrary.Interop.Model;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.Model;
-    using HandBrakeWPF.Model.Filters;
-    using HandBrakeWPF.Services.Encode.Model.Models;
-    using AllowedPassthru = HandBrakeWPF.Services.Encode.Model.Models.AllowedPassthru;
-    using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
-    using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
-    using DenoisePreset = HandBrakeWPF.Services.Encode.Model.Models.DenoisePreset;
-    using DenoiseTune = HandBrakeWPF.Services.Encode.Model.Models.DenoiseTune;
-    using FramerateMode = HandBrakeWPF.Services.Encode.Model.Models.FramerateMode;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
-    using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
-    using VideoLevel = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoLevel;
-    using VideoPreset = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoPreset;
-    using VideoProfile = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoProfile;
-    using VideoTune = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoTune;
+    using HandBrake.Model.Filters;
+    using HandBrake.Services.Encode.Model.Models;
+    using AllowedPassthru = HandBrake.Services.Encode.Model.Models.AllowedPassthru;
+    using AudioTrack = HandBrake.Services.Encode.Model.Models.AudioTrack;
+    using ChapterMarker = HandBrake.Services.Encode.Model.Models.ChapterMarker;
+    using DenoisePreset = HandBrake.Services.Encode.Model.Models.DenoisePreset;
+    using DenoiseTune = HandBrake.Services.Encode.Model.Models.DenoiseTune;
+    using FramerateMode = HandBrake.Services.Encode.Model.Models.FramerateMode;
+    using OutputFormat = HandBrake.Services.Encode.Model.Models.OutputFormat;
+    using PointToPointMode = HandBrake.Services.Encode.Model.Models.PointToPointMode;
+    using SubtitleTrack = HandBrake.Services.Encode.Model.Models.SubtitleTrack;
+    using VideoLevel = HandBrake.Services.Encode.Model.Models.Video.VideoLevel;
+    using VideoPreset = HandBrake.Services.Encode.Model.Models.Video.VideoPreset;
+    using VideoProfile = HandBrake.Services.Encode.Model.Models.Video.VideoProfile;
+    using VideoTune = HandBrake.Services.Encode.Model.Models.Video.VideoTune;
 
     public class EncodeTask : PropertyChangedBase
     {

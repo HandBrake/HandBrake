@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Queue.Model
+namespace HandBrake.Services.Queue.Model
 {
     using HandBrake.CoreLibrary.Attributes;
 

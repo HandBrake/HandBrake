@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Presets.Interfaces
+namespace HandBrake.Services.Presets.Interfaces
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
     using HandBrake.CoreLibrary.Model;
 
-    using HandBrakeWPF.Services.Presets.Model;
+    using HandBrake.Services.Presets.Model;
     using PlatformBindings.Models.FileSystem;
 
     /// <summary>

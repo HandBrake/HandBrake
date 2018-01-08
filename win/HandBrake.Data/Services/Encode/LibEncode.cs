@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Encode
+namespace HandBrake.Services.Encode
 {
     using System;
     using System.Diagnostics;
@@ -22,8 +22,8 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrake.CoreLibrary.Services.Logging.Interfaces;
     using HandBrake.CoreLibrary.Services.Logging.Model;
     using HandBrake.Properties;
-    using HandBrakeWPF.Exceptions;
-    using HandBrakeWPF.Services.Encode.Factories;
+    using HandBrake.Exceptions;
+    using HandBrake.Services.Encode.Factories;
 
     using EncodeTask = Model.EncodeTask;
     using IEncode = Interfaces.IEncode;

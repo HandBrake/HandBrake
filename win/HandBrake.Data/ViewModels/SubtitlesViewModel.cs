@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -17,19 +17,19 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake;
     using HandBrake.CoreLibrary.Utilities;
     using HandBrake.Services.Interfaces;
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Model.Subtitles;
+    using HandBrake.EventArgs;
+    using HandBrake.Model.Subtitles;
     using HandBrake.Properties;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.ViewModels.Interfaces;
     using PlatformBindings;
     using PlatformBindings.Models.FileSystem;
     using PlatformBindings.Services;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
-    using SubtitleType = HandBrakeWPF.Services.Encode.Model.Models.SubtitleType;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using OutputFormat = HandBrake.Services.Encode.Model.Models.OutputFormat;
+    using SubtitleTrack = HandBrake.Services.Encode.Model.Models.SubtitleTrack;
+    using SubtitleType = HandBrake.Services.Encode.Model.Models.SubtitleType;
 
     /// <summary>
     /// The Subtitles View Model
@@ -49,7 +49,7 @@ namespace HandBrakeWPF.ViewModels
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HandBrakeWPF.ViewModels.SubtitlesViewModel"/> class.
+        /// Initializes a new instance of the <see cref="HandBrake.ViewModels.SubtitlesViewModel"/> class.
         /// </summary>
         /// <param name="windowManager">
         /// The window Manager.

@@ -7,16 +7,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using Caliburn.Micro;
     using HandBrake.Model.Prompts;
     using HandBrake.Properties;
-    using HandBrakeWPF.Model;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Model;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.ViewModels.Interfaces;
 
-    using IQueueProcessor = HandBrakeWPF.Services.Queue.Interfaces.IQueueProcessor;
+    using IQueueProcessor = HandBrake.Services.Queue.Interfaces.IQueueProcessor;
 
     /// <summary>
     /// The Shell View Model

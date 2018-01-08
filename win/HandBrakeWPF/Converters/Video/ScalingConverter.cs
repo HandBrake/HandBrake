@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Video
+namespace HandBrake.Converters.Video
 {
     using System;
     using System.Globalization;
     using System.Windows.Data;
 
     using HandBrake.CoreLibrary.Model;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Utilities;
 
     /// <summary>
     /// Video Scaling Converter

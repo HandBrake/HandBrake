@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Services.Scan.EventArgs
+namespace HandBrake.Services.Scan.EventArgs
 {
     using System;
 
-    using HandBrakeWPF.Services.Scan.Model;
+    using HandBrake.Services.Scan.Model;
 
     /// <summary>
     /// Scan Progress Event Args

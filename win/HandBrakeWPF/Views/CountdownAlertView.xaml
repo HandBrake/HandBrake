@@ -1,8 +1,8 @@
-﻿<Window x:Class="HandBrakeWPF.Views.CountdownAlertView"
+﻿<Window x:Class="HandBrake.Views.CountdownAlertView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
-        xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+        xmlns:Properties="clr-namespace:HandBrake.Properties"
         Title="When Done Action" MinHeight="130" MinWidth="400" WindowStartupLocation="CenterScreen" WindowStyle="None"
         ShowActivated="True" ShowInTaskbar="True" SizeToContent="WidthAndHeight">
     <Grid>

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.ComponentModel;
@@ -22,11 +22,11 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.CoreLibrary.Utilities;
     using HandBrake.Model.Prompts;
     using HandBrake.Utilities.Interfaces;
-    using HandBrakeWPF.Model;
+    using HandBrake.Model;
     using HandBrake.Properties;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
     using PlatformBindings;
     using PlatformBindings.Models.FileSystem;
     using PlatformBindings.Services;

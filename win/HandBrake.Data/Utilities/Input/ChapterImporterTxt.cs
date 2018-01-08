@@ -8,13 +8,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Utilities.Input
+namespace HandBrake.Utilities.Input
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using HandBrakeWPF.Helpers;
+    using HandBrake.Helpers;
 
     /// <summary>
     /// Imports chapter markers in the ChaptersDb.org TXT format

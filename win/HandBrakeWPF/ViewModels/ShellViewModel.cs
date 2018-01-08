@@ -4,13 +4,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.ViewModels.Interfaces;
 
     public class ShellViewModel : ShellViewModelBase
     {

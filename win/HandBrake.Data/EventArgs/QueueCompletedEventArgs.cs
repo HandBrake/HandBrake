@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.EventArgs
+namespace HandBrake.EventArgs
 {
     using System;
     using System.Runtime.Serialization;

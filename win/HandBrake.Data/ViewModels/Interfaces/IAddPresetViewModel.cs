@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels.Interfaces
+namespace HandBrake.ViewModels.Interfaces
 {
-    using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Model.Subtitles;
-    using HandBrakeWPF.Services.Scan.Model;
+    using HandBrake.Model.Audio;
+    using HandBrake.Model.Subtitles;
+    using HandBrake.Services.Scan.Model;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
 
     /// <summary>
     /// The Add Preset View Model

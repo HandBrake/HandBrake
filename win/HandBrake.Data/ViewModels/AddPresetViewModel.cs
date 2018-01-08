@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -16,17 +16,17 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Model.Prompts;
     using HandBrake.Properties;
     using HandBrake.Services.Interfaces;
-    using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Model.Subtitles;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets;
-    using HandBrakeWPF.Services.Presets.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
+    using HandBrake.Model.Audio;
+    using HandBrake.Model.Subtitles;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets;
+    using HandBrake.Services.Presets.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using PresetPictureSettingsMode = HandBrake.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>
     /// The Add Preset View Model

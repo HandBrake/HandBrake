@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -17,16 +17,16 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.CoreLibrary.Interop.Model;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Helpers;
+    using HandBrake.EventArgs;
+    using HandBrake.Helpers;
     using HandBrake.Properties;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
 
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using PresetPictureSettingsMode = HandBrake.Model.Picture.PresetPictureSettingsMode;
 
     /// <summary>
     /// The Picture Settings View Model
@@ -123,7 +123,7 @@ namespace HandBrakeWPF.ViewModels
         #region Constructors and Destructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HandBrakeWPF.ViewModels.PictureSettingsViewModel"/> class.
+        /// Initializes a new instance of the <see cref="HandBrake.ViewModels.PictureSettingsViewModel"/> class.
         /// </summary>
         public PictureSettingsViewModel(IStaticPreviewViewModel staticPreviewViewModel)
         {

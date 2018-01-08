@@ -7,8 +7,8 @@
     <ProjectGuid>{5E81D474-DC19-4F3F-B60A-0ADFDDA5EF96}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HandBrakeUWP</RootNamespace>
-    <AssemblyName>HandBrakeUWP</AssemblyName>
+    <RootNamespace>HandBrake</RootNamespace>
+    <AssemblyName>HandBrake</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.16299.0</TargetPlatformVersion>
@@ -102,6 +102,9 @@
     <Compile Include="Utilities\ProcessIdentificationService.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
     <Compile Include="UWPHandBrakeServices.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\OptionsViewModel.cs" />
+    <Compile Include="ViewModels\ShellViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">

@@ -25,7 +25,7 @@ namespace HandBrakeUWP.Utilities
         {
             // Will only display processes it has access to, so it will only ever return HandBrake.
             var processes = ProcessDiagnosticInfo.GetForProcesses()
-                .Where(process => process.ExecutableFileName == "HandBrakeUWP.exe") // just in case though
+                .Where(process => process.ExecutableFileName == "HandBrake.exe") // just in case though
                 .Select(process => process.ProcessId)
                 .ToList();
 

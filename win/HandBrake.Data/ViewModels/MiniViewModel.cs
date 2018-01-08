@@ -7,15 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using HandBrake.Properties;
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Services.Queue.Interfaces;
-    using HandBrakeWPF.ViewModels.Interfaces;
-    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
-    using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
+    using HandBrake.EventArgs;
+    using HandBrake.Services.Queue.Interfaces;
+    using HandBrake.ViewModels.Interfaces;
+    using EncodeProgressEventArgs = HandBrake.Services.Encode.EventArgs.EncodeProgressEventArgs;
+    using IEncode = HandBrake.Services.Encode.Interfaces.IEncode;
 
     /// <summary>
     /// The mini view model.

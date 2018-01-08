@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Properties {
+namespace HandBrake.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace HandBrakeWPF.Properties {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("HandBrakeWPF.Properties.ResourcesTooltips", typeof(ResourcesTooltips).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("HandBrake.Properties.ResourcesTooltips", typeof(ResourcesTooltips).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

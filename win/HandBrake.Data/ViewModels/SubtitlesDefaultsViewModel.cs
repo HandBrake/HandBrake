@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -15,10 +15,10 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrake.CoreLibrary.Utilities;
 
-    using HandBrakeWPF.Model.Subtitles;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Model.Subtitles;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// The Subtitles View Model

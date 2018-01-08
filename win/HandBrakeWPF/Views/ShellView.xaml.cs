@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Views
+namespace HandBrake.Views
 {
     using System;
     using System.ComponentModel;
@@ -15,11 +15,11 @@ namespace HandBrakeWPF.Views
     using System.Windows.Input;
 
     using Caliburn.Micro;
-    using HandBrakeWPF.Commands;
-    using HandBrakeWPF.Services;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.Commands;
+    using HandBrake.Services;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
     /// Interaction logic for ShellView.xaml

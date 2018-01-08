@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF
+namespace HandBrake
 {
     /// <summary>
     /// Constants for the User Settings Service

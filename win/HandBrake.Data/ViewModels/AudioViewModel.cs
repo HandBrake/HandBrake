@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -18,17 +18,17 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.CoreLibrary.Utilities;
     using HandBrake.Properties;
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
-    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
-    using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
+    using HandBrake.EventArgs;
+    using HandBrake.Model.Audio;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.Utilities;
+    using HandBrake.ViewModels.Interfaces;
+    using AudioEncoder = HandBrake.Services.Encode.Model.Models.AudioEncoder;
+    using AudioTrack = HandBrake.Services.Encode.Model.Models.AudioTrack;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using OutputFormat = HandBrake.Services.Encode.Model.Models.OutputFormat;
 
     /// <summary>
     /// The Audio View Model

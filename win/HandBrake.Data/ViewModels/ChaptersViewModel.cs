@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.ViewModels
+namespace HandBrake.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -16,18 +16,18 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
     using HandBrake.Model.Prompts;
     using HandBrake.Properties;
-    using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Presets.Model;
-    using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities.Input;
-    using HandBrakeWPF.Utilities.Output;
-    using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrake.EventArgs;
+    using HandBrake.Services.Interfaces;
+    using HandBrake.Services.Presets.Model;
+    using HandBrake.Services.Scan.Model;
+    using HandBrake.Utilities.Input;
+    using HandBrake.Utilities.Output;
+    using HandBrake.ViewModels.Interfaces;
     using PlatformBindings;
     using PlatformBindings.Models.FileSystem;
-    using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
+    using ChapterMarker = HandBrake.Services.Encode.Model.Models.ChapterMarker;
+    using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
+    using GeneralApplicationException = HandBrake.Exceptions.GeneralApplicationException;
 
     /// <summary>
     /// The Chapters View Model

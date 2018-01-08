@@ -7,14 +7,14 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Utilities
+namespace HandBrake.Utilities
 {
     using System;
     using System.IO;
     using HandBrake.EventArgs;
     using HandBrake.Model.Prompts;
     using HandBrake.Properties;
-    using HandBrakeWPF.Services.Interfaces;
+    using HandBrake.Services.Interfaces;
 
     /// <summary>
     /// The directory utilities.

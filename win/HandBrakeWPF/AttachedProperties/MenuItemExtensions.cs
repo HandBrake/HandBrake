@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.AttachedProperties
+namespace HandBrake.AttachedProperties
 {
     using System.Collections.Generic;
     using System.Windows;

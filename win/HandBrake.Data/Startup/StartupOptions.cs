@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Startup
+namespace HandBrake.Startup
 {
     /// <summary>
     /// The startup options.

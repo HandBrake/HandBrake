@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Helpers
+namespace HandBrake.Helpers
 {
     using HandBrake.CoreLibrary.Interop.HbLib;
     using HandBrake.CoreLibrary.Interop.Model;

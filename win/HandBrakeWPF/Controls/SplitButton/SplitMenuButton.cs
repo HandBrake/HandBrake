@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Controls.SplitButton
+namespace HandBrake.Controls.SplitButton
 {
     using System;
     using System.Collections.ObjectModel;

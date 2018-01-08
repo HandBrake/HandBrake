@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Converters.Subtitles
+namespace HandBrake.Converters.Subtitles
 {
     using System;
     using System.ComponentModel;
@@ -15,8 +15,8 @@ namespace HandBrakeWPF.Converters.Subtitles
     using System.Linq;
     using System.Windows.Data;
 
-    using HandBrakeWPF.Model.Subtitles;
-    using HandBrakeWPF.Utilities;
+    using HandBrake.Model.Subtitles;
+    using HandBrake.Utilities;
 
     /// <summary>
     /// Subtitle Behaviour Converter
