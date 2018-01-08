@@ -10,8 +10,7 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
-    using System.Windows;
-
+    using HandBrake;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -37,7 +36,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private string solution;
 
-        #endregion
+        #endregion Constants and Fields
 
         #region Constructors and Destructors
 
@@ -51,7 +50,7 @@ namespace HandBrakeWPF.ViewModels
             this.Details = Resources.ErrorViewModel_NoFurtherInformation;
         }
 
-        #endregion
+        #endregion Constructors and Destructors
 
         #region Properties
 
@@ -106,7 +105,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Properties
 
         /// <summary>
         /// Close this window.
@@ -128,7 +127,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Copy()
         {
-            Clipboard.SetDataObject(this.ErrorMessage + Environment.NewLine + this.Details, true);
+            HandBrakeServices.Current.Clipboard.Copy(this.ErrorMessage + Environment.NewLine + this.Details);
         }
     }
 }

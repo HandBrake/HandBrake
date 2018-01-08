@@ -36,7 +36,7 @@ namespace HandBrakeWPF.Services.Encode
         /// Initializes a new instance of the <see cref="EncodeBase"/> class.
         /// </summary>
         public EncodeBase()
-        {    
+        {
         }
 
         #region Events
@@ -56,7 +56,7 @@ namespace HandBrakeWPF.Services.Encode
         /// </summary>
         public event EncodeProgessStatus EncodeStatusChanged;
 
-        #endregion
+        #endregion Events
 
         #region Properties
 
@@ -65,7 +65,7 @@ namespace HandBrakeWPF.Services.Encode
         /// </summary>
         public bool IsEncoding { get; protected set; }
 
-        #endregion
+        #endregion Properties
 
         #region Invoke Events
 
@@ -114,7 +114,7 @@ namespace HandBrakeWPF.Services.Encode
             }
         }
 
-        #endregion
+        #endregion Invoke Events
 
         #region Methods
 
@@ -185,9 +185,10 @@ namespace HandBrakeWPF.Services.Encode
         protected void VerifyEncodeDestinationPath(EncodeTask task)
         {
             // Make sure the path exists, attempt to create it if it doesn't
+            // This will likely throw an exception in UWP.
             try
             {
-                string path = Directory.GetParent(task.Destination).ToString();
+                string path = Directory.GetParent(task.Destination.Path).ToString();
                 if (!Directory.Exists(path))
                 {
                     Directory.CreateDirectory(path);
@@ -224,6 +225,6 @@ namespace HandBrakeWPF.Services.Encode
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }

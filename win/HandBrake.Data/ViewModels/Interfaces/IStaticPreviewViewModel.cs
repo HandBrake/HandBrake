@@ -9,8 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using System.IO;
-
+    using HandBrake.CoreLibrary.Model;
     using HandBrakeWPF.Services.Scan.Model;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -36,7 +35,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// </summary>
         bool IsOpen { get; set; }
 
-        MemoryStream PreviewImage { get; }
+        ImageData PreviewImage { get; }
 
         void PreviousPreview();
 

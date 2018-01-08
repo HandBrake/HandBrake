@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.Helpers
 {
-    using System;
     using System.IO;
 
     using HandBrake.CoreLibrary.Interop;

@@ -23,18 +23,13 @@ namespace HandBrakeWPF.Utilities.Input
     public class ChapterImporterTxt
     {
         /// <summary>
-        /// The file filter value for the OpenFileDialog
-        /// </summary>
-        public static string FileFilter => "Text files (*.txt)|*.txt";
-
-        /// <summary>
         /// Imports all chapter information from the given <see cref="filename"/> into the <see cref="chapterMap"/> dictionary.
         /// </summary>
-        /// <param name="filename">The full path and filename of the chapter marker file to import</param>
+        /// <param name="filestream">The file stream of the chapter marker file to import</param>
         /// <param name="chapterMap">The dictionary that should be populated with parsed chapter markers</param>
-        public static void Import(string filename, ref Dictionary<int, Tuple<string, TimeSpan>> chapterMap)
+        public static void Import(Stream filestream, ref Dictionary<int, Tuple<string, TimeSpan>> chapterMap)
         {
-            using (var file = new StreamReader(filename))
+            using (var file = new StreamReader(filestream))
             {
                 // Indexing is 1-based
                 int chapterMapIdx = 1;

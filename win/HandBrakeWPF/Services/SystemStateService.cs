@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.Services
 {
-    using System;
     using System.Diagnostics;
     using System.Windows.Forms;
     using Caliburn.Micro;

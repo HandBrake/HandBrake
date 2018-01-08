@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
-    using System.Windows;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 

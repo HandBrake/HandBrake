@@ -14,13 +14,12 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.Globalization;
     using System.IO;
-    using System.Linq;
     using System.Runtime.ExceptionServices;
     using System.Threading;
     using System.Windows;
-    using System.Windows.Media.Imaging;
 
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
+    using HandBrake.CoreLibrary.Model;
     using HandBrake.Model.Prompts;
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
@@ -30,7 +29,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
-
+    using PlatformBindings;
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -79,7 +78,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         ///     The preview image.
         /// </summary>
-        private MemoryStream previewImage;
+        private ImageData previewImage;
 
         /// <summary>
         ///     The selected preview image.
@@ -181,7 +180,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         ///     Gets or sets the preview image.
         /// </summary>
-        public MemoryStream PreviewImage
+        public ImageData PreviewImage
         {
             get
             {
@@ -467,7 +466,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            MemoryStream image = null;
+            ImageData image = null;
             try
             {
                 image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage, HBConfigurationFactory.Create());
@@ -481,8 +480,8 @@ namespace HandBrakeWPF.ViewModels
             if (image != null)
             {
                 PreviewNotAvailable = false;
-                //this.Width = (int)Math.Ceiling(image.Width);
-                //this.Height = (int)Math.Ceiling(image.Height);
+                this.Width = image.Width;
+                this.Height = image.Height;
                 this.PreviewImage = image;
             }
         }
@@ -569,20 +568,25 @@ namespace HandBrakeWPF.ViewModels
             };
 
             // Filename handling.
-            if (string.IsNullOrEmpty(encodeTask.Destination))
+            if (encodeTask.Destination == null)
             {
                 string filename = Path.ChangeExtension(Path.GetTempFileName(), encodeTask.OutputFormat == OutputFormat.Mkv ? "m4v" : "mkv");
-                encodeTask.Destination = filename;
+                encodeTask.Destination = AppServices.Current?.IO?.GetFile(filename)?.Result;
                 this.CurrentlyPlaying = filename;
             }
             else
             {
-                string directory = Path.GetDirectoryName(encodeTask.Destination) ?? string.Empty;
-                string filename = Path.GetFileNameWithoutExtension(encodeTask.Destination);
-                string extension = Path.GetExtension(encodeTask.Destination);
+                var path = encodeTask.Destination.Path;
+
+                string directory = Path.GetDirectoryName(path) ?? string.Empty;
+                string filename = Path.GetFileNameWithoutExtension(path);
+                string extension = Path.GetExtension(path);
                 string previewFilename = string.Format("{0}_preview{1}", filename, extension);
                 string previewFullPath = Path.Combine(directory, previewFilename);
-                encodeTask.Destination = previewFullPath;
+
+                // This will throw an exception in most platforms if outside of the permissions boundary (Such as UWP).
+                // Can this be done with encodeTask.Destination.RenameAsync() ?
+                encodeTask.Destination = AppServices.Current?.IO?.CreateFile(previewFullPath)?.Result;
                 this.CurrentlyPlaying = previewFullPath;
             }
 

@@ -12,10 +12,9 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Diagnostics;
     using System.Text;
-    using System.Windows;
 
     using Caliburn.Micro;
-
+    using HandBrake;
     using HandBrake.CoreLibrary.Services.Logging;
     using HandBrake.CoreLibrary.Services.Logging.EventArgs;
     using HandBrake.CoreLibrary.Services.Logging.Model;
@@ -36,7 +35,7 @@ namespace HandBrakeWPF.ViewModels
         private StringBuilder log = new StringBuilder();
         private long lastReadIndex;
 
-        #endregion
+        #endregion Private Fields
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LogViewModel"/> class.
@@ -62,7 +61,7 @@ namespace HandBrakeWPF.ViewModels
         /// The log message received.
         /// </summary>
         public event EventHandler<LogEventArgs> LogMessageReceived;
-    
+
         /// <summary>
         /// Open the Log file directory
         /// </summary>
@@ -79,7 +78,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void CopyLog()
         {
-            Clipboard.SetDataObject(this.ActivityLog, true);
+            HandBrakeServices.Current.Clipboard.Copy(this.ActivityLog);
         }
 
         /// <summary>

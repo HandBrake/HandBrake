@@ -21,7 +21,7 @@ namespace HandBrakeWPF
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels;
     using HandBrakeWPF.ViewModels.Interfaces;
-
+    using PlatformBindings;
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
 
     /// <summary>
@@ -34,6 +34,7 @@ namespace HandBrakeWPF
         /// </summary>
         public App()
         {
+            PlatformBindingsBootstrapper.Initialise(true);
             new WPFHandBrakeServices();
 
             Application.Current.Dispatcher.UnhandledException += this.Dispatcher_UnhandledException;

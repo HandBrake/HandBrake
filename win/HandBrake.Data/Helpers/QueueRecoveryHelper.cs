@@ -16,10 +16,8 @@ namespace HandBrakeWPF.Helpers
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
-    using System.Windows;
     using System.Xml.Serialization;
     using HandBrake;
-    using HandBrake.CoreLibrary.Model;
     using HandBrake.CoreLibrary.Utilities;
     using HandBrake.Model.Prompts;
     using HandBrakeWPF.Services.Interfaces;

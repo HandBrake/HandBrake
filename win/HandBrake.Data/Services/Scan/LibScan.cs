@@ -12,7 +12,6 @@ namespace HandBrakeWPF.Services.Scan
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.IO;
 
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Interop.HbLib;
@@ -31,7 +30,6 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrakeWPF.Services.Scan.EventArgs;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
-    using HandBrakeWPF.Utilities;
 
     using Chapter = HandBrakeWPF.Services.Scan.Model.Chapter;
     using ScanProgressEventArgs = HandBrake.CoreLibrary.Interop.EventArgs.ScanProgressEventArgs;
@@ -182,14 +180,14 @@ namespace HandBrakeWPF.Services.Scan
         /// <returns>
         /// The <see cref="BitmapImage"/>.
         /// </returns>
-        public MemoryStream GetPreview(EncodeTask job, int preview, HBConfiguration configuraiton)
+        public ImageData GetPreview(EncodeTask job, int preview, HBConfiguration configuraiton)
         {
             if (this.instance == null)
             {
                 return null;
             }
 
-            MemoryStream result = null;
+            ImageData result = null;
 
             try
             {

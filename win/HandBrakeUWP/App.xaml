@@ -1,8 +1,8 @@
-﻿<Application
+﻿<caliburn:CaliburnApplication
     x:Class="HandBrakeUWP.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:caliburn="using:Caliburn.Micro"
     xmlns:local="using:HandBrakeUWP"
     RequestedTheme="Light">
-
-</Application>
+</caliburn:CaliburnApplication>

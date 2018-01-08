@@ -9,8 +9,9 @@
 
 namespace HandBrakeWPF.Utilities
 {
-    using System.IO;
     using System.Windows.Media.Imaging;
+
+    using HandBrake.CoreLibrary.Model;
 
     /// <summary>
     /// The bitmap utilities.
@@ -26,7 +27,7 @@ namespace HandBrakeWPF.Utilities
         /// <returns>
         /// The <see cref="BitmapImage"/>.
         /// </returns>
-        public static BitmapImage ConvertToBitmapImage(MemoryStream bitmap)
+        public static BitmapImage ConvertToBitmapImage(ImageData bitmap)
         {
             // Create a Bitmap Image for display.
             using (bitmap)
@@ -34,7 +35,7 @@ namespace HandBrakeWPF.Utilities
                 var wpfBitmap = new BitmapImage();
                 wpfBitmap.BeginInit();
                 wpfBitmap.CacheOption = BitmapCacheOption.OnLoad;
-                wpfBitmap.StreamSource = bitmap;
+                wpfBitmap.StreamSource = bitmap.Stream;
                 wpfBitmap.EndInit();
                 wpfBitmap.Freeze();
 

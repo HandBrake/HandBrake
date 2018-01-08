@@ -12,7 +12,6 @@ namespace HandBrakeWPF.Views
     using System;
     using System.Windows;
     using System.Windows.Input;
-    using System.Windows.Media.Imaging;
 
     using HandBrakeWPF.ViewModels.Interfaces;
 

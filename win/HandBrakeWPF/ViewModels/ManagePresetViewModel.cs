@@ -9,7 +9,6 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using System.Windows;
 
     using Caliburn.Micro;
     using HandBrake.Model.Prompts;

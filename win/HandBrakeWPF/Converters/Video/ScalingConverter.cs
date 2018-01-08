@@ -14,9 +14,6 @@ namespace HandBrakeWPF.Converters.Video
     using System.Windows.Data;
 
     using HandBrake.CoreLibrary.Model;
-    using HandBrake.CoreLibrary.Utilities;
-
-    using HandBrakeWPF.Model;
     using HandBrakeWPF.Utilities;
 
     /// <summary>

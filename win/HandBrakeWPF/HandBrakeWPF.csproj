@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\MSBuild.Sdk.Extras.1.2.0\build\MSBuild.Sdk.Extras.props" Condition="Exists('..\packages\MSBuild.Sdk.Extras.1.2.0\build\MSBuild.Sdk.Extras.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -107,12 +108,23 @@
     <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <HintPath>..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="PlatformBindings, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PlatformBindings.0.2.12-alpha\lib\net461\PlatformBindings.dll</HintPath>
+    </Reference>
+    <Reference Include="PlatformBindings-Core, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PlatformBindings-Core.0.2.13-alpha\lib\netstandard1.4\PlatformBindings-Core.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Net.NetworkInformation">
+      <HintPath>..\packages\System.Net.NetworkInformation.4.3.0\lib\net46\System.Net.NetworkInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -150,6 +162,7 @@
     <Compile Include="Converters\Audio\AudioRateTypeConverter.cs" />
     <Compile Include="Converters\Audio\AudioTrackDefaultBehaviourConverter.cs" />
     <Compile Include="Converters\Audio\AudioBehaviourConverter.cs" />
+    <Compile Include="Converters\BitmapImageDataConverter.cs" />
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
     <Compile Include="Converters\Filters\SharpenTuneConverter.cs" />
     <Compile Include="Converters\Filters\SharpenPresetConverter.cs" />
@@ -181,11 +194,13 @@
     </Compile>
     <Compile Include="Services\Interfaces\INotifyIconService.cs" />
     <Compile Include="Services\NotifyIconService.cs" />
+    <Compile Include="Services\ViewManager.cs" />
     <Compile Include="Services\SoundService.cs" />
     <Compile Include="Services\SystemStateService.cs" />
     <Compile Include="Startup\StartupOptions.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\BitmapUtilities.cs" />
+    <Compile Include="Utilities\CopyService.cs" />
     <Compile Include="Utilities\DialogService.cs" />
     <Compile Include="Utilities\DPIAwareness.cs" />
     <Compile Include="Utilities\ProcessIdentificationService.cs" />
@@ -365,7 +380,9 @@
     <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="app.manifest" />
     <None Include="Installer\Installer.nsi" />
     <None Include="Installer\Installer64.nsi" />
@@ -373,7 +390,9 @@
     <None Include="Installer\MakeNightly64.nsi" />
     <AppDesigner Include="Properties\" />
     <EmbeddedResource Include="public.key" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="portable.ini.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -621,7 +640,10 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets'))" />
+    <Error Condition="!Exists('..\packages\MSBuild.Sdk.Extras.1.2.0\build\MSBuild.Sdk.Extras.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuild.Sdk.Extras.1.2.0\build\MSBuild.Sdk.Extras.props'))" />
+    <Error Condition="!Exists('..\packages\MSBuild.Sdk.Extras.1.2.0\build\MSBuild.Sdk.Extras.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuild.Sdk.Extras.1.2.0\build\MSBuild.Sdk.Extras.targets'))" />
   </Target>
+  <Import Project="..\packages\MSBuild.Sdk.Extras.1.2.0\build\MSBuild.Sdk.Extras.targets" Condition="Exists('..\packages\MSBuild.Sdk.Extras.1.2.0\build\MSBuild.Sdk.Extras.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

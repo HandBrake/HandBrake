@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF.Utilities
+namespace HandBrakeUWP.Utilities
 {
     using System.Diagnostics;
     using System.Linq;
@@ -23,9 +23,9 @@ namespace HandBrakeWPF.Utilities
 
         public bool IsProccessIdActive(int id)
         {
-            // Will only disply
+            // Will only display processes it has access to, so it will only ever return HandBrake.
             var processes = ProcessDiagnosticInfo.GetForProcesses()
-                .Where(process => process.ExecutableFileName.Contains("HandBrakeUWP"))
+                .Where(process => process.ExecutableFileName == "HandBrakeUWP.exe") // just in case though
                 .Select(process => process.ProcessId)
                 .ToList();
 

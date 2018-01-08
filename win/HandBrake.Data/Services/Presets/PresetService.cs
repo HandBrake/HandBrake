@@ -34,7 +34,7 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrakeWPF.Utilities;
 
     using Newtonsoft.Json;
-
+    using PlatformBindings.Models.FileSystem;
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
 
     /// <summary>
@@ -167,17 +167,18 @@ namespace HandBrakeWPF.Services.Presets
         /// <summary>
         /// The import.
         /// </summary>
-        /// <param name="filename">
-        /// The filename.
+        /// <param name="file">
+        /// The file.
         /// </param>
-        public void Import(string filename)
+        public void Import(FileContainer file)
         {
-            if (!string.IsNullOrEmpty(filename))
+            if (file != null)
             {
                 PresetTransportContainer container = null;
                 try
                 {
-                    container = HandBrakePresetService.GetPresetFromFile(filename);
+                    // LibHB may or may not need a re-write for this to act on a file stream instead of a path,  in order to preserve permissions.
+                    container = HandBrakePresetService.GetPresetFromFile(file.Path);
                 }
                 catch (Exception exc)
                 {
@@ -228,8 +229,8 @@ namespace HandBrakeWPF.Services.Presets
         /// <summary>
         /// The export.
         /// </summary>
-        /// <param name="filename">
-        /// The filename.
+        /// <param name="file">
+        /// The file.
         /// </param>
         /// <param name="preset">
         /// The preset.
@@ -237,11 +238,14 @@ namespace HandBrakeWPF.Services.Presets
         /// <param name="configuration">
         /// The configuration.
         /// </param>
-        public void Export(string filename, Preset preset, HBConfiguration configuration)
+        public void Export(FileContainer file, Preset preset, HBConfiguration configuration)
         {
             // TODO Add support for multiple export
             PresetTransportContainer container = JsonPresetFactory.ExportPreset(preset, configuration);
-            HandBrakePresetService.ExportPreset(filename, container);
+            using (var filestream = file.OpenAsStream(true).Result)
+            {
+                HandBrakePresetService.ExportPreset(filestream, container);
+            }
         }
 
         /// <summary>

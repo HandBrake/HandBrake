@@ -12,7 +12,6 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Windows;
@@ -28,7 +27,9 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using Microsoft.Win32;
-
+    using PlatformBindings;
+    using PlatformBindings.Models.FileSystem;
+    using PlatformBindings.Models.FileSystem.Options;
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -381,7 +382,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             var firstOrDefault = this.QueueTasks.FirstOrDefault(s => s.Status == QueueItemStatus.Waiting);
-            if (firstOrDefault != null && !DriveUtilities.HasMinimumDiskSpace(firstOrDefault.Task.Destination,
+            if (firstOrDefault != null && !DriveUtilities.HasMinimumDiskSpace(firstOrDefault.Task.Destination.Path,
                     this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel)))
             {
                 this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, DialogButtonType.OK, DialogType.Error);
@@ -457,7 +458,22 @@ namespace HandBrakeWPF.ViewModels
         {
             if (task != null)
             {
-                this.OpenDirectory(task.ScannedSourcePath);
+                var io = AppServices.Current?.IO;
+                if (io?.SupportsOpenFolderForDisplay ?? false)
+                {
+                    FileSystemContainer scannedsource = null;
+
+                    if (Directory.Exists(task.ScannedSourcePath))
+                    {
+                        scannedsource = io.GetFolder(task.ScannedSourcePath).Result;
+                    }
+                    else if (File.Exists(task.ScannedSourcePath))
+                    {
+                        scannedsource = io.GetFile(task.ScannedSourcePath).Result;
+                    }
+
+                    this.OpenDirectory(scannedsource);
+                }
             }
         }
 
@@ -527,17 +543,24 @@ namespace HandBrakeWPF.ViewModels
             base.OnDeactivate(close);
         }
 
-        private void OpenDirectory(string directory)
+        private void OpenDirectory(FileSystemContainer item)
         {
             try
             {
-                if (!string.IsNullOrEmpty(directory))
+                var io = AppServices.Current?.IO;
+                if (io?.SupportsOpenFolderForDisplay ?? false)
                 {
-                    directory = Path.GetDirectoryName(directory);
-                    if (directory != null && Directory.Exists(directory))
+                    var folder = item as FolderContainer;
+                    var properties = new FolderOpenOptions();
+
+                    if (item is FileContainer file)
                     {
-                        Process.Start(directory);
+                        var directory = Path.GetDirectoryName(file.Path);
+                        folder = io.GetFolder(directory)?.Result;
+                        properties.ItemsToSelect.Add(file);
                     }
+
+                    io.OpenFolderForDisplay(folder, properties)?.RunSynchronously();
                 }
             }
             catch (Exception exc)

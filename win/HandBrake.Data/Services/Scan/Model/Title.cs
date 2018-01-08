@@ -16,9 +16,6 @@ namespace HandBrakeWPF.Services.Scan.Model
 
     using HandBrake.CoreLibrary.Interop.Model;
 
-    using HandBrakeWPF.Model;
-    using HandBrakeWPF.Utilities;
-
     /// <summary>
     /// An object that represents a single Title of a DVD
     /// </summary>

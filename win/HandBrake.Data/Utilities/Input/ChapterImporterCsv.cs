@@ -23,26 +23,22 @@ namespace HandBrakeWPF.Utilities.Input
     public class ChapterImporterCsv
     {
         /// <summary>
-        /// The file filter value for the OpenFileDialog
-        /// </summary>
-        public static string FileFilter => "CSV files (*.csv;*.tsv)|*.csv;*.tsv";
-
-        /// <summary>
         /// Imports all chapter information from the given <see cref="filename"/> into the <see cref="chapterMap"/> dictionary.
         /// </summary>
-        /// <param name="filename">
-        /// The full path and filename of the chapter marker file to import
+        /// <param name="filestream">
+        /// The file stream of the chapter marker file to import
+        /// </param>
+        /// <param name="extension">
+        /// The file extension of the file.
         /// </param>
         /// <param name="importedChapters">
         /// The imported Chapters.
         /// </param>
-        public static void Import(string filename, ref Dictionary<int, Tuple<string, TimeSpan>> importedChapters)
+        public static void Import(Stream filestream, string extension, ref Dictionary<int, Tuple<string, TimeSpan>> importedChapters)
         {
             // Determine the Delimeter Type for the Separate Values File Format.
-            var extension = Path.GetExtension(filename);
             var delimeter = extension == ".tsv" ? "\t" : ",";
-
-            using (var raw = File.OpenText(filename))
+            using (var raw = new StreamReader(filestream))
             {
                 using (var csv = new CsvReader(raw, new Configuration
                 {

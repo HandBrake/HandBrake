@@ -83,16 +83,16 @@ namespace HandBrake.CoreLibrary.Interop
         /// <summary>
         /// The export preset.
         /// </summary>
-        /// <param name="filename">
-        /// The filename.
+        /// <param name="filestream">
+        /// The file stream.
         /// </param>
         /// <param name="container">
         /// The container.
         /// </param>
-        public static void ExportPreset(string filename, PresetTransportContainer container)
+        public static void ExportPreset(Stream filestream, PresetTransportContainer container)
         {
             string preset = JsonConvert.SerializeObject(container, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            using (StreamWriter writer = new StreamWriter(filename))
+            using (StreamWriter writer = new StreamWriter(filestream))
             {
                 writer.Write(preset);
             }

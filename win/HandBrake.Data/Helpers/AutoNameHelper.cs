@@ -30,7 +30,7 @@ namespace HandBrakeWPF.Helpers
     public class AutoNameHelper
     {
         /// <summary>
-        /// Function which generates the filename and path automatically based on 
+        /// Function which generates the filename and path automatically based on
         /// the Source Name, DVD title and DVD Chapters
         /// </summary>
         /// <param name="task">
@@ -50,7 +50,7 @@ namespace HandBrakeWPF.Helpers
             IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
             if (task.Destination == null)
             {
-                task.Destination = string.Empty;
+                task.Destination = null;
             }
 
             string autoNamePath = string.Empty;
@@ -68,9 +68,9 @@ namespace HandBrakeWPF.Helpers
                 {
                     sourceName = sourceName.Replace("-", string.Empty);
                     sourceName = sourceName.Replace(",", string.Empty);
-                    sourceName = sourceName.Replace(".", string.Empty); 
+                    sourceName = sourceName.Replace(".", string.Empty);
                 }
-                  
+
                 // Switch to "Title Case"
                 if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameTitleCase))
                     sourceName = sourceName.ToTitleCase();
@@ -129,9 +129,11 @@ namespace HandBrakeWPF.Helpers
                         case 0: // Automatic
                             destinationFilename += task.IncludeChapterMarkers || MP4Helper.RequiresM4v(task) ? ".m4v" : ".mp4";
                             break;
+
                         case 1: // Always MP4
                             destinationFilename += ".mp4";
                             break;
+
                         case 2: // Always M4V
                             destinationFilename += ".m4v";
                             break;
@@ -175,7 +177,7 @@ namespace HandBrakeWPF.Helpers
                         autoNamePath = Path.Combine(userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Replace("{source_folder_name}", sourceFolder), destinationFilename);
                     }
                 }
-                else if (!task.Destination.Contains(Path.DirectorySeparatorChar.ToString()))
+                else if (!task.Destination.Path.Contains(Path.DirectorySeparatorChar.ToString()))
                 {
                     // Third case: If the destination box doesn't already contain a path, make one.
                     if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim() != string.Empty &&
@@ -183,7 +185,7 @@ namespace HandBrakeWPF.Helpers
                     {
                         autoNamePath = Path.Combine(userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath), destinationFilename);
                     }
-                    else 
+                    else
                     {
                         // ...otherwise, output to the source directory
                         autoNamePath = null;
@@ -193,7 +195,7 @@ namespace HandBrakeWPF.Helpers
                 {
                     // Otherwise, use the path that is already there.
                     // Use the path and change the file extension to match the previous destination
-                    autoNamePath = Path.Combine(Path.GetDirectoryName(task.Destination), destinationFilename);
+                    autoNamePath = Path.Combine(Path.GetDirectoryName(task.Destination.Path), destinationFilename);
                 }
             }
 

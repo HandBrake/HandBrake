@@ -14,7 +14,6 @@ namespace HandBrake.CoreLibrary.Interop
     using System.Diagnostics;
     using System.Drawing;
     using System.Drawing.Imaging;
-    using System.IO;
     using System.Linq;
     using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
@@ -27,18 +26,14 @@ namespace HandBrake.CoreLibrary.Interop
     using HandBrake.CoreLibrary.Interop.Interfaces;
     using HandBrake.CoreLibrary.Interop.Json.Encode;
     using HandBrake.CoreLibrary.Interop.Json.Scan;
-    using HandBrake.CoreLibrary.Interop.Json.Shared;
     using HandBrake.CoreLibrary.Interop.Json.State;
-    using HandBrake.CoreLibrary.Interop.Model;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.CoreLibrary.Interop.Model.Preview;
+    using HandBrake.CoreLibrary.Model;
     using HandBrake.CoreLibrary.Services.Logging;
     using HandBrake.CoreLibrary.Services.Logging.Interfaces;
     using HandBrake.CoreLibrary.Services.Logging.Model;
-
     using Newtonsoft.Json;
-
-    using Size = HandBrake.CoreLibrary.Interop.Model.Size;
 
     /// <summary>
     /// A wrapper for a HandBrake instance.
@@ -287,7 +282,7 @@ namespace HandBrake.CoreLibrary.Interop
         /// An image with the requested preview.
         /// </returns>
         [HandleProcessCorruptedStateExceptions]
-        public MemoryStream GetPreview(PreviewSettings settings, int previewNumber, bool deinterlace)
+        public ImageData GetPreview(PreviewSettings settings, int previewNumber, bool deinterlace)
         {
             SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == settings.TitleNumber);
 
@@ -349,19 +344,15 @@ namespace HandBrake.CoreLibrary.Interop
             HBFunctions.hb_image_close(nativeJobPtrPtr);
             Marshal.FreeHGlobal(nativeJobPtrPtr);
 
-            // Converts Bitmap into MemoryStream for transport.
-            var memoryStream = new MemoryStream();
-
+            // Converts Bitmap into ImageData for transport.
             try
             {
-                bitmap.Save(memoryStream, ImageFormat.Bmp);
+                return new ImageData(bitmap);
             }
             finally
             {
                 bitmap.Dispose();
             }
-
-            return memoryStream;
         }
 
         /// <summary>

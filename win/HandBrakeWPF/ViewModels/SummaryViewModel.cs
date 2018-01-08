@@ -15,11 +15,10 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Runtime.ExceptionServices;
     using System.Text;
-    using System.Windows.Media.Imaging;
 
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
-
+    using HandBrake.CoreLibrary.Model;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
@@ -130,7 +129,7 @@ namespace HandBrakeWPF.ViewModels
 
         #region DisplayProperties
 
-        public MemoryStream PreviewImage { get; set; }
+        public ImageData PreviewImage { get; set; }
         public bool PreviewNotAvailable { get; set; }
         public int MaxWidth { get; set; }
         public int MaxHeight { get; set; }
@@ -658,7 +657,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            MemoryStream image = null;
+            ImageData image = null;
             try
             {
                 image = this.scanService.GetPreview(this.Task, this.selectedPreview - 1, HBConfigurationFactory.Create());
@@ -673,8 +672,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.PreviewNotAvailable = false;
                 this.PreviewImage = image;
-                //this.MaxWidth = (int)image.Width;
-                //this.MaxHeight = (int)image.Height;
+                this.MaxWidth = image.Width;
+                this.MaxHeight = image.Height;
                 this.IsPreviewInfoVisible = true;
                 this.NotifyOfPropertyChange(() => this.IsPreviewInfoVisible);
                 this.NotifyOfPropertyChange(() => this.PreviewImage);

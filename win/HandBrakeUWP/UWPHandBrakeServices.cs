@@ -1,34 +1,30 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="WPFHandBrakeServices.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="UWPHandBrakeServices.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   WPF Services.
+//   UWP Services.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeWPF
+namespace HandBrakeUWP
 {
     using HandBrake;
     using HandBrake.Services.Interfaces;
     using HandBrake.Utilities;
     using HandBrake.Utilities.Interfaces;
-    using HandBrakeWPF.Services;
-    using HandBrakeWPF.Utilities;
+    using HandBrakeUWP.Utilities;
 
-    public class WPFHandBrakeServices : HandBrakeServices
+    /// <summary>
+    /// UWP Services.
+    /// </summary>
+    public class UWPHandBrakeServices : HandBrakeServices
     {
-        public WPFHandBrakeServices()
+        public UWPHandBrakeServices()
         {
             Current = this;
-            SystemInfo = new SystemInfo();
-            TaskBar = new TaskBarService();
-            SystemState = new SystemStateService();
-            Sound = new SoundService();
-            Dialog = new DialogService();
-            Process = new ProcessIdentificationService();
-            Clipboard = new CopyService();
-            ViewManager = new ViewManager();
+            this.SystemInfo = new SystemInfo();
+            this.Process = new ProcessIdentificationService();
         }
 
         public override ISystemInfo SystemInfo { get; }

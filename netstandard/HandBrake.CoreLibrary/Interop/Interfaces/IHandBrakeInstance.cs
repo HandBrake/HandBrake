@@ -10,12 +10,12 @@
 namespace HandBrake.CoreLibrary.Interop.Interfaces
 {
     using System;
-    using System.IO;
 
     using HandBrake.CoreLibrary.Interop.EventArgs;
     using HandBrake.CoreLibrary.Interop.Json.Encode;
     using HandBrake.CoreLibrary.Interop.Json.Scan;
     using HandBrake.CoreLibrary.Interop.Model.Preview;
+    using HandBrake.CoreLibrary.Model;
 
     /// <summary>
     /// The Interface for HandBrakeInstance
@@ -103,7 +103,7 @@ namespace HandBrake.CoreLibrary.Interop.Interfaces
         /// <returns>
         /// An image with the requested preview.
         /// </returns>
-        MemoryStream GetPreview(PreviewSettings job, int previewNumber, bool deinterlace);
+        ImageData GetPreview(PreviewSettings job, int previewNumber, bool deinterlace);
 
         /// <summary>
         /// Pauses the current encode.

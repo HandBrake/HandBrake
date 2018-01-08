@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
     using HandBrake.CoreLibrary.Model;
 
     using HandBrakeWPF.Services.Presets.Model;
+    using PlatformBindings.Models.FileSystem;
 
     /// <summary>
     /// The Preset Service Interface
@@ -69,16 +70,16 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// <summary>
         /// The import.
         /// </summary>
-        /// <param name="filename">
-        /// The filename.
+        /// <param name="file">
+        /// The file.
         /// </param>
-        void Import(string filename);
+        void Import(FileContainer file);
 
         /// <summary>
         /// The export.
         /// </summary>
-        /// <param name="filename">
-        /// The filename.
+        /// <param name="file">
+        /// The file.
         /// </param>
         /// <param name="preset">
         /// The preset.
@@ -86,7 +87,7 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
         /// <param name="configuration">
         /// The configuration.
         /// </param>
-        void Export(string filename, Preset preset, HBConfiguration configuration);
+        void Export(FileContainer file, Preset preset, HBConfiguration configuration);
 
         /// <summary>
         /// Update a preset

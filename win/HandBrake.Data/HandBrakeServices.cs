@@ -9,6 +9,7 @@
 
 namespace HandBrake
 {
+    using HandBrake.Services.Interfaces;
     using HandBrake.Utilities;
     using HandBrake.Utilities.Interfaces;
 
@@ -51,5 +52,15 @@ namespace HandBrake
         /// Gets the Process Identification Service.
         /// </summary>
         public abstract IProcessIdentificationService Process { get; }
+
+        /// <summary>
+        /// Gets the Copy Service.
+        /// </summary>
+        public abstract ICopyService Clipboard { get; }
+
+        /// <summary>
+        /// Gets the View Manager.
+        /// </summary>
+        public abstract ViewManagerBase ViewManager { get; }
     }
 }

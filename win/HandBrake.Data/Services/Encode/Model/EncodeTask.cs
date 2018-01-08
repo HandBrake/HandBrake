@@ -19,7 +19,7 @@ namespace HandBrakeWPF.Services.Encode.Model
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model.Models;
-
+    using PlatformBindings.Models.FileSystem;
     using AllowedPassthru = HandBrakeWPF.Services.Encode.Model.Models.AllowedPassthru;
     using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
     using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
@@ -43,7 +43,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// </summary>
         private bool showAdvancedTab;
 
-        #endregion
+        #endregion Private Fields
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EncodeTask"/> class.
@@ -62,7 +62,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="EncodeTask"/> class. 
+        /// Initializes a new instance of the <see cref="EncodeTask"/> class.
         /// Copy Constructor
         /// </summary>
         /// <param name="task">
@@ -191,16 +191,16 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// </summary>
         public int EndPoint { get; set; }
 
-        #endregion
+        #endregion Source
 
         #region Destination
 
         /// <summary>
         /// Gets or sets Destination.
         /// </summary>
-        public string Destination { get; set; }
+        public FileContainer Destination { get; set; }
 
-        #endregion
+        #endregion Destination
 
         #region Output Settings
 
@@ -221,7 +221,7 @@ namespace HandBrakeWPF.Services.Encode.Model
 
         public bool AlignAVStart { get; set; }
 
-        #endregion
+        #endregion Output Settings
 
         #region Picture
 
@@ -285,7 +285,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// </summary>
         public int? Modulus { get; set; }
 
-        #endregion
+        #endregion Picture
 
         #region Filters
 
@@ -378,7 +378,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         public FilterPreset SharpenPreset { get; set; }
         public FilterTune SharpenTune { get; set; }
         public string SharpenCustom { get; set; }
-        #endregion
+        #endregion Filters
 
         #region Video
 
@@ -423,7 +423,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// </summary>
         public double? Framerate { get; set; }
 
-        #endregion
+        #endregion Video
 
         #region Audio
 
@@ -437,7 +437,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// </summary>
         public AllowedPassthru AllowedPassthruOptions { get; set; }
 
-        #endregion
+        #endregion Audio
 
         #region Subtitles
 
@@ -446,7 +446,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// </summary>
         public ObservableCollection<SubtitleTrack> SubtitleTracks { get; set; }
 
-        #endregion
+        #endregion Subtitles
 
         #region Chapters
 
@@ -465,7 +465,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// </summary>
         public ObservableCollection<ChapterMarker> ChapterNames { get; set; }
 
-        #endregion
+        #endregion Chapters
 
         #region Advanced
 
@@ -518,7 +518,7 @@ namespace HandBrakeWPF.Services.Encode.Model
             }
         }
 
-        #endregion
+        #endregion Advanced
 
         #region MetaData
 
@@ -526,7 +526,8 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// Gets or sets the meta data.
         /// </summary>
         public MetaData MetaData { get; set; }
-        #endregion
+
+        #endregion MetaData
 
         #region Preview
 
@@ -545,6 +546,6 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// </summary>
         public int? PreviewEncodeStartAt { get; set; }
 
-        #endregion
+        #endregion Preview
     }
 }

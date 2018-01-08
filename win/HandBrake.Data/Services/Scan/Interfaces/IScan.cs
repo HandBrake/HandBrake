@@ -10,7 +10,6 @@
 namespace HandBrakeWPF.Services.Scan.Interfaces
 {
     using System;
-    using System.IO;
 
     using HandBrake.CoreLibrary.Model;
 
@@ -103,7 +102,7 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
         /// <returns>
         /// The <see cref="BitmapImage"/>.
         /// </returns>
-        MemoryStream GetPreview(EncodeTask task, int preview, HBConfiguration configuration);
+        ImageData GetPreview(EncodeTask task, int preview, HBConfiguration configuration);
 
         /// <summary>
         /// Kill the scan

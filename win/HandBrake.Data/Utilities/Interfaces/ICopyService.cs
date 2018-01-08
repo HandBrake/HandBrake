@@ -1,27 +1,22 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OptionsView.xaml.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="ICopyService.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Interaction logic for OptionsView.xaml
+//   Functions related to copying information.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
-namespace HandBrakeWPF.Views
+namespace HandBrake.Utilities.Interfaces
 {
-    using System.Windows.Controls;
-
     /// <summary>
-    /// Interaction logic for OptionsView.xaml
+    /// Functions related to copying information.
     /// </summary>
-    public partial class OptionsView : UserControl
+    public interface ICopyService
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="OptionsView"/> class.
+        /// Copies text to the Clipboard.
         /// </summary>
-        public OptionsView()
-        {
-            InitializeComponent();
-        }
+        /// <param name="text">Text to copy.</param>
+        void Copy(string text);
     }
 }

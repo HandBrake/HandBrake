@@ -15,7 +15,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
 
     using HandBrake.CoreLibrary.Interop;
-    using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.CoreLibrary.Utilities;
 
     using HandBrakeWPF.Model.Audio;
@@ -64,7 +63,7 @@ namespace HandBrakeWPF.ViewModels
             this.Setup((Preset)null, task);
         }
 
-        #endregion
+        #endregion Constructors and Destructors
 
         #region Properties
 
@@ -291,9 +290,9 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Properties
 
-        #region Data Properties 
+        #region Data Properties
 
         /// <summary>
         /// Gets the audio behaviour modes.
@@ -344,7 +343,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public IList<string> SampleRates { get; set; }
 
-        #endregion
+        #endregion Data Properties
 
         #region Public Methods
 
@@ -425,7 +424,7 @@ namespace HandBrakeWPF.ViewModels
             this.AudioBehaviours.SelectedLangauges.Clear();
         }
 
-        #endregion
+        #endregion Public Methods
 
         #region Methods
 
@@ -460,7 +459,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return;
             }
-           
+
             AudioBehaviours behaviours = preset.AudioTrackBehaviours.Clone();
             if (behaviours != null)
             {
@@ -473,7 +472,7 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.NotifyOfPropertyChange(() => this.BehaviourTracks);
-                
+
                 foreach (string selectedItem in behaviours.SelectedLangauges)
                 {
                     this.AvailableLanguages.Remove(selectedItem);
@@ -501,13 +500,13 @@ namespace HandBrakeWPF.ViewModels
         {
             this.NotifyOfPropertyChange(() => this.Task);
 
-            if (this.Task.OutputFormat == OutputFormat.Mp4 && 
+            if (this.Task.OutputFormat == OutputFormat.Mp4 &&
                 (this.AudioEncoderFallback == AudioEncoder.ffflac || this.AudioEncoderFallback == AudioEncoder.ffflac24 || this.AudioEncoderFallback == AudioEncoder.Vorbis))
             {
-                    this.AudioEncoderFallback = AudioEncoder.ffaac;
+                this.AudioEncoderFallback = AudioEncoder.ffaac;
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }

@@ -10,10 +10,10 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
-    using System.Windows.Threading;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using PlatformBindings.Models;
 
     /// <summary>
     ///  The Countdown Alert View Model
@@ -35,9 +35,9 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// The timer.
         /// </summary>
-        private DispatcherTimer timer;
+        private LoopTimer timer;
 
-        #endregion
+        #endregion Private Fields
 
         #region Constructors and Destructors
 
@@ -51,14 +51,14 @@ namespace HandBrakeWPF.ViewModels
             Caliburn.Micro.Execute.OnUIThread(
                 () =>
                 {
-                    timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+                    timer = new LoopTimer { Interval = TimeSpan.FromSeconds(1) };
                     timer.Tick += this.timer_Tick;
 
                     timer.Start();
                 });
         }
 
-        #endregion
+        #endregion Constructors and Destructors
 
         #region Public Properties
 
@@ -83,7 +83,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public int Ticks { get; set; }
 
-        #endregion
+        #endregion Public Properties
 
         #region Public Methods and Operators
 
@@ -122,7 +122,7 @@ namespace HandBrakeWPF.ViewModels
             this.action = actionMsg;
         }
 
-        #endregion
+        #endregion Public Methods and Operators
 
         #region Methods
 
@@ -147,6 +147,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
+        #endregion Methods
     }
 }

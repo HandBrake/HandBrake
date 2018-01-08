@@ -39,11 +39,6 @@ namespace HandBrakeWPF.Services
         private readonly IUserSettingService userSettingService;
 
         /// <summary>
-        /// The window manager.
-        /// </summary>
-        private readonly IWindowManager windowManager;
-
-        /// <summary>
         /// The System State Manager.
         /// </summary>
         private readonly ISystemStateService systemStateService;
@@ -60,11 +55,10 @@ namespace HandBrakeWPF.Services
         /// <param name="windowManager">
         /// The window Manager.
         /// </param>
-        public PrePostActionService(IQueueProcessor queueProcessor, IUserSettingService userSettingService, IWindowManager windowManager)
+        public PrePostActionService(IQueueProcessor queueProcessor, IUserSettingService userSettingService)
         {
             this.queueProcessor = queueProcessor;
             this.userSettingService = userSettingService;
-            this.windowManager = windowManager;
             this.systemStateService = HandBrakeServices.Current.SystemState;
 
             this.queueProcessor.QueueCompleted += QueueProcessorQueueCompleted;
@@ -153,7 +147,7 @@ namespace HandBrakeWPF.Services
                 () =>
                     {
                         titleSpecificView.SetAction(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction));
-                        this.windowManager.ShowDialog(titleSpecificView);
+                        HandBrakeServices.Current?.ViewManager?.ShowDialog(titleSpecificView);
                     });
 
             if (!titleSpecificView.IsCancelled)

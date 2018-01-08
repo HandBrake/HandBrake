@@ -14,8 +14,6 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.ObjectModel;
     using System.IO;
     using System.Linq;
-    using System.Windows;
-    using System.Windows.Forms;
 
     using Caliburn.Micro;
     using HandBrake.Model.Prompts;
@@ -27,7 +25,8 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Utilities.Input;
     using HandBrakeWPF.Utilities.Output;
     using HandBrakeWPF.ViewModels.Interfaces;
-
+    using PlatformBindings;
+    using PlatformBindings.Models.FileSystem;
     using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
@@ -131,30 +130,26 @@ namespace HandBrakeWPF.ViewModels
         /// </exception>
         public void Export()
         {
-            string fileName = null;
-            using (var saveFileDialog = new SaveFileDialog()
-            {
-                Filter = "Csv File|*.csv",
-                DefaultExt = "csv",
-                CheckPathExists = true,
-                OverwritePrompt = true
-            })
-            {
-                var dialogResult = saveFileDialog.ShowDialog();
-                fileName = saveFileDialog.FileName;
+            var properties = new FileSavePickerProperties();
+            properties.FileTypes.Add(".csv");
 
-                // Exit early if the user cancelled or the filename is invalid
-                if (dialogResult != System.Windows.Forms.DialogResult.OK || string.IsNullOrWhiteSpace(fileName))
-                    return;
+            var file = AppServices.Current?.IO?.Pickers?.SaveFile(properties)?.Result;
+            if (file == null)
+            {
+                // Exit if the user cancelled the dialog, or some other exception occurred.
+                return;
             }
 
             try
             {
-                using (var csv = new StreamWriter(fileName))
+                using (var filestream = file.OpenAsStream(true).Result)
                 {
-                    foreach (ChapterMarker row in this.Chapters)
+                    using (var csv = new StreamWriter(filestream))
                     {
-                        csv.Write("{0},{1}{2}", row.ChapterNumber, CsvHelper.Escape(row.ChapterName), Environment.NewLine);
+                        foreach (ChapterMarker row in this.Chapters)
+                        {
+                            csv.Write("{0},{1}{2}", row.ChapterNumber, CsvHelper.Escape(row.ChapterName), Environment.NewLine);
+                        }
                     }
                 }
             }
@@ -175,48 +170,45 @@ namespace HandBrakeWPF.ViewModels
         /// </exception>
         public void Import()
         {
-            string filename = null;
-            string fileExtension = null;
-            using (var dialog = new OpenFileDialog()
-            {
-                Filter = string.Join("|", "All Supported Formats (*.csv;*.tsv,*.xml,*.txt)|*.csv;*.tsv;*.xml;*.txt", ChapterImporterCsv.FileFilter, ChapterImporterXml.FileFilter, ChapterImporterTxt.FileFilter),
-                FilterIndex = 1,  // 1 based, the index value of the first filter entry is 1
-                CheckFileExists = true
-            })
-            {
-                var dialogResult = dialog.ShowDialog();
-                filename = dialog.FileName;
+            var properties = new FilePickerProperties();
+            properties.FileTypes.Add(".csv");
+            properties.FileTypes.Add(".tsv");
+            properties.FileTypes.Add(".xml");
+            properties.FileTypes.Add(".txt");
 
-                // Exit if the user didn't press the OK button or the file name is invalid
-                if (dialogResult != System.Windows.Forms.DialogResult.OK || string.IsNullOrWhiteSpace(filename))
-                    return;
-
-                // Retrieve the file extension after we've confirmed that the user selected something to open
-                fileExtension = Path.GetExtension(filename)?.ToLowerInvariant();
+            var file = AppServices.Current?.IO?.Pickers?.PickFile(properties).Result;
+            // Exit if the user cancelled the dialog, or some other exception occurred.
+            if (file == null)
+            {
+                return;
             }
 
+            var fileExtension = Path.GetExtension(file.Path);
             var importedChapters = new Dictionary<int, Tuple<string, TimeSpan>>();
 
-            // Execute the importer based on the file extension
-            switch (fileExtension)
+            using (var filestream = file.OpenAsStream(false).Result)
             {
-                case ".csv": // comma separated file
-                case ".tsv": // tab separated file
-                    ChapterImporterCsv.Import(filename, ref importedChapters);
-                    break;
+                // Execute the importer based on the file extension
+                switch (fileExtension)
+                {
+                    case ".csv": // comma separated file
+                    case ".tsv": // tab separated file
+                        ChapterImporterCsv.Import(filestream, fileExtension, ref importedChapters);
+                        break;
 
-                case ".xml":
-                    ChapterImporterXml.Import(filename, ref importedChapters);
-                    break;
+                    case ".xml":
+                        ChapterImporterXml.Import(filestream, ref importedChapters);
+                        break;
 
-                case ".txt":
-                    ChapterImporterTxt.Import(filename, ref importedChapters);
-                    break;
+                    case ".txt":
+                        ChapterImporterTxt.Import(filestream, ref importedChapters);
+                        break;
 
-                default:
-                    throw new GeneralApplicationException(
-                        Resources.ChaptersViewModel_UnsupportedFileFormatWarning,
-                        string.Format(Resources.ChaptersViewModel_UnsupportedFileFormatMsg, fileExtension));
+                    default:
+                        throw new GeneralApplicationException(
+                            Resources.ChaptersViewModel_UnsupportedFileFormatWarning,
+                            string.Format(Resources.ChaptersViewModel_UnsupportedFileFormatMsg, fileExtension));
+                }
             }
 
             // Exit early if no chapter information was extracted

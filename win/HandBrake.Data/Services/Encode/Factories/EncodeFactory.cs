@@ -14,7 +14,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using System.Globalization;
     using System.Linq;
     using System.Runtime.InteropServices;
-    using System.Runtime.InteropServices.ComTypes;
 
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Interop.HbLib;
@@ -98,16 +97,19 @@ namespace HandBrakeWPF.Services.Encode.Factories
                     range.Start = job.StartPoint;
                     range.End = job.EndPoint;
                     break;
+
                 case PointToPointMode.Seconds:
                     range.Type = "time";
                     range.Start = job.StartPoint * 90000;
                     range.End = job.EndPoint * 90000;
                     break;
+
                 case PointToPointMode.Frames:
                     range.Type = "frame";
                     range.Start = job.StartPoint;
                     range.End = job.EndPoint;
                     break;
+
                 case PointToPointMode.Preview:
                     range.Type = "preview";
                     range.Start = job.PreviewEncodeStartAt;
@@ -139,7 +141,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
         {
             Destination destination = new Destination
             {
-                File = job.Destination,
+                File = job.Destination.Path,
                 Mp4Options = new Mp4Options
                 {
                     IpodAtom = job.IPod5GSupport,
@@ -423,7 +425,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             // Deinterlace
             if (job.DeinterlaceFilter == DeinterlaceFilter.Yadif)
             {
-                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DEINTERLACE, EnumHelper<Deinterlace>.GetShortName(job.Deinterlace),  null, job.CustomDeinterlace);
+                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DEINTERLACE, EnumHelper<Deinterlace>.GetShortName(job.Deinterlace), null, job.CustomDeinterlace);
                 string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {
@@ -459,13 +461,13 @@ namespace HandBrakeWPF.Services.Encode.Factories
                         JToken settings = JObject.Parse(unparsedJson);
 
                         Filter filterItem = new Filter
-                                                {
-                                                    ID = (int)hb_filter_ids.HB_FILTER_COMB_DETECT,
-                                                    Settings = settings
-                                                };
+                        {
+                            ID = (int)hb_filter_ids.HB_FILTER_COMB_DETECT,
+                            Settings = settings
+                        };
                         filter.FilterList.Add(filterItem);
                     }
-                }    
+                }
             }
 
             // Denoise
@@ -529,10 +531,10 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 JToken cropSettingsJson = JObject.Parse(unparsedCropSettingsJson);
 
                 Filter cropScale = new Filter
-                                       {
-                                           ID = (int)hb_filter_ids.HB_FILTER_CROP_SCALE,
-                                           Settings = cropSettingsJson
-                                       };
+                {
+                    ID = (int)hb_filter_ids.HB_FILTER_CROP_SCALE,
+                    Settings = cropSettingsJson
+                };
                 filter.FilterList.Add(cropScale);
             }
 
@@ -581,10 +583,10 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 JToken framerateSettings = JObject.Parse(unparsedFramerateJson);
 
                 Filter framerateShaper = new Filter
-                                             {
-                                                 ID = (int)hb_filter_ids.HB_FILTER_VFR,
-                                                 Settings = framerateSettings
-                                             };
+                {
+                    ID = (int)hb_filter_ids.HB_FILTER_VFR,
+                    Settings = framerateSettings
+                };
                 filter.FilterList.Add(framerateShaper);
             }
 
