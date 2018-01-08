@@ -139,7 +139,7 @@
       <Version>10.0.3</Version>
     </PackageReference>
     <PackageReference Include="PlatformBindings">
-      <Version>0.2.13-alpha</Version>
+      <Version>0.2.15-alpha</Version>
     </PackageReference>
     <PackageReference Include="StyleCop.Analyzers">
       <Version>1.1.0-beta004</Version>

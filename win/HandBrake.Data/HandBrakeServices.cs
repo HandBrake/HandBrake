@@ -62,5 +62,10 @@ namespace HandBrake
         /// Gets the View Manager.
         /// </summary>
         public abstract ViewManagerBase ViewManager { get; }
+
+        /// <summary>
+        /// Gets the Notification Service.
+        /// </summary>
+        public abstract INotificationService NotificationManager { get; }
     }
 }

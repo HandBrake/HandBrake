@@ -11,33 +11,21 @@ namespace HandBrakeWPF.Views
 {
     using System;
     using System.ComponentModel;
-    using System.Drawing;
-    using System.IO;
     using System.Windows;
-    using System.Windows.Forms;
     using System.Windows.Input;
-    using System.Windows.Resources;
 
     using Caliburn.Micro;
-    using HandBrake;
     using HandBrakeWPF.Commands;
+    using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
-
-    using Application = System.Windows.Application;
-    using Execute = Caliburn.Micro.Execute;
 
     /// <summary>
     /// Interaction logic for ShellView.xaml
     /// </summary>
     public partial class ShellView
     {
-        /// <summary>
-        /// The my notify icon.
-        /// </summary>
-        private readonly NotifyIcon notifyIcon;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellView"/> class.
         /// </summary>
@@ -50,18 +38,7 @@ namespace HandBrakeWPF.Views
 
             if (minimiseToTray)
             {
-                INotifyIconService notifyIconService = IoC.Get<INotifyIconService>();
-                this.notifyIcon = new NotifyIcon();
-                this.notifyIcon.ContextMenu = new ContextMenu(new[] { new MenuItem("Restore", NotifyIconClick), new MenuItem("Mini Status Display", ShowMiniStatusDisplay) });
-                notifyIconService.RegisterNotifyIcon(this.notifyIcon);
-
-                StreamResourceInfo streamResourceInfo = Application.GetResourceStream(new Uri("pack://application:,,,/handbrakepineapple.ico"));
-                if (streamResourceInfo != null)
-                {
-                    Stream iconStream = streamResourceInfo.Stream;
-                    this.notifyIcon.Icon = new Icon(iconStream);
-                }
-                this.notifyIcon.DoubleClick += this.NotifyIconClick;
+                NotificationService.Register(this);
                 this.StateChanged += this.ShellViewStateChanged;
             }
 
@@ -102,46 +79,9 @@ namespace HandBrakeWPF.Views
                 }
             }
 
-            if (this.notifyIcon != null)
-            {
-                this.notifyIcon.Visible = false;
-            }
+            NotificationService.UnRegister();
 
             base.OnClosing(e);
-        }
-
-        /// <summary>
-        /// The show mini status display.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void ShowMiniStatusDisplay(object sender, EventArgs e)
-        {
-            IMiniViewModel titleSpecificView = IoC.Get<IMiniViewModel>();
-            Execute.OnUIThread(
-                () =>
-                {
-                    titleSpecificView.Activate();
-                    HandBrakeServices.Current?.ViewManager?.ShowWindow(titleSpecificView);
-                });
-        }
-
-        /// <summary>
-        /// The notify icon_ click.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void NotifyIconClick(object sender, EventArgs e)
-        {
-            this.WindowState = WindowState.Normal;
         }
 
         /// <summary>
@@ -155,16 +95,16 @@ namespace HandBrakeWPF.Views
         /// </param>
         private void ShellViewStateChanged(object sender, EventArgs e)
         {
-            if (this.notifyIcon != null)
+            if (NotificationService.Registered)
             {
                 if (this.WindowState == WindowState.Minimized)
                 {
                     this.ShowInTaskbar = false;
-                    notifyIcon.Visible = true;
+                    NotificationService.ChangeVisibility(true);
                 }
                 else if (this.WindowState == WindowState.Normal)
                 {
-                    notifyIcon.Visible = false;
+                    NotificationService.ChangeVisibility(false);
                     this.ShowInTaskbar = true;
                 }
             }

@@ -29,6 +29,7 @@ namespace HandBrakeWPF
             Process = new ProcessIdentificationService();
             Clipboard = new CopyService();
             ViewManager = new ViewManager();
+            NotificationManager = new NotificationService();
         }
 
         public override ISystemInfo SystemInfo { get; }
@@ -46,5 +47,7 @@ namespace HandBrakeWPF
         public override ICopyService Clipboard { get; }
 
         public override ViewManagerBase ViewManager { get; }
+
+        public override INotificationService NotificationManager { get; }
     }
 }

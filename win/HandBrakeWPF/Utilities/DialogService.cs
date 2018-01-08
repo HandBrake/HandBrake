@@ -25,5 +25,10 @@ namespace HandBrakeWPF.Utilities
 
             return (DialogResult)(int)result;
         }
+
+        public DialogResult Show(string message)
+        {
+            return (DialogResult)(int)MessageBox.Show(message);
+        }
     }
 }

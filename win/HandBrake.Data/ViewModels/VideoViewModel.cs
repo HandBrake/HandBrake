@@ -21,7 +21,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
 
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Properties;
+    using HandBrake.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;

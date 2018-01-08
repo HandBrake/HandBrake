@@ -14,10 +14,10 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.Model.Prompts;
+    using HandBrake.Properties;
     using HandBrake.Services.Interfaces;
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Model.Subtitles;
-    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets;
     using HandBrakeWPF.Services.Presets.Interfaces;
@@ -25,7 +25,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
-
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
 

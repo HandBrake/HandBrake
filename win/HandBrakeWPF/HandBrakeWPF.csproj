@@ -109,10 +109,10 @@
       <HintPath>..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="PlatformBindings, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PlatformBindings.0.2.12-alpha\lib\net461\PlatformBindings.dll</HintPath>
+      <HintPath>..\packages\PlatformBindings.0.2.15-alpha\lib\net461\PlatformBindings.dll</HintPath>
     </Reference>
     <Reference Include="PlatformBindings-Core, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\PlatformBindings-Core.0.2.13-alpha\lib\netstandard1.4\PlatformBindings-Core.dll</HintPath>
+      <HintPath>..\packages\PlatformBindings-Core.0.2.15-alpha\lib\netstandard1.4\PlatformBindings-Core.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
@@ -138,6 +138,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
+    <Reference Include="WPFCustomMessageBox, Version=1.0.7.39267, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WPFCustomMessageBox.1.0.7\lib\WPFCustomMessageBox.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -147,12 +150,7 @@
     <Compile Include="AppcastConstants.cs" />
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Commands\InputBindingTrigger.cs" />
-    <Compile Include="Commands\Menu\QueueCommandParams.cs" />
-    <Compile Include="Commands\Menu\QueueCommands.cs" />
-    <Compile Include="Commands\OpenOptionsScreenCommand.cs" />
-    <Compile Include="Commands\PresetMenuSelectCommand.cs" />
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
-    <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Controls\SplitButton\SplitMenuButton.cs" />
     <Compile Include="Controls\AlertPanel.xaml.cs">
       <DependentUpon>AlertPanel.xaml</DependentUpon>
@@ -177,6 +175,7 @@
     <Compile Include="Converters\Video\VideoOptionsTooltipConverter.cs" />
     <Compile Include="Converters\Video\ScalingConverter.cs" />
     <Compile Include="Helpers\TreeViewHelper.cs" />
+    <Compile Include="Models\UpdateCheckInformation.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -192,12 +191,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Services\Interfaces\INotifyIconService.cs" />
-    <Compile Include="Services\NotifyIconService.cs" />
+    <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\ViewManager.cs" />
     <Compile Include="Services\SoundService.cs" />
     <Compile Include="Services\SystemStateService.cs" />
-    <Compile Include="Startup\StartupOptions.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
     <Compile Include="Utilities\BitmapUtilities.cs" />
     <Compile Include="Utilities\CopyService.cs" />
@@ -209,19 +206,11 @@
     <Compile Include="Utilities\TaskBarService.cs" />
     <Compile Include="Utilities\UwpDetect.cs" />
     <Compile Include="Utilities\Win32.cs" />
-    <Compile Include="ViewModels\ManagePresetViewModel.cs" />
-    <Compile Include="ViewModels\AudioDefaultsViewModel.cs" />
-    <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
     <Compile Include="Controls\SourceSelection.xaml.cs">
       <DependentUpon>SourceSelection.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\MetaDataViewModel.cs" />
-    <Compile Include="ViewModels\MiniViewModel.cs" />
-    <Compile Include="ViewModels\PopupWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
-    <Compile Include="ViewModels\StaticPreviewViewModel.cs" />
-    <Compile Include="ViewModels\SubtitlesDefaultsViewModel.cs" />
-    <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="Views\ManagePresetView.xaml.cs">
       <DependentUpon>ManagePresetView.xaml</DependentUpon>
@@ -264,7 +253,6 @@
     <Compile Include="Helpers\GrayscaleImage.cs" />
     <Compile Include="Services\Interfaces\IUpdateService.cs" />
     <Compile Include="Services\UpdateService.cs" />
-    <Compile Include="ViewModels\QueueSelectionViewModel.cs" />
     <Compile Include="Views\QueueSelectionView.xaml.cs">
       <DependentUpon>QueueSelectionView.xaml</DependentUpon>
     </Compile>
@@ -277,8 +265,6 @@
     <Compile Include="Views\ShellView.xaml.cs">
       <DependentUpon>ShellView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\ShellViewModelBase.cs" />
-    <Compile Include="ViewModels\TitleSpecificViewModel.cs" />
     <Compile Include="Views\StaticPreviewView.xaml.cs">
       <DependentUpon>StaticPreviewView.xaml</DependentUpon>
     </Compile>
@@ -289,22 +275,7 @@
     <Compile Include="Converters\EnumComboConverter.cs" />
     <Compile Include="Converters\FullPathToFileNameConverter.cs" />
     <Compile Include="Helpers\ListBoxHelper.cs" />
-    <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Startup\AppBootstrapper.cs" />
-    <Compile Include="ViewModels\AboutViewModel.cs" />
-    <Compile Include="ViewModels\AddPresetViewModel.cs" />
-    <Compile Include="ViewModels\AudioViewModel.cs" />
-    <Compile Include="ViewModels\X264ViewModel.cs" />
-    <Compile Include="ViewModels\VideoViewModel.cs" />
-    <Compile Include="ViewModels\FiltersViewModel.cs" />
-    <Compile Include="ViewModels\SubtitlesViewModel.cs" />
-    <Compile Include="ViewModels\ChaptersViewModel.cs" />
-    <Compile Include="ViewModels\PictureSettingsViewModel.cs" />
-    <Compile Include="ViewModels\ErrorViewModel.cs" />
-    <Compile Include="ViewModels\LogViewModel.cs" />
-    <Compile Include="ViewModels\QueueViewModel.cs" />
-    <Compile Include="ViewModels\OptionsViewModelBase.cs" />
-    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="Views\AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
@@ -312,7 +283,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="Views\SubtitlesDefaultsView.xaml.cs">
       <DependentUpon>SubtitlesDefaultsView.xaml</DependentUpon>
     </Compile>

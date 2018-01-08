@@ -15,8 +15,8 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Linq;
     using HandBrake.Model.Prompts;
+    using HandBrake.Properties;
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
@@ -131,33 +131,36 @@ namespace HandBrakeWPF.ViewModels
             var properties = new FileSavePickerProperties();
             properties.FileTypes.Add(".csv");
 
-            var file = AppServices.Current?.IO?.Pickers?.SaveFile(properties)?.Result;
-            if (file == null)
+            AppServices.Current?.IO?.Pickers?.SaveFile(properties)?.ContinueWith(async task =>
             {
-                // Exit if the user cancelled the dialog, or some other exception occurred.
-                return;
-            }
-
-            try
-            {
-                using (var filestream = file.OpenAsStream(true).Result)
+                var file = task.Result;
+                if (file == null)
                 {
-                    using (var csv = new StreamWriter(filestream))
+                    // Exit if the user cancelled the dialog, or some other exception occurred.
+                    return;
+                }
+
+                try
+                {
+                    using (var filestream = await file.OpenAsStream(true))
                     {
-                        foreach (ChapterMarker row in this.Chapters)
+                        using (var csv = new StreamWriter(filestream))
                         {
-                            csv.Write("{0},{1}{2}", row.ChapterNumber, CsvHelper.Escape(row.ChapterName), Environment.NewLine);
+                            foreach (ChapterMarker row in this.Chapters)
+                            {
+                                csv.Write("{0},{1}{2}", row.ChapterNumber, CsvHelper.Escape(row.ChapterName), Environment.NewLine);
+                            }
                         }
                     }
                 }
-            }
-            catch (Exception exc)
-            {
-                throw new GeneralApplicationException(
-                    Resources.ChaptersViewModel_UnableToExportChaptersWarning,
-                    Resources.ChaptersViewModel_UnableToExportChaptersMsg,
-                    exc);
-            }
+                catch (Exception exc)
+                {
+                    throw new GeneralApplicationException(
+                        Resources.ChaptersViewModel_UnableToExportChaptersWarning,
+                        Resources.ChaptersViewModel_UnableToExportChaptersMsg,
+                        exc);
+                }
+            });
         }
 
         /// <summary>
@@ -174,75 +177,83 @@ namespace HandBrakeWPF.ViewModels
             properties.FileTypes.Add(".xml");
             properties.FileTypes.Add(".txt");
 
-            var file = AppServices.Current?.IO?.Pickers?.PickFile(properties).Result;
-            // Exit if the user cancelled the dialog, or some other exception occurred.
-            if (file == null)
+            AppServices.Current?.IO?.Pickers?.PickFile(properties)?.ContinueWith(async task =>
             {
-                return;
-            }
+                var file = task.Result;
 
-            var fileExtension = Path.GetExtension(file.Path);
-            var importedChapters = new Dictionary<int, Tuple<string, TimeSpan>>();
-
-            using (var filestream = file.OpenAsStream(false).Result)
-            {
-                // Execute the importer based on the file extension
-                switch (fileExtension)
+                // Exit if the user cancelled the dialog, or some other exception occurred.
+                if (file == null)
                 {
-                    case ".csv": // comma separated file
-                    case ".tsv": // tab separated file
-                        ChapterImporterCsv.Import(filestream, fileExtension, ref importedChapters);
-                        break;
+                    return;
+                }
 
-                    case ".xml":
-                        ChapterImporterXml.Import(filestream, ref importedChapters);
-                        break;
+                var fileExtension = Path.GetExtension(file.Path);
+                var importedChapters = new Dictionary<int, Tuple<string, TimeSpan>>();
 
-                    case ".txt":
-                        ChapterImporterTxt.Import(filestream, ref importedChapters);
-                        break;
+                using (var filestream = await file.OpenAsStream(false))
+                {
+                    // Execute the importer based on the file extension
+                    switch (fileExtension)
+                    {
+                        case ".csv": // comma separated file
+                        case ".tsv": // tab separated file
+                            ChapterImporterCsv.Import(filestream, fileExtension, ref importedChapters);
+                            break;
 
-                    default:
+                        case ".xml":
+                            ChapterImporterXml.Import(filestream, ref importedChapters);
+                            break;
+
+                        case ".txt":
+                            ChapterImporterTxt.Import(filestream, ref importedChapters);
+                            break;
+
+                        default:
+                            throw new GeneralApplicationException(
+                                Resources.ChaptersViewModel_UnsupportedFileFormatWarning,
+                                string.Format(Resources.ChaptersViewModel_UnsupportedFileFormatMsg, fileExtension));
+                    }
+                }
+
+                // Exit early if no chapter information was extracted
+                if (importedChapters == null || importedChapters.Count <= 0)
+                {
+                    return;
+                }
+
+                // Validate the chaptermap against the current chapter list extracted from the source
+                string validationErrorMessage;
+                if (!this.ValidateImportedChapters(importedChapters, out validationErrorMessage))
+                {
+                    if (!string.IsNullOrEmpty(validationErrorMessage))
+                    {
                         throw new GeneralApplicationException(
-                            Resources.ChaptersViewModel_UnsupportedFileFormatWarning,
-                            string.Format(Resources.ChaptersViewModel_UnsupportedFileFormatMsg, fileExtension));
+                                  Resources.ChaptersViewModel_ValidationFailedWarning,
+                                  validationErrorMessage);
+                    }
+
+                    // The user has cancelled the import, so exit
+                    return;
                 }
-            }
 
-            // Exit early if no chapter information was extracted
-            if (importedChapters == null || importedChapters.Count <= 0)
-                return;
-
-            // Validate the chaptermap against the current chapter list extracted from the source
-            string validationErrorMessage;
-            if (!this.ValidateImportedChapters(importedChapters, out validationErrorMessage))
-            {
-                if (!string.IsNullOrEmpty(validationErrorMessage))
+                // Now iterate over each chatper we have, and set it's name
+                foreach (ChapterMarker item in this.Chapters)
                 {
-                    throw new GeneralApplicationException(
-                              Resources.ChaptersViewModel_ValidationFailedWarning,
-                              validationErrorMessage);
+                    // If we don't have a chapter name for this chapter then
+                    // fallback to the value that is already set for the chapter
+                    string chapterName = item.ChapterName;
+
+                    // Attempt to retrieve the imported chapter name
+                    Tuple<string, TimeSpan> chapterInfo;
+                    if (importedChapters.TryGetValue(item.ChapterNumber, out chapterInfo))
+                    {
+                        chapterName = chapterInfo.Item1;
+                    }
+
+                    // Assign the chapter name unless the name is not set or only whitespace charaters
+                    item.ChapterName = !string.IsNullOrWhiteSpace(chapterName) ? chapterName : string.Empty;
                 }
-
-                // The user has cancelled the import, so exit
-                return;
-            }
-
-            // Now iterate over each chatper we have, and set it's name
-            foreach (ChapterMarker item in this.Chapters)
-            {
-                // If we don't have a chapter name for this chapter then
-                // fallback to the value that is already set for the chapter
-                string chapterName = item.ChapterName;
-
-                // Attempt to retrieve the imported chapter name
-                Tuple<string, TimeSpan> chapterInfo;
-                if (importedChapters.TryGetValue(item.ChapterNumber, out chapterInfo))
-                    chapterName = chapterInfo.Item1;
-
-                // Assign the chapter name unless the name is not set or only whitespace charaters
-                item.ChapterName = !string.IsNullOrWhiteSpace(chapterName) ? chapterName : string.Empty;
-            }
+            });
         }
 
         /// <summary>

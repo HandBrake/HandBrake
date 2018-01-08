@@ -19,7 +19,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Services.Interfaces;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Subtitles;
-    using HandBrakeWPF.Properties;
+    using HandBrake.Properties;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -241,24 +241,27 @@ namespace HandBrakeWPF.ViewModels
             var properties = new FilePickerProperties();
             properties.FileTypes.Add(".srt");
 
-            var files = ioServices?.Pickers?.PickFiles(properties)?.Result;
-
-            if (files != null)
+            this.ioServices?.Pickers?.PickFiles(properties)?.ContinueWith(task =>
             {
-                foreach (var srtFile in files)
+                var files = task.Result;
+
+                if (files != null)
                 {
-                    SubtitleTrack track = new SubtitleTrack
+                    foreach (var srtFile in files)
                     {
-                        SrtFileName = Path.GetFileNameWithoutExtension(srtFile.Path),
-                        SrtOffset = 0,
-                        SrtCharCode = "UTF-8",
-                        SrtLang = "English",
-                        SubtitleType = SubtitleType.SRT,
-                        SrtPath = srtFile.Path
-                    };
-                    this.Task.SubtitleTracks.Add(track);
+                        SubtitleTrack track = new SubtitleTrack
+                        {
+                            SrtFileName = Path.GetFileNameWithoutExtension(srtFile.Path),
+                            SrtOffset = 0,
+                            SrtCharCode = "UTF-8",
+                            SrtLang = "English",
+                            SubtitleType = SubtitleType.SRT,
+                            SrtPath = srtFile.Path,
+                        };
+                        this.Task.SubtitleTracks.Add(track);
+                    }
                 }
-            }
+            });
         }
 
         /// <summary>

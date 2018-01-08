@@ -23,7 +23,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Model;
     using HandBrake.Model.Prompts;
     using HandBrakeWPF.Factories;
-    using HandBrakeWPF.Properties;
+    using HandBrake.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
@@ -38,6 +38,7 @@ namespace HandBrakeWPF.ViewModels
     using LibEncode = HandBrakeWPF.Services.Encode.LibEncode;
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
     using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
+    using HandBrake.Common;
 
     /// <summary>
     ///     The Static Preview View Model
@@ -572,7 +573,7 @@ namespace HandBrakeWPF.ViewModels
             if (encodeTask.Destination == null)
             {
                 string filename = Path.ChangeExtension(Path.GetTempFileName(), encodeTask.OutputFormat == OutputFormat.Mkv ? "m4v" : "mkv");
-                encodeTask.Destination = new FileData(AppServices.Current?.IO?.GetFile(filename)?.Result);
+                encodeTask.Destination = new FileData(AsyncHelpers.GetThreadedResult(() => AppServices.Current?.IO?.GetFile(filename)));
                 this.CurrentlyPlaying = filename;
             }
             else
@@ -587,7 +588,7 @@ namespace HandBrakeWPF.ViewModels
 
                 // This will throw an exception in most platforms if outside of the permissions boundary (Such as UWP).
                 // Can this be done with encodeTask.Destination.RenameAsync() ?
-                encodeTask.Destination = new FileData(AppServices.Current?.IO?.CreateFile(previewFullPath)?.Result);
+                encodeTask.Destination = new FileData(AsyncHelpers.GetThreadedResult(() => AppServices.Current?.IO?.CreateFile(previewFullPath)));
                 this.CurrentlyPlaying = previewFullPath;
             }
 

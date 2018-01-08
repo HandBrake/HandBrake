@@ -11,7 +11,7 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
 
-    using HandBrakeWPF.Properties;
+    using HandBrake.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
     using PlatformBindings.Models;
 

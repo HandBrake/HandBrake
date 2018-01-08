@@ -8,6 +8,7 @@ namespace HandBrake.Model
 {
     using System.Runtime.Serialization;
     using System.Xml.Serialization;
+    using HandBrake.Common;
     using PlatformBindings;
     using PlatformBindings.Models.FileSystem;
 
@@ -54,16 +55,12 @@ namespace HandBrake.Model
         {
             get
             {
-                if (this.file != null)
+                if (this.file == null && !string.IsNullOrWhiteSpace(this.Path))
                 {
-                    return this.file;
-                }
-                else if (!string.IsNullOrWhiteSpace(this.Path))
-                {
-                    this.file = AppServices.Current?.IO?.GetFile(this.Path)?.Result;
+                    this.file = AsyncHelpers.GetThreadedResult(() => AppServices.Current?.IO?.GetFile(this.Path));
                 }
 
-                return null;
+                return this.file;
             }
 
             set

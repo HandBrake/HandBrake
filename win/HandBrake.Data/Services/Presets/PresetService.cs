@@ -242,10 +242,13 @@ namespace HandBrakeWPF.Services.Presets
         {
             // TODO Add support for multiple export
             PresetTransportContainer container = JsonPresetFactory.ExportPreset(preset, configuration);
-            using (var filestream = file.OpenAsStream(true).Result)
+            file.OpenAsStream(true).ContinueWith(task =>
             {
-                HandBrakePresetService.ExportPreset(filestream, container);
-            }
+                using (var filestream = task.Result)
+                {
+                    HandBrakePresetService.ExportPreset(filestream, container);
+                }
+            });
         }
 
         /// <summary>

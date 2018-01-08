@@ -93,7 +93,6 @@ namespace HandBrakeWPF.Startup
 
             // Shell
             this.container.Singleton<IShellViewModel, ShellViewModel>();
-            this.container.Singleton<INotifyIconService, NotifyIconService>();
 
             base.Configure();
         }

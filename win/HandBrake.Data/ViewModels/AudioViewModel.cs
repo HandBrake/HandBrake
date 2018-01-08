@@ -17,16 +17,14 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.CoreLibrary.Interop;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.CoreLibrary.Utilities;
-
+    using HandBrake.Properties;
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Audio;
-    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
-
     using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
     using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;

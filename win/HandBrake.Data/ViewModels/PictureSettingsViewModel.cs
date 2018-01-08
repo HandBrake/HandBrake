@@ -19,7 +19,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Helpers;
-    using HandBrakeWPF.Properties;
+    using HandBrake.Properties;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
@@ -654,8 +654,8 @@ namespace HandBrakeWPF.ViewModels
                     else
                     {
                         this.MaxWidth = preset.Task.MaxWidth ?? this.sourceResolution.Width;
-                        this.MaxHeight = preset.Task.MaxHeight ?? this.sourceResolution.Height;                        
-                    }             
+                        this.MaxHeight = preset.Task.MaxHeight ?? this.sourceResolution.Height;
+                    }
 
                     // Set the width, then check the height doesn't breach the max height and correct if necessary.
                     int width = this.GetModulusValue(this.GetRes((this.sourceResolution.Width - this.CropLeft - this.CropRight), this.MaxWidth));
@@ -803,7 +803,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.Height = this.GetModulusValue(this.sourceResolution.Height - this.CropTop - this.CropBottom);
                     this.MaintainAspectRatio = preset.Task.KeepDisplayAspect;
                 }
-                else 
+                else
                 {
                     // Custom
                     // Set the Width, and Maintain Aspect ratio. That should calc the Height for us.
@@ -813,7 +813,7 @@ namespace HandBrakeWPF.ViewModels
                     {
                         this.Task.Height = this.GetModulusValue(this.MaxHeight - this.CropTop - this.CropBottom);
                     }
- 
+
                     // If our height is too large, let it downscale the width for us by setting the height to the lower value.
                     if (!this.MaintainAspectRatio && this.Height > this.MaxHeight)
                     {

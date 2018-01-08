@@ -15,7 +15,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Linq;
 
     using HandBrakeWPF.Model;
-    using HandBrakeWPF.Properties;
+    using HandBrake.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
@@ -36,7 +36,7 @@ namespace HandBrakeWPF.ViewModels
         private string currentPreset;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="QueueSelectionViewModel"/> class. 
+        /// Initializes a new instance of the <see cref="QueueSelectionViewModel"/> class.
         /// </summary>
         /// <param name="errorService">
         /// The Error Service

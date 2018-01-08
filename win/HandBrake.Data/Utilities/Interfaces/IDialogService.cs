@@ -25,5 +25,12 @@ namespace HandBrake.Utilities.Interfaces
         /// <param name="type">Type of Dialog</param>
         /// <returns>Result of Dialog.</returns>
         DialogResult Show(string message, string header, DialogButtonType buttons, DialogType type);
+
+        /// <summary>
+        /// Shows a Dialog.
+        /// </summary>
+        /// <param name="message">Message for the Dialog.</param>
+        /// <returns>Result of Dialog.</returns>
+        DialogResult Show(string message);
     }
 }

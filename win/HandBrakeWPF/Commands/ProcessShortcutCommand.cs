@@ -10,11 +10,10 @@
 namespace HandBrakeWPF.Commands
 {
     using System;
-    using System.Windows;
     using System.Windows.Input;
 
     using Caliburn.Micro;
-
+    using HandBrake;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -47,7 +46,7 @@ namespace HandBrakeWPF.Commands
             if (gesture != null)
             {
                 IMainViewModel mainViewModel = IoC.Get<IMainViewModel>();
-                
+
                 // Start Encode (Ctrl+S)
                 if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.S)
                 {
@@ -105,7 +104,7 @@ namespace HandBrakeWPF.Commands
                 if (gesture.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift) && gesture.Key == Key.G)
                 {
                     GC.Collect();
-                    MessageBox.Show("DEBUG: Garbage Collection Completed");
+                    HandBrakeServices.Current.Dialog.Show("DEBUG: Garbage Collection Completed");
                 }
             }
         }

@@ -42,5 +42,7 @@ namespace HandBrakeUWP
         public override ICopyService Clipboard { get; }
 
         public override ViewManagerBase ViewManager { get; }
+
+        public override INotificationService NotificationManager { get; }
     }
 }

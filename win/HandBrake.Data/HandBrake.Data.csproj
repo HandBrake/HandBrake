@@ -16,7 +16,7 @@
     <PackageReference Include="Caliburn.Micro.Core" Version="3.2.0" />
     <PackageReference Include="CsvHelper" Version="6.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="PlatformBindings-Core" Version="0.2.13-alpha" />
+    <PackageReference Include="PlatformBindings-Core" Version="0.2.15-alpha" />
   </ItemGroup>
 
   <ItemGroup>

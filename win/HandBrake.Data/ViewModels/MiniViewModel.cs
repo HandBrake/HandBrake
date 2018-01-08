@@ -10,12 +10,10 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
-
+    using HandBrake.Properties;
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
-
     using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
     using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
 

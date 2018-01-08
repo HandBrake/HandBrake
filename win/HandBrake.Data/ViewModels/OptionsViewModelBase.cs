@@ -23,7 +23,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Model.Prompts;
     using HandBrake.Utilities.Interfaces;
     using HandBrakeWPF.Model;
-    using HandBrakeWPF.Properties;
+    using HandBrake.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -31,6 +31,7 @@ namespace HandBrakeWPF.ViewModels
     using PlatformBindings.Models.FileSystem;
     using PlatformBindings.Services;
     using SystemInfo = HandBrake.CoreLibrary.Utilities.SystemInfo;
+    using HandBrake.Common;
 
     /// <summary>
     /// The Options View Model
@@ -151,14 +152,6 @@ namespace HandBrakeWPF.ViewModels
         #endregion Window Properties
 
         #region Properties
-
-        public bool IsUWP
-        {
-            get
-            {
-                return UwpDetect.IsUWP();
-            }
-        }
 
         #region General
 
@@ -510,7 +503,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.removePunctuation = value;
-                this.NotifyOfPropertyChange(() => RemovePunctuation);
+                this.NotifyOfPropertyChange(() => this.RemovePunctuation);
             }
         }
 
@@ -919,7 +912,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return IsQuickSyncAvailable && this.EnableQuickSyncDecoding;
+                return this.IsQuickSyncAvailable && this.EnableQuickSyncDecoding;
             }
         }
 
@@ -988,12 +981,15 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void BrowseSendFileTo()
         {
-            var file = IOService?.Pickers?.PickFile()?.Result;
-            if (file != null)
+            this.IOService?.Pickers?.PickFile()?.ContinueWith(task =>
             {
-                this.SendFileTo = Path.GetFileNameWithoutExtension(file.Path);
-                this.sendFileToPath = file.Path;
-            }
+                var file = task.Result;
+                if (file != null)
+                {
+                    this.SendFileTo = Path.GetFileNameWithoutExtension(file.Path);
+                    this.sendFileToPath = file.Path;
+                }
+            });
         }
 
         /// <summary>
@@ -1001,11 +997,14 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void BrowseAutoNamePath()
         {
-            var folder = IOService?.Pickers?.PickFolder()?.Result;
-            if (folder != null)
+            this.IOService?.Pickers?.PickFolder()?.ContinueWith(task =>
             {
-                this.AutoNameDefaultPath = folder.Path;
-            }
+                var folder = task.Result;
+                if (folder != null)
+                {
+                    this.AutoNameDefaultPath = folder.Path;
+                }
+            });
         }
 
         /// <summary>
@@ -1014,14 +1013,17 @@ namespace HandBrakeWPF.ViewModels
         public void BrowseLogPath()
         {
             var properties = new FolderPickerProperties();
-            var suggestedFolder = AppServices.Current?.IO?.GetFolder(this.logDirectory)?.Result;
-            // properties.SuggestedStorageItem = suggestedFolder; Not Ready yet.
+            var suggestedFolder = AsyncHelpers.GetThreadedResult(() => AppServices.Current?.IO?.GetFolder(this.logDirectory));
+            properties.SuggestedStorageItem = suggestedFolder;
 
-            var folder = IOService?.Pickers?.PickFolder(properties)?.Result;
-            if (folder != null)
+            this.IOService?.Pickers?.PickFolder(properties)?.ContinueWith(task =>
             {
-                this.LogDirectory = folder.Path;
-            }
+                var folder = task.Result;
+                if (folder != null)
+                {
+                    this.LogDirectory = folder.Path;
+                }
+            });
         }
 
         /// <summary>
@@ -1057,15 +1059,18 @@ namespace HandBrakeWPF.ViewModels
             var properties = new FilePickerProperties();
             properties.FileTypes.Add(".wav");
             properties.FileTypes.Add(".mp3");
-            var suggestedFile = AppServices.Current?.IO?.GetFile(this.WhenDoneAudioFileFullPath)?.Result;
-            // properties.SuggestedStorageItem = suggestedFile; Not Ready yet.
+            var suggestedFile = AsyncHelpers.GetThreadedResult(() => AppServices.Current?.IO?.GetFile(this.WhenDoneAudioFileFullPath));
+            properties.SuggestedStorageItem = suggestedFile;
 
-            var file = IOService?.Pickers?.PickFile(properties)?.Result;
-            if (file != null)
+            this.IOService?.Pickers?.PickFile(properties)?.ContinueWith(task =>
             {
-                this.WhenDoneAudioFile = Path.GetFileNameWithoutExtension(file.Path);
-                this.WhenDoneAudioFileFullPath = file.Path;
-            }
+                var file = task.Result;
+                if (file != null)
+                {
+                    this.WhenDoneAudioFile = Path.GetFileNameWithoutExtension(file.Path);
+                    this.WhenDoneAudioFileFullPath = file.Path;
+                }
+            });
         }
 
         #endregion Public Methods
@@ -1088,7 +1093,7 @@ namespace HandBrakeWPF.ViewModels
             this.whenDoneOptions.Add("Lock System");
             this.whenDoneOptions.Add("Log off");
             this.whenDoneOptions.Add("Quit HandBrake");
-            this.WhenDone = UserSettingService.GetUserSetting<string>("WhenCompleteAction");
+            this.WhenDone = this.UserSettingService.GetUserSetting<string>("WhenCompleteAction");
             if (this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
             {
                 this.WhenDone = "Do nothing";
@@ -1157,10 +1162,10 @@ namespace HandBrakeWPF.ViewModels
             this.priorityLevelOptions.Add("Normal");
             this.priorityLevelOptions.Add("Below Normal");
             this.priorityLevelOptions.Add("Low");
-            this.SelectedPriority = UserSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority);
+            this.SelectedPriority = this.UserSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority);
 
-            this.PreventSleep = UserSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
-            this.PauseOnLowDiskspace = UserSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace);
+            this.PreventSleep = this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
+            this.PauseOnLowDiskspace = this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace);
             this.PauseOnLowDiskspaceLevel = this.UserSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel);
 
             // Log Verbosity Level
@@ -1168,14 +1173,14 @@ namespace HandBrakeWPF.ViewModels
             this.logVerbosityOptions.Add(0);
             this.logVerbosityOptions.Add(1);
             this.logVerbosityOptions.Add(2);
-            this.SelectedVerbosity = UserSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
+            this.SelectedVerbosity = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
 
             // Logs
-            this.CopyLogToEncodeDirectory = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo);
-            this.CopyLogToSepcficedLocation = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory);
+            this.CopyLogToEncodeDirectory = this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo);
+            this.CopyLogToSepcficedLocation = this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory);
 
             // The saved log path
-            this.LogDirectory = UserSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory) ?? string.Empty;
+            this.LogDirectory = this.UserSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory) ?? string.Empty;
             this.originalLogDirectory = this.logDirectory;
 
             this.ClearOldOlgs = this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearOldLogs);
@@ -1184,8 +1189,8 @@ namespace HandBrakeWPF.ViewModels
             // Advanced
             // #############################
 
-            this.ClearQueueOnEncodeCompleted = UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue);
-            this.ShowAdvancedTab = UserSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
+            this.ClearQueueOnEncodeCompleted = this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue);
+            this.ShowAdvancedTab = this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
 
             // Set the preview count
             this.PreviewPicturesToScan.Clear();
@@ -1207,13 +1212,13 @@ namespace HandBrakeWPF.ViewModels
             this.ConstantQualityGranularity.Add("1.00");
             this.ConstantQualityGranularity.Add("0.50");
             this.ConstantQualityGranularity.Add("0.25");
-            this.SelectedGranulairty = UserSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString("0.00", CultureInfo.InvariantCulture);
+            this.SelectedGranulairty = this.UserSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString("0.00", CultureInfo.InvariantCulture);
 
             // Min Title Length
             this.MinLength = this.UserSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration);
 
             // Use dvdnav
-            this.DisableLibdvdNav = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
+            this.DisableLibdvdNav = this.UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
         }
 
         /// <summary>
@@ -1221,7 +1226,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void UpdateSettings()
         {
-            this.WhenDone = UserSettingService.GetUserSetting<string>("WhenCompleteAction");
+            this.WhenDone = this.UserSettingService.GetUserSetting<string>("WhenCompleteAction");
         }
 
         /// <summary>
@@ -1276,21 +1281,21 @@ namespace HandBrakeWPF.ViewModels
             this.UserSettingService.SetUserSetting(UserSettingConstants.UseQSVDecodeForNonQSVEnc, this.UseQSVDecodeForNonQSVEnc);
 
             /* System and Logging */
-            UserSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, this.SelectedPriority);
-            UserSettingService.SetUserSetting(UserSettingConstants.PreventSleep, this.PreventSleep);
-            UserSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspace, this.PauseOnLowDiskspace);
-            UserSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspaceLevel, this.PauseOnLowDiskspaceLevel);
-            UserSettingService.SetUserSetting(UserSettingConstants.Verbosity, this.SelectedVerbosity);
-            UserSettingService.SetUserSetting(UserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
-            UserSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);
-            UserSettingService.SetUserSetting(UserSettingConstants.SaveLogCopyDirectory, this.LogDirectory);
-            UserSettingService.SetUserSetting(UserSettingConstants.ClearOldLogs, this.ClearOldOlgs);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, this.SelectedPriority);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.PreventSleep, this.PreventSleep);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspace, this.PauseOnLowDiskspace);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspaceLevel, this.PauseOnLowDiskspaceLevel);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.Verbosity, this.SelectedVerbosity);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.SaveLogCopyDirectory, this.LogDirectory);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.ClearOldLogs, this.ClearOldOlgs);
 
             /* Advanced */
-            UserSettingService.SetUserSetting(UserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
-            UserSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
-            UserSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));
-            UserSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, this.ShowAdvancedTab);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));
+            this.UserSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, this.ShowAdvancedTab);
 
             int value;
             if (int.TryParse(this.MinLength.ToString(CultureInfo.InvariantCulture), out value))
@@ -1298,10 +1303,10 @@ namespace HandBrakeWPF.ViewModels
                 this.UserSettingService.SetUserSetting(UserSettingConstants.MinScanDuration, value);
             }
 
-            UserSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
+            this.UserSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
 
             // Get File/Folder tokens for future access if required.
-            if (IOService.FutureAccess != null)
+            if (this.IOService.FutureAccess != null)
             {
                 Task.Run(() =>
                 {
@@ -1315,12 +1320,12 @@ namespace HandBrakeWPF.ViewModels
                             try
                             {
                                 var oldToken = settings.GetValue<string>(UserSettingConstants.SaveLogCopyDirectory);
-                                IOService.FutureAccess.RemoveFutureAccessPermission(oldToken);
+                                this.IOService.FutureAccess.RemoveFutureAccessPermission(oldToken);
                             }
                             catch { }
 
-                            var newfile = IOService.GetFolder(this.LogDirectory).Result;
-                            var token = IOService.FutureAccess.GetFutureAccessPermission(newfile);
+                            var newfolder = AsyncHelpers.GetThreadedResult(() => this.IOService.GetFolder(this.LogDirectory));
+                            var token = this.IOService.FutureAccess.GetFutureAccessPermission(newfolder);
                             settings.SetValue(UserSettingConstants.SaveLogCopyDirectory, token);
                         }
                         catch
@@ -1336,12 +1341,12 @@ namespace HandBrakeWPF.ViewModels
                             try
                             {
                                 var oldToken = settings.GetValue<string>(UserSettingConstants.SendFileTo);
-                                IOService.FutureAccess.RemoveFutureAccessPermission(oldToken);
+                                this.IOService.FutureAccess.RemoveFutureAccessPermission(oldToken);
                             }
                             catch { }
 
-                            var newfile = IOService.GetFile(this.sendFileToPath).Result;
-                            var token = IOService.FutureAccess.GetFutureAccessPermission(newfile);
+                            var newfile = AsyncHelpers.GetThreadedResult(() => this.IOService.GetFile(this.sendFileToPath));
+                            var token = this.IOService.FutureAccess.GetFutureAccessPermission(newfile);
                             settings.SetValue(UserSettingConstants.SendFileTo, token);
                         }
                         catch
@@ -1357,12 +1362,12 @@ namespace HandBrakeWPF.ViewModels
                             try
                             {
                                 var oldToken = settings.GetValue<string>(UserSettingConstants.WhenDoneAudioFile);
-                                IOService.FutureAccess.RemoveFutureAccessPermission(oldToken);
+                                this.IOService.FutureAccess.RemoveFutureAccessPermission(oldToken);
                             }
                             catch { }
 
-                            var newfile = IOService.GetFile(this.whenDoneAudioFile).Result;
-                            var token = IOService.FutureAccess.GetFutureAccessPermission(newfile);
+                            var newfile = AsyncHelpers.GetThreadedResult(() => this.IOService.GetFile(this.whenDoneAudioFile));
+                            var token = this.IOService.FutureAccess.GetFutureAccessPermission(newfile);
                             settings.SetValue(UserSettingConstants.WhenDoneAudioFile, token);
                         }
                         catch
@@ -1378,12 +1383,12 @@ namespace HandBrakeWPF.ViewModels
                             try
                             {
                                 var oldToken = settings.GetValue<string>(UserSettingConstants.AutoNamePath);
-                                IOService.FutureAccess.RemoveFutureAccessPermission(oldToken);
+                                this.IOService.FutureAccess.RemoveFutureAccessPermission(oldToken);
                             }
                             catch { }
 
-                            var newfolder = IOService.GetFolder(this.autoNameDefaultPath).Result;
-                            var token = IOService.FutureAccess.GetFutureAccessPermission(newfolder);
+                            var newfolder = AsyncHelpers.GetThreadedResult(() => this.IOService.GetFolder(this.autoNameDefaultPath));
+                            var token = this.IOService.FutureAccess.GetFutureAccessPermission(newfolder);
                             settings.SetValue(UserSettingConstants.AutoNamePath, token);
                         }
                         catch

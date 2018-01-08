@@ -11,8 +11,8 @@ namespace HandBrakeWPF.ViewModels
 {
     using Caliburn.Micro;
     using HandBrake.Model.Prompts;
+    using HandBrake.Properties;
     using HandBrakeWPF.Model;
-    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 

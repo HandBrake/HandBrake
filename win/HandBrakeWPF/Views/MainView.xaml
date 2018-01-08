@@ -5,7 +5,7 @@
              xmlns:Converters="clr-namespace:HandBrakeWPF.Converters"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:cal="http://www.caliburnproject.org"
-             xmlns:menu="clr-namespace:HandBrakeWPF.Commands.Menu"
+             xmlns:menu="clr-namespace:HandBrakeWPF.Commands.Menu;assembly=HandBrake.Data"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"

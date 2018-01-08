@@ -10,7 +10,7 @@
 namespace HandBrakeWPF.ViewModels
 {
     using HandBrake.Model.Prompts;
-    using HandBrakeWPF.Properties;
+    using HandBrake.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets;
     using HandBrakeWPF.Services.Presets.Interfaces;

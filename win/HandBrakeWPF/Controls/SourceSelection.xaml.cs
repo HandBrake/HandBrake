@@ -39,7 +39,7 @@ namespace HandBrakeWPF.Controls
         /// </param>
         private void AboutHandBrake_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            MainViewModel vm = this.DataContext as MainViewModel;
+            MainViewModelBase vm = this.DataContext as MainViewModelBase;
             vm.OpenAboutApplication();
         }
 
@@ -54,7 +54,7 @@ namespace HandBrakeWPF.Controls
         /// </param>
         private void OpenOptions_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            MainViewModel vm = this.DataContext as MainViewModel;
+            MainViewModelBase vm = this.DataContext as MainViewModelBase;
             vm.OpenOptionsWindow();
         }
 

@@ -20,6 +20,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Properties;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
     using PlatformBindings.Models.FileSystem;
 
@@ -46,6 +47,14 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #region Updates
+
+        public bool IsUWP
+        {
+            get
+            {
+                return UwpDetect.IsUWP();
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether CheckForUpdates.
@@ -162,13 +171,16 @@ namespace HandBrakeWPF.ViewModels
             var properties = new FilePickerProperties();
             properties.FileTypes.Add(".exe");
             var vlcfile = new CoreFileContainer(this.VLCPath);
-            // properties.SuggestedStorageItem = vlcfile; Not Ready yet.
+            properties.SuggestedStorageItem = vlcfile;
 
-            var file = IOService?.Pickers?.PickFile(properties)?.Result;
-            if (file != null)
+            IOService?.Pickers?.PickFile(properties)?.ContinueWith(task =>
             {
-                this.VLCPath = file.Path;
-            }
+                var file = task.Result;
+                if (file != null)
+                {
+                    this.VLCPath = file.Path;
+                }
+            });
         }
 
         /// <summary>

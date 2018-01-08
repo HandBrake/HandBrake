@@ -19,7 +19,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake;
     using HandBrake.Model.Prompts;
     using HandBrakeWPF.EventArgs;
-    using HandBrakeWPF.Properties;
+    using HandBrake.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
@@ -33,6 +33,7 @@ namespace HandBrakeWPF.ViewModels
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using HandBrake.Common;
 
     /// <summary>
     /// The Preview View Model
@@ -408,14 +409,17 @@ namespace HandBrakeWPF.ViewModels
             var properties = new FileSavePickerProperties();
             properties.FileTypes.Add(".json");
 
-            var file = ioService?.Pickers?.SaveFile(properties)?.Result;
-            if (file != null)
+            this.ioService?.Pickers?.SaveFile(properties)?.ContinueWith(async task =>
             {
-                using (var filestream = file.OpenAsStream(true).Result)
+                var file = task.Result;
+                if (file != null)
                 {
-                    this.queueProcessor.ExportJson(filestream);
+                    using (var filestream = await file.OpenAsStream(true))
+                    {
+                        this.queueProcessor.ExportJson(filestream);
+                    }
                 }
-            }
+            });
         }
 
         /// <summary>
@@ -426,11 +430,14 @@ namespace HandBrakeWPF.ViewModels
             var properties = new FilePickerProperties();
             properties.FileTypes.Add(".json");
 
-            var file = ioService?.Pickers?.PickFile(properties)?.Result;
-            if (file != null)
+            ioService?.Pickers?.PickFile(properties)?.ContinueWith(task =>
             {
-                this.queueProcessor.RestoreQueue(file.Path);
-            }
+                var file = task.Result;
+                if (file != null)
+                {
+                    this.queueProcessor.RestoreQueue(file.Path);
+                }
+            });
         }
 
         /// <summary>
@@ -467,15 +474,15 @@ namespace HandBrakeWPF.ViewModels
                 var io = AppServices.Current?.IO;
                 if (io?.SupportsOpenFolderForDisplay ?? false)
                 {
-                    FileSystemContainer scannedsource = null;
+                    StorageContainer scannedsource = null;
 
                     if (Directory.Exists(task.ScannedSourcePath))
                     {
-                        scannedsource = io.GetFolder(task.ScannedSourcePath).Result;
+                        scannedsource = AsyncHelpers.GetThreadedResult(() => io.GetFolder(task.ScannedSourcePath));
                     }
                     else if (File.Exists(task.ScannedSourcePath))
                     {
-                        scannedsource = io.GetFile(task.ScannedSourcePath).Result;
+                        scannedsource = AsyncHelpers.GetThreadedResult(() => io.GetFile(task.ScannedSourcePath));
                     }
 
                     this.OpenDirectory(scannedsource);
@@ -549,7 +556,7 @@ namespace HandBrakeWPF.ViewModels
             base.OnDeactivate(close);
         }
 
-        private void OpenDirectory(FileSystemContainer item)
+        private void OpenDirectory(StorageContainer item)
         {
             try
             {
@@ -562,7 +569,7 @@ namespace HandBrakeWPF.ViewModels
                     if (item is FileContainer file)
                     {
                         var directory = Path.GetDirectoryName(file.Path);
-                        folder = io.GetFolder(directory)?.Result;
+                        folder = AsyncHelpers.GetThreadedResult(() => io.GetFolder(directory));
                         properties.ItemsToSelect.Add(file);
                     }
 
