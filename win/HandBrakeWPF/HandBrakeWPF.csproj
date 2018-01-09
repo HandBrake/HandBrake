@@ -150,7 +150,12 @@
     <Compile Include="AppcastConstants.cs" />
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="Commands\InputBindingTrigger.cs" />
+    <Compile Include="Commands\Menu\QueueCommandParams.cs" />
+    <Compile Include="Commands\Menu\QueueCommands.cs" />
+    <Compile Include="Commands\OpenOptionsScreenCommand.cs" />
+    <Compile Include="Commands\PresetMenuSelectCommand.cs" />
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
+    <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Controls\SplitButton\SplitMenuButton.cs" />
     <Compile Include="Controls\AlertPanel.xaml.cs">
       <DependentUpon>AlertPanel.xaml</DependentUpon>
@@ -176,21 +181,6 @@
     <Compile Include="Converters\Video\ScalingConverter.cs" />
     <Compile Include="Helpers\TreeViewHelper.cs" />
     <Compile Include="Models\UpdateCheckInformation.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\ResourcesTooltips.Designer.cs">
-      <DependentUpon>ResourcesTooltips.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Properties\ResourcesUI.Designer.cs">
-      <DependentUpon>ResourcesUI.resx</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="Services\ViewManager.cs" />
     <Compile Include="Services\SoundService.cs" />
@@ -334,21 +324,6 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="Properties\ResourcesTooltips.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ResourcesTooltips.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\ResourcesUI.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ResourcesUI.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <AdditionalFiles Include="..\stylecop.json">
       <Link>stylecop.json</Link>
     </AdditionalFiles>

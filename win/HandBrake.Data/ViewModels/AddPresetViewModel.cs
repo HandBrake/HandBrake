@@ -18,7 +18,6 @@ namespace HandBrake.ViewModels
     using HandBrake.Services.Interfaces;
     using HandBrake.Model.Audio;
     using HandBrake.Model.Subtitles;
-    using HandBrake.Services.Interfaces;
     using HandBrake.Services.Presets;
     using HandBrake.Services.Presets.Interfaces;
     using HandBrake.Services.Presets.Model;

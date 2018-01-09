@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainViewModel.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="MainViewModelBase.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -17,23 +17,18 @@ namespace HandBrake.ViewModels
     using System.IO;
     using System.Linq;
     using System.Threading;
-
     using Caliburn.Micro;
     using HandBrake;
     using HandBrake.Common;
     using HandBrake.CoreLibrary.Interop;
-    using HandBrake.Model;
-    using HandBrake.Model.Prompts;
-    using HandBrake.Properties;
-    using HandBrake.Services.Interfaces;
-    using HandBrake.Utilities.Interfaces;
-    using HandBrake.Commands;
     using HandBrake.EventArgs;
     using HandBrake.Factories;
     using HandBrake.Helpers;
     using HandBrake.Model;
     using HandBrake.Model.Audio;
+    using HandBrake.Model.Prompts;
     using HandBrake.Model.Subtitles;
+    using HandBrake.Properties;
     using HandBrake.Services.Encode.EventArgs;
     using HandBrake.Services.Encode.Model;
     using HandBrake.Services.Encode.Model.Models;
@@ -47,8 +42,8 @@ namespace HandBrake.ViewModels
     using HandBrake.Services.Scan.Model;
     using HandBrake.Startup;
     using HandBrake.Utilities;
+    using HandBrake.Utilities.Interfaces;
     using HandBrake.ViewModels.Interfaces;
-
     using PlatformBindings;
     using PlatformBindings.Common;
     using PlatformBindings.Models.FileSystem;
@@ -1003,18 +998,18 @@ namespace HandBrake.ViewModels
                 if (this.showSourceSelection)
                 {
                     this.Drives.Clear();
-                    foreach (SourceMenuItem menuItem in from item in DriveUtilities.GetDrives()
-                                                        let driveInformation = item
-                                                        select new SourceMenuItem
-                                                        {
-                                                            Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
-                                                            Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
-                                                            Tag = item,
-                                                            IsDrive = true
-                                                        })
-                    {
-                        this.Drives.Add(menuItem);
-                    }
+                    //foreach (SourceMenuItem menuItem in from item in DriveUtilities.GetDrives()
+                    //                                    let driveInformation = item
+                    //                                    select new SourceMenuItem
+                    //                                    {
+                    //                                        Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
+                    //                                        Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
+                    //                                        Tag = item,
+                    //                                        IsDrive = true
+                    //                                    })
+                    //{
+                    //    this.Drives.Add(menuItem);
+                    //}
 
                     this.TitleSpecificScan = 0;
                     this.NotifyOfPropertyChange(() => this.TitleSpecificScan);
@@ -1336,8 +1331,7 @@ namespace HandBrake.ViewModels
         /// </summary>
         public void OpenAboutApplication()
         {
-            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
-            command.Execute(OptionsTab.About);
+            HandBrakeServices.Current.OpenOptions(OptionsTab.About);
         }
 
         /// <summary>
@@ -1418,15 +1412,6 @@ namespace HandBrake.ViewModels
             {
                 this.errorService.ShowError(Resources.Main_UnableToLoadHelpMessage, Resources.Main_UnableToLoadHelpSolution, exc);
             }
-        }
-
-        /// <summary>
-        /// Check for Updates.
-        /// </summary>
-        public void CheckForUpdates()
-        {
-            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
-            command.Execute(OptionsTab.Updates);
         }
 
         /// <summary>

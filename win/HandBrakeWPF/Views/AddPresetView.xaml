@@ -5,7 +5,7 @@
         xmlns:Converters="clr-namespace:HandBrake.Converters"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:Properties="clr-namespace:HandBrake.Properties" xmlns:controls="clr-namespace:HandBrake.Controls"
+        xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data" xmlns:controls="clr-namespace:HandBrake.Controls"
         Title="{Binding Title}"
         Width="350"
         ResizeMode="NoResize"

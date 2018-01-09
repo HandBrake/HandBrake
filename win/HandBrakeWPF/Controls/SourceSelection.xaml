@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:controls="clr-namespace:HandBrake.Controls"
-        xmlns:Properties="clr-namespace:HandBrake.Properties" x:Name="sourcePanel"
-       >
+        xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data" x:Name="sourcePanel">
 
     <Grid Height="{Binding ElementName=sourcePanel, Path=ActualHeight}">
 
@@ -29,7 +28,6 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="30" />
             </Grid.ColumnDefinitions>
-
 
             <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="20,8,0,0">
                 <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_SourceSelection}" FontSize="26" FontFamily="Segoe UI Light" />
@@ -77,9 +75,9 @@
             <ListBox Grid.Row="4" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0" Margin="16,5,0,0" ItemContainerStyle="{StaticResource hoverlessListBoxItemStyle}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
+                        <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
                                 cal:Message.Attach="[Event Click] = [Action ProcessDrive($this.Tag)]"
-                                Margin="0,0,0,10" Padding="8" HorizontalAlignment="Left" 
+                                Margin="0,0,0,10" Padding="8" HorizontalAlignment="Left"
                                 Tag="{Binding}" AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseDisc}">
                             <StackPanel Orientation="Horizontal" MinWidth="100">
                                 <Image Source="../Views/Images/Disc.png" Width="32" />
@@ -91,9 +89,7 @@
                         </Button>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-
             </ListBox>
-
 
             <!-- Cancel Window -->
             <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
@@ -101,26 +97,24 @@
             </StackPanel>
 
             <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
-                <TextBlock>           
+                <TextBlock>
                     <Hyperlink x:Name="Preferences" NavigateUri="/"  RequestNavigate="OpenOptions_OnRequestNavigate" >Preferences</Hyperlink>
                 </TextBlock>
-                <TextBlock Text="|"  Margin="5,0,5,0"/>
-                <TextBlock>           
+                <TextBlock Text="|"  Margin="5,0,5,0" />
+                <TextBlock>
                     <Hyperlink x:Name="help" NavigateUri="/" RequestNavigate="Help_OnRequestNavigate" >Help</Hyperlink>
                 </TextBlock>
-                <TextBlock Text="|"  Margin="5,0,5,0"/>
-                <TextBlock>           
+                <TextBlock Text="|"  Margin="5,0,5,0" />
+                <TextBlock>
                     <Hyperlink x:Name="AboutHandBrake" NavigateUri="/" RequestNavigate="AboutHandBrake_OnRequestNavigate" >About HandBrake</Hyperlink>
                 </TextBlock>
             </StackPanel>
-
         </Grid>
-
 
         <Grid Grid.Column="1" Background="Black" Opacity="0.65" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Border BorderThickness="8" CornerRadius="4"  VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Border.BorderBrush>
-                    <SolidColorBrush Color="White" Opacity=".65"/>
+                    <SolidColorBrush Color="White" Opacity=".65" />
                 </Border.BorderBrush>
                 <TextBlock Text="Or drop a file or folder here ..." Foreground="White" Margin="100,125,100,125"  FontSize="26" FontFamily="Segoe UI Light" />
             </Border>

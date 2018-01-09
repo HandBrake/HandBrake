@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:Converters="clr-namespace:HandBrake.Converters"
              xmlns:controls="clr-namespace:HandBrake.Controls"
-              xmlns:Properties="clr-namespace:HandBrake.Properties">
+              xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data">
 
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="boolConverter" />

@@ -7,9 +7,9 @@
 namespace HandBrake.ViewModels
 {
     using System.Windows.Input;
-    using HandBrake.Properties;
     using HandBrake.Commands.Menu;
     using HandBrake.Model;
+    using HandBrake.Properties;
     using HandBrake.Services.Interfaces;
     using HandBrake.Services.Presets.Interfaces;
     using HandBrake.Services.Scan.Interfaces;
@@ -62,6 +62,14 @@ namespace HandBrake.ViewModels
             {
                 this.ProgramStatusLabel = Resources.Main_NewUpdate;
             }
+        }
+
+        /// <summary>
+        /// Check for Updates.
+        /// </summary>
+        public void CheckForUpdates()
+        {
+            HandBrakeServices.Current.OpenOptions(OptionsTab.Updates);
         }
     }
 }

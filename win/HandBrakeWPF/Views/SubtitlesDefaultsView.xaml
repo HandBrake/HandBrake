@@ -8,7 +8,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:helpers="clr-namespace:HandBrake.Helpers"
              xmlns:subtitles="clr-namespace:HandBrake.Converters.Subtitles"
-             xmlns:Properties="clr-namespace:HandBrake.Properties"
+             xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data"
              d:DesignHeight="350"
              d:DesignWidth="500"
              mc:Ignorable="d"

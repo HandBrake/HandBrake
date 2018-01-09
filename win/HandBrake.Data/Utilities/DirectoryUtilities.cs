@@ -15,6 +15,8 @@ namespace HandBrake.Utilities
     using HandBrake.Model.Prompts;
     using HandBrake.Properties;
     using HandBrake.Services.Interfaces;
+    using PlatformBindings;
+    using PlatformBindings.Enums;
 
     /// <summary>
     /// The directory utilities.
@@ -76,7 +78,7 @@ namespace HandBrake.Utilities
                 if (!Directory.Exists(dirPath))
                 {
                     var result = errorService.ShowMessageBox(string.Format(Resources.DirectoryUtils_CreateFolderMsg, dirPath), Resources.DirectoryUtils_CreateFolder, DialogButtonType.YesNo, DialogType.Question);
-                    if (result == DialogResult.Yes)
+                    if (result == Model.Prompts.DialogResult.Yes)
                     {
                         Directory.CreateDirectory(dirPath);
                     }
@@ -102,10 +104,15 @@ namespace HandBrake.Utilities
         /// </returns>
         private static string GetStorageDirectory()
         {
-            var args = new DirectoryFetchingEventArgs
+            var args = new DirectoryFetchingEventArgs();
+            if (AppServices.Current.ServicePlatform == Platform.Win32)
             {
-                Directory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-            };
+                args.Directory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            }
+            else
+            {
+                args.Directory = AppServices.Current.IO.GetBaseFolder(PathRoot.LocalAppStorage).Path;
+            }
 
             GettingStorageDirectory?.Invoke(null, args);
 

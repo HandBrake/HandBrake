@@ -1,6 +1,6 @@
 ﻿<UserControl x:Class="HandBrake.Views.AboutView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Properties="clr-namespace:HandBrake.Properties"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data"
              TextOptions.TextFormattingMode="Display">
 
     <Grid>
@@ -41,7 +41,7 @@
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1"  Margin="5,5,0,0">
                     <TextBlock Text="Website: " />
-                    <TextBlock>           
+                    <TextBlock>
                         <Hyperlink x:Name="handbrakeWebsite" NavigateUri="/" RequestNavigate="HandbrakeWebsite_OnRequestNavigate"  >https://handbrake.fr</Hyperlink>
                     </TextBlock>
                 </StackPanel>
@@ -50,10 +50,7 @@
 
                 <TextBox Text="{x:Static Properties:Resources.About_GPL}" Grid.Row="3" Margin="10,0,10,10" HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
-
-         
             </Grid>
         </Grid>
-
     </Grid>
 </UserControl>

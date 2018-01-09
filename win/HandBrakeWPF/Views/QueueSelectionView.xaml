@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Conveters="clr-namespace:HandBrake.Converters"
-        xmlns:Properties="clr-namespace:HandBrake.Properties"
+        xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data"
         Title="{Binding Title}"
         Width="550"
         Height="475"
@@ -21,7 +21,7 @@
             <Setter Property="ToolTipService.ShowDuration" Value="20000" />
             <Setter Property="Margin" Value="0,2,0,2" />
         </Style>
-        
+
         <Conveters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
     </Window.Resources>
 
@@ -82,20 +82,19 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        
+
                         <CheckBox IsChecked="{Binding IsSelected}" Grid.RowSpan="2" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" />
 
-                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0" >                           
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
                             <TextBlock Text="Title:" Margin="0,0,5,0" FontWeight="Bold" />
                             <TextBlock Text="{Binding Title}" Margin="5,0,5,0" />
                         </StackPanel>
 
-                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0" >
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
                             <TextBlock Text="Source:" Margin="0,0,5,0" FontWeight="Bold" />
                             <TextBlock Text="{Binding SourceName}" Margin="5,0,5,0" />
                         </StackPanel>
                     </Grid>
-
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
@@ -105,9 +104,9 @@
             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                 <TextBlock Text="{Binding CurrentPreset}" TextWrapping="Wrap" />
             </StackPanel>
-          
+
             <TextBlock Text="{x:Static Properties:Resources.QueueSelection_AutoNameWarning}"
-                       TextWrapping="Wrap" Visibility="{Binding IsAutoNamingEnabled, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}"/>
+                       TextWrapping="Wrap" Visibility="{Binding IsAutoNamingEnabled, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
         </StackPanel>
 
         <!--  Controls  -->
@@ -132,6 +131,5 @@
                     IsDefault="True"
                     Padding="8,2" />
         </Grid>
-
     </Grid>
 </Window>

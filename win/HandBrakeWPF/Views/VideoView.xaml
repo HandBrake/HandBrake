@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:Converters="clr-namespace:HandBrake.Converters"
              xmlns:Video="clr-namespace:HandBrake.Converters.Video"
-             xmlns:Properties="clr-namespace:HandBrake.Properties"
+             xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" >
 

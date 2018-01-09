@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:cal="http://www.caliburnproject.org"
-             xmlns:Properties="clr-namespace:HandBrake.Properties"
+             xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data"
              d:DesignHeight="170"
              d:DesignWidth="616"
              mc:Ignorable="d" >

@@ -9,12 +9,12 @@
 
 namespace HandBrake
 {
-    using HandBrake;
+    using HandBrake.Commands;
+    using HandBrake.Model;
+    using HandBrake.Services;
     using HandBrake.Services.Interfaces;
     using HandBrake.Utilities;
     using HandBrake.Utilities.Interfaces;
-    using HandBrake.Services;
-    using HandBrake.Utilities;
 
     public class WPFHandBrakeServices : HandBrakeServices
     {
@@ -49,5 +49,11 @@ namespace HandBrake
         public override ViewManagerBase ViewManager { get; }
 
         public override INotificationService NotificationManager { get; }
+
+        public override void OpenOptions(OptionsTab tab)
+        {
+            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
+            command.Execute(tab);
+        }
     }
 }

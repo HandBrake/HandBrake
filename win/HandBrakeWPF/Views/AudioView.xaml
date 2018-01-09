@@ -10,7 +10,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:splitButton="clr-namespace:HandBrake.Controls.SplitButton"
              xmlns:controls="clr-namespace:HandBrake.Controls"
-             xmlns:Properties="clr-namespace:HandBrake.Properties"
+             xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data"
              d:DesignHeight="500"
              d:DesignWidth="770"
              mc:Ignorable="d"

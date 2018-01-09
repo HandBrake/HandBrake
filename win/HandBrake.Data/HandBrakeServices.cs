@@ -9,6 +9,7 @@
 
 namespace HandBrake
 {
+    using HandBrake.Model;
     using HandBrake.Services.Interfaces;
     using HandBrake.Utilities;
     using HandBrake.Utilities.Interfaces;
@@ -67,5 +68,11 @@ namespace HandBrake
         /// Gets the Notification Service.
         /// </summary>
         public abstract INotificationService NotificationManager { get; }
+
+        /// <summary>
+        /// Opens the Options View.
+        /// </summary>
+        /// <param name="tab">Tab to Open</param>
+        public abstract void OpenOptions(OptionsTab tab);
     }
 }

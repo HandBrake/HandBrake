@@ -14,7 +14,6 @@ namespace HandBrake.Services
     using HandBrake;
     using HandBrake.Model.Prompts;
     using HandBrake.Services.Interfaces;
-    using Interfaces;
     using ViewModels.Interfaces;
 
     /// <summary>

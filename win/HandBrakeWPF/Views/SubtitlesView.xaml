@@ -9,7 +9,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:HandBrake.Controls"
              xmlns:splitButton="clr-namespace:HandBrake.Controls.SplitButton"
-             xmlns:Properties="clr-namespace:HandBrake.Properties"
+             xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data"
              xmlns:subtitles="clr-namespace:HandBrake.Converters.Subtitles"
              d:DesignHeight="350"
              d:DesignWidth="500"

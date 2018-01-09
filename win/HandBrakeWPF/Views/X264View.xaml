@@ -6,7 +6,7 @@
              xmlns:Helpers="clr-namespace:HandBrake.Helpers"
              xmlns:uniHelpers="clr-namespace:HandBrake.Helpers;assembly=HandBrake.Data"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:Properties="clr-namespace:HandBrake.Properties"
+             xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data"
              xmlns:controls="clr-namespace:HandBrake.Controls"
              x:Name="x264View"
              mc:Ignorable="d">

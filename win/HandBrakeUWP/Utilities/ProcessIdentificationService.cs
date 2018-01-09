@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeUWP.Utilities
+namespace HandBrake.Utilities
 {
     using System.Diagnostics;
     using System.Linq;

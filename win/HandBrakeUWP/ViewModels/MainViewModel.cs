@@ -4,12 +4,11 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeUWP.ViewModels
+namespace HandBrake.ViewModels
 {
     using HandBrake.Services.Interfaces;
     using HandBrake.Services.Presets.Interfaces;
     using HandBrake.Services.Scan.Interfaces;
-    using HandBrake.ViewModels;
     using HandBrake.ViewModels.Interfaces;
 
     public class MainViewModel : MainViewModelBase

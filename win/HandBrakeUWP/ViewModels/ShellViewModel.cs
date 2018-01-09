@@ -4,17 +4,53 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeUWP.ViewModels
+namespace HandBrake.ViewModels
 {
+    using System;
+    using HandBrake.Properties;
     using HandBrake.Services.Interfaces;
-    using HandBrake.ViewModels;
     using HandBrake.ViewModels.Interfaces;
+    using Windows.ApplicationModel.DataTransfer;
+    using Windows.Storage;
+    using Windows.UI.Xaml;
 
     public class ShellViewModel : ShellViewModelBase
     {
         public ShellViewModel(IErrorService errorService, IMainViewModel mainViewModel, IOptionsViewModel optionsViewModel)
             : base(errorService, mainViewModel, optionsViewModel)
         {
+        }
+
+        /// <summary>
+        /// Something is dragged into the Window context, determine if it is a file, and allow linking.
+        /// </summary>
+        /// <param name="e">Drag Event Args.</param>
+        public void DragEntered(DragEventArgs e)
+        {
+            if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            {
+                // TODO: Filter by file type?
+                e.AcceptedOperation = DataPackageOperation.Link;
+                e.DragUIOverride.Caption = ResourcesUI.MainView_SourceOpen;
+            }
+        }
+
+        /// <summary>
+        /// The data dropped on window. Pass this through to the active view model.
+        /// </summary>
+        /// <param name="e">
+        /// The DragEventArgs.
+        /// </param>
+        public async void DataDropped(DragEventArgs e)
+        {
+            if (e.DataView.Contains(StandardDataFormats.StorageItems))
+            {
+                var items = await e.DataView.GetStorageItemsAsync();
+                if (items.Count > 0)
+                {
+                    this.MainViewModel.StartScan(items[0].Path, 0);
+                }
+            }
         }
     }
 }

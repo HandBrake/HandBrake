@@ -4,10 +4,9 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeUWP.ViewModels
+namespace HandBrake.ViewModels
 {
     using HandBrake.Services.Interfaces;
-    using HandBrake.ViewModels;
     using HandBrake.ViewModels.Interfaces;
 
     public class OptionsViewModel : OptionsViewModelBase

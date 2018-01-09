@@ -14,8 +14,6 @@ namespace HandBrake.Utilities
     using System.Drawing;
     using System.Management;
     using System.Windows.Forms;
-
-    using HandBrake.Utilities;
     using Microsoft.Win32;
 
     /// <summary>

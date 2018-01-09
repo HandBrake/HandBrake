@@ -7,13 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeUWP
+namespace HandBrake
 {
-    using HandBrake;
+    using HandBrake.Model;
     using HandBrake.Services.Interfaces;
     using HandBrake.Utilities;
     using HandBrake.Utilities.Interfaces;
-    using HandBrakeUWP.Utilities;
 
     /// <summary>
     /// UWP Services.
@@ -25,6 +24,7 @@ namespace HandBrakeUWP
             Current = this;
             this.SystemInfo = new SystemInfo();
             this.Process = new ProcessIdentificationService();
+            this.Dialog = new DialogService();
         }
 
         public override ISystemInfo SystemInfo { get; }
@@ -44,5 +44,10 @@ namespace HandBrakeUWP
         public override ViewManagerBase ViewManager { get; }
 
         public override INotificationService NotificationManager { get; }
+
+        public override void OpenOptions(OptionsTab tab)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -3,7 +3,7 @@
               xmlns:Options="clr-namespace:HandBrake.Converters.Options"
               xmlns:Converters="clr-namespace:HandBrake.Converters"
               xmlns:local="clr-namespace:HandBrake.Model;assembly=HandBrake.Data"
-              xmlns:Properties="clr-namespace:HandBrake.Properties">
+              xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data">
 
     <UserControl.Resources>
         <Style TargetType="Button">

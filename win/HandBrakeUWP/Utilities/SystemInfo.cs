@@ -7,12 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrakeUWP.Utilities
+namespace HandBrake.Utilities
 {
     using System.Collections.Generic;
     using System.Drawing;
     using System.IO;
-    using HandBrake.Utilities;
     using Windows.ApplicationModel;
     using Windows.Storage;
 

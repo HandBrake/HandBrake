@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cal="http://www.caliburnproject.org"
-             xmlns:properties="clr-namespace:HandBrake.Properties"
+             xmlns:properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data"
              xmlns:converters="clr-namespace:HandBrake.Converters"
              d:DesignHeight="250"
              d:DesignWidth="650"

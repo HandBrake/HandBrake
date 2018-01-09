@@ -12,7 +12,7 @@
         xmlns:video="clr-namespace:HandBrake.Converters.Video"
         xmlns:commands="clr-namespace:HandBrake.Commands"
         xmlns:helpers="clr-namespace:HandBrake.Helpers"
-        xmlns:Properties="clr-namespace:HandBrake.Properties"
+        xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data"
         xmlns:queue="clr-namespace:HandBrake.Converters.Queue"
         Title="{Binding Title}"
         Width="700"

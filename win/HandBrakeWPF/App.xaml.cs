@@ -35,6 +35,7 @@ namespace HandBrake
         public App()
         {
             PlatformBindingsBootstrapper.Initialise(true);
+            NETCoreServices.UseGlobalAppData = true;
             new WPFHandBrakeServices();
 
             Application.Current.Dispatcher.UnhandledException += this.Dispatcher_UnhandledException;
