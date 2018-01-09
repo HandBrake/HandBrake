@@ -26,9 +26,14 @@ namespace HandBrake.Utilities
             return (DialogResult)(int)result;
         }
 
-        public DialogResult Show(string message)
+        public void Show(string message, string title)
         {
-            return (DialogResult)(int)MessageBox.Show(message);
+            MessageBox.Show(message, title);
+        }
+
+        void IDialogService.Show(string message)
+        {
+            MessageBox.Show(message);
         }
     }
 }

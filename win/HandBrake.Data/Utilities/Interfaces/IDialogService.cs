@@ -30,7 +30,13 @@ namespace HandBrake.Utilities.Interfaces
         /// Shows a Dialog.
         /// </summary>
         /// <param name="message">Message for the Dialog.</param>
-        /// <returns>Result of Dialog.</returns>
-        DialogResult Show(string message);
+        /// <param name="title">Title of Dialog.</param>
+        void Show(string message, string title);
+
+        /// <summary>
+        /// Shows a Dialog.
+        /// </summary>
+        /// <param name="message">Message for the Dialog.</param>
+        void Show(string message);
     }
 }

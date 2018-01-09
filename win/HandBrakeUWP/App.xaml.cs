@@ -23,6 +23,7 @@ namespace HandBrake
     using HandBrake.ViewModels.Interfaces;
     using PlatformBindings;
     using Windows.ApplicationModel.Activation;
+    using Windows.UI.Xaml;
     using Windows.UI.Xaml.Controls;
 
     using IEncode = HandBrake.Services.Encode.Interfaces.IEncode;
@@ -162,6 +163,7 @@ namespace HandBrake
                 return;
             }
 
+            PlatformBindingsBootstrapper.AttachDispatcher(Window.Current.Dispatcher);
             this.DisplayRootViewFor<IShellViewModel>();
         }
     }

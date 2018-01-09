@@ -17,6 +17,7 @@ namespace HandBrake.ViewModels
     using System.IO;
     using System.Linq;
     using System.Threading;
+    using System.Threading.Tasks;
     using Caliburn.Micro;
     using HandBrake;
     using HandBrake.Common;
@@ -1600,66 +1601,69 @@ namespace HandBrake.ViewModels
         /// </summary>
         public void StartEncode()
         {
-            if (this.queueProcessor.IsProcessing)
+            Task.Run(() =>
             {
-                this.IsEncoding = true;
-                return;
-            }
-
-            // Check if we already have jobs, and if we do, just start the queue.
-            if (this.queueProcessor.Count != 0 || this.queueProcessor.EncodeService.IsPasued)
-            {
-                if (this.queueProcessor.EncodeService.IsPasued)
+                if (this.queueProcessor.IsProcessing)
                 {
                     this.IsEncoding = true;
-                }
-
-                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
-                return;
-            }
-
-            // Otherwise, perform Santiy Checking then add to the queue and start if everything is ok.
-            if (this.SelectedTitle == null)
-            {
-                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, DialogButtonType.OK, DialogType.Error);
-                return;
-            }
-
-            if (this.Destination == null)
-            {
-                this.errorService.ShowMessageBox(Resources.Main_ChooseDestination, Resources.Error, DialogButtonType.OK, DialogType.Error);
-                return;
-            }
-
-            if (!DriveUtilities.HasMinimumDiskSpace(
-                this.Destination.Path,
-                this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel)))
-            {
-                this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, DialogButtonType.OK, DialogType.Error);
-                return;
-            }
-
-            if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.Path.ToLower() == this.scannedSource.ScanPath.ToLower())
-            {
-                this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, DialogButtonType.OK, DialogType.Error);
-                return;
-            }
-
-            if (File.Exists(this.Destination.Path))
-            {
-                var result = this.errorService.ShowMessageBox(Resources.Main_DestinationOverwrite, Resources.Question, DialogButtonType.YesNo, DialogType.Question);
-                if (result == DialogResult.No)
-                {
                     return;
                 }
-            }
 
-            // Create the Queue Task and Start Processing
-            if (this.AddToQueue())
-            {
-                this.IsEncoding = true;
-                this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
-            }
+                // Check if we already have jobs, and if we do, just start the queue.
+                if (this.queueProcessor.Count != 0 || this.queueProcessor.EncodeService.IsPasued)
+                {
+                    if (this.queueProcessor.EncodeService.IsPasued)
+                    {
+                        this.IsEncoding = true;
+                    }
+
+                    this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
+                    return;
+                }
+
+                // Otherwise, perform Santiy Checking then add to the queue and start if everything is ok.
+                if (this.SelectedTitle == null)
+                {
+                    this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, DialogButtonType.OK, DialogType.Error);
+                    return;
+                }
+
+                if (this.Destination == null)
+                {
+                    this.errorService.ShowMessageBox(Resources.Main_ChooseDestination, Resources.Error, DialogButtonType.OK, DialogType.Error);
+                    return;
+                }
+
+                if (!DriveUtilities.HasMinimumDiskSpace(
+                    this.Destination.Path,
+                    this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel)))
+                {
+                    this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, DialogButtonType.OK, DialogType.Error);
+                    return;
+                }
+
+                if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.Path.ToLower() == this.scannedSource.ScanPath.ToLower())
+                {
+                    this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, DialogButtonType.OK, DialogType.Error);
+                    return;
+                }
+
+                if (File.Exists(this.Destination.Path))
+                {
+                    var result = this.errorService.ShowMessageBox(Resources.Main_DestinationOverwrite, Resources.Question, DialogButtonType.YesNo, DialogType.Question);
+                    if (result == DialogResult.No)
+                    {
+                        return;
+                    }
+                }
+
+                // Create the Queue Task and Start Processing
+                if (this.AddToQueue())
+                {
+                    this.IsEncoding = true;
+                    this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
+                }
+            });
         }
 
         /// <summary>

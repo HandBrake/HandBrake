@@ -97,6 +97,11 @@
     </Compile>
     <Compile Include="Common\BooleanVisibilityInverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\en\Resources.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resw</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\DialogService.cs" />
     <Compile Include="Utilities\ProcessIdentificationService.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
@@ -104,6 +109,9 @@
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="Views\Dialogs\MessageDialog.xaml.cs">
+      <DependentUpon>MessageDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -116,6 +124,11 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="..\Store\HandBrake_TemporaryKey.pfx" />
+    <PRIResource Include="Resources\en\Resources.resw">
+      <CustomToolNamespace>HandBrake.Resources</CustomToolNamespace>
+      <Generator>PublicReswFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.cs</LastGenOutput>
+    </PRIResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="defaultsettings.xml">
@@ -227,6 +240,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\Dialogs\MessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

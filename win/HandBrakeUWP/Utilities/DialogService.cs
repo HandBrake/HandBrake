@@ -6,19 +6,37 @@
 
 namespace HandBrake.Utilities
 {
+    using System;
+    using System.Threading.Tasks;
     using HandBrake.Model.Prompts;
     using HandBrake.Utilities.Interfaces;
+    using HandBrake.Views.Dialogs;
+    using Execute = Caliburn.Micro.Execute;
 
     public class DialogService : IDialogService
     {
-        public DialogResult Show(string message, string header, DialogButtonType buttons, DialogType type)
+        public DialogResult Show(string message, string title, DialogButtonType buttons, DialogType type)
         {
-            throw new System.NotImplementedException();
+            TaskCompletionSource<DialogResult> waiter = new TaskCompletionSource<DialogResult>();
+            Execute.OnUIThread(async () =>
+            {
+                var result = await MessageDialog.GetResult(message, title, buttons, type);
+                waiter.TrySetResult(result);
+            });
+            return waiter.Task.Result;
         }
 
-        public DialogResult Show(string message)
+        public void Show(string message)
         {
-            throw new System.NotImplementedException();
+            this.Show(message, null);
+        }
+
+        public void Show(string message, string title)
+        {
+            Execute.OnUIThread(() =>
+            {
+                MessageDialog.Show(message, title);
+            });
         }
     }
 }
