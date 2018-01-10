@@ -6,38 +6,103 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:cal="using:Caliburn.Micro"
+    xmlns:dialogs="using:HandBrake.Views.Dialogs"
     mc:Ignorable="d"
     d:DesignHeight="300"
     d:DesignWidth="400">
 
-    <Grid HorizontalAlignment="Stretch">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+    <Grid>
+        <!-- Whole Window Controls -->
+        <dialogs:SourceSelection Show="{x:Bind Viewmodel.ShowSourceSelection, Mode=OneWay}" />
+        <!-- Whole Window Controls -->
 
-        <StackPanel Grid.Row="0">
-            <!-- Include UWPCommunityToolkit Menu Bar on Desktop??? -->
-            <CommandBar DefaultLabelPosition="Right" HorizontalAlignment="Stretch">
-                <AppBarButton Label="Open Source" Icon="OpenFile" />
-                <AppBarSeparator Margin="-5,0" />
-                <AppBarButton Label="Start Encode"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0">
+                <!-- Include UWPCommunityToolkit Menu Bar on Desktop??? -->
+                <CommandBar DefaultLabelPosition="Right" HorizontalAlignment="Stretch">
+                    <AppBarButton x:Name="OpenSource"
+                                  Label="{Binding MainView_SourceOpen, Source={StaticResource resourcesUI}}"
+                                  Icon="OpenFile"
+                                  Click="{x:Bind Viewmodel.SelectSourceWindow}" />
+
+                    <AppBarSeparator Margin="-5,0" />
+
+                    <AppBarButton x:Name="EncodeStart"
+                              Label="{Binding MainView_StartEncode, Source={StaticResource resourcesUI}}"
                               Icon="Play"
-                              Visibility="{x:Bind Viewmodel.IsEncoding, Converter={StaticResource boolInverter}}"
+                              Visibility="{x:Bind Viewmodel.IsEncoding, Converter={StaticResource boolInverter}, Mode=OneWay}"
                               Click="{x:Bind Viewmodel.StartEncode}" />
-                <AppBarButton Label="Add to Queue" Icon="Add" />
-                <AppBarButton Label="Show Queue" Icon="Pictures" />
-                <AppBarSeparator Margin="-5,0" />
-                <AppBarButton Label="Preview" Icon="Video" />
-                <AppBarButton Label="Activity Log" Icon="Manage" />
-                <CommandBar.SecondaryCommands>
-                    <AppBarButton Label="Preferences" />
-                    <AppBarSeparator />
-                    <AppBarButton Label="Help" />
-                    <AppBarButton Label="About" />
-                </CommandBar.SecondaryCommands>
-            </CommandBar>
-        </StackPanel>
+
+                    <AppBarButton x:Name="EncodeStop"
+                              Label="{Binding MainView_Stop, Source={StaticResource resourcesUI}}"
+                              Icon="Stop"
+                              Visibility="{x:Bind Viewmodel.IsEncoding, Mode=OneWay}"
+                              Click="{x:Bind Viewmodel.StopEncode}" />
+
+                    <AppBarButton x:Name="EncodePause"
+                              Label="{Binding MainView_Pause, Source={StaticResource resourcesUI}}"
+                              Icon="Pause"
+                              Visibility="{x:Bind Viewmodel.IsEncoding, Mode=OneWay}"
+                              Click="{x:Bind Viewmodel.PauseEncode}" />
+
+                    <AppBarButton x:Name="AddToQueue"
+                                  Label="{Binding MainView_AddToQueue, Source={StaticResource resourcesUI}}"
+                                  Icon="Add">
+
+                        <MenuFlyout>
+                            <MenuFlyoutItem
+                                Text="{Binding MainView_AddCurrent, Source={StaticResource resourcesUI}}"
+                                Click="{x:Bind Viewmodel.AddToQueue}" />
+                            <MenuFlyoutItem
+                                Text="{Binding MainView_AddAll, Source={StaticResource resourcesUI}}"
+                                Click="{x:Bind Viewmodel.AddAllToQueue}" />
+                            <MenuFlyoutItem
+                                Text="{Binding MainView_AddSelection, Source={StaticResource resourcesUI}}"
+                                Click="{x:Bind Viewmodel.AddSelectionToQueue}" />
+                        </MenuFlyout>
+                    </AppBarButton>
+
+                    <AppBarButton x:Name="ShowQueue"
+                                  Label="{x:Bind Viewmodel.QueueLabel}"
+                                  Icon="Pictures"
+                                  Click="{x:Bind Viewmodel.OpenQueueWindow}" />
+
+                    <AppBarSeparator Margin="-5,0" />
+
+                    <AppBarButton x:Name="Preview"
+                                  Label="{Binding MainView_ShowPreview, Source={StaticResource resourcesUI}}"
+                                  Icon="Video"
+                                  Click="{x:Bind Viewmodel.OpenPreviewWindow}" />
+
+                    <AppBarButton x:Name="ActivityLog"
+                                  Label="{Binding ActivityLog, Source={StaticResource resourcesUWP}}"
+                                  Icon="Manage"
+                                  Click="{x:Bind Viewmodel.OpenLogWindow}" />
+
+                    <CommandBar.SecondaryCommands>
+                        <AppBarButton x:Name="Preferences"
+                                      Label="Preferences"
+                                      Icon="Setting"
+                                      Click="{x:Bind Viewmodel.OpenOptionsWindow}" />
+
+                        <AppBarSeparator />
+
+                        <AppBarButton x:Name="Help"
+                                      Label="{Binding Help, Source={StaticResource resourcesUWP}}"
+                                      Click="{x:Bind Viewmodel.LaunchHelp}" />
+
+                        <AppBarButton x:Name="AboutApp"
+                                      Label="{Binding About, Source={StaticResource resourcesUWP}}"
+                                      Click="{x:Bind Viewmodel.OpenAboutApplication}" />
+                    </CommandBar.SecondaryCommands>
+                </CommandBar>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

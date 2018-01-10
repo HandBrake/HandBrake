@@ -1,0 +1,112 @@
+﻿<ContentDialog
+    x:Class="HandBrake.Views.Dialogs.SourceSelection"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HandBrake.Views.Dialogs"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:telerik="using:Telerik.UI.Xaml.Controls.Input"
+    xmlns:converters="using:HandBrake.Converters"
+    xmlns:controls="using:HandBrake.Controls"
+    xmlns:models="using:HandBrake.Model"
+    xmlns:cal="using:Caliburn.Micro"
+    mc:Ignorable="d"
+    PrimaryButtonText="{Binding Cancel, Source={StaticResource resourcesUWP}}"
+    PrimaryButtonClick="{x:Bind Viewmodel.CloseSourceSelection}"
+    Background="{ThemeResource SystemControlChromeHighAcrylicElementMediumBrush }">
+
+    <ContentDialog.Resources>
+        <converters:NonZeroIntegerDecimalConverter x:Key="TitleConverter" />
+
+        <Style TargetType="Border" x:Key="SelectionBorder">
+            <Setter Property="BorderThickness" Value="0,1,0,0" />
+            <Setter Property="BorderBrush" Value="Gray" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0,10" />
+        </Style>
+    </ContentDialog.Resources>
+
+    <StackPanel>
+        <TextBlock
+                Text="{Binding SourceSelection_SourceSelection, Source={StaticResource resourcesUI}}"
+                TextAlignment="Center"
+                FontWeight="SemiBold"
+                FontSize="15"
+                HorizontalAlignment="Center" />
+
+        <TextBlock
+                Text="{Binding SourceSelection_Description, Source={StaticResource resourcesUWP}}"
+                TextAlignment="Center"
+                HorizontalAlignment="Center"
+                FontSize="13" />
+
+        <Border Style="{StaticResource SelectionBorder}" />
+
+        <TextBlock Text="{Binding SourceSelection_ChooseSpecificTitle, Source={StaticResource resourcesUI}}" TextWrapping="Wrap" />
+
+        <telerik:RadNumericBox
+                Margin="10"
+                Width="300"
+                Value="{x:Bind Viewmodel.TitleSpecificScan, Mode=TwoWay, Converter={StaticResource TitleConverter}}"
+                ValueFormat="{}{0:N0}"
+                Minimum="0"
+                Watermark="{Binding Selected_None, Source={StaticResource resourcesUWP}}"
+                Maximum="5000"
+                ToolTipService.ToolTip="{Binding SourceSelection_TitleSpecific, Source={StaticResource resourcesTooltips}}">
+        </telerik:RadNumericBox>
+
+        <Border Style="{StaticResource SelectionBorder}" />
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <controls:SourceItem x:Name="FolderScan"
+                Symbol="Folder"
+                SourceName="{Binding Folder_BatchScan_NewLine, Source={StaticResource resourcesUWP}}"
+                SourceDescription="{Binding SourceSelection_OpenFolderWIth, Source={StaticResource resourcesUI}}"
+                HorizontalAlignment="Stretch"
+                Width="150"
+                Height="140"
+                MaxWidth="150"
+                MaxHeight="140" />
+
+            <controls:SourceItem x:Name="FileScan"
+                Grid.Column="1"
+                Symbol="OpenFile"
+                SourceName="{Binding SourceSelection_File, Source={StaticResource resourcesUI}}"
+                SourceDescription="{Binding SourceSelection_SingleVideoFile, Source={StaticResource resourcesUI}}"
+                HorizontalAlignment="Stretch"
+                Width="150"
+                Height="140"
+                MaxWidth="150"
+                MaxHeight="140" />
+        </Grid>
+
+        <StackPanel
+            Visibility="{x:Bind Viewmodel.HasOpticalDrives}">
+            <Border Style="{StaticResource SelectionBorder}" />
+            <ScrollViewer IsTabStop="False">
+                <ItemsControl ItemsSource="{x:Bind Viewmodel.Drives, Mode=OneWay}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:SourceMenuItem">
+                            <controls:SourceItem
+                            SourceName="{x:Bind DriveLetter}"
+                            SourceDescription="{Binding SourceSelection_OpenDVDBluray, Source={StaticResource resourcesUWP}}"
+                            Tag="{x:Bind Tag}"
+                            Click="{x:Bind Process}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </StackPanel>
+    </StackPanel>
+</ContentDialog>

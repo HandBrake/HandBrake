@@ -202,34 +202,6 @@ namespace HandBrake.ViewModels
             this.PresetsCategories = new BindingList<IPresetObject>();
             this.Drives = new BindingList<SourceMenuItem>();
 
-            // Set Process Priority
-            switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority))
-            {
-                case "Realtime":
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
-                    break;
-
-                case "High":
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
-                    break;
-
-                case "Above Normal":
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
-                    break;
-
-                case "Normal":
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
-                    break;
-
-                case "Low":
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
-                    break;
-
-                default:
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
-                    break;
-            }
-
             LogManager.Init();
             HandBrakeInstanceManager.Init();
         }
@@ -996,25 +968,38 @@ namespace HandBrake.ViewModels
                 this.NotifyOfPropertyChange(() => this.ShowSourceSelection);
 
                 // Refresh the drives.
-                if (this.showSourceSelection)
+                if (this.showSourceSelection && HandBrakeServices.Current.SystemInfo.SupportsOpticalDrive)
                 {
                     this.Drives.Clear();
-                    //foreach (SourceMenuItem menuItem in from item in DriveUtilities.GetDrives()
-                    //                                    let driveInformation = item
-                    //                                    select new SourceMenuItem
-                    //                                    {
-                    //                                        Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
-                    //                                        Command = new SourceMenuCommand(() => this.ProcessDrive(driveInformation)),
-                    //                                        Tag = item,
-                    //                                        IsDrive = true
-                    //                                    })
-                    //{
-                    //    this.Drives.Add(menuItem);
-                    //}
+                    foreach (SourceMenuItem menuItem in from item in DriveUtilities.GetDrives()
+                                                        let driveInformation = item
+                                                        select new SourceMenuItem
+                                                        {
+                                                            Text = string.Format("{0} ({1})", item.RootDirectory, item.VolumeLabel),
+                                                            DriveLetter = item.RootDirectory,
+                                                            Action = () => this.ProcessDrive(driveInformation),
+                                                            Tag = item,
+                                                            IsDrive = true,
+                                                        })
+                    {
+                        this.Drives.Add(menuItem);
+                    }
 
                     this.TitleSpecificScan = 0;
+                    this.NotifyOfPropertyChange(() => this.HasOpticalDrives);
                     this.NotifyOfPropertyChange(() => this.TitleSpecificScan);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether there are any Optical Drives.
+        /// </summary>
+        public bool HasOpticalDrives
+        {
+            get
+            {
+                return HandBrakeServices.Current.SystemInfo.SupportsOpticalDrive && this.Drives.Any();
             }
         }
 

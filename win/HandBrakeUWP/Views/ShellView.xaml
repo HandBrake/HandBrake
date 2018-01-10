@@ -26,7 +26,7 @@
         </Core:EventTriggerBehavior>
     </interactivity:Interaction.Behaviors>
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource SystemControlAcrylicWindowBrush}">
         <ContentControl x:Name="MainViewModel"  IsEnabled="{Binding IsMainPanelEnabled}" />
     </Grid>
 </Page>

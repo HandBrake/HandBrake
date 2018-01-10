@@ -28,5 +28,7 @@ namespace HandBrake.Utilities
         public string InstallLocation => Package.Current.InstalledLocation.Path;
 
         public string AppDataLocation => Path.GetDirectoryName(ApplicationData.Current.LocalFolder.Path);
+
+        public bool SupportsOpticalDrive => false;
     }
 }

@@ -6,6 +6,7 @@
 
 namespace HandBrake.ViewModels
 {
+    using System.Diagnostics;
     using System.Windows.Input;
     using HandBrake.Commands.Menu;
     using HandBrake.Model;
@@ -30,6 +31,34 @@ namespace HandBrake.ViewModels
                   summaryViewModel, filtersViewModel, audioViewModel, subtitlesViewModel, advancedViewModel, chaptersViewModel, staticPreviewViewModel, queueViewModel, metaDataViewModel)
         {
             this.updateService = updateService;
+
+            // Set Process Priority
+            switch (userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority))
+            {
+                case "Realtime":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
+                    break;
+
+                case "High":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
+                    break;
+
+                case "Above Normal":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+                    break;
+
+                case "Normal":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
+                    break;
+
+                case "Low":
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
+                    break;
+
+                default:
+                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+                    break;
+            }
 
             // Setup Commands
             this.QueueCommand = new QueueCommands(this.QueueViewModel);

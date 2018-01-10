@@ -96,6 +96,10 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\BooleanVisibilityInverter.cs" />
+    <Compile Include="Controls\SourceItem.xaml.cs">
+      <DependentUpon>SourceItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\NonZeroIntegerDecimalConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\en\Resources.cs">
       <AutoGen>True</AutoGen>
@@ -111,6 +115,9 @@
     <Compile Include="ViewModels\ShellViewModel.cs" />
     <Compile Include="Views\Dialogs\MessageDialog.xaml.cs">
       <DependentUpon>MessageDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\SourceSelection.xaml.cs">
+      <DependentUpon>SourceSelection.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
@@ -167,6 +174,9 @@
     </PackageReference>
     <PackageReference Include="StyleCop.Analyzers">
       <Version>1.1.0-beta004</Version>
+    </PackageReference>
+    <PackageReference Include="Telerik.UI.for.UniversalWindowsPlatform">
+      <Version>1.0.0.7</Version>
     </PackageReference>
   </ItemGroup>
   <!-- Image Assets -->
@@ -240,7 +250,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\SourceItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Dialogs\MessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Dialogs\SourceSelection.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

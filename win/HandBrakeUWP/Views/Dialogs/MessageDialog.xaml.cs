@@ -75,6 +75,12 @@ namespace HandBrake.Views.Dialogs
                 case DialogButtonType.YesNoCancel:
                     this.PrimaryButtonText = HandBrake.Resources.Resources.Yes;
                     this.SecondaryButtonText = HandBrake.Resources.Resources.No;
+
+                    if (buttontype == DialogButtonType.YesNoCancel)
+                    {
+                        this.CloseButtonText = HandBrake.Resources.Resources.Cancel;
+                    }
+
                     break;
             }
         }

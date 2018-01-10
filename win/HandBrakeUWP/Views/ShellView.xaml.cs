@@ -6,6 +6,7 @@
 
 namespace HandBrake.Views
 {
+    using HandBrake.Utilities;
     using HandBrake.ViewModels;
     using Windows.UI.Xaml.Controls;
 

@@ -155,7 +155,6 @@
     <Compile Include="Commands\OpenOptionsScreenCommand.cs" />
     <Compile Include="Commands\PresetMenuSelectCommand.cs" />
     <Compile Include="Commands\ProcessShortcutCommand.cs" />
-    <Compile Include="Commands\SourceMenuCommand.cs" />
     <Compile Include="Controls\SplitButton\SplitMenuButton.cs" />
     <Compile Include="Controls\AlertPanel.xaml.cs">
       <DependentUpon>AlertPanel.xaml</DependentUpon>

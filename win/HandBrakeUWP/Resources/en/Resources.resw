@@ -117,14 +117,36 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="ActivityLog" xml:space="preserve">
+    <value>Activity Log</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="Folder_BatchScan_NewLine" xml:space="preserve">
+    <value>Folder
+(Batch Scan)</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Help</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Selected_None" xml:space="preserve">
+    <value>(None)</value>
+  </data>
+  <data name="SourceSelection_Description" xml:space="preserve">
+    <value>Select a source to Encode Videos</value>
+  </data>
+  <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
+    <value>Optical Drive</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>

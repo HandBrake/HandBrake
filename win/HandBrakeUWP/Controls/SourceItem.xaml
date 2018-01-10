@@ -1,0 +1,48 @@
+﻿<Button
+    x:Class="HandBrake.Controls.SourceItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:HandBrake.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    BorderThickness="0"
+    Background="Transparent"
+    Width="75"
+    MaxWidth="75"
+    Height="110"
+    MaxHeight="110"
+    VerticalContentAlignment="Stretch">
+
+    <Grid VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Viewbox
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Height="30">
+            <SymbolIcon Symbol="{x:Bind Symbol, Mode=OneWay}" />
+        </Viewbox>
+
+        <StackPanel
+            Grid.Row="1">
+            <TextBlock
+            Text="{x:Bind SourceName, Mode=TwoWay}"
+            TextAlignment="Center"
+            FontSize="15"
+            TextWrapping="Wrap"
+            HorizontalAlignment="Center"
+            FontWeight="Bold" />
+
+            <TextBlock
+            Text="{x:Bind SourceDescription, Mode=TwoWay}"
+            TextWrapping="Wrap"
+            TextAlignment="Center"
+            FontSize="13"
+            HorizontalAlignment="Center" />
+        </StackPanel>
+    </Grid>
+</Button>

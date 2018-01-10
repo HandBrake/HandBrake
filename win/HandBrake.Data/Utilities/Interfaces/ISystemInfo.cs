@@ -49,5 +49,10 @@ namespace HandBrake.Utilities
         /// Gets the AppData Location.
         /// </summary>
         string AppDataLocation { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the current System Supports use of an Optical Drive.
+        /// </summary>
+        bool SupportsOpticalDrive { get; }
     }
 }

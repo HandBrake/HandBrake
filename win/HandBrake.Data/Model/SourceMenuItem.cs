@@ -9,6 +9,7 @@
 
 namespace HandBrake.Model
 {
+    using System;
     using System.Collections.ObjectModel;
     using System.Windows.Input;
 
@@ -31,9 +32,14 @@ namespace HandBrake.Model
         public string Text { get; set; }
 
         /// <summary>
-        /// Gets or sets the command.
+        /// Gets or sets the Drive Letter.
         /// </summary>
-        public ICommand Command { get; set; }
+        public string DriveLetter { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Action.
+        /// </summary>
+        public Action Action { get; set; }
 
         /// <summary>
         /// Gets or sets the children.
@@ -70,5 +76,13 @@ namespace HandBrake.Model
         /// Gets or sets the input gesture text.
         /// </summary>
         public string InputGestureText { get; set; }
+
+        /// <summary>
+        /// Invokes the Processing.
+        /// </summary>
+        public void Process()
+        {
+            this.Action?.Invoke();
+        }
     }
 }

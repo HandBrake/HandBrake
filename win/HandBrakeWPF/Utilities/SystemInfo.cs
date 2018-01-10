@@ -101,5 +101,7 @@ namespace HandBrake.Utilities
         public string InstallLocation => Application.StartupPath;
 
         public string AppDataLocation => Application.UserAppDataPath;
+
+        public bool SupportsOpticalDrive => true;
     }
 }

@@ -17,7 +17,7 @@
 // 	This code contains a helper class exposing property representations
 // 	of the string resources defined in the specified .ResW file
 // 
-// 	Generated: 01/09/2018 23:00:14
+// 	Generated: 01/10/2018 20:41:28
 // </auto-generatedInfo>
 // --------------------------------------------------------------------------------------------------
 namespace HandBrake.Resources
@@ -53,6 +53,28 @@ namespace HandBrake.Resources
         }
         
         /// <summary>
+        /// Localized resource similar to "About"
+        /// </summary>
+        public static string About
+        {
+            get
+            {
+                return resourceLoader.GetString("About");
+            }
+        }
+        
+        /// <summary>
+        /// Localized resource similar to "Activity Log"
+        /// </summary>
+        public static string ActivityLog
+        {
+            get
+            {
+                return resourceLoader.GetString("ActivityLog");
+            }
+        }
+        
+        /// <summary>
         /// Localized resource similar to "Cancel"
         /// </summary>
         public static string Cancel
@@ -60,6 +82,29 @@ namespace HandBrake.Resources
             get
             {
                 return resourceLoader.GetString("Cancel");
+            }
+        }
+        
+        /// <summary>
+        /// Localized resource similar to "Folder
+        ///(Batch Scan)"
+        /// </summary>
+        public static string Folder_BatchScan_NewLine
+        {
+            get
+            {
+                return resourceLoader.GetString("Folder_BatchScan_NewLine");
+            }
+        }
+        
+        /// <summary>
+        /// Localized resource similar to "Help"
+        /// </summary>
+        public static string Help
+        {
+            get
+            {
+                return resourceLoader.GetString("Help");
             }
         }
         
@@ -82,6 +127,39 @@ namespace HandBrake.Resources
             get
             {
                 return resourceLoader.GetString("OK");
+            }
+        }
+        
+        /// <summary>
+        /// Localized resource similar to "(None)"
+        /// </summary>
+        public static string Selected_None
+        {
+            get
+            {
+                return resourceLoader.GetString("Selected_None");
+            }
+        }
+        
+        /// <summary>
+        /// Localized resource similar to "Select a source to Encode Videos"
+        /// </summary>
+        public static string SourceSelection_Description
+        {
+            get
+            {
+                return resourceLoader.GetString("SourceSelection_Description");
+            }
+        }
+        
+        /// <summary>
+        /// Localized resource similar to "Optical Drive"
+        /// </summary>
+        public static string SourceSelection_OpenDVDBluray
+        {
+            get
+            {
+                return resourceLoader.GetString("SourceSelection_OpenDVDBluray");
             }
         }
         

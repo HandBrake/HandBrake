@@ -35,14 +35,19 @@ namespace HandBrake.Utilities
                     if (Directory.Exists(curDrive.RootDirectory + "VIDEO_TS") ||
                         Directory.Exists(curDrive.RootDirectory + "BDMV"))
                     {
-                        drives.Add(
-                            new DriveInformation
-                            {
-                                Id = id, 
-                                VolumeLabel = curDrive.VolumeLabel, 
-                                RootDirectory = curDrive.RootDirectory.ToString()
-                            });
-                        id++;
+                        // Protect UWP from exceptions arising from Permissions issues.
+                        try
+                        {
+                            drives.Add(
+                                new DriveInformation
+                                {
+                                    Id = id,
+                                    VolumeLabel = curDrive.VolumeLabel,
+                                    RootDirectory = curDrive.RootDirectory.ToString(),
+                                });
+                            id++;
+                        }
+                        catch { }
                     }
                 }
             }
@@ -52,14 +57,21 @@ namespace HandBrake.Utilities
 
         public static bool HasMinimumDiskSpace(string destination, long minimumInBytes)
         {
-            string drive = Path.GetPathRoot(destination);
-            if (!string.IsNullOrEmpty(drive) && !drive.StartsWith("\\"))
+            // UWP does not permit free space info on System Drives, catch and return true.
+            try
             {
-                DriveInfo c = new DriveInfo(drive);
-                if (c.AvailableFreeSpace < minimumInBytes)
+                string drive = Path.GetPathRoot(destination);
+                if (!string.IsNullOrEmpty(drive) && !drive.StartsWith("\\"))
                 {
-                    return false;
+                    DriveInfo c = new DriveInfo(drive);
+                    if (c.AvailableFreeSpace < minimumInBytes)
+                    {
+                        return false;
+                    }
                 }
+            }
+            catch
+            {
             }
 
             return true;
