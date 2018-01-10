@@ -161,7 +161,7 @@ static AVFilterContext * append_filter( hb_filter_private_t * pv,
 
 static int avfilter_init( hb_filter_object_t * filter, hb_filter_init_t * init )
 {
-    hb_filter_private_t * pv = filter->private_data;
+    hb_filter_private_t * pv = NULL;
     char                * sws_flags;
     AVFilterContext     * avfilter;
     char                * filter_args;
