@@ -343,7 +343,7 @@
                         </connections>
                     </textField>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="1628">
-                        <rect key="frame" x="281" y="514" width="581" height="5"/>
+                        <rect key="frame" x="312" y="514" width="550" height="5"/>
                     </box>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3205">
                         <rect key="frame" x="125" y="575" width="737" height="5"/>
@@ -578,12 +578,6 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                                             <binding destination="-2" name="title" keyPath="self.job.presetName" id="vO4-JB-o7Q"/>
                                         </connections>
                                     </menuItem>
-                                    <menuItem title="New Preset…" id="nmZ-D3-Tl9">
-                                        <connections>
-                                            <action selector="showAddPresetPanel:" target="-2" id="4aq-W2-V8l"/>
-                                        </connections>
-                                    </menuItem>
-                                    <menuItem isSeparatorItem="YES" id="oD9-5q-EMm"/>
                                 </items>
                             </menu>
                         </popUpButtonCell>
@@ -623,6 +617,21 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <binding destination="-2" name="textColor" keyPath="self.labelColor" id="NpP-Z0-hPs"/>
                         </connections>
                     </textField>
+                    <button toolTip="Save New Preset" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2vD-zN-YMe">
+                        <rect key="frame" x="276" y="502" width="33" height="28"/>
+                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSAddTemplate" imagePosition="only" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IOU-3L-nvB">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="showAddPresetPanel:" target="-2" id="QgW-qo-eKy"/>
+                            <binding destination="-2" name="enabled" keyPath="self.job" id="XiA-f4-ZO2">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSIsNotNil</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="5180" firstAttribute="leading" secondItem="1541" secondAttribute="trailing" constant="15" id="0Bt-0B-noA"/>
@@ -633,6 +642,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1548" firstAttribute="baseline" secondItem="1553" secondAttribute="baseline" id="5U2-Lr-4Qc"/>
                     <constraint firstItem="5180" firstAttribute="baseline" secondItem="5181" secondAttribute="baseline" id="7rI-Pr-24u"/>
                     <constraint firstItem="5181" firstAttribute="leading" secondItem="5180" secondAttribute="trailing" constant="8" id="88n-hD-lCW"/>
+                    <constraint firstItem="2vD-zN-YMe" firstAttribute="leading" secondItem="bWH-Lp-mKY" secondAttribute="trailing" constant="8" id="9oq-nZ-scg"/>
                     <constraint firstItem="bWH-Lp-mKY" firstAttribute="baseline" secondItem="1627" secondAttribute="baseline" id="A8O-c5-J59"/>
                     <constraint firstItem="d0E-xw-bxh" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="-4" id="ANc-YO-rUk"/>
                     <constraint firstItem="5505" firstAttribute="leading" secondItem="1545" secondAttribute="trailing" constant="4" id="AlP-tE-q8e"/>
@@ -653,6 +663,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="5513" firstAttribute="leading" secondItem="4NG-AB-JWs" secondAttribute="trailing" constant="8" id="LaE-py-QST"/>
                     <constraint firstItem="1554" firstAttribute="leading" secondItem="1553" secondAttribute="trailing" constant="4" id="Lrw-hs-Pdg"/>
                     <constraint firstItem="3203" firstAttribute="top" secondItem="2" secondAttribute="top" constant="16" id="MDg-nr-Pos"/>
+                    <constraint firstItem="1628" firstAttribute="leading" secondItem="2vD-zN-YMe" secondAttribute="trailing" constant="8" id="NLi-5N-bLW"/>
                     <constraint firstItem="1539" firstAttribute="centerY" secondItem="3205" secondAttribute="centerY" id="O7P-Hr-rDa"/>
                     <constraint firstAttribute="trailing" secondItem="3203" secondAttribute="trailing" constant="20" id="PnZ-2e-abQ"/>
                     <constraint firstAttribute="trailing" secondItem="3205" secondAttribute="trailing" constant="20" id="QkZ-Q7-VGX"/>
@@ -665,6 +676,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1562" firstAttribute="leading" secondItem="PJi-21-hie" secondAttribute="trailing" constant="2" id="UgJ-hP-CRv"/>
                     <constraint firstAttribute="bottom" secondItem="d0E-xw-bxh" secondAttribute="bottom" id="Unb-Sk-dKC"/>
                     <constraint firstItem="1627" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="VV8-Hu-yZk"/>
+                    <constraint firstItem="2vD-zN-YMe" firstAttribute="centerY" secondItem="bWH-Lp-mKY" secondAttribute="centerY" id="VpY-Jn-29g"/>
                     <constraint firstItem="4NG-AB-JWs" firstAttribute="leading" secondItem="5181" secondAttribute="trailing" constant="15" id="Xtb-eN-L1f"/>
                     <constraint firstItem="1540" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="YBA-8V-7wA"/>
                     <constraint firstItem="5493" firstAttribute="width" secondItem="1548" secondAttribute="width" id="Z4Q-52-cXt"/>
@@ -680,7 +692,6 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1540" firstAttribute="baseline" secondItem="1541" secondAttribute="baseline" id="gBD-ib-Qcp"/>
                     <constraint firstItem="gfs-4j-YSE" firstAttribute="centerY" secondItem="PJi-21-hie" secondAttribute="centerY" id="gR5-Tl-M5T"/>
                     <constraint firstItem="5523" firstAttribute="leading" secondItem="5493" secondAttribute="leading" id="gm6-wR-wHe"/>
-                    <constraint firstItem="1628" firstAttribute="leading" secondItem="bWH-Lp-mKY" secondAttribute="trailing" constant="8" id="hxV-pb-HlV"/>
                     <constraint firstAttribute="trailing" secondItem="1628" secondAttribute="trailing" constant="20" id="k3w-7F-PJy"/>
                     <constraint firstItem="5523" firstAttribute="baseline" secondItem="1548" secondAttribute="baseline" id="kfY-mQ-JIb"/>
                     <constraint firstItem="1541" firstAttribute="baseline" secondItem="5180" secondAttribute="baseline" id="l58-3I-TTV"/>
@@ -727,7 +738,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="A5F62853-5047-43C2-AD64-73654B0E34B2" label="Add Titles To Queue" paletteLabel="Add Titles To Queue" toolTip="Add Titles To Queue" image="addqueue" id="38K-hd-P5J">
-                        <size key="minSize" width="58" height="32"/>
+                        <size key="minSize" width="58" height="25"/>
                         <size key="maxSize" width="58" height="32"/>
                         <popUpButton key="view" imageHugsTitle="YES" id="pJJ-0V-TQq">
                             <rect key="frame" x="28" y="14" width="58" height="25"/>
@@ -796,11 +807,11 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <toolbarItem reference="8r8-nZ-dYs"/>
                     <toolbarItem reference="ZEH-cS-zXY"/>
                     <toolbarItem reference="DZZ-Fe-wjw"/>
-                    <toolbarItem reference="HCx-ku-nF7"/>
                     <toolbarItem reference="ZEH-cS-zXY"/>
                     <toolbarItem reference="byg-kj-sEM"/>
                     <toolbarItem reference="wTQ-KF-5KW"/>
                     <toolbarItem reference="wjB-Tl-5qq"/>
+                    <toolbarItem reference="HCx-ku-nF7"/>
                     <toolbarItem reference="dK4-jt-v4K"/>
                     <toolbarItem reference="p7Q-L3-zcW"/>
                     <toolbarItem reference="qhv-9l-2FH"/>
@@ -809,7 +820,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="2048" y="-183"/>
+            <point key="canvasLocation" x="2263" y="-203"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
         <customView id="lZQ-gl-3wX" userLabel="Open Panel View">
@@ -875,6 +886,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
         </customView>
     </objects>
     <resources>
+        <image name="NSAddTemplate" width="11" height="11"/>
         <image name="activity" width="32" height="32"/>
         <image name="addqueue" width="32" height="32"/>
         <image name="encode" width="32" height="32"/>
