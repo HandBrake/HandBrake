@@ -348,7 +348,10 @@ ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, hb_buffer_t * in,
     // when there is no layer field.
     numPartsRead = sscanf( (char *)in_data, "Dialogue:%128[^,],", layerField );
     if ( numPartsRead != 1 )
+    {
+        free(layerField);
         goto fail;
+    }
 
     styleToTextFields = (char *)find_field( in_data, in_data + in_size, 4 );
     if ( styleToTextFields == NULL ) {
