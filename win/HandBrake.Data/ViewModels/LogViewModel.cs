@@ -14,12 +14,12 @@ namespace HandBrake.ViewModels
     using System.Text;
 
     using Caliburn.Micro;
-    using HandBrake;
     using HandBrake.CoreLibrary.Services.Logging;
     using HandBrake.CoreLibrary.Services.Logging.EventArgs;
     using HandBrake.CoreLibrary.Services.Logging.Model;
 
     using HandBrake.Utilities;
+    using HandBrake.Utilities.Interfaces;
     using HandBrake.ViewModels.Interfaces;
 
     using ILog = HandBrake.CoreLibrary.Services.Logging.Interfaces.ILog;
@@ -78,7 +78,8 @@ namespace HandBrake.ViewModels
         /// </summary>
         public void CopyLog()
         {
-            HandBrakeServices.Current.Clipboard.Copy(this.ActivityLog);
+            var copyservice = IoC.Get<ICopyService>();
+            copyservice.Copy(this.ActivityLog);
         }
 
         /// <summary>

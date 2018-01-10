@@ -11,9 +11,9 @@ namespace HandBrake.Services
 {
     using System;
     using Caliburn.Micro;
-    using HandBrake;
     using HandBrake.Model.Prompts;
     using HandBrake.Services.Interfaces;
+    using HandBrake.Utilities.Interfaces;
     using ViewModels.Interfaces;
 
     /// <summary>
@@ -21,11 +21,22 @@ namespace HandBrake.Services
     /// </summary>
     public class ErrorService : IErrorService
     {
-        private readonly ViewManagerBase viewManager;
+        private readonly IViewManager viewManager;
+        private readonly IDialogService dialogService;
 
-        public ErrorService()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ErrorService"/> class.
+        /// </summary>
+        /// <param name="viewManager">
+        /// The View Manager.
+        /// </param>
+        /// <param name="dialogService">
+        /// The Dialog service.
+        /// </param>
+        public ErrorService(IViewManager viewManager, IDialogService dialogService)
         {
-            this.viewManager = HandBrakeServices.Current?.ViewManager;
+            this.viewManager = viewManager;
+            this.dialogService = dialogService;
         }
 
         /// <summary>
@@ -99,7 +110,7 @@ namespace HandBrake.Services
         /// </returns>
         public DialogResult ShowMessageBox(string message, string header, DialogButtonType buttons, DialogType type)
         {
-            return HandBrakeServices.Current.Dialog.Show(message, header, buttons, type);
+            return this.dialogService.Show(message, header, buttons, type);
         }
     }
 }

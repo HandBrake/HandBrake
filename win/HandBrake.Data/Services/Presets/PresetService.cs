@@ -22,17 +22,17 @@ namespace HandBrake.Services.Presets
     using HandBrake.CoreLibrary.Interop.Json.Presets;
     using HandBrake.CoreLibrary.Model;
     using HandBrake.CoreLibrary.Utilities;
-    using HandBrake.Model.Prompts;
-    using HandBrake.Properties;
     using HandBrake.Factories;
     using HandBrake.Model.Picture;
+    using HandBrake.Model.Prompts;
+    using HandBrake.Properties;
     using HandBrake.Services.Encode.Model.Models;
     using HandBrake.Services.Interfaces;
     using HandBrake.Services.Presets.Factories;
     using HandBrake.Services.Presets.Interfaces;
     using HandBrake.Services.Presets.Model;
     using HandBrake.Utilities;
-
+    using HandBrake.Utilities.Interfaces;
     using Newtonsoft.Json;
     using PlatformBindings.Models.FileSystem;
     using GeneralApplicationException = HandBrake.Exceptions.GeneralApplicationException;
@@ -51,8 +51,10 @@ namespace HandBrake.Services.Presets
         private readonly string presetFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly()), "presets.json");
         private readonly ObservableCollection<IPresetObject> presets = new ObservableCollection<IPresetObject>(); // Can store Presets and PresetDisplayCategory objects.
         private readonly Dictionary<string, Preset> flatPresetList = new Dictionary<string, Preset>();
+
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
+        private readonly IDialogService dialogService;
 
         #endregion Private Variables
 
@@ -65,10 +67,11 @@ namespace HandBrake.Services.Presets
         /// <param name="userSettingService">
         /// The User setting service.
         /// </param>
-        public PresetService(IErrorService errorService, IUserSettingService userSettingService)
+        public PresetService(IErrorService errorService, IUserSettingService userSettingService, IDialogService dialogService)
         {
             this.errorService = errorService;
             this.userSettingService = userSettingService;
+            this.dialogService = dialogService;
         }
 
         /// <summary>
@@ -919,11 +922,11 @@ namespace HandBrake.Services.Presets
             {
                 if (!this.CanUpdatePreset(preset.Name))
                 {
-                    HandBrakeServices.Current.Dialog.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, DialogButtonType.OK, DialogType.Error);
+                    this.dialogService.Show(Resources.Main_PresetErrorBuiltInName, Resources.Error, DialogButtonType.OK, DialogType.Error);
                     return;
                 }
 
-                var result = HandBrakeServices.Current.Dialog.Show(string.Format(Resources.Main_PresetOverwriteWarning, preset.Name), Resources.Overwrite, DialogButtonType.YesNo, DialogType.Warning);
+                var result = this.dialogService.Show(string.Format(Resources.Main_PresetOverwriteWarning, preset.Name), Resources.Overwrite, DialogButtonType.YesNo, DialogType.Warning);
                 if (result == HandBrake.Model.Prompts.DialogResult.Yes)
                 {
                     this.Update(preset);

@@ -44,6 +44,11 @@ namespace HandBrake.Services
         private readonly ISystemStateService systemStateService;
 
         /// <summary>
+        /// The View Manager.
+        /// </summary>
+        private readonly IViewManager viewManager;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PrePostActionService"/> class.
         /// </summary>
         /// <param name="queueProcessor">
@@ -52,14 +57,17 @@ namespace HandBrake.Services
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        /// <param name="windowManager">
-        /// The window Manager.
+        /// <param name="systemStateService">
+        /// The System State Service.
         /// </param>
-        public PrePostActionService(IQueueProcessor queueProcessor, IUserSettingService userSettingService)
+        /// <param name="viewManager">
+        /// The View Manager.
+        /// </param>
+        public PrePostActionService(IQueueProcessor queueProcessor, IUserSettingService userSettingService, ISystemStateService systemStateService, IViewManager viewManager)
         {
             this.queueProcessor = queueProcessor;
             this.userSettingService = userSettingService;
-            this.systemStateService = HandBrakeServices.Current.SystemState;
+            this.systemStateService = systemStateService;
 
             this.queueProcessor.QueueCompleted += QueueProcessorQueueCompleted;
             this.queueProcessor.EncodeService.EncodeCompleted += EncodeService_EncodeCompleted;
@@ -147,7 +155,7 @@ namespace HandBrake.Services
                 () =>
                     {
                         titleSpecificView.SetAction(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction));
-                        HandBrakeServices.Current?.ViewManager?.ShowDialog(titleSpecificView);
+                        viewManager.ShowDialog(titleSpecificView);
                     });
 
             if (!titleSpecificView.IsCancelled)
@@ -226,8 +234,13 @@ namespace HandBrake.Services
 
         private void PlayWhenDoneSound()
         {
-            string filePath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
-            HandBrakeServices.Current.Sound?.PlayWhenDoneSound(filePath);
+            try
+            {
+                var soundService = IoC.Get<ISoundService>();
+                string filePath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
+                soundService.PlayWhenDoneSound(filePath);
+            }
+            catch { }
         }
     }
 }

@@ -37,7 +37,7 @@ namespace HandBrake.ViewModels
     public class SubtitlesViewModel : ViewModelBase, ISubtitlesViewModel
     {
         private readonly IOBindings ioServices;
-        private readonly ViewManagerBase viewManager;
+        private readonly IViewManager viewManager;
 
         #region Constants and Fields
 
@@ -51,12 +51,12 @@ namespace HandBrake.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="HandBrake.ViewModels.SubtitlesViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window Manager.
+        /// <param name="viewManager">
+        /// The view Manager.
         /// </param>
-        public SubtitlesViewModel()
+        public SubtitlesViewModel(IViewManager viewManager)
         {
-            this.viewManager = HandBrakeServices.Current.ViewManager;
+            this.viewManager = viewManager;
             ioServices = AppServices.Current?.IO;
 
             this.SubtitleDefaultsViewModel = new SubtitlesDefaultsViewModel();

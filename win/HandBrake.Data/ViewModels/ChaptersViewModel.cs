@@ -50,9 +50,6 @@ namespace HandBrake.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="ChaptersViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>

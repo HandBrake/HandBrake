@@ -11,7 +11,6 @@ namespace HandBrake.ViewModels
 {
     using System.Collections.Generic;
     using System.Linq;
-    using HandBrake;
     using HandBrake.CoreLibrary.Interop.Model.Encoding;
     using HandBrake.Model.Prompts;
     using HandBrake.Properties;
@@ -34,7 +33,7 @@ namespace HandBrake.ViewModels
     {
         private readonly IPresetService presetService;
         private readonly IErrorService errorService;
-        private readonly ViewManagerBase viewManager;
+        private readonly IViewManager viewManager;
 
         private PresetPictureSettingsMode selectedPictureSettingMode;
         private bool showCustomInputs;
@@ -56,11 +55,14 @@ namespace HandBrake.ViewModels
         /// <param name="errorService">
         /// The Error Service
         /// </param>
-        public AddPresetViewModel(IPresetService presetService, IErrorService errorService)
+        /// <param name="viewManager">
+        /// The View Manager.
+        /// </param>
+        public AddPresetViewModel(IPresetService presetService, IErrorService errorService, IViewManager viewManager)
         {
             this.presetService = presetService;
             this.errorService = errorService;
-            this.viewManager = HandBrakeServices.Current?.ViewManager;
+            this.viewManager = viewManager;
 
             this.Title = ResourcesUI.AddPresetView_AddPreset;
             this.Preset = new Preset { IsBuildIn = false, IsDefault = false, Category = PresetService.UserPresetCatgoryName };

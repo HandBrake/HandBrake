@@ -9,8 +9,8 @@
 
 namespace HandBrake.Services.Interfaces
 {
-    using HandBrake.Model.Prompts;
     using System;
+    using HandBrake.Model.Prompts;
 
     /// <summary>
     /// The Interface to the Error Service.

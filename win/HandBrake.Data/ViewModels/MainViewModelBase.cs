@@ -12,7 +12,6 @@ namespace HandBrake.ViewModels
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using System.Diagnostics;
     using System.Globalization;
     using System.IO;
     using System.Linq;
@@ -59,14 +58,17 @@ namespace HandBrake.ViewModels
     {
         #region Private Variables and Services
 
-        private readonly IQueueProcessor queueProcessor;
-        private readonly IPresetService presetService;
-        private readonly IErrorService errorService;
-        private readonly IUserSettingService userSettingService;
-        private readonly IScan scanService;
-        private readonly IDialogService dialogService;
-        private readonly ViewManagerBase viewManager;
-        private readonly INotificationService notificationManager;
+        protected readonly IQueueProcessor queueProcessor;
+        protected readonly IPresetService presetService;
+        protected readonly IErrorService errorService;
+        protected readonly IUserSettingService userSettingService;
+        protected readonly IScan scanService;
+        protected readonly IDialogService dialogService;
+        protected readonly IViewManager viewManager;
+        protected readonly INotificationService notificationManager;
+        protected readonly ISystemInfo systemInfo;
+        protected readonly LauncherServiceBase launcher;
+        protected readonly ITaskBarService taskbarService;
 
         private string windowName;
         private string sourceLabel;
@@ -110,15 +112,18 @@ namespace HandBrake.ViewModels
         /// <param name="errorService">
         /// The Error Service
         /// </param>
-        /// <param name="updateService">
-        /// The update Service.
+        /// <param name="viewManager">
+        /// The View Manager.
+        /// </param>
+        /// <param name="notificationManager">
+        /// The Notification Manager.
+        /// </param>
+        /// <param name="queueProcessor">
+        /// The queue processor.
         /// </param>
         /// <param name="whenDoneService">
         /// The when Done Service.
         /// *** Leave in Constructor. ***
-        /// </param>
-        /// <param name="windowManager">
-        /// The window Manager.
         /// </param>
         /// <param name="pictureSettingsViewModel">
         /// The picture Settings View Model.
@@ -153,22 +158,33 @@ namespace HandBrake.ViewModels
         /// <param name="metaDataViewModel">
         /// The Meta Data View Model
         /// </param>
-        /// <param name="notifyIconService">Wrapper around the WinForms NotifyIcon for this app. </param>
+        /// <param name="systemInfo">
+        /// System Information.
+        /// </param>
+        /// <param name="launcher">
+        /// The Launcher.
+        /// </param>
+        /// <param name="taskbarService">
+        /// Manipulates the TaskBar.
+        /// </param>
         public MainViewModelBase(IUserSettingService userSettingService, IScan scanService, IPresetService presetService,
-            IErrorService errorService,
+            IErrorService errorService, IViewManager viewManager, INotificationService notificationManager, IQueueProcessor queueProcessor,
             IPrePostActionService whenDoneService, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, ISummaryViewModel summaryViewModel,
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
             IX264ViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
-            IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel)
+            IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel, ISystemInfo systemInfo, LauncherServiceBase launcher, ITaskBarService taskbarService)
         {
             this.scanService = scanService;
             this.presetService = presetService;
             this.errorService = errorService;
             this.QueueViewModel = queueViewModel;
             this.userSettingService = userSettingService;
-            this.queueProcessor = IoC.Get<IQueueProcessor>();
-            this.viewManager = HandBrakeServices.Current?.ViewManager;
-            this.notificationManager = HandBrakeServices.Current?.NotificationManager;
+            this.queueProcessor = queueProcessor;
+            this.viewManager = viewManager;
+            this.notificationManager = notificationManager;
+            this.systemInfo = systemInfo;
+            this.launcher = launcher;
+            this.taskbarService = taskbarService;
 
             this.SummaryViewModel = summaryViewModel;
             this.PictureSettingsViewModel = pictureSettingsViewModel;
@@ -968,7 +984,7 @@ namespace HandBrake.ViewModels
                 this.NotifyOfPropertyChange(() => this.ShowSourceSelection);
 
                 // Refresh the drives.
-                if (this.showSourceSelection && HandBrakeServices.Current.SystemInfo.SupportsOpticalDrive)
+                if (this.showSourceSelection && systemInfo.SupportsOpticalDrive)
                 {
                     this.Drives.Clear();
                     foreach (SourceMenuItem menuItem in from item in DriveUtilities.GetDrives()
@@ -999,7 +1015,7 @@ namespace HandBrake.ViewModels
         {
             get
             {
-                return HandBrakeServices.Current.SystemInfo.SupportsOpticalDrive && this.Drives.Any();
+                return systemInfo.SupportsOpticalDrive && this.Drives.Any();
             }
         }
 
@@ -1317,7 +1333,7 @@ namespace HandBrake.ViewModels
         /// </summary>
         public void OpenAboutApplication()
         {
-            HandBrakeServices.Current.OpenOptions(OptionsTab.About);
+            this.viewManager.OpenOptions(OptionsTab.About);
         }
 
         /// <summary>
@@ -1392,7 +1408,7 @@ namespace HandBrake.ViewModels
         {
             try
             {
-                Process.Start("https://handbrake.fr/docs");
+                AppServices.Current.UI.OpenLink(new Uri("https://handbrake.fr/docs"));
             }
             catch (Exception exc)
             {
@@ -1686,7 +1702,8 @@ namespace HandBrake.ViewModels
         /// </summary>
         public void ExitApplication()
         {
-            HandBrakeServices.Current?.SystemState?.Quit();
+            var systemState = IoC.Get<ISystemStateService>();
+            systemState.Quit();
         }
 
         /// <summary>
@@ -1802,24 +1819,7 @@ namespace HandBrake.ViewModels
                 try
                 {
                     string directory = Path.GetDirectoryName(this.Destination.Path);
-                    if (!string.IsNullOrEmpty(directory) && Directory.Exists(directory))
-                    {
-                        Process.Start(directory);
-                    }
-                    else
-                    {
-                        var result =
-                            errorService.ShowMessageBox(
-                                string.Format(Resources.DirectoryUtils_CreateFolderMsg, directory),
-                                Resources.DirectoryUtils_CreateFolder,
-                                DialogButtonType.YesNo,
-                                DialogType.Question);
-                        if (result == DialogResult.Yes)
-                        {
-                            Directory.CreateDirectory(directory);
-                            Process.Start(directory);
-                        }
-                    }
+                    this.launcher.OpenDirectory(directory);
                 }
                 catch (Exception exc)
                 {
@@ -1937,7 +1937,7 @@ namespace HandBrake.ViewModels
             }
             else
             {
-                HandBrakeServices.Current.Dialog.Show(Resources.Main_SelectPreset, Resources.Warning, DialogButtonType.OK, DialogType.Warning);
+                this.dialogService.Show(Resources.Main_SelectPreset, Resources.Warning, DialogButtonType.OK, DialogType.Warning);
             }
         }
 
@@ -1949,11 +1949,11 @@ namespace HandBrake.ViewModels
             if (this.selectedPreset != null)
             {
                 this.presetService.SetDefault(this.selectedPreset);
-                HandBrakeServices.Current.Dialog.Show(string.Format(Resources.Main_NewDefaultPreset, this.selectedPreset.Name), Resources.Main_Presets, DialogButtonType.OK, DialogType.Information);
+                this.dialogService.Show(string.Format(Resources.Main_NewDefaultPreset, this.selectedPreset.Name), Resources.Main_Presets, DialogButtonType.OK, DialogType.Information);
             }
             else
             {
-                HandBrakeServices.Current.Dialog.Show(Resources.Main_SelectPreset, Resources.Warning, DialogButtonType.OK, DialogType.Warning);
+                this.dialogService.Show(Resources.Main_SelectPreset, Resources.Warning, DialogButtonType.OK, DialogType.Warning);
             }
         }
 
@@ -1998,7 +1998,7 @@ namespace HandBrake.ViewModels
             }
             else
             {
-                HandBrakeServices.Current.Dialog.Show(Resources.Main_SelectPreset, Resources.Warning, DialogButtonType.OK, DialogType.Warning);
+                this.dialogService.Show(Resources.Main_SelectPreset, Resources.Warning, DialogButtonType.OK, DialogType.Warning);
             }
         }
 
@@ -2457,9 +2457,9 @@ namespace HandBrake.ViewModels
                                 jobsPending);
                         }
 
-                        if (lastEncodePercentage != percent && HandBrakeServices.Current.TaskBar != null)
+                        if (lastEncodePercentage != percent && this.taskbarService != null)
                         {
-                            HandBrakeServices.Current.TaskBar.SetTaskBarProgress(percent);
+                            this.taskbarService.SetTaskBarProgress(percent);
                         }
 
                         lastEncodePercentage = percent;
@@ -2480,9 +2480,9 @@ namespace HandBrake.ViewModels
                         this.WindowTitle = Resources.HandBrake_Title;
                         this.notificationManager.Notify(this.WindowTitle);
 
-                        if (HandBrakeServices.Current.TaskBar != null)
+                        if (taskbarService != null)
                         {
-                            HandBrakeServices.Current.TaskBar.DisableTaskBarProgress();
+                            taskbarService.DisableTaskBarProgress();
                         }
                     }
                 });
@@ -2533,9 +2533,9 @@ namespace HandBrake.ViewModels
                     this.WindowTitle = Resources.HandBrake_Title;
                     this.notificationManager.Notify(this.WindowTitle);
 
-                    if (HandBrakeServices.Current.TaskBar != null)
+                    if (this.taskbarService != null)
                     {
-                        HandBrakeServices.Current.TaskBar.DisableTaskBarProgress();
+                        this.taskbarService.DisableTaskBarProgress();
                     }
                 });
         }

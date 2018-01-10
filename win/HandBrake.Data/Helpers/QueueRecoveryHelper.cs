@@ -17,13 +17,13 @@ namespace HandBrake.Helpers
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Xml.Serialization;
-    using HandBrake;
+    using Caliburn.Micro;
     using HandBrake.CoreLibrary.Utilities;
     using HandBrake.Model.Prompts;
     using HandBrake.Services.Interfaces;
     using HandBrake.Services.Queue.Model;
     using HandBrake.Utilities;
-
+    using HandBrake.Utilities.Interfaces;
     using IQueueProcessor = HandBrake.Services.Queue.Interfaces.IQueueProcessor;
 
     /// <summary>
@@ -43,6 +43,8 @@ namespace HandBrake.Helpers
         {
             try
             {
+                var processinfo = IoC.Get<IProcessIdentificationService>();
+
                 string tempPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
                 List<string> queueFiles = new List<string>();
                 DirectoryInfo info = new DirectoryInfo(tempPath);
@@ -90,7 +92,7 @@ namespace HandBrake.Helpers
                     if (m.Success)
                     {
                         int processId = int.Parse(m.Groups[1].ToString());
-                        if (HandBrakeServices.Current.Process.IsProccessIdActive(processId))
+                        if (processinfo.IsProccessIdActive(processId))
                         {
                             continue;
                         }
@@ -125,7 +127,7 @@ namespace HandBrake.Helpers
         /// </returns>
         public static bool RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService, bool silentRecovery)
         {
-            var processinfo = HandBrakeServices.Current.Process;
+            var processinfo = IoC.Get<IProcessIdentificationService>();
             string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
             List<string> queueFiles = CheckQueueRecovery();
             var result = DialogResult.None;

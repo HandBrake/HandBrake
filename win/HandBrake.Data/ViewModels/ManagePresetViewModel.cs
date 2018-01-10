@@ -35,9 +35,6 @@ namespace HandBrake.ViewModels
         /// <param name="errorService">
         /// The Error Service
         /// </param>
-        /// <param name="windowManager">
-        /// The window Manager.
-        /// </param>
         public ManagePresetViewModel(IPresetService presetService, IErrorService errorService)
         {
             this.presetService = presetService;

@@ -16,7 +16,6 @@ namespace HandBrake.Services
     using System.Windows.Forms;
     using System.Windows.Resources;
     using Caliburn.Micro;
-    using HandBrake;
     using HandBrake.Services.Interfaces;
     using HandBrake.ViewModels.Interfaces;
 
@@ -25,7 +24,7 @@ namespace HandBrake.Services
         public static bool Registered => Instance.registered;
         private bool registered;
 
-        private static NotificationService Instance => (NotificationService)HandBrakeServices.Current?.NotificationManager;
+        private static NotificationService Instance => (NotificationService)IoC.Get<INotificationService>();
 
         private NotifyIcon notifyIcon;
         private Window window;
@@ -101,11 +100,12 @@ namespace HandBrake.Services
         private void ShowMiniStatusDisplay(object sender, EventArgs e)
         {
             IMiniViewModel titleSpecificView = IoC.Get<IMiniViewModel>();
+            IViewManager viewManager = IoC.Get<IViewManager>();
             Execute.OnUIThread(
                 () =>
                 {
                     titleSpecificView.Activate();
-                    HandBrakeServices.Current?.ViewManager?.ShowWindow(titleSpecificView);
+                    viewManager.ShowWindow(titleSpecificView);
                 });
         }
     }

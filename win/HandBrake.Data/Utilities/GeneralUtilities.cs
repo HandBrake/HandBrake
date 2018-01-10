@@ -13,7 +13,7 @@ namespace HandBrake.Utilities
     using System.Diagnostics;
     using System.IO;
     using System.Text;
-    using HandBrake;
+    using Caliburn.Micro;
     using HandBrake.CoreLibrary.Utilities;
 
     /// <summary>
@@ -92,7 +92,7 @@ namespace HandBrake.Utilities
         public static StringBuilder CreateLogHeader()
         {
             var logHeader = new StringBuilder();
-            var systemInfo = HandBrakeServices.Current.SystemInfo;
+            var systemInfo = IoC.Get<ISystemInfo>();
 
             StringBuilder gpuBuilder = new StringBuilder();
             foreach (var item in systemInfo.GPUInfo)

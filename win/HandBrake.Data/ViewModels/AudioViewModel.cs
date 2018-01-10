@@ -38,21 +38,24 @@ namespace HandBrake.ViewModels
         private IEnumerable<Audio> sourceTracks;
         private Preset currentPreset;
 
+        private IViewManager viewManager;
+
         #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public AudioViewModel(IUserSettingService userSettingService)
+        /// <param name="viewManager">
+        /// The View Manager.
+        /// </param>
+        public AudioViewModel(IUserSettingService userSettingService, IViewManager viewManager)
         {
             this.Task = new EncodeTask();
             this.AudioDefaultsViewModel = new AudioDefaultsViewModel(this.Task);
+            this.viewManager = viewManager;
 
             this.SampleRates = new ObservableCollection<string> { "Auto" };
             foreach (var item in HandBrakeEncoderHelpers.AudioSampleRates)
@@ -211,7 +214,7 @@ namespace HandBrake.ViewModels
         public void ShowAudioDefaults()
         {
             IPopupWindowViewModel popup = new PopupWindowViewModel(this.AudioDefaultsViewModel, ResourcesUI.Preset_AudioDefaults_Title, ResourcesUI.AudioView_AudioDefaultsDescription);
-            if (HandBrakeServices.Current?.ViewManager?.ShowDialog(popup) == true)
+            if (this.viewManager.ShowDialog(popup) == true)
             {
                 this.OnTabStatusChanged(null);
             }

@@ -10,8 +10,9 @@
 namespace HandBrake.ViewModels
 {
     using System;
-    using HandBrake;
+    using Caliburn.Micro;
     using HandBrake.Properties;
+    using HandBrake.Utilities.Interfaces;
     using HandBrake.ViewModels.Interfaces;
 
     /// <summary>
@@ -127,7 +128,8 @@ namespace HandBrake.ViewModels
         /// </summary>
         public void Copy()
         {
-            HandBrakeServices.Current.Clipboard.Copy(this.ErrorMessage + Environment.NewLine + this.Details);
+            var copyservice = IoC.Get<ICopyService>();
+            copyservice.Copy(this.ErrorMessage + Environment.NewLine + this.Details);
         }
     }
 }

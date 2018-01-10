@@ -107,9 +107,9 @@
       <DependentUpon>Resources.resw</DependentUpon>
     </Compile>
     <Compile Include="Utilities\DialogService.cs" />
+    <Compile Include="Utilities\LauncherService.cs" />
     <Compile Include="Utilities\ProcessIdentificationService.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
-    <Compile Include="UWPHandBrakeServices.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />

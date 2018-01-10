@@ -34,6 +34,7 @@ namespace HandBrake.ViewModels
     using EncodeProgressEventArgs = HandBrake.Services.Encode.EventArgs.EncodeProgressEventArgs;
     using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
     using HandBrake.Common;
+    using HandBrake.Utilities.Interfaces;
 
     /// <summary>
     /// The Preview View Model
@@ -46,6 +47,7 @@ namespace HandBrake.ViewModels
         private readonly IUserSettingService userSettingService;
         private readonly IQueueProcessor queueProcessor;
         private readonly IOBindings ioService;
+        private readonly IDialogService dialogService;
 
         private bool isEncoding;
         private string jobStatus;
@@ -70,12 +72,16 @@ namespace HandBrake.ViewModels
         /// <param name="errorService">
         /// The Error Service
         /// </param>
-        public QueueViewModel(IUserSettingService userSettingService, IQueueProcessor queueProcessor, IErrorService errorService)
+        /// <param name="dialogService">
+        /// The Dialog Service.
+        /// </param>
+        public QueueViewModel(IUserSettingService userSettingService, IQueueProcessor queueProcessor, IErrorService errorService, IDialogService dialogService)
         {
             this.userSettingService = userSettingService;
             this.queueProcessor = queueProcessor;
             this.errorService = errorService;
             this.ioService = AppServices.Current?.IO;
+            this.dialogService = dialogService;
 
             this.Title = Resources.QueueViewModel_Queue;
             this.JobsPending = Resources.QueueViewModel_NoEncodesPending;
@@ -275,8 +281,7 @@ namespace HandBrake.ViewModels
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = false;
 
-            HandBrakeServices.Current.Dialog.Show(Resources.QueueViewModel_QueuePauseNotice, Resources.QueueViewModel_Queue,
-                DialogButtonType.OK, DialogType.Information);
+            this.dialogService.Show(Resources.QueueViewModel_QueuePauseNotice, Resources.QueueViewModel_Queue, DialogButtonType.OK, DialogType.Information);
         }
 
         /// <summary>

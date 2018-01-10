@@ -26,6 +26,7 @@ namespace HandBrake.ViewModels
     using HandBrake.Services.Presets.Model;
     using HandBrake.Services.Scan.Model;
     using HandBrake.Utilities;
+    using HandBrake.Utilities.Interfaces;
     using HandBrake.ViewModels.Interfaces;
 
     using EncodeTask = HandBrake.Services.Encode.Model.EncodeTask;
@@ -50,6 +51,7 @@ namespace HandBrake.ViewModels
 
         private const string SameAsSource = "Same as source";
         private readonly IUserSettingService userSettingService;
+        private readonly ICopyService copyService;
 
         private bool displayOptimiseOptions;
         private int qualityMax;
@@ -77,10 +79,14 @@ namespace HandBrake.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public VideoViewModel(IUserSettingService userSettingService)
+        /// <param name="copyService">
+        /// The Copy Service.
+        /// </param>
+        public VideoViewModel(IUserSettingService userSettingService, ICopyService copyService)
         {
             this.Task = new EncodeTask { VideoEncoder = VideoEncoder.X264 };
             this.userSettingService = userSettingService;
+            this.copyService = copyService;
             this.QualityMin = 0;
             this.QualityMax = 51;
             this.IsConstantQuantity = true;
@@ -1156,7 +1162,7 @@ namespace HandBrake.ViewModels
         /// </summary>
         public void CopyQuery()
         {
-            HandBrakeServices.Current?.Clipboard?.Copy(this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 ? this.GetActualx264Query() : this.ExtraArguments);
+            this.copyService.Copy(this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 ? this.GetActualx264Query() : this.ExtraArguments);
         }
 
         #endregion Public Methods

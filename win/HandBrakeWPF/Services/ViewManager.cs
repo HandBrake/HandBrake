@@ -9,9 +9,11 @@ namespace HandBrake.Services
     using System.Linq;
     using System.Windows;
     using Caliburn.Micro;
+    using HandBrake.Commands;
+    using HandBrake.Model;
     using HandBrake.Services.Interfaces;
 
-    public class ViewManager : ViewManagerBase
+    public class ViewManager : IViewManager
     {
         public IWindowManager WindowManager => windowManager ?? (windowManager = IoC.Get<IWindowManager>());
 
@@ -21,9 +23,9 @@ namespace HandBrake.Services
         {
         }
 
-        public override bool SupportsWindow => true;
+        public bool SupportsWindow => true;
 
-        public override bool? ShowDialog<TViewModel>(TViewModel viewmodel = default(TViewModel))
+        public bool? ShowDialog<TViewModel>(TViewModel viewmodel = default(TViewModel))
         {
             if (viewmodel == null)
             {
@@ -33,7 +35,7 @@ namespace HandBrake.Services
             return this.WindowManager.ShowDialog(viewmodel);
         }
 
-        public override void ShowWindow<TViewModel>(TViewModel viewmodel = default(TViewModel))
+        public void ShowWindow<TViewModel>(TViewModel viewmodel = default(TViewModel))
         {
             if (viewmodel == null)
             {
@@ -57,6 +59,12 @@ namespace HandBrake.Services
             {
                 this.WindowManager.ShowWindow(viewmodel);
             }
+        }
+
+        public void OpenOptions(OptionsTab tab)
+        {
+            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
+            command.Execute(tab);
         }
     }
 }

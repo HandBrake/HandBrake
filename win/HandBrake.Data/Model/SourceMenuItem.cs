@@ -11,7 +11,6 @@ namespace HandBrake.Model
 {
     using System;
     using System.Collections.ObjectModel;
-    using System.Windows.Input;
 
     /// <summary>
     /// The source menu item.

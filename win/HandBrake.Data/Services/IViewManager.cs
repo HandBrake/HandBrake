@@ -1,20 +1,22 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ViewManagerBase.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="IViewManager.cs" company="HandBrake Project (http://handbrake.fr)">
 // This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.Services.Interfaces
 {
+    using HandBrake.Model;
+
     /// <summary>
     /// Handles Queue functions
     /// </summary>
-    public abstract class ViewManagerBase
+    public interface IViewManager
     {
         /// <summary>
         /// Gets a value indicating whether Window Mode is supported (Might not be on some platforms).
         /// </summary>
-        public abstract bool SupportsWindow { get; }
+        bool SupportsWindow { get; }
 
         /// <summary>
         /// Shows a Window based on the ViewModel, if supported.
@@ -25,7 +27,7 @@ namespace HandBrake.Services.Interfaces
         /// <param name="viewmodel">
         /// Viewmodel to use for the Window.
         /// </param>
-        public abstract void ShowWindow<TViewModel>(TViewModel viewmodel = default(TViewModel));
+        void ShowWindow<TViewModel>(TViewModel viewmodel = default(TViewModel));
 
         /// <summary>
         /// Shows a Dialog based on the ViewModel.
@@ -39,6 +41,12 @@ namespace HandBrake.Services.Interfaces
         /// <returns>
         /// Response
         /// </returns>
-        public abstract bool? ShowDialog<TViewModel>(TViewModel viewmodel = default(TViewModel));
+        bool? ShowDialog<TViewModel>(TViewModel viewmodel = default(TViewModel));
+
+        /// <summary>
+        /// Opens the Options View.
+        /// </summary>
+        /// <param name="tab">Tab to open to.</param>
+        void OpenOptions(OptionsTab tab);
     }
 }

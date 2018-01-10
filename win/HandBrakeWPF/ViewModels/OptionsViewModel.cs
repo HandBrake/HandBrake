@@ -23,6 +23,7 @@ namespace HandBrake.ViewModels
     using HandBrake.Utilities;
     using HandBrake.ViewModels.Interfaces;
     using PlatformBindings.Models.FileSystem;
+    using HandBrake.Utilities.Interfaces;
 
     public class OptionsViewModel : OptionsViewModelBase
     {
@@ -39,8 +40,8 @@ namespace HandBrake.ViewModels
         private string vlcPath;
         private bool minimiseToTray;
 
-        public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService)
-            : base(userSettingService, aboutViewModel, errorService)
+        public OptionsViewModel(IUserSettingService userSettingService, IUpdateService updateService, IAboutViewModel aboutViewModel, IErrorService errorService, IDialogService dialogService)
+            : base(userSettingService, aboutViewModel, errorService, dialogService)
         {
             this.updateService = updateService;
             this.UpdateMessage = "Click 'Check for Updates' to check for new versions";

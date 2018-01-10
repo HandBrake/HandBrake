@@ -10,9 +10,10 @@
     xmlns:controls="using:HandBrake.Controls"
     xmlns:models="using:HandBrake.Model"
     xmlns:cal="using:Caliburn.Micro"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
     mc:Ignorable="d"
     PrimaryButtonText="{Binding Cancel, Source={StaticResource resourcesUWP}}"
-    PrimaryButtonClick="{x:Bind Viewmodel.CloseSourceSelection}"
     Background="{ThemeResource SystemControlChromeHighAcrylicElementMediumBrush }">
 
     <ContentDialog.Resources>
@@ -26,7 +27,11 @@
         </Style>
     </ContentDialog.Resources>
 
-    <StackPanel>
+    <StackPanel
+        AllowDrop="True"
+        DragEnter="ContentDialog_DragEnter"
+        Drop="ContentDialog_Drop"
+        Background="#00000000">
         <TextBlock
                 Text="{Binding SourceSelection_SourceSelection, Source={StaticResource resourcesUI}}"
                 TextAlignment="Center"

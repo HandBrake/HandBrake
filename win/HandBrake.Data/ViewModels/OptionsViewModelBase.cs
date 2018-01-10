@@ -110,12 +110,15 @@ namespace HandBrake.ViewModels
         /// <param name="errorService">
         /// The error Service.
         /// </param>
-        public OptionsViewModelBase(IUserSettingService userSettingService, IAboutViewModel aboutViewModel, IErrorService errorService)
+        /// <param name="dialogService">
+        /// The Dialog Service.
+        /// </param>
+        public OptionsViewModelBase(IUserSettingService userSettingService, IAboutViewModel aboutViewModel, IErrorService errorService, IDialogService dialogService)
         {
             this.Title = "Options";
             this.UserSettingService = userSettingService;
             this.ErrorService = errorService;
-            this.DialogService = HandBrakeServices.Current.Dialog;
+            this.DialogService = dialogService;
             this.IOService = AppServices.Current?.IO;
             this.AboutViewModel = aboutViewModel;
             this.OnLoad();

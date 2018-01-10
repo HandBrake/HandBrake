@@ -39,6 +39,7 @@ namespace HandBrake.ViewModels
     using OutputFormat = HandBrake.Services.Encode.Model.Models.OutputFormat;
     using PointToPointMode = HandBrake.Services.Encode.Model.Models.PointToPointMode;
     using HandBrake.Common;
+    using HandBrake.Utilities;
 
     /// <summary>
     ///     The Static Preview View Model
@@ -71,6 +72,16 @@ namespace HandBrake.ViewModels
         /// The user Setting Service
         /// </summary>
         private readonly IUserSettingService userSettingService;
+
+        /// <summary>
+        /// System Information.
+        /// </summary>
+        private readonly ISystemInfo systemInfo;
+
+        /// <summary>
+        /// The Launcher Service.
+        /// </summary>
+        private readonly LauncherServiceBase launcher;
 
         /// <summary>
         ///     The height.
@@ -133,16 +144,24 @@ namespace HandBrake.ViewModels
         /// <param name="errorService">
         /// The error Service.
         /// </param>
-        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService)
+        /// <param name="launcher">
+        /// The Launcher Service.
+        /// </param>
+        /// <param name="systemInfo">
+        /// System Information.
+        /// </param>
+        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, LauncherServiceBase launcher, ISystemInfo systemInfo)
         {
             this.scanService = scanService;
             this.selectedPreviewImage = 1;
             this.Title = Resources.Preview;
             this.PreviewNotAvailable = true;
+            this.systemInfo = systemInfo;
 
             // Live Preview
             this.userSettingService = userSettingService;
             this.errorService = errorService;
+            this.launcher = launcher;
             this.encodeService = new LibEncode(); // Preview needs a seperate instance rather than the shared singleton. This could maybe do with being refactored at some point
 
             this.Title = "Preview";
@@ -496,7 +515,7 @@ namespace HandBrake.ViewModels
         /// </param>
         public int FixWidth(int width)
         {
-            var screendimensions = HandBrakeServices.Current.SystemInfo.ScreenBounds;
+            var screendimensions = this.systemInfo.ScreenBounds;
             if (width > screendimensions.Width)
             {
                 return screendimensions.Width - 50;
@@ -507,7 +526,7 @@ namespace HandBrake.ViewModels
 
         public int FixHeight(int height)
         {
-            var screendimensions = HandBrakeServices.Current.SystemInfo.ScreenBounds;
+            var screendimensions = this.systemInfo.ScreenBounds;
             if (height > screendimensions.Height)
             {
                 return screendimensions.Height - 50;
@@ -630,46 +649,7 @@ namespace HandBrake.ViewModels
             {
                 if (File.Exists(this.CurrentlyPlaying))
                 {
-                    string args = "\"" + this.CurrentlyPlaying + "\"";
-
-                    if (this.UseSystemDefaultPlayer)
-                    {
-                        Process.Start(args);
-                    }
-                    else
-                    {
-                        if (!File.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
-                        {
-                            // Attempt to find VLC if it doesn't exist in the default set location.
-                            string vlcPath;
-
-                            if (IntPtr.Size == 8 || (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("PROCESSOR_ARCHITEW6432"))))
-                                vlcPath = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
-                            else
-                                vlcPath = Environment.GetEnvironmentVariable("ProgramFiles");
-
-                            if (!string.IsNullOrEmpty(vlcPath))
-                            {
-                                vlcPath = Path.Combine(vlcPath, "VideoLAN\\VLC\\vlc.exe");
-                            }
-
-                            if (File.Exists(vlcPath))
-                            {
-                                userSettingService.SetUserSetting(UserSettingConstants.VLCPath, vlcPath);
-                            }
-                            else
-                            {
-                                this.errorService.ShowMessageBox(Resources.StaticPreviewViewModel_UnableToFindVLC,
-                                                                 Resources.Error, DialogButtonType.OK, DialogType.Warning);
-                            }
-                        }
-
-                        if (File.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath)))
-                        {
-                            ProcessStartInfo vlc = new ProcessStartInfo(userSettingService.GetUserSetting<string>(UserSettingConstants.VLCPath), args);
-                            Process.Start(vlc);
-                        }
-                    }
+                    this.launcher.PlayFile(this.CurrentlyPlaying);
                 }
                 else
                 {

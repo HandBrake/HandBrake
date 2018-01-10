@@ -19,6 +19,8 @@ namespace HandBrake
     using HandBrake.Services.Queue.Interfaces;
     using HandBrake.Services.Scan;
     using HandBrake.Services.Scan.Interfaces;
+    using HandBrake.Utilities;
+    using HandBrake.Utilities.Interfaces;
     using HandBrake.ViewModels;
     using HandBrake.ViewModels.Interfaces;
     using PlatformBindings;
@@ -42,7 +44,6 @@ namespace HandBrake
         public App()
         {
             PlatformBindingsBootstrapper.Initialise(true);
-            new UWPHandBrakeServices();
             this.InitializeComponent();
         }
 
@@ -54,6 +55,8 @@ namespace HandBrake
             this.container = new WinRTContainer();
             this.container.RegisterWinRTServices();
 
+            //new UWPHandBrakeServices();
+
             this.container.Singleton<IEventAggregator, EventAggregator>();
 
             // Services
@@ -63,6 +66,18 @@ namespace HandBrake
             this.container.Singleton<IUserSettingService, UserSettingService>();
             this.container.Singleton<IPresetService, PresetService>();
             this.container.Singleton<IQueueProcessor, QueueProcessor>();
+
+            // Utilities
+            this.container.Singleton<ISystemInfo, SystemInfo>();
+            this.container.Singleton<IProcessIdentificationService, ProcessIdentificationService>();
+            this.container.Singleton<IDialogService, DialogService>();
+            this.container.Singleton<LauncherServiceBase, LauncherService>();
+
+            // this.container.Singleton<ISoundService, SoundService>();
+            // this.container.Singleton<ITaskBarService, TaskBarService>();
+            // this.container.Singleton<ICopyService, CopyService>();
+            // this.container.Singleton<ViewManagerBase, ViewManager>();
+            // this.container.Singleton<INotificationService, NotificationService>();
 
             // Services and Shell Components
             this.container.Singleton<IErrorService, ErrorService>();

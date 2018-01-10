@@ -11,7 +11,6 @@ namespace HandBrake.ViewModels
     using HandBrake.Services.Interfaces;
     using HandBrake.ViewModels.Interfaces;
     using Windows.ApplicationModel.DataTransfer;
-    using Windows.Storage;
     using Windows.UI.Xaml;
 
     public class ShellViewModel : ShellViewModelBase

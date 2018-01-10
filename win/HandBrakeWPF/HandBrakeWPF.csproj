@@ -189,6 +189,7 @@
     <Compile Include="Utilities\CopyService.cs" />
     <Compile Include="Utilities\DialogService.cs" />
     <Compile Include="Utilities\DPIAwareness.cs" />
+    <Compile Include="Utilities\LauncherService.cs" />
     <Compile Include="Utilities\ProcessIdentificationService.cs" />
     <Compile Include="Utilities\Portable.cs" />
     <Compile Include="Utilities\SystemInfo.cs" />
@@ -317,7 +318,6 @@
     <Compile Include="Views\VideoView.xaml.cs">
       <DependentUpon>VideoView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WPFHandBrakeServices.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
