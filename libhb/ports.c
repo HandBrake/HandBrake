@@ -1306,6 +1306,7 @@ void hb_system_sleep_private_enable(void *opaque)
     if (opaque == NULL)
     {
         hb_error("hb_system_sleep: opaque is NULL");
+        return;
     }
 
     IOPMAssertionID *assertionID = (IOPMAssertionID*)opaque;
@@ -1336,6 +1337,7 @@ void hb_system_sleep_private_disable(void *opaque)
     if (opaque == NULL)
     {
         hb_error("hb_system_sleep: opaque is NULL");
+        return;
     }
     
     IOPMAssertionID *assertionID = (IOPMAssertionID*)opaque;
