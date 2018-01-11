@@ -1,0 +1,203 @@
+﻿<UserControl x:Class="HandBrake.Views.VideoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:Converters="clr-namespace:HandBrake.Converters"
+             xmlns:Video="clr-namespace:HandBrake.Converters.Video"
+             xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data"
+             xmlns:cal="http://www.caliburnproject.org"
+             mc:Ignorable="d" >
+
+    <UserControl.Resources>
+        <Converters:BooleanConverter x:Key="boolConverter" />
+        <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+        <Converters:EnumComboConverter x:Key="enumComboConverter" />
+        <Converters:InverseBooleanConverter x:Key="inverseConverter" />
+        <Video:VideoEncoderConverter x:Key="videoEncoderConverter" />
+    </UserControl.Resources>
+
+    <Grid Margin="10,5,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Vertical" Grid.Column="0" >
+
+                <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_Video}" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_Codec}" Width="100" />
+
+                    <ComboBox Width="120" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Encoders}" >
+                        <ComboBox.SelectedItem>
+                            <MultiBinding Converter="{StaticResource videoEncoderConverter}">
+                                <Binding Path="SelectedVideoEncoder" />
+                            </MultiBinding>
+                        </ComboBox.SelectedItem>
+                        <ComboBox.ItemsSource>
+                            <MultiBinding Converter="{StaticResource videoEncoderConverter}">
+                                <Binding Path="VideoEncoders"/>
+                                <Binding Path="Task" />
+                            </MultiBinding>
+                        </ComboBox.ItemsSource>
+                    </ComboBox>
+
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_Framerate}" VerticalAlignment="Top" Margin="0,5,0,0" Width="100"/>
+                    <StackPanel Orientation="Vertical">
+                        <ComboBox Width="120" ItemsSource="{Binding Framerates}" SelectedItem="{Binding SelectedFramerate}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Framerate}"  />
+
+                        <StackPanel Orientation="Vertical" >
+                            <RadioButton Content="{x:Static Properties:ResourcesUI.VideoView_ConstantFramerate}" IsChecked="{Binding IsConstantFramerate}" Margin="0,5,0,0"
+                                         ToolTip="{x:Static Properties:ResourcesTooltips.Video_ConstantFramerate}" />
+                            <RadioButton Content="{x:Static Properties:ResourcesUI.VideoView_VariableFramerate}" IsChecked="{Binding IsVariableFramerate}" Margin="0,5,0,0" 
+                                     Visibility="{Binding ShowPeakFramerate, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_VariableFramerate}"  />
+                            <RadioButton Content="{x:Static Properties:ResourcesUI.VideoView_PeakFramerate}" IsChecked="{Binding IsPeakFramerate}" Margin="0,5,0,0"
+                                     Visibility="{Binding ShowPeakFramerate, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_PeakFramerate}"  />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Grid.Column="1">
+                <TextBlock Text="Quality" FontWeight="Bold" Margin="0,0,0,10"/>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
+                    <RadioButton Content="{x:Static Properties:ResourcesUI.VideoView_ConstantQuality}" IsChecked="{Binding IsConstantQuantity}"  Margin="0,0,10,0"
+                                 ToolTip="{x:Static Properties:ResourcesTooltips.Video_Quality}" />
+                    <TextBlock Text="{Binding DisplayRF}" MinWidth="30" />
+                    <TextBlock Text="{Binding Rfqp}" FontWeight="Bold" Margin="5,0,0,0" />
+
+                    <TextBlock Text="{x:Static Properties:Resources.Video_LosslessWarning}" Visibility="{Binding IsLossless, Converter={StaticResource boolToVisConverter}}" 
+                           Margin="10,0,0,0" ToolTip="{x:Static Properties:Resources.Video_LosslessWarningTooltip}" FontWeight="Bold" />
+                </StackPanel>
+
+                <Slider Width="280" Value="{Binding RF, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"  Maximum="{Binding QualityMax}" Minimum="{Binding QualityMin}"
+                        IsEnabled="{Binding IsConstantQuantity}" Margin="20,0,0,10"
+                        ToolTip="{x:Static Properties:ResourcesTooltips.Video_Quality}" Style="{StaticResource LongToolTipHolder}" 
+                        IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" />
+
+                <Grid Margin="20,0,0,15" Width="280" HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Static Properties:Resources.Video_LowQuality}" />
+                    <TextBlock Text="{Binding HighQualityLabel}" HorizontalAlignment="Right" Grid.Column="1" />
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                    <RadioButton Content="{x:Static Properties:ResourcesUI.VideoView_AverageBitrate}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_AvgBitrate}" 
+                                 IsChecked="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,10,0"/>
+                    <TextBox Width="75" Text="{Binding VideoBitrate, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
+                             ToolTip="{x:Static Properties:ResourcesTooltips.Video_AvgBitrate}" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Margin="30,0,0,0" Visibility="{Binding DisplayNonQSVControls, Converter={StaticResource boolToVisConverter}}">
+                    <CheckBox Content="{x:Static Properties:ResourcesUI.VideoView_2Pass}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
+                              IsChecked="{Binding TwoPass}" Margin="0,0,10,0" ToolTip="{x:Static Properties:ResourcesTooltips.Video_TwoPass}"  />
+                    <CheckBox Content="{x:Static Properties:ResourcesUI.VideoView_TurboFirstPass}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
+                              IsChecked="{Binding TurboFirstPass}" Visibility="{Binding DisplayTurboFirstPass, Converter={StaticResource boolToVisConverter}}"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.Video_TurboFirstPass}" />
+                </StackPanel>
+
+            </StackPanel>
+
+            <!-- H264 settings -->
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,5,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_OptimiseVideo}" Margin="0,0,0,0" Grid.Row="0"  Grid.ColumnSpan="2" FontWeight="Bold" VerticalAlignment="Center" />
+
+                <CheckBox Content="{x:Static Properties:ResourcesUI.VideoView_UseAdvancedTab}" Grid.Row="1" IsChecked="{Binding UseAdvancedTab}" Margin="0,5,0,0"
+                          Visibility="{Binding IsAdvancedTabOptionEnabled, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
+                          ToolTip="{x:Static Properties:ResourcesTooltips.Video_AdvancedOptions}" />
+
+                <Grid Grid.Row="2" Margin="0,8,0,0" IsEnabled="{Binding UseAdvancedTab, Converter={StaticResource inverseConverter}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Row 1 -->
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_EncoderPreset}" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Visibility="{Binding DisplayOptimiseOptions, Converter={StaticResource boolToVisConverter}}" />
+                    <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal" Visibility="{Binding DisplayOptimiseOptions, Converter={StaticResource boolToVisConverter}}">
+                        <Slider Minimum="0" Maximum="{Binding VideoPresetMaxValue}" Width="150" Value="{Binding VideoPresetValue, Mode=Default, UpdateSourceTrigger=PropertyChanged}" 
+                            IsSnapToTickEnabled="True" TickFrequency="1" TickPlacement="BottomRight" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Presets}" 
+                            Style="{StaticResource LongToolTipHolder}"  />
+                        <TextBlock Text="{Binding VideoPreset.DisplayName}" Margin="5,0,0,0" />
+                    </StackPanel>
+
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_EncodeTune}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,0,0"
+                               Visibility="{Binding DisplayTuneControls, Converter={StaticResource boolToVisConverter}}"/>
+                    <ComboBox Width="100" Grid.Row="2" Grid.Column="1" Margin="5,5,5,0" Height="22"
+                              ItemsSource="{Binding VideoTunes}" DisplayMemberPath="DisplayName" SelectedItem="{Binding VideoTune}"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.Video_EncoderTune}"  Visibility="{Binding DisplayTuneControls, Converter={StaticResource boolToVisConverter}}"
+                              Style="{StaticResource LongToolTipHolder}" />
+                    <CheckBox IsChecked="{Binding FastDecode}" Content="{x:Static Properties:ResourcesUI.VideoView_FastDecode}" Grid.Row="2" Grid.Column="2" Margin="10,5,10,0" VerticalAlignment="Center" VerticalContentAlignment="Center"
+                              ToolTip="{x:Static Properties:ResourcesTooltips.Video_FastDecode}"  Visibility="{Binding DisplayTuneControls, Converter={StaticResource boolToVisConverter}}"/>
+
+          
+                    <!-- Row 2-->
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_EncoderProfile}" Grid.Row="3" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" Visibility="{Binding DisplayProfileControl, Converter={StaticResource boolToVisConverter}}"/>
+                    <ComboBox Width="100" Grid.Row="3" Grid.Column="1" Margin="5,5,5,0" Height="22" VerticalAlignment="Center" Visibility="{Binding DisplayProfileControl, Converter={StaticResource boolToVisConverter}}"
+                          ItemsSource="{Binding VideoProfiles}" DisplayMemberPath="DisplayName" SelectedItem="{Binding VideoProfile}"
+                          Style="{StaticResource LongToolTipHolder}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Profile}"  />
+
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_EncoderLevel}" Grid.Row="3" Grid.Column="2" Margin="10,5,0,0" VerticalAlignment="Center" Visibility="{Binding DisplayLevelControl, Converter={StaticResource boolToVisConverter}}" />
+                    <ComboBox Width="100" Grid.Row="3" Grid.Column="3" Margin="5,5,5,0" Height="22" VerticalAlignment="Center" Visibility="{Binding DisplayLevelControl, Converter={StaticResource boolToVisConverter}}"
+                          ItemsSource="{Binding VideoLevels}"  DisplayMemberPath="DisplayName" SelectedItem="{Binding VideoLevel}"
+                          Style="{StaticResource LongToolTipHolder}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Level}" />
+
+                    <!-- Row 3 -->
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_ExtraOptions}" Grid.Row="4" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" />
+                    <TextBox Text="{Binding ExtraArguments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow"
+                             MaxLines="4" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="5,5,5,2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch"
+                             ToolTip="{Binding FullOptionsTooltip}" Style="{StaticResource LongToolTipHolder}" >
+                        <TextBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Copy Full Query" cal:Message.Attach="[Event Click] = [Action CopyQuery]"  />
+                            </ContextMenu>
+                        </TextBox.ContextMenu>
+                    </TextBox>
+
+
+                </Grid>
+            </Grid>
+
+
+        </Grid>
+
+    </Grid>
+</UserControl>

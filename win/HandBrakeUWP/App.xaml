@@ -1,0 +1,21 @@
+﻿<caliburn:CaliburnApplication
+    x:Class="HandBrake.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:caliburn="using:Caliburn.Micro"
+    xmlns:common="using:HandBrake.Common"
+    xmlns:properties="using:HandBrake.Properties"
+    xmlns:resources="using:HandBrake.Resources">
+    <caliburn:CaliburnApplication.Resources>
+        <ResourceDictionary>
+            <!-- Resources -->
+            <properties:Resources x:Key="resources" />
+            <properties:ResourcesUI x:Key="resourcesUI" />
+            <properties:ResourcesTooltips x:Key="resourcesTooltips" />
+            <resources:Resources x:Key="resourcesUWP" />
+            <!-- Resources -->
+
+            <common:BooleanVisibilityInverter x:Key="boolInverter" />
+        </ResourceDictionary>
+    </caliburn:CaliburnApplication.Resources>
+</caliburn:CaliburnApplication>

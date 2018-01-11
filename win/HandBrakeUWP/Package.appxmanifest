@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:wincap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/windowscapabilities" IgnorableNamespaces="uap mp">
+  <Identity Name="06bcfa84-a650-442c-9ecd-e64641a14f24" Version="1.1.7.0" Publisher="CN=HandBrake Unofficial" />
+  <mp:PhoneIdentity PhoneProductId="06bcfa84-a650-442c-9ecd-e64641a14f24" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Properties>
+    <DisplayName>HandBrake</DisplayName>
+    <PublisherDisplayName>HandBrake Team</PublisherDisplayName>
+    <Logo>Assets\Logo\storelogo.png</Logo>
+  </Properties>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+  </Dependencies>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="HandBrake.App">
+      <uap:VisualElements DisplayName="HandBrake" Description="HandBrake is a tool for converting video from nearly any format to a selection of modern, widely supported codecs." BackgroundColor="transparent" Square150x150Logo="Assets\Logo\Square150x150Logo.png" Square44x44Logo="Assets\Logo\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Logo\Wide310x150Logo.png" ShortName="HandBrake" Square71x71Logo="Assets\Logo\SmallTile.png" Square310x310Logo="Assets\Logo\LargeTile.png">
+        </uap:DefaultTile>
+        <uap:SplashScreen Image="Assets\Logo\splashscreen.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <uap:Capability Name="removableStorage" />
+  </Capabilities>
+</Package>

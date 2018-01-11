@@ -1,0 +1,123 @@
+﻿<UserControl x:Class="HandBrake.Controls.SourceSelection"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:cal="http://www.caliburnproject.org"
+        xmlns:controls="clr-namespace:HandBrake.Controls"
+        xmlns:Properties="clr-namespace:HandBrake.Properties;assembly=HandBrake.Data" x:Name="sourcePanel">
+
+    <Grid Height="{Binding ElementName=sourcePanel, Path=ActualHeight}">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid VerticalAlignment="Stretch" Grid.Column="0" Width="300" Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="30" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="20,8,0,0">
+                <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_SourceSelection}" FontSize="26" FontFamily="Segoe UI Light" />
+            </StackPanel>
+
+            <!-- Title Specific Scan -->
+            <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left"  Margin="20,15,0,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_ChooseSpecificTitle}" />
+
+                    <controls:NumberBox Width="60" Height="24" Margin="10,0,0,0" ToolTip="{x:Static Properties:ResourcesTooltips.SourceSelection_TitleSpecific}"
+                                Minimum="0" Maximum="5000" Number="{Binding TitleSpecificScan, Mode=TwoWay}" />
+                </StackPanel>
+
+                <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_ChooseVideo}" Margin="0,10,0,0" />
+            </StackPanel>
+
+            <!-- Source Types -->
+
+            <!-- Ctrl + R -->
+            <Button Grid.Row="2"  AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseFolder}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
+                    Margin="20,5,0,0" Padding="8" HorizontalAlignment="Left">
+
+                <StackPanel Orientation="Horizontal" MinWidth="100">
+                    <Image Source="../Views/Images/folder32.png" Width="32" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_FolderBatchScan}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_OpenFolderWIth}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                    </StackPanel>
+                </StackPanel>
+            </Button>
+
+            <!--Ctrl + F-->
+            <Button Grid.Row="3"  AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseFile}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FileScan]"
+                    Margin="20,5,0,0" Padding="8" HorizontalAlignment="Left">
+                <StackPanel Orientation="Horizontal" MinWidth="100">
+                    <Image Source="../Views/Images/File32.png" Width="32" />
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_File}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_SingleVideoFile}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                    </StackPanel>
+                </StackPanel>
+            </Button>
+
+            <ListBox Grid.Row="4" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0" Margin="16,5,0,0" ItemContainerStyle="{StaticResource hoverlessListBoxItemStyle}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}"
+                                cal:Message.Attach="[Event Click] = [Action ProcessDrive($this.Tag)]"
+                                Margin="0,0,0,10" Padding="8" HorizontalAlignment="Left"
+                                Tag="{Binding}" AutomationProperties.Name="{x:Static Properties:ResourcesUI.SourceSelection_ChooseDisc}">
+                            <StackPanel Orientation="Horizontal" MinWidth="100">
+                                <Image Source="../Views/Images/Disc.png" Width="32" />
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                                    <TextBlock Text="{x:Static Properties:ResourcesUI.SourceSelection_OpenDVDBluray}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Button>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!-- Cancel Window -->
+            <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
+                <Button cal:Message.Attach="[Event Click] = [Action CloseSourceSelection]" Content="Cancel" Padding="8,2" />
+            </StackPanel>
+
+            <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
+                <TextBlock>
+                    <Hyperlink x:Name="Preferences" NavigateUri="/"  RequestNavigate="OpenOptions_OnRequestNavigate" >Preferences</Hyperlink>
+                </TextBlock>
+                <TextBlock Text="|"  Margin="5,0,5,0" />
+                <TextBlock>
+                    <Hyperlink x:Name="help" NavigateUri="/" RequestNavigate="Help_OnRequestNavigate" >Help</Hyperlink>
+                </TextBlock>
+                <TextBlock Text="|"  Margin="5,0,5,0" />
+                <TextBlock>
+                    <Hyperlink x:Name="AboutHandBrake" NavigateUri="/" RequestNavigate="AboutHandBrake_OnRequestNavigate" >About HandBrake</Hyperlink>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Column="1" Background="Black" Opacity="0.65" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Border BorderThickness="8" CornerRadius="4"  VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Border.BorderBrush>
+                    <SolidColorBrush Color="White" Opacity=".65" />
+                </Border.BorderBrush>
+                <TextBlock Text="Or drop a file or folder here ..." Foreground="White" Margin="100,125,100,125"  FontSize="26" FontFamily="Segoe UI Light" />
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

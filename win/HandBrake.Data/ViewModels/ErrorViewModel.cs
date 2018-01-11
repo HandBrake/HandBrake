@@ -1,0 +1,135 @@
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ErrorViewModel.cs" company="HandBrake Project (http://handbrake.fr)">
+//   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
+// </copyright>
+// <summary>
+//   Defines the ErrorViewModel type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace HandBrake.ViewModels
+{
+    using System;
+    using Caliburn.Micro;
+    using HandBrake.Properties;
+    using HandBrake.Utilities.Interfaces;
+    using HandBrake.ViewModels.Interfaces;
+
+    /// <summary>
+    /// The Error View Model
+    /// </summary>
+    public class ErrorViewModel : ViewModelBase, IErrorViewModel
+    {
+        #region Constants and Fields
+
+        /// <summary>
+        /// The details.
+        /// </summary>
+        private string details;
+
+        /// <summary>
+        /// The error message.
+        /// </summary>
+        private string errorMessage;
+
+        /// <summary>
+        /// The solution.
+        /// </summary>
+        private string solution;
+
+        #endregion Constants and Fields
+
+        #region Constructors and Destructors
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ErrorViewModel"/> class.
+        /// </summary>
+        public ErrorViewModel()
+        {
+            this.Title = Resources.Error;
+            this.ErrorMessage = Resources.ErrorViewModel_UnknownError;
+            this.Details = Resources.ErrorViewModel_NoFurtherInformation;
+        }
+
+        #endregion Constructors and Destructors
+
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets Details.
+        /// </summary>
+        public string Details
+        {
+            get
+            {
+                return string.IsNullOrEmpty(this.details) ? Resources.ErrorViewModel_NoFurtherInformation : this.details;
+            }
+
+            set
+            {
+                this.details = value;
+                this.NotifyOfPropertyChange("Details");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets ErrorMessage.
+        /// </summary>
+        public string ErrorMessage
+        {
+            get
+            {
+                return this.errorMessage;
+            }
+
+            set
+            {
+                this.errorMessage = value;
+                this.NotifyOfPropertyChange("ErrorMessage");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets Solution.
+        /// </summary>
+        public string Solution
+        {
+            get
+            {
+                return string.IsNullOrEmpty(this.solution) ? Resources.ErrorViewModel_IfTheProblemPersists : this.solution;
+            }
+
+            set
+            {
+                this.solution = value;
+                this.NotifyOfPropertyChange("Solution");
+            }
+        }
+
+        #endregion Properties
+
+        /// <summary>
+        /// Close this window.
+        /// </summary>
+        public void Close()
+        {
+            try
+            {
+                this.TryClose();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        /// <summary>
+        /// Copy the Error to the clipboard.
+        /// </summary>
+        public void Copy()
+        {
+            var copyservice = IoC.Get<ICopyService>();
+            copyservice.Copy(this.ErrorMessage + Environment.NewLine + this.Details);
+        }
+    }
+}
