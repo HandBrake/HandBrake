@@ -587,7 +587,7 @@ static void nlmeans_prefilter(BorderedPlane *src,
                               const int filter_type)
 {
     hb_lock(src->mutex);
-    if (src->prefiltered)
+    if (src->prefiltered == 1)
     {
         hb_unlock(src->mutex);
         return;
