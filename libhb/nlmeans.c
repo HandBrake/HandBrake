@@ -1109,16 +1109,16 @@ static void nlmeans_filter_thread(void *thread_args_v)
 
         for (int c = 0; c < 3; c++)
         {
-            if (pv->strength[c] == 0)
+            if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
             {
+                nlmeans_prefilter(&frame->plane[c], pv->prefilter[c]);
                 nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
                                  buf->plane[c].width, buf->plane[c].stride,
                                  buf->plane[c].height);
                 continue;
             }
-            if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
+            if (pv->strength[c] == 0)
             {
-                nlmeans_prefilter(&frame->plane[c], pv->prefilter[c]);
                 nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
                                  buf->plane[c].width, buf->plane[c].stride,
                                  buf->plane[c].height);
@@ -1240,16 +1240,16 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
 
         for (int c = 0; c < 3; c++)
         {
-            if (pv->strength[c] == 0)
+            if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
             {
+                nlmeans_prefilter(&frame->plane[c], pv->prefilter[c]);
                 nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
                                  buf->plane[c].width, buf->plane[c].stride,
                                  buf->plane[c].height);
                 continue;
             }
-            if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
+            if (pv->strength[c] == 0)
             {
-                nlmeans_prefilter(&frame->plane[c], pv->prefilter[c]);
                 nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
                                  buf->plane[c].width, buf->plane[c].stride,
                                  buf->plane[c].height);
