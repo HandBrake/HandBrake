@@ -619,15 +619,15 @@ static void nlmeans_prefilter(BorderedPlane *src,
         }
 
         // Filter plane; should already have at least 2px extra border on each side
-        if (filter_type & NLMEANS_PREFILTER_MODE_CSM3X3)
-        {
-            // CSM 3x3
-            nlmeans_filter_csm(image, image_pre, w, h, border, 3);
-        }
-        else if (filter_type & NLMEANS_PREFILTER_MODE_CSM5X5)
+        if (filter_type & NLMEANS_PREFILTER_MODE_CSM5X5)
         {
             // CSM 5x5
             nlmeans_filter_csm(image, image_pre, w, h, border, 5);
+        }
+        else if (filter_type & NLMEANS_PREFILTER_MODE_CSM3X3)
+        {
+            // CSM 3x3
+            nlmeans_filter_csm(image, image_pre, w, h, border, 3);
         }
         else if (filter_type & NLMEANS_PREFILTER_MODE_MEDIAN5X5)
         {
