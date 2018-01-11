@@ -97,6 +97,7 @@ typedef struct
     int h;
     int border;
     hb_lock_t *mutex;
+    int prefiltered;
 } BorderedPlane;
 
 typedef struct
@@ -251,8 +252,9 @@ static void nlmeans_alloc(const uint8_t *src,
     dst->border    = border;
 
     nlmeans_border(dst->mem, dst->w, dst->h, dst->border);
-    dst->mem_pre   = dst->mem;
-    dst->image_pre = dst->image;
+    dst->mem_pre     = dst->mem;
+    dst->image_pre   = dst->image;
+    dst->prefiltered = 0;
 
 }
 
@@ -585,6 +587,11 @@ static void nlmeans_prefilter(BorderedPlane *src,
                               const int filter_type)
 {
     hb_lock(src->mutex);
+    if (src->prefiltered)
+    {
+        hb_unlock(src->mutex);
+        return;
+    }
 
     if (filter_type & NLMEANS_PREFILTER_MODE_MEAN3X3   ||
         filter_type & NLMEANS_PREFILTER_MODE_MEAN5X5   ||
@@ -696,6 +703,7 @@ static void nlmeans_prefilter(BorderedPlane *src,
         nlmeans_border(mem_pre, w, h, border);
 
     }
+    src->prefiltered = 1;
     hb_unlock(src->mutex);
 }
 
