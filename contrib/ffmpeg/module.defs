@@ -28,7 +28,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-avdevice \
     --disable-muxers \
     --disable-network \
-    --disable-vaapi \
     --disable-vdpau \
     --disable-encoders \
     --enable-avresample \
@@ -43,6 +42,10 @@ FFMPEG.CONFIGURE.extra = \
     --enable-encoder=libmp3lame \
     --enable-encoder=h264_nvenc \
     --enable-encoder=hevc_nvenc \
+    --enable-encoder=h264_vaapi \
+    --enable-encoder=hevc_vaapi \
+    --enable-encoder=vp8_vaapi \
+    --enable-encoder=vp9_vaapi \
     --enable-libopus \
     --enable-encoder=libopus \
     --enable-libvpx \

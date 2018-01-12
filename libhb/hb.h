@@ -23,6 +23,10 @@ extern "C" {
 #include "param.h"
 #include "colormap.h"
 
+#ifdef SYS_LINUX
+#define USE_VAAPI 1
+#endif
+
 /* hb_init()
    Initializes a libhb session (launches his own thread, detects CPUs,
    etc) */

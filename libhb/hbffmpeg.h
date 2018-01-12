@@ -16,17 +16,18 @@
 #include "libavutil/avutil.h"
 #include "libavutil/downmix_info.h"
 #include "libavutil/display.h"
+#include "libavutil/hwcontext.h"
 #include "libswscale/swscale.h"
 #include "libavresample/avresample.h"
 #include "common.h"
 
 #define HB_FFMPEG_THREADS_AUTO (-1) // let hb_avcodec_open() decide thread_count
 
-void hb_avcodec_init(void);
 int  hb_avcodec_open(AVCodecContext *, AVCodec *, AVDictionary **, int);
 void hb_avcodec_free_context(AVCodecContext **avctx);
-int hb_avcodec_test_encoder(AVCodec *codec);
-int hb_av_encoder_present(int encoder);
+int  hb_avcodec_vaapi_set_hwframe_ctx(AVCodecContext *ctx, int hw_device_ctxidx, int init_pool_sz);
+int  hb_avcodec_test_encoder(AVCodec *codec, enum AVPixelFormat fmt);
+int  hb_av_encoder_present(int encoder);
 const char* const* hb_av_preset_get_names(int encoder);
 const char* const* hb_av_profile_get_names(int encoder);
 const char* const* hb_av_level_get_names(int encoder);

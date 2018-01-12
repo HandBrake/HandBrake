@@ -69,6 +69,11 @@ struct hb_handle_s
 hb_work_object_t * hb_objects = NULL;
 int hb_instance_counter = 0;
 
+#ifdef USE_VAAPI
+static const char * vaapi_device0 = NULL; // "/dev/dri/renderD128";
+static AVBufferRef *vaapi_device_ctx0 = NULL;
+#endif
+
 static void thread_func( void * );
 
 static int ff_lockmgr_cb(void **mutex, enum AVLockOp op)
@@ -97,11 +102,21 @@ static int ff_lockmgr_cb(void **mutex, enum AVLockOp op)
     return 0;
 }
 
-void hb_avcodec_init()
+static void hb_avcodec_init()
 {
     av_lockmgr_register(ff_lockmgr_cb);
     av_register_all();
     avfilter_register_all();
+#ifdef USE_VAAPI
+    {
+        int err;
+        if( (err = av_hwdevice_ctx_create(&vaapi_device_ctx0, AV_HWDEVICE_TYPE_VAAPI,
+        							      vaapi_device0, NULL, 0)) < 0 ) {
+            hb_log("Failed to create a VAAPI device. Error code: %s %p\n", av_err2str(err), vaapi_device_ctx0);
+            vaapi_device_ctx0 = NULL;
+        }
+    }
+#endif
 #ifdef _WIN64
     // avresample's assembly optimizations can cause crashes under Win x86_64
     // (see http://bugzilla.libav.org/show_bug.cgi?id=496)
@@ -109,6 +124,16 @@ void hb_avcodec_init()
     hb_deep_log(2, "hb_avcodec_init: Windows x86_64, disabling AVX and FMA4");
     int cpu_flags = av_get_cpu_flags() & ~AV_CPU_FLAG_AVX & ~AV_CPU_FLAG_FMA4;
     av_set_cpu_flags_mask(cpu_flags);
+#endif
+}
+
+static void hb_avcodec_free()
+{
+#ifdef USE_VAAPI
+    if( NULL != vaapi_device_ctx0 ) {
+        av_buffer_unref(&vaapi_device_ctx0);
+        vaapi_device_ctx0 = NULL;
+    }
 #endif
 }
 
@@ -145,8 +170,52 @@ void hb_avcodec_free_context(AVCodecContext **avctx)
     avcodec_free_context(avctx);
 }
 
-int hb_avcodec_test_encoder(AVCodec *codec)
+int hb_avcodec_vaapi_set_hwframe_ctx(AVCodecContext *ctx, int hw_device_ctxidx, int init_pool_sz)
 {
+#ifdef USE_VAAPI
+	// AV_PIX_FMT_NV12 	  planar YUV 4:2:0, 12bpp, 1 plane for Y and 1 plane for the UV components, which are interleaved (first byte U and the following byte V)
+	// NV12	0x3231564E	12	8-bit Y plane followed by an interleaved U/V plane with 2x2 subsampling
+	// NV21	0x3132564E	12	As NV12 with U and V reversed in the interleaved plane
+	// AV_PIX_FMT_YUV420P planar YUV 4:2:0, 12bpp, (1 Cr & Cb sample per 2x2 Y samples)
+    AVBufferRef *hw_device_ctx = vaapi_device_ctx0;
+    AVBufferRef *hw_frames_ref;
+    AVHWFramesContext *frames_ctx = NULL;
+    int err = 0;
+    if( NULL == hw_device_ctx ) {
+        hb_log("VAAPI device is NULL.");
+        return -1;
+    }
+    if (!(hw_frames_ref = av_hwframe_ctx_alloc(hw_device_ctx))) {
+        hb_log("Failed to create VAAPI frame context.");
+        return -2;
+    }
+    frames_ctx = (AVHWFramesContext *)(hw_frames_ref->data);
+    frames_ctx->format    = AV_PIX_FMT_VAAPI;
+    frames_ctx->sw_format = AV_PIX_FMT_NV12; // AV_PIX_FMT_NV12; // AV_PIX_FMT_YUV420P
+    frames_ctx->width     = ctx->width;
+    frames_ctx->height    = ctx->height;
+    frames_ctx->initial_pool_size = init_pool_sz;
+    if ((err = av_hwframe_ctx_init(hw_frames_ref)) < 0) {
+        hb_log("Failed to initialize VAAPI frame context."
+                "Error code: %s",av_err2str(err));
+        av_buffer_unref(&hw_frames_ref);
+        return err;
+    }
+    ctx->hw_frames_ctx = av_buffer_ref(hw_frames_ref);
+    if (!ctx->hw_frames_ctx) {
+        err = AVERROR(ENOMEM);
+    }
+    av_buffer_unref(&hw_frames_ref);
+    return err;
+#else
+    hb_log("VAAPI n/a.");
+    return -1;
+#endif
+}
+
+int hb_avcodec_test_encoder(AVCodec *codec, enum AVPixelFormat fmt)
+{
+    int err, res=0;
     AVDictionary * av_opts = NULL;
     AVCodecContext * context = NULL;
     if( NULL == codec ) {
@@ -154,7 +223,8 @@ int hb_avcodec_test_encoder(AVCodec *codec)
     }
     context = avcodec_alloc_context3(codec);
     if( NULL == context ) {
-        return -2;
+        res = -2;
+        goto close;
     }
     // setting all fields marked: 'encoding: MUST be set by user'
     context->time_base.num = 1;
@@ -163,19 +233,31 @@ int hb_avcodec_test_encoder(AVCodec *codec)
     context->height = 480;
     // deprecated: context->me_method = 1;
     // setting other fields as required via testing
-    context->pix_fmt   = AV_PIX_FMT_YUV420P;
+    context->pix_fmt = fmt;
+
+    if( AV_PIX_FMT_VAAPI == fmt ) {
+        if((err = hb_avcodec_vaapi_set_hwframe_ctx(context, 0, 20))<0) {
+            hb_log("Failed to set the VAAPI hwframe_ctx. Error code: %s", av_err2str(err));
+            res = -4;
+            goto close;
+        }
+        av_dict_set( &av_opts, "profile", "77", 0 ); // main
+        av_dict_set(&av_opts, "bf", "0", 0); // FIXME: VAAPI 'B frames are not supported"
+    }
 
     av_dict_set(&av_opts, "b", "2M", 0);
     if (avcodec_open2(context, codec, &av_opts) < 0) {
-        av_dict_free( &av_opts );
-        av_free( context );
-        return -3;
+        res = -3;
+        goto close;
     }
-    av_dict_free( &av_opts );
-    avcodec_flush_buffers( context );
-    avcodec_close( context );
-    av_free( context );
-    return 0; // OK
+close:
+    if(NULL!=av_opts) {
+        av_dict_free( &av_opts );
+    }
+    if(NULL!=context) {
+        avcodec_free_context(&context);
+    }
+    return res;
 }
 
 int hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *buf)
@@ -1791,6 +1873,9 @@ void hb_global_close()
         closedir( dir );
         rmdir( dirname );
     }
+
+    /* libavcodec */
+    hb_avcodec_free();
 }
 
 /**
