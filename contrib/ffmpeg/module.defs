@@ -25,10 +25,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-bsfs \
     --enable-bsf=aac_adtstoasc \
     --disable-programs \
-    --disable-ffmpeg \
-    --disable-ffplay \
-    --disable-ffprobe \
-    --disable-ffserver \
     --disable-avdevice \
     --disable-muxers \
     --disable-network \
@@ -61,9 +57,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-decoder=msmpeg4_crystalhd \
     --disable-decoder=vc1_crystalhd \
     --disable-decoder=wmv3_crystalhd \
-    --enable-zlib \
-    --enable-bzlib \
-    --enable-pthreads \
     --cc="$(FFMPEG.GCC.gcc)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
 
