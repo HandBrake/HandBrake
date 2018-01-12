@@ -502,7 +502,7 @@ static void decsubClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
     avcodec_flush_buffers( pv->context );
-    avcodec_close( pv->context );
+    avcodec_free_context( &pv->context );
 }
 
 hb_work_object_t hb_decpgssub =

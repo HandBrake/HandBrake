@@ -24,7 +24,7 @@
 
 void hb_avcodec_init(void);
 int  hb_avcodec_open(AVCodecContext *, AVCodec *, AVDictionary **, int);
-int  hb_avcodec_close(AVCodecContext *);
+void hb_avcodec_free_context(AVCodecContext **avctx);
 const char* const* hb_av_preset_get_names(int encoder);
 
 uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode);
