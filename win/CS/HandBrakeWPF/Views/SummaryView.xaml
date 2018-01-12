@@ -124,7 +124,7 @@
                     <TextBlock Text="{Binding PreviewInfo}" TextAlignment="Center" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}" />
                 </Border>
 
-                <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Center" Width="84" Visibility="{Binding IsPreviewControlsVisible, Converter={StaticResource boolToVisConverter}}">
+                <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" HorizontalAlignment="Center" Width="84" Visibility="{Binding IsPreviewInfoVisible, Converter={StaticResource boolToVisConverter}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="42" />
                         <ColumnDefinition Width="42" />
