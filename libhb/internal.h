@@ -441,9 +441,7 @@ enum
     WORK_ENCAVCODEC_AUDIO,
     WORK_MUX,
     WORK_READER,
-    WORK_DECPGSSUB,
-    WORK_H264_NVENC,
-    WORK_HEVC_NVENC
+    WORK_DECPGSSUB
 };
 
 extern hb_filter_object_t hb_filter_detelecine;
