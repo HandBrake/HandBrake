@@ -304,7 +304,7 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,5,0,0">
                     <Label FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Title}" />
                     <ComboBox Name="Titles"
-                             Width="160"
+                             Width="100"
                              Margin="17,0,0,0"
                              ItemsSource="{Binding ScannedSource.Titles}"
                              ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Title}"
@@ -323,24 +323,24 @@
                             </Style>
                         </ComboBox.Style>
                     </ComboBox>
-                    <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Angle}" />
+                    <Label Margin="5,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Angle}" />
 
                     <ComboBox Name="Angles"
                                   MinWidth="60"
-                                  Margin="8,0,0,0"
+                                  Margin="2,0,0,0"
                                   ItemsSource="{Binding Angles}"
                                   SelectedItem="{Binding SelectedAngle}"
                                   ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Angle}" />
 
-                    <Label Margin="8,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Range}" />
+                    <Label Margin="2,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Range}" />
                     <ComboBox Name="PointToPointMode"
                                   MinWidth="80"
-                                  Margin="8,0,0,0"
+                                  Margin="5,0,0,0"
                                   ItemsSource="{Binding RangeMode}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Range}"
                                   SelectedItem="{Binding SelectedPointToPoint}" />
                     <ComboBox Name="StartPoint"
                                   MinWidth="60"
-                                  Margin="8,0,0,0"
+                                  Margin="5,0,0,0"
                                   ItemsSource="{Binding StartEndRangeItems}"
                                   SelectedItem="{Binding SelectedStartPoint}"
                                   ToolTip="{x:Static Properties:ResourcesTooltips.MainView_StartPoint}"
@@ -350,7 +350,7 @@
                     <Controls:TimeSpanBox  Number="{Binding SelectedStartPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding IsTimespanRange}"
                                                ToolTip="{x:Static Properties:ResourcesTooltips.MainView_StartPoint}"
-                                               MinWidth="80" Margin="8,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
+                                               MinWidth="72" Margin="5,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}" />
 
@@ -367,12 +367,12 @@
                     <Controls:TimeSpanBox  Number="{Binding SelectedEndPoint, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                Minimum="0" AllowEmpty="False" ShowTimeSpan="{Binding IsTimespanRange}"
                                                ToolTip="{x:Static Properties:ResourcesTooltips.MainView_EndPoint}"
-                                               MinWidth="80" Margin="8,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
+                                               MinWidth="72" Margin="5,0,0,0"  Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}" />
 
-                    <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" FontWeight="Bold" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
-                    <Label Margin="4,0,0,0" Content="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
+                    <Label Margin="2,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" FontWeight="Bold" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
+                    <Label Margin="0,0,0,0" Content="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
 
                 </StackPanel>
             </Grid>

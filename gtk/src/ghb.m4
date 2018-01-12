@@ -543,8 +543,8 @@ conjunction with the "Forced" option.</property>
     <property name="skip_pager_hint">True</property>
     <property name="program_name">HandBrake</property>
     <property name="version">0.9.2</property>
-    <property name="copyright" translatable="yes">Copyright © 2008 - 2017 John Stebbins
-Copyright © 2004 - 2017, HandBrake Devs</property>
+    <property name="copyright" translatable="yes">Copyright © 2008 -  John Stebbins
+Copyright © 2004 - , HandBrake Devs</property>
     <property name="comments" translatable="yes">HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder.</property>
     <property name="website">https://handbrake.fr</property>
     <property name="website_label" translatable="yes">https://handbrake.fr</property>

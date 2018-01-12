@@ -1,6 +1,6 @@
 /* qsv_common.c
  *
- * Copyright (c) 2003-2017 HandBrake Team
+ * Copyright (c) 2003-2018 HandBrake Team
  * This file is part of the HandBrake source code.
  * Homepage: <http://handbrake.fr/>.
  * It may be used under the terms of the GNU General Public License v2.
@@ -397,6 +397,7 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
             init_video_param(&inputParam);
             inputParam.mfx.CodecId           = info->codec_id;
             inputParam.mfx.RateControlMethod = MFX_RATECONTROL_LA;
+            inputParam.mfx.TargetKbps        = 5000;
 
             memset(&videoParam, 0, sizeof(mfxVideoParam));
             videoParam.mfx.CodecId = inputParam.mfx.CodecId;
@@ -411,6 +412,7 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                 inputParam.mfx.CodecId             = info->codec_id;
                 inputParam.mfx.RateControlMethod   = MFX_RATECONTROL_LA;
                 inputParam.mfx.FrameInfo.PicStruct = MFX_PICSTRUCT_FIELD_TFF;
+                inputParam.mfx.TargetKbps          = 5000;
 
                 memset(&videoParam, 0, sizeof(mfxVideoParam));
                 videoParam.mfx.CodecId = inputParam.mfx.CodecId;
@@ -428,6 +430,7 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
             init_video_param(&inputParam);
             inputParam.mfx.CodecId           = info->codec_id;
             inputParam.mfx.RateControlMethod = MFX_RATECONTROL_ICQ;
+            inputParam.mfx.ICQQuality        = 20;
 
             memset(&videoParam, 0, sizeof(mfxVideoParam));
             videoParam.mfx.CodecId = inputParam.mfx.CodecId;

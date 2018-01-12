@@ -179,7 +179,7 @@ namespace HandBrakeWPF.ViewModels
             string fileExtension = null;
             using (var dialog = new OpenFileDialog()
                     {
-                        Filter = string.Join("|", ChapterImporterCsv.FileFilter, ChapterImporterXml.FileFilter, ChapterImporterTxt.FileFilter),
+                        Filter = string.Join("|", "All Supported Formats (*.csv;*.tsv,*.xml,*.txt)|*.csv;*.tsv;*.xml;*.txt", ChapterImporterCsv.FileFilter, ChapterImporterXml.FileFilter, ChapterImporterTxt.FileFilter),
                         FilterIndex = 1,  // 1 based, the index value of the first filter entry is 1
                         CheckFileExists = true
                     })

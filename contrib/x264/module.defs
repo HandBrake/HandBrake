@@ -1,25 +1,20 @@
-$(eval $(call import.MODULE.defs,X264,x264,YASM PTHREADW32))
+$(eval $(call import.MODULE.defs,X264,x264,PTHREADW32))
 $(eval $(call import.CONTRIB.defs,X264))
 
-X264.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/x264-snapshot-20160920-2245-stable.tar.bz2
-X264.FETCH.url    += https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-20160920-2245-stable.tar.bz2
-X264.FETCH.sha256  = 6ba2d848eabbca0d9d2c2a12b263e02f856a81fce87fbc74df52a1097c88e39c
+X264.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/x264-snapshot-20171225-2245.tar.bz2
+X264.FETCH.url    += https://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-20171225-2245.tar.bz2
+X264.FETCH.sha256  = ea39f32ccb3bd3aeaccd663c8d210117be5d9cfbe89e1a8b5f631e0f7ed74954
 
 X264.GCC.args.c_std =
 
 X264.CONFIGURE.deps   =
 X264.CONFIGURE.shared =
 
-X264.CONFIGURE.extra  = --bit-depth=8 --chroma-format=420
 X264.CONFIGURE.extra += --disable-lavf --disable-ffms --disable-avs --disable-swscale --disable-gpac --disable-lsmash --disable-cli
 
-ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+ifeq (1,$(BUILD.cross))
+    X264.CONFIGURE.build  =
     X264.CONFIGURE.extra += --cross-prefix=$(BUILD.spec)-
     X264.CONFIGURE.env.CFLAGS = CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver ?extra)"
     X264.CONFIGURE.env.LDFLAGS = LDFLAGS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver)"
-endif
-
-ifeq (1,$(FEATURE.local_yasm))
-    X264.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    X264.BUILD.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 endif

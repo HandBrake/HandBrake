@@ -1,7 +1,7 @@
 /* nlmeans.c
 
    Copyright (c) 2013 Dirk Farin
-   Copyright (c) 2003-2017 HandBrake Team
+   Copyright (c) 2003-2018 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -72,8 +72,8 @@
 #define NLMEANS_PREFILTER_MODE_MEAN5X5       2
 #define NLMEANS_PREFILTER_MODE_MEDIAN3X3     4
 #define NLMEANS_PREFILTER_MODE_MEDIAN5X5     8
-#define NLMEANS_PREFILTER_MODE_RESERVED16   16 // Reserved
-#define NLMEANS_PREFILTER_MODE_RESERVED32   32 // Reserved
+#define NLMEANS_PREFILTER_MODE_CSM3X3       16
+#define NLMEANS_PREFILTER_MODE_CSM5X5       32
 #define NLMEANS_PREFILTER_MODE_RESERVED64   64 // Reserved
 #define NLMEANS_PREFILTER_MODE_RESERVED128 128 // Reserved
 #define NLMEANS_PREFILTER_MODE_REDUCE25    256
@@ -252,8 +252,9 @@ static void nlmeans_alloc(const uint8_t *src,
     dst->border    = border;
 
     nlmeans_border(dst->mem, dst->w, dst->h, dst->border);
-    dst->mem_pre   = dst->mem;
-    dst->image_pre = dst->image;
+    dst->mem_pre     = dst->mem;
+    dst->image_pre   = dst->image;
+    dst->prefiltered = 0;
 
 }
 
@@ -386,6 +387,99 @@ static void nlmeans_filter_median(const uint8_t *src,
 
 }
 
+static void nlmeans_filter_csm(const uint8_t *src,
+                                     uint8_t *dst,
+                               const int w,
+                               const int h,
+                               const int border,
+                               const int size)
+{
+    // CSM filter
+    const int bw = w + 2 * border;
+    const int offset_min = -((size - 1) /2);
+    const int offset_max =   (size + 1) /2;
+    uint8_t min,  max,
+            min2, max2,
+            min3, max3,
+            median,
+            pixel;
+    for (int y = 0; y < h; y++)
+    {
+        for (int x = 0; x < w; x++)
+        {
+            for (int k = offset_min; k < offset_max; k++)
+            {
+                for (int j = offset_min; j < offset_max; j++)
+                {
+                    if (k == 0 && j == 0)
+                    {
+                        // Ignore origin
+                        goto end;
+                    }
+                    pixel = *(src + bw*(y+j) + (x+k));
+                    if (k == offset_min && j == offset_min)
+                    {
+                        // Start calculating neighborhood thresholds
+                        min = pixel;
+                        max = min;
+                        goto end;
+                    }
+                    if (pixel < min)
+                    {
+                        min = pixel;
+                    }
+                    if (pixel > max)
+                    {
+                        max = pixel;
+                    }
+                }
+                end:
+                    continue;
+            }
+
+            // Final neighborhood thresholds
+            // min = minimum neighbor pixel value
+            // max = maximum neighbor pixel value
+
+            // Median
+            median = (min + max) / 2;
+
+            // Additional thresholds for median-like filtering
+            min2 = (min + median) / 2;
+            max2 = (max + median) / 2;
+            min3 = (min2 + median) / 2;
+            max3 = (max2 + median) / 2;
+
+            // Clamp to thresholds
+            pixel = *(src + bw*(y) + (x));
+            if (pixel < min)
+            {
+                *(dst + bw*y + x) = min;
+            }
+            else if (pixel > max)
+            {
+                *(dst + bw*y + x) = max;
+            }
+            else if (pixel < min2)
+            {
+                *(dst + bw*y + x) = min2;
+            }
+            else if (pixel > max2)
+            {
+                *(dst + bw*y + x) = max2;
+            }
+            else if (pixel < min3)
+            {
+                *(dst + bw*y + x) = min3;
+            }
+            else if (pixel > max3)
+            {
+                *(dst + bw*y + x) = max3;
+            }
+        }
+    }
+}
+
 static void nlmeans_filter_edgeboost(const uint8_t *src,
                                            uint8_t *dst,
                                      const int w,
@@ -493,7 +587,7 @@ static void nlmeans_prefilter(BorderedPlane *src,
                               const int filter_type)
 {
     hb_lock(src->mutex);
-    if (src->prefiltered)
+    if (src->prefiltered == 1)
     {
         hb_unlock(src->mutex);
         return;
@@ -502,7 +596,9 @@ static void nlmeans_prefilter(BorderedPlane *src,
     if (filter_type & NLMEANS_PREFILTER_MODE_MEAN3X3   ||
         filter_type & NLMEANS_PREFILTER_MODE_MEAN5X5   ||
         filter_type & NLMEANS_PREFILTER_MODE_MEDIAN3X3 ||
-        filter_type & NLMEANS_PREFILTER_MODE_MEDIAN5X5)
+        filter_type & NLMEANS_PREFILTER_MODE_MEDIAN5X5 ||
+        filter_type & NLMEANS_PREFILTER_MODE_CSM3X3    ||
+        filter_type & NLMEANS_PREFILTER_MODE_CSM5X5)
     {
 
         // Source image
@@ -523,7 +619,17 @@ static void nlmeans_prefilter(BorderedPlane *src,
         }
 
         // Filter plane; should already have at least 2px extra border on each side
-        if (filter_type & NLMEANS_PREFILTER_MODE_MEDIAN5X5)
+        if (filter_type & NLMEANS_PREFILTER_MODE_CSM5X5)
+        {
+            // CSM 5x5
+            nlmeans_filter_csm(image, image_pre, w, h, border, 5);
+        }
+        else if (filter_type & NLMEANS_PREFILTER_MODE_CSM3X3)
+        {
+            // CSM 3x3
+            nlmeans_filter_csm(image, image_pre, w, h, border, 3);
+        }
+        else if (filter_type & NLMEANS_PREFILTER_MODE_MEDIAN5X5)
         {
             // Median 5x5
             nlmeans_filter_median(image, image_pre, w, h, border, 5);
@@ -580,12 +686,17 @@ static void nlmeans_prefilter(BorderedPlane *src,
             }
         }
 
+        // Recreate borders
+        nlmeans_border(mem_pre, w, h, border);
+
         // Assign result
         src->mem_pre   = mem_pre;
         src->image_pre = image_pre;
-
-        // Recreate borders
-        nlmeans_border(mem_pre, w, h, border);
+        if (filter_type & NLMEANS_PREFILTER_MODE_PASSTHRU)
+        {
+            src->mem   = src->mem_pre;
+            src->image = src->image_pre;
+        }
 
     }
     src->prefiltered = 1;
@@ -998,16 +1109,16 @@ static void nlmeans_filter_thread(void *thread_args_v)
 
         for (int c = 0; c < 3; c++)
         {
-            if (pv->strength[c] == 0)
+            if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
             {
+                nlmeans_prefilter(&frame->plane[c], pv->prefilter[c]);
                 nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
                                  buf->plane[c].width, buf->plane[c].stride,
                                  buf->plane[c].height);
                 continue;
             }
-            if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
+            if (pv->strength[c] == 0)
             {
-                nlmeans_prefilter(&frame->plane[c], pv->prefilter[c]);
                 nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
                                  buf->plane[c].width, buf->plane[c].stride,
                                  buf->plane[c].height);
@@ -1129,16 +1240,16 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
 
         for (int c = 0; c < 3; c++)
         {
-            if (pv->strength[c] == 0)
+            if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
             {
+                nlmeans_prefilter(&frame->plane[c], pv->prefilter[c]);
                 nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
                                  buf->plane[c].width, buf->plane[c].stride,
                                  buf->plane[c].height);
                 continue;
             }
-            if (pv->prefilter[c] & NLMEANS_PREFILTER_MODE_PASSTHRU)
+            if (pv->strength[c] == 0)
             {
-                nlmeans_prefilter(&pv->frame[f].plane[c], pv->prefilter[c]);
                 nlmeans_deborder(&frame->plane[c], buf->plane[c].data,
                                  buf->plane[c].width, buf->plane[c].stride,
                                  buf->plane[c].height);

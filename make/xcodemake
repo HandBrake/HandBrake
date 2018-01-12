@@ -100,6 +100,11 @@ fi
 if [ -n "$reconfigure" ]; then
     echo "reconfiguring ($reconfigure)"
 
+    ## respect PATH priority
+    export PATH="${PATH#$SYSTEM_DEVELOPER_BIN_DIR:}:${SYSTEM_DEVELOPER_BIN_DIR}"
+    echo "Unclobbering PATH:"
+    echo "    export PATH=\"${PATH}\""
+
     if [ "$EXTERNAL_DRIVER" == "bootstrap" ]; then
         driver="--xcode-driver=terminal"
     else

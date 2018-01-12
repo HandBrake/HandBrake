@@ -1524,6 +1524,7 @@ try:
         ranlib   = ToolProbe( 'RANLIB.exe',   'ranlib' )
         strip    = ToolProbe( 'STRIP.exe',    'strip' )
         tar      = ToolProbe( 'TAR.exe',      'gtar', 'tar' )
+        nasm     = ToolProbe( 'NASM.exe',     'nasm', abort=False, minversion=[2,13,0] )
         yasm     = ToolProbe( 'YASM.exe',     'yasm', abort=False, minversion=[1,2,0] )
         autoconf = ToolProbe( 'AUTOCONF.exe', 'autoconf', abort=False )
         automake = ToolProbe( 'AUTOMAKE.exe', 'automake', abort=False )
@@ -1583,6 +1584,13 @@ try:
     ## run delayed actions
     for action in Action.actions:
         action.run()
+
+    ## fail on missing or old nasm where needed
+    if host.match( '*-*-darwin*' ) or options.cross:
+        if Tools.nasm.fail:
+            raise AbortError( 'error: nasm missing\n' )
+        elif Tools.nasm.version.inadequate():
+            raise AbortError( 'error: minimum required nasm version is %s and %s is %s\n' % ('.'.join([str(i) for i in Tools.nasm.version.minversion]),Tools.nasm.pathname,Tools.nasm.version.svers) )
 
     ## enable local yasm when yasm probe fails or version is too old
     ## x264 requires 1.2.0+

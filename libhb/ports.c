@@ -1,6 +1,6 @@
 /* ports.c
 
-   Copyright (c) 2003-2017 HandBrake Team
+   Copyright (c) 2003-2018 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -1306,6 +1306,7 @@ void hb_system_sleep_private_enable(void *opaque)
     if (opaque == NULL)
     {
         hb_error("hb_system_sleep: opaque is NULL");
+        return;
     }
 
     IOPMAssertionID *assertionID = (IOPMAssertionID*)opaque;
@@ -1336,6 +1337,7 @@ void hb_system_sleep_private_disable(void *opaque)
     if (opaque == NULL)
     {
         hb_error("hb_system_sleep: opaque is NULL");
+        return;
     }
     
     IOPMAssertionID *assertionID = (IOPMAssertionID*)opaque;

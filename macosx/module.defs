@@ -99,3 +99,5 @@ MACOSX.XCODE_ARCHIVE = $(strip \
         -exportOptionsPlist '$(MACOSX.src/)archive.plist' \
         -exportPath '$(MACOSX.xarchive/)' \
         -archivePath '$(MACOSX.xarchive/)' )
+
+MACOSX.SIGN = $(strip $(MACOSX.src/)hbsign '$(ID)' $(MACOSX.xroot/)HandBrake.app)
