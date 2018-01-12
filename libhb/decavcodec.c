@@ -1349,8 +1349,8 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
             reordered->pts          = packet_info->pts;
             reordered->scr_sequence = packet_info->scr_sequence;
             reordered->new_chap     = packet_info->new_chap;
+            reordered_hash_add(pv, reordered);
         }
-        reordered_hash_add(pv, reordered);
 
         // libav avcodec video decoder needs AVPacket flagged with
         // AV_PKT_FLAG_KEY for some codecs. For example, sequence of

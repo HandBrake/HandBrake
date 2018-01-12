@@ -1055,7 +1055,8 @@ int apply_h264_level(const x264_api_t *api, x264_param_t *param,
             return -1;
         }
     }
-    else if(!strcasecmp(h264_level, hb_h264_level_names[0]))
+    else if(h264_level != NULL &&
+            !strcasecmp(h264_level, hb_h264_level_names[0]))
     {
         // "auto", do nothing
         return 0;

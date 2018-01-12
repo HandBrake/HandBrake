@@ -604,6 +604,24 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
     int                i;
     hb_work_object_t * w;
 
+    /* Get a real muxer */
+    if( job->pass_id == HB_PASS_ENCODE || job->pass_id == HB_PASS_ENCODE_2ND )
+    {
+        switch( job->mux )
+        {
+            case HB_MUX_AV_MP4:
+            case HB_MUX_AV_MKV:
+                mux->m = hb_mux_avformat_init( job );
+                break;
+            default:
+                hb_error( "No muxer selected, exiting" );
+                free(mux);
+                *job->done_error = HB_ERROR_INIT;
+                *job->die = 1;
+                return -1;
+        }
+    }
+
     pv->list_work = hb_list_init();
 
     // The bit vectors must be allocated before hb_thread_init for the
@@ -623,21 +641,8 @@ static int muxInit( hb_work_object_t * muxer, hb_job_t * job )
     mux->interleave = 90000. * (double)job->vrate.den / job->vrate.num;
     mux->pts = mux->interleave;
 
-    /* Get a real muxer */
     if( job->pass_id == HB_PASS_ENCODE || job->pass_id == HB_PASS_ENCODE_2ND )
     {
-        switch( job->mux )
-        {
-        case HB_MUX_AV_MP4:
-        case HB_MUX_AV_MKV:
-            mux->m = hb_mux_avformat_init( job );
-            break;
-        default:
-            hb_error( "No muxer selected, exiting" );
-            *job->done_error = HB_ERROR_INIT;
-            *job->die = 1;
-            return -1;
-        }
         /* Create file, write headers */
         if( mux->m )
         {

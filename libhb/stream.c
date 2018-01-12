@@ -813,6 +813,12 @@ static void prune_streams(hb_stream_t *d)
 hb_stream_t *
 hb_stream_open(hb_handle_t *h, char *path, hb_title_t *title, int scan)
 {
+    if (title == NULL)
+    {
+        hb_log("hb_stream_open: title is null");
+        return NULL;
+    }
+
     FILE *f = hb_fopen(path, "rb");
     if ( f == NULL )
     {
@@ -828,7 +834,7 @@ hb_stream_open(hb_handle_t *h, char *path, hb_title_t *title, int scan)
         return NULL;
     }
 
-    if( title && !( title->flags & HBTF_NO_IDR ) )
+    if (!(title->flags & HBTF_NO_IDR))
     {
         d->has_IDRs = 1;
     }
@@ -2899,10 +2905,10 @@ static int decode_PAT(const uint8_t *buf, hb_stream_t *stream)
                             }
                     }
 
-                    pos += 3 + section_len;
+//                    pos += 3 + section_len;
             }
 
-            tablepos = 0;
+//            tablepos = 0;
     }
     return 1;
 }

@@ -607,10 +607,6 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     }
     else if (job->pts_to_start != 0 || job->pts_to_stop != 0)
     {
-        range_dict = json_pack_ex(&error, 0, "{s:o, s:o, s:o}",
-            "Type",  hb_value_string("time"),
-            "Start", hb_value_int(job->pts_to_start),
-            "End",   hb_value_int(job->pts_to_stop));
         range_dict = hb_dict_init();
         hb_dict_set(source_dict, "Type", hb_value_string("time"));
         if (job->pts_to_start > 0)
