@@ -874,6 +874,13 @@ int hb_audio_samplerate_find_closest(int samplerate, uint32_t codec)
     const hb_rate_t * rate, * prev, * next;
 
     rate = prev = next = hb_audio_samplerate_get_next_for_codec(NULL, codec);
+
+    if (rate == NULL)
+    {
+        // This codec doesn't support any samplerate
+        return 0;
+    }
+
     while (rate != NULL && next->rate < samplerate)
     {
         rate = hb_audio_samplerate_get_next_for_codec(rate, codec);
@@ -4605,6 +4612,7 @@ int hb_audio_add(const hb_job_t * job, const hb_audio_config_t * audiocfg)
     {
         /* This most likely means the client didn't call hb_audio_config_init
          * so bail. */
+        hb_audio_close(&audio);
         return 0;
     }
 
@@ -5196,7 +5204,12 @@ char * hb_strncat_dup( const char * s1, const char * s2, size_t n )
         strcpy( str, s1 );
     else
         strcpy( str, "" );
-    strncat( str, s2, n );
+
+    if (s2)
+    {
+        strncat( str, s2, n );
+    }
+
     return str;
 }
 

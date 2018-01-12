@@ -468,7 +468,6 @@ static void resample( uint8_t * dst, uint8_t * src, int dst_w, int src_w )
     if( dst_w < src_w )
     {
         // sample down
-        err = 0;
         sum = 0;
         val = 0;
         cnt = 0;
@@ -495,7 +494,6 @@ static void resample( uint8_t * dst, uint8_t * src, int dst_w, int src_w )
     else
     {
         // sample up
-        err = 0;
         err = dst_w / 2;
         src_x = 0;
         for( dst_x = 0; dst_x < dst_w; dst_x++ )

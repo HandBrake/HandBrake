@@ -1157,7 +1157,7 @@ int
 hb_validate_filter_preset(int filter_id, const char *preset, const char *tune,
                           const char *custom)
 {
-    if (preset == NULL && tune == NULL)
+    if (preset == NULL)
         return 1;
 
     int preset_count, tune_count;

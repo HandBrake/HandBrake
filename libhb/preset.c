@@ -921,7 +921,6 @@ static void add_subtitle_for_lang(hb_value_array_t *list, hb_title_t *title,
                                   subtitle_behavior_t *behavior)
 {
     int t;
-    t = find_subtitle_track(title, lang, 0);
     for (t = find_subtitle_track(title, lang, 0);
          t >= 0;
          t = behavior->one ? -1 : find_subtitle_track(title, lang, t + 1))
@@ -3698,6 +3697,12 @@ int hb_presets_add_path(char * path)
     {
         count++;
     }
+
+    if (count == 0)
+    {
+        return -1;
+    }
+
     files = malloc(count * sizeof(char*));
 
     // Find all regular files

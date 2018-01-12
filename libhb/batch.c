@@ -53,6 +53,12 @@ hb_batch_t * hb_batch_init( hb_handle_t *h, char * path )
     {
         count++;
     }
+
+    if (count == 0)
+    {
+        return NULL;
+    }
+
     files = malloc(count * sizeof(char*));
 
     // Find all regular files
