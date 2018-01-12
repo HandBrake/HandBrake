@@ -1294,8 +1294,12 @@ static void filter_video(hb_work_private_t *pv)
     {
         int result;
 
-        av_buffersrc_add_frame(pv->video_filters.input, pv->frame);
-        result = av_buffersink_get_frame(pv->video_filters.output, pv->frame);
+        result = av_buffersrc_add_frame(pv->video_filters.input, pv->frame);
+        if (result < 0) {
+            hb_error("filter_video: failed to add frame");
+        } else {
+            result = av_buffersink_get_frame(pv->video_filters.output, pv->frame);
+        }
         while (result >= 0)
         {
             hb_buffer_t * buf = copy_frame(pv);
