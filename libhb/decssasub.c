@@ -1,6 +1,6 @@
 /* decssasub.c
 
-   Copyright (c) 2003-2017 HandBrake Team
+   Copyright (c) 2003-2018 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -348,7 +348,10 @@ ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, hb_buffer_t * in,
     // when there is no layer field.
     numPartsRead = sscanf( (char *)in_data, "Dialogue:%128[^,],", layerField );
     if ( numPartsRead != 1 )
+    {
+        free(layerField);
         goto fail;
+    }
 
     styleToTextFields = (char *)find_field( in_data, in_data + in_size, 4 );
     if ( styleToTextFields == NULL ) {

@@ -304,9 +304,11 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
     }
 
     /* need more space for 10bits */
+    int bpp12 = 3;
     if (pv->param.videoParam->mfx.FrameInfo.FourCC == MFX_FOURCC_P010)
     {
          hb_buffer_realloc(bitstream_buf,bitstream_buf->size*2);
+         bpp12 = 6;
     }
     bitstream.Data      = bitstream_buf->data;
     bitstream.MaxLength = bitstream_buf->alloc;
@@ -315,9 +317,9 @@ static int qsv_hevc_make_header(hb_work_object_t *w, mfxSession session)
     mfxU16 Height            = pv->param.videoParam->mfx.FrameInfo.Height;
     mfxU16 Width             = pv->param.videoParam->mfx.FrameInfo.Width;
     frameSurface1.Info       = pv->param.videoParam->mfx.FrameInfo;
-    frameSurface1.Data.Y     = av_mallocz(Width * Height * 3 / 2);
-    frameSurface1.Data.VU    = frameSurface1.Data.Y + Width * Height;
-    frameSurface1.Data.Pitch = Width;
+    frameSurface1.Data.Y     = av_mallocz(Width * Height * (bpp12 / 2.0));
+    frameSurface1.Data.VU    = frameSurface1.Data.Y + Width * Height * (bpp12 == 6 ? 2 : 1);
+    frameSurface1.Data.Pitch = Width * (bpp12 == 6 ? 2 : 1);
 
     /* Encode a single blank frame */
     do

@@ -2123,6 +2123,7 @@
 		273F217214ADD2170021BE6D /* debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PATH = $PATH;
 				PRODUCT_NAME = external;
 			};
 			name = debug;
@@ -2130,6 +2131,7 @@
 		273F217314ADD2170021BE6D /* release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PATH = $PATH;
 				PRODUCT_NAME = external;
 			};
 			name = release;
@@ -2423,6 +2425,7 @@
 		A9A5CD9A1E32072F00947914 /* debug-sandbox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PATH = $PATH;
 				PRODUCT_NAME = external;
 			};
 			name = "debug-sandbox";
@@ -2666,6 +2669,7 @@
 		A9A5CDA01E32073800947914 /* release-sandbox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PATH = $PATH;
 				PRODUCT_NAME = external;
 			};
 			name = "release-sandbox";

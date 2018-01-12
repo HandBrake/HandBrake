@@ -1,6 +1,6 @@
 /*
  * marshalers.c
- * Copyright (C) John Stebbins 2008-2017 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2018 <stebbins@stebbins>
  *
  * marshalers.c is free software.
  *

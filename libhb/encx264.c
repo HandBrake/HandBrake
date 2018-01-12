@@ -1,6 +1,6 @@
 /* encx264.c
 
-   Copyright (c) 2003-2017 HandBrake Team
+   Copyright (c) 2003-2018 HandBrake Team
    This file is part of the HandBrake source code
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
@@ -151,7 +151,11 @@ static void * x264_lib_open_ubuntu_10bit(void)
 
 void hb_x264_global_init(void)
 {
+#if X264_BUILD < 153
     x264_apis[0].bit_depth                 = x264_bit_depth;
+#else
+    x264_apis[0].bit_depth                 = X264_BIT_DEPTH;
+#endif
     x264_apis[0].param_default             = x264_param_default;
     x264_apis[0].param_default_preset      = x264_param_default_preset;
     x264_apis[0].param_apply_profile       = x264_param_apply_profile;
@@ -164,13 +168,32 @@ void hb_x264_global_init(void)
     x264_apis[0].encoder_close             = x264_encoder_close;
     x264_apis[0].picture_init              = x264_picture_init;
 
+    if (x264_apis[0].bit_depth == 0)
+    {
+        // libx264 supports 8 and 10 bit
+        x264_apis[0].bit_depth                 = 8;
+        x264_apis[1].bit_depth                 = 10;
+        x264_apis[1].param_default             = x264_param_default;
+        x264_apis[1].param_default_preset      = x264_param_default_preset;
+        x264_apis[1].param_apply_profile       = x264_param_apply_profile;
+        x264_apis[1].param_apply_fastfirstpass = x264_param_apply_fastfirstpass;
+        x264_apis[1].param_parse               = x264_param_parse;
+        x264_apis[1].encoder_open              = x264_encoder_open;
+        x264_apis[1].encoder_headers           = x264_encoder_headers;
+        x264_apis[1].encoder_encode            = x264_encoder_encode;
+        x264_apis[1].encoder_delayed_frames    = x264_encoder_delayed_frames;
+        x264_apis[1].encoder_close             = x264_encoder_close;
+        x264_apis[1].picture_init              = x264_picture_init;
+        return;
+    }
+
     // Invalidate other apis
     x264_apis[1].bit_depth = -1;
 
     // Attempt to dlopen a library for handling the bit-depth that we do
     // not already have.
     void *h;
-    if (x264_bit_depth == 8)
+    if (x264_apis[0].bit_depth == 8)
     {
         h = x264_lib_open(libx264_10bit_names);
 #if defined(SYS_LINUX)
@@ -190,8 +213,23 @@ void hb_x264_global_init(void)
     }
 
     int ii;
+    int dll_bitdepth = 0;
+#if X264_BUILD < 153
     int *pbit_depth                   = (int*)hb_dlsym(h, "x264_bit_depth");
+    if (pbit_depth != NULL)
+    {
+        dll_bitdepth = *pbit_depth;
+    }
+#endif
     x264_apis[1].param_default        = hb_dlsym(h, "x264_param_default");
+#if X264_BUILD >= 153
+    if (x264_apis[1].param_default != NULL)
+    {
+        x264_param_t defaults;
+        x264_apis[1].param_default(&defaults);
+        dll_bitdepth = defaults.i_bitdepth;
+    }
+#endif
     x264_apis[1].param_default_preset = hb_dlsym(h, "x264_param_default_preset");
     x264_apis[1].param_apply_profile  = hb_dlsym(h, "x264_param_apply_profile");
     x264_apis[1].param_apply_fastfirstpass =
@@ -215,7 +253,7 @@ void hb_x264_global_init(void)
     x264_apis[1].encoder_close        = hb_dlsym(h, "x264_encoder_close");
     x264_apis[1].picture_init         = hb_dlsym(h, "x264_picture_init");
 
-    if (pbit_depth                             != NULL &&
+    if (dll_bitdepth > 0 && dll_bitdepth != x264_apis[0].bit_depth &&
         x264_apis[1].param_default             != NULL &&
         x264_apis[1].param_default_preset      != NULL &&
         x264_apis[1].param_apply_profile       != NULL &&
@@ -228,7 +266,7 @@ void hb_x264_global_init(void)
         x264_apis[1].encoder_close             != NULL &&
         x264_apis[1].picture_init              != NULL)
     {
-        x264_apis[1].bit_depth = *pbit_depth;
+        x264_apis[1].bit_depth = dll_bitdepth;
     }
 }
 
@@ -320,6 +358,10 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         w->private_data = NULL;
         return 1;
     }
+
+#if X264_BUILD >= 153
+    param.i_bitdepth = bit_depth;
+#endif
 
     /* If the PSNR or SSIM tunes are in use, enable the relevant metric */
     if (job->encoder_tune != NULL && *job->encoder_tune)
