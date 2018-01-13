@@ -56,5 +56,7 @@ GhbValue* ghb_read_settings_file(const gchar *path);
 void ghb_write_settings_file(const gchar *path, GhbValue *dict);
 GhbValue* ghb_create_copy_mask(GhbValue *settings);
 GhbValue* ghb_settings_to_preset(GhbValue *settings);
+void ghb_preset_menu_button_refresh(signal_user_data_t *ud,
+                                    const char *name, int type);
 
 #endif // _GHB_PRESETS_H_

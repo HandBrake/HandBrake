@@ -553,6 +553,16 @@ set_preset_menu_button_label(signal_user_data_t *ud, hb_preset_index_t *path)
     gtk_widget_set_tooltip_text(widget, description);
 }
 
+void
+ghb_preset_menu_button_refresh(signal_user_data_t *ud,
+                               const char *fullname, int type)
+{
+    hb_preset_index_t * path;
+
+    path = hb_preset_search_index(fullname, 0, type);
+    set_preset_menu_button_label(ud, path);
+}
+
 static void
 select_preset2(signal_user_data_t *ud, hb_preset_index_t *path)
 {

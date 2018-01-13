@@ -1193,6 +1193,7 @@ ghb_load_settings(signal_user_data_t * ud)
     if (preset_modified)
     {
         ghb_clear_presets_selection(ud);
+        ghb_preset_menu_button_refresh(ud, fullname, type);
     }
     else
     {
