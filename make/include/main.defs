@@ -136,6 +136,11 @@ ifeq (1-linux,$(FEATURE.gtk)-$(BUILD.system))
     MODULES += gtk
 endif
 
+ifeq (1-freebsd,$(FEATURE.gtk)-$(BUILD.system))
+    ## build gtk when gtk+freebsd
+    MODULES += gtk
+endif
+
 ifeq (1-kfreebsd,$(FEATURE.gtk)-$(BUILD.system))
     ## build gtk when gtk+kfreebsd
     MODULES += gtk

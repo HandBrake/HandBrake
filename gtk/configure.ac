@@ -184,6 +184,9 @@ case $host in
 	fi
     HB_LIBS="$HB_LIBS -lregex -luuid"
     ;;
+  *-*-freebsd*)
+    HB_LIBS="$HB_LIBS -lpthread"
+    ;;
   *)
     HB_LIBS="$HB_LIBS -ldl -lpthread"
     ;;
