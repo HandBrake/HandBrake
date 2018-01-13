@@ -212,12 +212,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.isMkv;
-            }
-            set
-            {
-                this.isMkv = value;
-                this.NotifyOfPropertyChange(() => this.IsMkv);
+                return this.SelectedOutputFormat == OutputFormat.Mkv;
             }
         }
 
@@ -441,18 +436,17 @@ namespace HandBrakeWPF.ViewModels
                         newExtension = ".m4v";
                         break;
                 }
-
-                this.IsMkv = false;
             }
 
             // Now disable controls that are not required. The Following are for MP4 only!
             if (newExtension == ".mkv")
             {
-                this.IsMkv = true;
                 this.OptimizeMP4 = false;
                 this.IPod5GSupport = false;
                 this.AlignAVStart = false;
             }
+
+            this.NotifyOfPropertyChange(() => this.IsMkv);
 
             // Update The browse file extension display
             if (Path.HasExtension(newExtension))

@@ -605,7 +605,7 @@ namespace HandBrakeWPF.ViewModels
                 encodeTask.SubtitleTracks.Remove(scanTrack);
             }
 
-            QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create(), this.ScannedSource.ScanPath);
+            QueueTask task = new QueueTask(encodeTask, HBConfigurationFactory.Create(), this.ScannedSource.ScanPath, null);
             ThreadPool.QueueUserWorkItem(this.CreatePreview, task);
         }
 

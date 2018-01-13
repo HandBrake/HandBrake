@@ -450,7 +450,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Pass a copy of the job back to the Main Screen
             IMainViewModel mvm = IoC.Get<IMainViewModel>();
-            mvm.EditQueueJob(new EncodeTask(task.Task));
+            mvm.EditQueueJob(task);
         }
 
         public void OpenSourceDirectory(QueueTask task)
