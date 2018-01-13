@@ -1645,8 +1645,8 @@ This is often the feature title of a DVD.</property>
                         <property name="label" translatable="yes">Reload</property>
                         <property name="visible">False</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">Reload the encoding settings for the currently selected preset.
-    Modifications will be discarded.</property>
+                        <property name="tooltip_text" translatable="yes">Reload the settings for the currently selected preset.
+Modifications will be discarded.</property>
                         <property name="receives_default">True</property>
                         <property name="halign">end</property>
                         <property name="action-name">app.preset-reload</property>
@@ -1662,8 +1662,7 @@ This is often the feature title of a DVD.</property>
                         <property name="label" translatable="yes">Save New Preset</property>
                         <property name="visible">False</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip_text" translatable="yes">Reload the encoding settings for the currently selected preset.
-    Modifications will be discarded.</property>
+                        <property name="tooltip_text" translatable="yes">Save the current settings to a new Preset.</property>
                         <property name="receives_default">True</property>
                         <property name="halign">end</property>
                         <property name="action-name">app.preset-save-as</property>
