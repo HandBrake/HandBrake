@@ -73,7 +73,6 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.Opus);
 
                     encoders.Remove(AudioEncoder.TrueHDPassthrough);
-                    encoders.Remove(AudioEncoder.FlacPassthru);
                     encoders.Remove(AudioEncoder.EAc3Passthrough);
                 }
 
