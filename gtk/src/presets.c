@@ -1637,7 +1637,6 @@ ghb_settings_to_preset(GhbValue *settings)
 
     ghb_dict_remove(preset, "title");
     ghb_dict_set_bool(preset, "Default", 0);
-    ghb_dict_set_int(preset, "Type", HB_PRESET_TYPE_CUSTOM);
     if (!ghb_dict_get_bool(preset, "PictureWidthEnable"))
     {
         ghb_dict_remove(preset, "PictureWidth");
@@ -1874,6 +1873,7 @@ settings_save(signal_user_data_t *ud, const char * category,
     }
 
     new_preset = ghb_settings_to_preset(ud->settings);
+    ghb_dict_set_int(new_preset, "Type", HB_PRESET_TYPE_CUSTOM);
     ghb_dict_set_string(new_preset, "PresetName", name);
     ghb_dict_set_string(new_preset, "PresetDescription", desc);
 
