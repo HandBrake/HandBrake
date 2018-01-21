@@ -247,23 +247,23 @@
                             <TextBlock Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="Offset (ms)" />
                             <controls:NumberBox Grid.Column="7" Width="58" Height="24" Margin="5,0,5,0" Minimum="-9000000" Maximum="900000" 
                                                 IsEnabled="{Binding IsSrtSubtitle}" Number="{Binding SrtOffset, Mode=TwoWay}" />
-
-                            <TextBlock Grid.Column="8" VerticalAlignment="Center" FontWeight="Bold" Text="Default" />
-                            <CheckBox Grid.Column="9" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Default}">
+             
+                            <TextBlock Grid.Column="8" VerticalAlignment="Center" FontWeight="Bold" Text="Burn In" />
+                            <CheckBox Grid.Column="9" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Burned}" IsEnabled="{Binding CanBeBurned}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
-                                        <cal:ActionMessage MethodName="SelectDefaultTrack">
+                                        <cal:ActionMessage MethodName="SetBurnedToFalseForAllExcept">
                                             <cal:Parameter Value="{Binding}" />
                                         </cal:ActionMessage>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-                            <TextBlock Grid.Column="10" VerticalAlignment="Center" FontWeight="Bold" Text="Burn In" />
-                            <CheckBox Grid.Column="11" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Burned}" IsEnabled="{Binding CanBeBurned}">
+                            <TextBlock Grid.Column="10" VerticalAlignment="Center" FontWeight="Bold" Text="Default" />
+                            <CheckBox Grid.Column="11" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Default}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
-                                        <cal:ActionMessage MethodName="SetBurnedToFalseForAllExcept">
+                                        <cal:ActionMessage MethodName="SelectDefaultTrack">
                                             <cal:Parameter Value="{Binding}" />
                                         </cal:ActionMessage>
                                     </i:EventTrigger>
