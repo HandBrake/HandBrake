@@ -40,7 +40,7 @@
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="41" y="572" width="882" height="600"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
             <view key="contentView" id="2" customClass="HBFocusRingView">
                 <rect key="frame" x="0.0" y="0.0" width="882" height="600"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -343,7 +343,7 @@
                         </connections>
                     </textField>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="1628">
-                        <rect key="frame" x="312" y="514" width="550" height="5"/>
+                        <rect key="frame" x="394" y="514" width="468" height="5"/>
                     </box>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3205">
                         <rect key="frame" x="125" y="575" width="737" height="5"/>
@@ -618,8 +618,8 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </textField>
                     <button toolTip="Save New Preset" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2vD-zN-YMe">
-                        <rect key="frame" x="276" y="502" width="33" height="28"/>
-                        <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSAddTemplate" imagePosition="only" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IOU-3L-nvB">
+                        <rect key="frame" x="276" y="502" width="115" height="28"/>
+                        <buttonCell key="cell" type="push" title="Save New Preset" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IOU-3L-nvB">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
@@ -886,7 +886,6 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
         </customView>
     </objects>
     <resources>
-        <image name="NSAddTemplate" width="11" height="11"/>
         <image name="activity" width="32" height="32"/>
         <image name="addqueue" width="32" height="32"/>
         <image name="encode" width="32" height="32"/>
