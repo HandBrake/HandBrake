@@ -59,43 +59,43 @@
                             </tabViewItem>
                             <tabViewItem label="Dimensions" identifier="2" id="eij-Sn-QmJ" userLabel="PictureTab">
                                 <view key="view" id="nvx-9b-6fF">
-                                    <rect key="frame" x="10" y="29" width="874" height="348"/>
+                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Filters" identifier="" id="0UB-bG-kwS">
                                 <view key="view" id="JAj-E3-Cq2">
-                                    <rect key="frame" x="10" y="29" width="874" height="348"/>
+                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Video" identifier="1" id="1477">
                                 <view key="view" id="1478">
-                                    <rect key="frame" x="10" y="29" width="874" height="348"/>
+                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Audio" identifier="3" id="1475">
                                 <view key="view" id="1476">
-                                    <rect key="frame" x="10" y="29" width="874" height="348"/>
+                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Subtitles" identifier="4" id="5194">
                                 <view key="view" id="5195">
-                                    <rect key="frame" x="10" y="29" width="874" height="348"/>
+                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Chapters" identifier="5" id="1989">
                                 <view key="view" id="1990">
-                                    <rect key="frame" x="10" y="29" width="874" height="348"/>
+                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Advanced" identifier="6" id="2015">
                                 <view key="view" id="2016">
-                                    <rect key="frame" x="10" y="29" width="874" height="348"/>
+                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -343,7 +343,7 @@
                         </connections>
                     </textField>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="1628">
-                        <rect key="frame" x="394" y="514" width="468" height="5"/>
+                        <rect key="frame" x="454" y="514" width="408" height="5"/>
                     </box>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3205">
                         <rect key="frame" x="125" y="575" width="737" height="5"/>
@@ -617,8 +617,23 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <binding destination="-2" name="textColor" keyPath="self.labelColor" id="NpP-Z0-hPs"/>
                         </connections>
                     </textField>
+                    <button toolTip="Reload the currently selected preset." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AhR-pK-Oz4">
+                        <rect key="frame" x="276" y="502" width="62" height="28"/>
+                        <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cgS-BU-Nfd">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="smallSystem"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="reloadPreset:" target="-2" id="v7a-73-wrT"/>
+                            <binding destination="-2" name="enabled" keyPath="self.job" id="pER-xA-jjU">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSIsNotNil</string>
+                                </dictionary>
+                            </binding>
+                        </connections>
+                    </button>
                     <button toolTip="Save New Preset" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2vD-zN-YMe">
-                        <rect key="frame" x="276" y="502" width="115" height="28"/>
+                        <rect key="frame" x="336" y="502" width="115" height="28"/>
                         <buttonCell key="cell" type="push" title="Save New Preset" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IOU-3L-nvB">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -635,6 +650,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                 </subviews>
                 <constraints>
                     <constraint firstItem="5180" firstAttribute="leading" secondItem="1541" secondAttribute="trailing" constant="15" id="0Bt-0B-noA"/>
+                    <constraint firstItem="1628" firstAttribute="centerY" secondItem="2vD-zN-YMe" secondAttribute="centerY" id="0J5-jO-GJE"/>
                     <constraint firstItem="5491" firstAttribute="width" secondItem="1545" secondAttribute="width" id="18C-7M-Qr7"/>
                     <constraint firstItem="PJi-21-hie" firstAttribute="leading" secondItem="gfs-4j-YSE" secondAttribute="trailing" constant="10" id="2dV-0m-kAI"/>
                     <constraint firstItem="1539" firstAttribute="baseline" secondItem="1538" secondAttribute="baseline" id="3gB-bu-uWq"/>
@@ -642,9 +658,10 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1548" firstAttribute="baseline" secondItem="1553" secondAttribute="baseline" id="5U2-Lr-4Qc"/>
                     <constraint firstItem="5180" firstAttribute="baseline" secondItem="5181" secondAttribute="baseline" id="7rI-Pr-24u"/>
                     <constraint firstItem="5181" firstAttribute="leading" secondItem="5180" secondAttribute="trailing" constant="8" id="88n-hD-lCW"/>
-                    <constraint firstItem="2vD-zN-YMe" firstAttribute="leading" secondItem="bWH-Lp-mKY" secondAttribute="trailing" constant="8" id="9oq-nZ-scg"/>
+                    <constraint firstItem="AhR-pK-Oz4" firstAttribute="top" secondItem="1541" secondAttribute="bottom" constant="13" id="9np-TF-f0W"/>
                     <constraint firstItem="bWH-Lp-mKY" firstAttribute="baseline" secondItem="1627" secondAttribute="baseline" id="A8O-c5-J59"/>
                     <constraint firstItem="d0E-xw-bxh" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="-4" id="ANc-YO-rUk"/>
+                    <constraint firstItem="AhR-pK-Oz4" firstAttribute="leading" secondItem="bWH-Lp-mKY" secondAttribute="trailing" constant="8" id="Aej-di-xCA"/>
                     <constraint firstItem="5505" firstAttribute="leading" secondItem="1545" secondAttribute="trailing" constant="4" id="AlP-tE-q8e"/>
                     <constraint firstItem="5523" firstAttribute="leading" secondItem="1548" secondAttribute="leading" id="BFc-Em-mCW"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1554" secondAttribute="trailing" constant="20" id="CEn-JC-Lxm"/>
@@ -663,7 +680,6 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="5513" firstAttribute="leading" secondItem="4NG-AB-JWs" secondAttribute="trailing" constant="8" id="LaE-py-QST"/>
                     <constraint firstItem="1554" firstAttribute="leading" secondItem="1553" secondAttribute="trailing" constant="4" id="Lrw-hs-Pdg"/>
                     <constraint firstItem="3203" firstAttribute="top" secondItem="2" secondAttribute="top" constant="16" id="MDg-nr-Pos"/>
-                    <constraint firstItem="1628" firstAttribute="leading" secondItem="2vD-zN-YMe" secondAttribute="trailing" constant="8" id="NLi-5N-bLW"/>
                     <constraint firstItem="1539" firstAttribute="centerY" secondItem="3205" secondAttribute="centerY" id="O7P-Hr-rDa"/>
                     <constraint firstAttribute="trailing" secondItem="3203" secondAttribute="trailing" constant="20" id="PnZ-2e-abQ"/>
                     <constraint firstAttribute="trailing" secondItem="3205" secondAttribute="trailing" constant="20" id="QkZ-Q7-VGX"/>
@@ -672,6 +688,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1561" firstAttribute="leading" secondItem="1552" secondAttribute="trailing" constant="8" id="TLF-qk-2Eq"/>
                     <constraint firstItem="bWH-Lp-mKY" firstAttribute="top" secondItem="1541" secondAttribute="bottom" constant="13" id="Tex-Li-ACD"/>
                     <constraint firstItem="5513" firstAttribute="baseline" secondItem="1545" secondAttribute="baseline" id="TiQ-ye-MeD"/>
+                    <constraint firstItem="2vD-zN-YMe" firstAttribute="top" secondItem="5181" secondAttribute="bottom" constant="13" id="UJb-D1-3pm"/>
                     <constraint firstItem="1539" firstAttribute="leading" secondItem="1538" secondAttribute="trailing" constant="8" id="Ue2-hw-ZPH"/>
                     <constraint firstItem="1562" firstAttribute="leading" secondItem="PJi-21-hie" secondAttribute="trailing" constant="2" id="UgJ-hP-CRv"/>
                     <constraint firstAttribute="bottom" secondItem="d0E-xw-bxh" secondAttribute="bottom" id="Unb-Sk-dKC"/>
@@ -688,13 +705,14 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1561" firstAttribute="top" secondItem="1474" secondAttribute="bottom" constant="16" id="dN9-Oy-x6I"/>
                     <constraint firstItem="5493" firstAttribute="trailing" secondItem="5523" secondAttribute="trailing" id="fEO-qG-sc6"/>
                     <constraint firstItem="1474" firstAttribute="top" secondItem="bWH-Lp-mKY" secondAttribute="bottom" constant="16" id="fWK-a5-vqI"/>
+                    <constraint firstItem="1628" firstAttribute="leading" secondItem="2vD-zN-YMe" secondAttribute="trailing" constant="8" symbolic="YES" id="fhO-CZ-d3j"/>
                     <constraint firstItem="1538" firstAttribute="top" secondItem="2" secondAttribute="top" constant="16" id="fuA-H3-g7K"/>
                     <constraint firstItem="1540" firstAttribute="baseline" secondItem="1541" secondAttribute="baseline" id="gBD-ib-Qcp"/>
                     <constraint firstItem="gfs-4j-YSE" firstAttribute="centerY" secondItem="PJi-21-hie" secondAttribute="centerY" id="gR5-Tl-M5T"/>
                     <constraint firstItem="5523" firstAttribute="leading" secondItem="5493" secondAttribute="leading" id="gm6-wR-wHe"/>
-                    <constraint firstAttribute="trailing" secondItem="1628" secondAttribute="trailing" constant="20" id="k3w-7F-PJy"/>
                     <constraint firstItem="5523" firstAttribute="baseline" secondItem="1548" secondAttribute="baseline" id="kfY-mQ-JIb"/>
                     <constraint firstItem="1541" firstAttribute="baseline" secondItem="5180" secondAttribute="baseline" id="l58-3I-TTV"/>
+                    <constraint firstItem="2vD-zN-YMe" firstAttribute="leading" secondItem="AhR-pK-Oz4" secondAttribute="trailing" constant="8" id="mbm-ho-ew2"/>
                     <constraint firstItem="1552" firstAttribute="baseline" secondItem="1561" secondAttribute="baseline" id="n18-gY-q1Z"/>
                     <constraint firstItem="1474" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="qm5-es-UMl"/>
                     <constraint firstItem="5493" firstAttribute="baseline" secondItem="5521" secondAttribute="baseline" id="rau-a9-VIU"/>
@@ -704,7 +722,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1553" firstAttribute="baseline" secondItem="1554" secondAttribute="baseline" id="vEY-tK-ETq"/>
                     <constraint firstItem="5493" firstAttribute="leading" secondItem="1548" secondAttribute="leading" id="vkn-JT-TK1"/>
                     <constraint firstItem="5521" firstAttribute="baseline" secondItem="1545" secondAttribute="baseline" id="wAY-Q7-JGO"/>
-                    <constraint firstItem="bWH-Lp-mKY" firstAttribute="centerY" secondItem="1628" secondAttribute="centerY" id="wqQ-KS-MuK"/>
+                    <constraint firstItem="1628" firstAttribute="trailing" secondItem="1554" secondAttribute="trailing" id="wrz-Ln-Dxe"/>
                     <constraint firstItem="1548" firstAttribute="leading" secondItem="5505" secondAttribute="trailing" constant="4" id="wvM-ZM-Lg5"/>
                     <constraint firstItem="1552" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="x7n-hu-WyG"/>
                     <constraint firstItem="bWH-Lp-mKY" firstAttribute="leading" secondItem="1627" secondAttribute="trailing" constant="8" id="xar-Kr-fKk"/>

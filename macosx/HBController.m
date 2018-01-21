@@ -1435,6 +1435,14 @@
     }
 }
 
+- (void)reloadPreset:(id)sender;
+{
+    // Reload the currently selected preset if it is selected.
+    if (self.currentPreset != NULL){
+        [self applyPreset:self.currentPreset];
+    }
+}
+
 - (void)applyPreset:(HBPreset *)preset
 {
     NSParameterAssert(preset);
