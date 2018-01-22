@@ -413,6 +413,8 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER
     make install-gcc >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
 
     # mingw-w64 runtime
+    export CC=""
+    export CXX=""
     echo "  mingw-w64 ${MINGW_W64_VER} runtime"
     local MINGW_W64_CONFIG_EXTRA
     MINGW_W64_CONFIG_EXTRA=()
