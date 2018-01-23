@@ -1301,7 +1301,7 @@ def createCLI():
 
     grp.add_option( '--disable-gst', default=False, action='store_true', help=h )
 
-    h = IfHost( 'enable Intel Quick Sync Video (QSV) hardware acceleration', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    h = IfHost( 'enable Intel Quick Sync Video (QSV) hardware acceleration. (Windows and Linux only)', '*-*-linux*', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-qsv', default=False, action='store_true', help=h )
 
     h = IfHost( 'enable x265 video encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
