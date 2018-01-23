@@ -261,8 +261,8 @@ DQ
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="BK7-c4-kkk">
                         <rect key="frame" x="646" y="376" width="51" height="18"/>
-                        <string key="toolTip">Enable this if your playback device supports EAC3. This permits EAC3 passthru to be selected when automatic passthru selecion is enabled.</string>
-                        <buttonCell key="cell" type="check" title="EAC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="u9h-dn-wcK">
+                        <string key="toolTip">Enable this if your playback device supports E-AC3. This permits E-AC3 passthru to be selected when automatic passthru selecion is enabled.</string>
+                        <buttonCell key="cell" type="check" title="E-AC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="u9h-dn-wcK">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
