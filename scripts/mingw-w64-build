@@ -1,7 +1,7 @@
 #!/bin/bash
 # mingw-w64-build - download and build mingw-w64 toolchain
 #
-# Copyright 2017 Bradley Sepos
+# Copyright 2018 Bradley Sepos
 # Released under the MIT License. See LICENSE for details.
 # https://github.com/bradleysepos/mingw-w64-build
 
@@ -143,7 +143,7 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="3.1.0"
+    VERSION="3.1.1"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -413,6 +413,8 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER
     make install-gcc >> "${BUILD_DIR}/gcc.log" 2>&1 || return 1
 
     # mingw-w64 runtime
+    export CC=""
+    export CXX=""
     echo "  mingw-w64 ${MINGW_W64_VER} runtime"
     local MINGW_W64_CONFIG_EXTRA
     MINGW_W64_CONFIG_EXTRA=()
