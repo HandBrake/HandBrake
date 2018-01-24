@@ -758,10 +758,10 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="A5F62853-5047-43C2-AD64-73654B0E34B2" label="Add Titles To Queue" paletteLabel="Add Titles To Queue" toolTip="Add Titles To Queue" image="addqueue" id="38K-hd-P5J">
-                        <size key="minSize" width="58" height="25"/>
+                        <size key="minSize" width="58" height="32"/>
                         <size key="maxSize" width="58" height="32"/>
                         <popUpButton key="view" imageHugsTitle="YES" id="pJJ-0V-TQq">
-                            <rect key="frame" x="28" y="14" width="58" height="25"/>
+                            <rect key="frame" x="28" y="14" width="58" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                             <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addqueue" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
