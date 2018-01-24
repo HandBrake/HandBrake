@@ -763,7 +763,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         <popUpButton key="view" imageHugsTitle="YES" id="pJJ-0V-TQq">
                             <rect key="frame" x="28" y="14" width="58" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addqueue" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" inset="2" pullsDown="YES" id="BAK-n3-eIN">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="QCi-1O-Msg">
@@ -802,16 +802,16 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <action selector="showPreviewWindow:" target="-2" id="uci-BT-5bQ"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="AC64166E-55C9-431A-8085-74C960AAF1D5" label="Activity Log" paletteLabel="Show Activity Window" toolTip="Show Activity Window" tag="-1" image="activity" id="p7Q-L3-zcW">
+                    <toolbarItem implicitItemIdentifier="AC64166E-55C9-431A-8085-74C960AAF1D5" label="Activity" paletteLabel="Show Activity Window" toolTip="Show Activity Window" tag="-1" image="activity" id="p7Q-L3-zcW">
                         <connections>
                             <action selector="showOutputPanel:" target="-1" id="TxI-PX-wlm"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="27166A18-3AC0-4FD9-B76C-B1702BA05D47" label="Presets" paletteLabel="Show Presets" toolTip="Show Presets List" image="presets" id="qhv-9l-2FH">
+                    <toolbarItem implicitItemIdentifier="27166A18-3AC0-4FD9-B76C-B1702BA05D47" label="Presets" paletteLabel="Show Presets List" toolTip="Show Presets List" image="presets" id="qhv-9l-2FH">
                         <size key="minSize" width="32" height="32"/>
                         <size key="maxSize" width="32" height="32"/>
                         <button key="view" verticalHuggingPriority="750" id="kdj-uK-UE0">
-                            <rect key="frame" x="24" y="14" width="32" height="32"/>
+                            <rect key="frame" x="35" y="14" width="32" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="presets" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="b1r-Ra-EmB">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -826,15 +826,14 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                 <defaultToolbarItems>
                     <toolbarItem reference="8r8-nZ-dYs"/>
                     <toolbarItem reference="ZEH-cS-zXY"/>
-                    <toolbarItem reference="DZZ-Fe-wjw"/>
                     <toolbarItem reference="ZEH-cS-zXY"/>
+                    <toolbarItem reference="DZZ-Fe-wjw"/>
                     <toolbarItem reference="byg-kj-sEM"/>
                     <toolbarItem reference="wTQ-KF-5KW"/>
                     <toolbarItem reference="wjB-Tl-5qq"/>
                     <toolbarItem reference="HCx-ku-nF7"/>
                     <toolbarItem reference="dK4-jt-v4K"/>
                     <toolbarItem reference="p7Q-L3-zcW"/>
-                    <toolbarItem reference="qhv-9l-2FH"/>
                 </defaultToolbarItems>
             </toolbar>
             <connections>
