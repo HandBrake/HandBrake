@@ -343,7 +343,7 @@
                         </connections>
                     </textField>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="1628">
-                        <rect key="frame" x="461" y="514" width="401" height="5"/>
+                        <rect key="frame" x="470" y="514" width="392" height="5"/>
                     </box>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3205">
                         <rect key="frame" x="127" y="575" width="735" height="5"/>
@@ -617,7 +617,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             <binding destination="-2" name="textColor" keyPath="self.labelColor" id="NpP-Z0-hPs"/>
                         </connections>
                     </textField>
-                    <button toolTip="Reload the currently selected preset." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AhR-pK-Oz4">
+                    <button toolTip="Reload the encoding settings for the currently selected preset. Modifications will be discarded." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AhR-pK-Oz4">
                         <rect key="frame" x="276" y="502" width="62" height="28"/>
                         <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cgS-BU-Nfd">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -632,9 +632,9 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             </binding>
                         </connections>
                     </button>
-                    <button toolTip="Save New Preset" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2vD-zN-YMe">
-                        <rect key="frame" x="336" y="502" width="115" height="28"/>
-                        <buttonCell key="cell" type="push" title="Save New Preset" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IOU-3L-nvB">
+                    <button toolTip="Save New Preset…" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2vD-zN-YMe">
+                        <rect key="frame" x="336" y="502" width="124" height="28"/>
+                        <buttonCell key="cell" type="push" title="Save New Preset…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IOU-3L-nvB">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
                         </buttonCell>
