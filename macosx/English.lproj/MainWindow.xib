@@ -40,20 +40,20 @@
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="41" y="572" width="882" height="600"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
             <view key="contentView" id="2" customClass="HBFocusRingView">
                 <rect key="frame" x="0.0" y="0.0" width="882" height="600"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <tabView controlSize="small" translatesAutoresizingMaskIntoConstraints="NO" id="1474" customClass="HBTabView">
-                        <rect key="frame" x="13" y="116" width="856" height="379"/>
+                        <rect key="frame" x="13" y="116" width="856" height="382"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="334" id="Jdl-tV-liS"/>
                         </constraints>
                         <tabViewItems>
                             <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
                                 <view key="view" id="BjX-E2-6tb">
-                                    <rect key="frame" x="10" y="29" width="836" height="337"/>
+                                    <rect key="frame" x="10" y="29" width="836" height="340"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -343,10 +343,10 @@
                         </connections>
                     </textField>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="1628">
-                        <rect key="frame" x="454" y="514" width="408" height="5"/>
+                        <rect key="frame" x="461" y="514" width="401" height="5"/>
                     </box>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3205">
-                        <rect key="frame" x="125" y="575" width="737" height="5"/>
+                        <rect key="frame" x="127" y="575" width="735" height="5"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="8eM-Lw-0wS"/>
                         </constraints>
@@ -661,14 +661,14 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="AhR-pK-Oz4" firstAttribute="top" secondItem="1541" secondAttribute="bottom" constant="13" id="9np-TF-f0W"/>
                     <constraint firstItem="bWH-Lp-mKY" firstAttribute="baseline" secondItem="1627" secondAttribute="baseline" id="A8O-c5-J59"/>
                     <constraint firstItem="d0E-xw-bxh" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="-4" id="ANc-YO-rUk"/>
-                    <constraint firstItem="AhR-pK-Oz4" firstAttribute="leading" secondItem="bWH-Lp-mKY" secondAttribute="trailing" constant="8" id="Aej-di-xCA"/>
                     <constraint firstItem="5505" firstAttribute="leading" secondItem="1545" secondAttribute="trailing" constant="4" id="AlP-tE-q8e"/>
                     <constraint firstItem="5523" firstAttribute="leading" secondItem="1548" secondAttribute="leading" id="BFc-Em-mCW"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1554" secondAttribute="trailing" constant="20" id="CEn-JC-Lxm"/>
+                    <constraint firstAttribute="trailing" secondItem="1628" secondAttribute="trailing" constant="20" id="CO6-Lf-qeZ"/>
                     <constraint firstItem="1562" firstAttribute="baseline" secondItem="gfs-4j-YSE" secondAttribute="baseline" id="D6B-x1-Rm7"/>
                     <constraint firstItem="1553" firstAttribute="leading" secondItem="1548" secondAttribute="trailing" constant="15" id="DOO-4b-o8G"/>
                     <constraint firstItem="5505" firstAttribute="baseline" secondItem="1548" secondAttribute="baseline" id="EGN-hl-cvN"/>
-                    <constraint firstItem="3205" firstAttribute="leading" secondItem="1539" secondAttribute="trailing" constant="13" id="EOg-9m-BWr"/>
+                    <constraint firstItem="3205" firstAttribute="leading" secondItem="1539" secondAttribute="trailing" constant="15" id="EOg-9m-BWr"/>
                     <constraint firstItem="gfs-4j-YSE" firstAttribute="leading" secondItem="1561" secondAttribute="trailing" constant="20" id="Eeg-iK-8sW"/>
                     <constraint firstAttribute="trailing" secondItem="1562" secondAttribute="trailing" constant="20" id="Evo-6G-PeG"/>
                     <constraint firstItem="1561" firstAttribute="baseline" secondItem="gfs-4j-YSE" secondAttribute="baseline" id="HGj-mW-j31"/>
@@ -680,6 +680,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="5513" firstAttribute="leading" secondItem="4NG-AB-JWs" secondAttribute="trailing" constant="8" id="LaE-py-QST"/>
                     <constraint firstItem="1554" firstAttribute="leading" secondItem="1553" secondAttribute="trailing" constant="4" id="Lrw-hs-Pdg"/>
                     <constraint firstItem="3203" firstAttribute="top" secondItem="2" secondAttribute="top" constant="16" id="MDg-nr-Pos"/>
+                    <constraint firstItem="2vD-zN-YMe" firstAttribute="baseline" secondItem="AhR-pK-Oz4" secondAttribute="baseline" id="Nzc-xh-xik"/>
                     <constraint firstItem="1539" firstAttribute="centerY" secondItem="3205" secondAttribute="centerY" id="O7P-Hr-rDa"/>
                     <constraint firstAttribute="trailing" secondItem="3203" secondAttribute="trailing" constant="20" id="PnZ-2e-abQ"/>
                     <constraint firstAttribute="trailing" secondItem="3205" secondAttribute="trailing" constant="20" id="QkZ-Q7-VGX"/>
@@ -693,7 +694,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1562" firstAttribute="leading" secondItem="PJi-21-hie" secondAttribute="trailing" constant="2" id="UgJ-hP-CRv"/>
                     <constraint firstAttribute="bottom" secondItem="d0E-xw-bxh" secondAttribute="bottom" id="Unb-Sk-dKC"/>
                     <constraint firstItem="1627" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="VV8-Hu-yZk"/>
-                    <constraint firstItem="2vD-zN-YMe" firstAttribute="centerY" secondItem="bWH-Lp-mKY" secondAttribute="centerY" id="VpY-Jn-29g"/>
+                    <constraint firstItem="AhR-pK-Oz4" firstAttribute="baseline" secondItem="bWH-Lp-mKY" secondAttribute="baseline" id="WHN-Wz-YyG"/>
                     <constraint firstItem="4NG-AB-JWs" firstAttribute="leading" secondItem="5181" secondAttribute="trailing" constant="15" id="Xtb-eN-L1f"/>
                     <constraint firstItem="1540" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="YBA-8V-7wA"/>
                     <constraint firstItem="5493" firstAttribute="width" secondItem="1548" secondAttribute="width" id="Z4Q-52-cXt"/>
@@ -704,8 +705,8 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="5521" firstAttribute="leading" secondItem="1545" secondAttribute="leading" id="cja-Gd-DHN"/>
                     <constraint firstItem="1561" firstAttribute="top" secondItem="1474" secondAttribute="bottom" constant="16" id="dN9-Oy-x6I"/>
                     <constraint firstItem="5493" firstAttribute="trailing" secondItem="5523" secondAttribute="trailing" id="fEO-qG-sc6"/>
-                    <constraint firstItem="1474" firstAttribute="top" secondItem="bWH-Lp-mKY" secondAttribute="bottom" constant="16" id="fWK-a5-vqI"/>
-                    <constraint firstItem="1628" firstAttribute="leading" secondItem="2vD-zN-YMe" secondAttribute="trailing" constant="8" symbolic="YES" id="fhO-CZ-d3j"/>
+                    <constraint firstItem="1474" firstAttribute="top" secondItem="bWH-Lp-mKY" secondAttribute="bottom" constant="13" id="fWK-a5-vqI"/>
+                    <constraint firstItem="1628" firstAttribute="leading" secondItem="2vD-zN-YMe" secondAttribute="trailing" constant="15" id="fhO-CZ-d3j"/>
                     <constraint firstItem="1538" firstAttribute="top" secondItem="2" secondAttribute="top" constant="16" id="fuA-H3-g7K"/>
                     <constraint firstItem="1540" firstAttribute="baseline" secondItem="1541" secondAttribute="baseline" id="gBD-ib-Qcp"/>
                     <constraint firstItem="gfs-4j-YSE" firstAttribute="centerY" secondItem="PJi-21-hie" secondAttribute="centerY" id="gR5-Tl-M5T"/>
@@ -714,6 +715,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1541" firstAttribute="baseline" secondItem="5180" secondAttribute="baseline" id="l58-3I-TTV"/>
                     <constraint firstItem="2vD-zN-YMe" firstAttribute="leading" secondItem="AhR-pK-Oz4" secondAttribute="trailing" constant="8" id="mbm-ho-ew2"/>
                     <constraint firstItem="1552" firstAttribute="baseline" secondItem="1561" secondAttribute="baseline" id="n18-gY-q1Z"/>
+                    <constraint firstItem="AhR-pK-Oz4" firstAttribute="leading" secondItem="bWH-Lp-mKY" secondAttribute="trailing" constant="8" id="obL-SF-8PU"/>
                     <constraint firstItem="1474" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="qm5-es-UMl"/>
                     <constraint firstItem="5493" firstAttribute="baseline" secondItem="5521" secondAttribute="baseline" id="rau-a9-VIU"/>
                     <constraint firstItem="5181" firstAttribute="baseline" secondItem="4NG-AB-JWs" secondAttribute="baseline" id="tbj-bm-Nbs"/>
