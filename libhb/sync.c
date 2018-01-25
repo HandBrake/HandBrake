@@ -1499,22 +1499,22 @@ static void OutputBuffer( sync_common_t * common )
         for (ii = 0; ii < common->stream_count; ii++)
         {
             sync_stream_t * stream = &common->streams[ii];
+            int             min    = stream->min_len;
+
+            // Ignore minimum buffer requirements for video if we have
+            // not yet found the PtoP start frame.
+            if (!common->start_found && common->wait_for_frame &&
+                stream->type == SYNC_TYPE_VIDEO)
+            {
+                min = 0;
+            }
             // We need at least 2 buffers in the queue in order to fix
             // frame overlaps and inter-frame gaps.  So if a queue is
             // low, do not do normal PTS interleaving with this queue.
             // Except for subtitles which are not processed for gaps
             // and overlaps.
-            if (hb_list_count(stream->in_queue) > stream->min_len)
+            if (hb_list_count(stream->in_queue) > min)
             {
-                if (!common->start_found)
-                {
-                    // If we have not yet found the start point for
-                    // p-to-p, grab the first stream that has data
-                    // above min_len. This ensures that we prefer
-                    // video buffers for finding start point.
-                    out_stream = stream;
-                    break;
-                }
                 buf = hb_list_item(stream->in_queue, 0);
                 if (buf->s.start < pts)
                 {
@@ -1567,8 +1567,18 @@ static void OutputBuffer( sync_common_t * common )
         {
             // pts_to_start or frame_to_start were specified.
             // Wait for the appropriate start point.
-            if (common->wait_for_frame && out_stream->type == SYNC_TYPE_VIDEO)
+            if (common->wait_for_frame)
             {
+                if (out_stream->type != SYNC_TYPE_VIDEO)
+                {
+                    // We haven't found the PtoP start frame yet and
+                    // this buffer is either before the start frame or
+                    // the video queue was empty.
+                    out_stream->next_pts = buf->s.start + buf->s.duration;
+                    hb_list_rem(out_stream->in_queue, buf);
+                    hb_buffer_close(&buf);
+                    continue;
+                }
                 common->start_pts = buf->s.start + 1;
                 if (out_stream->frame_count >= common->job->frame_to_start)
                 {
