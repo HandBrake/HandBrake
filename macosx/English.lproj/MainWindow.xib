@@ -112,6 +112,9 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                         <accessibility description="Source file"/>
+                        <connections>
+                            <binding destination="-2" name="textColor" keyPath="self.labelColor" id="65m-tX-rfB"/>
+                        </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1540">
                         <rect key="frame" x="18" y="540" width="33" height="14"/>

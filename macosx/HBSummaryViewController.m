@@ -34,6 +34,8 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
 @property (nonatomic) BOOL filtersReloadInQueue;
 @property (nonatomic) BOOL pictureReloadInQueue;
 
+@property (nonatomic, readwrite) NSColor *labelColor;
+
 @end
 
 @implementation HBSummaryViewController
@@ -43,6 +45,8 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
     self = [super initWithNibName:@"HBSummaryViewController" bundle:nil];
     if (self)
     {
+        _labelColor = [NSColor disabledControlTextColor];
+
         _previewViewController = [[HBPreviewViewController alloc] init];
     }
     return self;
@@ -66,6 +70,7 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
 {
     if (job)
     {
+        self.labelColor = [NSColor controlTextColor];
         [self removeJobObservers];
         _job = job;
         [self addJobObservers];
@@ -75,6 +80,7 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
     }
     else
     {
+        self.labelColor = [NSColor disabledControlTextColor];
         [self removeJobObservers];
         [self resetLabels];
         _job = job;

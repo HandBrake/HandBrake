@@ -59,6 +59,9 @@
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="yCO-fl-3Lt"/>
+                    </connections>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="GCn-2c-Fql" userLabel="Tracks">
                     <rect key="frame" x="18" y="251" width="45" height="14"/>
@@ -67,6 +70,9 @@
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="oGS-ya-5m8"/>
+                    </connections>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="0kh-Uy-Yo3" userLabel="Filters">
                     <rect key="frame" x="18" y="221" width="45" height="14"/>
@@ -75,6 +81,9 @@
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Y59-Gp-EZi"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="yRE-5c-FhX">
                     <rect key="frame" x="67" y="251" width="214" height="14"/>
@@ -87,6 +96,9 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <accessibility description="Tracks summary"/>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="yvf-9M-R6G"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="BHq-Mt-3eA">
                     <rect key="frame" x="67" y="221" width="214" height="14"/>
@@ -96,6 +108,9 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <accessibility description="Filters summary"/>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="lMO-Nm-o0r"/>
+                    </connections>
                 </textField>
                 <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m5a-0z-QQ4">
                     <rect key="frame" x="295" y="16" width="556" height="334"/>
@@ -108,6 +123,9 @@
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="EMw-0U-JBu"/>
+                    </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="Jaw-pH-rhf">
                     <rect key="frame" x="67" y="191" width="214" height="14"/>
@@ -117,6 +135,9 @@
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <accessibility description="Size summary"/>
+                    <connections>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="4UW-2D-uWZ"/>
+                    </connections>
                 </textField>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="9OK-03-grs">
                     <rect key="frame" x="69" y="281" width="114" height="48"/>

@@ -19,6 +19,10 @@
 - (instancetype)init
 {
     self = [super initWithNibName:@"HBFiltersViewController" bundle:nil];
+    if (self)
+    {
+        _labelColor = [NSColor disabledControlTextColor];
+    }
     return self;
 }
 
