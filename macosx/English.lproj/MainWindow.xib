@@ -470,7 +470,7 @@ IA
 
 Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature.</string>
                         <constraints>
-                            <constraint firstAttribute="width" constant="312" id="Kfe-4R-KRB"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="312" id="Kfe-4R-KRB"/>
                         </constraints>
                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="4908">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -664,7 +664,6 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="AhR-pK-Oz4" firstAttribute="top" secondItem="1541" secondAttribute="bottom" constant="13" id="9np-TF-f0W"/>
                     <constraint firstItem="bWH-Lp-mKY" firstAttribute="baseline" secondItem="1627" secondAttribute="baseline" id="A8O-c5-J59"/>
                     <constraint firstItem="d0E-xw-bxh" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="-4" id="ANc-YO-rUk"/>
-                    <constraint firstItem="5505" firstAttribute="leading" secondItem="1545" secondAttribute="trailing" constant="4" id="AlP-tE-q8e"/>
                     <constraint firstItem="5523" firstAttribute="leading" secondItem="1548" secondAttribute="leading" id="BFc-Em-mCW"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="1554" secondAttribute="trailing" constant="20" id="CEn-JC-Lxm"/>
                     <constraint firstAttribute="trailing" secondItem="1628" secondAttribute="trailing" constant="20" id="CO6-Lf-qeZ"/>
@@ -698,6 +697,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstAttribute="bottom" secondItem="d0E-xw-bxh" secondAttribute="bottom" id="Unb-Sk-dKC"/>
                     <constraint firstItem="1627" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="VV8-Hu-yZk"/>
                     <constraint firstItem="AhR-pK-Oz4" firstAttribute="baseline" secondItem="bWH-Lp-mKY" secondAttribute="baseline" id="WHN-Wz-YyG"/>
+                    <constraint firstItem="5505" firstAttribute="leading" secondItem="1545" secondAttribute="trailing" constant="4" id="Wta-a4-i7N"/>
                     <constraint firstItem="4NG-AB-JWs" firstAttribute="leading" secondItem="5181" secondAttribute="trailing" constant="15" id="Xtb-eN-L1f"/>
                     <constraint firstItem="1540" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="YBA-8V-7wA"/>
                     <constraint firstItem="5493" firstAttribute="width" secondItem="1548" secondAttribute="width" id="Z4Q-52-cXt"/>
@@ -722,7 +722,6 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <constraint firstItem="1474" firstAttribute="leading" secondItem="2" secondAttribute="leading" constant="20" id="qm5-es-UMl"/>
                     <constraint firstItem="5493" firstAttribute="baseline" secondItem="5521" secondAttribute="baseline" id="rau-a9-VIU"/>
                     <constraint firstItem="5181" firstAttribute="baseline" secondItem="4NG-AB-JWs" secondAttribute="baseline" id="tbj-bm-Nbs"/>
-                    <constraint firstItem="1548" firstAttribute="leading" secondItem="1545" secondAttribute="trailing" constant="18" id="uQR-fp-LdJ"/>
                     <constraint firstItem="1541" firstAttribute="leading" secondItem="1540" secondAttribute="trailing" constant="8" id="vAS-wg-SY2"/>
                     <constraint firstItem="1553" firstAttribute="baseline" secondItem="1554" secondAttribute="baseline" id="vEY-tK-ETq"/>
                     <constraint firstItem="5493" firstAttribute="leading" secondItem="1548" secondAttribute="leading" id="vkn-JT-TK1"/>
