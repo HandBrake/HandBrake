@@ -1438,7 +1438,8 @@
 - (void)reloadPreset:(id)sender;
 {
     // Reload the currently selected preset if it is selected.
-    if (self.currentPreset != NULL){
+    if (self.currentPreset != NULL)
+    {
         [self applyPreset:self.currentPreset];
     }
 }
