@@ -115,7 +115,7 @@
                     </textField>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1540">
                         <rect key="frame" x="18" y="540" width="33" height="14"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Title:" id="4907">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Title:" id="4907">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -148,7 +148,7 @@
                     </popUpButton>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1552">
                         <rect key="frame" x="18" y="94" width="52" height="14"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Save As:" id="4913">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Save As:" id="4913">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -159,7 +159,7 @@
                     </textField>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1553">
                         <rect key="frame" x="754" y="540" width="57" height="14"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Duration:" id="4914">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Duration:" id="4914">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -519,7 +519,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="50" translatesAutoresizingMaskIntoConstraints="NO" id="gfs-4j-YSE">
                         <rect key="frame" x="438" y="94" width="22" height="14"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="To:" id="rfK-nQ-Aq2">
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="To:" id="rfK-nQ-Aq2">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -592,7 +592,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     </popUpButton>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="5180">
                         <rect key="frame" x="382" y="540" width="41" height="14"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Angle:" id="5185">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Angle:" id="5185">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -608,7 +608,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     </textField>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="4NG-AB-JWs">
                         <rect key="frame" x="480" y="540" width="43" height="14"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Range:" id="IxV-PW-oYh">
+                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Range:" id="IxV-PW-oYh">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
