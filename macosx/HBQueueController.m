@@ -969,14 +969,14 @@
         if (result == HBCoreResultDone)
         {
             title = NSLocalizedString(@"Put down that cocktail…", nil);
-            description = [NSString stringWithFormat:NSLocalizedString(@"your HandBrake encode %@ is done!", nil),
+            description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ is done!", nil),
                                      job.outputFileName];
 
         }
         else
         {
             title = NSLocalizedString(@"Encode failed", nil);
-            description = [NSString stringWithFormat:NSLocalizedString(@"your HandBrake encode %@ couldn't be completed.", nil),
+            description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ couldn't be completed.", nil),
                            job.outputFileName];
         }
 
