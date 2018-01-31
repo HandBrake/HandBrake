@@ -228,7 +228,7 @@
 
                 <Separator />
 
-                <Button Name="ShowQueue" AutomationProperties.Name="Show Queue" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
+                <Button Name="ShowQueue" AutomationProperties.Name="Queue" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
@@ -260,6 +260,18 @@
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="Activity Log"/>
+                    </StackPanel>
+                </Button>
+
+
+                <Button Name="PresetPane" AutomationProperties.Name="Show Preset Pane" cal:Message.Attach="[Event Click] = [Action ShowPresetPane]">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="32"
+                               Height="32"
+                               Source="Images/Presets2.png"/>
+                        <Label Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Content="Presets"/>
                     </StackPanel>
                 </Button>
             </ToolBar>

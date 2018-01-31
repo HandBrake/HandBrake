@@ -532,7 +532,7 @@ This could be due to one of the following reasons:
 The Activity log may have further information.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
-    <value>Show Queue{0}</value>
+    <value>Queue{0}</value>
   </data>
   <data name="Main_Start" xml:space="preserve">
     <value>Start Encode</value>

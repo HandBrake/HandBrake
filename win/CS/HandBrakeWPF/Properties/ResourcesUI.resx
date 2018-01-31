@@ -184,7 +184,7 @@
     <value>Remove</value>
   </data>
   <data name="MainView_ShowQueue" xml:space="preserve">
-    <value>Show Queue</value>
+    <value>Queue</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
     <value>Source:</value>
@@ -1020,6 +1020,6 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Save New Preset</value>
   </data>
   <data name="MainView_ShowPreview" xml:space="preserve">
-    <value>Show Preview</value>
+    <value>Preview</value>
   </data>
 </root>

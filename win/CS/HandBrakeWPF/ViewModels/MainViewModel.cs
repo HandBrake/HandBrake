@@ -1433,6 +1433,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void ShowPresetPane()
+        {
+            this.IsPresetPanelShowing = !this.IsPresetPanelShowing;
+        }
+
         /// <summary>
         /// Launch the Help pages.
         /// </summary>

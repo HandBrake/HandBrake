@@ -897,7 +897,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show Queue{0}.
+        ///   Looks up a localized string similar to Queue{0}.
         /// </summary>
         public static string Main_QueueLabel {
             get {
