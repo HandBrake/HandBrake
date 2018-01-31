@@ -391,11 +391,16 @@
     [self.jobs beginTransaction];
     [self.outlineView beginUpdates];
 
-    NSArray *removeJobs = [self.jobs objectsAtIndexes:indexes];
+    NSArray<HBJob *> *removeJobs = [self.jobs objectsAtIndexes:indexes];
 
     if (self.jobs.count > indexes.lastIndex)
     {
         [self.jobs removeObjectsAtIndexes:indexes];
+    }
+
+    for (HBJob *job in removeJobs)
+    {
+        [self.descriptions removeObjectForKey:job.uuid];
     }
 
     [self.outlineView removeItemsAtIndexes:indexes inParent:nil withAnimation:NSTableViewAnimationSlideUp];
@@ -1523,12 +1528,12 @@
     if ([tableColumn.identifier isEqualToString:@"desc"])
     {
         HBJob *job = item;
-        NSAttributedString *description = self.descriptions[@(job.hash)];
+        NSAttributedString *description = self.descriptions[job.uuid];
 
         if (description == nil)
         {
             description = job.attributedDescription;
-            self.descriptions[@(job.hash)] = description;
+            self.descriptions[job.uuid] = description;
         }
 
         return description;
