@@ -4088,9 +4088,12 @@ show_activity_action_cb(GSimpleAction *action, GVariant *value,
 G_MODULE_EXPORT gboolean
 presets_window_delete_cb(GtkWidget *xwidget, GdkEvent *event, signal_user_data_t *ud)
 {
-    gtk_widget_set_visible(xwidget, FALSE);
-    GtkWidget *widget = GHB_WIDGET(ud->builder, "show_presets");
-    gtk_check_menu_item_set_active(GTK_CHECK_MENU_ITEM(widget), FALSE);
+    GSimpleAction * action;
+    GVariant      * state = g_variant_new_boolean(FALSE);
+
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(
+                             G_ACTION_MAP(ud->app), "show-presets"));
+    g_action_change_state(G_ACTION(action), state);
     return TRUE;
 }
 
@@ -4285,10 +4288,7 @@ show_presets_action_cb(GSimpleAction *action, GVariant *value,
     gboolean state = g_variant_get_boolean(value);
 
     g_simple_action_set_state(action, value);
-    ghb_dict_set(ud->prefs, "show_presets", ghb_boolean_value(state));
-    presets_window_set_visible(ud, ghb_dict_get_bool(ud->prefs,
-                                                     "show_presets"));
-    ghb_pref_save(ud->prefs, "show_presets");
+    presets_window_set_visible(ud, state);
 }
 
 static void
@@ -5805,8 +5805,6 @@ window_map_cb(
     GdkEventAny *event,
     signal_user_data_t *ud)
 {
-    presets_window_set_visible(ud, ghb_dict_get_bool(ud->prefs,
-                                                     "show_presets"));
     return FALSE;
 }
 

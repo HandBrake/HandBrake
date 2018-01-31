@@ -96,7 +96,6 @@
         "preview_show_crop": false,
         "preview_x": -1,
         "preview_y": -1,
-        "show_presets": false,
         "UseM4v": true,
         "auto_name": true,
         "auto_name_template": "{source}",
