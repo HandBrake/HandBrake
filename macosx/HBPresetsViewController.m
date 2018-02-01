@@ -249,6 +249,15 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     }
 }
 
+- (IBAction)renamed:(id)sender
+{
+    if (self.delegate && [[self.treeController.selectedObjects firstObject] isLeaf])
+    {
+        [self.delegate selectionDidChange];
+        [[NSNotificationCenter defaultCenter] postNotificationName:HBPresetsChangedNotification object:nil];
+    }
+}
+
 - (IBAction)addNewPreset:(id)sender
 {
     if (self.delegate)

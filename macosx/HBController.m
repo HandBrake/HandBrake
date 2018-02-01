@@ -1367,10 +1367,7 @@
 
 - (void)selectionDidChange
 {
-    if (fPresetsView.selectedPreset != self.currentPreset || self.edited)
-    {
-        [self applyPreset:fPresetsView.selectedPreset];
-    }
+    [self applyPreset:fPresetsView.selectedPreset];
 }
 
 #pragma mark -  Presets
