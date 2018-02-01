@@ -337,16 +337,13 @@
                                     <action selector="insertCategory:" target="-1" id="JL7-bI-H97"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" tag="-1" id="ymY-bE-5EP">
-                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                            </menuItem>
-                            <menuItem title="Select Default Preset" tag="-1" id="2421">
-                                <connections>
-                                    <action selector="selectDefaultPreset:" target="-1" id="2eH-zk-T3n"/>
-                                </connections>
-                            </menuItem>
                             <menuItem isSeparatorItem="YES" tag="-1" id="1954">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Make Default Preset" tag="-1" id="frQ-v5-pRa" userLabel="Make Default Preset">
+                                <connections>
+                                    <action selector="setDefaultPreset:" target="-1" id="adZ-ic-MKn"/>
+                                </connections>
                             </menuItem>
                             <menuItem title="Delete Preset" tag="-1" id="CN3-Rh-gVf">
                                 <connections>
@@ -371,6 +368,14 @@
                             <menuItem title="Reset Official Presets" tag="-1" id="1950">
                                 <connections>
                                     <action selector="addFactoryPresets:" target="6lr-Yy-GMc" id="5Ga-rb-ORy"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" tag="-1" id="ymY-bE-5EP">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Select Default Preset" tag="-1" id="2421">
+                                <connections>
+                                    <action selector="selectDefaultPreset:" target="-1" id="2eH-zk-T3n"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" tag="-1" id="wgI-bc-Ors">

@@ -1524,6 +1524,11 @@
     fPresetsView.selectedPreset = presetManager.defaultPreset;
 }
 
+- (IBAction)setDefaultPreset:(id)sender
+{
+    [fPresetsView setDefault:sender];
+}
+
 - (IBAction)deletePreset:(id)sender
 {
     HBPreset *preset = [sender representedObject];

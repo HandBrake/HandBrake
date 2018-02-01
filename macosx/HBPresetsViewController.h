@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readwrite, assign) id<HBPresetsViewControllerDelegate> delegate;
 
+- (IBAction)setDefault:(id)sender;
 - (IBAction)deletePreset:(id)sender;
 
 - (IBAction)exportPreset:(id)sender;
