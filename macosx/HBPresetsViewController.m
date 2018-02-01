@@ -261,8 +261,6 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 {
     if ([self.treeController canRemove])
     {
-        // Save the current selection path and apply it again after the deletion
-        NSIndexPath *currentSelection = [self.treeController selectionIndexPath];
         /* Alert user before deleting preset */
         NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Are you sure you want to permanently delete the selected preset?", nil)
                                          defaultButton:NSLocalizedString(@"Delete Preset", nil)
@@ -276,8 +274,8 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
         if (status == NSAlertDefaultReturn)
         {
             [self.presets deletePresetAtIndexPath:[self.treeController selectionIndexPath]];
+            [self setSelection:self.presets.defaultPreset];
         }
-        [self.treeController setSelectionIndexPath:currentSelection];
     }
 }
 
