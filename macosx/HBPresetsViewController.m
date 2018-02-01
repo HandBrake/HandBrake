@@ -306,6 +306,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     if (selectedNode.isLeaf)
     {
         self.presets.defaultPreset = selectedNode;
+        [[NSNotificationCenter defaultCenter] postNotificationName:HBPresetsChangedNotification object:nil];
     }
 }
 
