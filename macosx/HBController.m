@@ -1395,6 +1395,7 @@
         }
         else
         {
+            fPresetsView.selectedPreset = _currentPreset;
             [self.presetsPopover close];
         }
     }
