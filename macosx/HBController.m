@@ -253,6 +253,8 @@
         // note that interacting with menus or panels that become key only when needed will not cause a transient popover to close.
         self.presetsPopover.behavior = NSPopoverBehaviorSemitransient;
         self.presetsPopover.delegate = self;
+
+        [fPresetsView loadView];
     }
 
     // Set up the summary view
