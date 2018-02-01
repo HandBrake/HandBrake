@@ -1527,6 +1527,12 @@
     fPresetsView.selectedPreset = presetManager.defaultPreset;
 }
 
+- (IBAction)deletePreset:(id)sender
+{
+    HBPreset *preset = [sender representedObject];
+    [fPresetsView deletePreset:preset];
+}
+
 - (IBAction)insertCategory:(id)sender
 {
     [fPresetsView insertCategory:sender];

@@ -40,6 +40,7 @@
 - (IBAction)showAddPresetPanel:(id)sender;
 - (IBAction)selectDefaultPreset:(id)sender;
 
+- (IBAction)deletePreset:(id)sender;
 - (IBAction)reloadPreset:(id)sender;
 
 
