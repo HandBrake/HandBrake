@@ -1526,6 +1526,7 @@
 
 - (IBAction)setDefaultPreset:(id)sender
 {
+    fPresetsView.selectedPreset = _currentPreset;
     [fPresetsView setDefault:sender];
 }
 
