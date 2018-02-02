@@ -38,8 +38,10 @@
 
 // Manage User presets
 - (IBAction)showAddPresetPanel:(id)sender;
+- (IBAction)showRenamePresetPanel:(id)sender;
 - (IBAction)selectDefaultPreset:(id)sender;
 
+- (IBAction)renamePreset:(id)sender;
 - (IBAction)deletePreset:(id)sender;
 - (IBAction)reloadPreset:(id)sender;
 

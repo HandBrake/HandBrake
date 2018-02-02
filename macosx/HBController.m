@@ -30,6 +30,7 @@
 
 #import "HBPresetsViewController.h"
 #import "HBAddPresetController.h"
+#import "HBRenamePresetController.h"
 
 @import HandBrakeKit;
 
@@ -549,7 +550,18 @@
     }
     if (action == @selector(exportPreset:))
     {
-        return [fPresetsView validateUserInterfaceItem:menuItem];
+        return [fPresetsView validateUserInterfaceItem:menuItem] && self.job != nil;
+    }
+    if (action == @selector(selectDefaultPreset:) ||
+        action == @selector(insertCategory:))
+    {
+        return self.job != nil;
+    }
+    if (action == @selector(renamePreset:) ||
+        action == @selector(deletePreset:) ||
+        action == @selector(setDefaultPreset:))
+    {
+        return self.job != nil && self.edited == NO;//fixme
     }
 
     return YES;
@@ -1502,6 +1514,27 @@
     return [preset copy];
 }
 
+- (IBAction)showRenamePresetPanel:(id)sender
+{
+    [self.window HB_endEditing];
+
+    HBRenamePresetController *renamePresetController = [[HBRenamePresetController alloc] initWithPreset:self.currentPreset
+                                                                                          presetManager:presetManager];
+
+    [NSApp beginSheet:renamePresetController.window modalForWindow:self.window modalDelegate:self didEndSelector:@selector(renamePresetSheetDidEnd:returnCode:contextInfo:) contextInfo:(void *)CFBridgingRetain(renamePresetController)];
+}
+
+- (void)renamePresetSheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+    __unused HBRenamePresetController *renamePresetController = (HBRenamePresetController *)CFBridgingRelease(contextInfo);
+
+    if (returnCode != NSModalResponseCancel)
+    {
+        [self applyPreset:fPresetsView.selectedPreset];
+        [[NSNotificationCenter defaultCenter] postNotificationName:HBPresetsChangedNotification object:nil];
+    }
+}
+
 #pragma mark -
 #pragma mark Import Export Preset(s)
 
@@ -1528,6 +1561,12 @@
 {
     fPresetsView.selectedPreset = _currentPreset;
     [fPresetsView setDefault:sender];
+}
+
+- (IBAction)renamePreset:(id)sender
+{
+    fPresetsView.selectedPreset = _currentPreset;
+    [self showRenamePresetPanel:sender];
 }
 
 - (IBAction)deletePreset:(id)sender

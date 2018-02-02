@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1C6D76551CD7733300F5B943 /* libharfbuzz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C15C82B1CD7722500368223 /* libharfbuzz.a */; };
 		1C6D76561CD7733400F5B943 /* libharfbuzz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C15C82B1CD7722500368223 /* libharfbuzz.a */; };
+		1C7776A2202300DD001C31EB /* HBRenamePresetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C7776A0202300DC001C31EB /* HBRenamePresetController.m */; };
+		1C7776A5202301D5001C31EB /* HBRenamePresetController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C7776A3202301D5001C31EB /* HBRenamePresetController.xib */; };
 		226268E11572CC7300477B4E /* libavresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 226268DF1572CC7300477B4E /* libavresample.a */; };
 		22DD2C4B177B95DA00EF50D3 /* libvpx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22DD2C49177B94DB00EF50D3 /* libvpx.a */; };
 		273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
@@ -316,6 +318,9 @@
 
 /* Begin PBXFileReference section */
 		1C15C82B1CD7722500368223 /* libharfbuzz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libharfbuzz.a; path = external/contrib/lib/libharfbuzz.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C7776A0202300DC001C31EB /* HBRenamePresetController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBRenamePresetController.m; sourceTree = "<group>"; };
+		1C7776A1202300DC001C31EB /* HBRenamePresetController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBRenamePresetController.h; sourceTree = "<group>"; };
+		1C7776A4202301D5001C31EB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/HBRenamePresetController.xib; sourceTree = "<group>"; };
 		226268DF1572CC7300477B4E /* libavresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavresample.a; path = external/contrib/lib/libavresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22CC9E74191EBEA500C69D81 /* libx265.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx265.a; path = external/contrib/lib/libx265.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external/contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1198,6 +1203,9 @@
 				273F20A014ADBE670021BE6D /* HBPreferencesController.m */,
 				A939DD891FC8826A00135F2A /* HBPresetsMenuBuilder.h */,
 				A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */,
+				1C7776A1202300DC001C31EB /* HBRenamePresetController.h */,
+				1C7776A0202300DC001C31EB /* HBRenamePresetController.m */,
+				1C7776A3202301D5001C31EB /* HBRenamePresetController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1486,6 +1494,7 @@
 				A9F2EB6F196F12C800066546 /* Audio.xib in Resources */,
 				A9CF25F11990D62C0023F727 /* Presets.xib in Resources */,
 				A9C1839D1A716BCC00C897C2 /* HBTitleSelection.xib in Resources */,
+				1C7776A5202301D5001C31EB /* HBRenamePresetController.xib in Resources */,
 				273F218A14ADDDA10021BE6D /* AdvancedView.xib in Resources */,
 				273F218B14ADDDA10021BE6D /* InfoPlist.strings in Resources */,
 				A932E26C1988334B0047D13E /* AudioDefaults.xib in Resources */,
@@ -1574,6 +1583,7 @@
 				A99F40CF1B624E7E00750170 /* HBPictureViewController.m in Sources */,
 				273F20AF14ADBE670021BE6D /* HBAudioController.m in Sources */,
 				A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */,
+				1C7776A2202300DD001C31EB /* HBRenamePresetController.m in Sources */,
 				A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */,
 				273F20AD14ADBE670021BE6D /* HBAdvancedController.m in Sources */,
 				A9906B2C1A710920001D82D5 /* HBQueueController.m in Sources */,
@@ -1691,6 +1701,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		1C7776A3202301D5001C31EB /* HBRenamePresetController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1C7776A4202301D5001C31EB /* English */,
+			);
+			name = HBRenamePresetController.xib;
+			sourceTree = "<group>";
+		};
 		273F217A14ADDDA10021BE6D /* AdvancedView.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

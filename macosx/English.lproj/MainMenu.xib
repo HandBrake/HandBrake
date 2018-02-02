@@ -345,6 +345,14 @@
                                     <action selector="setDefaultPreset:" target="-1" id="adZ-ic-MKn"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" tag="-1" id="2954">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
+                            <menuItem title="Rename Preset…" tag="-1" id="1GQ-n3-jfY">
+                                <connections>
+                                    <action selector="renamePreset:" target="-1" id="ts9-w0-2WC"/>
+                                </connections>
+                            </menuItem>
                             <menuItem title="Delete Preset" tag="-1" id="CN3-Rh-gVf">
                                 <connections>
                                     <action selector="deletePreset:" target="-1" id="ZGV-Ji-MGc"/>
