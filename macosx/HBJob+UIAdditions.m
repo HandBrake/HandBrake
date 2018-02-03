@@ -235,7 +235,7 @@ static NSDictionary            *shortHeightAttr;
     return attrString;
 }
 
-- (NSAttributedString *)pictureAttributedDescription
+- (NSAttributedString *)dimensionsAttributedDescription
 {
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
 
@@ -244,10 +244,10 @@ static NSDictionary            *shortHeightAttr;
     {
         pictureInfo = [pictureInfo stringByAppendingString:@" Keep Aspect Ratio"];
     }
-    [attrString appendString:@"\tPicture: " withAttributes:detailBoldAttr];
-    [attrString appendString:@"\t"          withAttributes:detailAttr];
-    [attrString appendString:pictureInfo    withAttributes:detailAttr];
-    [attrString appendString:@"\n"          withAttributes:detailAttr];
+    [attrString appendString:@"\tDimensions: " withAttributes:detailBoldAttr];
+    [attrString appendString:@"\t"             withAttributes:detailAttr];
+    [attrString appendString:pictureInfo       withAttributes:detailAttr];
+    [attrString appendString:@"\n"             withAttributes:detailAttr];
 
     return attrString;
 }
@@ -600,8 +600,7 @@ static NSDictionary            *shortHeightAttr;
         [attrString appendAttributedString:[self titleAttributedDescription]];
         [attrString appendAttributedString:[self presetAttributedDescription]];
         [attrString appendAttributedString:[self formatAttributedDescription]];
-        [attrString appendAttributedString:[self destinationAttributedDescription]];
-        [attrString appendAttributedString:[self pictureAttributedDescription]];
+        [attrString appendAttributedString:[self dimensionsAttributedDescription]];
         [attrString appendAttributedString:[self filtersAttributedDescription]];
         [attrString appendAttributedString:[self videoAttributedDescription]];
         if (self.audio.countOfTracks > 1)
@@ -612,6 +611,7 @@ static NSDictionary            *shortHeightAttr;
         {
             [attrString appendAttributedString:[self subtitlesAttributedDescription]];
         }
+        [attrString appendAttributedString:[self destinationAttributedDescription]];
     }
 
     [attrString deleteCharactersInRange:NSMakeRange(attrString.length - 1, 1)];
