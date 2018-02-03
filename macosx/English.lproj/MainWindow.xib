@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14087.3" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14087.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -39,8 +39,8 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="41" y="572" width="882" height="600"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="contentRect" x="41" y="572" width="885" height="600"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
             <view key="contentView" id="2" customClass="HBFocusRingView">
                 <rect key="frame" x="0.0" y="0.0" width="885" height="600"/>
                 <autoresizingMask key="autoresizingMask"/>
@@ -53,7 +53,7 @@
                         <tabViewItems>
                             <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
                                 <view key="view" id="BjX-E2-6tb">
-                                    <rect key="frame" x="10" y="25" width="839" height="344"/>
+                                    <rect key="frame" x="10" y="29" width="839" height="340"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -631,12 +631,12 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </buttonCell>
                         <connections>
                             <action selector="reloadPreset:" target="-2" id="v7a-73-wrT"/>
-                            <binding destination="5676" name="hidden" keyPath="values.HBHideButtons" previousBinding="pER-xA-jjU" id="wOC-Ys-6ZR"/>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="pER-xA-jjU">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSIsNotNil</string>
                                 </dictionary>
                             </binding>
+                            <binding destination="5676" name="hidden" keyPath="values.HBHideButtons" previousBinding="pER-xA-jjU" id="wOC-Ys-6ZR"/>
                         </connections>
                     </button>
                     <button toolTip="Save New Preset…" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2vD-zN-YMe">
@@ -647,12 +647,12 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </buttonCell>
                         <connections>
                             <action selector="showAddPresetPanel:" target="-2" id="QgW-qo-eKy"/>
-                            <binding destination="5676" name="hidden" keyPath="values.HBHideButtons" previousBinding="XiA-f4-ZO2" id="rdw-AT-F5e"/>
                             <binding destination="-2" name="enabled" keyPath="self.job" id="XiA-f4-ZO2">
                                 <dictionary key="options">
                                     <string key="NSValueTransformerName">NSIsNotNil</string>
                                 </dictionary>
                             </binding>
+                            <binding destination="5676" name="hidden" keyPath="values.HBHideButtons" previousBinding="XiA-f4-ZO2" id="rdw-AT-F5e"/>
                         </connections>
                     </button>
                 </subviews>
@@ -838,8 +838,9 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     <toolbarItem reference="byg-kj-sEM"/>
                     <toolbarItem reference="wTQ-KF-5KW"/>
                     <toolbarItem reference="wjB-Tl-5qq"/>
-                    <toolbarItem reference="HCx-ku-nF7"/>
+                    <toolbarItem reference="qhv-9l-2FH"/>
                     <toolbarItem reference="dK4-jt-v4K"/>
+                    <toolbarItem reference="HCx-ku-nF7"/>
                     <toolbarItem reference="p7Q-L3-zcW"/>
                 </defaultToolbarItems>
             </toolbar>
