@@ -11,6 +11,7 @@
    - New 4K device presets for Apple TV, Chromecast, FireTV and Roku
    - Expanded Matroska presets with more 4K options 
    - Added new production video editing presets.
+- Fixed a hang that would occur if one of the streams reaches eof before the end point is detected
 
 ### Video
 - Intel QuickSync: 
