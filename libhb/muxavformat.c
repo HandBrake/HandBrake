@@ -719,7 +719,7 @@ static int avformatInit( hb_mux_object_t * m )
     // Quicktime requires that at least one subtitle is enabled,
     // else it doesn't show any of the subtitles.
     // So check to see if any of the subtitles are flagged to be
-    // the defualt.  The default will the the enabled track, else
+    // the default.  The default will the the enabled track, else
     // enable the first track.
     if (job->mux == HB_MUX_AV_MP4 && subtitle_default == -1)
     {
@@ -1171,7 +1171,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     }
     if (duration < 0)
     {
-        // There is a possiblility that some subtitles get through the pipeline
+        // There is a possibility that some subtitles get through the pipeline
         // without ever discovering their true duration.  Make the duration
         // 10 seconds in this case. Unless they are PGS subs which should
         // have zero duration.
