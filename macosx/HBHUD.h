@@ -11,7 +11,7 @@
 - (BOOL)canBeHidden;
 
 // Responder chains is nice and good, but NSViewController
-// are not automatically insterted in the responder chain prior 10.10
+// are not automatically inserted in the responder chain prior 10.10
 // and are removed when the view is hidden, so let's deliver the
 // events manually.
 

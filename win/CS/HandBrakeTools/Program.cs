@@ -20,7 +20,7 @@ namespace HandBrakeTools
         {
             if (args.Length == 0)
             {
-                Console.WriteLine("Invalid Comand.  Either 'genkeys' or 'sign <filename>'");
+                Console.WriteLine("Invalid Command.  Either 'genkeys' or 'sign <filename>'");
                 Console.Read();
                 return;
             }

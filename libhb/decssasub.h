@@ -14,12 +14,12 @@ typedef struct
 {
     uint32_t    flags;
 
-    uint32_t    fg_rgb;     // forground color
+    uint32_t    fg_rgb;     // foreground color
     uint32_t    alt_rgb;    // secondary color
     uint32_t    ol_rgb;     // outline color
     uint32_t    bg_rgb;     // background color
 
-    uint32_t    fg_alpha;     // forground alpha
+    uint32_t    fg_alpha;     // foreground alpha
     uint32_t    alt_alpha;    // secondary alpha
     uint32_t    ol_alpha;     // outline alpha
     uint32_t    bg_alpha;     // background alpha

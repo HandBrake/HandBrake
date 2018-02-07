@@ -2197,7 +2197,7 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         ghb_dict_set_int(settings, "scale_width",
                  title->geometry.width - crop[2] - crop[3]);
 
-        // If anamorphic or keep_aspect, the hight will
+        // If anamorphic or keep_aspect, the height will
         // be automatically calculated
         gboolean keep_aspect;
         gint pic_par;
@@ -4431,7 +4431,7 @@ chapter_edited_cb(
 
         gtk_tree_path_next(treepath);
         // When a cell has been edited, I want to advance to the
-        // next cell and start editing it automaitcally.
+        // next cell and start editing it automatically.
         // Unfortunately, we may not be in a state here where
         // editing is allowed.  This happens when the user selects
         // a new cell with the mouse instead of just hitting enter.

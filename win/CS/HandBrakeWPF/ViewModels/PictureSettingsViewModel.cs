@@ -950,7 +950,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            // Step 1, Update what controls are visibile.
+            // Step 1, Update what controls are visible.
             this.UpdateVisibileControls();
 
             // Step 2, Set sensible defaults
@@ -1012,7 +1012,7 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// The update visibile controls.
+        /// The update visible controls.
         /// </summary>
         private void UpdateVisibileControls()
         {

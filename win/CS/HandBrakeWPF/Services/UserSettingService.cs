@@ -3,7 +3,7 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   The User Setting Serivce
+//   The User Setting Service
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -25,7 +25,7 @@ namespace HandBrakeWPF.Services
     using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
 
     /// <summary>
-    /// The User Setting Serivce
+    /// The User Setting Service
     /// </summary>
     public class UserSettingService : IUserSettingService
     {

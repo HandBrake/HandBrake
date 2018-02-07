@@ -293,7 +293,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
     __block HBPreset *firstBuiltInPreset = nil;
     __block BOOL defaultAlreadySetted = NO;
 
-    // Search for a possibile new default preset
+    // Search for a possible new default preset
     // Try to use "Normal" or the first user preset.
     [self.root enumerateObjectsUsingBlock:^(id obj, NSIndexPath *idx, BOOL *stop) {
         if ([obj isBuiltIn] && [obj isLeaf])

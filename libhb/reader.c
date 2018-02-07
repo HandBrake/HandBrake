@@ -572,7 +572,7 @@ static int reader_work( hb_work_object_t * w, hb_buffer_t ** buf_in,
         buf = splice_discontinuity(r, buf);
         if (fifos && buf != NULL)
         {
-            /* if there are mutiple output fifos, send a copy of the
+            /* if there are multiple output fifos, send a copy of the
              * buffer down all but the first (we have to not ship the
              * original buffer or we'll race with the thread that's
              * consuming the buffer & inject garbage into the data stream). */

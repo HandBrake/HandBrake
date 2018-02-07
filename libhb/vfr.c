@@ -84,8 +84,8 @@ static void build_gamma_lut( hb_filter_private_t * pv )
 
 #define DUP_THRESH_SSE 5.0
 
-// Compute ths sum of squared errors for a 16x16 block
-// Gamma adjusts pixel values so that less visible diffreences
+// Compute the sum of squared errors for a 16x16 block
+// Gamma adjusts pixel values so that less visible differences
 // count less.
 static inline unsigned sse_block16( unsigned *gamma_lut, uint8_t *a, uint8_t *b, int stride )
 {

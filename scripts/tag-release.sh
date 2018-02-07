@@ -98,7 +98,7 @@ function tag_release()
 
     if [ "x${REF}" == "x" ]; then
         echo "Creating release tag ${TAG} and branch ${BRANCH} from HEAD, proceed? (y/N)"
-        # retrive full hash of HEAD
+        # retrieve full hash of HEAD
         COMMIT=$(${GIT_EXE} rev-list HEAD --max-count=1)
     else
         echo "Creating release tag ${TAG} and branch ${BRANCH} from ${REF}, proceed? (y/N)"

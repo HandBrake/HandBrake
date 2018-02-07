@@ -41,7 +41,7 @@ namespace HandBrakeWPF.Utilities.Input
             using (TextFieldParser csv = new TextFieldParser(filename)
             {
                 CommentTokens = new[] { "#" }, // Comment lines
-                Delimiters = new[] { ",", "\t", ";", ":" }, // Support all of these common delimeter types
+                Delimiters = new[] { ",", "\t", ";", ":" }, // Support all of these common delimiter types
                 HasFieldsEnclosedInQuotes = true, // Assume that our data will be properly escaped
                 TextFieldType = FieldType.Delimited,
                 TrimWhiteSpace = true // Remove excess whitespace from ends of imported values

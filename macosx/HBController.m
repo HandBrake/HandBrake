@@ -795,7 +795,7 @@
 
 /**
  *  Observe the job settings changes.
- *  This is used to update the file name and extention
+ *  This is used to update the file name and extension
  *  and the custom preset string.
  */
 - (void)addJobObservers

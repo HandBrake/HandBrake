@@ -22,10 +22,10 @@
  * The provided NAL unit must start with the NAL unit header.
  *
  * Note: the buffer is assumed to be large enough to hold the NAL unit
- * as well as any additonal data the function may prepend/append to it.
+ * as well as any additional data the function may prepend/append to it.
  *
  * The caller may check the minimum required buffer size by passing a
- * NULL buffer to the fucntion and checking the returned size value.
+ * NULL buffer to the function and checking the returned size value.
  */
 size_t hb_nal_unit_write_annexb(uint8_t *buf, const uint8_t *nal_unit, const size_t nal_unit_size);
 size_t hb_nal_unit_write_isomp4(uint8_t *buf, const uint8_t *nal_unit, const size_t nal_unit_size);

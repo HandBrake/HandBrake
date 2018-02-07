@@ -66,7 +66,7 @@ namespace HandBrakeWPF.Utilities
                 Directory.CreateDirectory(GetStorageDirectory());
             }
 
-            // Setup enviroment variables for this instance.
+            // Setup environment variables for this instance.
             Environment.SetEnvironmentVariable("TMP", GetTempDirectory());
         }
 

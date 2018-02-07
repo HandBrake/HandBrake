@@ -421,7 +421,7 @@
  * @method openGrowlPreferences:
  * @abstract Open Growl preferences, optionally to this app's settings, growl:// method
  * @param showApp Whether to show the application's settings, otherwise just opens to the last position
- * @return Return's whether opening the URL was succesfull or not.  
+ * @return Returns whether opening the URL was successful or not.  
  * @discussion Will launch if Growl is installed, but not running, and open the preferences window
  * Uses growl:// URL scheme
  * @since Growl.framework 1.4

@@ -39,7 +39,7 @@ extern NSString *keySubTrackSrtFileURLBookmark;
 @property (nonatomic, readwrite, weak) HBJob *job;
 @property (nonatomic, readwrite) int container;
 
-/// Used to aovid circular dependecy validation.
+/// Used to avoid circular dependency validation.
 @property (nonatomic, readwrite) BOOL validating;
 
 @end

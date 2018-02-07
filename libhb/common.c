@@ -4555,7 +4555,7 @@ void hb_audio_close( hb_audio_t **audio )
  *********************************************************************/
 void hb_audio_config_init(hb_audio_config_t * audiocfg)
 {
-    /* Set read-only paramaters to invalid values */
+    /* Set read-only parameters to invalid values */
     audiocfg->in.codec = 0;
     audiocfg->in.codec_param = 0;
     audiocfg->in.reg_desc = 0;
@@ -4575,7 +4575,7 @@ void hb_audio_config_init(hb_audio_config_t * audiocfg)
     audiocfg->lang.simple[0] = 0;
     audiocfg->lang.iso639_2[0] = 0;
 
-    /* Initalize some sensible defaults */
+    /* Initialize some sensible defaults */
     audiocfg->in.track = audiocfg->out.track = 0;
     audiocfg->out.codec = hb_audio_encoder_get_default(HB_MUX_MP4); // default container
     audiocfg->out.samplerate = -1;

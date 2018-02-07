@@ -424,7 +424,7 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
             int  size, len;
 
             // If the current line is empty, we assume this is the
-            //	seperation betwene two entries. In case we are wrong,
+            //	separation between two entries. In case we are wrong,
             //	the mistake is corrected in the next state.
             if (strcmp(line_buffer, "\n") == 0 || strcmp(line_buffer, "\r\n") == 0) {
                 pv->current_state = k_state_potential_new_entry;
@@ -621,7 +621,7 @@ static int decsrtInit( hb_work_object_t * w, hb_job_t * job )
     pv->subtitle = w->subtitle;
 
     /*
-     * Figure out the start and stop times from teh chapters being
+     * Figure out the start and stop times from the chapters being
      * encoded - drop subtitle not in this range.
      */
     pv->start_time = 0;

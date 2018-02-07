@@ -394,7 +394,7 @@ static kind_t ts_stream_kind( hb_stream_t * stream, int idx )
 {
     if ( stream->ts.list[idx].pes_list != -1 )
     {
-        // Retuns kind for the first pes substream in the pes list
+        // Returns kind for the first pes substream in the pes list
         // All substreams in a TS stream are the same kind.
         return stream->pes.list[stream->ts.list[idx].pes_list].stream_kind;
     }
@@ -408,7 +408,7 @@ static kind_t ts_stream_type( hb_stream_t * stream, int idx )
 {
     if ( stream->ts.list[idx].pes_list != -1 )
     {
-        // Retuns stream type for the first pes substream in the pes list
+        // Returns stream type for the first pes substream in the pes list
         // All substreams in a TS stream are the same stream type.
         return stream->pes.list[stream->ts.list[idx].pes_list].stream_type;
     }

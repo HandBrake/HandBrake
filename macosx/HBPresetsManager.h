@@ -32,7 +32,7 @@ extern NSString *HBPresetsChangedNotification;
 @property (nonatomic, readwrite, strong) HBPreset *defaultPreset;
 
 /**
- *  Returs a HBPresetManager with the presets loaded at the passed URL.
+ *  Returns a HBPresetManager with the presets loaded at the passed URL.
  *
  *  @param url the URL of the presets file to load.
  *

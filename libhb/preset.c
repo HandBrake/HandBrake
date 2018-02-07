@@ -3402,7 +3402,7 @@ char * hb_presets_builtin_get_json(void)
 }
 
 // Lookup a preset in the preset list.  The "name" may contain '/'
-// separators to explicitely specify a preset within the preset lists
+// separators to explicitly specify a preset within the preset lists
 // folder structure.
 //
 // If 'recurse' is specified, a recursive search for the first component
@@ -3431,7 +3431,7 @@ static hb_preset_index_t * preset_lookup_path(const char *name,
 }
 
 // Lookup a preset in the preset list.  The "name" may contain '/'
-// separators to explicitely specify a preset within the preset lists
+// separators to explicitly specify a preset within the preset lists
 // folder structure.
 //
 // If 'recurse' is specified, a recursive search for the first component

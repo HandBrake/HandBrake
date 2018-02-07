@@ -1375,7 +1375,7 @@ static int try_menu(
                 break;
             }
         }
-        // Sometimes the menu is preceeded by a intro that just
+        // Sometimes the menu is preceded by a intro that just
         // gets restarted when hitting the menu button. So
         // try skipping with the skip forward button.  Then
         // try hitting the menu again.

@@ -318,7 +318,7 @@ subtitle_add_to_settings(GhbValue *settings, GhbValue *subsettings)
 
     ghb_array_append(subtitle_list, subsettings);
 
-    // Check consistancy of exclusive flags
+    // Check consistency of exclusive flags
     count = ghb_array_len(subtitle_list);
     if (burn)
         subtitle_exclusive_burn_settings(settings, count-1);

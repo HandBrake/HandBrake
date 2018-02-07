@@ -152,7 +152,7 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
          * We make this call just to set the encoder into 2-pass mode, because
          * by default enabling two-pass sets the buffer delay to the whole file
          * (because there's no way to explicitly request that behavior).
-         * If we waited until we were actually encoding, it would overwite our
+         * If we waited until we were actually encoding, it would overwrite our
          * settings.*/
         hb_log("enctheora: init 2nd pass");
         if( th_encode_ctl( pv->ctx, TH_ENCCTL_2PASS_IN, NULL, 0) < 0)

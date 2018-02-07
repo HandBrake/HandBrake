@@ -155,7 +155,7 @@ void eedi2_upscale_by_2( uint8_t * srcp, uint8_t * dstp, int height, int pitch )
 }
 
 /**
- * Finds places where verticaly adjacent pixels abruptly change in intensity, i.e., sharp edges.
+ * Finds places where vertically adjacent pixels abruptly change in intensity, i.e., sharp edges.
  * @param dstp Pointer to the destination bitmap
  * @param dst_pitch Stride of dstp
  * @param srcp Pointer to the source bitmap

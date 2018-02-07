@@ -961,7 +961,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         pv->param.videoParam->mfx.MaxKbps = pv->param.rc.vbv_max_bitrate;
     }
 
-    // set rate control paremeters
+    // set rate control parameters
     if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         if (pv->param.rc.icq)

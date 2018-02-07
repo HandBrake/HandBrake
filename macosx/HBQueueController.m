@@ -25,7 +25,7 @@
 // Pasteboard type for or drag operations
 #define DragDropSimplePboardType    @"HBQueueCustomOutlineViewPboardType"
 
-// DockTile update freqency in total percent increment
+// DockTile update frequency in total percent increment
 #define dockTileUpdateFrequency     0.1f
 
 @interface HBQueueController () <NSOutlineViewDataSource, HBQueueOutlineViewDelegate>

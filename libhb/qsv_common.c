@@ -273,7 +273,7 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
      * - MFXVideoENCODE_Query should zero out all unsupported parameters
      *
      * Mode 2:
-     * - the paramaters we want to query are set for in
+     * - the parameters we want to query are set for in
      * - in ->mfx.CodecId field has to be set (mandatory)
      * - out->mfx.CodecId field has to be set (mandatory)
      * - MFXVideoENCODE_Query should sanitize all unsupported parameters

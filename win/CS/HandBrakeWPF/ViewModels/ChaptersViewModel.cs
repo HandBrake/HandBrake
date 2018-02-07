@@ -247,7 +247,7 @@ namespace HandBrakeWPF.ViewModels
                 if (importedChapters.TryGetValue(item.ChapterNumber, out chapterInfo))
                     chapterName = chapterInfo.Item1;
 
-                // Assign the chapter name unless the name is not set or only whitespace charaters
+                // Assign the chapter name unless the name is not set or only whitespace characters
                 item.ChapterName = !string.IsNullOrWhiteSpace(chapterName) ? chapterName : string.Empty;
             }
         }

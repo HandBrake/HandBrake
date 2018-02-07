@@ -650,7 +650,7 @@ gval_write(FILE *file, hb_value_t *gval)
     }
     else
     {
-        // Try to make anything thats unrecognized into a string
+        // Try to make anything that's unrecognized into a string
         hb_error("Unhandled data type %d", gtype);
     }
 }

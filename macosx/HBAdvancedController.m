@@ -1316,7 +1316,7 @@
     
     if( [self X264AdvancedOptionsIsOpt: optNameToChange inString: currentOptString] )
     {
-        /* If the option is in the string wth a semicolon, or starts the string, it's time to edit.
+        /* If the option is in the string with a semicolon, or starts the string, it's time to edit.
            This means parsing the whole string into an array of options and values. From there,
            iterate through the options, and when you reach the one that's been changed, edit it.   */
         
@@ -1372,7 +1372,7 @@
             }
         }
         
-        /* Change the dislayed option string to reflect the new modified settings */
+        /* Change the displayed option string to reflect the new modified settings */
         [fDisplayX264Options setStringValue:changedOptString];
     }
     else // if none exists, add it to the string

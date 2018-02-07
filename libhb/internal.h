@@ -210,7 +210,7 @@ static inline int hb_image_width(int pix_fmt, int width, int plane)
 
     if (desc != NULL && (plane == 1 || plane == 2))
     {
-        // The wacky arithmatic assures rounding up.
+        // The wacky arithmetic assures rounding up.
         width = -((-width) >> desc->log2_chroma_w);
     }
 
@@ -237,7 +237,7 @@ static inline int hb_image_height(int pix_fmt, int height, int plane)
 
     if (desc != NULL && (plane == 1 || plane == 2))
     {
-        // The wacky arithmatic assures rounding up.
+        // The wacky arithmetic assures rounding up.
         height = -((-height) >> desc->log2_chroma_h);
     }
 

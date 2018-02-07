@@ -88,7 +88,7 @@ namespace HandBrakeWPF
         }
 
         /// <summary>
-        /// Non-UI Thread expection handler.
+        /// Non-UI Thread exception handler.
         /// </summary>
         /// <param name="sender">
         /// The sender.
@@ -197,7 +197,7 @@ namespace HandBrakeWPF
             }
             catch (Exception)
             {
-                MessageBox.Show("An Unknown Error has occured. \n\n Exception:" + exception, "Unhandled Exception",
+                MessageBox.Show("An Unknown Error has occurred. \n\n Exception:" + exception, "Unhandled Exception",
                      MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }

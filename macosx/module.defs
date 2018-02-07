@@ -41,11 +41,11 @@ endif
 ## extra CFLAGS: macro definitions
 MACOSX.extra_cflags = OTHER_CFLAGS='$(MACOSX.GCC.D)'
 
-## launch a build thru xcode; which in turn will do a nested make against
+## launch a build through xcode; which in turn will do a nested make against
 ## this build system with normal build rules enabled.
 ##
 ## $(1) = list of targets
-## $(2) = list of goals to shunt thru xcodebuild->make
+## $(2) = list of goals to shunt through xcodebuild->make
 ##
 
 MACOSX.XCODE = $(strip \
