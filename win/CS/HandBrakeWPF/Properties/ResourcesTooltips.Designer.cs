@@ -667,7 +667,7 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Tune settings to optimize for common scenarios.
         ///
-        ///This can improve effeciency for particular source characteristics or set
+        ///This can improve efficiency for particular source characteristics or set
         ///characteristics of the output file.  Changes will be applied after the
         ///preset but before all other parameters..
         /// </summary>

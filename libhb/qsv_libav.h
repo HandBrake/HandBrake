@@ -76,7 +76,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *  data/linesize should be used together with SYSTEM_MEMORY and tested
  *
  *  Note: Compilation would require:
- *   - Intel MediaSDK headers, Full SDK is avaialble from the original web site:
+ *   - Intel MediaSDK headers, Full SDK is available from the original web site:
  *                     http://software.intel.com/en-us/vcsource/tools/media-SDK
  *     Will be referenced as mfx*.h (mfxdefs.h, mfxstructures.h, ... )
  *  and
@@ -374,7 +374,7 @@ typedef struct hb_qsv_config {
 
     /**
      * Set amount of additional surfaces might be needed
-     * Format: ammount of additional buffers(surfaces+syncs)
+     * Format: amount of additional buffers(surfaces+syncs)
      * to allocate in advance
      *
      * - encoding: Set by user.

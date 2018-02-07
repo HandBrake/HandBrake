@@ -14,7 +14,7 @@
 /**
  *  Updates two DockTextFields on the dockTile,
  *  one with total percentage, the other one with the ETA.
- *  The ETA string is formated by the callers *
+ *  The ETA string is formatted by the callers *
  */
 - (void)updateDockIcon:(double)progress withETA:(NSString *)etaStr;
 

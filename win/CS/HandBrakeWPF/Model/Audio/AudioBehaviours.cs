@@ -90,7 +90,7 @@ namespace HandBrakeWPF.Model.Audio
         }
 
         /// <summary>
-        /// Gets or sets the selected langauges.
+        /// Gets or sets the selected languages.
         /// </summary>
         public BindingList<string> SelectedLangauges
         {

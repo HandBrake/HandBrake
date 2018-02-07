@@ -265,7 +265,7 @@ static void demux_mpeg( hb_buffer_t *buf, hb_buffer_list_t *list_es,
                 // we have a new pcr
                 discontinuity = check_mpeg_scr( state, buf->s.pcr, tolerance );
                 buf->s.pcr = AV_NOPTS_VALUE;
-                // Some streams have consistantly bad PCRs or SCRs
+                // Some streams have consistently bad PCRs or SCRs
                 // So filter out the offset
                 if ( buf->s.start >= 0 )
                     state->scr_delta = buf->s.start - state->last_scr;

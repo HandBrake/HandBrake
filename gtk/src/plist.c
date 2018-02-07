@@ -511,7 +511,7 @@ gval_write(FILE *file, GhbValue *gval)
     }
     else
     {
-        // Try to make anything thats unrecognized into a string
+        // Try to make anything that's unrecognized into a string
         g_warning("Unhandled data type %d", gtype);
     }
 }

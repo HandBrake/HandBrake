@@ -626,7 +626,7 @@ static void detect_combed_segment( hb_filter_private_t * pv,
                         else if (spatial_metric == 1)
                         {
                             /* This, for comparison, is what IsCombed uses.
-                               It's better, but still noise senstive.      */
+                               It's better, but still noise sensitive.      */
                                int combing = ( cur[up_1] - cur[0] ) *
                                              ( cur[down_1] - cur[0] );
 
@@ -1246,7 +1246,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
                     decomb_prev_thread_args->segment_height[pp];
             }
 
-            // Make segment hight a multiple of block_height
+            // Make segment height a multiple of block_height
             int h = hb_image_height(init->pix_fmt, init->geometry.height, pp) / pv->comb_check_nthreads;
             h = h / pv->block_height * pv->block_height;
             if (h == 0)

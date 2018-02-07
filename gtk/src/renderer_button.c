@@ -159,7 +159,7 @@ static void
 custom_cell_renderer_button_finalize (GObject *object)
 {
     /*
-    If you need to do anyting with the renderer button ...
+    If you need to do anything with the renderer button ...
     CustomCellRendererProgress *cellrendererbutton = CUSTOM_CELL_RENDERER_BUTTON(object);
     */
 

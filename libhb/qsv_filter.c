@@ -548,7 +548,7 @@ int process_frame(hb_qsv_list* received_item, hb_qsv_context* qsv, hb_filter_pri
                     continue;
                 }
 
-                // shouldnt be a case but drain
+                // shouldn't be a case but drain
                 if(stage){
                         hb_qsv_stage* new_stage = hb_qsv_stage_init();
 

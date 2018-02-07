@@ -859,9 +859,9 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
     aspect = (double)wb->width * wb->par.num /
                     (wb->height * wb->par.den);
 
-    // CC grid is 16 rows by 32 colums (for 4:3 video)
+    // CC grid is 16 rows by 32 columns (for 4:3 video)
     // Our SSA resolution is the title resolution
-    // Tranlate CC grid to SSA coordinates
+    // Translate CC grid to SSA coordinates
     // The numbers are tweaked to keep things off the very
     // edges of the screen and in the "safe" zone
     int screen_columns = 32;

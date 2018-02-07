@@ -25,7 +25,7 @@
 
 /*
  * It seems WinXP doesn't align the stack of new threads to 16 bytes.
- * To prevent crashes in SSE functions, we need to force stack alignement
+ * To prevent crashes in SSE functions, we need to force stack alignment
  * of new threads.
  */
 #if defined( __GNUC__ ) && (defined( _WIN32 ) || defined( __MINGW32__ ))

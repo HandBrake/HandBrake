@@ -85,7 +85,7 @@ namespace HandBrakeWPF.Services.Queue
         #region Delegates
 
         /// <summary>
-        /// Queue Progess Status
+        /// Queue Progress Status
         /// </summary>
         /// <param name="sender">
         /// The sender.

@@ -353,7 +353,7 @@ static void blend_filter_line(filter_param_t *filter,
     }
     else
     {
-        hb_error("Invalid value y %d heigh %d", y, height);
+        hb_error("Invalid value y %d height %d", y, height);
         return;
     }
 

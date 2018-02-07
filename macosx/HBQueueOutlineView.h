@@ -13,7 +13,7 @@
 // HBQueueOutlineView exists solely to get around a bug in variable row height outline
 // views in which row heights get messed up during live resizes. See this discussion:
 // http://lists.apple.com/archives/cocoa-dev/2005/Oct/msg00871.html
-// However, the recommeneded fix (override drawRect:) does not work. Instead, this
+// However, the recommended fix (override drawRect:) does not work. Instead, this
 // subclass implements viewDidEndLiveResize in order to recalculate all row heights.
 //
 // (2) prevent expanding of items during drags

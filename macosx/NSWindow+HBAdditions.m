@@ -26,7 +26,7 @@
 
     // Set the new frame size
     // Add the border to the new frame size so that the content region
-    // of the frame is large enough to accomodate the preview image
+    // of the frame is large enough to accommodate the preview image
     frame.size.width = viewSize.width + borderX;
     frame.size.height = viewSize.height + borderY;
 

@@ -21,7 +21,7 @@
 #define SYNC_MIN_AUDIO_QUEUE_LEN    30
 
 // We do not place a limit on the number of subtitle frames
-// that are buffered (max_len == INT_MAX) becuase there are
+// that are buffered (max_len == INT_MAX) because there are
 // cases where we will receive all the subtitles for a file
 // all at once (SSA subs).
 //

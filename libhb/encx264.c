@@ -514,7 +514,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         hb_log( "encx264: min-keyint: %s, keyint: %s", min, max );
     }
 
-    /* Settings which can't be overriden in the encoder_options string
+    /* Settings which can't be overridden in the encoder_options string
      * (muxer-specific settings, resolution, ratecontrol, etc.). */
 
     /* Disable annexb. Inserts size into nal header instead of start code. */
@@ -1349,7 +1349,7 @@ char * hb_x264_param_unparse(int bit_depth, const char *x264_preset,
     if (api->param_default_preset(&param, x264_preset, x264_tune) < 0)
     {
         /*
-         * Note: GUIs should be able to always specifiy valid preset/tunes, so
+         * Note: GUIs should be able to always specify valid preset/tunes, so
          *       this code will hopefully never be reached
          */
         return strdup("hb_x264_param_unparse: invalid x264 preset/tune");
@@ -1900,7 +1900,7 @@ char * hb_x264_param_unparse(int bit_depth, const char *x264_preset,
     }
     else
     {
-        // pbratio requires bframes and is incomaptible with mbtree
+        // pbratio requires bframes and is incompatible with mbtree
         hb_dict_remove(x264_opts, "pbratio");
     }
     if (param.rc.f_qcompress != defaults.rc.f_qcompress)

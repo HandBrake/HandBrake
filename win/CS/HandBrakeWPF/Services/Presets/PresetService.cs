@@ -827,7 +827,7 @@ namespace HandBrakeWPF.Services.Presets
                     Directory.CreateDirectory(directory);
                 }
 
-                // Orgamise the Presets list into Json Equivilent objects.
+                // Organise the Presets list into Json Equivalent objects.
                 Dictionary<string, PresetCategory> presetCategories = new Dictionary<string, PresetCategory>();
                 List<HBPreset> uncategorisedPresets = new List<HBPreset>();
 
@@ -881,7 +881,7 @@ namespace HandBrakeWPF.Services.Presets
             catch (Exception exc)
             {
                 Debug.WriteLine(exc);
-                throw new GeneralApplicationException("Unable to write to the presets file.", "The details section below may indicate why this error has occured.", exc);
+                throw new GeneralApplicationException("Unable to write to the presets file.", "The details section below may indicate why this error has occurred.", exc);
             }
         }
 

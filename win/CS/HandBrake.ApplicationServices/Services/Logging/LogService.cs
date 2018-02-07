@@ -309,7 +309,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
             }
             catch (Exception exc)
             {
-                Debug.WriteLine(exc); // This exception doesn't warrent user interaction, but it should be logged
+                Debug.WriteLine(exc); // This exception doesn't warrant user interaction, but it should be logged
             }
         }
 
@@ -349,7 +349,7 @@ namespace HandBrake.ApplicationServices.Services.Logging
             }
             catch (Exception exc)
             {
-                Debug.WriteLine(exc); // This exception doesn't warrent user interaction, but it should be logged
+                Debug.WriteLine(exc); // This exception doesn't warrant user interaction, but it should be logged
             }
         }
 

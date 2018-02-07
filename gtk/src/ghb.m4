@@ -3856,7 +3856,7 @@ settings will result in better quality or smaller files.</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip_text" translatable="yes">Tune settings to optimize for common scenarios.
 
-This can improve effeciency for particular source characteristics or set
+This can improve efficiency for particular source characteristics or set
 characteristics of the output file.  Changes will be applied after the
 preset but before all other parameters.</property>
                                     <signal name="changed" handler="video_setting_changed_cb" swapped="no"/>

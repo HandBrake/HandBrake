@@ -157,7 +157,7 @@ void hb_sanitize_audio_settings(const hb_title_t * title,
                                 hb_value_t * audio_settings);
 
 // Lookup a preset in the preset list.  The "name" may contain '/'
-// separators to explicitely specify a preset within the preset lists
+// separators to explicitly specify a preset within the preset lists
 // folder structure.
 //
 // If 'recurse' is specified, a recursive search for the first component

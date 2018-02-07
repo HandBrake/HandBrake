@@ -548,7 +548,7 @@ fail:
 }
 
 /**
- *  Retuns the tune string plus the fastdecode option (if enabled)
+ *  Returns the tune string plus the fastdecode option (if enabled)
  */
 - (NSString *)completeTune
 {

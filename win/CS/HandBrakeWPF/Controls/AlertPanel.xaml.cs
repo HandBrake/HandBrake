@@ -28,25 +28,25 @@ namespace HandBrakeWPF.Controls
         }
 
         /// <summary>
-        /// Dependancy Property for the Message Property
+        /// Dependency Property for the Message Property
         /// </summary>
         public static readonly DependencyProperty MessageProperty =
             DependencyProperty.Register("Message", typeof(string), typeof(AlertPanel), new UIPropertyMetadata("Loading..."));
 
         /// <summary>
-        /// Dependancy Property for the submessage propery
+        /// Dependency Property for the submessage property
         /// </summary>
         public static readonly DependencyProperty SubMessageProperty =
             DependencyProperty.Register("SubMessage", typeof(string), typeof(AlertPanel), new FrameworkPropertyMetadata("Please Wait", FrameworkPropertyMetadataOptions.AffectsRender));
 
         /// <summary>
-        /// Dependancy Property for the submessage propery
+        /// Dependency Property for the submessage property
         /// </summary>
         public static readonly DependencyProperty DefaultActionProperty =
             DependencyProperty.Register("DefaultAction", typeof(Action), typeof(AlertPanel), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None, DefaultActionSet));
 
         /// <summary>
-        /// Dependancy Property for the submessage propery
+        /// Dependency Property for the submessage property
         /// </summary>
         public static readonly DependencyProperty ActionTextProperty =
             DependencyProperty.Register("ActionText", typeof(string), typeof(AlertPanel), new UIPropertyMetadata("Cancel"));

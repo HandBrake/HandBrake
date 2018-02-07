@@ -82,7 +82,7 @@ void              hb_audio_remap_free(hb_audio_remap_t *remap);
 
 /*
  * Remap audio between 2 different channel orders, using the settings specified
- * in the remap paremeter. Remapping is only done when necessary.
+ * in the remap parameter. Remapping is only done when necessary.
  *
  * The remap parameter can be NULL (no remapping).
  */

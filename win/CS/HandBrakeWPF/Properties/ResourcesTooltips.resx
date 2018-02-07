@@ -240,7 +240,7 @@ to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate set
   <data name="Video_EncoderTune" xml:space="preserve">
     <value>Tune settings to optimize for common scenarios.
 
-This can improve effeciency for particular source characteristics or set
+This can improve efficiency for particular source characteristics or set
 characteristics of the output file.  Changes will be applied after the
 preset but before all other parameters.</value>
   </data>

@@ -216,7 +216,7 @@ namespace HandBrake.ApplicationServices.Interop.Helpers
         }
 
         /// <summary>
-        /// Reads in a list of objects given an interator and a conversion function.
+        /// Reads in a list of objects given an iterator and a conversion function.
         /// </summary>
         /// <typeparam name="T1">The type of the struct given by the iterator.</typeparam>
         /// <typeparam name="T2">The object type to convert to.</typeparam>

@@ -318,7 +318,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             // work around broken timestamps
             if (pts < pv->last_pts)
             {
-                // XXX: this should only happen if the prevous pts
+                // XXX: this should only happen if the previous pts
                 // was unknown and our 3 second default duration
                 // overshot the next pgs pts.
                 //

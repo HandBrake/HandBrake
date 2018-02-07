@@ -486,7 +486,7 @@ namespace HandBrakeWPF.ViewModels
         public int TitleSpecificScan { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the encode serivce supports pausing.
+        /// Gets or sets a value indicating whether the encode service supports pausing.
         /// </summary>
         public bool CanPause
         {

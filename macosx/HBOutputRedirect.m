@@ -137,7 +137,7 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
  * Private constructor which should not be called from outside. This is used to
  * initialize the class at @c stdoutRedirect and @c stderrRedirect.
  *
- * @param aStream	Stream that wil be redirected (stdout or stderr).
+ * @param aStream	Stream that will be redirected (stdout or stderr).
  * @param aSelector	Selector that will be called in listeners to redirect the stream.
  *
  * @return New HBOutputRedirect object.

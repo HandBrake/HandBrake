@@ -595,7 +595,7 @@ The Activity log may have further information.</value>
     <value>There is no further information available about this error.</value>
   </data>
   <data name="ErrorViewModel_UnknownError" xml:space="preserve">
-    <value>An Unknown Error has occured.</value>
+    <value>An Unknown Error has occurred.</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
     <value>A New Update is Available! Please check the website for release notes.</value>
@@ -784,7 +784,7 @@ Are you sure you want to import the chapter names?</value>
     <value>Chapter duration doesn't match between source and input file</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>An error occured when trying to stop the scan. Please restart HandBrake.</value>
+    <value>An error occurred when trying to stop the scan. Please restart HandBrake.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
     <value>HandBrake is unable to upgrade your presets file to a new version format.
@@ -794,7 +794,7 @@ Your preset file will be archived and new one created. You will need to re-creat
     <value>Any settings you changed may need to be reset the next time HandBrake launches.</value>
   </data>
   <data name="UserSettings_AnErrorOccured" xml:space="preserve">
-    <value>A problem occured when trying to save your preferences.</value>
+    <value>A problem occurred when trying to save your preferences.</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
     <value>Warning, your settings have been reset!</value>

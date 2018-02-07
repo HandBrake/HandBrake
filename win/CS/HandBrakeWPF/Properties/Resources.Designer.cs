@@ -640,7 +640,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An Unknown Error has occured..
+        ///   Looks up a localized string similar to An Unknown Error has occurred..
         /// </summary>
         public static string ErrorViewModel_UnknownError {
             get {
@@ -1684,7 +1684,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An error occured when trying to stop the scan. Please restart HandBrake..
+        ///   Looks up a localized string similar to An error occurred when trying to stop the scan. Please restart HandBrake..
         /// </summary>
         public static string ScanService_ScanStopFailed {
             get {
@@ -1861,7 +1861,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A problem occured when trying to save your preferences..
+        ///   Looks up a localized string similar to A problem occurred when trying to save your preferences..
         /// </summary>
         public static string UserSettings_AnErrorOccured {
             get {

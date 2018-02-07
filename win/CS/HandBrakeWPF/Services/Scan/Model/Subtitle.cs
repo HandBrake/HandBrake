@@ -80,7 +80,7 @@ namespace HandBrakeWPF.Services.Scan.Model
         public string Language { get; set; }
 
         /// <summary>
-        /// Gets or sets the Langauage Code
+        /// Gets or sets the Language Code
         /// </summary>
         public string LanguageCode { get; set; }
 

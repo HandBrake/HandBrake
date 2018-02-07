@@ -3,7 +3,7 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Encode Progess Status
+//   Encode Progress Status
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -19,7 +19,7 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
     using HandBrakeWPF.Services.Scan.Model;
 
     /// <summary>
-    /// Encode Progess Status
+    /// Encode Progress Status
     /// </summary>
     /// <param name="sender">
     /// The sender.
@@ -30,7 +30,7 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
     public delegate void ScanProgessStatus(object sender, ScanProgressEventArgs e);
 
     /// <summary>
-    /// Encode Progess Status
+    /// Encode Progress Status
     /// </summary>
     /// <param name="sender">
     /// The sender.

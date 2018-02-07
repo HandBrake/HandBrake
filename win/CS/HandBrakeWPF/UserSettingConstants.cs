@@ -62,7 +62,7 @@ namespace HandBrakeWPF
         public const string LastUpdateCheckDate = "lastUpdateCheckDate";
 
         /// <summary>
-        /// Main Window Minimise
+        /// Main Window Minimize
         /// </summary>
         public const string MainWindowMinimize = "MainWindowMinimize";
 
