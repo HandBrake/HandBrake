@@ -807,17 +807,11 @@ namespace HandBrakeWPF.ViewModels
                 {
                     // Custom
                     // Set the Width, and Maintain Aspect ratio. That should calc the Height for us.
-                    this.Task.Width = this.GetModulusValue(this.MaxWidth - this.CropLeft - this.CropRight);
-
+                    this.Task.Width = this.GetModulusValue(this.sourceResolution.Width - this.CropLeft - this.CropRight);
+           
                     if (this.SelectedAnamorphicMode != Anamorphic.Loose)
                     {
-                        this.Task.Height = this.GetModulusValue(this.MaxHeight - this.CropTop - this.CropBottom);
-                    }
- 
-                    // If our height is too large, let it downscale the width for us by setting the height to the lower value.
-                    if (!this.MaintainAspectRatio && this.Height > this.MaxHeight)
-                    {
-                        this.Task.Height = this.MaxHeight;
+                        this.Task.Height = this.GetModulusValue(this.sourceResolution.Height - this.CropTop - this.CropBottom);
                     }
                 }
 
@@ -829,6 +823,7 @@ namespace HandBrakeWPF.ViewModels
                     title.ParVal.Width,
                     title.ParVal.Height);
 
+                // Force a re-calc. This will handle MaxWidth / Height corrections.
                 this.RecaulcatePictureSettingsProperties(ChangedPictureField.Width);
             }
 
@@ -912,7 +907,7 @@ namespace HandBrakeWPF.ViewModels
                 ParH = this.ParHeight,
                 MaxWidth = this.MaxWidth,
                 MaxHeight = this.MaxHeight,
-                KeepDisplayAspect = this.MaintainAspectRatio,
+                KeepDisplayAspect = false, //this.MaintainAspectRatio,
                 AnamorphicMode = this.SelectedAnamorphicMode,
                 Crop = new Cropping(this.CropTop, this.CropBottom, this.CropLeft, this.CropRight),
             };

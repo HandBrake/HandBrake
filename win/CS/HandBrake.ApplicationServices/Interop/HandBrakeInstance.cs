@@ -305,7 +305,7 @@ namespace HandBrake.ApplicationServices.Interop
                 {
                     height = settings.Height,
                     width = settings.Width,
-                    par = settings.Anamorphic != Anamorphic.Custom
+                    par = settings.Anamorphic != Anamorphic.Custom && settings.Anamorphic != Anamorphic.Automatic
                         ? new hb_rational_t { den = title.Geometry.PAR.Den, num = title.Geometry.PAR.Num }
                         : new hb_rational_t { den = settings.PixelAspectY, num = settings.PixelAspectX }
                 }
