@@ -361,7 +361,7 @@
     <value>Show</value>
   </data>
   <data name="AudioView_TrackName" xml:space="preserve">
-    <value>Track Name:</value>
+    <value>Track Name</value>
   </data>
   <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
     <value>Track Selection Behaviour:</value>

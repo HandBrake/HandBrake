@@ -259,7 +259,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Track Name:.
+        ///   Looks up a localized string similar to Track Name.
         /// </summary>
         public static string AudioView_TrackName {
             get {
