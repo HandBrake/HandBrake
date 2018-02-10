@@ -296,6 +296,14 @@ namespace HandBrakeWPF.ViewModels
 
         public ISummaryViewModel SummaryViewModel { get; set; }
 
+        /// <summary>
+        /// Active Tab.
+        /// </summary>
+        /// <remarks>
+        ///  Should move this to the view when refactoring the keyboard shotcut handling.
+        /// </remarks>
+        public int SelectedTab { get; set; }
+
         #endregion
 
         #region Properties
@@ -1810,6 +1818,12 @@ namespace HandBrakeWPF.ViewModels
             }
 
             e.Handled = true;
+        }
+
+        public void SwitchTab(int i)
+        {
+            this.SelectedTab = i;
+            this.NotifyOfPropertyChange(() => this.SelectedTab);
         }
 
         /// <summary>

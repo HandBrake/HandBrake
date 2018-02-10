@@ -102,6 +102,42 @@ namespace HandBrakeWPF.Commands
                     mainViewModel.LaunchHelp();
                 }
 
+                // Tabs
+                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.D1)
+                {
+                     mainViewModel.SwitchTab(0);
+                }
+
+                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.D2)
+                {
+                    mainViewModel.SwitchTab(1);
+                }
+
+                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.D3)
+                {
+                    mainViewModel.SwitchTab(2);
+                }
+
+                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.D4)
+                {
+                    mainViewModel.SwitchTab(3);
+                }
+
+                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.D5)
+                {
+                    mainViewModel.SwitchTab(4);
+                }
+
+                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.D6)
+                {
+                    mainViewModel.SwitchTab(5);
+                }
+
+                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.D7)
+                {
+                    mainViewModel.SwitchTab(6);
+                }
+
                 if (gesture.Modifiers == (ModifierKeys.Control | ModifierKeys.Shift) && gesture.Key == Key.G)
                 {
                     GC.Collect();

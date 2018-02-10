@@ -465,9 +465,9 @@
 
             <!--  Tab Control  -->
             <TabControl Name="tabControl" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
-                        Grid.Row="2"
-                        Margin="15,10,10,6"
-                        HorizontalAlignment="Stretch"
+                        Grid.Row="2" Margin="15,10,10,6"
+                        SelectedIndex="{Binding SelectedTab}"
+                        HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch"
                         SelectionChanged="TabControl_OnSelectionChanged"
                         Visibility="{Binding IsQueueShowingInLine,  Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">

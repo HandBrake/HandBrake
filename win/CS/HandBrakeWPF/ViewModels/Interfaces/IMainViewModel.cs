@@ -112,5 +112,11 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The e.
         /// </param>
         void FilesDroppedOnWindow(DragEventArgs e);
+
+        /// <summary>
+        /// Handle Tab Switching
+        /// </summary>
+        /// <param name="i">The Tab Number</param>
+        void SwitchTab(int i);
     }
 }

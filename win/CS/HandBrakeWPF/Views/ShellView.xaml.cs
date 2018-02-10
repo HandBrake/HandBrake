@@ -76,6 +76,17 @@ namespace HandBrakeWPF.Views
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.G, ModifierKeys.Control | ModifierKeys.Shift)), new KeyGesture(Key.G, ModifierKeys.Control | ModifierKeys.Shift))); // Garbage Colleciton
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.F1, ModifierKeys.None)), new KeyGesture(Key.F1, ModifierKeys.None))); // Help
 
+
+            // Tabs Switching
+            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D1, ModifierKeys.Control)), new KeyGesture(Key.D1, ModifierKeys.Control))); 
+            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D2, ModifierKeys.Control)), new KeyGesture(Key.D2, ModifierKeys.Control))); 
+            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D3, ModifierKeys.Control)), new KeyGesture(Key.D3, ModifierKeys.Control))); 
+            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D4, ModifierKeys.Control)), new KeyGesture(Key.D4, ModifierKeys.Control))); 
+            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D5, ModifierKeys.Control)), new KeyGesture(Key.D5, ModifierKeys.Control)));
+            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D6, ModifierKeys.Control)), new KeyGesture(Key.D6, ModifierKeys.Control)));
+            this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D7, ModifierKeys.Control)), new KeyGesture(Key.D7, ModifierKeys.Control)));
+
+
             // Enable Windows 7 Taskbar progress indication.
             if (this.TaskbarItemInfo == null)
             {
