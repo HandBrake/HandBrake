@@ -907,7 +907,7 @@ namespace HandBrakeWPF.ViewModels
                 ParH = this.ParHeight,
                 MaxWidth = this.MaxWidth,
                 MaxHeight = this.MaxHeight,
-                KeepDisplayAspect = false, //this.MaintainAspectRatio,
+                KeepDisplayAspect = this.MaintainAspectRatio,
                 AnamorphicMode = this.SelectedAnamorphicMode,
                 Crop = new Cropping(this.CropTop, this.CropBottom, this.CropLeft, this.CropRight),
             };
