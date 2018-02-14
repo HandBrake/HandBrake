@@ -306,13 +306,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Show the CombDetect Custom Box.
         /// </summary>
-        public bool ShowCombDetectCustom
-        {
-            get
-            {
-                return this.SelectedCombDetectPreset == CombDetect.Custom;
-            }
-        }
+        public bool ShowCombDetectCustom => this.SelectedCombDetectPreset == CombDetect.Custom;
 
         /// <summary>
         /// Gets or sets the custom comb detect.
@@ -373,7 +367,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedDenoise);
 
                 // Show / Hide the Custom Control
-                this.ShowDenoiseCustom = this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
 
                 this.SelectedDenoisePreset = this.CurrentTask.Denoise == Denoise.hqdn3d ? DenoisePreset.Weak : DenoisePreset.Ultralight; // Default so we don't have an invalid preset.
@@ -400,7 +393,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedDetelecine);
 
                 // Show / Hide the Custom Control
-                this.ShowDetelecineCustom = this.CurrentTask.Detelecine == Detelecine.Custom;
                 if (value != Detelecine.Custom) this.CustomDetelecine = string.Empty;
                 this.NotifyOfPropertyChange(() => this.ShowDetelecineCustom);
                 this.OnTabStatusChanged(null);
@@ -425,12 +417,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets a value indicating whether ShowDenoiseCustom.
         /// </summary>
-        public bool ShowDenoiseCustom { get; set; }
+        public bool ShowDenoiseCustom => this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
 
         /// <summary>
         /// Gets or sets a value indicating whether ShowDetelecineCustom.
         /// </summary>
-        public bool ShowDetelecineCustom { get; set; }
+        public bool ShowDetelecineCustom => this.CurrentTask.Detelecine == Detelecine.Custom;
 
         /// <summary>
         /// Gets or sets the selected deinterlace filter mode.
@@ -451,22 +443,6 @@ namespace HandBrakeWPF.ViewModels
                 this.deinterlaceFilter = value;
                 this.CurrentTask.DeinterlaceFilter = value;
 
-                if (this.deinterlaceFilter == DeinterlaceFilter.Yadif)
-                {
-                    this.IsDeinterlaceMode = true;
-                    this.IsDecombMode = false;
-                }
-                else if (this.deinterlaceFilter == DeinterlaceFilter.Decomb)
-                {
-                    this.IsDeinterlaceMode = false;
-                    this.IsDecombMode = true;
-                }
-                else
-                {
-                    this.IsDeinterlaceMode = false;
-                    this.IsDecombMode = false;
-                }
-
                 this.NotifyOfPropertyChange(() => this.SelectedDeinterlaceFilter);
                 this.NotifyOfPropertyChange(() => this.IsDeinterlaceMode);
                 this.NotifyOfPropertyChange(() => this.IsDecombMode);
@@ -481,12 +457,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets a value indicating whether is deinterlace mode.
         /// </summary>
-        public bool IsDeinterlaceMode { get; set; }
+        public bool IsDeinterlaceMode => this.deinterlaceFilter == DeinterlaceFilter.Yadif;
 
         /// <summary>
         /// Gets or sets a value indicating whether is decomb mode.
         /// </summary>
-        public bool IsDecombMode { get; set; }
+        public bool IsDecombMode => this.deinterlaceFilter == DeinterlaceFilter.Decomb;
 
         /// <summary>
         /// Gets or sets a value indicating whether is deinterlace or decomb mode.
@@ -527,7 +503,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedDenoisePreset);
 
                 // Show / Hide the Custom Control
-                this.ShowDenoiseCustom = this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
                 if (value != DenoisePreset.Custom) this.CustomDenoise = string.Empty;
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
                 this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
@@ -721,29 +696,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool ShowSharpenTune
-        {
-            get
-            {
-                return this.SelectedSharpenPreset != null && this.SelectedSharpenPreset.DisplayName != "Custom";
-            }
-        }
+        public bool ShowSharpenTune => this.SelectedSharpenPreset != null && this.SelectedSharpenPreset.DisplayName != "Custom";
 
-        public bool ShowSharpenCustom
-        {
-            get
-            {
-                return this.SelectedSharpenPreset != null && this.SelectedSharpenPreset.DisplayName == "Custom";
-            }
-        }
+        public bool ShowSharpenCustom => this.SelectedSharpenPreset != null && this.SelectedSharpenPreset.DisplayName == "Custom";
 
-        public bool ShowSharpenOptions
-        {
-            get
-            {
-                return this.SelectedSharpen != Sharpen.Off;
-            }
-        }
+        public bool ShowSharpenOptions => this.SelectedSharpen != Sharpen.Off;
 
         #endregion
 
@@ -839,18 +796,37 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.SelectedDetelecine);
             this.NotifyOfPropertyChange(() => this.Grayscale);
             this.NotifyOfPropertyChange(() => this.DeblockValue);
+            this.NotifyOfPropertyChange(() => this.SelectedSharpen);
+            this.NotifyOfPropertyChange(() => this.SelectedSharpenPreset);
+            this.NotifyOfPropertyChange(() => this.SelectedSharpenTune);
+            this.NotifyOfPropertyChange(() => this.SelectedCombDetectPreset);
+            this.NotifyOfPropertyChange(() => this.SelectedDenoisePreset);
+            this.NotifyOfPropertyChange(() => this.SelectedDenoiseTune);
+            this.NotifyOfPropertyChange(() => this.FlipVideo);
+            this.NotifyOfPropertyChange(() => this.SelectedRotation);
 
             this.NotifyOfPropertyChange(() => this.CustomDecomb);
             this.NotifyOfPropertyChange(() => this.CustomDeinterlace);
             this.NotifyOfPropertyChange(() => this.CustomDetelecine);
             this.NotifyOfPropertyChange(() => this.CustomDenoise);
+            this.NotifyOfPropertyChange(() => this.CustomSharpen);
+            this.NotifyOfPropertyChange(() => this.CustomCombDetect);
 
             this.NotifyOfPropertyChange(() => this.IsDeinterlaceMode);
             this.NotifyOfPropertyChange(() => this.IsDecombMode);
             this.NotifyOfPropertyChange(() => this.IsDeinterlaceDecomb);
 
-            this.NotifyOfPropertyChange(() => this.FlipVideo);
-            this.NotifyOfPropertyChange(() => this.SelectedRotation);
+            this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
+            this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
+            this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);
+            this.NotifyOfPropertyChange(() => this.ShowDecombCustom);
+            this.NotifyOfPropertyChange(() => this.ShowCombDetectCustom);
+            this.NotifyOfPropertyChange(() => this.ShowDeinterlaceDecombCustom);
+            this.NotifyOfPropertyChange(() => this.ShowDeinterlaceCustom);
+            this.NotifyOfPropertyChange(() => this.ShowDetelecineCustom);       
+            this.NotifyOfPropertyChange(() => this.ShowSharpenCustom);
+            this.NotifyOfPropertyChange(() => this.ShowSharpenOptions);
+            this.NotifyOfPropertyChange(() => this.ShowSharpenTune);
         }
 
         public bool MatchesPreset(Preset preset)
