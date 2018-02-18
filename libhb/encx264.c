@@ -976,15 +976,23 @@ static int apply_h264_profile(const x264_api_t *api, x264_param_t *param,
         /*
          * lossless requires High 4:4:4 Predictive profile
          */
-        if (param->rc.f_rf_constant < 1.0 &&
-            param->rc.i_rc_method == X264_RC_CRF &&
-            strcasecmp(h264_profile, "high444") != 0)
+        int qp_bd_offset = 6 * (api->bit_depth - 8);
+        if (strcasecmp(h264_profile, "high444") != 0 &&
+            ((param->rc.i_rc_method == X264_RC_CQP && param->rc.i_qp_constant <= 0) ||
+             (param->rc.i_rc_method == X264_RC_CRF && (int)(param->rc.f_rf_constant + qp_bd_offset) <= 0)))
         {
             if (verbose)
             {
                 hb_log("apply_h264_profile [warning]: lossless requires high444 profile, disabling");
             }
-            param->rc.f_rf_constant = 1.0;
+            if (param->rc.i_rc_method == X264_RC_CQP)
+            {
+                param->rc.i_qp_constant = 1;
+            }
+            else
+            {
+                param->rc.f_rf_constant = 1 - qp_bd_offset;
+            }
         }
         return api->param_apply_profile(param, h264_profile);
     }
