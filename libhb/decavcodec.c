@@ -390,13 +390,12 @@ static void closePrivData( hb_work_private_t ** ppv )
             //if (!(pv->qsv.decode && pv->job != NULL && (pv->job->vcodec & HB_VCODEC_QSV_MASK)))
 #endif
             {
-                hb_avcodec_close(pv->context);
+                hb_avcodec_free_context(&pv->context);
             }
         }
         if ( pv->context )
         {
-            av_freep( &pv->context->extradata );
-            av_freep( &pv->context );
+            hb_avcodec_free_context(&pv->context);
         }
         hb_audio_resample_free(pv->resample);
 
@@ -821,9 +820,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
 
     if ( parser != NULL )
         av_parser_close( parser );
-    hb_avcodec_close( context );
-    av_freep( &context->extradata );
-    av_freep( &context );
+    hb_avcodec_free_context(&context);
     return result;
 }
 
@@ -1294,8 +1291,12 @@ static void filter_video(hb_work_private_t *pv)
     {
         int result;
 
-        av_buffersrc_add_frame(pv->video_filters.input, pv->frame);
-        result = av_buffersink_get_frame(pv->video_filters.output, pv->frame);
+        result = av_buffersrc_add_frame(pv->video_filters.input, pv->frame);
+        if (result < 0) {
+            hb_error("filter_video: failed to add frame");
+        } else {
+            result = av_buffersink_get_frame(pv->video_filters.output, pv->frame);
+        }
         while (result >= 0)
         {
             hb_buffer_t * buf = copy_frame(pv);
@@ -2101,9 +2102,7 @@ static void decavcodecvFlush( hb_work_object_t *w )
         if ( pv->title->opaque_priv == NULL )
         {
             pv->video_codec_opened = 0;
-            hb_avcodec_close( pv->context );
-            av_freep( &pv->context->extradata );
-            av_freep( &pv->context );
+            hb_avcodec_free_context(&pv->context);
             if ( pv->parser )
             {
                 av_parser_close(pv->parser);

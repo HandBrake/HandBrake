@@ -214,6 +214,8 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_QSV_H264:
+        case HB_VCODEC_FFMPEG_H264_NVENC:
+        case HB_VCODEC_FFMPEG_H264_VAAPI:
             track->st->codecpar->codec_id = AV_CODEC_ID_H264;
             if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
             {
@@ -290,12 +292,14 @@ static int avformatInit( hb_mux_object_t * m )
             break;
 
         case HB_VCODEC_FFMPEG_VP8:
+        case HB_VCODEC_FFMPEG_VP8_VAAPI:
             track->st->codecpar->codec_id = AV_CODEC_ID_VP8;
             priv_data                  = NULL;
             priv_size                  = 0;
             break;
 
         case HB_VCODEC_FFMPEG_VP9:
+        case HB_VCODEC_FFMPEG_VP9_VAAPI:
             track->st->codecpar->codec_id = AV_CODEC_ID_VP9;
             priv_data                  = NULL;
             priv_size                  = 0;
@@ -339,6 +343,8 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_X265_16BIT:
         case HB_VCODEC_QSV_H265:
         case HB_VCODEC_QSV_H265_10BIT:
+        case HB_VCODEC_FFMPEG_H265_NVENC:
+        case HB_VCODEC_FFMPEG_H265_VAAPI:
             track->st->codecpar->codec_id  = AV_CODEC_ID_HEVC;
             if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
             {
@@ -1197,10 +1203,12 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         {
             pkt.flags |= AV_PKT_FLAG_KEY;
         }
+#ifdef AV_PKT_FLAG_DISPOSABLE
         if (!(buf->s.flags & HB_FLAG_FRAMETYPE_REF))
         {
             pkt.flags |= AV_PKT_FLAG_DISPOSABLE;
         }
+#endif
     }
     else if (buf->s.frametype & HB_FRAME_MASK_KEY)
     {
@@ -1270,8 +1278,8 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     {
                         char errstr[64];
                         av_strerror(ret, errstr, sizeof(errstr));
-                        hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s' (empty_pkt)",
-                                 track->st->index, errstr);
+                        hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s' (empty_pkt, ret %d)",
+                                 track->st->index, errstr, ret);
                         *job->done_error = HB_ERROR_UNKNOWN;
                         *job->die = 1;
                         return -1;
@@ -1399,8 +1407,8 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
     {
         char errstr[64];
         av_strerror(ret < 0 ? ret : m->oc->pb->error, errstr, sizeof(errstr));
-        hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s'",
-                 track->st->index, errstr);
+        hb_error("avformatMux: track %d, av_interleaved_write_frame failed with error '%s' (ret %d, pb-err %d)",
+                 track->st->index, errstr, ret, m->oc->pb->error);
         *job->done_error = HB_ERROR_UNKNOWN;
         *job->die = 1;
         return -1;

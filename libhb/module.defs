@@ -130,10 +130,16 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        ass avcodec avformat avfilter avutil avresample dvdnav dvdread \
+        ass avformat avfilter avcodec avutil avresample swresample postproc dvdnav dvdread \
         freetype mp3lame samplerate swscale vpx theora vorbis vorbisenc ogg \
         x264 xml2 bluray jansson harfbuzz opus, \
         $(CONTRIB.build/)lib/lib$(n).a )
+
+ifeq ($(BUILD.system),linux)
+LIBHB.dll.libs += $(foreach n, \
+        X11 va-drm va-x11 va, \
+        $(CONTRIB.build/)lib/lib$(n).a )
+endif
 
 ifeq (1,$(FEATURE.fdk_aac))
 LIBHB.dll.libs += $(CONTRIB.build/)lib/libfdk-aac.a
