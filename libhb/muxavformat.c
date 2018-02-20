@@ -719,7 +719,7 @@ static int avformatInit( hb_mux_object_t * m )
     // Quicktime requires that at least one subtitle is enabled,
     // else it doesn't show any of the subtitles.
     // So check to see if any of the subtitles are flagged to be
-    // the default.  The default will the the enabled track, else
+    // the default.  The default will be the enabled track, else
     // enable the first track.
     if (job->mux == HB_MUX_AV_MP4 && subtitle_default == -1)
     {
