@@ -589,9 +589,8 @@ namespace HandBrakeWPF.Services.Presets
                     {
                         continue;
                     }
-                   
-                        categoriesList.Add(category);
-                   
+
+                    categoriesList.Add(category);
                 }
             }
 
