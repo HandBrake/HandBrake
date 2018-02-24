@@ -17,7 +17,7 @@ X265.INSTALL.args = !make @dir !extra
 
 X265.UNINSTALL.dir = $(X265.BUILD.dir)/8bit
 
-X265.CLEAN.make = $(RM.exe)
+X265.CLEAN.make = $(RM.exe) -rf
 X265.CLEAN.args.dir = cd $(1);
 X265.CLEAN.extra = libx265.a
 X265.CLEAN.args = @dir !make !extra
