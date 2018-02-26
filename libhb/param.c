@@ -175,36 +175,40 @@ typedef struct
     int                filter_id;
     hb_filter_param_t *presets;
     hb_filter_param_t *tunes;
-    int                count;
+    int                preset_count;
+    int                tune_count;
 } filter_param_map_t;
 
 static filter_param_map_t param_map[] =
 {
     { HB_FILTER_NLMEANS,     nlmeans_presets,     nlmeans_tunes,
-      sizeof(nlmeans_presets) / sizeof(hb_filter_param_t)        },
+      sizeof(nlmeans_presets) / sizeof(hb_filter_param_t),
+      sizeof(nlmeans_tunes)   / sizeof(hb_filter_param_t),        },
 
     { HB_FILTER_HQDN3D,      hqdn3d_presets,      NULL,
-      sizeof(hqdn3d_presets) / sizeof(hb_filter_param_t)         },
+      sizeof(hqdn3d_presets) / sizeof(hb_filter_param_t),      0, },
 
     { HB_FILTER_UNSHARP,     unsharp_presets,     unsharp_tunes,
-      sizeof(unsharp_presets) / sizeof(hb_filter_param_t)        },
+      sizeof(unsharp_presets) / sizeof(hb_filter_param_t),
+      sizeof(unsharp_tunes)   / sizeof(hb_filter_param_t),        },
 
     { HB_FILTER_LAPSHARP,    lapsharp_presets,    lapsharp_tunes,
-      sizeof(lapsharp_presets) / sizeof(hb_filter_param_t)        },
+      sizeof(lapsharp_presets) / sizeof(hb_filter_param_t),
+      sizeof(lapsharp_tunes)   / sizeof(hb_filter_param_t),       },
 
     { HB_FILTER_DETELECINE,  detelecine_presets,  NULL,
-      sizeof(detelecine_presets) / sizeof(hb_filter_param_t)     },
+      sizeof(detelecine_presets) / sizeof(hb_filter_param_t),  0, },
 
     { HB_FILTER_COMB_DETECT, comb_detect_presets, NULL,
-      sizeof(decomb_presets) / sizeof(hb_filter_param_t)         },
+      sizeof(decomb_presets) / sizeof(hb_filter_param_t),      0, },
 
     { HB_FILTER_DECOMB,      decomb_presets,      NULL,
-      sizeof(decomb_presets) / sizeof(hb_filter_param_t)         },
+      sizeof(decomb_presets) / sizeof(hb_filter_param_t),      0, },
 
     { HB_FILTER_DEINTERLACE, deinterlace_presets, NULL,
-      sizeof(deinterlace_presets) / sizeof(hb_filter_param_t)    },
+      sizeof(deinterlace_presets) / sizeof(hb_filter_param_t), 0, },
 
-    { HB_FILTER_INVALID,     NULL,                NULL,  0       }
+    { HB_FILTER_INVALID,     NULL,                NULL,     0, 0, },
 };
 
 void hb_param_configure_qsv(void)
@@ -949,7 +953,7 @@ filter_param_get_presets_internal(int filter_id, int *count)
         {
             if (count != NULL)
             {
-                *count = param_map[ii].count;
+                *count = param_map[ii].preset_count;
             }
             return param_map[ii].presets;
         }
@@ -972,7 +976,7 @@ filter_param_get_tunes_internal(int filter_id, int *count)
         {
             if (count != NULL)
             {
-                *count = param_map[ii].count;
+                *count = param_map[ii].tune_count;
             }
             return param_map[ii].tunes;
         }
