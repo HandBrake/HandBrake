@@ -247,7 +247,7 @@ static hb_dict_t * generate_nlmeans_settings(const char *preset,
     if (preset == NULL)
         return NULL;
 
-    if (preset == NULL || !strcasecmp(preset, "custom"))
+    if (!strcasecmp(preset, "custom"))
     {
         return hb_parse_filter_settings(custom);
     }
@@ -472,7 +472,7 @@ static hb_dict_t * generate_unsharp_settings(const char *preset,
     if (preset == NULL)
         return NULL;
 
-    if (preset == NULL || !strcasecmp(preset, "custom"))
+    if (!strcasecmp(preset, "custom"))
     {
         return hb_parse_filter_settings(custom);
     }
@@ -670,7 +670,7 @@ static hb_dict_t * generate_lapsharp_settings(const char *preset,
     if (preset == NULL)
         return NULL;
 
-    if (preset == NULL || !strcasecmp(preset, "custom"))
+    if (!strcasecmp(preset, "custom"))
     {
         return hb_parse_filter_settings(custom);
     }
