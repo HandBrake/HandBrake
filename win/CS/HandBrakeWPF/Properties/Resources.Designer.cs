@@ -978,7 +978,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HandBrake will not be able to encode the seleteced source as it did not find a valid source with titles to encode. 
+        ///   Looks up a localized string similar to HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. 
         ///This could be due to one of the following reasons:
         ///- The source file is not a valid video file or is in a format that HandBrake does not support.
         ///- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
