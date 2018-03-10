@@ -1453,7 +1453,6 @@ namespace HandBrakeWPF.ViewModels
             // Handle some quicksync specific options.
             if (selectedEncoder == VideoEncoder.QuickSync || selectedEncoder == VideoEncoder.QuickSyncH265 || selectedEncoder == VideoEncoder.QuickSyncH26510b)
             {
-                this.IsConstantFramerate = true;
                 this.TwoPass = false;
                 this.TurboFirstPass = false;
                 this.Task.Framerate = null;
