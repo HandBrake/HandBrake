@@ -980,6 +980,13 @@ queue_save_action_cb(GSimpleAction *action, GVariant *param,
 }
 
 G_MODULE_EXPORT void
+queue_open_action_cb(GSimpleAction *action, GVariant *param,
+                     signal_user_data_t *ud)
+{
+    open_queue_file(ud);
+}
+
+G_MODULE_EXPORT void
 queue_open_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     open_queue_file(ud);
