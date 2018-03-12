@@ -882,6 +882,15 @@ libx264 authors:
                         <property name="action-name">app.queue-save</property>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkMenuItem" id="queue_open_menu">
+                        <property name="label" translatable="yes">_Load Queue File</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="action-name">app.queue-open</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
