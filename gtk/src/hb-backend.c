@@ -3792,27 +3792,27 @@ ghb_set_scale_settings(GhbValue *settings, gint mode)
 }
 
 char *
-ghb_get_display_aspect_string(int disp_width, int disp_height)
+ghb_get_display_aspect_string(double disp_width, double disp_height)
 {
-    gint dar_width, dar_height;
     gchar *str;
 
-    hb_reduce(&dar_width, &dar_height, disp_width, disp_height);
-    gint iaspect = dar_width * 9 / dar_height;
-    if (dar_width > 2 * dar_height)
+    gint iaspect = disp_width * 9 / disp_height;
+    if (disp_width > 2 * disp_height)
     {
-        str = g_strdup_printf("%.2f:1", (gdouble)dar_width / dar_height);
+        str = g_strdup_printf("%.2f:1", disp_width / disp_height);
     }
     else if (iaspect <= 16 && iaspect >= 15)
     {
-        str = g_strdup_printf("%.4g:9", (gdouble)dar_width * 9 / dar_height);
+        str = g_strdup_printf("%.4g:9", disp_width * 9 / disp_height);
     }
     else if (iaspect <= 12 && iaspect >= 11)
     {
-        str = g_strdup_printf("%.4g:3", (gdouble)dar_width * 3 / dar_height);
+        str = g_strdup_printf("%.4g:3", disp_width * 3 / disp_height);
     }
     else
     {
+        gint dar_width, dar_height;
+        hb_reduce(&dar_width, &dar_height, disp_width, disp_height);
         str = g_strdup_printf("%d:%d", dar_width, dar_height);
     }
     return str;
@@ -3821,12 +3821,17 @@ ghb_get_display_aspect_string(int disp_width, int disp_height)
 void
 ghb_update_display_aspect_label(signal_user_data_t *ud)
 {
-    gint disp_width, disp_height;
+    gint width, disp_height;
+    gint par_num, par_den;
+    double disp_width;
     gchar *str;
 
-    disp_width  = ghb_dict_get_int(ud->settings, "PictureDisplayWidth");
-    disp_height = ghb_dict_get_int(ud->settings, "PictureDisplayHeight");
-    str         = ghb_get_display_aspect_string(disp_width, disp_height);
+    width  = ghb_dict_get_int(ud->settings, "scale_width");
+    disp_height = ghb_dict_get_int(ud->settings, "scale_height");
+    par_num = ghb_dict_get_int(ud->settings, "PicturePARWidth");
+    par_den = ghb_dict_get_int(ud->settings, "PicturePARHeight");
+    disp_width = (double)width * par_num / par_den;
+    str        = ghb_get_display_aspect_string(disp_width, disp_height);
     ghb_ui_update(ud, "display_aspect", ghb_string_value(str));
     g_free(str);
 }

@@ -2674,7 +2674,8 @@ ghb_update_summary_info(signal_user_data_t *ud)
     gtk_label_set_text(GTK_LABEL(widget), text);
     g_free(text);
 
-    int    width, height, display_width, display_height, par_width, par_height;
+    double display_width;
+    int    width, height, display_height, par_width, par_height;
     char * display_aspect;
 
     width          = ghb_dict_get_int(ud->settings, "scale_width");
@@ -2684,12 +2685,15 @@ ghb_update_summary_info(signal_user_data_t *ud)
     par_width      = ghb_dict_get_int(ud->settings, "PicturePARWidth");
     par_height     = ghb_dict_get_int(ud->settings, "PicturePARHeight");
 
+    display_width = (double)width * par_width / par_height;
     display_aspect = ghb_get_display_aspect_string(display_width,
                                                    display_height);
+
+    display_width  = ghb_dict_get_int(ud->settings, "PictureDisplayWidth");
     text = g_strdup_printf("%dx%d storage, %dx%d display\n"
                            "%d:%d Pixel Aspect Ratio\n"
                             "%s Display Aspect Ratio",
-                           width, height, display_width, display_height,
+                           width, height, (int)display_width, display_height,
                            par_width, par_height, display_aspect);
     widget = GHB_WIDGET(ud->builder, "dimensions_summary");
     gtk_label_set_text(GTK_LABEL(widget), text);
