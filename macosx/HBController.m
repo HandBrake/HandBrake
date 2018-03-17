@@ -1499,6 +1499,13 @@
 - (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
     __unused HBAddPresetController *addPresetController = (HBAddPresetController *)CFBridgingRelease(contextInfo);
+
+    if (returnCode == NSModalResponseContinue)
+    {
+        fPresetsView.selectedPreset = addPresetController.preset;
+        [self applyPreset:fPresetsView.selectedPreset];
+        [[NSNotificationCenter defaultCenter] postNotificationName:HBPresetsChangedNotification object:nil];
+    }
 }
 
 - (HBPreset *)createPresetFromCurrentSettings
