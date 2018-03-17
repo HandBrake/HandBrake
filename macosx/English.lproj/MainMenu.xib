@@ -350,7 +350,7 @@
                             </menuItem>
                             <menuItem title="Rename Preset…" tag="-1" id="1GQ-n3-jfY">
                                 <connections>
-                                    <action selector="renamePreset:" target="-1" id="ts9-w0-2WC"/>
+                                    <action selector="showRenamePresetPanel:" target="-1" id="gRr-Jl-kZO"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Delete Preset" tag="-1" id="CN3-Rh-gVf">

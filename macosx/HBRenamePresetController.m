@@ -41,7 +41,11 @@
 {
     [super windowDidLoad];
 
-    self.name.stringValue = self.name.placeholderString = self.preset.name;
+    if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_9)
+    {
+        self.name.placeholderString = self.preset.name;
+    }
+    self.name.stringValue = self.preset.name;
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(controlTextDidChange:)

@@ -1517,6 +1517,7 @@
 - (IBAction)showRenamePresetPanel:(id)sender
 {
     [self.window HB_endEditing];
+    fPresetsView.selectedPreset = _currentPreset;
 
     HBRenamePresetController *renamePresetController = [[HBRenamePresetController alloc] initWithPreset:self.currentPreset
                                                                                           presetManager:presetManager];
@@ -1561,12 +1562,6 @@
 {
     fPresetsView.selectedPreset = _currentPreset;
     [fPresetsView setDefault:sender];
-}
-
-- (IBAction)renamePreset:(id)sender
-{
-    fPresetsView.selectedPreset = _currentPreset;
-    [self showRenamePresetPanel:sender];
 }
 
 - (IBAction)deletePreset:(id)sender
