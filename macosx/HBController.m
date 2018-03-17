@@ -1529,7 +1529,7 @@
 {
     __unused HBRenamePresetController *renamePresetController = (HBRenamePresetController *)CFBridgingRelease(contextInfo);
 
-    if (returnCode != NSModalResponseCancel)
+    if (returnCode == NSModalResponseContinue)
     {
         [self applyPreset:fPresetsView.selectedPreset];
         [[NSNotificationCenter defaultCenter] postNotificationName:HBPresetsChangedNotification object:nil];
