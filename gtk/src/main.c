@@ -40,7 +40,6 @@
 
 #if !defined(_WIN32)
 #include <libnotify/notify.h>
-#include <dbus/dbus-glib.h>
 #else
 #include <windows.h>
 #include <io.h>
@@ -991,9 +990,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     ghb_resource_init();
     ghb_load_icons();
 
-#if !defined(_WIN32)
-    dbus_g_thread_init();
-#endif
     ghb_udev_init();
 
     // Override user config dir
