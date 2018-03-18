@@ -119,7 +119,7 @@ ghb_get_session_dbus_proxy(const gchar *name, const gchar *path, const gchar *in
 
     g_debug("ghb_get_session_dbus_proxy()");
     conn = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, &error);
-    if (conn == NULL)
+    if (error != NULL)
     {
         g_warning("DBUS cannot connect: %s", error->message);
         g_error_free(error);
@@ -154,17 +154,22 @@ ghb_can_suspend_gpm()
 
     res = g_dbus_proxy_call_sync(proxy, "CanSuspend", NULL,
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    if (res != NULL)
+    if (!res)
     {
-        g_variant_get(res, "(b)", &can_suspend);
-        g_variant_unref(res);
+        if (error != NULL)
+        {
+            g_warning("CanSuspend failed: %s", error->message);
+            g_error_free(error);
+        }
+        else
+            g_warning("CanSuspend failed");
+        // Try to shutdown anyway
+        can_suspend = TRUE;
     }
     else
     {
-        g_warning("CanSuspend failed: %s", error->message);
-        g_error_free(error);
-        // Try to shutdown anyway
-        can_suspend = TRUE;
+        g_variant_get(res, "(b)", &can_suspend);
+        g_variant_unref(res);
     }
     g_object_unref(G_OBJECT(proxy));
 #endif
@@ -188,14 +193,19 @@ ghb_suspend_gpm()
 
     res = g_dbus_proxy_call_sync(proxy, "Suspend", NULL,
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    if (res != NULL)
+    if (!res)
     {
-        g_variant_unref(res);
+        if (error != NULL)
+        {
+            g_warning("Suspend failed: %s", error->message);
+            g_error_free(error);
+        }
+        else
+            g_warning("Suspend failed");
     }
     else
     {
-        g_warning("Suspend failed: %s", error->message);
-        g_error_free(error);
+        g_variant_unref(res);
     }
     g_object_unref(G_OBJECT(proxy));
 #endif
@@ -219,17 +229,22 @@ ghb_can_shutdown_gpm()
 
     res = g_dbus_proxy_call_sync(proxy, "CanShutdown", NULL,
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    if (res != NULL)
+    if (!res)
     {
-        g_variant_get(res, "(b)", &can_shutdown);
-        g_variant_unref(res);
+        if (error != NULL)
+        {
+            g_warning("CanShutdown failed: %s", error->message);
+            g_error_free(error);
+        }
+        else
+            g_warning("CanShutdown failed");
+        // Try to shutdown anyway
+        can_shutdown = TRUE;
     }
     else
     {
-        g_warning("CanShutdown failed: %s", error->message);
-        g_error_free(error);
-        // Try to shutdown anyway
-        can_shutdown = TRUE;
+        g_variant_get(res, "(b)", &can_shutdown);
+        g_variant_unref(res);
     }
     g_object_unref(G_OBJECT(proxy));
     return can_shutdown;
@@ -253,14 +268,19 @@ ghb_shutdown_gpm()
 
     res = g_dbus_proxy_call_sync(proxy, "Shutdown", NULL,
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    if (res != NULL)
+    if (!res)
     {
-        g_variant_unref(res);
+        if (error != NULL)
+        {
+            g_warning("Shutdown failed: %s", error->message);
+            g_error_free(error);
+        }
+        else
+            g_warning("Shutdown failed");
     }
     else
     {
-        g_warning("Shutdown failed: %s", error->message);
-        g_error_free(error);
+        g_variant_unref(res);
     }
     g_object_unref(G_OBJECT(proxy));
 }
@@ -285,14 +305,17 @@ ghb_inhibit_gpm()
     res = g_dbus_proxy_call_sync(proxy, "Inhibit",
                                  g_variant_new("(ss)", "ghb", "Encoding"),
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    if (res != NULL)
+    if (!res)
     {
-        g_variant_get(res, "(u)", &cookie);
-        g_variant_unref(res);
+        if (error != NULL)
+        {
+            g_error_free(error);
+        }
     }
     else
     {
-        g_error_free(error);
+        g_variant_get(res, "(u)", &cookie);
+        g_variant_unref(res);
     }
     g_object_unref(G_OBJECT(proxy));
 #endif
@@ -318,13 +341,16 @@ ghb_uninhibit_gpm(guint cookie)
     res = g_dbus_proxy_call_sync(proxy, "UnInhibit",
                                  g_variant_new("(u)", cookie),
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    if (res != NULL)
+    if (!res)
     {
-        g_variant_unref(res);
+        if (error != NULL)
+        {
+            g_error_free(error);
+        }
     }
     else
     {
-        g_error_free(error);
+        g_variant_unref(res);
     }
     g_object_unref(G_OBJECT(proxy));
 #endif
@@ -354,16 +380,19 @@ ghb_can_shutdown_gsm()
     res = g_dbus_proxy_call_sync(proxy, "CanShutdown", NULL,
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
     g_object_unref(G_OBJECT(proxy));
-    if (res != NULL)
+    if (!res)
     {
-        g_variant_get(res, "(b)", &can_shutdown);
-        g_variant_unref(res);
+        if (error != NULL)
+        {
+            g_error_free(error);
+        }
+        // Try the gpm version
+        can_shutdown = ghb_can_shutdown_gpm();
     }
     else
     {
-        g_error_free(error);
-        // Try the gpm version
-        can_shutdown = ghb_can_shutdown_gpm();
+        g_variant_get(res, "(b)", &can_shutdown);
+        g_variant_unref(res);
     }
 #endif
     return can_shutdown;
@@ -387,15 +416,18 @@ ghb_shutdown_gsm()
     res = g_dbus_proxy_call_sync(proxy, "Shutdown", NULL,
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
     g_object_unref(G_OBJECT(proxy));
-    if (res != NULL)
+    if (!res)
     {
-        g_variant_unref(res);
+        if (error != NULL)
+        {
+            g_error_free(error);
+        }
+        // Try the gpm version
+        ghb_shutdown_gpm();
     }
     else
     {
-        g_error_free(error);
-        // Try the gpm version
-        ghb_shutdown_gpm();
+        g_variant_unref(res);
     }
 #endif
 }
@@ -424,15 +456,17 @@ ghb_inhibit_gsm(signal_user_data_t *ud)
                                  g_variant_new("(susu)", "ghb", xid, "Encoding", 1 | 4),
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
     g_object_unref(G_OBJECT(proxy));
-    if (res != NULL)
+    if (!res)
     {
-        g_variant_get(res, "(u)", &cookie);
-        g_variant_unref(res);
+        if (error != NULL)
+        {
+            g_error_free(error);
+        }
     }
     else
     {
-        g_error_free(error);
-        cookie = -1;
+        g_variant_get(res, "(u)", &cookie);
+        g_variant_unref(res);
     }
 #endif
 
@@ -457,13 +491,16 @@ ghb_uninhibit_gsm(guint cookie)
     res = g_dbus_proxy_call_sync(proxy, "Uninhibit",
                                  g_variant_new("(u)", cookie),
                                  G_DBUS_CALL_FLAGS_NONE, -1, NULL, &error);
-    if (res != NULL)
+    if (!res)
     {
-        g_variant_unref(res);
+        if (error != NULL)
+        {
+            g_error_free(error);
+        }
     }
     else
     {
-        g_error_free(error);
+        g_variant_unref(res);
     }
     g_object_unref(G_OBJECT(proxy));
 #endif
