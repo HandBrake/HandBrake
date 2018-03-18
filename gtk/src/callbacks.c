@@ -119,10 +119,13 @@ ghb_get_session_dbus_proxy(const gchar *name, const gchar *path, const gchar *in
 
     g_debug("ghb_get_session_dbus_proxy()");
     conn = g_bus_get_sync(G_BUS_TYPE_SESSION, NULL, &error);
-    if (error != NULL)
+    if (conn == NULL)
     {
-        g_warning("DBUS cannot connect: %s", error->message);
-        g_error_free(error);
+        if (error != NULL)
+        {
+            g_warning("DBUS cannot connect: %s", error->message);
+            g_error_free(error);
+        }
         return NULL;
     }
 
