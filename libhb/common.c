@@ -5462,11 +5462,6 @@ static char *strndup_quote(const char *str, char q, int len)
     {
         if (str[src] == q)
             src++;
-        else if (str[src] == '\\' && str[src+1] != 0)
-        {
-            res[dst++] = str[src+1];
-            src += 2;
-        }
         else
             res[dst++] = str[src++];
     }
