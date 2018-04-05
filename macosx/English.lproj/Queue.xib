@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11762" systemVersion="16D17a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14111" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="7000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11762"/>
+        <development version="8000" identifier="xcode"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14111"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBQueueController">
@@ -17,7 +18,7 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Queue" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="QueueWindow" animationBehavior="default" id="2576" userLabel="Window">
-            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES" unifiedTitleAndToolbar="YES"/>
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="157" y="863" width="574" height="423"/>
@@ -92,7 +93,7 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <textField verticalHuggingPriority="750" id="2511">
+                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="2511">
                         <rect key="frame" x="17" y="399" width="540" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Pending Jobs" id="2637">
@@ -101,7 +102,7 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" id="2646">
+                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="2646">
                         <rect key="frame" x="17" y="366" width="540" height="29"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="There are no jobs currently encoding" id="2647">
@@ -112,7 +113,7 @@
                     </textField>
                 </subviews>
             </view>
-            <toolbar key="toolbar" implicitIdentifier="0FE76B40-49B7-48AE-B44E-D1B8034BC88A" autosavesConfiguration="NO" displayMode="iconAndLabel" sizeMode="regular" id="ZVb-ld-0UP">
+            <toolbar key="toolbar" implicitIdentifier="0FE76B40-49B7-48AE-B44E-D1B8034BC88A" explicitIdentifier="HBQueueToolbar" displayMode="iconAndLabel" sizeMode="regular" id="ZVb-ld-0UP">
                 <allowedToolbarItems>
                     <toolbarItem implicitItemIdentifier="609C5CFE-D854-4567-9CC2-70E109CBA332" explicitItemIdentifier="HBQueueStartCancelToolbarIdentifier" label="Start" paletteLabel="Start/Cancel" toolTip="Start Encoding" tag="-1" image="encode" id="SX6-mq-Hck">
                         <connections>
@@ -162,7 +163,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="2579"/>
             </connections>
-            <point key="canvasLocation" x="322" y="355.5"/>
+            <point key="canvasLocation" x="91" y="295"/>
         </window>
         <menu id="2649" userLabel="ContextMenu">
             <items>
@@ -211,7 +212,7 @@
     </objects>
     <resources>
         <image name="Delete" width="16" height="16"/>
-        <image name="encode" width="24" height="24"/>
-        <image name="pauseencode" width="24" height="24"/>
+        <image name="encode" width="32" height="32"/>
+        <image name="pauseencode" width="32" height="32"/>
     </resources>
 </document>
