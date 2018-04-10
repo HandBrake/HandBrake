@@ -48,6 +48,8 @@ namespace HandBrakeWPF.ViewModels
         private bool isPreviousPreviewControlVisible;
         private bool isNextPreviewControlVisible;
 
+        private bool showPreview;
+
         public SummaryViewModel(IScan scanService, IUserSettingService userSettingService)
         {
             this.scanService = scanService;
@@ -171,6 +173,20 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.isNextPreviewControlVisible) return;
                 this.isNextPreviewControlVisible = value;
                 this.NotifyOfPropertyChange(() => this.IsNextPreviewControlVisible);
+            }
+        }
+
+        public bool ShowPreview
+        {
+            get
+            {
+                return this.showPreview;
+            }
+            set
+            {
+                if (value == this.showPreview) return;
+                this.showPreview = value;
+                this.NotifyOfPropertyChange(() => this.ShowPreview);
             }
         }
 
@@ -492,6 +508,8 @@ namespace HandBrakeWPF.ViewModels
             // Preview
             this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
             this.NotifyOfPropertyChange(() => this.PreviewInfo);
+
+            this.ShowPreview = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPreviewOnSummaryTab);
         }
 
         private string GetFilterDescription()

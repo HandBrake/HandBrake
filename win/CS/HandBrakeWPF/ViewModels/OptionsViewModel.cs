@@ -75,7 +75,7 @@ namespace HandBrakeWPF.ViewModels
         private int selectedVerbosity;
         private bool sendFileAfterEncode;
         private string sendFileTo;
-        private string sendFileToPath;       
+        private string sendFileToPath;
         private string vlcPath;
         private string whenDone;
         private BindingList<string> whenDoneOptions = new BindingList<string>();
@@ -95,6 +95,7 @@ namespace HandBrakeWPF.ViewModels
         private long pauseOnLowDiskspaceLevel;
         private bool useQsvDecodeForNonQsvEnc;
         private bool showStatusInTitleBar;
+        private bool showPreviewOnSummaryTab;
 
         private string whenDoneAudioFile;
         private bool playSoundWhenDone;
@@ -380,6 +381,23 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether to show previews in the summary tab.
+        /// </summary>
+        public bool ShowPreviewOnSummaryTab
+        {
+            get
+            {
+                return this.showPreviewOnSummaryTab;
+            }
+            set
+            {
+                if (value == this.showPreviewOnSummaryTab) return;
+                this.showPreviewOnSummaryTab = value;
+                this.NotifyOfPropertyChange(() => this.ShowPreviewOnSummaryTab);
+            }
+        }
+
+        /// <summary>
         /// When Done Audio File
         /// </summary>
         public string WhenDoneAudioFile
@@ -484,8 +502,8 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (this.IsValidAutonameFormat(value, false))
                 {
-                    this.autonameFormat = value;   
-                } 
+                    this.autonameFormat = value;
+                }
 
                 this.NotifyOfPropertyChange("AutonameFormat");
             }
@@ -1280,6 +1298,7 @@ namespace HandBrakeWPF.ViewModels
             this.ResetWhenDoneAction = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction);
             this.ShowQueueInline = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline);
             this.ShowStatusInTitleBar = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowStatusInTitleBar);
+            this.ShowPreviewOnSummaryTab = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPreviewOnSummaryTab);
             this.WhenDoneAudioFile = Path.GetFileNameWithoutExtension(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile)) ?? string.Empty;
             this.WhenDoneAudioFileFullPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
             this.PlaySoundWhenDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone);
@@ -1443,6 +1462,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ResetWhenDoneAction, this.ResetWhenDoneAction);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowStatusInTitleBar, this.ShowStatusInTitleBar);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowPreviewOnSummaryTab, this.ShowPreviewOnSummaryTab);
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenDone, this.PlaySoundWhenDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenQueueDone, this.PlaySoundWhenQueueDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenDoneAudioFile, this.WhenDoneAudioFileFullPath);

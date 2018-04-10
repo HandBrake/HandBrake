@@ -237,6 +237,11 @@ namespace HandBrakeWPF
         public const string ShowStatusInTitleBar = "ShowStatusInTitleBar";
 
         /// <summary>
+        /// Setting to turn on/off the ability to show previews in the summary tab.
+        /// </summary>
+        public const string ShowPreviewOnSummaryTab = "ShowPreviewOnSummaryTab";
+
+        /// <summary>
         /// Setting to turn on/off the ability to play a sound when an encodeis done.
         /// </summary>
         public static string PlaySoundWhenDone = "PlaySoundWhenDone";
