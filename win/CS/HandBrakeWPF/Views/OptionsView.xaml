@@ -175,6 +175,7 @@
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_AdvancedTab}" IsChecked="{Binding ShowAdvancedTab}" />
                             <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ShowQueueInline}" IsChecked="{Binding ShowQueueInline}" Visibility="Collapsed" />
                             <CheckBox Content="{x:Static Properties:ResourcesUI.OptionsView_ShowStatusInTitleBar}" IsChecked="{Binding ShowStatusInTitleBar}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.OptionsView_ShowPreviewOnSummaryTab}" IsChecked="{Binding ShowPreviewOnSummaryTab}" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
