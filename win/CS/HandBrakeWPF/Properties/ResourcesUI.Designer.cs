@@ -1690,6 +1690,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show previews on summary tab..
+        /// </summary>
+        public static string OptionsView_ShowPreviewOnSummaryTab {
+            get {
+                return ResourceManager.GetString("OptionsView_ShowPreviewOnSummaryTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show the encode status in the application title bar..
         /// </summary>
         public static string OptionsView_ShowStatusInTitleBar {

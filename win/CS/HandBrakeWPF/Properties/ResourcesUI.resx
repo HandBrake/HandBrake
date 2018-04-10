@@ -1022,4 +1022,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="MainView_ShowPreview" xml:space="preserve">
     <value>Preview</value>
   </data>
+  <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
+    <value>Show previews on summary tab.</value>
+  </data>
 </root>

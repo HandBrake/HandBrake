@@ -95,7 +95,9 @@
         </Grid>
 
         <!-- Column 2 -->
-        <Grid Grid.Column="1" Margin="10,0,0,5">
+        <Grid Grid.Column="1"
+              Margin="10,0,0,5"
+              Visibility="{Binding ShowPreview, Converter={StaticResource boolToVisConverter}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
