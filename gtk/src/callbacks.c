@@ -3919,7 +3919,6 @@ ghb_start_next_job(signal_user_data_t *ud)
         if (status == GHB_QUEUE_PENDING)
         {
             ghb_inhibit_suspend(ud);
-printf("inhibited %d\n", suspend_inhibited);
             submit_job(ud, queueDict);
             ghb_update_pending(ud);
 
