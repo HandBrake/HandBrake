@@ -7,6 +7,7 @@
     <file>icons/32x32/apps/hb-add-queue.png</file>
     <file>icons/32x32/apps/hb-showqueue.png</file>
     <file>icons/32x32/apps/hb-activity.png</file>
+    <file>icons/32x32/apps/hb-presets.png</file>
     <file>icons/32x32/apps/hb-start.png</file>
     <file>icons/32x32/apps/hb-stop.png</file>
     <file>icons/32x32/apps/hb-pause.png</file>
@@ -16,6 +17,7 @@
     <file>icons/64x64/apps/hb-add-queue.png</file>
     <file>icons/64x64/apps/hb-showqueue.png</file>
     <file>icons/64x64/apps/hb-activity.png</file>
+    <file>icons/64x64/apps/hb-presets.png</file>
     <file>icons/64x64/apps/hb-start.png</file>
     <file>icons/64x64/apps/hb-stop.png</file>
     <file>icons/64x64/apps/hb-pause.png</file>
@@ -24,6 +26,7 @@
     <file>icons/scalable/apps/hb-add-queue.svg</file>
     <file>icons/scalable/apps/hb-showqueue.svg</file>
     <file>icons/scalable/apps/hb-activity.svg</file>
+    <file>icons/scalable/apps/hb-presets.svg</file>
     <file>icons/scalable/apps/hb-start.svg</file>
     <file>icons/scalable/apps/hb-stop.svg</file>
     <file>icons/scalable/apps/hb-pause.svg</file>

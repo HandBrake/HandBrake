@@ -1101,11 +1101,11 @@ update_preview_labels(signal_user_data_t *ud, gboolean active)
 
     if (!active)
     {
-        gtk_tool_button_set_label(button, "Show\nPreview");
+        gtk_tool_button_set_label(button, "Preview");
     }
     else
     {
-        gtk_tool_button_set_label(button, "Hide\nPreview");
+        gtk_tool_button_set_label(button, "Preview");
     }
 }
 

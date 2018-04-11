@@ -4541,11 +4541,11 @@ update_activity_labels(signal_user_data_t *ud, gboolean active)
 
     if (!active)
     {
-        gtk_tool_button_set_label(button, "Show\nActivity");
+        gtk_tool_button_set_label(button, "Activity");
     }
     else
     {
-        gtk_tool_button_set_label(button, "Hide\nActivity");
+        gtk_tool_button_set_label(button, "Activity");
     }
 }
 
@@ -4679,11 +4679,11 @@ update_queue_labels(signal_user_data_t *ud)
 
     if (!active)
     {
-        show_hide = _("Show\nQueue");
+        show_hide = _("Queue");
     }
     else
     {
-        show_hide = _("Hide\nQueue");
+        show_hide = _("Queue");
     }
     if (pending > 0)
     {
