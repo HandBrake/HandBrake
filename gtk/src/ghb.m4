@@ -915,7 +915,7 @@ libx264 authors:
                       </object>
                     </child>
                     <child>
-                      <object class="GtkCheckMenuItem" id="show_presets">
+                      <object class="GtkCheckMenuItem" id="show_presets_menu">
                         <property name="label" translatable="yes">Presets _List</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
@@ -1108,6 +1108,7 @@ libx264 authors:
                 <property name="can_focus">False</property>
                 <property name="show-arrow">False</property>
                 <property name="icon_size">5</property>
+                <property name="toolbar-style">GTK_TOOLBAR_BOTH</property>
                 <child>
                   <object class="GtkToolButton" id="sourcetoolbutton">
                     <property name="visible">True</property>
@@ -1115,14 +1116,24 @@ libx264 authors:
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Choose Video Source</property>
                     <property name="is_important">True</property>
-                    <property name="label" translatable="yes">Open
-Source</property>
+                    <property name="label" translatable="yes">Open Source</property>
                     <property name="icon_name">hb-source</property>
                     <property name="action-name">app.source</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSeparatorToolItem" id="main_tool_sep2">
+                    <property name="visible">True</property>
+                    <property name="width-request">60</property>
+                    <property name="draw">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
@@ -1132,14 +1143,13 @@ Source</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Add to Queue</property>
                     <property name="is_important">True</property>
-                    <property name="label" translatable="yes">Add To
-Queue</property>
+                    <property name="label" translatable="yes">Add To Queue</property>
                     <property name="icon_name">hb-add-queue</property>
                     <property name="action-name">app.queue-add</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
@@ -1149,14 +1159,13 @@ Queue</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Start Encoding</property>
                     <property name="is_important">True</property>
-                    <property name="label" translatable="yes">Start
-Encoding</property>
+                    <property name="label" translatable="yes">Start</property>
                     <property name="icon_name">hb-start</property>
                     <property name="action-name">app.queue-start</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
@@ -1166,14 +1175,13 @@ Encoding</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Pause Encoding</property>
                     <property name="is_important">True</property>
-                    <property name="label" translatable="yes">Pause
-Encoding</property>
+                    <property name="label" translatable="yes">Pause</property>
                     <property name="icon_name">hb-pause</property>
                     <property name="action-name">app.queue-pause</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
@@ -1187,20 +1195,19 @@ Encoding</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleToolButton" id="show_queue">
+                  <object class="GtkToggleToolButton" id="show_presets">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">Show Queue</property>
+                    <property name="tooltip_text" translatable="yes">Show Presets Window</property>
                     <property name="is_important">True</property>
-                    <property name="label" translatable="yes">Show
-Queue</property>
-                    <property name="icon_name">hb-showqueue</property>
-                    <property name="action-name">app.show-queue</property>
+                    <property name="label" translatable="yes">Presets</property>
+                    <property name="icon_name">hb-presets</property>
+                    <property name="action-name">app.show-presets</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
@@ -1210,14 +1217,29 @@ Queue</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Show Preview Window</property>
                     <property name="is_important">True</property>
-                    <property name="label" translatable="yes">Show
-Preview</property>
+                    <property name="label" translatable="yes">Preview</property>
                     <property name="icon_name">hb-picture</property>
                     <property name="action-name">app.show-preview</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkToggleToolButton" id="show_queue">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="tooltip_text" translatable="yes">Show Queue</property>
+                    <property name="is_important">True</property>
+                    <property name="label" translatable="yes">Queue</property>
+                    <property name="icon_name">hb-showqueue</property>
+                    <property name="action-name">app.show-queue</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
                 <child>
@@ -1227,14 +1249,13 @@ Preview</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Show Activity Window</property>
                     <property name="is_important">True</property>
-                    <property name="label" translatable="yes">Show
-Activity</property>
+                    <property name="label" translatable="yes">Activity</property>
                     <property name="icon_name">hb-activity</property>
                     <property name="action-name">app.show-activity</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">True</property>
+                    <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>

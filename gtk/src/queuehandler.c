@@ -2331,26 +2331,26 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     if (show_stop)
     {
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-stop");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop\nEncoding"));
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Stop"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Stop Encoding"));
     }
     else
     {
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Start\nEncoding"));
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Start"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Start Encoding"));
     }
     widget = GHB_WIDGET (ud->builder, "queue_pause");
     if (paused)
     {
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-start");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Resume\nEncoding"));
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Resume"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Resume Encoding"));
     }
     else
     {
         gtk_tool_button_set_icon_name(GTK_TOOL_BUTTON(widget), "hb-pause");
-        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Pause\nEncoding"));
+        gtk_tool_button_set_label(GTK_TOOL_BUTTON(widget), _("Pause"));
         gtk_tool_item_set_tooltip_text(GTK_TOOL_ITEM(widget), _("Pause Encoding"));
     }
 
