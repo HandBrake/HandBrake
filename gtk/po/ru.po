@@ -1,16 +1,16 @@
+# SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
-# Translators:
-# VictorR2007 <victorr2007@yandex.ru>, 2016
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-12-28 17:15+0300\n"
+"POT-Creation-Date: 2018-04-12 17:07+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: VictorR2007 <victorr2007@yandex.ru>, 2016\n"
+"Last-Translator: VictorR2007 <victorr2007@yandex.ru>, 2018\n"
 "Language-Team: Russian (https://www.transifex.com/victorr2007/teams/8026/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,396 +18,18 @@ msgstr ""
 "Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-msgid "Quality: "
-msgstr "Качество: "
-
-#, c-format
-msgid "Bitrate: %dkbps"
-msgstr "Битрейт: %dкбит/с"
-
-#, c-format
-msgid "Bitrate: %.4gkbps"
-msgstr "Битрейт: %.4gкбит/с"
-
-msgid "<small>Passthrough</small>"
-msgstr "<small>Транзитная передача</small>"
-
-#, c-format
-msgid ""
-"%s\n"
-"Gain: %s\n"
-"DRC: %s\n"
-"Track Name: %s"
-msgstr ""
-"%s\n"
-"Усиление: %s\n"
-"DRC: %s\n"
-"Название дорожки: %s"
-
-#, c-format
-msgid ""
-"%s\n"
-"Gain: %s\n"
-"DRC: %s"
-msgstr ""
-"%s\n"
-"Усиление: %s\n"
-"DRC: %s"
-
-msgid "Add"
-msgstr "Добавить"
-
-msgid ""
-"Add an audio encoder.\n"
-"Each selected source track will be encoded with all selected encoders."
-msgstr ""
-"Добавить аудио кодировщик.\n"
-"Каждая дорожка выбранного источника будет закодирована со всеми выбранными кодировщиками."
-
-msgid "Set the audio codec to encode this track with."
-msgstr "Установить аудио кодек для кодирования этой дорожки."
-
-msgid "Set the bitrate to encode this track with."
-msgstr "Установить битрейт для кодирования этой дорожки."
-
-msgid ""
-"<b>Audio Quality:</b>\n"
-"For encoders that support it, adjust the quality of the output."
-msgstr ""
-"<b>Качество звука:</b>\n"
-"Для выходного кодека, который поддерживают это, установить качество вывода."
-
-msgid "Set the mixdown of the output audio track."
-msgstr "Установить микширование каналов выходной звуковой дорожки."
-
-msgid "Set the sample rate of the output audio track."
-msgstr "Установить частоту дискретизации дорожки вывода звука."
-
-msgid ""
-"<b>Audio Gain:</b>\n"
-"Adjust the amplification or attenuation of the output audio track."
-msgstr ""
-"<b>Усиление звука:</b> \n"
-"Регулирует усиление или ослабление звуковой дорожки вывода."
-
-msgid "0dB"
-msgstr "0дБ"
-
-msgid "%ddB"
-msgstr "%dдБ"
-
-msgid "%.4gkHz"
-msgstr "%.4gкГц"
-
-msgid "<small>%d - %s (%.4gkHz)</small>"
-msgstr "<small>%d - %s (%.4gкГц)</small>"
-
-msgid ""
-"<b>Dynamic Range Compression:</b>\n"
-"Adjust the dynamic range of the output audio track.\n"
-"For source audio that has a wide dynamic range,\n"
-"very loud and very soft sequences, DRC allows you\n"
-"to 'compress' the range by making loud sounds\n"
-"softer and soft sounds louder.\n"
-msgstr ""
-"<b>Динамическое сжатие диапазона:</b>\n"
-"Устанавливает динамический диапазон для звуковой дорожки вывода.\n"
-"Для источника звука, который имеет широкий динамический диапазон.\n"
-"Очень громкие и очень мягкие последовательности, DRC позволяет сжимать\n"
-"диапазон, делая громкие разделы мягче и мягкие разделы громче.\n"
-
-msgid "Remove this audio encoder"
-msgstr "Удалить этот кодировщик звука"
-
-msgid "Closing HandBrake will terminate encoding.\n"
-msgstr "Закрытие HandBrake прекратит кодирование.\n"
-
-msgid "No Title Found"
-msgstr "Название не найдено"
-
-msgid "none"
-msgstr "нет"
-
-msgid "Not Selected"
-msgstr "Не выбрано"
-
-msgid "zerolatency x264 tune selected, forcing constant framerate"
-msgstr "Выбраны настройки x264 без задержки, принудительная частота кадров"
-
-msgid "Scanning ..."
-msgstr "Сканирование…"
-
-msgid ""
-"Stop\n"
-"Scan"
-msgstr ""
-
-msgid "Stop Scan"
-msgstr "Остановить сканирование"
-
-msgid "On"
-msgstr "Вкл"
-
-msgid "Strict"
-msgstr "Строгое"
-
-msgid "Loose"
-msgstr "Произвольно"
-
-msgid "Custom"
-msgstr "Другое"
-
-msgid "Unknown"
-msgstr "Неизвестно"
-
-msgid "auto"
-msgstr "авто"
-
-#, c-format
-msgid ""
-"%s\n"
-"\n"
-"%s in %d seconds ..."
-msgstr ""
-"%s\n"
-"\n"
-"%s в %d секунды ..."
-
-#, c-format
-msgid "%sYour movie will be lost if you don't continue encoding."
-msgstr "%sВаш фильм будет потерян, если вы не продолжать кодирование."
-
-msgid "Cancel Current and Stop"
-msgstr "Отменить текущий и остановить"
-
-msgid "Cancel Current, Start Next"
-msgstr "Отменить текущий, начать следующий"
-
-msgid "Finish Current, then Stop"
-msgstr "Закончить текущий, затем остановить"
-
-msgid "Continue Encoding"
-msgstr "Продолжить кодирование"
-
-msgid "Custom "
-msgstr "Другое "
-
-msgid "Modified "
-msgstr "Изменён "
-
-#, c-format
-msgid "Handbrake Version: %s (%d)\n"
-msgstr "Версия Handbrake: %s (%d)\n"
-
-#, c-format
-msgid "%d encode(s) pending"
-msgstr "В ожидании кодирования %d"
-
-#, c-format
-msgid "job %d of %d, "
-msgstr "задание %d из %d, "
-
-#, c-format
-msgid "pass %d (subtitle scan) of %d, "
-msgstr "проход %d (сканирование субтитров) из %d, "
-
-#, c-format
-msgid "pass %d of %d, "
-msgstr "проход %d из %d, "
-
-#, c-format
-msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
-msgstr ""
-"Кодирование: %s%s%.2f %% (%.2f fps, средний %.2f fps, время до окончания "
-"%02d час %02d мин %02d сек)."
-
-#, c-format
-msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
-msgstr ""
-"Кодирование: %s%s%.2f %% (время до окончания %02d час %02d мин %02d сек)."
-
-#, c-format
-msgid "Encoding: %s%s%.2f %%"
-msgstr "Кодирование: %s%s%.2f %%."
-
-msgid "Searching for start time, "
-msgstr "Поиск времени начала, "
-
-msgid "Scanning..."
-msgstr "Сканирование…"
-
-#, c-format
-msgid "Scanning title %d of %d..."
-msgstr "Сканирование фильма %d из  %d..."
-
-#, c-format
-msgid "Scanning title %d of %d preview %d..."
-msgstr "Сканирование фильма %d из %d просмотр %d..."
-
-msgid "Source"
-msgstr "Источник"
-
-msgid "Choose Video Source"
-msgstr "Выбрать исходное видео"
-
-msgid "Paused"
-msgstr "Приостановлено"
-
-msgid "Encode Done!"
-msgstr "Кодирование завершено!"
-
-msgid "Encode Canceled."
-msgstr "Кодирование отменено."
-
-msgid "Encode Failed."
-msgstr "Ошибка кодирования."
-
-msgid "Muxing: This may take a while..."
-msgstr "Мультиплексирование: Это может занять некоторое время..."
-
-msgid "Scan this DVD source"
-msgstr "Сканировать этот DVD"
-
-msgid "AutoScan"
-msgstr "Автоматическое сканирование"
-
-msgid "Suspend"
-msgstr "Ждущий режим"
-
-#, c-format
-msgid "Suspend failed: %s"
-msgstr "Не удалось перейти в ждущий режим: %s"
-
-msgid "Suspend failed"
-msgstr "Не удалось перейти в ждущий режим"
-
-msgid "Shutdown"
-msgstr "Выключить компьютер"
-
-#, c-format
-msgid "Shutdown failed: %s"
-msgstr "Ошибка выключения компьютера: %s"
-
-msgid "Shutdown failed"
-msgstr "Ошибка выключения компьютера"
-
-msgid "Encoding"
-msgstr "Кодирование"
-
-#, c-format
-msgid "press %d %d"
-msgstr "проход %d %d, "
-
-#, c-format
-msgid ""
-"Invalid Settings:\n"
-"%s"
-msgstr ""
-"Недопустимые настройки:\n"
-"%s"
-
-#, c-format
-msgid "%s: %.4g (Warning: lossless)"
-msgstr "%s: %.4g (Предупреждение: без потерь)"
-
-#, c-format
-msgid "HandBrake %s/%s is now available (you have %s/%d)."
-msgstr "Доступна новая версия HandBrake %s/%s (у вас версия %s/%d)."
-
-msgid "Encode Complete"
-msgstr "Кодирование завершено"
-
-msgid "Put down that cocktail, Your HandBrake queue is done!"
-msgstr "HandBrake завершил кодировать этот фильм!"
-
-msgid "Your encode is complete."
-msgstr "Кодирование завершено."
-
-msgid "Shutting down the computer"
-msgstr "Выключение компьютера"
-
-msgid "Putting computer to sleep"
-msgstr "Переход в спящий режим"
-
-msgid "Quitting Handbrake"
-msgstr "Очередь"
-
-msgid "Bottom"
-msgstr "Снизу"
-
-#, c-format
-msgid "open failed: %s\n"
-msgstr "не удалось открыть: %s\n"
-
-msgid "No key for dictionary item"
-msgstr "Нет ключа для элемента словаря"
-
-msgid "Invalid container type. This shouldn't happen"
-msgstr "Неправильный тип контейнера. Этого не должно быть"
-
-#, c-format
-msgid "%s:missing a requried attribute"
-msgstr "%s:отсутствует нужный атрибут"
-
-#, c-format
-msgid ""
-"Usage: %s [-I <inc path>] <in resource list> <out resource plist>\n"
-"Summary:\n"
-"    Creates a resource plist from a resource list\n"
-"Options:\n"
-"    I - Include path to search for files\n"
-"    <in resource list>    Input resources file\n"
-"    <out resource plist>  Output resources plist file\n"
-msgstr ""
-"Используется: %s [-I <inc path>] <in resource list> <out resource plist>\n"
-"Сводка:\n"
-"    Создает плейлист ресурса из списка ресурсов\n"
-"Options:\n"
-"    I - Включить путь для поиска файлов\n"
-"    <in resource list>    Входной файл ресурсов\n"
-"    <out resource plist>  Выходной плейлист файлов ресурсов\n"
-
-msgid "language"
-msgstr "Язык"
-
-msgid "Language"
-msgstr "Язык"
-
-msgid ""
-"The language this text is in, as an ISO code. Pango can use this as a hint "
-"when rendering the text. If you don't understand this parameter, you "
-"probably don't need it"
-msgstr ""
-"Язык, на котором написан текст, в виде ISO-кода.  Pango может использовать "
-"это как хинт при отрисовке текста.  Если вы не понимаете, что это за "
-"параметр, то он вам, скорее всего, не нужен."
-
-msgid ""
-"The preferred place to ellipsize the string, if the cell renderer does not "
-"have enough room to display the entire string"
-msgstr ""
-"Желаемое место эллиптизации строки, если механизму отображения строки в "
-"ячейке не хватает места для отображения всей  строки."
-
-msgid ""
-"How to break the string into multiple lines, if the cell renderer does not "
-"have enough room to display the entire string"
-msgstr ""
-"Как разделить строку на несколько строк, если механизму отображения строки "
-"не хватает места для отображения всей строки"
-
+#: ../src/ghb.m4.h:1
 msgid ""
 "Render the subtitle over the video.\n"
 "\n"
 "The subtitle will be part of the video and can not be disabled."
 msgstr ""
-"Отображение субтитров на видео.\n"
-"\n"
-"Субтитры будут на части видео и не могут быть отключены."
 
+#: ../src/ghb.m4.h:4
 msgid "<b>Burned In</b>"
-msgstr "<b>Встроенные</b>"
+msgstr ""
 
+#: ../src/ghb.m4.h:5
 msgid ""
 "Set the default output subtitle track.\n"
 "\n"
@@ -417,17 +39,12 @@ msgid ""
 "This is useful for creating a \"forced\" track\n"
 "in your output."
 msgstr ""
-"Устанавливает по умолчанию дорожку субтитров вывода.\n"
-"\n"
-"Большинство проигрывателей будет автоматически отображать эту\n"
-"дорожку субтитров при воспроизводится видео.\n"
-"\n"
-"Это эффективно для создания «форсированной» дорожки\n"
-"в выводе."
 
+#: ../src/ghb.m4.h:12
 msgid "<b>Default</b>"
-msgstr "<b>По умолчанию</b>"
+msgstr ""
 
+#: ../src/ghb.m4.h:13
 msgid ""
 "Use only subtitles that have been flagged\n"
 "as forced in the source subtitle track\n"
@@ -436,16 +53,12 @@ msgid ""
 "subtitles during scenes where someone is speaking\n"
 "a foreign language."
 msgstr ""
-"Использует только те субтитры, которые были помечены\n"
-"как форсированные, в дорожке субтитров источника\n"
-"\n"
-"«Форсированные» субтитры, как правило, используется, чтобы показать\n"
-"субтитры во время сцен, где кто-то говорит\n"
-"на иностранном языке."
 
+#: ../src/ghb.m4.h:19
 msgid "<b>Forced Only</b>"
-msgstr "<b>Только форсированные</b>"
+msgstr ""
 
+#: ../src/ghb.m4.h:20
 msgid ""
 "Add (or subtract) an offset (in milliseconds)\n"
 "to the start of the SRT subtitle track.\n"
@@ -454,19 +67,12 @@ msgid ""
 "does not coincide with the start of the video.\n"
 "This setting allows you to synchronize the files."
 msgstr ""
-"Добавить (или вычесть) смещение (в миллисекундах)\n"
-"с начала дорожки SRT субтитров.\n"
-"\n"
-"Часто, начало внешнего SRT файла\n"
-"не совпадает с началом видео.\n"
-"Этот параметр позволяет синхронизировать файлы."
 
+#: ../src/ghb.m4.h:26
 msgid "<b>SRT Offset</b>"
-msgstr "<b>Смещение SRT</b>"
+msgstr ""
 
-msgid "Off"
-msgstr "Выкл"
-
+#: ../src/ghb.m4.h:27
 msgid ""
 "The source subtitle track\n"
 "\n"
@@ -474,46 +80,77 @@ msgid ""
 "recognized in your source file.\n"
 "\n"
 "In addition, there is a special track option\n"
-"\"Foreign Audio Search\".  This option will add\n"
+"\"Foreign Audio Scan\".  This option will add\n"
 "an extra pass to the encode that searches for\n"
 "subtitles that may correspond to a foreign\n"
 "language scene.  This option is best used in\n"
 "conjunction with the \"Forced\" option."
 msgstr ""
-"Дорожка субтитров источника\n"
-"\n"
-"Вы можете выбрать любые из субтитров,\n"
-"распознанных в исходном файле.\n"
-"\n"
-"Кроме того, есть специальный вариант дорожки\n"
-"«Поиск иностранного языка».  Эта опция добавит\n"
-"дополнительный проход в кодирование, который ищет\n"
-"субтитры, которые могут соответствовать сцене с\n"
-"иностранным языком.Эту опцию лучше всего использовать в\n"
-"сочетании с опцией «Форсированные»."
 
+#: ../src/ghb.m4.h:38
 msgid "<b>Track</b>"
-msgstr "<b>Дорожка</b>"
-
-msgid "About HandBrake"
-msgstr "О программе"
-
-msgid ""
-"Copyright © 2008 - 2015 John Stebbins\n"
-"Copyright © 2004 - 2015, HandBrake Devs"
 msgstr ""
-"Авторские права © 2008 - 2015 John Stebbins\n"
-"Авторские права © 2004 - 2015, HandBrake Devs"
 
+#: ../src/ghb.m4.h:39
+msgid "_Presets"
+msgstr ""
+
+#: ../src/ghb.m4.h:40
+msgid "Set De_fault"
+msgstr ""
+
+#: ../src/ghb.m4.h:41
+msgid "_Save"
+msgstr ""
+
+#: ../src/ghb.m4.h:42
+msgid "Save _As"
+msgstr ""
+
+#: ../src/ghb.m4.h:43
+msgid "_Rename"
+msgstr ""
+
+#: ../src/ghb.m4.h:44
+msgid "_Delete"
+msgstr ""
+
+#: ../src/ghb.m4.h:45
+msgid "_Import"
+msgstr ""
+
+#: ../src/ghb.m4.h:46
+msgid "_Export"
+msgstr ""
+
+#: ../src/ghb.m4.h:47
+msgid "Reset _Built-in Presets"
+msgstr ""
+
+#: ../src/ghb.m4.h:48
+msgid "<b>Presets List</b>"
+msgstr ""
+
+#: ../src/ghb.m4.h:49
+msgid "About HandBrake"
+msgstr ""
+
+#: ../src/ghb.m4.h:50
+msgid ""
+"Copyright © 2008 -  John Stebbins\n"
+"Copyright © 2004 - , HandBrake Devs"
+msgstr ""
+
+#: ../src/ghb.m4.h:52
 msgid ""
 "HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder."
 msgstr ""
-"HandBrake, это GPL-лицензированный, мультиплатформенный, многопоточный видео"
-" транскодер."
 
-msgid "http://handbrake.fr"
-msgstr "http://handbrake.fr"
+#: ../src/ghb.m4.h:53
+msgid "https://handbrake.fr"
+msgstr ""
 
+#: ../src/ghb.m4.h:54
 msgid ""
 "HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.\n"
 "\n"
@@ -521,408 +158,331 @@ msgid ""
 "\n"
 "You should have received a copy of the GNU General Public License along with Glade; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
 msgstr ""
-"HandBrake― свободное программное обеспечение. Вы можете распространять или изменять его при условиях соответствия GNU General Public License опубликованной Free Software Foundation; либо версии 2 лицензии, либо (на ваше усмотрение) любой более поздней версии.\n"
-"\n"
-"HandBrake распространяется в надежде на то, что приложение будет полезно, но БЕЗ ВСЯКИХ ГАРАНТИЙ; не гарантируется даже ПРИГОДНОСТЬ или СООТВЕТСТВИЕ КАКИМ-ЛИБО ТРЕБОВАНИЯМ. Для получения дополнительной информации ознакомьтесь с GNU General Public License.\n"
-"\n"
-"Вы должны получить копию GNU General Public License вместе с этой программой. Если этого не произошло, напишите to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA."
 
-msgid "_Minimize/Maximize"
-msgstr "_Свернуть/распахнуть"
-
-msgid "_Pause Queue"
-msgstr "_Приостановить очередь"
-
-msgid "_Quit"
-msgstr "_Выход"
-
-msgid "_About"
-msgstr "_О программе"
-
+#: ../src/ghb.m4.h:59
 msgid "HandBrake"
-msgstr "HandBrake"
+msgstr ""
 
+#: ../src/ghb.m4.h:60
 msgid "_File"
-msgstr "_Файл"
+msgstr ""
 
-msgid "_Source"
-msgstr "_Источник"
+#: ../src/ghb.m4.h:61
+msgid "Open _Source"
+msgstr ""
 
-msgid "Single _Title"
-msgstr "Один _файл"
+#: ../src/ghb.m4.h:62
+msgid "Open Single _Title"
+msgstr ""
 
-msgid "_Destination"
-msgstr "_Назначение"
+#: ../src/ghb.m4.h:63
+msgid "Set _Destination"
+msgstr ""
 
+#: ../src/ghb.m4.h:64
 msgid "_Preferences"
-msgstr "_Параметры"
+msgstr ""
 
+#: ../src/ghb.m4.h:65
+msgid "_Quit"
+msgstr ""
+
+#: ../src/ghb.m4.h:66
 msgid "_Queue"
-msgstr "_Очередь"
+msgstr ""
 
+#: ../src/ghb.m4.h:67
 msgid "_Add"
-msgstr "_Добавить"
+msgstr ""
 
+#: ../src/ghb.m4.h:68
 msgid "Add _Multiple"
-msgstr "Добавить _несколько"
+msgstr ""
 
-msgid "_Start"
-msgstr "_Старт"
+#: ../src/ghb.m4.h:69 ../src/queuehandler.c:2365
+msgid "_Start Encoding"
+msgstr ""
 
-msgid "_Pause"
-msgstr "_Пауза"
+#: ../src/ghb.m4.h:70 ../src/queuehandler.c:2376
+msgid "_Pause Encoding"
+msgstr ""
 
+#: ../src/ghb.m4.h:71
+msgid "S_ave Queue"
+msgstr ""
+
+#: ../src/ghb.m4.h:72
+msgid "_Load Queue File"
+msgstr ""
+
+#: ../src/ghb.m4.h:73
 msgid "_View"
-msgstr "_Вид"
+msgstr ""
 
+#: ../src/ghb.m4.h:74
 msgid "HandBrake For _Dumbies"
-msgstr "HandBrake для чайников"
+msgstr ""
 
-msgid "_Show Presets"
-msgstr "_Показать предустановки"
+#: ../src/ghb.m4.h:75
+msgid "Presets _List"
+msgstr ""
 
+#: ../src/ghb.m4.h:76
 msgid "_Preview"
-msgstr "_Просмотр"
+msgstr ""
 
+#: ../src/ghb.m4.h:77
 msgid "_Activity Window"
-msgstr "_Окно процесса обработки"
+msgstr ""
 
-msgid "Show _Queue"
-msgstr "Показать _очередь"
-
-msgid "_Presets"
-msgstr "_Предустановки"
-
-msgid "_Save"
-msgstr "_Сохранить"
-
-msgid "_Delete"
-msgstr "_Удалить"
-
-msgid "_Make Default"
-msgstr "_Сделать по умолчанию"
-
-msgid "_New Folder"
-msgstr "_Новая папка"
-
-msgid "_Export"
-msgstr "_Экспорт"
-
-msgid "_Import"
-msgstr "_Импорт"
-
-msgid "_Reload Built-in Presets"
-msgstr "_Перезагрузить предустановки"
-
-msgid "_Update Built-in Presets"
-msgstr "_Обновить предустановки"
-
+#: ../src/ghb.m4.h:78
 msgid "_Help"
-msgstr "_Помощь"
+msgstr ""
 
+#: ../src/ghb.m4.h:79
+msgid "_About"
+msgstr ""
+
+#: ../src/ghb.m4.h:80
 msgid "_Guide"
-msgstr "_Руководство"
+msgstr ""
 
-msgid "Start Encoding"
-msgstr "Начать кодирование"
+#: ../src/ghb.m4.h:81 ../src/callbacks.c:4140
+msgid "Choose Video Source"
+msgstr ""
 
-msgid "Start"
-msgstr "Старт"
+#: ../src/ghb.m4.h:82 ../src/callbacks.c:4139
+msgid ""
+"Open\n"
+"Source"
+msgstr ""
 
-msgid "Pause Encoding"
-msgstr "Приостановить кодирование"
-
-msgid "Pause"
-msgstr "Пауза"
-
+#: ../src/ghb.m4.h:84
 msgid "Add to Queue"
-msgstr "Добавить в очередь"
+msgstr ""
 
-msgid "Enqueue"
-msgstr "Поставить в очередь"
+#: ../src/ghb.m4.h:85
+msgid ""
+"Add To\n"
+"Queue"
+msgstr ""
 
+#: ../src/ghb.m4.h:87 ../src/queuehandler.c:2341 ../src/queuehandler.c:2366
+msgid "Start Encoding"
+msgstr ""
+
+#: ../src/ghb.m4.h:88 ../src/queuehandler.c:2340
+msgid ""
+"Start\n"
+"Encoding"
+msgstr ""
+
+#: ../src/ghb.m4.h:90 ../src/queuehandler.c:2354 ../src/queuehandler.c:2377
+msgid "Pause Encoding"
+msgstr ""
+
+#: ../src/ghb.m4.h:91 ../src/queuehandler.c:2353
+msgid ""
+"Pause\n"
+"Encoding"
+msgstr ""
+
+#: ../src/ghb.m4.h:93
 msgid "Show Queue"
-msgstr "Показать очередь"
-
-msgid "Queue"
-msgstr "Очередь"
-
-msgid "Failed to find widget"
-msgstr "Не удалось найти виджет"
-
-msgid "Choose Destination"
-msgstr "Выберите назначение"
-
-#, c-format
-msgid "%s%sPreset: %s"
-msgstr "%s%sПредустановка: %s"
-
-#, c-format
-msgid "Queue (%d)"
-msgstr "Очередь (%d)"
-
-msgid "Updating preview\n"
-msgstr "Обновление предустановки\n"
-
-msgid "Update Check"
-msgstr "Проверка обновления"
-
-msgid "Error while reading activity from pipe"
-msgstr "Ошибка при чтении из канала"
-
-msgid "Updating chapter row ui"
-msgstr "Обновление строк главы"
-
-msgid "Delete All"
-msgstr "Удалить все"
-
-msgid "Delete all items in the queue."
-msgstr "Удалить все объекты из очереди."
-
-msgid ""
-"<b>Anamorphic Modes:</b>\n"
-"<small><tt>\n"
-"None   - Force pixel aspect ratio to 1:1.\n"
-"Loose  - Align dimensions to chosen 'Alignment' value\n"
-"         and pick pixel aspect ratio that preserves the\n"
-"         original display aspect ratio\n"
-"Strict - Keep original source dimensions and pixel\n"
-"         aspect ratio</tt></small>"
 msgstr ""
-"<b>Анаморфотные режимы:</b>\n"
-"<small><tt>\n"
-"Нет  - Принудительное соотношение сторон 1:1.\n"
-"Произвольно  - Выравнять размеры выбрав «Выравнивание»\n"
-"         чтобы значение и соотношение сторон  соответствовало \n"
-"         соотношению сторон оригинала\n"
-"Строго - Держать исходные размеры и исходное \n"
-"         соотношение сторон</tt></small>"
 
+#: ../src/ghb.m4.h:94 ../src/callbacks.c:4682
 msgid ""
-"Open Picture Settings and Preview window.\n"
-"Here you can adjust cropping, resolution, aspect ratio, and filters."
+"Show\n"
+"Queue"
 msgstr ""
-"Открыть настройки изображения и окно просмотра.\n"
-"Здесь вы можете отрегулировать обрезку, разрешение, соотношение сторон и фильтры."
 
-msgid "Preview"
-msgstr "Предварительный просмотр"
+#: ../src/ghb.m4.h:96
+msgid "Show Preview Window"
+msgstr ""
 
+#: ../src/ghb.m4.h:97
+msgid ""
+"Show\n"
+"Preview"
+msgstr ""
+
+#: ../src/ghb.m4.h:99
 msgid "Show Activity Window"
-msgstr "Показать окно процесса обработки"
+msgstr ""
 
-msgid "Activity"
-msgstr "Процесс"
+#: ../src/ghb.m4.h:100
+msgid ""
+"Show\n"
+"Activity"
+msgstr ""
 
+#: ../src/ghb.m4.h:102
 msgid "<b>Source:</b>"
-msgstr "<b>Источник:</b>"
+msgstr ""
 
+#: ../src/ghb.m4.h:103 ../src/hb-backend.c:60 ../src/hb-backend.c:72
+#: ../src/hb-backend.c:85 ../src/hb-backend.c:250 ../src/hb-backend.c:335
+#: ../src/hb-backend.c:2295 ../src/hb-backend.c:2517
+#: ../src/subtitlehandler.c:1266
 msgid "None"
-msgstr "Нет"
+msgstr ""
 
-msgid "Foreign Audio Subtitle Track"
-msgstr "Дорожка субтитров иностранного языка"
+#: ../src/ghb.m4.h:104 ../src/callbacks.c:4109
+msgid "Scanning..."
+msgstr ""
 
-msgid "First Selected Track"
-msgstr "Первая выбранная дорожка"
+#: ../src/ghb.m4.h:105
+msgid "<b>Title:</b>"
+msgstr ""
 
-msgid "Foreign Audio, then First Selected Track"
-msgstr "Иностранный язык, затем первая выбранная дорожка"
-
-msgid "Title:"
-msgstr "Название:"
-
+#: ../src/ghb.m4.h:106
 msgid ""
 "Set the title to encode.\n"
 "By default the longest title is chosen.\n"
 "This is often the feature title of a DVD."
 msgstr ""
-"Установить название для кодирования.\n"
-"По умолчанию выбрано длинное название.\n"
-"Часто  это название функций DVD."
 
-msgid "Angle:"
-msgstr "Угол:"
+#: ../src/ghb.m4.h:109
+msgid "<small>No Titles</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:110
+msgid "<b>Angle:</b>"
+msgstr ""
+
+#: ../src/ghb.m4.h:111
 msgid "For multi-angle DVD's, select the desired angle to encode."
-msgstr "Для нескольких ракурсов DVD, выберите нужный ракурс для кодирования."
-
-msgid "Interlace Detection:"
-msgstr "Предустановки деинтерлейсинга:"
-
-msgid ""
-"This filter detects interlaced frames.\n"
-"\n"
-"If a deinterlace filter is enabled, only frames that this filter finds\n"
-"to be interlaced will be deinterlaced."
 msgstr ""
 
-msgid "Rotate Filter:"
-msgstr "Фильтр поворота:"
-
-msgid "Rotate the video clockwise in 90 degree increments."
-msgstr "Повернуть видео по часовой стрелке на 90 градусов."
-
-msgid "Choose which audio tracks of the source media are used."
+#: ../src/ghb.m4.h:112
+msgid "<b>Range:</b>"
 msgstr ""
 
-msgid "Choose which subtitle tracks of the source media are used."
-msgstr ""
-
-msgid ""
-"Choose decomb or deinterlace filter.\n"
-"\n"
-"The decomb filter supports a variety of interpolation algorithms.\n"
-"The deinterlace filter is a classic YADIF deinterlacer.\n"
-msgstr ""
-
-msgid ""
-"Choose decomb or deinterlace filter options.\n"
-"\n"
-"The decomb filter supports a variety of interpolation algorithms.\n"
-"The deinterlace filter is a classic YADIF deinterlacer.\n"
-msgstr ""
-
-msgid "Reset All Titles"
-msgstr "Сбросить все"
-
-msgid "Apply current settings to all titles"
-msgstr "Применить текущие настройки ко всем названиям."
-
+#: ../src/ghb.m4.h:113
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
 msgstr ""
-"Диапазон заголовков для кодирования. Могут быть главы, секунды или кадры."
 
+#: ../src/ghb.m4.h:114
 msgid "Set the first chapter to encode."
-msgstr "Установить первую главу для кодирования."
+msgstr ""
 
+#: ../src/ghb.m4.h:115
+msgid "-"
+msgstr ""
+
+#: ../src/ghb.m4.h:116
 msgid "Set the last chapter to encode."
-msgstr "Установить последнюю главу для кодирования."
+msgstr ""
 
-msgid "Duration:"
-msgstr "Продолжительность:"
+#: ../src/ghb.m4.h:117
+msgid "<b>Preset:</b>"
+msgstr ""
 
-msgid "hh:mm:ss"
-msgstr "чч:мм:сс"
+#: ../src/ghb.m4.h:118
+msgid "Choose Preset"
+msgstr ""
 
-msgid "<b>Destination</b>"
-msgstr "<b>Назначение</b>"
+#: ../src/ghb.m4.h:119
+msgid "<u><i>Modified</i></u>"
+msgstr ""
 
-msgid "File:"
-msgstr "Файл:"
+#: ../src/ghb.m4.h:120
+msgid "Reload"
+msgstr ""
 
-msgid "Destination filename for your encode."
-msgstr "Название папки для перекодированных файлов."
+#: ../src/ghb.m4.h:121
+msgid ""
+"Reload the settings for the currently selected preset.\n"
+"Modifications will be discarded."
+msgstr ""
 
-msgid "Destination directory for your encode."
-msgstr "Папка назначения для перекодированных файлов."
+#: ../src/ghb.m4.h:123
+msgid "Save New Preset"
+msgstr ""
 
-msgid "Destination Directory"
-msgstr "Каталог назначения"
+#: ../src/ghb.m4.h:124
+msgid "Save the current settings to a new Preset."
+msgstr ""
 
+#: ../src/ghb.m4.h:125
 msgid "Format:"
-msgstr "Формат:"
+msgstr ""
 
+#: ../src/ghb.m4.h:126
 msgid "Format to mux encoded tracks to."
-msgstr "Формат мультиплексора кодирования дорожек."
+msgstr ""
 
-msgid "iPod 5G Support"
-msgstr "Поддержка iPod 5G"
-
-msgid "Add iPod Atom needed by some older iPods."
-msgstr "Добавить iPod Atom, необходимый некоторым старым плеерам."
-
+#: ../src/ghb.m4.h:127
 msgid "Web Optimized"
-msgstr "Оптимизация для интернет-трансляции"
+msgstr ""
 
+#: ../src/ghb.m4.h:128
 msgid ""
 "Optimize the layout of the MP4 file for progressive download.\n"
 "This allows a player to initiate playback before downloading the entire file."
 msgstr ""
-"Оптимизирует структуру файлов mp4 для последовательной загрузки.\n"
-"Это позволяет проигрывателю начать воспроизведение до загрузки всего файла."
 
-msgid "Large file (>4GB)"
-msgstr "Большой файл (>4GB)"
-
-msgid ""
-"Allow 64 bit MP4 file which can be over 4GB.\n"
-"\n"
-"<b>Caution:</b> This option may break device compatibility."
+#: ../src/ghb.m4.h:130
+msgid "Align A/V Start"
 msgstr ""
-"Разрешить 64 битный MP4 файл, который может быть более 4 ГБ.\n"
-"\n"
-"<b>Внимание:</b> Эта опция может сломать совместимость устройств."
 
-msgid "<b>Presets List</b>"
-msgstr "<b>Список предустановок</b>"
+#: ../src/ghb.m4.h:131
+msgid ""
+"Aligns the initial timestamps of all audio and video streams by\n"
+"inserting blank frames or dropping frames. May improve audio/video\n"
+"sync for broken players that do not honor MP4 edit lists."
+msgstr ""
 
-msgid "Source Codec:"
-msgstr "Кодек источника:"
+#: ../src/ghb.m4.h:134
+msgid "iPod 5G Support"
+msgstr ""
 
-msgid "Dimensions:"
-msgstr "Размер изображения:"
+#: ../src/ghb.m4.h:135
+msgid "Add iPod Atom needed by some older iPods."
+msgstr ""
 
-msgid "Aspect: "
-msgstr "Соотношение сторон: "
+#: ../src/ghb.m4.h:136
+msgid "Duration:"
+msgstr ""
 
-msgid "Frame Rate:"
-msgstr "Частота кадров:"
+#: ../src/ghb.m4.h:137
+msgid "hh:mm:ss"
+msgstr ""
 
-msgid "<b>Source Picture Parameters</b>"
-msgstr "<b>Параметры изображения источника</b>"
+#: ../src/ghb.m4.h:138
+msgid "Tracks:"
+msgstr ""
 
-msgid "Autocrop:"
-msgstr "Автокадрирование:"
+#: ../src/ghb.m4.h:139
+msgid "Filters:"
+msgstr ""
 
-msgid "Crop:"
-msgstr "Кадрирование:"
+#: ../src/ghb.m4.h:140
+msgid "Size:"
+msgstr ""
 
-msgid "Crop Dimensions:"
-msgstr "Размер после обрезки:"
+#: ../src/ghb.m4.h:141
+msgid "--"
+msgstr ""
 
-msgid "<b>Cropping</b>"
-msgstr "<b>Кадрирование</b>"
-
-msgid "Scale Dimensions:"
-msgstr "Масштаб:"
-
-msgid "Optimal for Source:"
-msgstr "Оптимально для источника:"
-
-msgid "Anamorphic:"
-msgstr "Анаморфотный:"
-
-msgid "<b>Scaling</b>"
-msgstr "<b>Масштабирование</b>"
-
-msgid "Presentation Dimensions:"
-msgstr "Размеры презентации:"
-
+#: ../src/ghb.m4.h:142
 msgid "Summary"
-msgstr "Описание"
+msgstr ""
 
-msgid "Left Crop"
-msgstr "Обрезка слева"
-
-msgid "Top Crop"
-msgstr "Обрезка сверху"
-
-msgid "Bottom Crop"
-msgstr "Обрезка снизу"
-
-msgid "Right Crop"
-msgstr "Обрезка справа"
-
+#: ../src/ghb.m4.h:143
 msgid "Auto Crop"
-msgstr "Автообрезка черных полос"
+msgstr ""
 
+#: ../src/ghb.m4.h:144
 msgid "Automatically crop black borders around edges of the video."
-msgstr "Автоматически обрезает черные полосы по краям видео."
+msgstr ""
 
+#: ../src/ghb.m4.h:145
 msgid "Loose Crop"
-msgstr "Произвольное кадрирование"
+msgstr ""
 
+#: ../src/ghb.m4.h:146
 msgid ""
 "When picture settings require that the image\n"
 "dimensions be rounded to some multiple number\n"
@@ -930,324 +490,337 @@ msgid ""
 "instead of doing exact cropping and then scaling to\n"
 "the required multiple."
 msgstr ""
-"Когда настройки изображения требуют, чтобы размеры\n"
-"изображения округлялись до некоторого многократного числа\n"
-"пикселей, эта установка будет обрезать несколько дополнительных\n"
-"пикселей, а не делать точную обрезку и затем масштабирование\n"
-"до требуемого числа пикселей."
 
-msgid "width:"
-msgstr "Ширина:"
-
-msgid ""
-"This is the width that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+#: ../src/ghb.m4.h:151
+msgid "Left Crop"
 msgstr ""
-"Это ширина, в которой будет храниться видео.\n"
-"Фактические размеры дисплей будут отличаться, если соотношение сторон пиксела не равно 1:1."
 
-msgid "height:"
-msgstr "Высота:"
-
-msgid ""
-"This is the height that the video will be stored at.\n"
-"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+#: ../src/ghb.m4.h:152
+msgid "Top Crop"
 msgstr ""
-"Это высота, в которой будет храниться видео.\n"
-"Фактические размеры дисплей будут отличаться, если соотношение сторон пиксела не равно 1:1."
 
+#: ../src/ghb.m4.h:153
+msgid "Bottom Crop"
+msgstr ""
+
+#: ../src/ghb.m4.h:154
+msgid "Right Crop"
+msgstr ""
+
+#: ../src/ghb.m4.h:155
+msgid "Crop Dimensions:"
+msgstr ""
+
+#: ../src/ghb.m4.h:156
+msgid "<b>Cropping</b>"
+msgstr ""
+
+#: ../src/ghb.m4.h:157
 msgid "Optimal for source"
-msgstr "Оптимально для источника"
+msgstr ""
 
+#: ../src/ghb.m4.h:158
 msgid ""
 "If enabled, select the 'optimal' storage resolution.\n"
 "This will be the resolution that most closely matches the source resolution after cropping."
 msgstr ""
-"Если включено, выберет оптимальное разрешение для сохранения.\n"
-"Это будет разрешение, наиболее точно соответствующее исходному разрешению после обрезки."
 
+#: ../src/ghb.m4.h:160
+msgid "Width:"
+msgstr ""
+
+#: ../src/ghb.m4.h:161
+msgid ""
+"This is the width that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+
+#: ../src/ghb.m4.h:163
+msgid "Height:"
+msgstr ""
+
+#: ../src/ghb.m4.h:164
+msgid ""
+"This is the height that the video will be stored at.\n"
+"The actual display dimensions will differ if the pixel aspect ratio is not 1:1."
+msgstr ""
+
+#: ../src/ghb.m4.h:166
+msgid "Anamorphic:"
+msgstr ""
+
+#: ../src/ghb.m4.h:167
 msgid ""
 "<b>Anamorphic Modes:</b>\n"
 "<small><tt>\n"
-"None   - Force pixel aspect ratio to 1:1.\n"
-"Loose  - Align dimensions to chosen 'Alignment' value\n"
-"     and pick pixel aspect ratio that preserves the\n"
-"     original display aspect ratio\n"
-"Strict - Keep original source dimensions and pixel\n"
-"     aspect ratio</tt></small>"
+"None      - Force pixel aspect ratio to 1:1.\n"
+"Loose     - Use a pixel aspect ratio that is as\n"
+"            close as possible to the source video pixel\n"
+"            aspect ratio while preserving the original\n"
+"            display aspect ratio\n"
+"Automatic - Use a pixel aspect ratio that maximizes\n"
+"            storage resolution while preserving the original\n"
+"            display aspect ratio</tt></small>"
 msgstr ""
-"<b>Анаморфотные режимы:</b>\n"
-"<small><tt>\n"
-"Нет  - Принудительное соотношение сторон 1:1.\n"
-"Произвольно  - Выравнять размеры выбрав «Выравнивание»\n"
-"         чтобы значение и соотношение сторон  соответствовало \n"
-"         соотношению сторон оригинала\n"
-"Строго - Держать исходные размеры и исходное \n"
-"         соотношение сторон</tt></small>"
 
+#: ../src/ghb.m4.h:177
 msgid "Alignment:"
-msgstr "Выравнивание:"
+msgstr ""
 
+#: ../src/ghb.m4.h:178
 msgid ""
 "Align storage dimensions to multiples of this value.\n"
 "\n"
 "This setting is only necessary for compatibility with some devices.\n"
 "You should use 2 unless you experience compatibility issues."
 msgstr ""
-"Выравнивание размеров сохранения в несколько раз этого значения.\n"
-"\n"
-"Этот параметр необходим только для совместимости с некоторыми устройствами.\n"
-"Следует использовать 2, если вы не испытываете проблем с совместимостью."
 
+#: ../src/ghb.m4.h:182
 msgid "<b>Storage Geometry</b>"
-msgstr "<b>Геометрия сохранения</b>"
+msgstr ""
 
+#: ../src/ghb.m4.h:183
+msgid "Keep Aspect"
+msgstr ""
+
+#: ../src/ghb.m4.h:184
+msgid ""
+"If enabled, the original display aspect of the source will be maintained."
+msgstr ""
+
+#: ../src/ghb.m4.h:185
 msgid ""
 "This is the display width. It is the result of scaling the storage "
 "dimensions by the pixel aspect."
 msgstr ""
-"Это ширина дисплея. Это является результатом изменения размеров сохранения "
-"пропорций пикселей."
 
+#: ../src/ghb.m4.h:186
 msgid "Pixel Aspect:"
-msgstr "Пропорции в пикселах:"
+msgstr ""
 
+#: ../src/ghb.m4.h:187
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "\n"
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
-"Соотношение сторон пикселей определяет форму пикселей.\n"
-"\n"
-"Соотношение 1:1 определяет квадратный пиксель. Другие значения определяют прямоугольные формы.\n"
-"Проигрыватели будут масштабировать изображение, чтобы достичь указанного соотношения."
 
+#: ../src/ghb.m4.h:191
 msgid ":"
-msgstr ":"
+msgstr ""
 
+#: ../src/ghb.m4.h:192
 msgid ""
 "Pixel aspect defines the shape of the pixels.\n"
 "A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.\n"
 "Players will scale the image in order to achieve the specified aspect."
 msgstr ""
-"Соотношение сторон пикселей определяет форму пикселей.\n"
-"Соотношение 1:1 определяет квадратный пиксель. Другие значения определяют прямоугольные формы.\n"
-"Проигрыватели будут масштабировать изображение, чтобы достичь указанного соотношения."
 
-msgid "Keep Aspect"
-msgstr "Сохранять соотношение сторон"
-
-msgid ""
-"If enabled, the original display aspect of the source will be maintained."
-msgstr ""
-"Если включено, оригинальное соотношение сторон источника будут сохранено."
-
+#: ../src/ghb.m4.h:195
 msgid "Display Aspect:"
-msgstr "Соотношение дисплея:"
+msgstr ""
 
+#: ../src/ghb.m4.h:196
+msgid "--:--"
+msgstr ""
+
+#: ../src/ghb.m4.h:197
 msgid "<b>Display Geometry</b>"
-msgstr "<b>Геометрия экрана</b>"
-
-msgid "Grayscale"
-msgstr "Чёрно-белое"
-
-msgid "If enabled, filter colour components out of video."
-msgstr "Если включено, фильтр вывода оттенков цвета в видео."
-
-msgid "Deblock:"
-msgstr "Подавление блоков:"
-
-msgid ""
-"The deblocking filter removes a common type of compression artifact.\n"
-"If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
-"Фильтр для устранения «блочности» устраняет распространенный тип артефактов сжатия.\n"
-"Если в источнике существует «блочность», этот фильтр может помочь в ее очистке."
 
-msgid "Denoise Filter:"
-msgstr "Фильтр шумоподавления:"
-
-msgid ""
-"Denoise filtering reduces or removes the appearance of noise and grain.\n"
-"Film grain and other types of high frequency noise are difficult to compress.\n"
-"Using this filter on such sources can result in smaller file sizes."
+#: ../src/ghb.m4.h:198
+msgid "Dimensions"
 msgstr ""
-"Фильтр шумоподавления уменьшает или устраняет появление шума и зернистости.\n"
-"Зернистость фильма и другие виды высокочастотного шума сложно сжимать.\n"
-"Использование этого фильтра на таких источниках может привести к уменьшению размеров файлов."
 
-msgid "Denoise Preset:"
-msgstr "Предустановка шумоподавления:"
-
-msgid "Denoise Tune:"
-msgstr "Настройка шумоподавления:"
-
-msgid ""
-"Custom denoise filter string format\n"
-"\n"
-"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
-msgstr ""
-"Пользовательский фильтр удаления шумов\n"
-"\n"
-"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
-
+#: ../src/ghb.m4.h:199
 msgid "Detelecine:"
-msgstr "Детелесин:"
+msgstr ""
 
+#: ../src/ghb.m4.h:200
 msgid ""
 "This filter removes 'combing' artifacts that are the result of telecining.\n"
 "\n"
 "Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
 msgstr ""
-"Этот фильтр устраняет артефакты «гребенки», которые являются результатом телесина.\n"
-"\n"
-"Телесин, это процесс, который регулирует частоту кадров фильма 24fps в NTSC, в видео с частотой кадров 30fps."
 
+#: ../src/ghb.m4.h:203
 msgid ""
 "Custom detelecine filter string format\n"
 "\n"
 "JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
 msgstr ""
-"Пользовательский фильтр  детелесина\n"
+
+#: ../src/ghb.m4.h:206
+msgid "Interlace Detection:"
+msgstr ""
+
+#: ../src/ghb.m4.h:207
+msgid ""
+"This filter detects interlaced frames.\n"
 "\n"
-"JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity"
+"If a deinterlace filter is enabled, only frames that this filter finds\n"
+"to be interlaced will be deinterlaced."
+msgstr ""
 
-msgid "Decomb"
-msgstr "Устранение гребенки"
+#: ../src/ghb.m4.h:211
+msgid ""
+"Custom interlace detection filter string format\n"
+"\n"
+"Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:\n"
+"Block Thresh: Block Width: Block Height"
+msgstr ""
 
+#: ../src/ghb.m4.h:215
+msgid "Deinterlace:"
+msgstr ""
+
+#: ../src/ghb.m4.h:216
+msgid ""
+"Choose decomb or deinterlace filter.\n"
+"\n"
+"The decomb filter supports a variety of interpolation algorithms.\n"
+"The deinterlace filter is a classic YADIF deinterlacer.\n"
+msgstr ""
+
+#: ../src/ghb.m4.h:221
+msgid "Deinterlace Preset:"
+msgstr ""
+
+#: ../src/ghb.m4.h:222
 msgid ""
 "Choose decomb or deinterlace filter options.\n"
 "\n"
-"The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
-"This will preserve quality in frames that are not interlaced.\n"
-"\n"
-"The classic deinterlace filter is applied to all frames.\n"
-"Frames that are not interlaced will suffer some quality degradation."
+"The decomb filter supports a variety of interpolation algorithms.\n"
+"The deinterlace filter is a classic YADIF deinterlacer.\n"
 msgstr ""
-"Выберите фильтр «Устранение гребенки» или «Деинтерлейсинг».\n"
-"\n"
-"Фильтр устранения гребенки избирательно убирает чересстрочность в кадрах, которые могут оказаться чересстрочными.\n"
-"Это позволит сохранить качество кадров с нечересстрочной разверткой\n"
-"\n"
-"Классический фильтр деинтерлейсинга применяется ко всем кадрам.\n"
-"Кадры, которые не чересстрочные, пострадают от некоторого ухудшение качества."
 
-msgid "Deinterlace"
-msgstr "Деинтерлейсинг"
+#: ../src/ghb.m4.h:227
+msgid "Deblock:"
+msgstr ""
 
-msgid "Decomb:"
-msgstr "Устранение гребенки:"
-
+#: ../src/ghb.m4.h:228
 msgid ""
-"The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
-"This will preserve quality in frames that are not interlaced."
+"The deblocking filter removes a common type of compression artifact.\n"
+"If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
-"Фильтр устранения гребенки избирательно убирает чересстрочность кадров, которые могут оказаться чересстрочными.\n"
-"Это позволит сохранить качество кадров, которые с нечересстрочной разверткой."
 
+#: ../src/ghb.m4.h:230
+msgid "Denoise Filter:"
+msgstr ""
+
+#: ../src/ghb.m4.h:231
 msgid ""
-"Custom decomb filter string format\n"
-"\n"
-"Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\n"
-"BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
-"ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
+"Denoise filtering reduces or removes the appearance of noise and grain.\n"
+"Film grain and other types of high frequency noise are difficult to compress.\n"
+"Using this filter on such sources can result in smaller file sizes."
 msgstr ""
-"Пользовательский фильтр устранения гребенки\n"
-"\n"
-"Mode:SpatialMetric:MotionThresh:SpatialThresh:BlockThresh:BlockWidth:\n"
-"BlockHeight:MagnitudeThres:VarianceThres:LaplacianThresh:DilationThresh:\n"
-"ErosionThresh:NoiseThresh:MaxSearchDistance:PostProcessing:Parity"
 
-msgid "Deinterlace:"
-msgstr "Деинтерлейсинг:"
+#: ../src/ghb.m4.h:234
+msgid "Denoise Preset:"
+msgstr ""
 
+#: ../src/ghb.m4.h:235
+msgid "Denoise Tune:"
+msgstr ""
+
+#: ../src/ghb.m4.h:236
 msgid ""
-"The classic deinterlace filter is applied to all frames.\n"
-"Frames that are not interlaced will suffer some quality degradation."
+"Custom denoise filter string format\n"
+"\n"
+"SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 msgstr ""
-"Классический фильтр деинтерлейсинга применяется ко всем кадрам.\n"
-"Кадры, которые не чересстрочные, пострадают от некоторого ухудшение качества."
 
+#: ../src/ghb.m4.h:239
+msgid "Sharpen Filter:"
+msgstr ""
+
+#: ../src/ghb.m4.h:240
 msgid ""
-"Custom deinterlace filter string format\n"
-"\n"
-"YadifMode:YadifParity:McdintMode:McdeintQp"
+"Sharpen filtering enhances edges and other\n"
+"high frequency components in the video."
 msgstr ""
-"Пользовательский фильтр деинтерлейсинга\n"
-"\n"
-"YadifMode:YadifParity:McdintMode:McdeintQp"
 
-msgid "<b>Filters</b>"
-msgstr "<b>Фильтры</b>"
+#: ../src/ghb.m4.h:242
+msgid "Sharpen Preset:"
+msgstr ""
 
-msgid "Picture"
-msgstr "Изображение"
+#: ../src/ghb.m4.h:243
+msgid "Sharpen Tune:"
+msgstr ""
 
+#: ../src/ghb.m4.h:244
+msgid "Rotate Filter:"
+msgstr ""
+
+#: ../src/ghb.m4.h:245
+msgid "Rotate the video clockwise in 90 degree increments."
+msgstr ""
+
+#: ../src/ghb.m4.h:246
+msgid "Grayscale"
+msgstr ""
+
+#: ../src/ghb.m4.h:247
+msgid "If enabled, filter colour components out of video."
+msgstr ""
+
+#: ../src/ghb.m4.h:248
+msgid "Filters"
+msgstr ""
+
+#: ../src/ghb.m4.h:249
 msgid "Video Encoder:"
-msgstr "Кодировщик видео:"
+msgstr ""
 
+#: ../src/ghb.m4.h:250
 msgid "Available video encoders."
-msgstr "Доступные кодировщики видео."
+msgstr ""
 
+#: ../src/ghb.m4.h:251
 msgid "Framerate:"
-msgstr "Частота кадров:"
+msgstr ""
 
+#: ../src/ghb.m4.h:252
 msgid ""
 "Output framerate.\n"
 "\n"
 "'Same as source' is recommended. If your source video has\n"
 "a variable framerate, 'Same as source' will preserve it."
 msgstr ""
-"Частота кадров на выходе.\n"
-"\n"
-"Рекомендуется «Как в источнике». Если исходное видео имеет\n"
-"переменную частоту кадров, выбор «Как в источнике» сохранит ее."
 
+#: ../src/ghb.m4.h:256
 msgid "Constant Framerate"
-msgstr "Постоянная частота кадров"
+msgstr ""
 
-msgid "Same as source"
-msgstr "Как в источнике"
-
-msgid "kbps"
-msgstr "кбит/с"
-
-msgid "(variable)"
-msgstr "(переменная)"
-
-msgid "(constant)"
-msgstr "(постоянная)"
-
+#: ../src/ghb.m4.h:257
 msgid "Enables constant framerate output."
-msgstr "Включает постоянную частоту кадров вывода."
+msgstr ""
 
+#: ../src/ghb.m4.h:258
 msgid "Peak Framerate (VFR)"
-msgstr "Пик частоты кадров (VFR)"
+msgstr ""
 
+#: ../src/ghb.m4.h:259
 msgid ""
 "Enables variable framerate output with a peak\n"
 "rate determined by the framerate setting.\n"
 "\n"
 "VFR is not compatible with some players."
 msgstr ""
-"Включает переменную частоту кадров на выходе с пиковой\n"
-"скоростью, определенной настройкой частоты кадров.\n"
-"\n"
-"VFR не совместим с некоторыми проигрывателями."
 
+#: ../src/ghb.m4.h:263
 msgid "Variable Framerate"
-msgstr "Переменная частота кадров"
+msgstr ""
 
+#: ../src/ghb.m4.h:264
 msgid ""
 "Enables variable framerate output.\n"
 "\n"
 "VFR is not compatible with some players."
 msgstr ""
-"Включает переменную частоту кадров.\n"
-"\n"
-"VFR не совместим с некоторыми проигрывателями."
 
+#: ../src/ghb.m4.h:267
 msgid ""
 "Set the desired quality factor.\n"
 "The encoder targets a certain quality.\n"
@@ -1262,24 +835,16 @@ msgid ""
 "FFMpeg's and Theora's scale is more linear.\n"
 "These encoders do not have a lossless mode."
 msgstr ""
-"Установите требуемый коэффициент качества.\n"
-"Конкретное качество для кодировщика целевого файла.\n"
-"Шкала, используемая каждым видео кодировщиком, различается.\n"
-"\n"
-"Шкала X264 является логарифмической и более низкие значения соответствуют более\n"
-"высокому качеству. Так, небольшое снижение значения приведет к прогрессивно более значительному\n"
-"увеличению размера файла. Значение 0 означает без потерь и приведет к размеру файла не больше, чем\n"
-"у источника, если только источник также без потерь.\n"
-"\n"
-"У FFMpeg и Theora шкала является более линейной.\n"
-"Эти кодировщики не имеет режима без потерь."
 
+#: ../src/ghb.m4.h:279 ../src/queuehandler.c:555
 msgid "Constant Quality:"
-msgstr "Постоянное качество:"
+msgstr ""
 
+#: ../src/ghb.m4.h:280
 msgid "Bitrate (kbps):    "
-msgstr "Битрейт (кбит/с):   "
+msgstr ""
 
+#: ../src/ghb.m4.h:281
 msgid ""
 "Set the average bitrate.\n"
 "\n"
@@ -1287,15 +852,12 @@ msgid ""
 "But the average over a long duration will be the value set here.  If you need\n"
 "to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings."
 msgstr ""
-"Установите средний битрейт.\n"
-"\n"
-"Кратковременный битрейт может быть гораздо выше или ниже в любой момент времени.\n"
-"Но средний, на протяжении длительного срока, будет на установленном здесь значении.\n"
-"Если нужно ограничить кратковременный битрейт, смотрите настройки x264 vbv-bufsize и vbv-maxrate."
 
+#: ../src/ghb.m4.h:286
 msgid "2-Pass Encoding"
-msgstr "Кодирование в 2 прохода"
+msgstr ""
 
+#: ../src/ghb.m4.h:287
 msgid ""
 "Perform 2 Pass Encoding.\n"
 "\n"
@@ -1303,37 +865,33 @@ msgid ""
 "the video are collected.  Then in the second pass, those statistics are used\n"
 "to make bitrate allocation decisions."
 msgstr ""
-"Производит кодирование в 2 прохода.\n"
-"\n"
-"Опция «Битрейт» является обязательным условием. В 1-ый проход собирается\n"
-"статистика о видео. Тогда на втором проходе используются эти статистические\n"
-"данные в решении распределения битрейта."
 
+#: ../src/ghb.m4.h:292
 msgid "Turbo First Pass"
-msgstr "Первый проход быстро"
+msgstr ""
 
+#: ../src/ghb.m4.h:293
 msgid ""
 "During the 1st pass of a 2 pass encode, use settings that speed things "
 "along."
 msgstr ""
-"Во время 1-го проход при 2-х проходном кодировании используйте настройки "
-"скоростного прохода."
 
+#: ../src/ghb.m4.h:294
 msgid "Use Advanced Options"
-msgstr "Использовать дополнительные параметры"
+msgstr ""
 
+#: ../src/ghb.m4.h:295
 msgid ""
 "Use advanced options Tab for x264 settings.\n"
 "\n"
 "Use at your own risk!"
 msgstr ""
-"Используйте вкладку дополнительных настроек для настройки x264. \n"
-"\n"
-" Используйте на свой страх и риск!"
 
+#: ../src/ghb.m4.h:298
 msgid "Preset:"
-msgstr "Предустановка:"
+msgstr ""
 
+#: ../src/ghb.m4.h:299
 msgid ""
 "Adjusts encoder settings to trade off compression efficiency against encoding speed.\n"
 "\n"
@@ -1342,44 +900,36 @@ msgid ""
 "You should generally set this option to the slowest you can bear since slower\n"
 "settings will result in better quality or smaller files."
 msgstr ""
-"Регулирует настройки кодировщика, балансируя между эффективностью сжатия и скоростью кодирования.\n"
-"\n"
-"Это определяют настройки кодировщика по умолчанию.\n"
-"Регулировка, профили, уровни и дополнительные параметры строки, будут применять это.\n"
-"Как правило, нужно установить этот параметр на самый медленный, Медленная настройка\n"
-"приведёт к улучшению качества или несколько меньшему размеру файла."
 
+#: ../src/ghb.m4.h:305
 msgid "Tune:"
-msgstr "Настройки:"
+msgstr ""
 
+#: ../src/ghb.m4.h:306
 msgid ""
 "Tune settings to optimize for common scenarios.\n"
 "\n"
-"This can improve effeciency for particular source characteristics or set\n"
+"This can improve efficiency for particular source characteristics or set\n"
 "characteristics of the output file.  Changes will be applied after the\n"
 "preset but before all other parameters."
 msgstr ""
-"Оптимизированные настройки параметров для выполнения типовых сценариев.\n"
-"\n"
-"Это может улучшить эффективность для конкретных характеристик исходного или заданных\n"
-"характеристик выходного файла. Изменения будут применены после предустановки, но\n"
-"до всех остальных параметров."
 
+#: ../src/ghb.m4.h:311
 msgid "Fast Decode"
-msgstr "Быстрое кодирование"
+msgstr ""
 
+#: ../src/ghb.m4.h:312
 msgid ""
 "Reduce decoder CPU usage.\n"
 "\n"
 "Set this if your device is struggling to play the output (dropped frames)."
 msgstr ""
-"Уменьшает использование CPU при декодировании.\n"
-"\n"
-"Установите ее, если ваше устройство  имеет затруднение с воспроизведением на выходе (пропускает кадры)."
 
+#: ../src/ghb.m4.h:315
 msgid "Zero Latency"
-msgstr "Нулевая задержка"
+msgstr ""
 
+#: ../src/ghb.m4.h:316
 msgid ""
 "Minimize latency between input to encoder and output of decoder.\n"
 "\n"
@@ -1388,328 +938,386 @@ msgid ""
 "Since HandBrake is not suitable for live stream broadcast purposes,\n"
 "this setting is of little value here."
 msgstr ""
-"Минимизация задержки между входом в кодировщик и выходом декодера.\n"
-"\n"
-"Это полезно для трансляции потокового вещания.\n"
-"\n"
-"Поскольку HandBrake не подходит  трансляции потокового вещания,\n"
-"этот параметр не имеет здесь большого значения."
 
+#: ../src/ghb.m4.h:322
 msgid "Profile:"
-msgstr "Профиль:"
+msgstr ""
 
+#: ../src/ghb.m4.h:323
 msgid ""
 "Sets and ensures compliance with the specified profile.\n"
 "\n"
 "Overrides all other settings."
 msgstr ""
-"Устанавливает и обеспечивает соблюдение указанного профиля.\n"
-"\n"
-"Подавляет все другие настройки."
 
+#: ../src/ghb.m4.h:326
 msgid "Level:"
-msgstr "Уровень:"
+msgstr ""
 
+#: ../src/ghb.m4.h:327
 msgid ""
 "Sets and ensures compliance with the specified level.\n"
 "\n"
 "Overrides all other settings."
 msgstr ""
-"Устанавливает и обеспечивает соблюдение указанного уровня.\n"
-"\n"
-"Подавляет все другие настройки."
 
+#: ../src/ghb.m4.h:330
 msgid "More Settings:"
-msgstr "Дополнительно:"
+msgstr ""
 
+#: ../src/ghb.m4.h:331
 msgid ""
 "Additional encoder settings.\n"
 "\n"
 "Colon separated list of encoder options."
 msgstr ""
-"Дополнительные настройки кодирования.\n"
-"\n"
-"Список вариантов опций разделять двоеточиями."
 
+#: ../src/ghb.m4.h:334 ../src/main.c:1169
 msgid "Video"
-msgstr "Видео"
+msgstr ""
 
+#: ../src/ghb.m4.h:335
+msgid "Track List"
+msgstr ""
+
+#: ../src/ghb.m4.h:336
+msgid "Show Output Audio Track List"
+msgstr ""
+
+#: ../src/ghb.m4.h:337
+msgid "Track Selection"
+msgstr ""
+
+#: ../src/ghb.m4.h:338
+msgid "Show Source Track Selection Options"
+msgstr ""
+
+#. Add Button
+#: ../src/ghb.m4.h:339 ../src/audiohandler.c:1724
+msgid "Add"
+msgstr ""
+
+#: ../src/ghb.m4.h:340
+msgid "Add new audio settings to the list"
+msgstr ""
+
+#: ../src/ghb.m4.h:341
+msgid "Add All"
+msgstr ""
+
+#: ../src/ghb.m4.h:342
+msgid "Add all audio tracks to the list"
+msgstr ""
+
+#: ../src/ghb.m4.h:343
+msgid "Reload all audio settings from defaults"
+msgstr ""
+
+#: ../src/ghb.m4.h:344
 msgid "Selection Behavior:"
-msgstr "Выбор поведения:"
+msgstr ""
 
+#: ../src/ghb.m4.h:345
+msgid "Choose which audio tracks of the source media are used."
+msgstr ""
+
+#: ../src/ghb.m4.h:346
+msgid ""
+"Create a list of languages you would like to select audio for.\n"
+"        Tracks matching these languages will be selected using the chosen Selection Behavior."
+msgstr ""
+
+#: ../src/ghb.m4.h:348
 msgid "Remove"
-msgstr "Удалить"
+msgstr ""
 
+#: ../src/ghb.m4.h:349
 msgid "Available Languages"
-msgstr "Доступные языки"
+msgstr ""
 
+#: ../src/ghb.m4.h:350
 msgid "Selected Languages"
-msgstr "Выбранные языки"
+msgstr ""
 
+#: ../src/ghb.m4.h:351
 msgid "Use only first encoder for secondary audio"
-msgstr "Использовать только первый кодировщик для вторичного аудиосигнала"
+msgstr ""
 
+#: ../src/ghb.m4.h:352
 msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
-"All other secondary audio output tracks will be encoded with first encoder only."
+"        All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
-"Только основная звуковая дорожка будет закодирован полным списком кодировщиков.\n"
-"Все другие, вторичные аудиодорожки, будут закодированы только первым кодировщиком."
 
+#: ../src/ghb.m4.h:354
 msgid "Auto Passthru:"
-msgstr "Автопроходные без перекодирования:"
+msgstr ""
 
+#: ../src/ghb.m4.h:355
 msgid "MP3"
-msgstr "MP3"
+msgstr ""
 
+#: ../src/ghb.m4.h:356
 msgid ""
 "Enable this if your playback device supports MP3.\n"
-"This permits MP3 passthru to be selected when automatic passthru selection is enabled."
+"        This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Включите это, если ваше устройство воспроизведения поддерживает MP3.\n"
-"Это позволяет при необходимости вызвать MP3, если включен автоматический выбор."
 
+#: ../src/ghb.m4.h:358
 msgid "AAC"
-msgstr "AAC"
+msgstr ""
 
+#: ../src/ghb.m4.h:359
 msgid ""
 "Enable this if your playback device supports AAC.\n"
-"This permits AAC passthru to be selected when automatic passthru selection is enabled."
+"        This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Включите это, если ваше устройство воспроизведения поддерживает AAC.\n"
-"Это позволяет при необходимости вызвать AAC, если включен автоматический выбор."
 
+#: ../src/ghb.m4.h:361
 msgid "AC-3"
-msgstr "AC-3"
+msgstr ""
 
+#: ../src/ghb.m4.h:362
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
-"This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
+"        This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Включите это, если ваше устройство воспроизведения поддерживает AC-3.\n"
-"Это позволяет при необходимости вызвать AC-3, если включен автоматический выбор."
 
+#: ../src/ghb.m4.h:364
 msgid "DTS"
-msgstr "DTS"
+msgstr ""
 
+#: ../src/ghb.m4.h:365
 msgid ""
 "Enable this if your playback device supports DTS.\n"
-"This permits DTS passthru to be selected when automatic passthru selection is enabled."
+"        This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Включите это, если ваше устройство воспроизведения поддерживает DTS.\n"
-"Это позволяет при необходимости вызвать DTS, если включен автоматический выбор."
 
+#: ../src/ghb.m4.h:367
 msgid "DTS-HD"
-msgstr "DTS-HD"
+msgstr ""
 
+#: ../src/ghb.m4.h:368
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
-"This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
+"        This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Включите это, если ваше устройство воспроизведения поддерживает DTS-HD.\n"
-"Это позволяет при необходимости вызвать DTS-HD, если включен автоматический выбор."
 
+#: ../src/ghb.m4.h:370
 msgid "EAC-3"
-msgstr "EAC-3"
+msgstr ""
 
+#: ../src/ghb.m4.h:371
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
-"This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
+"        This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Включите это, если ваше устройство воспроизведения поддерживает EAC-3.\n"
-"Это позволяет при необходимости вызвать EAC-3, если включен автоматический выбор."
 
+#: ../src/ghb.m4.h:373
 msgid "TrueHD"
-msgstr "TrueHD"
+msgstr ""
 
+#: ../src/ghb.m4.h:374
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
-"This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
+"        This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Включите это, если ваше устройство воспроизведения поддерживает TrueHD.\n"
-"Это позволяет при необходимости вызвать TrueHD, если включен автоматический выбор."
 
+#: ../src/ghb.m4.h:376
 msgid "FLAC"
-msgstr "FLAC"
+msgstr ""
 
+#: ../src/ghb.m4.h:377
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
-"This permits FLAC passthru to be selected when automatic passthru selection is enabled."
+"        This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
-"Включите это, если ваше устройство воспроизведения поддерживает FLAC.\n"
-"Это позволяет при необходимости вызвать FLAC, если включен автоматический выбор."
 
+#: ../src/ghb.m4.h:379
 msgid "Passthru Fallback:"
-msgstr "Резервный без перекодирования:"
+msgstr ""
 
+#: ../src/ghb.m4.h:380
 msgid ""
 "Set the audio codec to encode with when a suitable track can not be found "
 "for audio passthru."
 msgstr ""
-"Установить кодировщика аудио для кодирования с тем, что бы использовать "
-"когда подходящий декодер не найден."
 
+#: ../src/ghb.m4.h:381
 msgid "<b>Audio Encoder Settings:</b>"
-msgstr "<b>Параметры кодирования звука:</b>"
+msgstr ""
 
+#: ../src/ghb.m4.h:382
 msgid "Each selected source track will be encoded with all selected encoders"
 msgstr ""
-"Каждая дорожка выбранного источника будет закодирована со всеми выбранными "
-"кодировщиками."
 
+#: ../src/ghb.m4.h:383
 msgid "Encoder"
-msgstr "Кодировщик"
+msgstr ""
 
+#: ../src/ghb.m4.h:384
 msgid "Bitrate/Quality"
-msgstr "Битрейт/Качество"
+msgstr ""
 
+#: ../src/ghb.m4.h:385
 msgid "Mixdown"
-msgstr "Микширование"
+msgstr ""
 
+#: ../src/ghb.m4.h:386
 msgid "Samplerate"
-msgstr "Частота дискретизации"
+msgstr ""
 
+#: ../src/ghb.m4.h:387
 msgid "Gain"
-msgstr "Усиление"
+msgstr ""
 
+#: ../src/ghb.m4.h:388
 msgid "DRC"
-msgstr "DRC"
+msgstr ""
 
-msgid "Audio Defaults"
-msgstr "Аудио по умолчанию"
+#: ../src/ghb.m4.h:389
+msgid "Audio"
+msgstr ""
 
-msgid "Add new audio settings to the list"
-msgstr "Добавить новые настройки аудио в список"
+#: ../src/ghb.m4.h:390
+msgid "Show Output Subtitle Track List"
+msgstr ""
 
-msgid "Add All"
-msgstr "Добавить все"
+#: ../src/ghb.m4.h:391
+msgid "Add new subtitle settings to the list"
+msgstr ""
 
-msgid "Add all audio tracks to the list"
-msgstr "Добавить все аудиодорожки в список"
+#: ../src/ghb.m4.h:392
+msgid "Add all subtitle tracks to the list"
+msgstr ""
 
-msgid "Reload Defaults"
-msgstr "Перезагрузить по умолчанию"
+#: ../src/ghb.m4.h:393 ../src/queuehandler.c:111 ../src/queuehandler.c:164
+#: ../src/subtitlehandler.c:382
+msgid "Foreign Audio Scan"
+msgstr ""
 
-msgid "Reload all audio settings from defaults"
-msgstr "Перезагрузить все настройки звука по умолчанию"
+#: ../src/ghb.m4.h:394
+msgid ""
+"Add an extra pass to the encode which searches\n"
+"        for subtitle candidates that provide subtitles for\n"
+"        segments of the audio that are in a foreign language."
+msgstr ""
 
-msgid "Audio List"
-msgstr "Список аудио"
+#: ../src/ghb.m4.h:397
+msgid "Reload all subtitle settings from defaults"
+msgstr ""
 
+#: ../src/ghb.m4.h:398
+msgid "Choose which subtitle tracks of the source media are used."
+msgstr ""
+
+#: ../src/ghb.m4.h:399
 msgid ""
 "Create a list of languages you would like to select subtitles for.\n"
+"        Tracks matching these languages will be selected using the chosen Selection Behavior.\n"
 "\n"
-"The first language in this list is your \"preferred\" language and will be used\n"
-"for determining subtitle selection settings when there is foreign audio."
+"        The first language in this list is your \"preferred\" language and will be used\n"
+"        for determining subtitle selection settings when there is foreign audio."
 msgstr ""
-"Создать список языков вы хотели бы выбрать для субтитров.\n"
-"\n"
-"Первый язык в этом списке «Предпочтительных» языков и будетиспользоваться\n"
-"при определении параметров выбора субтитров, когда есть иностранный звук."
 
+#: ../src/ghb.m4.h:404
 msgid "Preferred Language: None"
-msgstr "Предпочитаемый язык: нет"
-
-msgid "Add Foreign Audio Search Pass"
-msgstr "Добавить поиск иностранного языка в проход"
-
-msgid "Add subtitle track if default audio is foreign"
-msgstr "Добавить дорожку субтитров, если по умолчанию будет иностранный звук"
-
-msgid ""
-"When the default audio track is not your preferred language, add a subtitle "
-"track."
 msgstr ""
-"Когда для звуковой дорожки по умолчанию нет нужного языка, добавить дорожку "
-"субтитров."
 
+#: ../src/ghb.m4.h:405
+msgid "Add Foreign Audio Scan Pass"
+msgstr ""
+
+#: ../src/ghb.m4.h:406
+msgid ""
+"Add \"Foreign Audio Scan\" when the default audio track is your preferred language.\n"
+"        This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
+"\n"
+"        This option requires a language to be set in the Selected Languages list."
+msgstr ""
+
+#: ../src/ghb.m4.h:410
+msgid "Add subtitle track if default audio is foreign"
+msgstr ""
+
+#: ../src/ghb.m4.h:411
+msgid ""
+"When the default audio track is not your preferred language, add a subtitle track.\n"
+"\n"
+"        This option requires a language to be set in the Selected Languages list."
+msgstr ""
+
+#: ../src/ghb.m4.h:414
 msgid "Add Closed Captions when available"
-msgstr "Добавлять скрытые субтитры, когда возможно"
+msgstr ""
 
+#: ../src/ghb.m4.h:415
 msgid ""
 "Closed captions are text subtitles that can be added to any container as a "
 "soft subtitle track"
 msgstr ""
-"Текстовые субтитры, которые могут быть добавлены в любой контейнер, как "
-"дорожка мягких субтитров"
 
-msgid "Burn-In Behavior:"
-msgstr "Поведение вшитых субтитров:"
+#: ../src/ghb.m4.h:416
+msgid "Burn-In Behavior*:"
+msgstr ""
 
+#: ../src/ghb.m4.h:417
 msgid ""
 "Set the behavior of subtitle \"Burn-In\".\n"
 "\n"
-"Burned-In subtitles are part of the video and can not be disabled during playback.\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
+"        Burned-In subtitles are part of the video and can not be disabled during playback.\n"
+"        Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Установить поведение «Вшитых» субтитров.\n"
-"\n"
-"Вшитые субтитры являются частью видео и не могут быть отключены во время воспроизведения.\n"
-"Может быть записана только одна дорожка субтитров! Могут возникать конфликты. Победит первый выбранный."
 
-msgid "Burn-In for deficient players:"
-msgstr "Вшитые субтитры для слабых проигрывателей:"
+#: ../src/ghb.m4.h:421
+msgid "Burn-In for deficient players*:"
+msgstr ""
 
+#: ../src/ghb.m4.h:422
 msgid "DVD Subtitles"
-msgstr "Субтитры DVD"
+msgstr ""
 
+#: ../src/ghb.m4.h:423
 msgid ""
 "Burn the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded.\n"
-"Use this option if your player software or device does not support DVD subtitles.\n"
+"        Use this option if your player software or device does not support DVD subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
+"        Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Записать первую выбранную дорожку субтитров DVD. Все остальные дорожки субтитров DVD будут отброшены.\n"
-"Используйте эту опцию, если ваш проигрыватель или устройство не поддерживает субтитры DVD.\n"
-"\n"
-"Может быть записана только одна дорожка субтитров! Могут возникать конфликты. Победит первый выбранный."
 
+#: ../src/ghb.m4.h:427
 msgid "Blu-ray Subtitles"
-msgstr "Субтитры Blu-ray"
+msgstr ""
 
+#: ../src/ghb.m4.h:428
 msgid ""
 "Burn the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded.\n"
-"Use this option if your player software or device does not support Blu-ray subtitles.\n"
+"        Use this option if your player software or device does not support Blu-ray subtitles.\n"
 "\n"
-"Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
+"        Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Записать первую выбранную дорожку субтитров Blu-ray. Все остальные дорожки субтитров Blu-ray будут отброшены.\n"
-"Используйте эту опцию, если ваш проигрыватель или устройство не поддерживает субтитры Blu-ray.\n"
-"\n"
-"Может быть записана только одна дорожка субтитров! Могут возникать конфликты. Победит первый выбранный."
 
+#: ../src/ghb.m4.h:432
 msgid ""
 "<small>* Only one of the above subtitle burn options will be applied, "
 "starting with the top.</small>"
 msgstr ""
-"<small>* Будет применяться только один из указанных выше вариантов "
-"субтитров, начиная с верхнего.</small>"
 
+#: ../src/ghb.m4.h:433
 msgid ""
 "Only one subtitle track can be burned! Since conflicts can occur, the first "
 "chosen wins."
 msgstr ""
-"Может быть записана только одна дорожка субтитров! Могут возникать "
-"конфликты. Победит первый выбранный."
 
-msgid "Subtitle Defaults"
-msgstr "Субтитры по умолчанию"
+#: ../src/ghb.m4.h:434
+msgid "Subtitles"
+msgstr ""
 
-msgid "Add new subtitle settings to the list"
-msgstr "Добавить новые настройки субтитров в список"
-
-msgid "Add all subtitle tracks to the list"
-msgstr "Добавить все дорожки субтитров в список"
-
-msgid "Reload all subtitle settings from defaults"
-msgstr "Перезагрузить все настройки субтитров по умолчанию"
-
-msgid "Subtitle List"
-msgstr "Список субтитров"
-
+#: ../src/ghb.m4.h:435
 msgid "<small>Reference Frames:</small>"
-msgstr "<small>Рефернсные кадры:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:436
 msgid ""
 "Sane values are ~1-6.  The more you add, the better the compression, but the slower the encode.\n"
 "Cel animation tends to benefit from more reference frames a lot more than film content.\n"
@@ -1718,16 +1326,12 @@ msgid ""
 "frames, so if you're encoding for a handheld or standalone player, don't touch this unless\n"
 "you're absolutely sure you know what you're doing!"
 msgstr ""
-"Нормальные значения ~ 1-6.Чем больше вы добавите, тем лучше сжатие, но медленнее  кодирование.\n"
-"Cel анимация, как правило, дает выгоду от дополнительных опорных кадров гораздо больше,  чем от содержимого фильма.\n"
-"\n"
-"Следует отметить, что многие аппаратные устройства имеют ограничения по количеству  поддерживаемых опорных\n"
-"кадров, так что если вы кодируете для карманного компьютера, не трогайте это, если\n"
-"не уверенны, что знаете, что вы делаете!"
 
+#: ../src/ghb.m4.h:442
 msgid "<small>Maximum B-Frames:</small>"
-msgstr "<small>Максимум B-кадров:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:443
 msgid ""
 "Sane values are ~2-5.  This specifies the maximum number of sequential B-frames that the encoder can use.\n"
 "\n"
@@ -1737,30 +1341,24 @@ msgid ""
 "\n"
 "Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off)."
 msgstr ""
-"Нормальные значения ~ 2-5. Это определяет максимальное число последовательных B-кадров, которые может использовать кодировщик.\n"
-"\n"
-"Большое количество обычно не помогает, если адаптивные B-кадры не установлены в «Оптимально».\n"
-"\n"
-"Базовый профиль, как это требуется для iPod и аналогичных устройств, требует чтобы для B-кадров было установлено на 0 (Выкл.)."
 
+#: ../src/ghb.m4.h:450
 msgid "<small>Pyramidal B-Frames:</small>"
-msgstr "<small>Пирамидальные B-кадры:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:451
 msgid ""
 "B-pyramid improves compression by creating a pyramidal structure (hence the name)\n"
 "of B-frames, allowing B-frames to reference each other to improve compression.\n"
 "\n"
 "Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit."
 msgstr ""
-"Пирамидальные B-кадры улучшают сжатие, создавая пирамидальную структуру (отсюда\n"
-"название)\n"
-"В-кадров, что позволяет B-кадрам ссылаться друг на друга, чтобы улучшить сжатие.\n"
-"\n"
-"Требования для Максимум B-кадров, больше 1; для адаптивных B-кадров рекомендуются «Оптимально» для выгоды полного сжатия."
 
+#: ../src/ghb.m4.h:455
 msgid "<small>Weighted P-Frames:</small>"
-msgstr "<small>Взвешенные P-кадры:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:456
 msgid ""
 "Performs extra analysis to decide upon weighting parameters for each frame.\n"
 "\n"
@@ -1771,18 +1369,13 @@ msgid ""
 "Main Profile, may have problems with Weighted P-frame prediction: the Apple TV is\n"
 "completely incompatible with it, for example."
 msgstr ""
-"Выполняет дополнительный анализ, чтобы принять решение о весовых параметрах для каждого кадра.\n"
-"\n"
-"Это немного улучшает общее сжатие и значительно улучшает качество изображения.\n"
-"\n"
-"Базовый профиль, как это требуется для iPod и подобных устройств, требует чтобы  прогнозирование\n"
-"взвешенных P-кадров было отключено. Обратите внимание, что у некоторых устройств и проигрывателей, даже тех, которые поддерживают\n"
-"основной профиль, могут возникнуть проблемы с прогнозированием взвешенных P-кадров:  например Apple TV, является\n"
-"совершенно несовместим с этим."
 
+#: ../src/ghb.m4.h:464
 msgid "8x8 Transform"
-msgstr "Преобразование 8x8 "
+msgstr ""
 
+#: ../src/ghb.m4.h:466
+#, no-c-format
 msgid ""
 "The 8x8 transform is the single most useful feature of x264 in terms of compression-per-speed.\n"
 "\n"
@@ -1790,15 +1383,13 @@ msgid ""
 "provide an unusually high visual quality benefit compared to its compression\n"
 "gain.  However, it requires High Profile, which many devices may not support."
 msgstr ""
-"Умное использование преобразований 8x8 является наиболее полезной особенностью x264 с точки зрения сжатие-скорость.\n"
-"\n"
-"Это улучшает сжатие по меньшей мере на 5% при очень малых издержках скорости и может\n"
-"обеспечить необычайно высокое качество изображения при получении выгоды в его\n"
-"сжатии. Тем не менее, она требует высокого профиля, которые многие устройства могут не поддерживать."
 
+#: ../src/ghb.m4.h:471
 msgid "CABAC Entropy Encoding"
-msgstr "Энтропийное кодирование CABAC"
+msgstr ""
 
+#: ../src/ghb.m4.h:473
+#, no-c-format
 msgid ""
 "After the encoder has done its work, it has a bunch of data that\n"
 "needs to be compressed losslessly, similar to ZIP or RAR.  H.264 provides\n"
@@ -1808,20 +1399,16 @@ msgid ""
 "If you're looking to minimize CPU requirements for video playback, disable this option.\n"
 "Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled."
 msgstr ""
-"После того как кодировщик завершит работу, у него много данных, которые\n"
-"должна быть сжаты без потерь, подобно ZIP или RAR.  H.264 обеспечивает\n"
-"для этого два варианта: CAVLC и CABAC.  CABAC декодирует намного медленнее,\n"
-"но сжимает значительно лучше (10-30%), особенно при более низком битрейте.\n"
-"\n"
-"Если хотите минимизировать требования к процессору при воспроизведении видео, отключите эту опцию.\n"
-"Базовый профиль, требуемый для iPod и аналогичных устройств, требует чтобы CABAC быть отключен."
 
+#: ../src/ghb.m4.h:480
 msgid "<small><b>Encoding Features</b></small>"
-msgstr "<small><b>Особенности кодирования</b></small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:481
 msgid "<small>Motion Est. Method:</small>"
-msgstr "<small>Метод оценки движения</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:482
 msgid ""
 "Controls the motion estimation method.\n"
 "\n"
@@ -1834,20 +1421,12 @@ msgid ""
 "Exhaustive: performs a \"dumb\" search of every pixel in a wide area.  Significantly slower for only a small compression gain.\n"
 "Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement."
 msgstr ""
-"Управляет методом оценки движения.\n"
-"\n"
-"Оценкой движения кодировщик определяет, как каждый блок пикселей переместился в кадре.\n"
-"Поиск метода движения улучшает сжатие за счет скорости.\n"
-"\n"
-"Ромб: выполняет чрезвычайно быстрый и простой поиск с помощью ромбовидной формы.\n"
-"Шестиугольник: работает несколько более эффективно, но поиск немного медленнее при использовании формы шестиугольника.\n"
-"Неравномерный мульти-шестиугольник: выполняет очень широкий поиск, используя различные модели более точного захвата сложного движения.\n"
-"Полный: выполняет «немой» поиск каждого пиксела в широкой области. Существенно медленнее, лишь с небольшим приростом сжатия.\n"
-"Полный Адамара: как  всесторонний, делает еще более точные решения. Соответственно, работает несколько медленнее, и только  для  небольшого улучшения."
 
+#: ../src/ghb.m4.h:492
 msgid "<small>Subpel ME &amp; Mode:</small>"
-msgstr "<small>Режим оценки субпикселов:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:493
 msgid ""
 "This setting controls both subpixel-precision motion estimation and mode decision methods.\n"
 "\n"
@@ -1858,18 +1437,12 @@ msgid ""
 "11 disables all early terminations in analysis.\n"
 "10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always)."
 msgstr ""
-"Этот параметр управляет субпиксельной точностью оценки движения и режимами методов решений.\n"
-"\n"
-"Субпиксельная оценка движения используется для улучшения оценки движения с точностью до пикселя, улучшая сжатие.\n"
-"Режим выбора метода используется, чтобы выбирать, как кодировать каждый блок кадра:: очень важное решение.\n"
-"Быстрый CAD метод, последующий SATD, RD, RD повышенного качества, и медленный QPRD.\n"
-"Настоятельно рекомендуется 6 или выше: Psy-RD, это очень мощная пси оптимизация, которая помогает сохранить детали, требуется RD.\n"
-"11 отключает все ранее сделанные анализы.\n"
-"10 и 11, самые мощные и самые медленные параметры, требуют адаптивное квантование (AQ-режим> 0) и треллис (Всегда)."
 
+#: ../src/ghb.m4.h:501
 msgid "<small>Motion Est. Range:</small>"
-msgstr "<small>Диапазон поиска движения:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:502
 msgid ""
 "This is the distance x264 searches from its initial guess at the\n"
 "motion of a block in order to try to find its actual motion.\n"
@@ -1878,16 +1451,12 @@ msgid ""
 "especially at HD resolutions, may benefit from higher ranges, albeit at\n"
 "a high speed cost."
 msgstr ""
-"Это расстояние поиска  x264 от предположительного начала блока\n"
-"движения, чтобы попытаться найти его фактическое движение.\n"
-"\n"
-"По умолчанию подходит для большинства содержимого, но чрезвычайно высокое движение видео,\n"
-"особенно на разрешениях HD, можно извлечь выгоду из более высоких диапазонов, хотя\n"
-"большие издержки в скорости."
 
+#: ../src/ghb.m4.h:508
 msgid "<small>Adaptive Direct Mode:</small>"
-msgstr "<small>Режим адаптивного управления:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:509
 msgid ""
 "H.264 allows for two different prediction modes, spatial and temporal, in B-frames.\n"
 "\n"
@@ -1895,15 +1464,12 @@ msgid ""
 "x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain),\n"
 "adaptively select which is better for each particular frame."
 msgstr ""
-"H.264 позволяет прогнозировать два различных режима, пространственные и временные B-кадры.\n"
-"\n"
-"Пространственный по умолчанию, он почти всегда лучше, но временной иногда бывает тоже полезен.\n"
-"x264 может, ценой небольшого уменьшения скорости (и соответственно, небольшого коэффициента усиления сжатия),\n"
-"адаптивно выбирать, какой лучше для каждого конкретного кадра."
 
+#: ../src/ghb.m4.h:514
 msgid "<small>Adaptive B-Frames:</small>"
-msgstr "<small>Адаптивные B-кадры:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:515
 msgid ""
 "x264 has a variety of algorithms to decide when to use B-frames and how many to use.\n"
 "\n"
@@ -1913,17 +1479,12 @@ msgid ""
 "Optimal mode gets slower as the maximum number of B-Frames increases,\n"
 "but makes much more accurate decisions, especially when used with B-pyramid."
 msgstr ""
-"x264 имеет множество алгоритмов, чтобы решить, когда и сколько  B-кадров следует использовать.\n"
-"\n"
-"Быстрый режим не занимает много времени, независимо от того, сколько B-кадров вы укажете.\n"
-"Тем не менее, хоть и быстро, его решения часто недостаточны.\n"
-"\n"
-"Оптимальный режим медленнее, а максимальное число B-кадров увеличенное,\n"
-"и он делает намного более точные решения, особенно при использовании B-пирамиды."
 
+#: ../src/ghb.m4.h:522
 msgid "<small>Partitions:</small>"
-msgstr "<small>Разделение на макроблоки:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:523
 msgid ""
 "Mode decision picks from a variety of options to make its decision:\n"
 "this option chooses what options those are.\n"
@@ -1931,15 +1492,13 @@ msgid ""
 "Fewer partitions to check means faster encoding, at the cost of worse\n"
 "decisions, since the best option might have been one that was turned off."
 msgstr ""
-"Режим выбирает решение из множества вариантов, чтобы сделать свое решение:\n"
-"эта опция выбирает, какие варианты использовать.\n"
-"\n"
-"Меньшее количество разделов для проверки означает более быстрое кодирование, за счет худшего\n"
-"решения,  поскольку лучший вариант возможно был тот, который был выключен."
 
+#: ../src/ghb.m4.h:528
 msgid "<small>Trellis:</small>"
-msgstr "<small>Треллис квантование:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:530
+#, no-c-format
 msgid ""
 "Trellis fine-tunes the rounding of transform coefficients to\n"
 "squeeze out 3-5% more compression at the cost of some speed.\n"
@@ -1949,46 +1508,39 @@ msgid ""
 "\n"
 "Trellis costs more speed at higher bitrates and requires CABAC."
 msgstr ""
-"Треллис настраивает коэффициент округления преобразования, чтобы\n"
-"выжать 3-5% большего сжатия, ценой некоторой скорости.\n"
-"\n"
-"Использовать «Всегда» не только во время основного процесса кодирования, но и\n"
-"при анализе, который улучшает сжатие, хотя и с большими издержками скорости.\n"
-"\n"
-"Треллис придает больше скорости с более высоким битрейтом и требует CABAC."
 
+#: ../src/ghb.m4.h:537
 msgid "<small><b>Analysis</b></small>"
-msgstr "<small><b>Анализ</b></small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:538
 msgid "<small>Adaptive Quantization Strength:</small>"
-msgstr "<small>Адаптивная сила квантования:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:539
 msgid ""
 "Adaptive quantization controls how the encoder distributes bits across the frame.\n"
 "\n"
 "Higher values take more bits away from edges and complex areas to improve areas with finer detail."
 msgstr ""
-"Адаптивное квантование контролирует, как кодировщик распределяет биты по всем  кадрам.\n"
-"\n"
-"Высокие значения считают больше битов от краев и сложных областей для улучшения участков с четкими деталями."
 
+#: ../src/ghb.m4.h:542
 msgid "<small>Psychovisual Rate Distortion:</small>"
-msgstr "<small>Психовизуальная скорость искажения:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:543
 msgid ""
 "Psychovisual rate-distortion optimization takes advantage of the characteristics of human\n"
 "vision to dramatically improve apparent detail and sharpness.\n"
 "The effect can be made weaker or stronger by adjusting the strength.\n"
 "Being an RD algorithm, it requires mode decision to be at least \"6\"."
 msgstr ""
-"Психовизуальная скорость искажения использует преимущества характеристик человеческого зрения,\n"
-"чтобы значительно улучшить детали и резкость.\n"
-"Эффект можно ослабить или усилить, регулируя силу. Алгоритм скорости искажения\n"
-"требует по меньшей мере установки режима «6»."
 
+#: ../src/ghb.m4.h:547
 msgid "<small>Psychovisual Trellis:</small>"
-msgstr "<small>Психовизуальные треллисы:</small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:548
 msgid ""
 "Psychovisual trellis is an experimental algorithm to further\n"
 "improve sharpness and detail retention beyond what Psychovisual RD does.\n"
@@ -1997,16 +1549,12 @@ msgid ""
 "grainy video or lower bitrate encodes.  Not recommended for cel animation\n"
 "and other sharp-edged graphics."
 msgstr ""
-"Психовизуальные треллисы являются экспериментальным алгоритмом, способствующим\n"
-"улучшению резкости и сохранения деталей выше, чем это делает психовизуальная скорость искажения.\n"
-"\n"
-"Рекомендуемые значения около 0,2. Более высокие значения могут помочь при очень\n"
-"зернистом видео или низким битрейте кодирования. Не рекомендуется для кель анимации кель\n"
-"и другой графики с острыми краями."
 
+#: ../src/ghb.m4.h:554
 msgid "Deblocking: "
-msgstr "Подавление блочности: "
+msgstr ""
 
+#: ../src/ghb.m4.h:555
 msgid ""
 "H.264 deblocking filter.\n"
 "\n"
@@ -2020,21 +1568,12 @@ msgid ""
 "(or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.\n"
 "The default is 0 (normal strength) for both parameters."
 msgstr ""
-"Фильтр устранения блочности H.264.\n"
-"\n"
-"h.264 имеет встроенный фильтр устранения блочности для сглаживания артефактов блочности\n"
-"после декодирования каждого кадра.  Это не только улучшает визуальное качество, но и значительно помогает сжатию. Фильтр деблокирования занимает много ресурсов процессора.\n"
-"Если хотите минимизировать требования к процессору при воспроизведении видео, отключите эту опцию.\n"
-"\n"
-"Фильтр деблокирования имеет два регулируемых параметра, «сила» (Альфа) и\n"
-"«порог» (Бета).\n"
-"Первый контролирует, насколько сильное (или слабое) деблокирование, в то время как последний определяет, сколько\n"
-"(или намного) она применяется. Более низкие значения означают меньше блочности, высокие значения означают больше блочности.\n"
-"По умолчанию 0 (нормальная сила) для обоих параметров."
 
+#: ../src/ghb.m4.h:566
 msgid "No DCT Decimate"
-msgstr "Не опустошать DCT"
+msgstr ""
 
+#: ../src/ghb.m4.h:567
 msgid ""
 "x264 normally zeroes out nearly-empty data blocks to save bits to\n"
 "be better used for some other purpose in the video.  However, this can\n"
@@ -2044,15 +1583,12 @@ msgid ""
 "Don't touch this unless you're having banding issues or other such cases\n"
 "where you are having trouble keeping fine noise."
 msgstr ""
-"x264 обычно обнуляет почти пустые блоки данных для сохранения битов, которые\n"
-"лучше будет использовать для других целей в видео. Тем не менее, иногда это\n"
-"может иметь некоторое отрицательное воздействие при сохранении тонких мелких\n"
-"частиц и размытия.\n"
-"Не касайтесь этого, если не испытываете проблем от сохранения мелких шумов."
 
+#: ../src/ghb.m4.h:574
 msgid "<small><b>Psychovisual</b></small>"
-msgstr "<small><b>Восприятие</b></small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:575
 msgid ""
 "Your selected options will appear here.\n"
 "You can edit these and add additional options.\n"
@@ -2064,325 +1600,471 @@ msgid ""
 "deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n"
 "no-fast-pskip=0:no-dct-decimate=0:cabac=1"
 msgstr ""
-"Выбранные опции будут показаны здесь.\n"
-"Вы можете их отредактировать и добавить в дополнительные опции.\n"
-"\n"
-"Значение по умолчанию не будет показано. По умолчанию это:\n"
-"ref=3:bframes=3:b-adapt=fast:direct=spatial:\n"
-"b-pyramid=normal:weightp=2:me=hex:merange=16:\n"
-"subme=7:partitions=p8x8,b8x8,i8x8,i4x4:8x8dct=1:\n"
-"deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:\n"
-"no-fast-pskip=0:no-dct-decimate=0:cabac=1"
 
+#: ../src/ghb.m4.h:584
 msgid "<small><b>Current x264 Advanced Option String</b></small>"
-msgstr "<small><b>Дополнительная строка текущей опции x264</b></small>"
+msgstr ""
 
+#: ../src/ghb.m4.h:585
 msgid "Advanced Video"
-msgstr "Дополнительно"
+msgstr ""
 
+#: ../src/ghb.m4.h:586
 msgid "Chapter Markers"
-msgstr "Маркеры глав"
+msgstr ""
 
+#: ../src/ghb.m4.h:587
 msgid "Add chapter markers to output file."
-msgstr "Добавить маркеры глав в выходной файл."
+msgstr ""
 
+#: ../src/ghb.m4.h:588 ../src/queuehandler.c:217 ../src/queuehandler.c:220
 msgid "Chapters"
-msgstr "Главы"
+msgstr ""
 
+#: ../src/ghb.m4.h:589
+msgid "Title:"
+msgstr ""
+
+#: ../src/ghb.m4.h:590
 msgid "Actors:"
-msgstr "Актеры:"
+msgstr ""
 
+#: ../src/ghb.m4.h:591
 msgid "Director:"
-msgstr "Режиссёр:"
+msgstr ""
 
+#: ../src/ghb.m4.h:592
 msgid "Release Date:"
-msgstr "Дата выпуска:"
+msgstr ""
 
+#: ../src/ghb.m4.h:593
 msgid "Comment:"
-msgstr "Комментарий:"
+msgstr ""
 
+#: ../src/ghb.m4.h:594
 msgid "Genre:"
-msgstr "Жанр:"
+msgstr ""
 
+#: ../src/ghb.m4.h:595
 msgid "Description:"
-msgstr "Описание:"
+msgstr ""
 
+#: ../src/ghb.m4.h:596
 msgid "Plot:"
-msgstr "Сюжет:"
+msgstr ""
 
+#: ../src/ghb.m4.h:597
 msgid "Tags"
-msgstr "Теги"
+msgstr ""
 
+#: ../src/ghb.m4.h:598
 msgid "Settings"
-msgstr "Настройки"
+msgstr ""
 
+#: ../src/ghb.m4.h:599
 msgid "Edit"
-msgstr "Изменить"
+msgstr ""
 
-msgid "Reload"
-msgstr "Перезагрузить"
-
+#: ../src/ghb.m4.h:600
 msgid ""
 "Mark selected queue entry as pending.\n"
 "Resets the queue job to pending and ready to run again."
 msgstr ""
-"Отметить выбранные записи очереди, как в ожидании.\n"
-"Сбросить ожидание очереди заданий и продолжить выполнять задание снова."
 
+#: ../src/ghb.m4.h:602
 msgid "Reload All"
-msgstr "Обновить все"
+msgstr ""
 
+#: ../src/ghb.m4.h:603
 msgid ""
 "Mark all queue entries as pending.\n"
 "Resets all queue jobs to pending and ready to run again."
 msgstr ""
-"Отметить все записи очереди, как в ожидании.\n"
-"Сбросить ожидание все заданий очереди и продолжить выполнять задание снова."
 
+#: ../src/ghb.m4.h:605
+msgid "Delete All"
+msgstr ""
+
+#: ../src/ghb.m4.h:606
+msgid "Delete all items in the queue."
+msgstr ""
+
+#: ../src/ghb.m4.h:607
 msgid "Save Queue"
-msgstr "Сохранить очередь"
+msgstr ""
 
+#: ../src/ghb.m4.h:608
 msgid ""
 "Save the current queue of encode jobs to a file.\n"
 "This file may be reloaded at a later time to edit your jobs and re-encode."
 msgstr ""
-"Сохранить текущую очередь заданий кодирования в файл.\n"
-"Файл можно перезагрузить в другое время, изменить задания и перекодировать."
 
+#: ../src/ghb.m4.h:610
 msgid "Load Queue File"
-msgstr "Загрузить файл очереди"
+msgstr ""
 
+#: ../src/ghb.m4.h:611
 msgid "Load a previously saved queue file."
-msgstr "Загрузить сохранённый ранее файл очереди."
+msgstr ""
 
+#: ../src/ghb.m4.h:612
+msgid "Queue"
+msgstr ""
+
+#: ../src/ghb.m4.h:613
+msgid "<b>Save As:</b>"
+msgstr ""
+
+#: ../src/ghb.m4.h:614
+msgid "Destination filename for your encode."
+msgstr ""
+
+#: ../src/ghb.m4.h:615
+msgid "<b>To:</b>"
+msgstr ""
+
+#: ../src/ghb.m4.h:616
+msgid "Destination directory for your encode."
+msgstr ""
+
+#: ../src/ghb.m4.h:617 ../src/queuehandler.c:1825
+msgid "Destination Directory"
+msgstr ""
+
+#: ../src/ghb.m4.h:618 ../src/callbacks.c:5744 ../src/callbacks.c:5754
+#: ../src/callbacks.c:5762 ../src/hb-backend.c:4052 ../src/hb-backend.c:4085
+#: ../src/hb-backend.c:4124 ../src/hb-backend.c:4155 ../src/hb-backend.c:4183
+#: ../src/hb-backend.c:4212 ../src/hb-backend.c:4262 ../src/hb-backend.c:4286
+#: ../src/hb-backend.c:4347 ../src/hb-backend.c:4388
+#: ../src/queuehandler.c:1217 ../src/queuehandler.c:1234
+#: ../src/queuehandler.c:1248 ../src/queuehandler.c:1263
 msgid "Cancel"
-msgstr "Отмена"
+msgstr ""
 
+#: ../src/ghb.m4.h:619
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
+#: ../src/ghb.m4.h:620
 msgid "Select All"
-msgstr "Выбрать все"
+msgstr ""
 
+#: ../src/ghb.m4.h:621
 msgid "Mark all titles for adding to the queue"
-msgstr "Отметить все названия для добавления в очередь"
+msgstr ""
 
+#: ../src/ghb.m4.h:622
 msgid "Clear All"
-msgstr "Очистить все"
+msgstr ""
 
+#: ../src/ghb.m4.h:623
 msgid "Unmark all titles"
-msgstr "Снять все названия"
+msgstr ""
 
+#: ../src/ghb.m4.h:624
 msgid "Destination files OK.  No duplicates detected."
-msgstr "С файлами назначения все хорошо. Дубликаты не обнаружены."
+msgstr ""
 
-msgid "Select this title for adding to the queue.\n"
-msgstr "Отметить все названия для добавления в очередь.\n"
-
+#: ../src/ghb.m4.h:625
 msgid "Preferences"
-msgstr "Параметры"
+msgstr ""
 
+#: ../src/ghb.m4.h:626
 msgid "Automatically check for updates"
-msgstr "Автоматически проверять наличие обновлений"
+msgstr ""
 
+#: ../src/ghb.m4.h:627
 msgid "When all encodes are complete"
-msgstr "Когда все кодирование завершено"
+msgstr ""
 
+#: ../src/ghb.m4.h:628
 msgid "Use automatic naming (uses modified source name)"
 msgstr ""
-"Использовать автоматический идентификатор (использует измененное исходное "
-"имя)"
 
+#: ../src/ghb.m4.h:629
 msgid "Auto-Name Template"
-msgstr "Шаблон автонаименования"
-
-msgid ""
-"Available Options: {source} {title} {chapters} {date} {time} {quality} "
-"{bitrate}"
 msgstr ""
-"Доступные параметры: {source} {title} {chapters} {date} {time} {quality} "
-"{bitrate}"
 
+#: ../src/ghb.m4.h:630
+msgid ""
+"Available Options: {source} {title} {preset} {chapters} {date} {time} "
+"{quality} {bitrate}"
+msgstr ""
+
+#: ../src/ghb.m4.h:631
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
 msgstr ""
-"Использовать дружественное iPod/iTunes расширение файла (.m4v) для MP4"
 
+#: ../src/ghb.m4.h:632
 msgid "Number of previews"
-msgstr "Количество миниатюр"
+msgstr ""
 
+#: ../src/ghb.m4.h:633
 msgid "Filter short titles (seconds)"
-msgstr "Фильтр коротких наименований (в секундах)"
+msgstr ""
 
-msgid "Show system tray icon"
-msgstr "Показывать значек в системном лотке"
-
+#: ../src/ghb.m4.h:634
 msgid "General"
-msgstr "Общие"
+msgstr ""
 
+#: ../src/ghb.m4.h:635
 msgid "Constant Quality fractional granularity"
-msgstr "Незначительная зернистость при постоянном качестве"
+msgstr ""
 
+#: ../src/ghb.m4.h:636
 msgid "Use dvdnav (instead of libdvdread)"
-msgstr "Использовать dvdnav (вместо libdvdread)"
+msgstr ""
 
+#: ../src/ghb.m4.h:637
+msgid "Monitor destination disk free space"
+msgstr ""
+
+#: ../src/ghb.m4.h:638
+msgid "Pause encoding if free disk space drops below limit"
+msgstr ""
+
+#: ../src/ghb.m4.h:639
+msgid "MB Limit"
+msgstr ""
+
+#: ../src/ghb.m4.h:640
 msgid "Put individual encode logs in same location as movie"
 msgstr ""
-"Помещать индивидуальные логи кодирования в то же расположение, что и фильм"
 
+#: ../src/ghb.m4.h:641
 msgid "Activity Log Verbosity Level"
-msgstr "Подробный журнал уровня деятельности"
+msgstr ""
 
+#: ../src/ghb.m4.h:642
 msgid "Activity Log Longevity"
-msgstr "Долговечный журнала операций"
+msgstr ""
 
+#: ../src/ghb.m4.h:643
 msgid "Scale down High Definition previews"
-msgstr "Уменьшать высокую четкость просмотра"
+msgstr ""
 
+#: ../src/ghb.m4.h:644
 msgid "Automatically Scan DVD when loaded"
-msgstr "Автоматически сканировать DVD при загрузке"
+msgstr ""
 
+#: ../src/ghb.m4.h:645
 msgid "Scans the DVD whenever a new disc is loaded"
-msgstr "Сканировать DVD после загрузки нового диска"
+msgstr ""
 
+#: ../src/ghb.m4.h:646
 msgid "Hide Advanced Video Options Tab"
-msgstr "Скрывать вкладку дополнительной настройки видео"
+msgstr ""
 
+#: ../src/ghb.m4.h:647
 msgid ""
 "Use advanced video options at your own risk.\n"
 "We recommend that you use the controls available\n"
 "on the Video tab instead."
 msgstr ""
-"Используйте дополнительные параметры видео на свой страх и риск.\n"
-"Мы рекомендуем вам использовать доступные элементы управления на\n"
-"на вкладке «Видео»."
 
+#: ../src/ghb.m4.h:650
 msgid "Delete completed jobs from queue"
-msgstr "Удалять завершённые задачи из очереди"
+msgstr ""
 
+#: ../src/ghb.m4.h:651
 msgid ""
 "By default, completed jobs remain in the queue and are marked as complete.\n"
 "Check this if you want the queue to clean itself up by deleting completed jobs."
 msgstr ""
-"По умолчанию, выполненные задания остаются в очереди и помечаются как завершенные.\n"
-"Отметьте это, если хотите очищать очередь до окончания выполнения задания."
 
+#: ../src/ghb.m4.h:653
+msgid "Use the same settings for all titles in a batch"
+msgstr ""
+
+#: ../src/ghb.m4.h:654
+msgid ""
+"When checked, every title will use the same settings when adding a\n"
+"batch of titles to the queue.\n"
+"\n"
+"Uncheck this if you want to allow changing each title's settings independently."
+msgstr ""
+
+#: ../src/ghb.m4.h:658
 msgid "Allow Tweaks"
-msgstr "Разрешить тонкие настройки"
+msgstr ""
 
+#: ../src/ghb.m4.h:659
 msgid "Allow HandBrake For Dummies"
-msgstr "Сделать HandBrake для чайников"
+msgstr ""
 
+#: ../src/ghb.m4.h:660
 msgid "Advanced"
-msgstr "Дополнительно"
+msgstr ""
 
+#: ../src/ghb.m4.h:661
 msgid "Folder Name:"
-msgstr "Название папки:"
+msgstr ""
 
+#: ../src/ghb.m4.h:662
 msgid "<b>Description</b>"
-msgstr "<b>Описание</b>"
+msgstr ""
 
+#: ../src/ghb.m4.h:663
+msgid "<span size=\"x-large\">Rename Preset</span>"
+msgstr ""
+
+#: ../src/ghb.m4.h:664
+msgid "Name:"
+msgstr ""
+
+#: ../src/ghb.m4.h:665
+msgid "Category:"
+msgstr ""
+
+#: ../src/ghb.m4.h:666
+msgid "Set the category that this preset will be shown under."
+msgstr ""
+
+#: ../src/ghb.m4.h:667
+msgid "Category Name:"
+msgstr ""
+
+#: ../src/ghb.m4.h:668
 msgid "Preset Name:"
-msgstr "Название предустановки:"
+msgstr ""
 
+#: ../src/ghb.m4.h:669
+msgid "Default Preset"
+msgstr ""
+
+#: ../src/ghb.m4.h:670
+msgid "Make this the default Preset when HandBrake starts"
+msgstr ""
+
+#: ../src/ghb.m4.h:671
 msgid "<b>Custom Picture Dimensions</b>"
-msgstr "<b>Пользовательский размер изображения</b>"
+msgstr ""
 
+#: ../src/ghb.m4.h:672
 msgid "Maximum Width:"
-msgstr "Максимальная ширина:"
+msgstr ""
 
+#: ../src/ghb.m4.h:673
 msgid "Enable maximum width limit."
-msgstr "Включить лимит максимальной ширины."
+msgstr ""
 
+#: ../src/ghb.m4.h:674
 msgid ""
 "This is the maximum width that the video will be stored at.\n"
 "\n"
 "Whenever a new source is loaded, this value will be applied if the source width is greater.\n"
 "Setting this to 0 means there is no maximum width."
 msgstr ""
-"Это максимальная ширина, в которой будет сохраняться видео.\n"
-"\n"
-"Всякий раз, когда загружается новый источник, это значение будет применяться, если ширина источника больше.\n"
-"Значение 0 означает, что максимальной ширины нет."
 
+#: ../src/ghb.m4.h:678
 msgid "Maximum Height:"
-msgstr "Максимальная высота:"
+msgstr ""
 
+#: ../src/ghb.m4.h:679
 msgid "Enable maximum height limit."
-msgstr "Включить лимит максимальной высоты."
+msgstr ""
 
+#: ../src/ghb.m4.h:680
 msgid ""
 "This is the maximum height that the video will be stored at.\n"
 "\n"
 "Whenever a new source is loaded, this value will be applied if the source height is greater.\n"
 "Setting this to 0 means there is no maximum height."
 msgstr ""
-"Это максимальная высота, в которой будет сохраняться видео.\n"
-"\n"
-"Всякий раз, когда загружается новый источник, это значение будет применяться, если высота источника больше.\n"
-"Значение 0 означает, что максимальной высоты нет."
 
+#: ../src/ghb.m4.h:684
+msgid "Preview"
+msgstr ""
+
+#: ../src/ghb.m4.h:685
 msgid "Select preview frames."
-msgstr "Выбор кадра просмотра."
+msgstr ""
 
+#: ../src/ghb.m4.h:686
 msgid ""
 "Encode and play a short sequence of video starting from the current preview "
 "position."
 msgstr ""
-"Кодировать и воспроизводить короткие последовательности видео, начиная с "
-"текущего положения просмотра."
 
+#: ../src/ghb.m4.h:687
 msgid "<b>Duration:</b>"
-msgstr "<b>Продолжительность:</b>"
+msgstr ""
 
+#: ../src/ghb.m4.h:688
 msgid "Set the duration of the live preview in seconds."
-msgstr "Установить продолжительность предварительного просмотра в секундах."
+msgstr ""
 
+#: ../src/ghb.m4.h:689
 msgid "Show Crop"
-msgstr "Показать границы обрезки"
+msgstr ""
 
+#: ../src/ghb.m4.h:690
 msgid "Show Cropped area of the preview"
-msgstr "Показать просмотр обрезанных областей"
+msgstr ""
 
-msgid "Fullscreen"
-msgstr "Полноэкранный"
+#: ../src/ghb.m4.h:691
+msgid "Source Resolution"
+msgstr ""
 
-msgid "View Fullscreen Preview"
-msgstr "Просмотр в полный экран"
+#: ../src/ghb.m4.h:692
+msgid "Reset preview window to the source video's resolution"
+msgstr ""
 
+#: ../src/ghb.m4.h:693
+msgid "_Cancel"
+msgstr ""
+
+#: ../src/ghb.m4.h:694
+msgid "_Open"
+msgstr ""
+
+#: ../src/ghb.m4.h:695
 msgid "Title Number:"
-msgstr "Количество названий:"
+msgstr ""
 
+#: ../src/ghb.m4.h:696
 msgid "Detected DVD devices:"
-msgstr "Обнаружено устройство DVD:"
+msgstr ""
 
-msgid "Setting:"
-msgstr "Настройка:"
-
+#: ../src/ghb.m4.h:697
 msgid "Import SRT"
-msgstr "Импорт SRT"
+msgstr ""
 
+#: ../src/ghb.m4.h:698
 msgid "Enable settings to import an SRT subtitle file"
-msgstr "Включить настройки импорта файла субтитров SRT"
+msgstr ""
 
+#: ../src/ghb.m4.h:699
 msgid "Embedded Subtitle List"
-msgstr "Список встроенных субтитров"
+msgstr ""
 
+#: ../src/ghb.m4.h:700
 msgid "Enable settings to select embedded subtitles"
-msgstr "Включить настройки выбранных встроенных субтитров"
+msgstr ""
 
+#: ../src/ghb.m4.h:701
+msgid "Language"
+msgstr ""
+
+#: ../src/ghb.m4.h:702
 msgid "Character Code"
-msgstr "Кодировка"
+msgstr ""
 
+#: ../src/ghb.m4.h:703
+msgid "File:"
+msgstr ""
+
+#: ../src/ghb.m4.h:704
 msgid "Offset (ms)"
-msgstr "Смещение (мс)"
+msgstr ""
 
+#: ../src/ghb.m4.h:705
 msgid ""
 "Set the language of this subtitle.\n"
 "This value will be used by players in subtitle menus."
 msgstr ""
-"Установить язык этих субтитров.\n"
-"Это значение будет использоваться проигрывателями в меню субтитров."
 
+#: ../src/ghb.m4.h:707
 msgid ""
 "Set the character code used by the SRT file you are importing.\n"
 "\n"
@@ -2390,422 +2072,165 @@ msgid ""
 "We translate the character set to UTF-8.\n"
 "The source's character code is needed in order to perform this translation."
 msgstr ""
-"Установить кодирокау символов, используемую SRT для импортируемого файла.\n"
-"\n"
-"SRT бывают для всех разновидностей кодировок.\n"
-"Мы переводим набор символов в UTF-8.\n"
-"Кодировка источника необходима для того, чтобы выполнить этот перевод."
 
+#: ../src/ghb.m4.h:712
 msgid "Select the SRT file to import."
-msgstr "Выберите файл srt для импорта."
+msgstr ""
 
+#: ../src/ghb.m4.h:713
 msgid "Srt File"
-msgstr "Файл srt"
+msgstr ""
 
+#: ../src/ghb.m4.h:714
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
 msgstr ""
-"Установить смещение в миллисекундах между видео и  метками времени SRT"
 
+#: ../src/ghb.m4.h:715
 msgid "Track"
-msgstr "Дорожка"
+msgstr ""
 
+#: ../src/ghb.m4.h:716
 msgid "List of subtitle tracks available from your source."
-msgstr "Список дорожек субтитров доступных в источнике."
+msgstr ""
 
+#: ../src/ghb.m4.h:717
 msgid "Forced Subtitles Only"
-msgstr "Только форсированные субтитры"
+msgstr ""
 
+#: ../src/ghb.m4.h:718
 msgid "Burn into video"
-msgstr "Записать в видео"
+msgstr ""
 
+#: ../src/ghb.m4.h:719
 msgid ""
 "Render the subtitle over the video.\n"
 "The subtitle will be part of the video and can not be disabled."
 msgstr ""
-"Отображение субтитров на видео.\n"
-"Субтитры будут на части видео и не могут быть отключены."
 
+#: ../src/ghb.m4.h:721
 msgid "Set Default Track"
-msgstr "Установить дорожку по умолчанию"
+msgstr ""
 
+#: ../src/ghb.m4.h:722
 msgid "Source Track"
-msgstr "Дорожка источника"
+msgstr ""
 
+#: ../src/ghb.m4.h:723
 msgid "List of audio tracks available from your source."
-msgstr "Список доступных в источнике звуковых дорожек."
+msgstr ""
 
+#: ../src/ghb.m4.h:724
 msgid "Track Name:"
-msgstr "Название дорожки:"
+msgstr ""
 
+#: ../src/ghb.m4.h:725
 msgid ""
 "Set the audio track name.\n"
 "\n"
 "Players may use this in the audio selection list."
 msgstr ""
-"Установить название звуковой дорожки.\n"
-"\n"
-"Проигрыватели могут использовать это списке выбора звука. "
 
+#: ../src/ghb.m4.h:728
 msgid "Mix"
-msgstr "Смешивание"
+msgstr ""
 
+#: ../src/ghb.m4.h:729
 msgid "Sample Rate"
-msgstr "Частота дискретизации"
+msgstr ""
 
+#: ../src/ghb.m4.h:730 ../src/audiohandler.c:1898
 msgid ""
 "<b>Dynamic Range Compression:</b> Adjust the dynamic range of the output audio track.\n"
 "\n"
 "For source audio that has a wide dynamic range (very loud and very soft sequences),\n"
 "DRC allows you to 'compress' the range by making loud sounds softer and soft sounds louder."
 msgstr ""
-"<b>Динамическое сжатие диапазона:</b>\n"
-"Для источника звука, который имеет широкий динамический диапазон. Очень громкие и очень мягкие последовательности, DRC позволяет сжимать диапазон, делая громкие разделы мягче и мягкие разделы громче."
 
+#: ../src/ghb.m4.h:734 ../src/audiohandler.c:1746
+msgid "Set the audio codec to encode this track with."
+msgstr ""
+
+#: ../src/ghb.m4.h:735 ../src/audiohandler.c:1760
+msgid "Bitrate"
+msgstr ""
+
+#: ../src/ghb.m4.h:736
 msgid "Enable bitrate setting"
-msgstr "Включить настройку битрейта"
+msgstr ""
 
+#: ../src/ghb.m4.h:737 ../src/audiohandler.c:1765
+msgid "Quality"
+msgstr ""
+
+#: ../src/ghb.m4.h:738
 msgid "Enable quality setting"
-msgstr "Включить настройку качества"
+msgstr ""
 
+#: ../src/ghb.m4.h:739 ../src/audiohandler.c:1779
+msgid "Set the bitrate to encode this track with."
+msgstr ""
+
+#: ../src/ghb.m4.h:740
 msgid ""
 "<b>Quality:</b> For output codec's that support it, adjust the quality of "
 "the output."
 msgstr ""
-"<b>Качество:</b> Для выходного кодека, который поддерживают это, установить "
-"качество вывода."
 
+#: ../src/ghb.m4.h:741
 msgid "00.0"
-msgstr "00.0"
+msgstr ""
 
+#: ../src/ghb.m4.h:742 ../src/audiohandler.c:1832
+msgid "Set the mixdown of the output audio track."
+msgstr ""
+
+#: ../src/ghb.m4.h:743 ../src/audiohandler.c:1845
+msgid "Set the sample rate of the output audio track."
+msgstr ""
+
+#: ../src/ghb.m4.h:744 ../src/audiohandler.c:1867
 msgid ""
 "<b>Audio Gain:</b> Adjust the amplification or attenuation of the output "
 "audio track."
 msgstr ""
-"<b>Усиление звука:</b> Регулирует усиление или ослабление звуковой дорожки "
-"вывода."
 
+#. Audio Gain Label
+#: ../src/ghb.m4.h:745 ../src/audiohandler.c:1877
+msgid "0dB"
+msgstr ""
+
+#. Audio DRC Label
+#: ../src/ghb.m4.h:746 ../src/audiohandler.c:413 ../src/audiohandler.c:743
+#: ../src/audiohandler.c:1150 ../src/audiohandler.c:1912
+#: ../src/callbacks.c:5432 ../src/hb-backend.c:123 ../src/hb-backend.c:201
+#: ../src/hb-backend.c:213 ../src/hb-backend.c:225 ../src/hb-backend.c:237
+#: ../src/hb-backend.c:263 ../src/hb-backend.c:275 ../src/hb-backend.c:287
+#: ../src/hb-backend.c:348
+#, c-format
+msgid "Off"
+msgstr ""
+
+#: ../src/ghb.m4.h:747
 msgid "Skip This Version"
-msgstr "Пропустить эту версию"
+msgstr ""
 
+#: ../src/ghb.m4.h:748
 msgid "Remind Me Later"
-msgstr "Напомнить позже"
+msgstr ""
 
+#: ../src/ghb.m4.h:749
 msgid "<b>A new version of HandBrake is available!</b>"
-msgstr "<b>Доступна новая версия HandBrake!</b>"
+msgstr ""
 
+#: ../src/ghb.m4.h:750
 msgid "HandBrake xxx is now available (you have yyy)."
-msgstr "Доступна новая версия HandBrake xxx (у вас версия yyy)."
+msgstr ""
 
+#: ../src/ghb.m4.h:751
 msgid "<b>Release Notes</b>"
-msgstr "<b>Заметки о релизе</b>"
-
-msgid "Burn-In Behavior*:"
-msgstr "Поведение вшитых субтитров*:"
-
-msgid "Burn-In for deficient players*:"
-msgstr "Вшитые субтитры для слабых проигрывателей*:"
-
-msgid "_Cancel"
-msgstr "_Отмена"
-
-msgid "_Open"
-msgstr "_Открыть"
-
-msgid "First Track Matching Selected Languages"
-msgstr "Первая дорожка соответствующая выбранным языкам"
-
-msgid "All Tracks Matching Selected Languages"
-msgstr "Все дорожки соответствующие выбранным языкам"
-
-msgid "Chapters:"
-msgstr "Главы:"
-
-msgid "Seconds:"
-msgstr "Секунды:"
-
-msgid "Frames:"
-msgstr "Кадры:"
-
-msgid "Do Nothing"
-msgstr "Ничего не делать"
-
-msgid "Show Notification"
-msgstr "Показать уведомление"
-
-msgid "Quit Handbrake"
-msgstr "Выйти из Handbrake"
-
-msgid "Put Computer To Sleep"
-msgstr "Перейти в спящий режим"
-
-msgid "Shutdown Computer"
-msgstr "Выключить компьютер"
-
-msgid "Week"
-msgstr "Неделя"
-
-msgid "Month"
-msgstr "Месяц"
-
-msgid "Year"
-msgstr "Год"
-
-msgid "Immortal"
-msgstr "Вечно"
-
-msgid "Never"
-msgstr "Никогда"
-
-msgid "Daily"
-msgstr "Ежедневно"
-
-msgid "Weekly"
-msgstr "Еженедельно"
-
-msgid "Monthly"
-msgstr "Ежемесячно"
-
-msgid "Default"
-msgstr "По умолчанию"
-
-msgid "Fast"
-msgstr "Быстро"
-
-msgid "Slow"
-msgstr "Медленно"
-
-msgid "Slower"
-msgstr "Медленно"
-
-msgid "Ultralight"
-msgstr "Очень легкое"
-
-msgid "Light"
-msgstr "Легкое"
-
-msgid "Medium"
-msgstr "Среднее"
-
-msgid "Strong"
-msgstr "Сильное"
-
-msgid "Film"
-msgstr "Фильм"
-
-msgid "Grain"
-msgstr "Зернистость"
-
-msgid "High Motion"
-msgstr "Высокое движение"
-
-msgid "Animation"
-msgstr "Анимация"
-
-msgid "Spatial"
-msgstr "Пространственный"
-
-msgid "Temporal"
-msgstr "Временной"
-
-msgid "Automatic"
-msgstr "Автоматически"
-
-msgid "Optimal"
-msgstr "Оптимально"
-
-msgid "Normal"
-msgstr "Обычные"
-
-msgid "Simple"
-msgstr "Простые"
-
-msgid "Smart"
-msgstr "Интеллектуальные"
-
-msgid "Diamond"
-msgstr "Ромб"
-
-msgid "Hexagon"
-msgstr "Шестиугольник"
-
-msgid "Uneven Multi-Hexagon"
-msgstr "Неравномерный мульти-шестиугольник"
-
-msgid "Exhaustive"
-msgstr "Полный"
-
-msgid "Hadamard Exhaustive"
-msgstr "Исчерпывающая Адамара"
-
-msgid "Most"
-msgstr "Большинство"
-
-msgid "Some"
-msgstr "Некоторые"
-
-msgid "All"
-msgstr "Все"
-
-msgid "Encode only"
-msgstr "Только кодирование"
-
-msgid "Always"
-msgstr "Всегда"
-
-msgid "(NTSC Film)"
-msgstr "(Фильм NTSC)"
-
-msgid "(PAL Film/Video)"
-msgstr "(Фильм/видео PAL)"
-
-msgid "(NTSC Video)"
-msgstr "(Видео NTSC)"
-
-msgid "%d - %02dh%02dm%02ds - %s"
-msgstr "%d - %02d час %02d мин %02d сек - %s"
-
-msgid "%d (%05d.MPLS) - %02dh%02dm%02ds"
-msgstr "%d (%05d.MPLS) - %02d час %02d мин %02d сек"
-
-msgid "%d (%05d.MPLS) - Unknown Length"
-msgstr "%d (%05d.MPLS) - Продолжительность неизвестна"
-
-msgid "%d - %02dh%02dm%02ds"
-msgstr "%d - %02d час %02d мин %02d сек"
-
-msgid "%d - Unknown Length"
-msgstr "%d - Продолжительность неизвестна"
-
-msgid "No Titles"
-msgstr "Без названия"
-
-msgid "No Audio"
-msgstr "Нет звука"
-
-msgid "Foreign Audio Search"
-msgstr "Поиск иностранного языка"
-
-msgid ""
-"Add an extra pass to the encode which searches\n"
-"for subtitle candidates that provide subtitles for\n"
-"segments of the audio that are in a foreign language."
 msgstr ""
-"Добавить дополнительный проход кодирования с поиском\n"
-"кандидатур для субтитров, которые обеспечат субтитрами\n"
-"сегменты звука на иностранном языке."
 
-#, c-format
-msgid "Chapter %2d"
-msgstr "Глава %2d"
-
-#, c-format
-msgid "N/A"
-msgstr "Н/Д"
-
-#, c-format
-msgid ""
-"Invalid Deinterlace Settings:\n"
-"\n"
-"%s\n"
-msgstr ""
-"Недопустимые настройки деинтерлейсинга:\n"
-"\n"
-"%s\n"
-
-#, c-format
-msgid ""
-"Invalid Detelecine Settings:\n"
-"\n"
-"%s\n"
-msgstr ""
-"Недопустимые настройки  детелесина:\n"
-"\n"
-"%s\n"
-
-#, c-format
-msgid ""
-"Invalid Decomb Settings:\n"
-"\n"
-"%s\n"
-msgstr ""
-"Недопустимые настройки устранения гребенки:\n"
-"\n"
-"%s\n"
-
-msgid ""
-"Theora is not supported in the MP4 container.\n"
-"\n"
-"You should choose a different video codec or container.\n"
-"If you continue, FFMPEG will be chosen for you."
-msgstr ""
-"Theora не поддерживается в контейнере MP4.\n"
-"\n"
-"Необходимо выбрать другой видеокодек или контейнер.\n"
-"Если продолжите, для вас будет выбран ffmpeg."
-
-msgid "Continue"
-msgstr "Продолжить"
-
-msgid "No title found.\n"
-msgstr "Название не найдено.\n"
-
-msgid ""
-"Only one subtitle may be burned into the video.\n"
-"\n"
-"You should change your subtitle selections.\n"
-"If you continue, some subtitles will be lost."
-msgstr ""
-"Только одни субтитры могут быть записаны в видео.\n"
-"\n"
-"Вы должны изменить настройки субтитров.\n"
-"Если продолжите, некоторые субтитры будут потеряны."
-
-msgid ""
-"Srt file does not exist or not a regular file.\n"
-"\n"
-"You should choose a valid file.\n"
-"If you continue, this subtitle will be ignored."
-msgstr ""
-"Srt файл не существует или неправильный файл.\n"
-"\n"
-"Вам следует выбрать правильный файл.\n"
-"Если продолжите, эти субтитры будут игнорироваться."
-
-msgid ""
-"The source does not support Pass-Thru.\n"
-"\n"
-"You should choose a different audio codec.\n"
-"If you continue, one will be chosen for you."
-msgstr ""
-"Источника не поддерживает %s автовыбор кодека.\n"
-"\n"
-"Вы должны выбрать другой кодек.\n"
-"Если вы продолжите, один из них будет выбран для вас."
-
-#, c-format
-msgid ""
-"%s is not supported in the %s container.\n"
-"\n"
-"You should choose a different audio codec.\n"
-"If you continue, one will be chosen for you."
-msgstr ""
-"%s  не поддерживается в контейнере %s.\n"
-"\n"
-"Вам следует выбрать другой кодировщик звука.\n"
-"Если продолжите, один будет выбран для вас."
-
-#, c-format
-msgid ""
-"The source audio does not support %s mixdown.\n"
-"\n"
-"You should choose a different mixdown.\n"
-"If you continue, one will be chosen for you."
-msgstr ""
-"Аудио источника не поддерживает %s микширование.\n"
-"\n"
-"Вы должны выбрать другое микширование.\n"
-"Если вы продолжите, одно из них будет выбрано для вас."
-
+#: ../src/main.c:102
 #, c-format
 msgid ""
 "<b><big>Unable to create %s.</big></b>\n"
@@ -2813,126 +2238,791 @@ msgid ""
 "Internal error. Could not parse UI description.\n"
 "%s"
 msgstr ""
-"<b><big>Не удалось создать %s.</big></b>\n"
-"\n"
-"Внутренняя ошибка. Не удалось разобрать описание пользовательского интерфейса.\n"
-"%s"
 
+#: ../src/main.c:225
 msgid "Index"
-msgstr "Индекс"
+msgstr ""
 
+#: ../src/main.c:230
+msgid "Start"
+msgstr ""
+
+#: ../src/main.c:235
 msgid "Duration"
-msgstr "Продолжительность"
+msgstr ""
 
+#: ../src/main.c:240
 msgid "Title"
-msgstr "Название"
+msgstr ""
 
+#: ../src/main.c:277
 msgid "Job Information"
-msgstr "Сведения о задании"
+msgstr ""
 
+#: ../src/main.c:348 ../src/main.c:413
 msgid "Track Information"
-msgstr "Информация о дорожке"
+msgstr ""
 
+#: ../src/main.c:468
 msgid "Preset Name"
-msgstr "Название предустановки"
+msgstr ""
 
+#: ../src/main.c:671
 msgid "The device or file to encode"
-msgstr "Устройство или файл для кодирования"
+msgstr ""
 
+#: ../src/main.c:672
 msgid "The preset values to use for encoding"
-msgstr "Использовать для кодирования заданные значения"
+msgstr ""
 
+#: ../src/main.c:673
 msgid "Spam a lot"
-msgstr "Много спама"
+msgstr ""
 
-msgid "- Transcode media formats"
-msgstr "- Форматы перекодирования"
+#: ../src/main.c:674
+msgid "The path to override user config dir"
+msgstr ""
 
-msgid "Globals"
-msgstr "Глобальные"
+#: ../src/main.c:676
+msgid "Open a console for debug output"
+msgstr ""
 
-msgid "Presets"
-msgstr "Предустановки"
+#: ../src/main.c:1165 ../src/hb-backend.c:337 ../src/queuehandler.c:929
+msgid "All"
+msgstr ""
 
-msgid "Folder"
-msgstr "Папка"
-
+#: ../src/audiohandler.c:425 ../src/audiohandler.c:739
+#: ../src/audiohandler.c:1218
 #, c-format
-msgid "%s path: (%s)"
-msgstr "%s путь: (%s)"
+msgid "%ddB"
+msgstr ""
 
+#: ../src/audiohandler.c:715 ../src/queuehandler.c:679
+msgid "Quality: "
+msgstr ""
+
+#: ../src/audiohandler.c:722
 #, c-format
-msgid "%s indices: len %d"
-msgstr "%s индексов: len %d"
+msgid "Bitrate: %dkbps\n"
+msgstr ""
 
-msgid "Type"
-msgstr "Тип"
+#: ../src/audiohandler.c:734
+#, c-format
+msgid "%.4gkHz"
+msgstr ""
 
+#: ../src/audiohandler.c:749
+#, c-format
+msgid "<small>%d - %s (%.4gkHz)</small>"
+msgstr ""
+
+#: ../src/audiohandler.c:754
+#, c-format
+msgid "Bitrate: %.4gkbps"
+msgstr ""
+
+#: ../src/audiohandler.c:760
+#, c-format
+msgid "<small>Passthrough</small>"
+msgstr ""
+
+#: ../src/audiohandler.c:769
+#, c-format
+msgid ""
+"%sGain: %s\n"
+"DRC: %s\n"
+"Track Name: %s"
+msgstr ""
+
+#: ../src/audiohandler.c:774
+#, c-format
+msgid ""
+"%sGain: %s\n"
+"DRC: %s"
+msgstr ""
+
+#: ../src/audiohandler.c:1726
+msgid ""
+"Add an audio encoder.\n"
+"Each selected source track will be encoded with all selected encoders."
+msgstr ""
+
+#: ../src/audiohandler.c:1805
+msgid ""
+"<b>Audio Quality:</b>\n"
+"For encoders that support it, adjust the quality of the output."
+msgstr ""
+
+#: ../src/audiohandler.c:1927
+msgid "Remove this audio encoder"
+msgstr ""
+
+#: ../src/callbacks.c:788 ../src/callbacks.c:2151
+msgid "Closing HandBrake will terminate encoding.\n"
+msgstr ""
+
+#: ../src/callbacks.c:1334 ../src/callbacks.c:2737 ../src/callbacks.c:4165
+#: ../src/hb-backend.c:2079 ../src/hb-backend.c:2091
+msgid "No Title Found"
+msgstr ""
+
+#: ../src/callbacks.c:1418
+msgid "Not Selected"
+msgstr ""
+
+#. This needs to be in scanning and working since scanning
+#. happens fast enough that it can be missed
+#: ../src/callbacks.c:1733 ../src/callbacks.c:4229
+msgid "Scanning ..."
+msgstr ""
+
+#: ../src/callbacks.c:1769
+msgid ""
+"Stop\n"
+"Scan"
+msgstr ""
+
+#: ../src/callbacks.c:1770
+msgid "Stop Scan"
+msgstr ""
+
+#: ../src/callbacks.c:2738
+msgid "New Video"
+msgstr ""
+
+#: ../src/callbacks.c:3521 ../src/callbacks.c:3543 ../src/callbacks.c:3562
+#: ../src/callbacks.c:3594
+#, c-format
+msgid ""
+"%s\n"
+"\n"
+"%s in %d seconds ..."
+msgstr ""
+
+#: ../src/callbacks.c:3665 ../src/callbacks.c:3707
+#, c-format
+msgid "%sYour movie will be lost if you don't continue encoding."
+msgstr ""
+
+#: ../src/callbacks.c:3668 ../src/callbacks.c:3710 ../src/queuehandler.c:1159
+msgid "Cancel Current and Stop"
+msgstr ""
+
+#: ../src/callbacks.c:3669
+msgid "Cancel Current, Start Next"
+msgstr ""
+
+#: ../src/callbacks.c:3670
+msgid "Finish Current, then Stop"
+msgstr ""
+
+#: ../src/callbacks.c:3671 ../src/callbacks.c:3711
+msgid "Continue Encoding"
+msgstr ""
+
+#: ../src/callbacks.c:3893
+#, c-format
+msgid "%d encode(s) pending"
+msgstr ""
+
+#: ../src/callbacks.c:3962 ../src/callbacks.c:4030
+#, c-format
+msgid "job %d of %d, "
+msgstr ""
+
+#: ../src/callbacks.c:3972
+#, c-format
+msgid "pass %d (subtitle scan) of %d, "
+msgstr ""
+
+#: ../src/callbacks.c:3977
+#, c-format
+msgid "pass %d of %d, "
+msgstr ""
+
+#: ../src/callbacks.c:3990
+#, c-format
+msgid "Encoding: %s%s%.2f %% (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)"
+msgstr ""
+
+#: ../src/callbacks.c:4000 ../src/callbacks.c:4040
+#, c-format
+msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
+msgstr ""
+
+#: ../src/callbacks.c:4010 ../src/callbacks.c:4049
+#, c-format
+msgid "Encoding: %s%s%.2f %%"
+msgstr ""
+
+#: ../src/callbacks.c:4036
+#, c-format
+msgid "Searching for start time, "
+msgstr ""
+
+#: ../src/callbacks.c:4114
+#, c-format
+msgid "Scanning title %d of %d..."
+msgstr ""
+
+#: ../src/callbacks.c:4118
+#, c-format
+msgid "Scanning title %d of %d preview %d..."
+msgstr ""
+
+#: ../src/callbacks.c:4238
+msgid "Paused"
+msgstr ""
+
+#: ../src/callbacks.c:4269
+msgid "Encode Done!"
+msgstr ""
+
+#: ../src/callbacks.c:4274
+msgid "Encode Canceled."
+msgstr ""
+
+#: ../src/callbacks.c:4280
+msgid "Encode Failed."
+msgstr ""
+
+#: ../src/callbacks.c:4325
+msgid "Muxing: This may take a while..."
+msgstr ""
+
+#: ../src/callbacks.c:4686
+msgid ""
+"Hide\n"
+"Queue"
+msgstr ""
+
+#: ../src/callbacks.c:5128
+msgid "Scan this DVD source"
+msgstr ""
+
+#: ../src/callbacks.c:5463
+#, c-format
+msgid "%s: %.4g (Warning: lossless)"
+msgstr ""
+
+#: ../src/callbacks.c:5500
+#, c-format
+msgid "HandBrake %s/%s is now available (you have %s/%d)."
+msgstr ""
+
+#: ../src/callbacks.c:5720
+msgid "Encode Complete"
+msgstr ""
+
+#: ../src/callbacks.c:5721
+msgid "Put down that cocktail, Your HandBrake queue is done!"
+msgstr ""
+
+#: ../src/callbacks.c:5742 ../src/callbacks.c:5752 ../src/callbacks.c:5760
+msgid "Your encode is complete."
+msgstr ""
+
+#: ../src/callbacks.c:5743
+msgid "Shutting down the computer"
+msgstr ""
+
+#: ../src/callbacks.c:5753
+msgid "Putting computer to sleep"
+msgstr ""
+
+#: ../src/callbacks.c:5761
+msgid "Quitting Handbrake"
+msgstr ""
+
+#: ../src/hb-backend.c:61 ../src/hb-backend.c:86
+msgid "First Track Matching Selected Languages"
+msgstr ""
+
+#: ../src/hb-backend.c:62 ../src/hb-backend.c:87
+msgid "All Tracks Matching Selected Languages"
+msgstr ""
+
+#: ../src/hb-backend.c:73
+msgid "Foreign Audio Subtitle Track"
+msgstr ""
+
+#: ../src/hb-backend.c:74
+msgid "First Selected Track"
+msgstr ""
+
+#: ../src/hb-backend.c:75
+msgid "Foreign Audio, then First Selected Track"
+msgstr ""
+
+#: ../src/hb-backend.c:97
+msgid "Chapters:"
+msgstr ""
+
+#: ../src/hb-backend.c:98
+msgid "Seconds:"
+msgstr ""
+
+#: ../src/hb-backend.c:99
+msgid "Frames:"
+msgstr ""
+
+#: ../src/hb-backend.c:109
+msgid "Do Nothing"
+msgstr ""
+
+#: ../src/hb-backend.c:110
+msgid "Show Notification"
+msgstr ""
+
+#: ../src/hb-backend.c:111
+msgid "Quit Handbrake"
+msgstr ""
+
+#: ../src/hb-backend.c:112
+msgid "Put Computer To Sleep"
+msgstr ""
+
+#: ../src/hb-backend.c:113
+msgid "Shutdown Computer"
+msgstr ""
+
+#: ../src/hb-backend.c:124 ../src/hb-backend.c:253
+msgid "Automatic"
+msgstr ""
+
+#: ../src/hb-backend.c:125
+msgid "Loose"
+msgstr ""
+
+#: ../src/hb-backend.c:126 ../src/hb-backend.c:338
+msgid "Custom"
+msgstr ""
+
+#: ../src/hb-backend.c:162
+msgid "Week"
+msgstr ""
+
+#: ../src/hb-backend.c:163
+msgid "Month"
+msgstr ""
+
+#: ../src/hb-backend.c:164
+msgid "Year"
+msgstr ""
+
+#: ../src/hb-backend.c:165
+msgid "Immortal"
+msgstr ""
+
+#: ../src/hb-backend.c:175
+msgid "Never"
+msgstr ""
+
+#: ../src/hb-backend.c:176
+msgid "Daily"
+msgstr ""
+
+#: ../src/hb-backend.c:177
+msgid "Weekly"
+msgstr ""
+
+#: ../src/hb-backend.c:178
+msgid "Monthly"
+msgstr ""
+
+#: ../src/hb-backend.c:202
+msgid "Decomb"
+msgstr ""
+
+#: ../src/hb-backend.c:203
+msgid "Yadif"
+msgstr ""
+
+#: ../src/hb-backend.c:214
+msgid "NLMeans"
+msgstr ""
+
+#: ../src/hb-backend.c:215
+msgid "HQDN3D"
+msgstr ""
+
+#: ../src/hb-backend.c:226
+msgid "Unsharp"
+msgstr ""
+
+#: ../src/hb-backend.c:227
+msgid "Lapsharp"
+msgstr ""
+
+#: ../src/hb-backend.c:238
+msgid "90 Degrees"
+msgstr ""
+
+#: ../src/hb-backend.c:239
+msgid "180 Degrees"
+msgstr ""
+
+#: ../src/hb-backend.c:240
+msgid "270 Degrees"
+msgstr ""
+
+#: ../src/hb-backend.c:251
+msgid "Spatial"
+msgstr ""
+
+#: ../src/hb-backend.c:252
+msgid "Temporal"
+msgstr ""
+
+#: ../src/hb-backend.c:264
+msgid "Fast"
+msgstr ""
+
+#: ../src/hb-backend.c:265
+msgid "Optimal"
+msgstr ""
+
+#: ../src/hb-backend.c:276
+msgid "Strict"
+msgstr ""
+
+#: ../src/hb-backend.c:277
+msgid "Normal"
+msgstr ""
+
+#: ../src/hb-backend.c:288
+msgid "Simple"
+msgstr ""
+
+#: ../src/hb-backend.c:289
+msgid "Smart"
+msgstr ""
+
+#: ../src/hb-backend.c:299
+msgid "Diamond"
+msgstr ""
+
+#: ../src/hb-backend.c:300
+msgid "Hexagon"
+msgstr ""
+
+#: ../src/hb-backend.c:301
+msgid "Uneven Multi-Hexagon"
+msgstr ""
+
+#: ../src/hb-backend.c:302
+msgid "Exhaustive"
+msgstr ""
+
+#: ../src/hb-backend.c:303
+msgid "Hadamard Exhaustive"
+msgstr ""
+
+#: ../src/hb-backend.c:313
+msgid "0: SAD, no subpel"
+msgstr ""
+
+#: ../src/hb-backend.c:314
+msgid "1: SAD, qpel"
+msgstr ""
+
+#: ../src/hb-backend.c:315
+msgid "2: SATD, qpel"
+msgstr ""
+
+#: ../src/hb-backend.c:316
+msgid "3: SATD: multi-qpel"
+msgstr ""
+
+#: ../src/hb-backend.c:317
+msgid "4: SATD, qpel on all"
+msgstr ""
+
+#: ../src/hb-backend.c:318
+msgid "5: SATD, multi-qpel on all"
+msgstr ""
+
+#: ../src/hb-backend.c:319
+msgid "6: RD in I/P-frames"
+msgstr ""
+
+#: ../src/hb-backend.c:320
+msgid "7: RD in all frames"
+msgstr ""
+
+#: ../src/hb-backend.c:321
+msgid "8: RD refine in I/P-frames"
+msgstr ""
+
+#: ../src/hb-backend.c:322
+msgid "9: RD refine in all frames"
+msgstr ""
+
+#: ../src/hb-backend.c:323
+msgid "10: QPRD in all frames"
+msgstr ""
+
+#: ../src/hb-backend.c:324
+msgid "11: No early terminations in analysis"
+msgstr ""
+
+#: ../src/hb-backend.c:334
+msgid "Most"
+msgstr ""
+
+#: ../src/hb-backend.c:336
+msgid "Some"
+msgstr ""
+
+#: ../src/hb-backend.c:349
+msgid "Encode only"
+msgstr ""
+
+#: ../src/hb-backend.c:350
+msgid "Always"
+msgstr ""
+
+#: ../src/hb-backend.c:1373 ../src/hb-backend.c:1433 ../src/hb-backend.c:1512
+msgid "Same as source"
+msgstr ""
+
+#: ../src/hb-backend.c:1526
+msgid "(NTSC Film)"
+msgstr ""
+
+#: ../src/hb-backend.c:1530
+msgid "(PAL Film/Video)"
+msgstr ""
+
+#: ../src/hb-backend.c:1534
+msgid "(NTSC Video)"
+msgstr ""
+
+#: ../src/hb-backend.c:2068
+#, c-format
+msgid "%s - (%05d.MPLS)"
+msgstr ""
+
+#: ../src/hb-backend.c:2098
+#, c-format
+msgid "%3d - %02dh%02dm%02ds - %s"
+msgstr ""
+
+#: ../src/hb-backend.c:2117
+#, c-format
+msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
+msgstr ""
+
+#: ../src/hb-backend.c:2123
+#, c-format
+msgid "%3d - (%05d.MPLS)"
+msgstr ""
+
+#: ../src/hb-backend.c:2129
+#, c-format
+msgid "%3d - %02dh%02dm%02ds"
+msgstr ""
+
+#: ../src/hb-backend.c:2163
+msgid "No Titles"
+msgstr ""
+
+#. No audio. set some default
+#: ../src/hb-backend.c:2444
+msgid "No Audio"
+msgstr ""
+
+#: ../src/hb-backend.c:2910
+msgid "Any"
+msgstr ""
+
+#: ../src/hb-backend.c:4041
+#, c-format
+msgid ""
+"Invalid Detelecine Settings:\n"
+"\n"
+"Preset:\t%s\n"
+"Custom:\t%s\n"
+msgstr ""
+
+#: ../src/hb-backend.c:4048
+#, c-format
+msgid ""
+"Invalid Detelecine Settings:\n"
+"\n"
+"Preset:\t%s\n"
+msgstr ""
+
+#: ../src/hb-backend.c:4074
+#, c-format
+msgid ""
+"Invalid Comb Detect Settings:\n"
+"\n"
+"Preset:\t%s\n"
+"Custom:\t%s\n"
+msgstr ""
+
+#: ../src/hb-backend.c:4081
+#, c-format
+msgid ""
+"Invalid Comb Detect Settings:\n"
+"\n"
+"Preset:\t%s\n"
+msgstr ""
+
+#: ../src/hb-backend.c:4110
+#, c-format
+msgid ""
+"Invalid Deinterlace Settings:\n"
+"\n"
+"Filter:\t%s\n"
+"Preset:\t%s\n"
+"Custom:\t%s\n"
+msgstr ""
+
+#: ../src/hb-backend.c:4119
+#, c-format
+msgid ""
+"Invalid Deinterlace Settings:\n"
+"\n"
+"Filter:\t%s\n"
+"Preset:\t%s\n"
+msgstr ""
+
+#: ../src/hb-backend.c:4148
+#, c-format
+msgid ""
+"Invalid Denoise Settings:\n"
+"\n"
+"Filter:\t%s\n"
+"Preset:\t%s\n"
+"Tune:\t%s\n"
+"Custom:\t%s\n"
+msgstr ""
+
+#: ../src/hb-backend.c:4176
+#, c-format
+msgid ""
+"Invalid Sharpen Settings:\n"
+"\n"
+"Filter:\t%s\n"
+"Preset:\t%s\n"
+"Tune:\t%s\n"
+"Custom:\t%s\n"
+msgstr ""
+
+#: ../src/hb-backend.c:4208
+#, c-format
+msgid ""
+"Theora is not supported in the MP4 container.\n"
+"\n"
+"You should choose a different video codec or container.\n"
+"If you continue, FFMPEG will be chosen for you."
+msgstr ""
+
+#: ../src/hb-backend.c:4212 ../src/hb-backend.c:4262 ../src/hb-backend.c:4286
+#: ../src/hb-backend.c:4347 ../src/hb-backend.c:4388
+msgid "Continue"
+msgstr ""
+
+#. No valid title, stop right there
+#: ../src/hb-backend.c:4237 ../src/hb-backend.c:4311
+msgid "No title found.\n"
+msgstr ""
+
+#: ../src/hb-backend.c:4258
+#, c-format
+msgid ""
+"Only one subtitle may be burned into the video.\n"
+"\n"
+"You should change your subtitle selections.\n"
+"If you continue, some subtitles will be lost."
+msgstr ""
+
+#: ../src/hb-backend.c:4282
+#, c-format
+msgid ""
+"SRT file does not exist or not a regular file.\n"
+"\n"
+"You should choose a valid file.\n"
+"If you continue, this subtitle will be ignored."
+msgstr ""
+
+#: ../src/hb-backend.c:4343
+#, c-format
+msgid ""
+"The source does not support Pass-Thru.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+
+#: ../src/hb-backend.c:4384
+#, c-format
+msgid ""
+"%s is not supported in the %s container.\n"
+"\n"
+"You should choose a different audio codec.\n"
+"If you continue, one will be chosen for you."
+msgstr ""
+
+#: ../src/presets.c:1177
+msgid "ghb_presets_menu_init: Failed to find presets folder."
+msgstr ""
+
+#: ../src/presets.c:1333
 msgid "Failed to find parent folder when adding child."
-msgstr "Не удалось найти родительскую папку."
-
-msgid "Failed to find parent folder while adding child."
-msgstr "Не удалось найти родительскую папку."
-
-#, c-format
-msgid "Can't map language value: (%s)"
-msgstr "Не удается отобразить значение языка: (%s)"
-
-#, c-format
-msgid "Can't map value: (%s)"
-msgstr "Не удается отобразить значение: (%s)"
-
-msgid "Subtitles"
-msgstr "Субтитры"
-
-msgid ""
-"%s: Folder already exists.\n"
-"You can not replace it with a preset."
 msgstr ""
-"%s: Папка уже существует.\n"
-"Вы не можете изменить эту папку."
 
+#: ../src/presets.c:1807
+#, c-format
 msgid ""
-"%s: Preset already exists.\n"
-"You can not replace it with a folder."
+"Presets found are newer than what is supported by this version of HandBrake!\n"
+"\n"
+"Would you like to continue?"
 msgstr ""
-"%s: Предустановка уже существует.\n"
-"Вы не можете изменить это  с папки."
 
-msgid "Import Preset"
-msgstr "Импорт предустановки"
+#: ../src/presets.c:1810
+msgid "Get me out of here!"
+msgstr ""
 
+#: ../src/presets.c:1810
+msgid "Load backup presets"
+msgstr ""
+
+#: ../src/presets.c:1956
 msgid "All (*)"
-msgstr "Все (*)"
+msgstr ""
 
-msgid "Presets (*.plist)"
-msgstr "Предустановки (*.plist)"
+#: ../src/presets.c:1961
+msgid "Presets (*.json)"
+msgstr ""
 
+#: ../src/presets.c:1967
+msgid "Legacy Presets (*.plist)"
+msgstr ""
+
+#: ../src/presets.c:2062
 msgid "Export Preset"
-msgstr "Экспорт предустановки"
+msgstr ""
 
+#: ../src/presets.c:2383
+#, c-format
 msgid ""
 "Confirm deletion of %s:\n"
 "\n"
 "%s"
 msgstr ""
-"Хотите удалить %s?\n"
-"\n"
-"%s"
 
+#: ../src/presets.c:2384
 msgid "folder"
-msgstr "папку"
+msgstr ""
 
+#: ../src/presets.c:2384
 msgid "preset"
-msgstr "Предустановка"
+msgstr ""
 
-msgid "No selection???  Perhaps unselected."
-msgstr "Нет выбора ??? Возможно, не выбрано."
-
-#, c-format
-msgid "Gstreamer Error: %s"
-msgstr "Ошибка Gstreamer: %s"
-
+#: ../src/preview.c:485
 #, c-format
 msgid ""
 "Missing GStreamer plugin\n"
@@ -2940,211 +3030,263 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Отсутствует плагин GStreamer\n"
-"Аудио или видео не сможет проигрываться, как ожидалось\n"
-"\n"
-"%s"
 
-msgid "Done"
-msgstr "Готово"
-
-msgid "Windowed"
-msgstr "Оконный"
-
+#: ../src/queuehandler.c:222
 msgid "Seconds"
-msgstr "Секунды"
+msgstr ""
 
+#: ../src/queuehandler.c:224
 msgid "Frames"
-msgstr "Кадры"
+msgstr ""
 
+#: ../src/queuehandler.c:228
 #, c-format
 msgid ""
 "<big><b>%s</b></big> <small>(Title %d, %s %d through %d, 2 Video Passes) -->"
 " %s</small>"
 msgstr ""
-"<big><b>%s</b></big> <small>(Название %d, %s %d по %d, 2 прохода видео) --> "
-"%s</small>"
 
+#: ../src/queuehandler.c:236
 #, c-format
 msgid ""
 "<big><b>%s</b></big> <small>(Title %d, %s %d through %d) --> %s</small>"
-msgstr "<big><b>%s</b></big> <small>(Название %d, %s %d по %d) --> %s</small>"
+msgstr ""
 
+#: ../src/queuehandler.c:299
 #, c-format
 msgid "<b>Modified Preset Based On:</b> <small>%s</small>\n"
-msgstr "<b>Изменен шаблон на основе:</b> <small>%s</small>\n"
+msgstr ""
 
+#: ../src/queuehandler.c:303
 #, c-format
 msgid "<b>Preset:</b> <small>%s</small>\n"
-msgstr "<b>Предустановка:</b> <small>%s</small>\n"
+msgstr ""
 
+#. Next line in the display (Container type)
+#. Format: XXX Container
+#: ../src/queuehandler.c:308
 #, c-format
 msgid "<b>Format:</b> <small>%s Container</small>\n"
-msgstr "<b>Формат:</b> <small>Контейнер %s</small>\n"
+msgstr ""
 
+#: ../src/queuehandler.c:321
 msgid "<b>Container Options:</b><small>"
-msgstr "<b>Параметры контейнера:</b><small>"
+msgstr ""
 
+#: ../src/queuehandler.c:324
 #, c-format
 msgid "%sChapter Markers"
-msgstr "%sМаркеры глав"
+msgstr ""
 
+#: ../src/queuehandler.c:329
 #, c-format
 msgid "%siPod 5G Support"
-msgstr "%sПоддержка iPod 5G"
+msgstr ""
 
+#: ../src/queuehandler.c:334
 #, c-format
 msgid "%sWeb Optimized"
-msgstr "%sОптимизация для интернет-трансляции"
+msgstr ""
 
-#, c-format
-msgid "%sLarge File Size (>4GB)"
-msgstr "%sБольшой размер файла (>4GB)"
-
+#: ../src/queuehandler.c:343
 #, c-format
 msgid "<b>Destination:</b> <small>%s</small>\n"
-msgstr "<b>Назначение:</b> <small>%s</small>\n"
+msgstr ""
 
+#: ../src/queuehandler.c:367
 msgid "(Aspect Preserved)"
-msgstr "(Соотношение сохранилось)"
+msgstr ""
 
+#: ../src/queuehandler.c:371
 msgid "(Aspect Lost)"
-msgstr "(Соотношение потерялось)"
+msgstr ""
 
+#: ../src/queuehandler.c:376
 msgid "(Anamorphic)"
-msgstr "(Анаморфотный)"
+msgstr ""
 
+#: ../src/queuehandler.c:380
 msgid "(Custom Anamorphic)"
-msgstr "(Пользовательский анаморфотный)"
+msgstr ""
 
+#: ../src/queuehandler.c:390
 msgid "<b>Picture:</b> <small>"
-msgstr "<b>Изображение:</b><small>"
+msgstr ""
 
+#: ../src/queuehandler.c:391
 #, c-format
 msgid "Source: %d x %d, Output %d x %d %s, Crop %d:%d:%d:%d"
-msgstr "Источник: %d x %d, Вывод %d x %d %s, Обрезка %d:%d:%d:%d"
+msgstr ""
 
+#: ../src/queuehandler.c:399
 #, c-format
 msgid ", Display %d x %d"
-msgstr ", Дисплей %d x %d"
+msgstr ""
 
+#: ../src/queuehandler.c:448
 msgid "<b>Filters:</b><small>"
-msgstr "<b>Фильтры:</b><small>"
+msgstr ""
 
+#: ../src/queuehandler.c:451
 #, c-format
 msgid "%sDetelecine"
-msgstr "%sДетелесин"
+msgstr ""
 
+#: ../src/queuehandler.c:460
 #, c-format
-msgid "%sDecomb"
-msgstr "%sУстранение гребенки"
+msgid "%s%s:"
+msgstr ""
 
+#: ../src/queuehandler.c:475
 #, c-format
-msgid "%sDeinterlace"
-msgstr "%sДеинтерлейсинг"
+msgid "%sDenoise %s:"
+msgstr ""
 
-#, c-format
-msgid "%sDenoise Filter %s:"
-msgstr "%sФильтр шумоподавления %s:"
-
+#: ../src/queuehandler.c:497
 #, c-format
 msgid "%sDeblock: %d"
-msgstr "%sУровень блочности: %d"
+msgstr ""
 
+#: ../src/queuehandler.c:502
 #, c-format
 msgid "%sGrayscale"
-msgstr "%sЧёрно-белое"
+msgstr ""
 
+#: ../src/queuehandler.c:515
 #, c-format
 msgid "<b>Video:</b> <small>%s"
-msgstr "<b>Видео:</b> <small>%s"
+msgstr ""
 
+#: ../src/queuehandler.c:523
+msgid "(constant)"
+msgstr ""
+
+#: ../src/queuehandler.c:525
+msgid "(variable)"
+msgstr ""
+
+#: ../src/queuehandler.c:526
 #, c-format
 msgid ", Framerate: %s %s"
-msgstr ", Частота кадров: %s %s"
+msgstr ""
 
+#: ../src/queuehandler.c:532
 #, c-format
 msgid ", Framerate: Peak %s (may be lower)"
-msgstr ", Частота кадров: Пик %s (может быть ниже)"
+msgstr ""
 
+#: ../src/queuehandler.c:536
 #, c-format
 msgid ", Framerate: %s (constant frame rate)"
-msgstr ", Частота кадров: %s (включает постоянную частоту кадров)"
+msgstr ""
 
+#: ../src/queuehandler.c:539
 msgid "Error"
-msgstr "Ошибка"
+msgstr ""
 
+#: ../src/queuehandler.c:546
 msgid "Bitrate:"
-msgstr "Битрейт:"
+msgstr ""
 
-msgid "Bitrate"
-msgstr "Битрейт"
+#: ../src/queuehandler.c:547
+msgid "kbps"
+msgstr ""
 
-msgid "Quality"
-msgstr "Качество"
-
+#: ../src/queuehandler.c:567
 msgid "<b>Turbo 1st Pass:</b> <small>On</small>\n"
-msgstr "<b>Turbo 1 проход:</b> <small>На</small>\n"
+msgstr ""
 
+#: ../src/queuehandler.c:592
 #, c-format
 msgid "<b>Video Options:</b> <small>Preset: %s</small>"
-msgstr "<b>Параметры видео:</b> <small>Предустановка: %s</small>"
+msgstr ""
 
+#: ../src/queuehandler.c:596
 msgid "<small> - Tune: "
-msgstr "<small> - Настройки: "
+msgstr ""
 
+#: ../src/queuehandler.c:619
 #, c-format
 msgid "<small> - Profile: %s</small>"
-msgstr "<small> - Профиль: %s</small>"
+msgstr ""
 
+#: ../src/queuehandler.c:623
 #, c-format
 msgid "<small> - Level: %s</small>"
-msgstr "<small> - Уровень: %s</small>"
+msgstr ""
 
+#: ../src/queuehandler.c:632 ../src/queuehandler.c:642
 #, c-format
 msgid "<b>Advanced Options:</b> <small>%s</small>\n"
-msgstr "<b>Дополнительные опции:</b> <small>%s</small>\n"
+msgstr ""
 
+#: ../src/queuehandler.c:659
 msgid "<b>Audio:</b> <small>"
-msgstr "<b>Аудио:</b> <small>"
+msgstr ""
 
+#: ../src/queuehandler.c:663
 #, c-format
 msgid "<b>Audio Tracks: %d</b><small>"
-msgstr "<b>Звуковые дорожки: %d</b><small>"
+msgstr ""
 
+#: ../src/queuehandler.c:684
 #, c-format
 msgid "Bitrate: %d"
-msgstr "Битрейт: %d"
-
-#, c-format
-msgid "%s --> Encoder: %s"
-msgstr "%s --> Кодировщик: %s"
-
-#, c-format
-msgid "%s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"
 msgstr ""
-"%s --> Кодировщик: %s, Микширование: %s, Частота дискредитации: %s, %s"
 
+#: ../src/queuehandler.c:702
+#, c-format
+msgid "%d - %s --> Encoder: %s"
+msgstr ""
+
+#: ../src/queuehandler.c:707
+#, c-format
+msgid "%d - %s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"
+msgstr ""
+
+#: ../src/queuehandler.c:733
 msgid "<b>Subtitle:</b> "
-msgstr "<b>Субтитры:</b>"
+msgstr ""
 
+#: ../src/queuehandler.c:737
 #, c-format
 msgid "<b>Subtitle Tracks: %d</b>\n"
-msgstr "<b>Дорожки субтитров: %d</b>\n"
+msgstr ""
 
-msgid " (Force)"
-msgstr " (Принудительные)"
+#: ../src/queuehandler.c:751 ../src/queuehandler.c:778
+msgid " (Forced Only)"
+msgstr ""
 
+#: ../src/queuehandler.c:752 ../src/queuehandler.c:779
 msgid " (Burn)"
-msgstr " (Записать)"
+msgstr ""
 
+#: ../src/queuehandler.c:753 ../src/queuehandler.c:780
 msgid " (Default)"
-msgstr " (По умолчанию)"
+msgstr ""
 
+#: ../src/queuehandler.c:787
 #, c-format
-msgid "<small> %s (%s), %s, Offset (ms) %d%s</small>\n"
-msgstr "<small> %s (%s), %s, Смещение (мс)  %d%s</small>\n"
+msgid "<small> %s, Offset (ms) %d%s</small>\n"
+msgstr ""
 
+#: ../src/queuehandler.c:1152
+#, c-format
+msgid ""
+"%sThe destination filesystem is almost full: %<PRIu64>MB free.\n"
+"Destination: %s\n"
+"Encode may be incomplete if you proceed.\n"
+msgstr ""
+
+#: ../src/queuehandler.c:1157
+msgid "Resume, I've fixed the problem"
+msgstr ""
+
+#: ../src/queuehandler.c:1158
+msgid "Resume, Don't tell me again"
+msgstr ""
+
+#: ../src/queuehandler.c:1212
 #, c-format
 msgid ""
 "Destination: %s\n"
@@ -3152,47 +3294,28 @@ msgid ""
 "Another queued job has specified the same destination.\n"
 "Do you want to overwrite?"
 msgstr ""
-"Назначение: %s\n"
-"\n"
-"Другое задание в очереди имеет это же назначение.\n"
-"Хотите его перезаписать?"
 
+#: ../src/queuehandler.c:1217 ../src/queuehandler.c:1263
 msgid "Overwrite"
-msgstr "Перезаписать"
+msgstr ""
 
+#: ../src/queuehandler.c:1230
 #, c-format
 msgid ""
 "Destination: %s\n"
 "\n"
 "This is not a valid directory."
 msgstr ""
-"Назначение: %s\n"
-"\n"
-"Это не допустимый каталог."
 
+#: ../src/queuehandler.c:1244
 #, c-format
 msgid ""
 "Destination: %s\n"
 "\n"
 "Can not read or write the directory."
 msgstr ""
-"Назначение: %s\n"
-"\n"
-"Не удается чтение или запись в папку."
 
-#, c-format
-msgid ""
-"Destination filesystem is almost full: %uM free\n"
-"\n"
-"Encode may be incomplete if you proceed.\n"
-msgstr ""
-"Файловая система почти заполнена: %uM свободно\n"
-"\n"
-"Кодирование может быть неполным, если продолжите.\n"
-
-msgid "Proceed"
-msgstr "Продолжить"
-
+#: ../src/queuehandler.c:1258
 #, c-format
 msgid ""
 "Destination: %s\n"
@@ -3200,137 +3323,74 @@ msgid ""
 "File already exists.\n"
 "Do you want to overwrite?"
 msgstr ""
-"Назначение: %s\n"
-"\n"
-"Файл уже существует.\n"
-"Хотите его переписать?"
 
-msgid ""
-"<span foreground='red' weight='bold'>Duplicate destination files detected.\n"
-"Duplicates will not be added to the queue.</span>"
+#: ../src/queuehandler.c:1791
+msgid "Select this title for adding to the queue.\n"
 msgstr ""
-"<span foreground='red' weight='bold'>Обнаружены повторяющиеся файлы назначения.\n"
-"Дубликаты не будут добавлены в очередь.</span>"
 
+#. Title label
+#: ../src/queuehandler.c:1799
 msgid "No Title"
-msgstr "Без названия"
+msgstr ""
 
+#: ../src/queuehandler.c:1809
 msgid ""
 "There is another title with the same destination file name.\n"
 "This title will not be added to the queue unless you change\n"
 "the output file name.\n"
 msgstr ""
-"Существует еще одно название с тем же именем файла назначения.\n"
-"Это название не будет добавлено в очередь, если не изменить\n"
-"имя выходного файла.\n"
 
-msgid "Stop"
-msgstr "Остановить"
+#: ../src/queuehandler.c:2334
+msgid ""
+"Stop\n"
+"Encoding"
+msgstr ""
 
+#: ../src/queuehandler.c:2335 ../src/queuehandler.c:2361
 msgid "Stop Encoding"
-msgstr "Остановить кодирование"
+msgstr ""
 
-msgid "S_top Encoding"
-msgstr "О_становить кодирование"
+#: ../src/queuehandler.c:2347
+msgid ""
+"Resume\n"
+"Encoding"
+msgstr ""
 
-msgid "Resume"
-msgstr "Продолжить"
-
+#: ../src/queuehandler.c:2348 ../src/queuehandler.c:2372
 msgid "Resume Encoding"
-msgstr "Продолжить кодирование"
+msgstr ""
 
+#: ../src/queuehandler.c:2360
+msgid "S_top Encoding"
+msgstr ""
+
+#: ../src/queuehandler.c:2371
 msgid "_Resume Encoding"
-msgstr "_Продолжить кодирование"
+msgstr ""
 
-msgid "S_top Queue"
-msgstr "О_становить очередь"
-
-msgid "_Start Queue"
-msgstr "_Запустить очередь"
-
-msgid "_Resume Queue"
-msgstr "_Продолжить очередь"
-
-msgid "Resume Queue"
-msgstr "Продолжить очередь"
-
+#: ../src/queuehandler.c:2410
 msgid ""
 "You are currently encoding.  What would you like to do?\n"
 "\n"
 msgstr ""
-"Вы сейчас кодируете. Что бы вы хотели сделать?\n"
-"\n"
 
-#, c-format
-msgid ""
-"You have %d unfinished job(s) in a saved queue.\n"
-"\n"
-"Would you like to reload them?"
-msgstr ""
-"У вас есть %d незаконченное задание(я) в сохраненной очереди.\n"
-"\n"
-"Хотите их перезапустить?"
-
-msgid "No"
-msgstr "Нет"
-
-msgid "Yes"
-msgstr "Да"
-
-#, c-format
-msgid "Usage: %s infile [outfile]\n"
-msgstr "Используется: %s infile [outfile]\n"
-
-#, c-format
-msgid "Offset: %dms"
-msgstr "Смещение: %dms"
-
-msgid "Burned Into Video"
-msgstr "Сведения о записываемом видео"
-
-msgid "Passthrough"
-msgstr "Передача"
-
-msgid "through"
-msgstr "по"
-
-msgid "(Forced Subtitles Only)"
-msgstr "(Только форсированные субтитры)"
-
-msgid "(Default)"
-msgstr "(По умолчанию)"
-
-msgid "Error!"
-msgstr "Ошибка!"
-
+#: ../src/subtitlehandler.c:1280
 #, c-format
 msgid "Preferred Language: %s"
-msgstr "Предпочитаемый язык: %s"
+msgstr ""
 
+#: ../src/subtitlehandler.c:1294
 #, c-format
 msgid "Add %s subtitle track if default audio is not %s"
-msgstr "Добавить %s дорожку субтитров, если не звука по умолчанию %s"
+msgstr ""
 
+#: ../src/subtitlehandler.c:1299
 #, c-format
-msgid "Type %s"
-msgstr "Тип  %s"
+msgid "Add subtitle track if default audio is not your preferred language"
+msgstr ""
 
-#, c-format
-msgid "Type %s value %s"
-msgstr "Тип %s значение %s"
-
-#, c-format
-msgid "Type %s value %d"
-msgstr "Тип %s значение %d"
-
-#, c-format
-msgid "Type %s value %<PRId64>"
-msgstr "Тип %s значение %<PRId64>"
-
-#, c-format
-msgid "Type %s value %f"
-msgstr "Тип %s значение %f"
-
+#: ../src/videohandler.c:207 ../src/videohandler.c:226
+#: ../src/x264handler.c:173
 #, c-format
 msgid ""
 "%s\n"
@@ -3338,11 +3398,9 @@ msgid ""
 "Expanded Options:\n"
 "\"%s\""
 msgstr ""
-"%s\n"
-"\n"
-"Расширенные параметры:\n"
-"«%s»"
 
+#: ../src/videohandler.c:210 ../src/videohandler.c:229
+#: ../src/x264handler.c:176
 #, c-format
 msgid ""
 "%s\n"
@@ -3350,391 +3408,3 @@ msgid ""
 "Expanded Options:\n"
 "\"\""
 msgstr ""
-"%s\n"
-"\n"
-"Расширенные параметры:\n"
-"«»"
-
-msgid "Any"
-msgstr "Любой"
-
-msgid "0: SAD, no subpel"
-msgstr "0: SAD, без субпиксельной"
-
-msgid "4: SATD, qpel on all"
-msgstr "4: SATD, qpel во всех"
-
-msgid "5: SATD, multi-qpel on all"
-msgstr "5: SATD, multi-qpel во всех"
-
-msgid "6: RD in I/P-frames"
-msgstr "6: RD в I/P-кадрах"
-
-msgid "7: RD in all frames"
-msgstr "7: RD во всех кадрах"
-
-msgid "8: RD refine in I/P-frames"
-msgstr "8: RD улучшать в I/P-кадрах"
-
-msgid "9: RD refine in all frames"
-msgstr "9: RD улучшать во всех кадрах"
-
-msgid "10: QPRD in all frames"
-msgstr "10: QPRD во всех кадрах"
-
-msgid "11: No early terminations in analysis"
-msgstr "11: Без ранние сделанных анализов"
-
-msgid ""
-"Add \"Foreign Audio Search\" when the default audio track is your preferred language.\n"
-"This search pass finds short sequences of foreign audio and provides subtitles for them.\n"
-"\n"
-"This option requires a language to be set in the Selected Languages list."
-msgstr ""
-"Добавить «Поиск иностранного языка», когда для звуковой дорожки у вас выбран предпочитаемый язык по умолчанию.\n"
-"Этот проход поиска находит короткие последовательности иностранного звука и предоставляет для них субтитры.\n"
-"\n"
-"Эта опция требует установки  языка в списке выбранных языков."
-
-msgid ""
-"When the default audio track is not your preferred language, add a subtitle track.\n"
-"\n"
-"This option requires a language to be set in the Selected Languages list."
-msgstr ""
-"Когда для звуковой дорожки по умолчанию нет нужного языка, добавить дорожку субтитров.\n"
-"\n"
-"Эта опция требует установки  языка в списке выбранных языков."
-
-msgid "_Pause Encoding"
-msgstr "_Приостановить кодирование"
-
-msgid "_Start Encoding"
-msgstr "_Начать кодирование"
-
-msgid ""
-"Open\n"
-"Source"
-msgstr ""
-"Открыть\n"
-"источник"
-
-msgid ""
-"Add To\n"
-"Queue"
-msgstr ""
-"Добавить в\n"
-"очередь"
-
-msgid ""
-"Start\n"
-"Encoding"
-msgstr ""
-"Начать\n"
-"кодирование"
-
-msgid ""
-"Stop\n"
-"Encoding"
-msgstr ""
-"Остановить\n"
-"кодирование"
-
-msgid ""
-"Pause\n"
-"Encoding"
-msgstr ""
-"Приостановить\n"
-"кодирование"
-
-msgid ""
-"Resume\n"
-"Encoding"
-msgstr ""
-"Продолжить\n"
-"кодирование"
-
-msgid ""
-"Show\n"
-"Queue"
-msgstr ""
-"Показать\n"
-"очередь"
-
-msgid ""
-"Hide\n"
-"Queue"
-msgstr ""
-"Скрыть\n"
-"очередь"
-
-msgid "Show Preview Window"
-msgstr "Показать окно просмотра"
-
-msgid ""
-"Show\n"
-"Preview"
-msgstr ""
-"Показать\n"
-"просмотр"
-
-msgid ""
-"Hide\n"
-"Preview"
-msgstr ""
-"Скрыть\n"
-"просмотр"
-
-msgid ""
-"Show\n"
-"Activity"
-msgstr ""
-"Показать\n"
-"процесс"
-
-msgid ""
-"Hide\n"
-"Activity"
-msgstr ""
-"Скрыть\n"
-"процесс"
-
-msgid "Dimensions"
-msgstr "Размер изображения"
-
-msgid "Deinterlace Filter:"
-msgstr "Фильтр деинтерлейсинга:"
-
-msgid "Deinterlace Preset:"
-msgstr "Предустановки деинтерлейсинга:"
-
-msgid ""
-" The decomb filter selectively deinterlaces frames that appear to be interlaced.\n"
-"This will preserve quality in frames that are not interlaced.\n"
-"\n"
-"The classic deinterlace filter is applied to all frames.\n"
-"Frames that are not interlaced will suffer some quality degradation."
-msgstr ""
-" Фильтр устранения гребенки избирательно убирает чересстрочность в кадрах, которые могут оказаться чересстрочными.\n"
-"Это позволит сохранить качество кадров  с нечересстрочной разверткой.\n"
-"\n"
-"Классический фильтр деинтерлейсинга применяется ко всем кадрам.\n"
-"Кадры, которые не чересстрочные, пострадают от некоторого ухудшение качества."
-
-msgid "Filters"
-msgstr "Фильтры"
-
-msgid "Add subtitle track if default audio is not your preferred language"
-msgstr ""
-"Добавить дорожку субтитров, если для звука по умолчанию нет нужного языка"
-
-msgid "Open _Source"
-msgstr "Открыть _источник"
-
-msgid "Open Single _Title"
-msgstr "Открыть один _файл"
-
-msgid "Set _Destination"
-msgstr "Установить _назначение"
-
-msgid "Your names"
-msgstr "Виктор Рыжих"
-
-msgid "Your emails"
-msgstr "victorr2007@yandex.ru"
-
-msgid "Name"
-msgstr "Название"
-
-msgid "Audio"
-msgstr "Аудио"
-
-msgid "Failed to find audio widget %s"
-msgstr "Не удалось найти аудиовиджет %s"
-
-msgid "Failed to find dependent widget %s"
-msgstr "Не удалось найти зависимый виджет %s"
-
-msgid "%dkbps"
-msgstr "%dкбит/с"
-
-msgid "Job"
-msgstr "Задание"
-
-msgid "Artist"
-msgstr "Исполнитель"
-
-msgid "off"
-msgstr "выкл"
-
-msgid "End"
-msgstr "Конец"
-
-msgid "text (%s)"
-msgstr "Текст (%s)"
-
-msgid "Text"
-msgstr "Текст"
-
-msgid "Markup"
-msgstr "Разметка"
-
-msgid "Attributes"
-msgstr "Атрибуты"
-
-msgid "Font"
-msgstr "Шрифт"
-
-msgid "Font family"
-msgstr "Гарнитура шрифта"
-
-msgid "Font style"
-msgstr "Стиль шрифта"
-
-msgid "Font weight"
-msgstr "Толщина шрифта"
-
-msgid "Font size"
-msgstr "Размер шрифта"
-
-msgid "Font scale"
-msgstr "Размер шрифта"
-
-msgid "Strikethrough"
-msgstr "Зачёркнутый"
-
-msgid "Underline"
-msgstr "Подчёркнутый"
-
-msgid "Font style set"
-msgstr "Установить стиль шрифта"
-
-msgid "Rise set"
-msgstr ""
-
-msgid "Language set"
-msgstr "Установить язык"
-
-msgid "Align set"
-msgstr ""
-
-msgid "90 Degrees"
-msgstr "90 градусов"
-
-msgid "180 Degrees"
-msgstr "180 градусов"
-
-msgid "270 Degrees"
-msgstr "270 градусов"
-
-msgid "1: SAD, qpel"
-msgstr ""
-
-msgid "2: SATD, qpel"
-msgstr ""
-
-msgid "3: SATD: multi-qpel"
-msgstr ""
-
-msgid "Num"
-msgstr "Номер"
-
-msgid ""
-"Invalid Deinterlace Settings:\n"
-"\n"
-"Filter: %s\n"
-"Preset: %s\n"
-"Custom: %s\n"
-msgstr ""
-"Недопустимые настройки деинтерлейсинга:\n"
-"\n"
-"Фильтр: %s\n"
-"Предустановка: %s\n"
-"Другое: %s\n"
-
-msgid ""
-"Invalid Deinterlace Settings:\n"
-"\n"
-"Filter: %s\n"
-"Preset: %s\n"
-msgstr ""
-"Недопустимые настройки деинтерлейсинга:\n"
-"\n"
-"Фильтр: %s\n"
-"Предустановка: %s\n"
-
-msgid ""
-"Invalid Detelecine Settings:\n"
-"\n"
-"Preset: %s\n"
-"Custom: %s\n"
-msgstr ""
-"Недопустимые настройки  детелесина:\n"
-"\n"
-"Предустановка: %s\n"
-"Другое: %s\n"
-
-msgid ""
-"Invalid Denoise Settings:\n"
-"\n"
-"Filter: %s\n"
-"Preset: %s\n"
-"Tune:   %s\n"
-"Custom: %s\n"
-msgstr ""
-"Недопустимые настройки шумоподавления:\n"
-"\n"
-"Фильтр: %s\n"
-"Предустановка: %s\n"
-"Настройка:   %s\n"
-"Другое: %s\n"
-
-msgid "SRT"
-msgstr "SRT"
-
-msgid "Burn"
-msgstr ""
-
-msgid "Filename"
-msgstr "Имя файла"
-
-msgid "Done\n"
-msgstr "Готово\n"
-
-msgid "DATA"
-msgstr "Данные"
-
-msgid "Navy"
-msgstr "Тёмно-синий"
-
-msgid "Presets (*.json)"
-msgstr "Предустановки (*.json)"
-
-msgid "Ok"
-msgstr "ОК"
-
-msgid "allocate %d x %d"
-msgstr ""
-
-msgid "Codeset"
-msgstr ""
-
-msgid "Auto"
-msgstr "Авто"
-
-msgid "Search"
-msgstr "Поиск"
-
-msgid "Enable"
-msgstr "Включить"
-
-msgid "Forced"
-msgstr "Принудительные"
-
-msgid "<small>%s%s%s%s</small>\n"
-msgstr ""
-
-msgid "Offset"
-msgstr "Смещение"
-
-msgid "No subtitle list!"
-msgstr "Нет списка субтитров!"
