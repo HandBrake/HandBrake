@@ -17,6 +17,8 @@ namespace HandBrakeWPF
 
     using Caliburn.Micro;
 
+    using HandBrake.ApplicationServices.Utilities;
+
     using HandBrakeWPF.Startup;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels;
@@ -53,7 +55,14 @@ namespace HandBrakeWPF
             OperatingSystem os = Environment.OSVersion;
             if (((os.Platform == PlatformID.Win32NT) && (os.Version.Major == 5)) || ((os.Platform == PlatformID.Win32NT) && (os.Version.Major == 6 && os.Version.Minor < 1)))
             {
-                MessageBox.Show("HandBrake requires Windows 7 or later to run. Version 0.9.9 (XP) and 0.10.5 (Vista) was the last version to support these versions.", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(HandBrakeWPF.Properties.Resources.OsVersionWarning, HandBrakeWPF.Properties.Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Warning);
+                Application.Current.Shutdown();
+                return;
+            }
+
+            if (!Environment.Is64BitOperatingSystem)
+            {
+                MessageBox.Show(HandBrakeWPF.Properties.Resources.OsBitnessWarning, HandBrakeWPF.Properties.Resources.Warning, MessageBoxButton.OK, MessageBoxImage.Warning);
                 Application.Current.Shutdown();
                 return;
             }

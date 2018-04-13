@@ -498,9 +498,7 @@
     </AdditionalFiles>
     <None Include="app.config" />
     <None Include="app.manifest" />
-    <None Include="Installer\Installer.nsi" />
     <None Include="Installer\Installer64.nsi" />
-    <None Include="Installer\MakeNightly.nsi" />
     <None Include="Installer\MakeNightly64.nsi" />
     <AppDesigner Include="Properties\" />
     <EmbeddedResource Include="public.key" />

@@ -97,17 +97,11 @@ namespace HandBrakeWPF.Services
                     try
                     {
                         // Figure out which appcast we want to read.
-                        string url =
-                            VersionHelper.Is64Bit() || Environment.Is64BitOperatingSystem
-                                ? Constants.Appcast64
-                                : Constants.Appcast32;
+                        string url = Constants.Appcast64;
 
                         if (VersionHelper.IsNightly())
                         {
-                            url =
-                            VersionHelper.Is64Bit() || Environment.Is64BitOperatingSystem
-                                ? Constants.AppcastUnstable64
-                                : Constants.AppcastUnstable32;
+                            url = Constants.AppcastUnstable64;
                         }
 
                         var currentBuild = HandBrakeUtils.Build;

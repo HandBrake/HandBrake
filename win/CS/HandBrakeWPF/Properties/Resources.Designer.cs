@@ -1280,6 +1280,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HandBrake requires a 64bit version of Windows 7 or later to run..
+        /// </summary>
+        public static string OsBitnessWarning {
+            get {
+                return ResourceManager.GetString("OsBitnessWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake requires Windows 7 or later to run. Version 0.9.9 (XP) and 0.10.5 (Vista) was the last version to support these versions..
+        /// </summary>
+        public static string OsVersionWarning {
+            get {
+                return ResourceManager.GetString("OsVersionWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overwrite?.
         /// </summary>
         public static string Overwrite {

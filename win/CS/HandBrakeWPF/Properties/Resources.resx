@@ -872,4 +872,10 @@ Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}</value>
   <data name="StaticPreviewView_Title" xml:space="preserve">
     <value>Preview ({0}% actual size)</value>
   </data>
+  <data name="OsBitnessWarning" xml:space="preserve">
+    <value>HandBrake requires a 64bit version of Windows 7 or later to run.</value>
+  </data>
+  <data name="OsVersionWarning" xml:space="preserve">
+    <value>HandBrake requires Windows 7 or later to run. Version 0.9.9 (XP) and 0.10.5 (Vista) was the last version to support these versions.</value>
+  </data>
 </root>
