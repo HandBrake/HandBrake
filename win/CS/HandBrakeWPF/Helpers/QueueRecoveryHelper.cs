@@ -12,14 +12,12 @@ namespace HandBrakeWPF.Helpers
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Globalization;
     using System.IO;
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Windows;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Model;
     using HandBrake.ApplicationServices.Utilities;
 
     using HandBrakeWPF.Services.Interfaces;
@@ -46,27 +44,29 @@ namespace HandBrakeWPF.Helpers
             try
             {
                 string tempPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
-                List<string> queueFiles = new List<string>();
                 DirectoryInfo info = new DirectoryInfo(tempPath);
-                IEnumerable<FileInfo> logFiles = info.GetFiles("*.xml").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+                IEnumerable<FileInfo> foundFiles = info.GetFiles("*.xml").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+                var queueFiles = GetFilesExcludingActiveProcesses(foundFiles);
 
-                if (!logFiles.Any())
+                if (!queueFiles.Any())
                 {
                     return queueFiles;
-                }
+                }        
 
                 List<string> removeFiles = new List<string>();
+                List<string> acceptedFiles = new List<string>();
+
                 XmlSerializer ser = new XmlSerializer(typeof(List<QueueTask>));
-                foreach (FileInfo file in logFiles)
+                foreach (string file in queueFiles)
                 {
                     try
                     {
-                        using (FileStream strm = new FileStream(file.FullName, FileMode.Open, FileAccess.Read))
+                        using (FileStream strm = new FileStream(file, FileMode.Open, FileAccess.Read))
                         {
                             List<QueueTask> list = ser.Deserialize(strm) as List<QueueTask>;
                             if (list != null && list.Count == 0)
                             {
-                                removeFiles.Add(file.FullName);
+                                removeFiles.Add(file);
                             }
 
                             if (list != null && list.Count != 0)
@@ -74,7 +74,11 @@ namespace HandBrakeWPF.Helpers
                                 List<QueueTask> tasks = list.Where(l => l.Status != QueueItemStatus.Completed).ToList();
                                 if (tasks.Count != 0)
                                 {
-                                    queueFiles.Add(file.Name);
+                                    acceptedFiles.Add(Path.GetFileName(file));
+                                }
+                                else
+                                {
+                                    removeFiles.Add(file);
                                 }
                             }
                         }
@@ -85,23 +89,9 @@ namespace HandBrakeWPF.Helpers
                     }
                 }
 
-                // Cleanup old/unused queue files for now.
-                foreach (string file in removeFiles)
-                {
-                    Match m = Regex.Match(file, @"([0-9]+).xml");
-                    if (m.Success)
-                    {
-                        int processId = int.Parse(m.Groups[1].ToString());
-                        if (GeneralUtilities.IsPidACurrentHandBrakeInstance(processId))
-                        {
-                            continue;
-                        }
-                    }
+                CleanupFiles(removeFiles);
 
-                    File.Delete(file);
-                }
-
-                return queueFiles;
+                return acceptedFiles;
             }
             catch (Exception exc)
             {
@@ -161,62 +151,58 @@ namespace HandBrakeWPF.Helpers
                 bool isRecovered = false;
                 foreach (string file in queueFiles)
                 {
-                    // Skip over the file if it belongs to another HandBrake instance.
-                    Match m = Regex.Match(file, @"([0-9]+).xml");
-                    if (m.Success)
-                    {
-                        int processId = int.Parse(m.Groups[1].ToString());
-                        if (processId != GeneralUtilities.ProcessId && GeneralUtilities.IsPidACurrentHandBrakeInstance(processId))
-                        {
-                            continue;
-                        }
-                    }
-
                     // Recover the Queue
                     encodeQueue.RestoreQueue(Path.Combine(appDataPath, file));
                     isRecovered = true;
 
                     // Cleanup
-                    if (!file.Contains(GeneralUtilities.ProcessId.ToString(CultureInfo.InvariantCulture)))
-                    {
-                        try
-                        {
-                            // Once we load it in, remove it as we no longer need it.
-                            File.Delete(Path.Combine(appDataPath, file));
-                        }
-                        catch (Exception)
-                        {
-                            // Keep quite, nothing much we can do if there are problems.
-                            // We will continue processing files.
-                        }
-                    }
+                    CleanupFiles(new List<string> { Path.Combine(appDataPath, file) });                   
                 }
 
                 return isRecovered;
             }
-            else
-            {
-                foreach (string file in queueFiles)
-                {
-                    if (File.Exists(Path.Combine(appDataPath, file)))
-                    {
-                        // Check that the file doesn't belong to another running instance.
-                        Match m = Regex.Match(file, @"([0-9]+).xml");
-                        if (m.Success)
-                        {
-                            int processId = int.Parse(m.Groups[1].ToString());
-                            if (GeneralUtilities.IsPidACurrentHandBrakeInstance(processId))
-                            {
-                                continue;
-                            }
-                        }
 
-                        // Delete it if it doesn't
-                        File.Delete(Path.Combine(appDataPath, file));
+            CleanupFiles(queueFiles);
+            return false;
+        }
+
+        private static List<string> GetFilesExcludingActiveProcesses(IEnumerable<FileInfo> foundFiles)
+        {
+            List<string> queueFiles = new List<string>();
+
+            // Remove any files where we have an active instnace.
+            foreach (FileInfo file in foundFiles)
+            {
+                string fileProcessId = file.Name.Replace("hb_queue_recovery", string.Empty).Replace(".xml", string.Empty);
+                int processId = 0;
+                if (!string.IsNullOrEmpty(fileProcessId) && int.TryParse(fileProcessId, out processId))
+                {
+                    if (!GeneralUtilities.IsPidACurrentHandBrakeInstance(processId))
+                    {
+                        queueFiles.Add(file.FullName);
+                    }
+                }
+            }
+
+            return queueFiles;
+        }
+
+        private static void CleanupFiles(List<string> removeFiles)
+        {
+            // Cleanup old/unused queue files for now.
+            foreach (string file in removeFiles)
+            {
+                Match m = Regex.Match(file, @"([0-9]+).xml");
+                if (m.Success)
+                {
+                    int processId = int.Parse(m.Groups[1].ToString());
+                    if (GeneralUtilities.IsPidACurrentHandBrakeInstance(processId))
+                    {
+                        continue;
                     }
                 }
 
-                return false;
+                File.Delete(file);
             }
         }
     }
