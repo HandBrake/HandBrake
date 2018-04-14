@@ -10,6 +10,7 @@
 namespace HandBrakeWPF
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Windows;
@@ -17,8 +18,7 @@ namespace HandBrakeWPF
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Utilities;
-
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Startup;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels;
@@ -74,6 +74,17 @@ namespace HandBrakeWPF
                 return;
             }
 
+            if (e.Args.Any(f => f.StartsWith("--recover-queue-ids")))
+            {
+                string command = e.Args.FirstOrDefault(f => f.StartsWith("--recover-queue-ids"));
+                if (!string.IsNullOrEmpty(command))
+                {
+                    command = command.Replace("--recover-queue-ids=", string.Empty);
+                    List<string> processIds = command.Split(',').ToList();
+                    StartupOptions.QueueRecoveryIds = processIds;
+                }
+            }
+            
             if (e.Args.Any(f => f.Equals("--auto-start-queue")))
             {
                 StartupOptions.AutoRestartQueue = true;

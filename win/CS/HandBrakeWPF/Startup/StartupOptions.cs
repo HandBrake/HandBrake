@@ -9,6 +9,8 @@
 
 namespace HandBrakeWPF.Startup
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// The startup options.
     /// </summary>
@@ -18,5 +20,6 @@ namespace HandBrakeWPF.Startup
         /// Gets or sets a value indicating whether auto restart queue.
         /// </summary>
         public static bool AutoRestartQueue { get; set; }
+        public static List<string> QueueRecoveryIds { get; set; }
     }
 }

@@ -39,14 +39,14 @@ namespace HandBrakeWPF.Helpers
         /// <returns>
         /// True if there is a queue to recover.
         /// </returns>
-        public static List<string> CheckQueueRecovery()
+        public static List<string> CheckQueueRecovery(List<string> filterQueueFiles)
         {
             try
             {
                 string tempPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
                 DirectoryInfo info = new DirectoryInfo(tempPath);
                 IEnumerable<FileInfo> foundFiles = info.GetFiles("*.xml").Where(f => f.Name.StartsWith("hb_queue_recovery"));
-                var queueFiles = GetFilesExcludingActiveProcesses(foundFiles);
+                var queueFiles = GetFilesExcludingActiveProcesses(foundFiles, filterQueueFiles);
 
                 if (!queueFiles.Any())
                 {
@@ -115,10 +115,10 @@ namespace HandBrakeWPF.Helpers
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public static bool RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService, bool silentRecovery)
+        public static bool RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService, bool silentRecovery, List<string> queueFilter)
         {
             string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
-            List<string> queueFiles = CheckQueueRecovery();
+            List<string> queueFiles = CheckQueueRecovery(queueFilter);
             MessageBoxResult result = MessageBoxResult.None;
             if (!silentRecovery)
             {
@@ -166,7 +166,7 @@ namespace HandBrakeWPF.Helpers
             return false;
         }
 
-        private static List<string> GetFilesExcludingActiveProcesses(IEnumerable<FileInfo> foundFiles)
+        private static List<string> GetFilesExcludingActiveProcesses(IEnumerable<FileInfo> foundFiles, List<string> filterQueueFiles)
         {
             List<string> queueFiles = new List<string>();
 
@@ -174,12 +174,22 @@ namespace HandBrakeWPF.Helpers
             foreach (FileInfo file in foundFiles)
             {
                 string fileProcessId = file.Name.Replace("hb_queue_recovery", string.Empty).Replace(".xml", string.Empty);
-                int processId = 0;
+                int processId;
                 if (!string.IsNullOrEmpty(fileProcessId) && int.TryParse(fileProcessId, out processId))
                 {
                     if (!GeneralUtilities.IsPidACurrentHandBrakeInstance(processId))
                     {
-                        queueFiles.Add(file.FullName);
+                        if (filterQueueFiles != null && filterQueueFiles.Count > 0)
+                        {
+                            if (filterQueueFiles.Contains(processId.ToString()))
+                            {
+                                queueFiles.Add(file.FullName);
+                            }
+                        }
+                        else
+                        {
+                            queueFiles.Add(file.FullName);
+                        }                       
                     }
                 }
             }

@@ -1254,7 +1254,7 @@ namespace HandBrakeWPF.ViewModels
             this.SummaryViewModel.OutputFormatChanged += this.SummaryViewModel_OutputFormatChanged;
 
             // Queue Recovery
-            bool queueRecovered = QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService, StartupOptions.AutoRestartQueue);
+            bool queueRecovered = QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService, StartupOptions.AutoRestartQueue, StartupOptions.QueueRecoveryIds);
 
             // If the queue is not recovered, show the source selection window by default.
             if (!queueRecovered)
