@@ -10,6 +10,9 @@
 
 + (id)HB_JSONObjectWithUTF8String:(const char *)nullTerminatedCString options:(NSJSONReadingOptions)opt error:(NSError **)error;
 {
+    if (!nullTerminatedCString) {
+        return nil;
+    }
     NSData *data = [NSData dataWithBytes:nullTerminatedCString length:strlen(nullTerminatedCString)];
     id result = [NSJSONSerialization JSONObjectWithData:data options:opt error:error];
     return result;
