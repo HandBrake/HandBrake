@@ -1341,7 +1341,7 @@ main(int argc, char *argv[])
     ghb_ui_register_resource();
     ud = g_malloc0(sizeof(signal_user_data_t));
     ud->app = gtk_application_new("org.handbrake.ghb",
-                                  G_APPLICATION_HANDLES_OPEN);
+                                  G_APPLICATION_NON_UNIQUE);
     // Connect application signals
     g_signal_connect(ud->app, "activate", (GCallback)ghb_activate_cb, ud);
     g_signal_connect(ud->app, "open", (GCallback)ghb_open_file_cb, ud);
