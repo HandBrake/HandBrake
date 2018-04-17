@@ -70,6 +70,7 @@
         "x264FastDecode": false
     },
     "Preferences": {
+        "ActivityFontSize": 8,
         "DiskFreeCheck": true,
         "DiskFreeLimit": 10000,
         "RemoveFinishedJobs": false,

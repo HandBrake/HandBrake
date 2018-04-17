@@ -815,7 +815,7 @@ stackswitcher button.text-button    \n\
 #activity_view                      \n\
 {                                   \n\
     font-family: monospace;         \n\
-    font-size: 7pt;                 \n\
+    font-size: 8pt;                 \n\
     font-weight: lighter;           \n\
 }                                   \n\
 "
@@ -967,15 +967,15 @@ ghb_idle_ui_init(signal_user_data_t *ud)
 extern G_MODULE_EXPORT void
 ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
 {
-    GError             * error = NULL;
-    GtkCssProvider     * css = gtk_css_provider_new();
+    GError             * error    = NULL;
+    GtkCssProvider     * provider = gtk_css_provider_new();
 
-    error = NULL;
-    gtk_css_provider_load_from_data(css, MyCSS, -1, &error);
+    gtk_css_provider_load_from_data(provider, MyCSS, -1, &error);
     if (error == NULL)
     {
         GdkScreen *ss = gdk_screen_get_default();
-        gtk_style_context_add_provider_for_screen(ss, GTK_STYLE_PROVIDER(css),
+        gtk_style_context_add_provider_for_screen(ss,
+                                    GTK_STYLE_PROVIDER(provider),
                                     GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
     else
@@ -983,6 +983,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
         g_warning("%s: %s", G_STRFUNC, error->message);
         g_clear_error(&error);
     }
+    g_object_unref(provider);
 
 #if !defined(_WIN32)
     notify_init("HandBrake");

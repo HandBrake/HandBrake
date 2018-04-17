@@ -533,6 +533,12 @@ conjunction with the "Forced" option.</property>
     <property name="step_increment">500</property>
     <property name="page_increment">1000</property>
   </object>
+  <object class="GtkAdjustment" id="ActivityFontSizeAdjustment">
+    <property name="upper">32</property>
+    <property name="lower">6</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkAboutDialog" id="hb_about">
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
@@ -8135,6 +8141,53 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkBox" id="ActivityFontSizeBox">
+                            <property name="orientation">horizontal</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="spacing">4</property>
+                            <property name="margin-start">0</property>
+                            <child>
+                              <object class="GtkSpinButton" id="ActivityFontSize">
+                                <property name="width-chars">3</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip_text" translatable="yes">Pause encoding if free disk space drops below limit</property>
+                                <property name="primary_icon_activatable">False</property>
+                                <property name="secondary_icon_activatable">False</property>
+                                <property name="valign">GTK_ALIGN_CENTER</property>
+                                <property name="adjustment">ActivityFontSizeAdjustment</property>
+                                <signal name="value-changed" handler="activity_font_changed_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="ActivityFontSizeLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Activity Window Font Size</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="top_attach">6</property>
+                            <property name="left_attach">0</property>
+                            <property name="width">1</property>
+                            <property name="height">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkCheckButton" id="HideAdvancedVideoSettings">
                             <property name="label" translatable="yes">Hide Advanced Video Options Tab</property>
                             <property name="visible">True</property>
@@ -8148,7 +8201,7 @@ on the Video tab instead.</property>
                             <signal name="toggled" handler="advanced_video_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">6</property>
+                            <property name="top_attach">7</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -8167,7 +8220,7 @@ Check this if you want the queue to clean itself up by deleting completed jobs.<
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">7</property>
+                            <property name="top_attach">8</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
@@ -8188,7 +8241,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">8</property>
+                            <property name="top_attach">9</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>

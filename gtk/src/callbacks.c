@@ -5011,6 +5011,54 @@ advanced_video_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
+activity_font_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+
+    ghb_widget_to_setting(ud->prefs, widget);
+    const gchar *name = ghb_get_setting_key(widget);
+    ghb_pref_set(ud->prefs, name);
+
+    int size = ghb_dict_get_int(ud->prefs, "ActivityFontSize");
+
+#if GTK_CHECK_VERSION(3, 16, 0)
+    const gchar *css_template =
+        "                                   \n\
+        #activity_view                      \n\
+        {                                   \n\
+            font-family: monospace;         \n\
+            font-size: %dpt;                \n\
+            font-weight: lighter;           \n\
+        }                                   \n\
+        ";
+    char           * css      = g_strdup_printf(css_template, size);
+    GError         * error    = NULL;
+    GtkCssProvider * provider = gtk_css_provider_new();
+
+    gtk_css_provider_load_from_data(provider, css, -1, &error);
+    if (error == NULL)
+    {
+        GdkScreen *ss = gdk_screen_get_default();
+        gtk_style_context_add_provider_for_screen(ss,
+                                    GTK_STYLE_PROVIDER(provider),
+                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    }
+    g_object_unref(provider);
+    g_free(css);
+#else
+    const gchar          * font_template = "monospace %d";
+    char                 * font          = g_strdup_printf(font_template, size);
+    PangoFontDescription * font_desc;
+    GtkTextView          * textview;
+
+    font_desc = pango_font_description_from_string(font);
+    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "activity_view"));
+    gtk_widget_override_font(GTK_WIDGET(textview), font_desc);
+    pango_font_description_free(font_desc);
+    g_free(font);
+#endif
+}
+
+G_MODULE_EXPORT void
 pref_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting (ud->prefs, widget);
