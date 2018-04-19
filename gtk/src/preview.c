@@ -123,6 +123,7 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
 {
     GtkWidget     * widget;
     GtkWindow     * window;
+    GdkWindow     * w;
     GdkGeometry     geo;
 
     widget = GHB_WIDGET (ud->builder, "preview_image");
@@ -130,11 +131,15 @@ preview_set_render_size(signal_user_data_t *ud, int width, int height)
     window = GTK_WINDOW(GHB_WIDGET(ud->builder, "preview_window"));
     gtk_window_unmaximize(window);
     gtk_window_resize(window, width, height);
-    geo.min_aspect = (double)(width - 4) / height;
-    geo.max_aspect = (double)(width + 4) / height;
-    geo.width_inc = geo.height_inc = 2;
-    gtk_window_set_geometry_hints(window, NULL, &geo,
-                                  GDK_HINT_ASPECT|GDK_HINT_RESIZE_INC);
+    w = gtk_widget_get_window(GTK_WIDGET(window));
+    if (w != NULL)
+    {
+        geo.min_aspect = (double)(width - 4) / height;
+        geo.max_aspect = (double)(width + 4) / height;
+        geo.width_inc = geo.height_inc = 2;
+        gdk_window_set_geometry_hints(w, &geo,
+                                      GDK_HINT_ASPECT|GDK_HINT_RESIZE_INC);
+    }
 
     ud->preview->render_width = width;
     ud->preview->render_height = height;
@@ -1050,7 +1055,7 @@ preview_draw_cb(
 }
 
 G_MODULE_EXPORT void
-preview_button_size_allocate_cb(GtkWidget *widget, GtkAllocation *allocation, signal_user_data_t *ud)
+preview_button_size_allocate_cb(GtkWidget *widget, GdkRectangle *allocation, signal_user_data_t *ud)
 {
     g_debug("allocate %d x %d", allocation->width, allocation->height);
     if (ud->preview->button_width == allocation->width &&
@@ -1305,16 +1310,23 @@ preview_state_cb(
     GdkEvent  *event,
     signal_user_data_t *ud)
 {
-    GdkEventWindowState * wse = (GdkEventWindowState*)event;
-    if (wse->type == GDK_WINDOW_STATE)
+    GdkEventType type = ghb_event_get_event_type(event);
+    if (type == GDK_WINDOW_STATE)
     {
         // Look for transition to iconified state.
         // Toggle "Show Preview" button when iconified.
         // I only do this because there seems to be no
         // way to reliably disable the iconfy button without
         // also disabling the maximize button.
+#if GTK_CHECK_VERSION(3, 90, 0)
+        GdkWindow      * window = gdk_event_get_window(event);
+        GdkWindowState   state  = gdk_window_get_state(window);
+        if (state & GDK_WINDOW_STATE_ICONIFIED)
+#else
+        GdkEventWindowState * wse = (GdkEventWindowState*)event;
         if (wse->changed_mask & wse->new_window_state &
             GDK_WINDOW_STATE_ICONIFIED)
+#endif
         {
             live_preview_stop(ud);
             GtkWidget *widget = GHB_WIDGET(ud->builder, "show_preview");

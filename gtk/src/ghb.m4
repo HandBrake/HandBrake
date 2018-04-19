@@ -1,9 +1,12 @@
 changequote(`[', `]')dnl
 define([filter_output],
-        [ifelse(eval(gtk_version <= 312), 1,
+        [ifelse(eval(gtk_version >= 400), 1,
+            [patsubst([patsubst([$1], [\"image\"], [\"icon-name\"])],
+                      [^.*<property name\=\"events\">.*$], [])],
+         [ifelse(eval(gtk_version <= 312), 1,
             [patsubst([patsubst([$1], [margin-start], [margin-left])],
-                      [margin-end], [margin-right])],
-            [$1])])dnl
+                      [margin-end], [margin-right])], [$1])]
+       )])dnl
 filter_output([
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
@@ -109,6 +112,8 @@ conjunction with the "Forced" option.</property>
           <object class="GtkMenuBar" id="presets_menu_bar">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="vexpand">False</property>
+            <property name="valign">GTK_ALIGN_FILL</property>
             <child>
               <object class="GtkMenuItem" id="presets_window_menu">
                 <property name="visible">True</property>
@@ -212,8 +217,6 @@ conjunction with the "Forced" option.</property>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -228,6 +231,8 @@ conjunction with the "Forced" option.</property>
             <property name="margin-end">6</property>
             <property name="margin-top">6</property>
             <property name="margin-bottom">6</property>
+            <property name="vexpand">True</property>
+            <property name="valign">GTK_ALIGN_FILL</property>
             <child>
               <object class="GtkScrolledWindow" id="presets_scroll">
                 <property name="visible">True</property>
@@ -260,8 +265,6 @@ conjunction with the "Forced" option.</property>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -292,11 +295,12 @@ conjunction with the "Forced" option.</property>
           <object class="GtkLabel" id="activity_location">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="vexpand">False</property>
+            <property name="valign">GTK_ALIGN_FILL</property>
+            <property name="margin-top">5</property>
+            <property name="margin-bottom">5</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="padding">5</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -306,6 +310,8 @@ conjunction with the "Forced" option.</property>
             <property name="can_focus">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <property name="shadow_type">in</property>
+            <property name="vexpand">True</property>
+            <property name="valign">GTK_ALIGN_FILL</property>
             <child>
               <object class="GtkTextView" id="activity_view">
                 <property name="width_request">600</property>
@@ -320,8 +326,6 @@ conjunction with the "Forced" option.</property>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -542,7 +546,6 @@ conjunction with the "Forced" option.</property>
   <object class="GtkAboutDialog" id="hb_about">
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
     <property name="title" translatable="yes">About HandBrake</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
@@ -727,8 +730,6 @@ libx264 authors:
             <property name="layout_style">end</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
@@ -751,10 +752,10 @@ libx264 authors:
     <signal name="configure-event" handler="window_configure_cb" swapped="no"/>
     <signal name="delete-event" handler="window_delete_event_cb" swapped="no"/>
     <signal name="destroy-event" handler="window_destroy_event_cb" swapped="no"/>
-    <signal name="visibility-notify-event" handler="hb_visibility_event_cb" swapped="no"/>
     <child>
       <object class="GtkBox" id="vbox48">
         <property name="orientation">vertical</property>
+        <property name="expand">True</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -1095,8 +1096,6 @@ libx264 authors:
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">0</property>
           </packing>
         </child>
@@ -1106,11 +1105,13 @@ libx264 authors:
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
+            <property name="vexpand">False</property>
             <property name="halign">GTK_ALIGN_FILL</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <child>
               <object class="GtkToolbar" id="toolbar1">
                 <property name="visible">True</property>
+                <property name="hexpand">True</property>
                 <property name="can_focus">False</property>
                 <property name="show-arrow">False</property>
                 <property name="icon_size">5</property>
@@ -1127,7 +1128,6 @@ libx264 authors:
                     <property name="action-name">app.source</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
@@ -1138,7 +1138,6 @@ libx264 authors:
                     <property name="draw">False</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
@@ -1154,7 +1153,6 @@ libx264 authors:
                     <property name="action-name">app.queue-add</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
@@ -1170,7 +1168,6 @@ libx264 authors:
                     <property name="action-name">app.queue-start</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
@@ -1186,7 +1183,6 @@ libx264 authors:
                     <property name="action-name">app.queue-pause</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
@@ -1194,6 +1190,8 @@ libx264 authors:
                   <object class="GtkSeparatorToolItem" id="main_tool_sep1">
                     <property name="visible">True</property>
                     <property name="draw">False</property>
+                    <property name="expand">True</property>
+                    <property name="halign">GTK_ALIGN_FILL</property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -1212,7 +1210,6 @@ libx264 authors:
                     <property name="action-name">app.show-presets</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
@@ -1228,7 +1225,6 @@ libx264 authors:
                     <property name="action-name">app.show-preview</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
@@ -1244,7 +1240,6 @@ libx264 authors:
                     <property name="action-name">app.show-queue</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
@@ -1260,14 +1255,11 @@ libx264 authors:
                     <property name="action-name">app.show-activity</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="homogeneous">False</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -1275,7 +1267,6 @@ libx264 authors:
               <object class="GtkGrid" id="source_title_preset_grid">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
                 <property name="row-homogeneous">True</property>
                 <property name="column_spacing">5</property>
                 <property name="hexpand">True</property>
@@ -1318,8 +1309,6 @@ libx264 authors:
                         <property name="label" translatable="yes">None</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -1333,8 +1322,6 @@ libx264 authors:
                         <property name="label" translatable="yes"></property>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -1367,8 +1354,6 @@ libx264 authors:
                         <property name="label" translatable="yes">Scanning...</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -1379,10 +1364,9 @@ libx264 authors:
                         <property name="can_focus">False</property>
                         <property name="valign">center</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                        <property name="hexpand">True</property>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -1459,8 +1443,6 @@ This is often the feature title of a DVD.</property>
                         <signal name="changed" handler="title_changed_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -1474,8 +1456,6 @@ This is often the feature title of a DVD.</property>
                         <property name="label" translatable="yes">&lt;b&gt;Angle:&lt;/b&gt;</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -1486,15 +1466,11 @@ This is often the feature title of a DVD.</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">For multi-angle DVD's, select the desired angle to encode.</property>
-                        <property name="primary_icon_activatable">False</property>
-                        <property name="secondary_icon_activatable">False</property>
                         <property name="adjustment">adjustment27</property>
                         <property name="halign">end</property>
                         <signal name="value-changed" handler="title_angle_changed_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -1508,8 +1484,6 @@ This is often the feature title of a DVD.</property>
                         <property name="label" translatable="yes">&lt;b&gt;Range:&lt;/b&gt;</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">False</property>
                         <property name="position">3</property>
                       </packing>
                     </child>
@@ -1522,8 +1496,6 @@ This is often the feature title of a DVD.</property>
                         <signal name="changed" handler="ptop_widget_changed_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
@@ -1534,8 +1506,6 @@ This is often the feature title of a DVD.</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Set the first chapter to encode.</property>
-                        <property name="primary_icon_activatable">False</property>
-                        <property name="secondary_icon_activatable">False</property>
                         <property name="adjustment">adjustment1</property>
                         <property name="numeric">True</property>
                         <signal name="value-changed" handler="start_point_changed_cb" swapped="no"/>
@@ -1543,8 +1513,6 @@ This is often the feature title of a DVD.</property>
                         <signal name="input" handler="ptop_input_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">5</property>
                       </packing>
                     </child>
@@ -1555,8 +1523,6 @@ This is often the feature title of a DVD.</property>
                         <property name="label" translatable="yes">-</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">6</property>
                       </packing>
                     </child>
@@ -1567,8 +1533,6 @@ This is often the feature title of a DVD.</property>
                         <property name="can_focus">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="tooltip_text" translatable="yes">Set the last chapter to encode.</property>
-                        <property name="primary_icon_activatable">False</property>
-                        <property name="secondary_icon_activatable">False</property>
                         <property name="adjustment">adjustment2</property>
                         <property name="numeric">True</property>
                         <signal name="value-changed" handler="end_point_changed_cb" swapped="no"/>
@@ -1576,8 +1540,6 @@ This is often the feature title of a DVD.</property>
                         <signal name="input" handler="ptop_input_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">7</property>
                       </packing>
                     </child>
@@ -1633,10 +1595,9 @@ This is often the feature title of a DVD.</property>
                                 <property name="xalign">0</property>
                                 <property name="label" translatable="yes">Choose Preset</property>
                                 <property name="use_markup">True</property>
+                                <property name="hexpand">True</property>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -1647,8 +1608,6 @@ This is often the feature title of a DVD.</property>
                                 <property name="icon_name">pan-end-symbolic</property>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -1656,8 +1615,6 @@ This is often the feature title of a DVD.</property>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -1671,8 +1628,6 @@ This is often the feature title of a DVD.</property>
                         <property name="use_markup">True</property>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -1688,8 +1643,6 @@ Modifications will be discarded.</property>
                         <property name="action-name">app.preset-reload</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">3</property>
                       </packing>
                     </child>
@@ -1704,8 +1657,6 @@ Modifications will be discarded.</property>
                         <property name="action-name">app.preset-save-as</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
@@ -1719,15 +1670,11 @@ Modifications will be discarded.</property>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -1739,6 +1686,7 @@ Modifications will be discarded.</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin-top">6</property>
+            <property name="vexpand">True</property>
             <child>
               <object class="GtkBox" id="settings_tab">
                 <property name="orientation">vertical</property>
@@ -1753,12 +1701,11 @@ Modifications will be discarded.</property>
                     <property name="stack">SettingsStack</property>
                     <property name="hexpand">True</property>
                     <property name="halign">GTK_ALIGN_FILL</property>
+                    <property name="valign">GTK_ALIGN_START</property>
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -1771,6 +1718,7 @@ Modifications will be discarded.</property>
                     <property name="can_focus">False</property>
                     <property name="margin-start">12</property>
                     <property name="margin-end">12</property>
+                    <property name="vexpand">True</property>
                     <child>
                       <object class="GtkBox" id="summary_tab">
                         <property name="orientation">horizontal</property>
@@ -2042,8 +1990,6 @@ sync for broken players that do not honor MP4 edit lists.</property>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -2069,15 +2015,11 @@ sync for broken players that do not honor MP4 edit lists.</property>
                                 <signal name="size-allocate" handler="preview_button_size_allocate_cb" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -2109,6 +2051,8 @@ sync for broken players that do not honor MP4 edit lists.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="label_xalign">0</property>
                                 <property name="shadow_type">none</property>
+                                <property name="margin-start">2</property>
+                                <property name="margin-end">2</property>
                                 <child>
                                   <object class="GtkBox" id="vbox6">
                                     <property name="orientation">vertical</property>
@@ -2171,8 +2115,6 @@ the required multiple.</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Left Crop</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment13</property>
                                             <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
                                           </object>
@@ -2190,8 +2132,6 @@ the required multiple.</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Top Crop</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment14</property>
                                             <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
                                           </object>
@@ -2209,8 +2149,6 @@ the required multiple.</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Bottom Crop</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment15</property>
                                             <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
                                           </object>
@@ -2228,8 +2166,6 @@ the required multiple.</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">Right Crop</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment16</property>
                                             <signal name="value-changed" handler="crop_changed_cb" swapped="no"/>
                                           </object>
@@ -2272,8 +2208,6 @@ the required multiple.</property>
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
                                         <property name="position">0</property>
                                       </packing>
                                     </child>
@@ -2290,9 +2224,6 @@ the required multiple.</property>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="padding">2</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -2303,6 +2234,8 @@ the required multiple.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="label_xalign">0</property>
                                 <property name="shadow_type">none</property>
+                                <property name="margin-start">2</property>
+                                <property name="margin-end">2</property>
                                 <child>
                                   <object class="GtkBox" id="vbox30">
                                     <property name="orientation">vertical</property>
@@ -2359,8 +2292,6 @@ This will be the resolution that most closely matches the source resolution afte
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">This is the width that the video will be stored at.
 The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment17</property>
                                             <property name="snap_to_ticks">True</property>
                                             <signal name="value-changed" handler="scale_width_changed_cb" swapped="no"/>
@@ -2394,8 +2325,6 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">This is the height that the video will be stored at.
 The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment18</property>
                                             <signal name="value-changed" handler="scale_height_changed_cb" swapped="no"/>
                                           </object>
@@ -2408,8 +2337,6 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
                                         <property name="position">2</property>
                                       </packing>
                                     </child>
@@ -2495,8 +2422,6 @@ You should use 2 unless you experience compatibility issues.</property>
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
                                         <property name="position">4</property>
                                       </packing>
                                     </child>
@@ -2513,9 +2438,6 @@ You should use 2 unless you experience compatibility issues.</property>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="padding">2</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -2526,6 +2448,8 @@ You should use 2 unless you experience compatibility issues.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="label_xalign">0</property>
                                 <property name="shadow_type">none</property>
+                                <property name="margin-start">2</property>
+                                <property name="margin-end">2</property>
                                 <child>
                                   <object class="GtkBox" id="vbox10">
                                     <property name="orientation">vertical</property>
@@ -2582,8 +2506,6 @@ You should use 2 unless you experience compatibility issues.</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                             <property name="tooltip_text" translatable="yes">This is the display width. It is the result of scaling the storage dimensions by the pixel aspect.</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment25</property>
                                             <property name="snap_to_ticks">True</property>
                                             <signal name="value-changed" handler="display_width_changed_cb" swapped="no"/>
@@ -2615,8 +2537,6 @@ You should use 2 unless you experience compatibility issues.</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment26</property>
                                             <signal name="value-changed" handler="display_height_changed_cb" swapped="no"/>
                                           </object>
@@ -2629,8 +2549,6 @@ You should use 2 unless you experience compatibility issues.</property>
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
                                         <property name="position">0</property>
                                       </packing>
                                     </child>
@@ -2667,8 +2585,6 @@ You should use 2 unless you experience compatibility issues.</property>
 
 A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
 Players will scale the image in order to achieve the specified aspect.</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment29</property>
                                             <property name="snap_to_ticks">True</property>
                                             <signal name="value-changed" handler="par_changed_cb" swapped="no"/>
@@ -2703,8 +2619,6 @@ Players will scale the image in order to achieve the specified aspect.</property
                                             <property name="tooltip_text" translatable="yes">Pixel aspect defines the shape of the pixels.
 A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
 Players will scale the image in order to achieve the specified aspect.</property>
-                                            <property name="primary_icon_activatable">False</property>
-                                            <property name="secondary_icon_activatable">False</property>
                                             <property name="adjustment">adjustment30</property>
                                             <signal name="value-changed" handler="par_changed_cb" swapped="no"/>
                                           </object>
@@ -2748,8 +2662,6 @@ Players will scale the image in order to achieve the specified aspect.</property
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
@@ -2766,9 +2678,6 @@ Players will scale the image in order to achieve the specified aspect.</property
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="padding">2</property>
                                 <property name="position">2</property>
                               </packing>
                             </child>
@@ -2850,8 +2759,6 @@ Telecining is a process that adjusts film framerates that are 24fps to NTSC vide
 
 JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
                                 <property name="width-chars">8</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
                                 <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
                               </object>
                               <packing>
@@ -2923,8 +2830,6 @@ to be interlaced will be deinterlaced.</property>
 Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:
 Block Thresh: Block Width: Block Height</property>
                                 <property name="width-chars">8</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
                                 <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
                               </object>
                               <packing>
@@ -3029,8 +2934,6 @@ The deinterlace filter is a classic YADIF deinterlacer.
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes"></property>
                                 <property name="width-chars">8</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
                                 <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
                               </object>
                               <packing>
@@ -3220,8 +3123,6 @@ Using this filter on such sources can result in smaller file sizes.</property>
 
 SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                                 <property name="width-chars">8</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
                                 <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
                               </object>
                               <packing>
@@ -3354,8 +3255,6 @@ high frequency components in the video.</property>
 
 SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                                 <property name="width-chars">8</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
                                 <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
                               </object>
                               <packing>
@@ -3611,8 +3510,6 @@ VFR is not compatible with some players.</property>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -3624,7 +3521,9 @@ VFR is not compatible with some players.</property>
                                 <property name="column_spacing">5</property>
                                 <property name="row-spacing">2</property>
                                 <property name="margin-top">12</property>
-                                <property name="margin-end">0</property>
+                                <property name="margin-start">2</property>
+                                <property name="margin-end">2</property>
+                                <property name="hexpand">True</property>
                                 <child>
                                   <object class="GtkScale" id="VideoQualitySlider">
                                     <property name="visible">True</property>
@@ -3720,8 +3619,6 @@ to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate set
 The instantaneous bitrate can be much higher or lower at any point in time.
 But the average over a long duration will be the value set here.  If you need
 to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</property>
-                                    <property name="primary_icon_activatable">False</property>
-                                    <property name="secondary_icon_activatable">False</property>
                                     <property name="adjustment">adjustment3</property>
                                     <signal name="value-changed" handler="vbitrate_changed_cb" swapped="no"/>
                                   </object>
@@ -3777,17 +3674,11 @@ to make bitrate allocation decisions.</property>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="padding">2</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="padding">0</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -3797,8 +3688,11 @@ to make bitrate allocation decisions.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="margin-top">2</property>
+                            <property name="margin-bottom">2</property>
                             <property name="margin-start">0</property>
                             <property name="margin-end">0</property>
+                            <property name="vexpand">True</property>
                             <child>
                               <object class="GtkCheckButton" id="x264UseAdvancedOptions">
                                 <property name="label" translatable="yes">Use Advanced Options</property>
@@ -3811,12 +3705,11 @@ to make bitrate allocation decisions.</property>
 Use at your own risk!</property>
                                 <property name="halign">start</property>
                                 <property name="draw_indicator">True</property>
+                                <property name="margin-top">2</property>
+                                <property name="margin-bottom">2</property>
                                 <signal name="toggled" handler="x264_use_advanced_options_changed_cb" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="padding">2</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -3827,6 +3720,7 @@ Use at your own risk!</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="column_spacing">5</property>
                                 <property name="row-spacing">2</property>
+                                <property name="vexpand">True</property>
                                 <child>
                                   <object class="GtkLabel" id="VideoPresetLabel">
                                     <property name="visible">True</property>
@@ -4035,11 +3929,10 @@ Overrides all other settings.</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="halign">start</property>
                                         <property name="label" translatable="yes">More Settings:</property>
+                                        <property name="margin-start">5</property>
+                                        <property name="margin-end">5</property>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="padding">5</property>
                                         <property name="position">0</property>
                                       </packing>
                                     </child>
@@ -4062,8 +3955,6 @@ Colon separated list of encoder options.</property>
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">True</property>
-                                        <property name="fill">True</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
@@ -4077,17 +3968,11 @@ Colon separated list of encoder options.</property>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="padding">0</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
-                            <property name="padding">2</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -4199,8 +4084,7 @@ filter_output([
                             <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
                             <property name="transition-duration">400</property>
                             <property name="visible">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
+                            <property name="expand">True</property>
                             <property name="can_focus">False</property>
 
                             <property name="margin-top">0</property>
@@ -4219,6 +4103,7 @@ filter_output([
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="spacing">2</property>
+                                    <property name="vexpand">True</property>
                                     <child>
                                       <object class="GtkToolbar" id="audio_toolbar">
                                         <property name="visible">True</property>
@@ -4235,9 +4120,6 @@ filter_output([
                                             <property name="tooltip_text" translatable="yes">Add new audio settings to the list</property>
                                             <signal name="clicked" handler="audio_add_clicked_cb" swapped="no"/>
                                           </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                          </packing>
                                         </child>
                                         <child>
                                           <object class="GtkToolButton" id="audio_add_all">
@@ -4250,9 +4132,6 @@ filter_output([
                                             <property name="tooltip_text" translatable="yes">Add all audio tracks to the list</property>
                                             <signal name="clicked" handler="audio_add_all_clicked_cb" swapped="no"/>
                                           </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                          </packing>
                                         </child>
                                         <child>
                                           <object class="GtkToolButton" id="audio_reset">
@@ -4266,14 +4145,9 @@ filter_output([
                                             <property name="tooltip_text" translatable="yes">Reload all audio settings from defaults</property>
                                             <signal name="clicked" handler="audio_reset_clicked_cb" swapped="no"/>
                                           </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                          </packing>
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
                                         <property name="position">0</property>
                                       </packing>
                                     </child>
@@ -4299,15 +4173,11 @@ filter_output([
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">True</property>
-                                        <property name="fill">True</property>
                                         <property name="position">2</property>
                                       </packing>
                                     </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -4373,7 +4243,6 @@ filter_output([
                                             </child>
                                           </object>
                                           <packing>
-                                            <property name="fill">True</property>
                                             <property name="position">0</property>
                                           </packing>
                                         </child>
@@ -4386,6 +4255,7 @@ filter_output([
                                             <property name="halign">GTK_ALIGN_END</property>
                                             <property name="margin_top">6</property>
                                             <property name="margin_bottom">6</property>
+                                            <property name="vexpand">True</property>
                                             <child>
                                               <object class="GtkScrolledWindow" id="scrolledwindow10">
                                                 <property name="visible">True</property>
@@ -4393,10 +4263,12 @@ filter_output([
                                                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="min_content_height">84</property>
+                                                <property name="vexpand">True</property>
                                                 <child>
                                                   <object class="GtkListBox" id="audio_avail_lang">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
+                                                    <property name="vexpand">True</property>
                                                   </object>
                                                 </child>
                                               </object>
@@ -4418,7 +4290,7 @@ filter_output([
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="tooltip_text" translatable="yes">Create a list of languages you would like to select audio for.
-        Tracks matching these languages will be selected using the chosen Selection Behavior.</property>
+Tracks matching these languages will be selected using the chosen Selection Behavior.</property>
                                                   </object>
                                                 </child>
                                               </object>
@@ -4489,8 +4361,6 @@ filter_output([
                                             </child>
                                           </object>
                                           <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
                                             <property name="position">1</property>
                                           </packing>
                                         </child>
@@ -4514,8 +4384,6 @@ filter_output([
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
                                         <property name="position">0</property>
                                       </packing>
                                     </child>
@@ -4718,7 +4586,6 @@ filter_output([
                                             </child>
                                           </object>
                                           <packing>
-                                            <property name="fill">True</property>
                                             <property name="position">0</property>
                                           </packing>
                                         </child>
@@ -4739,7 +4606,6 @@ filter_output([
                                                 <property name="label" translatable="yes">Passthru Fallback:</property>
                                               </object>
                                               <packing>
-                                                <property name="fill">True</property>
                                                 <property name="position">0</property>
                                               </packing>
                                             </child>
@@ -4753,19 +4619,16 @@ filter_output([
                                                 <signal name="changed" handler="audio_fallback_widget_changed_cb" swapped="no"/>
                                               </object>
                                               <packing>
-                                                <property name="fill">True</property>
                                                 <property name="position">1</property>
                                               </packing>
                                             </child>
                                           </object>
                                           <packing>
-                                            <property name="fill">True</property>
                                             <property name="position">1</property>
                                           </packing>
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="fill">True</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
@@ -4808,10 +4671,9 @@ filter_output([
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">Encoder</property>
+                                        <property name="halign">GTK_ALIGN_CENTER</property>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
                                         <property name="position">0</property>
                                       </packing>
                                     </child>
@@ -4820,10 +4682,9 @@ filter_output([
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">Bitrate/Quality</property>
+                                        <property name="halign">GTK_ALIGN_CENTER</property>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
@@ -4832,10 +4693,9 @@ filter_output([
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">Mixdown</property>
+                                        <property name="halign">GTK_ALIGN_CENTER</property>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
                                         <property name="position">2</property>
                                       </packing>
                                     </child>
@@ -4844,10 +4704,9 @@ filter_output([
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">Samplerate</property>
+                                        <property name="halign">GTK_ALIGN_CENTER</property>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
                                         <property name="position">3</property>
                                       </packing>
                                     </child>
@@ -4856,10 +4715,9 @@ filter_output([
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">Gain</property>
+                                        <property name="halign">GTK_ALIGN_CENTER</property>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
                                         <property name="position">4</property>
                                       </packing>
                                     </child>
@@ -4868,10 +4726,9 @@ filter_output([
                                         <property name="visible">True</property>
                                         <property name="can_focus">False</property>
                                         <property name="label" translatable="yes">DRC</property>
+                                        <property name="halign">GTK_ALIGN_CENTER</property>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">False</property>
                                         <property name="position">5</property>
                                       </packing>
                                     </child>
@@ -4886,6 +4743,7 @@ filter_output([
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="hexpand">True</property>
+                                    <property name="vexpand">True</property>
                                     <child>
                                       <object class="GtkListBox" id="audio_list_default">
                                         <property name="visible">True</property>
@@ -4897,7 +4755,6 @@ filter_output([
                                     </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
                                     <property name="position">5</property>
                                   </packing>
                                 </child>
@@ -4910,8 +4767,6 @@ filter_output([
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -5023,8 +4878,7 @@ filter_output([
                             <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
                             <property name="transition-duration">400</property>
                             <property name="visible">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="vexpand">True</property>
+                            <property name="expand">True</property>
                             <property name="can_focus">False</property>
 
                             <property name="margin-top">0</property>
@@ -5043,10 +4897,7 @@ filter_output([
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="spacing">2</property>
-                                    <property name="margin-top">6</property>
-                                    <property name="margin-bottom">6</property>
-                                    <property name="margin-start">6</property>
-                                    <property name="margin-end">6</property>
+                                    <property name="vexpand">True</property>
                                     <child>
                                       <object class="GtkToolbar" id="subtitle_toolbar">
                                         <property name="visible">True</property>
@@ -5063,9 +4914,6 @@ filter_output([
                                             <property name="tooltip_text" translatable="yes">Add new subtitle settings to the list</property>
                                             <signal name="clicked" handler="subtitle_add_clicked_cb" swapped="no"/>
                                           </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                          </packing>
                                         </child>
                                         <child>
                                           <object class="GtkToolButton" id="subtitle_add_all">
@@ -5078,9 +4926,6 @@ filter_output([
                                             <property name="tooltip_text" translatable="yes">Add all subtitle tracks to the list</property>
                                             <signal name="clicked" handler="subtitle_add_all_clicked_cb" swapped="no"/>
                                           </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                          </packing>
                                         </child>
                                         <child>
                                           <object class="GtkToolButton" id="subtitle_add_fas">
@@ -5095,9 +4940,6 @@ filter_output([
         segments of the audio that are in a foreign language.</property>
                                             <signal name="clicked" handler="subtitle_add_fas_clicked_cb" swapped="no"/>
                                           </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                          </packing>
                                         </child>
                                         <child>
                                           <object class="GtkToolButton" id="subtitle_reset">
@@ -5111,14 +4953,9 @@ filter_output([
                                             <property name="tooltip_text" translatable="yes">Reload all subtitle settings from defaults</property>
                                             <signal name="clicked" handler="subtitle_reset_clicked_cb" swapped="no"/>
                                           </object>
-                                          <packing>
-                                            <property name="expand">False</property>
-                                          </packing>
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
                                         <property name="position">0</property>
                                       </packing>
                                     </child>
@@ -5128,6 +4965,8 @@ filter_output([
                                         <property name="can_focus">False</property>
                                         <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                        <property name="vexpand">True</property>
+                                        <property name="valign">GTK_ALIGN_FILL</property>
                                         <child>
                                           <object class="GtkTreeView" id="subtitle_list_view">
                                             <property name="visible">True</property>
@@ -5142,15 +4981,11 @@ filter_output([
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">True</property>
-                                        <property name="fill">True</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -5220,7 +5055,6 @@ filter_output([
                                             </child>
                                           </object>
                                           <packing>
-                                            <property name="fill">True</property>
                                             <property name="position">0</property>
                                           </packing>
                                         </child>
@@ -5233,6 +5067,7 @@ filter_output([
                                             <property name="halign">GTK_ALIGN_END</property>
                                             <property name="margin_top">6</property>
                                             <property name="margin_bottom">6</property>
+                                            <property name="vexpand">True</property>
                                             <child>
                                               <object class="GtkScrolledWindow" id="sub_scrolledwindow10">
                                                 <property name="visible">True</property>
@@ -5240,10 +5075,14 @@ filter_output([
                                                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="min_content_height">108</property>
+                                                <property name="vexpand">True</property>
+                                                <property name="halign">GTK_ALIGN_FILL</property>
                                                 <child>
                                                   <object class="GtkListBox" id="subtitle_avail_lang">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
+                                                    <property name="vexpand">True</property>
+                                                    <property name="halign">GTK_ALIGN_FILL</property>
                                                   </object>
                                                 </child>
                                               </object>
@@ -5260,15 +5099,19 @@ filter_output([
                                                 <property name="can_focus">False</property>
                                                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                                <property name="vexpand">True</property>
+                                                <property name="halign">GTK_ALIGN_FILL</property>
                                                 <child>
                                                   <object class="GtkListBox" id="subtitle_selected_lang">
                                                     <property name="visible">True</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="tooltip_text" translatable="yes">Create a list of languages you would like to select subtitles for.
-        Tracks matching these languages will be selected using the chosen Selection Behavior.
+Tracks matching these languages will be selected using the chosen Selection Behavior.
 
-        The first language in this list is your "preferred" language and will be used
-        for determining subtitle selection settings when there is foreign audio.</property>
+The first language in this list is your "preferred" language and will be used
+for determining subtitle selection settings when there is foreign audio.</property>
+                                                    <property name="vexpand">True</property>
+                                                    <property name="halign">GTK_ALIGN_FILL</property>
                                                   </object>
                                                 </child>
                                               </object>
@@ -5354,15 +5197,11 @@ filter_output([
                                             </child>
                                           </object>
                                           <packing>
-                                            <property name="expand">True</property>
-                                            <property name="fill">True</property>
                                             <property name="position">1</property>
                                           </packing>
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
                                         <property name="position">0</property>
                                       </packing>
                                     </child>
@@ -5550,8 +5389,6 @@ filter_output([
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -5574,6 +5411,7 @@ filter_output([
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="hexpand">True</property>
                             <child>
                               <object class="GtkBox" id="hbox73">
                                 <property name="orientation">horizontal</property>
@@ -5587,6 +5425,7 @@ filter_output([
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="hexpand">True</property>
                                     <child>
                                       <object class="GtkFrame" id="frame10">
                                         <property name="visible">True</property>
@@ -5633,8 +5472,6 @@ Cel animation tends to benefit from more reference frames a lot more than film c
 Note that many hardware devices have limitations on the number of supported reference
 frames, so if you're encoding for a handheld or standalone player, don't touch this unless
 you're absolutely sure you know what you're doing!</property>
-                                                <property name="primary_icon_activatable">False</property>
-                                                <property name="secondary_icon_activatable">False</property>
                                                 <property name="adjustment">adjustment8</property>
                                                 <signal name="value-changed" handler="x264_widget_changed_cb" swapped="no"/>
                                               </object>
@@ -5674,8 +5511,6 @@ Cel-animated source material and B-pyramid also significantly increase the usefu
 values.
 
 Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off).</property>
-                                                <property name="primary_icon_activatable">False</property>
-                                                <property name="secondary_icon_activatable">False</property>
                                                 <property name="adjustment">adjustment9</property>
                                                 <signal name="value-changed" handler="x264_widget_changed_cb" swapped="no"/>
                                               </object>
@@ -5821,15 +5656,11 @@ Baseline profile, as required for iPods and similar devices, requires CABAC to b
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -5839,6 +5670,7 @@ Baseline profile, as required for iPods and similar devices, requires CABAC to b
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="hexpand">True</property>
                                     <child>
                                       <object class="GtkFrame" id="frame12">
                                         <property name="visible">True</property>
@@ -5846,6 +5678,8 @@ Baseline profile, as required for iPods and similar devices, requires CABAC to b
                                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                         <property name="label_xalign">0</property>
                                         <property name="shadow_type">none</property>
+                                        <property name="margin-top">2</property>
+                                        <property name="margin-bottom">2</property>
                                         <child>
                                           <object class="GtkBox" id="hbox84">
                                             <property name="orientation">horizontal</property>
@@ -5860,6 +5694,7 @@ Baseline profile, as required for iPods and similar devices, requires CABAC to b
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <property name="column_spacing">4</property>
                                                 <property name="row-spacing">2</property>
+                                                <property name="hexpand">True</property>
                                                 <child>
                                                   <object class="GtkLabel" id="label55">
                                                     <property name="visible">True</property>
@@ -5965,8 +5800,6 @@ motion of a block in order to try to find its actual motion.
 The default is fine for most content, but extremely high motion video,
 especially at HD resolutions, may benefit from higher ranges, albeit at
 a high speed cost.</property>
-                                                    <property name="primary_icon_activatable">False</property>
-                                                    <property name="secondary_icon_activatable">False</property>
                                                     <property name="adjustment">adjustment10</property>
                                                     <signal name="value-changed" handler="x264_widget_changed_cb" swapped="no"/>
                                                   </object>
@@ -6051,8 +5884,6 @@ but makes much more accurate decisions, especially when used with B-pyramid.</pr
                                                 </child>
                                               </object>
                                               <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
                                                 <property name="position">0</property>
                                               </packing>
                                             </child>
@@ -6064,18 +5895,7 @@ but makes much more accurate decisions, especially when used with B-pyramid.</pr
                                                 <property name="column_spacing">4</property>
                                                 <property name="row-spacing">2</property>
                                                 <property name="margin-start">6</property>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
-                                                <child>
-                                                  <placeholder/>
-                                                </child>
+                                                <property name="hexpand">True</property>
                                                 <child>
                                                   <object class="GtkLabel" id="label59">
                                                     <property name="visible">True</property>
@@ -6150,8 +5970,6 @@ Trellis costs more speed at higher bitrates and requires CABAC.</property>
                                                 </child>
                                               </object>
                                               <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
                                                 <property name="position">1</property>
                                               </packing>
                                             </child>
@@ -6168,9 +5986,6 @@ Trellis costs more speed at higher bitrates and requires CABAC.</property>
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
-                                        <property name="padding">2</property>
                                         <property name="position">0</property>
                                       </packing>
                                     </child>
@@ -6318,8 +6133,6 @@ and other sharp-edged graphics.</property>
                                                 </child>
                                               </object>
                                               <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
                                                 <property name="position">0</property>
                                               </packing>
                                             </child>
@@ -6338,8 +6151,6 @@ and other sharp-edged graphics.</property>
                                                     <property name="label" translatable="yes">Deblocking: </property>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
                                                     <property name="position">0</property>
                                                   </packing>
                                                 </child>
@@ -6359,14 +6170,10 @@ The deblocking filter has two adjustable parameters, "strength" (Alpha) and "thr
 The former controls how strong (or weak) the deblocker is, while the latter controls how many
 (or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.
 The default is 0 (normal strength) for both parameters.</property>
-                                                    <property name="primary_icon_activatable">False</property>
-                                                    <property name="secondary_icon_activatable">False</property>
                                                     <property name="adjustment">adjustment11</property>
                                                     <signal name="value-changed" handler="x264_widget_changed_cb" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
                                                     <property name="position">1</property>
                                                   </packing>
                                                 </child>
@@ -6386,14 +6193,10 @@ The deblocking filter has two adjustable parameters, "strength" (Alpha) and "thr
 The former controls how strong (or weak) the deblocker is, while the latter controls how many
 (or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.
 The default is 0 (normal strength) for both parameters.</property>
-                                                    <property name="primary_icon_activatable">False</property>
-                                                    <property name="secondary_icon_activatable">False</property>
                                                     <property name="adjustment">adjustment12</property>
                                                     <signal name="value-changed" handler="x264_widget_changed_cb" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">False</property>
-                                                    <property name="fill">True</property>
                                                     <property name="position">2</property>
                                                   </packing>
                                                 </child>
@@ -6411,22 +6214,19 @@ dither.
 
 Don't touch this unless you're having banding issues or other such cases
 where you are having trouble keeping fine noise.</property>
-                                                    <property name="halign">start</property>
                                                     <property name="active">True</property>
                                                     <property name="draw_indicator">True</property>
+                                                    <property name="hexpand">True</property>
+                                                    <property name="halign">start</property>
+                                                    <property name="margin-start">20</property>
                                                     <signal name="toggled" handler="x264_widget_changed_cb" swapped="no"/>
                                                   </object>
                                                   <packing>
-                                                    <property name="expand">True</property>
-                                                    <property name="fill">True</property>
-                                                    <property name="padding">20</property>
                                                     <property name="position">3</property>
                                                   </packing>
                                                 </child>
                                               </object>
                                               <packing>
-                                                <property name="expand">True</property>
-                                                <property name="fill">True</property>
                                                 <property name="position">1</property>
                                               </packing>
                                             </child>
@@ -6443,22 +6243,16 @@ where you are having trouble keeping fine noise.</property>
                                         </child>
                                       </object>
                                       <packing>
-                                        <property name="expand">False</property>
-                                        <property name="fill">True</property>
                                         <property name="position">1</property>
                                       </packing>
                                     </child>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
                                     <property name="position">2</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -6469,6 +6263,8 @@ where you are having trouble keeping fine noise.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="label_xalign">0</property>
                                 <property name="shadow_type">none</property>
+                                <property name="vexpand">True</property>
+                                <property name="margin-top">2</property>
                                 <child>
                                   <object class="GtkScrolledWindow" id="scrolledwindow6">
                                     <property name="height_request">40</property>
@@ -6477,6 +6273,7 @@ where you are having trouble keeping fine noise.</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
                                     <property name="shadow_type">etched-in</property>
+                                    <property name="vexpand">True</property>
                                     <child>
                                       <object class="GtkTextView" id="x264Option">
                                         <property name="visible">True</property>
@@ -6492,6 +6289,7 @@ deblock=0,0:trellis=1:psy-rd=1,0:aq-strength=1.0:
 no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                                         <property name="wrap_mode">char</property>
                                         <property name="accepts_tab">False</property>
+                                        <property name="vexpand">True</property>
                                         <signal name="focus-out-event" handler="x264_focus_out_cb" swapped="no"/>
                                       </object>
                                     </child>
@@ -6508,16 +6306,11 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="padding">2</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -6551,15 +6344,11 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                                 <signal name="toggled" handler="chapter_markers_changed_cb" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -6568,6 +6357,7 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="vexpand">True</property>
                             <child>
                               <object class="GtkTreeView" id="chapters_list">
                                 <property name="visible">True</property>
@@ -6581,8 +6371,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">True</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -6630,8 +6418,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="activates_default">False</property>
                             <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">False</property>
                             <signal name="changed" handler="meta_name_changed_cb" swapped="no"/>
                           </object>
                           <packing>
@@ -6667,8 +6453,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="activates_default">False</property>
                             <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">False</property>
                             <signal name="changed" handler="meta_artist_changed_cb" swapped="no"/>
                           </object>
                           <packing>
@@ -6704,8 +6488,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="activates_default">False</property>
                             <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">False</property>
                             <signal name="changed" handler="meta_album_artist_changed_cb" swapped="no"/>
                           </object>
                           <packing>
@@ -6741,8 +6523,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="activates_default">False</property>
                             <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">False</property>
                             <signal name="changed" handler="meta_release_date_changed_cb" swapped="no"/>
                           </object>
                           <packing>
@@ -6778,8 +6558,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="activates_default">False</property>
                             <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">False</property>
                             <signal name="changed" handler="meta_comment_changed_cb" swapped="no"/>
                           </object>
                           <packing>
@@ -6815,8 +6593,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="activates_default">False</property>
                             <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">False</property>
                             <signal name="changed" handler="meta_genre_changed_cb" swapped="no"/>
                           </object>
                           <packing>
@@ -6852,8 +6628,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                             <property name="activates_default">False</property>
                             <property name="width-chars">50</property>
                             <property name="truncate_multiline">True</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">False</property>
                             <signal name="changed" handler="meta_description_changed_cb" swapped="no"/>
                           </object>
                           <packing>
@@ -6913,8 +6687,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -6957,7 +6729,6 @@ no-fast-pskip=0:no-dct-decimate=0:cabac=1</property>
                         <signal name="clicked" handler="queue_edit_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
                         <property name="homogeneous">True</property>
                       </packing>
                     </child>
@@ -6975,7 +6746,6 @@ Resets the queue job to pending and ready to run again.</property>
                         <signal name="clicked" handler="queue_reload_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
                         <property name="homogeneous">True</property>
                       </packing>
                     </child>
@@ -6993,7 +6763,6 @@ Resets all queue jobs to pending and ready to run again.</property>
                         <signal name="clicked" handler="queue_reload_all_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
                         <property name="homogeneous">True</property>
                       </packing>
                     </child>
@@ -7010,7 +6779,6 @@ Resets all queue jobs to pending and ready to run again.</property>
                         <signal name="clicked" handler="queue_delete_all_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
                         <property name="homogeneous">True</property>
                       </packing>
                     </child>
@@ -7028,7 +6796,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                         <property name="action-name">app.queue-save</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
                         <property name="homogeneous">True</property>
                       </packing>
                     </child>
@@ -7045,14 +6812,11 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                         <signal name="clicked" handler="queue_open_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
                         <property name="homogeneous">True</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -7061,6 +6825,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="vexpand">True</property>
                     <child>
                       <object class="GtkTreeView" id="queue_list">
                         <property name="visible">True</property>
@@ -7076,8 +6841,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -7090,8 +6853,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -7126,8 +6887,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Destination filename for your encode.</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
                 <accelerator key="d" signal="grab-focus" modifiers="GDK_MOD1_MASK"/>
                 <signal name="changed" handler="dest_file_changed_cb" swapped="no"/>
                 <signal name="grab-focus" handler="destination_grab_cb" after="yes" swapped="no"/>
@@ -7175,8 +6934,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
         </child>
@@ -7199,10 +6956,9 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="halign">start</property>
+                <property name="hexpand">True</property>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -7214,15 +6970,11 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 <property name="halign">end</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">4</property>
           </packing>
         </child>
@@ -7236,8 +6988,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             <property name="margin-end">12</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">5</property>
           </packing>
         </child>
@@ -7279,8 +7029,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -7293,15 +7041,11 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
@@ -7360,7 +7104,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                     <signal name="toggled" handler="title_add_multiple_select_all_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -7378,7 +7121,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                     <signal name="toggled" handler="title_add_multiple_clear_all_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -7393,7 +7135,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             <child>
               <object class="GtkInfoBar" id="title_add_multiple_infobar">
                 <property name="visible">True</property>
-                <property name="app_paintable">True</property>
                 <property name="can_focus">False</property>
                 <property name="message_type">info</property>
                 <child internal-child="action_area">
@@ -7403,8 +7144,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                     <property name="layout_style">end</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -7419,15 +7158,11 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                         <property name="label" translatable="yes">Destination files OK.  No duplicates detected.</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -7444,8 +7179,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -7459,7 +7192,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
   <object class="GtkDialog" id="prefs_dialog">
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
     <property name="title" translatable="yes">Preferences</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
@@ -7484,17 +7216,14 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="halign">GTK_ALIGN_CENTER</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
@@ -7509,12 +7238,19 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <child>
+])dnl
+ifelse(eval(gtk_version >= 400), 1, filter_output([
+                  <object class="GtkBox" id="eventbox1">
+                    <property name="orientation">horizontal</property>
+]), filter_output([
                   <object class="GtkEventBox" id="eventbox1">
+]))dnl
+filter_output([
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
-                    <property name="above_child">True</property>
                     <signal name="button-press-event" handler="easter_egg_cb" swapped="no"/>
                     <child>
                       <object class="GtkImage" id="image3">
@@ -7527,8 +7263,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -7537,8 +7271,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 </child>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -7548,6 +7280,7 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                 <property name="can_focus">False</property>
                 <property name="show_border">False</property>
                 <property name="margin-start">12</property>
+                <property name="hexpand">True</property>
                 <child>
                   <object class="GtkBox" id="vbox42">
                     <property name="orientation">vertical</property>
@@ -7570,8 +7303,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <signal name="changed" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -7583,15 +7314,11 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <property name="use_markup">True</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -7613,8 +7340,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <signal name="changed" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -7626,15 +7351,11 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <property name="use_markup">True</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -7657,8 +7378,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -7680,8 +7399,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                 <property name="halign">end</property>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -7694,20 +7411,14 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                 <property name="activates_default">True</property>
                                 <property name="width-chars">40</property>
                                 <property name="truncate_multiline">True</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
                                 <signal name="changed" handler="pref_changed_cb" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -7722,15 +7433,11 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <signal name="toggled" handler="use_m4v_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -7747,19 +7454,12 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                           <object class="GtkSpinButton" id="preview_count">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="max_length">2</property>
                             <property name="width-chars">6</property>
-                            <property name="invisible_char">●</property>
-                            <property name="shadow_type">none</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">False</property>
                             <property name="adjustment">preview_count_adj</property>
                             <property name="numeric">True</property>
                             <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -7771,15 +7471,11 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <property name="use_markup">True</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">3</property>
                       </packing>
                     </child>
@@ -7796,19 +7492,12 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                           <object class="GtkSpinButton" id="MinTitleDuration">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="max-length">4</property>
                             <property name="width-chars">6</property>
-                            <property name="invisible_char">●</property>
-                            <property name="shadow_type">none</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">False</property>
                             <property name="adjustment">min_title_adj</property>
                             <property name="numeric">True</property>
                             <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -7820,15 +7509,11 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                             <property name="use_markup">True</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
@@ -7873,8 +7558,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                 <signal name="changed" handler="vqual_granularity_changed_cb" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -7884,10 +7567,9 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Constant Quality fractional granularity</property>
+                                <property name="hexpand">True</property>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -7934,8 +7616,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                 <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -7953,16 +7633,12 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                     <property name="can_focus">True</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="tooltip_text" translatable="yes">Pause encoding if free disk space drops below limit</property>
-                                    <property name="primary_icon_activatable">False</property>
-                                    <property name="secondary_icon_activatable">False</property>
                                     <property name="valign">GTK_ALIGN_CENTER</property>
                                     <property name="adjustment">DiskFreeLimitAdjustment</property>
                                     <property name="width_request">55</property>
                                     <signal name="value-changed" handler="pref_changed_cb" swapped="no"/>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -7972,17 +7648,14 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="label" translatable="yes">MB Limit</property>
+                                    <property name="hexpand">True</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -8011,8 +7684,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                 <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -8032,8 +7703,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                     <signal name="changed" handler="log_level_changed_cb" swapped="no"/>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -8043,17 +7712,14 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                     <property name="can_focus">False</property>
                                     <property name="halign">start</property>
                                     <property name="label" translatable="yes">Activity Log Verbosity Level</property>
+                                    <property name="hexpand">True</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -8072,8 +7738,6 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                     <signal name="changed" handler="pref_changed_cb" swapped="no"/>
                                   </object>
                                   <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">True</property>
                                     <property name="position">0</property>
                                   </packing>
                                 </child>
@@ -8085,15 +7749,11 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                     <property name="label" translatable="yes">Activity Log Longevity</property>
                                   </object>
                                   <packing>
-                                    <property name="expand">True</property>
-                                    <property name="fill">True</property>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">2</property>
                               </packing>
                             </child>
@@ -8154,15 +7814,11 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="tooltip_text" translatable="yes">Pause encoding if free disk space drops below limit</property>
-                                <property name="primary_icon_activatable">False</property>
-                                <property name="secondary_icon_activatable">False</property>
                                 <property name="valign">GTK_ALIGN_CENTER</property>
                                 <property name="adjustment">ActivityFontSizeAdjustment</property>
                                 <signal name="value-changed" handler="activity_font_changed_cb" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
@@ -8172,10 +7828,9 @@ This file may be reloaded at a later time to edit your jobs and re-encode.</prop
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
                                 <property name="label" translatable="yes">Activity Window Font Size</property>
+                                <property name="hexpand">True</property>
                               </object>
                               <packing>
-                                <property name="expand">True</property>
-                                <property name="fill">True</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -8249,8 +7904,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -8294,8 +7947,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -8317,15 +7968,11 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 </child>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -8339,7 +7986,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <property name="border_width">5</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
@@ -8364,10 +8010,9 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="halign">GTK_ALIGN_CENTER</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -8379,17 +8024,14 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="halign">GTK_ALIGN_CENTER</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
@@ -8400,12 +8042,15 @@ Uncheck this if you want to allow changing each title's settings independently.<
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="vexpand">True</property>
             <child>
               <object class="GtkBox" id="hbox31">
                 <property name="orientation">horizontal</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="margin-top">10</property>
+                <property name="margin-bottom">10</property>
                 <child>
                   <object class="GtkLabel" id="label30">
                     <property name="visible">True</property>
@@ -8415,8 +8060,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <property name="label" translatable="yes">Folder Name:</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -8429,20 +8072,14 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <property name="activates_default">True</property>
                     <property name="width-chars">30</property>
                     <property name="truncate_multiline">True</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
+                    <property name="hexpand">True</property>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="padding">10</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -8453,6 +8090,9 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">etched-out</property>
+                <property name="vexpand">True</property>
+                <property name="margin-top">10</property>
+                <property name="margin-bottom">10</property>
                 <child>
                   <object class="GtkTextView" id="FolderDescription">
                     <property name="margin-top">6</property>
@@ -8478,16 +8118,11 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 </child>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="padding">10</property>
                 <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -8502,7 +8137,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <property name="border_width">5</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
@@ -8513,6 +8147,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
         <property name="can_focus">False</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <property name="spacing">2</property>
+        <property name="hexpand">False</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_preset_rename_area">
             <property name="visible">True</property>
@@ -8527,10 +8162,9 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="hexpand">False</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -8542,17 +8176,14 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="hexpand">False</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
@@ -8563,6 +8194,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="vexpand">True</property>
             <child>
               <object class="GtkLabel" id="preset_dialog_rename_label">
                 <property name="visible">True</property>
@@ -8574,8 +8206,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="label" translatable="yes">&lt;span size="x-large"&gt;Rename Preset&lt;/span&gt;</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -8596,8 +8226,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <property name="label" translatable="yes">Name:</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -8610,8 +8238,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <property name="activates_default">True</property>
                     <property name="width-chars">40</property>
                     <property name="truncate_multiline">True</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
                     <property name="hexpand">True</property>
                     <signal name="changed" handler="preset_name_changed_cb" swapped="no"/>
                   </object>
@@ -8631,6 +8257,8 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">etched-out</property>
+                <property name="margin-top">10</property>
+                <property name="margin-bottom">10</property>
                 <child>
                   <object class="GtkTextView" id="PresetReDescription">
                     <property name="margin-top">6</property>
@@ -8658,14 +8286,11 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 </child>
               </object>
               <packing>
-                <property name="padding">10</property>
                 <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -8680,7 +8305,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <property name="border_width">5</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
@@ -8707,8 +8331,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -8722,15 +8344,11 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
@@ -8741,6 +8359,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="vexpand">True</property>
             <child>
               <object class="GtkGrid" id="preset_save_name_table">
                 <property name="visible">True</property>
@@ -8748,6 +8367,8 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="column-spacing">6</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="margin-top">10</property>
+                <property name="margin-bottom">10</property>
                 <child>
                   <object class="GtkLabel" id="preset_save_category_label">
                     <property name="visible">True</property>
@@ -8803,8 +8424,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <property name="activates_default">True</property>
                     <property name="width-chars">30</property>
                     <property name="truncate_multiline">True</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
                     <signal name="changed" handler="preset_category_changed_cb" swapped="no"/>
                   </object>
                   <packing>
@@ -8838,8 +8457,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <property name="activates_default">True</property>
                     <property name="width-chars">30</property>
                     <property name="truncate_multiline">True</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
                     <signal name="changed" handler="preset_name_changed_cb" swapped="no"/>
                   </object>
                   <packing>
@@ -8851,9 +8468,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="padding">10</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -8880,6 +8494,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="row-spacing">2</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="vexpand">True</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -8942,8 +8557,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
 
 Whenever a new source is loaded, this value will be applied if the source width is greater.
 Setting this to 0 means there is no maximum width.</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">adjustment32</property>
                     <property name="snap_to_ticks">True</property>
                     <signal name="value-changed" handler="preset_widget_changed_cb" swapped="no"/>
@@ -8984,8 +8597,6 @@ Setting this to 0 means there is no maximum width.</property>
 
 Whenever a new source is loaded, this value will be applied if the source height is greater.
 Setting this to 0 means there is no maximum height.</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">adjustment33</property>
                     <signal name="value-changed" handler="preset_widget_changed_cb" swapped="no"/>
                   </object>
@@ -8998,8 +8609,6 @@ Setting this to 0 means there is no maximum height.</property>
                 </child>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -9010,6 +8619,9 @@ Setting this to 0 means there is no maximum height.</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">etched-out</property>
+                <property name="vexpand">True</property>
+                <property name="margin-top">10</property>
+                <property name="margin-bottom">10</property>
                 <child>
                   <object class="GtkTextView" id="PresetDescription">
                     <property name="margin-top">6</property>
@@ -9035,16 +8647,11 @@ Setting this to 0 means there is no maximum height.</property>
                 </child>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="padding">10</property>
                 <property name="position">3</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -9072,11 +8679,17 @@ Setting this to 0 means there is no maximum height.</property>
     <signal name="configure-event" handler="preview_configure_cb" swapped="no"/>
     <signal name="delete-event" handler="preview_window_delete_cb" swapped="no"/>
     <child>
+])dnl
+ifelse(eval(gtk_version >= 400), 1, filter_output([
+      <object class="GtkBox" id="preview_image">
+        <property name="orientation">horizontal</property>
+]), filter_output([
       <object class="GtkEventBox" id="preview_image">
+]))dnl
+filter_output([
         <property name="width_request">854</property>
         <property name="height_request">480</property>
         <property name="visible">True</property>
-        <property name="app_paintable">True</property>
         <property name="can_focus">False</property>
         <property name="hexpand-set">True</property>
         <property name="vexpand-set">True</property>
@@ -9090,7 +8703,14 @@ Setting this to 0 means there is no maximum height.</property>
         <signal name="size-allocate" handler="preview_resize_cb" swapped="no"/>
         <signal name="draw" handler="preview_draw_cb" swapped="no"/>
         <child>
+])dnl
+ifelse(eval(gtk_version >= 400), 1, filter_output([
+          <object class="GtkBox" id="preview_hud">
+            <property name="orientation">horizontal</property>
+]), filter_output([
           <object class="GtkEventBox" id="preview_hud">
+]))dnl
+filter_output([
             <property name="visible">False</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
@@ -9121,8 +8741,6 @@ Setting this to 0 means there is no maximum height.</property>
                     <signal name="value-changed" handler="preview_frame_value_changed_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -9150,8 +8768,6 @@ Setting this to 0 means there is no maximum height.</property>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -9161,11 +8777,10 @@ Setting this to 0 means there is no maximum height.</property>
                         <property name="adjustment">preview_progress_adj</property>
                         <property name="draw_value">False</property>
                         <property name="value_pos">right</property>
+                        <property name="hexpand">True</property>
                         <signal name="value-changed" handler="live_preview_seek_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -9174,6 +8789,7 @@ Setting this to 0 means there is no maximum height.</property>
                         <property name="orientation">vertical</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="hexpand">True</property>
                         <child>
                           <object class="GtkProgressBar" id="live_encode_progress">
                             <property name="height_request">20</property>
@@ -9182,22 +8798,16 @@ Setting this to 0 means there is no maximum height.</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">True</property>
-                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -9221,8 +8831,6 @@ Setting this to 0 means there is no maximum height.</property>
                             <property name="use_markup">True</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">0</property>
                           </packing>
                         </child>
@@ -9232,22 +8840,16 @@ Setting this to 0 means there is no maximum height.</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="tooltip_text" translatable="yes">Set the duration of the live preview in seconds.</property>
-                            <property name="primary_icon_activatable">False</property>
-                            <property name="secondary_icon_activatable">False</property>
                             <property name="adjustment">adjustment21</property>
                             <property name="numeric">True</property>
                             <signal name="value-changed" handler="preview_duration_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -9263,8 +8865,6 @@ Setting this to 0 means there is no maximum height.</property>
                         <signal name="toggled" handler="show_crop_changed_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -9279,15 +8879,11 @@ Setting this to 0 means there is no maximum height.</property>
                         <signal name="clicked" handler="preview_reset_clicked_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -9300,7 +8896,6 @@ Setting this to 0 means there is no maximum height.</property>
   </object>
   <object class="GtkFileChooserDialog" id="source_dialog">
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
     <property name="modal">True</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
@@ -9367,8 +8962,6 @@ ifelse(eval(gtk_version <= 312), 1, filter_output([
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -9384,15 +8977,11 @@ ifelse(eval(gtk_version <= 312), 1, filter_output([
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
@@ -9417,8 +9006,6 @@ filter_output([
                     <property name="label" translatable="yes">Title Number:</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -9429,21 +9016,16 @@ filter_output([
                     <property name="can_focus">True</property>
                     <property name="halign">start</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">adjustment24</property>
+                    <property name="hexpand">True</property>
                     <signal name="value-changed" handler="setting_widget_changed_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -9460,8 +9042,6 @@ filter_output([
                     <property name="label" translatable="yes">Detected DVD devices:</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -9470,25 +9050,20 @@ filter_output([
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">start</property>
+                    <property name="hexpand">True</property>
                     <signal name="changed" handler="dvd_device_changed_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -9526,7 +9101,6 @@ filter_output([
   <object class="GtkDialog" id="subtitle_dialog">
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
     <property name="modal">True</property>
     <property name="resizable">False</property>
     <property name="window_position">center-on-parent</property>
@@ -9552,8 +9126,6 @@ filter_output([
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -9566,15 +9138,11 @@ filter_output([
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
@@ -9598,8 +9166,6 @@ filter_output([
                 <signal name="toggled" handler="subtitle_srt_radio_toggled_cb" swapped="no"/>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -9616,15 +9182,11 @@ filter_output([
                 <property name="group">SubtitleSrtEnable</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -9766,8 +9328,6 @@ The source's character code is needed in order to perform this translation.</pro
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Adjust the offset in milliseconds between video and SRT timestamps</property>
-                    <property name="primary_icon_activatable">False</property>
-                    <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">adjustment31</property>
                     <signal name="value-changed" handler="srt_offset_changed_cb" swapped="no"/>
                   </object>
@@ -9780,8 +9340,6 @@ The source's character code is needed in order to perform this translation.</pro
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -9798,8 +9356,6 @@ The source's character code is needed in order to perform this translation.</pro
                     <property name="label" translatable="yes">Track</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -9813,15 +9369,11 @@ The source's character code is needed in order to perform this translation.</pro
                     <signal name="changed" handler="subtitle_track_changed_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -9848,8 +9400,6 @@ a foreign language.</property>
                     <signal name="toggled" handler="subtitle_forced_toggled_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -9867,8 +9417,6 @@ The subtitle will be part of the video and can not be disabled.</property>
                     <signal name="toggled" handler="subtitle_burned_toggled_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -9891,22 +9439,16 @@ in your output.</property>
                     <signal name="toggled" handler="subtitle_default_toggled_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -9920,7 +9462,6 @@ in your output.</property>
   <object class="GtkDialog" id="audio_dialog">
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
     <property name="modal">True</property>
     <property name="resizable">False</property>
     <property name="window_position">center-on-parent</property>
@@ -9946,8 +9487,6 @@ in your output.</property>
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -9960,15 +9499,11 @@ in your output.</property>
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
@@ -9979,6 +9514,7 @@ in your output.</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="column_spacing">5</property>
+            <property name="vexpand">True</property>
             <child>
               <object class="GtkLabel" id="label35">
                 <property name="visible">True</property>
@@ -10037,8 +9573,6 @@ Players may use this in the audio selection list.</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="truncate_multiline">True</property>
-                <property name="primary_icon_activatable">False</property>
-                <property name="secondary_icon_activatable">False</property>
                 <signal name="changed" handler="audio_name_changed_cb" swapped="no"/>
               </object>
               <packing>
@@ -10050,8 +9584,6 @@ Players may use this in the audio selection list.</property>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -10061,6 +9593,7 @@ Players may use this in the audio selection list.</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="margin_top">24</property>
+            <property name="vexpand">True</property>
             <child>
               <object class="GtkLabel" id="AudioEncoderLabel">
                 <property name="visible">True</property>
@@ -10191,8 +9724,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                         <property name="draw_indicator">True</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -10210,15 +9741,11 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                         <signal name="toggled" handler="audio_quality_radio_changed_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -10232,8 +9759,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <signal name="changed" handler="audio_bitrate_changed_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -10264,8 +9789,6 @@ weather-clear</property>
                         <signal name="value-changed" handler="quality_widget_changed_cb" swapped="no"/>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">0</property>
                       </packing>
                     </child>
@@ -10279,15 +9802,11 @@ weather-clear</property>
                         <property name="width-chars">4</property>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
@@ -10354,8 +9873,6 @@ audio-volume-medium</property>
                     <signal name="value-changed" handler="gain_widget_changed_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -10369,8 +9886,6 @@ audio-volume-medium</property>
                     <property name="width-chars">6</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -10405,8 +9920,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <signal name="value-changed" handler="drc_widget_changed_cb" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -10420,8 +9933,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <property name="width-chars">4</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -10435,8 +9946,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
         </child>
@@ -10450,7 +9959,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
   <object class="GtkDialog" id="update_dialog">
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
-    <property name="border_width">5</property>
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
@@ -10474,8 +9982,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -10487,15 +9993,11 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                 <property name="receives_default">True</property>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
@@ -10505,18 +10007,25 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
             <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="vexpand">True</property>
             <child>
               <object class="GtkBox" id="vbox19">
                 <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
+])dnl
+ifelse(eval(gtk_version >= 400), 1, filter_output([
+                  <object class="GtkBox" id="eventbox2">
+                    <property name="orientation">horizontal</property>
+]), filter_output([
                   <object class="GtkEventBox" id="eventbox2">
+                    <property name="visible_window">False</property>
+]))dnl
+filter_output([
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
-                    <property name="visible_window">False</property>
-                    <property name="above_child">True</property>
                     <child>
                       <object class="GtkImage" id="image10">
                         <property name="visible">True</property>
@@ -10528,8 +10037,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -10538,8 +10045,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -10548,6 +10053,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                 <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
                 <child>
                   <object class="GtkLabel" id="label22">
                     <property name="visible">True</property>
@@ -10561,8 +10067,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">0</property>
                   </packing>
                 </child>
@@ -10578,8 +10082,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <property name="label" translatable="yes">HandBrake xxx is now available (you have yyy).</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -10589,6 +10091,7 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     <property name="can_focus">False</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">etched-out</property>
+                    <property name="vexpand">True</property>
                     <child>
                       <object class="GtkScrolledWindow" id="update_scroll">
                         <property name="margin-start">12</property>
@@ -10610,22 +10113,16 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>

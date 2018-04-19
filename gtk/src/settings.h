@@ -74,7 +74,6 @@ typedef struct
     preview_t           * preview;
     gchar               * appcast;
     gint                  appcast_len;
-    GdkVisibilityState    hb_visibility;
     int                   stderr_src_id;
     GtkApplication      * app;
 } signal_user_data_t;

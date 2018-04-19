@@ -1793,7 +1793,7 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     gtk_widget_set_name(GTK_WIDGET(selected), "title_selected");
     gtk_widget_show(GTK_WIDGET(selected));
     g_signal_connect(selected, "toggled", (GCallback)title_selected_cb, ud);
-    gtk_box_pack_start(hbox, GTK_WIDGET(selected), FALSE, FALSE, 0);
+    ghb_box_pack_start(hbox, GTK_WIDGET(selected));
 
     // Title label
     title = GTK_LABEL(gtk_label_new(_("No Title")));
@@ -1802,7 +1802,7 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     gtk_widget_set_valign(GTK_WIDGET(title), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(title), "title_label");
     gtk_widget_show(GTK_WIDGET(title));
-    gtk_box_pack_start(hbox, GTK_WIDGET(title), FALSE, FALSE, 0);
+    ghb_box_pack_start(hbox, GTK_WIDGET(title));
 
     default_title_attrs = gtk_label_get_attributes(title);
     gtk_widget_set_tooltip_text(GTK_WIDGET(title),
@@ -1813,6 +1813,8 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
 
     // Destination entry and file chooser
     vbox_dest = GTK_BOX(gtk_box_new(GTK_ORIENTATION_VERTICAL, 0));
+    gtk_widget_set_hexpand(GTK_WIDGET(vbox_dest), TRUE);
+    gtk_widget_set_halign(GTK_WIDGET(vbox_dest), GTK_ALIGN_FILL);
     //gtk_widget_set_hexpand(GTK_WIDGET(vbox_dest), TRUE);
     dest_file = GTK_ENTRY(gtk_entry_new());
     gtk_entry_set_width_chars(dest_file, 40);
@@ -1820,7 +1822,7 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     //gtk_widget_set_hexpand(GTK_WIDGET(dest_file), TRUE);
     gtk_widget_show(GTK_WIDGET(dest_file));
     g_signal_connect(dest_file, "changed", (GCallback)title_dest_file_cb, ud);
-    gtk_box_pack_start(vbox_dest, GTK_WIDGET(dest_file), FALSE, FALSE, 0);
+    ghb_box_pack_start(vbox_dest, GTK_WIDGET(dest_file));
     dest_dir = GTK_FILE_CHOOSER_BUTTON(
             gtk_file_chooser_button_new(_("Destination Directory"),
                                         GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER));
@@ -1829,9 +1831,9 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     gtk_widget_set_name(GTK_WIDGET(dest_dir), "title_dir");
     gtk_widget_set_hexpand(GTK_WIDGET(dest_dir), TRUE);
     gtk_widget_show(GTK_WIDGET(dest_dir));
-    gtk_box_pack_start(vbox_dest, GTK_WIDGET(dest_dir), FALSE, FALSE, 0);
+    ghb_box_pack_start(vbox_dest, GTK_WIDGET(dest_dir));
     gtk_widget_show(GTK_WIDGET(vbox_dest));
-    gtk_box_pack_start(hbox, GTK_WIDGET(vbox_dest), TRUE, TRUE, 0);
+    ghb_box_pack_start(hbox, GTK_WIDGET(vbox_dest));
 
     return GTK_WIDGET(hbox);
 }
@@ -2517,7 +2519,7 @@ find_pid:
 G_MODULE_EXPORT gboolean
 queue_key_press_cb(
     GtkWidget *widget,
-    GdkEventKey *event,
+    GdkEvent *event,
     signal_user_data_t *ud)
 {
     GtkTreeView *treeview;
@@ -2529,9 +2531,11 @@ queue_key_press_cb(
     gint unique_id;
     GhbValue *queueDict, *uiDict;
     gint status;
+    guint keyval;
 
     g_debug("queue_key_press_cb ()");
-    if (event->keyval != GDK_KEY_Delete)
+    ghb_event_get_keyval(event, &keyval);
+    if (keyval != GDK_KEY_Delete)
         return FALSE;
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
     store = gtk_tree_view_get_model(treeview);

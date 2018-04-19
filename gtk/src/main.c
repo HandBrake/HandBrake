@@ -795,9 +795,14 @@ const gchar *MyCSS =
     color: @white;                  \n\
 }                                   \n\
                                     \n\
-entry                               \n\
+textview                            \n\
 {                                   \n\
-    margin: 0px 0px 0px 0px;        \n\
+    padding: 5px 5px 5px 5px;       \n\
+}                                   \n\
+                                    \n\
+.entry                              \n\
+{                                   \n\
+    margin: 0px 5px 0px 5px;        \n\
     padding: 0px 0px 0px 0px;       \n\
 }                                   \n\
 "
@@ -967,22 +972,13 @@ ghb_idle_ui_init(signal_user_data_t *ud)
 extern G_MODULE_EXPORT void
 ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
 {
-    GError             * error    = NULL;
     GtkCssProvider     * provider = gtk_css_provider_new();
 
-    gtk_css_provider_load_from_data(provider, MyCSS, -1, &error);
-    if (error == NULL)
-    {
-        GdkScreen *ss = gdk_screen_get_default();
-        gtk_style_context_add_provider_for_screen(ss,
-                                    GTK_STYLE_PROVIDER(provider),
-                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
-    else
-    {
-        g_warning("%s: %s", G_STRFUNC, error->message);
-        g_clear_error(&error);
-    }
+    ghb_css_provider_load_from_data(provider, MyCSS, -1);
+    GdkScreen *ss = gdk_screen_get_default();
+    gtk_style_context_add_provider_for_screen(ss,
+                                GTK_STYLE_PROVIDER(provider),
+                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     g_object_unref(provider);
 
 #if !defined(_WIN32)
@@ -1130,13 +1126,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     GtkWidget *ghb_window = GHB_WIDGET(ud->builder, "hb_window");
 
     gint window_width, window_height;
-    GdkGeometry geo = {
-        -1, -1, 1920, 1080, -1, -1, 10, 10, 0, 0, GDK_GRAVITY_NORTH_WEST
-    };
-    GdkWindowHints geo_mask;
-    geo_mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE | GDK_HINT_BASE_SIZE;
-    gtk_window_set_geometry_hints(GTK_WINDOW(ghb_window), ghb_window,
-                                  &geo, geo_mask);
     window_width = ghb_dict_get_int(ud->prefs, "window_width");
     window_height = ghb_dict_get_int(ud->prefs, "window_height");
 

@@ -49,8 +49,8 @@ struct _GhbCellRendererText
   gchar *text;
   PangoFontDescription *font;
   gdouble font_scale;
-  PangoColor foreground;
-  PangoColor background;
+  GdkRGBA foreground;
+  GdkRGBA background;
 
   PangoAttrList *extra_attrs;
 

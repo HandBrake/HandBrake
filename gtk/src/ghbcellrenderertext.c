@@ -61,12 +61,21 @@ static void ghb_cell_renderer_text_get_size   (GtkCellRenderer          *cell,
                            gint                     *y_offset,
                            gint                     *width,
                            gint                     *height);
+#if GTK_CHECK_VERSION(3, 90, 0)
+static void ghb_cell_renderer_text_snapshot   (GtkCellRenderer          *cell,
+                           GtkSnapshot              *snapshot,
+                           GtkWidget                *widget,
+                           MyGdkRectangle           *background_area,
+                           MyGdkRectangle           *cell_area,
+                           GtkCellRendererState      flags);
+#else
 static void ghb_cell_renderer_text_render     (GtkCellRenderer          *cell,
                            cairo_t                  *cr,
                            GtkWidget                *widget,
                            MyGdkRectangle           *background_area,
                            MyGdkRectangle           *cell_area,
                            GtkCellRendererState      flags);
+#endif
 static GtkCellEditable *ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
                                   GdkEvent             *event,
                                   GtkWidget            *widget,
@@ -95,8 +104,8 @@ enum {
   /* Style args */
   PROP_BACKGROUND,
   PROP_FOREGROUND,
-  PROP_BACKGROUND_GDK,
-  PROP_FOREGROUND_GDK,
+  PROP_BACKGROUND_RGBA,
+  PROP_FOREGROUND_RGBA,
   PROP_FONT,
   PROP_FONT_DESC,
   PROP_FAMILY,
@@ -201,7 +210,11 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
   object_class->set_property = ghb_cell_renderer_text_set_property;
 
   cell_class->get_size = ghb_cell_renderer_text_get_size;
+#if GTK_CHECK_VERSION(3, 90, 0)
+  cell_class->snapshot = ghb_cell_renderer_text_snapshot;
+#else
   cell_class->render = ghb_cell_renderer_text_render;
+#endif
   cell_class->start_editing = ghb_cell_renderer_text_start_editing;
 
   g_object_class_install_property (object_class,
@@ -246,8 +259,8 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                         GTK_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
-                                   PROP_BACKGROUND_GDK,
-                                   g_param_spec_boxed ("background-gdk",
+                                   PROP_BACKGROUND_RGBA,
+                                   g_param_spec_boxed ("background-rgba",
                                                        P_("Background color"),
                                                        P_("Background color as a GdkColor"),
                                                        GDK_TYPE_RGBA,
@@ -262,8 +275,8 @@ ghb_cell_renderer_text_class_init (GhbCellRendererTextClass *class)
                                                         GTK_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
-                                   PROP_FOREGROUND_GDK,
-                                   g_param_spec_boxed ("foreground-gdk",
+                                   PROP_FOREGROUND_RGBA,
+                                   g_param_spec_boxed ("foreground-rgba",
                                                        P_("Foreground color"),
                                                        P_("Foreground color as a GdkColor"),
                                                        GDK_TYPE_RGBA,
@@ -680,27 +693,15 @@ ghb_cell_renderer_text_get_property (GObject        *object,
       g_value_set_boolean (value, priv->single_paragraph);
       break;
 
-    case PROP_BACKGROUND_GDK:
+    case PROP_BACKGROUND_RGBA:
       {
-        GdkColor color;
-
-        color.red = celltext->background.red;
-        color.green = celltext->background.green;
-        color.blue = celltext->background.blue;
-
-        g_value_set_boxed (value, &color);
+        g_value_set_boxed(value, &celltext->background);
       }
       break;
 
-    case PROP_FOREGROUND_GDK:
+    case PROP_FOREGROUND_RGBA:
       {
-        GdkColor color;
-
-        color.red = celltext->foreground.red;
-        color.green = celltext->foreground.green;
-        color.blue = celltext->foreground.blue;
-
-        g_value_set_boxed (value, &color);
+        g_value_set_boxed(value, &celltext->foreground);
       }
       break;
 
@@ -859,9 +860,7 @@ set_bg_color (GhbCellRendererText *celltext,
           g_object_notify (G_OBJECT (celltext), "background-set");
         }
 
-      celltext->background.red = rgba->red;
-      celltext->background.green = rgba->green;
-      celltext->background.blue = rgba->blue;
+      celltext->background = *rgba;
     }
   else
     {
@@ -886,9 +885,7 @@ set_fg_color (GhbCellRendererText *celltext,
           g_object_notify (G_OBJECT (celltext), "foreground-set");
         }
 
-      celltext->foreground.red = rgba->red;
-      celltext->foreground.green = rgba->green;
-      celltext->foreground.blue = rgba->blue;
+      celltext->foreground = *rgba;
     }
   else
     {
@@ -1108,7 +1105,7 @@ ghb_cell_renderer_text_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string(value));
 
-        g_object_notify (object, "background-gdk");
+        g_object_notify (object, "background-rgba");
       }
       break;
 
@@ -1123,16 +1120,16 @@ ghb_cell_renderer_text_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (object, "foreground-gdk");
+        g_object_notify (object, "foreground-rgba");
       }
       break;
 
-    case PROP_BACKGROUND_GDK:
+    case PROP_BACKGROUND_RGBA:
       /* This notifies the GObject itself. */
       set_bg_color (celltext, g_value_get_boxed (value));
       break;
 
-    case PROP_FOREGROUND_GDK:
+    case PROP_FOREGROUND_RGBA:
       /* This notifies the GObject itself. */
       set_fg_color (celltext, g_value_get_boxed (value));
       break;
@@ -1417,12 +1414,10 @@ get_layout (GhbCellRendererText *celltext,
       if (celltext->foreground_set
       && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
         {
-          PangoColor color;
-
-          color = celltext->foreground;
-
-          add_attr (attr_list,
-                    pango_attr_foreground_new (color.red, color.green, color.blue));
+          add_attr(attr_list,
+                   pango_attr_foreground_new(celltext->foreground.red,
+                                             celltext->foreground.green,
+                                             celltext->foreground.blue));
         }
 
       if (celltext->strikethrough_set)
@@ -1623,6 +1618,68 @@ ghb_cell_renderer_text_get_size (GtkCellRenderer *cell,
         x_offset, y_offset, width, height);
 }
 
+#if GTK_CHECK_VERSION(3, 90, 0)
+static void ghb_cell_renderer_text_snapshot(
+    GtkCellRenderer          *cell,
+    GtkSnapshot              *snapshot,
+    GtkWidget                *widget,
+    MyGdkRectangle           *background_area,
+    MyGdkRectangle           *cell_area,
+    GtkCellRendererState      flags)
+{
+    GhbCellRendererText        * celltext = (GhbCellRendererText *) cell;
+    GhbCellRendererTextPrivate * priv;
+    GtkStyleContext            * context;
+    PangoLayout                * layout;
+    gint                         x_offset = 0;
+    gint                         y_offset = 0;
+    gint                         xpad, ypad;
+    PangoRectangle               rect;
+
+    priv = GHB_CELL_RENDERER_TEXT_GET_PRIVATE (cell);
+
+    layout = get_layout (celltext, widget, TRUE, flags);
+    get_size(cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
+    context = gtk_widget_get_style_context(widget);
+
+    if (celltext->background_set && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
+    {
+        gtk_snapshot_append_color(snapshot,
+                                  &celltext->background,
+                                  &GRAPHENE_RECT_INIT(
+                                        background_area->x, background_area->y,
+                                        background_area->width,
+                                        background_area->height),
+                                  "CellTextBackground");
+    }
+
+
+    gtk_cell_renderer_get_padding(cell, &xpad, &ypad);
+
+    if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
+        pango_layout_set_width(layout,
+                (cell_area->width - x_offset - 2 * xpad) * PANGO_SCALE);
+    else if (priv->wrap_width == -1)
+        pango_layout_set_width(layout, -1);
+
+    pango_layout_get_pixel_extents (layout, NULL, &rect);
+    x_offset = x_offset - rect.x;
+
+    gtk_snapshot_push_clip(snapshot,
+                           &GRAPHENE_RECT_INIT(
+                                cell_area->x, cell_area->y,
+                                cell_area->width, cell_area->height),
+                           "CellTextClip");
+
+    gtk_snapshot_render_layout(snapshot, context,
+                               cell_area->x + x_offset + xpad,
+                               cell_area->y + y_offset + ypad, layout);
+
+    gtk_snapshot_pop(snapshot);
+
+    g_object_unref(layout);
+}
+#else
 static void ghb_cell_renderer_text_render(
     GtkCellRenderer          *cell,
     cairo_t                  *cr,
@@ -1700,6 +1757,7 @@ static void ghb_cell_renderer_text_render(
 
     g_object_unref (layout);
 }
+#endif
 
 static gboolean
 ghb_cell_renderer_text_keypress(
@@ -1863,40 +1921,6 @@ ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 
     gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
 
-#if 0
-    GtkRequisition min_size, size;
-
-    gtk_widget_get_preferred_size(priv->entry, &min_size, &size);
-    if (min_size.height > size.height)
-        size.height = min_size.height;
-    if (min_size.width > size.width)
-        size.width = min_size.width;
-    if (size.height < cell_area->height)
-    {
-        GtkBorder *style_border;
-        GtkBorder border;
-
-        gtk_widget_style_get (priv->entry,
-                "inner-border", &style_border,
-                NULL);
-
-        if (style_border)
-        {
-            border = *style_border;
-            g_boxed_free (GTK_TYPE_BORDER, style_border);
-        }
-        else
-        {
-            /* Since boxed style properties can't have default values ... */
-            border.left = 2;
-            border.right = 2;
-        }
-
-        border.top = (cell_area->height - size.height) / 2;
-        border.bottom = (cell_area->height - size.height) / 2;
-        gtk_entry_set_inner_border (GTK_ENTRY (priv->entry), &border);
-    }
-#endif
     priv->in_entry_menu = FALSE;
     if (priv->entry_menu_popdown_timeout)
     {

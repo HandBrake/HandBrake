@@ -4852,15 +4852,15 @@ ghb_chapter_list_refresh_all(signal_user_data_t *ud)
     chapter_refresh_list_ui(ud);
 }
 
-static gint chapter_edit_key = 0;
+static guint chapter_edit_key = 0;
 
 G_MODULE_EXPORT gboolean
 chapter_keypress_cb(
     GhbCellRendererText *cell,
-    GdkEventKey *event,
+    GdkEvent *event,
     signal_user_data_t *ud)
 {
-    chapter_edit_key = event->keyval;
+    ghb_event_get_keyval(event, &chapter_edit_key);
     return FALSE;
 }
 
@@ -5031,17 +5031,13 @@ activity_font_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         }                                   \n\
         ";
     char           * css      = g_strdup_printf(css_template, size);
-    GError         * error    = NULL;
     GtkCssProvider * provider = gtk_css_provider_new();
 
-    gtk_css_provider_load_from_data(provider, css, -1, &error);
-    if (error == NULL)
-    {
-        GdkScreen *ss = gdk_screen_get_default();
-        gtk_style_context_add_provider_for_screen(ss,
-                                    GTK_STYLE_PROVIDER(provider),
-                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    }
+    ghb_css_provider_load_from_data(provider, css, -1);
+    GdkScreen *ss = gdk_screen_get_default();
+    gtk_style_context_add_provider_for_screen(ss,
+                                GTK_STYLE_PROVIDER(provider),
+                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     g_object_unref(provider);
     g_free(css);
 #else
@@ -5445,28 +5441,63 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
 }
 #endif
 
+typedef struct
+{
+    gint count;
+    signal_user_data_t *ud;
+} button_click_t;
+
+static gboolean
+easter_egg_timeout_cb(button_click_t *bc)
+{
+    if (bc->count == 1)
+    {
+        GtkWidget *widget;
+        widget = GHB_WIDGET(bc->ud->builder, "allow_tweaks");
+        gtk_widget_hide(widget);
+        widget = GHB_WIDGET(bc->ud->builder, "hbfd_feature");
+        gtk_widget_hide(widget);
+    }
+    bc->count = 0;
+
+    return FALSE;
+}
+
 G_MODULE_EXPORT gboolean
 easter_egg_cb(
     GtkWidget *widget,
-    GdkEventButton *event,
+    GdkEvent *event,
     signal_user_data_t *ud)
 {
-    g_debug("press %d %d", event->type, event->button);
-    if (event->type == GDK_3BUTTON_PRESS && event->button == 1)
-    { // Its a tripple left mouse button click
-        GtkWidget *widget;
-        widget = GHB_WIDGET(ud->builder, "allow_tweaks");
-        gtk_widget_show(widget);
-        widget = GHB_WIDGET(ud->builder, "hbfd_feature");
-        gtk_widget_show(widget);
-    }
-    else if (event->type == GDK_BUTTON_PRESS && event->button == 1)
+    GdkEventType type = ghb_event_get_event_type(event);
+    guint        button;
+    static button_click_t bc = { .count = 0 };
+
+    bc.ud = ud;
+    ghb_event_get_button(event, &button);
+    if (type == GDK_BUTTON_PRESS && button == 1)
     {
-        GtkWidget *widget;
-        widget = GHB_WIDGET(ud->builder, "allow_tweaks");
-        gtk_widget_hide(widget);
-        widget = GHB_WIDGET(ud->builder, "hbfd_feature");
-        gtk_widget_hide(widget);
+        bc.count++;
+        switch (bc.count)
+        {
+            case 1:
+            {
+                g_timeout_add(500, (GSourceFunc)easter_egg_timeout_cb, &bc);
+            } break;
+
+            case 3:
+            {
+                // Its a tripple left mouse button click
+                GtkWidget *widget;
+                widget = GHB_WIDGET(ud->builder, "allow_tweaks");
+                gtk_widget_show(widget);
+                widget = GHB_WIDGET(ud->builder, "hbfd_feature");
+                gtk_widget_show(widget);
+            } break;
+
+            default:
+                break;
+        }
     }
     return FALSE;
 }
@@ -5713,37 +5744,6 @@ free_resources:
     g_match_info_free(mi);
     g_regex_unref(regex);
     return NULL;
-}
-
-G_MODULE_EXPORT gboolean
-hb_visibility_event_cb(
-    GtkWidget *widget,
-    GdkEventVisibility *vs,
-    signal_user_data_t *ud)
-{
-    ud->hb_visibility = vs->state;
-    return FALSE;
-}
-
-G_MODULE_EXPORT void
-show_hide_toggle_cb(GtkWidget *xwidget, signal_user_data_t *ud)
-{
-    GtkWindow *window;
-    GdkWindowState state;
-
-    window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    state = gdk_window_get_state(gtk_widget_get_window(GTK_WIDGET(window)));
-    if ((state & GDK_WINDOW_STATE_ICONIFIED) ||
-        (ud->hb_visibility != GDK_VISIBILITY_UNOBSCURED))
-    {
-        gtk_window_present(window);
-        gtk_window_set_skip_taskbar_hint(window, FALSE);
-    }
-    else
-    {
-        gtk_window_set_skip_taskbar_hint(window, TRUE);
-        gtk_window_iconify(window);
-    }
 }
 
 #if !defined(_WIN32)

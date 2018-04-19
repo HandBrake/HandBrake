@@ -119,7 +119,16 @@ case $host in
 esac
 
 PKG_PROG_PKG_CONFIG
-GHB_PACKAGES="gtk+-3.0 $GHB_PACKAGES"
+
+#PKG_CHECK_MODULES([GHB_GTK_4_0], [gtk+-4.0 >= 3.92], [HAVE_GTK_400=1], [HAVE_GTK_400=0])
+PKG_CHECK_MODULES([GHB_GTK_3_16], [gtk+-3.0 >= 3.16], [HAVE_GTK_316=1], [HAVE_GTK_316=0])
+PKG_CHECK_MODULES([GHB_GTK_3_14], [gtk+-3.0 >= 3.14], [HAVE_GTK_314=1], [HAVE_GTK_314=0])
+PKG_CHECK_MODULES([GHB_GTK_3_12], [gtk+-3.0 >= 3.12], [HAVE_GTK_312=1], [HAVE_GTK_312=0])
+if test "$HAVE_GTK_400" -eq 1 ; then
+    GHB_PACKAGES="gtk+-4.0 $GHB_PACKAGES"
+else
+    GHB_PACKAGES="gtk+-3.0 $GHB_PACKAGES"
+fi
 
 GST1_MODULES="gstreamer-1.0 gstreamer-video-1.0 gstreamer-audio-1.0 gstreamer-pbutils-1.0"
 
@@ -146,8 +155,8 @@ if test "x$gst_disable" = "xno" ; then
 fi
 
 if test "x$update_checks" = "xyes" ; then
-    PKG_CHECK_MODULES(WebKitGtk3, webkitgtk-3.0, use_webkitgtk3=yes, use_webkitgtk3=no)
-    if test "x$use_webkitgtk3" = "xyes" ; then
+    PKG_CHECK_MODULES(WebKitGtk3, webkitgtk-3.0, use_webkitgtk=yes, use_webkitgtk=no)
+    if test "x$use_webkitgtk" = "xyes" ; then
         GHB_PACKAGES="$GHB_PACKAGES webkitgtk-3.0"
     else
         update_checks="no"
@@ -157,9 +166,7 @@ else
 	CFLAGS="$CFLAGS -D_NO_UPDATE_CHECK"
 fi
 
-PKG_CHECK_MODULES([GHB_GTK_3_16], [gtk+-3.0 >= 3.16], [HAVE_GTK_316=1], [HAVE_GTK_316=0])
-PKG_CHECK_MODULES([GHB_GTK_3_14], [gtk+-3.0 >= 3.14], [HAVE_GTK_314=1], [HAVE_GTK_314=0])
-PKG_CHECK_MODULES([GHB_GTK_3_12], [gtk+-3.0 >= 3.12], [HAVE_GTK_312=1], [HAVE_GTK_312=0])
+AM_CONDITIONAL([GHB_GTK_4_00], [test "$HAVE_GTK_400" -eq 1])
 AM_CONDITIONAL([GHB_GTK_3_16], [test "$HAVE_GTK_316" -eq 1])
 AM_CONDITIONAL([GHB_GTK_3_14], [test "$HAVE_GTK_314" -eq 1])
 AM_CONDITIONAL([GHB_GTK_3_12], [test "$HAVE_GTK_312" -eq 1])

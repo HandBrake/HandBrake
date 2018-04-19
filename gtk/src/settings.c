@@ -322,12 +322,14 @@ ghb_widget_value(GtkWidget *widget)
     else if (type == GTK_TYPE_RADIO_BUTTON)
     {
         gboolean bval;
+#if !GTK_CHECK_VERSION(3, 90, 0)
         bval = gtk_toggle_button_get_inconsistent(GTK_TOGGLE_BUTTON(widget));
         if (bval)
         {
             value = ghb_bool_value_new(FALSE);
         }
         else
+#endif
         {
             bval = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
             value = ghb_bool_value_new(bval);
