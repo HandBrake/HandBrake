@@ -56,6 +56,7 @@ OutFile "HandBrake-${PRODUCT_VERSION_NUMBER}-Win_GUI.exe"
 !include WordFunc.nsh
 !insertmacro VersionCompare
 !include LogicLib.nsh
+!include x64.nsh
 
 InstallDir "$PROGRAMFILES64\HandBrake"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
@@ -81,6 +82,11 @@ Function .onInit
   ; Detect if the intsaller is running on Windows XP/Vista and abort if it is.
   ${IfNot} ${AtLeastWin7}
     MessageBox MB_OK "Windows 7 with Service Pack 1 or later is required in order to run HandBrake."
+    Quit
+  ${EndIf}
+
+  ${IfNot} ${RunningX64}
+    MessageBox MB_OK "HandBrake requires a 64bit version of Windows 7 SP1 or later to install. Your system has a 32bit version of Windows."
     Quit
   ${EndIf}
 
@@ -114,18 +120,18 @@ Section "HandBrake" SEC01
   Call CheckFramework
      StrCmp $0 "1" +3
         StrCpy $InstallDotNET "Yes"
-      MessageBox MB_OK|MB_ICONINFORMATION "${PRODUCT_NAME} requires that the Microsoft .NET Framework 4.6 Client Profile is installed. The latest .NET Framework will be downloaded and installed automatically during installation of ${PRODUCT_NAME}." /SD IDOK
+      MessageBox MB_OK|MB_ICONINFORMATION "${PRODUCT_NAME} requires that the Microsoft .NET Framework 4.6.2 is installed. The latest .NET Framework will be downloaded and installed automatically during installation of ${PRODUCT_NAME}." /SD IDOK
      Pop $0
 
   ; Get .NET if required
   ${If} $InstallDotNET == "Yes"
      SetDetailsView hide
-     inetc::get /caption "Downloading Microsoft .NET Framework 4.6" /canceltext "Cancel" "https://www.microsoft.com/en-us/download/confirmation.aspx?id=49982" "$INSTDIR\dotnetfx.exe" /end
+     inetc::get /caption "Downloading Microsoft .NET Framework 4.6.2" /canceltext "Cancel" "https://www.microsoft.com/en-us/download/confirmation.aspx?id=53344" "$INSTDIR\dotnetfx.exe" /end
      Pop $1
 
      ${If} $1 != "OK"
            Delete "$INSTDIR\dotnetfx.exe"
-           Abort "Installation cancelled, ${PRODUCT_NAME} requires the Microsoft .NET 4.6 Framework"
+           Abort "Installation cancelled, ${PRODUCT_NAME} requires the Microsoft .NET 4.6.2 Framework"
      ${EndIf}
 
      ExecWait "$INSTDIR\dotnetfx.exe"
