@@ -66,7 +66,7 @@ printf "Downloading [%02i/%02i] %s" "5" "${TOTAL}" "pkg-config 0.29.2"
 curl https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz -o "pkg-config-0.29.2.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 printf "Downloading [%02i/%02i] %s" "6" "${TOTAL}" "nasm 2.13.02"
-curl http://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.bz2 -o "nasm-2.13.02.tar.bz2" >/dev/null 2>&1 || print_fail_and_exit
+curl https://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.bz2 -o "nasm-2.13.02.tar.bz2" >/dev/null 2>&1 || print_fail_and_exit
 echo -en "${CREL}"
 printf "Downloading [%02i/%02i] %s" "7" "${TOTAL}" "yasm 1.3.0"
 curl https://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz -o "yasm-1.3.0.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
