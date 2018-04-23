@@ -38,6 +38,11 @@ namespace HandBrakeWPF.Utilities
         /// </returns>
         public static string GetDescription(T value)
         {
+            if (value == null)
+            {
+                return string.Empty;
+            }
+
             FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
             DescriptionAttribute[] attributes =
                   (DescriptionAttribute[])fieldInfo.GetCustomAttributes(
@@ -52,6 +57,11 @@ namespace HandBrakeWPF.Utilities
         /// <returns>A string name</returns>
         public static string GetDisplay(T value)
         {
+            if (value == null)
+            {
+                return string.Empty;
+            }
+
             FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
             DisplayName[] attributes = (DisplayName[])fieldInfo.GetCustomAttributes(typeof(DisplayName), false);
 
@@ -108,6 +118,11 @@ namespace HandBrakeWPF.Utilities
         /// </returns>
         public static string GetShortName(T value)
         {
+            if (value == null)
+            {
+                return string.Empty;
+            }
+
             FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
             ShortName[] attributes = (ShortName[])fieldInfo.GetCustomAttributes(typeof(ShortName), false);
 
