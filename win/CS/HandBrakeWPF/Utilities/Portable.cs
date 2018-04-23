@@ -117,6 +117,22 @@ namespace HandBrakeWPF.Utilities
             return storagePath;
         }
 
+        public static bool IsUpdateCheckEnabled()
+        {
+            if (keyPairs.ContainsKey("update.check"))
+            {
+                string updateCheckEnabled = keyPairs["update.check"];
+                if (!string.IsNullOrEmpty(updateCheckEnabled) && updateCheckEnabled.Trim() == "true")
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
         /// <summary>
         /// The get temp directory.
         /// </summary>

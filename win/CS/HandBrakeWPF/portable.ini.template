@@ -5,6 +5,7 @@
 # - Rename this file to portable.ini to activate feature.
 # - storage.dir => Stores Presets, Settings and Log Files.
 # - tmp.dir => temporary files only. (i.e Preview images)
+# - update.check =>  true | false   (enabled / disabled, default disabled for portable)
 #     
 # Set to 'cwd' to use the current applications directory. It will automatically create "storage" and "tmp" folders in this instance.
 # Leave blank to use the system "TMP" directory and the "AppData" user profile folder.
@@ -12,3 +13,4 @@
 
 storage.dir = cwd
 tmp.dir = cwd
+update.check = false

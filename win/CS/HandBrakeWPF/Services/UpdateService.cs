@@ -68,6 +68,11 @@ namespace HandBrakeWPF.Services
                 return; // Disable Update checker if we are in a UWP container.
             }
 
+            if (Portable.IsPortable() && !Portable.IsUpdateCheckEnabled())
+            {
+                return; // Disable Update Check for Portable Mode.
+            }
+
             // Make sure it's running on the calling thread
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus))
             {
