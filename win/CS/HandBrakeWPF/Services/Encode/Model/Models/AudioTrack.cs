@@ -113,7 +113,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             AudioEncoder chosenEncoder = track.Encoder;
             HBAudioEncoder encoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(track.Encoder));
-            HBAudioEncoder fallbackEncoderInfo;
             if (track.IsPassthru && (sourceTrack.Codec & encoderInfo.Id) == 0)
             {
                 chosenEncoder = fallback;
@@ -127,9 +126,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.mixDown = track.MixDown != null ? track.MixDown.ShortName : "dpl2";
 
             // If the mixdown isn't supported, downgrade it.
-
-
-            if (track.IsPassthru &&  track.MixDown != null && encoderInfo != null && !HandBrakeEncoderHelpers.MixdownIsSupported(track.MixDown, encoderInfo, sourceTrack.ChannelLayout))
+            if (track.IsPassthru && track.MixDown != null && encoderInfo != null && !HandBrakeEncoderHelpers.MixdownIsSupported(track.MixDown, encoderInfo, sourceTrack.ChannelLayout))
             {
                 HBMixdown changedMixdown = HandBrakeEncoderHelpers.GetDefaultMixdown(encoderInfo, (ulong)sourceTrack.ChannelLayout);
                 if (changedMixdown != null)
