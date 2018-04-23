@@ -127,7 +127,7 @@ namespace HandBrakeWPF.Model.Audio
         {
             get
             {
-                return this.IsPassthru ? null : this.mixDown;
+                return this.mixDown;
             }
 
             set
@@ -409,7 +409,7 @@ namespace HandBrakeWPF.Model.Audio
         {
             get
             {
-                if (this.IsPassthru || this.Encoder == AudioEncoder.ffflac || this.Encoder == AudioEncoder.ffflac24)
+                if (this.Encoder == AudioEncoder.ffflac || this.Encoder == AudioEncoder.ffflac24)
                 {
                     return false;
                 }
@@ -426,7 +426,7 @@ namespace HandBrakeWPF.Model.Audio
         {
             get
             {
-                if (this.IsPassthru || this.Encoder == AudioEncoder.ffflac || this.Encoder == AudioEncoder.ffflac24)
+                if (this.Encoder == AudioEncoder.ffflac || this.Encoder == AudioEncoder.ffflac24)
                 {
                     return false;
                 }
@@ -443,7 +443,7 @@ namespace HandBrakeWPF.Model.Audio
         {
             get
             {
-                if (this.IsPassthru || this.Encoder == AudioEncoder.ffflac || this.Encoder == AudioEncoder.ffflac24)
+                if (this.Encoder == AudioEncoder.ffflac || this.Encoder == AudioEncoder.ffflac24)
                 {
                     return false;
                 }
@@ -588,13 +588,13 @@ namespace HandBrakeWPF.Model.Audio
         private void SetupMixdowns()
         {
             this.mixdowns = new BindingList<HBMixdown>(HandBrakeEncoderHelpers.Mixdowns.ToList());
-
+  
             HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(this.Encoder));
 
             BindingList<HBMixdown> mixdownList = new BindingList<HBMixdown>();
             foreach (HBMixdown mixdown in HandBrakeEncoderHelpers.Mixdowns)
             {
-                if (HandBrakeEncoderHelpers.MixdownHasCodecSupport(mixdown, audioEncoder))
+                if (HandBrakeEncoderHelpers.MixdownHasCodecSupport(mixdown, audioEncoder) || this.IsPassthru) // Show only supported, or all for passthru.
                 {
                     mixdownList.Add(mixdown);
                 }
@@ -606,7 +606,8 @@ namespace HandBrakeWPF.Model.Audio
             // If the mixdown isn't supported, downgrade it to the best available. 
             if (!this.Mixdowns.Contains(this.MixDown))
             {
-                this.MixDown = this.Mixdowns.LastOrDefault();
+                this.mixDown = this.Mixdowns.LastOrDefault();
+                this.NotifyOfPropertyChange(() => this.MixDown);
             }
         }
 

@@ -267,33 +267,26 @@
                                       SelectedItem="{Binding Bitrate}"
                                       Visibility="{Binding IsBitrateVisible, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
 
-                            <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Mixdown}"
-                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                            <TextBlock Grid.Row="0" Grid.Column="6" VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Mixdown}" />
                             <ComboBox Grid.Row="0" Grid.Column="7" Height="22" Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
-                                      ItemsSource="{Binding Mixdowns}"
-                                      SelectedItem="{Binding MixDown}"
-                                      DisplayMemberPath="DisplayName"
-                                      Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                                      ItemsSource="{Binding Mixdowns}" SelectedItem="{Binding MixDown}"
+                                      DisplayMemberPath="DisplayName" />
 
 
-                            <TextBlock VerticalAlignment="Center" Grid.Column="8" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Samplerate}"
-                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                            <TextBlock VerticalAlignment="Center" Grid.Column="8" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Samplerate}" />
                             <ComboBox Width="70" Height="22" Margin="5,0,5,0" Grid.Column="9" 
                                       ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                      SelectedItem="{Binding SampleRateDisplayValue}"
-                                      Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                                      SelectedItem="{Binding SampleRateDisplayValue}" />
 
-                            <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_DRC}" Grid.Column="10" 
-                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                            <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_DRC}" Grid.Column="10" />
                             <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="11" 
-                                                    Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
-                                                    Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
+                                                Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" 
+                                                ShowIncrementButtons="True" AllowEmpty="False" />
 
-                            <TextBlock  VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Gain}" Grid.Column="12" 
-                                       Visibility="{Binding IsPassthru, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                            <TextBlock  VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.AudioView_Gain}" Grid.Column="12"  />
                             <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="13" 
-                                                    Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
-                                                    Visibility="{Binding IsPassthru, Converter={StaticResource boolToHiddenVisConverter}, ConverterParameter=true}"/>
+                                                Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" 
+                                                ShowIncrementButtons="True" AllowEmpty="False" />
 
                         </Grid>
 
