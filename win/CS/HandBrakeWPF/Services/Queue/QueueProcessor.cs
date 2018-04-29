@@ -575,8 +575,8 @@ namespace HandBrakeWPF.Services.Queue
             else
             {
                 this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
-                this.OnQueueCompleted(new QueueCompletedEventArgs(true));
                 this.BackupQueue(string.Empty);
+                this.OnQueueCompleted(new QueueCompletedEventArgs(true));
             }
         }
 
@@ -660,17 +660,18 @@ namespace HandBrakeWPF.Services.Queue
                 this.InvokeQueueChanged(EventArgs.Empty);
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
                 this.EncodeService.Start(job.Task, job.Configuration);
+                this.BackupQueue(string.Empty);
             }
             else
             {
                 // No more jobs to process, so unsubscribe the event
                 this.EncodeService.EncodeCompleted -= this.EncodeServiceEncodeCompleted;
 
+                this.BackupQueue(string.Empty);
+
                 // Fire the event to tell connected services.
                 this.OnQueueCompleted(new QueueCompletedEventArgs(false));
             }
-
-            this.BackupQueue(string.Empty);
         }
 
         #endregion
