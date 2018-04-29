@@ -456,6 +456,15 @@ namespace HandBrakeWPF.Controls
             {
                 e.Handled = true;
             }
+
+            if (e.Key == Key.Up)
+            {
+                this.IncrementNumber();
+            }
+            else if (e.Key == Key.Down)
+            {
+                this.DecrementNumber();
+            }
         }
 
         /// <summary>

@@ -151,7 +151,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Button  AutomationProperties.Name="Increase Number"
-				Style="{StaticResource UpButton}"
+				Style="{StaticResource UpButton}" IsTabStop="False"
 				Grid.Row="0"
 				FontSize="4"
 				PreviewMouseLeftButtonDown="UpButtonMouseLeftButtonDown"
@@ -161,7 +161,7 @@
 					Points="4,0 0,4 8,4" />
             </Button>
             <Button  AutomationProperties.Name="Decrease Number"
-				Style="{StaticResource DownButton}"
+				Style="{StaticResource DownButton}" IsTabStop="False"
 				Grid.Row="1"
 				FontSize="4"
 				PreviewMouseLeftButtonDown="DownButtonMouseLeftButtonDown"
