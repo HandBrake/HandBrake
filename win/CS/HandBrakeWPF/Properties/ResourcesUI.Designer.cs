@@ -124,7 +124,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save Picture Size:.
+        ///   Looks up a localized string similar to Dimensions:.
         /// </summary>
         public static string AddPresetView_SavePictureSize {
             get {

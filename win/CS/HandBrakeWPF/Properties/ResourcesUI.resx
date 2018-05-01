@@ -232,7 +232,7 @@
     <value>Name:</value>
   </data>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
-    <value>Save Picture Size:</value>
+    <value>Dimensions:</value>
   </data>
   <data name="Generic_Cancel" xml:space="preserve">
     <value>Cancel</value>
