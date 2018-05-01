@@ -66,7 +66,7 @@ namespace HandBrakeWPF.Views
 
         private void TabControl_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (e.AddedItems.Count > 0)
+            if (e.Source is TabControl && e.AddedItems.Count > 0)
             {
                 TabItem tab = e.AddedItems[0] as TabItem;
                 if (tab != null && Properties.ResourcesUI.MainView_SummaryTab.Equals(tab.Header))
