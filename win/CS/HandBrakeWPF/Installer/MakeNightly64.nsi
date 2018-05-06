@@ -16,7 +16,7 @@
 
 ;Required .NET framework
 !define MIN_FRA_MAJOR "4"
-!define MIN_FRA_MINOR "6"
+!define MIN_FRA_MINOR "7"
 !define MIN_FRA_BUILD "*"
 
 SetCompressor lzma
@@ -125,7 +125,7 @@ Section "HandBrake" SEC01
   ; Get .NET if required
   ${If} $InstallDotNET == "Yes"
      SetDetailsView hide
-     inetc::get /caption "Downloading Microsoft .NET Framework 4.6.2" /canceltext "Cancel" "https://www.microsoft.com/en-us/download/confirmation.aspx?id=53344" "$INSTDIR\dotnetfx.exe" /end
+     inetc::get /caption "Downloading Microsoft .NET Framework 4.6.2" /canceltext "Cancel" "https://www.microsoft.com/en-us/download/confirmation.aspx?id=56116" "$INSTDIR\dotnetfx.exe" /end
      Pop $1
 
      ${If} $1 != "OK"
