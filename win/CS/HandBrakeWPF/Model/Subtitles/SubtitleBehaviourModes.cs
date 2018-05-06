@@ -9,8 +9,6 @@
 
 namespace HandBrakeWPF.Model.Subtitles
 {
-    using System.ComponentModel.DataAnnotations;
-
     using HandBrake.ApplicationServices.Attributes;
 
     /// <summary>
