@@ -594,6 +594,11 @@ namespace HandBrakeWPF.ViewModels
             // For MP4, PGS Subtitles must be burned in.
             if (!track.Burned && (source.SubtitleType == SubtitleType.PGS) && this.Task != null && this.Task.OutputFormat == OutputFormat.Mp4)
             {
+                if (this.Task.SubtitleTracks.Any(a => a.Burned))
+                {
+                    return; // We can't add any more burned in tracks.
+                }
+
                 if (track.CanBeBurned)
                 {
                     track.Burned = true;
