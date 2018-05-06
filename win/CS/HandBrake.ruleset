@@ -1,33 +1,3 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <RuleSet Name="HandBrake" ToolsVersion="14.0">
-  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
-    <Rule Id="SA1116" Action="None" />
-    <Rule Id="SA1124" Action="None" />
-    <Rule Id="SA1413" Action="None" />
-    <Rule Id="SA1623" Action="None" />
-    <Rule Id="SA1028" Action="None" />
-    <Rule Id="SA1513" Action="None" />
-    <Rule Id="SA1101" Action="None" />
-    <Rule Id="SA1503" Action="None" />
-    <Rule Id="SA1501" Action="None" />
-    <Rule Id="SA1117" Action="None" />
-    <Rule Id="SA1119" Action="None" />
-    <Rule Id="SA1512" Action="None" />
-    <Rule Id="SA1515" Action="None" />
-    <Rule Id="SA1516" Action="None" />
-    <Rule Id="SA1300" Action="None" />
-    <Rule Id="SA1307" Action="None" />
-    <Rule Id="SA1602" Action="None" />
-    <Rule Id="SA1201" Action="None" />
-    <Rule Id="SA1401" Action="None" />
-    <Rule Id="SA1130" Action="None" />
-    <Rule Id="SA1311" Action="None" />
-    <Rule Id="SA1204" Action="None" />
-    <Rule Id="SA1624" Action="None" />
-    <Rule Id="SA1600" Action="None" />
-    <Rule Id="SA1310" Action="None" />
-    <Rule Id="SA1129" Action="None" />
-    <Rule Id="SA1643" Action="None" />
-    <Rule Id="SA1642" Action="None" />
-  </Rules>
 </RuleSet>
