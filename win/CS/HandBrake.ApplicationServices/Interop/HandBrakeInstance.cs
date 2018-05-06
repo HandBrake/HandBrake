@@ -12,9 +12,6 @@ namespace HandBrake.ApplicationServices.Interop
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Drawing;
-    using System.Drawing.Imaging;
-    using System.IO;
     using System.Linq;
     using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
@@ -27,9 +24,7 @@ namespace HandBrake.ApplicationServices.Interop
     using HandBrake.ApplicationServices.Interop.Interfaces;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
     using HandBrake.ApplicationServices.Interop.Json.Scan;
-    using HandBrake.ApplicationServices.Interop.Json.Shared;
     using HandBrake.ApplicationServices.Interop.Json.State;
-    using HandBrake.ApplicationServices.Interop.Model;
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Interop.Model.Preview;
     using HandBrake.ApplicationServices.Services.Logging;
@@ -37,8 +32,6 @@ namespace HandBrake.ApplicationServices.Interop
     using HandBrake.ApplicationServices.Services.Logging.Model;
 
     using Newtonsoft.Json;
-
-    using Size = HandBrake.ApplicationServices.Interop.Model.Size;
 
     /// <summary>
     /// A wrapper for a HandBrake instance.
@@ -287,7 +280,7 @@ namespace HandBrake.ApplicationServices.Interop
         /// An image with the requested preview.
         /// </returns>
         [HandleProcessCorruptedStateExceptions]
-        public Bitmap GetPreview(PreviewSettings settings, int previewNumber, bool deinterlace)
+        public RawPreviewData GetPreview(PreviewSettings settings, int previewNumber, bool deinterlace)
         {
             SourceTitle title = this.Titles.TitleList.FirstOrDefault(t => t.Index == settings.TitleNumber);
 
@@ -323,25 +316,7 @@ namespace HandBrake.ApplicationServices.Interop
             byte[] managedBuffer = new byte[imageBufferSize];
             Marshal.Copy(image.plane[0].data, managedBuffer, 0, imageBufferSize);
 
-            var bitmap = new Bitmap(image.width, image.height);
-
-            BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, image.width, image.height), ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
-
-            IntPtr ptr = bitmapData.Scan0; // Pointer to the first pixel.
-            for (int i = 0; i < image.height; i++)
-            {
-                try
-                {
-                    Marshal.Copy(managedBuffer, i * stride_width, ptr, stride_width);
-                    ptr = IntPtr.Add(ptr, image.width * 4);
-                }
-                catch (Exception exc)
-                {
-                    Debug.WriteLine(exc); // In theory, this will allow a partial image display if this happens. TODO add better logging of this.
-                }
-            }
-
-            bitmap.UnlockBits(bitmapData);
+            RawPreviewData preview = new RawPreviewData(managedBuffer, stride_width, stride_height, image.width, image.height);
 
             // Close the image so we don't leak memory.
             IntPtr nativeJobPtrPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(IntPtr)));
@@ -349,7 +324,7 @@ namespace HandBrake.ApplicationServices.Interop
             HBFunctions.hb_image_close(nativeJobPtrPtr);
             Marshal.FreeHGlobal(nativeJobPtrPtr);
 
-            return bitmap;
+            return preview;
         }
 
         /// <summary>

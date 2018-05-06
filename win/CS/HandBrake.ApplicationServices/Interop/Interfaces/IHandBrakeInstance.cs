@@ -10,7 +10,6 @@
 namespace HandBrake.ApplicationServices.Interop.Interfaces
 {
     using System;
-    using System.Drawing;
 
     using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Interop.Json.Encode;
@@ -103,7 +102,7 @@ namespace HandBrake.ApplicationServices.Interop.Interfaces
         /// <returns>
         /// An image with the requested preview.
         /// </returns>
-        Bitmap GetPreview(PreviewSettings job, int previewNumber, bool deinterlace);
+        RawPreviewData GetPreview(PreviewSettings job, int previewNumber, bool deinterlace);
 
         /// <summary>
         /// Pauses the current encode.
