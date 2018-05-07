@@ -189,6 +189,10 @@ function mac_toolchain_build {
 trap die_gracefully EXIT INT TERM
 
 mac_toolchain_build "${@}" &
-display_progress $!
+PID=$!
+display_progress "${PID}"
+wait "${PID}" || CODE=$?
 
 trap - EXIT INT TERM
+
+exit "${CODE:-0}"
