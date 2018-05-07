@@ -15,7 +15,6 @@ function die_gracefully {
     trap - EXIT INT
     trap ":" INT  # prevent recursion due to spamming ctrl-c
     echo ""
-    echo "Killing all processes and cleaning up..." >&2
     trap - TERM && kill -- -$$
 }
 
