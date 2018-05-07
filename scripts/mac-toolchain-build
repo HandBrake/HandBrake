@@ -1,165 +1,195 @@
 #!/usr/bin/env bash
 
-# mac only
-if [[ "$(uname)" != "Darwin" ]]; then
-    echo "macOS/Darwin required" >&2
-    exit 1
-fi
-
-# vars
-PREFIX="${1:-/usr/local}"
-CREL=$(echo -e "\r"$(tput el))
-if ! MAKEJOBS=$(sysctl -n hw.ncpu 2>/dev/null); then
-    MAKEJOBS="4"
-fi
-SUDO=
-TOTAL=7
-
-# functions
-function print_fail_and_exit {
-    echo -en " [FAIL]\n"
-    echo "Logs and temporary files remain at: ${TEMP_DIR:-}" >&2
-    exit 1
+# prints continuous output to avoid timeouts on build systems like Travis
+function display_progress {
+    local str=""
+    while [ "$(ps a | awk '{print $1}' | grep ${1})" ]; do
+        printf "%c" "$str"
+        sleep 5
+        str="."
+    done
 }
 
-# permissions
-mkdir -p "${PREFIX}" >/dev/null 2>&1
-if [[ ! -w "${PREFIX}" ]]; then
-    if ! sudo -n date >/dev/null 2>&1; then
-        echo "sudo is required to install files to ${PREFIX}"
-        [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    fi
-    sudo mkdir -p "${PREFIX}" >/dev/null 2>&1
-    if sudo touch "${PREFIX}" >/dev/null 2>&1; then
-        SUDO=sudo
-    else
-        echo "Unable to write to directory: ${PREFIX}" >&2
+# kills child processes
+function die_gracefully {
+    trap - EXIT INT
+    trap ":" INT  # prevent recursion due to spamming ctrl-c
+    echo ""
+    echo "Killing all processes and cleaning up..." >&2
+    trap - TERM && kill -- -$$
+}
+
+function mac_toolchain_build {
+    set -o pipefail
+
+    # mac only
+    if [[ "$(uname)" != "Darwin" ]]; then
+        echo "macOS/Darwin required" >&2
         exit 1
     fi
-fi
-PREFIX=$(cd "${PREFIX}" && pwd -P)
-PATH_ORIG="${PATH}"
-export PATH="${PREFIX}/bin${PATH:+:$PATH}"
 
-# temp dir
-TEMP_DIR=$(mktemp -d "${TMPDIR:-/tmp/}toolchain-XXXXXX")
-if [[ $? -ne 0 ]]; then
-    echo "Unable to create temporary directory" >&2
-    exit 1
-fi
-cd "${TEMP_DIR}"
+    # vars
+    PREFIX="${1:-/usr/local}"
+    CREL=$(echo -e "\r"$(tput el))
+    if ! MAKEJOBS=$(sysctl -n hw.ncpu 2>/dev/null); then
+        MAKEJOBS="4"
+    fi
+    SUDO=
+    TOTAL=7
 
-# download
-printf "Downloading [%02i/%02i] %s" "1" "${TOTAL}" "autoconf 2.69"
-curl -Lf --connect-timeout 30 https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz -o "autoconf-2.69.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
-printf "Downloading [%02i/%02i] %s" "2" "${TOTAL}" "automake 1.15.1"
-curl -Lf --connect-timeout 30 https://ftp.gnu.org/gnu/automake/automake-1.15.1.tar.gz -o "automake-1.15.1.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
-printf "Downloading [%02i/%02i] %s" "3" "${TOTAL}" "cmake 3.9.6"
-curl -Lf --connect-timeout 30 https://cmake.org/files/v3.9/cmake-3.9.6.tar.gz -o "cmake-3.9.6.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
-printf "Downloading [%02i/%02i] %s" "4" "${TOTAL}" "libtool 2.4.6"
-curl -Lf --connect-timeout 30 https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz -o "libtool-2.4.6.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
-printf "Downloading [%02i/%02i] %s" "5" "${TOTAL}" "pkg-config 0.29.2"
-curl -Lf --connect-timeout 30 https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz -o "pkg-config-0.29.2.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
-printf "Downloading [%02i/%02i] %s" "6" "${TOTAL}" "nasm 2.13.02"
-curl -Lf --connect-timeout 30 https://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.bz2 -o "nasm-2.13.02.tar.bz2" >/dev/null 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
-printf "Downloading [%02i/%02i] %s" "7" "${TOTAL}" "yasm 1.3.0"
-curl -Lf --connect-timeout 30 https://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz -o "yasm-1.3.0.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
-printf "Downloading [%02i/%02i] complete.\n" "${TOTAL}" "${TOTAL}"
+    # functions
+    function print_fail_and_exit {
+        echo -en " [FAIL]\n"
+        echo "Logs and temporary files remain at: ${TEMP_DIR:-}" >&2
+        exit 1
+    }
 
-# autoconf
-cd "${TEMP_DIR}"
-printf "Building    [%02i/%02i] %s" "1" "${TOTAL}" "autoconf 2.69"
-[[ "${SUDO}" != "" ]] && ${SUDO} -v
-tar -xf autoconf-2.69.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-cd autoconf-2.69 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" >../autoconf-2.69.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >>../autoconf-2.69.log 2>&1 || print_fail_and_exit
-${SUDO} make install >>../autoconf-2.69.log 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
+    # permissions
+    mkdir -p "${PREFIX}" >/dev/null 2>&1
+    if [[ ! -w "${PREFIX}" ]]; then
+        if ! sudo -n date >/dev/null 2>&1; then
+            echo "sudo is required to install files to ${PREFIX}"
+            [[ "${SUDO}" != "" ]] && ${SUDO} -v
+        fi
+        sudo mkdir -p "${PREFIX}" >/dev/null 2>&1
+        if sudo touch "${PREFIX}" >/dev/null 2>&1; then
+            SUDO=sudo
+        else
+            echo "Unable to write to directory: ${PREFIX}" >&2
+            exit 1
+        fi
+    fi
+    PREFIX=$(cd "${PREFIX}" && pwd -P)
+    PATH_ORIG="${PATH}"
+    export PATH="${PREFIX}/bin${PATH:+:$PATH}"
 
-# automake
-cd "${TEMP_DIR}"
-printf "Building    [%02i/%02i] %s" "2" "${TOTAL}" "automake 1.15.1"
-[[ "${SUDO}" != "" ]] && ${SUDO} -v
-tar -xf automake-1.15.1.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-cd automake-1.15.1 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" >../automake-1.15.1.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >>../automake-1.15.1.log 2>&1 || print_fail_and_exit
-${SUDO} make install >>../automake-1.15.1.log 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
+    # temp dir
+    TEMP_DIR=$(mktemp -d "${TMPDIR:-/tmp/}toolchain-XXXXXX")
+    if [[ $? -ne 0 ]]; then
+        echo "Unable to create temporary directory" >&2
+        exit 1
+    fi
+    cd "${TEMP_DIR}"
 
-# cmake
-cd "${TEMP_DIR}"
-printf "Building    [%02i/%02i] %s\n" "3" "${TOTAL}" "cmake 3.9.6"
-[[ "${SUDO}" != "" ]] && ${SUDO} -v
-echo "You may safely dismiss and ignore any prompt to install Java."
-tar -xf cmake-3.9.6.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-cd cmake-3.9.6 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" --no-qt-gui --system-curl >../cmake-3.9.6.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >>../cmake-3.9.6.log 2>&1 || print_fail_and_exit
-${SUDO} make install >>../cmake-3.9.6.log 2>&1 || print_fail_and_exit
+    # download
+    printf "Downloading [%02i/%02i] %s " "1" "${TOTAL}" "autoconf 2.69"
+    curl -Lf --connect-timeout 30 https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz -o "autoconf-2.69.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
+    printf "Downloading [%02i/%02i] %s " "2" "${TOTAL}" "automake 1.15.1"
+    curl -Lf --connect-timeout 30 https://ftp.gnu.org/gnu/automake/automake-1.15.1.tar.gz -o "automake-1.15.1.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
+    printf "Downloading [%02i/%02i] %s " "3" "${TOTAL}" "cmake 3.9.6"
+    curl -Lf --connect-timeout 30 https://cmake.org/files/v3.9/cmake-3.9.6.tar.gz -o "cmake-3.9.6.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
+    printf "Downloading [%02i/%02i] %s " "4" "${TOTAL}" "libtool 2.4.6"
+    curl -Lf --connect-timeout 30 https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz -o "libtool-2.4.6.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
+    printf "Downloading [%02i/%02i] %s " "5" "${TOTAL}" "pkg-config 0.29.2"
+    curl -Lf --connect-timeout 30 https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz -o "pkg-config-0.29.2.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
+    printf "Downloading [%02i/%02i] %s " "6" "${TOTAL}" "nasm 2.13.02"
+    curl -Lf --connect-timeout 30 https://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.bz2 -o "nasm-2.13.02.tar.bz2" >/dev/null 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
+    printf "Downloading [%02i/%02i] %s " "7" "${TOTAL}" "yasm 1.3.0"
+    curl -Lf --connect-timeout 30 https://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz -o "yasm-1.3.0.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
+    printf "Downloading [%02i/%02i] complete.\n" "${TOTAL}" "${TOTAL}"
 
-# libtool
-cd "${TEMP_DIR}"
-printf "Building    [%02i/%02i] %s" "4" "${TOTAL}" "libtool 2.4.6"
-[[ "${SUDO}" != "" ]] && ${SUDO} -v
-tar -xf libtool-2.4.6.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-cd libtool-2.4.6 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" >../libtool-2.4.6.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >>../libtool-2.4.6.log 2>&1 || print_fail_and_exit
-${SUDO} make install >>../libtool-2.4.6.log 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
+    # autoconf
+    cd "${TEMP_DIR}"
+    printf "Building    [%02i/%02i] %s " "1" "${TOTAL}" "autoconf 2.69"
+    [[ "${SUDO}" != "" ]] && ${SUDO} -v
+    tar -xf autoconf-2.69.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+    cd autoconf-2.69 >/dev/null 2>&1 || print_fail_and_exit
+    ./configure --prefix="${PREFIX}" >../autoconf-2.69.log 2>&1 || print_fail_and_exit
+    make --jobs="${MAKEJOBS}" >>../autoconf-2.69.log 2>&1 || print_fail_and_exit
+    ${SUDO} make install >>../autoconf-2.69.log 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
 
-# pkg-config
-cd "${TEMP_DIR}"
-printf "Building    [%02i/%02i] %s" "5" "${TOTAL}" "pkg-config 0.29.2"
-[[ "${SUDO}" != "" ]] && ${SUDO} -v
-tar -xf pkg-config-0.29.2.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-cd pkg-config-0.29.2 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" --with-internal-glib --disable-host-tool >../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >>../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
-${SUDO} make install >>../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
+    # automake
+    cd "${TEMP_DIR}"
+    printf "Building    [%02i/%02i] %s " "2" "${TOTAL}" "automake 1.15.1"
+    [[ "${SUDO}" != "" ]] && ${SUDO} -v
+    tar -xf automake-1.15.1.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+    cd automake-1.15.1 >/dev/null 2>&1 || print_fail_and_exit
+    ./configure --prefix="${PREFIX}" >../automake-1.15.1.log 2>&1 || print_fail_and_exit
+    make --jobs="${MAKEJOBS}" >>../automake-1.15.1.log 2>&1 || print_fail_and_exit
+    ${SUDO} make install >>../automake-1.15.1.log 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
 
-# nasm
-cd "${TEMP_DIR}"
-printf "Building    [%02i/%02i] %s" "6" "${TOTAL}" "nasm 2.13.02"
-[[ "${SUDO}" != "" ]] && ${SUDO} -v
-tar -xf nasm-2.13.02.tar.bz2 >/dev/null 2>&1 || print_fail_and_exit
-cd nasm-2.13.02 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" --enable-sections --enable-lto >../nasm-2.13.02.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" AR=ar RANLIB=ranlib >>../nasm-2.13.02.log 2>&1 || print_fail_and_exit
-${SUDO} make install >>../nasm-2.13.02.log 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
+    # cmake
+    cd "${TEMP_DIR}"
+    echo "You may safely dismiss and ignore any prompt to install Java."
+    printf "Building    [%02i/%02i] %s " "3" "${TOTAL}" "cmake 3.9.6"
+    [[ "${SUDO}" != "" ]] && ${SUDO} -v
+    tar -xf cmake-3.9.6.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+    cd cmake-3.9.6 >/dev/null 2>&1 || print_fail_and_exit
+    ./configure --prefix="${PREFIX}" --no-qt-gui --system-curl >../cmake-3.9.6.log 2>&1 || print_fail_and_exit
+    make --jobs="${MAKEJOBS}" >>../cmake-3.9.6.log 2>&1 || print_fail_and_exit
+    ${SUDO} make install >>../cmake-3.9.6.log 2>&1 || print_fail_and_exit
 
-# yasm
-cd "${TEMP_DIR}"
-printf "Building    [%02i/%02i] %s" "7" "${TOTAL}" "yasm 1.3.0"
-[[ "${SUDO}" != "" ]] && ${SUDO} -v
-tar -xf yasm-1.3.0.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-cd yasm-1.3.0 >/dev/null 2>&1 || print_fail_and_exit
-./configure --prefix="${PREFIX}" >../yasm-1.3.0.log 2>&1 || print_fail_and_exit
-make --jobs="${MAKEJOBS}" >>../yasm-1.3.0.log 2>&1 || print_fail_and_exit
-${SUDO} make install >>../yasm-1.3.0.log 2>&1 || print_fail_and_exit
-echo -en "${CREL}"
+    # libtool
+    cd "${TEMP_DIR}"
+    printf "Building    [%02i/%02i] %s " "4" "${TOTAL}" "libtool 2.4.6"
+    [[ "${SUDO}" != "" ]] && ${SUDO} -v
+    tar -xf libtool-2.4.6.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+    cd libtool-2.4.6 >/dev/null 2>&1 || print_fail_and_exit
+    ./configure --prefix="${PREFIX}" >../libtool-2.4.6.log 2>&1 || print_fail_and_exit
+    make --jobs="${MAKEJOBS}" >>../libtool-2.4.6.log 2>&1 || print_fail_and_exit
+    ${SUDO} make install >>../libtool-2.4.6.log 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
 
-# done
-printf "Building    [%02i/%02i] complete.\n" "${TOTAL}" "${TOTAL}"
-rm -rf "${TEMP_DIR}"
-if [[ "${PREFIX}" != "/usr/local" ]]; then
-    echo "bin: ${PREFIX}/bin"
-    echo "  add to your shell startup script (${HOME}/.bash_profile):"
-    echo "    export PATH=\"${PREFIX}/bin:\${PATH}\""
-fi
+    # pkg-config
+    cd "${TEMP_DIR}"
+    printf "Building    [%02i/%02i] %s " "5" "${TOTAL}" "pkg-config 0.29.2"
+    [[ "${SUDO}" != "" ]] && ${SUDO} -v
+    tar -xf pkg-config-0.29.2.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+    cd pkg-config-0.29.2 >/dev/null 2>&1 || print_fail_and_exit
+    ./configure --prefix="${PREFIX}" --with-internal-glib --disable-host-tool >../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
+    make --jobs="${MAKEJOBS}" >>../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
+    ${SUDO} make install >>../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
 
-# restore original PATH
-export PATH="${PATH_ORIG}"
+    # nasm
+    cd "${TEMP_DIR}"
+    printf "Building    [%02i/%02i] %s " "6" "${TOTAL}" "nasm 2.13.02"
+    [[ "${SUDO}" != "" ]] && ${SUDO} -v
+    tar -xf nasm-2.13.02.tar.bz2 >/dev/null 2>&1 || print_fail_and_exit
+    cd nasm-2.13.02 >/dev/null 2>&1 || print_fail_and_exit
+    ./configure --prefix="${PREFIX}" --enable-sections --enable-lto >../nasm-2.13.02.log 2>&1 || print_fail_and_exit
+    make --jobs="${MAKEJOBS}" AR=ar RANLIB=ranlib >>../nasm-2.13.02.log 2>&1 || print_fail_and_exit
+    ${SUDO} make install >>../nasm-2.13.02.log 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
 
-exit 0
+    # yasm
+    cd "${TEMP_DIR}"
+    printf "Building    [%02i/%02i] %s " "7" "${TOTAL}" "yasm 1.3.0"
+    [[ "${SUDO}" != "" ]] && ${SUDO} -v
+    tar -xf yasm-1.3.0.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+    cd yasm-1.3.0 >/dev/null 2>&1 || print_fail_and_exit
+    ./configure --prefix="${PREFIX}" >../yasm-1.3.0.log 2>&1 || print_fail_and_exit
+    make --jobs="${MAKEJOBS}" >>../yasm-1.3.0.log 2>&1 || print_fail_and_exit
+    ${SUDO} make install >>../yasm-1.3.0.log 2>&1 || print_fail_and_exit
+    echo -en "${CREL}"
+
+    # done
+    printf "Building    [%02i/%02i] complete.\n" "${TOTAL}" "${TOTAL}"
+    rm -rf "${TEMP_DIR}"
+    if [[ "${PREFIX}" != "/usr/local" ]]; then
+        echo "bin: ${PREFIX}/bin"
+        echo "  add to your shell startup script (${HOME}/.bash_profile):"
+        echo "    export PATH=\"${PREFIX}/bin:\${PATH}\""
+    fi
+
+    # restore original PATH
+    export PATH="${PATH_ORIG}"
+
+    set +o pipefail
+}
+
+trap die_gracefully EXIT INT TERM
+
+mac_toolchain_build "${@}" &
+display_progress $!
+
+trap - EXIT INT TERM
