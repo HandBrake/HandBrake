@@ -49,27 +49,5 @@ namespace HandBrake.ApplicationServices.Utilities
             // 01 = Unofficial Builds.  00 = Official Tagged Releases.
             return instance.Build.ToString().EndsWith("01");
         }
-
-        /// <summary>
-        /// The get platform bitness.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="bool"/>.
-        /// </returns>
-        public static string GetPlatformBitnessVersion()
-        {
-            return System.Environment.Is64BitProcess ? "64bit" : "32bit";
-        }
-
-        /// <summary>
-        /// Is a 64 bit app.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        public static bool Is64Bit()
-        {
-            return System.Environment.Is64BitProcess;
-        }
     }
 }

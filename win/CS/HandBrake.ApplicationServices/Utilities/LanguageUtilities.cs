@@ -10,7 +10,6 @@
 namespace HandBrake.ApplicationServices.Utilities
 {
     using System.Collections.Generic;
-    using System.Collections.Specialized;
     using System.Linq;
 
     /// <summary>

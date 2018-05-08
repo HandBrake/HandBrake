@@ -33,7 +33,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return string.Format("{0} - {1}", VersionHelper.GetVersion(), VersionHelper.GetPlatformBitnessVersion());
+                return string.Format("{0}", VersionHelper.GetVersion());
             }
         }
 

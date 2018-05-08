@@ -107,8 +107,8 @@ namespace HandBrakeWPF.Utilities
                 gpuBuilder.Append("GPU Information is unavailable");
             }
 
-            logHeader.AppendLine(string.Format("HandBrake {0} - {1}", VersionHelper.GetVersion(), VersionHelper.GetPlatformBitnessVersion()));
-            logHeader.AppendLine(string.Format("OS: {0} - {1}", Environment.OSVersion, Environment.Is64BitOperatingSystem ? "64bit" : "32bit"));
+            logHeader.AppendLine(string.Format("HandBrake {0}", VersionHelper.GetVersion()));
+            logHeader.AppendLine(string.Format("OS: {0}", Environment.OSVersion));
             logHeader.AppendLine(string.Format("CPU: {0}", SystemInfo.GetCpuCount));
             logHeader.AppendLine(string.Format("Ram: {0} MB, ", SystemInfo.TotalPhysicalMemory));
             logHeader.AppendLine(string.Format("GPU Information:{0}{1}", Environment.NewLine, gpuBuilder.ToString().TrimEnd()));
