@@ -10,7 +10,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services.Logging
+namespace HandBrakeWPF.Services.Logging
 {
     using System;
     using System.Collections.Generic;
@@ -21,9 +21,12 @@ namespace HandBrake.ApplicationServices.Services.Logging
 
     using HandBrake.ApplicationServices.Interop;
     using HandBrake.ApplicationServices.Interop.EventArgs;
-    using HandBrake.ApplicationServices.Services.Logging.EventArgs;
-    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
-    using HandBrake.ApplicationServices.Services.Logging.Model;
+
+    using ILog = Interfaces.ILog;
+    using LogEventArgs = EventArgs.LogEventArgs;
+    using LogLevel = Model.LogLevel;
+    using LogMessage = Model.LogMessage;
+    using LogMessageType = Model.LogMessageType;
 
     /// <summary>
     /// The log helper.

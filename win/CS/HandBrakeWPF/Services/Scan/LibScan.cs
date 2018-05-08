@@ -22,9 +22,6 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrake.ApplicationServices.Interop.Model.Encoding;
     using HandBrake.ApplicationServices.Interop.Model.Preview;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Logging;
-    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
-    using HandBrake.ApplicationServices.Services.Logging.Model;
 
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -34,6 +31,10 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrakeWPF.Utilities;
 
     using Chapter = HandBrakeWPF.Services.Scan.Model.Chapter;
+    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
+    using LogLevel = HandBrakeWPF.Services.Logging.Model.LogLevel;
+    using LogMessageType = HandBrakeWPF.Services.Logging.Model.LogMessageType;
+    using LogService = HandBrakeWPF.Services.Logging.LogService;
     using ScanProgressEventArgs = HandBrake.ApplicationServices.Interop.EventArgs.ScanProgressEventArgs;
     using Subtitle = HandBrakeWPF.Services.Scan.Model.Subtitle;
     using Title = HandBrakeWPF.Services.Scan.Model.Title;

@@ -7,14 +7,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services.Logging.Interfaces
+namespace HandBrakeWPF.Services.Logging.Interfaces
 {
     using System;
     using System.Collections.Generic;
 
-    using EventArgs;
-
-    using Model;
+    using LogEventArgs = HandBrakeWPF.Services.Logging.EventArgs.LogEventArgs;
+    using LogLevel = HandBrakeWPF.Services.Logging.Model.LogLevel;
+    using LogMessage = HandBrakeWPF.Services.Logging.Model.LogMessage;
+    using LogMessageType = HandBrakeWPF.Services.Logging.Model.LogMessageType;
 
     /// <summary>
     /// The Log interface.

@@ -7,11 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.ApplicationServices.Services.Logging.EventArgs
+namespace HandBrakeWPF.Services.Logging.EventArgs
 {
     using System;
 
-    using Model;
+    using LogMessage = HandBrakeWPF.Services.Logging.Model.LogMessage;
 
     /// <summary>
     /// The Message Logged Event Args

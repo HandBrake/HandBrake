@@ -18,9 +18,6 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrake.ApplicationServices.Interop.Interfaces;
     using HandBrake.ApplicationServices.Interop.Json.State;
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Logging;
-    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
-    using HandBrake.ApplicationServices.Services.Logging.Model;
 
     using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Properties;
@@ -28,6 +25,10 @@ namespace HandBrakeWPF.Services.Encode
 
     using EncodeTask = Model.EncodeTask;
     using IEncode = Interfaces.IEncode;
+    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
+    using LogLevel = HandBrakeWPF.Services.Logging.Model.LogLevel;
+    using LogMessageType = HandBrakeWPF.Services.Logging.Model.LogMessageType;
+    using LogService = HandBrakeWPF.Services.Logging.LogService;
 
     /// <summary>
     /// LibHB Implementation of IEncode

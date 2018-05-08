@@ -9,14 +9,14 @@
 
 namespace HandBrakeWPF.Helpers
 {
-    using System;
     using System.IO;
 
     using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Services.Logging;
-    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
 
     using HandBrakeWPF.Utilities;
+
+    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
+    using LogService = HandBrakeWPF.Services.Logging.LogService;
 
     /// <summary>
     /// Tempory Class to Initialise the logging.

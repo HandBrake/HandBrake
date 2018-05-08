@@ -15,8 +15,6 @@ namespace HandBrakeWPF.Services.Encode
     using System.IO;
 
     using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Services.Logging;
-    using HandBrake.ApplicationServices.Services.Logging.Interfaces;
 
     using HandBrakeWPF.Utilities;
 
@@ -26,6 +24,8 @@ namespace HandBrakeWPF.Services.Encode
     using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
+    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
+    using LogService = HandBrakeWPF.Services.Logging.LogService;
 
     /// <summary>
     /// A Base Class for the Encode Services.

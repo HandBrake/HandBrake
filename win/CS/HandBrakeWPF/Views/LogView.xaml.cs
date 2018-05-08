@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Views
     using System.Windows;
     using System.Windows.Controls;
 
+    using HandBrakeWPF.Services.Logging.EventArgs;
     using HandBrakeWPF.ViewModels;
 
     /// <summary>
@@ -58,7 +59,7 @@ namespace HandBrakeWPF.Views
         /// <param name="e">
         /// The e.
         /// </param>
-        private void Vm_LogMessageReceived(object sender, HandBrake.ApplicationServices.Services.Logging.EventArgs.LogEventArgs e)
+        private void Vm_LogMessageReceived(object sender, LogEventArgs e)
         {
             try
             {
