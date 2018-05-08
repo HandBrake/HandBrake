@@ -1,0 +1,23 @@
+language: c
+os:
+  - linux
+  - osx
+addons:
+  apt:
+    packages:
+      - intltool
+      - libmp3lame-dev
+      - libopus-dev
+      - libjansson-dev
+      - libx264-dev
+      - libass-dev
+      - libtheora-dev
+      - libvorbis-dev
+      - libsamplerate0-dev
+      - libharfbuzz-dev
+      - libgtk-3-dev
+      - libnotify-dev
+      - libxml2-utils
+      - xmlto
+install: if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew bundle; fi
+script: ./configure && pushd build && make

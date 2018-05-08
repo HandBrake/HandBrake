@@ -1,0 +1,2 @@
+before_build: nuget restore %APPVEYOR_BUILD_FOLDER%/win/CS/HandBrake.sln
+build_script: msbuild %APPVEYOR_BUILD_FOLDER%/win/CS/HandBrake.sln
