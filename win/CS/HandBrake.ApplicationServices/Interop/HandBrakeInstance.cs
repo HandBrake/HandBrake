@@ -48,8 +48,6 @@ namespace HandBrake.ApplicationServices.Interop
         /// </summary>
         private const double EncodePollIntervalMs = 250;
 
-        private readonly ILog log = LogService.GetLogger();
-
         /// <summary>
         /// The native handle to the HandBrake instance.
         /// </summary>
@@ -246,7 +244,7 @@ namespace HandBrake.ApplicationServices.Interop
                 catch (Exception exc)
                 {
                     Debug.WriteLine(exc);
-                    this.log.LogMessage(exc.ToString(), LogMessageType.API, LogLevel.Error);
+                    HandBrakeUtils.SendErrorEvent(exc.ToString());
                 }
             };
             this.scanPollTimer.Start();
@@ -480,7 +478,6 @@ namespace HandBrake.ApplicationServices.Interop
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
             string statusJson = Marshal.PtrToStringAnsi(json);
-            this.log.LogMessage(statusJson, LogMessageType.Progress, LogLevel.Trace);
             JsonState state = null;
             if (!string.IsNullOrEmpty(statusJson))
             {
@@ -502,14 +499,9 @@ namespace HandBrake.ApplicationServices.Interop
 
                 var jsonMsg = HBFunctions.hb_get_title_set_json(this.hbHandle);
                 this.titlesJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
-                this.log.LogMessage(this.titlesJson, LogMessageType.Progress, LogLevel.Trace);
 
-                if (string.IsNullOrEmpty(this.titlesJson))
-                {
-                    this.log.LogMessage("Scan Error: No Scan Data Returned.", LogMessageType.API, LogLevel.Error);
-                }
-                else
-                {
+                if (!string.IsNullOrEmpty(this.titlesJson))
+                { 
                     this.titles = JsonConvert.DeserializeObject<JsonScanObject>(this.titlesJson);
                     if (this.titles != null)
                     {
@@ -532,8 +524,6 @@ namespace HandBrake.ApplicationServices.Interop
         {
             IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
             string statusJson = Marshal.PtrToStringAnsi(json);
-
-            this.log.LogMessage(statusJson, LogMessageType.Progress, LogLevel.Trace);
 
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
 

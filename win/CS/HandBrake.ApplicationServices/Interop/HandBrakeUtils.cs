@@ -28,8 +28,6 @@ namespace HandBrake.ApplicationServices.Interop
     /// </summary>
     public static class HandBrakeUtils
     {
-        private static readonly ILog log = LogService.GetLogger();
-
         /// <summary>
         /// The callback for log messages from HandBrake.
         /// </summary>
@@ -298,7 +296,6 @@ namespace HandBrake.ApplicationServices.Interop
         public static Geometry GetAnamorphicSize(AnamorphicGeometry anamorphicGeometry)
         {
             string encode = JsonConvert.SerializeObject(anamorphicGeometry, Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            log.LogMessage(encode, LogMessageType.API, LogLevel.Debug);
             IntPtr json = HBFunctions.hb_set_anamorphic_size_json(Marshal.StringToHGlobalAnsi(encode));
             string result = Marshal.PtrToStringAnsi(json);
             return JsonConvert.DeserializeObject<Geometry>(result);
@@ -333,13 +330,9 @@ namespace HandBrake.ApplicationServices.Interop
         /// <param name="message">
         /// The message to send.
         /// </param>
-        private static void SendMessageEvent(string message)
+        public static void SendMessageEvent(string message)
         {
-            if (MessageLogged != null)
-            {
-                log.LogMessage(message, LogMessageType.ScanOrEncode, LogLevel.Info);
-                MessageLogged(null, new MessageLoggedEventArgs(message));
-            }
+            MessageLogged?.Invoke(null, new MessageLoggedEventArgs(message));
         }
 
         /// <summary>
@@ -348,13 +341,9 @@ namespace HandBrake.ApplicationServices.Interop
         /// <param name="message">
         /// The message to send
         /// </param>
-        private static void SendErrorEvent(string message)
+        public static void SendErrorEvent(string message)
         {
-            if (ErrorLogged != null)
-            {
-                log.LogMessage(message, LogMessageType.ScanOrEncode, LogLevel.Error);
-                ErrorLogged(null, new MessageLoggedEventArgs(message));
-            }
+            ErrorLogged?.Invoke(null, new MessageLoggedEventArgs(message));
         }
     }
 }
