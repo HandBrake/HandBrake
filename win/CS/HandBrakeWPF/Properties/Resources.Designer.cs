@@ -669,7 +669,7 @@ namespace HandBrakeWPF.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Warning: If you wish to have subtitles added to each item you are about to queue, please verify that you have the subtitle defaults setup correctly on the subtitles tab.
         ///    
-        ///    Do you wish to continue?.
+        ///Do you wish to continue?.
         /// </summary>
         public static string Main_AutoAdd_AudioAndSubWarning {
             get {
@@ -683,6 +683,15 @@ namespace HandBrakeWPF.Properties {
         public static string Main_ChooseDestination {
             get {
                 return ResourceManager.GetString("Main_ChooseDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to add the last job to the queue. Do you wish to proceed trying to add the rest?.
+        /// </summary>
+        public static string Main_ContinueAddingToQueue {
+            get {
+                return ResourceManager.GetString("Main_ContinueAddingToQueue", resourceCulture);
             }
         }
         
@@ -902,6 +911,16 @@ namespace HandBrakeWPF.Properties {
         public static string Main_QueueLabel {
             get {
                 return ResourceManager.GetString("Main_QueueLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file &apos;{0}&apos; already exists!
+        ///Would you like to overwrite it?.
+        /// </summary>
+        public static string Main_QueueOverwritePrompt {
+            get {
+                return ResourceManager.GetString("Main_QueueOverwritePrompt", resourceCulture);
             }
         }
         

@@ -327,7 +327,7 @@ In order to use the QuickSync encoder, you must:
   <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
     <value>Warning: If you wish to have subtitles added to each item you are about to queue, please verify that you have the subtitle defaults setup correctly on the subtitles tab.
     
-    Do you wish to continue?</value>
+Do you wish to continue?</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>You must turn on automatic file naming AND set a default path in preferences before you can add to the queue.</value>
@@ -877,5 +877,12 @@ Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
     <value>HandBrake requires Windows 7 or later to run. Version 0.9.9 (XP) and 0.10.5 (Vista) was the last version to support these versions.</value>
+  </data>
+  <data name="Main_ContinueAddingToQueue" xml:space="preserve">
+    <value>Unable to add the last job to the queue. Do you wish to proceed trying to add the rest?</value>
+  </data>
+  <data name="Main_QueueOverwritePrompt" xml:space="preserve">
+    <value>The file '{0}' already exists!
+Would you like to overwrite it?</value>
   </data>
 </root>

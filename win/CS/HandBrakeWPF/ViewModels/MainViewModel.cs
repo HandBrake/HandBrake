@@ -791,6 +791,7 @@ namespace HandBrakeWPF.ViewModels
                             this.Destination = AutoNameHelper.AutoName(this.CurrentTask, this.SourceName, this.selectedPreset);
                         }
                     }
+
                     this.NotifyOfPropertyChange(() => this.CurrentTask);
 
                     this.Duration = this.DurationCalculation();
@@ -1490,6 +1491,15 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
+            if (File.Exists(this.CurrentTask.Destination))
+            {
+                MessageBoxResult result = this.errorService.ShowMessageBox(string.Format(Resources.Main_QueueOverwritePrompt, Path.GetFileName(this.CurrentTask.Destination)), Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No)
+                {
+                    return false;
+                }           
+            }
+
             if (!DirectoryUtilities.IsWritable(Path.GetDirectoryName(this.CurrentTask.Destination), true, this.errorService))
             {
                 this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOrMissingDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
@@ -1556,9 +1566,10 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.CurrentTask != null && this.CurrentTask.SubtitleTracks != null && this.CurrentTask.SubtitleTracks.Count > 0)
             {
-                if (this.SubtitleViewModel.SubtitleBehaviours == null || this.SubtitleViewModel.SubtitleBehaviours.SelectedBehaviour == SubtitleBehaviourModes.None)
+                if ((this.SubtitleViewModel.SubtitleBehaviours == null || this.SubtitleViewModel.SubtitleBehaviours.SelectedBehaviour == SubtitleBehaviourModes.None)
+                    && !(this.CurrentTask.SubtitleTracks.Count == 1 && this.CurrentTask.SubtitleTracks.First().SubtitleType == SubtitleType.ForeignAudioSearch))
                 {
-                    System.Windows.MessageBoxResult result = this.errorService.ShowMessageBox(
+                    MessageBoxResult result = this.errorService.ShowMessageBox(
                         Resources.Main_AutoAdd_AudioAndSubWarning,
                         Resources.Warning,
                         MessageBoxButton.YesNo,
@@ -1574,7 +1585,15 @@ namespace HandBrakeWPF.ViewModels
             foreach (Title title in this.ScannedSource.Titles)
             {
                 this.SelectedTitle = title;
-                this.AddToQueue();
+                if (!this.AddToQueue())
+                {
+                   MessageBoxResult result = this.errorService.ShowMessageBox(Resources.Main_ContinueAddingToQueue, Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.No)
+                    {
+                        break;
+                    }
+                }
             }
         }
 
