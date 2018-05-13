@@ -5802,7 +5802,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
     else
     {
         // sometimes we get absurd sizes from ffmpeg
-        if ( stream->ffmpeg_pkt.size >= (1 << 25) )
+        if ( stream->ffmpeg_pkt.size >= (1 << 27) )
         {
             hb_log( "ffmpeg_read: pkt too big: %d bytes", stream->ffmpeg_pkt.size );
             av_packet_unref(&stream->ffmpeg_pkt);
