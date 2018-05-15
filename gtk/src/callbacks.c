@@ -1548,6 +1548,7 @@ ghb_scale_configure(
 
     scale = GTK_SCALE(GHB_WIDGET(ud->builder, name));
 
+    gtk_scale_set_draw_value(scale, FALSE);
     adj = gtk_range_get_adjustment(GTK_RANGE(scale));
     page_sz = gtk_adjustment_get_page_size(adj);
 
@@ -1555,6 +1556,7 @@ ghb_scale_configure(
 
     gtk_scale_set_digits(scale, digits);
     gtk_range_set_inverted(GTK_RANGE(scale), inverted);
+    gtk_scale_set_draw_value(scale, TRUE);
 }
 
 void
