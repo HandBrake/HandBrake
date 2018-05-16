@@ -10,6 +10,9 @@
 namespace HandBrakeWPF.Views
 {
     using System.Windows;
+    using System.Windows.Input;
+
+    using HandBrakeWPF.Model;
 
     /// <summary>
     /// Interaction logic for QueueSelectionView.xaml
@@ -22,6 +25,18 @@ namespace HandBrakeWPF.Views
         public QueueSelectionView()
         {
             InitializeComponent();
+        }
+
+        private void SelectionGrid_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space && this.SelectionGrid.SelectedItems.Count == 1)
+            {
+                SelectionTitle title = this.SelectionGrid.SelectedItems[0] as SelectionTitle;
+                if (title != null)
+                {
+                    title.IsSelected = !title.IsSelected;
+                }
+            }
         }
     }
 }

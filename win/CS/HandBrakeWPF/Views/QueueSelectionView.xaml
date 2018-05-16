@@ -7,10 +7,10 @@
         xmlns:Conveters="clr-namespace:HandBrakeWPF.Converters"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         Title="{Binding Title}"
+        MinWidth="550"
         Width="550"
         Height="475"
         MinHeight="475"
-        SizeToContent="Height"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
         mc:Ignorable="d">
@@ -44,14 +44,14 @@
         </StackPanel>
 
         <!-- Selection -->
-        <ListBox Grid.Row="2"
+        <ListBox x:Name="SelectionGrid" Grid.Row="2"
                  MinHeight="240"
-                 MaxHeight="500"
                  Margin="10,10,10,10"
                  VerticalAlignment="Stretch"
                  HorizontalAlignment="Stretch"
                  ItemsSource="{Binding TitleList}"
-                 SelectionMode="Single">
+                 SelectionMode="Single" 
+                 PreviewKeyDown="SelectionGrid_OnKeyDown">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
