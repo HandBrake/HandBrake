@@ -1,0 +1,12 @@
+diff -aur libav-12.3.orig/libavfilter/vf_pad.c libav-12.3/libavfilter/vf_pad.c
+--- libav-12.3.orig/libavfilter/vf_pad.c	2018-02-12 13:25:59.000000000 -0800
++++ libav-12.3/libavfilter/vf_pad.c	2018-05-18 10:00:21.636907569 -0700
+@@ -300,7 +300,7 @@
+                               (s->y >> vsub) * frame->linesize[planes[i]];
+         ptrdiff_t req_end   = ((s->w - s->x - frame->width) >> hsub) *
+                               s->line_step[planes[i]] +
+-                              (s->y >> vsub) * frame->linesize[planes[i]];
++                              ((s->h - s->y - frame->height) >> vsub) * frame->linesize[planes[i]];
+ 
+         if (frame->linesize[planes[i]] < (s->w >> hsub) * s->line_step[planes[i]])
+             return 1;
