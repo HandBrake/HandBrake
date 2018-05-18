@@ -62,6 +62,11 @@ namespace HandBrakeWPF.Helpers
 
         private static bool SelectItem(object o, TreeViewItem parentItem)
         {
+            if (parentItem == null)
+            {
+                return false;
+            }
+
             bool found = false;
             foreach (var item in parentItem.Items)
             {
