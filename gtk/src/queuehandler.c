@@ -1725,9 +1725,13 @@ title_dest_file_cb(GtkWidget *widget, signal_user_data_t *ud)
     // Check if changing the destination file name resolves
     // a file name conflict.  Enable selection if so.
     // Disable selection if it creates a conflict!!!
-    gboolean can_select;
+    gboolean selected, can_select;
+
+    widget     = find_widget(GTK_WIDGET(row), "title_selected");
+    selected   = ghb_widget_boolean(widget);
     can_select = title_multiple_can_select(ud->settings_array, index);
-    ghb_dict_set_bool(settings, "title_selected", can_select);
+
+    ghb_dict_set_bool(settings, "title_selected", selected && can_select);
     title_add_multiple_set_sensitive(GTK_WIDGET(row), can_select);
 
     g_free(dest_file);
@@ -1761,9 +1765,13 @@ title_dest_dir_cb(GtkWidget *widget, signal_user_data_t *ud)
     // Check if changing the destination file name resolves
     // a file name conflict.  Enable selection if so.
     // Disable selection if it creates a conflict!!!
-    gboolean can_select;
+    gboolean selected, can_select;
+
+    widget     = find_widget(GTK_WIDGET(row), "title_selected");
+    selected   = ghb_widget_boolean(widget);
     can_select = title_multiple_can_select(ud->settings_array, index);
-    ghb_dict_set_bool(settings, "title_selected", can_select);
+
+    ghb_dict_set_bool(settings, "title_selected", selected && can_select);
     title_add_multiple_set_sensitive(GTK_WIDGET(row), can_select);
 
     g_free(dest_dir);
