@@ -236,7 +236,14 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.presetService.CheckIfPresetExists(this.Preset.Name))
             {
-                MessageBoxResult result = this.errorService.ShowMessageBox(Resources.AddPresetViewModel_PresetWithSameNameOverwriteWarning, Resources.Error, MessageBoxButton.YesNo, MessageBoxImage.Error);
+                Preset currentPreset = this.presetService.GetPreset(this.Preset.Name);
+                if (currentPreset != null && currentPreset.IsBuildIn)
+                {
+                    this.errorService.ShowMessageBox(Resources.Main_NoUpdateOfBuiltInPresets, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                MessageBoxResult result = this.errorService.ShowMessageBox(Resources.AddPresetViewModel_PresetWithSameNameOverwriteWarning, Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.No)
                 {
                     return;
@@ -282,8 +289,11 @@ namespace HandBrakeWPF.ViewModels
             bool added = this.presetService.Add(this.Preset);
             if (!added)
             {
-                this.errorService.ShowMessageBox(Resources.AddPresetViewModel_UnableToAddPreset, Resources.UnknownError, MessageBoxButton.OK,
-                                                 MessageBoxImage.Error);
+                this.errorService.ShowMessageBox(
+                    Resources.AddPresetViewModel_UnableToAddPreset,
+                    Resources.UnknownError,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
             else
             {

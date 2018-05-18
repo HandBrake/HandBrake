@@ -159,6 +159,12 @@ namespace HandBrakeWPF.Services.Presets
                 {
                     this.SavePresetFiles();
                 }
+
+                return true;
+            }
+            else
+            {
+                this.Update(preset);
                 return true;
             }
 
