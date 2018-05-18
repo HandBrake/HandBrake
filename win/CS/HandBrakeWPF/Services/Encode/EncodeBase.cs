@@ -14,8 +14,10 @@ namespace HandBrakeWPF.Services.Encode
     using System.Globalization;
     using System.IO;
 
+    using HandBrake.ApplicationServices.Interop.EventArgs;
     using HandBrake.ApplicationServices.Model;
 
+    using HandBrakeWPF.Services.Encode.Interfaces;
     using HandBrakeWPF.Utilities;
 
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
@@ -78,10 +80,7 @@ namespace HandBrakeWPF.Services.Encode
         public void InvokeEncodeStatusChanged(EncodeProgressEventArgs e)
         {
             EncodeProgessStatus handler = this.EncodeStatusChanged;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            handler?.Invoke(this, e);
         }
 
         /// <summary>
@@ -93,10 +92,7 @@ namespace HandBrakeWPF.Services.Encode
         public void InvokeEncodeCompleted(EncodeCompletedEventArgs e)
         {
             EncodeCompletedStatus handler = this.EncodeCompleted;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            handler?.Invoke(this, e);
         }
 
         /// <summary>
@@ -108,10 +104,7 @@ namespace HandBrakeWPF.Services.Encode
         public void InvokeEncodeStarted(System.EventArgs e)
         {
             EventHandler handler = this.EncodeStarted;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            handler?.Invoke(this, e);
         }
 
         #endregion
@@ -163,7 +156,7 @@ namespace HandBrakeWPF.Services.Encode
                     this.WriteFile(logContent, Path.Combine(configuration.SaveLogCopyDirectory, encodeLogFile));
                 }
 
-                return encodeLogFile;
+                return Path.Combine(logDir, encodeLogFile);
             }
             catch (Exception exc)
             {

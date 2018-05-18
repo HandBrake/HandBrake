@@ -29,9 +29,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Microsoft.Win32;
 
-    using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
-    using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
+    using EncodeCompletedEventArgs = Services.Encode.EventArgs.EncodeCompletedEventArgs;
+    using EncodeProgressEventArgs = Services.Encode.EventArgs.EncodeProgressEventArgs;
 
     /// <summary>
     /// The Preview View Model
@@ -47,6 +46,7 @@ namespace HandBrakeWPF.ViewModels
         private string jobStatus;
         private string jobsPending;
         private string whenDoneAction;
+        private QueueTask selectedTask;
 
         private bool isQueueRunning;
 
@@ -94,6 +94,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.isQueueRunning;
             }
+
             set
             {
                 if (value == this.isQueueRunning) return;
@@ -145,6 +146,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.whenDoneAction;
             }
+
             set
             {
                 this.whenDoneAction = value;
@@ -167,6 +169,26 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets the selected items.
         /// </summary>
         public BindingList<QueueTask> SelectedItems { get; set; }
+
+        public QueueTask SelectedTask
+        {
+            get
+            {
+                return this.selectedTask;
+            }
+
+            set
+            {
+                if (Equals(value, this.selectedTask)) return;
+                this.selectedTask = value;
+                this.NotifyOfPropertyChange(() => this.SelectedTask);
+                this.HandleLogData();
+            }
+        }
+
+        public bool ShowLogTab { get; private set; }
+
+        public string ActivityLog { get; private set; }
 
         #endregion
 
@@ -545,6 +567,41 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.errorService.ShowError(Resources.MainViewModel_UnableToLaunchDestDir, Resources.MainViewModel_UnableToLaunchDestDirSolution, exc);
             }
+        }
+
+        private void HandleLogData()
+        {
+            if (this.SelectedTask == null || this.SelectedTask.Status == QueueItemStatus.InProgress)
+            {
+                this.ShowLogTab = false;
+            }
+            else
+            {
+                try
+                {
+                    // TODO full log path
+                    if (!string.IsNullOrEmpty(this.SelectedTask.Statistics.CompletedActivityLogPath)
+                        && File.Exists(this.SelectedTask.Statistics.CompletedActivityLogPath))
+                    {
+                        using (StreamReader logReader = new StreamReader(this.SelectedTask.Statistics.CompletedActivityLogPath))
+                        {
+                            string logContent = logReader.ReadToEnd();
+                            this.ActivityLog = logContent;
+                        }
+
+                        this.ShowLogTab = true;
+                    }
+                }
+                catch (Exception exc)
+                {
+                    Debug.WriteLine(exc);
+                    this.ShowLogTab = true;
+                    this.ActivityLog = exc.ToString();
+                }
+            }
+
+            this.NotifyOfPropertyChange(() => this.ShowLogTab);
+            this.NotifyOfPropertyChange(() => this.ActivityLog);
         }
 
         /// <summary>

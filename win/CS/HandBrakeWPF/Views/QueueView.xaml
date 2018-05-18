@@ -175,6 +175,7 @@
                  dd:DragDrop.IsDropTarget="True"
                  ItemsSource="{Binding QueueTasks, Mode=OneWay}"
                  helpers:ListBoxHelper.SelectedItems="{Binding SelectedItems}" 
+                 SelectedItem="{Binding SelectedTask}"
                  SelectionMode="Extended">
 
             <i:Interaction.Triggers>
