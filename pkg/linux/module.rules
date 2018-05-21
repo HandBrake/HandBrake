@@ -4,6 +4,8 @@ pkg.create.rpm:: $(PKG.rpm.stamp)
 pkg.create.src.deb:: $(PKG.src.deb.stamp)
 pkg.create.tar:: pkg.create $(PKG.cli.tar)
 
+DEBIAN_CHANGELOG_DATE = $(shell date -R)
+
 #
 # CLI Tar Package
 #
@@ -132,7 +134,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo "  * Snapshot" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
 	echo "    - See commit history at https://github.com/HandBrake/HandBrake/commits/master" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
-	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
+	echo " -- John Stebbins <jstebbins.hb@gmail.com>  " $(DEBIAN_CHANGELOG_DATE) >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)bionic/$(PKG.src.deb.tar) -C $(STAGE.out.src/)bionic $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)bionic/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	$(MKDIR.exe) -p $(STAGE.out.src/)artful
@@ -146,7 +148,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo "  * Snapshot" >> $(STAGE.out.src/)artful/$(PKG.deb.basename)/debian/changelog
 	echo "    - See commit history at https://github.com/HandBrake/HandBrake/commits/master" >> $(STAGE.out.src/)artful/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)artful/$(PKG.deb.basename)/debian/changelog
-	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)artful/$(PKG.deb.basename)/debian/changelog
+	echo " -- John Stebbins <jstebbins.hb@gmail.com>  " $(DEBIAN_CHANGELOG_DATE) >> $(STAGE.out.src/)artful/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)artful/$(PKG.src.deb.tar) -C $(STAGE.out.src/)artful $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)artful/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	$(MKDIR.exe) -p $(STAGE.out.src/)xenial
@@ -160,7 +162,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo "  * Snapshot" >> $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/changelog
 	echo "    - See commit history at https://github.com/HandBrake/HandBrake/commits/master" >> $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/changelog
-	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/changelog
+	echo " -- John Stebbins <jstebbins.hb@gmail.com>  " $(DEBIAN_CHANGELOG_DATE) >> $(STAGE.out.src/)xenial/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)xenial/$(PKG.src.deb.tar) -C $(STAGE.out.src/)xenial $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)xenial/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	$(MKDIR.exe) -p $(STAGE.out.src/)trusty
@@ -174,6 +176,6 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo "  * Snapshot" >> $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/changelog
 	echo "    - See commit history at https://github.com/HandBrake/HandBrake/commits/master" >> $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/changelog
-	echo " -- John Stebbins <jstebbins.hb@gmail.com>  Sun, 11 Apr 2010 9:51:07 -0800" >> $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/changelog
+	echo " -- John Stebbins <jstebbins.hb@gmail.com>  " $(DEBIAN_CHANGELOG_DATE) >> $(STAGE.out.src/)trusty/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)trusty/$(PKG.src.deb.tar) -C $(STAGE.out.src/)trusty $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)trusty/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
