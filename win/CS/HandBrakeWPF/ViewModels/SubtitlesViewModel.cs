@@ -13,6 +13,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Runtime.CompilerServices;
 
     using Caliburn.Micro;
 
@@ -245,19 +246,15 @@ namespace HandBrakeWPF.ViewModels
 
             dialog.ShowDialog();
 
-            foreach (var srtFile in dialog.FileNames)
+            this.AddInputSubtitles(dialog.FileNames);
+        }
+
+        public void Import(string[] subtitleFiles)
+        {
+            if (subtitleFiles != null && subtitleFiles.Any())
             {
-                SubtitleTrack track = new SubtitleTrack
-                    {
-                        SrtFileName = Path.GetFileNameWithoutExtension(srtFile),
-                        SrtOffset = 0,
-                        SrtCharCode = "UTF-8",
-                        SrtLang = "English",
-                        SubtitleType = SubtitleType.SRT,
-                        SrtPath = srtFile
-                    };
-                this.Task.SubtitleTracks.Add(track);
-            }
+                this.AddInputSubtitles(subtitleFiles);
+            }        
         }
 
         /// <summary>
@@ -293,6 +290,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     continue; // Skip the track the user selected.
                 }
+
                 track.Default = false;
             }
 
@@ -313,8 +311,10 @@ namespace HandBrakeWPF.ViewModels
                 {
                     continue; // Skip the track the user selected.
                 }
+
                 track.Burned = false;
             }
+
             this.NotifyOfPropertyChange(() => this.Task);
         }
 
@@ -357,6 +357,7 @@ namespace HandBrakeWPF.ViewModels
                                 break;
                             }
                         }
+
                         break;
                     case SubtitleBurnInBehaviourModes.ForeignAudio:
                         foreach (var track in this.Task.SubtitleTracks)
@@ -370,6 +371,7 @@ namespace HandBrakeWPF.ViewModels
                                 break;
                             }
                         }
+
                         break;
                     case SubtitleBurnInBehaviourModes.FirstTrack:                    
                         foreach (var track in this.Task.SubtitleTracks)
@@ -387,7 +389,8 @@ namespace HandBrakeWPF.ViewModels
                                 track.Burned = true;
                                 this.SetBurnedToFalseForAllExcept(track);
                             }
-                        }                  
+                        }   
+                        
                         break;
                     case SubtitleBurnInBehaviourModes.ForeignAudioPreferred:
                         foreach (var track in this.Task.SubtitleTracks)
@@ -408,7 +411,8 @@ namespace HandBrakeWPF.ViewModels
                                 this.SetBurnedToFalseForAllExcept(track);
                                 break;
                             }
-                        }            
+                        }       
+                        
                         break;
                 }
             }
@@ -663,6 +667,28 @@ namespace HandBrakeWPF.ViewModels
             return subtitles != null
                        ? subtitles.Where(subtitle => !this.Task.SubtitleTracks.Any(track => Equals(track.SourceTrack, subtitle))).ToList()
                        : this.SourceTracks.Where(subtitle => !this.Task.SubtitleTracks.Any(track => Equals(track.SourceTrack, subtitle))).ToList();
+        }
+
+        private void AddInputSubtitles(string[] filenames)
+        {
+            foreach (var srtFile in filenames)
+            {
+                if (!File.Exists(srtFile))
+                {
+                    continue;
+                }
+
+                SubtitleTrack track = new SubtitleTrack
+                                          {
+                                              SrtFileName = Path.GetFileNameWithoutExtension(srtFile),
+                                              SrtOffset = 0,
+                                              SrtCharCode = "UTF-8",
+                                              SrtLang = "English",
+                                              SubtitleType = SubtitleType.SRT,
+                                              SrtPath = srtFile
+                                          };
+                this.Task.SubtitleTracks.Add(track);
+            }
         }
 
         #endregion
