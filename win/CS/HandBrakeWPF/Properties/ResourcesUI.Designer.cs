@@ -1069,6 +1069,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please choose a source to encode before trying to import a subtitle file..
+        /// </summary>
+        public static string MainView_SubtitleBeforeScanError {
+            get {
+                return ResourceManager.GetString("MainView_SubtitleBeforeScanError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Subtitles.
         /// </summary>
         public static string MainView_SubtitlesTab {

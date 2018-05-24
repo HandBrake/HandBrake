@@ -1025,4 +1025,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
     <value>Show previews on summary tab.</value>
   </data>
+  <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
+    <value>Please choose a source to encode before trying to import a subtitle file.</value>
+  </data>
 </root>

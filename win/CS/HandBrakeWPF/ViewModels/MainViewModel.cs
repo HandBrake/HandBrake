@@ -1839,6 +1839,15 @@ namespace HandBrakeWPF.ViewModels
                         return;
                     }
 
+                    if (this.SelectedTitle == null)
+                    {
+                        MessageBox.Show(
+                            ResourcesUI.MainView_SubtitleBeforeScanError,
+                            Resources.Error,
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Error);
+                    }
+
                     // StartScan is not synchronous, so for now we don't support adding both srt and video file at the same time. 
                     string[] subtitleFiles = fileNames.Where(f => Path.GetExtension(f)?.ToLower() == ".srt").ToArray();
                     if (this.SelectedTab != 5 && subtitleFiles.Any())
