@@ -83,5 +83,8 @@ namespace HandBrakeWPF
         /// Preset Micro Version
         /// </summary>
         public const string PresetVersionMicro = "0";
+
+        public const string FileScanMru = "FileScanMru";
+        public const string FileSaveMru = "FileSaveMru";
     }
 }

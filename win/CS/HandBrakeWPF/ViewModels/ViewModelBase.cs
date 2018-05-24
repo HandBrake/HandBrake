@@ -9,8 +9,12 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
+    using System.IO;
+
     using Caliburn.Micro;
 
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -18,30 +22,19 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class ViewModelBase : Screen, IViewModelBase
     {
-        #region Constants and Fields
+        private readonly IUserSettingService userSettingService;
 
-        /// <summary>
-        /// Backing Field to prevent the Load method being called more than once.
-        /// </summary>
         private bool hasLoaded;
-
-        /// <summary>
-        /// The title.
-        /// </summary>
         private string title;
 
-        #endregion
-
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ViewModelBase"/> class.
-        /// </summary>
         public ViewModelBase()
         {
         }
 
-        #endregion
+        public ViewModelBase(IUserSettingService userSettingService)
+        {
+            this.userSettingService = userSettingService;
+        }
 
         #region Properties
 
@@ -58,7 +51,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.title = value;
-                this.NotifyOfPropertyChange("Title");
+                this.NotifyOfPropertyChange();
             }
         }
 
@@ -86,6 +79,38 @@ namespace HandBrakeWPF.ViewModels
         public virtual void OnLoad()
         {
             // Implement in the ViewModel to perform viewmodel specific code.
+        }
+
+        public string GetMru(string key)
+        {
+            if (this.userSettingService == null)
+            {
+                throw new NotImplementedException("You must use the constructor with UserSettingService to use this function.");
+            }
+
+            string filePath = this.userSettingService.GetUserSetting<string>("mru" + key);
+            if (!string.IsNullOrEmpty(filePath) && Directory.Exists(filePath))
+            {
+                return filePath;
+            }
+
+            return null;
+        }
+
+        public void SetMru(string key, string value)
+        {
+            if (this.userSettingService == null)
+            {
+                throw new NotImplementedException("You must use the constructor with UserSettingService to use this function.");
+            }
+
+            if (string.IsNullOrEmpty(value) || !Directory.Exists(value))
+            {
+                this.userSettingService.SetUserSetting("mru" + key, string.Empty);
+                return;
+            }
+
+            this.userSettingService.SetUserSetting("mru" + key, value);
         }
 
         #endregion
