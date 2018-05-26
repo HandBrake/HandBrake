@@ -21,6 +21,8 @@ X265_12.CONFIGURE.extra       = -DENABLE_CLI=OFF -DHIGH_BIT_DEPTH=ON -DENABLE_LI
 
 ifneq (none,$(X265_12.GCC.g))
     X265_12.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+else
+    X265_12.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
 endif
 
 ifeq (1,$(BUILD.cross))
