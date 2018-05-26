@@ -2,11 +2,11 @@ __deps__ := YASM CMAKE X265_8 X265_10 X265_12
 $(eval $(call import.MODULE.defs,X265,x265,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,X265))
 
-X265.FETCH.url     = https://download.handbrake.fr/contrib/x265_2.6.tar.gz
-X265.FETCH.url    += https://bitbucket.org/multicoreware/x265/downloads/x265_2.6.tar.gz
-X265.FETCH.url    += https://download.videolan.org/pub/videolan/x265/x265_2.6.tar.gz
-X265.FETCH.sha256  = 1bf0036415996af841884802161065b9e6be74f5f6808ac04831363e2549cdbf
-X265.EXTRACT.tarbase = x265_v2.6
+X265.FETCH.url     = https://download.handbrake.fr/contrib/x265_2.8.tar.gz
+X265.FETCH.url    += https://bitbucket.org/multicoreware/x265/downloads/x265_2.8.tar.gz
+X265.FETCH.url    += https://download.videolan.org/pub/videolan/x265/x265_2.8.tar.gz
+X265.FETCH.sha256  = 6e59f9afc0c2b87a46f98e33b5159d56ffb3558a49d8e3d79cb7fdc6b7aaa863
+X265.EXTRACT.tarbase = x265_2.8
 
 # Silence "warning: overriding recipe for target" messages
 X265.FETCH.target =
