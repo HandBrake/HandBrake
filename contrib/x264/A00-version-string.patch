@@ -23,8 +23,8 @@ index 2b59b92..86b7198 100644
 +#undef  X264_POINTVER
 +#endif
 +#define X264_BUILD    155
-+#define X264_VERSION " r2893 b00bcaf"
-+#define X264_POINTVER "0.155.2893 b00bcaf"
++#define X264_VERSION " r2901 7d0ff22"
++#define X264_POINTVER "0.155.2901 7d0ff22"
  
  /* Application developers planning to link against a shared library version of
   * libx264 from a Microsoft Visual Studio or similar development environment
