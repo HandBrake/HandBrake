@@ -1,0 +1,15 @@
+$(eval $(call import.MODULE.defs,XZ,xz))
+$(eval $(call import.CONTRIB.defs,XZ))
+
+XZ.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/xz-5.2.4.tar.bz2
+XZ.FETCH.url    += https://tukaani.org/xz/xz-5.2.4.tar.bz2
+XZ.FETCH.sha256  = 3313fd2a95f43d88e44264e6b015e7d03053e681860b0d5d3f9baca79c57b7bf
+
+XZ.CONFIGURE.extra = \
+    --disable-xz \
+    --disable-xzdec \
+    --disable-lzmadec \
+    --disable-lzmainfo \
+    --disable-scripts \
+    --disable-doc
+

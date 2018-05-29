@@ -118,7 +118,7 @@ define import.CONTRIB.defs
         $(1).CONFIGURE.env.CFLAGS   = CFLAGS="-I$$(call fn.ABSOLUTE,$(CONTRIB.build/))include $$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?c_std ?extra *D)"
         $(1).CONFIGURE.env.CXXFLAGS = CXXFLAGS="-I$$(call fn.ABSOLUTE,$(CONTRIB.build/))include $$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?cxx_std ?extra *D)"
     endif
-    $(1).CONFIGURE.env.CPPFLAGS = CPPFLAGS="-I$$(call fn.ABSOLUTE,$(CONTRIB.build/))include $$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra *D)"
+    $(1).CONFIGURE.env.CPPFLAGS = CPPFLAGS="-I$$(call fn.ABSOLUTE,$(CONTRIB.build/))include $$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver *D)"
     $(1).CONFIGURE.env.LDFLAGS  = LDFLAGS="-L$$(call fn.ABSOLUTE,$(CONTRIB.build/))lib $$(call fn.ARGS,$(1).GCC,*archs *sysroot *minver ?extra.exe *D)"
     $(1).CONFIGURE.env.PKG_CONFIG_PATH  = PKG_CONFIG_PATH="$$(call fn.ABSOLUTE,$$(CONTRIB.build/))lib/pkgconfig"
 

@@ -1,4 +1,4 @@
-__deps__ := YASM FDKAAC LIBVPX LAME LIBOPUS LIBSPEEX
+__deps__ := YASM FDKAAC LIBVPX LAME LIBOPUS LIBSPEEX XZ
 ifeq (1,$(FEATURE.qsv))
 __deps__ += LIBMFX
 endif
@@ -63,6 +63,7 @@ FFMPEG.CONFIGURE.extra = \
     --disable-decoder=wmv3_crystalhd \
     --disable-bzlib \
     --disable-zlib \
+    --enable-lzma \
     --cc="$(FFMPEG.GCC.gcc)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
 

@@ -185,6 +185,12 @@ else
     LIBHB.GCC.l += z
 endif
 
+ifneq ($(HAS.xz),1)
+LIBHB.dll.libs += $(CONTRIB.build/)lib/liblzma.a
+else
+    LIBHB.GCC.l += lzma
+endif
+
 LIBHB.GCC.args.extra.dylib++ += -Wl,--out-implib,$(LIBHB.lib)
 LIBHB.GCC.l += bcrypt ws2_32 uuid ole32
 ifeq ($(HAS.dlfcn),1)

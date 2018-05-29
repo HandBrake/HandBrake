@@ -102,6 +102,9 @@ ifneq (,$(filter $(BUILD.system),cygwin mingw))
 ifneq ($(HAS.iconv),1)
     MODULES += contrib/libiconv
 endif
+ifneq ($(HAS.xz),1)
+    MODULES += contrib/xz
+endif
 ifneq ($(HAS.libz),1)
     MODULES += contrib/zlib
 endif

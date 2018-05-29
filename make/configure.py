@@ -1686,6 +1686,18 @@ int main ()
         libz = LDProbe( 'static zlib', '%s -static' % Tools.gcc.pathname, '-lz', libz_test )
         libz.run()
 
+        xz_test = """
+#include <stdio.h>
+#include <lzma.h>
+int main ()
+{
+  lzma_stream_decoder(NULL, 0, 0);
+  return 0;
+}
+"""
+        xz = LDProbe( 'static xz', '%s -static' % Tools.gcc.pathname, '-llzma', xz_test )
+        xz.run()
+
         iconv_test = """
 #include <stdio.h>
 #include <iconv.h>
@@ -1893,6 +1905,8 @@ int main()
             doc.add( 'HAS.bz2', 1 )
         if not libz.fail:
             doc.add( 'HAS.libz', 1 )
+        if not xz.fail:
+            doc.add( 'HAS.xz', 1 )
         if not iconv.fail:
             doc.add( 'HAS.iconv', 1 )
         if not regex.fail:
