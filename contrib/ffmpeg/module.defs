@@ -59,8 +59,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-decoder=msmpeg4_crystalhd \
     --disable-decoder=vc1_crystalhd \
     --disable-decoder=wmv3_crystalhd \
-    --enable-zlib \
-    --enable-bzlib \
     --cc="$(FFMPEG.GCC.gcc)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
 
