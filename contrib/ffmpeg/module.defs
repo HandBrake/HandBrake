@@ -55,7 +55,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-decoder=libvpx_vp8 \
     --enable-encoder=libvpx_vp9 \
     --disable-decoder=libvpx_vp9 \
-    --disable-decoder=crystalhd \
     --disable-decoder=h264_crystalhd \
     --disable-decoder=mpeg2_crystalhd \
     --disable-decoder=mpeg4_crystalhd \
