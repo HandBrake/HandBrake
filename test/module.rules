@@ -31,6 +31,13 @@ test.xclean: test.clean
 $(TEST.exe): | $(dir $(TEST.exe))
 $(TEST.exe): $(TEST.c.o)
 	$(call TEST.GCC.EXE++,$@,$^ $(TEST.libs))
+ifeq (none,$(FFMPEG.GCC.g))
+ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+	$(STRIP.exe) -s $(TEST.exe)
+else
+	$(STRIP.exe) $(TEST.exe)
+endif
+endif
 
 $(TEST.c.o): $(LIBHB.a)
 $(TEST.c.o): | $(dir $(TEST.c.o))

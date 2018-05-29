@@ -46,6 +46,9 @@ libhb.build: $(LIBHB.dll)
 $(LIBHB.dll): | $(dirname $(LIBHB.dll) $(LIBHB.lib))
 $(LIBHB.dll): $(LIBHB.c.o) $(LIBHB.yasm.o)
 	$(call LIBHB.GCC.DYLIB++,$@,$^ $(LIBHB.dll.libs))
+ifeq (none,$(FFMPEG.GCC.g))
+	$(STRIP.exe) -s $(LIBHB.dll)
+endif
 
 endif
 
