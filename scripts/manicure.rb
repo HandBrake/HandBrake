@@ -361,6 +361,8 @@ class Display
           audioEncoders << "ca_haac"
         when /Vorbis/
           audioEncoders << "vorbis"
+        when /MP2 Pass/
+          audioEncoders << "copy:mp2"
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
@@ -448,6 +450,12 @@ class Display
         audioCopyMask << ","
       end
       audioCopyMask << "dts"
+    end
+    if hash["AudioAllowMP2Pass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "mp2"
     end
     if hash["AudioAllowMP3Pass"].to_i == 1
       if audioCopyMask.size > 0
@@ -760,6 +768,8 @@ class Display
           audioEncoders << "ca_haac"
         when /Vorbis/
           audioEncoders << "vorbis"
+        when /MP2 Pass/
+          audioEncoders << "copy:mp2"
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
@@ -847,6 +857,12 @@ class Display
         audioCopyMask << ","
       end
       audioCopyMask << "dts"
+    end
+    if hash["AudioAllowMP2Pass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "mp2"
     end
     if hash["AudioAllowMP3Pass"].to_i == 1
       if audioCopyMask.size > 0
@@ -1160,6 +1176,8 @@ class Display
           audioEncoders << "ca_haac"
         when /Vorbis/
           audioEncoders << "vorbis"
+        when /MP2 Pass/
+          audioEncoders << "copy:mp2"
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
@@ -1269,6 +1287,9 @@ class Display
       end
       if hash["AudioAllowDTSPass"].to_i == 1
         commandString << "    allowed_audio_copy |= HB_ACODEC_DCA_PASS;\n    "
+      end
+      if hash["AudioAllowMP2Pass"].to_i == 1
+        commandString << "    allowed_audio_copy |= HB_ACODEC_MP2_PASS;\n    "
       end
       if hash["AudioAllowMP3Pass"].to_i == 1
         commandString << "    allowed_audio_copy |= HB_ACODEC_MP3_PASS;\n    "
@@ -1612,6 +1633,8 @@ class Display
           audioEncoders << "ca_haac"
         when /Vorbis/
           audioEncoders << "vorbis"
+        when /MP2 Pass/
+          audioEncoders << "copy:mp2"
         when /MP3 Pass/
           audioEncoders << "copy:mp3"
         when /MP3/
@@ -1699,6 +1722,12 @@ class Display
         audioCopyMask << ","
       end
       audioCopyMask << "dts"
+    end
+    if hash["AudioAllowMP2Pass"].to_i == 1
+      if audioCopyMask.size > 0
+        audioCopyMask << ","
+      end
+      audioCopyMask << "mp2"
     end
     if hash["AudioAllowMP3Pass"].to_i == 1
       if audioCopyMask.size > 0

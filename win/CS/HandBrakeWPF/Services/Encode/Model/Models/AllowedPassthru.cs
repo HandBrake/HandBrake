@@ -27,6 +27,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowAC3Pass = true;
             this.AudioAllowDTSHDPass = true;
             this.AudioAllowDTSPass = true;
+            this.AudioAllowMP2Pass = true;
             this.AudioAllowMP3Pass = true;
             this.AudioAllowEAC3Pass = true;
             this.AudioAllowTrueHDPass = true;
@@ -46,6 +47,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowAC3Pass = initialValue;
             this.AudioAllowDTSHDPass = initialValue;
             this.AudioAllowDTSPass = initialValue;
+            this.AudioAllowMP2Pass = initialValue;
             this.AudioAllowMP3Pass = initialValue;
             this.AudioAllowEAC3Pass = initialValue;
             this.AudioAllowTrueHDPass = initialValue;
@@ -66,6 +68,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowAC3Pass = initialValue.AudioAllowAC3Pass;
             this.AudioAllowDTSHDPass = initialValue.AudioAllowDTSHDPass;
             this.AudioAllowDTSPass = initialValue.AudioAllowDTSPass;
+            this.AudioAllowMP2Pass = initialValue.AudioAllowMP2Pass;
             this.AudioAllowMP3Pass = initialValue.AudioAllowMP3Pass;
             this.AudioAllowEAC3Pass = initialValue.AudioAllowEAC3Pass;
             this.AudioAllowTrueHDPass = initialValue.AudioAllowTrueHDPass;
@@ -96,6 +99,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// Gets or sets a value indicating whether AudioAllowDTSPass.
         /// </summary>
         public bool AudioAllowDTSPass { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether AudioAllowMP2Pass.
+        /// </summary>
+        public bool AudioAllowMP2Pass { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether AudioAllowMP3Pass.
@@ -146,6 +154,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 {
                     audioEncoders.Add(AudioEncoder.DtsPassthrough);
                 }
+                if (this.AudioAllowMP2Pass)
+                {
+                    audioEncoders.Add(AudioEncoder.Mp2Passthru);
+                }
                 if (this.AudioAllowMP3Pass)
                 {
                     audioEncoders.Add(AudioEncoder.Mp3Passthru);
@@ -176,6 +188,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.AudioAllowAC3Pass = false;
             this.AudioAllowDTSHDPass = false;
             this.AudioAllowDTSPass = false;
+            this.AudioAllowMP2Pass = false;
             this.AudioAllowMP3Pass = false;
             this.AudioAllowEAC3Pass = false;
             this.AudioAllowTrueHDPass = false;

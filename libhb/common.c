@@ -61,6 +61,7 @@ enum
     HB_GID_ACODEC_EAC3_PASS,
     HB_GID_ACODEC_FLAC,
     HB_GID_ACODEC_FLAC_PASS,
+    HB_GID_ACODEC_MP2_PASS,
     HB_GID_ACODEC_MP3,
     HB_GID_ACODEC_MP3_PASS,
     HB_GID_ACODEC_TRUEHD_PASS,
@@ -323,6 +324,7 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     { { "TrueHD Passthru",    "copy:truehd","TrueHD Passthru",             HB_ACODEC_TRUEHD_PASS,                 HB_MUX_AV_MKV,   }, NULL, 1, HB_GID_ACODEC_TRUEHD_PASS,},
     { { "DTS Passthru",       "copy:dts",   "DTS Passthru",                HB_ACODEC_DCA_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_DTS_PASS,   },
     { { "DTS-HD Passthru",    "copy:dtshd", "DTS-HD Passthru",             HB_ACODEC_DCA_HD_PASS, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_DTSHD_PASS, },
+    { { "MP2 Passthru",       "copy:mp2",   "MP2 Passthru",                HB_ACODEC_MP2_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_MP2_PASS,   },
     { { "MP3",                "mp3",        "MP3 (libmp3lame)",            HB_ACODEC_LAME,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_MP3,        },
     { { "MP3 Passthru",       "copy:mp3",   "MP3 Passthru",                HB_ACODEC_MP3_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_MP3_PASS,   },
     { { "Vorbis",             "vorbis",     "Vorbis (libvorbis)",          HB_ACODEC_VORBIS,                      HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_VORBIS,     },
@@ -2205,6 +2207,10 @@ int hb_audio_encoder_get_fallback_for_passthru(int passthru)
         case HB_ACODEC_FLAC_PASS:
             gid = HB_GID_ACODEC_FLAC;
             break;
+
+        //case HB_ACODEC_MP2_PASS:
+            //gid = HB_GID_ACODEC_TODO; // TEMPCOMMENT: Discussion Required
+            //break;
 
         case HB_ACODEC_MP3_PASS:
             gid = HB_GID_ACODEC_MP3;

@@ -4417,6 +4417,27 @@ Tracks matching these languages will be selected using the chosen Selection Beha
                                               </packing>
                                             </child>
                                             <child>
+                                            <object class="GtkCheckButton" id="AudioAllowMP2Pass">
+                                                <property name="label" translatable="yes">MP2</property>
+                                                <property name="visible">True</property>
+                                                <property name="can_focus">True</property>
+                                                <property name="receives_default">False</property>
+                                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                                <property name="tooltip_text" translatable="yes">Enable this if your playback device supports MP2.
+        This permits MP2 passthru to be selected when automatic passthru selection is enabled.</property>
+                                                <property name="halign">start</property>
+                                                <property name="active">True</property>
+                                                <property name="draw_indicator">True</property>
+                                                <signal name="toggled" handler="audio_passthru_widget_changed_cb" swapped="no"/>
+                                              </object>
+                                              <packing>
+                                                <property name="left_attach">1</property>
+                                                <property name="top_attach">0</property>
+                                                <property name="width">1</property>
+                                                <property name="height">1</property>
+                                              </packing>
+                                            </child>
+                                            <child>
                                               <object class="GtkCheckButton" id="AudioAllowMP3Pass">
                                                 <property name="label" translatable="yes">MP3</property>
                                                 <property name="visible">True</property>

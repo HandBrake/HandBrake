@@ -448,7 +448,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                     || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.DtsHDPassthrough || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.AacPassthru
                     || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.Mp3Passthru || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.Passthrough ||
                     this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.EAc3Passthrough || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.TrueHDPassthrough
-                    || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.FlacPassthru)
+                    || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.FlacPassthru || this.Encoder == HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.Mp2Passthru)
                 {
                     return true;
                 }

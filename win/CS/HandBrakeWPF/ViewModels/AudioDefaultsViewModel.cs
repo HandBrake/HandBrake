@@ -136,6 +136,23 @@ namespace HandBrakeWPF.ViewModels
         public BindingList<string> SelectedLangaugesToMove { get; private set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether audio allow m p 2 pass.
+        /// </summary>
+        public bool AudioAllowMP2Pass
+        {
+            get
+            {
+                return this.Task.AllowedPassthruOptions.AudioAllowMP2Pass;
+            }
+
+            set
+            {
+                this.task.AllowedPassthruOptions.AudioAllowMP2Pass = value;
+                this.NotifyOfPropertyChange(() => this.AudioAllowMP2Pass);
+            }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether audio allow m p 3 pass.
         /// </summary>
         public bool AudioAllowMP3Pass
@@ -483,6 +500,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.task.AllowedPassthruOptions = new AllowedPassthru(preset.Task.AllowedPassthruOptions);
 
+            this.NotifyOfPropertyChange(() => this.AudioAllowMP2Pass);
             this.NotifyOfPropertyChange(() => this.AudioAllowMP3Pass);
             this.NotifyOfPropertyChange(() => this.AudioAllowAACPass);
             this.NotifyOfPropertyChange(() => this.AudioAllowAC3Pass);

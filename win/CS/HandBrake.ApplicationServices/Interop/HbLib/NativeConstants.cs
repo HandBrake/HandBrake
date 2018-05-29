@@ -31,10 +31,12 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         public const uint HB_ACODEC_FDK_HAAC = 0x00800000;
         public const uint HB_ACODEC_FFEAC3 = 0x01000000;
         public const uint HB_ACODEC_FFTRUEHD = 0x02000000;
+        public const uint HB_ACODEC_MP2 = 0x06000000;
         public const uint HB_ACODEC_FF_MASK = 0x03FF2800;
         public const uint HB_ACODEC_PASS_FLAG = 0x40000000;
-        public const uint HB_ACODEC_PASS_MASK = (HB_ACODEC_AC3 | HB_ACODEC_DCA | HB_ACODEC_DCA_HD | HB_ACODEC_FFAAC | HB_ACODEC_FFEAC3 | HB_ACODEC_FFFLAC | HB_ACODEC_MP3 | HB_ACODEC_FFTRUEHD);
+        public const uint HB_ACODEC_PASS_MASK = (HB_ACODEC_AC3 | HB_ACODEC_DCA | HB_ACODEC_DCA_HD | HB_ACODEC_FFAAC | HB_ACODEC_FFEAC3 | HB_ACODEC_FFFLAC | HB_ACODEC_MP2 | HB_ACODEC_MP3 | HB_ACODEC_FFTRUEHD);
         public const uint HB_ACODEC_AUTO_PASS = (HB_ACODEC_PASS_MASK | HB_ACODEC_PASS_FLAG);
+        public const uint HB_ACODEC_MP2_PASS = (HB_ACODEC_MP2 | HB_ACODEC_PASS_FLAG); 
         public const uint HB_ACODEC_MP3_PASS = (HB_ACODEC_MP3 | HB_ACODEC_PASS_FLAG);
         public const uint HB_ACODEC_AAC_PASS = (HB_ACODEC_FFAAC | HB_ACODEC_PASS_FLAG);
         public const uint HB_ACODEC_AC3_PASS = (HB_ACODEC_AC3 | HB_ACODEC_PASS_FLAG);
@@ -65,5 +67,5 @@ namespace HandBrake.ApplicationServices.Interop.HbLib
         public const int HB_KEEP_WIDTH = 0x01;
         public const int HB_KEEP_HEIGHT = 0x02;
         public const int HB_KEEP_DISPLAY_ASPECT = 0x04;
-	}
+    }
 }

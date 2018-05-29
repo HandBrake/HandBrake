@@ -334,6 +334,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (job.AllowedPassthruOptions.AudioAllowDTSPass) copyMaskList.Add(NativeConstants.HB_ACODEC_DCA_PASS);
             if (job.AllowedPassthruOptions.AudioAllowEAC3Pass) copyMaskList.Add(NativeConstants.HB_ACODEC_EAC3_PASS);
             if (job.AllowedPassthruOptions.AudioAllowFlacPass) copyMaskList.Add(NativeConstants.HB_ACODEC_FLAC_PASS);
+            if (job.AllowedPassthruOptions.AudioAllowMP2Pass) copyMaskList.Add(NativeConstants.HB_ACODEC_MP2_PASS);
             if (job.AllowedPassthruOptions.AudioAllowMP3Pass) copyMaskList.Add(NativeConstants.HB_ACODEC_MP3_PASS);
             if (job.AllowedPassthruOptions.AudioAllowTrueHDPass) copyMaskList.Add(NativeConstants.HB_ACODEC_TRUEHD_PASS);
             audio.CopyMask = copyMaskList.ToArray();

@@ -4063,6 +4063,7 @@ static int do_probe(hb_stream_t *stream, hb_pes_stream_t *pes, hb_buffer_t *buf)
                 { "eac3"     , AV_CODEC_ID_EAC3       },
                 { "h264"     , AV_CODEC_ID_H264       },
                 { "m4v"      , AV_CODEC_ID_MPEG4      },
+                { "mp2"      , AV_CODEC_ID_MP2        },
                 { "mp3"      , AV_CODEC_ID_MP3        },
                 { "mpegvideo", AV_CODEC_ID_MPEG2VIDEO },
                 { "cavsvideo", AV_CODEC_ID_CAVS       },
@@ -5148,6 +5149,10 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
             audio->priv.config.extradata.length = len;
             audio->config.in.codec              = HB_ACODEC_FFFLAC;
         } break;
+
+        case AV_CODEC_ID_MP2:
+            audio->config.in.codec = HB_ACODEC_MP2;
+            break;
 
         case AV_CODEC_ID_MP3:
             audio->config.in.codec = HB_ACODEC_MP3;

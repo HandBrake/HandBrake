@@ -4562,6 +4562,7 @@
                         "copy:ac3",
                         "copy:dts",
                         "copy:eac3",
+                        "copy:mp2"
                         "copy:mp3"
                     ],
                     "AudioEncoderFallback": "aac",
