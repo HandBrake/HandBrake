@@ -5,6 +5,7 @@ LAME.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/lame-3.100.
 LAME.FETCH.url    += https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
 LAME.FETCH.sha256  = ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
 
+LAME.CONFIGURE.extra += --disable-frontend
 ifneq (none,$(FFMPEG.GCC.g))
 	LAME.CONFIGURE.extra += --enable-debug
 endif
