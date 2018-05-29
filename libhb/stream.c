@@ -5327,7 +5327,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             subtitle->config.dest = PASSTHRUSUB;
             subtitle->codec = WORK_DECTX3GSUB;
             break;
-        case AV_CODEC_ID_SSA:
+        case AV_CODEC_ID_ASS:
             subtitle->format = TEXTSUB;
             subtitle->source = SSASUB;
             subtitle->config.dest = PASSTHRUSUB;
@@ -5852,7 +5852,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
      * either field. This is not a problem because the VOB decoder can extract this
      * information from the packet payload itself.
      *
-     * SSA subtitles (AV_CODEC_ID_SSA) do not have their duration stored in
+     * SSA subtitles (AV_CODEC_ID_ASS) do not have their duration stored in
      * either field. This is not a problem because the SSA decoder can extract this
      * information from the packet payload itself.
      */
