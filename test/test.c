@@ -1666,7 +1666,7 @@ static void ShowHelp()
     fprintf( out,
 "   --no-comb-detect        Disable preset comb-detect filter\n"
 "   -d, --deinterlace[=string]\n"
-"                           Deinterlace video using libav yadif.\n");
+"                           Deinterlace video using FFmpeg yadif.\n");
     showFilterPresets(out, HB_FILTER_DEINTERLACE);
     showFilterKeys(out, HB_FILTER_DEINTERLACE);
     showFilterDefault(out, HB_FILTER_DEINTERLACE);
