@@ -15,8 +15,9 @@ win/CS/HandBrakeAppX/AppPackages/**/*
 win/CS/HandBrakeAppX/BundleArtifacts/**/*
 *.ide
 
-# Xcode user data
-xcuserdata
+# Xcode
+macosx/**/xcuserdata
+macosx/**/xcshareddata/IDEWorkspaceChecks.plist
 
 # Build system
 build/
