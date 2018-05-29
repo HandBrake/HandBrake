@@ -4191,7 +4191,7 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
             continue;
         }
         // 0xa2 is DTS-HD LBR used in HD-DVD and bluray for
-        // secondary audio streams. Libav can not decode yet.
+        // secondary audio streams. FFmpeg can not decode yet.
         // Having it in the audio list causes delays during scan
         // while we try to get stream parameters. So skip
         // this type for now.
@@ -5403,7 +5403,7 @@ static void add_ffmpeg_attachment( hb_title_t *title, hb_stream_t *stream, int i
     switch ( codecpar->codec_id )
     {
         case AV_CODEC_ID_TTF:
-            // Libav sets codec ID based on mime type of the attachment
+            // FFmpeg sets codec ID based on mime type of the attachment
             type = FONT_TTF_ATTACH;
             break;
         default:

@@ -377,7 +377,7 @@ static void closePrivData( hb_work_private_t ** ppv )
             /*
              * FIXME: knowingly leaked.
              *
-             * If we're using our Libav QSV wrapper, qsv_decode_end() will call
+             * If we're using our FFmpeg QSV wrapper, qsv_decode_end() will call
              * MFXClose() on the QSV session. Even if decoding is complete, we
              * still need that session for QSV filtering and/or encoding, so we
              * we can't close the context here until we implement a proper fix.

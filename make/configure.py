@@ -1312,9 +1312,9 @@ def createCLI():
     grp.add_option( '--enable-fdk-aac', dest="enable_fdk_aac", default=False, action='store_true', help=h )
     grp.add_option( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false' )
 
-    h = IfHost( 'enable Libav AAC audio encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-libav-aac', dest="enable_libav_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
-    grp.add_option( '--disable-libav-aac', dest="enable_libav_aac", action='store_false' )
+    h = IfHost( 'enable FFmpeg AAC audio encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
+    grp.add_option( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false' )
 
     cli.add_option_group( grp )
 
@@ -1877,7 +1877,7 @@ int main()
     doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
-    doc.add( 'FEATURE.libav_aac',  int( options.enable_libav_aac or build.system == 'mingw' ))
+    doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac or build.system == 'mingw' ))
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))

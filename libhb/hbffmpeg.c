@@ -160,7 +160,7 @@ int hb_ff_get_colorspace(int color_matrix)
         case HB_COLR_MAT_BT709:
             color_space = SWS_CS_ITU709;
             break;
-        /* enable this when implemented in Libav
+        /* enable this when implemented in FFmpeg
         case HB_COLR_MAT_BT2020:
             color_space = SWS_CS_BT2020;
             break;

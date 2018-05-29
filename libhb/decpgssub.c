@@ -227,7 +227,7 @@ static int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         }
 
         /* Subtitles are "usable" if:
-         *   1. Libav returned a subtitle (has_subtitle) AND
+         *   1. FFmpeg returned a subtitle (has_subtitle) AND
          *   2. we're not doing Foreign Audio Search (!pv->job->indepth_scan) AND
          *   3. the sub is non-empty or we've seen one such sub before (!pv->discard_subtitle)
          * For forced-only extraction, usable subtitles also need to:

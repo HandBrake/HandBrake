@@ -160,11 +160,11 @@ static int filter_init( hb_qsv_context* qsv, hb_filter_private_t * pv ){
 
         /*
          * In theory, input width/height and decode CropW/CropH should be the
-         * same; however, due to some versions of Libav not applying the H.264
+         * same; however, due to some versions of FFmpeg not applying the H.264
          * "crop rect" properly, there can be a mismatch.
          *
          * Since we want the same bahevior regardless of whether we're using
-         * software or hardware-accelerated decoding, prefer the Libav values.
+         * software or hardware-accelerated decoding, prefer the FFmpeg values.
          *
          * Note that since CropW/CropH may be higher than the decode values, we
          * need to adjust  CropX/CropY to make sure we don't exceed the input's
