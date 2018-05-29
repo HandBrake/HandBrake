@@ -1,5 +1,5 @@
-$(eval $(call import.MODULE.defs,LIBSPEEX,libspeex))
-$(eval $(call import.CONTRIB.defs,LIBSPEEX,libspeex))
+$(eval $(call import.MODULE.defs,LIBSPEEX,libspeex,LIBOGG))
+$(eval $(call import.CONTRIB.defs,LIBSPEEX))
 
 LIBSPEEX.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/speex-1.2.0.tar.gz
 LIBSPEEX.FETCH.url    += https://downloads.us.xiph.org/releases/speex/speex-1.2.0.tar.gz
