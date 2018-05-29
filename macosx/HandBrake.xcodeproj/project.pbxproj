@@ -17,6 +17,8 @@
 		1C6D76561CD7733400F5B943 /* libharfbuzz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C15C82B1CD7722500368223 /* libharfbuzz.a */; };
 		1C7776A2202300DD001C31EB /* HBRenamePresetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C7776A0202300DC001C31EB /* HBRenamePresetController.m */; };
 		1C7776A5202301D5001C31EB /* HBRenamePresetController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C7776A3202301D5001C31EB /* HBRenamePresetController.xib */; };
+		1CBC683420BE014800A26CC2 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CBC683320BE014800A26CC2 /* liblzma.a */; };
+		1CBC683520BE014800A26CC2 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CBC683320BE014800A26CC2 /* liblzma.a */; };
 		226268E11572CC7300477B4E /* libavresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 226268DF1572CC7300477B4E /* libavresample.a */; };
 		22DD2C4B177B95DA00EF50D3 /* libvpx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22DD2C49177B94DB00EF50D3 /* libvpx.a */; };
 		273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
@@ -330,6 +332,7 @@
 		1C7776A0202300DC001C31EB /* HBRenamePresetController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBRenamePresetController.m; sourceTree = "<group>"; };
 		1C7776A1202300DC001C31EB /* HBRenamePresetController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBRenamePresetController.h; sourceTree = "<group>"; };
 		1C7776A4202301D5001C31EB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/HBRenamePresetController.xib; sourceTree = "<group>"; };
+		1CBC683320BE014800A26CC2 /* liblzma.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzma.a; path = "external/contrib/lib/liblzma.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		226268DF1572CC7300477B4E /* libavresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavresample.a; path = external/contrib/lib/libavresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22CC9E74191EBEA500C69D81 /* libx265.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx265.a; path = external/contrib/lib/libx265.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external/contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -648,6 +651,7 @@
 				27D6C75814B102DA00B785E4 /* libfreetype.a in Frameworks */,
 				27D6C75A14B102DA00B785E4 /* libfribidi.a in Frameworks */,
 				27D6C75F14B102DA00B785E4 /* libmp3lame.a in Frameworks */,
+				1CBC683420BE014800A26CC2 /* liblzma.a in Frameworks */,
 				1C0695AC20BD193D001543DA /* libpostproc.a in Frameworks */,
 				27D6C76514B102DA00B785E4 /* libogg.a in Frameworks */,
 				27D6C76714B102DA00B785E4 /* libsamplerate.a in Frameworks */,
@@ -685,6 +689,7 @@
 				A9ABD1AA1E2A0F8F00EC8B65 /* CoreGraphics.framework in Frameworks */,
 				A9ABD1A61E2A0F0700EC8B65 /* CoreText.framework in Frameworks */,
 				A91119A31C7DD591001C463C /* IOKit.framework in Frameworks */,
+				1CBC683520BE014800A26CC2 /* liblzma.a in Frameworks */,
 				A91119A21C7DD58B001C463C /* Cocoa.framework in Frameworks */,
 				1C53DE8D20BD598D006BBCA8 /* libspeex.a in Frameworks */,
 				A9736F1F1C7DA667008F1D18 /* Foundation.framework in Frameworks */,
@@ -739,6 +744,7 @@
 			isa = PBXGroup;
 			children = (
 				1C280BF320BD58DD00D5ECC2 /* libspeex.a */,
+				1CBC683320BE014800A26CC2 /* liblzma.a */,
 				1C0695AA20BD193D001543DA /* libpostproc.a */,
 				1C0695AB20BD193D001543DA /* libswresample.a */,
 				27D6C72414B1019100B785E4 /* libhandbrake.a */,
