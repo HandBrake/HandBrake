@@ -82,7 +82,7 @@ else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     FFMPEG.CONFIGURE.extra += \
         --target-os=mingw32 \
         --arch=$(BUILD.machine) \
-        --enable-cross-compile --cross-prefix=$(BUILD.cross.prefix)
+        --cross-prefix=$(BUILD.cross.prefix)
     FFMPEG.GCC.args.extra += -fno-common
     ifeq (1,$(FEATURE.local_pkgconfig))
         FFMPEG.CONFIGURE.extra += --pkg-config="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin/$(PKGCONFIG.exe))"
