@@ -13,9 +13,9 @@ __deps__ += X264
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url = http://www.ffmpeg.org/releases/ffmpeg-3.4.1.tar.gz
-FFMPEG.FETCH.url += https://download.handbrake.fr/handbrake/contrib/ffmpeg-3.4.1.tar.gz
-FFMPEG.FETCH.sha256 = 3b6824f2c3ddd6bde37b82f76c679867f5c18d0c040cea222afd93aac9bf7ad2
+FFMPEG.FETCH.url  = https://download.handbrake.fr/handbrake/contrib/ffmpeg-4.0.tar.bz2
+FFMPEG.FETCH.url += https://www.ffmpeg.org/releases/ffmpeg-4.0.tar.bz2
+FFMPEG.FETCH.sha256 = 318a39d906c9107d49766c63787798dd078d2a36e6670a9dfeda3c55be4573b8
 
 FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =
@@ -32,7 +32,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-ffmpeg \
     --disable-ffplay \
     --disable-ffprobe \
-    --disable-ffserver \
     --disable-avdevice \
     --disable-muxers \
     --disable-network \
