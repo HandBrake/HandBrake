@@ -11,6 +11,8 @@
 		1C0695AD20BD193D001543DA /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C0695AA20BD193D001543DA /* libpostproc.a */; };
 		1C0695AE20BD193D001543DA /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C0695AB20BD193D001543DA /* libswresample.a */; };
 		1C0695AF20BD193D001543DA /* libswresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C0695AB20BD193D001543DA /* libswresample.a */; };
+		1C53DE8C20BD598D006BBCA8 /* libspeex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C280BF320BD58DD00D5ECC2 /* libspeex.a */; };
+		1C53DE8D20BD598D006BBCA8 /* libspeex.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C280BF320BD58DD00D5ECC2 /* libspeex.a */; };
 		1C6D76551CD7733300F5B943 /* libharfbuzz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C15C82B1CD7722500368223 /* libharfbuzz.a */; };
 		1C6D76561CD7733400F5B943 /* libharfbuzz.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C15C82B1CD7722500368223 /* libharfbuzz.a */; };
 		1C7776A2202300DD001C31EB /* HBRenamePresetController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1C7776A0202300DC001C31EB /* HBRenamePresetController.m */; };
@@ -321,9 +323,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1C0695AA20BD193D001543DA /* libpostproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpostproc.a; path = "external/contrib/lib/libpostproc.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		1C0695AB20BD193D001543DA /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = "external/contrib/lib/libswresample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C0695AA20BD193D001543DA /* libpostproc.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpostproc.a; path = external/contrib/lib/libpostproc.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C0695AB20BD193D001543DA /* libswresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswresample.a; path = external/contrib/lib/libswresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C15C82B1CD7722500368223 /* libharfbuzz.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libharfbuzz.a; path = external/contrib/lib/libharfbuzz.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C280BF320BD58DD00D5ECC2 /* libspeex.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libspeex.a; path = external/contrib/lib/libspeex.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C7776A0202300DC001C31EB /* HBRenamePresetController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBRenamePresetController.m; sourceTree = "<group>"; };
 		1C7776A1202300DC001C31EB /* HBRenamePresetController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBRenamePresetController.h; sourceTree = "<group>"; };
 		1C7776A4202301D5001C31EB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/HBRenamePresetController.xib; sourceTree = "<group>"; };
@@ -641,6 +644,7 @@
 				27D6C74C14B102DA00B785E4 /* libbluray.a in Frameworks */,
 				27D6C75014B102DA00B785E4 /* libdvdnav.a in Frameworks */,
 				27D6C75214B102DA00B785E4 /* libdvdread.a in Frameworks */,
+				1C53DE8C20BD598D006BBCA8 /* libspeex.a in Frameworks */,
 				27D6C75814B102DA00B785E4 /* libfreetype.a in Frameworks */,
 				27D6C75A14B102DA00B785E4 /* libfribidi.a in Frameworks */,
 				27D6C75F14B102DA00B785E4 /* libmp3lame.a in Frameworks */,
@@ -682,6 +686,7 @@
 				A9ABD1A61E2A0F0700EC8B65 /* CoreText.framework in Frameworks */,
 				A91119A31C7DD591001C463C /* IOKit.framework in Frameworks */,
 				A91119A21C7DD58B001C463C /* Cocoa.framework in Frameworks */,
+				1C53DE8D20BD598D006BBCA8 /* libspeex.a in Frameworks */,
 				A9736F1F1C7DA667008F1D18 /* Foundation.framework in Frameworks */,
 				A91CE2B21C7DAB550068F46F /* AudioToolbox.framework in Frameworks */,
 				A91CE2D41C7DABE40068F46F /* libiconv.tbd in Frameworks */,
@@ -733,6 +738,7 @@
 		271BA4C714B1236D00BC1D2C /* Static Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				1C280BF320BD58DD00D5ECC2 /* libspeex.a */,
 				1C0695AA20BD193D001543DA /* libpostproc.a */,
 				1C0695AB20BD193D001543DA /* libswresample.a */,
 				27D6C72414B1019100B785E4 /* libhandbrake.a */,
