@@ -28,24 +28,6 @@ hb_work_object_t hb_encx264 =
 
 #define DTS_BUFFER_SIZE 32
 
-/*
- * The frame info struct remembers information about each frame across calls
- * to x264_encoder_encode. Since frames are uniquely identified by their
- * timestamp, we use some bits of the timestamp as an index. The LSB is
- * chosen so that two successive frames will have different values in the
- * bits over any plausible range of frame rates. (Starting with bit 8 allows
- * any frame rate slower than 352fps.) The MSB determines the size of the array.
- * It is chosen so that two frames can't use the same slot during the
- * encoder's max frame delay (set by the standard as 16 frames) and so
- * that, up to some minimum frame rate, frames are guaranteed to map to
- * different slots. (An MSB of 17 which is 2^(17-8+1) = 1024 slots guarantees
- * no collisions down to a rate of .7 fps).
- */
-#define FRAME_INFO_MAX2 (8)     // 2^8 = 256; 90000/256 = 352 frames/sec
-#define FRAME_INFO_MIN2 (17)    // 2^17 = 128K; 90000/131072 = 1.4 frames/sec
-#define FRAME_INFO_SIZE (1 << (FRAME_INFO_MIN2 - FRAME_INFO_MAX2 + 1))
-#define FRAME_INFO_MASK (FRAME_INFO_SIZE - 1)
-
 struct hb_work_private_s
 {
     hb_job_t           * job;
@@ -55,10 +37,6 @@ struct hb_work_private_s
     int64_t              last_stop;   // Debugging - stop time of previous input frame
 
     hb_chapter_queue_t * chapter_queue;
-
-    struct {
-        int64_t          duration;
-    } frame_info[FRAME_INFO_SIZE];
 
     char                 filename[1024];
 
@@ -663,22 +641,6 @@ void encx264Close( hb_work_object_t * w )
     w->private_data = NULL;
 }
 
-/*
- * see comments in definition of 'frame_info' in pv struct for description
- * of what these routines are doing.
- */
-static void save_frame_info( hb_work_private_t * pv, hb_buffer_t * in )
-{
-    int i = (in->s.start >> FRAME_INFO_MAX2) & FRAME_INFO_MASK;
-    pv->frame_info[i].duration = in->s.stop - in->s.start;
-}
-
-static int64_t get_frame_duration( hb_work_private_t * pv, int64_t pts )
-{
-    int i = (pts >> FRAME_INFO_MAX2) & FRAME_INFO_MASK;
-    return pv->frame_info[i].duration;
-}
-
 static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
                                 int i_nal, x264_nal_t *nal )
 {
@@ -692,9 +654,9 @@ static hb_buffer_t *nal_encode( hb_work_object_t *w, x264_picture_t *pic_out,
     buf->s.frametype = 0;
 
     // use the pts to get the original frame's duration.
-    buf->s.duration     = get_frame_duration( pv, pic_out->i_pts );
+    buf->s.duration     = AV_NOPTS_VALUE;
     buf->s.start        = pic_out->i_pts;
-    buf->s.stop         = buf->s.start + buf->s.duration;
+    buf->s.stop         = AV_NOPTS_VALUE;
     buf->s.renderOffset = pic_out->i_dts;
     if ( !w->config->init_delay && pic_out->i_dts < 0 )
     {
@@ -882,7 +844,6 @@ static hb_buffer_t *x264_encode( hb_work_object_t *w, hb_buffer_t *in )
 
     // Remember info about this frame that we need to pass across
     // the x264_encoder_encode call (since it reorders frames).
-    save_frame_info( pv, in );
 
     /* Feed the input PTS to x264 so it can figure out proper output PTS */
     pv->pic_in.i_pts = in->s.start;
