@@ -1187,7 +1187,8 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
     audio->config.in.mode = info.mode;
 
     // now that we have all the info, set the audio description
-    const char *codec_name = NULL;
+    const char *codec_name   = NULL;
+    const char *profile_name = NULL;
     if (audio->config.in.codec & HB_ACODEC_FF_MASK)
     {
         AVCodec *codec = avcodec_find_decoder(audio->config.in.codec_param);
@@ -1195,50 +1196,56 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
         {
             if (info.profile != FF_PROFILE_UNKNOWN)
             {
-                codec_name = av_get_profile_name(codec, info.profile);
+                profile_name = av_get_profile_name(codec, info.profile);
             }
-            if (codec_name == NULL)
+
+            // use our own capitalization for the most common codecs
+            switch (audio->config.in.codec_param)
             {
-                // use our own capitalization for the most common codecs
-                switch (audio->config.in.codec_param)
-                {
-                    case AV_CODEC_ID_AAC:
-                        codec_name = "AAC";
-                        break;
-                    case AV_CODEC_ID_AC3:
-                        codec_name = "AC3";
-                        break;
-                    case AV_CODEC_ID_EAC3:
-                        codec_name = "E-AC3";
-                        break;
-                    case AV_CODEC_ID_TRUEHD:
-                        codec_name = "TrueHD";
-                        break;
-                    case AV_CODEC_ID_DTS:
-                        codec_name = audio->config.in.codec == HB_ACODEC_DCA_HD ? "DTS-HD" : "DTS";
-                        break;
-                    case AV_CODEC_ID_FLAC:
-                        codec_name = "FLAC";
-                        break;
-                    case AV_CODEC_ID_MP2:
-                        codec_name = "MPEG";
-                        break;
-                    case AV_CODEC_ID_MP3:
-                        codec_name = "MP3";
-                        break;
-                    case AV_CODEC_ID_PCM_BLURAY:
-                        codec_name = "BD LPCM";
-                        break;
-                    case AV_CODEC_ID_OPUS:
-                        codec_name = "Opus";
-                        break;
-                    case AV_CODEC_ID_VORBIS:
-                        codec_name = "Vorbis";
-                        break;
-                    default:
-                        codec_name = codec->name;
-                        break;
-                }
+                case AV_CODEC_ID_AAC:
+                    codec_name = "AAC";
+                    break;
+                case AV_CODEC_ID_AC3:
+                    codec_name = "AC3";
+                    break;
+                case AV_CODEC_ID_EAC3:
+                    codec_name = "E-AC3";
+                    break;
+                case AV_CODEC_ID_TRUEHD:
+                    codec_name = "TrueHD";
+                    break;
+                case AV_CODEC_ID_DTS:
+                    if (profile_name == NULL &&
+                        audio->config.in.codec == HB_ACODEC_DCA_HD)
+                        codec_name = "DTS-HD";
+                    else
+                        codec_name = "DTS";
+                    break;
+                case AV_CODEC_ID_FLAC:
+                    codec_name = "FLAC";
+                    break;
+                case AV_CODEC_ID_MP2:
+                    codec_name = "MPEG";
+                    break;
+                case AV_CODEC_ID_MP3:
+                    codec_name = "MP3";
+                    break;
+                case AV_CODEC_ID_PCM_BLURAY:
+                    codec_name = "BD LPCM";
+                    break;
+                case AV_CODEC_ID_OPUS:
+                    codec_name = "Opus";
+                    break;
+                case AV_CODEC_ID_VORBIS:
+                    codec_name = "Vorbis";
+                    break;
+                default:
+                    codec_name = codec->name;
+                    break;
+            }
+            if (strstr(profile_name, codec_name) != NULL)
+            {
+                codec_name = NULL;
             }
         }
         else
@@ -1290,8 +1297,22 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
                 break;
         }
     }
-    sprintf(audio->config.lang.description, "%s (%s)",
-            audio->config.lang.simple, codec_name);
+
+    if (codec_name != NULL && profile_name != NULL)
+    {
+        sprintf(audio->config.lang.description, "%s (%s %s)",
+                audio->config.lang.simple, codec_name, profile_name);
+    }
+    else if (codec_name != NULL)
+    {
+        sprintf(audio->config.lang.description, "%s (%s)",
+                audio->config.lang.simple, codec_name);
+    }
+    else if (profile_name != NULL)
+    {
+        sprintf(audio->config.lang.description, "%s (%s)",
+                audio->config.lang.simple, profile_name);
+    }
 
     if (audio->config.lang.attributes & HB_AUDIO_ATTR_VISUALLY_IMPAIRED)
     {
