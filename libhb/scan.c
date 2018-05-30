@@ -1243,7 +1243,8 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
                     codec_name = codec->name;
                     break;
             }
-            if (strstr(profile_name, codec_name) != NULL)
+            if (profile_name != NULL && codec_name != NULL &&
+                strstr(profile_name, codec_name) != NULL)
             {
                 codec_name = NULL;
             }
