@@ -4,14 +4,14 @@
   Homepage: <http://handbrake.fr>.
   It may be used under the terms of the GNU General Public License
   
-  HandBrake Build Scipt for usage with Jenkins.
+  HandBrake Build Script for usage with Jenkins.
   Usage: 
-    msbuild build.xml /p:Platform=x64 /t:Nightly
-    msbuild build.xml /p:Platform=x64 /t:Release
+    msbuild build.xml /t:Nightly
+    msbuild build.xml /t:Release
   Example with code signing:
-    msbuild build.xml /p:Platform=x64 /t:Release /p:SignThumbprint=XYZ /p:SignTimestampServer=http://time.certum.pl/
+    msbuild build.xml /t:Release /p:SignThumbprint=XYZ /p:SignTimestampServer=http://time.certum.pl/
     
-  Reuqires: libhb.dll to be in the release folder.
+  Requires: libhb.dll to be in the release folder.
   
 -->
 <Project DefaultTargets="Nightly" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
@@ -38,7 +38,7 @@
   <Target Name="Nightly" DependsOnTargets="$(NightlyDependsOn)"/>
   <Target Name="Release" DependsOnTargets="$(InstallDependsOn)"/>
 
-  <!-- Build All Components (WPF, ApplicationServices, Interop -->
+  <!-- Build All Components (WPF, ApplicationServices, Interop) -->
   <Target Name="BuildRelease">
     <MSBuild Projects ="@(ProjectsToBuild)"
              ContinueOnError ="false"
@@ -49,7 +49,7 @@
 
   <!-- Code Signing Configuration -->
   <PropertyGroup Condition="'$(SignToolLocation)'==''">
-    <SighToolLocation>C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x64\SignTool.exe</SighToolLocation>
+    <SignToolLocation>C:\Program Files (x86)\Windows Kits\10\bin\10.0.15063.0\x64\SignTool.exe</SignToolLocation>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(SignThumbprint)'!=''">
@@ -62,7 +62,7 @@
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" Condition="$(Platform) == 'x64'" />
     <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\doc /I /Y" Condition="$(Platform) == 'x64'" />
     <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\MakeNightly64.nsi" Condition="$(Platform) == 'x64'" />
-    <Exec Command="&quot;$(SighToolLocation)&quot; sign /sha1 $(SignThumbprint) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\Release\*Win_GUI.exe&quot;"  Condition="'$(SignThumbprint)' != ''" />
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign /sha1 $(SignThumbprint) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\Release\*Win_GUI.exe&quot;"  Condition="'$(SignThumbprint)' != ''" />
   </Target>
 
   <Target Name="ReleasePostBuild">
@@ -70,7 +70,7 @@
     <Exec Command="copy $(MSBuildProjectDirectory)\HandBrakeWPF\handbrakepineapple.ico $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release /Y" Condition="$(Platform) == 'x64'" />
     <Exec Command="xcopy $(MSBuildProjectDirectory)\doc $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\doc /I /Y" Condition="$(Platform) == 'x64'" />
     <Exec Command="makensis $(MSBuildProjectDirectory)\HandBrakeWPF\bin\x64\Release\Installer64.nsi" Condition="$(Platform) == 'x64'" />
-    <Exec Command="&quot;$(SighToolLocation)&quot; sign /sha1 $(SignThumbprint) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\Release\*Win_GUI.exe&quot;"  Condition="'$(SignThumbprint)' != ''" />
+    <Exec Command="&quot;$(SignToolLocation)&quot; sign /sha1 $(SignThumbprint) $(SignTimestamp) $(SignTimestampServer) /v &quot;$(MSBuildProjectDirectory)\HandBrakeWPF\bin\$(Platform)\Release\*Win_GUI.exe&quot;"  Condition="'$(SignThumbprint)' != ''" />
   </Target>
 
 </Project>
