@@ -6,10 +6,10 @@
   
   HandBrake Build Scipt for usage with Jenkins.
   Usage: 
-    msbuild build.xml /p:Platform=x64 /t:Nightly
-    msbuild build.xml /p:Platform=x64 /t:Release
+    msbuild build.xml /t:Nightly
+    msbuild build.xml /t:Release
   Example with code signing:
-    msbuild build.xml /p:Platform=x64 /t:Release /p:SignThumbprint=XYZ /p:SignTimestampServer=http://time.certum.pl/
+    msbuild build.xml /t:Release /p:SignThumbprint=XYZ /p:SignTimestampServer=http://time.certum.pl/
     
   Requires: libhb.dll to be in the release folder.
   
