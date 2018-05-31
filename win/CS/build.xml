@@ -4,7 +4,7 @@
   Homepage: <http://handbrake.fr>.
   It may be used under the terms of the GNU General Public License
   
-  HandBrake Build Scipt for usage with Jenkins.
+  HandBrake Build Script for usage with Jenkins.
   Usage: 
     msbuild build.xml /t:Nightly
     msbuild build.xml /t:Release
@@ -38,7 +38,7 @@
   <Target Name="Nightly" DependsOnTargets="$(NightlyDependsOn)"/>
   <Target Name="Release" DependsOnTargets="$(InstallDependsOn)"/>
 
-  <!-- Build All Components (WPF, ApplicationServices, Interop -->
+  <!-- Build All Components (WPF, ApplicationServices, Interop) -->
   <Target Name="BuildRelease">
     <MSBuild Projects ="@(ProjectsToBuild)"
              ContinueOnError ="false"
