@@ -406,8 +406,15 @@ static hb_buffer_t* filterFrame( hb_filter_private_t * pv, hb_buffer_t * in )
     int                result;
     hb_buffer_list_t   list;
 
-    fill_frame(pv, pv->frame, in);
-    result = av_buffersrc_add_frame(pv->input, pv->frame);
+    if (in != NULL)
+    {
+        fill_frame(pv, pv->frame, in);
+        result = av_buffersrc_add_frame(pv->input, pv->frame);
+    }
+    else
+    {
+        result = av_buffersrc_add_frame(pv->input, NULL);
+    }
     if (result < 0)
     {
         return NULL;
@@ -444,11 +451,13 @@ static int avfilter_work( hb_filter_object_t * filter,
 
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
+        hb_buffer_t * out  = filterFrame(pv, NULL);
         hb_buffer_t * last = hb_buffer_list_tail(&pv->list);
         if (last != NULL && last->s.start != AV_NOPTS_VALUE)
         {
             last->s.stop = last->s.start + last->s.duration;
         }
+        hb_buffer_list_prepend(&pv->list, out);
         hb_buffer_list_append(&pv->list, in);
         *buf_out = hb_buffer_list_clear(&pv->list);
         *buf_in = NULL;
