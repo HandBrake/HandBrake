@@ -17,7 +17,7 @@
     </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <UseVSHostingProcess>true</UseVSHostingProcess>
@@ -173,6 +173,7 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="HandBrake.ApplicationServices.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
