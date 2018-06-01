@@ -92,6 +92,8 @@ elif [ "$EXTERNAL_SRC/make/configure.py" -nt "$EXTERNAL_BUILD/GNUmakefile" ]; th
     reconfigure="configure script was updated"
 elif [ "$EXTERNAL_DRIVER" == "bootstrap" ]; then
     reconfigure="driver bootstrap"
+elif [ "${PATH#$SYSTEM_DEVELOPER_BIN_DIR}" != "${PATH}" ]; then
+    reconfigure="unclobber PATH"
 else
     reconfigure=
 fi
