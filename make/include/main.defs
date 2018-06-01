@@ -59,6 +59,7 @@ ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
 endif
 
 ifeq (1,$(FEATURE.flatpak))
+    MODULES += contrib/libopus
     MODULES += contrib/lame
     MODULES += contrib/jansson
     MODULES += contrib/x264
