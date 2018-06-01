@@ -1344,8 +1344,6 @@ def createCLI():
     grp.add_option( '--minver', default=None, action='store', metavar='VER',
         help=h )
 
-    h = IfHost( 'Build and use local yasm', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-local-yasm', default=False, action='store_true', help=h )
     h = IfHost( 'Build and use local autotools', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-local-autotools', default=False, action='store_true', help=h )
     h = IfHost( 'Build and use local cmake', '*-*-*', none=optparse.SUPPRESS_HELP ).value
@@ -1532,7 +1530,6 @@ try:
         strip    = ToolProbe( 'STRIP.exe',    'strip' )
         tar      = ToolProbe( 'TAR.exe',      'gtar', 'tar' )
         nasm     = ToolProbe( 'NASM.exe',     'nasm', abort=False, minversion=[2,13,0] )
-        yasm     = ToolProbe( 'YASM.exe',     'yasm', abort=False, minversion=[1,2,0] )
         autoconf = ToolProbe( 'AUTOCONF.exe', 'autoconf', abort=False )
         automake = ToolProbe( 'AUTOMAKE.exe', 'automake', abort=False )
         cmake    = ToolProbe( 'CMAKE.exe',    'cmake', abort=False )
@@ -1598,16 +1595,6 @@ try:
             raise AbortError( 'error: nasm missing\n' )
         elif Tools.nasm.version.inadequate():
             raise AbortError( 'error: minimum required nasm version is %s and %s is %s\n' % ('.'.join([str(i) for i in Tools.nasm.version.minversion]),Tools.nasm.pathname,Tools.nasm.version.svers) )
-
-    ## enable local yasm when yasm probe fails or version is too old
-    ## x264 requires 1.2.0+
-    if not options.enable_local_yasm:
-        if Tools.yasm.fail:
-            stdout.write( 'note: enabling local yasm: missing system yasm\n' )
-            options.enable_local_yasm = True
-        elif Tools.yasm.version.inadequate():
-            stdout.write( 'note: enabling local yasm: minimum required version is %s and %s is %s\n' % ('.'.join([str(i) for i in Tools.yasm.version.minversion]),Tools.yasm.pathname,Tools.yasm.version.svers) )
-            options.enable_local_yasm = True
 
     ## enable local autotools when any of { autoconf, automake, libtool } probe fails
     if not options.enable_local_autotools and (Tools.autoconf.fail or Tools.automake.fail or Tools.libtool.fail):
@@ -1868,7 +1855,6 @@ int main()
     doc.add( 'PREFIX/', cfg.prefix_final + os.sep )
 
     doc.addBlank()
-    doc.add( 'FEATURE.local_yasm', int( options.enable_local_yasm ))
     doc.add( 'FEATURE.local_autotools', int( options.enable_local_autotools ))
     doc.add( 'FEATURE.local_cmake', int( options.enable_local_cmake ))
     doc.add( 'FEATURE.local_pkgconfig', int( options.enable_local_pkgconfig ))
@@ -1957,27 +1943,14 @@ int main()
     elif build.match( 'amd64-*' ):
         doc.add( 'LIBHB.GCC.D', 'ARCH_X86_64', append=True )
 
-    if options.enable_asm and ( not Tools.yasm.fail or options.enable_local_yasm ):
+    if options.enable_asm and ( not Tools.nasm.fail ):
         asm = ''
         if build.match( 'i?86-*' ):
             asm = 'x86'
             doc.add( 'LIBHB.GCC.D', 'HAVE_MMX', append=True )
-            doc.add( 'LIBHB.YASM.D', 'ARCH_X86', append=True )
-            if build.match( '*-*-darwin*' ):
-                doc.add( 'LIBHB.YASM.f', 'macho32' )
-            else:
-                doc.add( 'LIBHB.YASM.f', 'elf32' )
-            doc.add( 'LIBHB.YASM.m', 'x86' )
         elif build.match( 'x86_64-*' ) or build.match( 'amd64-*' ):
             asm = 'x86'
             doc.add( 'LIBHB.GCC.D', 'HAVE_MMX ARCH_X86_64', append=True )
-            if build.match( '*-*-darwin*' ):
-                doc.add( 'LIBHB.YASM.D', 'ARCH_X86_64 PIC', append=True )
-                doc.add( 'LIBHB.YASM.f', 'macho64' )
-            else:
-                doc.add( 'LIBHB.YASM.D', 'ARCH_X86_64', append=True )
-                doc.add( 'LIBHB.YASM.f', 'elf64' )
-            doc.add( 'LIBHB.YASM.m', 'amd64' )
         doc.update( 'FEATURE.asm', asm )
 
     ## add exports to make

@@ -34,7 +34,7 @@ function mac_toolchain_build {
         MAKEJOBS="4"
     fi
     SUDO=
-    TOTAL=7
+    TOTAL=6
 
     # functions
     function print_fail_and_exit {
@@ -88,9 +88,6 @@ function mac_toolchain_build {
     echo -en "${CREL}"
     printf "Downloading [%02i/%02i] %s " "6" "${TOTAL}" "nasm 2.13.02"
     curl -Lf --connect-timeout 30 https://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.bz2 -o "nasm-2.13.02.tar.bz2" >/dev/null 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-    printf "Downloading [%02i/%02i] %s " "7" "${TOTAL}" "yasm 1.3.0"
-    curl -Lf --connect-timeout 30 https://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz -o "yasm-1.3.0.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
     echo -en "${CREL}"
     printf "Downloading [%02i/%02i] complete.\n" "${TOTAL}" "${TOTAL}"
 
@@ -158,17 +155,6 @@ function mac_toolchain_build {
     ./configure --prefix="${PREFIX}" --enable-sections --enable-lto >../nasm-2.13.02.log 2>&1 || print_fail_and_exit
     make --jobs="${MAKEJOBS}" AR=ar RANLIB=ranlib >>../nasm-2.13.02.log 2>&1 || print_fail_and_exit
     ${SUDO} make install >>../nasm-2.13.02.log 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-
-    # yasm
-    cd "${TEMP_DIR}"
-    printf "Building    [%02i/%02i] %s " "7" "${TOTAL}" "yasm 1.3.0"
-    [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xf yasm-1.3.0.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-    cd yasm-1.3.0 >/dev/null 2>&1 || print_fail_and_exit
-    ./configure --prefix="${PREFIX}" >../yasm-1.3.0.log 2>&1 || print_fail_and_exit
-    make --jobs="${MAKEJOBS}" >>../yasm-1.3.0.log 2>&1 || print_fail_and_exit
-    ${SUDO} make install >>../yasm-1.3.0.log 2>&1 || print_fail_and_exit
     echo -en "${CREL}"
 
     # done
