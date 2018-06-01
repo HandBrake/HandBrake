@@ -66,7 +66,6 @@ ifeq (1,$(FEATURE.flatpak))
     MODULES += contrib/fribidi
     MODULES += contrib/freetype
     MODULES += contrib/libass
-    MODULES += contrib/yasm
 endif
 
 ifeq (1,$(FEATURE.fdk_aac))
@@ -161,10 +160,6 @@ endif
 ifeq (1-gnu,$(FEATURE.gtk)-$(BUILD.system))
     ## build gtk when gtk+gnu
     MODULES += gtk
-endif
-
-ifeq (1,$(FEATURE.local_yasm))
-    MODULES += contrib/yasm
 endif
 
 ###############################################################################

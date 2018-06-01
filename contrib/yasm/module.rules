@@ -1,2 +1,0 @@
-$(eval $(call import.MODULE.rules,YASM))
-$(eval $(call import.CONTRIB.rules,YASM))
