@@ -73,6 +73,9 @@ FFMPEG.CONFIGURE.extra += \
 
 ifeq (darwin,$(BUILD.system))
     FFMPEG.CONFIGURE.extra += --disable-audiotoolbox --disable-coreimage --disable-videotoolbox
+    ifeq (x86_64,$(BUILD.arch))
+        FFMPEG.CONFIGURE.extra += --arch=x86_64
+    endif
 endif
 
 ## check against tuple: B-SYSTEM where B is { 0 | 1 } for cross-compiling flag
