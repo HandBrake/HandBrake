@@ -1,0 +1,26 @@
+diff -ur libvpx-1.7.0.orig/libs.mk libvpx-1.7.0/libs.mk
+--- libvpx-1.7.0.orig/libs.mk	2018-01-24 14:25:44.000000000 -0800
++++ libvpx-1.7.0/libs.mk	2018-06-02 10:14:26.024150541 -0700
+@@ -333,12 +333,22 @@
+ 	$(qexec)echo 'Version: $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)' >> $@
+ 	$(qexec)echo 'Requires:' >> $@
+ 	$(qexec)echo 'Conflicts:' >> $@
++ifneq ($(CONFIG_SHARED),yes)
++ifeq ($(HAVE_PTHREAD_H),yes)
++	$(qexec)echo 'Libs: -L$${libdir} -lvpx -lm -lpthread' >> $@
++	$(qexec)echo 'Libs.private:' >> $@
++else
+ 	$(qexec)echo 'Libs: -L$${libdir} -lvpx -lm' >> $@
++	$(qexec)echo 'Libs.private:' >> $@
++endif
++else
++	$(qexec)echo 'Libs: -L$${libdir} -lvpx' >> $@
+ ifeq ($(HAVE_PTHREAD_H),yes)
+ 	$(qexec)echo 'Libs.private: -lm -lpthread' >> $@
+ else
+ 	$(qexec)echo 'Libs.private: -lm' >> $@
+ endif
++endif
+ 	$(qexec)echo 'Cflags: -I$${includedir}' >> $@
+ INSTALL-LIBS-yes += $(LIBSUBDIR)/pkgconfig/vpx.pc
+ INSTALL_MAPS += $(LIBSUBDIR)/pkgconfig/%.pc %.pc
