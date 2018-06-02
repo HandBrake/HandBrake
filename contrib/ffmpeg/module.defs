@@ -23,8 +23,6 @@ FFMPEG.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin)
 FFMPEG.CONFIGURE.extra = \
     --enable-gpl \
     --disable-doc \
-    --disable-bsfs \
-    --enable-bsf=aac_adtstoasc \
     --disable-programs \
     --disable-avdevice \
     --disable-muxers \
