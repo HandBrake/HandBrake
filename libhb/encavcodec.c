@@ -557,6 +557,8 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     AVFrame             frame = {0};
     int                 ret;
 
+    frame.width       = in->f.width;
+    frame.height      = in->f.height;
     frame.data[0]     = in->plane[0].data;
     frame.data[1]     = in->plane[1].data;
     frame.data[2]     = in->plane[2].data;
