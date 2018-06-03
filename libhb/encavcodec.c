@@ -477,7 +477,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     memcpy(w->config->h264.pps, data, len);
                 }
                 len = dataEnd - data;
-            } 
+            }
         }
         else
         {
