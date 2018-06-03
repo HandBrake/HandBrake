@@ -1,0 +1,594 @@
+From 7737e6ad4acf1058aeb0f9802e2a3ca1e0a30d29 Mon Sep 17 00:00:00 2001
+From: Henrik Gramner <henrik@gramner.com>
+Date: Sat, 2 Jun 2018 20:35:10 +0200
+Subject: [PATCH 1/1] Fix clang stack alignment issues
+
+Clang emits aligned AVX stores for things like zeroing stack-allocated
+variables when using -mavx even with -fno-tree-vectorize set which can
+result in crashes if this occurs before we've realigned the stack.
+
+Previously we only ensured that the stack was realigned before calling
+assembly functions that accesses stack-allocated buffers but this is
+not sufficient. Fix the issue by changing the stack realignment to
+instead occur immediately in all CLI, API and thread entry points.
+---
+ common/base.c         | 60 +++++++++++++++++++++++++++++++-------
+ common/threadpool.c   |  9 ++++--
+ common/x86/cpu-a.asm  | 80 ++++++++++++++++++++++++++++-----------------------
+ encoder/api.c         | 29 +++++++++++--------
+ encoder/encoder.c     |  8 +++---
+ encoder/lookahead.c   | 15 ++++++----
+ encoder/ratecontrol.c |  2 +-
+ tools/checkasm.c      |  6 +++-
+ x264.c                |  7 ++++-
+ 9 files changed, 144 insertions(+), 72 deletions(-)
+
+diff --git a/common/base.c b/common/base.c
+index a07d9c6b..3befe73d 100644
+--- a/common/base.c
++++ b/common/base.c
+@@ -196,7 +196,7 @@ error:
+ /****************************************************************************
+  * x264_picture_init:
+  ****************************************************************************/
+-void x264_picture_init( x264_picture_t *pic )
++static void picture_init( x264_picture_t *pic )
+ {
+     memset( pic, 0, sizeof( x264_picture_t ) );
+     pic->i_type = X264_TYPE_AUTO;
+@@ -204,10 +204,15 @@ void x264_picture_init( x264_picture_t *pic )
+     pic->i_pic_struct = PIC_STRUCT_AUTO;
+ }
+ 
++void x264_picture_init( x264_picture_t *pic )
++{
++    x264_stack_align( picture_init, pic );
++}
++
+ /****************************************************************************
+  * x264_picture_alloc:
+  ****************************************************************************/
+-int x264_picture_alloc( x264_picture_t *pic, int i_csp, int i_width, int i_height )
++static int picture_alloc( x264_picture_t *pic, int i_csp, int i_width, int i_height )
+ {
+     typedef struct
+     {
+@@ -237,7 +242,7 @@ int x264_picture_alloc( x264_picture_t *pic, int i_csp, int i_width, int i_heigh
+     int csp = i_csp & X264_CSP_MASK;
+     if( csp <= X264_CSP_NONE || csp >= X264_CSP_MAX || csp == X264_CSP_V210 )
+         return -1;
+-    x264_picture_init( pic );
++    picture_init( pic );
+     pic->img.i_csp = i_csp;
+     pic->img.i_plane = csp_tab[csp].planes;
+     int depth_factor = i_csp & X264_CSP_HIGH_DEPTH ? 2 : 1;
+@@ -259,10 +264,15 @@ int x264_picture_alloc( x264_picture_t *pic, int i_csp, int i_width, int i_heigh
+     return 0;
+ }
+ 
++int x264_picture_alloc( x264_picture_t *pic, int i_csp, int i_width, int i_height )
++{
++    return x264_stack_align( picture_alloc, pic, i_csp, i_width, i_height );
++}
++
+ /****************************************************************************
+  * x264_picture_clean:
+  ****************************************************************************/
+-void x264_picture_clean( x264_picture_t *pic )
++static void picture_clean( x264_picture_t *pic )
+ {
+     x264_free( pic->img.plane[0] );
+ 
+@@ -270,10 +280,15 @@ void x264_picture_clean( x264_picture_t *pic )
+     memset( pic, 0, sizeof( x264_picture_t ) );
+ }
+ 
++void x264_picture_clean( x264_picture_t *pic )
++{
++    x264_stack_align( picture_clean, pic );
++}
++
+ /****************************************************************************
+  * x264_param_default:
+  ****************************************************************************/
+-void x264_param_default( x264_param_t *param )
++static void param_default( x264_param_t *param )
+ {
+     /* */
+     memset( param, 0, sizeof( x264_param_t ) );
+@@ -416,6 +431,11 @@ void x264_param_default( x264_param_t *param )
+     param->psz_clbin_file = NULL;
+ }
+ 
++void x264_param_default( x264_param_t *param )
++{
++    x264_stack_align( param_default, param );
++}
++
+ static int param_apply_preset( x264_param_t *param, const char *preset )
+ {
+     char *end;
+@@ -643,9 +663,9 @@ static int param_apply_tune( x264_param_t *param, const char *tune )
+     return 0;
+ }
+ 
+-int x264_param_default_preset( x264_param_t *param, const char *preset, const char *tune )
++static int param_default_preset( x264_param_t *param, const char *preset, const char *tune )
+ {
+-    x264_param_default( param );
++    param_default( param );
+ 
+     if( preset && param_apply_preset( param, preset ) < 0 )
+         return -1;
+@@ -654,7 +674,12 @@ int x264_param_default_preset( x264_param_t *param, const char *preset, const ch
+     return 0;
+ }
+ 
+-void x264_param_apply_fastfirstpass( x264_param_t *param )
++int x264_param_default_preset( x264_param_t *param, const char *preset, const char *tune )
++{
++    return x264_stack_align( param_default_preset, param, preset, tune );
++}
++
++static void param_apply_fastfirstpass( x264_param_t *param )
+ {
+     /* Set faster options in case of turbo firstpass. */
+     if( param->rc.b_stat_write && !param->rc.b_stat_read )
+@@ -669,6 +694,11 @@ void x264_param_apply_fastfirstpass( x264_param_t *param )
+     }
+ }
+ 
++void x264_param_apply_fastfirstpass( x264_param_t *param )
++{
++    x264_stack_align( param_apply_fastfirstpass, param );
++}
++
+ static int profile_string_to_int( const char *str )
+ {
+     if( !strcasecmp( str, "baseline" ) )
+@@ -686,7 +716,7 @@ static int profile_string_to_int( const char *str )
+     return -1;
+ }
+ 
+-int x264_param_apply_profile( x264_param_t *param, const char *profile )
++static int param_apply_profile( x264_param_t *param, const char *profile )
+ {
+     if( !profile )
+         return 0;
+@@ -748,6 +778,11 @@ int x264_param_apply_profile( x264_param_t *param, const char *profile )
+     return 0;
+ }
+ 
++int x264_param_apply_profile( x264_param_t *param, const char *profile )
++{
++    return x264_stack_align( param_apply_profile, param, profile );
++}
++
+ static int parse_enum( const char *arg, const char * const *names, int *dst )
+ {
+     for( int i = 0; names[i]; i++ )
+@@ -809,7 +844,7 @@ static double atof_internal( const char *str, int *b_error )
+ #define atoi(str) atoi_internal( str, &b_error )
+ #define atof(str) atof_internal( str, &b_error )
+ 
+-int x264_param_parse( x264_param_t *p, const char *name, const char *value )
++static int param_parse( x264_param_t *p, const char *name, const char *value )
+ {
+     char *name_buf = NULL;
+     int b_error = 0;
+@@ -1308,6 +1343,11 @@ int x264_param_parse( x264_param_t *p, const char *name, const char *value )
+     return b_error ? errortype : 0;
+ }
+ 
++int x264_param_parse( x264_param_t *param, const char *name, const char *value )
++{
++    return x264_stack_align( param_parse, param, name, value );
++}
++
+ /****************************************************************************
+  * x264_param2string:
+  ****************************************************************************/
+diff --git a/common/threadpool.c b/common/threadpool.c
+index 5a71feb1..7f98f778 100644
+--- a/common/threadpool.c
++++ b/common/threadpool.c
+@@ -47,7 +47,7 @@ struct x264_threadpool_t
+     x264_sync_frame_list_t done;   /* list of jobs that have finished processing */
+ };
+ 
+-static void *threadpool_thread( x264_threadpool_t *pool )
++static void *threadpool_thread_internal( x264_threadpool_t *pool )
+ {
+     if( pool->init_func )
+         pool->init_func( pool->init_arg );
+@@ -66,12 +66,17 @@ static void *threadpool_thread( x264_threadpool_t *pool )
+         x264_pthread_mutex_unlock( &pool->run.mutex );
+         if( !job )
+             continue;
+-        job->ret = (void*)x264_stack_align( job->func, job->arg ); /* execute the function */
++        job->ret = job->func( job->arg );
+         x264_sync_frame_list_push( &pool->done, (void*)job );
+     }
+     return NULL;
+ }
+ 
++static void *threadpool_thread( x264_threadpool_t *pool )
++{
++    return (void*)x264_stack_align( threadpool_thread_internal, pool );
++}
++
+ int x264_threadpool_init( x264_threadpool_t **p_pool, int threads,
+                           void (*init_func)(void *), void *init_arg )
+ {
+diff --git a/common/x86/cpu-a.asm b/common/x86/cpu-a.asm
+index ad42c26d..d94f7d54 100644
+--- a/common/x86/cpu-a.asm
++++ b/common/x86/cpu-a.asm
+@@ -64,23 +64,42 @@ cglobal cpu_xgetbv
+ %endif
+     ret
+ 
++;-----------------------------------------------------------------------------
++; void cpu_emms( void )
++;-----------------------------------------------------------------------------
++cglobal cpu_emms
++    emms
++    ret
++
++;-----------------------------------------------------------------------------
++; void cpu_sfence( void )
++;-----------------------------------------------------------------------------
++cglobal cpu_sfence
++    sfence
++    ret
++
+ %if ARCH_X86_64
+ 
+ ;-----------------------------------------------------------------------------
+-; void stack_align( void (*func)(void*), void *arg );
++; intptr_t stack_align( void (*func)(void*), ... ); (up to 5 args)
+ ;-----------------------------------------------------------------------------
+ cglobal stack_align
+-    push rbp
+-    mov  rbp, rsp
++    mov      rax, r0mp
++    mov       r0, r1mp
++    mov       r1, r2mp
++    mov       r2, r3mp
++    mov       r3, r4mp
++    mov       r4, r5mp
++    push     rbp
++    mov      rbp, rsp
++%if WIN64
++    sub      rsp, 40 ; shadow space + r4
++%endif
++    and      rsp, ~(STACK_ALIGNMENT-1)
+ %if WIN64
+-    sub  rsp, 32 ; shadow space
++    mov [rsp+32], r4
+ %endif
+-    and  rsp, ~(STACK_ALIGNMENT-1)
+-    mov  rax, r0
+-    mov   r0, r1
+-    mov   r1, r2
+-    mov   r2, r3
+-    call rax
++    call     rax
+     leave
+     ret
+ 
+@@ -113,33 +132,22 @@ cglobal cpu_cpuid_test
+     ret
+ 
+ cglobal stack_align
+-    push ebp
+-    mov  ebp, esp
+-    sub  esp, 12
+-    and  esp, ~(STACK_ALIGNMENT-1)
+-    mov  ecx, [ebp+8]
+-    mov  edx, [ebp+12]
+-    mov  [esp], edx
+-    mov  edx, [ebp+16]
+-    mov  [esp+4], edx
+-    mov  edx, [ebp+20]
+-    mov  [esp+8], edx
+-    call ecx
++    push      ebp
++    mov       ebp, esp
++    sub       esp, 20
++    and       esp, ~(STACK_ALIGNMENT-1)
++    mov        r0, [ebp+12]
++    mov        r1, [ebp+16]
++    mov        r2, [ebp+20]
++    mov  [esp+ 0], r0
++    mov  [esp+ 4], r1
++    mov  [esp+ 8], r2
++    mov        r0, [ebp+24]
++    mov        r1, [ebp+28]
++    mov  [esp+12], r0
++    mov  [esp+16], r1
++    call [ebp+ 8]
+     leave
+     ret
+ 
+ %endif
+-
+-;-----------------------------------------------------------------------------
+-; void cpu_emms( void )
+-;-----------------------------------------------------------------------------
+-cglobal cpu_emms
+-    emms
+-    ret
+-
+-;-----------------------------------------------------------------------------
+-; void cpu_sfence( void )
+-;-----------------------------------------------------------------------------
+-cglobal cpu_sfence
+-    sfence
+-    ret
+diff --git a/encoder/api.c b/encoder/api.c
+index e247f3e4..b97612b7 100644
+--- a/encoder/api.c
++++ b/encoder/api.c
+@@ -73,7 +73,7 @@ typedef struct x264_api_t
+     int  (*encoder_invalidate_reference)( x264_t *, int64_t pts );
+ } x264_api_t;
+ 
+-x264_t *x264_encoder_open( x264_param_t *param )
++static x264_api_t *encoder_open( x264_param_t *param )
+ {
+     x264_api_t *api = calloc( 1, sizeof( x264_api_t ) );
+     if( !api )
+@@ -118,15 +118,20 @@ x264_t *x264_encoder_open( x264_param_t *param )
+         return NULL;
+     }
+ 
++    return api;
++}
++
++x264_t *x264_encoder_open( x264_param_t *param )
++{
+     /* x264_t is opaque */
+-    return (x264_t *)api;
++    return (x264_t *)x264_stack_align( encoder_open, param );
+ }
+ 
+ void x264_encoder_close( x264_t *h )
+ {
+     x264_api_t *api = (x264_api_t *)h;
+ 
+-    api->encoder_close( api->x264 );
++    x264_stack_align( api->encoder_close, api->x264 );
+     free( api );
+ }
+ 
+@@ -134,61 +139,61 @@ void x264_nal_encode( x264_t *h, uint8_t *dst, x264_nal_t *nal )
+ {
+     x264_api_t *api = (x264_api_t *)h;
+ 
+-    api->nal_encode( api->x264, dst, nal );
++    x264_stack_align( api->nal_encode, api->x264, dst, nal );
+ }
+ 
+ int x264_encoder_reconfig( x264_t *h, x264_param_t *param)
+ {
+     x264_api_t *api = (x264_api_t *)h;
+ 
+-    return api->encoder_reconfig( api->x264, param );
++    return x264_stack_align( api->encoder_reconfig, api->x264, param );
+ }
+ 
+ void x264_encoder_parameters( x264_t *h, x264_param_t *param )
+ {
+     x264_api_t *api = (x264_api_t *)h;
+ 
+-    api->encoder_parameters( api->x264, param );
++    x264_stack_align( api->encoder_parameters, api->x264, param );
+ }
+ 
+ int x264_encoder_headers( x264_t *h, x264_nal_t **pp_nal, int *pi_nal )
+ {
+     x264_api_t *api = (x264_api_t *)h;
+ 
+-    return api->encoder_headers( api->x264, pp_nal, pi_nal );
++    return x264_stack_align( api->encoder_headers, api->x264, pp_nal, pi_nal );
+ }
+ 
+ int x264_encoder_encode( x264_t *h, x264_nal_t **pp_nal, int *pi_nal, x264_picture_t *pic_in, x264_picture_t *pic_out )
+ {
+     x264_api_t *api = (x264_api_t *)h;
+ 
+-    return api->encoder_encode( api->x264, pp_nal, pi_nal, pic_in, pic_out );
++    return x264_stack_align( api->encoder_encode, api->x264, pp_nal, pi_nal, pic_in, pic_out );
+ }
+ 
+ int x264_encoder_delayed_frames( x264_t *h )
+ {
+     x264_api_t *api = (x264_api_t *)h;
+ 
+-    return api->encoder_delayed_frames( api->x264 );
++    return x264_stack_align( api->encoder_delayed_frames, api->x264 );
+ }
+ 
+ int x264_encoder_maximum_delayed_frames( x264_t *h )
+ {
+     x264_api_t *api = (x264_api_t *)h;
+ 
+-    return api->encoder_maximum_delayed_frames( api->x264 );
++    return x264_stack_align( api->encoder_maximum_delayed_frames, api->x264 );
+ }
+ 
+ void x264_encoder_intra_refresh( x264_t *h )
+ {
+     x264_api_t *api = (x264_api_t *)h;
+ 
+-    api->encoder_intra_refresh( api->x264 );
++    x264_stack_align( api->encoder_intra_refresh, api->x264 );
+ }
+ 
+ int x264_encoder_invalidate_reference( x264_t *h, int64_t pts )
+ {
+     x264_api_t *api = (x264_api_t *)h;
+ 
+-    return api->encoder_invalidate_reference( api->x264, pts );
++    return x264_stack_align( api->encoder_invalidate_reference, api->x264, pts );
+ }
+diff --git a/encoder/encoder.c b/encoder/encoder.c
+index 243a87a5..286b112b 100644
+--- a/encoder/encoder.c
++++ b/encoder/encoder.c
+@@ -1564,7 +1564,7 @@ x264_t *x264_encoder_open( x264_param_t *param )
+     if( h->param.b_cabac )
+         x264_cabac_init( h );
+     else
+-        x264_stack_align( x264_cavlc_init, h );
++        x264_cavlc_init( h );
+ 
+     mbcmp_init( h );
+     chroma_dsp_init( h );
+@@ -3087,7 +3087,7 @@ static void *slices_write( x264_t *h )
+             }
+         }
+         h->sh.i_last_mb = X264_MIN( h->sh.i_last_mb, last_thread_mb );
+-        if( x264_stack_align( slice_write, h ) )
++        if( slice_write( h ) )
+             goto fail;
+         h->sh.i_first_mb = h->sh.i_last_mb + 1;
+         // if i_first_mb is not the last mb in a row then go to the next mb in MBAFF order
+@@ -3122,7 +3122,7 @@ static int threaded_slices_write( x264_t *h )
+         t->sh.i_last_mb  =   t->i_threadslice_end * h->mb.i_mb_width - 1;
+     }
+ 
+-    x264_stack_align( x264_analyse_weight_frame, h, h->mb.i_mb_height*16 + 16 );
++    x264_analyse_weight_frame( h, h->mb.i_mb_height*16 + 16 );
+ 
+     x264_threads_distribute_ratecontrol( h );
+ 
+@@ -3300,7 +3300,7 @@ int     x264_encoder_encode( x264_t *h,
+                 return -1;
+         }
+         else
+-            x264_stack_align( x264_adaptive_quant_frame, h, fenc, pic_in->prop.quant_offsets );
++            x264_adaptive_quant_frame( h, fenc, pic_in->prop.quant_offsets );
+ 
+         if( pic_in->prop.quant_offsets_free )
+             pic_in->prop.quant_offsets_free( pic_in->prop.quant_offsets );
+diff --git a/encoder/lookahead.c b/encoder/lookahead.c
+index da8e6c2e..5c948cfb 100644
+--- a/encoder/lookahead.c
++++ b/encoder/lookahead.c
+@@ -67,7 +67,7 @@ static void lookahead_update_last_nonb( x264_t *h, x264_frame_t *new_nonb )
+ #if HAVE_THREAD
+ static void lookahead_slicetype_decide( x264_t *h )
+ {
+-    x264_stack_align( x264_slicetype_decide, h );
++    x264_slicetype_decide( h );
+ 
+     lookahead_update_last_nonb( h, h->lookahead->next.list[0] );
+     int shift_frames = h->lookahead->next.list[0]->i_bframes + 1;
+@@ -82,12 +82,12 @@ static void lookahead_slicetype_decide( x264_t *h )
+ 
+     /* For MB-tree and VBV lookahead, we have to perform propagation analysis on I-frames too. */
+     if( h->lookahead->b_analyse_keyframe && IS_X264_TYPE_I( h->lookahead->last_nonb->i_type ) )
+-        x264_stack_align( x264_slicetype_analyse, h, shift_frames );
++        x264_slicetype_analyse( h, shift_frames );
+ 
+     x264_pthread_mutex_unlock( &h->lookahead->ofbuf.mutex );
+ }
+ 
+-static void *lookahead_thread( x264_t *h )
++static void *lookahead_thread_internal( x264_t *h )
+ {
+     while( !h->lookahead->b_exit_thread )
+     {
+@@ -121,6 +121,11 @@ static void *lookahead_thread( x264_t *h )
+     x264_pthread_mutex_unlock( &h->lookahead->ofbuf.mutex );
+     return NULL;
+ }
++
++static void *lookahead_thread( x264_t *h )
++{
++    return (void*)x264_stack_align( lookahead_thread_internal, h );
++}
+ #endif
+ 
+ int x264_lookahead_init( x264_t *h, int i_slicetype_length )
+@@ -230,14 +235,14 @@ void x264_lookahead_get_frames( x264_t *h )
+         if( h->frames.current[0] || !h->lookahead->next.i_size )
+             return;
+ 
+-        x264_stack_align( x264_slicetype_decide, h );
++        x264_slicetype_decide( h );
+         lookahead_update_last_nonb( h, h->lookahead->next.list[0] );
+         int shift_frames = h->lookahead->next.list[0]->i_bframes + 1;
+         lookahead_shift( &h->lookahead->ofbuf, &h->lookahead->next, shift_frames );
+ 
+         /* For MB-tree and VBV lookahead, we have to perform propagation analysis on I-frames too. */
+         if( h->lookahead->b_analyse_keyframe && IS_X264_TYPE_I( h->lookahead->last_nonb->i_type ) )
+-            x264_stack_align( x264_slicetype_analyse, h, shift_frames );
++            x264_slicetype_analyse( h, shift_frames );
+ 
+         lookahead_encoder_shift( h );
+     }
+diff --git a/encoder/ratecontrol.c b/encoder/ratecontrol.c
+index 85548f0b..b7f0ee07 100644
+--- a/encoder/ratecontrol.c
++++ b/encoder/ratecontrol.c
+@@ -574,7 +574,7 @@ int x264_macroblock_tree_read( x264_t *h, x264_frame_t *frame, float *quant_offs
+         rc->mbtree.qpbuf_pos--;
+     }
+     else
+-        x264_stack_align( x264_adaptive_quant_frame, h, frame, quant_offsets );
++        x264_adaptive_quant_frame( h, frame, quant_offsets );
+     return 0;
+ fail:
+     x264_log( h, X264_LOG_ERROR, "Incomplete MB-tree stats file.\n" );
+diff --git a/tools/checkasm.c b/tools/checkasm.c
+index 440e1d23..5f1e275f 100644
+--- a/tools/checkasm.c
++++ b/tools/checkasm.c
+@@ -2913,7 +2913,7 @@ static int check_all_flags( void )
+     return ret;
+ }
+ 
+-int main(int argc, char *argv[])
++static int main_internal( int argc, char **argv )
+ {
+ #ifdef _WIN32
+     /* Disable the Windows Error Reporting dialog */
+@@ -2973,3 +2973,7 @@ int main(int argc, char *argv[])
+     return 0;
+ }
+ 
++int main( int argc, char **argv )
++{
++    return x264_stack_align( main_internal, argc, argv );
++}
+diff --git a/x264.c b/x264.c
+index b02ba49a..83bc9660 100644
+--- a/x264.c
++++ b/x264.c
+@@ -351,7 +351,7 @@ static void print_version_info( void )
+ #endif
+ }
+ 
+-int main( int argc, char **argv )
++static int main_internal( int argc, char **argv )
+ {
+     x264_param_t param;
+     cli_opt_t opt = {0};
+@@ -403,6 +403,11 @@ int main( int argc, char **argv )
+     return ret;
+ }
+ 
++int main( int argc, char **argv )
++{
++    return x264_stack_align( main_internal, argc, argv );
++}
++
+ static char const *strtable_lookup( const char * const table[], int idx )
+ {
+     int i = 0; while( table[i] ) i++;
+-- 
+2.11.0
+
