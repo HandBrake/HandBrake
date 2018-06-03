@@ -3,10 +3,6 @@ ifeq (1,$(FEATURE.qsv))
 __deps__ += LIBMFX
 endif
 
-# workaround for potential race condition
-# where x264 may fail to find nasm later
-__deps__ += X264
-
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
