@@ -98,6 +98,10 @@ ifeq (1,$(FEATURE.qsv))
     MODULES += contrib/libmfx
 endif
 
+ifeq (1,$(FEATURE.vce))
+    MODULES += contrib/amf
+endif
+
 ifneq (,$(filter $(BUILD.system),darwin))
     MODULES += contrib/xz
 endif

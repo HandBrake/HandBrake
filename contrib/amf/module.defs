@@ -1,0 +1,21 @@
+$(eval $(call import.MODULE.defs,AMF,amf))
+$(eval $(call import.CONTRIB.defs,AMF))
+
+AMF.FETCH.url      = https://download.handbrake.fr/contrib/AMF-1.4.7.0.tar.gz
+AMF.FETCH.url     += https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/v1.4.7.0.tar.gz
+AMF.FETCH.sha256   = ea91c8627fb16eaaf66c9c12b88a9fb8969879c244f782e807d2fb78f8f323bd
+AMF.FETCH.basename = AMF-1.4.7.0.tar.gz
+
+AMF.CONFIGURE = $(TOUCH.exe) $@
+AMF.BUILD     = $(TOUCH.exe) $@
+
+define AMF.INSTALL
+    $(MKDIR.exe) -p $(CONTRIB.build/)include/AMF
+    $(CP.exe) -R $(AMF.EXTRACT.dir/)AMF/public/include/* $(CONTRIB.build/)include/AMF/
+    $(TOUCH.exe) $@
+endef
+
+define AMF.UNINSTALL
+    $(RM.exe) -rf $(CONTRIB.build/)include/AMF
+    $(RM.exe) -f $(AMF.INSTALL.target)
+endef

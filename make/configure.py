@@ -1304,6 +1304,9 @@ def createCLI():
     h = IfHost( 'enable Intel Quick Sync Video (QSV) hardware acceleration. (Windows and Linux only)', '*-*-linux*', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-qsv', default=False, action='store_true', help=h )
 
+    h = IfHost( 'enable AMD VCE hardware acceleration. (Windows only)', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-vce', default=False, action='store_true', help=h )
+
     h = IfHost( 'enable x265 video encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-x265', dest="enable_x265", default=True, action='store_true', help=h )
     grp.add_option( '--disable-x265', dest="enable_x265", action='store_false' )
@@ -1879,6 +1882,7 @@ int main()
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac or build.system == 'mingw' ))
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
+    doc.add( 'FEATURE.vce',        int( options.enable_vce ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
 
