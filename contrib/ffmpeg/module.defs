@@ -1,6 +1,9 @@
-__deps__ := YASM AMF BZIP2 ZLIB FDKAAC LIBVPX LAME LIBOPUS LIBSPEEX XZ
+__deps__ := YASM BZIP2 ZLIB FDKAAC LIBVPX LAME LIBOPUS LIBSPEEX XZ
 ifeq (1,$(FEATURE.qsv))
 __deps__ += LIBMFX
+endif
+ifeq (1,$(FEATURE.vce))
+__deps__ += AMF
 endif
 
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
