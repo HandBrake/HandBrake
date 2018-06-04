@@ -1769,8 +1769,7 @@ static void OutputBuffer( sync_common_t * common )
             log_chapter(common, buf->s.new_chap, out_stream->frame_count,
                         buf->s.start);
         }
-        if ((buf->s.start < 0) ||
-            (out_stream->type == SYNC_TYPE_VIDEO && buf->s.duration < 256))
+        if (buf->s.start < 0)
         {
             // The pipeline can't handle negative timestamps
             // and it is sometimes not possible to avoid one
@@ -1780,9 +1779,6 @@ static void OutputBuffer( sync_common_t * common )
             // until we have seen the first PTS for all streams
             // so sometimes we may start before we have seen
             // the earliest PTS
-            //
-            // Also, encx264.c can't handle timestamps that are spaced
-            // less than 256 ticks apart.
             saveChap(out_stream, buf);
             hb_buffer_close(&buf);
         }
