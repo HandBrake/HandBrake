@@ -6,7 +6,8 @@
         "volume": "New Video"
     },
     "OneTimeInitialization": {
-        "title": "none"
+        "title": "none",
+        "show_presets": false
     },
     "Initialization": {
         "AudioAllowMP3Pass": false,
