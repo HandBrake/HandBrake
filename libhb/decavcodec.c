@@ -738,18 +738,28 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     info->sample_bit_depth  = context->bits_per_raw_sample;
 
                     int bps = av_get_bits_per_sample(context->codec_id);
-                    int channels = av_get_channel_layout_nb_channels(frame->channel_layout);
-                    if (bps > 0)
+                    int channels;
+                    if (frame->channel_layout != 0)
                     {
-                        info->bitrate = bps * channels * info->rate.num;
-                    }
-                    else if (context->bit_rate > 0)
-                    {
-                        info->bitrate = context->bit_rate;
+                        channels = av_get_channel_layout_nb_channels(
+                                                        frame->channel_layout);
                     }
                     else
                     {
-                        info->bitrate = 1;
+                        channels = frame->channels;
+                    }
+
+                    info->bitrate = bps * channels * info->rate.num;
+                    if (info->bitrate <= 0)
+                    {
+                        if (context->bit_rate > 0)
+                        {
+                            info->bitrate = context->bit_rate;
+                        }
+                        else
+                        {
+                            info->bitrate = 1;
+                        }
                     }
 
                     if (truehd_mono)
@@ -779,6 +789,13 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                         {
                             info->channel_layout = frame->channel_layout;
                         }
+                    }
+                    if (info->channel_layout == 0)
+                    {
+                        // Channel layout was not set.  Guess a layout based
+                        // on number of channels.
+                        info->channel_layout = av_get_default_channel_layout(
+                                                            frame->channels);
                     }
                     if (context->codec_id == AV_CODEC_ID_AC3 ||
                         context->codec_id == AV_CODEC_ID_EAC3)
@@ -2203,6 +2220,7 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
         else
         {
             AVFrameSideData *side_data;
+            uint64_t         channel_layout;
             if ((side_data =
                  av_frame_get_side_data(pv->frame,
                                 AV_FRAME_DATA_DOWNMIX_INFO)) != NULL)
@@ -2227,8 +2245,13 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
                                                  center_mix_level,
                                                  downmix_info->lfe_mix_level);
             }
-            hb_audio_resample_set_channel_layout(pv->resample,
-                                                 pv->frame->channel_layout);
+            channel_layout = pv->frame->channel_layout;
+            if (channel_layout == 0)
+            {
+                channel_layout = av_get_default_channel_layout(
+                                                        pv->frame->channels);
+            }
+            hb_audio_resample_set_channel_layout(pv->resample, channel_layout);
             hb_audio_resample_set_sample_fmt(pv->resample,
                                              pv->frame->format);
             if (hb_audio_resample_update(pv->resample))
