@@ -4602,12 +4602,17 @@ ghb_log(gchar *log, ...)
 }
 
 static void
-browse_url(const gchar *url)
+browse_url(signal_user_data_t *ud, const gchar *url)
 {
 #if defined(_WIN32)
     ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
 #else
-    gboolean result;
+    GtkWindow * parent;
+    gboolean    result;
+
+    parent = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
+    result = gtk_show_uri_on_window(parent, url, GDK_CURRENT_TIME, NULL);
+    if (result) return;
     char *argv[] =
         {"xdg-open",NULL,NULL,NULL};
     argv[1] = (gchar*)url;
@@ -4656,7 +4661,7 @@ about_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 guide_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 {
-    browse_url(HB_DOCS);
+    browse_url(ud, HB_DOCS);
 }
 
 G_MODULE_EXPORT void
