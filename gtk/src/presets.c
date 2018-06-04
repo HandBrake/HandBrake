@@ -1081,6 +1081,7 @@ ghb_prefs_load(signal_user_data_t *ud)
 #endif
         store_prefs();
     }
+    ghb_dict_remove(dict, "show_presets");
 }
 
 void
