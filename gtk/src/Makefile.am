@@ -186,7 +186,7 @@ uninstall-local:
 	fi
 	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu)
 	@-if test -n "$(flatpak_appdata)"; then \
-		rm -f $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata); \
+		rm -f $(DESTDIR)/$(datadir)/metainfo/$(flatpak_appdata); \
 	fi
 
 install-data-local:
@@ -204,6 +204,6 @@ install-data-local:
 	mkdir -p $(DESTDIR)/$(datadir)/applications/; \
 	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu)
 	@-if test -n "$(flatpak_appdata)"; then \
-		mkdir -p $(DESTDIR)/$(datadir)/appdata/; \
-		$(INSTALL_DATA) $(srcdir)/$(flatpak_appdata) $(DESTDIR)/$(datadir)/appdata/$(flatpak_appdata); \
+		mkdir -p $(DESTDIR)/$(datadir)/metainfo/; \
+		$(INSTALL_DATA) $(srcdir)/$(flatpak_appdata) $(DESTDIR)/$(datadir)/metainfo/$(flatpak_appdata); \
 	fi
