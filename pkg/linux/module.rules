@@ -76,8 +76,8 @@ $(PKG.gui.flatpak): GNUmakefile $(PKG.src.flatpak) $(PKG.contrib.flatpak)
 	# Relative paths in the manifest are relative to the location
 	# of the manifest.  So put it where we have staged the files that
 	# it needs.
-	$(CP.exe) $(PKG.gui.manifest.flatpak) $(STAGE.out.flatpak/)fr.handbrake.gui.json
-	flatpak-builder --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.gui.build.flatpak) $(STAGE.out.flatpak/)fr.handbrake.gui.json
+	$(CP.exe) $(PKG.gui.manifest.flatpak) $(STAGE.out.flatpak/)fr.handbrake.ghb.json
+	flatpak-builder --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.gui.build.flatpak) $(STAGE.out.flatpak/)fr.handbrake.ghb.json
 	flatpak build-bundle $(PKG.repo.flatpak) $(PKG.gui.flatpak) fr.handbrake.ghb
 
 $(PKG.cli.flatpak): GNUmakefile $(PKG.src.flatpak) $(PKG.contrib.flatpak)
