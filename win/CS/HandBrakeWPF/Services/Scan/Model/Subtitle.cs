@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Services.Scan.Model
     using System;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Utilities;

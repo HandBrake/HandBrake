@@ -14,9 +14,9 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model.Audio;
     using HandBrakeWPF.Services.Encode.Model;

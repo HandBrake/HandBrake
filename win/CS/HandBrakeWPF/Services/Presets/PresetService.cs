@@ -19,10 +19,10 @@ namespace HandBrakeWPF.Services.Presets
     using System.Linq;
     using System.Windows;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.Json.Presets;
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Json.Presets;
+    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Model.Picture;

@@ -20,7 +20,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
     using System.Windows.Media.Imaging;
 
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Model.Encoding;
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;

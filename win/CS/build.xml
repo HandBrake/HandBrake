@@ -24,7 +24,7 @@
 
   <!-- Build all the main cproj files.-->
   <ItemGroup>
-    <ProjectsToBuild Include="HandBrake.ApplicationServices\*proj" Exclude="$(MSBuildProjectFile)"/>
+    <ProjectsToBuild Include="HandBrake.Interop\*proj" Exclude="$(MSBuildProjectFile)"/>
     <ProjectsToBuild Include="HandBrakeWPF\HandBrakeWPF.*proj" Exclude="$(MSBuildProjectFile)"/>
   </ItemGroup>
 
@@ -38,7 +38,7 @@
   <Target Name="Nightly" DependsOnTargets="$(NightlyDependsOn)"/>
   <Target Name="Release" DependsOnTargets="$(InstallDependsOn)"/>
 
-  <!-- Build All Components (WPF, ApplicationServices, Interop) -->
+  <!-- Build All Components (WPF, Interop, Interop) -->
   <Target Name="BuildRelease">
     <MSBuild Projects ="@(ProjectsToBuild)"
              ContinueOnError ="false"

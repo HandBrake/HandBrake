@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels
 {
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.ViewModels.Interfaces;
 

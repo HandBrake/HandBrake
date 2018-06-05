@@ -14,7 +14,7 @@ namespace HandBrakeWPF.Utilities
     using System.Management;
     using System.Windows.Forms;
 
-    using HandBrake.ApplicationServices.Interop.HbLib;
+    using HandBrake.Interop.Interop.HbLib;
 
     using Microsoft.Win32;
 

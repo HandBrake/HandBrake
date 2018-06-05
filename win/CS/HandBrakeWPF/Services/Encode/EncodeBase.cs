@@ -14,8 +14,8 @@ namespace HandBrakeWPF.Services.Encode
     using System.Globalization;
     using System.IO;
 
-    using HandBrake.ApplicationServices.Interop.EventArgs;
-    using HandBrake.ApplicationServices.Model;
+    using HandBrake.Interop.Interop.EventArgs;
+    using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Services.Encode.Interfaces;
     using HandBrakeWPF.Utilities;

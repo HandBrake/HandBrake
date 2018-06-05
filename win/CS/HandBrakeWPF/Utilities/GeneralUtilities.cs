@@ -17,7 +17,7 @@ namespace HandBrakeWPF.Utilities
     using System.Text;
     using System.Windows.Forms;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Utilities;
 
     /// <summary>
     /// A Set of Static Utilities

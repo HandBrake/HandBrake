@@ -14,7 +14,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Globalization;
     using System.Linq;
 
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Model.Encoding;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Helpers;

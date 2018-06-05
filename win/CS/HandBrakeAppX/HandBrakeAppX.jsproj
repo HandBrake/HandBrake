@@ -67,8 +67,8 @@
     <Content Include="win32\Caliburn.Micro.Platform.Core.dll" />
     <Content Include="win32\Caliburn.Micro.Platform.dll" />
     <Content Include="win32\GongSolutions.Wpf.DragDrop.dll" />
-    <Content Include="win32\HandBrake.ApplicationServices.dll" />
-    <Content Include="win32\HandBrake.ApplicationServices.dll.config" />
+    <Content Include="win32\HandBrake.Interop.dll" />
+    <Content Include="win32\HandBrake.Interop.dll.config" />
     <Content Include="win32\HandBrake.exe" />
     <Content Include="win32\HandBrake.exe.config" />
     <Content Include="win32\hb.dll" />

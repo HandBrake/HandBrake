@@ -16,9 +16,9 @@ namespace HandBrakeWPF.Model.Audio
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.Model;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Model;
+    using HandBrake.Interop.Interop.Model.Encoding;
     using Newtonsoft.Json;
     using Services.Encode.Model.Models;
     using Utilities;

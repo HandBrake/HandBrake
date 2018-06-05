@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Services
     using System.Reflection;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;

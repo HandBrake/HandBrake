@@ -11,7 +11,7 @@ namespace HandBrakeWPF.Services.Encode.Interfaces
 {
     using System;
 
-    using HandBrake.ApplicationServices.Model;
+    using HandBrake.Interop.Model;
 
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
     using EncodeProgressEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeProgressEventArgs;

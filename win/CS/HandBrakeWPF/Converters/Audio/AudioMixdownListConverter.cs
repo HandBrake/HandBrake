@@ -13,8 +13,8 @@ namespace HandBrakeWPF.Converters.Audio
     using System.ComponentModel;
     using System.Globalization;
     using System.Windows.Data;
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Utilities;
 

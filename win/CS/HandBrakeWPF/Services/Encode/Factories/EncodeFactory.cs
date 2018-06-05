@@ -16,12 +16,12 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using System.Runtime.InteropServices;
     using System.Runtime.InteropServices.ComTypes;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.HbLib;
-    using HandBrake.ApplicationServices.Interop.Json.Encode;
-    using HandBrake.ApplicationServices.Interop.Json.Shared;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
-    using HandBrake.ApplicationServices.Model;
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.Json.Encode;
+    using HandBrake.Interop.Interop.Json.Shared;
+    using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Utilities;
 
@@ -35,9 +35,9 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using FramerateMode = HandBrakeWPF.Services.Encode.Model.Models.FramerateMode;
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
     using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
-    using Subtitle = HandBrake.ApplicationServices.Interop.Json.Encode.Subtitles;
+    using Subtitle = HandBrake.Interop.Interop.Json.Encode.Subtitles;
     using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
-    using SystemInfo = HandBrake.ApplicationServices.Utilities.SystemInfo;
+    using SystemInfo = HandBrake.Interop.Utilities.SystemInfo;
     using Validate = HandBrakeWPF.Helpers.Validate;
 
     /// <summary>
@@ -184,7 +184,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
         /// The job.
         /// </param>
         /// <returns>
-        /// The <see cref="HandBrake.ApplicationServices.Interop.Json.Encode.Subtitles"/>.
+        /// The <see cref="HandBrake.Interop.Interop.Json.Encode.Subtitles"/>.
         /// </returns>
         private static Subtitle CreateSubtitle(EncodeTask job)
         {
@@ -198,7 +198,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                             Burn = false,
                             Forced = false
                         },
-                SubtitleList = new List<HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack>()
+                SubtitleList = new List<HandBrake.Interop.Interop.Json.Encode.SubtitleTrack>()
             };
 
             foreach (SubtitleTrack item in job.SubtitleTracks)
@@ -215,7 +215,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                     }
                     else
                     {
-                        HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack track = new HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack
+                        HandBrake.Interop.Interop.Json.Encode.SubtitleTrack track = new HandBrake.Interop.Interop.Json.Encode.SubtitleTrack
                         {
                             Burn = item.Burned,
                             Default = item.Default,
@@ -229,7 +229,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
                 else
                 {
-                    HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack track = new HandBrake.ApplicationServices.Interop.Json.Encode.SubtitleTrack
+                    HandBrake.Interop.Interop.Json.Encode.SubtitleTrack track = new HandBrake.Interop.Interop.Json.Encode.SubtitleTrack
                     {
                         Track = -1, // Indicates SRT
                         Default = item.Default,
@@ -341,7 +341,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             HBAudioEncoder audioEncoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(job.AllowedPassthruOptions.AudioEncoderFallback));
             audio.FallbackEncoder = audioEncoder.Id;
 
-            audio.AudioList = new List<HandBrake.ApplicationServices.Interop.Json.Encode.AudioTrack>();
+            audio.AudioList = new List<HandBrake.Interop.Interop.Json.Encode.AudioTrack>();
             foreach (AudioTrack item in job.AudioTracks)
             {
                 HBAudioEncoder encoder = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(item.Encoder));
@@ -357,7 +357,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
                 HBRate sampleRate = HandBrakeEncoderHelpers.AudioSampleRates.FirstOrDefault(s => s.Name == item.SampleRate.ToString(CultureInfo.InvariantCulture));
 
-                HandBrake.ApplicationServices.Interop.Json.Encode.AudioTrack audioTrack = new HandBrake.ApplicationServices.Interop.Json.Encode.AudioTrack
+                HandBrake.Interop.Interop.Json.Encode.AudioTrack audioTrack = new HandBrake.Interop.Interop.Json.Encode.AudioTrack
                 {
                     Track = (item.Track.HasValue ? item.Track.Value : 0) - 1,
                     DRC = item.DRC,

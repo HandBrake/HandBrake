@@ -18,7 +18,7 @@ namespace HandBrakeWPF.Helpers
     using System.Windows;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;

@@ -15,7 +15,7 @@ namespace HandBrakeWPF.Converters.Audio
     using System.Text;
     using System.Windows.Data;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Utilities;
 

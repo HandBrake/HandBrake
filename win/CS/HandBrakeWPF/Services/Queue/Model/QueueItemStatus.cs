@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.Services.Queue.Model
 {
-    using HandBrake.ApplicationServices.Attributes;
+    using HandBrake.Interop.Attributes;
 
     /// <summary>
     /// Queue Item Status

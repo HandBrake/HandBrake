@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.Model.Picture
 {
-    using HandBrake.ApplicationServices.Attributes;
+    using HandBrake.Interop.Attributes;
 
     /// <summary>
     /// Picture Settings Mode when adding presets

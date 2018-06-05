@@ -11,8 +11,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
 {
     using System.Collections.Generic;
 
-    using HandBrake.ApplicationServices.Interop.Json.Queue;
-    using HandBrake.ApplicationServices.Model;
+    using HandBrake.Interop.Interop.Json.Queue;
+    using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Services.Encode.Model;
 

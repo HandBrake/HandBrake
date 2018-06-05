@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Services.Presets.Interfaces
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
-    using HandBrake.ApplicationServices.Model;
+    using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Services.Presets.Model;
 

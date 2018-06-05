@@ -17,7 +17,7 @@ namespace HandBrakeWPF.Utilities
     using System.Runtime.InteropServices;
     using System.Windows.Media.Imaging;
 
-    using HandBrake.ApplicationServices.Interop.Model.Preview;
+    using HandBrake.Interop.Interop.Model.Preview;
 
     /// <summary>
     /// The bitmap utilities.

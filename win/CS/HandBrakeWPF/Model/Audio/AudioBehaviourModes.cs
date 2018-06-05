@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.Model.Audio
 {
-    using HandBrake.ApplicationServices.Attributes;
+    using HandBrake.Interop.Attributes;
 
     /// <summary>
     /// The audio behaviours.

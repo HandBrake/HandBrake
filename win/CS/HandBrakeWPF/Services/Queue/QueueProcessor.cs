@@ -16,8 +16,8 @@ namespace HandBrakeWPF.Services.Queue
     using System.Linq;
     using System.Xml.Serialization;
 
-    using HandBrake.ApplicationServices.Model;
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Model;
+    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;

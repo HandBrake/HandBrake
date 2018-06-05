@@ -17,7 +17,7 @@ namespace HandBrakeWPF.Services
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Utilities;
+    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Services.Interfaces;

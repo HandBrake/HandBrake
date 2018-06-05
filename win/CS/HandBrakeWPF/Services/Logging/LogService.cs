@@ -19,8 +19,8 @@ namespace HandBrakeWPF.Services.Logging
     using System.Linq;
     using System.Text;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.EventArgs;
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.EventArgs;
 
     using ILog = Interfaces.ILog;
     using LogEventArgs = EventArgs.LogEventArgs;

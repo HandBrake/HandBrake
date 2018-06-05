@@ -12,7 +12,7 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
     using System;
     using System.Windows.Media.Imaging;
 
-    using HandBrake.ApplicationServices.Model;
+    using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Scan.EventArgs;

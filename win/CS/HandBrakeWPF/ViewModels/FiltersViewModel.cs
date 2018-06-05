@@ -17,9 +17,9 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
-    using HandBrake.ApplicationServices.Interop;
-    using HandBrake.ApplicationServices.Interop.HbLib;
-    using HandBrake.ApplicationServices.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.Model.Encoding;
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Filters;

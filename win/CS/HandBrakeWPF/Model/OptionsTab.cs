@@ -9,7 +9,7 @@
 
 namespace HandBrakeWPF.Model
 {
-    using HandBrake.ApplicationServices.Attributes;
+    using HandBrake.Interop.Attributes;
 
     /// <summary>
     /// A enum representing each tab on the options screen.
