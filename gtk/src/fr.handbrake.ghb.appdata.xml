@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2013 John Stebbins <your@email.com> -->
-<component type="desktop">
-  <id>fr.handbrake.ghb.desktop</id>
+<!-- Copyright 2018 John Stebbins <your@email.com> -->
+<component type="desktop-application">
+  <id>fr.handbrake.ghb</id>
+  <launchable type="desktop-id">fr.handbrake.ghb.desktop</launchable>
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-2.0+</project_license>
   <name>HandBrake</name>
@@ -21,7 +22,7 @@
   </description>
 
   <url type="homepage">https://handbrake.fr/</url>
-  <url type="help">https://handbrake.fr/docs/en/latest/table-of-contents.html</url>
+  <url type="help">https://handbrake.fr/docs/</url>
   <url type="bugtracker">https://github.com/HandBrake/HandBrake/issues</url>
   <mimetypes>
     <mimetype>application/ogg</mimetype>
