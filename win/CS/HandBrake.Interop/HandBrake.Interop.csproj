@@ -25,7 +25,7 @@
     <CodeAnalysisRuleSet>..\HandBrake.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>true</Optimize>
