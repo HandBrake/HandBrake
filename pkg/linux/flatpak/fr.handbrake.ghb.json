@@ -23,7 +23,6 @@
             "no-autogen": true,
             "config-opts": ["--flatpak"],
             "builddir": true,
-            "post-install": ["rm /app/bin/HandBrakeCLI"],
             "sources": [
                 {
                     "type": "archive",
