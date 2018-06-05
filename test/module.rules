@@ -16,8 +16,14 @@ test.install-strip: | $(dir $(TEST.install.exe))
 	$(CP.exe) $(TEST.exe) $(TEST.install.exe)
 	$(STRIP.exe) $(TEST.install.exe)
 
+ifeq (1,$(FEATURE.flatpak))
+test.install: | $(dir $(TEST.install.appdata))
+endif
 test.install: | $(dir $(TEST.install.exe))
 	$(CP.exe) $(TEST.exe) $(TEST.install.exe)
+ifeq (1,$(FEATURE.flatpak))
+	$(CP.exe) $(TEST.appdata) $(TEST.install.appdata)
+endif
 
 test.uninstall:
 	$(RM.exe) -f $(TEST.install.exe)
