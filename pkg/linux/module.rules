@@ -1,4 +1,4 @@
-pkg.create.flatpak:: $(PKG.gui.flatpak) $(PKG.cli.flatpak)
+pkg.create.flatpak:: contrib.fetch $(PKG.gui.flatpak) $(PKG.cli.flatpak)
 pkg.create.deb:: $(PKG.gui.deb) $(PKG.cli.deb)
 pkg.create.rpm:: $(PKG.rpm.stamp)
 pkg.create.src.deb:: $(PKG.src.deb.stamp)
@@ -63,7 +63,7 @@ $(PKG.rpm.stamp): $(PKG.native.rpm.stamp)
 #
 $(PKG.src.flatpak): $(PKG.src.tar.bz2)
 	$(MKDIR.exe) -p $(STAGE.out.flatpak/)
-	-$(RM.exe) -rf $(STAGE.out.flatpak/).flatpak-builder
+	-$(RM.exe) -rf $(BUILD/).flatpak-builder
 	$(CP.exe) $(PKG.src.tar.bz2) $(PKG.src.flatpak)
 
 $(PKG.contrib.flatpak):
@@ -77,7 +77,7 @@ $(PKG.gui.flatpak): GNUmakefile $(PKG.src.flatpak) $(PKG.contrib.flatpak)
 	# of the manifest.  So put it where we have staged the files that
 	# it needs.
 	$(CP.exe) $(PKG.gui.manifest.flatpak) $(STAGE.out.flatpak/)fr.handbrake.gui.json
-	flatpak-builder --force-clean --gpg-sign=608AD8F6 --repo=$(PKG.repo.flatpak) $(PKG.gui.build.flatpak) $(STAGE.out.flatpak/)fr.handbrake.gui.json
+	flatpak-builder --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.gui.build.flatpak) $(STAGE.out.flatpak/)fr.handbrake.gui.json
 	flatpak build-bundle $(PKG.repo.flatpak) $(PKG.gui.flatpak) fr.handbrake.ghb
 
 $(PKG.cli.flatpak): GNUmakefile $(PKG.src.flatpak) $(PKG.contrib.flatpak)
@@ -87,7 +87,7 @@ $(PKG.cli.flatpak): GNUmakefile $(PKG.src.flatpak) $(PKG.contrib.flatpak)
 	# of the manifest.  So put it where we have staged the files that
 	# it needs.
 	$(CP.exe) $(PKG.cli.manifest.flatpak) $(STAGE.out.flatpak/)fr.handbrake.HandBrakeCLI.json
-	flatpak-builder --force-clean --gpg-sign=608AD8F6 --repo=$(PKG.repo.flatpak) $(PKG.cli.build.flatpak) $(STAGE.out.flatpak/)fr.handbrake.HandBrakeCLI.json
+	flatpak-builder --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.cli.build.flatpak) $(STAGE.out.flatpak/)fr.handbrake.HandBrakeCLI.json
 	flatpak build-bundle $(PKG.repo.flatpak) $(PKG.cli.flatpak) fr.handbrake.HandBrakeCLI
 
 #
