@@ -398,8 +398,10 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             title->container_dar.den = 9;
             break;
         default:
-            hb_log( "bd: unknown aspect" );
-            goto fail;
+            hb_log( "bd: unknown aspect %d, assuming 16:9", bdvideo->aspect );
+            title->container_dar.num = 16;
+            title->container_dar.den = 9;
+            break;
     }
     hb_log("bd: aspect = %d:%d",
            title->container_dar.num, title->container_dar.den);
