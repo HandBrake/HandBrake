@@ -1,4 +1,5 @@
-pkg.create.flatpak:: contrib.fetch $(PKG.gui.flatpak) $(PKG.cli.flatpak)
+pkg.create.flatpak:: contrib.fetch $(PKG.gui.flatpak) $(PKG.cli.flatpak) $(FLATHUB_MANIFEST)
+pkg.create.flathub:: $(FLATHUB_MANIFEST)
 pkg.create.deb:: $(PKG.gui.deb) $(PKG.cli.deb)
 pkg.create.rpm:: $(PKG.rpm.stamp)
 pkg.create.src.deb:: $(PKG.src.deb.stamp)
@@ -9,7 +10,6 @@ DEBIAN_CHANGELOG_DATE = $(shell date -R)
 #
 # CLI Tar Package
 #
-
 $(PKG.cli.tar): | $(dir $(PKG.cli.tar))
 $(PKG.cli.tar): | $(STAGE.out.cli/)
 	cd $(STAGE.out.cli/) && $(TAR.exe) cjf $(call fn.ABSOLUTE,$(PKG.cli.tar)) .
@@ -61,32 +61,23 @@ $(PKG.rpm.stamp): $(PKG.native.rpm.stamp)
 #
 # Flatpak binary package rules
 #
-$(PKG.src.flatpak): $(PKG.src.tar.bz2)
-	$(MKDIR.exe) -p $(STAGE.out.flatpak/)
-	-$(RM.exe) -rf $(BUILD/).flatpak-builder
-	$(CP.exe) $(PKG.src.tar.bz2) $(PKG.src.flatpak)
+$(PKG.gui.flathub.manifest):
+	$(SRC/)scripts/create_flatpak_manifest.py -a "$(HB_URL)" -s "$(HB_SHA256)" -t $(PKG.gui.manifest.flatpak) $(foreach m,$(CONTRIBS),-c "$(word 1,$($m.FETCH.url))" -s "$(word 1,$($m.FETCH.sha256))") $(FPRUNTIME) $(PKG.gui.flathub.manifest)
 
-$(PKG.contrib.flatpak):
-	$(MKDIR.exe) -p $(STAGE.out.flatpak/)
-	$(TAR.exe) -C $(SRC/) -czf $(PWD)/$(PKG.contrib.flatpak) download
+$(PKG.cli.flathub.manifest):
+	$(SRC/)scripts/create_flatpak_manifest.py -a "$(HB_URL)" -s "$(HB_SHA256)" -t $(PKG.cli.manifest.flatpak) $(foreach m,$(CONTRIBS),-c "$(word 1,$($m.FETCH.url))" -s "$(word 1,$($m.FETCH.sha256))") $(FPRUNTIME) $(PKG.cli.flathub.manifest)
 
-$(PKG.gui.flatpak): GNUmakefile $(PKG.src.flatpak) $(PKG.contrib.flatpak)
-	make contrib.fetch
+$(PKG.gui.flatpak): GNUmakefile $(PKG.src.tar.bz2)
+	$(MKDIR.exe) -p $(STAGE.out.flatpak/)
 	$(MKDIR.exe) -p $(PKG.out.flatpak/)
-	# Relative paths in the manifest are relative to the location
-	# of the manifest.  So put it where we have staged the files that
-	# it needs.
-	$(CP.exe) $(PKG.gui.manifest.flatpak) $(STAGE.out.flatpak/)fr.handbrake.ghb.json
+	$(SRC/)scripts/create_flatpak_manifest.py -a "$(abspath $(PKG.src.tar.bz2))" -t $(PKG.gui.manifest.flatpak) $(foreach m,$(CONTRIBS),-c "$(abspath $(CONTRIB.download/)$($m.FETCH.basename))") $(STAGE.out.flatpak/)fr.handbrake.ghb.json
 	flatpak-builder --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.gui.build.flatpak) $(STAGE.out.flatpak/)fr.handbrake.ghb.json
 	flatpak build-bundle $(PKG.repo.flatpak) $(PKG.gui.flatpak) fr.handbrake.ghb
 
-$(PKG.cli.flatpak): GNUmakefile $(PKG.src.flatpak) $(PKG.contrib.flatpak)
-	make contrib.fetch
+$(PKG.cli.flatpak): GNUmakefile $(PKG.src.tar.bz2)
+	$(MKDIR.exe) -p $(STAGE.out.flatpak/)
 	$(MKDIR.exe) -p $(PKG.out.flatpak/)
-	# Relative paths in the manifest are relative to the location
-	# of the manifest.  So put it where we have staged the files that
-	# it needs.
-	$(CP.exe) $(PKG.cli.manifest.flatpak) $(STAGE.out.flatpak/)fr.handbrake.HandBrakeCLI.json
+	$(SRC/)scripts/create_flatpak_manifest.py -a "$(abspath $(PKG.src.tar.bz2))" -t $(PKG.cli.manifest.flatpak) $(foreach m,$(CONTRIBS),-c "$(abspath $(CONTRIB.download/)$($m.FETCH.basename))") $(STAGE.out.flatpak/)fr.handbrake.HandBrakeCLI.json
 	flatpak-builder --force-clean $(PGPSIGN) --repo=$(PKG.repo.flatpak) $(PKG.cli.build.flatpak) $(STAGE.out.flatpak/)fr.handbrake.HandBrakeCLI.json
 	flatpak build-bundle $(PKG.repo.flatpak) $(PKG.cli.flatpak) fr.handbrake.HandBrakeCLI
 

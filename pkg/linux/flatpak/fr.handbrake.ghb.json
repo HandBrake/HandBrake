@@ -5,16 +5,11 @@
     "sdk": "org.gnome.Sdk",
     "command": "ghb",
     "finish-args": [
-        /* X11 + XShm access */
         "--share=ipc", "--socket=x11",
-        /* Wayland access */
         "--socket=wayland",
-        /* Needed for dconf to work */
         "--filesystem=xdg-run/dconf", "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
-        /* Needs video */
         "--filesystem=xdg-videos",
-        /* Home */
         "--filesystem=home"
     ],
     "modules": [
