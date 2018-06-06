@@ -5,9 +5,7 @@
     "sdk": "org.gnome.Sdk",
     "command": "HandBrakeCLI",
     "finish-args": [
-        /* Needs video */
         "--filesystem=xdg-videos",
-        /* Home */
         "--filesystem=home"
     ],
     "modules": [

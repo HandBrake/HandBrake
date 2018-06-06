@@ -10,6 +10,11 @@ CONTRIB.spec      = $(if $(filter 1,$(BUILD.cross)),$(HOST.spec))
 ##
 define import.CONTRIB.defs
     ##
+    ## keep a list of the enabled contrib packages
+    ##
+    CONTRIBS += $(1)
+
+    ##
     ## import gcc/g++ support mainly so we can force contrib choice of
     ## gcc executable, and debug/optimization flags.
     ##

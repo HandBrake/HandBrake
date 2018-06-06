@@ -18,6 +18,15 @@ ifneq ($(PGP_ID),)
     PGPSIGN = --gpg-sign=$(PGP_ID)
 endif
 
+ifneq ($(FP_RUNTIME),)
+    FPRUNTIME = -r $(FP_RUNTIME)
+endif
+
+ifneq ($(HB_URL),)
+ifneq ($(HB_SHA256),)
+	FLATHUB_MANIFEST = $(PKG.gui.flathub.manifest) $(PKG.cli.flathub.manifest)
+endif
+endif
 
 ###############################################################################
 
@@ -48,8 +57,8 @@ PKG.rpm.stamp = $(PKG.out/).rpm.stamp
 
 PKG.out.flatpak/ = $(PKG.out/)flatpak/
 STAGE.out.flatpak/ = $(STAGE.out/)flatpak/
-PKG.src.flatpak = $(STAGE.out.flatpak/)handbrake.tar.bz2
-PKG.contrib.flatpak = $(STAGE.out.flatpak/)download.tgz
+PKG.gui.flathub.manifest = $(PKG.out.flatpak/)/fr.handbrake.ghb.json
+PKG.cli.flathub.manifest = $(PKG.out.flatpak/)/fr.handbrake.HandBrakeCLI.json
 PKG.gui.manifest.flatpak = $(PKG.flatpak/)fr.handbrake.ghb.json
 PKG.cli.manifest.flatpak = $(PKG.flatpak/)fr.handbrake.HandBrakeCLI.json
 PKG.gui.build.flatpak = $(STAGE.out.flatpak/)$(HB.name)-$(HB.version)-$(BUILD.machine).build
