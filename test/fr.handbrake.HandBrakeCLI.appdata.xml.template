@@ -60,5 +60,9 @@
     <binary>HandBrakeCLI</binary>
   </provides>
 
+  <releases>
+    RELEASE_TAG
+  </releases>
+
 </component>
 
