@@ -38,11 +38,21 @@ icons_dep =	\
 if GHB_FLATPAK
 icons += fr.handbrake.ghb.svg
 hb_menu = fr.handbrake.ghb.desktop
-flatpak_appdata = fr.handbrake.ghb.appdata.xml
 else
 hb_menu = ghb.desktop
 endif
 
+@INTLTOOL_XML_RULE@
+appdatadir = $(datarootdir)/metainfo
+appdata_in_files = fr.handbrake.ghb.appdata.xml.in
+appdata_DATA = $(appdata_in_files:.xml.in=.xml)
+dist_appdata_DATA = $(appdata_files)
+
+EXTRA_DIST = \
+	$(appdata_in_files)
+
+DISTCLEANFILES = \
+	$(appdata_files)
 
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
@@ -163,6 +173,9 @@ widget_reverse.deps: makedeps.py
 widget.deps: makedeps.py
 	python2 $(srcdir)/makedeps.py
 
+fr.handbrake.ghb.appdata.xml.in: fr.handbrake.ghb.appdata.xml.template
+	sed -e 's^RELEASE_TAG^<release version="$(HB.version)" date="$(word 1,$(HB.repo.date))" />^' $< > $@
+
 ghbcellrenderertext.$(OBJEXT): marshalers.h
 
 $(srcdir)/marshalers.h: marshalers.list
@@ -185,9 +198,6 @@ uninstall-local:
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
 	rm -f $(DESTDIR)/$(datadir)/applications/$(hb_menu)
-	@-if test -n "$(flatpak_appdata)"; then \
-		rm -f $(DESTDIR)/$(datadir)/metainfo/$(flatpak_appdata); \
-	fi
 
 install-data-local:
 	for icon in $(icons); do \
@@ -203,7 +213,3 @@ install-data-local:
 	fi
 	mkdir -p $(DESTDIR)/$(datadir)/applications/; \
 	$(INSTALL_DATA) $(srcdir)/$(hb_menu) $(DESTDIR)/$(datadir)/applications/$(hb_menu)
-	@-if test -n "$(flatpak_appdata)"; then \
-		mkdir -p $(DESTDIR)/$(datadir)/metainfo/; \
-		$(INSTALL_DATA) $(srcdir)/$(flatpak_appdata) $(DESTDIR)/$(datadir)/metainfo/$(flatpak_appdata); \
-	fi
