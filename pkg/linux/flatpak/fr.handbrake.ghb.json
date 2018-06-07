@@ -16,7 +16,7 @@
         {
             "name": "handbrake",
             "no-autogen": true,
-            "config-opts": ["--flatpak"],
+            "config-opts": ["--flatpak", "--disable-gtk-update-checks"],
             "builddir": true,
             "sources": [
                 {
