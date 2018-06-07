@@ -47,3 +47,5 @@ endif
 ifeq (1,$(FEATURE.flatpak))
 	GTK.CONFIGURE.extra += --enable-flatpak
 endif
+
+export HB.version HB.repo.date
