@@ -29,6 +29,8 @@
 /// Path to log text file.
 @property (nonatomic, copy, readonly) HBOutputFileWriter *outputFile;
 
+@property (nonatomic, readonly) NSDictionary *textAttributes;
+
 @end
 
 @implementation HBOutputPanelController
@@ -63,6 +65,9 @@
         [[textView layoutManager] replaceTextStorage:outputTextStorage];
         [[textView enclosingScrollView] setLineScroll:10];
         [[textView enclosingScrollView] setPageScroll:20];
+
+        // Text attributes
+        _textAttributes = @{NSForegroundColorAttributeName: [NSColor textColor]};
 
         // Add ourself as stderr/stdout listener
         [[HBOutputRedirect stderrRedirect] addListener:self];
@@ -100,7 +105,7 @@
  */
 - (void)stderrRedirect:(NSString *)text
 {
-    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text];
+    NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text attributes:_textAttributes];
 	/* Actually write the libhb output to the text view (outputTextStorage) */
     [outputTextStorage appendAttributedString:attributedString];
     
