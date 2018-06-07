@@ -332,7 +332,7 @@
 		1C7776A0202300DC001C31EB /* HBRenamePresetController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBRenamePresetController.m; sourceTree = "<group>"; };
 		1C7776A1202300DC001C31EB /* HBRenamePresetController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBRenamePresetController.h; sourceTree = "<group>"; };
 		1C7776A4202301D5001C31EB /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/HBRenamePresetController.xib; sourceTree = "<group>"; };
-		1CBC683320BE014800A26CC2 /* liblzma.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzma.a; path = "external/contrib/lib/liblzma.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1CBC683320BE014800A26CC2 /* liblzma.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzma.a; path = external/contrib/lib/liblzma.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		226268DF1572CC7300477B4E /* libavresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavresample.a; path = external/contrib/lib/libavresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22CC9E74191EBEA500C69D81 /* libx265.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx265.a; path = external/contrib/lib/libx265.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external/contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1462,7 +1462,7 @@
 		273F1FE014AD9DA40021BE6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 1000;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
 						SystemCapabilities = {
@@ -1946,6 +1946,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = NO;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
@@ -2010,6 +2011,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = NO;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
@@ -2056,6 +2058,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BOOL_CONVERSION = NO;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
 				CLANG_WARN_ENUM_CONVERSION = NO;
@@ -2081,6 +2084,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BOOL_CONVERSION = NO;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
 				CLANG_WARN_ENUM_CONVERSION = NO;
@@ -2165,6 +2169,7 @@
 		273F217214ADD2170021BE6D /* debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				PATH = $PATH;
 				PRODUCT_NAME = external;
 			};
@@ -2173,6 +2178,7 @@
 		273F217314ADD2170021BE6D /* release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				PATH = $PATH;
 				PRODUCT_NAME = external;
 			};
@@ -2416,6 +2422,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = NO;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
@@ -2467,6 +2474,7 @@
 		A9A5CD9A1E32072F00947914 /* debug-sandbox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				PATH = $PATH;
 				PRODUCT_NAME = external;
 			};
@@ -2476,6 +2484,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BOOL_CONVERSION = NO;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
 				CLANG_WARN_ENUM_CONVERSION = NO;
@@ -2664,6 +2673,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_IMPLICIT_ATOMIC_PROPERTIES = NO;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_IMPLICIT_CONVERSION = YES;
@@ -2711,6 +2721,7 @@
 		A9A5CDA01E32073800947914 /* release-sandbox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				PATH = $PATH;
 				PRODUCT_NAME = external;
 			};
@@ -2720,6 +2731,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BOOL_CONVERSION = NO;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
 				CLANG_WARN_ENUM_CONVERSION = NO;
