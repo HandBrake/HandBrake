@@ -11,7 +11,7 @@ AMF.BUILD     = $(TOUCH.exe) $@
 
 define AMF.INSTALL
     $(MKDIR.exe) -p $(CONTRIB.build/)include/AMF
-    $(CP.exe) -R $(AMF.EXTRACT.dir/)AMF/public/include/* $(CONTRIB.build/)include/AMF/
+    $(CP.exe) -R $(AMF.EXTRACT.dir/)amf/public/include/* $(CONTRIB.build/)include/AMF/
     $(TOUCH.exe) $@
 endef
 
