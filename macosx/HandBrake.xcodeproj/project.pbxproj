@@ -185,6 +185,7 @@
 		A93B49221DA3AA6900DD70A3 /* HBToolbarBadgedItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A93B49211DA3AA6900DD70A3 /* HBToolbarBadgedItem.m */; };
 		A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */ = {isa = PBXBuildFile; fileRef = A93E0ED11972957000FD67FB /* HBVideoController.m */; };
 		A94A98F51C858EFB004BA9BA /* HBDictTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A94A98F41C858EFB004BA9BA /* HBDictTests.m */; };
+		A94DC2DE20CADA2C00EAC8FD /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94DC2DC20CADA2C00EAC8FD /* MainWindow.xib */; };
 		A95121E61B5F7BE700FD773D /* NSArray+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */; };
 		A955128B1A320B02001BFC6F /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A95512881A320A12001BFC6F /* libjansson.a */; };
 		A95BC1E71CD2548A008D6A33 /* volHighTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A95BC1E51CD2548A008D6A33 /* volHighTemplate.pdf */; };
@@ -212,7 +213,6 @@
 		A9A96B8820CAD2D100A39AFB /* HBPlayerHUDController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96B8A20CAD2D100A39AFB /* HBPlayerHUDController.xib */; };
 		A9A96BAD20CAD5A200A39AFB /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BAB20CAD5A100A39AFB /* MainMenu.xib */; };
 		A9A96BB020CAD5BD00A39AFB /* Presets.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BAE20CAD5BD00A39AFB /* Presets.xib */; };
-		A9A96BB320CAD5CD00A39AFB /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BB120CAD5CD00A39AFB /* MainMenu.xib */; };
 		A9A96BB620CAD5D600A39AFB /* HBTitleSelection.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BB420CAD5D600A39AFB /* HBTitleSelection.xib */; };
 		A9A96BB920CAD5EE00A39AFB /* HBPictureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BB720CAD5ED00A39AFB /* HBPictureViewController.xib */; };
 		A9A96BBC20CAD5F400A39AFB /* HBFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BBA20CAD5F300A39AFB /* HBFiltersViewController.xib */; };
@@ -460,6 +460,7 @@
 		A93FD4741A62ABE800A6AC43 /* HBAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudio.m; sourceTree = "<group>"; };
 		A941ACB91CD75B4E0029D06A /* HBHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBHUD.h; sourceTree = "<group>"; };
 		A94A98F41C858EFB004BA9BA /* HBDictTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBDictTests.m; sourceTree = "<group>"; };
+		A94DC2DD20CADA2C00EAC8FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainWindow.xib; sourceTree = "<group>"; };
 		A95121E41B5F7BE700FD773D /* NSArray+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+HBAdditions.h"; sourceTree = "<group>"; };
 		A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+HBAdditions.m"; sourceTree = "<group>"; };
 		A9523935199A6AAE00588AEF /* HBFilters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBFilters.h; sourceTree = "<group>"; };
@@ -528,7 +529,6 @@
 		A9A96B8D20CAD2EE00A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBRenamePresetController.xib; sourceTree = "<group>"; };
 		A9A96BAC20CAD5A100A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		A9A96BAF20CAD5BD00A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Presets.xib; sourceTree = "<group>"; };
-		A9A96BB220CAD5CD00A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		A9A96BB520CAD5D600A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBTitleSelection.xib; sourceTree = "<group>"; };
 		A9A96BB820CAD5ED00A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBPictureViewController.xib; sourceTree = "<group>"; };
 		A9A96BBB20CAD5F300A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBFiltersViewController.xib; sourceTree = "<group>"; };
@@ -938,7 +938,7 @@
 				A9A96BB420CAD5D600A39AFB /* HBTitleSelection.xib */,
 				273F208E14ADBE670021BE6D /* HBController.h */,
 				273F208F14ADBE670021BE6D /* HBController.m */,
-				A9A96BB120CAD5CD00A39AFB /* MainMenu.xib */,
+				A94DC2DC20CADA2C00EAC8FD /* MainWindow.xib */,
 				A9B34D701976841800871B7D /* View Controllers */,
 			);
 			name = "Main Window";
@@ -1493,7 +1493,7 @@
 				1C7776A5202301D5001C31EB /* HBRenamePresetController.xib in Resources */,
 				A9A96BC220CAD60400A39AFB /* AdvancedView.xib in Resources */,
 				273F218B14ADDDA10021BE6D /* InfoPlist.strings in Resources */,
-				A9A96BB320CAD5CD00A39AFB /* MainMenu.xib in Resources */,
+				A94DC2DE20CADA2C00EAC8FD /* MainWindow.xib in Resources */,
 				D86C9DD51C6D372500F06F1B /* Assets.xcassets in Resources */,
 				A9A96BCE20CAD61F00A39AFB /* SubtitlesDefaults.xib in Resources */,
 				A9A96BDA20CAD64B00A39AFB /* PicturePreview.xib in Resources */,
@@ -1735,6 +1735,14 @@
 			name = AddPreset.xib;
 			sourceTree = "<group>";
 		};
+		A94DC2DC20CADA2C00EAC8FD /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A94DC2DD20CADA2C00EAC8FD /* Base */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
 		A9A96B8420CAD2C200A39AFB /* HBPictureHUDController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1773,14 +1781,6 @@
 				A9A96BAF20CAD5BD00A39AFB /* Base */,
 			);
 			name = Presets.xib;
-			sourceTree = "<group>";
-		};
-		A9A96BB120CAD5CD00A39AFB /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A9A96BB220CAD5CD00A39AFB /* Base */,
-			);
-			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 		A9A96BB420CAD5D600A39AFB /* HBTitleSelection.xib */ = {
