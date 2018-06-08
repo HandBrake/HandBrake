@@ -51,6 +51,10 @@ namespace HandBrake.Interop.Interop.HbLib
         public const uint HB_VCODEC_QSV_H265_10BIT = 0x0000400;
         public const uint HB_VCODEC_QSV_MASK = 0x0000F00;
 
+        public const uint HB_VCODEC_FFMPEG_VCE_H264 = 0x00040000;
+        public const uint HB_VCODEC_FFMPEG_VCE_H265 = 0x00080000;
+        public const uint HB_VCODEC_FFMPEG_MASK = (0x00000F0 | HB_VCODEC_FFMPEG_VCE_H264 | HB_VCODEC_FFMPEG_VCE_H265);
+
         // Encode state
         public const int HB_STATE_IDLE = 1;
         public const int HB_STATE_SCANNING = 2;

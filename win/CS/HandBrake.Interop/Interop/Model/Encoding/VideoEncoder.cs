@@ -28,6 +28,10 @@ namespace HandBrake.Interop.Interop.Model.Encoding
         [ShortName("qsv_h264")]
         QuickSync,
 
+        [DisplayName("H.264 (AMD VCE)")]
+        [ShortName("vce_h264")]
+        VceH264,    
+
         [DisplayName("MPEG-4")]
         [ShortName("mpeg4")]
         FFMpeg,
@@ -59,6 +63,10 @@ namespace HandBrake.Interop.Interop.Model.Encoding
         [DisplayName("H.265 10-bit (Intel QSV)")]
         [ShortName("qsv_h265_10bit")]
         QuickSyncH26510b,
+
+        [DisplayName("H.265 (AMD VCE)")]
+        [ShortName("vce_h265")]
+        VceH265,
 
         [DisplayName("VP8")]
         [ShortName("VP8")]

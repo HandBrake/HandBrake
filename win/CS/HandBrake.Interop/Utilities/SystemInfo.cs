@@ -90,5 +90,37 @@ namespace HandBrake.Interop.Utilities
                 }
             }
         }
+
+        public static bool IsVceH264Available
+        {
+            get
+            {
+                try
+                {
+                    return HBFunctions.hb_vce_h264_available() != 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+
+        public static bool IsVceH265Available
+        {
+            get
+            {
+                try
+                {
+                    return HBFunctions.hb_vce_h265_available() != 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
     }
 }

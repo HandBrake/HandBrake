@@ -295,7 +295,11 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
             }
 
-            if (job.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality) video.Quality = job.Quality;
+            if (job.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
+            {
+                video.Quality = job.Quality;
+            }
+
             if (job.VideoEncodeRateType == VideoEncodeRateType.AverageBitrate)
             {
                 video.Bitrate = job.VideoBitrate;
@@ -306,7 +310,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             video.QSV.Decode = SystemInfo.IsQsvAvailable && configuration.EnableQuickSyncDecoding;
 
             // The use of the QSV decoder is configurable for non QSV encoders.
-            if (video.QSV.Decode && job.VideoEncoder != VideoEncoder.QuickSync && job.VideoEncoder != VideoEncoder.QuickSyncH265)
+            if (video.QSV.Decode && job.VideoEncoder != VideoEncoder.QuickSync && job.VideoEncoder != VideoEncoder.QuickSyncH265 && job.VideoEncoder != VideoEncoder.QuickSyncH26510b)
             {
                 video.QSV.Decode = configuration.UseQSVDecodeForNonQSVEnc;
             }
