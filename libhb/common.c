@@ -1499,6 +1499,18 @@ const char* const* hb_video_encoder_get_levels(int encoder)
     }
 #endif
 
+#ifdef USE_VCE
+    if (encoder & HB_VCODEC_FFMPEG_VCE_H264)
+    {
+        return hb_h264_level_names;
+    }
+    
+    if (encoder & HB_VCODEC_FFMPEG_VCE_H265)
+    {
+        return hb_h265_level_names;
+    }
+#endif
+
     switch (encoder)
     {
         case HB_VCODEC_X264_8BIT:
