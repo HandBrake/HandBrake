@@ -9,5 +9,5 @@
 /**
  *  The HBHUDView class implements simple views that can draw the background in the HUD style.
  */
-@interface HBHUDView : NSView
+@interface HBHUDView : NSVisualEffectView
 @end

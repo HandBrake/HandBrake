@@ -224,21 +224,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     _showHeader = showHeader;
 
     self.headerLabel.hidden = !showHeader;
-    if (NSAppKitVersionNumber < NSAppKitVersionNumber10_10)
-    {
-        if (showHeader)
-        {
-            [self.view addConstraint:self.headerBottomConstraint];
-        }
-        else
-        {
-            [self.view removeConstraint:self.headerBottomConstraint];
-        }
-    }
-    else
-    {
-        self.headerBottomConstraint.active = showHeader;
-    }
+    self.headerBottomConstraint.active = showHeader;
 }
 
 - (IBAction)clicked:(id)sender
@@ -270,17 +256,17 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 {
     if ([self.treeController canRemove])
     {
-        /* Alert user before deleting preset */
-        NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"Are you sure you want to permanently delete the selected preset?", nil)
-                                         defaultButton:NSLocalizedString(@"Delete Preset", nil)
-                                       alternateButton:NSLocalizedString(@"Cancel", nil)
-                                           otherButton:nil
-                             informativeTextWithFormat:NSLocalizedString(@"You can't undo this action.", nil)];
-        [alert setAlertStyle:NSCriticalAlertStyle];
+        // Alert user before deleting preset
+        NSAlert *alert = [NSAlert init];
+        alert.messageText = NSLocalizedString(@"Are you sure you want to permanently delete the selected preset?", nil);
+        alert.informativeText = NSLocalizedString(@"You can't undo this action.", nil);
+        [alert addButtonWithTitle:NSLocalizedString(@"Delete Preset", nil)];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+        alert.alertStyle = NSCriticalAlertStyle;
 
         NSInteger status = [alert runModal];
 
-        if (status == NSAlertDefaultReturn)
+        if (status == NSAlertFirstButtonReturn)
         {
             [self.presets deletePresetAtIndexPath:[self.treeController selectionIndexPath]];
             [self setSelection:self.presets.defaultPreset];

@@ -6,7 +6,7 @@
 
 #import "HBPictureViewController.h"
 
-@import HandBrakeKit.HBPicture;
+@import HandBrakeKit;
 
 static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
 

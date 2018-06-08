@@ -39,7 +39,7 @@
     hb_title_t *title = self.title.hb_title;
     hb_job_t *job = hb_job_init(title);
 
-    hb_job_set_file(job, self.completeOutputURL.path.fileSystemRepresentation);
+    hb_job_set_file(job, self.completeOutputURL.fileSystemRepresentation);
 
     // Title Angle for dvdnav
     job->angle = self.angle;
@@ -271,7 +271,7 @@
                     sub_config.offset = subTrack.offset;
 
                     // we need to strncpy file name and codeset
-                    strncpy(sub_config.src_filename, subTrack.fileURL.path.fileSystemRepresentation, 255);
+                    strncpy(sub_config.src_filename, subTrack.fileURL.fileSystemRepresentation, 255);
                     sub_config.src_filename[255] = 0;
                     strncpy(sub_config.src_codeset, subTrack.charCode.UTF8String, 39);
                     sub_config.src_codeset[39] = 0;

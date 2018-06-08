@@ -7,7 +7,7 @@
 #import "HBAudioDefaultsController.h"
 #import "HBLanguagesSelection.h"
 
-@import HandBrakeKit.HBAudioDefaults;
+@import HandBrakeKit;
 
 static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 
@@ -87,14 +87,12 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 - (IBAction)ok:(id)sender
 {
     self.settings.trackSelectionLanguages = [self.languagesList.selectedLanguages mutableCopy];
-    [self.window orderOut:nil];
-    [NSApp endSheet:self.window returnCode:NSModalResponseOK];
+    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
 }
 
 - (IBAction)cancel:(id)sender
 {
-    [self.window orderOut:nil];
-    [NSApp endSheet:self.window returnCode:NSModalResponseCancel];
+    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
 - (IBAction)openUserGuide:(id)sender

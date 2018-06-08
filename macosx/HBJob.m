@@ -426,7 +426,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         decodeObjectOrFail(_uuid, NSString);
 
 #ifdef __SANDBOX_ENABLED__
-        _fileURLBookmark = [HBCodingUtilities decodeObjectOfClass:[NSData class] forKey:@"_fileURLBookmark" decoder:decoder];
+        _fileURLBookmark = [decoder decodeObjectOfClass:[NSData class] forKey:@"_fileURLBookmark"];
 
         if (_fileURLBookmark)
         {
@@ -438,7 +438,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
             decodeObjectOrFail(_fileURL, NSURL);
         }
 
-        _outputURLFolderBookmark = [HBCodingUtilities decodeObjectOfClass:[NSData class] forKey:@"_outputURLFolderBookmark" decoder:decoder];
+        _outputURLFolderBookmark = [decoder decodeObjectOfClass:[NSData class] forKey:@"_outputURLFolderBookmark"];
 
         if (_outputURLFolderBookmark)
         {

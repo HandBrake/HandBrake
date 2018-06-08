@@ -10,6 +10,7 @@
 @implementation HBOutputFileWriter
 {
     FILE *f;
+    NSDateFormatter *_formatter;
 }
 
 - (nullable instancetype)initWithFileURL:(NSURL *)url;
@@ -31,7 +32,7 @@
 
         _url = [url copy];
 
-        f = fopen(url.path.fileSystemRepresentation, "w");
+        f = fopen(url.fileSystemRepresentation, "w");
         if (!f)
         {
             return nil;
@@ -42,6 +43,11 @@
         {
             return nil;
         }
+
+        _formatter = [[NSDateFormatter alloc] init];
+        _formatter.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
+        _formatter.dateFormat = @"yyyy-MM-dd'T'HH:mm:ssZZZZZ";
+        _formatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
 
         [self writeHeaderForReason:@"Session"];
     }
@@ -58,7 +64,7 @@
 {
     [self write:[NSString stringWithFormat:@"HandBrake Activity Log for %@: %@\n%@\n",
                  reason,
-                 [[NSDate date] descriptionWithCalendarFormat:nil timeZone:nil locale:nil],
+                 [_formatter stringFromDate:[NSDate date]],
                  [HBUtilities handBrakeVersion]]];
 }
 

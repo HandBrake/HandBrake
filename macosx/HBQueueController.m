@@ -28,7 +28,7 @@
 // DockTile update frequency in total percent increment
 #define dockTileUpdateFrequency     0.1f
 
-@interface HBQueueController () <NSOutlineViewDataSource, HBQueueOutlineViewDelegate>
+@interface HBQueueController () <NSOutlineViewDataSource, HBQueueOutlineViewDelegate, NSUserNotificationCenterDelegate>
 
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly
@@ -82,14 +82,12 @@
 
         // Progress
         _progressInfo = @"";
-        if (NSAppKitVersionNumber < NSAppKitVersionNumber10_10)
-        {
-            _visible = YES;
-        }
 
         // Load the queue from disk.
         _jobs = [[HBDistributedArray alloc] initWithURL:queueURL class:[HBJob class]];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadQueue) name:HBDistributedArrayChanged object:_jobs];
+
+        [NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
     }
 
     return self;
@@ -882,37 +880,27 @@
 
 #pragma mark - Encode Done Actions
 
-#define SERVICE_NAME @"Encode Done"
-
-/**
- *  Register a test notification and make
- *  it enabled by default
- */
-- (NSDictionary *)registrationDictionaryForGrowl
+- (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
 {
-    return @{GROWL_NOTIFICATIONS_ALL: @[SERVICE_NAME],
-             GROWL_NOTIFICATIONS_DEFAULT: @[SERVICE_NAME]};
+    // Show the file in Finder when a done notification was clicked.
+    NSString *path = notification.userInfo[@"Path"];
+    if ([path isKindOfClass:[NSString class]] && path.length)
+    {
+        NSURL *fileURL = [NSURL fileURLWithPath:path];
+        [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[fileURL]];
+    }
 }
 
 - (void)showNotificationWithTitle:(NSString *)title description:(NSString *)description url:(NSURL *)fileURL
 {
-    [GrowlApplicationBridge notifyWithTitle:title
-                                description:description
-                           notificationName:SERVICE_NAME
-                                   iconData:nil
-                                   priority:0
-                                   isSticky:YES
-                               clickContext:fileURL.path];
-}
-
-- (void)growlNotificationWasClicked:(id)clickContext
-{
-    // Show the file in Finder when a done notification was clicked.
-    if ([clickContext isKindOfClass:[NSString class]] && [clickContext length])
-    {
-        NSURL *fileURL = [NSURL fileURLWithPath:clickContext];
-        [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[fileURL]];
-    }
+    NSUserNotification *notification = [[NSUserNotification alloc] init];
+    notification.title = title;
+    notification.informativeText = description;
+    notification.soundName = NSUserNotificationDefaultSoundName;
+    notification.hasActionButton = YES;
+    notification.actionButtonTitle = NSLocalizedString(@"Show", @"Notification -> Show in Finder");
+    notification.userInfo = @{ @"Path": fileURL.path };
+    [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
 
 /**
@@ -1098,10 +1086,18 @@
                 [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", nil)];
                 [alert setAlertStyle:NSCriticalAlertStyle];
 
-                [alert beginSheetModalForWindow:targetWindow
-                                  modalDelegate:self
-                                 didEndSelector:@selector(didDimissCancelCurrentJob:returnCode:contextInfo:)
-                                    contextInfo:NULL];
+                [alert beginSheetModalForWindow:targetWindow completionHandler:^(NSModalResponse returnCode) {
+                    if (returnCode == NSAlertSecondButtonReturn)
+                    {
+                        [self.jobs beginTransaction];
+
+                        NSInteger index = [self.jobs indexOfObject:self.currentJob];
+                        [self cancelCurrentJobAndContinue];
+
+                        [self removeQueueItemAtIndex:index];
+                        [self.jobs commit];
+                    }
+                }];
             }
         }
 
@@ -1109,22 +1105,6 @@
         [self removeQueueItemsAtIndexes:targetedRows];
     }
     [self.jobs commit];
-}
-
-- (void)didDimissCancelCurrentJob:(NSAlert *)alert
-                       returnCode:(NSInteger)returnCode
-                      contextInfo:(void *)contextInfo
-{
-    if (returnCode == NSAlertSecondButtonReturn)
-    {
-        [self.jobs beginTransaction];
-
-        NSInteger index = [self.jobs indexOfObject:self.currentJob];
-        [self cancelCurrentJobAndContinue];
-
-        [self removeQueueItemAtIndex:index];
-        [self.jobs commit];
-    }
 }
 
 /**
@@ -1230,28 +1210,20 @@
     [alert addButtonWithTitle:NSLocalizedString(@"Finish Current and Stop", nil)];
     [alert setAlertStyle:NSCriticalAlertStyle];
 
-    [alert beginSheetModalForWindow:window
-                      modalDelegate:self
-                     didEndSelector:@selector(didDimissCancel:returnCode:contextInfo:)
-                        contextInfo:nil];
-}
-
-- (void)didDimissCancel:(NSAlert *)alert
-             returnCode:(NSInteger)returnCode
-            contextInfo:(void *)contextInfo
-{
-    if (returnCode == NSAlertSecondButtonReturn)
-    {
-        [self cancelCurrentJobAndStop];
-    }
-    else if (returnCode == NSAlertThirdButtonReturn)
-    {
-        [self cancelCurrentJobAndContinue];
-    }
-    else if (returnCode == NSAlertThirdButtonReturn + 1)
-    {
-        [self finishCurrentAndStop];
-    }
+    [alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSAlertSecondButtonReturn)
+        {
+            [self cancelCurrentJobAndStop];
+        }
+        else if (returnCode == NSAlertThirdButtonReturn)
+        {
+            [self cancelCurrentJobAndContinue];
+        }
+        else if (returnCode == NSAlertThirdButtonReturn + 1)
+        {
+            [self finishCurrentAndStop];
+        }
+    }];
 }
 
 /**
@@ -1389,10 +1361,12 @@
             [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Edit", nil)];
             [alert setAlertStyle:NSCriticalAlertStyle];
 
-            [alert beginSheetModalForWindow:docWindow
-                              modalDelegate:self
-                             didEndSelector:@selector(didDimissEditCurrentJob:returnCode:contextInfo:)
-                                contextInfo:(__bridge void *)(job)];
+            [alert beginSheetModalForWindow:docWindow completionHandler:^(NSModalResponse returnCode) {
+                if (returnCode == NSAlertSecondButtonReturn)
+                {
+                    [self editQueueItem:job];
+                }
+            }];
         }
         else if (job.state != HBJobStateWorking)
         {
@@ -1401,17 +1375,6 @@
     }
 
     [self.jobs commit];
-}
-
-- (void)didDimissEditCurrentJob:(NSAlert *)alert
-                       returnCode:(NSInteger)returnCode
-                      contextInfo:(void *)contextInfo
-{
-    if (returnCode == NSAlertSecondButtonReturn)
-    {
-        HBJob *job = (__bridge HBJob *)contextInfo;
-        [self editQueueItem:job];
-    }
 }
 
 - (IBAction)clearAll:(id)sender

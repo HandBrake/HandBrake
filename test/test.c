@@ -43,6 +43,7 @@
 #include <IOKit/IOKitLib.h>
 #include <IOKit/storage/IOMedia.h>
 #include <IOKit/storage/IODVDMedia.h>
+#include <sys/mount.h>
 #endif
 
 #define LAPSHARP_DEFAULT_PRESET     "medium"
@@ -4888,46 +4889,23 @@ static void print_string_list(FILE *out, const char* const *list, const char *pr
  ****************************************************************************/
 static char* bsd_name_for_path(char *path)
 {
-    OSStatus err;
-    FSRef ref;
-    err = FSPathMakeRef( (const UInt8 *) input, &ref, NULL );
-    if( err != noErr )
+    const char *prefix = "/dev/";
+    struct statfs s;
+
+    if (statfs(path, &s) == -1)
     {
         return NULL;
     }
 
-    // Get the volume reference number.
-    FSCatalogInfo catalogInfo;
-    err = FSGetCatalogInfo( &ref, kFSCatInfoVolume, &catalogInfo, NULL, NULL,
-                            NULL);
-    if( err != noErr )
-    {
-        return NULL;
-    }
-    FSVolumeRefNum volRefNum = catalogInfo.volume;
+    size_t lenpre = strlen(prefix),
+           lenstr = strlen(s.f_mntfromname);
 
-    // Now let's get the device name
-    GetVolParmsInfoBuffer volumeParms;
-    err = FSGetVolumeParms( volRefNum, &volumeParms, sizeof( volumeParms ) );
-    if( err != noErr )
+    if (lenstr > lenpre && strncmp(prefix, s.f_mntfromname, lenpre) == 0)
     {
-        return NULL;
+        return strdup(s.f_mntfromname + lenpre);
     }
 
-    // A version 4 GetVolParmsInfoBuffer contains the BSD node name in the vMDeviceID field.
-    // It is actually a char * value. This is mentioned in the header CoreServices/CarbonCore/Files.h.
-    if( volumeParms.vMVersion < 4 )
-    {
-        return NULL;
-    }
-
-    // vMDeviceID might be zero as is reported with experimental ZFS (zfs-119) support in Leopard.
-    if( !volumeParms.vMDeviceID )
-    {
-        return NULL;
-    }
-
-    return strdup( volumeParms.vMDeviceID );
+    return strdup(s.f_mntfromname);
 }
 
 /****************************************************************************

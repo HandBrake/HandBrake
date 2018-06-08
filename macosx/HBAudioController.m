@@ -7,8 +7,7 @@
 #import "HBAudioController.h"
 #import "HBAudioDefaultsController.h"
 
-@import HandBrakeKit.HBAudio;
-@import HandBrakeKit.HBAudioDefaults;
+@import HandBrakeKit;
 
 @interface HBAudioController ()
 
@@ -46,22 +45,13 @@
     HBAudioDefaults *defaults = [self.audio.defaults copy];
     self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
 
-	[NSApp beginSheet:self.defaultsController.window
-       modalForWindow:self.view.window
-        modalDelegate:self
-       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
-          contextInfo:(void *)CFBridgingRetain(defaults)];
-}
-
-- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
-    HBAudioDefaults *defaults = (HBAudioDefaults *)CFBridgingRelease(contextInfo);
-
-    if (returnCode == NSModalResponseOK)
-    {
-        self.audio.defaults = defaults;
-    }
-    self.defaultsController = nil;
+    [self.view.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSModalResponseOK)
+        {
+            self.audio.defaults = defaults;
+        }
+        self.defaultsController = nil;
+    }];
 }
 
 - (IBAction)reloadDefaults:(id)sender

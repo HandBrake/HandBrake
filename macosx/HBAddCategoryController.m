@@ -52,8 +52,7 @@
 
 - (IBAction)dismiss:(id)sender
 {
-    [self.window orderOut:nil];
-    [NSApp endSheet:self.window returnCode:NSModalResponseCancel];
+    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
 - (IBAction)create:(id)sender
@@ -61,8 +60,7 @@
     self.category = [[HBPreset alloc] initWithCategoryName:self.name.stringValue builtIn:NO];
     [self.manager addPreset:self.category];
 
-    [self.window orderOut:nil];
-    [NSApp endSheet:self.window returnCode:NSModalResponseOK];
+    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
 }
 
 

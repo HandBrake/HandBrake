@@ -274,7 +274,7 @@ typedef void (^HBCoreCleanupHandler)(void);
 
     [self preventAutoSleep];
 
-    hb_scan(_hb_handle, url.path.fileSystemRepresentation,
+    hb_scan(_hb_handle, url.fileSystemRepresentation,
             (int)index, (int)previewsNum,
             1, min_title_duration_ticks);
 
@@ -422,7 +422,7 @@ typedef void (^HBCoreCleanupHandler)(void);
 
     // Add the job to libhb
     hb_job_t *hb_job = job.hb_job;
-    hb_job_set_file(hb_job, job.completeOutputURL.path.fileSystemRepresentation);
+    hb_job_set_file(hb_job, job.completeOutputURL.fileSystemRepresentation);
     hb_add(_hb_handle, hb_job);
 
     // Free the job
@@ -526,7 +526,6 @@ typedef void (^HBCoreCleanupHandler)(void);
     if (self.updateTimer)
     {
         dispatch_source_cancel(self.updateTimer);
-        dispatch_release(self.updateTimer);
         self.updateTimer = NULL;
     }
 }

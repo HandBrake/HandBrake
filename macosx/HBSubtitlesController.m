@@ -7,8 +7,7 @@
 #import "HBSubtitlesController.h"
 #import "HBSubtitlesDefaultsController.h"
 
-@import HandBrakeKit.HBSubtitles;
-@import HandBrakeKit.HBSubtitlesDefaults;
+@import HandBrakeKit;
 
 @interface HBSubtitlesController ()
 
@@ -62,22 +61,13 @@
     HBSubtitlesDefaults *defaults = [self.subtitles.defaults copy];
     self.defaultsController = [[HBSubtitlesDefaultsController alloc] initWithSettings:defaults];
 
-    [NSApp beginSheet:self.defaultsController.window
-       modalForWindow:self.view.window
-        modalDelegate:self
-       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
-          contextInfo:(void *)CFBridgingRetain(defaults)];
-}
-
-- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
-    HBSubtitlesDefaults *defaults = (HBSubtitlesDefaults *)CFBridgingRelease(contextInfo);
-
-    if (returnCode == NSModalResponseOK)
-    {
-        self.subtitles.defaults = defaults;
-    }
-    self.defaultsController = nil;
+    [self.view.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSModalResponseOK)
+        {
+            self.subtitles.defaults = defaults;
+        }
+        self.defaultsController = nil;
+    }];
 }
 
 #pragma mark - Srt import

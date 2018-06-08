@@ -7,7 +7,7 @@
 #import "HBApplication.h"
 #import "HBExceptionAlertController.h"
 
-@import HandBrakeKit.HBUtilities;
+@import HandBrakeKit;
 
 @implementation HBApplication
 

@@ -6,7 +6,7 @@
 
 #import "HBFiltersViewController.h"
 
-@import HandBrakeKit.HBFilters;
+@import HandBrakeKit;
 
 @interface HBFiltersViewController ()
 

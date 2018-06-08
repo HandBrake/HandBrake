@@ -62,9 +62,6 @@
         _queueController = [[HBQueueController alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:QUEUE_FILE]];
         _queueController.delegate = self;
         _mainController = [[HBController alloc] initWithQueue:_queueController presetsManager:_presetsManager];
-
-        // Set the Growl Delegate
-        [GrowlApplicationBridge setGrowlDelegate:_queueController];
     }
     return self;
 }

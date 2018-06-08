@@ -9,8 +9,6 @@
 
 @import HandBrakeKit;
 
-#include "hb.h"
-
 static void *HBVideoControllerContext = &HBVideoControllerContext;
 
 @interface HBVideoController () {
@@ -130,21 +128,15 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         }
         else if ([keyPath isEqualToString:@"video.quality"])
         {
-            if ([fVidQualitySlider respondsToSelector:@selector(setAccessibilityValueDescription:)])
-            {
-                fVidQualitySlider.accessibilityValueDescription = [NSString stringWithFormat:@"%@ %.2f", self.video.constantQualityLabel, self.video.quality];;
-            }
+            fVidQualitySlider.accessibilityValueDescription = [NSString stringWithFormat:@"%@ %.2f", self.video.constantQualityLabel, self.video.quality];;
         }
         else if ([keyPath isEqualToString:@"video.preset"])
         {
-            if ([fPresetsSlider respondsToSelector:@selector(setAccessibilityValueDescription:)])
-            {
-                fPresetsSlider.accessibilityValueDescription = self.video.preset;
-            }
+            fPresetsSlider.accessibilityValueDescription = self.video.preset;
         }
         else if ([keyPath isEqualToString:@"video.unparseOptions"])
         {
-            if (self.video.encoder & HB_VCODEC_X264_MASK)
+            if ([self.video isUnparsedSupported:self.video.encoder])
             {
                 fDisplayX264PresetsUnparseTextField.stringValue = [NSString stringWithFormat:@"x264 Unparse: %@", self.video.unparseOptions];
             }
@@ -195,8 +187,8 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 {
     int direction;
     float minValue, maxValue, granularity;
-    hb_video_quality_get_limits(self.video.encoder,
-                                &minValue, &maxValue, &granularity, &direction);
+    [self.video qualityLimitsForEncoder:self.video.encoder low:&minValue high:&maxValue granularity:&granularity direction:&direction];
+
     if (granularity < 1.0f)
     {
          // Encoders that allow fractional CQ values often have a low granularity
@@ -225,19 +217,19 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 {
     self.advancedController.hidden = YES;
 
-    if (hb_video_encoder_get_presets(self.video.encoder) != NULL)
+    if ([self.video isPresetSystemSupported:self.video.encoder])
     {
         [self toggleAdvancedOptionsCheckBoxForEncoder:self.video.encoder];
 
         fPresetsBox.contentView = fPresetView;
         [self setupPresetsSlider];
 
-        if (self.video.encoder & HB_VCODEC_X264_MASK)
+        if ([self.video isOldAdvancedPanelSupported:self.video.encoder])
         {
             self.advancedController.hidden = NO;
         }
     }
-    else if (self.video.encoder & HB_VCODEC_FFMPEG_MASK)
+    else if ([self.video isSimpleOptionsPanelSupported:self.video.encoder])
     {
         fPresetsBox.contentView = fSimplePresetView;
     }
@@ -268,7 +260,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
  */
 - (void)toggleAdvancedOptionsCheckBoxForEncoder:(int)encoder
 {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"] && (encoder & HB_VCODEC_X264_MASK))
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"] && [self.video isOldAdvancedPanelSupported:self.video.encoder])
     {
         fX264UseAdvancedOptionsCheck.hidden = NO;
         fDividerLine.hidden = YES;

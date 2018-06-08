@@ -413,3 +413,31 @@
 }
 
 @end
+
+@implementation HBVideo (EncoderAdditions)
+
+- (BOOL)isUnparsedSupported:(int)encoder
+{
+    return encoder & HB_VCODEC_X264_MASK;
+}
+- (BOOL)isPresetSystemSupported:(int)encoder
+{
+    return hb_video_encoder_get_presets(encoder) != NULL;
+}
+
+- (BOOL)isSimpleOptionsPanelSupported:(int)encoder
+{
+    return encoder & HB_VCODEC_FFMPEG_MASK;
+}
+
+- (BOOL)isOldAdvancedPanelSupported:(int)encoder
+{
+    return encoder & HB_VCODEC_X264_MASK;
+}
+
+- (void)qualityLimitsForEncoder:(int)encoder low:(float *)low high:(float *)high granularity:(float *)granularity direction:(int *)direction
+{
+    hb_video_quality_get_limits(encoder, low, high, granularity, direction);
+}
+
+@end

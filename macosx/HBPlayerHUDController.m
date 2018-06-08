@@ -36,12 +36,6 @@
 {
     [super loadView];
 
-    if (NSClassFromString(@"NSVisualEffectView") == NO)
-    {
-        self.currentTimeLabel.textColor = [NSColor whiteColor];
-        self.remaingTimeLabel.textColor = [NSColor whiteColor];
-    }
-
     if ([[NSFont class] respondsToSelector:@selector(monospacedDigitSystemFontOfSize:weight:)]) {
         _monospacedAttr = @{NSFontAttributeName: [NSFont monospacedDigitSystemFontOfSize:[NSFont smallSystemFontSize] weight:NSFontWeightRegular]};
     }

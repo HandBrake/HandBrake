@@ -41,7 +41,6 @@
 - (IBAction)showRenamePresetPanel:(id)sender;
 - (IBAction)selectDefaultPreset:(id)sender;
 
-- (IBAction)renamePreset:(id)sender;
 - (IBAction)deletePreset:(id)sender;
 - (IBAction)reloadPreset:(id)sender;
 

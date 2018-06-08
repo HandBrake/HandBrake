@@ -142,21 +142,16 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 {
     HBAddCategoryController *addCategoryController = [[HBAddCategoryController alloc] initWithPresetManager:self.manager];
 
-    [NSApp beginSheet:addCategoryController.window modalForWindow:self.window modalDelegate:self didEndSelector:@selector(categorySheetDidEnd:returnCode:contextInfo:) contextInfo:(void *)CFBridgingRetain(addCategoryController)];
-}
+    [self.window beginSheet:addCategoryController.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSModalResponseOK)
+        {
+            NSMenuItem *item = [self buildMenuItemWithCategory:addCategoryController.category];
+            [self.categories.menu insertItem:item atIndex:2];
+        }
 
-- (void)categorySheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
-    HBAddCategoryController *addCategoryController = (HBAddCategoryController *)CFBridgingRelease(contextInfo);
-
-    if (returnCode == NSModalResponseOK)
-    {
-        NSMenuItem *item = [self buildMenuItemWithCategory:addCategoryController.category];
-        [self.categories.menu insertItem:item atIndex:2];
-    }
-
-    [self.categories selectItemWithTag:2];
-    [self selectCategoryFromMenu:self.categories.selectedItem];
+        [self.categories selectItemWithTag:2];
+        [self selectCategoryFromMenu:self.categories.selectedItem];
+    }];
 }
 
 - (IBAction)selectCategoryFromMenu:(NSMenuItem *)sender
@@ -183,11 +178,13 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 
     self.defaultsController = [[HBAudioDefaultsController alloc] initWithSettings:defaults];
 
-    [NSApp beginSheet:self.defaultsController.window
-       modalForWindow:self.window
-        modalDelegate:self
-       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
-          contextInfo:(void *)CFBridgingRetain(defaults)];
+    [self.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSModalResponseOK)
+        {
+            [defaults writeToPreset:self.mutablePreset];
+        }
+        self.defaultsController = nil;
+    }];
 }
 
 - (IBAction)showSubtitlesSettingsSheet:(id)sender
@@ -197,22 +194,13 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 
     self.defaultsController = [[HBSubtitlesDefaultsController alloc] initWithSettings:defaults];
 
-    [NSApp beginSheet:self.defaultsController.window
-       modalForWindow:self.window
-        modalDelegate:self
-       didEndSelector:@selector(sheetDidEnd:returnCode:contextInfo:)
-          contextInfo:(void *)CFBridgingRetain(defaults)];
-}
-
-- (void)sheetDidEnd:(NSWindow *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
-{
-    id defaults = (id)CFBridgingRelease(contextInfo);
-
-    if (returnCode == NSModalResponseOK)
-    {
-        [defaults writeToPreset:self.mutablePreset];
-    }
-    self.defaultsController = nil;
+    [self.window beginSheet:self.defaultsController.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSModalResponseOK)
+        {
+            [defaults writeToPreset:self.mutablePreset];
+        }
+        self.defaultsController = nil;
+    }];
 }
 
 - (IBAction)add:(id)sender
@@ -254,15 +242,13 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
         self.preset = [newPreset copy];
         [self.selectedCategory insertObject:self.preset inChildrenAtIndex:self.selectedCategory.countOfChildren];
 
-        [self.window orderOut:nil];
-        [NSApp endSheet:self.window returnCode:NSModalResponseContinue];
+        [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
     }
 }
 
 - (IBAction)cancel:(id)sender
 {
-    [self.window orderOut:nil];
-    [NSApp endSheet:self.window returnCode:NSModalResponseAbort];
+    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
 - (IBAction)openUserGuide:(id)sender

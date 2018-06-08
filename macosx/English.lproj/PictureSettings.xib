@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13168.3" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13168.3"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -287,7 +287,7 @@
                                 <button id="45">
                                     <rect key="frame" x="73" y="57" width="125" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Keep Aspect Ratio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="170" customClass="HBHUDButtonCell">
+                                    <buttonCell key="cell" type="check" title="Keep Aspect Ratio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="170">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="smallSystem"/>
                                     </buttonCell>
@@ -344,13 +344,13 @@
                                         <font key="font" metaFont="smallSystem"/>
                                     </stepperCell>
                                     <connections>
-                                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxTopCrop" id="Kft-ci-UbK"/>
                                         <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="Vp0-sU-c5s">
                                             <dictionary key="options">
                                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                                             </dictionary>
                                         </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropTop" previousBinding="Kft-ci-UbK" id="Zqw-Pu-qi1"/>
+                                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxTopCrop" id="Kft-ci-UbK"/>
                                     </connections>
                                 </stepper>
                                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="15">
@@ -360,13 +360,13 @@
                                         <font key="font" metaFont="smallSystem"/>
                                     </stepperCell>
                                     <connections>
-                                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxRightCrop" id="Fyc-RI-h9A"/>
                                         <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="5QD-Dh-bzl">
                                             <dictionary key="options">
                                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                                             </dictionary>
                                         </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropRight" previousBinding="Fyc-RI-h9A" id="L3c-i2-kQY"/>
+                                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxRightCrop" id="Fyc-RI-h9A"/>
                                     </connections>
                                 </stepper>
                                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="16">
@@ -375,17 +375,17 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     <size key="cellSize" width="90" height="20"/>
                                     <size key="intercellSpacing" width="2" height="3"/>
-                                    <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="small" inset="2" id="178" customClass="HBHUDButtonCell">
+                                    <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="small" inset="2" id="178">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="smallSystem"/>
                                     </buttonCell>
                                     <cells>
                                         <column>
-                                            <buttonCell type="radio" title="Automatic" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="17" customClass="HBHUDButtonCell">
+                                            <buttonCell type="radio" title="Automatic" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="17">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
-                                            <buttonCell type="radio" title="Custom:" imagePosition="left" alignment="left" controlSize="small" inset="2" id="18" customClass="HBHUDButtonCell">
+                                            <buttonCell type="radio" title="Custom:" imagePosition="left" alignment="left" controlSize="small" inset="2" id="18">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="smallSystem"/>
                                             </buttonCell>
@@ -450,13 +450,13 @@
                                         <font key="font" metaFont="smallSystem"/>
                                     </stepperCell>
                                     <connections>
-                                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxLeftCrop" id="CcF-LX-2Wg"/>
                                         <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="WmV-2A-EDo">
                                             <dictionary key="options">
                                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                                             </dictionary>
                                         </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropLeft" previousBinding="CcF-LX-2Wg" id="VtG-0s-YHK"/>
+                                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxLeftCrop" id="CcF-LX-2Wg"/>
                                     </connections>
                                 </stepper>
                                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="11">
@@ -488,13 +488,13 @@
                                         <font key="font" metaFont="smallSystem"/>
                                     </stepperCell>
                                     <connections>
-                                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxBottomCrop" id="YKW-no-4sN"/>
                                         <binding destination="-2" name="enabled" keyPath="self.picture.autocrop" id="soK-UE-pde">
                                             <dictionary key="options">
                                                 <string key="NSValueTransformerName">NSNegateBoolean</string>
                                             </dictionary>
                                         </binding>
                                         <binding destination="-2" name="value" keyPath="self.picture.cropBottom" previousBinding="YKW-no-4sN" id="4AO-dA-bmi"/>
+                                        <binding destination="-2" name="maxValue" keyPath="self.picture.maxBottomCrop" id="YKW-no-4sN"/>
                                     </connections>
                                 </stepper>
                                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="382">

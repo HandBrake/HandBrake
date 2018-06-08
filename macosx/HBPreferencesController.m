@@ -191,7 +191,7 @@
     [panel setDirectoryURL:[NSURL fileURLWithPath:sendToAppDirectory]];
 
     [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
-        if (result == NSOKButton)
+        if (result == NSModalResponseOK)
         {
             NSURL *sendToAppURL = [panel URL];
             NSURL *sendToAppDirectoryURL = [sendToAppURL URLByDeletingLastPathComponent];
@@ -199,9 +199,9 @@
 
             // We set the name of the app to send to in the display field
             NSString *sendToAppName = [[sendToAppURL lastPathComponent] stringByDeletingPathExtension];
-            [fSendEncodeToAppField setStringValue:sendToAppName];
+            [self->fSendEncodeToAppField setStringValue:sendToAppName];
 
-            [[NSUserDefaults standardUserDefaults] setObject:[fSendEncodeToAppField stringValue] forKey:@"HBSendToApp"];
+            [[NSUserDefaults standardUserDefaults] setObject:self->fSendEncodeToAppField.stringValue forKey:@"HBSendToApp"];
         }
     }];
 }

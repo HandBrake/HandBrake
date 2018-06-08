@@ -6,7 +6,7 @@
 
 #import "HBTitleSelectionController.h"
 
-@import HandBrakeKit.HBTitle;
+@import HandBrakeKit;
 
 @interface HBTitleSelection : NSObject
 @property (nonatomic, readonly) HBTitle *title;

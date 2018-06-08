@@ -70,5 +70,7 @@ GPLv2 license.</string>
 	<string>dsa_pub.pem</string>
 	<key>SUAllowsAutomaticUpdates</key>
 	<false/>
+	<key>NSUserNotificationAlertStyle</key>
+	<string>alert</string>
 </dict>
 </plist>

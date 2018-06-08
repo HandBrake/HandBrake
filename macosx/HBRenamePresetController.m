@@ -41,10 +41,7 @@
 {
     [super windowDidLoad];
 
-    if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_9)
-    {
-        self.name.placeholderString = self.preset.name;
-    }
+    self.name.placeholderString = self.preset.name;
     self.name.stringValue = self.preset.name;
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -63,8 +60,7 @@
 
 - (IBAction)dismiss:(id)sender
 {
-    [self.window orderOut:nil];
-    [NSApp endSheet:self.window returnCode:NSModalResponseCancel];
+    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
 }
 
 - (IBAction)rename:(id)sender
@@ -79,9 +75,7 @@
     else
     {
         [self.preset setName:self.name.stringValue];
-
-        [self.window orderOut:nil];
-        [NSApp endSheet:self.window returnCode:NSModalResponseContinue];
+        [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
     }
 }
 
