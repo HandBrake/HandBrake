@@ -267,9 +267,13 @@ static int hb_video_encoder_is_enabled(int encoder)
         case HB_VCODEC_FFMPEG_MPEG2:
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
+            return 1;
+
+#ifdef USE_VCE
         case HB_VCODEC_FFMPEG_VCE_H264:
         case HB_VCODEC_FFMPEG_VCE_H265:
             return 1;
+#endif
 
 #ifdef USE_X265
         case HB_VCODEC_X265_8BIT:

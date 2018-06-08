@@ -30,6 +30,10 @@ ifeq ($(BUILD.system),linux)
 endif
 endif
 
+ifeq (1,$(FEATURE.vce))
+    TEST.GCC.D += USE_VCE
+endif
+
 ifeq (1,$(FEATURE.x265))
     TEST.GCC.D += USE_X265
 endif
