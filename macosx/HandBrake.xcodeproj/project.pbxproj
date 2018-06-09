@@ -38,7 +38,7 @@
 		273F20B314ADBE670021BE6D /* HBOutputPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209C14ADBE670021BE6D /* HBOutputPanelController.m */; };
 		273F20B414ADBE670021BE6D /* HBOutputRedirect.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209E14ADBE670021BE6D /* HBOutputRedirect.m */; };
 		273F20B514ADBE670021BE6D /* HBPreferencesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A014ADBE670021BE6D /* HBPreferencesController.m */; };
-		273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A414ADBE670021BE6D /* HBPreviewController.m */; settings = {COMPILER_FLAGS = "-Wno-deprecated-declarations"; }; };
+		273F20B714ADBE670021BE6D /* HBPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20A414ADBE670021BE6D /* HBPreviewController.m */; };
 		273F20BA14ADBE670021BE6D /* HBPictureController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F20AA14ADBE670021BE6D /* HBPictureController.m */; };
 		273F20CC14ADC8A10021BE6D /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 273F20C014ADC1250021BE6D /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		273F218B14ADDDA10021BE6D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 273F217C14ADDDA10021BE6D /* InfoPlist.strings */; };

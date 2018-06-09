@@ -257,7 +257,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     if ([self.treeController canRemove])
     {
         // Alert user before deleting preset
-        NSAlert *alert = [NSAlert init];
+        NSAlert *alert = [[NSAlert alloc] init];
         alert.messageText = NSLocalizedString(@"Are you sure you want to permanently delete the selected preset?", @"Delete preset alert -> message");
         alert.informativeText = NSLocalizedString(@"You can't undo this action.", @"Delete preset alert -> informative text");
         [alert addButtonWithTitle:NSLocalizedString(@"Delete Preset", @"Delete preset alert -> first button")];

@@ -525,14 +525,15 @@
 
 - (void)showAlert:(NSURL *)fileURL;
 {
-    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"HandBrake can't open the preview.", @"Preview -> live preview alert message")
-                                     defaultButton:NSLocalizedString(@"Open in external player", @"Preview -> live preview alert default button")
-                                   alternateButton:NSLocalizedString(@"Cancel", @"Preview -> live preview alert alternate button")
-                                       otherButton:nil
-                         informativeTextWithFormat:NSLocalizedString(@"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?", @"Preview -> live preview alert informative text")];
+    NSAlert *alert = [[NSAlert alloc] init];
+    alert.messageText = NSLocalizedString(@"HandBrake can't open the preview.", @"Preview -> live preview alert message");
+    alert.informativeText = NSLocalizedString(@"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?", @"Preview -> live preview alert informative text");
+    [alert addButtonWithTitle:NSLocalizedString(@"Open in external player", @"Preview -> live preview alert default button")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Preview -> live preview alert alternate button")];
 
-    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
-        if (returnCode == NSModalResponseOK)
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode)
+    {
+        if (returnCode == NSAlertFirstButtonReturn)
         {
             [[NSWorkspace sharedWorkspace] openURL:fileURL];
         }
