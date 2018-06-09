@@ -134,6 +134,9 @@
 
 @property (nonatomic, readwrite) NSColor *labelColor;
 
+// Alerts
+@property (nonatomic) BOOL suppressCopyProtectionWarning;
+
 @end
 
 #define WINDOW_HEIGHT_OFFSET_INIT 48
@@ -551,7 +554,7 @@
 {
     NSAlert *alert = [[NSAlert alloc] init];
     [alert setMessageText:NSLocalizedString(@"Copy-Protected sources are not supported.", nil)];
-    [alert setInformativeText:NSLocalizedString(@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function.", nil)];
+    [alert setInformativeText:NSLocalizedString(@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run.", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Attempt Scan Anyway", nil)];
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
 
@@ -579,17 +582,14 @@
     NSURL *mediaURL = [HBUtilities mediaURLFromURL:fileURL];
 
     NSError *outError = NULL;
-    BOOL suppressWarning = [[NSUserDefaults standardUserDefaults] boolForKey:@"suppressCopyProtectionAlert"];
 
     // Check if we can scan the source and if there is any warning.
     BOOL canScan = [self.core canScan:mediaURL error:&outError];
 
     // Notify the user that we don't support removal of copy proteciton.
-    if (canScan && [outError code] == 101 && !suppressWarning)
+    if (canScan && [outError code] == 101 && !self.suppressCopyProtectionWarning)
     {
-        // Only show the user this warning once. They may be using a solution we don't know about. Notifying them each time is annoying.
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"suppressCopyProtectionAlert"];
-
+        self.suppressCopyProtectionWarning = YES;
         if ([self runCopyProtectionAlert] == NSAlertFirstButtonReturn)
         {
             // User chose to override our warning and scan the physical dvd anyway, at their own peril. on an encrypted dvd this produces massive log files and fails
