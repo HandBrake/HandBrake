@@ -2,7 +2,7 @@
 **Before Posting:**
 
 - [ ] For moderate to large issues, please create a new issue to discuss the change before raising a pull request. 
-This will allow us to confirm the change is suitable for HandBarke and make any suggestions that may be relevant.
+This will allow us to confirm the change is suitable for HandBrake and make any suggestions that may be relevant.
 
 **Description of Change:**
 
