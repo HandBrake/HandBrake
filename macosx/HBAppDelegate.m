@@ -50,7 +50,7 @@
         [HBCore registerErrorHandler:^(NSString *error) {
             fprintf(stderr, "error: %s\n", error.UTF8String);
         }];
-        [HBCore setDVDNav:[[[NSUserDefaults standardUserDefaults] objectForKey:@"UseDvdNav"] boolValue]];
+        [HBCore setDVDNav:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseDvdNav"]];
 
         _outputPanel = [[HBOutputPanelController alloc] init];
 

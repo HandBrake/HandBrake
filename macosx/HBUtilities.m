@@ -225,18 +225,18 @@
     {
         if ([formatKey isEqualToString:@"{Source}"])
         {
-            if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"HBAutoNamingRemoveUnderscore"] boolValue])
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBAutoNamingRemoveUnderscore"])
             {
                 sourceName = [sourceName stringByReplacingOccurrencesOfString:@"_" withString:@" "];
             }
-            if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"HBAutoNamingRemovePunctuation"] boolValue])
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBAutoNamingRemovePunctuation"])
             {
                 sourceName = [sourceName stringByReplacingOccurrencesOfString:@"-" withString:@""];
                 sourceName = [sourceName stringByReplacingOccurrencesOfString:@"." withString:@""];
                 sourceName = [sourceName stringByReplacingOccurrencesOfString:@"," withString:@""];
                 sourceName = [sourceName stringByReplacingOccurrencesOfString:@";" withString:@""];
             }
-            if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"HBAutoNamingTitleCase"] boolValue])
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBAutoNamingTitleCase"])
             {
                 sourceName = [sourceName capitalizedString];
             }
