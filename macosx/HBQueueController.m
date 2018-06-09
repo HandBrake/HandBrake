@@ -961,14 +961,14 @@
         NSString *description;
         if (result == HBCoreResultDone)
         {
-            title = NSLocalizedString(@"Put down that cocktail…", nil);
+            title = NSLocalizedString(@"Put down that cocktail…", @"Queue notification alert message");
             description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ is done!", @"Queue done notification message"),
                                      job.outputFileName];
 
         }
         else
         {
-            title = NSLocalizedString(@"Encode failed", nil);
+            title = NSLocalizedString(@"Encode failed", @"Queue done notification failed message");
             description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ couldn't be completed.", @"Queue done notification message"),
                            job.outputFileName];
         }

@@ -296,7 +296,7 @@
     {
         return [NSString stringWithFormat:NSLocalizedString(@"Preview Image, Size: %zu x %zu, Scale: %.0f%%", @"Preview -> accessibility label"), CGImageGetWidth(self.image), CGImageGetHeight(self.image), self.scale * 100];
     }
-    return NSLocalizedString(@"No image", nil);
+    return NSLocalizedString(@"No image", @"Preview -> accessibility label");
 }
 
 @end
