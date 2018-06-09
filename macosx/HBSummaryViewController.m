@@ -255,9 +255,9 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
 
 - (void)resetLabels
 {
-    self.tracksLabel.stringValue = NSLocalizedString(@"", nil);
-    self.filtersLabel.stringValue = NSLocalizedString(@"", nil);
-    self.dimensionLabel.stringValue = NSLocalizedString(@"", nil);
+    self.tracksLabel.stringValue = @"";
+    self.filtersLabel.stringValue = @"";
+    self.dimensionLabel.stringValue = @"";
     self.tracksReloadInQueue = NO;
     self.filtersReloadInQueue = NO;
     self.pictureReloadInQueue = NO;

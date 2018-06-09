@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
-        <capability name="box content view" minToolsVersion="7.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14269.12"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -50,7 +48,7 @@
                             <real key="minimum" value="0.0"/>
                         </numberFormatter>
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
@@ -272,7 +270,7 @@ Average Bitrate varies quality to ensure the data rate remains relatively consis
                     </connections>
                 </matrix>
                 <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xe2-d5-nEH">
-                    <rect key="frame" x="117" y="209" width="143" height="38"/>
+                    <rect key="frame" x="117" y="209" width="180" height="38"/>
                     <string key="toolTip">Variable Framerate allows each frame to have its own duration, matching the source.
 
 Peak Framerate is the same as Variable Framerate and limited to the maximum set by Framerate (FPS). Useful for ensuring frame rate compatibility, regardless of the source.
@@ -280,10 +278,9 @@ Peak Framerate is the same as Variable Framerate and limited to the maximum set 
 Constant Framerate forces all frames to be exactly the same duration, set by Framerate (FPS).</string>
                     <constraints>
                         <constraint firstAttribute="height" constant="38" id="9tE-25-ADr"/>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="143" id="OIn-JQ-Mi8"/>
                     </constraints>
                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    <size key="cellSize" width="143" height="18"/>
+                    <size key="cellSize" width="180" height="18"/>
                     <size key="intercellSpacing" width="4" height="2"/>
                     <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" inset="2" id="M9p-y9-GDo">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -371,6 +368,7 @@ x264 is lossless at RF 0.</string>
                 <constraint firstItem="bAn-iZ-ieF" firstAttribute="width" secondItem="rOd-nt-22T" secondAttribute="width" id="7bO-dm-xB0"/>
                 <constraint firstItem="Xe2-d5-nEH" firstAttribute="top" secondItem="9tc-EO-QMd" secondAttribute="bottom" constant="8" id="883-2F-hs6"/>
                 <constraint firstItem="lsD-0N-H8k" firstAttribute="leading" secondItem="gfa-Hb-cDP" secondAttribute="trailing" constant="8" id="9mN-Bk-FUt"/>
+                <constraint firstItem="gfa-Hb-cDP" firstAttribute="leading" secondItem="Xe2-d5-nEH" secondAttribute="trailing" constant="12" id="Af6-mG-j8Z"/>
                 <constraint firstItem="1au-ZO-l1i" firstAttribute="baseline" secondItem="gfa-Hb-cDP" secondAttribute="baseline" id="BfH-Qs-3mV"/>
                 <constraint firstItem="GPu-Ht-bKg" firstAttribute="leading" secondItem="gfa-Hb-cDP" secondAttribute="trailing" constant="36" id="D92-Pk-Eb2"/>
                 <constraint firstItem="A3o-Zx-OfM" firstAttribute="leading" secondItem="1au-ZO-l1i" secondAttribute="leading" id="F0a-Kc-s3X"/>
@@ -393,14 +391,16 @@ x264 is lossless at RF 0.</string>
                 <constraint firstItem="bnV-aE-FVh" firstAttribute="baseline" secondItem="olm-zg-k9Y" secondAttribute="baseline" id="gA6-nQ-o4p"/>
                 <constraint firstItem="rOd-nt-22T" firstAttribute="baseline" secondItem="xwK-Yu-a1e" secondAttribute="baseline" id="gSI-9O-c0a"/>
                 <constraint firstAttribute="bottom" secondItem="A4U-3F-pYq" secondAttribute="bottom" constant="20" symbolic="YES" id="hwA-f3-WWM"/>
+                <constraint firstItem="lsD-0N-H8k" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9tc-EO-QMd" secondAttribute="trailing" constant="8" symbolic="YES" id="k1s-PG-fmj"/>
                 <constraint firstItem="olm-zg-k9Y" firstAttribute="top" secondItem="A3o-Zx-OfM" secondAttribute="bottom" constant="6" id="mJ5-rh-5HC"/>
                 <constraint firstAttribute="trailing" secondItem="GPu-Ht-bKg" secondAttribute="trailing" constant="20" id="sL1-if-zZ9"/>
                 <constraint firstItem="Pai-3Q-Gs3" firstAttribute="baseline" secondItem="1au-ZO-l1i" secondAttribute="baseline" id="sVB-mt-wYZ"/>
                 <constraint firstItem="Xe2-d5-nEH" firstAttribute="leading" secondItem="9tc-EO-QMd" secondAttribute="leading" id="vI1-l7-kWA"/>
                 <constraint firstItem="A4U-3F-pYq" firstAttribute="leading" secondItem="wAC-5p-nXb" secondAttribute="leading" id="xFf-rj-qaL"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Pai-3Q-Gs3" secondAttribute="trailing" constant="20" symbolic="YES" id="yJK-FI-8b5"/>
                 <constraint firstItem="A3o-Zx-OfM" firstAttribute="leading" secondItem="olm-zg-k9Y" secondAttribute="leading" id="ydG-Lc-8Ru"/>
             </constraints>
-            <point key="canvasLocation" x="198" y="151"/>
+            <point key="canvasLocation" x="225" y="71"/>
         </view>
         <customView id="2dX-Hf-Hxl" userLabel="x264/x264 presets view">
             <rect key="frame" x="0.0" y="0.0" width="920" height="204"/>
@@ -544,7 +544,7 @@ Syntax: option-1=foo:opt2=bar,baz</string>
                     </constraints>
                     <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="IID-yp-or8">
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
@@ -657,6 +657,7 @@ This setting is no longer supported and may be removed in a future version. Use 
                 <constraint firstItem="mkM-81-g3d" firstAttribute="leading" secondItem="2dX-Hf-Hxl" secondAttribute="leading" constant="20" id="dRX-Dc-WbC"/>
                 <constraint firstItem="P7c-Zk-G99" firstAttribute="baseline" secondItem="BY1-IG-JvI" secondAttribute="baseline" id="di0-4c-Nqj"/>
                 <constraint firstItem="gzq-SL-YVY" firstAttribute="leading" secondItem="0sa-ep-yfr" secondAttribute="leading" id="ehu-8e-5ci"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="z7F-H2-Vfr" secondAttribute="trailing" constant="20" symbolic="YES" id="fHZ-Dm-Woa"/>
                 <constraint firstItem="Biw-5K-pPD" firstAttribute="width" secondItem="A7d-wM-Xmp" secondAttribute="width" id="fzL-Ib-VAe"/>
                 <constraint firstItem="CPP-lh-FbN" firstAttribute="leading" secondItem="dY9-5D-mXX" secondAttribute="trailing" constant="8" id="iXi-0D-sED"/>
                 <constraint firstItem="P7c-Zk-G99" firstAttribute="top" secondItem="CPP-lh-FbN" secondAttribute="bottom" constant="8" id="kDE-kd-szR"/>
@@ -666,9 +667,11 @@ This setting is no longer supported and may be removed in a future version. Use 
                 <constraint firstItem="mkM-81-g3d" firstAttribute="baseline" secondItem="Zs7-1Y-50A" secondAttribute="baseline" id="omV-G5-hMn"/>
                 <constraint firstItem="Biw-5K-pPD" firstAttribute="width" secondItem="P7c-Zk-G99" secondAttribute="width" id="pJk-eY-1r2"/>
                 <constraint firstItem="Zs7-1Y-50A" firstAttribute="leading" secondItem="mkM-81-g3d" secondAttribute="trailing" constant="8" id="qe2-wu-PNj"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Zs7-1Y-50A" secondAttribute="trailing" constant="20" symbolic="YES" id="riE-Nn-yRP"/>
                 <constraint firstItem="0sa-ep-yfr" firstAttribute="leading" secondItem="mkM-81-g3d" secondAttribute="leading" constant="40" id="sdR-pt-ls6"/>
                 <constraint firstItem="oJk-ur-wgc" firstAttribute="leading" secondItem="ijg-ux-uvb" secondAttribute="trailing" constant="8" id="wsw-IM-Ooe"/>
                 <constraint firstItem="0sa-ep-yfr" firstAttribute="width" secondItem="dY9-5D-mXX" secondAttribute="width" id="xvU-on-9bJ"/>
+                <constraint firstItem="ijg-ux-uvb" firstAttribute="leading" secondItem="P7c-Zk-G99" secondAttribute="trailing" constant="20" id="zKk-dV-w0d"/>
             </constraints>
             <point key="canvasLocation" x="51" y="477"/>
         </customView>
@@ -687,7 +690,7 @@ Syntax: option-1=foo:opt2=bar</string>
                     </constraints>
                     <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="z0u-VS-m0l">
                         <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>

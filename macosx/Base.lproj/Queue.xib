@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14111" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14111"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14269.12"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -22,15 +21,14 @@
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="157" y="863" width="574" height="423"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1418"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
             <value key="minSize" type="size" width="525" height="340"/>
             <view key="contentView" id="2577">
                 <rect key="frame" x="0.0" y="0.0" width="574" height="423"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <scrollView horizontalLineScroll="19" horizontalPageScroll="0.0" verticalLineScroll="19" verticalPageScroll="0.0" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="2596">
+                    <scrollView horizontalLineScroll="19" horizontalPageScroll="0.0" verticalLineScroll="19" verticalPageScroll="0.0" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2596">
                         <rect key="frame" x="20" y="20" width="534" height="338"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="B5m-TR-ErO">
                             <rect key="frame" x="1" y="1" width="532" height="336"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -93,18 +91,19 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="2511">
-                        <rect key="frame" x="17" y="399" width="540" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="6000" translatesAutoresizingMaskIntoConstraints="NO" id="2511">
+                        <rect key="frame" x="18" y="399" width="538" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Pending Jobs" id="2637">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="2646">
-                        <rect key="frame" x="17" y="366" width="540" height="29"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="6000" translatesAutoresizingMaskIntoConstraints="NO" id="2646">
+                        <rect key="frame" x="18" y="366" width="538" height="29"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="29" id="IvQ-56-oOt"/>
+                        </constraints>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="There are no jobs currently encoding" id="2647">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -112,6 +111,18 @@
                         </textFieldCell>
                     </textField>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="2511" firstAttribute="leading" secondItem="2577" secondAttribute="leading" constant="20" id="8Xc-AN-fPc"/>
+                    <constraint firstAttribute="trailing" secondItem="2511" secondAttribute="trailing" constant="20" id="Eu0-GV-JYK"/>
+                    <constraint firstItem="2596" firstAttribute="leading" secondItem="2577" secondAttribute="leading" constant="20" id="F6K-w4-dhC"/>
+                    <constraint firstAttribute="trailing" secondItem="2646" secondAttribute="trailing" constant="20" id="QhH-jG-52I"/>
+                    <constraint firstItem="2646" firstAttribute="top" secondItem="2511" secondAttribute="bottom" constant="4" id="agE-FW-5eL"/>
+                    <constraint firstAttribute="bottom" secondItem="2596" secondAttribute="bottom" constant="20" id="agY-QN-MrH"/>
+                    <constraint firstAttribute="trailing" secondItem="2596" secondAttribute="trailing" constant="20" id="cPs-nV-8Hz"/>
+                    <constraint firstItem="2596" firstAttribute="top" secondItem="2646" secondAttribute="bottom" constant="8" id="lUS-mr-e51"/>
+                    <constraint firstItem="2511" firstAttribute="top" secondItem="2577" secondAttribute="top" constant="10" id="q87-Mh-5mE"/>
+                    <constraint firstItem="2646" firstAttribute="leading" secondItem="2577" secondAttribute="leading" constant="20" id="r9l-aI-qMG"/>
+                </constraints>
             </view>
             <toolbar key="toolbar" implicitIdentifier="0FE76B40-49B7-48AE-B44E-D1B8034BC88A" explicitIdentifier="HBQueueToolbar" displayMode="iconAndLabel" sizeMode="regular" id="ZVb-ld-0UP">
                 <allowedToolbarItems>
@@ -163,7 +174,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="2579"/>
             </connections>
-            <point key="canvasLocation" x="91" y="295"/>
+            <point key="canvasLocation" x="114" y="263"/>
         </window>
         <menu id="2649" userLabel="ContextMenu">
             <items>

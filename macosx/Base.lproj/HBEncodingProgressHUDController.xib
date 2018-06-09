@@ -1,8 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11129.15" systemVersion="15G12a" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11129.15"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14269.12"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBEncodingProgressHUDController">
@@ -18,13 +19,11 @@
             <rect key="frame" x="0.0" y="0.0" width="460" height="100"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <progressIndicator verticalHuggingPriority="750" fixedFrame="YES" maxValue="1" bezeled="NO" controlSize="small" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="oJT-Rc-VeH">
-                    <rect key="frame" x="20" y="27" width="346" height="12"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <progressIndicator wantsLayer="YES" verticalHuggingPriority="750" maxValue="1" bezeled="NO" controlSize="small" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="oJT-Rc-VeH">
+                    <rect key="frame" x="17" y="27" width="365" height="12"/>
                 </progressIndicator>
-                <button toolTip="Cancel Live Preview Encode" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SEa-H6-T26">
-                    <rect key="frame" x="383" y="25" width="58" height="16"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <button toolTip="Cancel Live Preview Encode" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SEa-H6-T26">
+                    <rect key="frame" x="389" y="25" width="55" height="16"/>
                     <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="mini" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ha0-iE-RLa">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="miniSystem"/>
@@ -33,9 +32,8 @@
                         <action selector="cancelEncoding:" target="-2" id="XDk-r6-Ihc"/>
                     </connections>
                 </button>
-                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eKh-n7-BCx">
-                    <rect key="frame" x="17" y="60" width="425" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eKh-n7-BCx">
+                    <rect key="frame" x="15" y="60" width="430" height="14"/>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Preparing Preview" id="tM8-gj-kBo">
                         <font key="font" metaFont="smallSystemBold"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -43,6 +41,17 @@
                     </textFieldCell>
                 </textField>
             </subviews>
+            <constraints>
+                <constraint firstItem="oJT-Rc-VeH" firstAttribute="top" secondItem="eKh-n7-BCx" secondAttribute="bottom" constant="21" id="1tD-Xt-RgM"/>
+                <constraint firstItem="SEa-H6-T26" firstAttribute="leading" secondItem="oJT-Rc-VeH" secondAttribute="trailing" constant="8" id="DoU-pN-uGc"/>
+                <constraint firstItem="eKh-n7-BCx" firstAttribute="top" secondItem="Bz7-r6-NCQ" secondAttribute="top" constant="26" id="KxF-bd-h6J"/>
+                <constraint firstAttribute="bottom" secondItem="oJT-Rc-VeH" secondAttribute="bottom" constant="27" id="UPR-0y-JpX"/>
+                <constraint firstItem="oJT-Rc-VeH" firstAttribute="leading" secondItem="Bz7-r6-NCQ" secondAttribute="leading" constant="17" id="bYJ-7Y-SsV"/>
+                <constraint firstAttribute="trailing" secondItem="SEa-H6-T26" secondAttribute="trailing" constant="17" id="umg-H6-82U"/>
+                <constraint firstAttribute="trailing" secondItem="eKh-n7-BCx" secondAttribute="trailing" constant="17" id="yz5-nD-9lZ"/>
+                <constraint firstItem="SEa-H6-T26" firstAttribute="centerY" secondItem="oJT-Rc-VeH" secondAttribute="centerY" id="z66-s2-3yN"/>
+                <constraint firstItem="eKh-n7-BCx" firstAttribute="leading" secondItem="Bz7-r6-NCQ" secondAttribute="leading" constant="17" id="zKA-IC-ZFj"/>
+            </constraints>
             <point key="canvasLocation" x="262" y="401"/>
         </customView>
     </objects>

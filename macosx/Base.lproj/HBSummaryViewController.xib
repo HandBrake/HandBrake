@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14269.12"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -113,7 +112,7 @@
                     </connections>
                 </textField>
                 <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m5a-0z-QQ4">
-                    <rect key="frame" x="295" y="16" width="556" height="334"/>
+                    <rect key="frame" x="287" y="16" width="564" height="334"/>
                     <accessibility description="Preview"/>
                 </customView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="Jgq-K8-z3W" userLabel="Size">
@@ -140,10 +139,10 @@
                     </connections>
                 </textField>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="9OK-03-grs">
-                    <rect key="frame" x="69" y="281" width="114" height="48"/>
+                    <rect key="frame" x="69" y="281" width="210" height="48"/>
                     <subviews>
                         <button translatesAutoresizingMaskIntoConstraints="NO" id="lUi-Oc-208">
-                            <rect key="frame" x="-3" y="33" width="109" height="18"/>
+                            <rect key="frame" x="-3" y="33" width="205" height="18"/>
                             <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
                             <buttonCell key="cell" type="check" title="Web Optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="wcc-5d-Dgj">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -164,7 +163,7 @@
                             </connections>
                         </button>
                         <button translatesAutoresizingMaskIntoConstraints="NO" id="QKv-GR-d2g">
-                            <rect key="frame" x="-3" y="-3" width="109" height="18"/>
+                            <rect key="frame" x="-3" y="-3" width="205" height="18"/>
                             <string key="toolTip">Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility.</string>
                             <buttonCell key="cell" type="check" title="iPod 5G Support" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zz5-qY-GSA">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -185,7 +184,7 @@
                             </connections>
                         </button>
                         <button translatesAutoresizingMaskIntoConstraints="NO" id="fPv-Vw-I89">
-                            <rect key="frame" x="-3" y="15" width="109" height="18"/>
+                            <rect key="frame" x="-3" y="15" width="205" height="18"/>
                             <string key="toolTip">Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</string>
                             <buttonCell key="cell" type="check" title="Align A/V Start" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="De0-Je-MAm">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -235,7 +234,7 @@
                 <constraint firstItem="GCn-2c-Fql" firstAttribute="width" secondItem="bpr-UY-4al" secondAttribute="width" id="HE8-Du-yhU"/>
                 <constraint firstItem="txV-1R-WoD" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="trailing" constant="8" symbolic="YES" id="I9H-1U-iqt"/>
                 <constraint firstItem="BHq-Mt-3eA" firstAttribute="top" secondItem="yRE-5c-FhX" secondAttribute="bottom" constant="16" id="IVl-m1-yLo"/>
-                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" secondItem="yRE-5c-FhX" secondAttribute="trailing" constant="16" id="J92-rN-Hgk"/>
+                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" secondItem="yRE-5c-FhX" secondAttribute="trailing" constant="8" symbolic="YES" id="J92-rN-Hgk"/>
                 <constraint firstItem="9OK-03-grs" firstAttribute="top" secondItem="txV-1R-WoD" secondAttribute="bottom" constant="6" id="MgV-fX-yfE"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Jaw-pH-rhf" secondAttribute="trailing" constant="20" symbolic="YES" id="Ndp-Pa-1Wq"/>
                 <constraint firstItem="yRE-5c-FhX" firstAttribute="leading" secondItem="GCn-2c-Fql" secondAttribute="trailing" constant="8" id="Ok2-zj-HHS"/>
@@ -251,7 +250,7 @@
                 <constraint firstItem="Jgq-K8-z3W" firstAttribute="top" secondItem="Jaw-pH-rhf" secondAttribute="top" id="l2y-8G-v9J"/>
                 <constraint firstItem="0kh-Uy-Yo3" firstAttribute="top" secondItem="BHq-Mt-3eA" secondAttribute="top" id="nwz-Xj-cMt"/>
                 <constraint firstItem="Jgq-K8-z3W" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="ogm-2d-HB7"/>
-                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" secondItem="9OK-03-grs" secondAttribute="trailing" constant="112" id="onT-fu-ioj"/>
+                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" secondItem="9OK-03-grs" secondAttribute="trailing" constant="8" symbolic="YES" id="onT-fu-ioj"/>
                 <constraint firstItem="bpr-UY-4al" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="ptr-Mh-cla"/>
                 <constraint firstItem="Jaw-pH-rhf" firstAttribute="width" secondItem="yRE-5c-FhX" secondAttribute="width" id="tyw-5Q-kCp"/>
                 <constraint firstItem="GCn-2c-Fql" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="utH-I5-f9B"/>

@@ -19,7 +19,11 @@ static NSArray * filterParamsToNamesArray(hb_filter_param_t * (f)(int), int filt
 
     for (hb_filter_param_t *preset = f(filter_id); preset->name != NULL; preset++)
     {
-        [presets addObject:@(preset->name)];
+        NSString *name = @(preset->name);
+        if ([name isEqualToString:@"Off"]) {
+            name = NSLocalizedString(@"Off", @"HBFilters -> off display name");
+        }
+        [presets addObject:name];
     }
 
     return [presets copy];
@@ -37,7 +41,11 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
     for (hb_filter_param_t *preset = f(filter_id); preset->name != NULL; preset++)
     {
-        [presets setObject:NSLocalizedString(@(preset->short_name), nil) forKey:@(preset->name)];
+        NSString *name = @(preset->name);
+        if ([name isEqualToString:@"Off"]) {
+            name = NSLocalizedString(@"Off", @"HBFilters -> off display name");
+        }
+        [presets setObject:@(preset->short_name) forKey:name];
     }
 
     return [presets copy];
