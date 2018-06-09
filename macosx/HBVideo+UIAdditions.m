@@ -43,7 +43,7 @@
 {
     NSMutableArray *framerates = [NSMutableArray array];
 
-    [framerates addObject:NSLocalizedString(@"Same as source", @"")];
+    [framerates addObject:NSLocalizedString(@"Same as source", @"HBVideo -> frame rates display name")];
 
     for (const hb_rate_t *video_framerate = hb_video_framerate_get_next(NULL);
          video_framerate != NULL;
@@ -265,7 +265,7 @@
     }
     else
     {
-        return NSLocalizedString(@"Same as source", @"");
+        return NSLocalizedString(@"Same as source", @"HBVideo -> frame rates display name");
     }
 }
 
@@ -276,7 +276,7 @@
 
 - (id)reverseTransformedValue:(id)value
 {
-    if ([value isEqualTo:NSLocalizedString(@"Same as source", @"")])
+    if ([value isEqualTo:NSLocalizedString(@"Same as source", @"HBVideo -> frame rates display name")])
     {
         return @0;
     }

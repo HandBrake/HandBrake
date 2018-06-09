@@ -119,7 +119,7 @@
     NSArray<HBPlayerTrack *> *audioTracks = self.player.audioTracks;
     if (audioTracks.count)
     {
-        [self _addSectionTitle:NSLocalizedString(@"Audio", nil)];
+        [self _addSectionTitle:NSLocalizedString(@"Audio", @"Player HUD -> audio menu")];
         [self _addTracksItemFromArray:audioTracks selector:@selector(enableAudioTrack:)];
     }
 
@@ -130,7 +130,7 @@
         {
             [self.tracksSelection.menu addItem:[NSMenuItem separatorItem]];
         }
-        [self _addSectionTitle:NSLocalizedString(@"Subtitles", nil)];
+        [self _addSectionTitle:NSLocalizedString(@"Subtitles", @"Player HUD -> subtitles menu")];
         [self _addTracksItemFromArray:subtitlesTracks selector:@selector(enableSubtitlesTrack:)];
     }
 }

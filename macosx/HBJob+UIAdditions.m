@@ -70,11 +70,11 @@ static NSDictionary            *shortHeightAttr;
         NSString *title = nil;
         if (container->format & HB_MUX_MASK_MP4)
         {
-            title = NSLocalizedString(@"MP4 File", @"");
+            title = NSLocalizedString(@"MP4 File", @"HBJob -> Format display name");
         }
         else if (container->format & HB_MUX_MASK_MKV)
         {
-            title = NSLocalizedString(@"MKV File", @"");
+            title = NSLocalizedString(@"MKV File", @"HBJob -> Format display name");
         }
         else
         {
@@ -626,7 +626,7 @@ static NSDictionary            *shortHeightAttr;
     NSMutableString *info = [NSMutableString string];
 
     const char *encoderName = hb_video_encoder_get_name(self.video.encoder);
-    [info appendString:encoderName ? @(encoderName) : NSLocalizedString(@"Unknown", nil)];
+    [info appendString:encoderName ? @(encoderName) : NSLocalizedString(@"Unknown", @"HBJob -> video short description encoder name")];
 
     [info appendString:@", "];
 
@@ -635,11 +635,11 @@ static NSDictionary            *shortHeightAttr;
         if (self.video.frameRateMode == 0)
         {
             // we are using same as source with vfr
-            [info appendFormat:NSLocalizedString(@"VFR", nil)];
+            [info appendFormat:NSLocalizedString(@"VFR", @"HBJob -> video short description framerate")];
         }
         else
         {
-            [info appendFormat:NSLocalizedString(@"CRF", nil)];
+            [info appendFormat:NSLocalizedString(@"CRF", @"HBJob -> video short description framerate")];
         }
     }
     else
@@ -702,11 +702,11 @@ static NSDictionary            *shortHeightAttr;
         NSUInteger count = self.audio.tracks.count - 3;
         if (count == 1)
         {
-            [info appendString:NSLocalizedString(@"+ 1 additional audio track", nil)];
+            [info appendString:NSLocalizedString(@"+ 1 additional audio track", @"HBJob -> audio short description")];
         }
         else
         {
-            [info appendFormat:NSLocalizedString(@"+ %lu additional audio tracks", nil), (unsigned long)count];
+            [info appendFormat:NSLocalizedString(@"+ %lu additional audio tracks", @"HBJob -> audio short description"), (unsigned long)count];
         }
     }
 
@@ -733,7 +733,7 @@ static NSDictionary            *shortHeightAttr;
 
             if (track.burnedIn)
             {
-                [info appendString:NSLocalizedString(@", Burned", nil)];
+                [info appendString:NSLocalizedString(@", Burned", @"HBJob -> subtitles short description")];
             }
 
             [info appendString:@"\n"];
@@ -750,11 +750,11 @@ static NSDictionary            *shortHeightAttr;
         NSUInteger count = self.subtitles.tracks.count - 3;
         if (count == 1)
         {
-            [info appendString:NSLocalizedString(@"+ 1 additional subtitles track", nil)];
+            [info appendString:NSLocalizedString(@"+ 1 additional subtitles track", @"HBJob -> subtitles short description")];
         }
         else
         {
-            [info appendFormat:NSLocalizedString(@"+ %lu additional subtitles tracks", nil), (unsigned long)count];
+            [info appendFormat:NSLocalizedString(@"+ %lu additional subtitles tracks", @"HBJob -> subtitles short description"), (unsigned long)count];
         }
     }
 
@@ -789,7 +789,7 @@ static NSDictionary            *shortHeightAttr;
     if (self.chaptersEnabled && self.chapterTitles.count > 1)
     {
         [info appendString:@"\n"];
-        [info appendString:NSLocalizedString(@"Chapter Markers", nil)];
+        [info appendString:NSLocalizedString(@"Chapter Markers", @"HBJob -> chapters short description")];
     }
 
     return info;
@@ -803,14 +803,14 @@ static NSDictionary            *shortHeightAttr;
     // Detelecine
     if (![filters.detelecine isEqualToString:@"off"])
     {
-        [summary appendString:NSLocalizedString(@"Detelecine", nil)];
+        [summary appendString:NSLocalizedString(@"Detelecine", @"HBJob -> filters short description")];
         [summary appendString:@", "];
     }
 
     // Comb detect
     if (![filters.combDetection isEqualToString:@"off"])
     {
-        [summary appendString:NSLocalizedString(@"Comb Detect", nil)];
+        [summary appendString:NSLocalizedString(@"Comb Detect", @"HBJob -> filters short description")];
         [summary appendString:@", "];
     }
 
@@ -829,7 +829,7 @@ static NSDictionary            *shortHeightAttr;
     // Deblock
     if (filters.deblock > 0)
     {
-        [summary appendString:NSLocalizedString(@"Deblock", nil)];
+        [summary appendString:NSLocalizedString(@"Deblock", @"HBJob -> filters short description")];
         [summary appendString:@", "];
     }
 
@@ -858,14 +858,14 @@ static NSDictionary            *shortHeightAttr;
     // Grayscale
     if (filters.grayscale)
     {
-        [summary appendString:NSLocalizedString(@"Grayscale", nil)];
+        [summary appendString:NSLocalizedString(@"Grayscale", @"HBJob -> filters short description")];
         [summary appendString:@", "];
     }
 
     // Rotation
     if (filters.rotate || filters.flip)
     {
-        [summary appendString:NSLocalizedString(@"Rotation", nil)];
+        [summary appendString:NSLocalizedString(@"Rotation", @"HBJob -> filters short description")];
         [summary appendString:@", "];
     }
 
@@ -876,7 +876,7 @@ static NSDictionary            *shortHeightAttr;
 
     if (summary.length == 0)
     {
-        [summary appendString:NSLocalizedString(@"None", nil)];
+        [summary appendString:NSLocalizedString(@"None", @"HBJob -> filters short description")];
     }
 
     return summary;
@@ -896,11 +896,11 @@ static NSDictionary            *shortHeightAttr;
     int container = [value intValue];
     if (container & HB_MUX_MASK_MP4)
     {
-        return NSLocalizedString(@"MP4 File", @"");
+        return NSLocalizedString(@"MP4 File", @"HBJob -> Format display name");
     }
     else if (container & HB_MUX_MASK_MKV)
     {
-        return NSLocalizedString(@"MKV File", @"");
+        return NSLocalizedString(@"MKV File", @"HBJob -> Format display name");
     }
     else
     {
@@ -923,11 +923,11 @@ static NSDictionary            *shortHeightAttr;
 
 - (id)reverseTransformedValue:(id)value
 {
-    if ([value isEqualToString:NSLocalizedString(@"MP4 File", @"")])
+    if ([value isEqualToString:NSLocalizedString(@"MP4 File", @"HBJob -> Format display name")])
     {
         return @(HB_MUX_AV_MP4);
     }
-    else if ([value isEqualToString:NSLocalizedString(@"MKV File", @"")])
+    else if ([value isEqualToString:NSLocalizedString(@"MKV File", @"HBJob -> Format display name")])
     {
         return @(HB_MUX_AV_MKV);
     }

@@ -119,11 +119,11 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
             // fFramerateVfrPfrCell
             if (self.video.frameRate == 0) // We are Same as Source
             {
-                [fFramerateVfrPfrCell setTitle:NSLocalizedString(@"Variable Framerate", nil)];
+                [fFramerateVfrPfrCell setTitle:NSLocalizedString(@"Variable Framerate", @"Video -> Framerate")];
             }
             else
             {
-                [fFramerateVfrPfrCell setTitle:NSLocalizedString(@"Peak Framerate (VFR)", nil)];
+                [fFramerateVfrPfrCell setTitle:NSLocalizedString(@"Peak Framerate (VFR)", @"Video -> Framerate")];
             }
         }
         else if ([keyPath isEqualToString:@"video.quality"])
@@ -264,13 +264,13 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     {
         fX264UseAdvancedOptionsCheck.hidden = NO;
         fDividerLine.hidden = YES;
-        fEncoderOptionsLabel.stringValue = NSLocalizedString(@"Encoder Options:", @"");
+        fEncoderOptionsLabel.stringValue = NSLocalizedString(@"Encoder Options:", @"Video -> Advanced panel checkbox");
     }
     else
     {
         fX264UseAdvancedOptionsCheck.hidden =YES;
         fDividerLine.hidden = NO;
-        fEncoderOptionsLabel.stringValue = NSLocalizedString(@"Encoder Options", @"");
+        fEncoderOptionsLabel.stringValue = NSLocalizedString(@"Encoder Options", @"Video -> Encoder options title");
         self.video.advancedOptions = NO;
     }
 }

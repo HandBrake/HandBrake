@@ -89,17 +89,17 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     // Default to Source Maximum
     HBAddPresetControllerMode mode = HBAddPresetControllerModeSourceMaximum;
 
-    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"None", nil)];
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"None", @"Add preset window -> picture setting")];
     [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeNone];
 
-    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Custom", nil)];
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Custom", @"Add preset window -> picture setting")];
     [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeCustom];
 
     if (self.defaultToCustom)
     {
         mode = HBAddPresetControllerModeCustom;
     }
-    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Source Maximum", nil)];
+    [self.picSettingsPopUp addItemWithTitle:NSLocalizedString(@"Source Maximum", @"Add preset window -> picture setting")];
     [[self.picSettingsPopUp lastItem] setTag:HBAddPresetControllerModeSourceMaximum];
 
 
@@ -208,8 +208,8 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     if (self.name.stringValue.length == 0)
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"The preset name cannot be empty.", @"")];
-        [alert setInformativeText:NSLocalizedString(@"Please enter a name.", @"")];
+        [alert setMessageText:NSLocalizedString(@"The preset name cannot be empty.", @"Add preset window -> name alert message")];
+        [alert setInformativeText:NSLocalizedString(@"Please enter a name.", @"Add preset window -> name alert informative text")];
         [alert runModal];
     }
     else

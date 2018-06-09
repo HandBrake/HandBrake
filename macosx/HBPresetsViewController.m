@@ -155,7 +155,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
     // Open a panel to let the user choose where and how to save the export file
     NSSavePanel *panel = [NSSavePanel savePanel];
-    panel.title = NSLocalizedString(@"Export presets", nil);
+    panel.title = NSLocalizedString(@"Export presets", @"Export presets save panel title");
 
     // We get the current file name and path from the destination field here
     NSURL *defaultExportDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
@@ -177,7 +177,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 - (IBAction)importPreset:(id)sender
 {
     NSOpenPanel *panel = [NSOpenPanel openPanel];
-    panel.title = NSLocalizedString(@"Import presets", nil);
+    panel.title = NSLocalizedString(@"Import presets", @"Import preset open panel title");
     panel.allowsMultipleSelection = YES;
     panel.canChooseFiles = YES;
     panel.canChooseDirectories = NO;
@@ -258,10 +258,10 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     {
         // Alert user before deleting preset
         NSAlert *alert = [NSAlert init];
-        alert.messageText = NSLocalizedString(@"Are you sure you want to permanently delete the selected preset?", nil);
-        alert.informativeText = NSLocalizedString(@"You can't undo this action.", nil);
-        [alert addButtonWithTitle:NSLocalizedString(@"Delete Preset", nil)];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+        alert.messageText = NSLocalizedString(@"Are you sure you want to permanently delete the selected preset?", @"Delete preset alert -> message");
+        alert.informativeText = NSLocalizedString(@"You can't undo this action.", @"Delete preset alert -> informative text");
+        [alert addButtonWithTitle:NSLocalizedString(@"Delete Preset", @"Delete preset alert -> first button")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Delete preset alert -> second button")];
         alert.alertStyle = NSCriticalAlertStyle;
 
         NSInteger status = [alert runModal];

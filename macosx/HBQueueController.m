@@ -118,13 +118,13 @@
     {
         if (self.core.state == HBStateIdle)
         {
-            menuItem.title = NSLocalizedString(@"Start Encoding", nil);
+            menuItem.title = NSLocalizedString(@"Start Encoding", @"Queue -> start/stop menu");
 
             return (self.pendingItemsCount > 0);
         }
         else if (self.core.state != HBStateIdle)
         {
-            menuItem.title = NSLocalizedString(@"Stop Encoding", nil);
+            menuItem.title = NSLocalizedString(@"Stop Encoding", @"Queue -> start/stop menu");
 
             return YES;
         }
@@ -134,11 +134,11 @@
     {
         if (self.core.state != HBStatePaused)
         {
-            menuItem.title = NSLocalizedString(@"Pause Encoding", nil);
+            menuItem.title = NSLocalizedString(@"Pause Encoding", @"Queue -> pause/resume menu");
         }
         else
         {
-            menuItem.title = NSLocalizedString(@"Resume Encoding", nil);
+            menuItem.title = NSLocalizedString(@"Resume Encoding", @"Queue -> pause/resume men");
         }
 
         return (self.core.state == HBStateWorking || self.core.state == HBStatePaused);
@@ -179,15 +179,15 @@
         if ((s == HBStateScanning) || (s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing))
         {
             theItem.image = [NSImage imageNamed:@"stopencode"];
-            theItem.label = NSLocalizedString(@"Stop", @"");
-            theItem.toolTip = NSLocalizedString(@"Stop Encoding", @"");
+            theItem.label = NSLocalizedString(@"Stop", @"Queue Toolbar -> start/stop item title");
+            theItem.toolTip = NSLocalizedString(@"Stop Encoding", @"Queue Toolbar -> start/stop item tooltip");
             return YES;
         }
         else
         {
             theItem.image = [NSImage imageNamed:@"encode"];
-            theItem.label = NSLocalizedString(@"Start", @"");
-            theItem.toolTip = NSLocalizedString(@"Start Encoding", @"");
+            theItem.label = NSLocalizedString(@"Start", @"Queue Toolbar -> start/stop item title");
+            theItem.toolTip = NSLocalizedString(@"Start Encoding", @"Queue Toolbar -> start/stop item tooltip");
             return (self.pendingItemsCount > 0);
         }
     }
@@ -197,15 +197,15 @@
         if (s == HBStatePaused)
         {
             theItem.image = [NSImage imageNamed:@"encode"];
-            theItem.label = NSLocalizedString(@"Resume", @"");
-            theItem.toolTip = NSLocalizedString(@"Resume Encoding", @"");
+            theItem.label = NSLocalizedString(@"Resume", @"Queue Toolbar -> pause/resume item title");
+            theItem.toolTip = NSLocalizedString(@"Resume Encoding", @"Queue Toolbar -> pause/resume item tooltip");
             return YES;
         }
         else
         {
             theItem.image = [NSImage imageNamed:@"pauseencode"];
-            theItem.label = NSLocalizedString(@"Pause", @"");
-            theItem.toolTip = NSLocalizedString(@"Pause Encoding", @"");
+            theItem.label = NSLocalizedString(@"Pause", @"Queue Toolbar -> pause/resume item title");
+            theItem.toolTip = NSLocalizedString(@"Pause Encoding", @"Queue Toolbar -> pause/resume item tooltip");
             return (s == HBStateWorking || s == HBStateMuxing);
         }
     }
@@ -359,11 +359,11 @@
     {
         if (items.count == 1)
         {
-            [undo setActionName:NSLocalizedString(@"Add Job To Queue", nil)];
+            [undo setActionName:NSLocalizedString(@"Add Job To Queue", @"Queue undo action name")];
         }
         else
         {
-            [undo setActionName:NSLocalizedString(@"Add Jobs To Queue", nil)];
+            [undo setActionName:NSLocalizedString(@"Add Jobs To Queue", @"Queue undo action name")];
         }
     }
 
@@ -411,11 +411,11 @@
     {
         if (indexes.count == 1)
         {
-            [undo setActionName:NSLocalizedString(@"Remove Job From Queue", nil)];
+            [undo setActionName:NSLocalizedString(@"Remove Job From Queue", @"Queue undo action name")];
         }
         else
         {
-            [undo setActionName:NSLocalizedString(@"Remove Jobs From Queue", nil)];
+            [undo setActionName:NSLocalizedString(@"Remove Jobs From Queue", @"Queue undo action name")];
         }
     }
 
@@ -458,11 +458,11 @@
     {
         if (items.count == 1)
         {
-            [undo setActionName:NSLocalizedString(@"Move Job in Queue", nil)];
+            [undo setActionName:NSLocalizedString(@"Move Job in Queue", @"Queue undo action name")];
         }
         else
         {
-            [undo setActionName:NSLocalizedString(@"Move Jobs in Queue", nil)];
+            [undo setActionName:NSLocalizedString(@"Move Jobs in Queue", @"Queue undo action name")];
         }
     }
 
@@ -500,11 +500,11 @@
     {
         if (source.count == 1)
         {
-            [undo setActionName:NSLocalizedString(@"Move Job in Queue", nil)];
+            [undo setActionName:NSLocalizedString(@"Move Job in Queue", @"Queue undo action name")];
         }
         else
         {
-            [undo setActionName:NSLocalizedString(@"Move Jobs in Queue", nil)];
+            [undo setActionName:NSLocalizedString(@"Move Jobs in Queue", @"Queue undo action name")];
         }
     }
 
@@ -559,15 +559,15 @@
     NSString *string;
     if (pendingCount == 0)
     {
-        string = NSLocalizedString(@"No encode pending", @"");
+        string = NSLocalizedString(@"No encode pending", @"Queue status");
     }
     else if (pendingCount == 1)
     {
-        string = [NSString stringWithFormat: NSLocalizedString(@"%d encode pending", @""), pendingCount];
+        string = [NSString stringWithFormat: NSLocalizedString(@"%d encode pending", @"Queue status"), pendingCount];
     }
     else
     {
-        string = [NSString stringWithFormat: NSLocalizedString(@"%d encodes pending", @""), pendingCount];
+        string = [NSString stringWithFormat: NSLocalizedString(@"%d encodes pending", @"Queue status"), pendingCount];
     }
 
     self.countTextField.stringValue = string;
@@ -734,14 +734,14 @@
     NSString *info = nil;
     switch (result) {
         case HBCoreResultDone:
-            info = NSLocalizedString(@"Encode Finished.", @"");
+            info = NSLocalizedString(@"Encode Finished.", @"Queue status");
             [self jobCompletedAlerts:job result:result];
             break;
         case HBCoreResultCanceled:
-            info = NSLocalizedString(@"Encode Canceled.", @"");
+            info = NSLocalizedString(@"Encode Canceled.", @"Queue status");
             break;
         default:
-            info = NSLocalizedString(@"Encode Failed.", @"");
+            info = NSLocalizedString(@"Encode Failed.", @"Queue status");
             [self jobCompletedAlerts:job result:result];
             break;
     }
@@ -962,14 +962,14 @@
         if (result == HBCoreResultDone)
         {
             title = NSLocalizedString(@"Put down that cocktail…", nil);
-            description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ is done!", nil),
+            description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ is done!", @"Queue done notification message"),
                                      job.outputFileName];
 
         }
         else
         {
             title = NSLocalizedString(@"Encode failed", nil);
-            description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ couldn't be completed.", nil),
+            description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ couldn't be completed.", @"Queue done notification message"),
                            job.outputFileName];
         }
 
@@ -996,8 +996,8 @@
     {
         // On Screen Notification
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"Put down that cocktail…", @"")];
-        [alert setInformativeText:NSLocalizedString(@"Your HandBrake queue is done!", @"")];
+        [alert setMessageText:NSLocalizedString(@"Put down that cocktail…", @"Queue done alert message")];
+        [alert setInformativeText:NSLocalizedString(@"Your HandBrake queue is done!", @"Queue done alert informative text")];
         [NSApp requestUserAttention:NSCriticalRequest];
         [alert runModal];
     }
@@ -1024,8 +1024,8 @@
 - (void)queueLowDiskSpaceAlert
 {
     NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:NSLocalizedString(@"Your destination disk is almost full.", @"")];
-    [alert setInformativeText:NSLocalizedString(@"You need to make more space available on your destination disk.", @"")];
+    [alert setMessageText:NSLocalizedString(@"Your destination disk is almost full.", @"Queue -> disk almost full alert message")];
+    [alert setInformativeText:NSLocalizedString(@"You need to make more space available on your destination disk.",@"Queue -> disk almost full alert informative text")];
     [NSApp requestUserAttention:NSCriticalRequest];
     [alert runModal];
 }
@@ -1070,7 +1070,7 @@
 
             if ([workingJobs containsObject:self.currentJob])
             {
-                NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", nil)];
+                NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", @"Queue Stop Alert -> stop and remove message")];
 
                 // Which window to attach the sheet to?
                 NSWindow *targetWindow = self.window;
@@ -1081,9 +1081,9 @@
 
                 NSAlert *alert = [[NSAlert alloc] init];
                 [alert setMessageText:alertTitle];
-                [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil)];
-                [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", nil)];
-                [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", nil)];
+                [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Stop Alert -> stop and remove informative text")];
+                [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Stop Alert -> stop and remove first button")];
+                [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", @"Queue Stop Alert -> stop and remove second button")];
                 [alert setAlertStyle:NSCriticalAlertStyle];
 
                 [alert beginSheetModalForWindow:targetWindow completionHandler:^(NSModalResponse returnCode) {
@@ -1134,10 +1134,10 @@
         [NSApp requestUserAttention:NSCriticalRequest];
 
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"The computer will sleep after encoding is done.", @"")];
-        [alert setInformativeText:NSLocalizedString(@"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences.", @"")];
-        [alert addButtonWithTitle:NSLocalizedString(@"OK", @"")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Preferences…",@"")];
+        [alert setMessageText:NSLocalizedString(@"The computer will sleep after encoding is done.", @"Queue Done Alert -> sleep message")];
+        [alert setInformativeText:NSLocalizedString(@"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences.", @"Queue Done Alert -> sleep informative text")];
+        [alert addButtonWithTitle:NSLocalizedString(@"OK", @"Queue Done Alert -> sleep first button")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Preferences…", @"Queue Done Alert -> sleep second button")];
 
         NSInteger response = [alert runModal];
         if (response == NSAlertSecondButtonReturn)
@@ -1152,10 +1152,10 @@
         [NSApp requestUserAttention:NSCriticalRequest];
 
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"The computer will shut down after encoding is done.", @"")];
-        [alert setInformativeText:NSLocalizedString(@"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences.", @"")];
-        [alert addButtonWithTitle:NSLocalizedString(@"OK", @"")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Preferences…", @"")];
+        [alert setMessageText:NSLocalizedString(@"The computer will shut down after encoding is done.", @"Queue Done Alert -> shut down message")];
+        [alert setInformativeText:NSLocalizedString(@"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences.", @"Queue Done Alert -> shut down informative text")];
+        [alert addButtonWithTitle:NSLocalizedString(@"OK", @"Queue Done Alert -> shut down first button")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Preferences…", @"Queue Done Alert -> shut down second button")];
 
         NSInteger response = [alert runModal];
         if (response == NSAlertSecondButtonReturn)
@@ -1202,12 +1202,12 @@
     }
 
     NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:NSLocalizedString(@"You are currently encoding. What would you like to do?", nil)];
-    [alert setInformativeText:NSLocalizedString(@"Your encode will be canceled if you don't continue encoding.", nil)];
-    [alert addButtonWithTitle:NSLocalizedString(@"Continue Encoding", nil)];
-    [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Stop", nil)];
-    [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Continue", nil)];
-    [alert addButtonWithTitle:NSLocalizedString(@"Finish Current and Stop", nil)];
+    [alert setMessageText:NSLocalizedString(@"You are currently encoding. What would you like to do?", @"Queue Alert -> cancel rip message")];
+    [alert setInformativeText:NSLocalizedString(@"Your encode will be canceled if you don't continue encoding.", @"Queue Alert -> cancel rip informative text")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Continue Encoding", @"Queue Alert -> cancel rip first button")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Stop", @"Queue Alert -> cancel rip second button")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Continue", @"Queue Alert -> cancel rip third button")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Finish Current and Stop", @"Queue Alert -> cancel rip fourth button")];
     [alert setAlertStyle:NSCriticalAlertStyle];
 
     [alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {
@@ -1345,7 +1345,7 @@
         HBJob *job = self.jobs[row];
         if (job == self.currentJob)
         {
-            NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Edit It?", nil)];
+            NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Edit It?", @"Queue Edit Alert -> stop and edit message")];
 
             // Which window to attach the sheet to?
             NSWindow *docWindow = self.window;
@@ -1356,9 +1356,9 @@
 
             NSAlert *alert = [[NSAlert alloc] init];
             [alert setMessageText:alertTitle];
-            [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", nil)];
-            [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", nil)];
-            [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Edit", nil)];
+            [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Edit Alert -> stop and edit informative text")];
+            [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Edit Alert -> stop and edit first button")];
+            [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Edit", @"Queue Edit Alert -> stop and edit second button")];
             [alert setAlertStyle:NSCriticalAlertStyle];
 
             [alert beginSheetModalForWindow:docWindow completionHandler:^(NSModalResponse returnCode) {

@@ -91,7 +91,7 @@
 
 - (NSString *)shortInfo
 {
-    return [NSString stringWithFormat:NSLocalizedString(@"%dx%d Storage, %dx%d Display", nil), self.width, self.height, self.displayWidth, self.height];
+    return [NSString stringWithFormat:NSLocalizedString(@"%dx%d Storage, %dx%d Display", @"HBPicture -> short info"), self.width, self.height, self.displayWidth, self.height];
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingSummary

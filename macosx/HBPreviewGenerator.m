@@ -213,7 +213,7 @@
     HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
     formatter.twoLines = NO;
     formatter.showPassNumber = NO;
-    formatter.title = NSLocalizedString(@"preview", nil);
+    formatter.title = NSLocalizedString(@"preview", @"Preview -> progress formatter title");
 
     self.core.stateFormatter = formatter;
 

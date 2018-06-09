@@ -68,8 +68,8 @@
     if (self.name.stringValue.length == 0)
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"The preset name cannot be empty.", @"")];
-        [alert setInformativeText:NSLocalizedString(@"Please enter a name.", @"")];
+        [alert setMessageText:NSLocalizedString(@"The preset name cannot be empty.", @"Rename preset window -> name alert message")];
+        [alert setInformativeText:NSLocalizedString(@"Please enter a name.",  @"Rename preset window -> name alert informative text")];
         [alert runModal];
     }
     else

@@ -379,9 +379,9 @@
         if (action == @selector(browseSources:))
         {
             [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
-            [toolbarItem setLabel: NSLocalizedString(@"Cancel Scan", nil)];
-            [toolbarItem setPaletteLabel: NSLocalizedString(@"Cancel Scanning", nil)];
-            [toolbarItem setToolTip: NSLocalizedString(@"Cancel Scanning Source", nil)];
+            [toolbarItem setLabel: NSLocalizedString(@"Cancel Scan", @"Toolbar Open/Cancel Item")];
+            [toolbarItem setPaletteLabel: NSLocalizedString(@"Cancel Scanning", @"Toolbar Open/Cancel Item")];
+            [toolbarItem setToolTip: NSLocalizedString(@"Cancel Scanning Source", @"Toolbar Open/Cancel Item")];
             return YES;
         }
 
@@ -393,9 +393,9 @@
         if (action == @selector(browseSources:))
         {
             [toolbarItem setImage:[NSImage imageNamed:@"source"]];
-            [toolbarItem setLabel:NSLocalizedString(@"Open Source", nil)];
-            [toolbarItem setPaletteLabel:NSLocalizedString(@"Open Source", nil)];
-            [toolbarItem setToolTip:NSLocalizedString(@"Open Source", nil)];
+            [toolbarItem setLabel:NSLocalizedString(@"Open Source",  @"Toolbar Open/Cancel Item")];
+            [toolbarItem setPaletteLabel:NSLocalizedString(@"Open Source",  @"Toolbar Open/Cancel Item")];
+            [toolbarItem setToolTip:NSLocalizedString(@"Open Source", @"Toolbar Open/Cancel Item")];
             return YES;
         }
     }
@@ -407,17 +407,17 @@
         if (action == @selector(rip:))
         {
             [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
-            [toolbarItem setLabel: NSLocalizedString(@"Stop", nil)];
-            [toolbarItem setPaletteLabel: NSLocalizedString(@"Stop", nil)];
-            [toolbarItem setToolTip: NSLocalizedString(@"Stop Encoding", nil)];
+            [toolbarItem setLabel: NSLocalizedString(@"Stop", @"Toolbar Start/Stop Item")];
+            [toolbarItem setPaletteLabel: NSLocalizedString(@"Stop", @"Toolbar Start/Stop Item")];
+            [toolbarItem setToolTip: NSLocalizedString(@"Stop Encoding", @"Toolbar Start/Stop Item")];
             return YES;
         }
         if (action == @selector(pause:))
         {
             [toolbarItem setImage: [NSImage imageNamed: @"pauseencode"]];
-            [toolbarItem setLabel: NSLocalizedString(@"Pause", nil)];
-            [toolbarItem setPaletteLabel: NSLocalizedString(@"Pause Encoding", nil)];
-            [toolbarItem setToolTip: NSLocalizedString(@"Pause Encoding", nil)];
+            [toolbarItem setLabel: NSLocalizedString(@"Pause", @"Toolbar Pause Item")];
+            [toolbarItem setPaletteLabel: NSLocalizedString(@"Pause Encoding", @"Pause Item")];
+            [toolbarItem setToolTip: NSLocalizedString(@"Pause Encoding", @"Toolbar Pause Item")];
             return YES;
         }
     }
@@ -426,9 +426,9 @@
         if (action == @selector(pause:))
         {
             [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
-            [toolbarItem setLabel: NSLocalizedString(@"Resume", nil)];
-            [toolbarItem setPaletteLabel: NSLocalizedString(@"Resume Encoding", nil)];
-            [toolbarItem setToolTip: NSLocalizedString(@"Resume Encoding", nil)];
+            [toolbarItem setLabel: NSLocalizedString(@"Resume", @"Toolbar Pause Item")];
+            [toolbarItem setPaletteLabel: NSLocalizedString(@"Resume Encoding", @"Toolbar Pause Item")];
+            [toolbarItem setToolTip: NSLocalizedString(@"Resume Encoding", @"Toolbar Pause Item")];
             return YES;
         }
         if (action == @selector(rip:))
@@ -440,11 +440,11 @@
         {
             [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
             if (fQueueController.pendingItemsCount > 0)
-                [toolbarItem setLabel: NSLocalizedString(@"Start Queue", nil)];
+                [toolbarItem setLabel: NSLocalizedString(@"Start Queue", @"Toolbar Start/Stop Item")];
             else
-                [toolbarItem setLabel: NSLocalizedString(@"Start", nil)];
-            [toolbarItem setPaletteLabel: NSLocalizedString(@"Start Encoding", nil)];
-            [toolbarItem setToolTip: NSLocalizedString(@"Start Encoding", nil)];
+                [toolbarItem setLabel: NSLocalizedString(@"Start", @"Toolbar Start/Stop Item")];
+            [toolbarItem setPaletteLabel: NSLocalizedString(@"Start Encoding", @"Toolbar Start/Stop Item")];
+            [toolbarItem setToolTip: NSLocalizedString(@"Start Encoding", @"Toolbar Start/Stop Item")];
         }
 
         if (action == @selector(rip:))
@@ -487,7 +487,7 @@
     {
         BOOL result = [fQueueController validateMenuItem:menuItem];
 
-        if ([menuItem.title isEqualToString:NSLocalizedString(@"Start Encoding", nil)])
+        if ([menuItem.title isEqualToString:NSLocalizedString(@"Start Encoding", @"Menu Start/Stop Item")])
         {
             if (!result && self.job)
             {
@@ -553,10 +553,10 @@
 - (NSModalResponse)runCopyProtectionAlert
 {
     NSAlert *alert = [[NSAlert alloc] init];
-    [alert setMessageText:NSLocalizedString(@"Copy-Protected sources are not supported.", nil)];
-    [alert setInformativeText:NSLocalizedString(@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run.", nil)];
-    [alert addButtonWithTitle:NSLocalizedString(@"Attempt Scan Anyway", nil)];
-    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
+    [alert setMessageText:NSLocalizedString(@"Copy-Protected sources are not supported.", @"Copy Protection Alert -> message")];
+    [alert setInformativeText:NSLocalizedString(@"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run.", @"Copy Protection Alert -> informative text")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Attempt Scan Anyway", @"Copy Protection Alert -> first button")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Copy Protection Alert -> second button")];
 
     [NSApp requestUserAttention:NSCriticalRequest];
 
@@ -577,7 +577,7 @@
     self.job = nil;
     [fSrcTitlePopUp removeAllItems];
     self.window.representedURL = nil;
-    self.window.title = NSLocalizedString(@"HandBrake", nil);
+    self.window.title = NSLocalizedString(@"HandBrake", @"Main Window -> title");
 
     NSURL *mediaURL = [HBUtilities mediaURLFromURL:fileURL];
 
@@ -637,7 +637,7 @@
              else
              {
                  // We display a message if a valid source was not chosen
-                 self->fSrcDVD2Field.stringValue = NSLocalizedString(@"No Valid Source Found", @"");
+                 self->fSrcDVD2Field.stringValue = NSLocalizedString(@"No Valid Source Found", @"Main Window -> Info text");
              }
 
              // Set the last searched source directory in the prefs here
@@ -903,7 +903,7 @@
     panel.canChooseFiles = NO;
     panel.canChooseDirectories = YES;
     panel.canCreateDirectories = YES;
-    panel.prompt = NSLocalizedString(@"Choose", nil);
+    panel.prompt = NSLocalizedString(@"Choose", @"Main Window -> Destination open panel");
 
     if (self.job.outputURL)
     {
@@ -992,9 +992,9 @@
     if (!(undo.isUndoing || undo.isRedoing))
     {
         // Change UI to show "Custom" settings are being used
-        if (![self.job.presetName hasSuffix:NSLocalizedString(@"(Modified)", nil)])
+        if (![self.job.presetName hasSuffix:NSLocalizedString(@"(Modified)", @"Main Window -> preset modified")])
         {
-            self.job.presetName = [NSString stringWithFormat:@"%@ %@", self.job.presetName, NSLocalizedString(@"(Modified)", nil)];
+            self.job.presetName = [NSString stringWithFormat:@"%@ %@", self.job.presetName, NSLocalizedString(@"(Modified)", @"Main Window -> preset modified")];
         }
         self.edited = YES;
         [self updateFileName];
@@ -1078,24 +1078,24 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:job.outputURL.path] == 0)
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"Warning!", @"")];
-        [alert setInformativeText:NSLocalizedString(@"This is not a valid destination directory!", @"")];
+        [alert setMessageText:NSLocalizedString(@"Warning!", @"Invalid destination alert -> message")];
+        [alert setInformativeText:NSLocalizedString(@"This is not a valid destination directory!", @"Invalid destination alert -> informative text")];
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
     else if ([job.fileURL isEqual:job.completeOutputURL])
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"")];
-        [alert setInformativeText:NSLocalizedString(@"The destination is the same as the source, you can not overwrite your source file!", @"")];
+        [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"Destination same as source alert -> message")];
+        [alert setInformativeText:NSLocalizedString(@"The destination is the same as the source, you can not overwrite your source file!", @"Destination same as source alert -> informative text")];
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
     else if ([[NSFileManager defaultManager] fileExistsAtPath:job.completeOutputURL.path])
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"")];
-        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), job.completeOutputURL.path]];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"")];
+        [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"File already exists alert -> message")];
+        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @"File already exists alert -> informative text"), job.completeOutputURL.path]];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists alert -> first button")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists alert -> second button")];
         [alert setAlertStyle:NSCriticalAlertStyle];
 
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
@@ -1103,10 +1103,10 @@
     else if ([fQueueController jobExistAtURL:job.completeOutputURL])
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"There is already a queue item for this destination.", @"")];
-        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @""), job.completeOutputURL.path]];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"")];
+        [alert setMessageText:NSLocalizedString(@"There is already a queue item for this destination.", @"File already exists in queue alert -> message")];
+        [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @"File already exists in queue alert -> informative text"), job.completeOutputURL.path]];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists in queue alert -> first button")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists in queue alert -> second button")];
         [alert setAlertStyle:NSCriticalAlertStyle];
 
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
@@ -1258,18 +1258,18 @@
     if (fileOverwritesSource)
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"")];
-        [alert setInformativeText:NSLocalizedString(@"The destination is the same as the source, you can not overwrite your source file!", @"")];
+        [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"Destination same as source alert -> message")];
+        [alert setInformativeText:NSLocalizedString(@"The destination is the same as the source, you can not overwrite your source file!", @"Destination same as source alert -> informative text")];
         [alert beginSheetModalForWindow:self.window completionHandler:nil];
     }
     else if (fileExists)
     {
         // File exist, warn user
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"File already exists.", nil)];
-        [alert setInformativeText:NSLocalizedString(@"One or more file already exists. Do you want to overwrite?", nil)];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", nil)];
-        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", nil)];
+        [alert setMessageText:NSLocalizedString(@"File already exists.", @"File already exists alert -> message")];
+        [alert setInformativeText:NSLocalizedString(@"One or more file already exists. Do you want to overwrite?", @"File already exists alert -> informative text")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists alert -> first button")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists alert -> second button")];
         [alert setAlertStyle:NSCriticalAlertStyle];
 
         [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {

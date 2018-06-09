@@ -177,7 +177,7 @@
     [panel setCanChooseFiles:YES];
     [panel setCanChooseDirectories:NO];
     [panel setAllowedFileTypes:@[@"app"]];
-    [panel setMessage:NSLocalizedString(@"Select the desired external application", nil)];
+    [panel setMessage:NSLocalizedString(@"Select the desired external application", @"Preferences -> send to app destination open panel")];
 
     NSString *sendToAppDirectory;
 	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSendToAppDirectory"])

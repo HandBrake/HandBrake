@@ -197,9 +197,9 @@
 
 - (NSError *)invalidPresetErrorForUrl:(NSURL *)url
 {
-    NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The preset \"%@\" could not be imported.", nil),
+    NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The preset \"%@\" could not be imported.", @"Preset -> import error description"),
                              url.lastPathComponent];
-    NSString *reason = NSLocalizedString(@"The selected preset is invalid.", nil);
+    NSString *reason = NSLocalizedString(@"The selected preset is invalid.", @"Preset -> import error reason");
 
     return [NSError errorWithDomain:@"HBPresetDomain" code:1 userInfo:@{NSLocalizedDescriptionKey: description,
                                                                         NSLocalizedRecoverySuggestionErrorKey: reason}];
@@ -208,9 +208,9 @@
 
 - (NSError *)newerPresetErrorForUrl:(NSURL *)url
 {
-    NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The preset \"%@\" could not be imported.", nil),
+    NSString *description = [NSString stringWithFormat:NSLocalizedString(@"The preset \"%@\" could not be imported.", @"Preset -> import error description"),
                              url.lastPathComponent];
-    NSString *reason = NSLocalizedString(@"The selected preset was created with a newer version of HandBrake.", nil);
+    NSString *reason = NSLocalizedString(@"The selected preset was created with a newer version of HandBrake.",  @"Preset -> import error reason");
 
     return [NSError errorWithDomain:@"HBPresetDomain" code:2 userInfo:@{NSLocalizedDescriptionKey: description,
                                                                         NSLocalizedRecoverySuggestionErrorKey: reason}];

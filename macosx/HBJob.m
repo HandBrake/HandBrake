@@ -178,8 +178,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         {
             if (outError)
             {
-                *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid name", nil),
-                                                                                  NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The file name can't contain the / character.", nil)}];
+                *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid name", @"HBJob -> invalid name error description"),
+                                                                                  NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The file name can't contain the / character.", @"HBJob -> invalid name error recovery suggestion")}];
             }
             return NO;
         }

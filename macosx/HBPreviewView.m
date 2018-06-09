@@ -294,7 +294,7 @@
 {
     if (self.image)
     {
-        return [NSString stringWithFormat:NSLocalizedString(@"Preview Image, Size: %zu x %zu, Scale: %.0f%%", nil), CGImageGetWidth(self.image), CGImageGetHeight(self.image), self.scale * 100];
+        return [NSString stringWithFormat:NSLocalizedString(@"Preview Image, Size: %zu x %zu, Scale: %.0f%%", @"Preview -> accessibility label"), CGImageGetWidth(self.image), CGImageGetHeight(self.image), self.scale * 100];
     }
     return NSLocalizedString(@"No image", nil);
 }

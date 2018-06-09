@@ -125,11 +125,11 @@ extern NSString *keySubTrackType;
 
     if (audioCount > 1)
     {
-        [format appendFormat:NSLocalizedString(@", %d audio tracks", nil), audioCount];
+        [format appendFormat:NSLocalizedString(@", %d audio tracks", @"Title short description -> audio format"), audioCount];
     }
     else if (audioCount == 1)
     {
-        [format appendFormat:NSLocalizedString(@", 1 audio track", nil)];
+        [format appendFormat:NSLocalizedString(@", 1 audio track", @"Title short description -> audio format")];
     }
 
     hb_list_t *subList = _hb_title->list_subtitle;
@@ -137,11 +137,11 @@ extern NSString *keySubTrackType;
 
     if (subCount > 1)
     {
-        [format appendFormat:NSLocalizedString(@", %d subtitles tracks", nil), subCount];
+        [format appendFormat:NSLocalizedString(@", %d subtitles tracks", @"Title short description -> subtitles format"), subCount];
     }
     else if (subCount == 1)
     {
-        [format appendFormat:NSLocalizedString(@", 1 subtitles track", nil)];
+        [format appendFormat:NSLocalizedString(@", 1 subtitles track", @"Title short description -> subtitles format")];
     }
 
     return format;

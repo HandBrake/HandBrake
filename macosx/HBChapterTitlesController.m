@@ -251,8 +251,8 @@
             {
                 if (NULL != outError)
                 {
-                    *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid chapters CSV file", nil),
-                                                                                      NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The CSV file is not a valid chapters CSV file.", nil)}];
+                    *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid chapters CSV file", @"Chapters import -> invalid CSV description"),
+                                                                                      NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The CSV file is not a valid chapters CSV file.", @"Chapters import -> invalid CSV recovery suggestion")}];
                 }
                 return NO;
             }
@@ -270,8 +270,8 @@
 
     if (NULL != outError)
     {
-        *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Incorrect line count", nil),
-                                                                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The line count in the chapters CSV file does not match the number of chapters in the movie.", nil)}];
+        *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Incorrect line count", @"Chapters import -> invalid CSV line count description"),
+                                                                          NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The line count in the chapters CSV file does not match the number of chapters in the movie.", @"Chapters import -> invalid CSV line count recovery suggestion")}];
     }
 
     return NO;

@@ -44,7 +44,7 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
 
         // Add the none and foreign track to the source array
         NSMutableArray *sourceTracks = [job.title.audioTracks mutableCopy];
-        NSDictionary *none = @{keyAudioTrackName: NSLocalizedString(@"None", nil)};
+        NSDictionary *none = @{keyAudioTrackName: NSLocalizedString(@"None", @"HBAudio -> none track name")};
         [sourceTracks insertObject:none atIndex:0];
         _sourceTracks = [sourceTracks copy];
     }

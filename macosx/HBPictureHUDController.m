@@ -110,11 +110,11 @@
     [self.delegate toggleScaleToScreen];
     if (self.fitToView == YES)
     {
-        self.scaleToScreenButton.title = NSLocalizedString(@"Scale To Screen", nil);
+        self.scaleToScreenButton.title = NSLocalizedString(@"Scale To Screen", @"Picture HUD -> scale button");
     }
     else
     {
-        self.scaleToScreenButton.title = NSLocalizedString(@"Actual Scale", nil);
+        self.scaleToScreenButton.title = NSLocalizedString(@"Actual Scale", @"Picture HUD -> scale button");
     }
     self.fitToView = !self.fitToView;
 }

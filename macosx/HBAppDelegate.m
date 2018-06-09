@@ -98,8 +98,8 @@
     if (instances > 1)
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"There is already an instance of HandBrake running.", nil)];
-        [alert setInformativeText:NSLocalizedString(@"The queue will be shared between the instances.", nil)];
+        [alert setMessageText:NSLocalizedString(@"There is already an instance of HandBrake running.", @"Queue -> Multiple instances alert message")];
+        [alert setInformativeText:NSLocalizedString(@"The queue will be shared between the instances.", @"Queue -> Multiple instances alert informative text")];
         [alert runModal];
     }
     else
@@ -149,10 +149,10 @@
     if (self.queueController.core.state != HBStateIdle)
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"Are you sure you want to quit HandBrake?", nil)];
-        [alert setInformativeText:NSLocalizedString(@"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?", nil)];
-        [alert addButtonWithTitle:NSLocalizedString(@"Quit", nil)];
-        [alert addButtonWithTitle:NSLocalizedString(@"Don't Quit", nil)];
+        [alert setMessageText:NSLocalizedString(@"Are you sure you want to quit HandBrake?", @"Quit Alert -> message")];
+        [alert setInformativeText:NSLocalizedString(@"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?", @"Quit Alert -> informative text")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Quit", @"Quit Alert -> first button")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Don't Quit", @"Quit Alert -> second button")];
         [alert.buttons[1] setKeyEquivalent:@"\E"];
         [alert setAlertStyle:NSCriticalAlertStyle];
 

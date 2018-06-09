@@ -166,7 +166,7 @@
     else
     {
         self.previewView.image = nil;
-        self.window.title = NSLocalizedString(@"Preview", nil);
+        self.window.title = NSLocalizedString(@"Preview", @"Preview -> window title");
     }
     [self switchStateToHUD:self.pictureHUD];
 }
@@ -248,16 +248,16 @@
         NSMutableString *scaleString = [NSMutableString string];
         if (scale * 100.0 != 100)
         {
-            [scaleString appendFormat:NSLocalizedString(@"(%.0f%% actual size)", nil), scale * 100.0];
+            [scaleString appendFormat:NSLocalizedString(@"(%.0f%% actual size)", @"Preview -> size info label"), scale * 100.0];
         }
         else
         {
-            [scaleString appendString:NSLocalizedString(@"(Actual size)", nil)];
+            [scaleString appendString:NSLocalizedString(@"(Actual size)", @"Preview -> size info label")];
         }
 
         if (self.previewView.fitToView == YES)
         {
-            [scaleString appendString:NSLocalizedString(@" Scaled To Screen", nil)];
+            [scaleString appendString:NSLocalizedString(@" Scaled To Screen", @"Preview -> size info label")];
         }
 
         // Set the info fields in the hud controller
@@ -265,7 +265,7 @@
         self.pictureHUD.scale = scaleString;
 
         // Set the info field in the window title bar
-        self.window.title = [NSString stringWithFormat:NSLocalizedString(@"Preview - %@ %@", nil),
+        self.window.title = [NSString stringWithFormat:NSLocalizedString(@"Preview - %@ %@", @"Preview -> window title format"),
                              self.generator.info, scaleString];
     }
 }
@@ -525,24 +525,18 @@
 
 - (void)showAlert:(NSURL *)fileURL;
 {
-    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"HandBrake can't open the preview.", nil)
-                                     defaultButton:NSLocalizedString(@"Open in external player", nil)
-                                   alternateButton:NSLocalizedString(@"Cancel", nil)
+    NSAlert *alert = [NSAlert alertWithMessageText:NSLocalizedString(@"HandBrake can't open the preview.", @"Preview -> live preview alert message")
+                                     defaultButton:NSLocalizedString(@"Open in external player", @"Preview -> live preview alert default button")
+                                   alternateButton:NSLocalizedString(@"Cancel", @"Preview -> live preview alert alternate button")
                                        otherButton:nil
-                         informativeTextWithFormat:NSLocalizedString(@"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?", nil)];
+                         informativeTextWithFormat:NSLocalizedString(@"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?", @"Preview -> live preview alert informative text")];
 
-    [alert beginSheetModalForWindow:self.window modalDelegate:self didEndSelector:@selector(alertDidEnd:returnCode:contextInfo:) contextInfo:(void *)CFBridgingRetain(fileURL)];
-}
-
-- (void)alertDidEnd:(NSAlert *)alert
-         returnCode:(NSInteger)returnCode
-        contextInfo:(void *)contextInfo
-{
-    NSURL *fileURL = CFBridgingRelease(contextInfo);
-    if (returnCode == NSModalResponseOK)
-    {
-        [[NSWorkspace sharedWorkspace] openURL:fileURL];
-    }
+    [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
+        if (returnCode == NSModalResponseOK)
+        {
+            [[NSWorkspace sharedWorkspace] openURL:fileURL];
+        }
+    }];
 }
 
 - (void)setUpPlaybackOfURL:(NSURL *)fileURL playerClass:(Class)class;

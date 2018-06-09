@@ -20,9 +20,9 @@
 
 - (NSArray *)types
 {
-    return @[NSLocalizedString(@"Chapters", @""),
-             NSLocalizedString(@"Seconds", @""),
-             NSLocalizedString(@"Frames", @"")];
+    return @[NSLocalizedString(@"Chapters", @"HBRange -> display name"),
+             NSLocalizedString(@"Seconds", @"HBRange -> display name"),
+             NSLocalizedString(@"Frames", @"HBRange -> display name")];
 }
 
 - (BOOL)chaptersSelected
