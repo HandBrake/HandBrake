@@ -5840,27 +5840,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
         buf->s.renderOffset = buf->s.start;
     }
 
-    /*
-     * Fill out buf->s.stop for subtitle packets
-     *
-     * libavcodec's MKV demuxer stores the duration of UTF-8 subtitles (AV_CODEC_ID_TEXT)
-     * in the 'convergence_duration' field for some reason.
-     *
-     * Other subtitles' durations are stored in the 'duration' field.
-     *
-     * VOB subtitles (AV_CODEC_ID_DVD_SUBTITLE) do not have their duration stored in
-     * either field. This is not a problem because the VOB decoder can extract this
-     * information from the packet payload itself.
-     *
-     * SSA subtitles (AV_CODEC_ID_ASS) do not have their duration stored in
-     * either field. This is not a problem because the SSA decoder can extract this
-     * information from the packet payload itself.
-     */
-    enum AVCodecID ffmpeg_pkt_codec;
-    enum AVMediaType codec_type;
-    ffmpeg_pkt_codec = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt.stream_index]->codecpar->codec_id;
-    codec_type = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt.stream_index]->codecpar->codec_type;
-    switch ( codec_type )
+    switch (s->codecpar->codec_type)
     {
         case AVMEDIA_TYPE_VIDEO:
             buf->s.type = VIDEO_BUF;
@@ -5880,19 +5860,20 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
             break;
 
         case AVMEDIA_TYPE_SUBTITLE:
+        {
+            // Fill out stop and duration for subtitle packets
+            int64_t pkt_duration = stream->ffmpeg_pkt.duration;
+            if (pkt_duration != AV_NOPTS_VALUE)
+            {
+                buf->s.duration = av_to_hb_pts(pkt_duration, tsconv, 0);
+                buf->s.stop = buf->s.start + buf->s.duration;
+            }
             buf->s.type = SUBTITLE_BUF;
-            break;
+        } break;
 
         default:
             buf->s.type = OTHER_BUF;
             break;
-    }
-    if ( ffmpeg_pkt_codec == AV_CODEC_ID_TEXT ||
-         ffmpeg_pkt_codec == AV_CODEC_ID_SUBRIP  ||
-         ffmpeg_pkt_codec == AV_CODEC_ID_MOV_TEXT ) {
-        int64_t ffmpeg_pkt_duration = stream->ffmpeg_pkt.duration;
-        int64_t buf_duration = av_to_hb_pts( ffmpeg_pkt_duration, tsconv, 0 );
-        buf->s.stop = buf->s.start + buf_duration;
     }
 
     /*

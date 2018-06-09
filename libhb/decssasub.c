@@ -40,12 +40,6 @@ struct hb_work_private_s
     hb_job_t *job;
 };
 
-#define SSA_2_HB_TIME(hr,min,sec,centi) \
-    ( 90LL * ( hr    * 1000LL * 60 * 60 +\
-              min   * 1000LL * 60 +\
-              sec   * 1000LL +\
-              centi * 10LL ) )
-
 #define SSA_VERBOSE_PACKETS 0
 
 static int ssa_update_style(char *ssa, hb_subtitle_style_t *style)
@@ -226,175 +220,6 @@ void hb_ssa_style_init(hb_subtitle_style_t *style)
     style->bg_alpha  = 0xFF;
 }
 
-static hb_buffer_t *
-ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, hb_buffer_t * in,
-                            uint8_t *in_data, int in_size );
-
-/*
- * Decodes a single SSA packet to one or more TEXTSUB or PICTURESUB subtitle packets.
- *
- * SSA packet format:
- * ( Dialogue: Marked,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text CR LF ) +
- *             1      2     3   4     5    6       7       8       9      10
- */
-static hb_buffer_t *ssa_decode_packet( hb_work_object_t * w, hb_buffer_t *in )
-{
-    // Store NULL after the end of the buffer to make using string processing safe
-    hb_buffer_realloc(in, ++in->size);
-    in->data[in->size - 1] = '\0';
-
-    hb_buffer_list_t list;
-    hb_buffer_t *buf;
-
-    hb_buffer_list_clear(&list);
-    const char *EOL = "\r\n";
-    char *curLine, *curLine_parserData;
-    for ( curLine = strtok_r( (char *) in->data, EOL, &curLine_parserData );
-          curLine;
-          curLine = strtok_r( NULL, EOL, &curLine_parserData ) )
-    {
-        // Skip empty lines and spaces between adjacent CR and LF
-        if (curLine[0] == '\0')
-            continue;
-
-        // Decode an individual SSA line
-        buf = ssa_decode_line_to_mkv_ssa(w, in,
-                                         (uint8_t *)curLine, strlen(curLine));
-        hb_buffer_list_append(&list, buf);
-    }
-
-    return hb_buffer_list_clear(&list);
-}
-
-/*
- * Parses the start and stop time from the specified SSA packet.
- *
- * Returns true if parsing failed; false otherwise.
- */
-static int parse_timing_from_ssa_packet( char *in_data, int64_t *in_start, int64_t *in_stop )
-{
-    /*
-     * Parse Start and End fields for timing information
-     */
-    int start_hr, start_min, start_sec, start_centi;
-    int   end_hr,   end_min,   end_sec,   end_centi;
-    // SSA subtitles have an empty layer field (bare ',').  The scanf
-    // format specifier "%*128[^,]" will not match on a bare ','.  There
-    // must be at least one non ',' character in the match.  So the format
-    // specifier is placed directly next to the ':' so that the next
-    // expected ' ' after the ':' will be the character it matches on
-    // when there is no layer field.
-    int numPartsRead = sscanf( (char *) in_data, "Dialogue:%*128[^,],"
-        "%d:%d:%d.%d,"  // Start
-        "%d:%d:%d.%d,", // End
-        &start_hr, &start_min, &start_sec, &start_centi,
-          &end_hr,   &end_min,   &end_sec,   &end_centi );
-    if ( numPartsRead != 8 )
-        return 1;
-
-    *in_start = SSA_2_HB_TIME(start_hr, start_min, start_sec, start_centi);
-    *in_stop  = SSA_2_HB_TIME(  end_hr,   end_min,   end_sec,   end_centi);
-
-    return 0;
-}
-
-static uint8_t *find_field( uint8_t *pos, uint8_t *end, int fieldNum )
-{
-    int curFieldID = 1;
-    while (pos < end)
-    {
-        if ( *pos++ == ',' )
-        {
-            curFieldID++;
-            if ( curFieldID == fieldNum )
-                return pos;
-        }
-    }
-    return NULL;
-}
-
-/*
- * SSA line format:
- *   Dialogue: Marked,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text '\0'
- *             1      2     3   4     5    6       7       8       9      10
- *
- * MKV-SSA packet format:
- *   ReadOrder,Marked,          Style,Name,MarginL,MarginR,MarginV,Effect,Text '\0'
- *   1         2                3     4    5       6       7       8      9
- */
-static hb_buffer_t *
-ssa_decode_line_to_mkv_ssa( hb_work_object_t * w, hb_buffer_t * in,
-                            uint8_t *in_data, int in_size )
-{
-    hb_work_private_t * pv = w->private_data;
-    hb_buffer_t * out;
-
-    // Parse values for in->s.start and in->s.stop
-    int64_t in_start, in_stop;
-    if ( parse_timing_from_ssa_packet( (char *) in_data, &in_start, &in_stop ) )
-        goto fail;
-
-    // Convert the SSA packet to MKV-SSA format, which is what libass expects
-    char *mkvIn;
-    int numPartsRead;
-    char *styleToTextFields;
-    char *layerField = malloc( in_size );
-
-    // SSA subtitles have an empty layer field (bare ',').  The scanf
-    // format specifier "%*128[^,]" will not match on a bare ','.  There
-    // must be at least one non ',' character in the match.  So the format
-    // specifier is placed directly next to the ':' so that the next
-    // expected ' ' after the ':' will be the character it matches on
-    // when there is no layer field.
-    numPartsRead = sscanf( (char *)in_data, "Dialogue:%128[^,],", layerField );
-    if ( numPartsRead != 1 )
-    {
-        free(layerField);
-        goto fail;
-    }
-
-    styleToTextFields = (char *)find_field( in_data, in_data + in_size, 4 );
-    if ( styleToTextFields == NULL ) {
-        free( layerField );
-        goto fail;
-    }
-
-    // The sscanf conversion above will result in an extra space
-    // before the layerField.  Strip the space.
-    char *stripLayerField = layerField;
-    for(; *stripLayerField == ' '; stripLayerField++);
-
-    out = hb_buffer_init( in_size + 1 );
-    mkvIn = (char*)out->data;
-
-    mkvIn[0] = '\0';
-    sprintf(mkvIn, "%d", pv->readOrder++);    // ReadOrder: make this up
-    strcat( mkvIn, "," );
-    strcat( mkvIn, stripLayerField );
-    strcat( mkvIn, "," );
-    strcat( mkvIn, (char *)styleToTextFields );
-
-    out->size           = strlen(mkvIn) + 1;
-    out->s.frametype    = HB_FRAME_SUBTITLE;
-    out->s.start        = in->s.start;
-    out->s.duration     = in_stop - in_start;
-    out->s.stop         = in->s.start + out->s.duration;
-    out->s.scr_sequence = in->s.scr_sequence;
-
-    if( out->size == 0 )
-    {
-        hb_buffer_close(&out);
-    }
-
-    free( layerField );
-
-    return out;
-
-fail:
-    hb_log( "decssasub: malformed SSA subtitle packet: %.*s\n", in_size, in_data );
-    return NULL;
-}
-
 static int decssaInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv;
@@ -415,14 +240,19 @@ static int decssaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     printf("\nPACKET(%"PRId64",%"PRId64"): %.*s\n", in->s.start/90, in->s.stop/90, in->size, in->data);
 #endif
 
+    *buf_in = NULL;
+    *buf_out = in;
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
-        *buf_out = in;
-        *buf_in = NULL;
         return HB_WORK_DONE;
     }
 
-    *buf_out = ssa_decode_packet(w, in);
+    // Not much to do here.  ffmpeg already supplies SSA subtitles in the
+    // requried matroska packet format.
+    //
+    // We require string termination of the buffer
+    hb_buffer_realloc(in, ++in->size);
+    in->data[in->size - 1] = '\0';
 
     return HB_WORK_OK;
 }
