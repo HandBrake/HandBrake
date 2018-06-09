@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -20,13 +19,11 @@
             <rect key="frame" x="0.0" y="0.0" width="875" height="335"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <customView misplaced="YES" id="Mri-4y-8rX">
-                    <rect key="frame" x="296" y="184" width="284" height="155"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <customView translatesAutoresizingMaskIntoConstraints="NO" id="Mri-4y-8rX">
+                    <rect key="frame" x="296" y="184" width="281" height="155"/>
                     <subviews>
-                        <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Mke-9L-LvB">
-                            <rect key="frame" x="192" y="64" width="15" height="22"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Mke-9L-LvB">
+                            <rect key="frame" x="192" y="68" width="15" height="22"/>
                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="jWe-et-eOH">
                                 <font key="font" metaFont="smallSystem"/>
                             </stepperCell>
@@ -50,16 +47,18 @@
                                 <binding destination="-2" name="maxValue" keyPath="self.picture.maxTopCrop" id="4Z9-jd-EzH"/>
                             </connections>
                         </stepper>
-                        <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" id="RTr-3u-52l">
-                            <rect key="frame" x="79" y="92" width="90" height="43"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" autosizesCells="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RTr-3u-52l">
+                            <rect key="frame" x="76" y="96" width="205" height="43"/>
                             <string key="toolTip">Cropping mode.
 
 Automatic detects and removes black borders from the video.
 
 Custom allows for manual settings.</string>
+                            <constraints>
+                                <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="205" id="nnb-NE-THM"/>
+                            </constraints>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                            <size key="cellSize" width="90" height="20"/>
+                            <size key="cellSize" width="205" height="20"/>
                             <size key="intercellSpacing" width="2" height="3"/>
                             <buttonCell key="prototype" type="radio" title="Radio" imagePosition="left" alignment="left" controlSize="small" inset="2" id="S7K-vF-t1n">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -91,9 +90,8 @@ Custom allows for manual settings.</string>
                                 </binding>
                             </connections>
                         </matrix>
-                        <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="r9l-cH-pFW">
-                            <rect key="frame" x="137" y="41" width="15" height="22"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="r9l-cH-pFW">
+                            <rect key="frame" x="134" y="45" width="15" height="22"/>
                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Z4J-oE-seK">
                                 <font key="font" metaFont="smallSystem"/>
                             </stepperCell>
@@ -117,9 +115,8 @@ Custom allows for manual settings.</string>
                                 <binding destination="-2" name="maxValue" keyPath="self.picture.maxLeftCrop" id="ygC-Mk-gae"/>
                             </connections>
                         </stepper>
-                        <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="6W6-RI-fBx">
-                            <rect key="frame" x="192" y="18" width="15" height="22"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="6W6-RI-fBx">
+                            <rect key="frame" x="192" y="22" width="15" height="22"/>
                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="Fll-IT-6Ex">
                                 <font key="font" metaFont="smallSystem"/>
                             </stepperCell>
@@ -143,9 +140,8 @@ Custom allows for manual settings.</string>
                                 <binding destination="-2" name="maxValue" keyPath="self.picture.maxBottomCrop" id="9V7-cf-abT"/>
                             </connections>
                         </stepper>
-                        <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="Bmd-c8-9hp">
-                            <rect key="frame" x="18" y="119" width="59" height="14"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="Bmd-c8-9hp">
+                            <rect key="frame" x="18" y="123" width="56" height="14"/>
                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Cropping:" id="haC-cO-jDm">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -155,9 +151,11 @@ Custom allows for manual settings.</string>
                                 <binding destination="-2" name="textColor" keyPath="self.labelColor" id="fkJ-hW-R19"/>
                             </connections>
                         </textField>
-                        <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="wsq-TS-cC6">
-                            <rect key="frame" x="216" y="43" width="36" height="19"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textField toolTip="Right edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="36" translatesAutoresizingMaskIntoConstraints="NO" id="wsq-TS-cC6">
+                            <rect key="frame" x="213" y="47" width="36" height="19"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="36" id="FKh-P6-rGY"/>
+                            </constraints>
                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CIG-PU-RMT">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -187,9 +185,8 @@ Custom allows for manual settings.</string>
                                 </binding>
                             </connections>
                         </textField>
-                        <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" id="Ddg-4D-el9">
-                            <rect key="frame" x="251" y="41" width="15" height="22"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ddg-4D-el9">
+                            <rect key="frame" x="248" y="45" width="15" height="22"/>
                             <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="2" maxValue="59" id="QFM-0O-SjJ">
                                 <font key="font" metaFont="smallSystem"/>
                             </stepperCell>
@@ -213,9 +210,11 @@ Custom allows for manual settings.</string>
                                 <binding destination="-2" name="maxValue" keyPath="self.picture.maxRightCrop" id="X5t-bh-W3a"/>
                             </connections>
                         </stepper>
-                        <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="1Z0-JT-vst">
-                            <rect key="frame" x="157" y="20" width="36" height="19"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textField toolTip="Bottom edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="36" translatesAutoresizingMaskIntoConstraints="NO" id="1Z0-JT-vst">
+                            <rect key="frame" x="157" y="24" width="36" height="19"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="36" id="3ia-1j-BcT"/>
+                            </constraints>
                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="DzX-1f-HsP">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -245,9 +244,11 @@ Custom allows for manual settings.</string>
                                 </binding>
                             </connections>
                         </textField>
-                        <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="41c-48-2XJ">
-                            <rect key="frame" x="157" y="66" width="36" height="19"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textField toolTip="Top edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="36" translatesAutoresizingMaskIntoConstraints="NO" id="41c-48-2XJ">
+                            <rect key="frame" x="157" y="70" width="36" height="19"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="36" id="iB8-cV-2Mf"/>
+                            </constraints>
                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="CZs-y7-1JV">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -277,9 +278,11 @@ Custom allows for manual settings.</string>
                                 </binding>
                             </connections>
                         </textField>
-                        <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" id="LTu-ic-Ty9">
-                            <rect key="frame" x="102" y="43" width="36" height="19"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textField toolTip="Left edge cropping amount in pixels." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="36" translatesAutoresizingMaskIntoConstraints="NO" id="LTu-ic-Ty9">
+                            <rect key="frame" x="99" y="47" width="36" height="19"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="36" id="g6w-uS-3jp"/>
+                            </constraints>
                             <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XZs-gj-hoo">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -310,12 +313,39 @@ Custom allows for manual settings.</string>
                             </connections>
                         </textField>
                     </subviews>
+                    <constraints>
+                        <constraint firstItem="LTu-ic-Ty9" firstAttribute="leading" secondItem="Bmd-c8-9hp" secondAttribute="trailing" constant="27" id="1CD-SF-3ne"/>
+                        <constraint firstAttribute="trailing" secondItem="Mke-9L-LvB" secondAttribute="trailing" constant="76" id="28v-SD-i5m"/>
+                        <constraint firstItem="Bmd-c8-9hp" firstAttribute="leading" secondItem="Mri-4y-8rX" secondAttribute="leading" constant="20" id="2og-D9-eRi"/>
+                        <constraint firstItem="Bmd-c8-9hp" firstAttribute="top" secondItem="RTr-3u-52l" secondAttribute="top" constant="2" id="3Rp-09-iy5"/>
+                        <constraint firstAttribute="bottom" secondItem="1Z0-JT-vst" secondAttribute="bottom" constant="24" id="3uz-Kd-oJj"/>
+                        <constraint firstItem="Mke-9L-LvB" firstAttribute="leading" secondItem="41c-48-2XJ" secondAttribute="trailing" constant="1" id="8t6-SC-3I7"/>
+                        <constraint firstItem="1Z0-JT-vst" firstAttribute="leading" secondItem="41c-48-2XJ" secondAttribute="leading" id="DL3-J2-q8X"/>
+                        <constraint firstItem="Mke-9L-LvB" firstAttribute="centerY" secondItem="41c-48-2XJ" secondAttribute="centerY" id="EBx-Hx-m7A"/>
+                        <constraint firstItem="6W6-RI-fBx" firstAttribute="leading" secondItem="1Z0-JT-vst" secondAttribute="trailing" constant="1" id="Ig6-np-JIv"/>
+                        <constraint firstItem="Ddg-4D-el9" firstAttribute="leading" secondItem="wsq-TS-cC6" secondAttribute="trailing" constant="1" id="JUM-DW-Ax2"/>
+                        <constraint firstAttribute="trailing" secondItem="RTr-3u-52l" secondAttribute="trailing" id="Kmh-ck-ddn"/>
+                        <constraint firstItem="1Z0-JT-vst" firstAttribute="top" secondItem="LTu-ic-Ty9" secondAttribute="bottom" constant="4" id="LcO-SU-clL"/>
+                        <constraint firstItem="LTu-ic-Ty9" firstAttribute="top" secondItem="41c-48-2XJ" secondAttribute="bottom" constant="4" id="Oeg-QA-EpY"/>
+                        <constraint firstItem="wsq-TS-cC6" firstAttribute="baseline" secondItem="LTu-ic-Ty9" secondAttribute="baseline" id="TSx-tN-5sz"/>
+                        <constraint firstItem="r9l-cH-pFW" firstAttribute="leading" secondItem="LTu-ic-Ty9" secondAttribute="trailing" constant="1" id="UdC-WZ-Oq7"/>
+                        <constraint firstItem="6W6-RI-fBx" firstAttribute="centerY" secondItem="1Z0-JT-vst" secondAttribute="centerY" id="WEw-3s-Bak"/>
+                        <constraint firstItem="RTr-3u-52l" firstAttribute="leading" secondItem="Bmd-c8-9hp" secondAttribute="trailing" constant="4" id="WMd-GK-erY"/>
+                        <constraint firstItem="wsq-TS-cC6" firstAttribute="leading" secondItem="r9l-cH-pFW" secondAttribute="trailing" constant="66" id="a57-oU-J2m"/>
+                        <constraint firstItem="41c-48-2XJ" firstAttribute="top" secondItem="RTr-3u-52l" secondAttribute="bottom" constant="7" id="cRS-oF-I8k"/>
+                        <constraint firstAttribute="trailing" secondItem="Ddg-4D-el9" secondAttribute="trailing" constant="20" id="nJp-9K-MPE"/>
+                        <constraint firstItem="Bmd-c8-9hp" firstAttribute="top" secondItem="Mri-4y-8rX" secondAttribute="top" constant="18" id="sgt-V6-NJP"/>
+                        <constraint firstItem="r9l-cH-pFW" firstAttribute="centerY" secondItem="LTu-ic-Ty9" secondAttribute="centerY" id="uPP-7j-B8i"/>
+                        <constraint firstItem="wsq-TS-cC6" firstAttribute="centerY" secondItem="Ddg-4D-el9" secondAttribute="centerY" id="vYN-3g-xVL"/>
+                    </constraints>
                     <accessibility description="Cropping"/>
                 </customView>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="LWv-Y9-b0S">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="LWv-Y9-b0S">
                     <rect key="frame" x="98" y="246" width="54" height="19"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Display width. This is the number of pixels wide your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect.</string>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="54" id="9Cw-j4-ab2"/>
+                    </constraints>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="XYg-xi-ExT">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="jW5-N6-2cB"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -334,10 +364,12 @@ Custom allows for manual settings.</string>
                         <outlet property="nextKeyView" destination="JC3-5O-BXA" id="oN1-b9-dyt"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="nQe-Vq-Og2">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="nQe-Vq-Og2">
                     <rect key="frame" x="180" y="246" width="54" height="19"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Display height. This is the number of pixels tall your video will appear to be at its native resolution, and is the result of scaling the storage dimensions by the pixel aspect.</string>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="54" id="oRF-SD-pEX"/>
+                    </constraints>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="0ho-7Y-adD">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="gd7-JE-NQS"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -355,10 +387,12 @@ Custom allows for manual settings.</string>
                         <outlet property="nextKeyView" destination="JC3-5O-BXA" id="Ly3-4t-fIs"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="JC3-5O-BXA">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="JC3-5O-BXA">
                     <rect key="frame" x="98" y="219" width="54" height="19"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback.</string>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="54" id="SMO-4B-I1G"/>
+                    </constraints>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="w99-9Y-YN4">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="ygx-uC-eb0"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -378,9 +412,8 @@ Custom allows for manual settings.</string>
                         <outlet property="nextKeyView" destination="rFi-0b-3BX" id="IBQ-5n-k0g"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="vOY-Ix-eha">
-                    <rect key="frame" x="14" y="221" width="78" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="vOY-Ix-eha">
+                    <rect key="frame" x="18" y="222" width="74" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR:" id="gVj-RG-PcL">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -390,10 +423,9 @@ Custom allows for manual settings.</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="VwV-bW-PBZ"/>
                     </connections>
                 </textField>
-                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" id="FwZ-6T-zJe">
-                    <rect key="frame" x="153" y="299" width="15" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FwZ-6T-zJe">
+                    <rect key="frame" x="153" y="298" width="15" height="22"/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="NP7-P2-Qga">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <accessibility description="Storage Width"/>
@@ -408,10 +440,12 @@ Custom allows for manual settings.</string>
                         <outlet property="nextKeyView" destination="Hkl-7Z-J2e" id="uHh-Lp-0GY"/>
                     </connections>
                 </stepper>
-                <popUpButton verticalHuggingPriority="750" misplaced="YES" id="ns0-ar-I7c">
-                    <rect key="frame" x="95" y="156" width="54" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ns0-ar-I7c">
+                    <rect key="frame" x="95" y="156" width="56" height="22"/>
                     <string key="toolTip">Ensure storage dimensions are multiples of this value. Higher values are only necessary for compatibility with certain legacy devices. Set to 2 unless you have a specific compatibility concern.</string>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="aED-d6-HLo"/>
+                    </constraints>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" id="H0L-sP-ky8">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -434,10 +468,12 @@ Custom allows for manual settings.</string>
                         <binding destination="-2" name="selectedValue" keyPath="self.picture.modulus" id="lCQ-i3-hQ0"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="9hH-As-JSa">
-                    <rect key="frame" x="98" y="301" width="56" height="19"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="751" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="9hH-As-JSa">
+                    <rect key="frame" x="98" y="300" width="56" height="19"/>
                     <string key="toolTip">Video storage width. This is the number of pixels wide to be encoded. Storage width may differ from display width depending on anamorphic settings.</string>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="56" id="ALR-s1-L2M"/>
+                    </constraints>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="fVv-0N-MQB">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="6jd-2b-RPM"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -460,9 +496,8 @@ Custom allows for manual settings.</string>
                         <outlet property="nextKeyView" destination="FwZ-6T-zJe" id="FVz-Ke-KDt"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="JBo-0E-AsU">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="JBo-0E-AsU">
                     <rect key="frame" x="18" y="187" width="74" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Anamorphic:" id="8vS-Mw-bny">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -472,9 +507,8 @@ Custom allows for manual settings.</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="MVb-7T-IbY"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="uqQ-uA-3xF">
-                    <rect key="frame" x="173" y="304" width="10" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uqQ-uA-3xF">
+                    <rect key="frame" x="173" y="303" width="10" height="14"/>
                     <textFieldCell key="cell" controlSize="small" enabled="NO" sendsActionOnEndEditing="YES" alignment="right" title="x" id="hN1-S9-zl8">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -482,27 +516,24 @@ Custom allows for manual settings.</string>
                     </textFieldCell>
                     <accessibility description=" "/>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="IVk-ye-fOe">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IVk-ye-fOe">
                     <rect key="frame" x="161" y="249" width="10" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" enabled="NO" sendsActionOnEndEditing="YES" alignment="right" title="x" id="uuL-JR-73C">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="sKT-h2-mAF">
-                    <rect key="frame" x="161" y="223" width="10" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sKT-h2-mAF">
+                    <rect key="frame" x="161" y="222" width="10" height="14"/>
                     <textFieldCell key="cell" controlSize="small" enabled="NO" sendsActionOnEndEditing="YES" alignment="right" title="x" id="cNr-IZ-H9j">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <popUpButton verticalHuggingPriority="750" misplaced="YES" id="w1f-3S-up0">
-                    <rect key="frame" x="95" y="182" width="83" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="w1f-3S-up0">
+                    <rect key="frame" x="95" y="182" width="90" height="22"/>
                     <string key="toolTip">Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
 
 Off disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.
@@ -512,6 +543,9 @@ Auto maximizes storage resolution while preserving the original display aspect r
 Loose is similar to Auto, but attempts to preserve the storage aspect ratio. This can result in a slight storage resolution loss compared to Auto.
 
 Custom allows manually setting all parameters. Useful for correcting an incorrect source display aspect and for professionals needing advanced control in post-production.</string>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="84" id="avw-sh-hdv"/>
+                    </constraints>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" id="vx1-8S-fyc">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -534,9 +568,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="selectedTag" keyPath="self.picture.anamorphicMode" id="ugL-AX-WF2"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="tHY-g2-oWj">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="tHY-g2-oWj">
                     <rect key="frame" x="18" y="161" width="74" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Modulus:" id="jXn-fo-wNU">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -546,9 +579,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="fh5-vf-5Tr"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="9oG-zm-Y0W">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="9oG-zm-Y0W">
                     <rect key="frame" x="18" y="303" width="74" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Storage Size:" id="L7V-2e-qf9">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -559,9 +591,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <outlet property="nextKeyView" destination="9hH-As-JSa" id="XO3-A3-WZr"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="hei-Cd-vcN">
-                    <rect key="frame" x="14" y="249" width="78" height="14"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="hei-Cd-vcN">
+                    <rect key="frame" x="18" y="249" width="74" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Display Size:" id="SPg-s0-Oh0">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -571,10 +602,12 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Ghz-q6-1Y1"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="Hkl-7Z-J2e">
-                    <rect key="frame" x="187" y="301" width="56" height="19"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Hkl-7Z-J2e">
+                    <rect key="frame" x="187" y="300" width="56" height="19"/>
                     <string key="toolTip">Video storage height. This is the number of pixels tall to be encoded. Storage height may differ from display height depending on anamorphic settings.</string>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="56" id="DlL-Br-Zgg"/>
+                    </constraints>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="ZHl-Y5-C5P">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" localizesFormat="NO" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Ts7-R5-Oye"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -597,10 +630,12 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <outlet property="nextKeyView" destination="2s0-5k-fjU" id="D8H-ff-R52"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" misplaced="YES" allowsCharacterPickerTouchBarItem="YES" id="rFi-0b-3BX">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="rFi-0b-3BX">
                     <rect key="frame" x="180" y="219" width="54" height="19"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <string key="toolTip">Pixel Aspect Ratio defines the shape of the storage pixels, or how to scale anamorphic video to create the correct display aspect and dimensions. Non-anamorphic video (1:1 PAR) is not scaled during playback.</string>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="54" id="aaK-0g-Qkk"/>
+                    </constraints>
                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="QSZ-2r-Ydl">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Tzx-xq-0zo"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -618,10 +653,9 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="value" keyPath="self.picture.parHeight" id="Bwn-Hk-CGG"/>
                     </connections>
                 </textField>
-                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" id="2s0-5k-fjU">
-                    <rect key="frame" x="242" y="299" width="15" height="22"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
+                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2s0-5k-fjU">
+                    <rect key="frame" x="242" y="298" width="15" height="22"/>
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <accessibility description="Storage Height"/>
@@ -635,9 +669,8 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="maxValue" keyPath="self.picture.maxHeight" id="yUT-oM-ZsK"/>
                     </connections>
                 </stepper>
-                <button misplaced="YES" id="6G0-MW-iVa">
-                    <rect key="frame" x="95" y="278" width="145" height="18"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                <button translatesAutoresizingMaskIntoConstraints="NO" id="6G0-MW-iVa">
+                    <rect key="frame" x="95" y="278" width="119" height="18"/>
                     <string key="toolTip">Keep Aspect Ratio maintains the original display aspect of the source. Disabling this may result in a stretched or squeezed picture.</string>
                     <buttonCell key="cell" type="check" title="Keep Aspect Ratio" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="hcF-CZ-p0E">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -658,10 +691,60 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                     </connections>
                 </button>
             </subviews>
+            <constraints>
+                <constraint firstItem="hei-Cd-vcN" firstAttribute="leading" secondItem="9oG-zm-Y0W" secondAttribute="leading" id="3w5-XP-fGc"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ns0-ar-I7c" secondAttribute="trailing" constant="20" symbolic="YES" id="4d7-AW-HE0"/>
+                <constraint firstItem="IVk-ye-fOe" firstAttribute="leading" secondItem="LWv-Y9-b0S" secondAttribute="trailing" constant="11" id="5CN-RX-tbh"/>
+                <constraint firstItem="FwZ-6T-zJe" firstAttribute="centerY" secondItem="uqQ-uA-3xF" secondAttribute="centerY" id="5Xb-UM-UVq"/>
+                <constraint firstItem="Mri-4y-8rX" firstAttribute="leading" secondItem="2s0-5k-fjU" secondAttribute="trailing" constant="41" id="7Fu-rw-NQ5"/>
+                <constraint firstItem="w1f-3S-up0" firstAttribute="leading" secondItem="JBo-0E-AsU" secondAttribute="trailing" constant="8" id="7Ui-hg-NUd"/>
+                <constraint firstItem="9oG-zm-Y0W" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="8y0-eK-p1d"/>
+                <constraint firstItem="nQe-Vq-Og2" firstAttribute="baseline" secondItem="IVk-ye-fOe" secondAttribute="baseline" id="A1k-oZ-jxT"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Mri-4y-8rX" secondAttribute="trailing" constant="20" symbolic="YES" id="A8h-Xo-Yf7"/>
+                <constraint firstItem="vOY-Ix-eha" firstAttribute="baseline" secondItem="JC3-5O-BXA" secondAttribute="baseline" id="AHl-Mc-RL4"/>
+                <constraint firstItem="vOY-Ix-eha" firstAttribute="leading" secondItem="hei-Cd-vcN" secondAttribute="leading" id="CAl-vA-hzG"/>
+                <constraint firstItem="hei-Cd-vcN" firstAttribute="width" secondItem="9oG-zm-Y0W" secondAttribute="width" id="CnQ-29-ukc"/>
+                <constraint firstItem="ns0-ar-I7c" firstAttribute="top" secondItem="w1f-3S-up0" secondAttribute="bottom" constant="8" id="D8p-hR-m8g"/>
+                <constraint firstItem="rFi-0b-3BX" firstAttribute="baseline" secondItem="sKT-h2-mAF" secondAttribute="baseline" id="Ddc-yP-13V"/>
+                <constraint firstItem="9oG-zm-Y0W" firstAttribute="baseline" secondItem="9hH-As-JSa" secondAttribute="baseline" id="FuM-gJ-Ws1"/>
+                <constraint firstItem="LWv-Y9-b0S" firstAttribute="leading" secondItem="hei-Cd-vcN" secondAttribute="trailing" constant="8" id="JgQ-R2-S4d"/>
+                <constraint firstItem="sKT-h2-mAF" firstAttribute="leading" secondItem="JC3-5O-BXA" secondAttribute="trailing" constant="11" id="L9V-AS-0qe"/>
+                <constraint firstItem="uqQ-uA-3xF" firstAttribute="baseline" secondItem="Hkl-7Z-J2e" secondAttribute="baseline" id="LO9-aK-AVh"/>
+                <constraint firstItem="FwZ-6T-zJe" firstAttribute="centerY" secondItem="9hH-As-JSa" secondAttribute="centerY" id="OPq-WV-0rN"/>
+                <constraint firstItem="LWv-Y9-b0S" firstAttribute="baseline" secondItem="IVk-ye-fOe" secondAttribute="baseline" id="OtX-mc-oar"/>
+                <constraint firstItem="6G0-MW-iVa" firstAttribute="top" secondItem="9hH-As-JSa" secondAttribute="bottom" constant="7" id="PvA-DS-muN"/>
+                <constraint firstItem="ns0-ar-I7c" firstAttribute="leading" secondItem="tHY-g2-oWj" secondAttribute="trailing" constant="8" id="QVv-qJ-Ofs"/>
+                <constraint firstItem="tHY-g2-oWj" firstAttribute="leading" secondItem="JBo-0E-AsU" secondAttribute="leading" id="UN8-rQ-FOt"/>
+                <constraint firstItem="nQe-Vq-Og2" firstAttribute="leading" secondItem="IVk-ye-fOe" secondAttribute="trailing" constant="11" id="W1D-bO-dgc"/>
+                <constraint firstItem="hei-Cd-vcN" firstAttribute="baseline" secondItem="LWv-Y9-b0S" secondAttribute="baseline" id="W4D-1v-rYx"/>
+                <constraint firstItem="JBo-0E-AsU" firstAttribute="leading" secondItem="vOY-Ix-eha" secondAttribute="leading" id="WxP-rx-Z3C"/>
+                <constraint firstItem="Mri-4y-8rX" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6G0-MW-iVa" secondAttribute="trailing" constant="8" symbolic="YES" id="XHg-AE-MAw"/>
+                <constraint firstItem="JBo-0E-AsU" firstAttribute="baseline" secondItem="w1f-3S-up0" secondAttribute="baseline" id="XjT-JQ-Ydo"/>
+                <constraint firstItem="LWv-Y9-b0S" firstAttribute="top" secondItem="6G0-MW-iVa" secondAttribute="bottom" constant="16" id="Y9M-iu-Gn4"/>
+                <constraint firstItem="JBo-0E-AsU" firstAttribute="width" secondItem="vOY-Ix-eha" secondAttribute="width" id="YQF-rZ-wB0"/>
+                <constraint firstItem="vOY-Ix-eha" firstAttribute="width" secondItem="hei-Cd-vcN" secondAttribute="width" id="ZE9-sd-nm4"/>
+                <constraint firstItem="tHY-g2-oWj" firstAttribute="width" secondItem="JBo-0E-AsU" secondAttribute="width" id="bfA-bN-xmc"/>
+                <constraint firstItem="Mri-4y-8rX" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="-4" id="cwh-LP-c8Z"/>
+                <constraint firstItem="w1f-3S-up0" firstAttribute="top" secondItem="JC3-5O-BXA" secondAttribute="bottom" constant="16" id="d8Q-sV-Al9"/>
+                <constraint firstItem="JC3-5O-BXA" firstAttribute="leading" secondItem="vOY-Ix-eha" secondAttribute="trailing" constant="8" id="fde-NK-LLZ"/>
+                <constraint firstItem="Hkl-7Z-J2e" firstAttribute="leading" secondItem="uqQ-uA-3xF" secondAttribute="trailing" constant="6" id="gkW-Lu-BH7"/>
+                <constraint firstItem="6G0-MW-iVa" firstAttribute="leading" secondItem="9hH-As-JSa" secondAttribute="leading" id="gyR-Lu-st4"/>
+                <constraint firstItem="JC3-5O-BXA" firstAttribute="top" secondItem="LWv-Y9-b0S" secondAttribute="bottom" constant="8" id="gzL-GN-orP"/>
+                <constraint firstItem="uqQ-uA-3xF" firstAttribute="leading" secondItem="FwZ-6T-zJe" secondAttribute="trailing" constant="9" id="hir-dB-x3n"/>
+                <constraint firstItem="tHY-g2-oWj" firstAttribute="baseline" secondItem="ns0-ar-I7c" secondAttribute="baseline" id="jqR-W6-d9k"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="w1f-3S-up0" secondAttribute="trailing" constant="20" symbolic="YES" id="rHw-Bp-bfe"/>
+                <constraint firstItem="JC3-5O-BXA" firstAttribute="baseline" secondItem="sKT-h2-mAF" secondAttribute="baseline" id="rhM-x4-rx4"/>
+                <constraint firstItem="2s0-5k-fjU" firstAttribute="centerY" secondItem="Hkl-7Z-J2e" secondAttribute="centerY" id="usl-bK-BhB"/>
+                <constraint firstItem="rFi-0b-3BX" firstAttribute="leading" secondItem="sKT-h2-mAF" secondAttribute="trailing" constant="11" id="v5K-aK-eKg"/>
+                <constraint firstItem="9hH-As-JSa" firstAttribute="leading" secondItem="9oG-zm-Y0W" secondAttribute="trailing" constant="8" id="vkW-yC-lfd"/>
+                <constraint firstItem="9oG-zm-Y0W" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="18" id="vuz-LJ-1fi"/>
+                <constraint firstItem="FwZ-6T-zJe" firstAttribute="leading" secondItem="9hH-As-JSa" secondAttribute="trailing" constant="1" id="xqZ-an-1yf"/>
+                <constraint firstItem="2s0-5k-fjU" firstAttribute="leading" secondItem="Hkl-7Z-J2e" secondAttribute="trailing" constant="1" id="zKn-1Z-8Ea"/>
+            </constraints>
             <connections>
                 <outlet property="nextKeyView" destination="9oG-zm-Y0W" id="qo2-0g-l82"/>
             </connections>
-            <point key="canvasLocation" x="153" y="-52"/>
+            <point key="canvasLocation" x="152.5" y="-52.5"/>
         </customView>
         <userDefaultsController representsSharedInstance="YES" id="UZ0-eg-oV8"/>
     </objects>
