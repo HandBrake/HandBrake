@@ -56,6 +56,7 @@ namespace HandBrakeWPF.ViewModels
     using DataFormats = System.Windows.DataFormats;
     using DragEventArgs = System.Windows.DragEventArgs;
     using Execute = Caliburn.Micro.Execute;
+    using HandBrakeInstanceManager = HandBrakeWPF.Instance.HandBrakeInstanceManager;
     using LogManager = HandBrakeWPF.Helpers.LogManager;
     using MessageBox = System.Windows.MessageBox;
     using OpenFileDialog = Microsoft.Win32.OpenFileDialog;

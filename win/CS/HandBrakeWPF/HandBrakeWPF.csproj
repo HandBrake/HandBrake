@@ -90,6 +90,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -153,6 +154,8 @@
     <Compile Include="Helpers\MP4Helper.cs" />
     <Compile Include="Helpers\TimeSpanHelper.cs" />
     <Compile Include="Helpers\Validate.cs" />
+    <Compile Include="Instance\HandBrakeInstanceManager.cs" />
+    <Compile Include="Instance\Model\ServerResponse.cs" />
     <Compile Include="Instance\RemoteInstance.cs" />
     <Compile Include="Model\Audio\AudioBehaviourTrack.cs" />
     <Compile Include="Model\Audio\AudioTrackDefaultsMode.cs" />
@@ -717,6 +720,10 @@
     <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj">
       <Project>{087a2ba8-bac2-4577-a46f-07ff9d420016}</Project>
       <Name>HandBrake.Interop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HandBrake.Worker\HandBrake.Worker.csproj">
+      <Project>{f8370f37-b226-4830-aee7-6d7ae403e3d2}</Project>
+      <Name>HandBrake.Worker</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

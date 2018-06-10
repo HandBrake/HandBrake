@@ -421,6 +421,22 @@ namespace HandBrake.Interop.Interop
         }
 
         /// <summary>
+        /// Checks the status of the ongoing encode.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="JsonState"/>.
+        /// </returns>
+        [HandleProcessCorruptedStateExceptions]
+        public JsonState GetEncodeProgress()
+        {
+            IntPtr json = HBFunctions.hb_get_state_json(this.hbHandle);
+            string statusJson = Marshal.PtrToStringAnsi(json);
+
+            JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
+            return state;
+        }
+
+        /// <summary>
         /// Frees any resources associated with this object.
         /// </summary>
         public void Dispose()

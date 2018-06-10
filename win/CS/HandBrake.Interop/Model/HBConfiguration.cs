@@ -63,5 +63,15 @@ namespace HandBrake.Interop.Model
         /// Gets or sets the save log copy directory.
         /// </summary>
         public string SaveLogCopyDirectory { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether we use in-process or out-of-process encoding.
+        /// </summary>
+        public bool RemoteServiceEnabled { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating what port the worker process is to use.
+        /// </summary>
+        public int RemoteServicePort { get; set; }
     }
 }

@@ -256,6 +256,16 @@ namespace HandBrakeWPF
         /// </summary>
         public static string WhenDoneAudioFile = "WhenDoneAudioFile";
 
+        /// <summary>
+        /// Setting to store whether we are using a Worker Process or in-process encoding.
+        /// </summary>
+        public static string RemoteServiceEnabled = "RemoteServiceEnabled";
+
+        /// <summary>
+        /// The port that the worker process is running on.
+        /// </summary>
+        public static string RemoteServicePort = "RemoteServicePort";
+
         #endregion
     }
 }

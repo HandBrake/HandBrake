@@ -14,34 +14,40 @@ namespace HandBrake.Worker
     using System.Net;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Interop.Json.State;
     using HandBrake.Interop.Utilities;
 
     using Newtonsoft.Json;
 
     public class ApiRouter
     {
+        private readonly JsonSerializerSettings jsonNetSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
         private HandBrakeInstance handbrakeInstance;
 
-        public string GetVersionInfo(HttpListenerRequest request)
-        {
-            JsonSerializerSettings settings =
-                new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
-
-            string versionInfo = JsonConvert.SerializeObject((object)VersionHelper.GetVersion(), Formatting.Indented, settings);
-
-            return versionInfo;
-        }
-
-        public string StartEncode(HttpListenerRequest request)
+        public string Initialise(HttpListenerRequest request)
         {
             if (this.handbrakeInstance == null)
             {
                 this.handbrakeInstance = new HandBrakeInstance();
             }
 
-            string requestPostData = ApiRouter.GetRequestPostData(request);
-
+            // TODO support verbosity
             this.handbrakeInstance.Initialize(1);
+
+            return null;
+        }
+
+        public string GetVersionInfo(HttpListenerRequest request)
+        {
+            string versionInfo = JsonConvert.SerializeObject(VersionHelper.GetVersion(), Formatting.Indented, this.jsonNetSettings);
+
+            return versionInfo;
+        }
+
+        public string StartEncode(HttpListenerRequest request)
+        {
+            string requestPostData = GetRequestPostData(request);
+
             this.handbrakeInstance.StartEncode(requestPostData);
 
             return null;
@@ -49,30 +55,21 @@ namespace HandBrake.Worker
 
         public string StopEncode(HttpListenerRequest request)
         {
-            if (this.handbrakeInstance != null)
-            {
-                this.handbrakeInstance.StopEncode();
-            }
+            this.handbrakeInstance?.StopEncode();
 
             return (string)null;
         }
 
         public string PauseEncode(HttpListenerRequest request)
         {
-            if (this.handbrakeInstance != null)
-            {
-                this.handbrakeInstance.PauseEncode();
-            }
+            this.handbrakeInstance?.PauseEncode();
 
             return null;
         }
 
         public string ResumeEncode(HttpListenerRequest request)
         {
-            if (this.handbrakeInstance != null)
-            {
-                this.handbrakeInstance.ResumeEncode();
-            }
+            this.handbrakeInstance?.ResumeEncode();
 
             return null;
         }
@@ -81,7 +78,10 @@ namespace HandBrake.Worker
         {
             if (this.handbrakeInstance != null)
             {
-                return null;
+                JsonState statusJson = this.handbrakeInstance.GetEncodeProgress();
+                string versionInfo = JsonConvert.SerializeObject(statusJson, Formatting.Indented, this.jsonNetSettings);
+
+                return versionInfo;
             }
 
             return null;
@@ -107,9 +107,5 @@ namespace HandBrake.Worker
                 }
             }
         }
-    }
-
-    public class strixng
-    {
     }
 }

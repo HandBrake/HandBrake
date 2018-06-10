@@ -30,14 +30,14 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
 
-    using Chapter = HandBrakeWPF.Services.Scan.Model.Chapter;
-    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
-    using LogLevel = HandBrakeWPF.Services.Logging.Model.LogLevel;
-    using LogMessageType = HandBrakeWPF.Services.Logging.Model.LogMessageType;
-    using LogService = HandBrakeWPF.Services.Logging.LogService;
+    using Chapter = Model.Chapter;
+    using ILog = Logging.Interfaces.ILog;
+    using LogLevel = Logging.Model.LogLevel;
+    using LogMessageType = Logging.Model.LogMessageType;
+    using LogService = Logging.LogService;
     using ScanProgressEventArgs = HandBrake.Interop.Interop.EventArgs.ScanProgressEventArgs;
-    using Subtitle = HandBrakeWPF.Services.Scan.Model.Subtitle;
-    using Title = HandBrakeWPF.Services.Scan.Model.Title;
+    using Subtitle = Model.Subtitle;
+    using Title = Model.Title;
 
     /// <summary>
     /// Scan a Source
@@ -129,7 +129,7 @@ namespace HandBrakeWPF.Services.Scan
             this.postScanOperation = postAction;
 
             // Create a new HandBrake Instance.
-            this.instance = HandBrakeInstanceManager.GetScanInstance(configuraiton.Verbosity);
+            this.instance = HandBrake.Interop.Interop.HandBrakeInstanceManager.GetScanInstance(configuraiton.Verbosity);
             this.instance.ScanProgress += this.InstanceScanProgress;
             this.instance.ScanCompleted += this.InstanceScanCompleted;
 
@@ -266,8 +266,7 @@ namespace HandBrakeWPF.Services.Scan
                 this.ServiceLogMessage("Starting Scan ...");
                 this.instance.StartScan(sourcePath.ToString(), previewCount, minDuration, title != 0 ? title : 0);
 
-                if (this.ScanStarted != null)
-                    this.ScanStarted(this, System.EventArgs.Empty);
+                this.ScanStarted?.Invoke(this, System.EventArgs.Empty);
             }
             catch (Exception exc)
             {

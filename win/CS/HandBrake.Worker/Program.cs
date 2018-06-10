@@ -15,6 +15,16 @@ namespace HandBrake.Worker
 
     public class Program
     {
+        /*
+         * TODO
+         * Methods:
+         *   1. Fetch Log
+         *   2. Fetch Log since last index.
+         * Services:
+         *   3. Support for connecting via sockets.
+         *   4. All methods will return a json state object response.
+         */
+
         private static ApiRouter router;
 
         public static void Main(string[] args)
@@ -66,7 +76,8 @@ namespace HandBrake.Worker
             apiHandlers.Add("StopEncode", router.StopEncode);
             apiHandlers.Add("PollEncodeProgress", router.PollEncodeProgress);
             apiHandlers.Add("SetConfiguration", router.SetConfiguration);
-
+            apiHandlers.Add("Initialise", router.Initialise);
+           
             return apiHandlers;
         }
     }

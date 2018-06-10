@@ -61,19 +61,6 @@ namespace HandBrake.Interop.Interop.Interfaces
         #region Public Methods
 
         /// <summary>
-        /// Initializes this instance.
-        /// </summary>
-        /// <param name="verbosity">
-        /// The code for the logging verbosity to use.
-        /// </param>
-        void Initialize(int verbosity);
-
-        /// <summary>
-        /// Frees any resources associated with this object.
-        /// </summary>
-        void Dispose();
-
-        /// <summary>
         /// Gets an image for the given job and preview
         /// </summary>
         /// <remarks>

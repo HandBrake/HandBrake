@@ -13,6 +13,7 @@ namespace HandBrake.Interop.Interop.Interfaces
 
     using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.Json.Encode;
+    using HandBrake.Interop.Interop.Json.State;
 
     public interface IEncodeInstance
     {
@@ -25,6 +26,19 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// Fires for progress updates when encoding.
         /// </summary>
         event EventHandler<EncodeProgressEventArgs> EncodeProgress;
+
+        /// <summary>
+        /// Initializes this instance.
+        /// </summary>
+        /// <param name="verbosity">
+        /// The code for the logging verbosity to use.
+        /// </param>
+        void Initialize(int verbosity);
+
+        /// <summary>
+        /// Frees any resources associated with this object.
+        /// </summary>
+        void Dispose();
 
         /// <summary>
         /// Pauses the current encode.
@@ -48,5 +62,11 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// Stops the current encode.
         /// </summary>
         void StopEncode();
+
+        /// <summary>
+        /// Get the current Encode State.
+        /// </summary>
+        /// <returns>A JsonState object</returns>
+        JsonState GetEncodeProgress();
     }
 }

@@ -45,7 +45,9 @@ namespace HandBrakeWPF.Factories
                                              SaveLogToCopyDirectory = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory), 
                                              SaveLogWithVideo = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo), 
                                              SaveLogCopyDirectory = UserSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory), 
-                                         };
+                                             RemoteServiceEnabled = UserSettingService.GetUserSetting<bool>(UserSettingConstants.RemoteServiceEnabled),
+                                             RemoteServicePort = UserSettingService.GetUserSetting<int>(UserSettingConstants.RemoteServicePort)
+            };
 
             return config;
         }

@@ -12,6 +12,7 @@ namespace HandBrake.Interop.Interop
     using System;
 
     using HandBrake.Interop.Interop.Interfaces;
+    using HandBrake.Interop.Model;
 
     /// <summary>
     /// The HandBrake Instance manager.
@@ -20,7 +21,6 @@ namespace HandBrake.Interop.Interop
     public static class HandBrakeInstanceManager
     {
         private static HandBrakeInstance scanInstance;
-        private static HandBrakeInstance encodeInstance;
         private static HandBrakeInstance previewInstance;
         private static HandBrakeInstance masterInstance;
 
@@ -71,34 +71,13 @@ namespace HandBrake.Interop.Interop
         /// <param name="verbosity">
         /// The verbosity.
         /// </param>
-        /// <returns>
-        /// The <see cref="IHandBrakeInstance"/>.
-        /// </returns>
-        public static IHandBrakeInstance GetEncodeInstance(int verbosity)
-        {
-            if (encodeInstance != null)
-            {
-                encodeInstance.Dispose();
-                encodeInstance = null;
-            }
-
-            HandBrakeInstance newInstance = new HandBrakeInstance();
-            newInstance.Initialize(verbosity);
-            encodeInstance = newInstance;
-
-            return encodeInstance;
-        }
-
-        /// <summary>
-        /// The get encode instance.
-        /// </summary>
-        /// <param name="verbosity">
-        /// The verbosity.
+        /// <param name="configuration">
+        /// The configuration.
         /// </param>
         /// <returns>
         /// The <see cref="IHandBrakeInstance"/>.
         /// </returns>
-        public static IHandBrakeInstance GetPreviewInstance(int verbosity)
+        public static IHandBrakeInstance GetPreviewInstance(int verbosity, HBConfiguration configuration)
         {
             if (previewInstance != null)
             {
@@ -109,6 +88,8 @@ namespace HandBrake.Interop.Interop
             HandBrakeInstance newInstance = new HandBrakeInstance();
             newInstance.Initialize(verbosity);
             previewInstance = newInstance;
+
+            HandBrakeUtils.SetDvdNav(!configuration.IsDvdNavDisabled);
 
             return previewInstance;
         }
@@ -143,28 +124,6 @@ namespace HandBrake.Interop.Interop
             get
             {
                 return scanInstance.Handle;
-            }
-        }
-
-        /// <summary>
-        /// Gets the last encode scan instance.
-        /// </summary>
-        internal static IHandBrakeInstance LastEncodeScanInstance
-        {
-            get
-            {
-                return encodeInstance;
-            }
-        }
-
-        /// <summary>
-        /// Gets the encode handle.
-        /// </summary>
-        internal static IntPtr LastEncodeHandle
-        {
-            get
-            {
-                return encodeInstance.Handle;
             }
         }
     }
