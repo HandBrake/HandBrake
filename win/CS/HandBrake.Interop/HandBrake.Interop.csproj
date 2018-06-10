@@ -80,6 +80,7 @@
     <Compile Include="Interop\Helpers\InteropUtilities.cs" />
     <Compile Include="Interop\Helpers\NativeList.cs" />
     <Compile Include="Interop\Helpers\Utilities.cs" />
+    <Compile Include="Interop\Interfaces\IEncodeInstance.cs" />
     <Compile Include="Interop\Interfaces\IHandBrakeInstance.cs" />
     <Compile Include="Interop\Json\Anamorphic\AnamorphicGeometry.cs" />
     <Compile Include="Interop\Json\Anamorphic\DestSettings.cs" />

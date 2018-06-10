@@ -38,7 +38,7 @@ namespace HandBrakeWPF.Services.Encode
         #region Private Variables
 
         private ILog log = LogService.GetLogger();
-        private IHandBrakeInstance instance;
+        private IEncodeInstance instance;
         private DateTime startTime;
         private EncodeTask currentTask;
         private HBConfiguration currentConfiguration;

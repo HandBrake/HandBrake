@@ -12,26 +12,15 @@ namespace HandBrake.Interop.Interop.Interfaces
     using System;
 
     using HandBrake.Interop.Interop.EventArgs;
-    using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Json.Scan;
     using HandBrake.Interop.Interop.Model.Preview;
 
     /// <summary>
     /// The Interface for HandBrakeInstance
     /// </summary>
-    public interface IHandBrakeInstance
+    public interface IHandBrakeInstance : IEncodeInstance
     {
         #region Events
-
-        /// <summary>
-        /// Fires when an encode has completed.
-        /// </summary>
-        event EventHandler<EncodeCompletedEventArgs> EncodeCompleted;
-
-        /// <summary>
-        /// Fires for progress updates when encoding.
-        /// </summary>
-        event EventHandler<EncodeProgressEventArgs> EncodeProgress;
 
         /// <summary>
         /// Fires when a scan has completed.
@@ -105,24 +94,6 @@ namespace HandBrake.Interop.Interop.Interfaces
         RawPreviewData GetPreview(PreviewSettings job, int previewNumber, bool deinterlace);
 
         /// <summary>
-        /// Pauses the current encode.
-        /// </summary>
-        void PauseEncode();
-
-        /// <summary>
-        /// Resumes a paused encode.
-        /// </summary>
-        void ResumeEncode();
-
-        /// <summary>
-        /// Starts an encode with the given job.
-        /// </summary>
-        /// <param name="jobToStart">
-        /// The job to start.
-        /// </param>
-        void StartEncode(JsonEncodeObject jobToStart);
-
-        /// <summary>
         /// Starts a scan of the given path.
         /// </summary>
         /// <param name="path">
@@ -134,12 +105,10 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// <param name="minDuration">
         /// The min Duration.
         /// </param>
+        /// <param name="titleIndex">
+        /// The title Index.
+        /// </param>
         void StartScan(string path, int previewCount, TimeSpan minDuration, int titleIndex);
-
-        /// <summary>
-        /// Stops the current encode.
-        /// </summary>
-        void StopEncode();
 
         /// <summary>
         /// Stop any running scans
