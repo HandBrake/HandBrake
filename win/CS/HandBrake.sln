@@ -16,6 +16,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeTools", "HandBrake
 EndProject
 Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "HandBrakeAppX", "HandBrakeAppX\HandBrakeAppX.jsproj", "{6E855245-E402-4C0F-BB0B-EEB63082F6AC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.Worker", "HandBrake.Worker\HandBrake.Worker.csproj", "{F8370F37-B226-4830-AEE7-6D7AE403E3D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -40,6 +42,10 @@ Global
 		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Release|x64.ActiveCfg = Release|x64
 		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Release|x64.Build.0 = Release|x64
 		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Release|x64.Deploy.0 = Release|x64
+		{F8370F37-B226-4830-AEE7-6D7AE403E3D2}.Debug|x64.ActiveCfg = Debug|x64
+		{F8370F37-B226-4830-AEE7-6D7AE403E3D2}.Debug|x64.Build.0 = Debug|x64
+		{F8370F37-B226-4830-AEE7-6D7AE403E3D2}.Release|x64.ActiveCfg = Release|x64
+		{F8370F37-B226-4830-AEE7-6D7AE403E3D2}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
