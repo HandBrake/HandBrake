@@ -34,7 +34,7 @@
 
 @import HandBrakeKit;
 
-@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDrawerDelegate, NSDraggingDestination, NSPopoverDelegate>
+@interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDraggingDestination, NSPopoverDelegate>
 {
     IBOutlet NSTabView *fMainTabView;
 
@@ -93,7 +93,6 @@
 
 @property (nonatomic, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
 @property (nonatomic, strong) IBOutlet NSPopUpButton *presetsPopup;
-@property (nonatomic, strong) IBOutlet NSDrawer *presetsDrawer;
 
 @property (nonatomic, strong) IBOutlet NSToolbarItem *presetsItem;
 @property (nonatomic, strong) NSPopover *presetsPopover;
@@ -353,11 +352,6 @@
     }
 
     fPresetsView.enabled = enabled;
-}
-
-- (NSSize)drawerWillResizeContents:(NSDrawer *) drawer toSize:(NSSize)contentSize {
-    [[NSUserDefaults standardUserDefaults] setObject:NSStringFromSize(contentSize) forKey:@"HBDrawerSize"];
-    return contentSize;
 }
 
 - (void)setNilValueForKey:(NSString *)key
@@ -886,7 +880,7 @@
 
     [panel beginSheetModalForWindow:self.window completionHandler: ^(NSInteger result)
     {
-         if (result == NSFileHandlingPanelOKButton)
+        if (result == NSModalResponseOK)
          {
              NSInteger titleIdx = self.scanSpecificTitle ? self.scanSpecificTitleIdx : 0;
              [self openURL:panel.URL titleIndex:titleIdx];
@@ -912,7 +906,7 @@
 
     [panel beginSheetModalForWindow:self.window completionHandler:^(NSInteger result)
      {
-         if (result == NSFileHandlingPanelOKButton)
+         if (result == NSModalResponseOK)
          {
              self.job.outputURL = panel.URL;
              self.currentDestination = panel.URL;
@@ -1096,7 +1090,7 @@
         [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @"File already exists alert -> informative text"), job.completeOutputURL.path]];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists alert -> second button")];
-        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert setAlertStyle:NSAlertStyleCritical];
 
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
@@ -1107,7 +1101,7 @@
         [alert setInformativeText:[NSString stringWithFormat:NSLocalizedString(@"Do you want to overwrite %@?", @"File already exists in queue alert -> informative text"), job.completeOutputURL.path]];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists in queue alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists in queue alert -> second button")];
-        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert setAlertStyle:NSAlertStyleCritical];
 
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
@@ -1270,7 +1264,7 @@
         [alert setInformativeText:NSLocalizedString(@"One or more file already exists. Do you want to overwrite?", @"File already exists alert -> informative text")];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"File already exists alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Overwrite", @"File already exists alert -> second button")];
-        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert setAlertStyle:NSAlertStyleCritical];
 
         [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
             if (returnCode == NSAlertSecondButtonReturn)
@@ -1335,19 +1329,6 @@
             fPresetsView.selectedPreset = _currentPreset;
             [self.presetsPopover close];
         }
-    }
-    else
-    {
-        if (self.presetsDrawer.state == NSDrawerClosedState)
-        {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"HBDefaultPresetsDrawerShow"];
-        }
-        else
-        {
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"HBDefaultPresetsDrawerShow"];
-        }
-
-        [self.presetsDrawer toggle:self];
     }
 }
 

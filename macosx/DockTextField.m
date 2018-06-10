@@ -24,7 +24,7 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [[self cell] setBezelStyle:NSRoundedBezelStyle];
+        [[self cell] setBezelStyle:NSBezelStyleRounded];
         _textToDisplay = @"";
         _textAttributes = [self textAttributesWithFontSize:DOCK_TEXTFIELD_FONTSIZE];
         _smallTextAttributes = [self textAttributesWithFontSize:DOCK_TEXTFIELD_FONTSIZE - 2];

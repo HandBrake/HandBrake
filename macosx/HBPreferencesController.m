@@ -57,7 +57,6 @@
         @"HBShowOpenPanelAtLaunch":         @YES,
         @"DefaultMpegExtension":            @"Auto",
         @"UseDvdNav":                       @"YES",
-        @"HBDefaultPresetsDrawerShow":      @YES,
         // Archive the URL because they aren't supported in plist.
         @"HBLastDestinationDirectory":      [NSKeyedArchiver archivedDataWithRootObject:desktopURL],
         @"HBLastSourceDirectory":           [NSKeyedArchiver archivedDataWithRootObject:desktopURL],
@@ -72,7 +71,6 @@
         @"x264CqSliderFractional":          @"0.50",
         @"HBShowAdvancedTab":               @NO,
         @"HBAutoNamingFormat":              @[@"{Source}", @" ", @"{Title}"],
-        @"HBDrawerSize":                    NSStringFromSize(NSMakeSize(184, 591)),
         @"HBQueuePauseIfLowSpace":          @YES,
         @"HBQueueMinFreeSpace":             @"2"
         }];
@@ -222,11 +220,11 @@
 {
     if ([representedObject rangeOfString: @"{"].location == 0)
     {
-        return NSRoundedTokenStyle;
+        return NSTokenStyleRounded;
     }
     else
     {
-        return NSPlainTextTokenStyle;
+        return NSTokenStyleNone;
     }
 }
 

@@ -345,7 +345,7 @@
     /* Adaptive Quantization Strength fX264opAqSlider */
     [fX264optAqSlider setMinValue:0.0];
     [fX264optAqSlider setMaxValue:2.0];
-    [fX264optAqSlider setTickMarkPosition:NSTickMarkBelow];
+    [fX264optAqSlider setTickMarkPosition:NSTickMarkPositionBelow];
     [fX264optAqSlider setNumberOfTickMarks:21];
     [fX264optAqSlider setAllowsTickMarkValuesOnly:YES];
     [fX264optAqSlider setFloatValue:1.0];
@@ -357,7 +357,7 @@
     /* PsyRDO fX264optPsyRDSlider */
     [fX264optPsyRDSlider setMinValue:0.0];
     [fX264optPsyRDSlider setMaxValue:2.0];
-    [fX264optPsyRDSlider setTickMarkPosition:NSTickMarkBelow];
+    [fX264optPsyRDSlider setTickMarkPosition:NSTickMarkPositionBelow];
     [fX264optPsyRDSlider setNumberOfTickMarks:21];
     [fX264optPsyRDSlider setAllowsTickMarkValuesOnly:YES];
     [fX264optPsyRDSlider setFloatValue:1.0];
@@ -369,7 +369,7 @@
     /* PsyTrellis fX264optPsyRDSlider */
     [fX264optPsyTrellisSlider setMinValue:0.0];
     [fX264optPsyTrellisSlider setMaxValue:1.0];
-    [fX264optPsyTrellisSlider setTickMarkPosition:NSTickMarkBelow];
+    [fX264optPsyTrellisSlider setTickMarkPosition:NSTickMarkPositionBelow];
     [fX264optPsyTrellisSlider setNumberOfTickMarks:21];
     [fX264optPsyTrellisSlider setAllowsTickMarkValuesOnly:YES];
     [fX264optPsyTrellisSlider setFloatValue:0.0];

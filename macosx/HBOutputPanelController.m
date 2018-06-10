@@ -140,8 +140,8 @@
 - (IBAction)copyAllOutputToPasteboard:(id)sender
 {
 	NSPasteboard *pboard = [NSPasteboard generalPasteboard];
-	[pboard declareTypes:@[NSStringPboardType] owner:nil];
-	[pboard setString:[outputTextStorage string] forType:NSStringPboardType];
+    [pboard declareTypes:@[NSPasteboardTypeString] owner:nil];
+    [pboard setString:[outputTextStorage string] forType:NSPasteboardTypeString];
 }
 
 /**

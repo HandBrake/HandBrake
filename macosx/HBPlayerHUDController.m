@@ -303,11 +303,11 @@
             [self.player play];
             self.player.rate = rate;
         }
-        else if (event.modifierFlags & NSAlternateKeyMask && key == NSLeftArrowFunctionKey)
+        else if (event.modifierFlags & NSEventModifierFlagOption && key == NSLeftArrowFunctionKey)
         {
             [self.player gotoBeginning];
         }
-        else if (event.modifierFlags & NSAlternateKeyMask && key == NSRightArrowFunctionKey)
+        else if (event.modifierFlags & NSEventModifierFlagOption && key == NSRightArrowFunctionKey)
         {
             [self.player gotoEnd];
         }

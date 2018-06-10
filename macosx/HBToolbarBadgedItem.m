@@ -139,7 +139,7 @@
         [NSGraphicsContext saveGraphicsState];
         [NSGraphicsContext setCurrentContext:ctx];
 
-        CGContextRef context = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+        CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
         CGContextSaveGState(context);
 
         NSRect imageRect = NSMakeRect(0, 0, size.width, size.height);

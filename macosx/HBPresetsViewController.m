@@ -164,7 +164,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
     [panel beginWithCompletionHandler:^(NSInteger result)
      {
-         if (result == NSFileHandlingPanelOKButton)
+         if (result == NSModalResponseOK)
          {
              NSURL *presetExportDirectory = [panel.URL URLByDeletingLastPathComponent];
              [[NSUserDefaults standardUserDefaults] setURL:presetExportDirectory forKey:@"LastPresetExportDirectoryURL"];
@@ -196,7 +196,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
      {
          [[NSUserDefaults standardUserDefaults] setURL:panel.directoryURL forKey:@"LastPresetImportDirectoryURL"];
 
-         if (result == NSFileHandlingPanelOKButton)
+         if (result == NSModalResponseOK)
          {
              for (NSURL *url in panel.URLs)
              {
@@ -262,7 +262,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
         alert.informativeText = NSLocalizedString(@"You can't undo this action.", @"Delete preset alert -> informative text");
         [alert addButtonWithTitle:NSLocalizedString(@"Delete Preset", @"Delete preset alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Delete preset alert -> second button")];
-        alert.alertStyle = NSCriticalAlertStyle;
+        alert.alertStyle = NSAlertStyleCritical;
 
         NSInteger status = [alert runModal];
 

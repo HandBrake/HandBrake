@@ -99,7 +99,7 @@
 
     [panel beginSheetModalForWindow:self.view.window completionHandler:^(NSInteger result)
     {
-        if (result == NSFileHandlingPanelOKButton)
+        if (result == NSModalResponseOK)
         {
             NSURL *importSrtFileURL = panel.URL;
             NSURL *importSrtDirectory = importSrtFileURL.URLByDeletingLastPathComponent;

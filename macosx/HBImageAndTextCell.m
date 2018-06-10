@@ -194,7 +194,7 @@ scaleProportionally(NSSize imageSize, NSRect canvasRect)
           
         }
 
-        [image drawAtPoint:imageFrame.origin fromRect:imageFrame operation:NSCompositeSourceOver fraction:1.0];
+        [image drawAtPoint:imageFrame.origin fromRect:imageFrame operation:NSCompositingOperationSourceOver fraction:1.0];
     }
 
     [super drawWithFrame:cellFrame inView:controlView];

@@ -450,7 +450,7 @@
         CFRelease(fPreviewImage);
     }
 
-    if (self.previewView.fitToView == NO && !(self.window.styleMask & NSFullScreenWindowMask))
+    if (self.previewView.fitToView == NO && !(self.window.styleMask & NSWindowStyleMaskFullScreen))
     {
         // Get the optimal view size for the image
         NSSize imageScaledSize = [self.generator imageSize];
@@ -473,7 +473,7 @@
     else
     {
         self.previewView.fitToView = YES;
-        if (!(self.window.styleMask & NSFullScreenWindowMask))
+        if (!(self.window.styleMask & NSWindowStyleMaskFullScreen))
         {
             [self.window setFrame:self.window.screen.visibleFrame display:YES animate:YES];
         }

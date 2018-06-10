@@ -154,7 +154,7 @@
         [alert addButtonWithTitle:NSLocalizedString(@"Quit", @"Quit Alert -> first button")];
         [alert addButtonWithTitle:NSLocalizedString(@"Don't Quit", @"Quit Alert -> second button")];
         [alert.buttons[1] setKeyEquivalent:@"\E"];
-        [alert setAlertStyle:NSCriticalAlertStyle];
+        [alert setAlertStyle:NSAlertStyleCritical];
 
         NSInteger result = [alert runModal];
 

@@ -289,7 +289,7 @@
 
     [panel beginSheetModalForWindow:self.view.window completionHandler:^(NSInteger result)
     {
-        if (result == NSFileHandlingPanelOKButton)
+        if (result == NSModalResponseOK)
         {
             NSError *error;
             if ([self importChaptersFromURL:panel.URL error:&error] == NO)
@@ -311,7 +311,7 @@
 
     [panel beginSheetModalForWindow:self.view.window completionHandler:^(NSInteger result)
     {
-        if (result == NSFileHandlingPanelOKButton)
+        if (result == NSModalResponseOK)
         {
             NSError *saveError;
             NSMutableString *csv = [NSMutableString string];

@@ -173,12 +173,12 @@
 		A91CE2FC1C7DB99D0068F46F /* HBPreset.h in Headers */ = {isa = PBXBuildFile; fileRef = A9CF25F21990D64E0023F727 /* HBPreset.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91CE2FD1C7DB99D0068F46F /* HBMutablePreset.h in Headers */ = {isa = PBXBuildFile; fileRef = A96CD1741BCC5F9100F372F1 /* HBMutablePreset.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91CE2FE1C7DB99D0068F46F /* HBTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = A9D488A31996270300E9B1BA /* HBTreeNode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A91D54871E378ABD006D0997 /* HBSecurityAccessToken.h in Headers */ = {isa = PBXBuildFile; fileRef = A91D54851E378ABD006D0997 /* HBSecurityAccessToken.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A91D54871E378ABD006D0997 /* HBSecurityAccessToken.h in Headers */ = {isa = PBXBuildFile; fileRef = A91D54851E378ABD006D0997 /* HBSecurityAccessToken.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		A91D54881E378ABD006D0997 /* HBSecurityAccessToken.m in Sources */ = {isa = PBXBuildFile; fileRef = A91D54861E378ABD006D0997 /* HBSecurityAccessToken.m */; };
 		A91F97351D7B2A4E00D82DCE /* HBAudioTransformers.h in Headers */ = {isa = PBXBuildFile; fileRef = A91F97331D7B2A4E00D82DCE /* HBAudioTransformers.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A91F97361D7B2A4E00D82DCE /* HBAudioTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = A91F97341D7B2A4E00D82DCE /* HBAudioTransformers.m */; };
 		A92268781A6E555500A8D5C5 /* HBAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A92268771A6E555500A8D5C5 /* HBAppDelegate.m */; };
-		A9294CC91DC4BBF7004D3415 /* HBJob+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A9294CC71DC4BBF7004D3415 /* HBJob+Private.h */; };
+		A9294CC91DC4BBF7004D3415 /* HBJob+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = A9294CC71DC4BBF7004D3415 /* HBJob+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		A92B148220CA9F7700146FD8 /* HBHUDView.m in Sources */ = {isa = PBXBuildFile; fileRef = A92B148120CA9F7600146FD8 /* HBHUDView.m */; };
 		A937EECB1C6C7C0300EEAE6D /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = A937EECA1C6C7C0300EEAE6D /* dsa_pub.pem */; };
 		A939DD8B1FC8826A00135F2A /* HBPresetsMenuBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */; };
@@ -1325,13 +1325,13 @@
 				A91CE2EC1C7DAEEE0068F46F /* HBStateFormatter.h in Headers */,
 				A91CE2ED1C7DAEEE0068F46F /* HBUtilities.h in Headers */,
 				A91CE2FB1C7DB99D0068F46F /* HBPresetsManager.h in Headers */,
-				A9294CC91DC4BBF7004D3415 /* HBJob+Private.h in Headers */,
 				A91CE2FC1C7DB99D0068F46F /* HBPreset.h in Headers */,
 				A91CE2FD1C7DB99D0068F46F /* HBMutablePreset.h in Headers */,
-				A91D54871E378ABD006D0997 /* HBSecurityAccessToken.h in Headers */,
 				A91F97351D7B2A4E00D82DCE /* HBAudioTransformers.h in Headers */,
 				A98B8E241C7DD2A200B810C9 /* HBPresetCoding.h in Headers */,
+				A9294CC91DC4BBF7004D3415 /* HBJob+Private.h in Headers */,
 				A91CE2FE1C7DB99D0068F46F /* HBTreeNode.h in Headers */,
+				A91D54871E378ABD006D0997 /* HBSecurityAccessToken.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

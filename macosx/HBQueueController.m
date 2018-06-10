@@ -1084,7 +1084,7 @@
                 [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Stop Alert -> stop and remove informative text")];
                 [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Stop Alert -> stop and remove first button")];
                 [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", @"Queue Stop Alert -> stop and remove second button")];
-                [alert setAlertStyle:NSCriticalAlertStyle];
+                [alert setAlertStyle:NSAlertStyleCritical];
 
                 [alert beginSheetModalForWindow:targetWindow completionHandler:^(NSModalResponse returnCode) {
                     if (returnCode == NSAlertSecondButtonReturn)
@@ -1208,7 +1208,7 @@
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Stop", @"Queue Alert -> cancel rip second button")];
     [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Continue", @"Queue Alert -> cancel rip third button")];
     [alert addButtonWithTitle:NSLocalizedString(@"Finish Current and Stop", @"Queue Alert -> cancel rip fourth button")];
-    [alert setAlertStyle:NSCriticalAlertStyle];
+    [alert setAlertStyle:NSAlertStyleCritical];
 
     [alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSAlertSecondButtonReturn)
@@ -1359,7 +1359,7 @@
             [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Edit Alert -> stop and edit informative text")];
             [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Edit Alert -> stop and edit first button")];
             [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Edit", @"Queue Edit Alert -> stop and edit second button")];
-            [alert setAlertStyle:NSCriticalAlertStyle];
+            [alert setAlertStyle:NSAlertStyleCritical];
 
             [alert beginSheetModalForWindow:docWindow completionHandler:^(NSModalResponse returnCode) {
                 if (returnCode == NSAlertSecondButtonReturn)
