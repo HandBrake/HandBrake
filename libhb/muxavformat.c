@@ -1317,41 +1317,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                     free(styleatom);
                 }
             }
-            if (track->st->codecpar->codec_id == AV_CODEC_ID_ASS &&
-                job->mux == HB_MUX_AV_MKV)
-            {
-                // avformat requires the this additional information
-                // which it parses and then strips away
-                int start_hh, start_mm, start_ss, start_ms;
-                int stop_hh, stop_mm, stop_ss, stop_ms, layer;
-                char *ssa;
-
-                start_hh = buf->s.start / (90000 * 60 * 60);
-                start_mm = (buf->s.start / (90000 * 60)) % 60;
-                start_ss = (buf->s.start / 90000) % 60;
-                start_ms = (buf->s.start / 900) % 100;
-                stop_hh = buf->s.stop / (90000 * 60 * 60);
-                stop_mm = (buf->s.stop / (90000 * 60)) % 60;
-                stop_ss = (buf->s.stop / 90000) % 60;
-                stop_ms = (buf->s.stop / 900) % 100;
-
-                // Skip the read-order field
-                ssa = strchr((char*)buf->data, ',');
-                if (ssa != NULL)
-                    ssa++;
-                // Skip the layer field
-                layer = strtol(ssa, NULL, 10);
-                ssa = strchr(ssa, ',');
-                if (ssa != NULL)
-                    ssa++;
-                sub_out = (uint8_t*)hb_strdup_printf(
-                    "Dialogue: %d,%d:%02d:%02d.%02d,%d:%02d:%02d.%02d,%s",
-                    layer,
-                    start_hh, start_mm, start_ss, start_ms,
-                    stop_hh, stop_mm, stop_ss, stop_ms, ssa);
-                pkt.data = sub_out;
-                pkt.size = strlen((char*)sub_out) + 1;
-            }
             if (pkt.data == NULL)
             {
                 // Memory allocation failure!
