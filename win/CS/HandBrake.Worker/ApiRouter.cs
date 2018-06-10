@@ -8,15 +8,15 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-
 namespace HandBrake.Worker
 {
-    using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Utilities;
-    using Newtonsoft.Json;
-    using System;
     using System.IO;
     using System.Net;
+
+    using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Utilities;
+
+    using Newtonsoft.Json;
 
     public class ApiRouter
     {
@@ -24,64 +24,92 @@ namespace HandBrake.Worker
 
         public string GetVersionInfo(HttpListenerRequest request)
         {
-            return string.Format(JsonConvert.SerializeObject((object)VersionHelper.GetVersion(), Formatting.Indented, new JsonSerializerSettings()
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            }), Array.Empty<object>());
+            JsonSerializerSettings settings =
+                new JsonSerializerSettings() { NullValueHandling = NullValueHandling.Ignore };
+
+            string versionInfo = JsonConvert.SerializeObject((object)VersionHelper.GetVersion(), Formatting.Indented, settings);
+
+            return versionInfo;
         }
 
         public string StartEncode(HttpListenerRequest request)
         {
             if (this.handbrakeInstance == null)
+            {
                 this.handbrakeInstance = new HandBrakeInstance();
+            }
+
             string requestPostData = ApiRouter.GetRequestPostData(request);
+
             this.handbrakeInstance.Initialize(1);
             this.handbrakeInstance.StartEncode(requestPostData);
-            return (string)null;
+
+            return null;
         }
 
         public string StopEncode(HttpListenerRequest request)
         {
             if (this.handbrakeInstance != null)
+            {
                 this.handbrakeInstance.StopEncode();
+            }
+
             return (string)null;
         }
 
         public string PauseEncode(HttpListenerRequest request)
         {
             if (this.handbrakeInstance != null)
+            {
                 this.handbrakeInstance.PauseEncode();
-            return (string)null;
+            }
+
+            return null;
         }
 
         public string ResumeEncode(HttpListenerRequest request)
         {
             if (this.handbrakeInstance != null)
+            {
                 this.handbrakeInstance.ResumeEncode();
-            return (string)null;
+            }
+
+            return null;
         }
 
         public string PollEncodeProgress(HttpListenerRequest request)
         {
-            if (this.handbrakeInstance == null)
-                ;
-            return (string)null;
+            if (this.handbrakeInstance != null)
+            {
+                return null;
+            }
+
+            return null;
         }
 
         public string SetConfiguration(HttpListenerRequest request)
         {
-            return (string)null;
+            return null;
         }
 
         private static string GetRequestPostData(HttpListenerRequest request)
         {
             if (!request.HasEntityBody)
-                return (string)null;
+            {
+                return null;
+            }
+
             using (Stream inputStream = request.InputStream)
             {
                 using (StreamReader streamReader = new StreamReader(inputStream, request.ContentEncoding))
+                {
                     return streamReader.ReadToEnd();
+                }
             }
         }
+    }
+
+    public class strixng
+    {
     }
 }

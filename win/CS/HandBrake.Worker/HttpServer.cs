@@ -57,13 +57,16 @@ namespace HandBrake.Worker
                             (c) =>
                                 {
                                     var context = c as HttpListenerContext;
+                                    if (context == null)
+                                    {
+                                        return;
+                                    }
+
                                     try
                                     {
-                                        string requestType = context.Request.HttpMethod;
                                         string path = context.Request.RawUrl.TrimStart('/');
 
-                                        Func<HttpListenerRequest, string> actionToPerform;
-                                        if (apiHandlers.TryGetValue(path, out actionToPerform))
+                                        if (this.apiHandlers.TryGetValue(path, out var actionToPerform))
                                         {
                                             string rstr = actionToPerform(context.Request);
                                             byte[] buf = Encoding.UTF8.GetBytes(rstr);
@@ -84,7 +87,6 @@ namespace HandBrake.Worker
                                     }
                                     finally
                                     {
-                                        // always close the stream
                                         context?.Response.OutputStream.Close();
                                     }
                                 },

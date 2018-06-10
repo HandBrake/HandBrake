@@ -12,8 +12,6 @@ namespace HandBrake.Worker
     using System;
     using System.Collections.Generic;
     using System.Net;
-    using HandBrake.Interop.Utilities;
-    using Newtonsoft.Json;
 
     public class Program
     {
@@ -70,19 +68,6 @@ namespace HandBrake.Worker
             apiHandlers.Add("SetConfiguration", router.SetConfiguration);
 
             return apiHandlers;
-        }
-
-        public static string GetVersionInfo(HttpListenerRequest request)
-        {
-            string version = VersionHelper.GetVersion();
-            JsonSerializerSettings settings = new JsonSerializerSettings
-                                                  {
-                                                      NullValueHandling = NullValueHandling.Ignore,
-                                                  };
-
-            string versionJson = JsonConvert.SerializeObject(version, Formatting.Indented, settings);
-
-            return string.Format(versionJson);
         }
     }
 }
