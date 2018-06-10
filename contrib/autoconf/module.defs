@@ -1,6 +1,0 @@
-$(eval $(call import.MODULE.defs,AUTOCONF,autoconf,M4))
-$(eval $(call import.CONTRIB.defs,AUTOCONF))
-
-AUTOCONF.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/autoconf-2.69.tar.gz
-AUTOCONF.FETCH.url    += https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
-AUTOCONF.FETCH.sha256  = 954bd69b391edc12d6a4a51a2dd1476543da5c6bbf05a95b59dc0dd6fd4c2969

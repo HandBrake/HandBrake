@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,PKGCONFIG LIBXML2 FREETYPE))
+$(eval $(call import.MODULE.defs,LIBBLURAY,libbluray,LIBXML2 FREETYPE))
 $(eval $(call import.CONTRIB.defs,LIBBLURAY))
 
 LIBBLURAY.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libbluray-1.0.2.tar.bz2
@@ -10,11 +10,6 @@ ifeq (none,$(LIBBLURAY.GCC.O))
 endif
 
 LIBBLURAY.CONFIGURE.extra += --disable-doxygen-doc --disable-examples --disable-bdjava-jar --without-freetype --without-fontconfig
-
-ifeq (1,$(FEATURE.local_pkgconfig))
-    LIBBLURAY.CONFIGURE.env += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    LIBBLURAY.BUILD.env     += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-endif
 
 ifeq (mingw,$(BUILD.system))
     LIBBLURAY.GCC.D += MINGW_HAS_SECURE_API=1

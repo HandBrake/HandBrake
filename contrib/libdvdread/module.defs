@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread,PKGCONFIG))
+$(eval $(call import.MODULE.defs,LIBDVDREAD,libdvdread))
 $(eval $(call import.CONTRIB.defs,LIBDVDREAD))
 
 LIBDVDREAD.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libdvdread-5.0.3.tar.bz2
@@ -7,9 +7,4 @@ LIBDVDREAD.FETCH.sha256  = 321cdf2dbdc83c96572bc583cd27d8c660ddb540ff16672ecb286
 
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
     LIBDVDREAD.CONFIGURE.extra = --enable-dlfcn
-endif
-
-ifeq (1,$(FEATURE.local_pkgconfig))
-    LIBDVDREAD.CONFIGURE.env += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    LIBDVDREAD.BUILD.env     += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 endif

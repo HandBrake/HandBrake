@@ -1,2 +1,0 @@
-$(eval $(call import.MODULE.rules,PKGCONFIG))
-$(eval $(call import.CONTRIB.rules,PKGCONFIG))

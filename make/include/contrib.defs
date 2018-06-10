@@ -26,7 +26,7 @@ define import.CONTRIB.defs
     $(1).src/   = $$(SRC/)contrib/$($(1).dir)/
     $(1).build/ = $$(CONTRIB.build/)$($(1).dir)/
     ## add prerequisites and autotool modules for all contribs
-    $(1).deps   = $$(foreach n,$($(1).prerequisites) $(if $(filter $1,$(AUTOTOOL_MODULES)),,$(AUTOTOOL_MODULES)),$$($$n.INSTALL.target))
+    $(1).deps   = $$(foreach n,$($(1).prerequisites),$$($$n.INSTALL.target))
     $(1).build_dir =
 
     ##

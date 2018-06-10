@@ -1,6 +1,0 @@
-$(eval $(call import.MODULE.defs,M4,m4))
-$(eval $(call import.CONTRIB.defs,M4))
-
-M4.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/m4-1.4.17.tar.bz2
-M4.FETCH.url    += https://ftp.gnu.org/gnu/m4/m4-1.4.17.tar.bz2
-M4.FETCH.sha256  = 8e4e1f963932136ed45dcd5afb0c6e237e96a6fcdcd2a2fa6755040859500d70

@@ -1,2 +1,0 @@
-$(eval $(call import.MODULE.rules,AUTOCONF))
-$(eval $(call import.CONTRIB.rules,AUTOCONF))

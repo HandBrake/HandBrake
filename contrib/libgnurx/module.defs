@@ -22,8 +22,3 @@ define LIBGNURX.UNINSTALL
     $(RM.exe) -f $(CONTRIB.build/)include/regex.h
     $(RM.exe) -f $(LIBGNURX.INSTALL.target)
 endef
-
-ifeq (1,$(FEATURE.local_pkgconfig))
-    LIBGNURX.CONFIGURE.env += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    LIBGNURX.BUILD.env     += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-endif

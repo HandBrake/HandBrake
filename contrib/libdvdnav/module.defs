@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,LIBDVDNAV,libdvdnav,PKGCONFIG LIBDVDREAD))
+$(eval $(call import.MODULE.defs,LIBDVDNAV,libdvdnav,LIBDVDREAD))
 $(eval $(call import.CONTRIB.defs,LIBDVDNAV))
 
 LIBDVDNAV.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libdvdnav-5.0.3.tar.bz2
@@ -7,9 +7,4 @@ LIBDVDNAV.FETCH.sha256  = 5097023e3d2b36944c763f1df707ee06b19dc639b2b68fb30113a5
 
 ifneq (max,$(LIBDVDNAV.GCC.g))
     LIBDVDNAV.GCC.D += NDEBUG
-endif
-
-ifeq (1,$(FEATURE.local_pkgconfig))
-    LIBDVDNAV.CONFIGURE.env += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    LIBDVDNAV.BUILD.env     += PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 endif

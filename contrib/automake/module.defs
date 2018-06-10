@@ -1,6 +1,0 @@
-$(eval $(call import.MODULE.defs,AUTOMAKE,automake,AUTOCONF))
-$(eval $(call import.CONTRIB.defs,AUTOMAKE))
-
-AUTOMAKE.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/automake-1.15.tar.gz
-AUTOMAKE.FETCH.url    += https://ftp.gnu.org/gnu/automake/automake-1.15.tar.gz
-AUTOMAKE.FETCH.sha256  = 7946e945a96e28152ba5a6beb0625ca715c6e32ac55f2e353ef54def0c8ed924

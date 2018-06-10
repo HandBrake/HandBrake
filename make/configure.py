@@ -1344,12 +1344,8 @@ def createCLI():
     grp.add_option( '--minver', default=None, action='store', metavar='VER',
         help=h )
 
-    h = IfHost( 'Build and use local autotools', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-local-autotools', default=False, action='store_true', help=h )
     h = IfHost( 'Build and use local cmake', '*-*-*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-local-cmake', default=False, action='store_true', help=h )
-    h = IfHost( 'Build and use local pkg-config', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-local-pkgconfig', default=False, action='store_true', help=h )
     cli.add_option_group( grp )
 
     ## add Xcode options
@@ -1513,28 +1509,28 @@ try:
 
     ## create tools in a scope
     class Tools:
-        ar    = ToolProbe( 'AR.exe',    'ar' )
-        cp    = ToolProbe( 'CP.exe',    'cp' )
+        ar    = ToolProbe( 'AR.exe',    'ar', abort=True )
+        cp    = ToolProbe( 'CP.exe',    'cp', abort=True )
         gcc   = ToolProbe( 'GCC.gcc',   'gcc', IfHost( 'gcc-4', '*-*-cygwin*' ))
 
         if host.match( '*-*-darwin*' ):
-            gmake = ToolProbe( 'GMAKE.exe', 'make', 'gmake' )
+            gmake = ToolProbe( 'GMAKE.exe', 'make', 'gmake', abort=True )
         else:
-            gmake = ToolProbe( 'GMAKE.exe', 'gmake', 'make' )
+            gmake = ToolProbe( 'GMAKE.exe', 'gmake', 'make', abort=True )
 
-        m4       = ToolProbe( 'M4.exe',       'gm4', 'm4' )
-        mkdir    = ToolProbe( 'MKDIR.exe',    'mkdir' )
-        patch    = ToolProbe( 'PATCH.exe',    'gpatch', 'patch' )
-        rm       = ToolProbe( 'RM.exe',       'rm' )
-        ranlib   = ToolProbe( 'RANLIB.exe',   'ranlib' )
-        strip    = ToolProbe( 'STRIP.exe',    'strip' )
-        tar      = ToolProbe( 'TAR.exe',      'gtar', 'tar' )
+        m4       = ToolProbe( 'M4.exe',       'gm4', 'm4', abort=True )
+        mkdir    = ToolProbe( 'MKDIR.exe',    'mkdir', abort=True )
+        patch    = ToolProbe( 'PATCH.exe',    'gpatch', 'patch', abort=True )
+        rm       = ToolProbe( 'RM.exe',       'rm', abort=True )
+        ranlib   = ToolProbe( 'RANLIB.exe',   'ranlib', abort=True )
+        strip    = ToolProbe( 'STRIP.exe',    'strip', abort=True )
+        tar      = ToolProbe( 'TAR.exe',      'gtar', 'tar', abort=True )
         nasm     = ToolProbe( 'NASM.exe',     'nasm', abort=False, minversion=[2,13,0] )
-        autoconf = ToolProbe( 'AUTOCONF.exe', 'autoconf', abort=False )
-        automake = ToolProbe( 'AUTOMAKE.exe', 'automake', abort=False )
+        autoconf = ToolProbe( 'AUTOCONF.exe', 'autoconf', abort=True )
+        automake = ToolProbe( 'AUTOMAKE.exe', 'automake', abort=True )
         cmake    = ToolProbe( 'CMAKE.exe',    'cmake', abort=False )
-        libtool  = ToolProbe( 'LIBTOOL.exe',  'libtool', abort=False )
-        pkgconfig = ToolProbe( 'PKGCONFIG.exe', 'pkg-config', abort=False )
+        libtool  = ToolProbe( 'LIBTOOL.exe',  'libtool', abort=True )
+        pkgconfig = ToolProbe( 'PKGCONFIG.exe', 'pkg-config', abort=True )
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', abort=False )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo', abort=False )
@@ -1596,20 +1592,10 @@ try:
         elif Tools.nasm.version.inadequate():
             raise AbortError( 'error: minimum required nasm version is %s and %s is %s\n' % ('.'.join([str(i) for i in Tools.nasm.version.minversion]),Tools.nasm.pathname,Tools.nasm.version.svers) )
 
-    ## enable local autotools when any of { autoconf, automake, libtool } probe fails
-    if not options.enable_local_autotools and (Tools.autoconf.fail or Tools.automake.fail or Tools.libtool.fail):
-        stdout.write( 'note: enabling local autotools\n' )
-        options.enable_local_autotools = True
-
     ## enable local cmake when cmake probe fails
     if not options.enable_local_cmake and (Tools.cmake.fail):
         stdout.write( 'note: enabling local cmake\n' )
         options.enable_local_cmake = True
-
-    ## enable local pkg-config when probe fails
-    if not options.enable_local_pkgconfig and Tools.pkgconfig.fail:
-        stdout.write( 'note: enabling local pkgconfig\n' )
-        options.enable_local_pkgconfig = True
 
     if build.system == 'mingw':
         dlfcn_test = """
@@ -1855,9 +1841,7 @@ int main()
     doc.add( 'PREFIX/', cfg.prefix_final + os.sep )
 
     doc.addBlank()
-    doc.add( 'FEATURE.local_autotools', int( options.enable_local_autotools ))
     doc.add( 'FEATURE.local_cmake', int( options.enable_local_cmake ))
-    doc.add( 'FEATURE.local_pkgconfig', int( options.enable_local_pkgconfig ))
     doc.add( 'FEATURE.asm',        'disabled' )
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
     doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
