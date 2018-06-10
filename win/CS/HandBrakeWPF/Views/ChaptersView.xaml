@@ -31,7 +31,7 @@
         <DataGrid Grid.Row="2" Margin="10" ItemsSource="{Binding Chapters}" 
                   VerticalAlignment="Stretch"  AutoGenerateColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False"
-                  CanUserAddRows="False" CanUserDeleteRows="False">
+                  CanUserAddRows="False" CanUserDeleteRows="False" HeadersVisibility="Column">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell">
                     <Setter Property="MinHeight" Value="22" />
