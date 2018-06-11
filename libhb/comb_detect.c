@@ -1527,7 +1527,10 @@ static int comb_detect_work( hb_filter_object_t * filter,
     {
         // Duplicate last frame and process refs
         store_ref(pv, hb_buffer_dup(pv->ref[2]));
-        process_frame(pv);
+        if (pv->ref[0] != NULL)
+        {
+            process_frame(pv);
+        }
         hb_buffer_list_append(&pv->out_list, in);
         *buf_out = hb_buffer_list_clear(&pv->out_list);
         return HB_FILTER_DONE;
