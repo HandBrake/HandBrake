@@ -5885,3 +5885,48 @@ void ghb_container_empty(GtkContainer *c)
 {
     gtk_container_foreach(c, container_empty_cb, NULL);
 }
+
+G_MODULE_EXPORT gboolean
+combo_search_key_press_cb(
+    GtkWidget *widget,
+    GdkEvent *event,
+    signal_user_data_t *ud)
+{
+    GtkComboBox  * combo = GTK_COMBO_BOX(widget);
+    GtkTreeModel * model = GTK_TREE_MODEL(gtk_combo_box_get_model(combo));
+    GtkTreeIter    iter, prev_iter;
+    gchar        * lang;
+    guint          keyval;
+    gunichar       key_char;
+    gunichar       first_char;
+    int            pos = 0, count = 2048;
+
+    ghb_event_get_keyval(event, &keyval);
+    key_char = g_unichar_toupper(gdk_keyval_to_unicode(keyval));
+    if (gtk_combo_box_get_active_iter(combo, &iter))
+    {
+        while (pos <= count)
+        {
+            pos++;
+            prev_iter = iter;
+            if (!gtk_tree_model_iter_next(model, &iter))
+            {
+                GtkTreePath * path = gtk_tree_model_get_path(model, &prev_iter);
+                gint        * ind  = gtk_tree_path_get_indices(path);;
+
+                count = ind[0];
+                gtk_tree_path_free(path);
+                gtk_tree_model_get_iter_first(model, &iter);
+            }
+            gtk_tree_model_get(model, &iter, 0, &lang, -1);
+            first_char = g_unichar_toupper(g_utf8_get_char(lang));
+            g_free(lang);
+            if (first_char == key_char)
+            {
+                gtk_combo_box_set_active_iter(combo, &iter);
+                break;
+            }
+        }
+    }
+    return FALSE;
+}

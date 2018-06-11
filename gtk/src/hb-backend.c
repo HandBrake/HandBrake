@@ -2016,6 +2016,8 @@ srt_codeset_opts_set(signal_user_data_t *ud, const gchar *name,
     }
 }
 
+extern G_MODULE_EXPORT void combo_search_key_press_cb(void);
+
 static void
 language_opts_set(signal_user_data_t *ud, const gchar *name,
                   void *opts, const void* data)
@@ -2048,6 +2050,7 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
                            3, (gdouble)ii,
                            -1);
     }
+    g_signal_connect(combo, "key-press-event", combo_search_key_press_cb, ud);
 }
 
 gchar*
