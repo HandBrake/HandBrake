@@ -101,12 +101,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         case AV_CODEC_ID_VP8:
         {
             hb_log("encavcodecInit: VP8 encoder");
-            codec = avcodec_find_encoder_by_name("libvpx_vp8");
+            codec = avcodec_find_encoder_by_name("libvpx");
         } break;
         case AV_CODEC_ID_VP9:
         {
             hb_log("encavcodecInit: VP9 encoder");
-            codec = avcodec_find_encoder_by_name("libvpx_vp9");
+            codec = avcodec_find_encoder_by_name("libvpx-vp9");
         } break;
         case AV_CODEC_ID_H264:
         {
