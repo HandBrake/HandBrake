@@ -1,0 +1,80 @@
+From 38dc27cc6d03383cf1764e03697137e2f330d550 Mon Sep 17 00:00:00 2001
+From: Martin Storsjo <martin@martin.st>
+Date: Sat, 14 Apr 2018 23:40:46 +0300
+Subject: [PATCH] configure: Test linking pthreads before using it
+
+This avoids enabling pthreads if only pthreads-w32 is available.
+pthreads-w32 provides pthread.h but has a link library with a
+different name (libpthreadGC2.a).
+
+Generally, always using win32 threads when on windows would be
+sensible.
+
+However, libstdc++ can be configured to use pthreads (winpthreads), and
+in these cases, standard C++ headers can pollute the namespace with
+pthreads declarations, which break the win32 threads headers that
+declare similar symbols - leading us to prefer pthreads on windows
+whenever available (see d167a1ae and bug 1132).
+
+Change-Id: Icd668ccdaf3aeabb7fa4e713e040ef3d67546f00
+---
+ build/make/configure.sh | 12 +++++++++++-
+ configure               |  9 ++++++++-
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/build/make/configure.sh b/build/make/configure.sh
+index 60fc36e430..72376373c4 100644
+--- a/build/make/configure.sh
++++ b/build/make/configure.sh
+@@ -319,6 +319,12 @@ check_ld() {
+     && check_cmd ${LD} ${LDFLAGS} "$@" -o ${TMP_X} ${TMP_O} ${extralibs}
+ }
+ 
++check_lib() {
++  log check_lib "$@"
++  check_cc $@ \
++    && check_cmd ${LD} ${LDFLAGS} -o ${TMP_X} ${TMP_O} "$@" ${extralibs}
++}
++
+ check_header(){
+   log check_header "$@"
+   header=$1
+@@ -1484,7 +1490,11 @@ EOF
+         # bionic includes basic pthread functionality, obviating -lpthread.
+         ;;
+       *)
+-        check_header pthread.h && add_extralibs -lpthread
++        check_lib -lpthread <<EOF && enable_feature pthread_h && add_extralibs -lpthread
++#include <pthread.h>
++#include <stddef.h>
++int main(void) { return pthread_create(NULL, NULL, NULL, NULL); }
++EOF
+         ;;
+     esac
+   fi
+diff --git a/configure b/configure
+index 2f198e9a61..3174a9f4b5 100755
+--- a/configure
++++ b/configure
+@@ -573,13 +573,20 @@ process_detect() {
+         check_ld() {
+             true
+         }
++        check_lib() {
++            true
++        }
+     fi
+     check_header stdio.h || die "Unable to invoke compiler: ${CC} ${CFLAGS}"
+     check_ld <<EOF || die "Toolchain is unable to link executables"
+ int main(void) {return 0;}
+ EOF
+     # check system headers
+-    check_header pthread.h
++    check_lib -lpthread <<EOF && enable_feature pthread_h
++#include <pthread.h>
++#include <stddef.h>
++int main(void) { return pthread_create(NULL, NULL, NULL, NULL); }
++EOF
+     check_header unistd.h # for sysconf(3) and friends.
+ 
+     check_header vpx/vpx_integer.h -I${source_path} && enable_feature vpx_ports
