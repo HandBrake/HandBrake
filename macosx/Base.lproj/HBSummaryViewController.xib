@@ -23,7 +23,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <popUpButton toolTip="Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="txV-1R-WoD">
-                    <rect key="frame" x="66" y="332" width="136" height="22"/>
+                    <rect key="frame" x="66" y="330" width="136" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="JWl-qc-DOw"/>
                     </constraints>
@@ -52,7 +52,7 @@
                     </connections>
                 </popUpButton>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-UY-4al" userLabel="Format">
-                    <rect key="frame" x="18" y="336" width="45" height="14"/>
+                    <rect key="frame" x="18" y="334" width="45" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="RXJ-DZ-4mh">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -63,7 +63,7 @@
                     </connections>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="GCn-2c-Fql" userLabel="Tracks">
-                    <rect key="frame" x="18" y="251" width="45" height="14"/>
+                    <rect key="frame" x="18" y="249" width="45" height="14"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Tracks:" id="3mF-Bb-Gon">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -74,7 +74,7 @@
                     </connections>
                 </textField>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="0kh-Uy-Yo3" userLabel="Filters">
-                    <rect key="frame" x="18" y="221" width="45" height="14"/>
+                    <rect key="frame" x="18" y="219" width="45" height="14"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Filters:" id="OCw-f6-uA0">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -85,7 +85,7 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="yRE-5c-FhX">
-                    <rect key="frame" x="67" y="251" width="214" height="14"/>
+                    <rect key="frame" x="67" y="249" width="214" height="14"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="210" id="I7F-Rh-oaP"/>
                     </constraints>
@@ -100,7 +100,7 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="BHq-Mt-3eA">
-                    <rect key="frame" x="67" y="221" width="214" height="14"/>
+                    <rect key="frame" x="67" y="219" width="214" height="14"/>
                     <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="RIB-ME-Yhh">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -116,7 +116,7 @@
                     <accessibility description="Preview"/>
                 </customView>
                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="Jgq-K8-z3W" userLabel="Size">
-                    <rect key="frame" x="18" y="191" width="45" height="14"/>
+                    <rect key="frame" x="18" y="189" width="45" height="14"/>
                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Size:" id="B4a-co-0ly">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -127,7 +127,7 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="Jaw-pH-rhf">
-                    <rect key="frame" x="67" y="191" width="214" height="14"/>
+                    <rect key="frame" x="67" y="189" width="214" height="14"/>
                     <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="xmy-Jl-mR4">
                         <font key="font" metaFont="smallSystem"/>
                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -139,7 +139,7 @@
                     </connections>
                 </textField>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="9OK-03-grs">
-                    <rect key="frame" x="69" y="281" width="210" height="48"/>
+                    <rect key="frame" x="69" y="279" width="210" height="48"/>
                     <subviews>
                         <button translatesAutoresizingMaskIntoConstraints="NO" id="lUi-Oc-208">
                             <rect key="frame" x="-3" y="33" width="205" height="18"/>
@@ -239,7 +239,7 @@
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Jaw-pH-rhf" secondAttribute="trailing" constant="20" symbolic="YES" id="Ndp-Pa-1Wq"/>
                 <constraint firstItem="yRE-5c-FhX" firstAttribute="leading" secondItem="GCn-2c-Fql" secondAttribute="trailing" constant="8" id="Ok2-zj-HHS"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Jaw-pH-rhf" secondAttribute="bottom" constant="8" id="U19-5y-ann"/>
-                <constraint firstItem="bpr-UY-4al" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="VFQ-Vg-ESJ"/>
+                <constraint firstItem="bpr-UY-4al" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="18" id="VFQ-Vg-ESJ"/>
                 <constraint firstItem="0kh-Uy-Yo3" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="ZSW-w5-hfn"/>
                 <constraint firstItem="Jaw-pH-rhf" firstAttribute="leading" secondItem="Jgq-K8-z3W" secondAttribute="trailing" constant="8" id="beE-wT-2DH"/>
                 <constraint firstItem="BHq-Mt-3eA" firstAttribute="leading" secondItem="0kh-Uy-Yo3" secondAttribute="trailing" constant="8" id="dZN-9S-z89"/>

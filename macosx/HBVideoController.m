@@ -13,7 +13,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 
 @interface HBVideoController () {
     // Framerate Radio Button Framerate Controls
-    IBOutlet NSButtonCell *fFramerateVfrPfrCell;
+    IBOutlet NSButton *fFramerateVfrPfrButton;
 
     // Video Encoder
     IBOutlet NSSlider *fVidQualitySlider;
@@ -119,11 +119,11 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
             // fFramerateVfrPfrCell
             if (self.video.frameRate == 0) // We are Same as Source
             {
-                [fFramerateVfrPfrCell setTitle:NSLocalizedString(@"Variable Framerate", @"Video -> Framerate")];
+                [fFramerateVfrPfrButton setTitle:NSLocalizedString(@"Variable Framerate", @"Video -> Framerate")];
             }
             else
             {
-                [fFramerateVfrPfrCell setTitle:NSLocalizedString(@"Peak Framerate (VFR)", @"Video -> Framerate")];
+                [fFramerateVfrPfrButton setTitle:NSLocalizedString(@"Peak Framerate (VFR)", @"Video -> Framerate")];
             }
         }
         else if ([keyPath isEqualToString:@"video.quality"])
