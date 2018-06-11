@@ -7,16 +7,6 @@ include $(SRC/)make/include/tool.defs
 
 ###############################################################################
 
-HB_TOOLS_PATH =
-ifeq (1,$(FEATURE.local_cmake))
-    MODULES += contrib/cmake
-    HB_TOOLS_PATH = $(call fn.ABSOLUTE,$(CONTRIB.build/)bin)
-endif
-
-ifneq (,$(HB_TOOLS_PATH))
-    PATH := $(HB_TOOLS_PATH):$(PATH)
-endif
-
 ifneq (,$(filter $(BUILD.system),cygwin mingw))
 ifneq ($(HAS.bz2),1)
     MODULES += contrib/bzip2

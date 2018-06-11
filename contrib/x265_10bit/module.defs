@@ -1,4 +1,4 @@
-__deps__ := CMAKE X265_8
+__deps__ := X265_8
 $(eval $(call import.MODULE.defs,X265_10,x265_10,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_10))
 

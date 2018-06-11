@@ -1343,9 +1343,6 @@ def createCLI():
     h = IfHost( 'specify Mac OS X deployment target for Xcode builds', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--minver', default=None, action='store', metavar='VER',
         help=h )
-
-    h = IfHost( 'Build and use local cmake', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-local-cmake', default=False, action='store_true', help=h )
     cli.add_option_group( grp )
 
     ## add Xcode options
@@ -1528,7 +1525,7 @@ try:
         nasm     = ToolProbe( 'NASM.exe',     'nasm', abort=False, minversion=[2,13,0] )
         autoconf = ToolProbe( 'AUTOCONF.exe', 'autoconf', abort=True )
         automake = ToolProbe( 'AUTOMAKE.exe', 'automake', abort=True )
-        cmake    = ToolProbe( 'CMAKE.exe',    'cmake', abort=False )
+        cmake    = ToolProbe( 'CMAKE.exe',    'cmake', abort=True )
         libtool  = ToolProbe( 'LIBTOOL.exe',  'libtool', abort=True )
         pkgconfig = ToolProbe( 'PKGCONFIG.exe', 'pkg-config', abort=True )
 
@@ -1591,11 +1588,6 @@ try:
             raise AbortError( 'error: nasm missing\n' )
         elif Tools.nasm.version.inadequate():
             raise AbortError( 'error: minimum required nasm version is %s and %s is %s\n' % ('.'.join([str(i) for i in Tools.nasm.version.minversion]),Tools.nasm.pathname,Tools.nasm.version.svers) )
-
-    ## enable local cmake when cmake probe fails
-    if not options.enable_local_cmake and (Tools.cmake.fail):
-        stdout.write( 'note: enabling local cmake\n' )
-        options.enable_local_cmake = True
 
     if build.system == 'mingw':
         dlfcn_test = """
@@ -1841,7 +1833,6 @@ int main()
     doc.add( 'PREFIX/', cfg.prefix_final + os.sep )
 
     doc.addBlank()
-    doc.add( 'FEATURE.local_cmake', int( options.enable_local_cmake ))
     doc.add( 'FEATURE.asm',        'disabled' )
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
     doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
