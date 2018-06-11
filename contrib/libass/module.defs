@@ -1,4 +1,4 @@
-__deps__ := YASM FREETYPE FRIBIDI HARFBUZZ
+__deps__ := FREETYPE FRIBIDI HARFBUZZ
 
 ifeq (,$(filter $(BUILD.system),darwin cygwin mingw))
     __deps__ += FONTCONFIG
@@ -31,11 +31,4 @@ ifneq ($(BUILD.system),linux)
     LIBASS.CONFIGURE.extra += \
         FRIBIDI_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfribidi" \
         FRIBIDI_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"
-endif
-
-ifneq (1,$(BUILD.cross))
-    ifeq (1,$(FEATURE.local_yasm))
-        LIBASS.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-        LIBASS.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    endif
 endif

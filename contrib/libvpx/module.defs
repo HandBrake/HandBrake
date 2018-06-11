@@ -1,10 +1,4 @@
-__deps__ := YASM
-ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-__deps__ += PTHREADW32
-endif
-
-
-$(eval $(call import.MODULE.defs,LIBVPX,libvpx,$(__deps__)))
+$(eval $(call import.MODULE.defs,LIBVPX,libvpx,PTHREADW32))
 $(eval $(call import.CONTRIB.defs,LIBVPX))
 
 LIBVPX.FETCH.url     = https://download.handbrake.fr/contrib/libvpx-1.7.0.tar.gz
@@ -14,7 +8,7 @@ LIBVPX.FETCH.sha256  = 1fec931eb5c94279ad219a5b6e0202358e94a93a90cfb1603578c326a
 LIBVPX.CONFIGURE.args.host =
 LIBVPX.CONFIGURE.deps  =
 LIBVPX.CONFIGURE.extra =  \
-    --as=yasm \
+    --as=nasm \
     --enable-vp8-encoder  \
     --disable-vp8-decoder \
     --enable-vp9-encoder  \
@@ -38,9 +32,4 @@ ifeq (linux,$(BUILD.system))
     ifeq (x86_64,$(BUILD.machine))
         LIBVPX.CONFIGURE.extra += --enable-pic
     endif
-endif
-
-ifeq (1,$(FEATURE.local_yasm))
-    LIBVPX.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    LIBVPX.BUILD.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
 endif

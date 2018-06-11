@@ -3,7 +3,7 @@ $(eval $(call import.MODULE.rules,LIBHB))
 libhb.build: $(LIBHB.a)
 
 $(LIBHB.a): | $(dir $(LIBHB.a))
-$(LIBHB.a): $(LIBHB.c.o) $(LIBHB.m.o) $(LIBHB.yasm.o)
+$(LIBHB.a): $(LIBHB.c.o) $(LIBHB.m.o)
 	$(AR.exe) rsu $@ $^
 
 $(LIBHB.c.o): $(LIBHB.d)
@@ -28,23 +28,12 @@ libhb.clean:
 
 ###############################################################################
 
-ifneq (disabled,$(FEATURE.asm))
-
-$(LIBHB.yasm.o): $(LIBHB.yasm.d)
-$(LIBHB.yasm.o): | $(dir $(LIBHB.yasm.o))
-$(LIBHB.yasm.o): $(LIBHB.yasm.build/)%.o: $(LIBHB.yasm.src/)%.asm
-	$(call LIBHB.YASM.ASM_O,$@,$<)
-
-endif
-
-###############################################################################
-
 ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
 
 libhb.build: $(LIBHB.dll)
 
 $(LIBHB.dll): | $(dirname $(LIBHB.dll) $(LIBHB.lib))
-$(LIBHB.dll): $(LIBHB.c.o) $(LIBHB.yasm.o)
+$(LIBHB.dll): $(LIBHB.c.o)
 	$(call LIBHB.GCC.DYLIB++,$@,$^ $(LIBHB.dll.libs))
 ifeq (none,$(FFMPEG.GCC.g))
 	$(STRIP.exe) -s $(LIBHB.dll)

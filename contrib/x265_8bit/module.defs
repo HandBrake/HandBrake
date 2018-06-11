@@ -1,4 +1,4 @@
-__deps__ := YASM CMAKE
+__deps__ := CMAKE
 $(eval $(call import.MODULE.defs,X265_8,x265_8,$(__deps__),x265))
 $(eval $(call import.CONTRIB.defs,X265_8))
 
@@ -30,10 +30,6 @@ ifeq (1,$(BUILD.cross))
     X265_8.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265_8.CONFIGURE.build)"
 else
     X265_8.CONFIGURE.args.host  = -DCMAKE_HOST_SYSTEM="$(X265_8.CONFIGURE.host)"
-    ifeq (1,$(FEATURE.local_yasm))
-        X265_8.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-        X265_8.BUILD.env                = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
-    endif
 endif
 
 ## find CMakeLists.txt
