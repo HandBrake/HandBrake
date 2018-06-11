@@ -1,0 +1,59 @@
+From 95a71057f09f6b94e08ad2206ee8856a5695cf4f Mon Sep 17 00:00:00 2001
+From: Johann <johannkoenig@google.com>
+Date: Mon, 12 Mar 2018 14:54:48 -0700
+Subject: [PATCH] autodetect macOS High Sierra
+
+Add darwin17 target
+
+Change-Id: I349a2f6a0396c59269f567a03ae813e3e59ccefa
+---
+ build/make/configure.sh | 8 ++++++++
+ configure               | 2 ++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/build/make/configure.sh b/build/make/configure.sh
+index d7e40b83f1..20a38e8146 100644
+--- a/build/make/configure.sh
++++ b/build/make/configure.sh
+@@ -757,6 +757,10 @@ process_common_toolchain() {
+         tgt_isa=x86_64
+         tgt_os=darwin16
+         ;;
++      *darwin17*)
++        tgt_isa=x86_64
++        tgt_os=darwin17
++        ;;
+       x86_64*mingw32*)
+         tgt_os=win64
+         ;;
+@@ -885,6 +889,10 @@ process_common_toolchain() {
+       add_cflags  "-mmacosx-version-min=10.12"
+       add_ldflags "-mmacosx-version-min=10.12"
+       ;;
++    *-darwin17-*)
++      add_cflags  "-mmacosx-version-min=10.13"
++      add_ldflags "-mmacosx-version-min=10.13"
++      ;;
+     *-iphonesimulator-*)
+       add_cflags  "-miphoneos-version-min=${IOS_VERSION_MIN}"
+       add_ldflags "-miphoneos-version-min=${IOS_VERSION_MIN}"
+diff --git a/configure b/configure
+index 6e7630ebac..32652c447e 100755
+--- a/configure
++++ b/configure
+@@ -129,6 +129,7 @@ all_platforms="${all_platforms} x86-darwin13-gcc"
+ all_platforms="${all_platforms} x86-darwin14-gcc"
+ all_platforms="${all_platforms} x86-darwin15-gcc"
+ all_platforms="${all_platforms} x86-darwin16-gcc"
++all_platforms="${all_platforms} x86-darwin17-gcc"
+ all_platforms="${all_platforms} x86-iphonesimulator-gcc"
+ all_platforms="${all_platforms} x86-linux-gcc"
+ all_platforms="${all_platforms} x86-linux-icc"
+@@ -149,6 +150,7 @@ all_platforms="${all_platforms} x86_64-darwin13-gcc"
+ all_platforms="${all_platforms} x86_64-darwin14-gcc"
+ all_platforms="${all_platforms} x86_64-darwin15-gcc"
+ all_platforms="${all_platforms} x86_64-darwin16-gcc"
++all_platforms="${all_platforms} x86_64-darwin17-gcc"
+ all_platforms="${all_platforms} x86_64-iphonesimulator-gcc"
+ all_platforms="${all_platforms} x86_64-linux-gcc"
+ all_platforms="${all_platforms} x86_64-linux-icc"
