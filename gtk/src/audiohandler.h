@@ -40,7 +40,7 @@ void ghb_audio_list_refresh_all(signal_user_data_t *ud);
 char * ghb_format_quality( const char *prefix, int codec, double quality );
 void ghb_init_audio_defaults_ui(signal_user_data_t *ud);
 void ghb_audio_defaults_to_ui(signal_user_data_t *ud);
-GtkListBoxRow* ghb_find_lang_row(GtkListBox *list_box, int lang_idx);
+gboolean ghb_find_lang_row(GtkTreeModel *model, GtkTreeIter *iter, int idx);
 void ghb_audio_title_change(signal_user_data_t *ud, gboolean title_valid);
 void ghb_clear_audio_selection(GtkBuilder *builder);
 gboolean ghb_audio_quality_enabled(const GhbValue *asettings);

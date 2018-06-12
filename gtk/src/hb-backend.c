@@ -2899,15 +2899,39 @@ ghb_lookup_combo_option(const gchar *name, const GhbValue *gval)
     return result;
 }
 
-void ghb_init_lang_list_box(GtkListBox *list_box)
+void ghb_init_lang_list_model(GtkTreeView *tv)
 {
-    int ii;
+    GtkTreeViewColumn * column;
+    GtkTreeStore      * ts;
+    GtkCellRenderer   * lang_cell;
+
+    // Store contains:
+    // 0 - Language string to display
+    // 1 - Index of language in the libhb language list
+    ts = gtk_tree_store_new(2, G_TYPE_STRING, G_TYPE_INT);
+    gtk_tree_view_set_model(tv, GTK_TREE_MODEL(ts));
+
+    lang_cell = gtk_cell_renderer_text_new();
+    column = gtk_tree_view_column_new();
+    gtk_tree_view_column_pack_start(column, lang_cell, FALSE);
+    gtk_tree_view_column_add_attribute(column, lang_cell, "markup", 0);
+    gtk_tree_view_append_column(tv, GTK_TREE_VIEW_COLUMN(column));
+}
+
+void ghb_init_lang_list(GtkTreeView *tv, signal_user_data_t *ud)
+{
+    GtkTreeIter    iter;
+    GtkTreeStore * ts;
+    int            ii;
+
+    ghb_init_lang_list_model(tv);
+    ts = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
 
     const iso639_lang_t *iso639;
     for (iso639 = lang_get_next(NULL), ii = 0; iso639 != NULL;
          iso639 = lang_get_next(iso639), ii++)
     {
-        const char *lang;
+        const char * lang;
         if (ii == 0)
         {
             lang = _("Any");
@@ -2921,10 +2945,8 @@ void ghb_init_lang_list_box(GtkListBox *list_box)
         {
             lang = iso639->eng_name;
         }
-        GtkWidget *label = gtk_label_new(lang);
-        g_object_set_data(G_OBJECT(label), "lang_idx", (gpointer)(intptr_t)ii);
-        gtk_widget_show(label);
-        gtk_list_box_insert(list_box, label, -1);
+        gtk_tree_store_append(ts, &iter, NULL);
+        gtk_tree_store_set(ts, &iter, 0, lang, 1, ii, -1);
     }
 }
 

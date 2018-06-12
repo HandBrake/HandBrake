@@ -1329,80 +1329,137 @@ ghb_subtitle_set_pref_lang(GhbValue *settings)
     }
 }
 
-G_MODULE_EXPORT void
-subtitle_add_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+void
+subtitle_add_lang_iter(GtkTreeModel *tm, GtkTreeIter *iter,
+                       signal_user_data_t *ud)
 {
-    GtkListBox *avail = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
-    GtkListBox *selected = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "subtitle_selected_lang"));
-    GtkListBoxRow *row;
-    GtkWidget *label;
+    GtkTreeView         * selected;
+    GtkTreeStore        * selected_ts;
+    GtkTreeIter           pos;
+    GtkTreePath         * tp;
+    char                * lang;
+    int                   index;
+    const iso639_lang_t * iso_lang;
+    GhbValue            * glang, * slang_list;
+    GtkTreeSelection    * tsel;
 
-    row = gtk_list_box_get_selected_row(avail);
-    if (row != NULL)
+    selected    = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_selected_lang"));
+    selected_ts = GTK_TREE_STORE(gtk_tree_view_get_model(selected));
+    tsel        = gtk_tree_view_get_selection(selected);
+
+    // Add to UI selected language list box
+    gtk_tree_model_get(tm, iter, 0, &lang, 1, &index, -1);
+    gtk_tree_store_append(selected_ts, &pos, NULL);
+    gtk_tree_store_set(selected_ts, &pos, 0, lang, 1, index, -1);
+    g_free(lang);
+
+    // Select the item added to the selected list and make it
+    // visible in the scrolled window
+    tp = gtk_tree_model_get_path(GTK_TREE_MODEL(selected_ts), &pos);
+    gtk_tree_selection_select_iter(tsel, &pos);
+    gtk_tree_view_scroll_to_cell(selected, tp, NULL, FALSE, 0, 0);
+    gtk_tree_path_free(tp);
+
+    // Remove from UI available language list box
+    gtk_tree_store_remove(GTK_TREE_STORE(tm), iter);
+
+    // Add to preset language list
+    iso_lang = ghb_iso639_lookup_by_int(index);
+    glang = ghb_string_value_new(iso_lang->iso639_2);
+    slang_list = ghb_dict_get_value(ud->settings, "SubtitleLanguageList");
+    if (ghb_array_len(slang_list) == 0)
     {
-        int idx;
-        const iso639_lang_t *lang;
-        GhbValue *glang, *lang_list;
+        subtitle_update_pref_lang(ud, iso_lang);
+    }
+    ghb_array_append(slang_list, glang);
+    ghb_clear_presets_selection(ud);
+}
 
-        // Remove from UI available language list box
-        label = gtk_bin_get_child(GTK_BIN(row));
-        g_object_ref(G_OBJECT(label));
-        gtk_widget_destroy(GTK_WIDGET(row));
-        gtk_widget_show(label);
-        // Add to UI selected language list box
-        gtk_list_box_insert(selected, label, -1);
+G_MODULE_EXPORT void
+subtitle_avail_lang_activated_cb(GtkTreeView *tv, GtkTreePath *tp,
+                                 GtkTreeViewColumn *column,
+                                 signal_user_data_t *ud)
+{
+    GtkTreeIter    iter;
+    GtkTreeModel * tm = gtk_tree_view_get_model(tv);
 
-        // Add to preset language list
-        idx = (intptr_t)g_object_get_data(G_OBJECT(label), "lang_idx");
-        lang = ghb_iso639_lookup_by_int(idx);
-        glang = ghb_string_value_new(lang->iso639_2);
-        lang_list = ghb_dict_get_value(ud->settings, "SubtitleLanguageList");
-        if (ghb_array_len(lang_list) == 0)
-        {
-            subtitle_update_pref_lang(ud, lang);
-        }
-        ghb_array_append(lang_list, glang);
-        ghb_clear_presets_selection(ud);
+    if (gtk_tree_model_get_iter(tm, &iter, tp))
+    {
+        subtitle_add_lang_iter(tm, &iter, ud);
     }
 }
 
 G_MODULE_EXPORT void
-subtitle_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+subtitle_add_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
+    GtkTreeView      * avail;
+    GtkTreeModel     * avail_tm;
+    GtkTreeSelection * tsel;
+    GtkTreeIter        iter;
 
-    GtkListBox *avail, *selected;
-    GtkListBoxRow *row;
-    GtkWidget *label;
-
-    avail = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
-    selected = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "subtitle_selected_lang"));
-    row = gtk_list_box_get_selected_row(selected);
-    if (row != NULL)
+    avail       = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
+    avail_tm    = gtk_tree_view_get_model(avail);
+    tsel        = gtk_tree_view_get_selection(avail);
+    if (gtk_tree_selection_get_selected(tsel, NULL, &iter))
     {
-        gint index;
-        GhbValue *lang_list;
+        subtitle_add_lang_iter(avail_tm, &iter, ud);
+    }
+}
 
-        index = gtk_list_box_row_get_index(row);
+void
+subtitle_remove_lang_iter(GtkTreeModel *tm, GtkTreeIter *iter,
+                          signal_user_data_t *ud)
+{
+    GtkTreeView      * avail;
+    GtkTreeStore     * avail_ts;
+    GtkTreeIter        pos, sibling;
+    char             * lang;
+    int                index;
+    GtkTreePath      * tp  = gtk_tree_model_get_path(tm, iter);
+    int              * ind = gtk_tree_path_get_indices(tp);
+    int                row = ind[0];
+    GhbValue         * slang_list;
+    GtkTreeSelection * tsel;
 
-        // Remove from UI selected language list box
-        label = gtk_bin_get_child(GTK_BIN(row));
-        g_object_ref(G_OBJECT(label));
-        int idx = (intptr_t)g_object_get_data(G_OBJECT(label), "lang_idx");
-        gtk_widget_destroy(GTK_WIDGET(row));
-        gtk_widget_show(label);
-        // Add to UI available language list box
-        gtk_list_box_insert(avail, label, idx);
+    gtk_tree_path_free(tp);
+    avail    = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
+    avail_ts = GTK_TREE_STORE(gtk_tree_view_get_model(avail));
+    tsel     = gtk_tree_view_get_selection(avail);
 
-        // Remove from preset language list
-        lang_list = ghb_dict_get_value(ud->settings, "SubtitleLanguageList");
-        ghb_array_remove(lang_list, index);
+    // Add to UI available language list box
+    gtk_tree_model_get(tm, iter, 0, &lang, 1, &index, -1);
+    if (ghb_find_lang_row(GTK_TREE_MODEL(avail_ts), &sibling, index))
+    {
+        gtk_tree_store_insert_before(avail_ts, &pos, NULL, &sibling);
+    }
+    else
+    {
+        gtk_tree_store_append(avail_ts, &pos, NULL);
+    }
+    gtk_tree_store_set(avail_ts, &pos, 0, lang, 1, index, -1);
+    g_free(lang);
 
-        ghb_clear_presets_selection(ud);
+    // Select the item added to the available list and make it
+    // visible in the scrolled window
+    tp = gtk_tree_model_get_path(GTK_TREE_MODEL(avail_ts), &pos);
+    gtk_tree_selection_select_iter(tsel, &pos);
+    gtk_tree_view_scroll_to_cell(avail, tp, NULL, FALSE, 0, 0);
+    gtk_tree_path_free(tp);
 
-        if (ghb_array_len(lang_list) > 0)
+    // Remove from UI selected language list box
+    gtk_tree_store_remove(GTK_TREE_STORE(tm), iter);
+
+    // Remove from preset language list
+    slang_list = ghb_dict_get_value(ud->settings, "SubtitleLanguageList");
+    ghb_array_remove(slang_list, row);
+    ghb_clear_presets_selection(ud);
+
+    if (row == 0)
+    {
+        if (ghb_array_len(slang_list) > 0)
         {
             const iso639_lang_t *lang;
-            GhbValue *entry = ghb_array_get(lang_list, 0);
+            GhbValue *entry = ghb_array_get(slang_list, 0);
             lang = ghb_iso639_lookup_by_int(ghb_lookup_lang(entry));
             subtitle_update_pref_lang(ud, lang);
         }
@@ -1413,29 +1470,85 @@ subtitle_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
     }
 }
 
-static void subtitle_def_lang_list_clear_cb(GtkWidget *row, gpointer data)
+G_MODULE_EXPORT void
+subtitle_selected_lang_activated_cb(GtkTreeView *tv, GtkTreePath *tp,
+                                    GtkTreeViewColumn *column,
+                                    signal_user_data_t *ud)
 {
-    GtkListBox *avail = (GtkListBox*)data;
-    GtkWidget *label = gtk_bin_get_child(GTK_BIN(row));
-    g_object_ref(G_OBJECT(label));
-    gtk_widget_destroy(GTK_WIDGET(row));
-    gtk_widget_show(label);
-    int idx = (intptr_t)g_object_get_data(G_OBJECT(label), "lang_idx");
-    gtk_list_box_insert(avail, label, idx);
+    GtkTreeIter    iter;
+    GtkTreeModel * tm = gtk_tree_view_get_model(tv);
+
+    if (gtk_tree_model_get_iter(tm, &iter, tp))
+    {
+        subtitle_remove_lang_iter(tm, &iter, ud);
+    }
+}
+
+G_MODULE_EXPORT void
+subtitle_remove_lang_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GtkTreeView      * selected;
+    GtkTreeModel     * selected_tm;
+    GtkTreeSelection * tsel;
+    GtkTreeIter        iter;
+
+    selected    = GTK_TREE_VIEW(GHB_WIDGET(ud->builder,
+                                           "subtitle_selected_lang"));
+    selected_tm = gtk_tree_view_get_model(selected);
+    tsel        = gtk_tree_view_get_selection(selected);
+    if (gtk_tree_selection_get_selected(tsel, NULL, &iter))
+    {
+        subtitle_remove_lang_iter(selected_tm, &iter, ud);
+    }
 }
 
 static void subtitle_def_selected_lang_list_clear(signal_user_data_t *ud)
 {
-    GtkListBox *avail, *selected;
-    avail = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
-    selected = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "subtitle_selected_lang"));
-    gtk_container_foreach(GTK_CONTAINER(selected),
-                          subtitle_def_lang_list_clear_cb, (gpointer)avail);
+    GtkTreeView  * tv;
+    GtkTreeModel * selected_tm;
+    GtkTreeStore * avail_ts;
+    GtkTreeIter    iter;
+
+    tv          = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
+    avail_ts    = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
+    tv          = GTK_TREE_VIEW(GHB_WIDGET(ud->builder,
+                                           "subtitle_selected_lang"));
+    selected_tm = gtk_tree_view_get_model(tv);
+    if (gtk_tree_model_get_iter_first(selected_tm, &iter))
+    {
+        do
+        {
+            char        * lang;
+            gint          index;
+            GtkTreeIter   pos, sibling;
+
+            gtk_tree_model_get(selected_tm, &iter, 0, &lang, 1, &index, -1);
+            if (ghb_find_lang_row(GTK_TREE_MODEL(avail_ts), &sibling, index))
+            {
+                gtk_tree_store_insert_before(avail_ts, &pos, NULL, &sibling);
+            }
+            else
+            {
+                gtk_tree_store_append(avail_ts, &pos, NULL);
+            }
+            gtk_tree_store_set(avail_ts, &pos, 0, lang, 1, index, -1);
+        } while (gtk_tree_model_iter_next(selected_tm, &iter));
+    }
+    gtk_tree_store_clear(GTK_TREE_STORE(selected_tm));
 }
 
 static void subtitle_def_lang_list_init(signal_user_data_t *ud)
 {
-    GhbValue *lang_list;
+    GhbValue     * lang_list;
+    GtkTreeView  * tv;
+    GtkTreeModel * avail;
+    GtkTreeStore * selected;
+    int            ii, count;
+
+    tv       = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
+    avail    = gtk_tree_view_get_model(tv);
+    tv       = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_selected_lang"));
+    selected = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
 
     // Clear selected languages.
     subtitle_def_selected_lang_list_clear(ud);
@@ -1447,31 +1560,30 @@ static void subtitle_def_lang_list_init(signal_user_data_t *ud)
         ghb_dict_set(ud->settings, "SubtitleLanguageList", lang_list);
     }
 
-    int ii, count;
     count = ghb_array_len(lang_list);
     for (ii = 0; ii < count; )
     {
-        GhbValue *lang_val = ghb_array_get(lang_list, ii);
-        int idx = ghb_lookup_lang(lang_val);
+        GhbValue    * lang_val = ghb_array_get(lang_list, ii);
+        int           idx      = ghb_lookup_lang(lang_val);
+        GtkTreeIter   iter;
+
         if (ii == 0)
         {
             const iso639_lang_t *lang;
             lang = ghb_iso639_lookup_by_int(idx);
             subtitle_update_pref_lang(ud, lang);
         }
-
-        GtkListBox *avail, *selected;
-        GtkListBoxRow *row;
-        avail = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
-        selected = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "subtitle_selected_lang"));
-        row = ghb_find_lang_row(avail, idx);
-        if (row)
+        if (ghb_find_lang_row(avail, &iter, idx))
         {
-            GtkWidget *label = gtk_bin_get_child(GTK_BIN(row));
-            g_object_ref(G_OBJECT(label));
-            gtk_widget_destroy(GTK_WIDGET(row));
-            gtk_widget_show(label);
-            gtk_list_box_insert(selected, label, -1);
+            gchar       * lang;
+            gint          index;
+            GtkTreeIter   pos;
+
+            gtk_tree_model_get(avail, &iter, 0, &lang, 1, &index, -1);
+            gtk_tree_store_append(selected, &pos, NULL);
+            gtk_tree_store_set(selected, &pos, 0, lang, 1, index, -1);
+            g_free(lang);
+            gtk_tree_store_remove(GTK_TREE_STORE(avail), &iter);
             ii++;
         }
         else
@@ -1495,10 +1607,12 @@ void ghb_subtitle_defaults_to_ui(signal_user_data_t *ud)
 
 void ghb_init_subtitle_defaults_ui(signal_user_data_t *ud)
 {
-    GtkListBox *list_box;
+    GtkTreeView * tv;
 
-    list_box = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
-    ghb_init_lang_list_box(list_box);
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_avail_lang"));
+    ghb_init_lang_list(tv, ud);
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "subtitle_selected_lang"));
+    ghb_init_lang_list_model(tv);
 }
 
 G_MODULE_EXPORT void

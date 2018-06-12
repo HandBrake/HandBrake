@@ -169,7 +169,8 @@ const char* ghb_lookup_filter_name(int filter_id, const char *short_name, int pr
 gchar* ghb_get_tmp_dir();
 gint ghb_find_closest_audio_samplerate(gint rate);
 
-void ghb_init_lang_list_box(GtkListBox *list_box);
+void ghb_init_lang_list_model(GtkTreeView *tv);
+void ghb_init_lang_list(GtkTreeView *tv, signal_user_data_t *ud);
 
 void ghb_init_combo_box(GtkComboBox *combo);
 void ghb_audio_encoder_opts_set(GtkComboBox *combo);

@@ -4265,10 +4265,12 @@ filter_output([
                                                 <property name="min_content_height">84</property>
                                                 <property name="vexpand">True</property>
                                                 <child>
-                                                  <object class="GtkListBox" id="audio_avail_lang">
+                                                  <object class="GtkTreeView" id="audio_avail_lang">
                                                     <property name="visible">True</property>
+                                                    <property name="headers-visible">False</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="vexpand">True</property>
+                                                    <signal name="row-activated" handler="audio_avail_lang_activated_cb" swapped="no"/>
                                                   </object>
                                                 </child>
                                               </object>
@@ -4286,11 +4288,13 @@ filter_output([
                                                 <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
                                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                                 <child>
-                                                  <object class="GtkListBox" id="audio_selected_lang">
+                                                  <object class="GtkTreeView" id="audio_selected_lang">
                                                     <property name="visible">True</property>
+                                                    <property name="headers-visible">False</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="tooltip_text" translatable="yes">Create a list of languages you would like to select audio for.
 Tracks matching these languages will be selected using the chosen Selection Behavior.</property>
+                                                    <signal name="row-activated" handler="audio_selected_lang_activated_cb" swapped="no"/>
                                                   </object>
                                                 </child>
                                               </object>
@@ -5078,11 +5082,13 @@ filter_output([
                                                 <property name="vexpand">True</property>
                                                 <property name="halign">GTK_ALIGN_FILL</property>
                                                 <child>
-                                                  <object class="GtkListBox" id="subtitle_avail_lang">
+                                                  <object class="GtkTreeView" id="subtitle_avail_lang">
                                                     <property name="visible">True</property>
+                                                    <property name="headers-visible">False</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="vexpand">True</property>
                                                     <property name="halign">GTK_ALIGN_FILL</property>
+                                                    <signal name="row-activated" handler="subtitle_avail_lang_activated_cb" swapped="no"/>
                                                   </object>
                                                 </child>
                                               </object>
@@ -5102,8 +5108,9 @@ filter_output([
                                                 <property name="vexpand">True</property>
                                                 <property name="halign">GTK_ALIGN_FILL</property>
                                                 <child>
-                                                  <object class="GtkListBox" id="subtitle_selected_lang">
+                                                  <object class="GtkTreeView" id="subtitle_selected_lang">
                                                     <property name="visible">True</property>
+                                                    <property name="headers-visible">False</property>
                                                     <property name="can_focus">True</property>
                                                     <property name="tooltip_text" translatable="yes">Create a list of languages you would like to select subtitles for.
 Tracks matching these languages will be selected using the chosen Selection Behavior.
@@ -5112,6 +5119,7 @@ The first language in this list is your "preferred" language and will be used
 for determining subtitle selection settings when there is foreign audio.</property>
                                                     <property name="vexpand">True</property>
                                                     <property name="halign">GTK_ALIGN_FILL</property>
+                                                    <signal name="row-activated" handler="subtitle_selected_lang_activated_cb" swapped="no"/>
                                                   </object>
                                                 </child>
                                               </object>
