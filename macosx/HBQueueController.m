@@ -891,12 +891,12 @@
     }
 }
 
-- (void)showNotificationWithTitle:(NSString *)title description:(NSString *)description url:(NSURL *)fileURL
+- (void)showNotificationWithTitle:(NSString *)title description:(NSString *)description url:(NSURL *)fileURL playSound:(BOOL)playSound
 {
     NSUserNotification *notification = [[NSUserNotification alloc] init];
     notification.title = title;
     notification.informativeText = description;
-    notification.soundName = NSUserNotificationDefaultSoundName;
+    notification.soundName = playSound ? NSUserNotificationDefaultSoundName : nil;
     notification.hasActionButton = YES;
     notification.actionButtonTitle = NSLocalizedString(@"Show", @"Notification -> Show in Finder");
     notification.userInfo = @{ @"Path": fileURL.path };
@@ -952,10 +952,7 @@
         [[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionAlertAndNotification)
     {
         // If Play System Alert has been selected in Preferences
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBAlertWhenDoneSound"] == YES)
-        {
-            NSBeep();
-        }
+        bool playSound = [[NSUserDefaults standardUserDefaults] boolForKey:@"HBAlertWhenDoneSound"];
 
         NSString *title;
         NSString *description;
@@ -975,7 +972,8 @@
 
         [self showNotificationWithTitle:title
                             description:description
-                                    url:job.completeOutputURL];
+                                    url:job.completeOutputURL
+                                playSound:playSound];
     }
 }
 
