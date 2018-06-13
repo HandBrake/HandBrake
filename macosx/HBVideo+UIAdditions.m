@@ -418,7 +418,7 @@
 
 - (BOOL)isUnparsedSupported:(int)encoder
 {
-    return encoder & HB_VCODEC_X264_MASK;
+    return (encoder & HB_VCODEC_X264_MASK) != 0;
 }
 - (BOOL)isPresetSystemSupported:(int)encoder
 {
@@ -427,12 +427,12 @@
 
 - (BOOL)isSimpleOptionsPanelSupported:(int)encoder
 {
-    return encoder & HB_VCODEC_FFMPEG_MASK;
+    return (encoder & HB_VCODEC_FFMPEG_MASK) != 0;
 }
 
 - (BOOL)isOldAdvancedPanelSupported:(int)encoder
 {
-    return encoder & HB_VCODEC_X264_MASK;
+    return (encoder & HB_VCODEC_X264_MASK) != 0;
 }
 
 - (void)qualityLimitsForEncoder:(int)encoder low:(float *)low high:(float *)high granularity:(float *)granularity direction:(int *)direction
