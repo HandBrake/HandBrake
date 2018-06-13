@@ -73,8 +73,6 @@ static void thread_func( void * );
 
 void hb_avcodec_init()
 {
-    av_register_all();
-    avfilter_register_all();
 #ifdef _WIN64
     // avresample's assembly optimizations can cause crashes under Win x86_64
     // (see http://bugzilla.libav.org/show_bug.cgi?id=496)
