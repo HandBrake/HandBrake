@@ -64,6 +64,11 @@
             <Menu Height="23"
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Top">
+                <Menu.Resources>
+                    <Style TargetType="MenuItem">
+                        <Setter Property="Height" Value="23" />
+                    </Style>
+                </Menu.Resources>
                 <MenuItem Header="_File">
                     <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SourceOpen}" cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]" InputGestureText="Alt + O" />
                     <Separator />
