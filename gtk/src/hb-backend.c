@@ -1093,24 +1093,20 @@ hb_handle_t* ghb_live_handle(void)
     return h_live;
 }
 
-extern void hb_get_temporary_directory(char path[512]);
-
 gchar*
 ghb_get_tmp_dir()
 {
-    char dir[512];
-
-    hb_get_temporary_directory(dir);
-    return g_strdup(dir);
+    return hb_get_temporary_directory();
 }
 
 void
 ghb_hb_cleanup(gboolean partial)
 {
-    char dir[512];
+    char * dir;
 
-    hb_get_temporary_directory(dir);
+    dir = hb_get_temporary_directory();
     del_tree(dir, !partial);
+    free(dir);
 }
 
 gint

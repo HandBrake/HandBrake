@@ -368,17 +368,18 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     if( job->pass_id == HB_PASS_ENCODE_1ST ||
         job->pass_id == HB_PASS_ENCODE_2ND )
     {
-        char filename[1024]; memset( filename, 0, 1024 );
-        hb_get_tempory_filename( job->h, filename, "ffmpeg.log" );
+        char * filename = hb_get_temporary_filename("ffmpeg.log");
 
         if( job->pass_id == HB_PASS_ENCODE_1ST )
         {
             pv->file = hb_fopen(filename, "wb");
-            if (!pv->file) {
+            if (!pv->file)
+            {
                 if (strerror_r(errno, reason, 79) != 0)
                     strcpy(reason, "unknown -- strerror_r() failed");
 
                 hb_error("encavcodecInit: Failed to open %s (reason: %s)", filename, reason);
+                free(filename);
                 ret = 1;
                 goto done;
             }
@@ -395,6 +396,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     strcpy(reason, "unknown -- strerror_r() failed");
 
                 hb_error("encavcodecInit: Failed to open %s (reason: %s)", filename, reason);
+                free(filename);
                 ret = 1;
                 goto done;
             }
@@ -412,6 +414,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                         strcpy(reason, "unknown -- strerror_r() failed");
 
                     hb_error( "encavcodecInit: Failed to read %s (reason: %s)" , filename, reason);
+                    free(filename);
                     ret = 1;
                     fclose( pv->file );
                     pv->file = NULL;
@@ -424,12 +427,14 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             context->flags    |= AV_CODEC_FLAG_PASS2;
             context->stats_in  = log;
         }
+        free(filename);
     }
 
     if (hb_avcodec_open(context, codec, &av_opts, HB_FFMPEG_THREADS_AUTO))
     {
         hb_log( "encavcodecInit: avcodec_open failed" );
-        return 1;
+        ret = 1;
+        goto done;
     }
 
     if (job->pass_id == HB_PASS_ENCODE_1ST &&

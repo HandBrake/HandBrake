@@ -308,17 +308,20 @@ int hb_get_build( hb_handle_t * h )
  */
 void hb_remove_previews( hb_handle_t * h )
 {
-    char            filename[1024];
-    char            dirname[1024];
+    char          * filename;
+    char          * dirname;
     hb_title_t    * title;
     int             i, count, len;
     DIR           * dir;
     struct dirent * entry;
 
-    memset( dirname, 0, 1024 );
-    hb_get_temporary_directory( dirname );
+    dirname = hb_get_temporary_directory();
     dir = opendir( dirname );
-    if (dir == NULL) return;
+    if (dir == NULL)
+    {
+        free(dirname);
+        return;
+    }
 
     count = hb_list_count( h->title_set.list_title );
     while( ( entry = readdir( dir ) ) )
@@ -330,15 +333,20 @@ void hb_remove_previews( hb_handle_t * h )
         for( i = 0; i < count; i++ )
         {
             title = hb_list_item( h->title_set.list_title, i );
+            filename = hb_strdup_printf("%d_%d", h->id, title->index);
             len = snprintf( filename, 1024, "%d_%d", h->id, title->index );
             if (strncmp(entry->d_name, filename, len) == 0)
             {
-                snprintf( filename, 1024, "%s/%s", dirname, entry->d_name );
+                free(filename);
+                filename = hb_strdup_printf("%s/%s", dirname, entry->d_name);
                 unlink( filename );
+                free(filename);
                 break;
             }
+            free(filename);
         }
     }
+    free(dirname);
     closedir( dir );
 }
 
@@ -444,19 +452,21 @@ hb_title_set_t * hb_get_title_set( hb_handle_t * h )
 int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
 {
     FILE * file;
-    char   filename[1024];
+    char * filename;
     char   reason[80];
 
-    hb_get_tempory_filename( h, filename, "%d_%d_%d",
-                             hb_get_instance_id(h), title, preview );
+    filename = hb_get_temporary_filename("%d_%d_%d", hb_get_instance_id(h),
+                                         title, preview );
 
     file = hb_fopen(filename, "wb");
-    if( !file )
+    if (file == NULL)
     {
         if (strerror_r(errno, reason, 79) != 0)
             strcpy(reason, "unknown -- strerror_r() failed");
 
-        hb_error( "hb_save_preview: Failed to open %s (reason: %s)", filename, reason );
+        hb_error("hb_save_preview: Failed to open %s (reason: %s)",
+                 filename, reason);
+        free(filename);
         return -1;
     }
 
@@ -477,7 +487,8 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
                     if (strerror_r(errno, reason, 79) != 0)
                         strcpy(reason, "unknown -- strerror_r() failed");
 
-                    hb_error( "hb_save_preview: Failed to write line %d to %s (reason: %s). Preview will be incomplete.",
+                    hb_error( "hb_save_preview: Failed to write line %d to %s "
+                              "(reason: %s). Preview will be incomplete.",
                               hh, filename, reason );
                     goto done;
                 }
@@ -487,6 +498,7 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
     }
 
 done:
+    free(filename);
     fclose( file );
 
     return 0;
@@ -495,19 +507,21 @@ done:
 hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
 {
     FILE * file;
-    char   filename[1024];
+    char * filename;
     char   reason[80];
 
-    hb_get_tempory_filename(h, filename, "%d_%d_%d",
-                            hb_get_instance_id(h), title->index, preview);
+    filename = hb_get_temporary_filename("%d_%d_%d", hb_get_instance_id(h),
+                                         title->index, preview);
 
     file = hb_fopen(filename, "rb");
-    if (!file)
+    if (file == NULL)
     {
         if (strerror_r(errno, reason, 79) != 0)
             strcpy(reason, "unknown -- strerror_r() failed");
 
-        hb_error( "hb_read_preview: Failed to open %s (reason: %s)", filename, reason );
+        hb_error("hb_read_preview: Failed to open %s (reason: %s)",
+                 filename, reason);
+        free(filename);
         return NULL;
     }
 
@@ -535,8 +549,9 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
                     if (strerror_r(errno, reason, 79) != 0)
                         strcpy(reason, "unknown -- strerror_r() failed");
 
-                    hb_error( "hb_read_preview: Failed to read line %d from %s (reason: %s). Preview will be incomplete.",
-                          hh, filename, reason );
+                    hb_error("hb_read_preview: Failed to read line %d from %s "
+                             "(reason: %s). Preview will be incomplete.",
+                             hh, filename, reason );
                     goto done;
                 }
             }
@@ -545,6 +560,7 @@ hb_buffer_t * hb_read_preview(hb_handle_t * h, hb_title_t *title, int preview)
     }
 
 done:
+    free(filename);
     fclose(file);
 
     return buf;
@@ -1703,33 +1719,33 @@ int hb_global_init()
  */
 void hb_global_close()
 {
-    char dirname[1024];
-    DIR * dir;
+    char          * dirname;
+    DIR           * dir;
     struct dirent * entry;
 
     hb_presets_free();
 
     /* Find and remove temp folder */
-    memset( dirname, 0, 1024 );
-    hb_get_temporary_directory( dirname );
+    dirname = hb_get_temporary_directory();
 
     dir = opendir( dirname );
     if (dir)
     {
         while( ( entry = readdir( dir ) ) )
         {
-            char filename[1024];
+            char * filename;
             if( entry->d_name[0] == '.' )
             {
                 continue;
             }
-            memset( filename, 0, 1024 );
-            snprintf( filename, 1023, "%s/%s", dirname, entry->d_name );
+            filename = hb_strdup_printf("%s/%s", dirname, entry->d_name);
             unlink( filename );
+            free(filename);
         }
         closedir( dir );
         rmdir( dirname );
     }
+    free(dirname);
 }
 
 /**
@@ -1741,15 +1757,15 @@ void hb_global_close()
 static void thread_func( void * _h )
 {
     hb_handle_t * h = (hb_handle_t *) _h;
-    char dirname[1024];
+    char * dirname;
 
     h->pid = getpid();
 
     /* Create folder for temporary files */
-    memset( dirname, 0, 1024 );
-    hb_get_temporary_directory( dirname );
+    dirname = hb_get_temporary_directory();
 
     hb_mkdir( dirname );
+    free(dirname);
 
     while( !h->die )
     {

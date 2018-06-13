@@ -598,17 +598,17 @@ void hb_get_user_config_filename( char name[1024], char *fmt, ... )
 /************************************************************************
  * Get a temporary directory for HB
  ***********************************************************************/
-void hb_get_temporary_directory( char path[512] )
+char * hb_get_temporary_directory()
 {
-    char base[512];
-    char *p;
+    char * path, * base, * p;
 
     /* Create the base */
 #if defined( SYS_CYGWIN ) || defined( SYS_MINGW )
-    int i_size = GetTempPath( 512, base );
-    if( i_size <= 0 || i_size >= 512 )
+    base = malloc(MAX_PATH);
+    int i_size = GetTempPath( MAX_PATH, base );
+    if( i_size <= 0 || i_size >= MAX_PATH )
     {
-        if( getcwd( base, 512 ) == NULL )
+        if( getcwd( base, MAX_PATH ) == NULL )
             strcpy( base, "c:" ); /* Bad fallback but ... */
     }
 
@@ -617,32 +617,39 @@ void hb_get_temporary_directory( char path[512] )
         *p = '/';
 #else
     if( (p = getenv( "TMPDIR" ) ) != NULL ||
-        (p = getenv( "TEMP" ) ) != NULL )
-        strcpy( base, p );
+        (p = getenv( "TEMP" ) )   != NULL )
+        base = strdup(p);
     else
-        strcpy( base, "/tmp" );
+        base = strdup("/tmp");
 #endif
     /* I prefer to remove evntual last '/' (for cygwin) */
     if( base[strlen(base)-1] == '/' )
         base[strlen(base)-1] = '\0';
 
-    snprintf(path, 512, "%s/hb.%d", base, (int)getpid());
+    path = hb_strdup_printf("%s/hb.%d", base, (int)getpid());
+    free(base);
+
+    return path;
 }
 
 /************************************************************************
  * Get a tempory filename for HB
  ***********************************************************************/
-void hb_get_tempory_filename( hb_handle_t * h, char name[1024],
-                              char *fmt, ... )
+char * hb_get_temporary_filename( char *fmt, ... )
 {
-    va_list args;
-
-    hb_get_temporary_directory( name );
-    strcat( name, "/" );
+    va_list   args;
+    char    * name, * path;
+    char    * dir = hb_get_temporary_directory();
 
     va_start( args, fmt );
-    vsnprintf( &name[strlen(name)], 1024 - strlen(name), fmt, args );
+    name = hb_strdup_vaprintf(fmt, args);
     va_end( args );
+
+    path = hb_strdup_printf("%s/%s", dir, name);
+    free(dir);
+    free(name);
+
+    return path;
 }
 
 /************************************************************************

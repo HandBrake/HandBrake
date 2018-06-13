@@ -83,6 +83,12 @@ int hb_stat(const char *path, hb_stat_t *sb);
 FILE * hb_fopen(const char *path, const char *mode);
 char * hb_strr_dir_sep(const char *path);
 
+/************************************************************************
+ * File utils
+ ***********************************************************************/
+char * hb_get_temporary_directory(void);
+char * hb_get_temporary_filename( char *fmt, ... );
+
 #ifdef __LIBHB__
 
 // Convert utf8 string to current code page.
@@ -94,13 +100,6 @@ char * hb_utf8_to_cp(const char *src);
  * DVD utils
  ***********************************************************************/
 int hb_dvd_region(char *device, int *region_mask);
-
-/************************************************************************
- * File utils
- ***********************************************************************/
-void hb_get_temporary_directory( char path[512] );
-void hb_get_tempory_filename( hb_handle_t *, char name[1024],
-                              char * fmt, ... );
 
 #if defined( SYS_DARWIN )
 int osx_get_user_config_directory( char path[512] );

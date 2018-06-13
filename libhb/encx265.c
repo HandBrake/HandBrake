@@ -53,7 +53,7 @@ struct hb_work_private_s
         int64_t          duration;
     } frame_info[FRAME_INFO_SIZE];
 
-    char                 csvfn[1024];
+    char               * csvfn;
 
     // Multiple bit-depth
     const x265_api     * api;
@@ -255,15 +255,17 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
         if (job->pass_id == HB_PASS_ENCODE_1ST ||
             job->pass_id == HB_PASS_ENCODE_2ND)
         {
-            char stats_file[1024] = "";
-            char pass[2];
+            char * stats_file;
+            char   pass[2];
             snprintf(pass, sizeof(pass), "%d", job->pass_id);
-            hb_get_tempory_filename(job->h, stats_file, "x265.log");
+            stats_file = hb_get_temporary_filename("x265.log");
             if (param_parse(pv, param, "stats", stats_file) ||
                 param_parse(pv, param, "pass", pass))
             {
+                free(stats_file);
                 goto fail;
             }
+            free(stats_file);
             if (job->pass_id == HB_PASS_ENCODE_1ST)
             {
                 char slowfirstpass[2];
@@ -278,17 +280,16 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     }
 
     /* statsfile (but not 2-pass) */
-    memset(pv->csvfn, 0, sizeof(pv->csvfn));
     if (param->logLevel >= X265_LOG_DEBUG)
     {
         if (param->csvfn == NULL)
         {
-            hb_get_tempory_filename(job->h, pv->csvfn, "x265.csv");
-            param->csvfn = pv->csvfn;
+            pv->csvfn = hb_get_temporary_filename("x265.csv");
+            param->csvfn = strdup(pv->csvfn);
         }
         else
         {
-            strncpy(pv->csvfn, param->csvfn, sizeof(pv->csvfn));
+            pv->csvfn = strdup(param->csvfn);
         }
     }
 
@@ -354,6 +355,7 @@ void encx265Close(hb_work_object_t *w)
 
     pv->api->param_free(pv->param);
     pv->api->encoder_close(pv->x265);
+    free(pv->csvfn);
     free(pv);
     w->private_data = NULL;
 }

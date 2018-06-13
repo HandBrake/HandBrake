@@ -38,7 +38,7 @@ struct hb_work_private_s
 
     hb_chapter_queue_t * chapter_queue;
 
-    char                 filename[1024];
+    char               * filename;
 
     // Multiple bit-depth
     const x264_api_t *   api;
@@ -520,8 +520,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
         if( job->pass_id == HB_PASS_ENCODE_1ST ||
             job->pass_id == HB_PASS_ENCODE_2ND )
         {
-            memset( pv->filename, 0, 1024 );
-            hb_get_tempory_filename( job->h, pv->filename, "x264.log" );
+            pv->filename = hb_get_temporary_filename("x264.log");
         }
         switch( job->pass_id )
         {
@@ -637,6 +636,7 @@ void encx264Close( hb_work_object_t * w )
     hb_chapter_queue_close(&pv->chapter_queue);
 
     pv->api->encoder_close( pv->x264 );
+    free( pv->filename );
     free( pv );
     w->private_data = NULL;
 }

@@ -47,9 +47,8 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
     if( job->pass_id == HB_PASS_ENCODE_1ST ||
         job->pass_id == HB_PASS_ENCODE_2ND )
     {
-        char filename[1024];
-        memset( filename, 0, 1024 );
-        hb_get_tempory_filename( job->h, filename, "theroa.log" );
+        char * filename;
+        filename = hb_get_temporary_filename("theroa.log");
         if ( job->pass_id == HB_PASS_ENCODE_1ST )
         {
             pv->file = hb_fopen(filename, "wb");
@@ -58,6 +57,7 @@ int enctheoraInit( hb_work_object_t * w, hb_job_t * job )
         {
             pv->file = hb_fopen(filename, "rb");
         }
+        free(filename);
     }
 
     th_info ti;

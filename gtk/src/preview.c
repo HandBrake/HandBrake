@@ -650,6 +650,7 @@ live_preview_start_cb(GtkWidget *xwidget, signal_user_data_t *ud)
 
     tmp_dir = ghb_get_tmp_dir();
     name = g_strdup_printf("%s/live%02d", tmp_dir, ud->preview->frame);
+    free(tmp_dir);
     if (ud->preview->current)
         g_free(ud->preview->current);
     ud->preview->current = name;
