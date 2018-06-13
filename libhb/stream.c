@@ -1078,6 +1078,8 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     title->video_id = get_id( &stream->pes.list[idx] );
     title->video_codec = stream->pes.list[idx].codec;
     title->video_codec_param = stream->pes.list[idx].codec_param;
+    title->video_timebase.num = 1;
+    title->video_timebase.den = 90000;
 
     if (stream->hb_stream_type == transport)
     {
@@ -1967,8 +1969,10 @@ static void pes_add_subtitle_to_title(
     hb_subtitle_t *subtitle = calloc( sizeof( hb_subtitle_t ), 1 );
     iso639_lang_t * lang;
 
-    subtitle->track = idx;
-    subtitle->id = id;
+    subtitle->track        = idx;
+    subtitle->id           = id;
+    subtitle->timebase.num = 1;
+    subtitle->timebase.den = 90000;
 
     switch ( pes->codec )
     {
@@ -2087,6 +2091,8 @@ static void pes_add_audio_to_title(
 
     audio->config.in.codec = pes->codec;
     audio->config.in.codec_param = pes->codec_param;
+    audio->config.in.timebase.num = 1;
+    audio->config.in.timebase.den = 90000;
 
     set_audio_description(audio, lang_for_code(pes->lang_code));
 
@@ -5098,6 +5104,12 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
     audio->config.in.bitrate       = 0;
     audio->config.in.encoder_delay = codecpar->initial_padding;
 
+    // If we ever improve our pipeline to allow other time bases...
+    // audio->config.in.timebase.num  = st->time_base.num;
+    // audio->config.in.timebase.den  = st->time_base.den;
+    audio->config.in.timebase.num  = 1;
+    audio->config.in.timebase.den  = 90000;
+
     // set the input codec and extradata for Passthru
     switch (codecpar->codec_id)
     {
@@ -5302,6 +5314,11 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     hb_subtitle_t *subtitle = calloc( 1, sizeof(*subtitle) );
 
     subtitle->id = id;
+    // If we ever improve our pipeline to allow other time bases...
+    // subtitle->timebase.num = st->time_base.num;
+    // subtitle->timebase.den = st->time_base.den;
+    subtitle->timebase.num = 1;
+    subtitle->timebase.den = 90000;
 
     switch ( codecpar->codec_id )
     {
@@ -5528,12 +5545,14 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     int i;
     for (i = 0; i < ic->nb_streams; ++i )
     {
-        if ( ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO &&
-           !(ic->streams[i]->disposition & AV_DISPOSITION_ATTACHED_PIC) &&
-             avcodec_find_decoder( ic->streams[i]->codecpar->codec_id ) &&
+        AVStream * st = ic->streams[i];
+
+        if ( st->codecpar->codec_type == AVMEDIA_TYPE_VIDEO &&
+           !(st->disposition & AV_DISPOSITION_ATTACHED_PIC) &&
+             avcodec_find_decoder( st->codecpar->codec_id ) &&
              title->video_codec == 0 )
         {
-            AVCodecParameters *codecpar = ic->streams[i]->codecpar;
+            AVCodecParameters *codecpar = st->codecpar;
             if ( codecpar->format != AV_PIX_FMT_YUV420P &&
                  !sws_isSupportedInput( codecpar->format ) )
             {
@@ -5542,17 +5561,17 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
             }
             title->video_id = i;
             stream->ffmpeg_video_id = i;
-            if ( ic->streams[i]->sample_aspect_ratio.num &&
-                 ic->streams[i]->sample_aspect_ratio.den )
+            if ( st->sample_aspect_ratio.num &&
+                 st->sample_aspect_ratio.den )
             {
-                title->geometry.par.num = ic->streams[i]->sample_aspect_ratio.num;
-                title->geometry.par.den = ic->streams[i]->sample_aspect_ratio.den;
+                title->geometry.par.num = st->sample_aspect_ratio.num;
+                title->geometry.par.den = st->sample_aspect_ratio.den;
             }
 
             int j;
-            for (j = 0; j < ic->streams[i]->nb_side_data; j++)
+            for (j = 0; j < st->nb_side_data; j++)
             {
-                AVPacketSideData sd = ic->streams[i]->side_data[j];
+                AVPacketSideData sd = st->side_data[j];
                 switch (sd.type)
                 {
                     case AV_PKT_DATA_DISPLAYMATRIX:
@@ -5582,23 +5601,28 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                 }
             }
 
-            title->video_codec = WORK_DECAVCODECV;
-            title->video_codec_param = codecpar->codec_id;
+            title->video_codec        = WORK_DECAVCODECV;
+            title->video_codec_param  = codecpar->codec_id;
+            // If we ever improve our pipeline to allow other time bases...
+            // title->video_timebase.num = st->time_base.num;
+            // title->video_timebase.den = st->time_base.den;
+            title->video_timebase.num = 1;
+            title->video_timebase.den = 90000;
             if (ic->iformat->raw_codec_id != AV_CODEC_ID_NONE)
             {
                 title->flags |= HBTF_RAW_VIDEO;
             }
         }
-        else if (ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_AUDIO &&
-                 avcodec_find_decoder( ic->streams[i]->codecpar->codec_id))
+        else if (st->codecpar->codec_type == AVMEDIA_TYPE_AUDIO &&
+                 avcodec_find_decoder( st->codecpar->codec_id))
         {
             add_ffmpeg_audio( title, stream, i );
         }
-        else if (ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_SUBTITLE)
+        else if (st->codecpar->codec_type == AVMEDIA_TYPE_SUBTITLE)
         {
             add_ffmpeg_subtitle( title, stream, i );
         }
-        else if (ic->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_ATTACHMENT)
+        else if (st->codecpar->codec_type == AVMEDIA_TYPE_ATTACHMENT)
         {
             add_ffmpeg_attachment( title, stream, i );
         }

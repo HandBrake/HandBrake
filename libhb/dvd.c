@@ -204,6 +204,8 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
     subtitle->stream_type    = 0xbd;
     subtitle->substream_type = 0x20 + position;
     subtitle->codec          = WORK_DECVOBSUB;
+    subtitle->timebase.num   = 1;
+    subtitle->timebase.den   = 90000;
 
     memcpy(subtitle->palette, palette, 16 * sizeof(uint32_t));
     subtitle->palette_set = 1;
@@ -572,7 +574,10 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
                audio->config.lang.simple, codec_name,
                audio->config.lang.iso639_2, lang_extension);
 
-        audio->config.in.track = i;
+        audio->config.in.track        = i;
+        audio->config.in.timebase.num = 1;
+        audio->config.in.timebase.den = 90000;
+
         hb_list_add( title->list_audio, audio );
     }
 

@@ -115,9 +115,11 @@ static void add_subtitle(int track, hb_list_t *list_subtitle, BLURAY_STREAM_INFO
     snprintf(subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
              lang->iso639_2);
 
-    subtitle->reg_desc = STR4_TO_UINT32("HDMV");
-    subtitle->stream_type = bdsub->coding_type;
-    subtitle->codec = codec;
+    subtitle->reg_desc     = STR4_TO_UINT32("HDMV");
+    subtitle->stream_type  = bdsub->coding_type;
+    subtitle->codec        = codec;
+    subtitle->timebase.num = 1;
+    subtitle->timebase.den = 90000;
 
     hb_log( "bd: subtitle id=0x%x, lang=%s, 3cc=%s", subtitle->id,
             subtitle->lang, subtitle->iso639_2 );
@@ -202,7 +204,10 @@ static void add_audio(int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdau
     hb_log("bd: audio id=0x%x, lang=%s (%s), 3cc=%s", audio->id,
            audio->config.lang.simple, codec_name, audio->config.lang.iso639_2);
 
-    audio->config.in.track = track;
+    audio->config.in.track        = track;
+    audio->config.in.timebase.num = 1;
+    audio->config.in.timebase.den = 90000;
+
     hb_list_add( list_audio, audio );
     return;
 }

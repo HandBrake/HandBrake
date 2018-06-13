@@ -3604,21 +3604,23 @@ hb_title_t * hb_title_init( char * path, int index )
 
     t = calloc( sizeof( hb_title_t ), 1 );
 
-    t->index         = index;
-    t->playlist      = -1;
-    t->list_audio    = hb_list_init();
-    t->list_chapter  = hb_list_init();
-    t->list_subtitle = hb_list_init();
-    t->list_attachment = hb_list_init();
-    t->metadata      = hb_metadata_init();
+    t->index              = index;
+    t->playlist           = -1;
+    t->list_audio         = hb_list_init();
+    t->list_chapter       = hb_list_init();
+    t->list_subtitle      = hb_list_init();
+    t->list_attachment    = hb_list_init();
+    t->metadata           = hb_metadata_init();
     strncat(t->path, path, sizeof(t->path) - 1);
     // default to decoding mpeg2
-    t->video_id      = 0xE0;
-    t->video_codec   = WORK_DECAVCODECV;
-    t->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
-    t->angle_count   = 1;
-    t->geometry.par.num = 1;
-    t->geometry.par.den = 1;
+    t->video_id           = 0xE0;
+    t->video_codec        = WORK_DECAVCODECV;
+    t->video_codec_param  = AV_CODEC_ID_MPEG2VIDEO;
+    t->video_timebase.num = 1;
+    t->video_timebase.den = 90000;
+    t->angle_count        = 1;
+    t->geometry.par.num   = 1;
+    t->geometry.par.den   = 1;
 
     return t;
 }
@@ -4809,6 +4811,8 @@ int hb_srt_add( const hb_job_t * job,
     subtitle->format = TEXTSUB;
     subtitle->source = SRTSUB;
     subtitle->codec = WORK_DECSRTSUB;
+    subtitle->timebase.num = 1;
+    subtitle->timebase.den = 90000;
 
     lang = lang_for_code2(lang_code);
     if (lang == NULL)

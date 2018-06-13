@@ -310,6 +310,9 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
         hb_log("decavcodecaInit: avcodec_open failed");
         return 1;
     }
+    pv->context->pkt_timebase.num = pv->audio->config.in.timebase.num;
+    pv->context->pkt_timebase.den = pv->audio->config.in.timebase.den;
+
     // avcodec_open populates av_opts with the things it didn't recognize.
     AVDictionaryEntry *t = NULL;
     while ((t = av_dict_get(av_opts, "", t, AV_DICT_IGNORE_SUFFIX)) != NULL)
@@ -657,6 +660,9 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         av_dict_free( &av_opts );
         return -1;
     }
+    context->pkt_timebase.num = audio->config.in.timebase.num;
+    context->pkt_timebase.den = audio->config.in.timebase.den;
+
     av_dict_free( &av_opts );
     unsigned char *parse_buffer;
     int parse_pos, parse_buffer_size;
@@ -1668,6 +1674,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             hb_log( "decavcodecvInit: avcodec_open failed" );
             return 1;
         }
+        pv->context->pkt_timebase.num = pv->title->video_timebase.num;
+        pv->context->pkt_timebase.den = pv->title->video_timebase.den;
         av_dict_free( &av_opts );
 
         pv->video_codec_opened = 1;
@@ -1843,6 +1851,8 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             hb_buffer_close( &in );
             return HB_WORK_OK;
         }
+        pv->context->pkt_timebase.num = pv->title->video_timebase.num;
+        pv->context->pkt_timebase.den = pv->title->video_timebase.den;
         av_dict_free( &av_opts );
         pv->video_codec_opened = 1;
     }

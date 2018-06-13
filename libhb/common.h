@@ -813,6 +813,7 @@ struct hb_audio_config_s
         PRIVATE int encoder_delay; /* Encoder delay in samples.
                                     * These samples should be dropped
                                     * when decoding */
+        PRIVATE hb_rational_t timebase;
     } in;
 
     struct
@@ -943,14 +944,15 @@ struct hb_subtitle_s
 
 #ifdef __LIBHB__
     /* Internal data */
-    PRIVATE uint32_t codec;         /* Input "codec" */
-    PRIVATE uint32_t reg_desc;      /* registration descriptor of source */
-    PRIVATE uint32_t stream_type;   /* stream type from source stream */
-    PRIVATE uint32_t substream_type;/* substream for multiplexed streams */
+    uint32_t        codec;          /* Input "codec" */
+    uint32_t        reg_desc;       /* registration descriptor of source */
+    uint32_t        stream_type;    /* stream type from source stream */
+    uint32_t        substream_type; /* substream for multiplexed streams */
+    hb_rational_t   timebase;
 
-    hb_fifo_t * fifo_in;  /* SPU ES */
-    hb_fifo_t * fifo_raw; /* Decoded SPU */
-    hb_fifo_t * fifo_out; /* Correct Timestamps, ready to be muxed */
+    hb_fifo_t     * fifo_in;        /* SPU ES */
+    hb_fifo_t     * fifo_raw;       /* Decoded SPU */
+    hb_fifo_t     * fifo_out;       /* Correct Timestamps, ready to be muxed */
     hb_mux_data_t * mux_data;
 #endif
 };
@@ -1000,51 +1002,52 @@ struct hb_metadata_s
 struct hb_title_s
 {
     enum { HB_DVD_TYPE, HB_BD_TYPE, HB_STREAM_TYPE, HB_FF_STREAM_TYPE } type;
-    uint32_t      reg_desc;
-    char          path[1024];
-    char          name[1024];
-    int           index;
-    int           playlist;
-    int           vts;
-    int           ttn;
-    int           cell_start;
-    int           cell_end;
-    uint64_t      block_start;
-    uint64_t      block_end;
-    uint64_t      block_count;
-    int           angle_count;
-    void        * opaque_priv;
+    uint32_t        reg_desc;
+    char            path[1024];
+    char            name[1024];
+    int             index;
+    int             playlist;
+    int             vts;
+    int             ttn;
+    int             cell_start;
+    int             cell_end;
+    uint64_t        block_start;
+    uint64_t        block_end;
+    uint64_t        block_count;
+    int             angle_count;
+    void          * opaque_priv;
 
     /* Visual-friendly duration */
-    int           hours;
-    int           minutes;
-    int           seconds;
+    int             hours;
+    int             minutes;
+    int             seconds;
 
     /* Exact duration (in 1/90000s) */
-    uint64_t      duration;
+    uint64_t        duration;
 
-    int           preview_count;
-    int           has_resolution_change;
+    int             preview_count;
+    int             has_resolution_change;
     enum { HB_ROTATION_0, HB_ROTATION_90, HB_ROTATION_180, HB_ROTATION_270 } rotation;
-    hb_geometry_t geometry;
-    hb_rational_t dar;             // aspect ratio for the title's video
-    hb_rational_t container_dar;   // aspect ratio from container (0 if none)
-    int           color_prim;
-    int           color_transfer;
-    int           color_matrix;
-    hb_rational_t vrate;
-    int           crop[4];
+    hb_geometry_t   geometry;
+    hb_rational_t   dar;             // aspect ratio for the title's video
+    hb_rational_t   container_dar;   // aspect ratio from container (0 if none)
+    int             color_prim;
+    int             color_transfer;
+    int             color_matrix;
+    hb_rational_t   vrate;
+    int             crop[4];
     enum {HB_DVD_DEMUXER, HB_TS_DEMUXER, HB_PS_DEMUXER, HB_NULL_DEMUXER} demuxer;
-    int           detected_interlacing;
-    int           pcr_pid;                /* PCR PID for TS streams */
-    int           video_id;               /* demuxer stream id for video */
-    int           video_codec;            /* worker object id of video codec */
-    uint32_t      video_stream_type;      /* stream type from source stream */
-    int           video_codec_param;      /* codec specific config */
-    char        * video_codec_name;
-    int           video_bitrate;
-    char        * container_name;
-    int           data_rate;
+    int             detected_interlacing;
+    int             pcr_pid;                /* PCR PID for TS streams */
+    int             video_id;               /* demuxer stream id for video */
+    int             video_codec;            /* worker object id of video codec */
+    uint32_t        video_stream_type;      /* stream type from source stream */
+    int             video_codec_param;      /* codec specific config */
+    char          * video_codec_name;
+    int             video_bitrate;
+    hb_rational_t   video_timebase;
+    char          * container_name;
+    int             data_rate;
 
     // additional supported video decoders (e.g. HW-accelerated implementations)
     int           video_decode_support;
