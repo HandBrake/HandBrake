@@ -71,35 +71,8 @@ int hb_instance_counter = 0;
 
 static void thread_func( void * );
 
-static int ff_lockmgr_cb(void **mutex, enum AVLockOp op)
-{
-    switch ( op )
-    {
-        case AV_LOCK_CREATE:
-        {
-            *mutex  = hb_lock_init();
-        } break;
-        case AV_LOCK_DESTROY:
-        {
-            hb_lock_close( (hb_lock_t**)mutex );
-        } break;
-        case AV_LOCK_OBTAIN:
-        {
-            hb_lock( (hb_lock_t*)*mutex );
-        } break;
-        case AV_LOCK_RELEASE:
-        {
-            hb_unlock( (hb_lock_t*)*mutex );
-        } break;
-        default:
-            break;
-    }
-    return 0;
-}
-
 void hb_avcodec_init()
 {
-    av_lockmgr_register(ff_lockmgr_cb);
     av_register_all();
     avfilter_register_all();
 #ifdef _WIN64
