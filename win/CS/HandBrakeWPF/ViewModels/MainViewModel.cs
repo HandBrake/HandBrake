@@ -811,7 +811,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.CurrentTask.StartPoint;
+                return this.CurrentTask.Angle;
             }
 
             set
@@ -829,12 +829,13 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets SelectedStartPoint.
         /// </summary>
-        public int SelectedStartPoint
+        public long SelectedStartPoint
         {
             get
             {
                 return this.CurrentTask.StartPoint;
             }
+
             set
             {
                 this.CurrentTask.StartPoint = value;
@@ -860,12 +861,13 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets SelectedEndPoint.
         /// </summary>
-        public int SelectedEndPoint
+        public long SelectedEndPoint
         {
             get
             {
                 return this.CurrentTask.EndPoint;
             }
+
             set
             {
                 this.CurrentTask.EndPoint = value;
@@ -2306,8 +2308,8 @@ namespace HandBrakeWPF.ViewModels
                 // Update the Main Window
                 this.NotifyOfPropertyChange(() => this.Destination);
                 this.SelectedAngle = this.CurrentTask.Angle;
-                int start = this.CurrentTask.StartPoint;
-                int end = this.CurrentTask.EndPoint;
+                long start = this.CurrentTask.StartPoint;
+                long end = this.CurrentTask.EndPoint;
                 this.SelectedPointToPoint = this.CurrentTask.PointToPointMode; // Force reset.
                 this.SelectedStartPoint = start;
                 this.SelectedEndPoint = end;

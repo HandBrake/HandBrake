@@ -67,7 +67,7 @@ namespace HandBrakeWPF.Controls
         /// The number property.
         /// </summary>
         public static readonly DependencyProperty NumberProperty = DependencyProperty.Register(
-            "Number", typeof(int), typeof(TimeSpanBox), new PropertyMetadata(OnNumberChanged));
+            "Number", typeof(long), typeof(TimeSpanBox), new PropertyMetadata(OnNumberChanged));
 
         /// <summary>
         /// The show time span property.
@@ -225,11 +225,11 @@ namespace HandBrakeWPF.Controls
         /// <summary>
         /// Gets or sets the number.
         /// </summary>
-        public int Number
+        public long Number
         {
             get
             {
-                return (int)this.GetValue(NumberProperty);
+                return (long)this.GetValue(NumberProperty);
             }
 
             set
@@ -337,7 +337,7 @@ namespace HandBrakeWPF.Controls
         /// </summary>
         private void DecrementNumber()
         {
-            int newNumber;
+            long newNumber;
             if (this.AllowEmpty && this.Number == 0)
             {
                 newNumber = Math.Min(this.Maximum, -this.Increment);
@@ -416,7 +416,7 @@ namespace HandBrakeWPF.Controls
         /// </summary>
         private void IncrementNumber()
         {
-            int newNumber;
+            long newNumber;
             if (this.AllowEmpty && this.Number == 0)
             {
                 newNumber = Math.Max(this.Minimum, this.Increment);

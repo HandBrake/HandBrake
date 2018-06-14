@@ -132,6 +132,7 @@
     <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
     <Compile Include="Converters\Filters\SharpenTuneConverter.cs" />
     <Compile Include="Converters\Filters\SharpenPresetConverter.cs" />
+    <Compile Include="Converters\LongToIntConverter.cs" />
     <Compile Include="Converters\Options\FileSizeConverter.cs" />
     <Compile Include="Converters\Options\LogLevelConverter.cs" />
     <Compile Include="Converters\OptionTabConverter.cs" />

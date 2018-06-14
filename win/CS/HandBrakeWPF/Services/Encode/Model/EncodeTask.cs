@@ -184,12 +184,12 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// <summary>
         /// Gets or sets StartPoint.
         /// </summary>
-        public int StartPoint { get; set; }
+        public long StartPoint { get; set; }
 
         /// <summary>
         /// Gets or sets EndPoint.
         /// </summary>
-        public int EndPoint { get; set; }
+        public long EndPoint { get; set; }
 
         #endregion
 
