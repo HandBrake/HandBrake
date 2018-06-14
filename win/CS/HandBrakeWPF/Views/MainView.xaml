@@ -19,6 +19,7 @@
     <UserControl.Resources>
         <Converters:BooleanConverter x:Key="booleanConverter" />
         <Converters:PresetsMenuConverter x:Key="presetsMenuConverter"/>
+        <Converters:LongToIntConverter x:Key="longToIntConverter" />
 
         <Style TargetType="Button">
             <Setter Property="Padding" Value="8,2" />
@@ -354,7 +355,7 @@
                                   MinWidth="60"
                                   Margin="5,0,0,0"
                                   ItemsSource="{Binding StartEndRangeItems}"
-                                  SelectedItem="{Binding SelectedStartPoint}"
+                                  SelectedItem="{Binding SelectedStartPoint, Converter={StaticResource longToIntConverter}}"
                                   ToolTip="{x:Static Properties:ResourcesTooltips.MainView_StartPoint}"
                                   Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
@@ -371,7 +372,7 @@
                                   MinWidth="60"
                                   Margin="4,0,0,0"
                                   ItemsSource="{Binding StartEndRangeItems}"
-                                  SelectedItem="{Binding SelectedEndPoint}"
+                                  SelectedItem="{Binding SelectedEndPoint, Converter={StaticResource longToIntConverter}}"
                                   ToolTip="{x:Static Properties:ResourcesTooltips.MainView_EndPoint}"
                                   Visibility="{Binding ShowTextEntryForPointToPointMode,
                                                        Converter={StaticResource boolToVisConverter},
