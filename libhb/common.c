@@ -1705,17 +1705,8 @@ int hb_audio_dither_get_default_method()
 
 int hb_audio_dither_is_supported(uint32_t codec)
 {
-    // encoder's input sample format must be s16(p)
-    switch (codec)
-    {
-        case HB_ACODEC_FFFLAC:
-        case HB_ACODEC_FDK_AAC:
-        case HB_ACODEC_FDK_HAAC:
-            return 1;
-
-        default:
-            return 0;
-    }
+    // Since dithering is performed by swresample, all codecs are supported
+    return 1;
 }
 
 int hb_audio_dither_get_from_name(const char *name)
