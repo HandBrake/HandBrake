@@ -182,7 +182,7 @@ static int avformatInit( hb_mux_object_t * m )
         hb_error("Could not guess output format %s", muxer_name);
         goto error;
     }
-    m->oc->url = strdup(job->file);
+    m->oc->url = av_strdup(job->file);
     ret = avio_open2(&m->oc->pb, job->file, AVIO_FLAG_WRITE,
                      &m->oc->interrupt_callback, NULL);
     if( ret < 0 )
