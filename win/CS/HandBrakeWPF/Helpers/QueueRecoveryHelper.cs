@@ -36,6 +36,9 @@ namespace HandBrakeWPF.Helpers
         /// If it does, it means the last queue did not complete before HandBrake closed.
         /// So, return a boolean if true. 
         /// </summary>
+        /// <param name="filterQueueFiles">
+        /// The filter Queue Files.
+        /// </param>
         /// <returns>
         /// True if there is a queue to recover.
         /// </returns>
@@ -156,7 +159,7 @@ namespace HandBrakeWPF.Helpers
                     isRecovered = true;
 
                     // Cleanup
-                    CleanupFiles(new List<string> { Path.Combine(appDataPath, file) });                   
+                    CleanupFiles(new List<string> { file });                   
                 }
 
                 return isRecovered;
@@ -199,6 +202,8 @@ namespace HandBrakeWPF.Helpers
 
         private static void CleanupFiles(List<string> removeFiles)
         {
+            string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
+
             // Cleanup old/unused queue files for now.
             foreach (string file in removeFiles)
             {
@@ -212,7 +217,8 @@ namespace HandBrakeWPF.Helpers
                     }
                 }
 
-                File.Delete(file);
+                string fullPath = Path.Combine(appDataPath, file);
+                File.Delete(fullPath);
             }
         }
     }
