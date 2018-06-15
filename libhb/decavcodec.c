@@ -2274,7 +2274,8 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
                 av_packet_unref(&avp);
                 return;
             }
-            out = hb_audio_resample(pv->resample, pv->frame->extended_data,
+            out = hb_audio_resample(pv->resample,
+                                    (const uint8_t **)pv->frame->extended_data,
                                     pv->frame->nb_samples);
             if (out != NULL && pv->drop_samples > 0)
             {

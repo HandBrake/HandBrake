@@ -177,12 +177,12 @@ hb_dither_t *hb_audio_dithers_first_item = NULL;
 hb_dither_t *hb_audio_dithers_last_item  = NULL;
 hb_dither_internal_t hb_audio_dithers[]  =
 {
-    { { "default",                       "auto",          AV_RESAMPLE_DITHER_NONE - 1,      }, NULL, 1, },
-    { { "none",                          "none",          AV_RESAMPLE_DITHER_NONE,          }, NULL, 1, },
-    { { "rectangular",                   "rectangular",   AV_RESAMPLE_DITHER_RECTANGULAR,   }, NULL, 1, },
-    { { "triangular",                    "triangular",    AV_RESAMPLE_DITHER_TRIANGULAR,    }, NULL, 1, },
-    { { "triangular with high pass",     "triangular_hp", AV_RESAMPLE_DITHER_TRIANGULAR_HP, }, NULL, 1, },
-    { { "triangular with noise shaping", "triangular_ns", AV_RESAMPLE_DITHER_TRIANGULAR_NS, }, NULL, 1, },
+    { { "default",                       "auto",          SWR_DITHER_NONE - 1,      }, NULL, 1, },
+    { { "none",                          "none",          SWR_DITHER_NONE,          }, NULL, 1, },
+    { { "rectangular",                   "rectangular",   SWR_DITHER_RECTANGULAR,   }, NULL, 1, },
+    { { "triangular",                    "triangular",    SWR_DITHER_TRIANGULAR,    }, NULL, 1, },
+    { { "triangular with high pass",     "triangular_hp", SWR_DITHER_TRIANGULAR_HIGHPASS, }, NULL, 1, },
+    { { "lipshitz noise shaping",        "lipshitz_ns",   SWR_DITHER_NS_LIPSHITZ, }, NULL, 1, },
 };
 int hb_audio_dithers_count = sizeof(hb_audio_dithers) / sizeof(hb_audio_dithers[0]);
 
@@ -1700,7 +1700,7 @@ int hb_audio_dither_get_default_method()
      * input could be s16 (possibly already dithered) converted to flt, so
      * let's use a "low-risk" dither algorithm (standard triangular).
      */
-    return AV_RESAMPLE_DITHER_TRIANGULAR;
+    return SWR_DITHER_TRIANGULAR;
 }
 
 int hb_audio_dither_is_supported(uint32_t codec)
@@ -1885,7 +1885,7 @@ int hb_mixdown_has_remix_support(int mixdown, uint64_t layout)
         // regular stereo (not Dolby)
         case HB_AMIXDOWN_LEFT:
         case HB_AMIXDOWN_RIGHT:
-            return (layout == AV_CH_LAYOUT_STEREO);
+            return (layout & AV_CH_LAYOUT_STEREO);
 
         // mono remix always supported
         // HB_AMIXDOWN_NONE always supported (for Passthru)

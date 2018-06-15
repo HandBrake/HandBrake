@@ -7,11 +7,11 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-/* Implements a libavresample wrapper for convenience.
+/* Implements a libswresample wrapper for convenience.
  *
  * Supports sample_fmt and channel_layout conversion.
  *
- * sample_rate conversion will come later (libavresample doesn't support
+ * sample_rate conversion will come later (libswresample doesn't support
  * sample_rate conversion with float samples yet). */
 
 #ifndef AUDIO_RESAMPLE_H
@@ -20,7 +20,7 @@
 #include <math.h>
 #include <stdint.h>
 #include "libavutil/channel_layout.h"
-#include "libavresample/avresample.h"
+#include "libswresample/swresample.h"
 
 /* Default mix level for center and surround channels */
 #define HB_MIXLEV_DEFAULT ((double)M_SQRT1_2)
@@ -33,7 +33,7 @@ typedef struct
     int dual_mono_right_only;
 
     int resample_needed;
-    AVAudioResampleContext *avresample;
+    SwrContext *swresample;
 
     struct
     {
@@ -58,10 +58,10 @@ typedef struct
     {
         int channels;
         int sample_size;
-        int normalize_mix_level;
         uint64_t channel_layout;
         enum AVSampleFormat sample_fmt;
         enum AVMatrixEncoding matrix_encoding;
+        double maxval;
     } out;
 } hb_audio_resample_t;
 
@@ -108,6 +108,6 @@ void                 hb_audio_resample_free(hb_audio_resample_t *resample);
  * resampling is only done when necessary.
  */
 hb_buffer_t*         hb_audio_resample(hb_audio_resample_t *resample,
-                                       uint8_t **samples, int nsamples);
+                                       const uint8_t **samples, int nsamples);
 
 #endif /* AUDIO_RESAMPLE_H */

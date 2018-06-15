@@ -20,7 +20,7 @@
 #include "libavutil/downmix_info.h"
 #include "libavutil/display.h"
 #include "libswscale/swscale.h"
-#include "libavresample/avresample.h"
+#include "libswresample/swresample.h"
 #include "common.h"
 
 #define HB_FFMPEG_THREADS_AUTO (-1) // let hb_avcodec_open() decide thread_count
