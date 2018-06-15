@@ -415,6 +415,7 @@ static int avformatInit( hb_mux_object_t * m )
         track->st->codecpar->codec_type = AVMEDIA_TYPE_AUDIO;
         track->st->codecpar->initial_padding = audio->priv.config.init_delay *
                                         audio->config.out.samplerate / 90000;
+        track->st->codecpar->frame_size = audio->config.out.samples_per_frame;
         if (job->mux == HB_MUX_AV_MP4)
         {
             track->st->time_base.num = 1;
