@@ -132,15 +132,7 @@ static int avformatInit( hb_mux_object_t * m )
 
     max_tracks = 1 + hb_list_count( job->list_audio ) +
                      hb_list_count( job->list_subtitle );
-
     m->tracks = calloc(max_tracks, sizeof(hb_mux_data_t*));
-
-    m->oc = avformat_alloc_context();
-    if (m->oc == NULL)
-    {
-        hb_error( "Could not initialize avformat context." );
-        goto error;
-    }
 
     AVDictionary * av_opts = NULL;
     switch (job->mux)
@@ -176,13 +168,14 @@ static int avformatInit( hb_mux_object_t * m )
             goto error;
         }
     }
-    m->oc->oformat = av_guess_format(muxer_name, NULL, NULL);
-    if(m->oc->oformat == NULL)
+
+    ret = avformat_alloc_output_context2(&m->oc, NULL, muxer_name, job->file);
+    if (ret < 0)
     {
-        hb_error("Could not guess output format %s", muxer_name);
+        hb_error( "Could not initialize avformat context." );
         goto error;
     }
-    m->oc->url = av_strdup(job->file);
+
     ret = avio_open2(&m->oc->pb, job->file, AVIO_FLAG_WRITE,
                      &m->oc->interrupt_callback, NULL);
     if( ret < 0 )
