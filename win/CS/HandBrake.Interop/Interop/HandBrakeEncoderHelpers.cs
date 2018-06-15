@@ -244,15 +244,15 @@ namespace HandBrake.Interop.Interop
             return Mixdowns.SingleOrDefault(m => m.ShortName == shortName);
         }
 
-		/// <summary>
-		/// Gets the mixdown with the specified ID.
-		/// </summary>
-		/// <param name="id">The mixdown ID.</param>
-		/// <returns>The requested mixdown.</returns>
-	    public static HBMixdown GetMixdown(int id)
-	    {
-		    return Mixdowns.SingleOrDefault(m => m.Id == id);
-	    }
+        /// <summary>
+        /// Gets the mixdown with the specified ID.
+        /// </summary>
+        /// <param name="id">The mixdown ID.</param>
+        /// <returns>The requested mixdown.</returns>
+        public static HBMixdown GetMixdown(int id)
+        {
+            return Mixdowns.SingleOrDefault(m => m.Id == id);
+        }
 
         /// <summary>
         /// Gets the container with the specified short name.
@@ -468,7 +468,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static HBMixdown SanitizeMixdown(HBMixdown mixdown, HBAudioEncoder encoder, ulong layout)
         {
-            if (mixdown == null)
+            if (mixdown == null || encoder == null)
             {
                 return null;
             }
@@ -478,6 +478,7 @@ namespace HandBrake.Interop.Interop
             {
                 return Mixdowns.Single(m => m.Id == sanitizedMixdown);
             }
+
             return Mixdowns.FirstOrDefault(); // "none"
         }
 
@@ -499,16 +500,16 @@ namespace HandBrake.Interop.Interop
             return Mixdowns.Single(m => m.Id == defaultMixdown);
         }
 
-		/// <summary>
-		/// Sanitizes the given sample rate for the given encoder.
-		/// </summary>
-		/// <param name="encoder">The encoder.</param>
-		/// <param name="sampleRate">The sample rate to sanitize.</param>
-		/// <returns>The sanitized sample rate.</returns>
-	    public static int SanitizeSampleRate(HBAudioEncoder encoder, int sampleRate)
-	    {
-		    return HBFunctions.hb_audio_samplerate_find_closest(sampleRate, (uint)encoder.Id);
-	    }
+        /// <summary>
+        /// Sanitizes the given sample rate for the given encoder.
+        /// </summary>
+        /// <param name="encoder">The encoder.</param>
+        /// <param name="sampleRate">The sample rate to sanitize.</param>
+        /// <returns>The sanitized sample rate.</returns>
+        public static int SanitizeSampleRate(HBAudioEncoder encoder, int sampleRate)
+        {
+            return HBFunctions.hb_audio_samplerate_find_closest(sampleRate, (uint)encoder.Id);
+        }
 
         /// <summary>
         /// Gets the bitrate limits for the given audio codec, sample rate and mixdown.
