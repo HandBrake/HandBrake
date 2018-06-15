@@ -21,8 +21,8 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
         goto fail;
     }
 
-    // avresample context, initialized in hb_audio_resample_update()
-    resample->avresample = NULL;
+    // swresample context, initialized in hb_audio_resample_update()
+    resample->swresample = NULL;
 
     // we don't support planar output yet
     if (av_sample_fmt_is_planar(sample_fmt))
@@ -55,8 +55,15 @@ hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
     resample->out.channels = av_get_channel_layout_nb_channels(channel_layout);
     resample->out.channel_layout      = channel_layout;
     resample->out.matrix_encoding     = matrix_encoding;
-    resample->out.normalize_mix_level = normalize_mix;
     resample->out.sample_fmt          = sample_fmt;
+    if (normalize_mix)
+    {
+        resample->out.maxval = 1.0;
+    }
+    else
+    {
+        resample->out.maxval = 1000;
+    }
     resample->out.sample_size         = av_get_bytes_per_sample(sample_fmt);
 
     // set default input characteristics
@@ -105,7 +112,7 @@ void hb_audio_resample_set_channel_layout(hb_audio_resample_t *resample,
             // Dolby Surround is Stereo when it comes to remixing
             channel_layout = AV_CH_LAYOUT_STEREO;
         }
-        // avresample can't remap a single-channel layout to
+        // swresample can't remap a single-channel layout to
         // another single-channel layout
         if (resample->out.channel_layout == AV_CH_LAYOUT_MONO &&
             is_mono(channel_layout))
@@ -161,50 +168,46 @@ int hb_audio_resample_update(hb_audio_resample_t *resample)
           resample->resample.surround_mix_level != resample->in.surround_mix_level));
 
     if (resample_changed || (resample->resample_needed &&
-                             resample->avresample == NULL))
+                             resample->swresample == NULL))
     {
-        if (resample->avresample == NULL)
+        if (resample->swresample == NULL)
         {
-            resample->avresample = avresample_alloc_context();
-            if (resample->avresample == NULL)
+            resample->swresample = swr_alloc();
+            if (resample->swresample == NULL)
             {
-                hb_error("hb_audio_resample_update: avresample_alloc_context() failed");
+                hb_error("hb_audio_resample_update: swr_alloc() failed");
                 return 1;
             }
 
-            av_opt_set_int(resample->avresample, "out_sample_fmt",
+            av_opt_set_int(resample->swresample, "out_sample_fmt",
                            resample->out.sample_fmt, 0);
-            av_opt_set_int(resample->avresample, "out_channel_layout",
+            av_opt_set_int(resample->swresample, "out_channel_layout",
                            resample->out.channel_layout, 0);
-            av_opt_set_int(resample->avresample, "matrix_encoding",
+            av_opt_set_int(resample->swresample, "matrix_encoding",
                            resample->out.matrix_encoding, 0);
-            av_opt_set_int(resample->avresample, "normalize_mix_level",
-                           resample->out.normalize_mix_level, 0);
-        }
-        else if (resample_changed)
-        {
-            avresample_close(resample->avresample);
+            av_opt_set_double(resample->swresample, "rematrix_maxval",
+                              resample->out.maxval, 0);
         }
 
-        av_opt_set_int(resample->avresample, "in_sample_fmt",
+        av_opt_set_int(resample->swresample, "in_sample_fmt",
                        resample->in.sample_fmt, 0);
-        av_opt_set_int(resample->avresample, "in_channel_layout",
+        av_opt_set_int(resample->swresample, "in_channel_layout",
                        resample->in.channel_layout, 0);
-        av_opt_set_double(resample->avresample, "lfe_mix_level",
+        av_opt_set_double(resample->swresample, "lfe_mix_level",
                           resample->in.lfe_mix_level, 0);
-        av_opt_set_double(resample->avresample, "center_mix_level",
+        av_opt_set_double(resample->swresample, "center_mix_level",
                           resample->in.center_mix_level, 0);
-        av_opt_set_double(resample->avresample, "surround_mix_level",
+        av_opt_set_double(resample->swresample, "surround_mix_level",
                           resample->in.surround_mix_level, 0);
 
-        if ((ret = avresample_open(resample->avresample)))
+        if ((ret = swr_init(resample->swresample)))
         {
             char err_desc[64];
             av_strerror(ret, err_desc, 63);
-            hb_error("hb_audio_resample_update: avresample_open() failed (%s)",
+            hb_error("hb_audio_resample_update: swr_init() failed (%s)",
                      err_desc);
-            // avresample won't open, start over
-            avresample_free(&resample->avresample);
+            // swresample won't open, start over
+            swr_free(&resample->swresample);
             return ret;
         }
 
@@ -224,25 +227,25 @@ void hb_audio_resample_free(hb_audio_resample_t *resample)
 {
     if (resample != NULL)
     {
-        if (resample->avresample != NULL)
+        if (resample->swresample != NULL)
         {
-            avresample_free(&resample->avresample);
+            swr_free(&resample->swresample);
         }
         free(resample);
     }
 }
 
 hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
-                               uint8_t **samples, int nsamples)
+                               const uint8_t **samples, int nsamples)
 {
     if (resample == NULL)
     {
         hb_error("hb_audio_resample: resample is NULL");
         return NULL;
     }
-    if (resample->resample_needed && resample->avresample == NULL)
+    if (resample->resample_needed && resample->swresample == NULL)
     {
-        hb_error("hb_audio_resample: resample needed but libavresample context "
+        hb_error("hb_audio_resample: resample needed but libswresample context "
                  "is NULL");
         return NULL;
     }
@@ -252,24 +255,17 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
 
     if (resample->resample_needed)
     {
-        int in_linesize, out_linesize;
-        // set in/out linesize and out_size
-        av_samples_get_buffer_size(&in_linesize,
-                                   resample->resample.channels, nsamples,
-                                   resample->resample.sample_fmt, 0);
-        out_size = av_samples_get_buffer_size(&out_linesize,
+        out_size = av_samples_get_buffer_size(NULL,
                                               resample->out.channels, nsamples,
                                               resample->out.sample_fmt, 0);
         out = hb_buffer_init(out_size);
-
-        out_samples = avresample_convert(resample->avresample,
-                                         &out->data, out_linesize, nsamples,
-                                         samples,     in_linesize, nsamples);
+        out_samples = swr_convert(resample->swresample, &out->data, nsamples,
+                                                        samples,    nsamples);
 
         if (out_samples <= 0)
         {
             if (out_samples < 0)
-                hb_log("hb_audio_resample: avresample_convert() failed");
+                hb_log("hb_audio_resample: swr_convert() failed");
             // don't send empty buffers downstream (EOF)
             hb_buffer_close(&out);
             return NULL;

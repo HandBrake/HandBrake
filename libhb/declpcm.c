@@ -338,7 +338,8 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
         hb_log("declpcm: hb_audio_resample_update() failed");
         return NULL;
     }
-    out = hb_audio_resample(pv->resample, &pv->data, pv->nsamples);
+    out = hb_audio_resample(pv->resample, (const uint8_t **)&pv->data,
+                            pv->nsamples);
 
     if (out != NULL)
     {

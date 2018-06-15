@@ -23,7 +23,7 @@ struct hb_work_private_s
     uint8_t        * input_buf;
     hb_list_t      * list;
 
-    AVAudioResampleContext *avresample;
+    SwrContext     * swresample;
 
     int64_t          last_pts;
 };
@@ -231,40 +231,40 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
     if (context->sample_fmt != AV_SAMPLE_FMT_FLT)
     {
         pv->output_buf = malloc(pv->max_output_bytes);
-        pv->avresample = avresample_alloc_context();
-        if (pv->avresample == NULL)
+        pv->swresample = swr_alloc();
+        if (pv->swresample == NULL)
         {
-            hb_error("encavcodecaInit: avresample_alloc_context() failed");
+            hb_error("encavcodecaInit: swr_alloc() failed");
             return 1;
         }
-        av_opt_set_int(pv->avresample, "in_sample_fmt",
+        av_opt_set_int(pv->swresample, "in_sample_fmt",
                        AV_SAMPLE_FMT_FLT, 0);
-        av_opt_set_int(pv->avresample, "out_sample_fmt",
+        av_opt_set_int(pv->swresample, "out_sample_fmt",
                        context->sample_fmt, 0);
-        av_opt_set_int(pv->avresample, "in_channel_layout",
+        av_opt_set_int(pv->swresample, "in_channel_layout",
                        context->channel_layout, 0);
-        av_opt_set_int(pv->avresample, "out_channel_layout",
+        av_opt_set_int(pv->swresample, "out_channel_layout",
                        context->channel_layout, 0);
         if (hb_audio_dither_is_supported(audio->config.out.codec))
         {
             // dithering needs the sample rate
-            av_opt_set_int(pv->avresample, "in_sample_rate",
+            av_opt_set_int(pv->swresample, "in_sample_rate",
                            context->sample_rate, 0);
-            av_opt_set_int(pv->avresample, "out_sample_rate",
+            av_opt_set_int(pv->swresample, "out_sample_rate",
                            context->sample_rate, 0);
-            av_opt_set_int(pv->avresample, "dither_method",
+            av_opt_set_int(pv->swresample, "dither_method",
                            audio->config.out.dither_method, 0);
         }
-        if (avresample_open(pv->avresample))
+        if (swr_init(pv->swresample))
         {
-            hb_error("encavcodecaInit: avresample_open() failed");
-            avresample_free(&pv->avresample);
+            hb_error("encavcodecaInit: swr_init() failed");
+            swr_free(&pv->swresample);
             return 1;
         }
     }
     else
     {
-        pv->avresample = NULL;
+        pv->swresample = NULL;
         pv->output_buf = pv->input_buf;
     }
 
@@ -329,9 +329,9 @@ static void encavcodecaClose(hb_work_object_t * w)
             hb_list_empty(&pv->list);
         }
 
-        if (pv->avresample != NULL)
+        if (pv->swresample != NULL)
         {
-            avresample_free(&pv->avresample);
+            swr_free(&pv->swresample);
         }
 
         free(pv);
@@ -404,31 +404,28 @@ static void Encode(hb_work_object_t *w, hb_buffer_list_t *list)
                          pv->input_samples * sizeof(float), &pts, &pos);
 
         // Prepare input frame
-        int     out_linesize, out_size;
+        int     out_size;
         AVFrame frame = { .nb_samples = pv->samples_per_frame, };
 
-        out_size = av_samples_get_buffer_size(&out_linesize,
+        out_size = av_samples_get_buffer_size(NULL,
                                               pv->context->channels,
                                               pv->samples_per_frame,
                                               pv->context->sample_fmt, 1);
         avcodec_fill_audio_frame(&frame,
                                  pv->context->channels, pv->context->sample_fmt,
                                  pv->output_buf, out_size, 1);
-        if (pv->avresample != NULL)
+        if (pv->swresample != NULL)
         {
-            int in_linesize, out_samples;
+            int out_samples;
 
-            av_samples_get_buffer_size(&in_linesize, pv->context->channels,
-                                       frame.nb_samples, AV_SAMPLE_FMT_FLT, 1);
-            out_samples = avresample_convert(pv->avresample,
-                                            frame.extended_data, out_linesize,
-                                            frame.nb_samples, &pv->input_buf,
-                                            in_linesize, frame.nb_samples);
+            out_samples = swr_convert(pv->swresample,
+                                      frame.extended_data, frame.nb_samples,
+                    (const uint8_t **)&pv->input_buf,      frame.nb_samples);
             if (out_samples != pv->samples_per_frame)
             {
                 // we're not doing sample rate conversion,
                 // so this shouldn't happen
-                hb_log("encavcodecaWork: avresample_convert() failed");
+                hb_log("encavcodecaWork: swr_convert() failed");
                 continue;
             }
         }
