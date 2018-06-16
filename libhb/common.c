@@ -1815,15 +1815,18 @@ int hb_mixdown_has_codec_support(int mixdown, uint32_t codec)
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_OPUS:
+        case HB_ACODEC_CA_AAC:
+        case HB_ACODEC_CA_HAAC:
+        case HB_ACODEC_FFAAC:
             return (mixdown <= HB_AMIXDOWN_7POINT1);
 
         case HB_ACODEC_LAME:
             return (mixdown <= HB_AMIXDOWN_DOLBYPLII);
 
-        case HB_ACODEC_CA_AAC:
-        case HB_ACODEC_CA_HAAC:
+        case HB_ACODEC_FDK_AAC:
+        case HB_ACODEC_FDK_HAAC:
             return ((mixdown <= HB_AMIXDOWN_5POINT1) ||
-                    (mixdown == HB_AMIXDOWN_5_2_LFE));
+                    (mixdown == HB_AMIXDOWN_7POINT1));
 
         default:
             return (mixdown <= HB_AMIXDOWN_5POINT1);
@@ -1968,6 +1971,11 @@ int hb_mixdown_get_default(uint32_t codec, uint64_t layout)
         case HB_ACODEC_FFFLAC:
         case HB_ACODEC_FFFLAC24:
         case HB_ACODEC_OPUS:
+        case HB_ACODEC_CA_AAC:
+        case HB_ACODEC_CA_HAAC:
+        case HB_ACODEC_FFAAC:
+        case HB_ACODEC_FDK_AAC:
+        case HB_ACODEC_FDK_HAAC:
             mixdown = HB_AMIXDOWN_7POINT1;
             break;
 
