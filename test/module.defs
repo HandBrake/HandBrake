@@ -41,14 +41,25 @@ endif
 TEST.GCC.l += $(foreach m,$(MODULES.NAMES),$($m.OSL.libs))
 
 TEST.install.exe = $(DESTDIR)$(PREFIX/)bin/$(notdir $(TEST.exe))
+ifeq (1,$(FEATURE.flatpak))
+    TEST.appdata.template = $(TEST.src/)fr.handbrake.HandBrakeCLI.appdata.xml.template
+    TEST.appdata = $(TEST.build/)fr.handbrake.HandBrakeCLI.appdata.xml
+    TEST.install.appdata = $(DESTDIR)$(PREFIX/)share/metainfo/$(notdir $(TEST.appdata))
+endif
 
 ###############################################################################
 
 TEST.out += $(TEST.c.o)
 TEST.out += $(TEST.exe)
+ifeq (1,$(FEATURE.flatpak))
+    TEST.out += $(TEST.appdata)
+endif
 
 BUILD.out += $(TEST.out)
 BUILD.out += $(TEST.install.exe)
+ifeq (1,$(FEATURE.flatpak))
+    BUILD.out += $(TEST.install.appdata)
+endif
 
 ###############################################################################
 

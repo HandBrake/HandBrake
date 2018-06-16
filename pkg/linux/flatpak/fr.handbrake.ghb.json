@@ -1,29 +1,24 @@
 {
     "app-id": "fr.handbrake.ghb",
     "runtime": "org.gnome.Platform",
-    "runtime-version": "3.20",
+    "runtime-version": "3.28",
     "sdk": "org.gnome.Sdk",
     "command": "ghb",
     "finish-args": [
-        /* X11 + XShm access */
         "--share=ipc", "--socket=x11",
-        /* Wayland access */
         "--socket=wayland",
-        /* Needed for dconf to work */
-        "--filesystem=xdg-run/dconf", "--filesystem=~/.config/dconf:ro",
-        "--talk-name=ca.desrt.dconf", "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
-        /* Needs video */
-        "--filesystem=xdg-videos",
-        /* Home */
-        "--filesystem=home"
+        "--filesystem=xdg-run/dconf",
+        "--filesystem=~/.config/dconf:ro",
+        "--talk-name=ca.desrt.dconf",
+        "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
+        "--filesystem=host"
     ],
     "modules": [
         {
             "name": "handbrake",
             "no-autogen": true,
-            "config-opts": ["--flatpak"],
+            "config-opts": ["--flatpak", "--disable-gtk-update-checks"],
             "builddir": true,
-            "post-install": ["rm /app/bin/HandBrakeCLI"],
             "sources": [
                 {
                     "type": "archive",
@@ -34,6 +29,19 @@
                     "type": "archive",
                     "path": "download.tgz",
                     "strip-components": 0
+                }
+            ],
+            "modules": [
+                {
+                    "name": "nasm",
+                    "cleanup": ["*"],
+                    "sources": [
+                        {
+                            "type": "archive",
+                            "url": "http://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.xz",
+                            "sha256": "8ac3235f49a6838ff7a8d7ef7c19a4430d0deecc0c2d3e3e237b5e9f53291757"
+                        }
+                    ]
                 }
             ]
         }

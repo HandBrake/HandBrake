@@ -14,6 +14,19 @@ else
     PKG.rpm.hb.version = $(tag).$(HB.repo.shorthash).$(HB.repo.branch)
 endif
 
+ifneq ($(PGP_ID),)
+    PGPSIGN = --gpg-sign=$(PGP_ID)
+endif
+
+ifneq ($(FP_RUNTIME),)
+    FPRUNTIME = -r $(FP_RUNTIME)
+endif
+
+ifneq ($(HB_URL),)
+ifneq ($(HB_SHA256),)
+	FLATHUB_MANIFEST = $(PKG.gui.flathub.manifest) $(PKG.cli.flathub.manifest)
+endif
+endif
 
 ###############################################################################
 
@@ -44,15 +57,15 @@ PKG.rpm.stamp = $(PKG.out/).rpm.stamp
 
 PKG.out.flatpak/ = $(PKG.out/)flatpak/
 STAGE.out.flatpak/ = $(STAGE.out/)flatpak/
-PKG.src.flatpak = $(STAGE.out.flatpak/)handbrake.tar.bz2
-PKG.contrib.flatpak = $(STAGE.out.flatpak/)download.tgz
+PKG.gui.flathub.manifest = $(PKG.out.flatpak/)/fr.handbrake.ghb.json
+PKG.cli.flathub.manifest = $(PKG.out.flatpak/)/fr.handbrake.HandBrakeCLI.json
 PKG.gui.manifest.flatpak = $(PKG.flatpak/)fr.handbrake.ghb.json
 PKG.cli.manifest.flatpak = $(PKG.flatpak/)fr.handbrake.HandBrakeCLI.json
-PKG.gui.build.flatpak = $(STAGE.out.flatpak/)$(HB.name)-Flatpak_GUI_$(BUILD.machine).build
-PKG.cli.build.flatpak = $(STAGE.out.flatpak/)$(HB.name)-Flatpak_CLI_$(BUILD.machine).build
+PKG.gui.build.flatpak = $(STAGE.out.flatpak/)$(HB.name)-$(HB.version)-$(BUILD.machine).build
+PKG.cli.build.flatpak = $(STAGE.out.flatpak/)$(HB.name)CLI-$(HB.version)-$(BUILD.machine).build
 PKG.repo.flatpak = $(PKG.out.flatpak/)$(HB.name)-Flatpak.repo
-PKG.cli.flatpak = $(PKG.out.flatpak/)$(HB.name)-$(HB.version)-Flatpak_CLI_$(BUILD.machine).flatpak
-PKG.gui.flatpak = $(PKG.out.flatpak/)$(HB.name)-$(HB.version)-Flatpak_GUI_$(BUILD.machine).flatpak
+PKG.cli.flatpak = $(PKG.out.flatpak/)$(HB.name)CLI-$(HB.version)-$(BUILD.machine).flatpak
+PKG.gui.flatpak = $(PKG.out.flatpak/)$(HB.name)-$(HB.version)-$(BUILD.machine).flatpak
 
 PKG.gui.native.rpm = $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name.lower)-gui-$(PKG.rpm.hb.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm
 PKG.cli.native.rpm = $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name.lower)-cli-$(PKG.rpm.hb.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm

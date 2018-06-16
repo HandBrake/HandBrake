@@ -1349,11 +1349,7 @@ def createCLI():
     grp.add_option( '--enable-local-cmake', default=False, action='store_true', help=h )
     h = IfHost( 'Build and use local pkg-config', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-local-pkgconfig', default=False, action='store_true', help=h )
-
-    h = IfHost( 'Build extra contribs for flatpak packaging', '*-*-linux*', '*-*-freebsd*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--flatpak', default=False, action='store_true', help=h )
     cli.add_option_group( grp )
-
 
     ## add Xcode options
     if host.match( '*-*-darwin*' ):
@@ -1383,6 +1379,9 @@ def createCLI():
     grp = OptionGroup( cli, 'Build Options' )
     grp.add_option( '--snapshot', default=False, action='store_true',
                     help='Force a snapshot build' )
+
+    h = IfHost( 'Build extra contribs for flatpak packaging', '*-*-linux*', '*-*-freebsd*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--flatpak', default=False, action='store_true', help=h )
     cli.add_option_group( grp )
 
     return cli

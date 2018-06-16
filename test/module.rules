@@ -8,6 +8,9 @@ clean: test.clean
 xclean: test.xclean
 
 test.build: $(TEST.exe)
+ifeq (1,$(FEATURE.flatpak))
+test.build: $(TEST.appdata)
+endif
 
 ########################################
 # sync with ../macosx/module.rules     #
@@ -16,8 +19,19 @@ test.install-strip: | $(dir $(TEST.install.exe))
 	$(CP.exe) $(TEST.exe) $(TEST.install.exe)
 	$(STRIP.exe) $(TEST.install.exe)
 
+ifeq (1,$(FEATURE.flatpak))
+$(TEST.appdata): $(TEST.appdata.template)
+	sed -e 's^RELEASE_TAG^<release version="$(HB.version)" date="$(word 1,$(HB.repo.date))" />^' $< > $@
+
+$(TEST.install.appdata): $(TEST.appdata)
+test.install: | $(dir $(TEST.install.appdata))
+endif
+
 test.install: | $(dir $(TEST.install.exe))
 	$(CP.exe) $(TEST.exe) $(TEST.install.exe)
+ifeq (1,$(FEATURE.flatpak))
+	$(CP.exe) $(TEST.appdata) $(TEST.install.appdata)
+endif
 
 test.uninstall:
 	$(RM.exe) -f $(TEST.install.exe)
