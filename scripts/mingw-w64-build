@@ -96,7 +96,7 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
 
     # dependencies
     local DEPS
-    DEPS=("bison" "bzip2" "curl" "flex" "g++" "gcc" "gunzip" "m4" "make" "pax" "yasm")
+    DEPS=("bison" "bzip2" "curl" "flex" "g++" "gcc" "gunzip" "m4" "make" "pax")
     check_dependencies "${DEPS[@]}" || return 1
 
     # package names
@@ -162,7 +162,7 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="4.0.1"
+    VERSION="4.1.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
