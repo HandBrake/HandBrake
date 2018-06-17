@@ -39,6 +39,7 @@
 
 ### Mac
 
+- Fixed corrupted output with VP8 and VP9 encoders
 - Fixed building x264 using Clang and -march=native/-mavx (thanks H. Gramner for the upstream patch)
 
 ### Windows
