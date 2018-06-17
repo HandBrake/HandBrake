@@ -1,5 +1,58 @@
 # HandBrake News
 
+## HandBrake 1.1.1
+
+### All platforms
+
+#### General
+
+- Fixed a potential crash in the comb detection filter
+- Fixed a potential crash in the padding filter
+
+#### Video
+
+- Fixed decoding certain very high bit rate ultra-high definition sources with extra large packets
+- Fixed last frame in source video missing in output
+
+#### Audio
+
+- Fixed crash when decoding an empty audio track
+
+#### Build system
+
+- Updated mac-toolchain-build script Nasm url and improved curl parameters for robustness
+
+#### Third-party libraries
+
+- Updated libraries (necessary to pull in needed bug fixes)
+  - libvpx 1.7.0 (VP8/VP9 video encoding)
+  - x264 155 r2901 (H.264/AVC video encoding)
+
+### Linux
+
+- Fixed Ubuntu PPA build date
+- Fixed a display issue with the quality slider control
+- Fixed issues occurring when running multiple HandBrake instances simultaneously
+- Updated Russian translation
+- Updated support for creating Flatpak bundles (experimental)
+- Miscellaneous bug fixes and improvements
+
+### Mac
+
+- Fixed building x264 using Clang and -march=native/-mavx (thanks H. Gramner for the upstream patch)
+
+### Windows
+
+- Fixed issues with queue recovery when running multiple HandBrake instances simultaneously
+- Fixed an issue with a When Done action potentially causing the last queue item to be marked as a warning instead of success
+- Fixed burn-in behavior with MP4 files; after the first burn-in track, no additional tracks that require burn-in will be added
+- Improved window resize behavior for Add Selection to Queue dialog and allowed space bar to toggle checkbox for selected row
+- Improved tabbing behavior in various circumstances
+- Improved adding a new preset with the same name as an existing user preset; the existing preset will now be updated properly
+- Improved privacy by adding an option to disable the Summary tab preview image
+- Updated installer to block installation on 32-bit systems to avoid confusion (unsupported since 1.1.0)
+- Miscellaneous bug fixes and improvements
+
 ## HandBrake 1.1.0
 
 ### All platforms
