@@ -18,3 +18,9 @@ ifeq (1,$(BUILD.cross))
     X264.CONFIGURE.env.CFLAGS = CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver ?extra)"
     X264.CONFIGURE.env.LDFLAGS = LDFLAGS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver)"
 endif
+
+ifeq (linux,$(BUILD.system))
+    ifeq (x86_64,$(BUILD.machine))
+        X264.CONFIGURE.extra += --enable-pic
+    endif
+endif
