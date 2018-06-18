@@ -40,6 +40,12 @@ ifeq (linux,$(BUILD.system))
     endif
 endif
 
+ifeq (0-darwin,$(BUILD.cross)-$(BUILD.system))
+    ifeq (x86_64,$(BUILD.machine))
+        LIBVPX.CONFIGURE.extra += --target=x86_64-darwin11-gcc
+    endif
+endif
+
 ifeq (1,$(FEATURE.local_yasm))
     LIBVPX.CONFIGURE.env.LOCAL_PATH = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
     LIBVPX.BUILD.env = PATH="$(call fn.ABSOLUTE,$(CONTRIB.build/)bin):$(PATH)"
