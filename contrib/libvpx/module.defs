@@ -33,3 +33,9 @@ ifeq (linux,$(BUILD.system))
         LIBVPX.CONFIGURE.extra += --enable-pic
     endif
 endif
+
+ifeq (0-darwin,$(BUILD.cross)-$(BUILD.system))
+    ifeq (x86_64,$(BUILD.machine))
+        LIBVPX.CONFIGURE.extra += --target=x86_64-darwin14-gcc
+    endif
+endif
