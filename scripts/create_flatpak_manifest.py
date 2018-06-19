@@ -6,6 +6,7 @@ import sys
 import json
 import getopt
 import posixpath
+from collections import OrderedDict
 try:
     from urlparse import urlsplit
     from urllib import unquote
@@ -35,20 +36,19 @@ class FlatpakManifest:
     def __init__(self, source_list, runtime, template=None):
         if template != None:
             with open(template, 'r') as fp:
-                self.manifest = json.load(fp)
+                self.manifest = json.load(fp, object_pairs_hook=OrderedDict)
 
             self.finish_args = self.manifest["finish-args"]
             self.modules     = self.manifest["modules"]
             self.hbmodule    = self.modules[0]
-            self.sources     = [None] * 2
+            self.sources     = [None]
 
             self.hbmodule["sources"]     = self.sources
         else:
-            self.manifest    = {}
-            self.finish_args = []
+            self.manifest    = OrderedDict()
             self.modules     = []
-            self.hbmodule    = {}
-            self.sources     = [None] * 2
+            self.hbmodule    = OrderedDict()
+            self.sources     = [None]
 
             self.manifest["finish-args"] = self.finish_args
             self.manifest["modules"]     = self.modules
@@ -57,15 +57,9 @@ class FlatpakManifest:
 
         self.manifest["runtime-version"] = runtime
 
-        # create "shell" source to 'mkdir download'
-        source = {}
-        source["type"] = "shell"
-        source["commands"] = [ "mkdir -p download" ]
-        self.sources[1] = source
-
         handbrake_found = False
         for key, value in source_list.items():
-            source = {}
+            source = OrderedDict()
             if islocal(value.url):
                 source["path"] = value.url
             else:
@@ -86,7 +80,8 @@ class FlatpakManifest:
 
             elif value.entry_type == SourceType.contrib:
                 source["type"] = "file"
-                source["dest-filename"] = "download/" + url2filename(value.url)
+                source["dest"] = "download"
+                source["dest-filename"] = url2filename(value.url)
                 self.sources.append(source)
 
 
@@ -113,7 +108,7 @@ if __name__ == "__main__":
         usage()
         exit(2)
 
-    source_list = {}
+    source_list = OrderedDict()
     current_source = None
     runtime = "3.28"
     for opt, arg in opts:
