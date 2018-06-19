@@ -5765,9 +5765,8 @@ ghb_notify_done(signal_user_data_t *ud)
     notification = g_notification_new(_("Encode Complete"));
     g_notification_set_body(notification,
         _("Put down that cocktail, Your HandBrake queue is done!"));
-    icon = g_themed_icon_new("hb-icon");
+    icon = g_themed_icon_new("fr.handbrake.ghb");
     g_notification_set_icon(notification, icon);
-    g_notification_set_priority(notification, G_NOTIFICATION_PRIORITY_URGENT);
 
     g_application_send_notification(G_APPLICATION(ud->app), "cocktail", notification);
     g_object_unref(G_OBJECT(notification));
