@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
 icons =	\
-	hb-icon.svg
+	hb-icon.svg fr.handbrake.ghb.svg
 
 icons_dep =	\
 	icons/24x24/apps/hb-remove.png \
@@ -35,12 +35,7 @@ icons_dep =	\
 	icons/scalable/apps/hb-edit.svg \
 	icons/scalable/apps/hb-icon.svg
 
-if GHB_FLATPAK
-icons += fr.handbrake.ghb.svg
 hb_menu = fr.handbrake.ghb.desktop
-else
-hb_menu = ghb.desktop
-endif
 
 @INTLTOOL_XML_RULE@
 appdatadir = $(datarootdir)/metainfo

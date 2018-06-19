@@ -48,21 +48,21 @@ ghb_resource_init()
     GResource *data_res = ghb_data_get_resource();
 
     gbytes = g_resource_lookup_data(data_res,
-                    "/org/handbrake/ghb/data/internal_defaults.json", 0, NULL);
+                    "/fr/handbrake/ghb/data/internal_defaults.json", 0, NULL);
     data = g_bytes_get_data(gbytes, &data_size);
     val = ghb_json_parse(data);
     g_bytes_unref(gbytes);
     ghb_dict_set(resources, "internal-defaults", val);
 
     gbytes = g_resource_lookup_data(data_res,
-                    "/org/handbrake/ghb/data/widget.deps", 0, NULL);
+                    "/fr/handbrake/ghb/data/widget.deps", 0, NULL);
     data = g_bytes_get_data(gbytes, &data_size);
     val = ghb_json_parse(data);
     g_bytes_unref(gbytes);
     ghb_dict_set(resources, "widget-deps", val);
 
     gbytes = g_resource_lookup_data(data_res,
-                    "/org/handbrake/ghb/data/widget_reverse.deps", 0, NULL);
+                    "/fr/handbrake/ghb/data/widget_reverse.deps", 0, NULL);
     data = g_bytes_get_data(gbytes, &data_size);
     val = ghb_json_parse(data);
     g_bytes_unref(gbytes);

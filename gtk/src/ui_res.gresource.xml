@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/handbrake/ghb/ui">
+  <gresource prefix="/fr/handbrake/ghb/ui">
     <file>ghb.ui</file>
   </gresource>
 </gresources>
