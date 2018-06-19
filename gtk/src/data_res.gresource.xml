@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/handbrake/ghb/data">
+  <gresource prefix="/fr/handbrake/ghb/data">
     <file>internal_defaults.json</file>
     <file>widget.deps</file>
     <file>widget_reverse.deps</file>

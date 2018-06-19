@@ -94,7 +94,7 @@ create_builder_or_die(const gchar * name)
 
     GResource *ui_res = ghb_ui_get_resource();
     GBytes *gbytes = g_resource_lookup_data(ui_res,
-                                            "/org/handbrake/ghb/ui/ghb.ui",
+                                            "/fr/handbrake/ghb/ui/ghb.ui",
                                             0, NULL);
     ghb_ui = g_bytes_get_data(gbytes, &data_size);
 
@@ -1340,7 +1340,7 @@ main(int argc, char *argv[])
 
     ghb_ui_register_resource();
     ud = g_malloc0(sizeof(signal_user_data_t));
-    ud->app = gtk_application_new("org.handbrake.ghb",
+    ud->app = gtk_application_new("fr.handbrake.ghb",
                                   G_APPLICATION_NON_UNIQUE |
                                   G_APPLICATION_HANDLES_OPEN);
     // Connect application signals

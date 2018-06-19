@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/org/handbrake/ghb">
+  <gresource prefix="/fr/handbrake/ghb">
     <file>icons/24x24/apps/hb-remove.png</file>
     <file>icons/32x32/apps/hb-source.png</file>
     <file>icons/32x32/apps/hb-picture.png</file>
