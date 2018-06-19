@@ -15,7 +15,7 @@ $(GTK.CONFIGURE.stamp): $(GTK.src/)configure.ac $(GTK.src/)src/Makefile.am
 	set -e; cd $(GTK.src/); NOCONFIGURE=1 ./autogen.sh
 	set -e; cd $(GTK.build/); $(call fn.ABSOLUTE,$(GTK.src/))configure \
 		$(GTK.CONFIGURE.extra) \
-		PKG_CONFIG_PATH=$(BUILD/)contrib/lib/pkgconfig \
+		PKG_CONFIG_PATH=$(BUILD/)contrib/lib/pkgconfig:$(PKG_CONFIG_PATH) \
 	    CFLAGS="$(call fn.ARGS,GTK.GCC,.g .O *D ?extra)" \
 	    LDFLAGS="$(call fn.ARGS,GTK.GCC,?strip .g .O ?extra.exe)" \
 	    --prefix=$(PREFIX) \
