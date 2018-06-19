@@ -1,8 +1,8 @@
 {
     "app-id": "fr.handbrake.ghb",
-    "runtime": "org.gnome.Platform",
-    "runtime-version": "3.28",
-    "sdk": "org.gnome.Sdk",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "1.6",
+    "sdk": "org.freedesktop.Sdk",
     "command": "ghb",
     "finish-args": [
         "--share=ipc", "--socket=x11",
@@ -10,7 +10,6 @@
         "--filesystem=xdg-run/dconf",
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
-        "--talk-name=org.freedesktop.Notifications",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         "--filesystem=host"
     ],
