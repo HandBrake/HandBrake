@@ -1,8 +1,8 @@
 {
     "app-id": "fr.handbrake.ghb",
-    "runtime": "org.gnome.Platform",
-    "runtime-version": "3.28",
-    "sdk": "org.gnome.Sdk",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "1.6",
+    "sdk": "org.freedesktop.Sdk",
     "command": "ghb",
     "finish-args": [
         "--share=ipc", "--socket=x11",
@@ -15,6 +15,16 @@
         "--filesystem=host"
     ],
     "modules": [
+        {
+            "name": "libnotify",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://ftp.gnome.org/pub/GNOME/sources/libnotify/0.7/libnotify-0.7.7.tar.xz",
+                    "sha256": "9cb4ce315b2655860c524d46b56010874214ec27e854086c1a1d0260137efc04"
+                }
+            ]
+        },
         {
             "name": "handbrake",
             "no-autogen": true,

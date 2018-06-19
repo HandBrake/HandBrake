@@ -40,7 +40,7 @@ class FlatpakManifest:
 
             self.finish_args = self.manifest["finish-args"]
             self.modules     = self.manifest["modules"]
-            self.hbmodule    = self.modules[0]
+            self.hbmodule    = self.modules[len(self.modules) - 1]
             self.sources     = [None]
 
             self.hbmodule["sources"]     = self.sources
@@ -55,7 +55,8 @@ class FlatpakManifest:
             self.modules[0]              = self.hbmodule
             self.hbmodule["sources"]     = self.sources
 
-        self.manifest["runtime-version"] = runtime
+        if runtime != None:
+            self.manifest["runtime-version"] = runtime
 
         handbrake_found = False
         for key, value in source_list.items():
@@ -110,7 +111,7 @@ if __name__ == "__main__":
 
     source_list = OrderedDict()
     current_source = None
-    runtime = "3.28"
+    runtime = None
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             usage()
