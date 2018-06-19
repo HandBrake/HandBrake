@@ -34,5 +34,6 @@
     <file>icons/scalable/apps/hb-complete.svg</file>
     <file>icons/scalable/apps/hb-edit.svg</file>
     <file>icons/scalable/apps/hb-icon.svg</file>
+    <file>icons/scalable/apps/fr.handbrake.ghb.svg</file>
   </gresource>
 </gresources>

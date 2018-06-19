@@ -33,7 +33,8 @@ icons_dep =	\
 	icons/scalable/apps/hb-remove.svg \
 	icons/scalable/apps/hb-complete.svg \
 	icons/scalable/apps/hb-edit.svg \
-	icons/scalable/apps/hb-icon.svg
+	icons/scalable/apps/hb-icon.svg \
+	icons/scalable/apps/fr.handbrake.ghb.svg
 
 hb_menu = fr.handbrake.ghb.desktop
 
