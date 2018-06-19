@@ -38,9 +38,7 @@
 #include <gst/gst.h>
 #endif
 
-#if !defined(_WIN32)
-#include <libnotify/notify.h>
-#else
+#if defined(_WIN32)
 #include <windows.h>
 #include <io.h>
 #define pipe(phandles)  _pipe (phandles, 4096, _O_BINARY)
@@ -981,9 +979,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     g_object_unref(provider);
 
-#if !defined(_WIN32)
-    notify_init("HandBrake");
-#endif
     ghb_resource_init();
     ghb_load_icons();
 
@@ -1359,9 +1354,6 @@ main(int argc, char *argv[])
         g_io_channel_unref(ud->activity_log);
     ghb_settings_close();
     ghb_resource_free();
-#if !defined(_WIN32)
-    notify_uninit();
-#endif
 
     if (ud->builder != NULL)
         g_object_unref(ud->builder);

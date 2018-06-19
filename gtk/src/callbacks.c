@@ -58,7 +58,6 @@
 #endif
 #endif
 
-#include <libnotify/notify.h>
 #ifndef NOTIFY_CHECK_VERSION
 #define NOTIFY_CHECK_VERSION(x,y,z) 0
 #endif
@@ -5753,14 +5752,6 @@ free_resources:
     return NULL;
 }
 
-#if !defined(_WIN32)
-G_MODULE_EXPORT void
-notify_closed_cb(NotifyNotification *notification, signal_user_data_t *ud)
-{
-    g_object_unref(G_OBJECT(notification));
-}
-#endif
-
 void
 ghb_notify_done(signal_user_data_t *ud)
 {
@@ -5768,25 +5759,18 @@ ghb_notify_done(signal_user_data_t *ud)
     if (ghb_settings_combo_int(ud->prefs, "WhenComplete") == 0)
         return;
 
-#if !defined(_WIN32)
-    NotifyNotification *notification;
-    notification = notify_notification_new(
-        _("Encode Complete"),
-        _("Put down that cocktail, Your HandBrake queue is done!"),
-        NULL
-#if NOTIFY_CHECK_VERSION (0, 7, 0)
-                );
-#else
-        ,NULL);
-#endif
-    GtkIconTheme *theme = gtk_icon_theme_get_default();
-    GdkPixbuf *pb = gtk_icon_theme_load_icon(theme, "hb-icon", 32,
-                                            GTK_ICON_LOOKUP_USE_BUILTIN, NULL);
-    notify_notification_set_icon_from_pixbuf(notification, pb);
-    g_signal_connect(notification, "closed", (GCallback)notify_closed_cb, ud);
-    notify_notification_show(notification, NULL);
-    g_object_unref(G_OBJECT(pb));
-#endif
+    GNotification * notification;
+    GIcon         * icon;
+
+    notification = g_notification_new(_("Encode Complete"));
+    g_notification_set_body(notification,
+        _("Put down that cocktail, Your HandBrake queue is done!"));
+    icon = g_themed_icon_new("hb-icon");
+    g_notification_set_icon(notification, icon);
+    g_notification_set_priority(notification, G_NOTIFICATION_PRIORITY_URGENT);
+
+    g_application_send_notification(G_APPLICATION(ud->app), "cocktail", notification);
+    g_object_unref(G_OBJECT(notification));
 
     if (ghb_settings_combo_int(ud->prefs, "WhenComplete") == 3)
     {
