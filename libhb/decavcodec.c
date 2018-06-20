@@ -660,8 +660,11 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
         av_dict_free( &av_opts );
         return -1;
     }
-    context->pkt_timebase.num = audio->config.in.timebase.num;
-    context->pkt_timebase.den = audio->config.in.timebase.den;
+    if (audio != NULL)
+    {
+        context->pkt_timebase.num = audio->config.in.timebase.num;
+        context->pkt_timebase.den = audio->config.in.timebase.den;
+    }
 
     av_dict_free( &av_opts );
     unsigned char *parse_buffer;
