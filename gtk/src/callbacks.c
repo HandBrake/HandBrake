@@ -4488,17 +4488,20 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
                 scroll_tok = g_idle_add((GSourceFunc)activity_scroll_to_bottom,
                                         ud);
             }
+            if (ud->activity_log != NULL)
+            {
 #if defined(_WIN32)
-            gsize one = 1;
-            utf8_text[length-1] = '\r';
+                gsize one = 1;
+                utf8_text[length-1] = '\r';
 #endif
-            g_io_channel_write_chars (ud->activity_log, utf8_text,
-                                    length, &outlength, NULL);
+                g_io_channel_write_chars (ud->activity_log, utf8_text,
+                                        length, &outlength, NULL);
 #if defined(_WIN32)
-            g_io_channel_write_chars (ud->activity_log, "\n",
-                                    one, &one, NULL);
+                g_io_channel_write_chars (ud->activity_log, "\n",
+                                        one, &one, NULL);
 #endif
-            g_io_channel_flush(ud->activity_log, NULL);
+                g_io_channel_flush(ud->activity_log, NULL);
+            }
             if (ud->job_activity_log)
             {
                 g_io_channel_write_chars (ud->job_activity_log, utf8_text,
