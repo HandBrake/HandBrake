@@ -1,0 +1,20 @@
+diff --git a/libavcodec/h264_refs.c b/libavcodec/h264_refs.c
+index 976044ce2c..0211d71a38 100644
+--- a/libavcodec/h264_refs.c
++++ b/libavcodec/h264_refs.c
+@@ -812,6 +812,7 @@ int ff_h264_execute_ref_pic_marking(H264Context *h)
+         }
+     }
+ 
++#if 0
+     if (   err >= 0
+         && h->long_ref_count==0
+         && (   h->short_ref_count<=2
+@@ -822,6 +823,7 @@ int ff_h264_execute_ref_pic_marking(H264Context *h)
+         if(!h->avctx->has_b_frames)
+             h->frame_recovered |= FRAME_RECOVERED_SEI;
+     }
++#endif
+ 
+ out:
+     return (h->avctx->err_recognition & AV_EF_EXPLODE) ? err : 0;
