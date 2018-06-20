@@ -57,7 +57,7 @@ PKG.rpm.stamp = $(PKG.out/).rpm.stamp
 
 PKG.out.flatpak/ = $(PKG.out/)flatpak/
 STAGE.out.flatpak/ = $(STAGE.out/)flatpak/
-PKG.gui.flathub.manifest = $(PKG.out.flatpak/)/fr.handbrake.ghb.json
+PKG.gui.flathub.manifest = $(PKG.out.flatpak/)fr.handbrake.ghb.json
 PKG.cli.flathub.manifest = $(PKG.out.flatpak/)/fr.handbrake.HandBrakeCLI.json
 PKG.gui.manifest.flatpak = $(PKG.flatpak/)fr.handbrake.ghb.json
 PKG.cli.manifest.flatpak = $(PKG.flatpak/)fr.handbrake.HandBrakeCLI.json

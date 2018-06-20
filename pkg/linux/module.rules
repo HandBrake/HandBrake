@@ -62,9 +62,11 @@ $(PKG.rpm.stamp): $(PKG.native.rpm.stamp)
 # Flatpak binary package rules
 #
 $(PKG.gui.flathub.manifest):
+	$(MKDIR.exe) -p $(PKG.out.flatpak/)
 	$(SRC/)scripts/create_flatpak_manifest.py -a "$(HB_URL)" -s "$(HB_SHA256)" -t $(PKG.gui.manifest.flatpak) $(foreach m,$(CONTRIBS),-c "$(word 1,$($m.FETCH.url))" -s "$(word 1,$($m.FETCH.sha256))") $(FPRUNTIME) $(PKG.gui.flathub.manifest)
 
 $(PKG.cli.flathub.manifest):
+	$(MKDIR.exe) -p $(PKG.out.flatpak/)
 	$(SRC/)scripts/create_flatpak_manifest.py -a "$(HB_URL)" -s "$(HB_SHA256)" -t $(PKG.cli.manifest.flatpak) $(foreach m,$(CONTRIBS),-c "$(word 1,$($m.FETCH.url))" -s "$(word 1,$($m.FETCH.sha256))") $(FPRUNTIME) $(PKG.cli.flathub.manifest)
 
 $(PKG.gui.flatpak): GNUmakefile $(PKG.src.tar.bz2)
