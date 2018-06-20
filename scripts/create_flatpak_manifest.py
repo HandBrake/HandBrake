@@ -40,7 +40,7 @@ class FlatpakManifest:
 
             self.finish_args = self.manifest["finish-args"]
             self.modules     = self.manifest["modules"]
-            self.hbmodule    = self.modules[0]
+            self.hbmodule    = self.modules[len(self.modules) - 1]
             self.sources     = [None]
 
             self.hbmodule["sources"]     = self.sources
