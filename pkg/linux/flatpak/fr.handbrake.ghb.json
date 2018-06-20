@@ -16,6 +16,29 @@
     ],
     "modules": [
         {
+            "name": "fribidi",
+            "make-args": ["-j1"],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.handbrake.fr/handbrake/contrib/fribidi-0.19.7.tar.gz",
+                    "sha256": "3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8"
+                }
+            ]
+        },
+        {
+            "name": "libass",
+            "config-opts": ["--enable-asm", "--enable-harfbuzz",
+                            "--enable-fontconfig"],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/libass/libass/releases/download/0.14.0/libass-0.14.0.tar.gz",
+                    "sha256": "8d5a5c920b90b70a108007ffcd2289ac652c0e03fc88e6eecefa37df0f2e7fdf"
+                }
+            ]
+        },
+        {
             "name": "libnotify",
             "sources": [
                 {

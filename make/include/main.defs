@@ -62,10 +62,6 @@ ifeq (1,$(FEATURE.flatpak))
     MODULES += contrib/lame
     MODULES += contrib/jansson
     MODULES += contrib/x264
-    MODULES += contrib/harfbuzz
-    MODULES += contrib/fribidi
-    MODULES += contrib/freetype
-    MODULES += contrib/libass
 endif
 
 ifeq (1,$(FEATURE.fdk_aac))
