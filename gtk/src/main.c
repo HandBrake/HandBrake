@@ -627,8 +627,11 @@ IoRedirect(signal_user_data_t *ud)
     g_free(str);
     g_free(path);
     g_free(config);
-    // Set encoding to raw.
-    g_io_channel_set_encoding(ud->activity_log, NULL, NULL);
+    if (ud->activity_log != NULL)
+    {
+        // Set encoding to raw.
+        g_io_channel_set_encoding(ud->activity_log, NULL, NULL);
+    }
     // redirect stderr to the writer end of the pipe
 
 #if defined(_WIN32)

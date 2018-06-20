@@ -636,11 +636,11 @@ ghb_select_default_preset(signal_user_data_t *ud)
     }
 }
 
-gchar*
+gchar *
 ghb_get_user_config_dir(gchar *subdir)
 {
-    const gchar *dir;
-    gchar       *config;
+    const gchar * dir, * ghb = "ghb";
+    gchar       * config;
 
     if (override_user_config_dir != NULL)
     {
@@ -650,19 +650,20 @@ ghb_get_user_config_dir(gchar *subdir)
     {
         dir = g_get_user_config_dir();
     }
-    if (!g_file_test(dir, G_FILE_TEST_IS_DIR))
+    if (dir == NULL || !g_file_test(dir, G_FILE_TEST_IS_DIR))
     {
-        dir    = g_get_home_dir();
-        config = g_strdup_printf ("%s/.ghb", dir);
-        if (!g_file_test(config, G_FILE_TEST_IS_DIR))
-            g_mkdir (config, 0755);
+        dir = g_get_home_dir();
+        ghb = ".ghb";
     }
-    else
+    if (dir == NULL || !g_file_test(dir, G_FILE_TEST_IS_DIR))
     {
-        config = g_strdup_printf ("%s/ghb", dir);
-        if (!g_file_test(config, G_FILE_TEST_IS_DIR))
-            g_mkdir (config, 0755);
+        // Last ditch, use CWD
+        dir = "./";
+        ghb = ".ghb";
     }
+    config = g_strdup_printf("%s/%s", dir, ghb);
+    if (!g_file_test(config, G_FILE_TEST_IS_DIR))
+        g_mkdir (config, 0755);
     if (subdir)
     {
         gchar **split;
@@ -835,11 +836,17 @@ ghb_write_pid_file()
     path   = g_strdup_printf ("%s/ghb.pid.%d", config, pid);
     fp     = g_fopen(path, "w");
 
-    fprintf(fp, "%d\n", pid);
-    fclose(fp);
+    if (fp != NULL)
+    {
+        fprintf(fp, "%d\n", pid);
+        fclose(fp);
+    }
 
     fd = open(path, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR);
-    lockf(fd, F_TLOCK, 0);
+    if (fd >= 0)
+    {
+        lockf(fd, F_TLOCK, 0);
+    }
 
     g_free(config);
     g_free(path);
