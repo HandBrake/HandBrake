@@ -175,7 +175,7 @@ int hb_audio_resample_update(hb_audio_resample_t *resample)
             resample->swresample = swr_alloc();
             if (resample->swresample == NULL)
             {
-                hb_error("hb_audio_resample_update: swresample_alloc_context() failed");
+                hb_error("hb_audio_resample_update: swr_alloc() failed");
                 return 1;
             }
 

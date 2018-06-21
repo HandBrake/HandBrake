@@ -234,7 +234,7 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
         pv->swresample = swr_alloc();
         if (pv->swresample == NULL)
         {
-            hb_error("encavcodecaInit: swresample_alloc_context() failed");
+            hb_error("encavcodecaInit: swr_alloc() failed");
             return 1;
         }
         av_opt_set_int(pv->swresample, "in_sample_fmt",
