@@ -16,6 +16,6 @@ define NVENC.INSTALL
 endef
 
 define NVENC.UNINSTALL
-    $(RM.exe) -rf $(CONTRIB.build/)include/nvenc
+    $(RM.exe) -rf $(CONTRIB.build/)include/ffnvcodec
     $(RM.exe) -f $(NVENC.INSTALL.target)
 endef

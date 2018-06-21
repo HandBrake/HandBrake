@@ -98,7 +98,7 @@ ifneq (none,$(FFMPEG.GCC.g))
     endif
 else
     FFMPEG.CONFIGURE.extra += --disable-debug
-    FFMPEG.CONFIGURE.extra += --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include)  -DNDEBUG"
+    FFMPEG.CONFIGURE.extra += --extra-cflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) -DNDEBUG"
 endif
 
 ifeq (none,$(FFMPEG.GCC.O))
