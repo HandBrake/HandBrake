@@ -298,14 +298,16 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     else
     {
         /* Constant quantizer */
-        // These settings produce better image quality than
-        // what was previously used
-        context->flags |= AV_CODEC_FLAG_QSCALE;
-        context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
+
         //Set constant quality for libvpx
         if ( w->codec_param == AV_CODEC_ID_VP8 ||
              w->codec_param == AV_CODEC_ID_VP9 )
         {
+            // These settings produce better image quality than
+            // what was previously used
+            context->flags |= AV_CODEC_FLAG_QSCALE;
+            context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
+        
             char quality[7];
             snprintf(quality, 7, "%.2f", job->vquality);
             av_dict_set( &av_opts, "crf", quality, 0 );
@@ -344,6 +346,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
         else
         {
+            // These settings produce better image quality than
+            // what was previously used
+            context->flags |= AV_CODEC_FLAG_QSCALE;
+            context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
+            
             hb_log( "encavcodec: encoding at constant quantizer %d",
                     context->global_quality );
         }
