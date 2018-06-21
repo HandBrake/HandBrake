@@ -320,6 +320,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                   job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 )
         {
             char quality[7];
+            snprintf(quality, 7, "%.2f", job->vquality);
             av_dict_set( &av_opts, "rc", "vbr", 0 );
             av_dict_set( &av_opts, "cq", quality, 0 );
 
