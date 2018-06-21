@@ -23,6 +23,7 @@
   <url type="homepage">https://handbrake.fr/</url>
   <url type="help">https://handbrake.fr/docs/</url>
   <url type="bugtracker">https://github.com/HandBrake/HandBrake/issues</url>
+  <url type="translate">https://www.transifex.com/victorr2007/</url>
   <mimetypes>
     <mimetype>application/ogg</mimetype>
     <mimetype>application/x-extension-mp4</mimetype>
