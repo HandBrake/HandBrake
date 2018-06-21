@@ -7,15 +7,6 @@ NVENC.FETCH.sha256   = 2b339b2493f5b63b285dd660be05102af7d4ff2de9fcf3af94e48b5f9
 NVENC.FETCH.basename = nv-codec-headers-n8.1.24.2.tar.gz
 
 NVENC.CONFIGURE = $(TOUCH.exe) $@
-NVENC.BUILD     = $(TOUCH.exe) $@
-
-define NVENC.INSTALL
-    $(MKDIR.exe) -p $(CONTRIB.build/)include/ffnvcodec
-    $(CP.exe) -R $(NVENC.EXTRACT.dir/)include/ffnvcodec/* $(CONTRIB.build/)include/ffnvcodec/
-    $(TOUCH.exe) $@
-endef
-
-define NVENC.UNINSTALL
-    $(RM.exe) -rf $(CONTRIB.build/)include/ffnvcodec
-    $(RM.exe) -f $(NVENC.INSTALL.target)
-endef
+NVENC.BUILD.extra = PREFIX="$(NVENC.CONFIGURE.prefix)"
+NVENC.INSTALL.extra = PREFIX="$(NVENC.CONFIGURE.prefix)"
+NVENC.UNINSTALL.extra = PREFIX="$(NVENC.CONFIGURE.prefix)"
