@@ -1319,6 +1319,10 @@ def createCLI():
     grp.add_option( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
     grp.add_option( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false' )
 
+    h = IfHost( 'enable Nvidia NVEnc video encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-nvenc', dest="enable_nvenc", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
+
+
     cli.add_option_group( grp )
 
     ## add launch options
@@ -1845,6 +1849,7 @@ int main()
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
+    doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
 
     if not Tools.xcodebuild.fail and not options.disable_xcode:
         doc.addBlank()

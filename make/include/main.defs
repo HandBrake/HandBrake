@@ -35,6 +35,10 @@ ifeq (1,$(FEATURE.flatpak))
     MODULES += contrib/lame
     MODULES += contrib/jansson
     MODULES += contrib/x264
+    MODULES += contrib/harfbuzz
+    MODULES += contrib/fribidi
+    MODULES += contrib/freetype
+    MODULES += contrib/libass
 endif
 
 ifeq (1,$(FEATURE.fdk_aac))
@@ -68,6 +72,10 @@ endif
 
 ifeq (1,$(FEATURE.vce))
     MODULES += contrib/amf
+endif
+
+ifeq (1,$(FEATURE.nvenc))
+    MODULES += contrib/nvenc
 endif
 
 ifneq (,$(filter $(BUILD.system),darwin))
