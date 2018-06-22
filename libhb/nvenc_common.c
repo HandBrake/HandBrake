@@ -7,20 +7,49 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include "hbffmpeg.h"
+#include <ffnvcodec/nvEncodeAPI.h>
+#include <ffnvcodec/dynlink_loader.h>
+
+
 int hb_nvenc_h264_available()
 {
     #ifdef USE_NVENC
-    return 1;
+        return hb_check_nvenc_available();
     #else
-    return 0;
+        return 0;
     #endif 
 }
 
 int hb_nvenc_h265_available()
 {
     #ifdef USE_NVENC
-    return 1;
+        return hb_check_nvenc_available();
     #else
-    return 0;
+        return 0;
+    #endif 
+}
+
+int hb_check_nvenc_available() 
+{
+    #ifdef USE_NVENC
+        uint32_t nvenc_ver;
+        void *context;
+        NvencFunctions *nvenc_dl;
+
+        int loadErr = nvenc_load_functions(&nvenc_dl, context);
+        if (loadErr < 0) {
+            return 0;
+        }
+  
+        NVENCSTATUS apiErr = nvenc_dl->NvEncodeAPIGetMaxSupportedVersion(&nvenc_ver);
+        if (apiErr != NV_ENC_SUCCESS)
+        {
+            return 0;
+        }
+
+        return 1;
+    #else
+        return 0;
     #endif 
 }
