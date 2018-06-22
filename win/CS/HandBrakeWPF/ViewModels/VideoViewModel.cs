@@ -349,6 +349,8 @@ namespace HandBrakeWPF.ViewModels
                     case VideoEncoder.QuickSyncH265:
                     case VideoEncoder.VceH264:
                     case VideoEncoder.VceH265:
+                    case VideoEncoder.NvencH264:
+                    case VideoEncoder.NvencH265:
                         rfValue = 51.0 - value;
                         rfValue = Math.Round(rfValue, 0);
                         this.Task.Quality = rfValue;
@@ -977,7 +979,8 @@ namespace HandBrakeWPF.ViewModels
                 if (preset.Task.VideoEncoder == VideoEncoder.X264 || preset.Task.VideoEncoder == VideoEncoder.X264_10
                     || preset.Task.VideoEncoder == VideoEncoder.X265 || preset.Task.VideoEncoder == VideoEncoder.X265_10 || preset.Task.VideoEncoder == VideoEncoder.X265_12
                     || preset.Task.VideoEncoder == VideoEncoder.QuickSync || preset.Task.VideoEncoder == VideoEncoder.QuickSyncH265 || preset.Task.VideoEncoder == VideoEncoder.QuickSyncH26510b
-                    || preset.Task.VideoEncoder == VideoEncoder.VceH264 || preset.Task.VideoEncoder == VideoEncoder.VceH265)
+                    || preset.Task.VideoEncoder == VideoEncoder.VceH264 || preset.Task.VideoEncoder == VideoEncoder.VceH265
+                    || preset.Task.VideoEncoder == VideoEncoder.NvencH264 || preset.Task.VideoEncoder == VideoEncoder.NvencH265)
                 {
                     this.VideoLevel = preset.Task.VideoLevel != null ? preset.Task.VideoLevel.Clone() : this.VideoLevels.FirstOrDefault();
                     this.VideoProfile = preset.Task.VideoProfile != null ? preset.Task.VideoProfile.Clone() : this.VideoProfiles.FirstOrDefault();
@@ -1090,7 +1093,8 @@ namespace HandBrakeWPF.ViewModels
                 || this.Task.VideoEncoder == VideoEncoder.X265 || this.Task.VideoEncoder == VideoEncoder.X265_10
                 || this.Task.VideoEncoder == VideoEncoder.X265_12 || this.Task.VideoEncoder == VideoEncoder.QuickSync
                 || this.Task.VideoEncoder == VideoEncoder.QuickSyncH265 || this.Task.VideoEncoder == VideoEncoder.QuickSyncH26510b
-                || this.Task.VideoEncoder == VideoEncoder.VceH264 || this.Task.VideoEncoder == VideoEncoder.VceH265)
+                || this.Task.VideoEncoder == VideoEncoder.VceH264 || this.Task.VideoEncoder == VideoEncoder.VceH265
+                || this.Task.VideoEncoder == VideoEncoder.NvencH264 || this.Task.VideoEncoder == VideoEncoder.NvencH265)
             {
                 if (!Equals(preset.Task.VideoPreset, this.Task.VideoPreset))
                 {
@@ -1183,6 +1187,8 @@ namespace HandBrakeWPF.ViewModels
                 case VideoEncoder.QuickSyncH265:
                 case VideoEncoder.VceH264:
                 case VideoEncoder.VceH265:
+                case VideoEncoder.NvencH264:
+                case VideoEncoder.NvencH265:
                     this.QualityMin = 0;
                     this.QualityMax = 51;
                     break;
@@ -1317,9 +1323,12 @@ namespace HandBrakeWPF.ViewModels
                 case VideoEncoder.QuickSyncH26510b:
                 case VideoEncoder.VceH264:
                 case VideoEncoder.VceH265:
+                case VideoEncoder.NvencH264:
+                case VideoEncoder.NvencH265:
 
                     if (this.SelectedVideoEncoder == VideoEncoder.QuickSync || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265 || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH26510b
-                        || this.SelectedVideoEncoder == VideoEncoder.VceH264 || this.SelectedVideoEncoder == VideoEncoder.VceH265)
+                        || this.SelectedVideoEncoder == VideoEncoder.VceH264 || this.SelectedVideoEncoder == VideoEncoder.VceH265
+                        || this.SelectedVideoEncoder == VideoEncoder.NvencH264 || this.SelectedVideoEncoder == VideoEncoder.NvencH265)
                     {
                         cqStep = 1;
                     }
@@ -1441,12 +1450,15 @@ namespace HandBrakeWPF.ViewModels
 
             // Update control display
             this.UseAdvancedTab = selectedEncoder != VideoEncoder.QuickSync && selectedEncoder != VideoEncoder.QuickSyncH265 && selectedEncoder != VideoEncoder.QuickSyncH26510b
-                               && selectedEncoder != VideoEncoder.VceH264 && selectedEncoder != VideoEncoder.VceH265  && this.UseAdvancedTab;
+                               && selectedEncoder != VideoEncoder.VceH264 && selectedEncoder != VideoEncoder.VceH265
+                               && selectedEncoder != VideoEncoder.NvencH264 && selectedEncoder != VideoEncoder.NvencH265
+                               && this.UseAdvancedTab;
 
             this.DisplayOptimiseOptions = this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 ||
                                           this.SelectedVideoEncoder == VideoEncoder.X265 || this.SelectedVideoEncoder == VideoEncoder.X265_10 || this.SelectedVideoEncoder == VideoEncoder.X265_12 ||
                                           this.SelectedVideoEncoder == VideoEncoder.QuickSync || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265 || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH26510b ||
                                           this.SelectedVideoEncoder == VideoEncoder.VceH264 || this.SelectedVideoEncoder == VideoEncoder.VceH265 ||
+                                          this.SelectedVideoEncoder == VideoEncoder.NvencH264 || this.SelectedVideoEncoder == VideoEncoder.NvencH265 ||
                                           this.SelectedVideoEncoder == VideoEncoder.VP8 || this.SelectedVideoEncoder == VideoEncoder.VP9;
 
             this.DisplayNonQSVControls = this.SelectedVideoEncoder != VideoEncoder.QuickSync && this.SelectedVideoEncoder != VideoEncoder.QuickSyncH265 && this.SelectedVideoEncoder != VideoEncoder.QuickSyncH26510b;
@@ -1459,7 +1471,8 @@ namespace HandBrakeWPF.ViewModels
 
             this.DisplayLevelControl = this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 || 
                                        this.SelectedVideoEncoder == VideoEncoder.QuickSync || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265 || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH26510b ||
-                                       this.SelectedVideoEncoder == VideoEncoder.VceH264 || this.SelectedVideoEncoder == VideoEncoder.VceH265;
+                                       this.SelectedVideoEncoder == VideoEncoder.VceH264 || this.SelectedVideoEncoder == VideoEncoder.VceH265 ||
+                                       this.SelectedVideoEncoder == VideoEncoder.NvencH264 || this.SelectedVideoEncoder == VideoEncoder.NvencH265;
 
             this.DisplayProfileControl = this.SelectedVideoEncoder == VideoEncoder.X264
                                          || this.SelectedVideoEncoder == VideoEncoder.X264_10
@@ -1470,7 +1483,9 @@ namespace HandBrakeWPF.ViewModels
                                          || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265
                                          || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH26510b
                                          || this.SelectedVideoEncoder == VideoEncoder.VceH264
-                                         || this.SelectedVideoEncoder == VideoEncoder.VceH265;
+                                         || this.SelectedVideoEncoder == VideoEncoder.VceH265
+                                         || this.SelectedVideoEncoder == VideoEncoder.NvencH264
+                                         || this.SelectedVideoEncoder == VideoEncoder.NvencH265;
 
             // Refresh Display
             this.NotifyOfPropertyChange(() => this.Rfqp);

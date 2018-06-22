@@ -415,6 +415,12 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_vce_h265_available", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_vce_h265_available();
 
+        [DllImport("hb", EntryPoint = "hb_nvenc_h264_available", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_nvenc_h264_available();
+
+        [DllImport("hb", EntryPoint = "hb_nvenc_h265_available", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_nvenc_h265_available();
+
         // hb_image_t* hb_get_preview2(hb_handle_t* h, int title_idx, int picture, hb_geometry_settings_t* geo, int deinterlace);
         [DllImport("hb", EntryPoint = "hb_get_preview2", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_get_preview2(IntPtr hbHandle, int title_idx, int preview_idx,  ref hb_geometry_settings_s geo, int deinterlace);
