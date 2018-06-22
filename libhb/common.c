@@ -31,6 +31,10 @@
 #include <windows.h>
 #endif
 
+#ifdef USE_QSV
+#include "nvenc_common.h"
+#endif
+
 static int mixdown_get_opus_coupled_stream_count(int mixdown);
 
 /**********************************************************************
@@ -279,8 +283,9 @@ static int hb_video_encoder_is_enabled(int encoder)
 
 #ifdef USE_NVENC
         case HB_VCODEC_FFMPEG_NVENC_H264:
+            return hb_nvenc_h264_available();
         case HB_VCODEC_FFMPEG_NVENC_H265:
-            return 1;
+            return hb_nvenc_h265_available();
 #endif
 
 #ifdef USE_X265
