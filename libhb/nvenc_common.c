@@ -11,7 +11,6 @@
 #include <ffnvcodec/nvEncodeAPI.h>
 #include <ffnvcodec/dynlink_loader.h>
 
-
 int hb_nvenc_h264_available()
 {
     #ifdef USE_NVENC
