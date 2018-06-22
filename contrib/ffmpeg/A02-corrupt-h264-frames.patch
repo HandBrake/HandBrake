@@ -1,20 +1,17 @@
-diff --git a/libavcodec/h264_refs.c b/libavcodec/h264_refs.c
-index 976044ce2c..0211d71a38 100644
---- a/libavcodec/h264_refs.c
-+++ b/libavcodec/h264_refs.c
-@@ -812,6 +812,7 @@ int ff_h264_execute_ref_pic_marking(H264Context *h)
-         }
-     }
+diff --git a/libavcodec/h264_slice.c b/libavcodec/h264_slice.c
+index d71ddbe9ba..215a6d3c65 100644
+--- a/libavcodec/h264_slice.c
++++ b/libavcodec/h264_slice.c
+@@ -1407,6 +1407,12 @@ static int h264_field_start(H264Context *h, const H264SliceContext *sl,
  
-+#if 0
-     if (   err >= 0
-         && h->long_ref_count==0
-         && (   h->short_ref_count<=2
-@@ -822,6 +823,7 @@ int ff_h264_execute_ref_pic_marking(H264Context *h)
-         if(!h->avctx->has_b_frames)
-             h->frame_recovered |= FRAME_RECOVERED_SEI;
-     }
-+#endif
+     sps = h->ps.sps;
  
- out:
-     return (h->avctx->err_recognition & AV_EF_EXPLODE) ? err : 0;
++    if (sps && sps->bitstream_restriction_flag &&
++        h->avctx->has_b_frames < sps->num_reorder_frames) {
++        h->avctx->has_b_frames = FFMAX(h->avctx->has_b_frames,
++                                       sps->num_reorder_frames);
++    }
++
+     last_pic_droppable   = h->droppable;
+     last_pic_structure   = h->picture_structure;
+     h->droppable         = (nal->ref_idc == 0);
