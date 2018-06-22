@@ -8,8 +8,11 @@
  */
 
 #include "hbffmpeg.h"
+
+#ifdef USE_NVENC
 #include <ffnvcodec/nvEncodeAPI.h>
 #include <ffnvcodec/dynlink_loader.h>
+#endif 
 
 int hb_nvenc_h264_available()
 {
