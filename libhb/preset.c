@@ -174,6 +174,12 @@ static int do_preset_clean(hb_value_t *preset, preset_do_context_t *do_ctx)
     return PRESET_DO_NEXT;
 }
 
+static int do_make_custom(hb_value_t *preset, preset_do_context_t *ctx)
+{
+    hb_dict_set_int(preset, "Type", HB_PRESET_TYPE_CUSTOM);
+    return PRESET_DO_NEXT;
+}
+
 static int do_delete_builtin(hb_value_t *preset, preset_do_context_t *ctx)
 {
     if (hb_value_get_int(hb_dict_get(preset, "Type")) == HB_PRESET_TYPE_OFFICIAL)
@@ -3654,6 +3660,11 @@ int hb_presets_add_file(const char *filename)
         preset = hb_plist_parse_file(filename);
     if (preset == NULL)
         return -1;
+
+    preset_do_context_t ctx;
+
+    ctx.path.depth = 1;
+    presets_do(do_make_custom, preset, &ctx);
 
     int result = hb_presets_add(preset);
     hb_value_free(&preset);
