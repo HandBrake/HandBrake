@@ -542,7 +542,12 @@ set_preset_menu_button_label(signal_user_data_t *ud, hb_preset_index_t *path)
 
     dict = hb_preset_get(path);
     type = ghb_dict_get_int(dict, "Type");
+
+#if PANGO_VERSION_CHECK(1, 38, 0)
     fullname = preset_get_fullname(path, " <span alpha=\"70%\">></span> ");
+#else
+    fullname = preset_get_fullname(path, " > ");
+#endif
     label = GTK_LABEL(GHB_WIDGET(ud->builder, "presets_menu_button_label"));
     text = g_strdup_printf("%s%s", type == HB_PRESET_TYPE_CUSTOM ?
                                    "Custom" : "Official", fullname);
