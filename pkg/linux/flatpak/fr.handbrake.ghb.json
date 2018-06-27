@@ -11,8 +11,21 @@
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
+        "--env=PATH=/app/bin:/usr/bin:/app/extensions/bin",
+        "--env=JAVA_HOME=/app/extensions/jre",
         "--filesystem=host"
     ],
+    "add-extensions": {
+        "fr.handbrake.plugin": {
+            "version": "1",
+            "directory": "extensions",
+            "add-ld-path": "lib",
+            "merge-dirs": "lib;bin;share;jre",
+            "subdirectories": true,
+            "no-autodownload": true,
+            "autodelete": true
+        }
+    },
     "modules": [
         {
             "name": "fribidi",
@@ -42,6 +55,7 @@
             "no-autogen": true,
             "config-opts": ["--flatpak", "--disable-gtk-update-checks"],
             "builddir": true,
+            "post-install": ["install -d /app/extensions"],
             "sources": [
                 {
                     "type": "archive",
