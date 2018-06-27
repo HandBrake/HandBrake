@@ -4610,12 +4610,16 @@ browse_url(signal_user_data_t *ud, const gchar *url)
 #if defined(_WIN32)
     ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
 #else
-    GtkWindow * parent;
     gboolean    result;
+
+#if GTK_CHECK_VERSION(3, 22, 0)
+    GtkWindow * parent;
 
     parent = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     result = gtk_show_uri_on_window(parent, url, GDK_CURRENT_TIME, NULL);
     if (result) return;
+#endif
+
     char *argv[] =
         {"xdg-open",NULL,NULL,NULL};
     argv[1] = (gchar*)url;
