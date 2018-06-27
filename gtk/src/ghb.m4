@@ -1634,6 +1634,8 @@ This is often the feature title of a DVD.</property>
                                 <property name="position">0</property>
                               </packing>
                             </child>
+])dnl
+ifelse(eval(gtk_version > 310), 1, filter_output([
                             <child>
                               <object class="GtkImage" id="presets_menu_button_arrow">
                                 <property name="visible">True</property>
@@ -1646,6 +1648,21 @@ This is often the feature title of a DVD.</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
+]), filter_output([
+                            <child>
+                              <object class="GtkArrow" id="presets_menu_button_arrow">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="arrow-type">GTK_ARROW_RIGHT</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+]))dnl
+filter_output([
                           </object>
                         </child>
                       </object>
