@@ -15,15 +15,16 @@
 
 struct hb_bd_s
 {
-    char         * path;
-    BLURAY       * bd;
-    int            title_count;
-    BLURAY_TITLE_INFO  ** title_info;
-    int64_t        duration;
-    hb_stream_t  * stream;
-    int            chapter;
-    int            next_chap;
-    hb_handle_t  * h;
+    char                    * path;
+    BLURAY                  * bd;
+    int                       title_count;
+    BLURAY_TITLE_INFO      ** title_info;
+    const BLURAY_DISC_INFO  * disc_info;
+    int64_t                   duration;
+    hb_stream_t             * stream;
+    int                       chapter;
+    int                       next_chap;
+    hb_handle_t             * h;
 };
 
 /***********************************************************************
@@ -68,6 +69,7 @@ hb_bd_t * hb_bd_init( hb_handle_t *h, char * path )
         d->title_info[ii] = bd_get_title_info( d->bd, ii, 0 );
     }
     qsort(d->title_info, d->title_count, sizeof( BLURAY_TITLE_INFO* ), title_info_compare_mpls );
+    d->disc_info = bd_get_disc_info(d->bd);
     d->path = strdup( path );
 
     return d;
@@ -277,18 +279,32 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     title->type = HB_BD_TYPE;
     title->reg_desc = STR4_TO_UINT32("HDMV");
 
-    char * p_cur, * p_last = d->path;
-    for( p_cur = d->path; *p_cur; p_cur++ )
+    if (d->disc_info->disc_name != NULL && d->disc_info->disc_name[0] != 0)
     {
-        if( IS_DIR_SEP(p_cur[0]) && p_cur[1] )
-        {
-            p_last = &p_cur[1];
-        }
+        strncpy(title->name, d->disc_info->disc_name, sizeof(title->name));
+        title->name[sizeof(title->name) - 1] = 0;
     }
-    snprintf( title->name, sizeof( title->name ), "%s", p_last );
-    char *dot_term = strrchr(title->name, '.');
-    if (dot_term)
-        *dot_term = '\0';
+    else if (d->disc_info->udf_volume_id != NULL &&
+             d->disc_info->udf_volume_id[0] != 0)
+    {
+        strncpy(title->name, d->disc_info->udf_volume_id, sizeof(title->name));
+        title->name[sizeof(title->name) - 1] = 0;
+    }
+    else
+    {
+        char * p_cur, * p_last = d->path;
+        for( p_cur = d->path; *p_cur; p_cur++ )
+        {
+            if( IS_DIR_SEP(p_cur[0]) && p_cur[1] )
+            {
+                p_last = &p_cur[1];
+            }
+        }
+        snprintf(title->name, sizeof( title->name ), "%s", p_last);
+        char *dot_term = strrchr(title->name, '.');
+        if (dot_term)
+            *dot_term = '\0';
+    }
 
     title->vts = 0;
     title->ttn = 0;
