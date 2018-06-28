@@ -2647,7 +2647,6 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     if (title != NULL)
     {
         GhbValue *job_dict;
-        char * source_name;
 
         job_dict = hb_preset_job_init(ghb_scan_handle(), title_id, settings);
         ghb_dict_set(settings, "Job", job_dict);
@@ -2661,9 +2660,10 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         ghb_dict_set_int(settings, "source_width", title->geometry.width);
         ghb_dict_set_int(settings, "source_height", title->geometry.height);
         ghb_dict_set_string(settings, "source", title->path);
-        source_name = ghb_create_source_label(title);
-        ghb_dict_set_string(settings, "source_label", source_name);
-        ghb_dict_set_string(settings, "volume", source_name);
+        ghb_dict_set_string(settings, "source_label",
+                            ghb_create_source_label(title));
+        ghb_dict_set_string(settings, "volume",
+                            ghb_create_volume_label(title));
 
         int crop[4];
 
