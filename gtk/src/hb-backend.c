@@ -2081,6 +2081,26 @@ ghb_create_source_label(const hb_title_t * title)
 }
 
 gchar*
+ghb_create_volume_label(const hb_title_t * title)
+{
+    char * volname;
+
+    if (title != NULL && title->name != NULL && title->name[0] != 0)
+    {
+        volname = strdup(title->name);
+        if (title->type == HB_DVD_TYPE)
+        {
+            ghb_sanitize_volname(volname);
+        }
+    }
+    else
+    {
+        volname = g_strdup(_("No Title Found"));
+    }
+    return volname;
+}
+
+gchar*
 ghb_create_title_label(const hb_title_t *title)
 {
     gchar *label;
