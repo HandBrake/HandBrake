@@ -1,0 +1,12 @@
+$(eval $(call import.MODULE.defs,NVENC,nvenc))
+$(eval $(call import.CONTRIB.defs,NVENC))
+
+NVENC.FETCH.url      = https://download.handbrake.fr/contrib/nv-codec-headers-8.1.24.2.tar.gz
+NVENC.FETCH.url     += https://github.com/FFmpeg/nv-codec-headers/releases/download/n8.1.24.2/nv-codec-headers-8.1.24.2.tar.gz
+NVENC.FETCH.sha256   = 2b339b2493f5b63b285dd660be05102af7d4ff2de9fcf3af94e48b5f91a3ca57
+NVENC.EXTRACT.tarbase = nv-codec-headers-n8.1.24.2
+
+NVENC.CONFIGURE = $(TOUCH.exe) $@
+NVENC.BUILD.extra = PREFIX="$(NVENC.CONFIGURE.prefix)"
+NVENC.INSTALL.extra = PREFIX="$(NVENC.CONFIGURE.prefix)"
+NVENC.UNINSTALL.extra = PREFIX="$(NVENC.CONFIGURE.prefix)"

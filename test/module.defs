@@ -34,6 +34,10 @@ ifeq (1,$(FEATURE.vce))
     TEST.GCC.D += USE_VCE
 endif
 
+ifeq (1,$(FEATURE.nvenc))
+    TEST.GCC.D += USE_NVENC
+endif
+
 ifeq (1,$(FEATURE.x265))
     TEST.GCC.D += USE_X265
 endif

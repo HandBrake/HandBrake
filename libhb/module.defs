@@ -86,6 +86,10 @@ ifeq (1,$(FEATURE.vce))
     LIBHB.GCC.D += USE_VCE
 endif
 
+ifeq (1,$(FEATURE.nvenc))
+    LIBHB.GCC.D += USE_NVENC
+endif
+
 ifeq (1,$(FEATURE.x265))
     LIBHB.GCC.D += USE_X265
 endif

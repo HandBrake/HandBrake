@@ -70,6 +70,10 @@ ifeq (1,$(FEATURE.vce))
     MODULES += contrib/amf
 endif
 
+ifeq (1,$(FEATURE.nvenc))
+    MODULES += contrib/nvenc
+endif
+
 ifneq (,$(filter $(BUILD.system),darwin))
     MODULES += contrib/xz
 endif

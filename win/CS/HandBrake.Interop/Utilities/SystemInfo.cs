@@ -18,6 +18,9 @@ namespace HandBrake.Interop.Utilities
     /// </summary>
     public class SystemInfo
     {
+        private static bool? isNvencH264Available;  // Local cache to prevent log spam.
+        private static bool? isNvencH265Available;
+
         /// <summary>
         /// Gets a value indicating whether is qsv available.
         /// </summary>
@@ -114,6 +117,53 @@ namespace HandBrake.Interop.Utilities
                 try
                 {
                     return HBFunctions.hb_vce_h265_available() != 0;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+
+        public static bool IsNVEncH264Available
+        {
+            get
+            {
+                try
+                {
+                    if (isNvencH264Available == null)
+                    {
+                        isNvencH264Available = HBFunctions.hb_nvenc_h264_available() != 0;
+                    }
+                    
+                    return isNvencH264Available.Value;
+                }
+                catch (Exception)
+                {
+                    // Silent failure. Typically this means the dll hasn't been built with --enable-qsv
+                    return false;
+                }
+            }
+        }
+
+        public static bool IsNVEncH265Available
+        {
+            get
+            {
+                try
+                {
+                    if (!IsNVEncH264Available)
+                    {
+                        return false;
+                    }
+
+                    if (isNvencH265Available == null)
+                    {
+                        isNvencH265Available = HBFunctions.hb_nvenc_h265_available() != 0;
+                    }
+
+                    return isNvencH265Available.Value;
                 }
                 catch (Exception)
                 {

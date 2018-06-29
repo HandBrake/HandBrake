@@ -45,4 +45,9 @@ static const char* const hb_vce_preset_names[] = { "speed", "balanced", "quality
 hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base);
 void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
                                        AVRational time_base);
+
+int hb_av_encoder_present(int encoder);
+const char* const* hb_av_profile_get_names(int encoder);
+const char* const* hb_av_level_get_names(int encoder);
+
 #endif

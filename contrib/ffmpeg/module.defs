@@ -5,6 +5,9 @@ endif
 ifeq (1,$(FEATURE.vce))
 __deps__ += AMF
 endif
+ifeq (1,$(FEATURE.nvenc))
+__deps__ += NVENC
+endif
 
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
@@ -107,7 +110,14 @@ ifeq (1,$(FEATURE.qsv))
 endif
 
 ifeq (1,$(FEATURE.vce))
-  FFMPEG.CONFIGURE.extra += --enable-amf --enable-encoder=h264_amf --enable-encoder=hevc_amf
+  FFMPEG.CONFIGURE.extra += --enable-amf --enable-encoder=h264_amf --enable-encoder=hevc_amf 
+endif
+
+ifeq (1,$(FEATURE.nvenc))
+FFMPEG.CONFIGURE.extra += \
+     --enable-nvenc \
+     --enable-encoder=h264_nvenc \
+     --enable-encoder=hevc_nvenc
 endif
 
 ## enable compile verbosity
