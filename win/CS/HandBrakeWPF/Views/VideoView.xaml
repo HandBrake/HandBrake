@@ -52,6 +52,7 @@
                             <MultiBinding Converter="{StaticResource videoEncoderConverter}">
                                 <Binding Path="VideoEncoders"/>
                                 <Binding Path="Task" />
+                                <Binding Path="UserSettingService" />
                             </MultiBinding>
                         </ComboBox.ItemsSource>
                     </ComboBox>

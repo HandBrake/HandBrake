@@ -101,6 +101,8 @@ namespace HandBrakeWPF.ViewModels
 
         #region Public Properties
 
+        public IUserSettingService UserSettingService => this.userSettingService;
+
         /// <summary>
         /// Gets or sets the current Encode Task.
         /// </summary>
@@ -528,17 +530,6 @@ namespace HandBrakeWPF.ViewModels
                     this.OnTabStatusChanged(null);
                 }
             }
-        }
-
-        private void HandleRFChange()
-        {
-            double displayRF = this.DisplayRF;
-            if (displayRF > this.QualityMax || displayRF < this.QualityMin)
-            {
-                displayRF = this.qualityMax / 2;
-            }
-
-            this.SetRF(displayRF);
         }
 
         /// <summary>
@@ -1279,6 +1270,7 @@ namespace HandBrakeWPF.ViewModels
             if (e.Key == UserSettingConstants.ShowAdvancedTab)
             {
                 this.NotifyOfPropertyChange(() => this.IsAdvancedTabOptionEnabled);
+                this.NotifyOfPropertyChange(() => this.VideoEncoders);
             }
         }
 
@@ -1506,6 +1498,17 @@ namespace HandBrakeWPF.ViewModels
             // Load the cached arguments. Saves the user from resetting when switching encoders.
             string result;
             this.ExtraArguments = this.encoderOptions.TryGetValue(EnumHelper<VideoEncoder>.GetShortName(selectedEncoder), out result) ? result : string.Empty;
+        }
+
+        private void HandleRFChange()
+        {
+            double displayRF = this.DisplayRF;
+            if (displayRF > this.QualityMax || displayRF < this.QualityMin)
+            {
+                displayRF = this.qualityMax / 2;
+            }
+
+            this.SetRF(displayRF);
         }
     }
 }

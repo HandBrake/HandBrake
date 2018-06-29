@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Converters.Video
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -49,8 +50,17 @@ namespace HandBrakeWPF.Converters.Video
         /// </returns>
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Count() == 2)
+            if (values.Count() >= 2)
             {
+                IUserSettingService userSettingService = values[2] as IUserSettingService;
+                bool isQsvEnabled = false, isVceEnabled = false, isNvencEnabled = false;
+                if (userSettingService != null)
+                {
+                    isQsvEnabled = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
+                    isVceEnabled = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
+                    isNvencEnabled = userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
+                }
+                
                 List<VideoEncoder> encoders = EnumHelper<VideoEncoder>.GetEnumList().ToList();
                 EncodeTask task = values[1] as EncodeTask;
 
@@ -76,12 +86,12 @@ namespace HandBrakeWPF.Converters.Video
                     encoders.Remove(VideoEncoder.VP9);
                 }
 
-                if (!SystemInfo.IsQsvAvailableH264)
+                if (!isQsvEnabled || !SystemInfo.IsQsvAvailableH264)
                 {
                     encoders.Remove(VideoEncoder.QuickSync);
                 }
 
-                if (!SystemInfo.IsQsvAvailableH265)
+                if (!isQsvEnabled || !SystemInfo.IsQsvAvailableH265)
                 {
                     encoders.Remove(VideoEncoder.QuickSyncH265);
                     encoders.Remove(VideoEncoder.QuickSyncH26510b);
@@ -91,22 +101,22 @@ namespace HandBrakeWPF.Converters.Video
                     encoders.Remove(VideoEncoder.QuickSyncH26510b);
                 }
 
-                if (!SystemInfo.IsVceH264Available)
+                if (!isVceEnabled || !SystemInfo.IsVceH264Available)
                 {
                     encoders.Remove(VideoEncoder.VceH264);
                 }
 
-                if (!SystemInfo.IsVceH265Available)
+                if (!isVceEnabled || !SystemInfo.IsVceH265Available)
                 {
                     encoders.Remove(VideoEncoder.VceH265);
                 }
 
-                if (!SystemInfo.IsNVEncH264Available)
+                if (!isNvencEnabled || !SystemInfo.IsNVEncH264Available)
                 {
                     encoders.Remove(VideoEncoder.NvencH264);
                 }
 
-                if (!SystemInfo.IsNVEncH265Available)
+                if (!isNvencEnabled || !SystemInfo.IsNVEncH265Available)
                 {
                     encoders.Remove(VideoEncoder.NvencH265);
                 }

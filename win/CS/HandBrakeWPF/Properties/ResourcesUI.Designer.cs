@@ -1348,6 +1348,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Encoding.
+        /// </summary>
+        public static string Options_Encoding {
+            get {
+                return ResourceManager.GetString("Options_Encoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File Format:.
         /// </summary>
         public static string Options_Format {
@@ -1668,6 +1677,33 @@ namespace HandBrakeWPF.Properties {
         public static string Options_x264Granularity {
             get {
                 return ResourceManager.GetString("Options_x264Granularity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Nvidia NVENC Encoder.
+        /// </summary>
+        public static string OptionsView_EnableNvencEncoding {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableNvencEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Intel QuickSync Encoder.
+        /// </summary>
+        public static string OptionsView_EnableQuicksyncEncoding {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableQuicksyncEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable AMD VCE Encoder.
+        /// </summary>
+        public static string OptionsView_EnableVceEncoding {
+            get {
+                return ResourceManager.GetString("OptionsView_EnableVceEncoding", resourceCulture);
             }
         }
         

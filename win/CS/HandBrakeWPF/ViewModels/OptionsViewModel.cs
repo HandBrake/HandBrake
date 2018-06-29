@@ -101,6 +101,12 @@ namespace HandBrakeWPF.ViewModels
         private bool playSoundWhenDone;
         private bool playSoundWhenQueueDone;
 
+        private bool enableQuickSyncEncoding;
+
+        private bool enableVceEncoder;
+
+        private bool enableNvencEncoder;
+
         #endregion
 
         #region Constructors and Destructors
@@ -986,15 +992,58 @@ namespace HandBrakeWPF.ViewModels
 
         #region Video
 
-        /// <summary>
-        /// Gets or sets a value indicating whether disable quick sync decoding.
-        /// </summary>
+        public bool EnableQuickSyncEncoding
+        {
+            get => this.enableQuickSyncEncoding && this.IsQuickSyncAvailable;
+            set
+            {
+                if (value == this.enableQuickSyncEncoding)
+                {
+                    return;
+                }
+
+                this.enableQuickSyncEncoding = value;
+                this.NotifyOfPropertyChange(() => this.EnableQuickSyncEncoding);
+            }
+        }
+
+        public bool EnableVceEncoder
+        {
+            get => this.enableVceEncoder && this.IsVceAvailable;
+            set
+            {
+                if (value == this.enableVceEncoder)
+                {
+                    return;
+                }
+
+                this.enableVceEncoder = value;
+                this.NotifyOfPropertyChange(() => this.EnableVceEncoder);
+            }
+        }
+
+        public bool EnableNvencEncoder
+        {
+            get => this.enableNvencEncoder && this.IsNvencAvailable;
+            set
+            {
+                if (value == this.enableNvencEncoder)
+                {
+                    return;
+                }
+
+                this.enableNvencEncoder = value;
+                this.NotifyOfPropertyChange(() => this.EnableNvencEncoder);
+            }
+        }
+
         public bool EnableQuickSyncDecoding
         {
             get
             {
                 return this.enableQuickSyncDecoding;
             }
+
             set
             {
                 if (value.Equals(this.enableQuickSyncDecoding))
@@ -1007,19 +1056,30 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets the selected scaling mode.
-        /// </summary>
         public VideoScaler SelectedScalingMode { get; set; }
 
-        /// <summary>
-        /// Gets a value indicating whether is quick sync available.
-        /// </summary>
         public bool IsQuickSyncAvailable
         {
             get
             {
                 return SystemInfo.IsQsvAvailable;
+            }
+        }
+
+        public bool IsVceAvailable
+        {
+            get
+            {
+                string foundGpu = Utilities.SystemInfo.GetGPUInfo.FirstOrDefault(g => g.Contains("AMD"));
+                return SystemInfo.IsVceH264Available && !string.IsNullOrEmpty(foundGpu);
+            }
+        }
+
+        public bool IsNvencAvailable
+        {
+            get
+            {
+                return SystemInfo.IsNVEncH264Available;
             }
         }
 
@@ -1034,15 +1094,13 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to use qsv decode for non qsv encoders
-        /// </summary>
         public bool UseQSVDecodeForNonQSVEnc
         {
             get
             {
                 return this.useQsvDecodeForNonQsvEnc;
             }
+
             set
             {
                 if (value == this.useQsvDecodeForNonQsvEnc) return;
@@ -1051,9 +1109,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets the scaling options.
-        /// </summary>
         public BindingList<VideoScaler> ScalingOptions
         {
             get
@@ -1348,6 +1403,10 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode);
             this.UseQSVDecodeForNonQSVEnc = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc);
 
+            this.EnableQuickSyncEncoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
+            this.EnableVceEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder);
+            this.EnableNvencEncoder = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder);
+
             // #############################
             // CLI
             // #############################
@@ -1483,6 +1542,10 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncDecoding, this.EnableQuickSyncDecoding);
             this.userSettingService.SetUserSetting(UserSettingConstants.ScalingMode, this.SelectedScalingMode);
             this.userSettingService.SetUserSetting(UserSettingConstants.UseQSVDecodeForNonQSVEnc, this.UseQSVDecodeForNonQSVEnc);
+
+            this.userSettingService.SetUserSetting(UserSettingConstants.EnableQuickSyncEncoding, this.EnableQuickSyncEncoding);
+            this.userSettingService.SetUserSetting(UserSettingConstants.EnableVceEncoder, this.EnableVceEncoder);
+            this.userSettingService.SetUserSetting(UserSettingConstants.EnableNvencEncoder, this.EnableNvencEncoder);
 
             /* System and Logging */
             userSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, this.SelectedPriority);
