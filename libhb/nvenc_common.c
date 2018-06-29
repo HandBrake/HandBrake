@@ -37,7 +37,7 @@ int hb_check_nvenc_available()
     #ifdef USE_NVENC
         uint32_t nvenc_ver;
         void *context;
-        NvencFunctions *nvenc_dl;
+        NvencFunctions *nvenc_dl = NULL;
 
         int loadErr = nvenc_load_functions(&nvenc_dl, context);
         if (loadErr < 0) {
