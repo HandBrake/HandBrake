@@ -13,6 +13,11 @@ else ifeq ($(HB.repo.branch),)
 else
     PKG.rpm.hb.version = $(tag).$(HB.repo.shorthash).$(HB.repo.branch)
 endif
+ifeq ($(HB.repo.type),release)
+    PKG.flatpak.branch = stable
+else
+    PKG.flatpak.branch = development
+endif
 
 ifneq ($(PGP_ID),)
     PGPSIGN = --gpg-sign=$(PGP_ID)
