@@ -31,7 +31,7 @@
 #include <windows.h>
 #endif
 
-#ifdef USE_QSV
+#ifdef USE_NVENC
 #include "nvenc_common.h"
 #endif
 
