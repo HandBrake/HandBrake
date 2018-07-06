@@ -1087,10 +1087,10 @@ parse_datestring(const char *src, struct tm *tm)
         if (match_by_pattern(src, maps[i].pattern))
         {
             strptime(src, maps[i].format, tm);
-            return(1);
+            return 1;
         }
     }
-    return(0);
+    return 0;
 }
 
 static char*
@@ -1205,16 +1205,18 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 g_string_append_printf(str, "%s", dt);
                 p += strlen("{date}");
             }
-            else if (!strncmp(p, "{creation-date}", strlen("{creation-date}"))){
-                const gchar *val;
+            else if (!strncmp(p, "{creation-date}", strlen("{creation-date}")))
+            {
+                gchar *val;
                 const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");             
                 val = get_creation_date("%Y-%m-%d", ghb_dict_get_string(settings, "MetaReleaseDate"), source);
                 g_string_append_printf(str, "%s", val);
                 p += strlen("{creation-date}");
                 g_free(val);
             }
-            else if (!strncmp(p, "{creation-time}", strlen("{creation-time}"))){  
-                const gchar *val;  
+            else if (!strncmp(p, "{creation-time}", strlen("{creation-time}")))
+            {
+                gchar *val;  
                 const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");          
                 val = get_creation_date("%H:%M", ghb_dict_get_string(settings, "MetaReleaseDate"), source);
                 g_string_append_printf(str, "%s", val);
