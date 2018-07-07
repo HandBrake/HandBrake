@@ -9,13 +9,13 @@
 
 namespace HandBrakeWPF.Services.Encode.Model.Models
 {
+    using HandBrakeWPF.Services.Scan.Model;
+
     /// <summary>
     /// The meta data.
     /// </summary>
     public class MetaData
     {
-        private string albumArtist;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="MetaData"/> class. 
         /// </summary>
@@ -34,6 +34,24 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             if (metadata != null)
             {
                 this.AlbumArtist = metadata.AlbumArtist;
+                this.Album = metadata.Album;
+                this.Artist = metadata.Artist;
+                this.Comment = metadata.Comment;
+                this.Composer = metadata.Composer;
+                this.Description = metadata.Description;
+                this.Genre = metadata.Genre;
+                this.LongDescription = metadata.LongDescription;
+                this.Name = metadata.Name;
+                this.ReleaseDate = metadata.ReleaseDate;
+            }
+        }
+
+        public MetaData(Metadata metadata)
+        {
+            if (metadata != null)
+            {
+                this.AlbumArtist = metadata.AlbumArtist;
+                this.Album = metadata.Album;
                 this.Artist = metadata.Artist;
                 this.Comment = metadata.Comment;
                 this.Composer = metadata.Composer;
@@ -48,17 +66,12 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// <summary>
         ///     Gets or sets the album artist.
         /// </summary>
-        public string AlbumArtist
-        {
-            get
-            {
-                return this.albumArtist;
-            }
-            set
-            {
-                this.albumArtist = value;
-            }
-        }
+        public string AlbumArtist { get; set; }
+
+        /// <summary>
+        ///     Gets or sets the album.
+        /// </summary>
+        public string Album { get; set; }
 
         /// <summary>
         ///     Gets or sets the artist.

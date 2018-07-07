@@ -20,6 +20,11 @@ namespace HandBrake.Interop.Interop.Json.Encode
         public string AlbumArtist { get; set; }
 
         /// <summary>
+        ///     Gets or sets the album.
+        /// </summary>
+        public string Album { get; set; }
+
+        /// <summary>
         ///     Gets or sets the artist.
         /// </summary>
         public string Artist { get; set; }

@@ -611,6 +611,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (job.MetaData != null)
             {
                 metaData.Artist = job.MetaData.Artist;
+                metaData.Album = job.MetaData.Album;
                 metaData.AlbumArtist = job.MetaData.AlbumArtist;
                 metaData.Comment = job.MetaData.Comment;
                 metaData.Composer = job.MetaData.Composer;

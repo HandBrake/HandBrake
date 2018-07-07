@@ -238,10 +238,12 @@
     <Compile Include="Services\Queue\Model\QueueTask.cs" />
     <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />
     <Compile Include="Services\Scan\EventArgs\ScanProgressEventArgs.cs" />
+    <Compile Include="Services\Scan\Factories\TitleFactory.cs" />
     <Compile Include="Services\Scan\Interfaces\IScan.cs" />
     <Compile Include="Services\Scan\LibScan.cs" />
     <Compile Include="Services\Scan\Model\Audio.cs" />
     <Compile Include="Services\Scan\Model\Chapter.cs" />
+    <Compile Include="Services\Scan\Model\Metadata.cs" />
     <Compile Include="Services\Scan\Model\Source.cs" />
     <Compile Include="Services\Scan\Model\Subtitle.cs" />
     <Compile Include="Services\Scan\Model\Title.cs" />

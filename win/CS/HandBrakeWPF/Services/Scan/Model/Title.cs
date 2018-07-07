@@ -16,9 +16,6 @@ namespace HandBrakeWPF.Services.Scan.Model
 
     using HandBrake.Interop.Interop.Model;
 
-    using HandBrakeWPF.Model;
-    using HandBrakeWPF.Utilities;
-
     /// <summary>
     /// An object that represents a single Title of a DVD
     /// </summary>
@@ -32,6 +29,7 @@ namespace HandBrakeWPF.Services.Scan.Model
             this.AudioTracks = new List<Audio>();
             this.Chapters = new List<Chapter>();
             this.Subtitles = new List<Subtitle>();
+            this.Metadata = new Metadata();
         }
 
         #region Properties
@@ -50,6 +48,8 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// Gets or sets a Collection of subtitles associated with this Title
         /// </summary>
         public List<Subtitle> Subtitles { get; set; }
+
+        public Metadata Metadata { get; set; }
 
         /// <summary>
         /// Gets or sets The track number of this Title
