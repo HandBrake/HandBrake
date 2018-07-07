@@ -35,6 +35,10 @@
 #include "nvenc_common.h"
 #endif
 
+#ifdef USE_VCE
+#include "vce_common.h"
+#endif
+
 static int mixdown_get_opus_coupled_stream_count(int mixdown);
 
 /**********************************************************************
@@ -277,8 +281,9 @@ static int hb_video_encoder_is_enabled(int encoder)
 
 #ifdef USE_VCE
         case HB_VCODEC_FFMPEG_VCE_H264:
+			return hb_vce_h264_available();
         case HB_VCODEC_FFMPEG_VCE_H265:
-            return 1;
+            return hb_vce_h265_available();
 #endif
 
 #ifdef USE_NVENC
