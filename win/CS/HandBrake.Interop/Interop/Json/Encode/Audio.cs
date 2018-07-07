@@ -24,11 +24,11 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the copy mask.
         /// </summary>
-        public uint[] CopyMask { get; set; }
+        public string[] CopyMask { get; set; }
 
         /// <summary>
         /// Gets or sets the fallback encoder.
         /// </summary>
-        public int FallbackEncoder { get; set; }
+        public string FallbackEncoder { get; set; }
     }
 }

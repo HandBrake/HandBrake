@@ -17,11 +17,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     public enum OutputFormat
     {
         [DisplayName("MP4")]
-        [ShortName("av_mp4")]
+        [ShortName("mp4")]
         Mp4 = 0,
 
         [DisplayName("MKV")]
-        [ShortName("av_mkv")]
+        [ShortName("mkv")]
         Mkv,
     }
 }

@@ -32,7 +32,7 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the encoder.
         /// </summary>
-        public int Encoder { get; set; }
+        public string Encoder { get; set; }
 
         /// <summary>
         /// Gets or sets the gain.

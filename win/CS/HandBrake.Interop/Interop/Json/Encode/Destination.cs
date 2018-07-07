@@ -44,6 +44,6 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the mux.
         /// </summary>
-        public int Mux { get; set; }
+        public string Mux { get; set; }
     }
 }
