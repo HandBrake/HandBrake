@@ -339,11 +339,6 @@ namespace HandBrake.Interop.Interop.Json.Presets
         public bool VideoGrayScale { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether video hw decode.
-        /// </summary>
-        public bool VideoHWDecode { get; set; }
-
-        /// <summary>
         /// Gets or sets the video scaler.
         /// </summary>
         public string VideoScaler { get; set; }

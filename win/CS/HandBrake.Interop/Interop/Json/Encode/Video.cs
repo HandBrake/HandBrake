@@ -78,11 +78,6 @@ namespace HandBrake.Interop.Interop.Json.Encode
         public string Tune { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether hw decode.
-        /// </summary>
-        public bool HWDecode { get; set; }
-
-        /// <summary>
         /// Gets or sets the qsv.
         /// </summary>
         public QSV QSV { get; set; }

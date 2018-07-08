@@ -18,10 +18,5 @@ namespace HandBrake.Interop.Interop.Model.Encoding
         /// Standard software scaling. Highest quality.
         /// </summary>
         Lanczos = 0,
-
-        /// <summary>
-        /// OpenCL-assisted bicubic scaling.
-        /// </summary>
-        Bicubic = 1
     }
 }

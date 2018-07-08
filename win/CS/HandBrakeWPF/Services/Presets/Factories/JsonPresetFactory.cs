@@ -493,7 +493,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             /* Not Supported Yet */
             // public int VideoColorMatrixCode { get; set; }
-            // public bool VideoHWDecode { get; set; }
             // public string VideoScaler { get; set; }
             // public bool VideoQSVDecode { get; set; }
             // public int VideoQSVAsyncDepth { get; set; }
