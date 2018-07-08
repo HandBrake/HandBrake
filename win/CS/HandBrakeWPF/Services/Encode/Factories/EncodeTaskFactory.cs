@@ -426,7 +426,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             // Deinterlace
             if (job.DeinterlaceFilter == DeinterlaceFilter.Yadif)
             {
-                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DEINTERLACE, EnumHelper<Deinterlace>.GetShortName(job.Deinterlace),  null, job.CustomDeinterlace);
+                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DEINTERLACE, job.DeinterlacePreset?.ShortName,  null, job.CustomDeinterlaceSettings);
                 string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {
@@ -440,7 +440,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             // Decomb
             if (job.DeinterlaceFilter == DeinterlaceFilter.Decomb)
             {
-                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DECOMB, EnumHelper<Decomb>.GetShortName(job.Decomb), null, job.CustomDecomb);
+                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DECOMB, job.DeinterlacePreset?.ShortName, null, job.CustomDeinterlaceSettings);
                 string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {

@@ -90,15 +90,13 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.AlignAVStart = task.AlignAVStart;
             this.ChapterMarkersFilePath = task.ChapterMarkersFilePath;
             this.Cropping = new Cropping(task.Cropping);
-            this.CustomDecomb = task.CustomDecomb;
-            this.CustomDeinterlace = task.CustomDeinterlace;
+            this.CustomDeinterlaceSettings = task.CustomDeinterlaceSettings;
             this.CustomDenoise = task.CustomDenoise;
             this.CustomDetelecine = task.CustomDetelecine;
             this.CustomCombDetect = task.CustomCombDetect;
             this.CombDetect = task.CombDetect;
             this.Deblock = task.Deblock;
-            this.Decomb = task.Decomb;
-            this.Deinterlace = task.Deinterlace;
+            this.DeinterlacePreset = task.DeinterlacePreset;
             this.DeinterlaceFilter = task.DeinterlaceFilter;
             this.Denoise = task.Denoise;
             this.DenoisePreset = task.DenoisePreset;
@@ -297,17 +295,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// <summary>
         /// Gets or sets Deinterlace.
         /// </summary>
-        public Deinterlace Deinterlace { get; set; }
-
-        /// <summary>
-        /// Gets or sets CustomDeinterlace.
-        /// </summary>
-        public string CustomDeinterlace { get; set; }
-
-        /// <summary>
-        /// Gets or sets Decomb.
-        /// </summary>
-        public Decomb Decomb { get; set; }
+        public HBPresetTune DeinterlacePreset { get; set; }
 
         /// <summary>
         /// Gets or sets the comb detect.
@@ -317,7 +305,7 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// <summary>
         /// Gets or sets CustomDecomb.
         /// </summary>
-        public string CustomDecomb { get; set; }
+        public string CustomDeinterlaceSettings { get; set; }
 
         /// <summary>
         /// Gets or sets the custom comb detect.

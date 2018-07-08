@@ -114,6 +114,8 @@
     <Compile Include="Interop\Json\State\TaskState.cs" />
     <Compile Include="Interop\Model\Encoding\CombDetect.cs" />
     <Compile Include="Interop\Model\Encoding\DeinterlaceFilter.cs" />
+    <Compile Include="Interop\Model\Encoding\Denoise.cs" />
+    <Compile Include="Interop\Model\Encoding\Detelecine.cs" />
     <Compile Include="Interop\Model\Encoding\HBPresetTune.cs" />
     <Compile Include="Interop\Model\Encoding\Sharpen.cs" />
     <Compile Include="Interop\Model\Preview\RawPreviewData.cs" />
@@ -136,10 +138,6 @@
     <Compile Include="Interop\Model\Cropping.cs" />
     <Compile Include="Interop\Model\Encoding\Anamorphic.cs" />
     <Compile Include="Interop\Model\Encoding\Container.cs" />
-    <Compile Include="Interop\Model\Encoding\Decomb.cs" />
-    <Compile Include="Interop\Model\Encoding\Deinterlace.cs" />
-    <Compile Include="Interop\Model\Encoding\Denoise.cs" />
-    <Compile Include="Interop\Model\Encoding\Detelecine.cs" />
     <Compile Include="Interop\Model\Encoding\HBAudioEncoder.cs" />
     <Compile Include="Interop\Model\Encoding\HBContainer.cs" />
     <Compile Include="Interop\Model\Encoding\HBMixdown.cs" />

@@ -3,40 +3,44 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   Defines the HBPresetTune type.
+//    An object represetning the key and name of a Filter Preset or Tune option.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 namespace HandBrake.Interop.Interop.Model.Encoding
 {
-    /// <summary>
-    /// The hb preset tune.
-    /// </summary>
     public class HBPresetTune
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HBPresetTune"/> class. 
-        /// </summary>
-        /// <param name="name">
-        /// The name.
-        /// </param>
-        /// <param name="shortName">
-        /// The short Name.
-        /// </param>
+        public HBPresetTune()
+        {
+        }
+
         public HBPresetTune(string name, string shortName)
         {
             this.Name = name;
             this.ShortName = shortName;
         }
 
-        /// <summary>
-        /// Gets the name.
-        /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
-        /// <summary>
-        /// Gets the short name.
-        /// </summary>
-        public string ShortName { get; private set; }
+        public string ShortName { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return this.Equals((HBPresetTune)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.ShortName != null ? this.ShortName.GetHashCode() : 0;
+        }
+
+        protected bool Equals(HBPresetTune other)
+        {
+            return string.Equals(this.ShortName, other.ShortName);
+        }
     }
 }

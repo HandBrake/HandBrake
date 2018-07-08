@@ -59,14 +59,6 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetEnumDisplayValues(typeof(PresetPictureSettingsMode));
             }
-            if (value is IEnumerable<Decomb>)
-            {
-                return EnumHelper<Decomb>.GetEnumDisplayValues(typeof(Decomb));
-            }
-            if (value is IEnumerable<Deinterlace>)
-            {
-                return EnumHelper<Deinterlace>.GetEnumDisplayValues(typeof(Deinterlace));
-            }
             if (value is IEnumerable<Detelecine>)
             {
                 return EnumHelper<Detelecine>.GetEnumDisplayValues(typeof(Detelecine));
@@ -105,17 +97,9 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<PresetPictureSettingsMode>.GetDisplay((PresetPictureSettingsMode)value);
             }
-            if (targetType == typeof(Deinterlace) || value.GetType() == typeof(Deinterlace))
-            {
-                return EnumHelper<Deinterlace>.GetDisplay((Deinterlace)value);
-            }
             if (targetType == typeof(Detelecine) || value.GetType() == typeof(Detelecine))
             {
                 return EnumHelper<Detelecine>.GetDisplay((Detelecine)value);
-            }
-            if (targetType == typeof(Decomb) || value.GetType() == typeof(Decomb))
-            {
-                return EnumHelper<Decomb>.GetDisplay((Decomb)value);
             }
             if (targetType == typeof(Denoise) || value.GetType() == typeof(Denoise))
             {
@@ -186,14 +170,6 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(Denoise) || value.GetType() == typeof(Denoise))
             {
                 return EnumHelper<Denoise>.GetValue(value.ToString());
-            }
-            if (targetType == typeof(Decomb) || value.GetType() == typeof(Decomb))
-            {
-                return EnumHelper<Decomb>.GetValue(value.ToString());
-            }
-            if (targetType == typeof(Deinterlace) || value.GetType() == typeof(Deinterlace))
-            {
-                return EnumHelper<Deinterlace>.GetValue(value.ToString());
             }
             if (targetType == typeof(Detelecine) || value.GetType() == typeof(Detelecine))
             {
