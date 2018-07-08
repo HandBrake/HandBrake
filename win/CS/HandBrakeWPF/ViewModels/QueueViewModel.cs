@@ -444,7 +444,7 @@ namespace HandBrakeWPF.ViewModels
             OpenFileDialog dialog = new OpenFileDialog { Filter = "Json (*.json)|*.json", CheckFileExists = true };
             if (dialog.ShowDialog() == true)
             {
-                this.queueProcessor.RestoreQueue(dialog.FileName);
+                this.queueProcessor.ImportJson(dialog.FileName);
             }
         }
 

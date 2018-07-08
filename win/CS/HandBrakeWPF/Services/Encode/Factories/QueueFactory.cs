@@ -45,11 +45,18 @@ namespace HandBrakeWPF.Services.Encode.Factories
             List<Task> queueJobs = new List<Task>();
             foreach (var item in tasks)
             {
-                Task task = new Task { Job = EncodeFactory.Create(item, configuration) };
+                Task task = new Task { Job = EncodeTaskFactory.Create(item, configuration) };
                 queueJobs.Add(task);
             }
 
             return JsonConvert.SerializeObject(queueJobs, Formatting.Indented, settings);
-        }        
+        }
+
+        public static List<Task> GetQueue(string content)
+        {
+            JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+            List<Task> tasks = JsonConvert.DeserializeObject<List<Task>>(content, settings);
+            return tasks;
+        }
     }
 }

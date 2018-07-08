@@ -2284,7 +2284,7 @@ namespace HandBrakeWPF.ViewModels
             /* TODO Fix this. */
             Execute.OnUIThread(() =>
             {
-                if (this.queueEditTask != null && this.selectedPreset.Name != this.queueEditTask.SelectedPresetKey)
+                if (this.queueEditTask != null && !string.IsNullOrEmpty(this.queueEditTask.SelectedPresetKey) && this.selectedPreset.Name != this.queueEditTask.SelectedPresetKey)
                 {
                     Preset foundPreset = this.presetService.GetPreset(this.queueEditTask.SelectedPresetKey);
                     if (foundPreset != null)

@@ -92,7 +92,7 @@ namespace HandBrakeWPF.Services.Encode
                 this.VerifyEncodeDestinationPath(task);
 
                 // Get an EncodeJob object for the Interop Library
-                this.instance.StartEncode(EncodeFactory.Create(task, configuration));
+                this.instance.StartEncode(EncodeTaskFactory.Create(task, configuration));
 
                 // Fire the Encode Started Event
                 this.InvokeEncodeStarted(System.EventArgs.Empty);

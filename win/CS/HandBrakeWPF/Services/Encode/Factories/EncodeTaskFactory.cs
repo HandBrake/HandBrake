@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EncodeFactory.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="EncodeTaskFactory.cs" company="HandBrake Project (http://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -14,7 +14,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using System.Globalization;
     using System.Linq;
     using System.Runtime.InteropServices;
-    using System.Runtime.InteropServices.ComTypes;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
@@ -27,24 +26,24 @@ namespace HandBrakeWPF.Services.Encode.Factories
 
     using Newtonsoft.Json.Linq;
 
-    using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
-    using AudioEncoderRateType = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType;
-    using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
-    using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
-    using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
-    using FramerateMode = HandBrakeWPF.Services.Encode.Model.Models.FramerateMode;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
+    using AudioEncoder = Model.Models.AudioEncoder;
+    using AudioEncoderRateType = Model.Models.AudioEncoderRateType;
+    using AudioTrack = Model.Models.AudioTrack;
+    using ChapterMarker = Model.Models.ChapterMarker;
+    using EncodeTask = Model.EncodeTask;
+    using FramerateMode = Model.Models.FramerateMode;
+    using OutputFormat = Model.Models.OutputFormat;
+    using PointToPointMode = Model.Models.PointToPointMode;
     using Subtitle = HandBrake.Interop.Interop.Json.Encode.Subtitles;
-    using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
+    using SubtitleTrack = Model.Models.SubtitleTrack;
     using SystemInfo = HandBrake.Interop.Utilities.SystemInfo;
-    using Validate = HandBrakeWPF.Helpers.Validate;
+    using Validate = Helpers.Validate;
 
     /// <summary>
     /// This factory takes the internal EncodeJob object and turns it into a set of JSON models
     /// that can be deserialized by libhb.
     /// </summary>
-    internal class EncodeFactory
+    internal class EncodeTaskFactory
     {
         /// <summary>
         /// The create.

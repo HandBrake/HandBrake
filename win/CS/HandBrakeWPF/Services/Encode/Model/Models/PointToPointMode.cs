@@ -17,15 +17,19 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
     public enum PointToPointMode
     {
         [DisplayName("Chapters")]
+        [ShortName("chapter")]
         Chapters = 0,
 
         [DisplayName("Seconds")]
+        [ShortName("time")]
         Seconds,
 
         [DisplayName("Frames")]
+        [ShortName("frame")]
         Frames,
 
         [DisplayName("Preview")]
+        [ShortName("preview")]
         Preview,
     }
 }

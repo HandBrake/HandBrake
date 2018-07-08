@@ -63,6 +63,11 @@ namespace HandBrakeWPF.Services.Scan.Model
             this.Bitrate = bitrate;
         }
 
+        public Audio(int trackNumber)
+        {
+            this.TrackNumber = trackNumber;
+        }
+
         /// <summary>
         /// Gets or sets The track number of this Audio Track
         /// </summary>

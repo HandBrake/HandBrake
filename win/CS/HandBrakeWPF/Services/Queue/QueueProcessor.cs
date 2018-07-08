@@ -16,6 +16,7 @@ namespace HandBrakeWPF.Services.Queue
     using System.Linq;
     using System.Xml.Serialization;
 
+    using HandBrake.Interop.Interop.Json.Queue;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
 
@@ -43,10 +44,6 @@ namespace HandBrakeWPF.Services.Queue
     public class QueueProcessor : Interfaces.IQueueProcessor
     {
         #region Constants and Fields
-
-        /// <summary>
-        /// A Lock object to maintain thread safety
-        /// </summary>
         private static readonly object QueueLock = new object();
         private readonly IUserSettingService userSettingService;
         private readonly BindingList<QueueTask> queue = new BindingList<QueueTask>();
@@ -228,12 +225,6 @@ namespace HandBrakeWPF.Services.Queue
             }
         }
 
-        /// <summary>
-        /// Export the Queue the standardised JSON format.
-        /// </summary>
-        /// <param name="exportPath">
-        /// The export Path.
-        /// </param>
         public void ExportJson(string exportPath)
         {
             List<QueueTask> jobs = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
@@ -247,6 +238,29 @@ namespace HandBrakeWPF.Services.Queue
                 strm.Write(json);
                 strm.Close();
                 strm.Dispose();
+            }
+        }
+
+        public void ImportJson(string path)
+        {
+            List<Task> tasks;
+            using (StreamReader reader = new StreamReader(path))
+            {
+                string fileContent = reader.ReadToEnd();
+                tasks = QueueFactory.GetQueue(fileContent);
+
+                if (tasks != null)
+                {
+                    foreach (Task task in tasks)
+                    {
+                        // TODO flesh out.
+                        EncodeTask encodeTask = EncodeTaskImportFactory.Create(task.Job);
+                        QueueTask queueTask = new QueueTask();
+                        queueTask.Task = encodeTask;
+
+                        this.queue.Add(queueTask);
+                    }
+                }
             }
         }
 

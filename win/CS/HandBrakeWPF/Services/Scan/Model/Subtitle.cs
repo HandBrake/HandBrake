@@ -29,6 +29,11 @@ namespace HandBrakeWPF.Services.Scan.Model
         {
         }
 
+        public Subtitle(int sourceId)
+        {
+            this.SourceId = sourceId;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Subtitle"/> class.
         /// </summary>
