@@ -145,7 +145,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     hb_log("encavcodecInit: H.265 (Nvidia NVENC)");
                     codec = avcodec_find_encoder_by_name("hevc_nvenc");
                     break;
-                case HB_VCODEC_FFMPEG_VCE_H264:
+                case HB_VCODEC_FFMPEG_VCE_H265:
                     hb_log("encavcodecInit: H.265 (AMD VCE)");
                     codec = avcodec_find_encoder_by_name("hevc_amf");
                     break;
