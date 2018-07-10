@@ -57,9 +57,7 @@
 
     _backLayer = [CALayer layer];
     [_backLayer setBounds:CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height)];
-    CGColorRef white = CGColorCreateGenericRGB(1.0, 1.0, 1.0, 1.0);
-    [_backLayer setBackgroundColor: white];
-    CFRelease(white);
+    [_backLayer setBackgroundColor: NSColor.whiteColor.CGColor];
     [_backLayer setShadowOpacity:0.5f];
     [_backLayer setShadowOffset:CGSizeMake(0, 0)];
     [_backLayer setAnchorPoint:CGPointMake(0, 0)];

@@ -32,9 +32,9 @@
     return @"HBPlayerHUDController";
 }
 
-- (void)loadView
+- (void)viewDidLoad
 {
-    [super loadView];
+    [super viewDidLoad];
 
     if ([[NSFont class] respondsToSelector:@selector(monospacedDigitSystemFontOfSize:weight:)]) {
         _monospacedAttr = @{NSFontAttributeName: [NSFont monospacedDigitSystemFontOfSize:[NSFont smallSystemFontSize] weight:NSFontWeightRegular]};
@@ -66,23 +66,20 @@
     {
         [self _buildTracksMenu];
 
-        // 10.7 does not supports weak NSViewController,
-        // so use self and disable the warning for now.
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-retain-cycles"
+        __weak HBPlayerHUDController *weakSelf = self;
 
         self.periodicObserver = [self.player addPeriodicTimeObserverUsingBlock:^(NSTimeInterval time) {
-            [self _refreshUI];
+            [weakSelf _refreshUI];
         }];
 
         self.rateObserver = [self.player addRateObserverUsingBlock:^{
-            if (self.player.rate != 0.0)
+            if (weakSelf.player.rate != 0.0)
             {
-                self.playButton.image = [NSImage imageNamed:@"PauseTemplate"];
+                weakSelf.playButton.image = [NSImage imageNamed:@"PauseTemplate"];
             }
             else
             {
-                self.playButton.image = [NSImage imageNamed:@"PlayTemplate"];
+                weakSelf.playButton.image = [NSImage imageNamed:@"PlayTemplate"];
             }
         }];
 

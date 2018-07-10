@@ -52,9 +52,9 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
     return self;
 }
 
-- (void)loadView
+- (void)viewDidLoad
 {
-    [super loadView];
+    [super viewDidLoad];
     self.previewViewController.view.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
     self.previewViewController.view.frame = NSMakeRect(0, 0, self.previewView.frame.size.width, self.previewView.frame.size.height);
     [self.previewView addSubview:self.previewViewController.view];
@@ -117,16 +117,13 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
     }
     else if (context == HBSummaryViewControllerContainerContext)
     {
-        if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_10 && change[NSKeyValueChangeNewKey])
+        if ([change[NSKeyValueChangeNewKey] integerValue] & 0x030000)
         {
-            if ([change[NSKeyValueChangeNewKey] integerValue] & 0x030000)
-            {
-                self.bottomOptionsConstrain.active = YES;
-            }
-            else
-            {
-                self.bottomOptionsConstrain.active = NO;
-            }
+            self.bottomOptionsConstrain.active = YES;
+        }
+        else
+        {
+            self.bottomOptionsConstrain.active = NO;
         }
         [self updateTracks:nil];
     }

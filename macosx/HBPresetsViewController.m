@@ -83,9 +83,9 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     return self;
 }
 
-- (void)loadView
+- (void)viewDidLoad
 {
-    [super loadView];
+    [super viewDidLoad];
 
     if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_10)
     {

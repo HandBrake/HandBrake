@@ -85,19 +85,6 @@
 
 #pragma mark -- Private Methods
 
-- (CGColorRef)copyNSColorToCGColor:(NSColor *)color
-{
-    // CGColor property of NSColor has been added only in 10.8,
-    // we need to support 10.7 too.
-    NSInteger numberOfComponents = [color numberOfComponents];
-    CGFloat components[numberOfComponents];
-    CGColorSpaceRef colorSpace = [[color colorSpace] CGColorSpace];
-    [color getComponents:(CGFloat *)&components];
-    CGColorRef cgColor = CGColorCreate(colorSpace, components);
-
-    return cgColor;
-}
-
 - (void)HB_refreshBadge
 {
     if (_badgeValue.length)
@@ -194,9 +181,8 @@
         CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, radius);
         CGContextAddArcToPoint(context, minx, maxy, minx, midy, radius);
         CGContextClosePath(context);
-        CGColorRef fillColor = [self copyNSColorToCGColor:_badgeFillColor];
+        CGColorRef fillColor = _badgeFillColor.CGColor;
         CGContextSetFillColorWithColor(context,fillColor);
-        CFRelease(fillColor);
         CGContextDrawPath(context, kCGPathFill);
 
         // Draw the text

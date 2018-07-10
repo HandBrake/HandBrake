@@ -180,9 +180,9 @@
     self.chapterTitles = job.chapterTitles;
 }
 
-- (void)loadView
+- (void)viewDidLoad
 {
-    [super loadView];
+    [super viewDidLoad];
     self.table.doubleAction = @selector(doubleClickAction:);
 }
 

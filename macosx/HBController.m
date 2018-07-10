@@ -102,7 +102,7 @@
 
 @property (nonatomic, weak) IBOutlet HBToolbarBadgedItem *showQueueToolbarItem;
 
-@property (nonatomic, unsafe_unretained) IBOutlet NSView *openTitleView;
+@property (nonatomic, weak) IBOutlet NSView *openTitleView;
 @property (nonatomic, readwrite) BOOL scanSpecificTitle;
 @property (nonatomic, readwrite) NSInteger scanSpecificTitleIdx;
 

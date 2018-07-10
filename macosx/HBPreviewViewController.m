@@ -38,9 +38,9 @@
     return self;
 }
 
-- (void)loadView
+- (void)viewDidLoad
 {
-    [super loadView];
+    [super viewDidLoad];
     self.visible = YES;
     self.previewView.showShadow = NO;
 

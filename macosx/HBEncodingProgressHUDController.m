@@ -20,16 +20,6 @@
     return @"HBEncodingProgressHUDController";
 }
 
-- (void)loadView
-{
-    [super loadView];
-
-    if (NSClassFromString(@"NSVisualEffectView") == NO)
-    {
-        self.infoLabel.textColor = [NSColor whiteColor];
-    }
-}
-
 - (BOOL)canBeHidden
 {
     return NO;

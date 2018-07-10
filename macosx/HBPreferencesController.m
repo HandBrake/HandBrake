@@ -104,15 +104,14 @@
 }
 
 /**
- * -[HBPreferencesController awakeFromNib]
  *
  * Called after all the outlets in the nib file have been attached. Sets up the
  * toolbar and shows the "General" pane.
  *
  */
-- (void) awakeFromNib
+- (void)windowDidLoad
 {
-    NSToolbar * toolbar = [[NSToolbar alloc] initWithIdentifier: @"Preferences Toolbar"];
+    NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier: @"Preferences Toolbar"];
     [toolbar setDelegate: self];
     [toolbar setAllowsUserCustomization: NO];
     [toolbar setDisplayMode: NSToolbarDisplayModeIconAndLabel];
@@ -294,7 +293,7 @@
             view.hidden = YES;
 
             [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-                if ([context respondsToSelector:@selector(setAllowsImplicitAnimation:)] && NSClassFromString(@"NSVisualEffectView"))
+                if ([context respondsToSelector:@selector(setAllowsImplicitAnimation:)])
                 {
                     context.allowsImplicitAnimation = YES;
                 }

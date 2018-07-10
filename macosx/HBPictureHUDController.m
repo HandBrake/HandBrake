@@ -30,17 +30,9 @@
     return @"HBPictureHUDController";
 }
 
-- (void)loadView
+- (void)viewDidLoad
 {
-    [super loadView];
-
-    if (NSClassFromString(@"NSVisualEffectView") == NO)
-    {
-        self.scaleLabel.textColor = [NSColor whiteColor];
-        self.infoLabel.textColor = [NSColor whiteColor];
-        self.durationLabel.textColor = [NSColor whiteColor];
-        self.durationUnitLabel.textColor = [NSColor whiteColor];
-    }
+    [super viewDidLoad];
 
     // we set the preview length popup in seconds
     [self.durationPopUp removeAllItems];

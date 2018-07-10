@@ -60,7 +60,6 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 @property (nonatomic, readwrite) NSTimeInterval modifiedTime;
 
 @property (nonatomic, readonly) NSSet *objectClasses;
-@property (nonatomic, readonly) BOOL requiresSecureCoding;
 
 @property (nonatomic, readonly) sem_t *mutex;
 @property (nonatomic, readwrite) uint32_t mutexCount;
@@ -77,12 +76,6 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
         _fileURL = [fileURL copy];
         _array = [[NSMutableArray alloc] init];
         _objectClasses = [NSSet setWithObjects:[NSMutableArray class], objectClass, nil];
-
-        // Enable secure coding only on 10.9 and later
-        if ([NSURL instancesRespondToSelector:@selector(fileSystemRepresentation)])
-        {
-            _requiresSecureCoding = YES;
-        }
 
         NSString *identifier = [[NSBundle mainBundle] bundleIdentifier];
         NSArray *runningInstances = [NSRunningApplication runningApplicationsWithBundleIdentifier:identifier];
@@ -204,18 +197,11 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
     NSMutableArray *jobsArray = nil;
     @try
     {
-        if (self.requiresSecureCoding)
-        {
-            NSData *queue = [NSData dataWithContentsOfURL:self.fileURL];
-            NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:queue];
-            unarchiver.requiresSecureCoding = YES;
-            jobsArray = [unarchiver decodeObjectOfClasses:self.objectClasses forKey:NSKeyedArchiveRootObjectKey];
-            [unarchiver finishDecoding];
-        }
-        else
-        {
-            jobsArray = [NSKeyedUnarchiver unarchiveObjectWithFile:self.fileURL.path];
-        }
+        NSData *queue = [NSData dataWithContentsOfURL:self.fileURL];
+        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:queue];
+        unarchiver.requiresSecureCoding = YES;
+        jobsArray = [unarchiver decodeObjectOfClasses:self.objectClasses forKey:NSKeyedArchiveRootObjectKey];
+        [unarchiver finishDecoding];
     }
     @catch (NSException *exception)
     {
