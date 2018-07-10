@@ -88,7 +88,7 @@
         }
 
         // Add the (Any) item.
-        HBLang *item = [[HBLang alloc] initWithLanguage:@"(Any)"
+        HBLang *item = [[HBLang alloc] initWithLanguage:NSLocalizedString(@"(Any)", @"Language selection")
                                             iso639_2code:@"und"];
         if ([languages containsObject:item.iso639_2])
         {

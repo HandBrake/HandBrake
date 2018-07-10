@@ -126,45 +126,45 @@ static NSDictionary            *shortHeightAttr;
     if (self.range.type == HBRangeTypeChapters)
     {
         startStopString = (self.range.chapterStart == self.range.chapterStop) ?
-        [NSString stringWithFormat:@"Chapter %d", self.range.chapterStart + 1] :
-        [NSString stringWithFormat:@"Chapters %d through %d", self.range.chapterStart + 1, self.range.chapterStop + 1];
+        [NSString stringWithFormat:NSLocalizedString(@"Chapter %d", @"Title description"), self.range.chapterStart + 1] :
+        [NSString stringWithFormat:NSLocalizedString(@"Chapters %d through %d", @"Title description"), self.range.chapterStart + 1, self.range.chapterStop + 1];
     }
     else if (self.range.type == HBRangeTypeSeconds)
     {
-        startStopString = [NSString stringWithFormat:@"Seconds %d through %d", self.range.secondsStart, self.range.secondsStop];
+        startStopString = [NSString stringWithFormat:NSLocalizedString(@"Seconds %d through %d", @"Title description"), self.range.secondsStart, self.range.secondsStop];
     }
     else if (self.range.type == HBRangeTypeFrames)
     {
-        startStopString = [NSString stringWithFormat:@"Frames %d through %d", self.range.frameStart, self.range.frameStop];
+        startStopString = [NSString stringWithFormat:NSLocalizedString(@"Frames %d through %d", @"Title description"), self.range.frameStart, self.range.frameStop];
     }
 
     NSMutableString *passesString = [NSMutableString string];
     // check to see if our first subtitle track is Foreign Language Search, in which case there is an in depth scan
     if (self.subtitles.tracks.firstObject.sourceTrackIdx == 1)
     {
-        [passesString appendString:@"1 Foreign Language Search Pass - "];
+        [passesString appendString:NSLocalizedString(@"1 Foreign Language Search Pass - ", @"Title description")];
     }
     if (self.video.qualityType != 1 && self.video.twoPass == YES)
     {
         if (self.video.turboTwoPass == YES)
         {
-            [passesString appendString:@"2 Video Passes First Turbo"];
+            [passesString appendString:NSLocalizedString(@"2 Video Passes First Turbo", @"Title description")];
         }
         else
         {
-            [passesString appendString:@"2 Video Passes"];
+            [passesString appendString:NSLocalizedString(@"2 Video Passes", @"Title description")];
         }
     }
 
     if (passesString.length)
     {
-        [attrString appendString:[NSString stringWithFormat:@" (Title %d, %@, %@) ▸ %@\n",
+        [attrString appendString:[NSString stringWithFormat:NSLocalizedString(@" (Title %d, %@, %@) ▸ %@\n", @"Title description"),
                                   self.titleIdx, startStopString, passesString, self.outputFileName]
                   withAttributes:detailAttr];
     }
     else
     {
-        [attrString appendString:[NSString stringWithFormat:@" (Title %d, %@) ▸ %@\n",
+        [attrString appendString:[NSString stringWithFormat:NSLocalizedString(@" (Title %d, %@) ▸ %@\n", @"Title description"),
                                   self.titleIdx, startStopString, self.outputFileName]
                   withAttributes:detailAttr];
     }
@@ -176,8 +176,9 @@ static NSDictionary            *shortHeightAttr;
 {
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
 
-    [attrString appendString:@"\tPreset: " withAttributes:detailBoldAttr];
     [attrString appendString:@"\t" withAttributes:detailAttr];
+    [attrString appendString:NSLocalizedString(@"Preset:", @"Preset description") withAttributes:detailBoldAttr];
+    [attrString appendString:@" \t" withAttributes:detailAttr];
     [attrString appendString:self.presetName withAttributes:detailAttr];
     [attrString appendString:@"\n" withAttributes:detailAttr];
 
@@ -193,22 +194,22 @@ static NSDictionary            *shortHeightAttr;
 
     if (self.chaptersEnabled)
     {
-        [options appendString:@", Chapter Markers"];
+        [options appendString:NSLocalizedString(@", Chapter Markers", @"Format description")];
     }
 
     if ((self.container & HB_MUX_MASK_MP4) && self.mp4HttpOptimize)
     {
-        [options appendString:@", Web Optimized"];
+        [options appendString:NSLocalizedString(@", Web Optimized", @"Format description")];
     }
 
     if ((self.container & HB_MUX_MASK_MP4) && self.alignAVStart)
     {
-        [options appendString:@", Align A/V Start"];
+        [options appendString:NSLocalizedString(@", Align A/V Start", @"Format description")];
     }
 
     if ((self.container & HB_MUX_MASK_MP4)  && self.mp4iPodCompatible)
     {
-        [options appendString:@", iPod 5G Support"];
+        [options appendString:NSLocalizedString(@", iPod 5G Support", @"Format description")];
     }
 
     if ([options hasPrefix:@", "])
@@ -216,9 +217,11 @@ static NSDictionary            *shortHeightAttr;
         [options deleteCharactersInRange:NSMakeRange(0, 2)];
     }
 
-    [attrString appendString:@"\tFormat: \t" withAttributes:detailBoldAttr];
-    [attrString appendString:options withAttributes:detailAttr];
-    [attrString appendString:@"\n" withAttributes:detailAttr];
+    [attrString appendString:@"\t"      withAttributes:detailAttr];
+    [attrString appendString:NSLocalizedString(@"Format:", @"Format description") withAttributes:detailBoldAttr];
+    [attrString appendString:@" \t"     withAttributes:detailAttr];
+    [attrString appendString:options    withAttributes:detailAttr];
+    [attrString appendString:@"\n"      withAttributes:detailAttr];
 
     return attrString;
 }
@@ -227,8 +230,9 @@ static NSDictionary            *shortHeightAttr;
 {
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
 
-    [attrString appendString:@"\tDestination: "             withAttributes:detailBoldAttr];
     [attrString appendString:@"\t"                          withAttributes:detailAttr];
+    [attrString appendString:NSLocalizedString(@"Destination:", @"Destination description") withAttributes:detailBoldAttr];
+    [attrString appendString:@" \t"                         withAttributes:detailAttr];
     [attrString appendString:self.completeOutputURL.path    withAttributes:detailAttr];
     [attrString appendString:@"\n"                          withAttributes:detailAttr];
 
@@ -242,10 +246,11 @@ static NSDictionary            *shortHeightAttr;
     NSString *pictureInfo = self.picture.summary;
     if (self.picture.keepDisplayAspect)
     {
-        pictureInfo = [pictureInfo stringByAppendingString:@" Keep Aspect Ratio"];
+        pictureInfo = [pictureInfo stringByAppendingString:NSLocalizedString(@" Keep Aspect Ratio", @"Dimensions description")];
     }
-    [attrString appendString:@"\tDimensions: " withAttributes:detailBoldAttr];
-    [attrString appendString:@"\t"             withAttributes:detailAttr];
+    [attrString appendString:@"\t"      withAttributes:detailAttr];
+    [attrString appendString:NSLocalizedString(@"Dimensions:", @"Dimensions description") withAttributes:detailBoldAttr];
+    [attrString appendString:@" \t"             withAttributes:detailAttr];
     [attrString appendString:pictureInfo       withAttributes:detailAttr];
     [attrString appendString:@"\n"             withAttributes:detailAttr];
 
@@ -264,11 +269,11 @@ static NSDictionary            *shortHeightAttr;
     {
         if ([filters.detelecine isEqualToString:@"custom"])
         {
-            [summary appendFormat:@", Detelecine (%@)", filters.detelecineCustomString];
+            [summary appendFormat:@", %@ (%@)", NSLocalizedString(@"Detelecine", @"Dimensions description"), filters.detelecineCustomString];
         }
         else
         {
-            [summary appendFormat:@", Detelecine (%@)", [[[HBFilters detelecinePresetsDict] allKeysForObject:filters.detelecine] firstObject]];
+            [summary appendFormat:@", %@ (%@)", NSLocalizedString(@"Detelecine", @"Dimensions description"), [[[HBFilters detelecinePresetsDict] allKeysForObject:filters.detelecine] firstObject]];
         }
     }
     else if (![filters.deinterlace isEqualToString:@"off"])
@@ -296,13 +301,13 @@ static NSDictionary            *shortHeightAttr;
     // Deblock
     if (filters.deblock > 0)
     {
-        [summary appendFormat:@", Deblock (%d)", filters.deblock];
+        [summary appendFormat:@", %@ (%d)", NSLocalizedString(@"Deblock", @"Filters description"), filters.deblock];
     }
 
     // Denoise
     if (![filters.denoise isEqualToString:@"off"])
     {
-        [summary appendFormat:@", Denoise (%@", [[[HBFilters denoiseTypesDict] allKeysForObject:filters.denoise] firstObject]];
+        [summary appendFormat:@", %@ (%@", NSLocalizedString(@"Denoise", @"Filters description"), [[[HBFilters denoiseTypesDict] allKeysForObject:filters.denoise] firstObject]];
         if (![filters.denoisePreset isEqualToString:@"custom"])
         {
             [summary appendFormat:@", %@", [[[HBFilters denoisePresetDict] allKeysForObject:filters.denoisePreset] firstObject]];
@@ -324,7 +329,7 @@ static NSDictionary            *shortHeightAttr;
     // Sharpen
     if (![filters.sharpen isEqualToString:@"off"])
     {
-        [summary appendFormat:@", Sharpen (%@", [[[HBFilters sharpenTypesDict] allKeysForObject:filters.sharpen] firstObject]];
+        [summary appendFormat:@", %@ (%@", NSLocalizedString(@"Sharpen", @"Filters description"), [[[HBFilters sharpenTypesDict] allKeysForObject:filters.sharpen] firstObject]];
         if (![filters.sharpenPreset isEqualToString:@"custom"])
         {
             [summary appendFormat:@", %@", [[[HBFilters sharpenPresetDict] allKeysForObject:filters.sharpenPreset] firstObject]];
@@ -350,7 +355,7 @@ static NSDictionary            *shortHeightAttr;
     // Grayscale
     if (filters.grayscale)
     {
-        [summary appendString:@", Grayscale"];
+        [summary appendFormat:@", %@", NSLocalizedString(@"Grayscale", @"Filters description")];
     }
 
     if ([summary hasPrefix:@", "])
@@ -361,8 +366,9 @@ static NSDictionary            *shortHeightAttr;
     // Optional String for Picture Filters
     if (summary.length)
     {
-        [attrString appendString:@"\tFilters: " withAttributes:detailBoldAttr];
         [attrString appendString:@"\t"          withAttributes:detailAttr];
+        [attrString appendString:NSLocalizedString(@"Filters:", @"Filters description") withAttributes:detailBoldAttr];
+        [attrString appendString:@" \t"          withAttributes:detailAttr];
         [attrString appendString:summary        withAttributes:detailAttr];
         [attrString appendString:@"\n"          withAttributes:detailAttr];
     }
@@ -376,20 +382,21 @@ static NSDictionary            *shortHeightAttr;
     NSMutableString *videoInfo = [NSMutableString string];
 
     const char *encoderName = hb_video_encoder_get_name(self.video.encoder);
-    [videoInfo appendFormat:@"Encoder: %@, ", encoderName ? @(encoderName) : @"Unknown"];
+    [videoInfo appendFormat:NSLocalizedString(@"Encoder: %@, ", @"Video description"),
+                            encoderName ? @(encoderName) : NSLocalizedString(@"Unknown", @"Video description")];
 
-    [videoInfo appendString:@"Framerate: "];
+    [videoInfo appendString:NSLocalizedString(@"Framerate: ", @"Video description")];
 
     if (self.video.frameRate == 0)
     {
         if (self.video.frameRateMode == 0)
         {
             // we are using same as source with vfr
-            [videoInfo appendFormat:@"Same as source (variable)"];
+            [videoInfo appendFormat:NSLocalizedString(@"Same as source (variable)", @"Video description")];
         }
         else
         {
-            [videoInfo appendFormat:@"Same as source (constant)"];
+            [videoInfo appendFormat:NSLocalizedString(@"Same as source (constant)", @"Video description")];
         }
     }
     else
@@ -397,27 +404,30 @@ static NSDictionary            *shortHeightAttr;
         // we have a specified, constant framerate
         if (self.video.frameRateMode == 0)
         {
-            [videoInfo appendFormat:@"Peak %@ (may be lower)", @(hb_video_framerate_get_name(self.video.frameRate))];
+            [videoInfo appendFormat:NSLocalizedString(@"Peak %@ (may be lower)", @"Video description"), @(hb_video_framerate_get_name(self.video.frameRate))];
         }
         else
         {
-            [videoInfo appendFormat:@"Peak %@ (constant frame rate)", @(hb_video_framerate_get_name(self.video.frameRate))];
+            [videoInfo appendFormat:NSLocalizedString(@"Peak %@ (constant frame rate)", @"Video description"), @(hb_video_framerate_get_name(self.video.frameRate))];
         }
     }
 
     if (self.video.qualityType == 0) // ABR
     {
-        [videoInfo appendFormat:@", Bitrate: %d kbps", self.video.avgBitrate];
+        [videoInfo appendFormat:@", "];
+        [videoInfo appendFormat:NSLocalizedString(@"Bitrate: %d kbps", @"Video description"), self.video.avgBitrate];
     }
     else // CRF
     {
-        [videoInfo appendFormat:@", Constant Quality: %.2f %s" ,self.video.quality, hb_video_quality_get_name(self.video.encoder)];
+        [videoInfo appendFormat:@", "];
+        [videoInfo appendFormat:NSLocalizedString(@"Constant Quality: %.2f %s", @"Video description"), self.video.quality, hb_video_quality_get_name(self.video.encoder)];
     }
 
-    [attrString appendString:@"\tVideo: " withAttributes:detailBoldAttr];
-    [attrString appendString:@"\t" withAttributes:detailAttr];
-    [attrString appendString:videoInfo withAttributes:detailAttr];
-    [attrString appendString:@"\n" withAttributes:detailAttr];
+    [attrString appendString:@"\t"       withAttributes:detailAttr];
+    [attrString appendString:NSLocalizedString(@"Video:", @"Video description") withAttributes:detailBoldAttr];
+    [attrString appendString:@" \t"      withAttributes:detailAttr];
+    [attrString appendString:videoInfo   withAttributes:detailAttr];
+    [attrString appendString:@"\n"       withAttributes:detailAttr];
 
     if (hb_video_encoder_get_presets(self.video.encoder) != NULL)
     {
@@ -432,17 +442,18 @@ static NSDictionary            *shortHeightAttr;
             }
             else
             {
-                [encoderPresetInfo appendString:@"default settings"];
+                [encoderPresetInfo appendString:NSLocalizedString(@"default settings", @"Video description")];
             }
         }
         else
         {
             // we are using the x264 system
-            [encoderPresetInfo appendFormat:@"Preset: %@", self.video.preset];
+            [encoderPresetInfo appendFormat:NSLocalizedString(@"Preset: %@", @"Video description"), self.video.preset];
 
             if (self.video.tune.length || self.video.fastDecode)
             {
-                [encoderPresetInfo appendString:@", Tune: "];
+                [encoderPresetInfo appendString:@", "];
+                [encoderPresetInfo appendString:NSLocalizedString(@"Tune: ", @"Video description")];
 
                 if (self.video.tune.length)
                 {
@@ -450,24 +461,28 @@ static NSDictionary            *shortHeightAttr;
                 }
                 if (self.video.fastDecode)
                 {
-                    [encoderPresetInfo appendString:@" - fastdecode"];
+                    [encoderPresetInfo appendString:NSLocalizedString(@" - fastdecode", @"Video description")];
                 }
             }
             if (self.video.videoOptionExtra.length)
             {
-                [encoderPresetInfo appendFormat:@", Options: %@", self.video.videoOptionExtra];
+                [encoderPresetInfo appendString:@", "];
+                [encoderPresetInfo appendFormat:NSLocalizedString(@"Options: %@", @"Video description"), self.video.videoOptionExtra];
             }
             if (self.video.profile.length)
             {
-                [encoderPresetInfo appendFormat:@", Profile: %@", self.video.profile];
+                [encoderPresetInfo appendString:@", "];
+                [encoderPresetInfo appendFormat:NSLocalizedString(@"Profile: %@", @"Video description"), self.video.profile];
             }
             if (self.video.level.length)
             {
-                [encoderPresetInfo appendFormat:@", Level: %@", self.video.level];
+                [encoderPresetInfo appendString:@", "];
+                [encoderPresetInfo appendFormat:NSLocalizedString(@"Level: %@", @"Video description"), self.video.level];
             }
         }
-        [attrString appendString:@"\tVideo Options: "   withAttributes:detailBoldAttr];
         [attrString appendString:@"\t"                  withAttributes:detailAttr];
+        [attrString appendString:NSLocalizedString(@"Video Options:", @"Video description") withAttributes:detailBoldAttr];
+        [attrString appendString:@" \t"                 withAttributes:detailAttr];
         [attrString appendString:encoderPresetInfo      withAttributes:detailAttr];
         [attrString appendString:@"\n"                  withAttributes:detailAttr];
     }
@@ -481,13 +496,14 @@ static NSDictionary            *shortHeightAttr;
         }
         else
         {
-            lavcInfo = @"default settings";
+            lavcInfo = NSLocalizedString(@"default settings", @"Video description");
         }
 
-        [attrString appendString:@"\tVideo Options: " withAttributes:detailBoldAttr];
-        [attrString appendString:@"\t"                  withAttributes:detailAttr];
-        [attrString appendString:lavcInfo               withAttributes:detailAttr];
-        [attrString appendString:@"\n"                  withAttributes:detailAttr];
+        [attrString appendString:@"\t"      withAttributes:detailBoldAttr];
+        [attrString appendString:NSLocalizedString(@"Video Options:", @"Video description") withAttributes:detailAttr];
+        [attrString appendString:@" \t"     withAttributes:detailAttr];
+        [attrString appendString:lavcInfo   withAttributes:detailAttr];
+        [attrString appendString:@"\n"      withAttributes:detailAttr];
     }
     
     return attrString;
@@ -498,31 +514,36 @@ static NSDictionary            *shortHeightAttr;
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
     BOOL secondLine = NO;
 
-    [attrString appendString:@"\tAudio: " withAttributes: detailBoldAttr];
+    [attrString appendString:@"\t" withAttributes: detailBoldAttr];
+    [attrString appendString:NSLocalizedString(@"Audio:", @"Audio description") withAttributes: detailBoldAttr];
+    [attrString appendString:@" " withAttributes: detailBoldAttr];
 
     for (HBAudioTrack *audioTrack in self.audio.tracks)
     {
         if (audioTrack.isEnabled)
         {
-            NSMutableString *detailString = [NSMutableString stringWithFormat:@"%@ ▸ Encoder: %@",
+            NSMutableString *detailString = [NSMutableString stringWithFormat:NSLocalizedString(@"%@ ▸ Encoder: %@", @"Audio description"),
                                       self.audio.sourceTracks[audioTrack.sourceTrackIdx][keyAudioTrackName],
                                       @(hb_audio_encoder_get_name(audioTrack.encoder))];
 
             if ((audioTrack.encoder  & HB_ACODEC_PASS_FLAG) == 0)
             {
-                [detailString appendFormat:@", Mixdown: %@, Samplerate: %@, Bitrate: %d kbps",
+                [detailString appendString:@", "];
+                [detailString appendFormat:NSLocalizedString(@"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps", @"Audio description"),
                                             @(hb_mixdown_get_name(audioTrack.mixdown)),
                                             audioTrack.sampleRate ? [NSString stringWithFormat:@"%@ khz", @(hb_audio_samplerate_get_name(audioTrack.sampleRate))] : @"Auto",
                                             audioTrack.bitRate];
 
                 if (0.0 < audioTrack.drc)
                 {
-                    [detailString appendFormat:@", DRC: %.2f", audioTrack.drc];
+                    [detailString appendString:@", "];
+                    [detailString appendFormat:NSLocalizedString(@"DRC: %.2f", @"Audio description"), audioTrack.drc];
                 }
 
                 if (0.0 != audioTrack.gain)
                 {
-                    [detailString appendFormat:@", Gain: %.2f", audioTrack.gain];
+                    [detailString appendString:@", "];
+                    [detailString appendFormat:NSLocalizedString(@"Gain: %.2f", @"Audio description"), audioTrack.gain];
                 }
             }
 
@@ -548,7 +569,9 @@ static NSDictionary            *shortHeightAttr;
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
     BOOL secondLine = NO;
 
-    [attrString appendString:@"\tSubtitles: " withAttributes:detailBoldAttr];
+    [attrString appendString:@"\t" withAttributes: detailBoldAttr];
+    [attrString appendString:NSLocalizedString(@"Subtitles:", @"Subtitles description") withAttributes: detailBoldAttr];
+    [attrString appendString:@" " withAttributes: detailBoldAttr];
 
     for (HBSubtitlesTrack *track in self.subtitles.tracks)
     {
@@ -562,15 +585,18 @@ static NSDictionary            *shortHeightAttr;
 
             if (track.forcedOnly)
             {
-                [detailString appendString:@", Forced Only"];
+                [detailString appendString:@", "];
+                [detailString appendString:NSLocalizedString(@"Forced Only", @"Subtitles description")];
             }
             if (track.burnedIn)
             {
-                [detailString appendString:@", Burned In"];
+                [detailString appendString:@", "];
+                [detailString appendString:NSLocalizedString(@"Burned In", @"Subtitles description")];
             }
             if (track.def)
             {
-                [detailString appendString:@", Default"];
+                [detailString appendString:@", "];
+                [detailString appendString:NSLocalizedString(@"Default", @"Subtitles description")];
             }
 
             [attrString appendString:@"\t" withAttributes: detailAttr];
