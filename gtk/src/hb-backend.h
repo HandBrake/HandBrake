@@ -229,7 +229,6 @@ char * ghb_get_display_aspect_string(double disp_width, double disp_height);
 hb_handle_t* ghb_scan_handle(void);
 hb_handle_t* ghb_queue_handle(void);
 hb_handle_t* ghb_live_handle(void);
-void ghb_sanitize_volname(gchar *name);
 gchar* ghb_create_title_label(const hb_title_t *title);
 gchar* ghb_create_source_label(const hb_title_t * title);
 gchar* ghb_create_volume_label(const hb_title_t * title);
