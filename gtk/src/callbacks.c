@@ -798,7 +798,7 @@ quit_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
     g_application_quit(G_APPLICATION(ud->app));
 }
 
-gboolean
+static gboolean
 uppers_and_unders(gchar *str)
 {
     if (str == NULL) return FALSE;
@@ -824,7 +824,7 @@ enum
     CAMEL_OTHER
 };
 
-void
+static void
 camel_convert(gchar *str)
 {
     gint state = CAMEL_OTHER;
@@ -1181,161 +1181,6 @@ set_destination(signal_user_data_t *ud)
     set_destination_settings(ud, ud->settings);
     ghb_ui_update(ud, "dest_file",
         ghb_dict_get_value(ud->settings, "dest_file"));
-}
-
-static gchar*
-get_file_label(const gchar *filename)
-{
-    gchar *base, *pos, *end;
-
-    base = g_path_get_basename(filename);
-    pos = strrchr(base, '.');
-    if (pos != NULL)
-    {
-        // If the last '.' is within 4 chars of end of name, assume
-        // there is an extension we want to strip.
-        end = &base[strlen(base) - 1];
-        if (end - pos <= 4)
-            *pos = 0;
-    }
-    return base;
-}
-
-static gchar*
-resolve_drive_name(gchar *filename)
-{
-#if defined(_WIN32)
-    if (filename[1] == ':')
-    {
-        gchar drive[4];
-        gchar *name;
-        gint dtype;
-
-        g_strlcpy(drive, filename, 4);
-        dtype = GetDriveType(drive);
-        if (dtype == DRIVE_CDROM)
-        {
-            gchar vname[51], fsname[51];
-            GetVolumeInformation(drive, vname, 50, NULL,
-                                NULL, NULL, fsname, 50);
-            name = g_strdup(vname);
-            return name;
-        }
-    }
-    return NULL;
-#else
-    return NULL;
-#endif
-}
-
-static gboolean
-update_source_label(signal_user_data_t *ud, const gchar *source)
-{
-    GStatBuf stat_buf;
-    gchar *label = NULL;
-    gint len;
-    gchar **path;
-    gchar *start;
-    gchar *filename = g_strdup(source);
-
-    g_debug("update_source_label()");
-    if (g_stat(filename, &stat_buf) == 0)
-    {
-        len = strlen(filename);
-        if (S_ISDIR(stat_buf.st_mode))
-        {
-            // Skip dos drive letters
-#if defined(_WIN32)
-            start = strchr(filename, ':');
-#else
-            start = filename;
-#endif
-            label = resolve_drive_name(filename);
-            if (label != NULL)
-            {
-                if (uppers_and_unders(label))
-                {
-                    camel_convert(label);
-                }
-            }
-            else
-            {
-                if (filename[len-1] == G_DIR_SEPARATOR) filename[len-1] = 0;
-                if (start != NULL)
-                    start++;
-                else
-                    start = filename;
-
-                path = g_strsplit(start, G_DIR_SEPARATOR_S, -1);
-                len = g_strv_length (path);
-                if ((len > 1) && (strcmp("VIDEO_TS", path[len-1]) == 0))
-                {
-                    label = g_strdup(path[len-2]);
-                    if (uppers_and_unders(label))
-                    {
-                        camel_convert(label);
-                    }
-                }
-                else if (len > 0)
-                {
-                    if (path[len-1][0] != 0)
-                    {
-                        label = g_strdup(path[len-1]);
-                        if (uppers_and_unders(label))
-                        {
-                            camel_convert(label);
-                        }
-                    }
-                    else
-                        label = g_strdup("new_video");
-                }
-                else
-                    label = g_strdup("new_video");
-                g_strfreev (path);
-            }
-        }
-        else if (S_ISBLK(stat_buf.st_mode))
-        {
-            // Is regular file or block dev.
-            // Check to see if it is a dvd image
-            label = ghb_dvd_volname(filename);
-            if (label == NULL)
-            {
-                label = get_file_label(filename);
-            }
-            else
-            {
-                if (uppers_and_unders(label))
-                {
-                    camel_convert(label);
-                }
-            }
-        }
-        else
-        {
-            label = get_file_label(filename);
-        }
-    }
-    else
-    {
-        label = get_file_label(filename);
-    }
-    g_free(filename);
-    GtkWidget *widget = GHB_WIDGET (ud->builder, "source_label");
-    if (label != NULL)
-    {
-        gtk_label_set_text (GTK_LABEL(widget), label);
-        ghb_dict_set_string(ud->globals, "volume", label);
-        g_free(label);
-    }
-    else
-    {
-        label = _("No Title Found");
-        gtk_label_set_text (GTK_LABEL(widget), label);
-        ghb_dict_set_string(ud->globals, "volume", label);
-        return FALSE;
-    }
-    return TRUE;
 }
 
 G_MODULE_EXPORT void
@@ -1831,24 +1676,18 @@ ghb_do_scan(
     last_scan_file = NULL;
     if (filename != NULL)
     {
+        const gchar *path;
+        gint preview_count;
+
         last_scan_file = g_strdup(filename);
         ghb_dict_set_string(ud->globals, "scan_source", filename);
-        if (update_source_label(ud, filename))
-        {
-            const gchar *path;
-            gint preview_count;
 
-            show_scan_progress(ud);
-            path = ghb_dict_get_string(ud->globals, "scan_source");
-            prune_logs(ud);
+        show_scan_progress(ud);
+        path = ghb_dict_get_string(ud->globals, "scan_source");
+        prune_logs(ud);
 
-            preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
-            start_scan(ud, path, title_id, preview_count);
-        }
-        else
-        {
-            // TODO: error dialog
-        }
+        preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
+        start_scan(ud, path, title_id, preview_count);
     }
 }
 
@@ -4129,9 +3968,6 @@ ghb_backend_events(signal_user_data_t *ud)
     }
     else if (status.scan.state & GHB_STATE_SCANDONE)
     {
-        const gchar *source;
-        GtkLabel *label;
-
         GtkWidget *widget;
 
         widget = GHB_WIDGET(ud->builder, "sourcetoolbutton");
@@ -4144,9 +3980,6 @@ ghb_backend_events(signal_user_data_t *ud)
         widget = GHB_WIDGET(ud->builder, "source_title_open");
         gtk_widget_set_sensitive(widget, TRUE);
 
-        source = ghb_dict_get_string(ud->globals, "scan_source");
-        update_source_label(ud, source);
-
         hide_scan_progress(ud);
 
         int title_id, titleindex;
@@ -4156,13 +3989,10 @@ ghb_backend_events(signal_user_data_t *ud)
         ghb_update_ui_combo_box(ud, "title", NULL, FALSE);
         load_all_titles(ud, titleindex);
 
-        label = GTK_LABEL(GHB_WIDGET (ud->builder, "source_label"));
-
         ghb_clear_scan_state(GHB_STATE_SCANDONE);
         // Are there really any titles.
         if (title == NULL)
         {
-            gtk_label_set_text(label, _("No Title Found"));
             ghb_ui_update(ud, "title", ghb_string_value("none"));
         }
         else
@@ -5328,7 +5158,6 @@ handle_media_change(const gchar *device, gboolean insert, signal_user_data_t *ud
                 strcmp(device, ud->current_dvd_device) == 0)
             {
                 show_scan_progress(ud);
-                update_source_label(ud, device);
                 gint preview_count;
                 preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
                 ghb_dict_set_string(ud->globals, "scan_source", device);
@@ -5433,7 +5262,6 @@ drive_changed_cb(GVolumeMonitor *gvm, GDrive *gd, signal_user_data_t *ud)
         if (ghb_dict_get_bool(ud->prefs, "AutoScan"))
         {
             show_scan_progress(ud);
-            update_source_label(ud, device);
             gint preview_count;
             preview_count = ghb_dict_get_int(ud->prefs, "preview_count");
             ghb_dict_set_string(ud->globals, "scan_source", device);

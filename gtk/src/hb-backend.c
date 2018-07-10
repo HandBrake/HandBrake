@@ -2049,6 +2049,31 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
     g_signal_connect(combo, "key-press-event", combo_search_key_press_cb, ud);
 }
 
+static void
+ghb_dvd_sanitize_volname(gchar *name)
+{
+    gchar *a, *b;
+
+    a = b = name;
+    while (*b)
+    {
+        switch(*b)
+        {
+        case '<':
+            b++;
+            break;
+        case '>':
+            b++;
+            break;
+        default:
+            *a = *b & 0x7f;
+            a++; b++;
+            break;
+        }
+    }
+    *a = 0;
+}
+
 gchar*
 ghb_create_source_label(const hb_title_t * title)
 {
@@ -2060,7 +2085,7 @@ ghb_create_source_label(const hb_title_t * title)
         volname = strdup(title->name);
         if (title->type == HB_DVD_TYPE)
         {
-            ghb_sanitize_volname(volname);
+            ghb_dvd_sanitize_volname(volname);
         }
         if (title->type == HB_BD_TYPE)
         {
@@ -2080,17 +2105,117 @@ ghb_create_source_label(const hb_title_t * title)
     return source;
 }
 
+static gboolean
+uppers_and_unders(gchar *str)
+{
+    if (str == NULL) return FALSE;
+    str = g_strchomp(g_strchug(str));
+    while (*str)
+    {
+        if (*str == ' ')
+        {
+            return FALSE;
+        }
+        if (*str >= 'a' && *str <= 'z')
+        {
+            return FALSE;
+        }
+        str++;
+    }
+    return TRUE;
+}
+
+enum
+{
+    CAMEL_FIRST_UPPER,
+    CAMEL_OTHER
+};
+
+static void
+camel_convert(gchar *str)
+{
+    gint state = CAMEL_OTHER;
+
+    if (str == NULL) return;
+    while (*str)
+    {
+        if (*str == '_') *str = ' ';
+        switch (state)
+        {
+            case CAMEL_OTHER:
+            {
+                if (*str >= 'A' && *str <= 'Z')
+                    state = CAMEL_FIRST_UPPER;
+                else
+                    state = CAMEL_OTHER;
+
+            } break;
+            case CAMEL_FIRST_UPPER:
+            {
+                if (*str >= 'A' && *str <= 'Z')
+                    *str = *str - 'A' + 'a';
+                else
+                    state = CAMEL_OTHER;
+            } break;
+        }
+        str++;
+    }
+}
+
+static gchar*
+get_file_label(const gchar *filename)
+{
+    gchar *base, *pos, *end;
+
+    base = g_path_get_basename(filename);
+    pos = strrchr(base, '.');
+    if (pos != NULL)
+    {
+        // If the last '.' is within 4 chars of end of name, assume
+        // there is an extension we want to strip.
+        end = &base[strlen(base) - 1];
+        if (end - pos <= 4)
+            *pos = 0;
+    }
+    return base;
+}
+
 gchar*
 ghb_create_volume_label(const hb_title_t * title)
 {
-    char * volname;
+    char * volname = NULL;
 
     if (title != NULL && title->name != NULL && title->name[0] != 0)
     {
-        volname = strdup(title->name);
-        if (title->type == HB_DVD_TYPE)
+        GStatBuf stat_buf;
+
+        if (g_stat(title->path, &stat_buf) == 0)
         {
-            ghb_sanitize_volname(volname);
+            if (!S_ISBLK(stat_buf.st_mode))
+            {
+                volname = get_file_label(title->path);
+            }
+            else
+            {
+                // DVD and BD volume labels are often all upper case
+                volname = strdup(title->name);
+                if (title->type == HB_DVD_TYPE)
+                {
+                    ghb_dvd_sanitize_volname(volname);
+                }
+                if (uppers_and_unders(volname))
+                {
+                    camel_convert(volname);
+                }
+            }
+        }
+        if (volname == NULL)
+        {
+            volname = strdup(title->name);
+            if (title->type == HB_DVD_TYPE)
+            {
+                ghb_dvd_sanitize_volname(volname);
+            }
         }
     }
     else
@@ -4780,31 +4905,6 @@ ghb_get_preview_image(
     return preview;
 }
 
-void
-ghb_sanitize_volname(gchar *name)
-{
-    gchar *a, *b;
-
-    a = b = name;
-    while (*b)
-    {
-        switch(*b)
-        {
-        case '<':
-            b++;
-            break;
-        case '>':
-            b++;
-            break;
-        default:
-            *a = *b & 0x7f;
-            a++; b++;
-            break;
-        }
-    }
-    *a = 0;
-}
-
 gchar*
 ghb_dvd_volname(const gchar *device)
 {
@@ -4813,7 +4913,7 @@ ghb_dvd_volname(const gchar *device)
     if (name != NULL && name[0] != 0)
     {
         name = g_strdup(name);
-        ghb_sanitize_volname(name);
+        ghb_dvd_sanitize_volname(name);
         return name;
     }
     return NULL;
