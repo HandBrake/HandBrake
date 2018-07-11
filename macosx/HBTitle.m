@@ -291,7 +291,7 @@ extern NSString *keySubTrackType;
                 }
                 else
                 {
-                    title = [NSString stringWithFormat:@"Chapter %d", i + 1];
+                    title = [NSString stringWithFormat:NSLocalizedString(@"Chapter %d", "Title -> chapter name"), i + 1];
                 }
 
                 [chapters addObject:[[HBChapter alloc] initWithTitle:title
