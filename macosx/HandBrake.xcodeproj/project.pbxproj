@@ -190,9 +190,7 @@
 		A955128B1A320B02001BFC6F /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A95512881A320A12001BFC6F /* libjansson.a */; };
 		A95BC1E71CD2548A008D6A33 /* volHighTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A95BC1E51CD2548A008D6A33 /* volHighTemplate.pdf */; };
 		A95BC1E81CD2548A008D6A33 /* volLowTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A95BC1E61CD2548A008D6A33 /* volLowTemplate.pdf */; };
-		A9637D8720F7A252001EAE7C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9637D8520F7A252001EAE7C /* InfoPlist.strings */; };
 		A9637D8A20F7A252001EAE7C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9637D8820F7A252001EAE7C /* InfoPlist.strings */; };
-		A9637D8D20F7A252001EAE7C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9637D8B20F7A252001EAE7C /* Localizable.strings */; };
 		A9637D9020F7A252001EAE7C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9637D8E20F7A252001EAE7C /* Localizable.strings */; };
 		A96664B01CCE45BF00DA4A57 /* HBPlayerHUDController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96664AE1CCE45BF00DA4A57 /* HBPlayerHUDController.m */; };
 		A96664B51CCE48F700DA4A57 /* HBPictureHUDController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96664B31CCE48F700DA4A57 /* HBPictureHUDController.m */; };
@@ -483,9 +481,7 @@
 		A9597A291A49749D00007771 /* HBRange+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBRange+UIAdditions.m"; sourceTree = "<group>"; };
 		A95BC1E51CD2548A008D6A33 /* volHighTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = volHighTemplate.pdf; sourceTree = "<group>"; };
 		A95BC1E61CD2548A008D6A33 /* volLowTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = volLowTemplate.pdf; sourceTree = "<group>"; };
-		A9637D8620F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A9637D8920F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A9637D8C20F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9637D8F20F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9637D9120F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBEncodingProgressHUDController.strings; sourceTree = "<group>"; };
 		A9637D9220F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBTitleSelection.strings; sourceTree = "<group>"; };
@@ -1128,8 +1124,6 @@
 				A9AA44791970664A00D7DEFC /* HBUtilities.m */,
 				A9736F041C7DA5FE008F1D18 /* HandBrakeKit.h */,
 				A9736F061C7DA5FE008F1D18 /* Info.plist */,
-				A9637D8B20F7A252001EAE7C /* Localizable.strings */,
-				A9637D8520F7A252001EAE7C /* InfoPlist.strings */,
 			);
 			path = HandBrakeKit;
 			sourceTree = "<group>";
@@ -1572,8 +1566,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9637D8720F7A252001EAE7C /* InfoPlist.strings in Resources */,
-				A9637D8D20F7A252001EAE7C /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1791,28 +1783,12 @@
 			name = MainWindow.xib;
 			sourceTree = "<group>";
 		};
-		A9637D8520F7A252001EAE7C /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A9637D8620F7A252001EAE7C /* de */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		A9637D8820F7A252001EAE7C /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				A9637D8920F7A252001EAE7C /* de */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		A9637D8B20F7A252001EAE7C /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A9637D8C20F7A252001EAE7C /* de */,
-			);
-			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		A9637D8E20F7A252001EAE7C /* Localizable.strings */ = {
