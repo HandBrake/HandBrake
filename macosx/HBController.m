@@ -226,7 +226,7 @@
     self.presetsPopover.behavior = NSPopoverBehaviorSemitransient;
     self.presetsPopover.delegate = self;
 
-    [fPresetsView loadView];
+    [fPresetsView view];
 
     // Set up the summary view
     self.summaryController = [[HBSummaryViewController alloc] init];
