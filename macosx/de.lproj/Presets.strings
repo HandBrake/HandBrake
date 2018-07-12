@@ -1,0 +1,51 @@
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "4tC-UE-40G"; */
+"4tC-UE-40G.title" = "Text Cell";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Delete Preset"; ObjectID = "b3V-8w-euU"; */
+"b3V-8w-euU.ibExternalAccessibilityDescription" = "Voreinstellung löschen";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Delete the selected preset."; ObjectID = "b3V-8w-euU"; */
+"b3V-8w-euU.ibShadowedToolTip" = "Lösche die ausgewählte Voreinstellung.";
+
+/* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
+"cm5-Kl-dB3.title" = "Offizielle Voreinstellungen zurücksetzen";
+
+/* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "D2t-YG-Frn"; */
+"D2t-YG-Frn.title" = "Zum Standard machen";
+
+/* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
+"Io0-Vm-Qez.title" = "Neue Kategorie";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "New Preset"; ObjectID = "kfi-wq-mgV"; */
+"kfi-wq-mgV.ibExternalAccessibilityDescription" = "Neue Voreinstellung";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Create a new custom preset based on the currently selected settings."; ObjectID = "kfi-wq-mgV"; */
+"kfi-wq-mgV.ibShadowedToolTip" = "Erstellt neue benutzerdefinierte Voreinstellungen basierend auf den momentanen Einstellungen.";
+
+/* Class = "NSMenu"; title = "Presets Action Menu"; ObjectID = "LQk-kD-5sj"; */
+"LQk-kD-5sj.title" = "Voreinstellungsmenüoptionen";
+
+/* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
+"LUl-ag-Iu6.title" = "Importieren…";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
+"oBC-Nh-TwB.title" = "Table View Cell";
+
+/* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
+"r4V-6L-SO8.title" = "Voreinstellungen";
+
+/* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Presets"; ObjectID = "uad-bt-uKD"; */
+"uad-bt-uKD.ibExternalAccessibilityDescription" = "Voreinstellungen";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.\n\nOverrides all encode settings. Settings may be further adjusted after selecting a preset."; ObjectID = "uad-bt-uKD"; */
+"uad-bt-uKD.ibShadowedToolTip" = "Voreinstellungen sind eine Gruppe con Enkodiereinstellungen, zugeschnitten auf ein bestimmtes Szenario. Es ist die Voreinstellung auszuwählen, die am besten zu den jeweiligen Bedürfnissen passt.\n\nOverrides all encode settings. Settings may be further adjusted after selecting a preset.";
+
+/* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
+"xEQ-Un-J0n.title" = "Exportieren…";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Additional Options"; ObjectID = "Ybq-Zt-sta"; */
+"Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Zusätzliche Optionen";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Show additional options."; ObjectID = "Ybq-Zt-sta"; */
+"Ybq-Zt-sta.ibShadowedToolTip" = "Zeige zusätzliche Optionen.";
+

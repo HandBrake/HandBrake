@@ -1,0 +1,57 @@
+/* Class = "NSTextFieldCell"; title = "Tracks:"; ObjectID = "3mF-Bb-Gon"; */
+"3mF-Bb-Gon.title" = "Spuren:";
+
+/* Class = "NSTextFieldCell"; title = "Size:"; ObjectID = "B4a-co-0ly"; */
+"B4a-co-0ly.title" = "Größe:";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Filters summary"; ObjectID = "BHq-Mt-3eA"; */
+"BHq-Mt-3eA.ibExternalAccessibilityDescription" = "Filterübersicht";
+
+/* Class = "NSButtonCell"; title = "Align A/V Start"; ObjectID = "De0-Je-MAm"; */
+"De0-Je-MAm.title" = "A/V synchron";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists."; ObjectID = "fPv-Vw-I89"; */
+"fPv-Vw-I89.ibShadowedToolTip" = "Gleicht die Zeitleiste der Video- und Tonspur aneinander an, indem leere Bilder hinzugefügt werden oder Bilder entfernt werden. Kann die Audio/Video-Synchronisation bei manchen defekten Abspielgeräten verbessern, die keine MP4-Änderungslisten mehr berücksichtigen.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
+"Jaw-pH-rhf.ibExternalAccessibilityDescription" = "Größenübersicht";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
+"lUi-Oc-208.ibShadowedToolTip" = "Optimiert MP4 für den schrittweißen Download. Nach der Enkodierung werden die Daten so umgeschrieben, dass ein direktes Abspielen übers Internet ermöglicht wird ohne den gesamten Film herunterladen zu müssen.";
+
+/* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
+"m5a-0z-QQ4.ibExternalAccessibilityDescription" = "Vorschau";
+
+/* Class = "NSTextFieldCell"; title = "Filters:"; ObjectID = "OCw-f6-uA0"; */
+"OCw-f6-uA0.title" = "Filter:";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Q1Z-yT-7iY"; */
+"Q1Z-yT-7iY.title" = "OtherViews";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility."; ObjectID = "QKv-GR-d2g"; */
+"QKv-GR-d2g.ibShadowedToolTip" = "Fügt einen speziellen MP4-Marker hinzu um das Abspielen auf alten iPod der 5. Generation (ca. 2006) zu ermöglichen.";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "RIB-ME-Yhh"; */
+"RIB-ME-Yhh.title" = "Keine";
+
+/* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "RXJ-DZ-4mh"; */
+"RXJ-DZ-4mh.title" = "Format:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility."; ObjectID = "txV-1R-WoD"; */
+"txV-1R-WoD.ibShadowedToolTip" = "Kontainerformat. Video, Audio und andere Spuren werden zu einer Datei kombiniert. Kann die Kompatibilität beeinflussen.";
+
+/* Class = "NSButtonCell"; title = "Web Optimized"; ObjectID = "wcc-5d-Dgj"; */
+"wcc-5d-Dgj.title" = "Web-optimiert";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "xmy-Jl-mR4"; */
+"xmy-Jl-mR4.title" = "Keine";
+
+/* Class = "NSTextFieldCell"; title = "None"; ObjectID = "xzc-qg-AMn"; */
+"xzc-qg-AMn.title" = "Keine";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Tracks summary"; ObjectID = "yRE-5c-FhX"; */
+"yRE-5c-FhX.ibExternalAccessibilityDescription" = "Spurübersicht";
+
+/* Class = "NSButtonCell"; title = "iPod 5G Support"; ObjectID = "zz5-qY-GSA"; */
+"zz5-qY-GSA.title" = "iPod 5G-Unterstützung";
+
