@@ -2474,7 +2474,7 @@ ghb_reload_queue(signal_user_data_t *ud)
 find_pid:
     pid = ghb_find_pid_file();
     if (pid < 0)
-        return FALSE;
+        goto done;
 
     queue = ghb_load_old_queue(pid);
     ghb_remove_old_queue_file(pid);
@@ -2521,6 +2521,10 @@ find_pid:
         ghb_save_queue(ud->queue);
         ghb_update_pending(ud);
     }
+
+done:
+    ghb_write_pid_file();
+
     return FALSE;
 }
 

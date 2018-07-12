@@ -871,16 +871,9 @@ ghb_find_pid_file()
             if (strncmp(file, "ghb.pid.", 8) == 0)
             {
                 gchar *path;
-                pid_t  my_pid;
                 int    pid;
 
                 sscanf(file, "ghb.pid.%d", &pid);
-                my_pid = getpid();
-                if (my_pid == pid)
-                {
-                    file = g_dir_read_name(gdir);
-                    continue;
-                }
                 path = g_strdup_printf("%s/%s", config, file);
 
 #if !defined(_WIN32)

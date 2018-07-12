@@ -993,8 +993,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
         ghb_override_user_config_dir(arg_config_dir);
     }
 
-    ghb_write_pid_file();
-
     // map application actions (menu callbacks)
     map_actions(app, ud);
 
