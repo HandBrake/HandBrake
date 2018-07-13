@@ -10,23 +10,18 @@
 namespace HandBrakeWPF.Services.Encode.Factories
 {
     using System;
-    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using System.Windows.Forms.VisualStyles;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Json.Encode;
     using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Model;
-
+    using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Encode.Model.Models.Video;
     using HandBrakeWPF.Utilities;
-    using HandBrakeWPF.ViewModels.Interfaces;
-
-    using Newtonsoft.Json.Linq;
 
     using AudioEncoder = Model.Models.AudioEncoder;
     using AudioEncoderRateType = Model.Models.AudioEncoderRateType;
@@ -48,7 +43,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
          * TODO
          * 1. Reconstruct the Config
          * 2. Reconstruct Queue State
-         * 3. Filters
+         * 3. Update JSON API. See #1481
          */
 
         internal static EncodeTask Create(JsonEncodeObject job)
@@ -314,8 +309,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (rotationFilter != null)
             {
                 var filterSettings = rotationFilter.Settings;
-                task.Rotation = filterSettings.Value<int>("angle");  // TODO split the string.
-                task.FlipVideo = filterSettings.Value<bool>("hflip");
+                task.Rotation = filterSettings.Value<int>("angle");
+                task.FlipVideo = filterSettings.Value<string>("hflip") == "1";
             }
 
             // Deblock
@@ -323,7 +318,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (deblockFilter != null)
             {
                 var filterSettings = deblockFilter.Settings;
-                task.Deblock = filterSettings.Value<int>("qp");  // TODO Split the string
+                task.Deblock = filterSettings.Value<string>("qp").ToInt(); 
             }
 
             // Sharpen
