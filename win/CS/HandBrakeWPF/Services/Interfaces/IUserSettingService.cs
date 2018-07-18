@@ -9,6 +9,8 @@
 
 namespace HandBrakeWPF.Services.Interfaces
 {
+    using System;
+
     using SettingChangedEventArgs = HandBrakeWPF.EventArgs.SettingChangedEventArgs;
 
     /// <summary>
@@ -49,12 +51,15 @@ namespace HandBrakeWPF.Services.Interfaces
         /// <param name="name">
         /// The name.
         /// </param>
+        /// <param name="convertType">
+        /// The convert Type.
+        /// </param>
         /// <typeparam name="T">
         /// The Type of the setting
         /// </typeparam>
         /// <returns>
         /// The user setting
         /// </returns>
-        T GetUserSetting<T>(string name);
+        T GetUserSetting<T>(string name, Type convertType = null);
     }
 }

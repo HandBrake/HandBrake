@@ -151,7 +151,7 @@ namespace HandBrakeWPF.ViewModels
             this.CanPlay = true;
 
             UseSystemDefaultPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.DefaultPlayer);
-            this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration);
+            this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration, typeof(int));
         }
 
         #endregion
@@ -238,7 +238,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount) - 1;
+                return this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int)) - 1;
             }
         }
 
@@ -345,7 +345,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 List<int> startPoints = new List<int>();
                 for (int i = 1;
-                     i <= this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+                     i <= this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int));
                      i++)
                 {
                     startPoints.Add(i);
@@ -428,7 +428,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void NextPreview()
         {
-            int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+            int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int));
             if ((this.SelectedPreviewImage + 1) == maxPreview)
             {
                 return;

@@ -1325,7 +1325,7 @@ namespace HandBrakeWPF.ViewModels
             this.checkForUpdatesFrequencies.Add("Weekly");
             this.checkForUpdatesFrequencies.Add("Monthly");
 
-            this.CheckForUpdatesFrequency = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck);
+            this.CheckForUpdatesFrequency = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck, typeof(int));
             if (this.CheckForUpdatesFrequency > 1)
             {
                 this.CheckForUpdatesFrequency = 1;
@@ -1380,7 +1380,7 @@ namespace HandBrakeWPF.ViewModels
             this.mp4ExtensionOptions.Add("Automatic");
             this.mp4ExtensionOptions.Add("Always use MP4");
             this.mp4ExtensionOptions.Add("Always use M4V");
-            this.SelectedMp4Extension = this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v);
+            this.SelectedMp4Extension = this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v, typeof(int));
 
             // Remove Underscores
             this.RemoveUnderscores = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore);
@@ -1400,7 +1400,7 @@ namespace HandBrakeWPF.ViewModels
             // Video
             // #############################
             this.EnableQuickSyncDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
-            this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode);
+            this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode, typeof(int));
             this.UseQSVDecodeForNonQSVEnc = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc);
 
             this.EnableQuickSyncEncoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
@@ -1429,7 +1429,7 @@ namespace HandBrakeWPF.ViewModels
             this.logVerbosityOptions.Add(0);
             this.logVerbosityOptions.Add(1);
             this.logVerbosityOptions.Add(2);
-            this.SelectedVerbosity = userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
+            this.SelectedVerbosity = userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity, typeof(int));
 
             // Logs
             this.CopyLogToEncodeDirectory = userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo);
@@ -1462,7 +1462,7 @@ namespace HandBrakeWPF.ViewModels
             this.PreviewPicturesToScan.Add(50);
             this.PreviewPicturesToScan.Add(55);
             this.PreviewPicturesToScan.Add(60);
-            this.SelectedPreviewCount = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+            this.SelectedPreviewCount = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int));
 
             // x264 step
             this.ConstantQualityGranularity.Clear();
@@ -1472,7 +1472,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedGranulairty = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString("0.00", CultureInfo.InvariantCulture);
 
             // Min Title Length
-            this.MinLength = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration);
+            this.MinLength = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration, typeof(int));
 
             // Use dvdnav
             this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);

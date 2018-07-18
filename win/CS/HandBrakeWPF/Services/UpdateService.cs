@@ -77,7 +77,7 @@ namespace HandBrakeWPF.Services
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus))
             {
                 DateTime lastUpdateCheck = this.userSettingService.GetUserSetting<DateTime>(UserSettingConstants.LastUpdateCheckDate);
-                int checkFrequency = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck) == 0 ? 7 : 30;
+                int checkFrequency = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck, typeof(int)) == 0 ? 7 : 30;
 
                 if (DateTime.Now.Subtract(lastUpdateCheck).TotalDays > checkFrequency)
                 {

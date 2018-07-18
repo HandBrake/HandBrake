@@ -740,7 +740,7 @@ namespace HandBrakeWPF.Services.Presets
                 }
 
                 // Force Upgrade of presets
-                if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.ForcePresetReset) < ForcePresetReset)
+                if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.ForcePresetReset, typeof(int)) < ForcePresetReset)
                 {
                     this.userSettingService.SetUserSetting(UserSettingConstants.ForcePresetReset, ForcePresetReset);
 

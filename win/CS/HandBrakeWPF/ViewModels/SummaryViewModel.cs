@@ -368,7 +368,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void NextPreview()
         {
-            int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+            int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int));
             if (this.selectedPreview == maxPreview)
             {
                 return;
@@ -384,7 +384,7 @@ namespace HandBrakeWPF.ViewModels
 
         public void PreviousPreview()
         {
-            int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
+            int maxPreview = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int));
             if (this.selectedPreview <= 1)
             {
                 return;
@@ -409,7 +409,7 @@ namespace HandBrakeWPF.ViewModels
                 this.IsPreviousPreviewControlVisible = false;
             }
 
-            if (this.selectedPreview < this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount))
+            if (this.selectedPreview < this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int)))
             {
                 this.IsNextPreviewControlVisible = true;
             }
@@ -440,7 +440,7 @@ namespace HandBrakeWPF.ViewModels
             // Make sure the output extension is set correctly based on the users preferences and selection.
             if (newExtension == ".mp4" || newExtension == ".m4v")
             {
-                switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
+                switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v, typeof(int)))
                 {
                     case 0: // Auto
                         newExtension = MP4Helper.RequiresM4v(this.Task) ? ".m4v" : ".mp4";
@@ -506,7 +506,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.AspectInfo);
 
             // Preview
-            this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount));
+            this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int)));
             this.NotifyOfPropertyChange(() => this.PreviewInfo);
 
             this.ShowPreview = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPreviewOnSummaryTab);

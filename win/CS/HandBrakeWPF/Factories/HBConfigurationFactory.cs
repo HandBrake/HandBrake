@@ -38,15 +38,15 @@ namespace HandBrakeWPF.Factories
                                              IsDvdNavDisabled = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
                                              EnableQuickSyncDecoding = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding), 
                                              UseQSVDecodeForNonQSVEnc = UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc),
-                                             ScalingMode = UserSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode), 
-                                             PreviewScanCount = UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount), 
-                                             Verbosity = UserSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity), 
-                                             MinScanDuration = UserSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration), 
+                                             ScalingMode = UserSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode, typeof(int)), 
+                                             PreviewScanCount = UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int)), 
+                                             Verbosity = UserSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity, typeof(int)), 
+                                             MinScanDuration = UserSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration, typeof(int)), 
                                              SaveLogToCopyDirectory = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogToCopyDirectory), 
                                              SaveLogWithVideo = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo), 
                                              SaveLogCopyDirectory = UserSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory), 
                                              RemoteServiceEnabled = UserSettingService.GetUserSetting<bool>(UserSettingConstants.RemoteServiceEnabled),
-                                             RemoteServicePort = UserSettingService.GetUserSetting<int>(UserSettingConstants.RemoteServicePort)
+                                             RemoteServicePort = UserSettingService.GetUserSetting<int>(UserSettingConstants.RemoteServicePort, typeof(int))
             };
 
             return config;
