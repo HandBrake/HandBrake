@@ -555,6 +555,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (!string.IsNullOrEmpty(directory))
                 {
+                    if (!File.Exists(directory) && !directory.EndsWith("\\"))
+                    {
+                        directory = directory + "\\";
+                    }
+
                     directory = Path.GetDirectoryName(directory);
                     if (directory != null && Directory.Exists(directory))
                     {
