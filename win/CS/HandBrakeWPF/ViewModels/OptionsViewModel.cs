@@ -1070,8 +1070,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                string foundGpu = Utilities.SystemInfo.GetGPUInfo.FirstOrDefault(g => g.Contains("AMD"));
-                return SystemInfo.IsVceH264Available && !string.IsNullOrEmpty(foundGpu);
+                return SystemInfo.IsVceH264Available;
             }
         }
 
