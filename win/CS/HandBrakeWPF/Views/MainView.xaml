@@ -322,13 +322,13 @@
                 <Grid Grid.Row="1" Margin="0,5,5,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" MaxWidth="272" />
+                        <ColumnDefinition Width="*" MaxWidth="270" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
                     <Label FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Title}"  Grid.Column="0"  />
                     <ComboBox Name="Titles"  Grid.Column="1" 
-                              MinWidth="100" Margin="17,0,0,0"
+                              MinWidth="100" Margin="16,0,0,0"
                               ItemsSource="{Binding ScannedSource.Titles}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Title}"
                               SelectedItem="{Binding Path=SelectedTitle}" >
