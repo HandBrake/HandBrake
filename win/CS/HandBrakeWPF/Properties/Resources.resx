@@ -885,4 +885,10 @@ Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}</value>
     <value>The file '{0}' already exists!
 Would you like to overwrite it?</value>
   </data>
+  <data name="Clipboard_Unavailable" xml:space="preserve">
+    <value>The system clipboard is currently unavailable.</value>
+  </data>
+  <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
+    <value>This may be due to another application monitoring or locking the clipboard for its own use. You will not be able to use the clipboard until it is unlocked.</value>
+  </data>
 </root>

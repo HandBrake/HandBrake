@@ -13,6 +13,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows;
 
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -20,32 +21,20 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class ErrorViewModel : ViewModelBase, IErrorViewModel
     {
-        #region Constants and Fields
+        private readonly IErrorService errorService;
 
-        /// <summary>
-        /// The details.
-        /// </summary>
         private string details;
-
-        /// <summary>
-        /// The error message.
-        /// </summary>
         private string errorMessage;
-
-        /// <summary>
-        /// The solution.
-        /// </summary>
         private string solution;
-
-        #endregion
 
         #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ErrorViewModel"/> class.
         /// </summary>
-        public ErrorViewModel()
+        public ErrorViewModel(IErrorService errorService)
         {
+            this.errorService = errorService;
             this.Title = Resources.Error;
             this.ErrorMessage = Resources.ErrorViewModel_UnknownError;
             this.Details = Resources.ErrorViewModel_NoFurtherInformation;
@@ -128,7 +117,14 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Copy()
         {
-            Clipboard.SetDataObject(this.ErrorMessage + Environment.NewLine + this.Details, true);
+            try
+            {
+                Clipboard.SetDataObject(this.ErrorMessage + Environment.NewLine + this.Details, true);
+            }
+            catch (Exception exc)
+            {
+                this.errorService.ShowError(Resources.Clipboard_Unavailable, Resources.Clipboard_Unavailable_Solution, exc);
+            }
         }
     }
 }

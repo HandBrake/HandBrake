@@ -16,6 +16,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -29,6 +31,8 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class LogViewModel : ViewModelBase, ILogViewModel
     {
+        private readonly IErrorService errorService;
+
         #region Private Fields
 
         private readonly ILog logService;
@@ -40,8 +44,9 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="LogViewModel"/> class.
         /// </summary>
-        public LogViewModel()
+        public LogViewModel(IErrorService errorService)
         {
+            this.errorService = errorService;
             this.logService = LogService.GetLogger();
             this.Title = "Log Viewer";
         }
@@ -78,7 +83,14 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void CopyLog()
         {
-            Clipboard.SetDataObject(this.ActivityLog, true);
+            try
+            {
+                Clipboard.SetDataObject(this.ActivityLog, true);
+            }
+            catch (Exception exc)
+            {
+                this.errorService.ShowError(Resources.Clipboard_Unavailable, Resources.Clipboard_Unavailable_Solution, exc);
+            }
         }
 
         /// <summary>

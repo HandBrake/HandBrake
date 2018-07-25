@@ -576,6 +576,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The system clipboard is currently unavailable..
+        /// </summary>
+        public static string Clipboard_Unavailable {
+            get {
+                return ResourceManager.GetString("Clipboard_Unavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This may be due to another application monitoring or locking the clipboard for its own use. You will not be able to use the clipboard until it is unlocked..
+        /// </summary>
+        public static string Clipboard_Unavailable_Solution {
+            get {
+                return ResourceManager.GetString("Clipboard_Unavailable_Solution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {

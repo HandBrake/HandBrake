@@ -19,6 +19,7 @@ namespace HandBrakeWPF
     using Caliburn.Micro;
 
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Startup;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels;
@@ -175,9 +176,10 @@ namespace HandBrakeWPF
             try
             {
                 IWindowManager windowManager = IoC.Get<IWindowManager>();
+                IErrorService errorService = IoC.Get<IErrorService>();
                 if (windowManager != null)
                 {
-                    ErrorViewModel errorView = new ErrorViewModel();
+                    ErrorViewModel errorView = new ErrorViewModel(errorService);
                     GeneralApplicationException applicationException = null;
                     if (exception.GetType() == typeof(GeneralApplicationException))
                     {
