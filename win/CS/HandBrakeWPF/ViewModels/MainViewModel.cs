@@ -2146,6 +2146,7 @@ namespace HandBrakeWPF.ViewModels
                     // Tab Settings
                     this.isSettingPreset = true;
                     this.IsModifiedPreset = false;
+                    this.SummaryViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.PictureSettingsViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.VideoViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.FiltersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
@@ -2154,7 +2155,6 @@ namespace HandBrakeWPF.ViewModels
                     this.ChaptersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.AdvancedViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.MetaDataViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                    this.SummaryViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.isSettingPreset = false;
                 }
             }
