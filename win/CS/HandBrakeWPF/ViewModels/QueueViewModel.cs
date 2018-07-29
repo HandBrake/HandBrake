@@ -379,23 +379,11 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Can Start Encoding.
-        /// Used by Caliburn Micro to enable/disable the context menu item.
-        /// </summary>
-        /// <returns>
-        /// True when we can start encoding.
-        /// </returns>
-        public bool CanStartQueue()
-        {
-            return !this.IsQueueRunning;
-        }
-
-        /// <summary>
         /// Start Encode
         /// </summary>
         public void StartQueue()
         {
-            if (this.queueProcessor.Count == 0 || !this.QueueTasks.Any(a => a.Status == QueueItemStatus.Waiting || a.Status == QueueItemStatus.InProgress))
+            if (!this.QueueTasks.Any(a => a.Status == QueueItemStatus.Waiting || a.Status == QueueItemStatus.InProgress))
             {
                 this.errorService.ShowMessageBox(
                     Resources.QueueViewModel_NoPendingJobs, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);

@@ -28,6 +28,7 @@
         <Converters:FullPathToFileNameConverter x:Key="filePathToFilenameConverter" />
         <Converters:EnumComboConverter x:Key="enumComboConverter" />
         <Converters:QueueStatusToVisibilityConverter x:Key="queueStatusVisConverter" />
+        <Converters:InverseBooleanConverter x:Key="notBooleanConverter" />
         <Audio:AudioQueueDisplayConverter x:Key="audioTrackDisplayConverter" />
         <Subtitles:SubtitlesQueueDisplayConverter x:Key="subtitleTrackDisplayConverter" />
         <video:EncoderOptionsTooltipConverter x:Key="encoderOptionsTooltipConverter" />
@@ -66,6 +67,7 @@
 
                 <Button Name="Start" DockPanel.Dock="Left" AutomationProperties.Name="Start Queue"
                         cal:Message.Attach="[Event Click] = [Action StartQueue]"
+                        IsEnabled="{Binding IsQueueRunning, Converter={StaticResource notBooleanConverter}}"
                         Visibility="{Binding IsQueueRunning,
                                              Converter={StaticResource boolToVisConverter},
                                              ConverterParameter=true}">
