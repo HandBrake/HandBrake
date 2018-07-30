@@ -344,6 +344,21 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             context->bit_rate = bit_rate_ceiling;
             hb_log( "encavcodec: bit_rate.4 %ld", context->bit_rate);
         }
+        else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
+        {
+            char quality[7];
+            snprintf(quality, 7, "%.2f", job->vquality);
+            av_dict_set( &av_opts, "rc", "cqp", 0 );
+            
+            av_dict_set( &av_opts, "qp_i", quality, 0 );
+            av_dict_set( &av_opts, "qp_p", quality, 0 );
+            
+            if ( job->vcodec != HB_VCODEC_FFMPEG_VCE_H265 )
+            {
+                av_dict_set( &av_opts, "qp_b", quality, 0 );
+            }
+            hb_log( "encavcodec: encoding at CQ %.2f", job->vquality );
+        }
         else
         {
             // These settings produce better image quality than
@@ -917,7 +932,7 @@ static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
         default:
             break;
     }
-
+    
     return 0;
 }
 
