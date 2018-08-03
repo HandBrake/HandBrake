@@ -118,5 +118,10 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// </summary>
         /// <param name="i">The Tab Number</param>
         void SwitchTab(int i);
+
+        /// <summary>
+        /// Browse for and set a destination file.
+        /// </summary>
+        void BrowseDestination();
     }
 }

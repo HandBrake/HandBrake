@@ -48,8 +48,8 @@ namespace HandBrakeWPF.Commands
             {
                 IMainViewModel mainViewModel = IoC.Get<IMainViewModel>();
                 
-                // Start Encode (Ctrl+S)
-                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.S)
+                // Start Encode (Ctrl+E)
+                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.E)
                 {
                     mainViewModel.StartEncode();
                 }
@@ -100,6 +100,12 @@ namespace HandBrakeWPF.Commands
                 if (gesture.Key == Key.F1)
                 {
                     mainViewModel.LaunchHelp();
+                }
+
+                // Browse Destination (Ctrl+S)
+                if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.S)
+                {
+                    mainViewModel.BrowseDestination();
                 }
 
                 // Tabs
