@@ -33,7 +33,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
         }
         else
         {
-            self.textField.textColor = [NSColor blueColor];
+            self.textField.textColor = [NSColor systemBlueColor];
         }
     }
     else
@@ -87,7 +87,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 {
     [super viewDidLoad];
 
-    if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_10)
+    if (NSAppKitVersionNumber >= NSAppKitVersionNumber10_10 && NSAppKitVersionNumber < 1651)
     {
         self.view.appearance = [NSAppearance appearanceNamed:NSAppearanceNameAqua];
     }
