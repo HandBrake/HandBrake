@@ -112,10 +112,13 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         if (filter_dict == NULL)
         {
             retval = NO;
-            NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid custom detelecine settings.",
+            if (outError)
+            {
+                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid custom detelecine settings.",
                                                                                         @"HBFilters -> invalid detelecine custom string description"),
-                                       NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0",                                                                                                            @"HBJob -> invalid detelecine custom settings error recovery suggestion")};
-            *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+                                           NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0",                                                                                                            @"HBJob -> invalid detelecine custom settings error recovery suggestion")};
+                *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+            }
         }
     }
 
@@ -174,10 +177,13 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         if (filter_dict == NULL)
         {
             retval = NO;
-            NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid custom comb detect settings.",
-                                                                                    @"HBFilters -> invalid comb detect custom string description"),
-                                       NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16",                                                                                                            @"HBJob -> invalid comb detect custom settings error recovery suggestion")};
-            *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+            if (outError)
+            {
+                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid custom comb detect settings.",
+                                                                                        @"HBFilters -> invalid comb detect custom string description"),
+                                           NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16",                                                                                                            @"HBJob -> invalid comb detect custom settings error recovery suggestion")};
+                *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+            }
         }
     }
 
@@ -278,19 +284,22 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         if (filter_dict == NULL)
         {
             retval = NO;
-            if (filter_id == HB_FILTER_DEINTERLACE)
+            if (outError)
             {
-                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid Yadif custom settings.",
-                                                                                    @"HBFilters -> invalid Yadif custom string description"),
-                                           NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Yadif syntax: mode=m:parity=p\n\nYadif default: mode=3",                                                                                                            @"HBJob -> invalid Yadif custom settings error recovery suggestion")};
-                *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
-            }
-            else if (filter_id == HB_FILTER_DECOMB)
-            {
-                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid Decomb custom settings.",
-                                                                                        @"HBFilters -> invalid Decomb custom string description"),
-                                           NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7",                                                                                                            @"HBJob -> invalid Decomb custom settings error recovery suggestion")};
-                *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+                if (filter_id == HB_FILTER_DEINTERLACE)
+                {
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid Yadif custom settings.",
+                                                                                            @"HBFilters -> invalid Yadif custom string description"),
+                                               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Yadif syntax: mode=m:parity=p\n\nYadif default: mode=3",                                                                                                            @"HBJob -> invalid Yadif custom settings error recovery suggestion")};
+                    *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+                }
+                else if (filter_id == HB_FILTER_DECOMB)
+                {
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid Decomb custom settings.",
+                                                                                            @"HBFilters -> invalid Decomb custom string description"),
+                                               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7",                                                                                                            @"HBJob -> invalid Decomb custom settings error recovery suggestion")};
+                    *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+                }
             }
         }
     }
@@ -391,19 +400,22 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         if (filter_dict == NULL)
         {
             retval = NO;
-            if (filter_id == HB_FILTER_HQDN3D)
+            if (outError)
             {
-                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid custom HQDN3D settings",
-                                                                                        @"HBFilters -> invalid denoise custom string description"),
-                                           NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nDefault settings: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3",                                                                                                            @"HBJob -> invalid name error recovery suggestion")};
-                *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
-            }
-            else if (filter_id == HB_FILTER_NLMEANS)
-            {
-                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid custom NLMeans settings",
-                                                                                        @"HBFilters -> invalid denoise custom string description"),
-                                           NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nDefault settings: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0",                                                                                                            @"HBJob -> invalid name error recovery suggestion")};
-                *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+                if (filter_id == HB_FILTER_HQDN3D)
+                {
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid custom HQDN3D settings",
+                                                                                            @"HBFilters -> invalid denoise custom string description"),
+                                               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nDefault settings: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3",                                                                                                            @"HBJob -> invalid name error recovery suggestion")};
+                    *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+                }
+                else if (filter_id == HB_FILTER_NLMEANS)
+                {
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid custom NLMeans settings",
+                                                                                            @"HBFilters -> invalid denoise custom string description"),
+                                               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nDefault settings: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0",                                                                                                            @"HBJob -> invalid name error recovery suggestion")};
+                    *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+                }
             }
         }
     }
@@ -538,19 +550,22 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         if (filter_dict == NULL)
         {
             retval = NO;
-            if (filter_id == HB_FILTER_UNSHARP)
+            if (outError)
             {
-                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid unsharp custom settings.",
-                                                                                        @"HBFilters -> invalid unsharp custom string description"),
-                                           NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7",                                                                                                            @"HBJob -> invalid unsharp custom settings error recovery suggestion")};
-                *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
-            }
-            else if (filter_id == HB_FILTER_LAPSHARP)
-            {
-                NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid lapsharp custom settings.",
-                                                                                        @"HBFilters -> invalid lapsharp custom string description"),
-                                           NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap",                                                                                                            @"HBJob -> invalid lapsharp custom settings error recovery suggestion")};
-                *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+                if (filter_id == HB_FILTER_UNSHARP)
+                {
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid unsharp custom settings.",
+                                                                                            @"HBFilters -> invalid unsharp custom string description"),
+                                               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7",                                                                                                            @"HBJob -> invalid unsharp custom settings error recovery suggestion")};
+                    *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+                }
+                else if (filter_id == HB_FILTER_LAPSHARP)
+                {
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid lapsharp custom settings.",
+                                                                                            @"HBFilters -> invalid lapsharp custom string description"),
+                                               NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap",                                                                                                            @"HBJob -> invalid lapsharp custom settings error recovery suggestion")};
+                    *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+                }
             }
         }
     }
