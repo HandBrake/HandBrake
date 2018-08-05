@@ -297,11 +297,17 @@ static hb_buffer_t * CreateSilenceBuf( sync_stream_t * stream,
         return NULL;
     }
     duration = dur;
+    // Although frame size isn't technically important any more, we
+    // keep audio buffer durations <= input audio buffer durations.
     frame_dur = (90000. * stream->audio.audio->config.in.samples_per_frame) /
                           stream->audio.audio->config.in.samplerate;
+    // Audio mixdown occurs in decoders before sync.
+    // So number of channels here is output channel count.
+    // But audio samplerate conversion happens in later here in sync.c
+    // FilterAudioFrame, so samples_per_frame is still the input sample count.
     size = sizeof(float) * stream->audio.audio->config.in.samples_per_frame *
-           av_get_channel_layout_nb_channels(
-                          stream->audio.audio->config.in.channel_layout );
+                           hb_mixdown_get_discrete_channel_count(
+                                    stream->audio.audio->config.out.mixdown);
 
     hb_buffer_list_clear(&list);
     next_pts = pts;
@@ -321,8 +327,8 @@ static hb_buffer_t * CreateSilenceBuf( sync_stream_t * stream,
         // Make certain size is even multiple of sample size * num channels
         size = (int)(duration * stream->audio.audio->config.in.samplerate /
                      90000) * sizeof(float) *
-               av_get_channel_layout_nb_channels(
-                              stream->audio.audio->config.in.channel_layout);
+               hb_mixdown_get_discrete_channel_count(
+                                    stream->audio.audio->config.out.mixdown);
         if (size > 0)
         {
             buf = hb_buffer_init(size);
