@@ -746,6 +746,7 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
 {
     int result;
     int error_count = 0;
+    int retry_count = 0;
     uint8_t buf[192];
     BD_EVENT event;
     uint64_t pos;
@@ -756,26 +757,6 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
     {
         discontinuity = 0;
         result = next_packet( d->bd, buf );
-        if ( result < 0 )
-        {
-            hb_error("bd: Read Error");
-            pos = bd_tell( d->bd );
-            bd_seek( d->bd, pos + 192 );
-            error_count++;
-            if (error_count > 10)
-            {
-                hb_error("bd: Error, too many consecutive read errors");
-                hb_set_work_error(d->h, HB_ERROR_READ);
-                return NULL;
-            }
-            continue;
-        }
-        else if ( result == 0 )
-        {
-            return NULL;
-        }
-
-        error_count = 0;
         while ( bd_get_event( d->bd, &event ) )
         {
             switch ( event.event )
@@ -798,10 +779,55 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
                     bd_read_skip_still( d->bd );
                     break;
 
+                case BD_EVENT_END_OF_TITLE:
+                    hb_log("bd: End of title");
+                    if (result <= 0)
+                    {
+                        return NULL;
+                    }
+                    break;
+
                 default:
                     break;
             }
         }
+
+        if ( result < 0 )
+        {
+            hb_error("bd: Read Error");
+            pos = bd_tell( d->bd );
+            bd_seek( d->bd, pos + 192 );
+            error_count++;
+            if (error_count > 10)
+            {
+                hb_error("bd: Error, too many consecutive read errors");
+                hb_set_work_error(d->h, HB_ERROR_READ);
+                return NULL;
+            }
+            continue;
+        }
+        else if ( result == 0 )
+        {
+            // libbluray returns 0 when it encounters and skips a bad unit.
+            // So retry a few times to be certain there is no more data
+            // to be read.
+            retry_count++;
+            if (retry_count > 1000)
+            {
+                // A unit is 6144 bytes (32 TS packets).  Give up after we've
+                // seen > 6MB of invalid data.
+                return NULL;
+            }
+            continue;
+        }
+
+        if (retry_count > 0)
+        {
+            hb_error("bd: Read Error, skipping bad data.");
+            retry_count = 0;
+        }
+
+        error_count = 0;
         // buf+4 to skip the BD timestamp at start of packet
         if (d->chapter != d->next_chap)
         {
