@@ -18,3 +18,7 @@ endif
 ifeq (freebsd,$(BUILD.system))
     LIBBLURAY.GCC.D += _XOPEN_SOURCE=700
 endif
+
+ifneq (none,$(FFMPEG.GCC.g))
+    LIBBLURAY.GCC.args.extra += -g
+endif
