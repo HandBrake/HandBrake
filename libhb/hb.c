@@ -1805,11 +1805,10 @@ static void thread_func( void * _h )
         {
             hb_thread_close( &h->work_thread );
 
-            hb_log( "libhb: work result = %d",
-                    h->work_error );
+            hb_log( "libhb: work result = %d", h->work_error );
             hb_lock( h->state_lock );
-            h->state.state                = HB_STATE_WORKDONE;
-            h->state.param.workdone.error = h->work_error;
+            h->state.state               = HB_STATE_WORKDONE;
+            h->state.param.working.error = h->work_error;
 
             hb_unlock( h->state_lock );
         }

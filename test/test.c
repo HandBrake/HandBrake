@@ -1022,7 +1022,7 @@ static int HandleEvents(hb_handle_t * h, hb_dict_t *preset_dict)
         }
 #undef p
 
-#define p s.param.workdone
+#define p s.param.working
         case HB_STATE_WORKDONE:
             /* Print error if any, then exit */
             if (json)

@@ -3553,7 +3553,7 @@ update_status(hb_state_t *state, ghb_instance_status_t *status)
         status->state &= ~GHB_STATE_SEARCHING;
     }
 #undef p
-#define p state->param.workdone
+#define p state->param.working
     if (state->state & HB_STATE_WORKDONE)
     {
         status->state |= GHB_STATE_WORKDONE;
@@ -3561,6 +3561,7 @@ update_status(hb_state_t *state, ghb_instance_status_t *status)
         status->state &= ~GHB_STATE_PAUSED;
         status->state &= ~GHB_STATE_WORKING;
         status->state &= ~GHB_STATE_SEARCHING;
+        status->unique_id = p.sequence_id;
         switch (p.error)
         {
         case HB_ERROR_NONE:

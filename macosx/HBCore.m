@@ -456,7 +456,7 @@ typedef void (^HBCoreCleanupHandler)(void);
     }
 
     HBCoreResult result = HBCoreResultDone;
-    switch (_hb_state->param.workdone.error)
+    switch (_hb_state->param.working.error)
     {
         case HB_ERROR_NONE:
             result = HBCoreResultDone;

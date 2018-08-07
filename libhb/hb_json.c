@@ -92,10 +92,11 @@ hb_dict_t* hb_state_to_dict( hb_state_t * state)
         break;
     case HB_STATE_WORKDONE:
         dict = json_pack_ex(&error, 0,
-            "{s:o, s{s:o}}",
+            "{s:o, s{s:o, s:o}}",
             "State", hb_value_string(state_s),
             "WorkDone",
-                "Error",    hb_value_int(state->param.workdone.error));
+                "SequenceID",   hb_value_int(state->param.working.sequence_id),
+                "Error",        hb_value_int(state->param.working.error));
         break;
     case HB_STATE_MUXING:
         dict = json_pack_ex(&error, 0,

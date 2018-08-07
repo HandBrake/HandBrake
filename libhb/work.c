@@ -77,6 +77,25 @@ static void InitWorkState(hb_handle_t *h, int pass_id, int pass, int pass_count)
 
 }
 
+static void SetWorkdoneState(hb_job_t *job)
+{
+    hb_state_t state;
+
+
+    if (job == NULL)
+    {
+        return;
+    }
+    hb_get_state2(job->h, &state);
+
+    state.state                     = HB_STATE_WORKDONE;
+    state.param.working.error       = *job->done_error;
+    state.param.working.sequence_id = job->sequence_id;
+
+    hb_set_state( job->h, &state );
+
+}
+
 /**
  * Iterates through job list and calls do_job for each job.
  * @param _work Handle work object.
@@ -136,8 +155,10 @@ static void work_func( void * _work )
             do_job( job );
             *(work->current_job) = NULL;
         }
-        // Clean up any incomplete jobs
-        for (; pass < pass_count; pass++)
+        SetWorkdoneState(job);
+
+        // Clean job passes
+        for (pass = 0; pass < pass_count; pass++)
         {
             job = hb_list_item(passes, pass);
             hb_job_close(&job);
@@ -1854,8 +1875,6 @@ cleanup:
     }
 
     hb_buffer_pool_free();
-
-    hb_job_close(&job);
 }
 
 static inline void copy_chapter( hb_buffer_t * dst, hb_buffer_t * src )

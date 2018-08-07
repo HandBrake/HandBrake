@@ -1097,7 +1097,7 @@ struct hb_state_s
 
         struct
         {
-            /* HB_STATE_WORKING */
+            /* HB_STATE_WORKING || HB_STATE_SEARCHING || HB_STATE_WORKDONE */
 #define HB_PASS_SUBTITLE    -1
 #define HB_PASS_ENCODE      0
 #define HB_PASS_ENCODE_1ST  1   // Some code depends on these values being
@@ -1112,13 +1112,8 @@ struct hb_state_s
             int   minutes;
             int   seconds;
             int   sequence_id;
-        } working;
-
-        struct
-        {
-            /* HB_STATE_WORKDONE */
             hb_error_code error;
-        } workdone;
+        } working;
 
         struct
         {
