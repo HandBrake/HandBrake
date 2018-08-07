@@ -207,6 +207,8 @@
 		A9906B2C1A710920001D82D5 /* HBQueueController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9906B2B1A710920001D82D5 /* HBQueueController.m */; };
 		A99F40CF1B624E7E00750170 /* HBPictureViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A99F40CD1B624E7E00750170 /* HBPictureViewController.m */; };
 		A9A0CBE81CCEA3670045B3DF /* HBPlayerTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A0CBE61CCEA1D10045B3DF /* HBPlayerTrack.m */; };
+		A9A25D9C21182741005A8A0F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9A25D9B21182741005A8A0F /* CoreMedia.framework */; };
+		A9A25D9D21182753005A8A0F /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9A25D9B21182741005A8A0F /* CoreMedia.framework */; };
 		A9A7E27C1FE2A0B5006BE79F /* HBPreviewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9A7E27A1FE2A0B5006BE79F /* HBPreviewViewController.m */; };
 		A9A96B8220CAD2C200A39AFB /* HBPictureHUDController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96B8420CAD2C200A39AFB /* HBPictureHUDController.xib */; };
 		A9A96B8520CAD2CC00A39AFB /* HBEncodingProgressHUDController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96B8720CAD2CC00A39AFB /* HBEncodingProgressHUDController.xib */; };
@@ -229,6 +231,9 @@
 		A9A96BDD20CAD66000A39AFB /* OutputPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BDB20CAD66000A39AFB /* OutputPanel.xib */; };
 		A9A96BE020CAD66500A39AFB /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BDE20CAD66500A39AFB /* Preferences.xib */; };
 		A9A96BE320CAD6CD00A39AFB /* HBPreviewViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BE120CAD6CD00A39AFB /* HBPreviewViewController.xib */; };
+		A9AB9AA5211819A500BB3C7E /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9AB9AA4211819A500BB3C7E /* VideoToolbox.framework */; };
+		A9AB9AA621181CA900BB3C7E /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9AB9AA4211819A500BB3C7E /* VideoToolbox.framework */; };
+		A9AB9AA821181CC700BB3C7E /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9AB9AA721181CC700BB3C7E /* CoreVideo.framework */; };
 		A9ABD1A61E2A0F0700EC8B65 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */; };
 		A9ABD1A71E2A0F7500EC8B65 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */; };
 		A9ABD1A91E2A0F8200EC8B65 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A81E2A0F8200EC8B65 /* CoreGraphics.framework */; };
@@ -546,6 +551,7 @@
 		A99F40CD1B624E7E00750170 /* HBPictureViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPictureViewController.m; sourceTree = "<group>"; };
 		A9A0CBE51CCEA1D10045B3DF /* HBPlayerTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPlayerTrack.h; sourceTree = "<group>"; };
 		A9A0CBE61CCEA1D10045B3DF /* HBPlayerTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPlayerTrack.m; sourceTree = "<group>"; };
+		A9A25D9B21182741005A8A0F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		A9A7E2791FE2A0B5006BE79F /* HBPreviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreviewViewController.h; sourceTree = "<group>"; };
 		A9A7E27A1FE2A0B5006BE79F /* HBPreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBPreviewViewController.m; sourceTree = "<group>"; };
 		A9A96B8320CAD2C200A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBPictureHUDController.xib; sourceTree = "<group>"; };
@@ -577,6 +583,8 @@
 		A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
 		A9AA447C1970726500D7DEFC /* HBQueueController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueController.h; sourceTree = "<group>"; };
 		A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreviewGenerator.h; sourceTree = "<group>"; };
+		A9AB9AA4211819A500BB3C7E /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		A9AB9AA721181CC700BB3C7E /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		A9ABD1A81E2A0F8200EC8B65 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A9B34D74197696FE00871B7D /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = System/Library/Frameworks/DiskArbitration.framework; sourceTree = SDKROOT; };
@@ -639,6 +647,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9A25D9C21182741005A8A0F /* CoreMedia.framework in Frameworks */,
+				A9AB9AA821181CC700BB3C7E /* CoreVideo.framework in Frameworks */,
+				A9AB9AA621181CA900BB3C7E /* VideoToolbox.framework in Frameworks */,
 				A9ABD1A91E2A0F8200EC8B65 /* CoreGraphics.framework in Frameworks */,
 				A9ABD1A71E2A0F7500EC8B65 /* CoreText.framework in Frameworks */,
 				A9E165521C523016003EF30E /* libavfilter.a in Frameworks */,
@@ -694,6 +705,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9A25D9D21182753005A8A0F /* CoreMedia.framework in Frameworks */,
+				A9AB9AA5211819A500BB3C7E /* VideoToolbox.framework in Frameworks */,
 				A9ABD1AA1E2A0F8F00EC8B65 /* CoreGraphics.framework in Frameworks */,
 				A9ABD1A61E2A0F0700EC8B65 /* CoreText.framework in Frameworks */,
 				A91119A31C7DD591001C463C /* IOKit.framework in Frameworks */,
@@ -832,6 +845,9 @@
 		273F203414ADBAC30021BE6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A9A25D9B21182741005A8A0F /* CoreMedia.framework */,
+				A9AB9AA721181CC700BB3C7E /* CoreVideo.framework */,
+				A9AB9AA4211819A500BB3C7E /* VideoToolbox.framework */,
 				A9ABD1A81E2A0F8200EC8B65 /* CoreGraphics.framework */,
 				A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */,
 				A91CE2D31C7DABE40068F46F /* libiconv.tbd */,

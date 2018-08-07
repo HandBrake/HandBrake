@@ -83,6 +83,20 @@ static const char * const h265_nvenc_profile_names[] =
     "auto", "main", NULL // "main10", "rext"  We do not currently support 10bit encodes with this encoder. 
 };
 
+static const char * const h26x_vt_preset_name[] =
+{
+    "default", NULL
+};
+
+static const char * const h264_vt_profile_name[] =
+{
+    "auto", "baseline", "main", "high", NULL
+};
+
+static const char * const h265_vt_profile_name[] =
+{
+    "auto", "main", "main10", NULL
+};
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
@@ -136,6 +150,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     hb_log("encavcodecInit: H.264 (AMD VCE)");
                     codec = avcodec_find_encoder_by_name("h264_amf");
                     break;
+                case HB_VCODEC_FFMPEG_VT_H264:
+                    hb_log("encavcodecInit: H.264 (VideoToolbox)");
+                    codec = avcodec_find_encoder_by_name("h264_videotoolbox");
+                    break;
             }
         }break;
         case AV_CODEC_ID_HEVC:
@@ -148,6 +166,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                 case HB_VCODEC_FFMPEG_VCE_H265:
                     hb_log("encavcodecInit: H.265 (AMD VCE)");
                     codec = avcodec_find_encoder_by_name("hevc_amf");
+                    break;
+                case HB_VCODEC_FFMPEG_VT_H265:
+                    hb_log("encavcodecInit: H.265 (VideoToolbox)");
+                    codec = avcodec_find_encoder_by_name("hevc_videotoolbox");
                     break;
             }
         }break;
@@ -407,6 +429,47 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     if( job->grayscale )
     {
         context->flags |= AV_CODEC_FLAG_GRAY;
+    }
+
+    if (job->vcodec == HB_VCODEC_FFMPEG_VT_H264)
+    {
+        // Set profile and level
+        if (job->encoder_profile != NULL && *job->encoder_profile)
+        {
+            if (!strcasecmp(job->encoder_profile, "baseline"))
+                av_dict_set(&av_opts, "profile", "baseline", 0);
+            else if (!strcasecmp(job->encoder_profile, "main"))
+                av_dict_set(&av_opts, "profile", "main", 0);
+            else if (!strcasecmp(job->encoder_profile, "high"))
+                av_dict_set(&av_opts, "profile", "high", 0);
+        }
+
+        if (job->encoder_level != NULL && *job->encoder_level)
+        {
+            int i = 1;
+            while (hb_h264_level_names[i] != NULL)
+            {
+                if (!strcasecmp(job->encoder_level, hb_h264_level_names[i]))
+                    av_dict_set(&av_opts, "level", job->encoder_level, 0);
+                ++i;
+            }
+        }
+
+        context->max_b_frames = 16;
+    }
+
+    if (job->vcodec == HB_VCODEC_FFMPEG_VT_H265)
+    {
+        // Set profile and level
+        if (job->encoder_profile != NULL && *job->encoder_profile)
+        {
+            if (!strcasecmp(job->encoder_profile, "main"))
+                av_dict_set(&av_opts, "profile", "main", 0);
+            else if (!strcasecmp(job->encoder_profile, "main10"))
+                av_dict_set(&av_opts, "profile", "main10", 0);
+        }
+
+        context->max_b_frames = 16;
     }
 
     if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H264)
@@ -731,7 +794,7 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
             hb_log("encavcodec: avcodec_receive_packet failed");
         }
 
-        if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H264)
+        if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VT_H264)
         {
             out = hb_nal_bitstream_annexb_to_mp4(pkt.data, pkt.size);
         }
@@ -962,6 +1025,10 @@ const char* const* hb_av_preset_get_names(int encoder)
         case HB_VCODEC_FFMPEG_NVENC_H265:
             return h26x_nvenc_preset_names;
 
+        case HB_VCODEC_FFMPEG_VT_H264:
+        case HB_VCODEC_FFMPEG_VT_H265:
+            return h26x_vt_preset_name;
+
         default:
             return NULL;
     }
@@ -975,6 +1042,10 @@ const char* const* hb_av_profile_get_names(int encoder)
             return h264_nvenc_profile_names;
         case HB_VCODEC_FFMPEG_NVENC_H265:
             return h265_nvenc_profile_names;
+        case HB_VCODEC_FFMPEG_VT_H264:
+            return h264_vt_profile_name;
+        case HB_VCODEC_FFMPEG_VT_H265:
+            return h265_vt_profile_name;
 
          default:
              return NULL;

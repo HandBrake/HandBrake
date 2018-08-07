@@ -286,7 +286,14 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 {
     NSArray *presets = self.presets;
     if (presets.count && ![presets containsObject:self.preset]) {
-        self.preset = presets[self.mediumPresetIndex];
+        if (presets.count > self.mediumPresetIndex)
+        {
+            self.preset = presets[self.mediumPresetIndex];
+        }
+        else
+        {
+            self.preset = presets.firstObject;
+        }
     }
 
     NSArray *tunes = self.tunes;
