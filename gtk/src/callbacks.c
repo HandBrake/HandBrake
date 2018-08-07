@@ -2203,6 +2203,7 @@ ghb_update_summary_info(signal_user_data_t *ud)
     }
     rate_str = get_rate_string(vrate.num, vrate.den);
     g_string_append_printf(str, "%s, %s FPS", video_encoder->name, rate_str);
+    g_free(rate_str);
     if (ghb_dict_get_bool(ud->settings, "VideoFramerateCFR"))
     {
         g_string_append_printf(str, " CFR");
@@ -2470,6 +2471,7 @@ ghb_update_summary_info(signal_user_data_t *ud)
 
     g_free(text);
     g_free(display_aspect);
+    ghb_value_free(&titleDict);
 }
 
 void
@@ -2485,6 +2487,7 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     if (title != NULL)
     {
         GhbValue *job_dict;
+        char     * label;
 
         job_dict = hb_preset_job_init(ghb_scan_handle(), title_id, settings);
         ghb_dict_set(settings, "Job", job_dict);
@@ -2498,10 +2501,12 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
         ghb_dict_set_int(settings, "source_width", title->geometry.width);
         ghb_dict_set_int(settings, "source_height", title->geometry.height);
         ghb_dict_set_string(settings, "source", title->path);
-        ghb_dict_set_string(settings, "source_label",
-                            ghb_create_source_label(title));
-        ghb_dict_set_string(settings, "volume",
-                            ghb_create_volume_label(title));
+        label = ghb_create_source_label(title);
+        ghb_dict_set_string(settings, "source_label", label);
+        g_free(label);
+        label = ghb_create_volume_label(title);
+        ghb_dict_set_string(settings, "volume", label);
+        g_free(label);
 
         int crop[4];
 
@@ -2651,14 +2656,15 @@ title_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     gint               title_id, titleindex, count;
     const hb_title_t * title;
     GtkLabel         * title_label;
-    const char       * opt;
+    char             * label;
 
     title_id = ghb_widget_int(widget);
     title = ghb_lookup_title(title_id, &titleindex);
 
-    opt = ghb_create_title_label(title);
+    label = ghb_create_title_label(title);
     title_label = GTK_LABEL(GHB_WIDGET(ud->builder, "title_label"));
-    gtk_label_set_markup(title_label, opt);
+    gtk_label_set_markup(title_label, label);
+    g_free(label);
 
     count = ghb_array_len(ud->settings_array);
     int idx = (titleindex >= 0 && titleindex < count) ? titleindex : 0;
@@ -5601,6 +5607,7 @@ ghb_notify_done(signal_user_data_t *ud)
 
     g_application_send_notification(G_APPLICATION(ud->app), "cocktail", notification);
     g_object_unref(G_OBJECT(notification));
+    g_object_unref(G_OBJECT(icon));
 
     if (ghb_settings_combo_int(ud->prefs, "WhenComplete") == 3)
     {

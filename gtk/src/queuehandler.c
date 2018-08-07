@@ -1036,7 +1036,7 @@ ghb_dest_free_space(GhbValue *settings)
 {
     GFile       *gfile;
     GFileInfo   *info;
-    guint64      size;
+    guint64      size = -1;
     const gchar *dest     = ghb_dict_get_string(settings, "destination");
     gchar       *destdir  = g_path_get_dirname(dest);
     gchar       *resolved = ghb_resolve_symlink(destdir);
@@ -1050,7 +1050,6 @@ ghb_dest_free_space(GhbValue *settings)
         {
             size = g_file_info_get_attribute_uint64(info,
                                     G_FILE_ATTRIBUTE_FILESYSTEM_FREE);
-            return size;
         }
         g_object_unref(info);
     }
@@ -1058,7 +1057,7 @@ ghb_dest_free_space(GhbValue *settings)
     g_free(resolved);
     g_free(destdir);
 
-    return -1;
+    return size;
 }
 
 gint

@@ -1532,6 +1532,7 @@ static void subtitle_def_selected_lang_list_clear(signal_user_data_t *ud)
                 gtk_tree_store_append(avail_ts, &pos, NULL);
             }
             gtk_tree_store_set(avail_ts, &pos, 0, lang, 1, index, -1);
+            g_free(lang);
         } while (gtk_tree_model_iter_next(selected_tm, &iter));
     }
     gtk_tree_store_clear(GTK_TREE_STORE(selected_tm));
