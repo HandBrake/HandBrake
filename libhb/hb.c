@@ -789,7 +789,7 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
     int cropped_width = src_geo->width - geo->crop[2] - geo->crop[3];
     int cropped_height = src_geo->height - geo->crop[0] - geo->crop[1];
     double storage_aspect = (double)cropped_width / cropped_height;
-    int mod = geo->modulus ? EVEN(geo->modulus) : 2;
+    int mod = (geo->modulus > 0) ? EVEN(geo->modulus) : 2;
 
     // Sanitize PAR
     if (geo->geometry.par.num == 0 || geo->geometry.par.den == 0)
