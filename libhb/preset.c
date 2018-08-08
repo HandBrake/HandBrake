@@ -3216,7 +3216,7 @@ int hb_presets_import(const hb_value_t *in, hb_value_t **out)
     }
     else
     {
-        *out = hb_value_dup(in);
+        *out = hb_value_dup(dup);
     }
     hb_value_free(&dup);
 
