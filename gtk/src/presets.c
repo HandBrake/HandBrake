@@ -629,6 +629,20 @@ ghb_select_default_preset(signal_user_data_t *ud)
     hb_preset_index_t *path;
 
     path = hb_presets_get_default_index();
+    if (path == NULL || path->depth == 0)
+    {
+        // No default set, find original "default" preset
+        g_free(path);
+        path = hb_preset_search_index("Fast 1080p30", 1, HB_PRESET_TYPE_ALL);
+    }
+    if (path == NULL || path->depth == 0)
+    {
+        int index[2] = {0, 0};
+
+        // Could not find original default, try first available preset
+        g_free(path);
+        path = hb_preset_index_init(index, 2);
+    }
     if (path != NULL)
     {
         select_preset2(ud, path);
