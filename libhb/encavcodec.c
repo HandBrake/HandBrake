@@ -70,7 +70,7 @@ static const char * const vpx_preset_names[] =
 
 static const char * const h26x_nvenc_preset_names[] =
 {
-    "losslesshp", "lossless", "llhp", "llhq", "ll", "bd", "hq", "hp", "fast", "medium", "slow", "default", NULL
+    "llhp", "llhq", "ll", "bd", "hq", "hp", "fast", "medium", "slow", "default", NULL  // No Lossless "losslesshp", "lossless",
 };
 
 static const char * const h264_nvenc_profile_names[] =
@@ -80,7 +80,7 @@ static const char * const h264_nvenc_profile_names[] =
 
 static const char * const h265_nvenc_profile_names[] =
 {
-    "auto", "main", "main10", "rext", NULL 
+    "auto", "main", NULL // "main10", "rext"  We do not currently support 10bit encodes with this encoder. 
 };
 
 
