@@ -11,11 +11,10 @@ namespace HandBrakeWPF.Utilities.Input
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
 
     using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Properties;
-
-    using Microsoft.VisualBasic.FileIO;
 
     /// <summary>
     /// Handles the importing of Chapter information from CSV files
@@ -27,50 +26,62 @@ namespace HandBrakeWPF.Utilities.Input
         /// </summary>
         public static string FileFilter => "CSV files (*.csv;*.tsv)|*.csv;*.tsv";
 
-        /// <summary>
-        /// Imports all chapter information from the given <see cref="filename"/> into the <see cref="chapterMap"/> dictionary.
-        /// </summary>
-        /// <param name="filename">
-        /// The full path and filename of the chapter marker file to import
-        /// </param>
-        /// <param name="importedChapters">
-        /// The imported Chapters.
-        /// </param>
         public static void Import(string filename, ref Dictionary<int, Tuple<string, TimeSpan>> importedChapters)
         {
-            using (TextFieldParser csv = new TextFieldParser(filename)
+            if (!File.Exists(filename))
             {
-                CommentTokens = new[] { "#" }, // Comment lines
-                Delimiters = new[] { ",", "\t", ";", ":" }, // Support all of these common delimiter types
-                HasFieldsEnclosedInQuotes = true, // Assume that our data will be properly escaped
-                TextFieldType = FieldType.Delimited,
-                TrimWhiteSpace = true // Remove excess whitespace from ends of imported values
-            })
+                throw new FileNotFoundException();
+            }
+
+            int lineNumber = 0;
+            try
             {
-                while (!csv.EndOfData)
+                using (StreamReader reader = new StreamReader(filename))
                 {
-                    try
-                    {
-                        // Only read the first two columns, anything else will be ignored but will not raise an error
-                        var row = csv.ReadFields();
-                        if (row == null || row.Length < 2) // null condition happens if the file is somehow corrupt during reading
-                            throw new MalformedLineException(Resources.ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns, csv.LineNumber);
+                    // Try guess the delimiter.
+                    string contents = reader.ReadToEnd();
+                    reader.DiscardBufferedData();
+                    reader.BaseStream.Seek(0, SeekOrigin.Begin);
+                    bool tabDelimited = contents.Split('\t').Length > contents.Split(',').Length;
 
-                        int chapterNumber;
-                        if (!int.TryParse(row[0], out chapterNumber))
-                            throw new MalformedLineException(Resources.ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber, csv.LineNumber);
-
-                        // Store the chapter name at the correct index
-                        importedChapters[chapterNumber] = new Tuple<string, TimeSpan>(row[1]?.Trim(), TimeSpan.Zero);
-                    }
-                    catch (MalformedLineException mlex)
+                    // Parse each line.
+                    while (reader.Peek() >= 0)
                     {
-                        throw new GeneralApplicationException(
-                            Resources.ChaptersViewModel_UnableToImportChaptersWarning,
-                            string.Format(Resources.ChaptersViewModel_UnableToImportChaptersMalformedLineMsg, mlex.LineNumber),
-                            mlex);
+                        lineNumber = lineNumber + 1;
+                        string line = reader.ReadLine();
+                        if (!string.IsNullOrEmpty(line))
+                        {
+                            string[] splitContents = tabDelimited ? line.Split('\t') : line.Split(',');
+
+                            if (splitContents.Length < 2)
+                            {
+                                throw new InvalidDataException(
+                                    string.Format(
+                                        Resources
+                                            .ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns,
+                                        lineNumber));
+                            }
+
+                            if (!int.TryParse(splitContents[0], out var chapterNumber))
+                            {
+                                throw new InvalidDataException(
+                                    string.Format(
+                                        Resources
+                                            .ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber,
+                                        lineNumber));
+                            }
+
+                            string chapterName = splitContents[1].Trim();
+
+                            // Store the chapter name at the correct index
+                            importedChapters[chapterNumber] = new Tuple<string, TimeSpan>(chapterName, TimeSpan.Zero);
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+                throw new GeneralApplicationException(Resources.ChaptersViewModel_UnableToImportChaptersWarning, string.Format(Resources.ChaptersViewModel_UnableToImportChaptersMalformedLineMsg, lineNumber), e);
             }
         }
     }
