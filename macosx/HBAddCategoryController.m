@@ -52,7 +52,15 @@
 
 - (IBAction)dismiss:(id)sender
 {
-    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
+    if (self.window.isSheet)
+    {
+        [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseCancel];
+    }
+    else
+    {
+        [NSApp stopModalWithCode:NSModalResponseCancel];
+        [self.window orderOut:self];
+    }
 }
 
 - (IBAction)create:(id)sender
@@ -60,7 +68,15 @@
     self.category = [[HBPreset alloc] initWithCategoryName:self.name.stringValue builtIn:NO];
     [self.manager addPreset:self.category];
 
-    [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
+    if (self.window.isSheet)
+    {
+        [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
+    }
+    else
+    {
+        [NSApp stopModalWithCode:NSModalResponseOK];
+        [self.window orderOut:self];
+    }
 }
 
 
