@@ -9396,7 +9396,7 @@ filter_output([
                     <property name="primary_icon_activatable">False</property>
                     <property name="secondary_icon_activatable">False</property>
                     <property name="adjustment">adjustment24</property>
-                    <signal name="value-changed" handler="setting_widget_changed_cb" swapped="no"/>
+                    <signal name="value-changed" handler="nonsetting_widget_changed_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="expand">True</property>
