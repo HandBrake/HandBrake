@@ -10,12 +10,10 @@
 namespace HandBrakeWPF.EventArgs
 {
     using System;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// Queue Completed Event Args
     /// </summary>
-    [DataContract]
     public class QueueCompletedEventArgs : EventArgs
     {
         /// <summary>
@@ -32,7 +30,6 @@ namespace HandBrakeWPF.EventArgs
         /// <summary>
         /// Gets a value indicating whether the queue WasManuallyStopped.
         /// </summary>
-        [DataMember]
         public bool WasManuallyStopped { get; private set; }
     }
 }
