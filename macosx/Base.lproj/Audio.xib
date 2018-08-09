@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
         <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -23,8 +23,9 @@
             <rect key="frame" x="0.0" y="0.0" width="926" height="322"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <button toolTip="Configure audio track selection default settings." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vFP-nq-IQg">
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vFP-nq-IQg">
                     <rect key="frame" x="110" y="282" width="132" height="28"/>
+                    <string key="toolTip">Configure audio tracks Selection Behavior. These settings affect which tracks will be added to the audio tracks list, and the settings used for each track.</string>
                     <buttonCell key="cell" type="push" title="Selection Behavior…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="aYF-d5-Ya6">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -38,7 +39,7 @@
                         </binding>
                     </connections>
                 </button>
-                <button toolTip="Reload audio track selection using the configured defaults." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wcL-rL-aYS">
+                <button toolTip="Reload the audio tracks list using the configured Selection Behavior." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wcL-rL-aYS">
                     <rect key="frame" x="240" y="282" width="62" height="28"/>
                     <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="q2P-Tg-cBJ">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -88,7 +89,7 @@
                 </popUpButton>
                 <scrollView wantsLayer="YES" autohidesScrollers="YES" horizontalLineScroll="27" horizontalPageScroll="10" verticalLineScroll="27" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yzu-Rk-hTv">
                     <rect key="frame" x="20" y="20" width="886" height="258"/>
-                    <string key="toolTip">Audio tracks list. Default track selection and settings are loaded from the selected preset, and may be configured using the Configure Defaults dialog.</string>
+                    <string key="toolTip">Audio tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the audio Selection Behavior dialog.</string>
                     <clipView key="contentView" id="2VK-QX-oZ0">
                         <rect key="frame" x="1" y="0.0" width="884" height="257"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -569,12 +570,12 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="CjR-R1-IBg"/>
-                <menuItem title="Configure Defaults…" id="TK6-fY-4Sk">
+                <menuItem title="Selection Behavior…" id="TK6-fY-4Sk">
                     <connections>
                         <action selector="showSettingsSheet:" target="-2" id="Q8y-a8-pV6"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Reload Defaults" id="sq7-Ux-T6D">
+                <menuItem title="Reload" id="sq7-Ux-T6D">
                     <connections>
                         <action selector="reloadDefaults:" target="-2" id="7JX-ub-E5y"/>
                     </connections>
