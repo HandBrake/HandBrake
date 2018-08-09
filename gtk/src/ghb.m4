@@ -9026,7 +9026,7 @@ filter_output([
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="adjustment">adjustment24</property>
                     <property name="hexpand">True</property>
-                    <signal name="value-changed" handler="setting_widget_changed_cb" swapped="no"/>
+                    <signal name="value-changed" handler="nonsetting_widget_changed_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="position">1</property>
