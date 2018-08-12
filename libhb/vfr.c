@@ -142,8 +142,8 @@ static int find_drop_frame(double *metrics, int count)
 {
     int ii, min;
 
-    min = 0;
-    for (ii = 1; ii < count; ii++)
+    min = 1;
+    for (ii = 2; ii < count - 1; ii++)
     {
         if (metrics[ii] < metrics[min])
         {
@@ -239,6 +239,13 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
     {
         int drop_frame;
 
+        // We may have to drop multiple frames.  Pick frames to drop
+        // that appear to have minimum motion.
+        //
+        // The main use case we are trying to cover here is
+        // "progressive telecine" where there is a repeating pattern
+        // of a new frame followed by some number of repeated frames.
+        // We want to keep the "new frames" and drop the repeates.
         drop_frame = find_drop_frame(pv->frame_metric, count);
         out = hb_list_item(pv->frame_rate_list, drop_frame);
 
@@ -361,15 +368,14 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
         // in_vrate / out_vrate tells us how many consecutive repeated
         // frames we can expect to see.  if the number of consecutive
         // repeated frame is < 2, we need the number of consecutive
-        // non-repeated frames.  Then add 1 to round up fractions
-        // and add 2 so that we should have transitions that we can
-        // detect at both ends of a sequence.
+        // non-repeated frames.  Then add 1 so that we should have
+        // transitions that we can detect at both ends of a sequence.
         double factor = in_vrate / out_vrate;
-        if (factor >= 1.0 && factor < 2.0)
+        if (factor > 1.0 && factor < 2.0)
         {
             factor = 1 / (factor - 1);
         }
-        pv->frame_analysis_depth = factor + 3;
+        pv->frame_analysis_depth = ceil(factor) + 1;
 
         // if we end up with an absurdly large value, limit it
         if (pv->frame_analysis_depth > MAX_FRAME_ANALYSIS_DEPTH)
