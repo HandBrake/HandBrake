@@ -10,7 +10,7 @@
 @interface HBToolbarBadgedItem ()
 
 @property (nonatomic) NSImage *primary;
-@property (nonatomic) NSImage *cache;
+@property (nonatomic) NSImage *badged;
 
 @end
 
@@ -41,31 +41,102 @@
 
 - (void)setImage:(NSImage *)image
 {
+    __weak HBToolbarBadgedItem *weakSelf = self;
     _primary = image;
-    if (_badgeValue.length)
-    {
-        _cache = nil;
-        [super setImage:[self HB_badgeImage:_badgeValue]];
-    }
-    else
-    {
-        [super setImage:image];
-    }
+    _badged = [NSImage imageWithSize:image.size flipped:NO drawingHandler:^BOOL(NSRect dstRect) {
+        HBToolbarBadgedItem *strongSelf = weakSelf;
+        if (strongSelf == nil)
+        {
+            return NO;
+        }
+
+        CGContextRef context = NSGraphicsContext.currentContext.CGContext;
+        CGContextSaveGState(context);
+
+        CGRect deviceRect = CGContextConvertRectToDeviceSpace(context, dstRect);
+        NSSize size = dstRect.size;
+
+        NSRect imageRect = NSMakeRect(0, 0, image.size.width, image.size.height);
+        CGImageRef ref = [image CGImageForProposedRect:&imageRect context:[NSGraphicsContext currentContext] hints:nil];
+        CGContextDrawImage(context, imageRect, ref);
+
+        // Work out the area
+        CGFloat scaleFactor = deviceRect.size.width / image.size.width;
+        CGFloat typeSize = 10;
+        if (scaleFactor > 1)
+        {
+            typeSize = 8;
+        }
+        CGFloat pointSize = typeSize;
+
+        NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        NSFont *font = [NSFont boldSystemFontOfSize:pointSize];
+        NSDictionary *attr = @{NSParagraphStyleAttributeName : paragraphStyle,
+                               NSFontAttributeName : font,
+                               NSForegroundColorAttributeName : strongSelf->_badgeTextColor };
+
+        NSRect textBounds = [strongSelf->_badgeValue boundingRectWithSize:NSZeroSize
+                                                                  options:0
+                                                               attributes:attr];
+
+        NSPoint indent = NSMakePoint(typeSize, 2);
+        CGFloat radius = (textBounds.size.height + indent.y) * 0.5f;
+
+        CGFloat offset_x = 0;
+        CGFloat offset_y = 0;
+        NSRect badgeRect = NSMakeRect(size.width - textBounds.size.width - indent.x - offset_x, offset_y,
+                                      textBounds.size.width + indent.x, textBounds.size.height + indent.y);
+        badgeRect = NSIntegralRect(badgeRect);
+
+        // Draw the ellipse
+        CGFloat minx = CGRectGetMinX(badgeRect);
+        CGFloat midx = CGRectGetMidX(badgeRect);
+        CGFloat maxx = CGRectGetMaxX(badgeRect);
+        CGFloat miny = CGRectGetMinY(badgeRect);
+        CGFloat midy = CGRectGetMidY(badgeRect);
+        CGFloat maxy = CGRectGetMaxY(badgeRect);
+
+        // Fill the ellipse
+        CGContextBeginPath(context);
+        CGContextMoveToPoint(context, minx, midy);
+        CGContextAddArcToPoint(context, minx, miny, midx, miny, radius);
+        CGContextAddArcToPoint(context, maxx, miny, maxx, midy, radius);
+        CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, radius);
+        CGContextAddArcToPoint(context, minx, maxy, minx, midy, radius);
+        CGContextClosePath(context);
+        CGColorRef fillColor = strongSelf->_badgeFillColor.CGColor;
+        CGContextSetFillColorWithColor(context,fillColor);
+        CGContextDrawPath(context, kCGPathFill);
+
+        // Draw the text
+        badgeRect.origin.x = CGRectGetMidX(badgeRect);
+        badgeRect.origin.x -= textBounds.origin.x / 2;
+        badgeRect.origin.x -= ((textBounds.size.width - textBounds.origin.x) * 0.5f);
+        badgeRect.origin.y = CGRectGetMidY(badgeRect);
+        badgeRect.origin.y -= textBounds.origin.y / 2;
+        badgeRect.origin.y -= ((textBounds.size.height - textBounds.origin.y) * 0.5f);
+
+        badgeRect.origin.x = floor(badgeRect.origin.x);
+        badgeRect.origin.y = floor(badgeRect.origin.y);
+        badgeRect.size.width = textBounds.size.width;
+        badgeRect.size.height = textBounds.size.height;
+
+        [strongSelf->_badgeValue drawInRect:badgeRect withAttributes:attr];
+
+        CGContextRestoreGState(context);
+
+        return YES;
+    }];
+
+    [self HB_refreshBadge];
 }
 
 - (void)setBadgeValue:(NSString *)badgeValue
 {
     if (![_badgeValue isEqualToString:badgeValue])
     {
-        if (badgeValue.length)
-        {
-            [super setImage:[self HB_badgeImage:badgeValue]];
-        }
-        else
-        {
-            [super setImage:_primary];
-        }
         _badgeValue = [badgeValue copy];
+        [self HB_refreshBadge];
     }
 }
 
@@ -89,128 +160,12 @@
 {
     if (_badgeValue.length)
     {
-        _cache = [self HB_renderImage:_primary withBadge:_badgeValue];
-        [super setImage:_cache];
+        [super setImage:_badged];
     }
-}
-
-- (NSImage *)HB_badgeImage:(NSString *)badgeValue
-{
-    if (![_badgeValue isEqualToString:badgeValue] || _cache == nil)
+    else
     {
-        _cache = [self HB_renderImage:_primary withBadge:badgeValue];
+        [super setImage:_primary];
     }
-    return _cache;
-}
-
-- (NSImage *)HB_renderImage:(NSImage *)image withBadge:(NSString *)badgeString
-{
-    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-
-    NSImage *newImage = [[NSImage alloc] initWithSize:image.size];
-    for (NSImageRep *rep in image.representations)
-    {
-        NSSize size = NSMakeSize(rep.pixelsWide, rep.pixelsHigh);
-        NSBitmapImageRep *newRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
-                                                                           pixelsWide:(NSInteger)floor(size.width)
-                                                                           pixelsHigh:(NSInteger)floor(size.height)
-                                                                        bitsPerSample:8
-                                                                      samplesPerPixel:4
-                                                                             hasAlpha:YES
-                                                                             isPlanar:NO
-                                                                       colorSpaceName:NSDeviceRGBColorSpace
-                                                                          bytesPerRow:(NSInteger)floor(size.width) * 4
-                                                                         bitsPerPixel:32];
-
-        NSGraphicsContext *ctx = [NSGraphicsContext graphicsContextWithBitmapImageRep:newRep];
-        [NSGraphicsContext saveGraphicsState];
-        [NSGraphicsContext setCurrentContext:ctx];
-
-        CGContextRef context = [[NSGraphicsContext currentContext] CGContext];
-        CGContextSaveGState(context);
-
-        NSRect imageRect = NSMakeRect(0, 0, size.width, size.height);
-        CGImageRef ref = [image CGImageForProposedRect:&imageRect context:[NSGraphicsContext currentContext] hints:nil];
-        CGContextDrawImage(context, imageRect, ref);
-
-        // Work out the area
-        CGFloat scaleFactor = rep.pixelsWide / rep.size.width;
-        CGFloat typeSize = 10;
-        if (scaleFactor > 1)
-        {
-            typeSize = 8;
-        }
-        CGFloat pointSize = typeSize * scaleFactor;
-
-        NSFont *font = [NSFont boldSystemFontOfSize:pointSize];
-        NSDictionary *attr = @{NSParagraphStyleAttributeName : paragraphStyle,
-                               NSFontAttributeName : font,
-                               NSForegroundColorAttributeName : _badgeTextColor };
-
-        NSRect textBounds = [badgeString boundingRectWithSize:NSZeroSize
-                                                      options:0
-                                                   attributes:attr];
-
-        NSPoint indent = NSMakePoint(typeSize * scaleFactor, 2 * scaleFactor);
-        CGFloat radius = (textBounds.size.height + indent.y) * 0.5f;
-
-        CGFloat offset_x = 0;
-        CGFloat offset_y = 0;
-        if (scaleFactor > 1)
-        {
-            offset_y = 2 * scaleFactor;
-        }
-        NSRect badgeRect = NSMakeRect(size.width - textBounds.size.width - indent.x - offset_x, offset_y,
-                                      textBounds.size.width + indent.x, textBounds.size.height + indent.y);
-        badgeRect = NSIntegralRect(badgeRect);
-
-        // Draw the ellipse
-        CGFloat minx = CGRectGetMinX(badgeRect);
-        CGFloat midx = CGRectGetMidX(badgeRect);
-        CGFloat maxx = CGRectGetMaxX(badgeRect);
-        CGFloat miny = CGRectGetMinY(badgeRect);
-        CGFloat midy = CGRectGetMidY(badgeRect);
-        CGFloat maxy = CGRectGetMaxY(badgeRect);
-
-        // Fill the ellipse
-        CGContextSaveGState(context);
-        CGContextBeginPath(context);
-        CGContextMoveToPoint(context, minx, midy);
-        CGContextAddArcToPoint(context, minx, miny, midx, miny, radius);
-        CGContextAddArcToPoint(context, maxx, miny, maxx, midy, radius);
-        CGContextAddArcToPoint(context, maxx, maxy, midx, maxy, radius);
-        CGContextAddArcToPoint(context, minx, maxy, minx, midy, radius);
-        CGContextClosePath(context);
-        CGColorRef fillColor = _badgeFillColor.CGColor;
-        CGContextSetFillColorWithColor(context,fillColor);
-        CGContextDrawPath(context, kCGPathFill);
-
-        // Draw the text
-        badgeRect.origin.x = CGRectGetMidX(badgeRect);
-        badgeRect.origin.x -= textBounds.origin.x / 2;
-        badgeRect.origin.x -= ((textBounds.size.width - textBounds.origin.x) * 0.5f);
-        badgeRect.origin.y = CGRectGetMidY(badgeRect);
-        badgeRect.origin.y -= textBounds.origin.y / 2;
-        badgeRect.origin.y -= ((textBounds.size.height - textBounds.origin.y) * 0.5f);
-
-        badgeRect.origin.x = floor(badgeRect.origin.x);
-        badgeRect.origin.y = floor(badgeRect.origin.y);
-        badgeRect.size.width = textBounds.size.width;
-        badgeRect.size.height = textBounds.size.height;
-
-        [badgeString drawInRect:badgeRect withAttributes:attr];
-
-        CGContextRestoreGState(context);
-
-        CGContextFlush(context);
-        CGContextRestoreGState(context);
-
-        [NSGraphicsContext restoreGraphicsState];
-
-        [newImage addRepresentation:newRep];
-    }
-
-    return newImage;
 }
 
 @end
