@@ -90,7 +90,10 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         ~HandBrakeInstance()
         {
-            this.Dispose(false);
+            if (this.hbHandle != IntPtr.Zero)
+            {
+                this.Dispose(false);
+            }
         }
 
         /// <summary>

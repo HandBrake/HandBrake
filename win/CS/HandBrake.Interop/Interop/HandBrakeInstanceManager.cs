@@ -22,15 +22,12 @@ namespace HandBrake.Interop.Interop
     {
         private static HandBrakeInstance scanInstance;
         private static HandBrakeInstance previewInstance;
-        private static HandBrakeInstance masterInstance;
 
         /// <summary>
         /// Initializes static members of the <see cref="HandBrakeInstanceManager"/> class.
         /// </summary>
         static HandBrakeInstanceManager()
         {
-            masterInstance = new HandBrakeInstance();
-            masterInstance.Initialize(2);
         }
 
         /// <summary>
@@ -92,17 +89,6 @@ namespace HandBrake.Interop.Interop
             HandBrakeUtils.SetDvdNav(!configuration.IsDvdNavDisabled);
 
             return previewInstance;
-        }
-
-        /// <summary>
-        /// Gets the master instance.
-        /// </summary>
-        internal static IHandBrakeInstance MasterInstance
-        {
-            get
-            {
-                return masterInstance;
-            }
         }
 
         /// <summary>

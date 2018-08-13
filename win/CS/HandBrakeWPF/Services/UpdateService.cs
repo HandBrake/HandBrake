@@ -109,7 +109,7 @@ namespace HandBrakeWPF.Services
                             url = Constants.AppcastUnstable64;
                         }
 
-                        var currentBuild = HandBrakeUtils.Build;
+                        var currentBuild = VersionHelper.Build;
 
                         // Fetch the Appcast from our server.
                         HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);

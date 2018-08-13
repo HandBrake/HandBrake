@@ -67,29 +67,6 @@ namespace HandBrake.Interop.Interop
         }
 
         /// <summary>
-        /// Gets the HandBrake version string.
-        /// </summary>
-        public static string Version
-        {
-            get
-            {
-                var versionPtr = HBFunctions.hb_get_version(IntPtr.Zero); // Pointer isn't actually used.
-                return Marshal.PtrToStringAnsi(versionPtr);
-            }
-        }
-
-        /// <summary>
-        /// Gets the HandBrake build number.
-        /// </summary>
-        public static int Build
-        {
-            get
-            {
-                return HBFunctions.hb_get_build(IntPtr.Zero);
-            }
-        }
-
-        /// <summary>
         /// Ensures the HB global initialize method has been called.
         /// </summary>
         public static void EnsureGlobalInit()

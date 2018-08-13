@@ -9,8 +9,10 @@
 
 namespace HandBrake.Interop.Utilities
 {
-    using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.Interfaces;
+    using System;
+    using System.Runtime.InteropServices;
+
+    using HandBrake.Interop.Interop.HbLib;
 
     /// <summary>
     /// Version Utility
@@ -25,15 +27,12 @@ namespace HandBrake.Interop.Utilities
         /// </returns>
         public static string GetVersion()
         {
-            IHandBrakeInstance instance = HandBrakeInstanceManager.MasterInstance;
-       
-            return IsNightly() ? string.Format("Nightly {0} ({1})", instance.Version, instance.Build) : string.Format("{0} ({1})", instance.Version, instance.Build);
+            return IsNightly() ? string.Format("Nightly {0} ({1})", Version, Build) : string.Format("{0} ({1})", Version, Build);
         }
 
         public static string GetVersionShort()
         {
-            IHandBrakeInstance instance = HandBrakeInstanceManager.MasterInstance;
-            return string.Format("{0} {1}", instance.Version, instance.Build);
+            return string.Format("{0} {1}", Version, Build);
         }
 
         /// <summary>
@@ -44,10 +43,31 @@ namespace HandBrake.Interop.Utilities
         /// </returns>
         public static bool IsNightly()
         {
-            IHandBrakeInstance instance = HandBrakeInstanceManager.MasterInstance;
-
             // 01 = Unofficial Builds.  00 = Official Tagged Releases.
-            return instance.Build.ToString().EndsWith("01");
+            return Build.ToString().EndsWith("01");
+        }
+
+        /// <summary>
+        /// Gets the HandBrake version string.
+        /// </summary>
+        public static string Version
+        {
+            get
+            {
+                var versionPtr = HBFunctions.hb_get_version(IntPtr.Zero); // Pointer isn't actually used.
+                return Marshal.PtrToStringAnsi(versionPtr);
+            }
+        }
+
+        /// <summary>
+        /// Gets the HandBrake build number.
+        /// </summary>
+        public static int Build
+        {
+            get
+            {
+                return HBFunctions.hb_get_build(IntPtr.Zero);
+            }
         }
     }
 }

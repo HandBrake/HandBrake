@@ -150,7 +150,7 @@ namespace HandBrakeWPF.ViewModels
             this.Duration = 30;
             this.CanPlay = true;
 
-            UseSystemDefaultPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.DefaultPlayer);
+            this.useSystemDefaultPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.DefaultPlayer);
             this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration, typeof(int));
         }
 
