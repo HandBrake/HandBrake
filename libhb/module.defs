@@ -115,7 +115,7 @@ LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib
 
 LIBHB.dll.libs = $(foreach n, \
-        ass avformat avfilter avcodec avutil avresample swresample postproc dvdnav dvdread \
+        ass avformat avfilter avcodec avutil swresample postproc dvdnav dvdread \
         freetype mp3lame samplerate swscale vpx theora vorbis vorbisenc ogg \
         x264 xml2 bluray jansson harfbuzz opus speex, \
         $(CONTRIB.build/)lib/lib$(n).a )

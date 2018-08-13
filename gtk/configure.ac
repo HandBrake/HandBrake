@@ -179,7 +179,7 @@ PKG_CHECK_MODULES(GHB, [$GHB_PACKAGES])
 
 GHB_CFLAGS="$HBINC $GHB_CFLAGS"
 
-HB_LIBS="-lhandbrake -lavformat -lavfilter -lavcodec -lavutil -lavresample -lswresample -lpostproc -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson -lopus -lspeex -llzma"
+HB_LIBS="-lhandbrake -lavformat -lavfilter -lavcodec -lavutil -lswresample -lpostproc -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson -lopus -lspeex -llzma"
 
 case $host in
   *-*-mingw*)

@@ -19,7 +19,6 @@
 		1C7776A5202301D5001C31EB /* HBRenamePresetController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C7776A3202301D5001C31EB /* HBRenamePresetController.xib */; };
 		1CBC683420BE014800A26CC2 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CBC683320BE014800A26CC2 /* liblzma.a */; };
 		1CBC683520BE014800A26CC2 /* liblzma.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1CBC683320BE014800A26CC2 /* liblzma.a */; };
-		226268E11572CC7300477B4E /* libavresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 226268DF1572CC7300477B4E /* libavresample.a */; };
 		22DD2C4B177B95DA00EF50D3 /* libvpx.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22DD2C49177B94DB00EF50D3 /* libvpx.a */; };
 		273F202314ADB8650021BE6D /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
 		273F202614ADB8A40021BE6D /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202514ADB8A40021BE6D /* libz.dylib */; };
@@ -119,7 +118,6 @@
 		A91CE2B41C7DABBC0068F46F /* libavcodec.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72914B102DA00B785E4 /* libavcodec.a */; };
 		A91CE2B51C7DABBC0068F46F /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E165511C523016003EF30E /* libavfilter.a */; };
 		A91CE2B61C7DABBC0068F46F /* libavformat.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72A14B102DA00B785E4 /* libavformat.a */; };
-		A91CE2B71C7DABBC0068F46F /* libavresample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 226268DF1572CC7300477B4E /* libavresample.a */; };
 		A91CE2B81C7DABBC0068F46F /* libavutil.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72B14B102DA00B785E4 /* libavutil.a */; };
 		A91CE2B91C7DABBC0068F46F /* libbluray.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72C14B102DA00B785E4 /* libbluray.a */; };
 		A91CE2BA1C7DABBC0068F46F /* libdvdnav.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C72E14B102DA00B785E4 /* libdvdnav.a */; };
@@ -326,7 +324,6 @@
 		1C7776A0202300DC001C31EB /* HBRenamePresetController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBRenamePresetController.m; sourceTree = "<group>"; };
 		1C7776A1202300DC001C31EB /* HBRenamePresetController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBRenamePresetController.h; sourceTree = "<group>"; };
 		1CBC683320BE014800A26CC2 /* liblzma.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = liblzma.a; path = external/contrib/lib/liblzma.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		226268DF1572CC7300477B4E /* libavresample.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libavresample.a; path = external/contrib/lib/libavresample.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22CC9E74191EBEA500C69D81 /* libx265.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx265.a; path = external/contrib/lib/libx265.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external/contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		271BA4C014B119F800BC1D2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = external/macosx/Info.plist; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -656,7 +653,6 @@
 				27D6C74414B102DA00B785E4 /* libass.a in Frameworks */,
 				27D6C74614B102DA00B785E4 /* libavcodec.a in Frameworks */,
 				27D6C74814B102DA00B785E4 /* libavformat.a in Frameworks */,
-				226268E11572CC7300477B4E /* libavresample.a in Frameworks */,
 				27D6C74A14B102DA00B785E4 /* libavutil.a in Frameworks */,
 				27D6C74C14B102DA00B785E4 /* libbluray.a in Frameworks */,
 				27D6C75014B102DA00B785E4 /* libdvdnav.a in Frameworks */,
@@ -716,7 +712,6 @@
 				A91CE2B41C7DABBC0068F46F /* libavcodec.a in Frameworks */,
 				A91CE2B51C7DABBC0068F46F /* libavfilter.a in Frameworks */,
 				A91CE2B61C7DABBC0068F46F /* libavformat.a in Frameworks */,
-				A91CE2B71C7DABBC0068F46F /* libavresample.a in Frameworks */,
 				A91CE2B81C7DABBC0068F46F /* libavutil.a in Frameworks */,
 				A91CE2B91C7DABBC0068F46F /* libbluray.a in Frameworks */,
 				A91CE2BA1C7DABBC0068F46F /* libdvdnav.a in Frameworks */,
@@ -763,7 +758,6 @@
 				27D6C72814B102DA00B785E4 /* libass.a */,
 				27D6C72914B102DA00B785E4 /* libavcodec.a */,
 				27D6C72A14B102DA00B785E4 /* libavformat.a */,
-				226268DF1572CC7300477B4E /* libavresample.a */,
 				27D6C72B14B102DA00B785E4 /* libavutil.a */,
 				27D6C72C14B102DA00B785E4 /* libbluray.a */,
 				27D6C72E14B102DA00B785E4 /* libdvdnav.a */,

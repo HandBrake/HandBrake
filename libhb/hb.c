@@ -73,15 +73,6 @@ static void thread_func( void * );
 
 void hb_avcodec_init()
 {
-#ifdef _WIN64
-    // TODO: retest with swresample
-    // avresample's assembly optimizations can cause crashes under Win x86_64
-    // (see http://bugzilla.libav.org/show_bug.cgi?id=496)
-    // disable AVX and FMA4 as a workaround
-    hb_deep_log(2, "hb_avcodec_init: Windows x86_64, disabling AVX and FMA4");
-    int cpu_flags = av_get_cpu_flags() & ~AV_CPU_FLAG_AVX & ~AV_CPU_FLAG_FMA4;
-    av_set_cpu_flags_mask(cpu_flags);
-#endif
 }
 
 int hb_avcodec_open(AVCodecContext *avctx, AVCodec *codec,

@@ -14,7 +14,7 @@ TEST.GCC.L = $(CONTRIB.build/)lib
 TEST.libs = $(LIBHB.a)
 
 TEST.GCC.l = \
-        ass avformat avfilter avcodec avutil avresample swresample postproc mp3lame dvdnav \
+        ass avformat avfilter avcodec avutil swresample postproc mp3lame dvdnav \
         dvdread fribidi \
         samplerate swscale vpx theoraenc theoradec vorbis vorbisenc ogg x264 \
         bluray freetype xml2 bz2 z jansson harfbuzz opus speex lzma

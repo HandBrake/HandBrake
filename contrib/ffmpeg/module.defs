@@ -33,7 +33,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-vaapi \
     --disable-vdpau \
     --disable-encoders \
-    --enable-avresample \
     --enable-libmp3lame \
     --enable-encoder=aac \
     --enable-encoder=ac3 \
