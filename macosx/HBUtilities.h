@@ -58,7 +58,8 @@ NS_ASSUME_NONNULL_BEGIN
                             chapters:(NSRange)chaptersRange
                              quality:(double)quality
                              bitrate:(int)bitrate
-                          videoCodec:(uint32_t)codec;
+                          videoCodec:(uint32_t)codec
+                        creationDate:(NSDate *)creationDate;
 
 + (NSString *)isoCodeForNativeLang:(NSString *)language;
 + (NSString *)iso6392CodeFor:(NSString *)language;

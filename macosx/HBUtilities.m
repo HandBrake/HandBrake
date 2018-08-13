@@ -155,9 +155,29 @@
     return mediaURL;
 }
 
++ (nullable NSDate *)getReleaseDate:(HBTitle *)title
+{
+    if ([title.metadata.releaseDate length] == 0){
+        return nil;
+    }
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    NSString *dt = title.metadata.releaseDate;
+    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+    NSDate *releaseDate = [dateFormatter dateFromString:dt];
+    return releaseDate;
+}
+
 + (NSString *)automaticNameForJob:(HBJob *)job
 {
     HBTitle *title = job.title;
+    
+    NSDate *releaseDate = [self getReleaseDate:title];
+    if (releaseDate == nil)
+    {
+        NSDictionary* fileAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:job.fileURL.path error:nil];
+        releaseDate = [fileAttribs objectForKey:NSFileCreationDate];
+    }
 
     // Generate a new file name
     NSString *fileName = [HBUtilities automaticNameForSource:title.name
@@ -165,7 +185,9 @@
                                                     chapters:NSMakeRange(job.range.chapterStart + 1, job.range.chapterStop + 1)
                                                      quality:job.video.qualityType ? job.video.quality : 0
                                                      bitrate:!job.video.qualityType ? job.video.avgBitrate : 0
-                                                  videoCodec:job.video.encoder];
+                                                  videoCodec:job.video.encoder
+                                                creationDate:releaseDate
+                          ];
     return fileName;
 }
 
@@ -206,7 +228,6 @@
     // use the correct extension based on the container
     NSString *ext = [self automaticExtForJob:job];
     fileName = [fileName stringByAppendingPathExtension:ext];
-    
     return fileName;
 }
 
@@ -216,10 +237,12 @@
                              quality:(double)quality
                              bitrate:(int)bitrate
                           videoCodec:(uint32_t)codec
+                         creationDate:(NSDate *)creationDate
 {
     NSMutableString *name = [[NSMutableString alloc] init];
     // The format array contains the tokens as NSString
     NSArray *format = [[NSUserDefaults standardUserDefaults] objectForKey:@"HBAutoNamingFormat"];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
 
     for (NSString *formatKey in format)
     {
@@ -250,7 +273,6 @@
         {
             NSDate *date = [NSDate date];
             NSString *dateString = nil;
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterShortStyle];
             [formatter setTimeStyle:NSDateFormatterNoStyle];
             dateString = [[formatter stringFromDate:date] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
@@ -259,10 +281,24 @@
         else if ([formatKey isEqualToString:@"{Time}"])
         {
             NSDate *date = [NSDate date];
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setDateStyle:NSDateFormatterNoStyle];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
             [name appendString:[formatter stringFromDate:date]];
+        }
+        else if ([formatKey isEqualToString:@"{Creation-Date}"])
+        {
+            NSString *dateString = nil;
+            [formatter setDateStyle:NSDateFormatterShortStyle];
+            [formatter setTimeStyle:NSDateFormatterNoStyle];
+            dateString = [[formatter stringFromDate:creationDate] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+            [name appendString:dateString];
+
+        }
+        else if ([formatKey isEqualToString:@"{Creation-Time}"])
+        {
+            [formatter setDateStyle:NSDateFormatterNoStyle];
+            [formatter setTimeStyle:NSDateFormatterShortStyle];
+            [name appendString:[formatter stringFromDate:creationDate]];
         }
         else if ([formatKey isEqualToString:@"{Chapters}"])
         {

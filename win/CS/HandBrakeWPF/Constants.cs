@@ -50,14 +50,24 @@ namespace HandBrakeWPF
         public const string Quality = "{quality}";
 
         /// <summary>
-        /// The quality.
+        /// The creation date of the new output file.
         /// </summary>
         public const string Date = "{date}";
 
         /// <summary>
-        /// The quality.
+        /// The creation time of the new output file.
         /// </summary>
         public const string Time = "{time}";
+
+        /// <summary>
+        /// The source creation date.
+        /// </summary>
+        public const string CretaionDate = "{creation-date}";
+
+        /// <summary>
+        /// The source creation time.
+        /// </summary>
+        public const string CreationTime = "{creation-time}";
 
         /// <summary>
         /// The bitrate.

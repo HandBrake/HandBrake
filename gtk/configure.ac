@@ -7,6 +7,7 @@ AM_INIT_AUTOMAKE([1.7.9 foreign dist-bzip2 dist-zip])
 AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
+AC_USE_SYSTEM_EXTENSIONS
 AC_PROG_CC(gcc clang)
 AC_ISC_POSIX
 AC_PROG_CXX(g++ clang++)
