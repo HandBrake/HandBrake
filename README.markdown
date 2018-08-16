@@ -18,21 +18,11 @@ Chat on [#handbrake on Freenode IRC](https://webchat.freenode.net/?channels=hand
 For information on HandBrake's community support channels, please see [Community Support](https://handbrake.fr/docs/en/latest/help/community-support.html).
 
 
-## Contributing
+## Contributing and Translations
 
-We welcome most contributions. While it is our goal to allow everyone to contribute, contributions not meeting the project's standards may be rejected. If this happens to you, don't fret. We usually provide reasons for rejection to give you the opportunity to correct anything out of place. Consider asking first before attempting to make sweeping changes.
+We welcome most contributions. While it is our goal to allow everyone to contribute, contributions not meeting the project's goals or  standards may be rejected.
 
-First fork the HandBrake repository using GitHub's web interface, and clone the fork to your local machine (`git clone my-fork`). Then create and switch to an appropriately named local branch to track your changes (`git checkout master; git checkout --branch branch-name`). This allows you to make as many changes as you like without affecting the `master` branch, and helps identify groups of changes when submitting pull requests later on.
-
-To make a change, edit the appropriate file(s), commit them to your local branch (`git add changed-files; git commit`), and push the branch to your fork on GitHub (`git push my-fork branch-name`). You're now ready to open a pull request using GitHub's web interface.
-
-For more on this workflow, read [Understanding the GitHub Flow](https://guides.github.com/introduction/flow/).
-
-### Translations
-
-The Mac and Windows GUIs are currently only available in English, and do not support other translations at this time.
-
-The Linux GUI is currently available in multiple languages thanks to the [HandBrake Transifex project](https://www.transifex.com/victorr2007/handbrake/) created by Victorr2007. If you would like to help translate HandBrake in your language, [go there now](https://www.transifex.com/victorr2007/handbrake/).
+Please read our [guide to contributing](https://handbrake.fr/docs/en/latest/contributing/contribute.html). This will provide you with all the information you need to start contributing to the project. 
 
 
 ## Additional Information
