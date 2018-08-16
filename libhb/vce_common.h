@@ -9,3 +9,6 @@
 
 int            hb_vce_h264_available();
 int            hb_vce_h265_available();
+
+static const char * const hb_h264_profile_names[]  = { "baseline", "main", "high",  NULL, };
+static const char * const hb_h265_profile_names[]  = { "main", NULL, };

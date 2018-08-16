@@ -1502,11 +1502,13 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         case HB_VCODEC_X265_16BIT:
             return hb_h265_profile_names_16bit;
 
+#ifdef USE_VCE
         case HB_VCODEC_FFMPEG_VCE_H264:
-            return hb_h264_profile_names_8bit;
+            return hb_h264_profile_names;
         case HB_VCODEC_FFMPEG_VCE_H265:
-            return hb_h265_profile_names_8bit;
-            
+            return hb_h265_profile_names;
+#endif
+
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
             return hb_av_profile_get_names(encoder);
