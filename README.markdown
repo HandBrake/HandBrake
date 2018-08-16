@@ -17,6 +17,8 @@ Chat on [#handbrake on Freenode IRC](https://webchat.freenode.net/?channels=hand
 
 For information on HandBrake's community support channels, please see [Community Support](https://handbrake.fr/docs/en/latest/help/community-support.html).
 
+Our [community rules](https://forum.handbrake.fr/app.php/rules) and [code of conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md) apply to both our site and GitHub.
+
 
 ## Contributing and Translations
 
