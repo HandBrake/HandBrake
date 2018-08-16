@@ -1504,9 +1504,9 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
 
 #ifdef USE_VCE
         case HB_VCODEC_FFMPEG_VCE_H264:
-            return hb_h264_profile_names;
+            return hb_vce_h264_profile_names;
         case HB_VCODEC_FFMPEG_VCE_H265:
-            return hb_h265_profile_names;
+            return hb_vce_h265_profile_names;
 #endif
 
         case HB_VCODEC_FFMPEG_NVENC_H264:
@@ -1531,17 +1531,20 @@ const char* const* hb_video_encoder_get_levels(int encoder)
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_FFMPEG_NVENC_H264:
-        case HB_VCODEC_FFMPEG_VCE_H264:
             return hb_h264_level_names;
-            
+
+#ifdef USE_VCE
+     case HB_VCODEC_FFMPEG_VCE_H264:
+            return hb_vce_h264_level_names; // Not quite the same as x264
+#endif
+
         case HB_VCODEC_X265_8BIT:
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
         case HB_VCODEC_X265_16BIT:
         case HB_VCODEC_FFMPEG_NVENC_H265:
         case HB_VCODEC_FFMPEG_VCE_H265:
-            return hb_h264_level_names;
-            
+            return hb_h265_level_names;
 
         default:
             return NULL;
