@@ -49,7 +49,7 @@ LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 
 ifeq ($(BUILD.system),freebsd)
-    LIBHB.GCC.I += /usr/local/include/libxml2
+    LIBHB.GCC.I += $(LOCALBASE)/include/libxml2
 else ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
     LIBHB.GCC.I += $(CONTRIB.build/)include/libxml2
 else
