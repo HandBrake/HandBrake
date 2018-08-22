@@ -348,7 +348,7 @@ hb_buffer_t * hb_buffer_init_internal( int size )
     // Note that we can't simply align the end of our buffer because
     // sometimes we feed data to these libraries starting from arbitrary
     // points within the buffer.
-    int alloc = size + 16;
+    int alloc = size + AV_INPUT_BUFFER_PADDING_SIZE;
     hb_fifo_t *buffer_pool = size_to_pool( alloc );
 
     if( buffer_pool )
