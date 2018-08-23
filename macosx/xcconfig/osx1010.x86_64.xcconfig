@@ -1,0 +1,3 @@
+#include "base/os.osx1010.xcconfig"
+#include "base/arch.x86_64.xcconfig"
+EXTERNAL_XCCONFIG = osx1010.x86_64
