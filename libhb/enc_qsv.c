@@ -713,45 +713,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->AsyncDepth = job->qsv.async_depth;
 
     // set and enable colorimetry (video signal information)
-    switch (job->color_matrix_code)
-    {
-        case 5:
-            // custom
-            pv->param.videoSignalInfo.ColourPrimaries         = job->color_prim;
-            pv->param.videoSignalInfo.TransferCharacteristics = job->color_transfer;
-            pv->param.videoSignalInfo.MatrixCoefficients      = job->color_matrix;
-            break;
-        case 4:
-            // ITU BT.2020 UHD content
-            pv->param.videoSignalInfo.ColourPrimaries         = HB_COLR_PRI_BT2020;
-            pv->param.videoSignalInfo.TransferCharacteristics = HB_COLR_TRA_BT709;
-            pv->param.videoSignalInfo.MatrixCoefficients      = HB_COLR_MAT_BT2020_NCL;
-            break;
-        case 3:
-            // ITU BT.709 HD content
-            pv->param.videoSignalInfo.ColourPrimaries         = HB_COLR_PRI_BT709;
-            pv->param.videoSignalInfo.TransferCharacteristics = HB_COLR_TRA_BT709;
-            pv->param.videoSignalInfo.MatrixCoefficients      = HB_COLR_MAT_BT709;
-            break;
-        case 2:
-            // ITU BT.601 DVD or SD TV content (PAL)
-            pv->param.videoSignalInfo.ColourPrimaries         = HB_COLR_PRI_EBUTECH;
-            pv->param.videoSignalInfo.TransferCharacteristics = HB_COLR_TRA_BT709;
-            pv->param.videoSignalInfo.MatrixCoefficients      = HB_COLR_MAT_SMPTE170M;
-            break;
-        case 1:
-            // ITU BT.601 DVD or SD TV content (NTSC)
-            pv->param.videoSignalInfo.ColourPrimaries         = HB_COLR_PRI_SMPTEC;
-            pv->param.videoSignalInfo.TransferCharacteristics = HB_COLR_TRA_BT709;
-            pv->param.videoSignalInfo.MatrixCoefficients      = HB_COLR_MAT_SMPTE170M;
-            break;
-        default:
-            // detected during scan
-            pv->param.videoSignalInfo.ColourPrimaries         = job->title->color_prim;
-            pv->param.videoSignalInfo.TransferCharacteristics = job->title->color_transfer;
-            pv->param.videoSignalInfo.MatrixCoefficients      = job->title->color_matrix;
-            break;
-    }
+    pv->param.videoSignalInfo.ColourPrimaries          = job->color_prim;
+    pv->param.videoSignalInfo.TransferCharacteristics  = job->color_transfer;
+    pv->param.videoSignalInfo.MatrixCoefficients       = job->color_matrix;
     pv->param.videoSignalInfo.ColourDescriptionPresent = 1;
 
     // parse user-specified encoder options, if present
@@ -799,17 +763,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // reload colorimetry in case values were set in encoder_options
     if (pv->param.videoSignalInfo.ColourDescriptionPresent)
     {
-        job->color_matrix_code = 4;
         job->color_prim        = pv->param.videoSignalInfo.ColourPrimaries;
         job->color_transfer    = pv->param.videoSignalInfo.TransferCharacteristics;
         job->color_matrix      = pv->param.videoSignalInfo.MatrixCoefficients;
-    }
-    else
-    {
-        job->color_matrix_code = 0;
-        job->color_prim        = HB_COLR_PRI_UNDEF;
-        job->color_transfer    = HB_COLR_TRA_UNDEF;
-        job->color_matrix      = HB_COLR_MAT_UNDEF;
     }
 
     // sanitize values that may exceed the Media SDK variable size

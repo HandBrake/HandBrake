@@ -645,11 +645,13 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     hb_dict_set(source_dict, "Range", range_dict);
 
     hb_dict_t *video_dict = hb_dict_get(dict, "Video");
-    if (job->color_matrix_code > 0)
-    {
-        hb_dict_set(video_dict, "ColorMatrixCode",
-                            hb_value_int(job->color_matrix_code));
-    }
+    hb_dict_set(video_dict, "ColorPrimaries",
+                hb_value_int(job->color_prim));
+    hb_dict_set(video_dict, "ColorTransfer",
+                hb_value_int(job->color_transfer));
+    hb_dict_set(video_dict, "ColorMatrix",
+                hb_value_int(job->color_matrix));
+
     if (job->vquality > HB_INVALID_VIDEO_QUALITY)
     {
         hb_dict_set(video_dict, "Quality", hb_value_double(job->vquality));
@@ -994,10 +996,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     // PAR {Num, Den}
     "s?{s:i, s:i},"
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level, Options
-    //        TwoPass, Turbo, ColorMatrixCode,
+    //        TwoPass, Turbo, ColorPrimaries, ColorTransfer, ColorMatrix,
     //        QSV {Decode, AsyncDepth}}
     "s:{s:o, s?f, s?i, s?s, s?s, s?s, s?s, s?s,"
-    "   s?b, s?b, s?i,"
+    "   s?b, s?b, s?i, s?i, s?i,"
     "   s?{s?b, s?i}},"
     // Audio {CopyMask, FallbackEncoder, AudioList}
     "s?{s?o, s?o, s?o},"
@@ -1041,7 +1043,9 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "Options",              unpack_s(&video_options),
             "TwoPass",              unpack_b(&job->twopass),
             "Turbo",                unpack_b(&job->fastfirstpass),
-            "ColorMatrixCode",      unpack_i(&job->color_matrix_code),
+            "ColorPrimaries",       unpack_i(&job->color_prim),
+            "ColorTransfer",        unpack_i(&job->color_transfer),
+            "ColorMatrix",          unpack_i(&job->color_matrix),
             "QSV",
                 "Decode",           unpack_b(&job->qsv.decode),
                 "AsyncDepth",       unpack_i(&job->qsv.async_depth),

@@ -554,7 +554,6 @@ struct hb_job_s
     char           *encoder_level;
     int             areBframes;
 
-    int             color_matrix_code;
     int             color_prim;
     int             color_transfer;
     int             color_matrix;
