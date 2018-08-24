@@ -395,6 +395,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     hb_log( "encavcodec: encoding with stored aspect %d/%d",
             job->par.num, job->par.den );
 
+    // set colorimetry
+    context->color_primaries = job->color_prim;
+    context->color_trc       = job->color_transfer;
+    context->colorspace      = job->color_matrix;
+
     if( job->mux & HB_MUX_MASK_MP4 )
     {
         context->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;

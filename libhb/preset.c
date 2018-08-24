@@ -1573,8 +1573,8 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
 int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
 {
     hb_dict_t    *dest_dict, *video_dict, *qsv;
-    hb_value_t   *value, *vcodec_value, *color_value;
-    int           mux, vcodec, vqtype;
+    hb_value_t   *value, *vcodec_value;
+    int           mux, vcodec, vqtype, color_matrix_code;
     hb_encoder_t *encoder;
 
     dest_dict    = hb_dict_get(job_dict, "Destination");
@@ -1609,8 +1609,44 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
     video_dict = hb_dict_get(job_dict, "Video");
     hb_dict_set(video_dict, "Encoder", hb_value_string(encoder->short_name));
 
-    if ((color_value = hb_dict_get(preset, "VideoColorMatrixCode")) != NULL)
-        hb_dict_set(video_dict, "ColorMatrixCode", hb_value_dup(color_value));
+    color_matrix_code = hb_value_get_int(hb_dict_get(preset, "VideoColorMatrixCode"));
+    if (color_matrix_code != 0)
+    {
+        int color_prim, color_transfer, color_matrix;
+
+        switch (color_matrix_code)
+        {
+            case 4:
+                // ITU BT.2020 UHD content
+                color_prim      = HB_COLR_PRI_BT2020;
+                color_transfer  = HB_COLR_TRA_BT709;
+                color_matrix    = HB_COLR_MAT_BT2020_NCL;
+                break;
+            case 3:
+                // ITU BT.709 HD content
+                color_prim      = HB_COLR_PRI_BT709;
+                color_transfer  = HB_COLR_TRA_BT709;
+                color_matrix    = HB_COLR_MAT_BT709;
+                break;
+            case 2:
+                // ITU BT.601 DVD or SD TV content (PAL)
+                color_prim      = HB_COLR_PRI_EBUTECH;
+                color_transfer  = HB_COLR_TRA_BT709;
+                color_matrix    = HB_COLR_MAT_SMPTE170M;
+                break;
+            case 1:
+            default:
+                // ITU BT.601 DVD or SD TV content (NTSC)
+                color_prim      = HB_COLR_PRI_SMPTEC;
+                color_transfer  = HB_COLR_TRA_BT709;
+                color_matrix    = HB_COLR_MAT_SMPTE170M;
+                break;
+        }
+
+        hb_dict_set(video_dict, "ColorPrimaries", hb_value_int(color_prim));
+        hb_dict_set(video_dict, "ColorTransfer", hb_value_int(color_transfer));
+        hb_dict_set(video_dict, "ColorMatrix", hb_value_int(color_matrix));
+    }
     hb_dict_set(video_dict, "Encoder", hb_value_dup(vcodec_value));
 
     if ((vcodec & HB_VCODEC_X264_MASK) &&

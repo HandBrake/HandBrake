@@ -3743,6 +3743,10 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->pass_id    = HB_PASS_ENCODE;
     job->vrate      = title->vrate;
 
+    job->color_prim     = title->color_prim;
+    job->color_transfer = title->color_transfer;
+    job->color_matrix   = title->color_matrix;
+
     job->mux = HB_MUX_MP4;
 
     job->list_audio = hb_list_init();
