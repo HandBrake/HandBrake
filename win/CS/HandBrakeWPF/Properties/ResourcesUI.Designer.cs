@@ -1663,7 +1663,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to x264 Settings.
+        ///   Looks up a localized string similar to x264/5 Settings.
         /// </summary>
         public static string Options_x264 {
             get {

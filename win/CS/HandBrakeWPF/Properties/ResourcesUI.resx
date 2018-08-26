@@ -817,7 +817,7 @@
     <value>When Done</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
-    <value>x264 Settings</value>
+    <value>x264/5 Settings</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
     <value>Constant quality fractional granularity:</value>
