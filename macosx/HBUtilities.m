@@ -13,7 +13,27 @@
 #include "common.h"
 #include "lang.h"
 
+static NSDateFormatter *_timeFormatter = nil;
+static NSDateFormatter *_dateFormatter = nil;
+static NSDateFormatter *_releaseDateFormatter = nil;
+
 @implementation HBUtilities
+
++ (void)initialize
+{
+    if (self == [HBUtilities class]) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        [_dateFormatter setDateStyle:NSDateFormatterShortStyle];
+        [_dateFormatter setTimeStyle:NSDateFormatterNoStyle];
+
+        _timeFormatter = [[NSDateFormatter alloc] init];
+        [_timeFormatter setDateStyle:NSDateFormatterNoStyle];
+        [_timeFormatter setTimeStyle:NSDateFormatterShortStyle];
+
+        _releaseDateFormatter = [[NSDateFormatter alloc] init];
+        [_releaseDateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
+    }
+}
 
 + (NSString *)handBrakeVersion
 {
@@ -155,24 +175,23 @@
     return mediaURL;
 }
 
-+ (nullable NSDate *)getReleaseDate:(HBTitle *)title
++ (nullable NSDate *)releaseDate:(HBTitle *)title
 {
-    if ([title.metadata.releaseDate length] == 0){
+    if ([title.metadata.releaseDate length] == 0)
+    {
         return nil;
     }
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    NSString *dt = title.metadata.releaseDate;
-    [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
-    NSDate *releaseDate = [dateFormatter dateFromString:dt];
-    return releaseDate;
+    else
+    {
+        return [_releaseDateFormatter dateFromString:title.metadata.releaseDate];
+    }
 }
 
 + (NSString *)automaticNameForJob:(HBJob *)job
 {
     HBTitle *title = job.title;
     
-    NSDate *releaseDate = [self getReleaseDate:title];
+    NSDate *releaseDate = [self releaseDate:title];
     if (releaseDate == nil)
     {
         NSDictionary* fileAttribs = [[NSFileManager defaultManager] attributesOfItemAtPath:job.fileURL.path error:nil];
@@ -186,8 +205,7 @@
                                                      quality:job.video.qualityType ? job.video.quality : 0
                                                      bitrate:!job.video.qualityType ? job.video.avgBitrate : 0
                                                   videoCodec:job.video.encoder
-                                                creationDate:releaseDate
-                          ];
+                                                creationDate:releaseDate];
     return fileName;
 }
 
@@ -241,8 +259,7 @@
 {
     NSMutableString *name = [[NSMutableString alloc] init];
     // The format array contains the tokens as NSString
-    NSArray *format = [[NSUserDefaults standardUserDefaults] objectForKey:@"HBAutoNamingFormat"];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSArray<NSString *> *format = [[NSUserDefaults standardUserDefaults] objectForKey:@"HBAutoNamingFormat"];
 
     for (NSString *formatKey in format)
     {
@@ -272,33 +289,23 @@
         else if ([formatKey isEqualToString:@"{Date}"])
         {
             NSDate *date = [NSDate date];
-            NSString *dateString = nil;
-            [formatter setDateStyle:NSDateFormatterShortStyle];
-            [formatter setTimeStyle:NSDateFormatterNoStyle];
-            dateString = [[formatter stringFromDate:date] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+            NSString *dateString = [[_dateFormatter stringFromDate:date] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
             [name appendString:dateString];
         }
         else if ([formatKey isEqualToString:@"{Time}"])
         {
             NSDate *date = [NSDate date];
-            [formatter setDateStyle:NSDateFormatterNoStyle];
-            [formatter setTimeStyle:NSDateFormatterShortStyle];
-            [name appendString:[formatter stringFromDate:date]];
+            [name appendString:[_timeFormatter stringFromDate:date]];
         }
         else if ([formatKey isEqualToString:@"{Creation-Date}"])
         {
-            NSString *dateString = nil;
-            [formatter setDateStyle:NSDateFormatterShortStyle];
-            [formatter setTimeStyle:NSDateFormatterNoStyle];
-            dateString = [[formatter stringFromDate:creationDate] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
+            NSString *dateString = [[_dateFormatter stringFromDate:creationDate] stringByReplacingOccurrencesOfString:@"/" withString:@"-"];
             [name appendString:dateString];
 
         }
         else if ([formatKey isEqualToString:@"{Creation-Time}"])
         {
-            [formatter setDateStyle:NSDateFormatterNoStyle];
-            [formatter setTimeStyle:NSDateFormatterShortStyle];
-            [name appendString:[formatter stringFromDate:creationDate]];
+            [name appendString:[_timeFormatter stringFromDate:creationDate]];
         }
         else if ([formatKey isEqualToString:@"{Chapters}"])
         {
