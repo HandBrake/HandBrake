@@ -212,8 +212,13 @@
         self.pictureLayer.bounds = pictureRect;
 
         // Position the CALayers
-        CGPoint anchor = CGPointMake(floor((self.frame.size.width - pictureRect.size.width) / 2),
-                                     floor((self.frame.size.height - pictureRect.size.height) / 2));
+        NSRect alignedRect = [self backingAlignedRect:NSMakeRect(0, 0,
+                                                                 self.frame.size.width - pictureRect.size.width,
+                                                                 self.frame.size.height - pictureRect.size.height)
+                                              options:NSAlignAllEdgesNearest];
+
+        CGPoint anchor = CGPointMake(alignedRect.size.width / 2,
+                                     alignedRect.size.height / 2);
         [self.pictureLayer setPosition:anchor];
 
         CGPoint backAchor = CGPointMake(anchor.x - BORDER_SIZE, anchor.y - BORDER_SIZE);
@@ -221,7 +226,7 @@
         
         [NSAnimationContext endGrouping];
         
-        // Update the proprierties
+        // Update the properties
         self.scale = self.pictureLayer.frame.size.width / imageSize.width * backingScaleFactor;
         self.pictureFrame = self.pictureLayer.frame;
     }
@@ -270,8 +275,11 @@
         resultSize.height += BORDER_SIZE * 2;
     }
 
-    resultSize.width = floor(resultSize.width);
-    resultSize.height = floor(resultSize.height);
+    NSRect alignedRect = [self backingAlignedRect:NSMakeRect(0, 0, resultSize.width, resultSize.height)
+                                          options:NSAlignAllEdgesNearest];
+
+    resultSize.width = alignedRect.size.width;
+    resultSize.height = alignedRect.size.height;
 
     return resultSize;
 }
