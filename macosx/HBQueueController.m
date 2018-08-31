@@ -1111,11 +1111,26 @@
 - (IBAction)revealSelectedQueueItems:(id)sender
 {
     NSIndexSet *targetedRows = [self.outlineView targetedRowIndexes];
-    NSMutableArray *urls = [[NSMutableArray alloc] init];
+    NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
 
     NSUInteger currentIndex = [targetedRows firstIndex];
     while (currentIndex != NSNotFound) {
         NSURL *url = [[self.jobs objectAtIndex:currentIndex] completeOutputURL];
+        [urls addObject:url];
+        currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
+    }
+
+    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:urls];
+}
+
+- (IBAction)revealSelectedQueueItemsSources:(id)sender
+{
+    NSIndexSet *targetedRows = [self.outlineView targetedRowIndexes];
+    NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
+
+    NSUInteger currentIndex = [targetedRows firstIndex];
+    while (currentIndex != NSNotFound) {
+        NSURL *url = [[self.jobs objectAtIndex:currentIndex] fileURL];
         [urls addObject:url];
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }

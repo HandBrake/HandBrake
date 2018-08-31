@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.3.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.13.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.3.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.13.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -28,13 +28,13 @@
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <scrollView horizontalLineScroll="19" horizontalPageScroll="0.0" verticalLineScroll="19" verticalPageScroll="0.0" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2596">
-                        <rect key="frame" x="20" y="20" width="534" height="336"/>
+                        <rect key="frame" x="20" y="20" width="534" height="337"/>
                         <clipView key="contentView" id="B5m-TR-ErO">
-                            <rect key="frame" x="1" y="1" width="532" height="334"/>
+                            <rect key="frame" x="1" y="1" width="532" height="335"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <outlineView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" indentationPerLevel="16" outlineTableColumn="2624" id="2597" customClass="HBQueueOutlineView">
-                                    <rect key="frame" x="0.0" y="0.0" width="532" height="334"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="532" height="335"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -87,12 +87,12 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="2643">
-                            <rect key="frame" x="517" y="1" width="16" height="334"/>
+                            <rect key="frame" x="517" y="1" width="16" height="335"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="6000" translatesAutoresizingMaskIntoConstraints="NO" id="2511">
-                        <rect key="frame" x="18" y="398" width="538" height="15"/>
+                        <rect key="frame" x="18" y="399" width="538" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Pending Jobs" id="2637">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -100,7 +100,7 @@
                         </textFieldCell>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="6000" translatesAutoresizingMaskIntoConstraints="NO" id="2646">
-                        <rect key="frame" x="18" y="364" width="538" height="30"/>
+                        <rect key="frame" x="18" y="365" width="538" height="30"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="30" id="IvQ-56-oOt"/>
                         </constraints>
@@ -178,7 +178,13 @@
         </window>
         <menu id="2649" userLabel="ContextMenu">
             <items>
-                <menuItem title="Show In Finder" id="2655">
+                <menuItem title="Show Source in Finder" id="gbW-g1-lEc">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="revealSelectedQueueItemsSources:" target="-2" id="NY5-Sp-e08"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Show Destination in Finder" id="2655">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="revealSelectedQueueItems:" target="-2" id="qtj-uq-KvZ"/>
