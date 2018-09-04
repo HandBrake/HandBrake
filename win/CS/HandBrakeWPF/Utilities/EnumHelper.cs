@@ -17,7 +17,7 @@ namespace HandBrakeWPF.Utilities
     using System.Linq;
     using System.Reflection;
 
-    using HandBrake.ApplicationServices.Attributes;
+    using HandBrake.Interop.Attributes;
 
     /// <summary>
     /// Enum Helpers
@@ -44,10 +44,15 @@ namespace HandBrakeWPF.Utilities
             }
 
             FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
-            DescriptionAttribute[] attributes =
+            if (fieldInfo != null)
+            {
+                DescriptionAttribute[] attributes =
                   (DescriptionAttribute[])fieldInfo.GetCustomAttributes(
                   typeof(DescriptionAttribute), false);
-            return (attributes.Length > 0) ? attributes[0].Description : value.ToString();
+                return (attributes.Length > 0) ? attributes[0].Description : value.ToString();
+            }
+
+            return string.Empty;
         }
 
         /// <summary>
@@ -63,9 +68,14 @@ namespace HandBrakeWPF.Utilities
             }
 
             FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
-            DisplayName[] attributes = (DisplayName[])fieldInfo.GetCustomAttributes(typeof(DisplayName), false);
+            if (fieldInfo != null)
+            {
+                DisplayName[] attributes = (DisplayName[])fieldInfo.GetCustomAttributes(typeof(DisplayName), false);
 
-            return (attributes.Length > 0) ? attributes[0].Name : value.ToString();
+                return (attributes.Length > 0) ? attributes[0].Name : value.ToString();
+            }
+
+            return string.Empty;
         }
 
         /// <summary>
@@ -124,9 +134,13 @@ namespace HandBrakeWPF.Utilities
             }
 
             FieldInfo fieldInfo = value.GetType().GetField(value.ToString());
-            ShortName[] attributes = (ShortName[])fieldInfo.GetCustomAttributes(typeof(ShortName), false);
+            if (fieldInfo != null)
+            {
+                ShortName[] attributes = (ShortName[])fieldInfo.GetCustomAttributes(typeof(ShortName), false);
+                return (attributes.Length > 0) ? attributes[0].Name : value.ToString();
+            }
 
-            return (attributes.Length > 0) ? attributes[0].Name : value.ToString(); 
+            return string.Empty;
         }
 
         /// <summary>
@@ -153,7 +167,10 @@ namespace HandBrakeWPF.Utilities
         {
             var strings = new Collection<string>();
             foreach (T e in Enum.GetValues(enumType))
+            {
                 strings.Add(GetDisplay(e));
+            }
+
             return strings;
         }
 
