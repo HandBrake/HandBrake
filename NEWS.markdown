@@ -7,10 +7,12 @@
 #### General
 
 #### Video
+
 - Added Support for Nvidia NVENC encoder. (Windows Only. Linux Coming Soon)
 - Added Support for AMD VCE encoder. (Windows Only)
 
 ### Audio
+
 - Improved AAC Encoder. This encoder is no longer considered beta.
 - Allow E-AC3 Muxing in MP4
 
@@ -22,30 +24,35 @@
 - Removed --enable-local-autotools and --enable-local-pkgconfig and associated contribs
 
 #### Third-party libraries
+
 - FFmpeg 4.0 (Previously libav 12.3)
 - x265 2.8
 
 ### Linux
+
 - Initial support for GTK 4
 - Bug Fixes: Multi-instance queues
-- Miscellaneous bug fixes and improvements 
+- Miscellaneous bug fixes and improvements
 
 ### Mac
+
 - macOS 10.10 Yosemite is now the minimum supported version.
 - Initial Localisation Support.
   - Supported Languages: German
 - Updated Sparkle to 0.19.0
-- Removed Growl support in favour of macOS built-in notifications. 
-- Miscellaneous bug fixes and improvements including many small tweaks to auto-layout to better support localisation. 
+- Removed Growl support in favour of macOS built-in notifications.
+- Miscellaneous bug fixes and improvements including many small tweaks to auto-layout to better support localisation.
 
 ### Windows
-- Portable Mode:  
+
+- Portable Mode:
   - You can now disable start-up update checking.
   - Fixed an issue that created a "HandBrake Team" folder in Roaming.
-- Audio Behaviours: Now supports setting of: Mixdown, Bitrate, Sample Rate, Gain and DRC for the fallback encoder. 
-- GUI CLI:  New start-up options: --recover-queue-ids=<commend separated id list>    to load only specific queue recovery files if desired. 
+- Audio Behaviours: Now supports setting of: Mixdown, Bitrate, Sample Rate, Gain and DRC for the fallback encoder.
+- GUI CLI:  New start-up options: --recover-queue-ids=<comma separated id list>    to load only specific queue recovery files if desired.
 - Improved the Multi-instance queue recovery handler. Should avoid any instances where the wrong queue files are loaded up from a 2nd instance.
 - Miscellaneous bug fixes and improvements
+
 
 ## HandBrake 1.1.1
 
@@ -100,6 +107,7 @@
 - Improved privacy by adding an option to disable the Summary tab preview image
 - Updated installer to block installation on 32-bit systems to avoid confusion (unsupported since 1.1.0)
 - Miscellaneous bug fixes and improvements
+
 
 ## HandBrake 1.1.0
 
@@ -300,7 +308,7 @@ Superseded by HandBrake 1.0.5.
 
 ### All platforms
 
-#### Video 
+#### Video
 
 - Fixed point to point encoding end point when using frames as the unit
 - Improve error handling for libdvdread and libavcodec decoders
@@ -861,12 +869,12 @@ Superseded by HandBrake 1.0.5.
 
 ### Core Library
 
-- BluRay disc structure support. (No decryption support) 
-- Updated Libraries (x264, ffmpeg) 
-- SSA Subtitle support. (Including burn-in) 
-- MP3 audio now supported in MP4 files (Note: Limited Player compatibility) 
-- VOBSUB subtitle now supported in MP4 files (Note: Limited Player compatibility) 
-- Updated Presets for newer devices and better quality 
+- BluRay disc structure support. (No decryption support)
+- Updated Libraries (x264, ffmpeg)
+- SSA Subtitle support. (Including burn-in)
+- MP3 audio now supported in MP4 files (Note: Limited Player compatibility)
+- VOBSUB subtitle now supported in MP4 files (Note: Limited Player compatibility)
+- Updated Presets for newer devices and better quality
 - AC3 encoding support.
 - Many Bug fixes and other small improvements
 - Improved DVD Main Feature detection (when using dvdnav)
@@ -876,7 +884,7 @@ Superseded by HandBrake 1.0.5.
 
 - Updated x264 Advanced Panel
 - Video Quality Slider drops % value and only shows RF for x264
-- Batch Scan (Scan Multiple files at once. N.B: Does not include multiple VIDEO_TS folders / Image files) 
+- Batch Scan (Scan Multiple files at once. N.B: Does not include multiple VIDEO_TS folders / Image files)
 - Peak framerate option (Capped VFR)
 - Many Bug fixes
 - Many Tweaks to improve usability.
@@ -897,7 +905,7 @@ Superseded by HandBrake 1.0.5.
 ### Linux GUI
 
 - Multiple instance support (run multiple copies of ghb at once)
-- Many Bug fixes and UI improvements. 
+- Many Bug fixes and UI improvements.
 
 ## HandBrake 0.9.4
 
@@ -935,7 +943,7 @@ Superseded by HandBrake 1.0.5.
 - Better AV sync
 - Support for sources with no audio
 - DTS passthrough for MKV
-- x264 bumped from r1169 to r1347, which means speed optimizations, new default settings (see r2742 commit comment), the magic of macroblock tree rate control (mbtree), a new CRF curve (meaning you will get different, generally lower bitrates at the same RF, with similar quality metrics), and weighted P-Frames (disabled by default for Baseline encodes and the AppleTV preset). 
+- x264 bumped from r1169 to r1347, which means speed optimizations, new default settings (see r2742 commit comment), the magic of macroblock tree rate control (mbtree), a new CRF curve (meaning you will get different, generally lower bitrates at the same RF, with similar quality metrics), and weighted P-Frames (disabled by default for Baseline encodes and the AppleTV preset).
 - Better sample interleaving
 - Better, optional deinterlacer for decomb (EEDI2)
 - New mode structure for the decomb filter
@@ -972,7 +980,7 @@ Superseded by HandBrake 1.0.5.
 - H.264 video source decoding crash fixed
 - Queue displays varying row heights based on encode settings
 - Fixed EyeTV package scanning
-- 64bit / 32 bit VLC detection 
+- 64bit / 32 bit VLC detection
 - Preset import/export
 
 ### Windows
@@ -1336,7 +1344,7 @@ The Universal preset is designed to play on all modern iPods (anything newer tha
 ### CLI
 
 - Built-in presets
-- Short names for denoising (weak, medium, strong) and deinterlacing (fast, slow, slower) 
+- Short names for denoising (weak, medium, strong) and deinterlacing (fast, slow, slower)
 - Solaris port
 - No more x264b30 (use -e x264 -I -x level=30:cabac=0 instead or better yet an iPod preset)
 - Chapter marker .csv input fixed
@@ -1487,28 +1495,28 @@ The Universal preset is designed to play on all modern iPods (anything newer tha
 ### Windows GUI Changes - Version 2.2 beta 1
 
 - Added: A few presets for the iPod in the menu.
-- Added: Ability to set default settings for all program encode options. 
+- Added: Ability to set default settings for all program encode options.
 - Added: Ability to turn off Automatic Update check on start-up. See Tools > Options
-- Added: Mod 16 check on the Height and Width boxes. 
-- Added: Check the amount of hard disk space left is not running low when saving file. 
+- Added: Mod 16 check on the Height and Width boxes.
+- Added: Check the amount of hard disk space left is not running low when saving file.
 - Added: Option to have a Read DVD window showup on start-up.
-- Added: ìView DVD dataî Menu item in the tools menu. 
+- Added: ìView DVD dataî Menu item in the tools menu.
 - Added: Links to the Homepage, forum, wiki and documentation page in the Help menu.
 - Added: Chapter markers check box (New feature in 0.8.5b1 CLI)
-- Changed: View DVD Information no longer appears after clicking the ìBrowseî button. 
-- Changed: A few changes to the GUI - replaced textboxes with Dropdowns which auto-populate. 
+- Changed: View DVD Information no longer appears after clicking the ìBrowseî button.
+- Changed: A few changes to the GUI - replaced textboxes with Dropdowns which auto-populate.
 - Changed: Auto Crop and Aspect text now automatically update when a new title is selected.
 - Changed: Several tweaks to the GUI design, remove a few text items that are no longer needed.
-- Changed: Ability to Queue videos enabled with completely re-written code. 
-- Changed: Ability to queue stuff up while the encoding process is running. 
-- Changed: Ability to remove items from the encode queue while is running. 
-- Changed: Anamorphic option blanks out resolution boxes. 
-- Changed: Re-written update checker. 
+- Changed: Ability to Queue videos enabled with completely re-written code.
+- Changed: Ability to queue stuff up while the encoding process is running.
+- Changed: Ability to remove items from the encode queue while is running.
+- Changed: Anamorphic option blanks out resolution boxes.
+- Changed: Re-written update checker.
 - Changed: Ability to turn off update check on start-up in Tools > Options
-- Changed: Auto Crop option now fills in figures into text boxes when selected. 
+- Changed: Auto Crop option now fills in figures into text boxes when selected.
 - Changed: Mp4 now default output file extension.
 - Changed: Enabled 5.1 AAC option.
-- Changed: Enabled h264 advanced options. 
+- Changed: Enabled h264 advanced options.
 - Changed: Updated the FAQ.
 - Changed: Included new version of HandBrake. Version 0.8.5b1.
 - Fixed: Pixel Ratio Not being saved with the profile.
