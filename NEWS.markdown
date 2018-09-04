@@ -54,6 +54,52 @@
 - Miscellaneous bug fixes and improvements
 
 
+## HandBrake 1.1.2
+
+### All platforms
+
+#### General
+
+- Fixed Blu-ray title name where reading from raw device
+- Improved handling of broken units in Blu-ray source (skip and continue reading)
+
+#### Video
+
+- Fixed rare crash related to preview images, anamorphic, and default preset values
+- Fixed jitter produced by 59.94 fps to 29.97 fps frame rate conversion
+
+#### Audio
+
+- Fixed duration of silence buffers (may improve audio/video sync for some sources)
+
+#### Build system
+
+- Fixed linker warning by setting libvpx target to minimum supported macOS version
+- Fixed build failure with old GTK versions
+- Miscellaneous Flatpak-related fixes and improvements
+
+#### Third-party libraries
+
+- Updated libraries (necessary to pull in needed bug fixes)
+  - libdvdread 6.0.0 (DVD decoding)
+  - libdvdnav 6.0.0 (DVD decoding)
+
+### Linux
+
+- Fixed potential crash where $HOME directory is missing
+- Fixed legacy preferences causing preset window being shown at every launch
+- Fixed preset name and menu display on Ubuntu 14.04 Trusty Tahr
+- Fixed default destination file name for Blu-ray source to not include MPLS number
+- Fixed queue reloading in Flatpak sandbox
+- Fixed toolbar icons alignment and use correct art for lower pixel density
+- Updated most translations
+
+### Mac
+
+- Fixed menu item and tooltip strings related to selection behavior
+- Fixed crash where presets file contains invalid UTF-8
+
+
 ## HandBrake 1.1.1
 
 ### All platforms
