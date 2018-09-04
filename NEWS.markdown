@@ -1,5 +1,52 @@
 # HandBrake News
 
+## HandBrake 1.2.0
+
+### All platforms
+
+#### General
+
+#### Video
+- Added Support for Nvidia NVENC encoder. (Windows Only. Linux Coming Soon)
+- Added Support for AMD VCE encoder. (Windows Only)
+
+### Audio
+- Improved AAC Encoder. This encoder is no longer considered beta.
+- Allow E-AC3 Muxing in MP4
+
+#### Command line interface
+
+#### Build system
+
+- Mac Toolchain script is now more robust against outages on 3rd party servers.
+- Removed --enable-local-autotools and --enable-local-pkgconfig and associated contribs
+
+#### Third-party libraries
+- FFmpeg 4.0 (Previously libav 12.3)
+- x265 2.8
+
+### Linux
+- Initial support for GTK 4
+- Bug Fixes: Multi-instance queues
+- Miscellaneous bug fixes and improvements 
+
+### Mac
+- macOS 10.10 Yosemite is now the minimum supported version.
+- Initial Localisation Support.
+  - Supported Languages: German
+- Updated Sparkle to 0.19.0
+- Removed Growl support in favour of macOS built-in notifications. 
+- Miscellaneous bug fixes and improvements including many small tweaks to auto-layout to better support localisation. 
+
+### Windows
+- Portable Mode:  
+  - You can now disable start-up update checking.
+  - Fixed an issue that created a "HandBrake Team" folder in Roaming.
+- Audio Behaviours: Now supports setting of: Mixdown, Bitrate, Sample Rate, Gain and DRC for the fallback encoder. 
+- GUI CLI:  New start-up options: --recover-queue-ids=<commend separated id list>    to load only specific queue recovery files if desired. 
+- Improved the Multi-instance queue recovery handler. Should avoid any instances where the wrong queue files are loaded up from a 2nd instance.
+- Miscellaneous bug fixes and improvements
+
 ## HandBrake 1.1.1
 
 ### All platforms
