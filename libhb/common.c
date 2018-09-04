@@ -303,7 +303,7 @@ static int hb_video_encoder_is_enabled(int encoder)
         case HB_VCODEC_FFMPEG_VT_H264:
             return hb_vt_h264_is_available();
         case HB_VCODEC_FFMPEG_VT_H265:
-            return hb_vt_h265_is_available;
+            return hb_vt_h265_is_available();
 #endif
 
 #ifdef USE_X265
