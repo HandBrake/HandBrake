@@ -52,6 +52,7 @@
 - Fixed an issue that could cause incorrect track selection behaviours on audio and subtitle tabs.
 - Fixed an issue that would create an unneeded "HandBrake" team folder in the users roaming directory.
 - Improve handling of directories on the queue's Open Source folder option.
+- Fixed a few miscellaneous crashes.
 
 
 ## HandBrake 1.1.1
