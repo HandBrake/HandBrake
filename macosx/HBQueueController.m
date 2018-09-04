@@ -1276,25 +1276,25 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     NSAlert *alert = [[NSAlert alloc] init];
     [alert setMessageText:NSLocalizedString(@"You are currently encoding. What would you like to do?", @"Queue Alert -> cancel rip message")];
-    [alert setInformativeText:NSLocalizedString(@"Your encode will be canceled if you don't continue encoding.", @"Queue Alert -> cancel rip informative text")];
+    [alert setInformativeText:NSLocalizedString(@"Select Continue Encoding to dismiss this dialog without making changes.", @"Queue Alert -> cancel rip informative text")];
     [alert addButtonWithTitle:NSLocalizedString(@"Continue Encoding", @"Queue Alert -> cancel rip first button")];
-    [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Stop", @"Queue Alert -> cancel rip second button")];
-    [alert addButtonWithTitle:NSLocalizedString(@"Cancel Current and Continue", @"Queue Alert -> cancel rip third button")];
-    [alert addButtonWithTitle:NSLocalizedString(@"Finish Current and Stop", @"Queue Alert -> cancel rip fourth button")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Skip Current Job", @"Queue Alert -> cancel rip second button")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Stop After Current Job", @"Queue Alert -> cancel rip third button")];
+    [alert addButtonWithTitle:NSLocalizedString(@"Stop All", @"Queue Alert -> cancel rip fourth button")];
     [alert setAlertStyle:NSAlertStyleCritical];
 
     [alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSAlertSecondButtonReturn)
         {
-            [self cancelCurrentJobAndStop];
+            [self cancelCurrentJobAndContinue];
         }
         else if (returnCode == NSAlertThirdButtonReturn)
         {
-            [self cancelCurrentJobAndContinue];
+            [self finishCurrentAndStop];
         }
         else if (returnCode == NSAlertThirdButtonReturn + 1)
         {
-            [self finishCurrentAndStop];
+            [self cancelCurrentJobAndStop];
         }
     }];
 }
