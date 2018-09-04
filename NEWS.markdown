@@ -46,13 +46,12 @@
 - Fixed menu item and tooltip strings related to selection behavior
 - Fixed crash where presets file contains invalid UTF-8
 
-
 ### Windows
 
-- Fixed an issue that could cause incorrect track selection behaviours on audio and subtitle tabs.
-- Fixed an issue that would create an unneeded "HandBrake" team folder in the users roaming directory.
-- Improve handling of directories on the queue's Open Source folder option.
-- Fixed a few miscellaneous crashes.
+- Fixed incorrect track selection behaviours on audio and subtitle tabs
+- Fixed creating an unneeded HandBrake Team directory in the user's Foaming directory
+- Improved path handling when opening a source directory from the queue
+- Miscellaneous bug fixes and improvements
 
 
 ## HandBrake 1.1.1
