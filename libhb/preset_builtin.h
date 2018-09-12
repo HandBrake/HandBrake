@@ -3531,7 +3531,7 @@ const char hb_builtin_presets_json[] =
 "                    \"PictureSharpenTune\": \"none\", \n"
 "                    \"PictureTopCrop\": 0, \n"
 "                    \"PictureWidth\": 960, \n"
-"                    \"PresetDescription\": \"H.264 video (up to 540p30), AAC stereo audio, and Dolby Digital (AC-3) surround audio, in an MP4 container. Compatible with Apple iPhone 1st Generation, 3G, 3GS, and later; iPod touch 1st, 2nd, 3rd Generation and later; iPod Classic; Apple TV 1st Generation and later.\", \n"
+"                    \"PresetDescription\": \"H.264 video (up to 540p30), AAC stereo audio, and Dolby Digital (AC-3) surround audio, in an MP4 container. Compatible with Apple iPhone 1st Generation, 3G, 3GS, and later; iPod touch 1st, 2nd, 3rd Generation and later; iPad 1st Generation and later; iPod Classic; Apple TV 1st Generation and later.\", \n"
 "                    \"PresetName\": \"Apple 540p30 Surround\", \n"
 "                    \"SubtitleAddCC\": false, \n"
 "                    \"SubtitleAddForeignAudioSearch\": true, \n"
