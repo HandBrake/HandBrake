@@ -2648,6 +2648,7 @@
         {
             "ChildrenArray": [
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -2752,6 +2753,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -2856,6 +2858,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -2960,6 +2963,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -3064,6 +3068,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -3182,6 +3187,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -3300,6 +3306,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -3418,6 +3425,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -3536,6 +3544,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -3654,6 +3663,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -3758,6 +3768,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -3876,6 +3887,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -3994,6 +4006,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -4112,6 +4125,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -4230,6 +4244,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -4334,6 +4349,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -4452,6 +4468,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -4556,6 +4573,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -5230,6 +5248,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -5334,6 +5353,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -5438,6 +5458,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -5542,6 +5563,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -5646,6 +5668,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -5764,6 +5787,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac",
                         "copy:ac3"
@@ -5889,6 +5913,7 @@
         {
             "ChildrenArray": [
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -5993,6 +6018,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6097,6 +6123,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6201,6 +6228,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6305,6 +6333,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6409,6 +6438,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6513,6 +6543,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6617,6 +6648,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6721,6 +6753,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6825,6 +6858,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                         "copy:aac"
                     ],
@@ -6929,6 +6963,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "opus",
@@ -7032,6 +7067,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "opus",
@@ -7135,6 +7171,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "opus",
@@ -7238,6 +7275,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "opus",
@@ -7341,6 +7379,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "opus",
@@ -7444,6 +7483,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "vorbis",
@@ -7547,6 +7587,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "vorbis",
@@ -7650,6 +7691,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "vorbis",
@@ -7753,6 +7795,7 @@
                     "x264UseAdvancedOptions": false
                 },
                 {
+                    "AlignAVStart": false,
                     "AudioCopyMask": [
                     ],
                     "AudioEncoderFallback": "vorbis",
