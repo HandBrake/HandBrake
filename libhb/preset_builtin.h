@@ -4536,7 +4536,7 @@ const char hb_builtin_presets_json[] =
 "                    \"x264UseAdvancedOptions\": false\n"
 "                }, \n"
 "                {\n"
-"                    \"AlignAVStart\": true, \n"
+"                    \"AlignAVStart\": false, \n"
 "                    \"AudioCopyMask\": [\n"
 "                        \"copy:aac\", \n"
 "                        \"copy:ac3\", \n"
