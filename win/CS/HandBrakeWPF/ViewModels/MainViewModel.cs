@@ -1368,8 +1368,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenOptionsWindow()
         {
-            IShellViewModel shellViewModel = IoC.Get<IShellViewModel>();
-            shellViewModel.DisplayWindow(ShellWindow.OptionsWindow);
+            OpenOptionsScreenCommand command = new OpenOptionsScreenCommand();
+            command.Execute(null);
         }
 
         /// <summary>

@@ -50,11 +50,17 @@ namespace HandBrakeWPF.Commands
         public void Execute(object parameter)
         {
             var shellViewModel = IoC.Get<IShellViewModel>();
+            var optionsViewModel = IoC.Get<IOptionsViewModel>();
+
             shellViewModel.DisplayWindow(ShellWindow.OptionsWindow);
+
+            if (parameter == null && optionsViewModel.SelectedTab == OptionsTab.About)
+            {
+                optionsViewModel.GotoTab(OptionsTab.General);
+            }
 
             if (parameter != null && parameter.GetType() == typeof(OptionsTab))
             {
-                var optionsViewModel = IoC.Get<IOptionsViewModel>();
                 optionsViewModel.GotoTab((OptionsTab)parameter);
             }
         }
