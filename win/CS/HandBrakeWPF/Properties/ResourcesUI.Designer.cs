@@ -1069,6 +1069,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stop Encode.
+        /// </summary>
+        public static string MainView_StopEncode {
+            get {
+                return ResourceManager.GetString("MainView_StopEncode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to stop thie encode?.
+        /// </summary>
+        public static string MainView_StopEncodeConfirm {
+            get {
+                return ResourceManager.GetString("MainView_StopEncodeConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please choose a source to encode before trying to import a subtitle file..
         /// </summary>
         public static string MainView_SubtitleBeforeScanError {

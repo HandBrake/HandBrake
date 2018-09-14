@@ -1040,4 +1040,10 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="Options_Encoding" xml:space="preserve">
     <value>Encoding</value>
   </data>
+  <data name="MainView_StopEncode" xml:space="preserve">
+    <value>Stop Encode</value>
+  </data>
+  <data name="MainView_StopEncodeConfirm" xml:space="preserve">
+    <value>Are you sure you wish to stop thie encode?</value>
+  </data>
 </root>

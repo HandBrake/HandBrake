@@ -1782,7 +1782,16 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void StopEncode()
         {
-            this.queueProcessor.Stop();
+            MessageBoxResult result = this.errorService.ShowMessageBox(
+                ResourcesUI.MainView_StopEncodeConfirm,
+                ResourcesUI.MainView_StopEncode,
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                this.queueProcessor.Stop();
+            }
         }
 
         /// <summary>
