@@ -136,6 +136,7 @@
     <Compile Include="Converters\Options\LogLevelConverter.cs" />
     <Compile Include="Converters\OptionTabConverter.cs" />
     <Compile Include="Converters\PresetsMenuConverter.cs" />
+    <Compile Include="Converters\Queue\InlineQueueConverter.cs" />
     <Compile Include="Converters\Queue\PictureSettingsDescConveter.cs" />
     <Compile Include="Converters\Subtitles\CanBurnSubtitleConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBurnInBehaviourConverter.cs" />

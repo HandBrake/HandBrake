@@ -1375,6 +1375,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Experimental Features.
+        /// </summary>
+        public static string Options_Experimental {
+            get {
+                return ResourceManager.GetString("Options_Experimental", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Experimental features are ideas we are working on. These may or may not make it into a final release and may not work!.
+        /// </summary>
+        public static string Options_ExperimentalFeatures {
+            get {
+                return ResourceManager.GetString("Options_ExperimentalFeatures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File Format:.
         /// </summary>
         public static string Options_Format {
@@ -1600,7 +1618,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show Queue in place of the tab controls when toggled on..
+        ///   Looks up a localized string similar to Show Queue in line with the main UI..
         /// </summary>
         public static string Options_ShowQueueInline {
             get {

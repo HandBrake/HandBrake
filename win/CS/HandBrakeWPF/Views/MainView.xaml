@@ -10,6 +10,7 @@
              xmlns:commands="clr-namespace:HandBrakeWPF.Commands"
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
              xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
+             xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
              AllowDrop="True"
              FontSize="11"
              cal:Message.Attach="[Event Loaded] = [Action Load]"
@@ -20,6 +21,7 @@
         <Converters:BooleanConverter x:Key="booleanConverter" />
         <Converters:PresetsMenuConverter x:Key="presetsMenuConverter"/>
         <Converters:LongToIntConverter x:Key="longToIntConverter" />
+        <queue:InlineQueueConverter x:Key="InlineQueueConverter" />
 
         <Style TargetType="Button">
             <Setter Property="Padding" Value="8,2" />
@@ -292,8 +294,9 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
+                <RowDefinition x:Name="tabContentArea" Height="{Binding IsQueueShowingInLine, Converter={StaticResource InlineQueueConverter}}" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="{Binding IsQueueShowingInLine, Converter={StaticResource InlineQueueConverter}, ConverterParameter=true}"/>
             </Grid.RowDefinitions>
 
             <!--  Main Controls  -->
@@ -400,8 +403,6 @@
 
                     </StackPanel>
                 </Grid>
-
-              
             </Grid>
 
             <!--  Presets Options  -->
@@ -512,17 +513,6 @@
                 </TabItem>
             </TabControl>
 
-            <!-- Queue in-line display if enabled -->
-            <Grid  Grid.Row="2" Grid.Column="0" Margin="10,10,10,5"  Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
-                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Label Content="Queue" FontWeight="Bold" Grid.Row="0"/>
-                <ContentControl x:Name="QueueViewModel" cal:View.Context="Embedded" Margin="5,0,0,0"  Grid.Row="1" />
-            </Grid>
-
             <!--  Destination  -->
             <StackPanel Grid.Row="3" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                         Margin="10,5,10,15"
@@ -556,8 +546,19 @@
                 </Grid>
             </StackPanel>
 
+            <!-- Queue in-line display if enabled -->
+            <Grid  Grid.Row="4" Grid.Column="0" Margin="10,0,10,10"  Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
+                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Label Content="Queue" FontWeight="Bold" Grid.Row="0"/>
+                <ContentControl x:Name="QueueViewModel" cal:View.Context="Embedded" Grid.Row="1" />
+            </Grid>
+
             <!--  Presets  -->
-            <GroupBox Grid.Row="0" Grid.RowSpan="4"
+            <GroupBox Grid.Row="0" Grid.RowSpan="5"
                       Grid.Column="1"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"

@@ -823,7 +823,7 @@
     <value>Constant quality fractional granularity:</value>
   </data>
   <data name="Options_ShowQueueInline" xml:space="preserve">
-    <value>Show Queue in place of the tab controls when toggled on.</value>
+    <value>Show Queue in line with the main UI.</value>
   </data>
   <data name="Options_PauseQueueOnLowDiskSpace" xml:space="preserve">
     <value>Pause queue if disk space is low before starting a job.</value>
@@ -1045,5 +1045,11 @@ This will not affect your current settings in the Subtitle tab.</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
     <value>Are you sure you wish to stop thie encode?</value>
+  </data>
+  <data name="Options_Experimental" xml:space="preserve">
+    <value>Experimental Features</value>
+  </data>
+  <data name="Options_ExperimentalFeatures" xml:space="preserve">
+    <value>Experimental features are ideas we are working on. These may or may not make it into a final release and may not work!</value>
   </data>
 </root>
