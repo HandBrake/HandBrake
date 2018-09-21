@@ -1052,4 +1052,10 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="Options_ExperimentalFeatures" xml:space="preserve">
     <value>Experimental features are ideas we are working on. These may or may not make it into a final release and may not work!</value>
   </data>
+  <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
+    <value>Queue Recovery</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
+    <value>A previous queue archive is available. </value>
+  </data>
 </root>

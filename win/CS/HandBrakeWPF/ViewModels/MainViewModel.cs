@@ -372,6 +372,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool QueueRecoveryArchivesExist { get; set; }
+
         /// <summary>
         /// Gets or sets Presets.
         /// </summary>
@@ -1260,6 +1262,8 @@ namespace HandBrakeWPF.ViewModels
 
             // Queue Recovery
             bool queueRecovered = QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService, StartupOptions.AutoRestartQueue, StartupOptions.QueueRecoveryIds);
+            this.QueueRecoveryArchivesExist = QueueRecoveryHelper.ArchivesExist();
+            this.NotifyOfPropertyChange(() => this.QueueRecoveryArchivesExist);
 
             // If the queue is not recovered, show the source selection window by default.
             if (!queueRecovered)
@@ -2272,6 +2276,14 @@ namespace HandBrakeWPF.ViewModels
                     this.ShowSourceSelection = false;
                 }
             }
+        }
+
+        public void RecoverQueue()
+        {
+            QueueRecoveryHelper.ResetArchives();
+            bool result = QueueRecoveryHelper.RecoverQueue(this.queueProcessor, this.errorService, StartupOptions.AutoRestartQueue, StartupOptions.QueueRecoveryIds);
+            this.QueueRecoveryArchivesExist = !result && QueueRecoveryHelper.ArchivesExist();
+            this.NotifyOfPropertyChange(() => this.QueueRecoveryArchivesExist);
         }
 
         #endregion

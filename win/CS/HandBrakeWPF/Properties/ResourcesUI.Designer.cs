@@ -2430,6 +2430,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Queue Recovery.
+        /// </summary>
+        public static string SourceSelection_QueueArchiveRecovery {
+            get {
+                return ResourceManager.GetString("SourceSelection_QueueArchiveRecovery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A previous queue archive is available. .
+        /// </summary>
+        public static string SourceSelection_QueueArchiveRecoveryDesc {
+            get {
+                return ResourceManager.GetString("SourceSelection_QueueArchiveRecoveryDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open a single video file..
         /// </summary>
         public static string SourceSelection_SingleVideoFile {

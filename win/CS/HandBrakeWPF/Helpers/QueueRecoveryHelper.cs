@@ -92,7 +92,7 @@ namespace HandBrakeWPF.Helpers
                     }
                 }
 
-                CleanupFiles(removeFiles);
+                CleanupFiles(removeFiles, false);
 
                 return acceptedFiles;
             }
@@ -159,14 +159,23 @@ namespace HandBrakeWPF.Helpers
                     isRecovered = true;
 
                     // Cleanup
-                    CleanupFiles(new List<string> { file });                   
+                    CleanupFiles(new List<string> { file }, false);                   
                 }
 
                 return isRecovered;
             }
 
-            CleanupFiles(queueFiles);
+            CleanupFiles(queueFiles, true);
             return false;
+        }
+
+        public static bool ArchivesExist()
+        {
+            string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
+            DirectoryInfo info = new DirectoryInfo(appDataPath);
+            IEnumerable<FileInfo> foundFiles = info.GetFiles("*.archive").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+
+            return foundFiles.Any();
         }
 
         private static List<string> GetFilesExcludingActiveProcesses(IEnumerable<FileInfo> foundFiles, List<string> filterQueueFiles)
@@ -200,7 +209,7 @@ namespace HandBrakeWPF.Helpers
             return queueFiles;
         }
 
-        private static void CleanupFiles(List<string> removeFiles)
+        private static void CleanupFiles(List<string> removeFiles, bool archive)
         {
             string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
 
@@ -218,7 +227,51 @@ namespace HandBrakeWPF.Helpers
                 }
 
                 string fullPath = Path.Combine(appDataPath, file);
-                File.Delete(fullPath);
+
+                if (archive)
+                {
+                    File.Move(fullPath, fullPath + ".archive");
+                }
+                else
+                {
+                    File.Delete(fullPath);
+                }      
+            }
+
+            TidyArchiveFiles();
+        }
+
+        /// <summary>
+        /// Tidy up archive files older than 7 days.
+        /// Gives the user an opportunity to recover a queue file they accidentally chose not to import. 
+        /// </summary>
+        private static void TidyArchiveFiles()
+        {
+            string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
+            DirectoryInfo info = new DirectoryInfo(appDataPath);
+            IEnumerable<FileInfo> foundFiles = info.GetFiles("*.archive").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+
+            DateTime LastWeek = DateTime.Now.AddDays(-7);
+
+            foreach (FileInfo file in foundFiles)
+            {
+                if (file.CreationTime < LastWeek)
+                {
+                    string fullPath = Path.Combine(appDataPath, file.Name);
+                    File.Delete(fullPath);
+                }
+            }
+        }
+
+        public static void ResetArchives()
+        {
+            string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
+            DirectoryInfo info = new DirectoryInfo(appDataPath);
+            IEnumerable<FileInfo> foundFiles = info.GetFiles("*.archive").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+            foreach (FileInfo file in foundFiles)
+            {
+                string fullPath = Path.Combine(appDataPath, file.Name);
+                File.Move(fullPath, fullPath.Replace(".archive", string.Empty));
             }
         }
     }
