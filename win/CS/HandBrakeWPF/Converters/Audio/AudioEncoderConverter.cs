@@ -73,7 +73,6 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.Opus);
 
                     encoders.Remove(AudioEncoder.TrueHDPassthrough);
-                    encoders.Remove(AudioEncoder.EAc3Passthrough);
                 }
 
                 // Hide the Passthru options and show the "None" option
