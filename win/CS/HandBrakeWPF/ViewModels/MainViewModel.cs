@@ -1400,6 +1400,10 @@ namespace HandBrakeWPF.ViewModels
         public void OpenQueueWindow()
         {
             bool showQueueInline = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline);
+            bool showNewQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowExperimentalQueue); ;
+
+            this.QueueViewModel.IsNewQueueVisible = showNewQueue;
+            this.QueueViewModel.IsInline = showQueueInline;
 
             if (showQueueInline)
             {

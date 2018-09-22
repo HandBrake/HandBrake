@@ -47,8 +47,10 @@ namespace HandBrakeWPF.ViewModels
         private string jobsPending;
         private string whenDoneAction;
         private QueueTask selectedTask;
-
         private bool isQueueRunning;
+        private double progressValue;
+        private bool intermediateProgress;
+        private bool showEncodeProgress;
 
         #endregion
 
@@ -183,12 +185,59 @@ namespace HandBrakeWPF.ViewModels
                 this.selectedTask = value;
                 this.NotifyOfPropertyChange(() => this.SelectedTask);
                 this.HandleLogData();
+
+                this.NotifyOfPropertyChange(() => this.CanRetryJob);
+                this.NotifyOfPropertyChange(() => this.CanEditJob);
+                this.NotifyOfPropertyChange(() => this.CanRemoveJob);
             }
         }
 
         public bool ShowLogTab { get; private set; }
 
         public string ActivityLog { get; private set; }
+
+        public bool CanRetryJob => this.SelectedTask != null && this.SelectedTask.Status != QueueItemStatus.Waiting;
+
+        public bool CanEditJob => this.SelectedTask != null;
+
+        public bool CanRemoveJob => this.SelectedTask != null;
+
+        public double ProgressValue
+        {
+            get => this.progressValue;
+            set
+            {
+                if (value == this.progressValue) return;
+                this.progressValue = value;
+                this.NotifyOfPropertyChange(() => this.ProgressValue);
+            }
+        }
+
+        public bool IntermediateProgress
+        {
+            get => this.intermediateProgress;
+            set
+            {
+                if (value == this.intermediateProgress) return;
+                this.intermediateProgress = value;
+                this.NotifyOfPropertyChange(() => this.IntermediateProgress);
+            }
+        }
+
+        public bool ShowEncodeProgress
+        {
+            get => this.showEncodeProgress;
+            set
+            {
+                if (value == this.showEncodeProgress) return;
+                this.showEncodeProgress = value;
+                this.NotifyOfPropertyChange(() => this.ShowEncodeProgress);
+            }
+        }
+
+        public bool IsNewQueueVisible { get; set; }
+
+        public bool IsInline { get; set; }
 
         #endregion
 
@@ -376,6 +425,7 @@ namespace HandBrakeWPF.ViewModels
             task.Status = QueueItemStatus.Waiting;
             this.queueProcessor.BackupQueue(null);
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
+            this.NotifyOfPropertyChange(() => this.CanRetryJob);
         }
 
         /// <summary>
@@ -611,6 +661,8 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(() =>
             {
                 string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
+                this.IntermediateProgress = false; 
+
                 if (e.IsSubtitleScan)
                 {
                     this.JobStatus = string.Format(Resources.MainViewModel_EncodeStatusChanged_SubScan_StatusLabel,
@@ -620,14 +672,18 @@ namespace HandBrakeWPF.ViewModels
                         e.EstimatedTimeLeft,
                         e.ElapsedTime,
                         jobsPending);
+
+                    this.ProgressValue = e.PercentComplete;
                 }
                 else if (e.IsMuxing)
                 {
                     this.JobStatus = ResourcesUI.MainView_Muxing;
+                    this.IntermediateProgress = true;
                 }
                 else if (e.IsSearching)
                 {
                     this.JobStatus = string.Format(ResourcesUI.MainView_ProgressStatusWithTask, ResourcesUI.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft, jobsPending);
+                    this.ProgressValue = e.PercentComplete;
                 }
                 else
                 {
@@ -641,6 +697,7 @@ namespace HandBrakeWPF.ViewModels
                             e.EstimatedTimeLeft,
                             e.ElapsedTime,
                             jobsPending);
+                    this.ProgressValue = e.PercentComplete;
                 }
             });
         }
@@ -663,6 +720,10 @@ namespace HandBrakeWPF.ViewModels
                 this.JobStatus = Resources.QueueViewModel_QueueNotRunning;
                 this.IsQueueRunning = false;
             }
+
+            this.NotifyOfPropertyChange(() => this.CanRetryJob);
+            this.NotifyOfPropertyChange(() => this.CanEditJob);
+            this.NotifyOfPropertyChange(() => this.CanRemoveJob);
         }
 
         /// <summary>

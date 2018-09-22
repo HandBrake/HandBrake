@@ -1618,6 +1618,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show the new experimental queue design..
+        /// </summary>
+        public static string Options_ShowExperimentalQueueDesign {
+            get {
+                return ResourceManager.GetString("Options_ShowExperimentalQueueDesign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Queue in line with the main UI..
         /// </summary>
         public static string Options_ShowQueueInline {

@@ -88,7 +88,6 @@ namespace HandBrakeWPF.ViewModels
         private bool showAdvancedTab;
         private bool removePunctuation;
         private bool resetWhenDoneAction;
-
         private bool enableQuickSyncDecoding;
         private bool showQueueInline;
         private bool pauseOnLowDiskspace;
@@ -96,16 +95,13 @@ namespace HandBrakeWPF.ViewModels
         private bool useQsvDecodeForNonQsvEnc;
         private bool showStatusInTitleBar;
         private bool showPreviewOnSummaryTab;
-
         private string whenDoneAudioFile;
         private bool playSoundWhenDone;
         private bool playSoundWhenQueueDone;
-
         private bool enableQuickSyncEncoding;
-
-        private bool enableVceEncoder;
-
+        private bool enableVceEncoder;    
         private bool enableNvencEncoder;
+        private bool showExperimentalQueue;
 
         #endregion
 
@@ -366,6 +362,17 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.showQueueInline = value;
                 this.NotifyOfPropertyChange(() => this.ShowQueueInline);
+            }
+        }
+
+        public bool ShowExperimentalQueue
+        {
+            get => this.showExperimentalQueue;
+            set
+            {
+                if (value == this.showExperimentalQueue) return;
+                this.showExperimentalQueue = value;
+                this.NotifyOfPropertyChange(() => this.ShowExperimentalQueue);
             }
         }
 
@@ -1357,7 +1364,8 @@ namespace HandBrakeWPF.ViewModels
             this.WhenDoneAudioFileFullPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
             this.PlaySoundWhenDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone);
             this.PlaySoundWhenQueueDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenQueueDone);
-
+            this.ShowExperimentalQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowExperimentalQueue);
+            
             // #############################
             // Output Settings
             // #############################
@@ -1518,12 +1526,16 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFile, this.SendFileAfterEncode);
             this.userSettingService.SetUserSetting(UserSettingConstants.SendFileToArgs, this.Arguments);
             this.userSettingService.SetUserSetting(UserSettingConstants.ResetWhenDoneAction, this.ResetWhenDoneAction);
-            this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowStatusInTitleBar, this.ShowStatusInTitleBar);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowPreviewOnSummaryTab, this.ShowPreviewOnSummaryTab);
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenDone, this.PlaySoundWhenDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenQueueDone, this.PlaySoundWhenQueueDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenDoneAudioFile, this.WhenDoneAudioFileFullPath);
+
+            /* Experiments */
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowExperimentalQueue, this.ShowExperimentalQueue);
+
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);

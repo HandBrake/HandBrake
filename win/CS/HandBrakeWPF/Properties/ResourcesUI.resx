@@ -1058,4 +1058,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
     <value>A previous queue archive is available. </value>
   </data>
+  <data name="Options_ShowExperimentalQueueDesign" xml:space="preserve">
+    <value>Show the new experimental queue design.</value>
+  </data>
 </root>

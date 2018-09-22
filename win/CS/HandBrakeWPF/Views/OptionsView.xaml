@@ -184,7 +184,9 @@
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <TextBlock Text="{x:Static  Properties:ResourcesUI.Options_ExperimentalFeatures}" Margin="0,0,0,10" />
-                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ShowQueueInline}" IsChecked="{Binding ShowQueueInline}" />
+                           
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ShowExperimentalQueueDesign}" IsChecked="{Binding ShowExperimentalQueue}" />
+                            <CheckBox Content="{x:Static Properties:ResourcesUI.Options_ShowQueueInline}" IsChecked="{Binding ShowQueueInline}" Margin="20,5,0,0" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>

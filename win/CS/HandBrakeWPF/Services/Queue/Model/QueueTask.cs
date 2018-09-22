@@ -93,6 +93,7 @@ namespace HandBrakeWPF.Services.Queue.Model
             {
                 this.status = value;
                 this.NotifyOfPropertyChange(() => this.Status);
+                this.NotifyOfPropertyChange(() => this.ShowEncodeProgress);
             }
         }
 
@@ -115,6 +116,8 @@ namespace HandBrakeWPF.Services.Queue.Model
                 return this.presetKey;
             }
         }
+
+        public bool ShowEncodeProgress => this.Status == QueueItemStatus.InProgress && SystemInfo.IsWindows10();
 
         #endregion
 

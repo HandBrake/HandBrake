@@ -547,14 +547,14 @@
             </StackPanel>
 
             <!-- Queue in-line display if enabled -->
-            <Grid  Grid.Row="4" Grid.Column="0" Margin="10,0,10,10"  Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
+            <Grid  Grid.Row="4" Grid.Column="0" Margin="10,0,10,10" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" 
                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Label Content="Queue" FontWeight="Bold" Grid.Row="0"/>
-                <ContentControl x:Name="QueueViewModel" cal:View.Context="Embedded" Grid.Row="1" />
+                <ContentControl cal:View.Model="{Binding QueueViewModel}" cal:View.Context="QueueTwoContent" Grid.Row="1" />
             </Grid>
 
             <!--  Presets  -->
