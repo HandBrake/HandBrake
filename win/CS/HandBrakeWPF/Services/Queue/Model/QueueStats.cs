@@ -68,6 +68,11 @@ namespace HandBrakeWPF.Services.Queue.Model
         {
             get
             {
+                if (this.endTime == DateTime.MinValue)
+                {
+                    return TimeSpan.MinValue;
+                }
+
                 return this.EndTime - this.StartTime - this.PausedDuration;
             }
         }

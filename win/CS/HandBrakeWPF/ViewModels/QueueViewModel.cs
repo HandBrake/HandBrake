@@ -42,7 +42,6 @@ namespace HandBrakeWPF.ViewModels
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
         private readonly IQueueProcessor queueProcessor;
-        private bool isEncoding;
         private string jobStatus;
         private string jobsPending;
         private string whenDoneAction;
@@ -79,7 +78,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedItems = new BindingList<QueueTask>();
             this.DisplayName = "Queue";
             this.IsQueueRunning = false;
-            
+
             this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction);
         }
 
@@ -189,10 +188,9 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.CanRetryJob);
                 this.NotifyOfPropertyChange(() => this.CanEditJob);
                 this.NotifyOfPropertyChange(() => this.CanRemoveJob);
+                this.NotifyOfPropertyChange(() => this.StatsVisible);
             }
         }
-
-        public bool ShowLogTab { get; private set; }
 
         public string ActivityLog { get; private set; }
 
@@ -238,6 +236,20 @@ namespace HandBrakeWPF.ViewModels
         public bool IsNewQueueVisible { get; set; }
 
         public bool IsInline { get; set; }
+
+        public bool StatsVisible
+        {
+            get
+            {
+                if (this.SelectedTask != null &&
+                    (this.selectedTask.Status == QueueItemStatus.Completed || this.selectedTask.Status == QueueItemStatus.Error))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+        }
 
         #endregion
 
@@ -340,7 +352,7 @@ namespace HandBrakeWPF.ViewModels
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = false;
 
-            MessageBox.Show(Resources.QueueViewModel_QueuePauseNotice, Resources.QueueViewModel_Queue, 
+            MessageBox.Show(Resources.QueueViewModel_QueuePauseNotice, Resources.QueueViewModel_Queue,
                 MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
@@ -397,9 +409,9 @@ namespace HandBrakeWPF.ViewModels
             {
                 MessageBoxResult result =
                     this.errorService.ShowMessageBox(
-                        Resources.QueueViewModel_JobCurrentlyRunningWarning, 
-                        Resources.Warning, 
-                        MessageBoxButton.YesNo, 
+                        Resources.QueueViewModel_JobCurrentlyRunningWarning,
+                        Resources.Warning,
+                        MessageBoxButton.YesNo,
                         MessageBoxImage.Question);
 
                 if (result == MessageBoxResult.Yes)
@@ -461,12 +473,12 @@ namespace HandBrakeWPF.ViewModels
         public void Export()
         {
             SaveFileDialog dialog = new SaveFileDialog
-                {
-                    Filter = "Json (*.json)|*.json", 
-                    OverwritePrompt = true, 
-                    DefaultExt = ".json", 
-                    AddExtension = true
-                };
+            {
+                Filter = "Json (*.json)|*.json",
+                OverwritePrompt = true,
+                DefaultExt = ".json",
+                AddExtension = true
+            };
 
             if (dialog.ShowDialog() == true)
             {
@@ -495,9 +507,9 @@ namespace HandBrakeWPF.ViewModels
         public void EditJob(QueueTask task)
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
-                Resources.QueueViewModel_EditConfrimation, 
-                "Modify Job?", 
-                MessageBoxButton.YesNo, 
+                Resources.QueueViewModel_EditConfrimation,
+                "Modify Job?",
+                MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
             if (result != MessageBoxResult.Yes)
@@ -612,11 +624,37 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        /// <summary>
+        /// Open the Log file directory
+        /// </summary>
+        public void OpenLogDirectory()
+        {
+            string logDir = DirectoryUtilities.GetLogDirectory();
+            string windir = Environment.GetEnvironmentVariable("WINDIR");
+            Process prc = new Process { StartInfo = { FileName = windir + @"\explorer.exe", Arguments = logDir } };
+            prc.Start();
+        }
+
+        /// <summary>
+        /// Copy the log file to the system clipboard
+        /// </summary>
+        public void CopyLog()
+        {
+            try
+            {
+                Clipboard.SetDataObject(this.ActivityLog, true);
+            }
+            catch (Exception exc)
+            {
+                this.errorService.ShowError(Resources.Clipboard_Unavailable, Resources.Clipboard_Unavailable_Solution, exc);
+            }
+        }
+
         private void HandleLogData()
         {
-            if (this.SelectedTask == null || this.SelectedTask.Status == QueueItemStatus.InProgress)
+            if (this.SelectedTask == null || this.SelectedTask.Status == QueueItemStatus.InProgress || this.SelectedTask.Status == QueueItemStatus.Waiting)
             {
-                this.ShowLogTab = false;
+                this.ActivityLog = ResourcesUI.QueueView_LogNotAvailableYet;
             }
             else
             {
@@ -632,18 +670,15 @@ namespace HandBrakeWPF.ViewModels
                             this.ActivityLog = logContent;
                         }
 
-                        this.ShowLogTab = true;
                     }
                 }
                 catch (Exception exc)
                 {
                     Debug.WriteLine(exc);
-                    this.ShowLogTab = true;
                     this.ActivityLog = exc.ToString();
                 }
             }
 
-            this.NotifyOfPropertyChange(() => this.ShowLogTab);
             this.NotifyOfPropertyChange(() => this.ActivityLog);
         }
 
@@ -661,7 +696,7 @@ namespace HandBrakeWPF.ViewModels
             Execute.OnUIThread(() =>
             {
                 string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
-                this.IntermediateProgress = false; 
+                this.IntermediateProgress = false;
 
                 if (e.IsSubtitleScan)
                 {
@@ -724,6 +759,8 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.CanRetryJob);
             this.NotifyOfPropertyChange(() => this.CanEditJob);
             this.NotifyOfPropertyChange(() => this.CanRemoveJob);
+            this.NotifyOfPropertyChange(() => this.StatsVisible);
+            this.HandleLogData();
         }
 
         /// <summary>
@@ -772,7 +809,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.JobStatus = Resources.QueueViewModel_QueueStarted;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-            this.IsQueueRunning = true; 
+            this.IsQueueRunning = true;
         }
 
         private void QueueProcessor_QueuePaused(object sender, EventArgs e)

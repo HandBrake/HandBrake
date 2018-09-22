@@ -1061,4 +1061,31 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="Options_ShowExperimentalQueueDesign" xml:space="preserve">
     <value>Show the new experimental queue design.</value>
   </data>
+  <data name="QueueView_Duration" xml:space="preserve">
+    <value>Encode Time:</value>
+  </data>
+  <data name="QueueView_EndTime" xml:space="preserve">
+    <value>End Time:</value>
+  </data>
+  <data name="QueueView_FileSize" xml:space="preserve">
+    <value>Filesize: </value>
+  </data>
+  <data name="QueueView_PausedDuration" xml:space="preserve">
+    <value>Paused Duration:</value>
+  </data>
+  <data name="QueueView_StartTime" xml:space="preserve">
+    <value>Start Time:</value>
+  </data>
+  <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
+    <value>The log will be available after the encode completes.</value>
+  </data>
+  <data name="QueueView_Statistics" xml:space="preserve">
+    <value>Statistics</value>
+  </data>
+  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
+    <value>Statistics will be available after an encode completes.</value>
+  </data>
+  <data name="QueueView_Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
 </root>

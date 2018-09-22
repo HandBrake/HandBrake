@@ -2124,11 +2124,38 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Encode Time:.
+        /// </summary>
+        public static string QueueView_Duration {
+            get {
+                return ResourceManager.GetString("QueueView_Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End Time:.
+        /// </summary>
+        public static string QueueView_EndTime {
+            get {
+                return ResourceManager.GetString("QueueView_EndTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Queue for CLI.
         /// </summary>
         public static string QueueView_Export {
             get {
                 return ResourceManager.GetString("QueueView_Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filesize: .
+        /// </summary>
+        public static string QueueView_FileSize {
+            get {
+                return ResourceManager.GetString("QueueView_FileSize", resourceCulture);
             }
         }
         
@@ -2147,6 +2174,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_LockSystem {
             get {
                 return ResourceManager.GetString("QueueView_LockSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The log will be available after the encode completes..
+        /// </summary>
+        public static string QueueView_LogNotAvailableYet {
+            get {
+                return ResourceManager.GetString("QueueView_LogNotAvailableYet", resourceCulture);
             }
         }
         
@@ -2196,6 +2232,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Paused Duration:.
+        /// </summary>
+        public static string QueueView_PausedDuration {
+            get {
+                return ResourceManager.GetString("QueueView_PausedDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Picture Settings:.
         /// </summary>
         public static string QueueView_PictureSettings {
@@ -2241,11 +2286,47 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start Time:.
+        /// </summary>
+        public static string QueueView_StartTime {
+            get {
+                return ResourceManager.GetString("QueueView_StartTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Statistics.
+        /// </summary>
+        public static string QueueView_Statistics {
+            get {
+                return ResourceManager.GetString("QueueView_Statistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Statistics will be available after an encode completes..
+        /// </summary>
+        public static string QueueView_StatsNotAvailableYet {
+            get {
+                return ResourceManager.GetString("QueueView_StatsNotAvailableYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Subtitles:.
         /// </summary>
         public static string QueueView_Subtitles {
             get {
                 return ResourceManager.GetString("QueueView_Subtitles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Summary.
+        /// </summary>
+        public static string QueueView_Summary {
+            get {
+                return ResourceManager.GetString("QueueView_Summary", resourceCulture);
             }
         }
         
