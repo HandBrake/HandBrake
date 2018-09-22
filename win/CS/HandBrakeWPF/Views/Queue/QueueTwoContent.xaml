@@ -273,7 +273,7 @@
                                 </StackPanel.Resources>
 
 
-                                <Button  Visibility="{Binding Status, Converter={StaticResource queueStatusVisConverter}}" >
+                                <Button>
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0"
