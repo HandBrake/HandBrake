@@ -1079,6 +1079,12 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
     <value>The log will be available after the encode completes.</value>
   </data>
+  <data name="QueueView_ResetAllJobs" xml:space="preserve">
+    <value>Retry All Jobs</value>
+  </data>
+  <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
+    <value>Retry Selected Jobs</value>
+  </data>
   <data name="QueueView_Statistics" xml:space="preserve">
     <value>Statistics</value>
   </data>

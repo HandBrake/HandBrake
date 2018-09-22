@@ -541,6 +541,28 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void ResetSelectedJobs()
+        {
+            foreach (var task in this.SelectedItems)
+            {
+                if (task.Status == QueueItemStatus.Completed || task.Status == QueueItemStatus.Error)
+                {
+                    this.RetryJob(task);
+                }
+            }
+        }
+
+        public void ResetAllJobs()
+        {
+            foreach (var task in this.QueueTasks)
+            {
+                if (task.Status == QueueItemStatus.Completed || task.Status == QueueItemStatus.Error)
+                {
+                    this.RetryJob(task);
+                }
+            }
+        }
+        
         #endregion
 
         #region Methods

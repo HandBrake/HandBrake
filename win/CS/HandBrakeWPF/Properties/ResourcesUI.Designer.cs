@@ -2259,6 +2259,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Retry All Jobs.
+        /// </summary>
+        public static string QueueView_ResetAllJobs {
+            get {
+                return ResourceManager.GetString("QueueView_ResetAllJobs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry Selected Jobs.
+        /// </summary>
+        public static string QueueView_ResetSelectedJobs {
+            get {
+                return ResourceManager.GetString("QueueView_ResetSelectedJobs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shutdown.
         /// </summary>
         public static string QueueView_Shutdown {
