@@ -405,6 +405,9 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
+            bool removed = false;
+            int index = this.QueueTasks.IndexOf(task);
+
             if (task.Status == QueueItemStatus.InProgress)
             {
                 MessageBoxResult result =
@@ -418,11 +421,18 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.queueProcessor.EncodeService.Stop();
                     this.queueProcessor.Remove(task);
+                    removed = true;
                 }
             }
             else
             {
                 this.queueProcessor.Remove(task);
+                removed = true;
+            }
+
+            if (this.QueueTasks.Any() && removed)
+            {              
+                this.SelectedTask = index > 1 ? this.QueueTasks[index - 1] : this.QueueTasks.FirstOrDefault();
             }
         }
 
