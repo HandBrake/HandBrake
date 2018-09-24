@@ -26,6 +26,7 @@ AMF_RESULT check_component_available(const wchar_t *componentID)
     if(!library)
     {
         result =  AMF_FAIL;
+        hb_log("VCE: VCE Library not found.");
         goto clean;
     }
 
@@ -33,18 +34,21 @@ AMF_RESULT check_component_available(const wchar_t *componentID)
     if(!init_fun)
     {
         result = AMF_FAIL;
+        hb_log("VCE: Load Library Failed");
         goto clean;
     }
 
     result = init_fun(AMF_FULL_VERSION, &factory);
     if(result != AMF_OK)
     {
+        hb_log("VCE: Init Failed");
         goto clean;
     }
 
     result = factory->pVtbl->CreateContext(factory, &context);
     if(result != AMF_OK)
     {
+        hb_log("VCE: Context Failed");
         goto clean;
     }
 
@@ -52,6 +56,7 @@ AMF_RESULT check_component_available(const wchar_t *componentID)
     if (result != AMF_OK) {
         result = context->pVtbl->InitDX9(context, NULL);
         if (result != AMF_OK) {
+            hb_log("VCE: DX11 and DX9 Failed");
             goto clean;
         }
     }
@@ -59,6 +64,7 @@ AMF_RESULT check_component_available(const wchar_t *componentID)
     result = factory->pVtbl->CreateComponent(factory, context, componentID, &encoder);
     if(result != AMF_OK)
     {
+        hb_log("VCE: Encoder not available");
         goto clean;
     }
 
