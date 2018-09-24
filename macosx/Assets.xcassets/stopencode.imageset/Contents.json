@@ -2,12 +2,34 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "stopencode.png",
+      "filename" : "StopEncode2.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "stopencode@2x.png",
+      "filename" : "StopEncode2-Dark.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "StopEncode2@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "StopEncode2-Dark@2x.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
       "scale" : "2x"
     },
     {
