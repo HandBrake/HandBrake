@@ -687,6 +687,10 @@ namespace HandBrakeWPF.ViewModels
                         }
 
                     }
+                    else
+                    {
+                        this.ActivityLog = string.Empty;
+                    }
                 }
                 catch (Exception exc)
                 {
