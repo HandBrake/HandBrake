@@ -674,6 +674,13 @@ namespace HandBrakeWPF.Services.Queue
                 this.IsProcessing = true;
                 this.InvokeQueueChanged(EventArgs.Empty);
                 this.InvokeJobProcessingStarted(new QueueProgressEventArgs(job));
+
+                if (!Directory.Exists(Path.GetDirectoryName(job.Task.Destination)))
+                {
+                    this.EncodeServiceEncodeCompleted(null, new EncodeCompletedEventArgs(false, null, "Destination Directory Missing", null, null, 0));
+                    this.BackupQueue(string.Empty);
+                    return;
+                }
                 this.EncodeService.Start(job.Task, job.Configuration);
                 this.BackupQueue(string.Empty);
             }
