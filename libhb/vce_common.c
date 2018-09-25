@@ -22,6 +22,8 @@ AMF_RESULT check_component_available(const wchar_t *componentID)
     AMFCaps            *encoderCaps = NULL;
     AMF_RESULT          result = AMF_FAIL;
 
+    hb_log("VCE: Checking for hardware availability.");
+    
     library = hb_dlopen(AMF_DLL_NAMEA);
     if(!library)
     {
@@ -69,6 +71,8 @@ AMF_RESULT check_component_available(const wchar_t *componentID)
     }
 
     result = encoder->pVtbl->GetCaps(encoder, &encoderCaps);
+    
+    hb_log("VCE: Result = %d", result);
 
 clean:
     if (encoderCaps)
