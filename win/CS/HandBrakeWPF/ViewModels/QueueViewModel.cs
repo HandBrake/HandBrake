@@ -807,6 +807,8 @@ namespace HandBrakeWPF.ViewModels
             this.JobStatus = Resources.QueueViewModel_QueueCompleted;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = false;
+            this.NotifyOfPropertyChange(() => this.SelectedTask);
+            this.NotifyOfPropertyChange(() => this.StatsVisible);
         }
 
         /// <summary>
