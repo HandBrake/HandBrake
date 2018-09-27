@@ -125,19 +125,21 @@
 
         <Grid Grid.Row="2" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" MaxWidth="400" x:Name="leftTabPanel" />
+                <ColumnDefinition Width="3*" MaxWidth="600" x:Name="leftTabPanel" />
                 <ColumnDefinition Width="5*" x:Name="rightTabPanel"  />
             </Grid.ColumnDefinitions>
 
             <ListBox Tag="{Binding}" x:Name="queueJobs"
-                 Margin="10,0,10,10"
+                 Margin="10,0,5,10"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"
                  dd:DragDrop.IsDropTarget="True"
                  ItemsSource="{Binding QueueTasks, Mode=OneWay}"
                  helpers:ListBoxHelper.SelectedItems="{Binding SelectedItems}" 
                  SelectedItem="{Binding SelectedTask}"
-                 SelectionMode="Extended">
+                 SelectionMode="Extended"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+
 
                 <i:Interaction.Triggers>
                     <commands:InputBindingTrigger>
@@ -177,7 +179,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate x:Name="QueueItemTemplate">
 
-                        <Grid HorizontalAlignment="Stretch">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="40" />
                                 <ColumnDefinition Width="*" />
@@ -226,42 +228,46 @@
                             </Image>
 
                             <!--  Settings  -->
-                            <StackPanel Grid.Column="1"
-                                    Margin="0,5,0,5"
-                                    HorizontalAlignment="Stretch">
-                                <StackPanel Orientation="Horizontal">
+                            <Grid Grid.Column="1" Margin="0,3,15,3">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
                                     <TextBlock FontWeight="Bold" Text="Title: " />
                                     <TextBlock Text="{Binding Task.Title}" />
 
-                                    <TextBlock Margin="10,0,0,0"
-                                           FontWeight="Bold"
-                                           Text="{Binding Task.PointToPointMode}" />
+                                    <TextBlock Text="{Binding Task.PointToPointMode}" Margin="10,0,0,0" FontWeight="Bold" />
                                     <TextBlock Text=": " />
                                     <TextBlock Text="{Binding Task.StartPoint}" />
                                     <TextBlock Margin="5,0,5,0" Text="to" />
                                     <TextBlock Text="{Binding Task.EndPoint}" />
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Source}" />
-                                    <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}" />
-                                </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Destination}" />
-                                    <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" />
-                                </StackPanel>
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Source}" Grid.Row="1" />
+                                <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}"  Margin="2,0,0,0" Grid.Row="1" Grid.Column="1"/>
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Destination}" Grid.Row="2" />
+                                <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" Margin="2,0,0,0" TextTrimming="CharacterEllipsis" Grid.Row="2" Grid.Column="1" />
 
-                                <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" Margin="0,2,5,0"
+                                <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" Margin="0,2,5,0" Grid.Row="3" Grid.ColumnSpan="2"
                                              Value="{Binding DataContext.ProgressValue, ElementName=queueJobs}" IsIndeterminate="{Binding DataContext.IntermediateProgress, ElementName=queueJobs}"
                                              Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
-                            </StackPanel>
+                            </Grid>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
-            
-            <TabControl x:Name="summaryTabControl"  Grid.Column="1"  Margin="0,0,10,10" >
+
+            <TabControl x:Name="summaryTabControl"  Grid.Column="1"  Margin="5,0,10,10" >
                 <TabItem Header="{x:Static Properties:ResourcesUI.QueueView_Summary}" >
                     <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="5,5,0,5">
 
