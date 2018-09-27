@@ -140,7 +140,6 @@
                  SelectionMode="Extended"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
 
-
                 <i:Interaction.Triggers>
                     <commands:InputBindingTrigger>
                         <commands:InputBindingTrigger.InputBinding>
@@ -155,6 +154,7 @@
                         <MenuItem cal:Message.Attach="[Event Click] = [Action StartQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Start}" />
                         <MenuItem cal:Message.Attach="[Event Click] = [Action PauseQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Pause}" />
                         <Separator />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action ResetFailed]" Header="{x:Static Properties:ResourcesUI.QueueView_ResetFailed}" />
                         <MenuItem cal:Message.Attach="[Event Click] = [Action ResetSelectedJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ResetSelectedJobs}" />
                         <MenuItem cal:Message.Attach="[Event Click] = [Action ResetAllJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ResetAllJobs}" />
                         <Separator />

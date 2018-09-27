@@ -2268,6 +2268,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Retry Failed.
+        /// </summary>
+        public static string QueueView_ResetFailed {
+            get {
+                return ResourceManager.GetString("QueueView_ResetFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Retry Selected Jobs.
         /// </summary>
         public static string QueueView_ResetSelectedJobs {

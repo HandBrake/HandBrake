@@ -1094,4 +1094,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="QueueView_Summary" xml:space="preserve">
     <value>Summary</value>
   </data>
+  <data name="QueueView_ResetFailed" xml:space="preserve">
+    <value>Retry Failed</value>
+  </data>
 </root>

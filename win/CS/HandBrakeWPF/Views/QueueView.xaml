@@ -16,10 +16,10 @@
         xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
         xmlns:queue1="clr-namespace:HandBrakeWPF.Views.Queue"
         Title="{Binding Title}"
-        Width="850"
+        Width="750"
         Height="500"
         MinWidth="450"
-        MinHeight="260"
+        MinHeight="300"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
         mc:Ignorable="d">
@@ -179,7 +179,7 @@
                 <TextBlock Text="{Binding JobStatus}" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis"/>
             </StackPanel>
 
-            <ListBox Grid.Row="2" Tag="{Binding}"
+            <ListBox Grid.Row="2" Tag="{Binding}" x:Name="queueJobs"
                  Margin="10,20,10,10"
                  dd:DragDrop.DropHandler="{Binding}"
                  dd:DragDrop.IsDragSource="True"
@@ -187,7 +187,8 @@
                  ItemsSource="{Binding QueueTasks, Mode=OneWay}"
                  helpers:ListBoxHelper.SelectedItems="{Binding SelectedItems}" 
                  SelectedItem="{Binding SelectedTask}"
-                 SelectionMode="Extended">
+                 SelectionMode="Extended"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
                 <i:Interaction.Triggers>
                     <commands:InputBindingTrigger>
@@ -202,6 +203,10 @@
                     <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" Opened="ContextMenu_OnOpened">
                         <MenuItem cal:Message.Attach="[Event Click] = [Action StartQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Start}" />
                         <MenuItem cal:Message.Attach="[Event Click] = [Action PauseQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Pause}" />
+                        <Separator />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action ResetFailed]" Header="{x:Static Properties:ResourcesUI.QueueView_ResetFailed}" />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action ResetSelectedJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ResetSelectedJobs}" />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action ResetAllJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ResetAllJobs}" />
                         <Separator />
                         <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearCompleted}" />
                         <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearAll}" />
@@ -324,33 +329,40 @@
                             </Image>
 
                             <!--  Settings  -->
-                            <StackPanel Grid.Column="1"
-                                    Margin="0,5,0,5"
-                                    HorizontalAlignment="Stretch">
-                                <StackPanel Orientation="Horizontal">
+                            <Grid Grid.Column="1" Margin="0,3,15,3">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
                                     <TextBlock FontWeight="Bold" Text="Title: " />
                                     <TextBlock Text="{Binding Task.Title}" />
 
-                                    <TextBlock Margin="10,0,0,0"
-                                           FontWeight="Bold"
-                                           Text="{Binding Task.PointToPointMode}" />
+                                    <TextBlock Text="{Binding Task.PointToPointMode}" Margin="10,0,0,0" FontWeight="Bold" />
                                     <TextBlock Text=": " />
                                     <TextBlock Text="{Binding Task.StartPoint}" />
                                     <TextBlock Margin="5,0,5,0" Text="to" />
                                     <TextBlock Text="{Binding Task.EndPoint}" />
                                 </StackPanel>
 
-                                <!--  TODO Support Drive Label Name  -->
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Source}" />
-                                    <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}" />
-                                </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Destination}" />
-                                    <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" />
-                                </StackPanel>
-                            </StackPanel>
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Source}" Grid.Row="1" />
+                                <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}"  Margin="2,0,0,0" Grid.Row="1" Grid.Column="1"/>
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Destination}" Grid.Row="2" />
+                                <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" Margin="2,0,0,0" TextTrimming="CharacterEllipsis" Grid.Row="2" Grid.Column="1" />
+
+                                <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" Margin="0,2,5,0" Grid.Row="3" Grid.ColumnSpan="2"
+                                             Value="{Binding DataContext.ProgressValue, ElementName=queueJobs}" IsIndeterminate="{Binding DataContext.IntermediateProgress, ElementName=queueJobs}"
+                                             Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
+                            </Grid>
 
                             <!--  Delete  -->
                             <Grid Grid.Column="2"
