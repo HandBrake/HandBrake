@@ -94,7 +94,7 @@
                 </MenuItem>
             </Menu>
 
-            <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Center" Grid.Column="3">
+            <!--<Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Center" Grid.Column="3">
                 <MenuItem>
                     <MenuItem.Header>
                         <StackPanel Height="32" Orientation="Horizontal">
@@ -114,7 +114,7 @@
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" />
 
                 </MenuItem>
-            </Menu>
+            </Menu>-->
 
         </Grid>
 
