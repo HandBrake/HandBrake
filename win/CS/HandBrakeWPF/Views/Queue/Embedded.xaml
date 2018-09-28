@@ -14,7 +14,6 @@
         xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
-
         MinWidth="350"
         MinHeight="250"
         TextOptions.TextFormattingMode="Display"

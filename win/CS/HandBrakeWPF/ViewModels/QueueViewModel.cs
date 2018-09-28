@@ -194,7 +194,7 @@ namespace HandBrakeWPF.ViewModels
 
         public string ActivityLog { get; private set; }
 
-        public bool CanRetryJob => this.SelectedTask != null && this.SelectedTask.Status != QueueItemStatus.Waiting;
+        public bool CanRetryJob => this.SelectedTask != null && this.SelectedTask.Status != QueueItemStatus.Waiting && this.SelectedTask.Status != QueueItemStatus.InProgress;
 
         public bool CanEditJob => this.SelectedTask != null;
 
@@ -447,6 +447,7 @@ namespace HandBrakeWPF.ViewModels
             task.Status = QueueItemStatus.Waiting;
             this.queueProcessor.BackupQueue(null);
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
+            this.JobStatus = Resources.QueueViewModel_QueueReady;
             this.NotifyOfPropertyChange(() => this.CanRetryJob);
         }
 
@@ -559,7 +560,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     this.RetryJob(task);
                 }
-            }
+            }       
         }
 
         public void ResetAllJobs()
@@ -737,7 +738,6 @@ namespace HandBrakeWPF.ViewModels
         {
             Execute.OnUIThread(() =>
             {
-                string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
                 this.IntermediateProgress = false;
 
                 if (e.IsSubtitleScan)
@@ -748,7 +748,7 @@ namespace HandBrakeWPF.ViewModels
                         e.PercentComplete,
                         e.EstimatedTimeLeft,
                         e.ElapsedTime,
-                        jobsPending);
+                        null);
 
                     this.ProgressValue = e.PercentComplete;
                 }
@@ -759,7 +759,7 @@ namespace HandBrakeWPF.ViewModels
                 }
                 else if (e.IsSearching)
                 {
-                    this.JobStatus = string.Format(ResourcesUI.MainView_ProgressStatusWithTask, ResourcesUI.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft, jobsPending);
+                    this.JobStatus = string.Format(ResourcesUI.MainView_ProgressStatusWithTask, ResourcesUI.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft, null);
                     this.ProgressValue = e.PercentComplete;
                 }
                 else
@@ -773,7 +773,7 @@ namespace HandBrakeWPF.ViewModels
                             e.AverageFrameRate,
                             e.EstimatedTimeLeft,
                             e.ElapsedTime,
-                            jobsPending);
+                            null);
                     this.ProgressValue = e.PercentComplete;
                 }
             });
@@ -821,6 +821,7 @@ namespace HandBrakeWPF.ViewModels
             this.IsQueueRunning = false;
             this.NotifyOfPropertyChange(() => this.SelectedTask);
             this.NotifyOfPropertyChange(() => this.StatsVisible);
+            this.NotifyOfPropertyChange(() => this.CanRetryJob);
         }
 
         /// <summary>

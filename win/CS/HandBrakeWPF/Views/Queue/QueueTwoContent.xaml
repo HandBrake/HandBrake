@@ -281,7 +281,6 @@
                                     </Style>
                                 </StackPanel.Resources>
 
-
                                 <Button>
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
