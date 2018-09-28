@@ -106,7 +106,8 @@
                     </Button>
 
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
-                        <Menu HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent">
+                        <Menu HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent"
+                              AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_WhenDone}">
                             <MenuItem>
                                 <MenuItem.Header>
                                     <StackPanel Height="32" Orientation="Horizontal">
@@ -146,29 +147,6 @@
                                   Header="{x:Static Properties:ResourcesUI.QueueView_QuitHandBrake}"/>
                             </MenuItem>
                         </Menu>
-
-                        <!--<Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Center">
-                            <MenuItem>
-                                <MenuItem.Header>
-                                    <StackPanel Height="32" Orientation="Horizontal">
-                                        <Image Source="Images\Advanced.png" Width="20" Height="20" VerticalAlignment="Center" />
-                                        <TextBlock VerticalAlignment="Center"
-                                           Text="{x:Static Properties:ResourcesUI.QueueView_Options}" Margin="5,0,0,0" />
-                                        <Path Height="5"
-                                      Margin="2,2,2,0"
-                                      Data="M 0 0 L 4 4 L 8 0 Z"
-                                      Fill="{DynamicResource GlyphBrush}" />
-                                    </StackPanel>
-                                </MenuItem.Header>
-
-                                <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearCompleted}" />
-                                <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearQueue}" />
-                                <Separator />
-                                <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" />
-
-                            </MenuItem>
-                        </Menu>-->
-
                     </StackPanel>
 
                 </DockPanel>
@@ -380,13 +358,13 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Button Visibility="{Binding Status, Converter={StaticResource queueStatusVisConverter}}"
+                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_Retry}"  ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}"
                                     Grid.Row="0" Grid.Column="0" Margin="0,5,0,0">
                                     <Button.Template>
                                         <ControlTemplate>
                                             <Image Width="20"  
                                                Height="20" VerticalAlignment="Center"
-                                               Source="Images/Refresh.ico"
-                                               ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}">
+                                               Source="Images/Refresh.ico">
                                             </Image>
                                         </ControlTemplate>
                                     </Button.Template>
@@ -399,7 +377,8 @@
                                     </i:Interaction.Triggers>
                                 </Button>
 
-                                <Button Grid.Row="0" Grid.Column="1" Margin="10,5,0,0">
+                                <Button Grid.Row="0" Grid.Column="1" Margin="10,5,0,0"
+                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_Edit}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_SendJobBack}" >
                                     <Button.Template>
                                         <ControlTemplate>
                                             <Image Width="20" 
@@ -418,7 +397,8 @@
                                     </i:Interaction.Triggers>
                                 </Button>
 
-                                <Button Grid.Row="0" Grid.Column="2" Margin="10,5,0,0">
+                                <Button Grid.Row="0" Grid.Column="2" Margin="10,5,0,0"
+                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_Delete}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}">
                                     <Button.Template>
                                         <ControlTemplate>
                                             <Image Width="20" 
@@ -436,10 +416,7 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </Button>
-
-
                             </Grid>
-
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

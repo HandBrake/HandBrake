@@ -9,6 +9,8 @@
 
 namespace HandBrakeWPF.Services.Queue.Model
 {
+    using System.Runtime.CompilerServices;
+
     using Caliburn.Micro;
 
     using HandBrake.Interop.Model;
@@ -137,6 +139,11 @@ namespace HandBrakeWPF.Services.Queue.Model
         public override int GetHashCode()
         {
             return this.Id.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Encode Task.  Title: {0}, Source: {1}, Destination: {2}", this.Task.Title, this.Task.Source, this.Task.Destination);
         }
     }
 }

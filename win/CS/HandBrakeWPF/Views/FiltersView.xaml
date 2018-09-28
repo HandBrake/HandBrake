@@ -54,16 +54,16 @@
                 <ComboBox Width="120" Grid.Row="0" ItemsSource="{Binding DetelecineOptions, Converter={StaticResource boolComboConverter}}" 
                           SelectedItem="{Binding SelectedDetelecine, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Detelecine}"
-                          HorizontalAlignment="Left"/>
+                          HorizontalAlignment="Left" AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_Detelecine}" />
                 <TextBox Width="120" Grid.Row="0" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDetelecine, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"
                          Visibility="{Binding ShowDetelecineCustom, Converter={StaticResource boolToVisConverter}}"/>
 
                 <!-- Interlace Detection -->
-                <TextBlock Text="Interlace Detection:" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Row="1"  />
+                <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_InterlaceDetection}" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Row="1"  />
 
                 <ComboBox Width="120" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CombDetectPresets, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"
                           SelectedItem="{Binding SelectedCombDetectPreset, Converter={StaticResource boolComboConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_InterlaceDetection}"
-                          VerticalContentAlignment="Center"/>
+                          VerticalContentAlignment="Center" AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_InterlaceDetection}"/>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
                 <TextBlock Text="Custom:" VerticalAlignment="Center" Margin="0,0,5,0" Visibility="{Binding ShowCombDetectCustom, Converter={StaticResource boolToVisConverter}}" />
@@ -75,13 +75,15 @@
                 <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Deinterlace}" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="0,0,0,10" />
                 <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,0,10">
                     <ComboBox Width="120" ItemsSource="{Binding DeinterlaceFilterOptions, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left"
-                          SelectedItem="{Binding SelectedDeinterlaceFilter, Converter={StaticResource boolComboConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deinterlace}"  />
+                              SelectedItem="{Binding SelectedDeinterlaceFilter, Converter={StaticResource boolComboConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deinterlace}"
+                              AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_Deinterlace}" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,10">
-                    <TextBlock Text="Preset:" VerticalAlignment="Center" Margin="0,0,5,0" Visibility="{Binding IsDeinterlaceEnabled, Converter={StaticResource boolToVisConverter}}"  />
+                    <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_DeinterlacePreset}" VerticalAlignment="Center" Margin="0,0,5,0" Visibility="{Binding IsDeinterlaceEnabled, Converter={StaticResource boolToVisConverter}}"  />
                     <ComboBox Width="120" ItemsSource="{Binding DeinterlacePresets}" HorizontalAlignment="Left" VerticalAlignment="Center"
-                              SelectedItem="{Binding SelectedDeInterlacePreset}" DisplayMemberPath="Name" Visibility="{Binding IsDeinterlaceEnabled, Converter={StaticResource boolToVisConverter}}" />
+                              SelectedItem="{Binding SelectedDeInterlacePreset}" DisplayMemberPath="Name" Visibility="{Binding IsDeinterlaceEnabled, Converter={StaticResource boolToVisConverter}}"
+                              AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_DeinterlacePresetAuto}" />
 
                     <TextBlock Text="Custom:" VerticalAlignment="Center" Margin="5,0,5,0"  Visibility="{Binding ShowCustomDeinterlace, Converter={StaticResource boolToVisConverter}}" />
                     <TextBox Width="120" Text="{Binding CustomDeinterlaceSettings, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"
@@ -93,12 +95,14 @@
                 <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Denoise}" Grid.Row="3" Grid.Column="0" Margin="0,0,0,10"/>
                 <ComboBox Width="120" Grid.Row="3" ItemsSource="{Binding DenoiseOptions, Converter={StaticResource boolComboConverter}}" 
                           SelectedItem="{Binding SelectedDenoise, Converter={StaticResource boolComboConverter}}" Grid.Column="1"
-                          HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Denoise}" />
+                          HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Denoise}"
+                          AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_Denoise}"/>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" Margin="0,0,0,10" 
                             Visibility="{Binding ShowDenoiseOptions, Converter={StaticResource boolToVisConverter}}">
                     <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Preset}" Margin="0,0,5,0" />
                     <ComboBox SelectedItem="{Binding SelectedDenoisePreset}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DenoisePreset}"
+                              AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_DenoisePresetAuto}"
                               MinWidth="100"  HorizontalAlignment="Center" VerticalAlignment="Center">
                         <ComboBox.ItemsSource>
                             <MultiBinding Converter="{StaticResource DenoisePresetConverter}">
@@ -111,6 +115,7 @@
                     <StackPanel Orientation="Horizontal" Visibility="{Binding ShowDenoiseTune, Converter={StaticResource boolToVisConverter}}">
                         <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Tune}" Margin="5,0,5,0" />
                         <ComboBox ItemsSource="{Binding DenoiseTunes}" SelectedItem="{Binding SelectedDenoiseTune}" MinWidth="100" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DenoiseTune}"
+                                  AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_DenoiseTuneAuto}"
                           Visibility="{Binding ShowDenoiseTune, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center" />
                     </StackPanel>
 
@@ -126,6 +131,7 @@
                 <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Sharpen}" Grid.Row="4" Grid.Column="0" Margin="0,0,0,10"/>
                 <ComboBox Width="120" Grid.Row="4" ItemsSource="{Binding SharpenOptions, Converter={StaticResource boolComboConverter}}" 
                           SelectedItem="{Binding SelectedSharpen, Converter={StaticResource boolComboConverter}}" Grid.Column="1"
+                          AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_Sharpen}"
                           HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Sharpen}" />
                 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="4" Grid.Column="2" Margin="0,0,0,10" 
@@ -133,7 +139,8 @@
                     
                     <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Preset}" Margin="0,0,5,0" />
                     <ComboBox SelectedItem="{Binding SelectedSharpenPreset}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_SharpenPreset}"
-                              MinWidth="100"  HorizontalAlignment="Center" VerticalAlignment="Center" DisplayMemberPath="DisplayName" >
+                              MinWidth="100"  HorizontalAlignment="Center" VerticalAlignment="Center" DisplayMemberPath="DisplayName"
+                              AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_SharpenPresetAuto}" >
                         <ComboBox.ItemsSource>
                             <MultiBinding Converter="{StaticResource SharpenPresetConverter}">
                                 <Binding Path="SharpenPresets" />
@@ -144,7 +151,8 @@
 
                     <StackPanel Orientation="Horizontal" Visibility="{Binding ShowSharpenTune, Converter={StaticResource boolToVisConverter}}">
                         <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Tune}" Margin="5,0,5,0" />
-                        <ComboBox SelectedItem="{Binding SelectedSharpenTune}" MinWidth="100" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_SharpenTune}" VerticalAlignment="Center" DisplayMemberPath="DisplayName" >
+                        <ComboBox SelectedItem="{Binding SelectedSharpenTune}" MinWidth="100" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_SharpenTune}" VerticalAlignment="Center" DisplayMemberPath="DisplayName" 
+                                  AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_SharpenTuneAuto}" >
                             <ComboBox.ItemsSource>
                                 <MultiBinding Converter="{StaticResource SharpenTuneConverter}">
                                     <Binding Path="SharpenTunes" />
@@ -165,7 +173,8 @@
                 <!-- Deblock -->
                 <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Deblock}" Grid.Row="5" Grid.Column="0" Margin="0,0,0,10"/>
                 <Slider Width="120" Value="{Binding DeblockValue}" TickPlacement="BottomRight" Minimum="4" Maximum="15" Grid.Row="5" Grid.Column="1" Margin="0,0,0,10"
-                        HorizontalAlignment="Left" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deblock}" />
+                        HorizontalAlignment="Left" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deblock}"
+                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_Deblock}" />
                 <TextBlock Text="{Binding DeblockText}" Grid.Row="5" Grid.Column="2" Margin="0,0,0,10"/>
 
                 <CheckBox Content="{x:Static Properties:ResourcesUI.FiltersView_Grayscale}" IsChecked="{Binding Grayscale}" Grid.Row="6" Grid.Column="1" Margin="0,0,0,10"
@@ -175,6 +184,7 @@
                 <TextBlock Text="{x:Static Properties:ResourcesUI.FiltersView_Rotate}" Grid.Row="7" Grid.Column="0" Margin="0,0,0,0"/>
                 <ComboBox Width="120" ItemsSource="{Binding RotationOptions}" Grid.Row="7" Grid.Column="1"
                               SelectedItem="{Binding SelectedRotation}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Rotate}"
+                          AutomationProperties.Name="{x:Static Properties:ResourcesUI.FiltersView_Rotate}"
                               HorizontalAlignment="Left" VerticalAlignment="Center" />
 
                 <CheckBox Content="{x:Static Properties:ResourcesUI.FiltersView_FlipVideo}" Margin="5,0,0,0" VerticalAlignment="Center" Grid.Row="7" Grid.Column="2" IsChecked="{Binding FlipVideo, UpdateSourceTrigger=PropertyChanged}"

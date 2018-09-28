@@ -457,11 +457,47 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preset:.
+        /// </summary>
+        public static string FiltersView_DeinterlacePreset {
+            get {
+                return ResourceManager.GetString("FiltersView_DeinterlacePreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deinterlace Preset.
+        /// </summary>
+        public static string FiltersView_DeinterlacePresetAuto {
+            get {
+                return ResourceManager.GetString("FiltersView_DeinterlacePresetAuto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Denoise:.
         /// </summary>
         public static string FiltersView_Denoise {
             get {
                 return ResourceManager.GetString("FiltersView_Denoise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Denoise Preset.
+        /// </summary>
+        public static string FiltersView_DenoisePresetAuto {
+            get {
+                return ResourceManager.GetString("FiltersView_DenoisePresetAuto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Denoise Tune.
+        /// </summary>
+        public static string FiltersView_DenoiseTuneAuto {
+            get {
+                return ResourceManager.GetString("FiltersView_DenoiseTuneAuto", resourceCulture);
             }
         }
         
@@ -502,6 +538,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interlace Detection:.
+        /// </summary>
+        public static string FiltersView_InterlaceDetection {
+            get {
+                return ResourceManager.GetString("FiltersView_InterlaceDetection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preset:.
         /// </summary>
         public static string FiltersView_Preset {
@@ -525,6 +570,24 @@ namespace HandBrakeWPF.Properties {
         public static string FiltersView_Sharpen {
             get {
                 return ResourceManager.GetString("FiltersView_Sharpen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sharpen Preset.
+        /// </summary>
+        public static string FiltersView_SharpenPresetAuto {
+            get {
+                return ResourceManager.GetString("FiltersView_SharpenPresetAuto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sharpen Tune.
+        /// </summary>
+        public static string FiltersView_SharpenTuneAuto {
+            get {
+                return ResourceManager.GetString("FiltersView_SharpenTuneAuto", resourceCulture);
             }
         }
         
@@ -795,6 +858,15 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_FiltersTab {
             get {
                 return ResourceManager.GetString("MainView_FiltersTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Format:.
+        /// </summary>
+        public static string MainView_Format {
+            get {
+                return ResourceManager.GetString("MainView_Format", resourceCulture);
             }
         }
         
@@ -2106,6 +2178,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string QueueView_Delete {
+            get {
+                return ResourceManager.GetString("QueueView_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Destination: .
         /// </summary>
         public static string QueueView_Destination {
@@ -2129,6 +2210,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_Duration {
             get {
                 return ResourceManager.GetString("QueueView_Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string QueueView_Edit {
+            get {
+                return ResourceManager.GetString("QueueView_Edit", resourceCulture);
             }
         }
         
@@ -2282,6 +2372,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_ResetSelectedJobs {
             get {
                 return ResourceManager.GetString("QueueView_ResetSelectedJobs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        public static string QueueView_Retry {
+            get {
+                return ResourceManager.GetString("QueueView_Retry", resourceCulture);
             }
         }
         
@@ -2601,7 +2700,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use system default player.
+        ///   Looks up a localized string similar to Select a preview image.
+        /// </summary>
+        public static string StaticPreviewView_SelectPreviewImage {
+            get {
+                return ResourceManager.GetString("StaticPreviewView_SelectPreviewImage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use system default video player.
         /// </summary>
         public static string StaticPreviewView_UseSystemDefault {
             get {
@@ -2871,7 +2979,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encoder Level.
+        ///   Looks up a localized string similar to Encoder Level:.
         /// </summary>
         public static string VideoView_EncoderLevel {
             get {

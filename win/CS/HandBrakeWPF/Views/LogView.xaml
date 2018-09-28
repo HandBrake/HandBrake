@@ -24,13 +24,15 @@
                      Loaded="ToolBarLoaded"
                      >
 
-                <Button cal:Message.Attach="[Event Click] = [Action CopyLog]" Margin="10,0,0,0">
+                <Button cal:Message.Attach="[Event Click] = [Action CopyLog]" Margin="10,0,0,0" 
+                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.LogView_CopyClipboard}" >
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/copy.png" />
                         <TextBlock Margin="2,0,0,0" Text="{x:Static Properties:ResourcesUI.LogView_CopyClipboard}" />
                     </StackPanel>
                 </Button>
-                <Button Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]">
+                <Button Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]"
+                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.LogView_OpenLogDir}" >
                     <StackPanel Orientation="Horizontal">
                         <Image Width="16" Source="Images/folder.png" />
                         <TextBlock Margin="2,0,0,0" Text="{x:Static Properties:ResourcesUI.LogView_OpenLogDir}" />

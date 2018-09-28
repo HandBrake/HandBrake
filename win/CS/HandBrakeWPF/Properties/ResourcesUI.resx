@@ -556,7 +556,7 @@
     <value>Live Preview</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Use system default player</value>
+    <value>Use system default video player</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
     <value>Add Closed Captions when available</value>
@@ -595,7 +595,7 @@
     <value>Constant Quality:</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>Encoder Level</value>
+    <value>Encoder Level:</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
     <value>Encoder Preset:</value>
@@ -1096,5 +1096,41 @@ This will not affect your current settings in the Subtitle tab.</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
     <value>Retry Failed</value>
+  </data>
+  <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
+    <value>Preset:</value>
+  </data>
+  <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
+    <value>Deinterlace Preset</value>
+  </data>
+  <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
+    <value>Denoise Preset</value>
+  </data>
+  <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
+    <value>Denoise Tune</value>
+  </data>
+  <data name="FiltersView_InterlaceDetection" xml:space="preserve">
+    <value>Interlace Detection:</value>
+  </data>
+  <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
+    <value>Sharpen Preset</value>
+  </data>
+  <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
+    <value>Sharpen Tune</value>
+  </data>
+  <data name="MainView_Format" xml:space="preserve">
+    <value>Format:</value>
+  </data>
+  <data name="QueueView_Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="QueueView_Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="QueueView_Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
+    <value>Select a preview image</value>
   </data>
 </root>

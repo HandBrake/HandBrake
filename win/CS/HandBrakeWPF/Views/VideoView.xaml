@@ -42,7 +42,7 @@
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                     <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_Codec}" Width="100" />
 
-                    <ComboBox Width="120" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Encoders}" >
+                    <ComboBox Width="120" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Encoders}" AutomationProperties.Name="{x:Static Properties:ResourcesUI.VideoView_Codec}" >
                         <ComboBox.SelectedItem>
                             <MultiBinding Converter="{StaticResource videoEncoderConverter}">
                                 <Binding Path="SelectedVideoEncoder" />
@@ -62,7 +62,8 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_Framerate}" VerticalAlignment="Top" Margin="0,5,0,0" Width="100"/>
                     <StackPanel Orientation="Vertical">
-                        <ComboBox Width="120" ItemsSource="{Binding Framerates}" SelectedItem="{Binding SelectedFramerate}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Framerate}"  />
+                        <ComboBox Width="120" ItemsSource="{Binding Framerates}" SelectedItem="{Binding SelectedFramerate}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Framerate}"
+                                  AutomationProperties.Name="{x:Static Properties:ResourcesUI.VideoView_Framerate}" />
 
                         <StackPanel Orientation="Vertical" >
                             <RadioButton Content="{x:Static Properties:ResourcesUI.VideoView_ConstantFramerate}" IsChecked="{Binding IsConstantFramerate}" Margin="0,5,0,0"
@@ -107,7 +108,7 @@
                     <RadioButton Content="{x:Static Properties:ResourcesUI.VideoView_AverageBitrate}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_AvgBitrate}" 
                                  IsChecked="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,10,0"/>
                     <TextBox Width="75" Text="{Binding VideoBitrate, UpdateSourceTrigger=PropertyChanged}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
-                             ToolTip="{x:Static Properties:ResourcesTooltips.Video_AvgBitrate}" />
+                             ToolTip="{x:Static Properties:ResourcesTooltips.Video_AvgBitrate}" AutomationProperties.Name="{x:Static Properties:ResourcesUI.VideoView_AverageBitrate}"  />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="30,0,0,0" Visibility="{Binding DisplayNonQSVControls, Converter={StaticResource boolToVisConverter}}">
@@ -162,7 +163,7 @@
 
                     <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_EncodeTune}" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,5,0,0"
                                Visibility="{Binding DisplayTuneControls, Converter={StaticResource boolToVisConverter}}"/>
-                    <ComboBox Width="100" Grid.Row="2" Grid.Column="1" Margin="5,5,5,0" Height="22"
+                    <ComboBox Width="100" Grid.Row="2" Grid.Column="1" Margin="5,5,5,0" Height="22" AutomationProperties.Name="{x:Static Properties:ResourcesUI.VideoView_EncodeTune}"
                               ItemsSource="{Binding VideoTunes}" DisplayMemberPath="DisplayName" SelectedItem="{Binding VideoTune}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.Video_EncoderTune}"  Visibility="{Binding DisplayTuneControls, Converter={StaticResource boolToVisConverter}}"
                               Style="{StaticResource LongToolTipHolder}" />
@@ -174,16 +175,19 @@
                     <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_EncoderProfile}" Grid.Row="3" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" Visibility="{Binding DisplayProfileControl, Converter={StaticResource boolToVisConverter}}"/>
                     <ComboBox Width="100" Grid.Row="3" Grid.Column="1" Margin="5,5,5,0" Height="22" VerticalAlignment="Center" Visibility="{Binding DisplayProfileControl, Converter={StaticResource boolToVisConverter}}"
                           ItemsSource="{Binding VideoProfiles}" DisplayMemberPath="DisplayName" SelectedItem="{Binding VideoProfile}"
-                          Style="{StaticResource LongToolTipHolder}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Profile}"  />
+                          Style="{StaticResource LongToolTipHolder}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Profile}"
+                              AutomationProperties.Name="{x:Static Properties:ResourcesUI.VideoView_EncoderProfile}" />
 
                     <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_EncoderLevel}" Grid.Row="3" Grid.Column="2" Margin="10,5,0,0" VerticalAlignment="Center" Visibility="{Binding DisplayLevelControl, Converter={StaticResource boolToVisConverter}}" />
                     <ComboBox Width="100" Grid.Row="3" Grid.Column="3" Margin="5,5,5,0" Height="22" VerticalAlignment="Center" Visibility="{Binding DisplayLevelControl, Converter={StaticResource boolToVisConverter}}"
                           ItemsSource="{Binding VideoLevels}"  DisplayMemberPath="DisplayName" SelectedItem="{Binding VideoLevel}"
-                          Style="{StaticResource LongToolTipHolder}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Level}" />
+                          Style="{StaticResource LongToolTipHolder}" ToolTip="{x:Static Properties:ResourcesTooltips.Video_Level}"
+                              AutomationProperties.Name="{x:Static Properties:ResourcesUI.VideoView_EncoderLevel}" />
 
                     <!-- Row 3 -->
                     <TextBlock Text="{x:Static Properties:ResourcesUI.VideoView_ExtraOptions}" Grid.Row="4" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" />
                     <TextBox Text="{Binding ExtraArguments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow"
+                             AutomationProperties.Name="{x:Static Properties:ResourcesUI.VideoView_ExtraOptions}" 
                              MaxLines="4" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="5,5,5,2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch"
                              ToolTip="{Binding FullOptionsTooltip}" Style="{StaticResource LongToolTipHolder}" >
                         <TextBox.ContextMenu>

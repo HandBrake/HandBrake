@@ -705,5 +705,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         }
 
         #endregion
+
+        public override string ToString()
+        {
+            return string.Format("Audio Track: Title {0}", this.ScannedTrack.ToString());
+        }
     }
 }

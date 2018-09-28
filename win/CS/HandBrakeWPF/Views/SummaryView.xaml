@@ -55,11 +55,12 @@
             </Grid.Resources>
 
 
-            <TextBlock Text="Format:" FontWeight="Bold" Grid.Row="0" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static Properties:ResourcesUI.MainView_Format}" FontWeight="Bold" Grid.Row="0" VerticalAlignment="Center" />
             <ComboBox Name="Container" Width="100" HorizontalAlignment="Left"  Grid.Row="0" Grid.Column="1"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Mux}" VerticalAlignment="Center"
                               ItemsSource="{Binding OutputFormats, Converter={StaticResource enumComboConverter}}"
-                              SelectedItem="{Binding SelectedOutputFormat, Converter={StaticResource enumComboConverter}}" />
+                              SelectedItem="{Binding SelectedOutputFormat, Converter={StaticResource enumComboConverter}}" 
+                              AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_Format}" />
             <CheckBox Name="WebOptimized" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"
                               Content="{x:Static Properties:ResourcesUI.MainView_WebOptimized}"
                               IsChecked="{Binding Path=OptimizeMP4}"

@@ -43,11 +43,13 @@
                     <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Width}" />
                     <controls:NumberBox Number="{Binding Width, Mode=TwoWay}" UpdateBindingOnTextChange="True" IsEnabled="{Binding WidthControlEnabled}" 
                                         Modulus="{Binding SelectedModulus, Mode=OneWay}"
-                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Width}"  Minimum="0" Width="60"  />
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Width}"  Minimum="0" Width="60"
+                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.PictureSettingsView_Width}" />
                     <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_Height}" />
                     <controls:NumberBox Number="{Binding Height, Mode=TwoWay}" IsEnabled="{Binding HeightControlEnabled}" UpdateBindingOnTextChange="True" 
                                         Modulus="{Binding SelectedModulus, Mode=OneWay}" 
-                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Height}" Minimum="0" Width="60"  />
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Height}" Minimum="0" Width="60"
+                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.PictureSettingsView_Height}" />
                     <CheckBox Content="{x:Static Properties:ResourcesUI.PictureSettingsView_KeepAR}" IsChecked="{Binding MaintainAspectRatio}"
                           Visibility="{Binding ShowKeepAR, Converter={StaticResource boolToVisHiddenConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_KeepAR}"
                           VerticalAlignment="Center" Margin="5,0,0,0" />
@@ -70,10 +72,12 @@
                        Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}" />
 
                     <ComboBox Width="110" Grid.Row="0" ItemsSource="{Binding AnamorphicModes}" SelectedItem="{Binding SelectedAnamorphicMode}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5"
-                              ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Anamorphic}" />
+                              ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Anamorphic}"
+                              AutomationProperties.Name="{x:Static Properties:ResourcesUI.PictureSettingsView_Anamorphic}" />
                     <ComboBox Width="110" Grid.Row="1" ItemsSource="{Binding ModulusValues}" SelectedItem="{Binding SelectedModulus}" 
-                          Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Modulus}"
-                          Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" />
+                              Visibility="{Binding ShowModulus, Converter={StaticResource boolToVisConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_Modulus}"
+                              Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5"
+                              AutomationProperties.Name="{x:Static Properties:ResourcesUI.PictureSettingsView_Modulus}"/>
                 </Grid>
 
                 <!-- Custom Anamoprhic -->
@@ -93,7 +97,8 @@
                     <Label Content="{x:Static Properties:ResourcesUI.PictureSettingsView_PAR}" Grid.Row="1" Grid.Column="0" />
 
                     <controls:NumberBox Width="60" Number="{Binding DisplayWidth, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,5" 
-                                    AllowEmpty="False" IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" />
+                                        AllowEmpty="False" IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}"
+                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.PictureSettingsView_DisplayWitdh}" />
                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1">
                         <controls:NumberBox Width="60" Number="{Binding ParWidth, Mode=TwoWay}" HorizontalAlignment="Left" AllowEmpty="False"
                                                  IsEnabled="{Binding MaintainAspectRatio, Converter={StaticResource boolConverter}, ConverterParameter=true}" Margin="0,0,0,5"
@@ -139,19 +144,23 @@
 
                     <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="1" Grid.Column="2"
                                     Minimum="0" Modulus="2" Number="{Binding CropTop, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
-                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropTop}" />
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropTop}"
+                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.PictureSettingsView_Top}" />
 
                     <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="3" Grid.Column="2"
                                     Minimum="0" Modulus="2" Number="{Binding CropBottom, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
-                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropBottom}" />
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropBottom}"
+                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.PictureSettingsView_Bottom}" />
 
                     <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="1"
                                     Minimum="0" Modulus="2" Number="{Binding CropLeft, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
-                                      ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropLeft}"  />
+                                      ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropLeft}"
+                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.PictureSettingsView_Left}"/>
 
                     <controls:NumberBox Width="60" HorizontalAlignment="Left" Margin="0,0,0,5" IsEnabled="{Binding IsCustomCrop}" Grid.Row="2" Grid.Column="3"
                                     Minimum="0" Modulus="2" Number="{Binding CropRight, Mode=TwoWay}" UpdateBindingOnTextChange="True" ShowIncrementButtons="True" AllowEmpty="False"
-                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropRight}" />
+                                        ToolTip="{x:Static Properties:ResourcesTooltips.PictureSettingsView_CropRight}"
+                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.PictureSettingsView_Right}"/>
 
                 </Grid>
 

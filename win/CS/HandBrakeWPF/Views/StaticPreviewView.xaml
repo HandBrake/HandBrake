@@ -31,7 +31,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Slider Maximum="{Binding TotalPreviews}" Minimum="0" 
+                <Slider Maximum="{Binding TotalPreviews}" Minimum="0" AutomationProperties.Name="{x:Static Properties:ResourcesUI.StaticPreviewView_SelectPreviewImage}"
                 Value="{Binding SelectedPreviewImage}"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Stretch"

@@ -304,5 +304,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 return this.SrtFileName != "-" && this.SrtFileName != null;
             }
         }
+
+        public override string ToString()
+        {
+            return string.Format("Subtitle Track: Title {0}", this.SrtFileName ?? this.SourceTrack.ToString());
+        }
     }
 }

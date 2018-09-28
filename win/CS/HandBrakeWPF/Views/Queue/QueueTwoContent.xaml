@@ -53,7 +53,8 @@
 
             <TextBlock Text="{x:Static Properties:ResourcesUI.MainView_ShowQueue}" FontSize="28" VerticalAlignment="Center" FontFamily="Segoe UI Light" Margin="10,0,0,0"  />
 
-            <Menu HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent" Grid.Column="2">
+            <Menu HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent" Grid.Column="2" 
+                  AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_WhenDone}">
                 <MenuItem>
                     <MenuItem.Header>
                         <StackPanel Height="32" Orientation="Horizontal">
@@ -93,29 +94,6 @@
                                   Header="{x:Static Properties:ResourcesUI.QueueView_QuitHandBrake}"/>
                 </MenuItem>
             </Menu>
-
-            <!--<Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Center" Grid.Column="3">
-                <MenuItem>
-                    <MenuItem.Header>
-                        <StackPanel Height="32" Orientation="Horizontal">
-                            <Image Source="..\Images\Advanced.png" Width="20" Height="20" VerticalAlignment="Center" />
-                            <TextBlock VerticalAlignment="Center"
-                                           Text="{x:Static Properties:ResourcesUI.QueueView_Options}" Margin="5,0,0,0" />
-                            <Path Height="5"
-                                      Margin="2,2,2,0"
-                                      Data="M 0 0 L 4 4 L 8 0 Z"
-                                      Fill="{DynamicResource GlyphBrush}" />
-                        </StackPanel>
-                    </MenuItem.Header>
-
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearCompleted}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearQueue}" />
-                    <Separator />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" />
-
-                </MenuItem>
-            </Menu>-->
-
         </Grid>
 
         <StackPanel Grid.Row="1" Margin="20,10,10,0" Visibility="{Binding IsNewQueueVisible, Converter={StaticResource boolToVisConverter}}">
@@ -281,13 +259,13 @@
                                     </Style>
                                 </StackPanel.Resources>
 
-                                <Button>
+                                <Button AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_Retry}"  ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0"
-                                               Source="../Images/Refresh.ico" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}">
+                                               Source="../Images/Refresh.ico">
                                             </Image>
-                                            <TextBlock Text="Retry" />
+                                            <TextBlock Text="{x:Static Properties:ResourcesUI.QueueView_Retry}" />
                                         </StackPanel>
 
                                     </Button.Content>
@@ -300,13 +278,13 @@
                                     </i:Interaction.Triggers>
                                 </Button>
 
-                                <Button Margin="10,0,0,0">
+                                <Button Margin="10,0,0,0" AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_Edit}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_SendJobBack}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="20" Margin="0,0,5,0" Height="20" VerticalAlignment="Center"
-                                               Source="../Images/options24.png" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}">
+                                               Source="../Images/options24.png">
                                             </Image>
-                                            <TextBlock Text="Edit" />
+                                            <TextBlock Text="{x:Static Properties:ResourcesUI.QueueView_Edit}" />
                                         </StackPanel>
                                     </Button.Content>
                                     <i:Interaction.Triggers>
@@ -318,13 +296,13 @@
                                     </i:Interaction.Triggers>
                                 </Button>
 
-                                <Button Margin="10,0,0,0">
+                                <Button Margin="10,0,0,0" AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_Delete}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" 
-                                               Source="../Images/delete.png" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}">
+                                               Source="../Images/delete.png">
                                             </Image>
-                                            <TextBlock Text="Delete" />
+                                            <TextBlock Text="{x:Static Properties:ResourcesUI.QueueView_Delete}" />
                                         </StackPanel>
                                     </Button.Content>
                                     <i:Interaction.Triggers>
