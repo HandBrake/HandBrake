@@ -172,6 +172,8 @@ namespace HandBrakeWPF.ViewModels
             IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel, INotifyIconService notifyIconService)
             : base(userSettingService)
         {
+            HandBrakeUtils.RegisterLogger();
+
             this.scanService = scanService;
             this.presetService = presetService;
             this.errorService = errorService;
