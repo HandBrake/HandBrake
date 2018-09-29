@@ -9,7 +9,8 @@
 
 #ifdef USE_VCE
 #include "AMF/core/Factory.h"
-#include "AMF/components/VideoDecoderUVD.h"
+#include "AMF/components/VideoEncoderVCE.h"
+#include "AMF/components/VideoEncoderHEVC.h"
 #include "hb.h"
 
 AMF_RESULT check_component_available(const wchar_t *componentID)
@@ -103,12 +104,12 @@ clean:
 
 int hb_vce_h264_available()
 {
-    return (check_component_available(AMFVideoDecoderUVD_H264_AVC) == AMF_OK) ? 1 : 0;
+    return (check_component_available(AMFVideoEncoderVCE_AVC) == AMF_OK) ? 1 : 0;
 }
 
 int hb_vce_h265_available()
 {
-    return (check_component_available(AMFVideoDecoderHW_H265_HEVC) == AMF_OK) ? 1 : 0;
+    return (check_component_available(AMFVideoEncoder_HEVC) == AMF_OK) ? 1 : 0;
 }
 
 #else
