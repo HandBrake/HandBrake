@@ -105,7 +105,6 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
         case HB_ACODEC_FFAAC:
             codec_name = "aac";
-            av_dict_set(&av_opts, "stereo_mode", "ms_off", 0);
             break;
 
         case HB_ACODEC_FFFLAC:
