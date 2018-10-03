@@ -403,7 +403,11 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
                     // track.AudioNormalizeMixLevel = audioTrack.AudioNormalizeMixLevel;
 
-                    if (!string.IsNullOrEmpty(audioTrack.AudioSamplerate) && !"auto".Equals(audioTrack.AudioSamplerate))
+                    if ("auto".Equals(audioTrack.AudioSamplerate))
+                    {
+                        track.SampleRate = 0;
+                    }
+                    else if (!string.IsNullOrEmpty(audioTrack.AudioSamplerate))
                     {
                         double sampleRate = 0;
                         if (double.TryParse(audioTrack.AudioSamplerate, NumberStyles.Any, CultureInfo.InvariantCulture, out sampleRate))

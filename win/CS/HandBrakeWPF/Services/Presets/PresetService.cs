@@ -608,7 +608,7 @@ namespace HandBrakeWPF.Services.Presets
         #region Private Helpers
 
         /// <summary>
-        /// Recover from a courrpted preset file
+        /// Recover from a corrupted preset file
         /// Add .old to the current filename, and delete the current file.
         /// </summary>
         /// <param name="file">
