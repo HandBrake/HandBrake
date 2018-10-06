@@ -44,7 +44,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         private bool isDefault;
         private IEnumerable<int> bitrates;
         private IEnumerable<double> encoderQualityValues;
-        private HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType encoderRateType;
+        private AudioEncoderRateType encoderRateType;
         private double? quality;
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         public AudioTrack()
         {
             // Default Values
-            this.Encoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder.ffaac;
+            this.Encoder = AudioEncoder.ffaac;
             this.MixDown = HandBrakeEncoderHelpers.Mixdowns.FirstOrDefault(m => m.ShortName == "dpl2")?.ShortName;
             this.SampleRate = 48;
             this.Bitrate = 160;
@@ -229,9 +229,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.NotifyOfPropertyChange(() => this.IsBitrateVisible);
                 this.NotifyOfPropertyChange(() => this.IsQualityVisible);
                 this.NotifyOfPropertyChange(() => this.IsRateTypeVisible);
-                this.NotifyOfPropertyChange(() => this.TrackReference);
-                this.GetDefaultMixdownIfNull();
+                this.NotifyOfPropertyChange(() => this.TrackReference);          
                 this.SetupLimits();
+                this.GetDefaultMixdownIfNull();
 
                 // Refresh the available encoder rate types.
                 this.NotifyOfPropertyChange(() => this.AudioEncoderRateTypes);
@@ -580,6 +580,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         {
             this.SetupBitrateLimits();
             this.SetupQualityCompressionLimits();
+            this.GetDefaultMixdownIfNull();
         }
 
         /// <summary>
