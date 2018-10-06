@@ -117,11 +117,11 @@
             </StackPanel>
             
             <TextBlock Text="Audio:" Grid.Row="6" />
-            <Button Content="Edit Defaults..." Grid.Row="6"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,2"
+            <Button Content="{x:Static Properties:Resources.AudioViewModel_ConfigureDefaults}" Grid.Row="6"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,2"
                     cal:Message.Attach="[Event Click] = [Action EditAudioDefaults]" />
             
             <TextBlock Text="Subtitles:" Grid.Row="7" />
-            <Button Content="Edit Defaults..." Grid.Row="7"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,2"
+            <Button Content="{x:Static Properties:Resources.SubtitlesViewModel_ConfigureDefaults}" Grid.Row="7"  Grid.Column="1" HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,2"
                     cal:Message.Attach="[Event Click] = [Action EditSubtitleDefaults]" />
 
         </Grid>
