@@ -546,7 +546,10 @@ typedef void (^HBCoreCleanupHandler)(void);
     }
 
     // Update HBCore state to reflect the current state of libhb
-    self.state = _hb_state->state;
+    if (_state != _hb_state->state)
+    {
+        self.state = _hb_state->state;
+    }
 
     // Call the handler for the current state
     if (_hb_state->state == HB_STATE_WORKDONE || _hb_state->state == HB_STATE_SCANDONE)

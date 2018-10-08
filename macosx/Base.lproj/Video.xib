@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.23.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14269.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.23.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -38,7 +38,7 @@
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="pD7-5v-U6l"/>
                     </connections>
                 </textField>
-                <textField toolTip="Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A3o-Zx-OfM">
+                <textField toolTip="Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video." verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3o-Zx-OfM">
                     <rect key="frame" x="498" y="232" width="78" height="19"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="78" id="EZ2-qD-5pb"/>
@@ -592,7 +592,7 @@ This setting is no longer supported and may be removed in a future version. Use 
                     </connections>
                 </textField>
                 <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="FHY-Ih-1rd">
-                    <rect key="frame" x="119" y="184" width="781" height="5"/>
+                    <rect key="frame" x="119" y="185" width="781" height="5"/>
                 </box>
                 <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Biw-5K-pPD">
                     <rect key="frame" x="106" y="155" width="124" height="18"/>

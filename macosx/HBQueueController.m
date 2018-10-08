@@ -28,6 +28,8 @@
 // DockTile update frequency in total percent increment
 #define dockTileUpdateFrequency     0.1f
 
+static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
+
 @interface HBQueueController () <NSOutlineViewDataSource, HBQueueOutlineViewDelegate, NSUserNotificationCenterDelegate>
 
 /// Whether the window is visible or occluded,
@@ -44,6 +46,9 @@
 @property (unsafe_unretained) IBOutlet NSTextField *countTextField;
 @property (unsafe_unretained) IBOutlet HBQueueOutlineView *outlineView;
 
+@property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
+@property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
+
 @property (nonatomic, readonly) NSMutableDictionary *descriptions;
 
 @property (nonatomic, readonly) HBDistributedArray<HBJob *> *jobs;
@@ -57,6 +62,11 @@
 
 @property (nonatomic) NSArray<HBJob *> *dragNodesArray;
 
+@end
+
+@interface HBQueueController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
+- (void)updateButtonsStateForQueueCore:(HBState)state;
+- (void)validateTouchBarsItems;
 @end
 
 @implementation HBQueueController
@@ -106,9 +116,64 @@
     [self.outlineView setVerticalMotionCanBeginDrag:YES];
 
     [self updateQueueStats];
+
+    [self.core addObserver:self forKeyPath:@"state"
+                         options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                         context:HBControllerQueueCoreContext];
+    [self addObserver:self forKeyPath:@"pendingItemsCount"
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   context:HBControllerQueueCoreContext];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == HBControllerQueueCoreContext)
+    {
+        HBState state = self.core.state;
+        [self updateToolbarButtonsStateForQueueCore:state];
+        [self.window.toolbar validateVisibleItems];
+        if (@available(macOS 10.12.2, *))
+        {
+            [self updateButtonsStateForQueueCore:state];
+            [self validateTouchBarsItems];
+        }
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 #pragma mark Toolbar
+
+- (void)updateToolbarButtonsStateForQueueCore:(HBState)state
+{
+    if (state == HBStatePaused)
+    {
+        _pauseToolbarItem.image = [NSImage imageNamed: @"encode"];
+        _pauseToolbarItem.label = NSLocalizedString(@"Resume", @"Toolbar Pause Item");
+        _pauseToolbarItem.toolTip = NSLocalizedString(@"Resume Encoding", @"Toolbar Pause Item");
+    }
+    else
+    {
+        _pauseToolbarItem.image = [NSImage imageNamed:@"pauseencode"];
+        _pauseToolbarItem.label = NSLocalizedString(@"Pause", @"Toolbar Pause Item");
+        _pauseToolbarItem.toolTip = NSLocalizedString(@"Pause Encoding", @"Toolbar Pause Item");
+
+    }
+    if (state == HBStateScanning || state == HBStateWorking || state == HBStateSearching || state == HBStateMuxing || state == HBStatePaused)
+    {
+        _ripToolbarItem.image = [NSImage imageNamed:@"stopencode"];
+        _ripToolbarItem.label = NSLocalizedString(@"Stop", @"Toolbar Start/Stop Item");
+        _ripToolbarItem.toolTip = NSLocalizedString(@"Stop Encoding", @"Toolbar Start/Stop Item");
+    }
+    else
+    {
+        _ripToolbarItem.image = [NSImage imageNamed: @"encode"];
+        _ripToolbarItem.label = NSLocalizedString(@"Start", @"Toolbar Start/Stop Item");
+        _pauseToolbarItem.toolTip = NSLocalizedString(@"Start Encoding", @"Toolbar Start/Stop Item");
+    }
+}
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
 {
@@ -169,25 +234,18 @@
     return YES;
 }
 
-- (BOOL)validateToolbarItem:(NSToolbarItem *)theItem
+- (BOOL)validateUserIterfaceItemForAction:(SEL)action
 {
-    SEL action = theItem.action;
     HBState s = self.core.state;
 
     if (action == @selector(toggleStartCancel:))
     {
         if ((s == HBStateScanning) || (s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing))
         {
-            theItem.image = [NSImage imageNamed:@"stopencode"];
-            theItem.label = NSLocalizedString(@"Stop", @"Queue Toolbar -> start/stop item title");
-            theItem.toolTip = NSLocalizedString(@"Stop Encoding", @"Queue Toolbar -> start/stop item tooltip");
             return YES;
         }
         else
         {
-            theItem.image = [NSImage imageNamed:@"encode"];
-            theItem.label = NSLocalizedString(@"Start", @"Queue Toolbar -> start/stop item title");
-            theItem.toolTip = NSLocalizedString(@"Start Encoding", @"Queue Toolbar -> start/stop item tooltip");
             return (self.pendingItemsCount > 0);
         }
     }
@@ -196,21 +254,21 @@
     {
         if (s == HBStatePaused)
         {
-            theItem.image = [NSImage imageNamed:@"encode"];
-            theItem.label = NSLocalizedString(@"Resume", @"Queue Toolbar -> pause/resume item title");
-            theItem.toolTip = NSLocalizedString(@"Resume Encoding", @"Queue Toolbar -> pause/resume item tooltip");
             return YES;
         }
         else
         {
-            theItem.image = [NSImage imageNamed:@"pauseencode"];
-            theItem.label = NSLocalizedString(@"Pause", @"Queue Toolbar -> pause/resume item title");
-            theItem.toolTip = NSLocalizedString(@"Pause Encoding", @"Queue Toolbar -> pause/resume item tooltip");
             return (s == HBStateWorking || s == HBStateMuxing);
         }
     }
 
     return NO;
+}
+
+- (BOOL)validateToolbarItem:(NSToolbarItem *)theItem
+{
+    SEL action = theItem.action;
+    return [self validateUserIterfaceItemForAction:action];
 }
 
 #pragma mark - Public methods
@@ -1600,7 +1658,7 @@
 
 #pragma mark NSOutlineView drag & drop
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray *)items toPasteboard:(NSPasteboard *)pboard
+- (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray<HBJob *> *)items toPasteboard:(NSPasteboard *)pboard
 {
     // Dragging is only allowed of the pending items.
     if ([items[0] state] != HBJobStateReady)
@@ -1655,3 +1713,89 @@
 }
 
 @end
+
+@implementation HBQueueController (TouchBar)
+
+static NSTouchBarItemIdentifier HBTouchBarMain = @"fr.handbrake.queueWindowTouchBar";
+
+static NSTouchBarItemIdentifier HBTouchBarRip = @"fr.handbrake.rip";
+static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
+
+- (NSTouchBar *)makeTouchBar
+{
+    NSTouchBar *bar = [[NSTouchBar alloc] init];
+    bar.delegate = self;
+
+    bar.defaultItemIdentifiers = @[HBTouchBarRip, HBTouchBarPause];
+
+    bar.customizationIdentifier = HBTouchBarMain;
+    bar.customizationAllowedItemIdentifiers = @[HBTouchBarRip, HBTouchBarPause];
+
+    return bar;
+}
+
+- (NSTouchBarItem *)touchBar:(NSTouchBar *)touchBar makeItemForIdentifier:(NSTouchBarItemIdentifier)identifier
+{
+    if ([identifier isEqualTo:HBTouchBarRip])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Rip", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPlayTemplate] target:self action:@selector(toggleStartCancel:)];
+
+        item.view = button;
+        return item;
+    }
+    else if ([identifier isEqualTo:HBTouchBarPause])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Pause", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPauseTemplate] target:self action:@selector(togglePauseResume:)];
+
+        item.view = button;
+        return item;
+    }
+
+    return nil;
+}
+
+- (void)updateButtonsStateForQueueCore:(HBState)state;
+{
+    NSButton *ripButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarRip] view];
+    NSButton *pauseButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarPause] view];
+
+    if (state == HBStateScanning || state == HBStateWorking || state == HBStateSearching || state == HBStateMuxing)
+    {
+        ripButton.image = [NSImage imageNamed:NSImageNameTouchBarRecordStopTemplate];
+        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPauseTemplate];
+    }
+    else if (state == HBStatePaused)
+    {
+        ripButton.image = [NSImage imageNamed:NSImageNameTouchBarRecordStopTemplate];
+        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPlayTemplate];
+    }
+    else if (state == HBStateIdle)
+    {
+        ripButton.image = [NSImage imageNamed:NSImageNameTouchBarPlayTemplate];
+        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPauseTemplate];
+    }
+}
+
+- (void)validateTouchBarsItems
+{
+    for (NSTouchBarItemIdentifier identifier in self.touchBar.itemIdentifiers) {
+        NSTouchBarItem *item = [self.touchBar itemForIdentifier:identifier];
+        NSView *view = item.view;
+        if ([view isKindOfClass:[NSButton class]]) {
+            NSButton *button = (NSButton *)view;
+            BOOL enabled = [self validateUserIterfaceItemForAction:button.action];
+            button.enabled = enabled;
+        }
+    }
+}
+
+@dynamic touchBar;
+
+@end
+

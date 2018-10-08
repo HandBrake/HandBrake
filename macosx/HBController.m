@@ -34,6 +34,10 @@
 
 @import HandBrakeKit;
 
+static void *HBControllerContext = &HBControllerContext;
+static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
+static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
+
 @interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDraggingDestination, NSPopoverDelegate>
 {
     IBOutlet NSTabView *fMainTabView;
@@ -68,9 +72,6 @@
 
     // Picture Preview
     HBPreviewController           * fPreviewController;
-
-    // Queue panel
-    HBQueueController            * fQueueController;
 
     // Source box
     IBOutlet NSProgressIndicator * fScanIndicator;
@@ -123,6 +124,9 @@
 /// The HBCore used for scanning.
 @property (nonatomic, strong) HBCore *core;
 
+/// The queue controller.
+@property (nonatomic, strong) HBQueueController *queue;
+
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly
 @property (nonatomic) BOOL visible;
@@ -136,6 +140,16 @@
 // Alerts
 @property (nonatomic) BOOL suppressCopyProtectionWarning;
 
+@property (nonatomic) IBOutlet NSToolbarItem *openSourceToolbarItem;
+@property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
+@property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
+
+@end
+
+@interface HBController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
+- (void)updateButtonsStateForScanCore:(HBState)state;
+- (void)updateButtonsStateForQueueCore:(HBState)state;
+- (void)validateTouchBarsItems;
 @end
 
 #define WINDOW_HEIGHT_OFFSET_INIT 48
@@ -156,8 +170,8 @@
         fPreviewController = [[HBPreviewController alloc] init];
         fPreviewController.documentController = self;
 
-        fQueueController = queueController;
-        fQueueController.controller = self;
+        _queue = queueController;
+        _queue.controller = self;
 
         presetManager = manager;
         _currentPreset = manager.defaultPreset;
@@ -263,8 +277,19 @@
     [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
                                                               forKeyPath:@"values.HBShowAdvancedTab"
                                                                  options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                                                                 context:NULL];
+                                                                 context:HBControllerContext];
 
+    [self.core addObserver:self forKeyPath:@"state"
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   context:HBControllerScanCoreContext];
+
+    [self.queue.core addObserver:self forKeyPath:@"state"
+                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                   context:HBControllerQueueCoreContext];
+
+    [self.queue addObserver:self forKeyPath:@"pendingItemsCount"
+              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+              context:HBControllerQueueCoreContext];
 
     self.presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsPopup.menu
                                                                   action:@selector(selectPresetFromMenu:)
@@ -320,23 +345,86 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:@"values.HBShowAdvancedTab"])
+    if (context == HBControllerContext && [keyPath isEqualToString:@"values.HBShowAdvancedTab"])
     {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"])
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"] && ![[fMainTabView tabViewItems] containsObject:fAdvancedTab])
         {
-            if (![[fMainTabView tabViewItems] containsObject:fAdvancedTab])
-            {
-                [fMainTabView insertTabViewItem:fAdvancedTab atIndex:5];
-            }
+            [fMainTabView insertTabViewItem:fAdvancedTab atIndex:5];
         }
         else
         {
             [fMainTabView removeTabViewItem:fAdvancedTab];
         }
     }
+    else if (context == HBControllerScanCoreContext)
+    {
+        HBState state = [change[NSKeyValueChangeNewKey] intValue];
+        [self updateToolbarButtonsStateForScanCore:state];
+        if (@available(macOS 10.12.2, *))
+        {
+            [self updateButtonsStateForScanCore:state];
+            [self validateTouchBarsItems];
+        }
+    }
+    else if (context == HBControllerQueueCoreContext)
+    {
+        HBState state = self.queue.core.state;
+        [self updateToolbarButtonsStateForQueueCore:state];
+        [self.window.toolbar validateVisibleItems];
+        if (@available(macOS 10.12.2, *))
+        {
+            [self updateButtonsStateForQueueCore:state];
+            [self validateTouchBarsItems];
+        }
+    }
     else
     {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)updateToolbarButtonsStateForScanCore:(HBState)state
+{
+    if (state == HBStateIdle)
+    {
+        _openSourceToolbarItem.image = [NSImage imageNamed: @"source"];
+        _openSourceToolbarItem.label = NSLocalizedString(@"Open Source",  @"Toolbar Open/Cancel Item");
+        _openSourceToolbarItem.toolTip = NSLocalizedString(@"Open Source", @"Toolbar Open/Cancel Item");
+    }
+    else
+    {
+        _openSourceToolbarItem.image = [NSImage imageNamed: @"stopencode"];
+        _openSourceToolbarItem.label = NSLocalizedString(@"Cancel Scan", @"Toolbar Open/Cancel Item");
+        _openSourceToolbarItem.toolTip = NSLocalizedString(@"Cancel Scanning Source", @"Toolbar Open/Cancel Item");
+    }
+}
+
+- (void)updateToolbarButtonsStateForQueueCore:(HBState)state
+{
+    if (state == HBStatePaused)
+    {
+        _pauseToolbarItem.image = [NSImage imageNamed: @"encode"];
+        _pauseToolbarItem.label = NSLocalizedString(@"Resume", @"Toolbar Pause Item");
+        _pauseToolbarItem.toolTip = NSLocalizedString(@"Resume Encoding", @"Toolbar Pause Item");
+    }
+    else
+    {
+        _pauseToolbarItem.image = [NSImage imageNamed:@"pauseencode"];
+        _pauseToolbarItem.label = NSLocalizedString(@"Pause", @"Toolbar Pause Item");
+        _pauseToolbarItem.toolTip = NSLocalizedString(@"Pause Encoding", @"Toolbar Pause Item");
+
+    }
+    if (state == HBStateScanning || state == HBStateWorking || state == HBStateSearching || state == HBStateMuxing || state == HBStatePaused)
+    {
+        _ripToolbarItem.image = [NSImage imageNamed:@"stopencode"];
+        _ripToolbarItem.label = NSLocalizedString(@"Stop", @"Toolbar Start/Stop Item");
+        _ripToolbarItem.toolTip = NSLocalizedString(@"Stop Encoding", @"Toolbar Start/Stop Item");
+    }
+    else
+    {
+        _ripToolbarItem.image = [NSImage imageNamed: @"encode"];
+        _ripToolbarItem.label = _queue.pendingItemsCount > 0 ? NSLocalizedString(@"Start Queue", @"Toolbar Start/Stop Item") :  NSLocalizedString(@"Start", @"Toolbar Start/Stop Item");
+        _pauseToolbarItem.toolTip = NSLocalizedString(@"Start Encoding", @"Toolbar Start/Stop Item");
     }
 }
 
@@ -364,91 +452,47 @@
 
 #pragma mark - UI Validation
 
-- (BOOL)validateToolbarItem:(NSToolbarItem *)toolbarItem
+- (BOOL)validateUserIterfaceItemForAction:(SEL)action
 {
-    SEL action = toolbarItem.action;
-
     if (self.core.state == HBStateScanning)
     {
         if (action == @selector(browseSources:))
         {
-            [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
-            [toolbarItem setLabel: NSLocalizedString(@"Cancel Scan", @"Toolbar Open/Cancel Item")];
-            [toolbarItem setPaletteLabel: NSLocalizedString(@"Cancel Scanning", @"Toolbar Open/Cancel Item")];
-            [toolbarItem setToolTip: NSLocalizedString(@"Cancel Scanning Source", @"Toolbar Open/Cancel Item")];
             return YES;
         }
-
         if (action == @selector(rip:) || action == @selector(addToQueue:))
-            return NO;
-    }
-    else
-    {
-        if (action == @selector(browseSources:))
-        {
-            [toolbarItem setImage:[NSImage imageNamed:@"source"]];
-            [toolbarItem setLabel:NSLocalizedString(@"Open Source",  @"Toolbar Open/Cancel Item")];
-            [toolbarItem setPaletteLabel:NSLocalizedString(@"Open Source",  @"Toolbar Open/Cancel Item")];
-            [toolbarItem setToolTip:NSLocalizedString(@"Open Source", @"Toolbar Open/Cancel Item")];
-            return YES;
-        }
-    }
-
-    HBState queueState = fQueueController.core.state;
-
-    if (queueState == HBStateScanning || queueState == HBStateWorking || queueState == HBStateSearching || queueState == HBStateMuxing)
-    {
-        if (action == @selector(rip:))
-        {
-            [toolbarItem setImage: [NSImage imageNamed: @"stopencode"]];
-            [toolbarItem setLabel: NSLocalizedString(@"Stop", @"Toolbar Start/Stop Item")];
-            [toolbarItem setPaletteLabel: NSLocalizedString(@"Stop", @"Toolbar Start/Stop Item")];
-            [toolbarItem setToolTip: NSLocalizedString(@"Stop Encoding", @"Toolbar Start/Stop Item")];
-            return YES;
-        }
-        if (action == @selector(pause:))
-        {
-            [toolbarItem setImage: [NSImage imageNamed: @"pauseencode"]];
-            [toolbarItem setLabel: NSLocalizedString(@"Pause", @"Toolbar Pause Item")];
-            [toolbarItem setPaletteLabel: NSLocalizedString(@"Pause Encoding", @"Pause Item")];
-            [toolbarItem setToolTip: NSLocalizedString(@"Pause Encoding", @"Toolbar Pause Item")];
-            return YES;
-        }
-    }
-    else if (queueState == HBStatePaused)
-    {
-        if (action == @selector(pause:))
-        {
-            [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
-            [toolbarItem setLabel: NSLocalizedString(@"Resume", @"Toolbar Pause Item")];
-            [toolbarItem setPaletteLabel: NSLocalizedString(@"Resume Encoding", @"Toolbar Pause Item")];
-            [toolbarItem setToolTip: NSLocalizedString(@"Resume Encoding", @"Toolbar Pause Item")];
-            return YES;
-        }
-        if (action == @selector(rip:))
-            return YES;
-    }
-    else
-    {
-        if (action == @selector(rip:))
-        {
-            [toolbarItem setImage: [NSImage imageNamed: @"encode"]];
-            if (fQueueController.pendingItemsCount > 0)
-                [toolbarItem setLabel: NSLocalizedString(@"Start Queue", @"Toolbar Start/Stop Item")];
-            else
-                [toolbarItem setLabel: NSLocalizedString(@"Start", @"Toolbar Start/Stop Item")];
-            [toolbarItem setPaletteLabel: NSLocalizedString(@"Start Encoding", @"Toolbar Start/Stop Item")];
-            [toolbarItem setToolTip: NSLocalizedString(@"Start Encoding", @"Toolbar Start/Stop Item")];
-        }
-
-        if (action == @selector(rip:))
-        {
-            return (self.job != nil || fQueueController.pendingItemsCount > 0);
-        }
-
-        if (action == @selector(pause:))
         {
             return NO;
+        }
+    }
+    else if (action == @selector(browseSources:))
+    {
+        return YES;
+    }
+
+    HBState queueState = _queue.core.state;
+
+    if (action == @selector(rip:))
+    {
+        if (queueState == HBStateScanning || queueState == HBStateWorking || queueState == HBStateSearching ||
+            queueState == HBStateMuxing || queueState == HBStatePaused)
+        {
+            return YES;
+        }
+        else
+        {
+            return (self.job != nil || _queue.pendingItemsCount > 0);
+        }
+    }
+
+    if (action == @selector(pause:)) {
+        if (queueState == HBStatePaused)
+        {
+            return YES;
+        }
+        else
+        {
+            return (queueState == HBStateWorking || queueState == HBStateMuxing);
         }
     }
 
@@ -458,6 +502,11 @@
     }
 
     return YES;
+}
+
+- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
+{
+    return [self validateUserIterfaceItemForAction:anItem.action];
 }
 
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem
@@ -475,11 +524,11 @@
     }
     if (action == @selector(pause:))
     {
-        return [fQueueController validateMenuItem:menuItem];
+        return [_queue validateMenuItem:menuItem];
     }
     if (action == @selector(rip:))
     {
-        BOOL result = [fQueueController validateMenuItem:menuItem];
+        BOOL result = [_queue validateMenuItem:menuItem];
 
         if ([menuItem.title isEqualToString:NSLocalizedString(@"Start Encoding", @"Menu Start/Stop Item")])
         {
@@ -646,6 +695,10 @@
 
              completionHandler(self.core.titles);
              [self.window.toolbar validateVisibleItems];
+             if (@available(macOS 10.12.2, *))
+             {
+                 [self validateTouchBarsItems];
+             }
          }];
     }
     else
@@ -1038,9 +1091,6 @@
             self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET;
             fRipIndicator.hidden = YES;
             fRipIndicatorShown = NO;
-
-            // Refresh the toolbar buttons
-            [self.window.toolbar validateVisibleItems];
         }
     }
     else
@@ -1052,9 +1102,6 @@
             self.bottomConstrain.animator.constant = 0;
             fRipIndicatorShown = YES;
             fRipIndicator.hidden = NO;
-
-            // Refresh the toolbar buttons
-            [self.window.toolbar validateVisibleItems];
         }
     }
 }
@@ -1094,7 +1141,7 @@
 
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
-    else if ([fQueueController jobExistAtURL:job.completeOutputURL])
+    else if ([_queue jobExistAtURL:job.completeOutputURL])
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"There is already a queue item for this destination.", @"File already exists in queue alert -> message")];
@@ -1116,7 +1163,7 @@
  */
 - (void)doAddToQueue
 {
-    [fQueueController addJob:[self.job copy]];
+    [_queue addJob:[self.job copy]];
 }
 
 /**
@@ -1139,12 +1186,12 @@
 {
     // if there are no jobs in the queue, then add this one to the queue and rip
     // otherwise, just rip the queue
-    if (fQueueController.pendingItemsCount == 0)
+    if (_queue.pendingItemsCount == 0)
     {
         [self doAddToQueue];
     }
 
-    [fQueueController rip:self];
+    [_queue rip:self];
 }
 
 /**
@@ -1153,15 +1200,15 @@
 - (IBAction)rip:(id)sender
 {
     // Rip or Cancel ?
-    if (fQueueController.core.state == HBStateWorking || fQueueController.core.state == HBStatePaused || fQueueController.core.state == HBStateSearching)
+    if (_queue.core.state == HBStateWorking || _queue.core.state == HBStatePaused || _queue.core.state == HBStateSearching)
 	{
         // Displays an alert asking user if the want to cancel encoding of current job.
-        [fQueueController cancelRip:self];
+        [_queue cancelRip:self];
     }
     // If there are pending jobs in the queue, then this is a rip the queue
-    else if (fQueueController.pendingItemsCount > 0)
+    else if (_queue.pendingItemsCount > 0)
     {
-        [fQueueController rip:self];
+        [_queue rip:self];
     }
     else
     {
@@ -1179,7 +1226,7 @@
 
 - (IBAction)pause:(id)sender
 {
-    [fQueueController togglePauseResume:sender];
+    [_queue togglePauseResume:sender];
 }
 
 #pragma mark -
@@ -1234,7 +1281,7 @@
             [destinations addObject:job.completeOutputURL];
         }
 
-        if ([[NSFileManager defaultManager] fileExistsAtPath:job.completeOutputURL.path] || [fQueueController jobExistAtURL:job.completeOutputURL])
+        if ([[NSFileManager defaultManager] fileExistsAtPath:job.completeOutputURL.path] || [_queue jobExistAtURL:job.completeOutputURL])
         {
             fileExists = YES;
             break;
@@ -1269,13 +1316,13 @@
         [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
             if (returnCode == NSAlertSecondButtonReturn)
             {
-                [self->fQueueController addJobsFromArray:jobs];
+                [self->_queue addJobsFromArray:jobs];
             }
         }];
     }
     else
     {
-        [fQueueController addJobsFromArray:jobs];
+        [_queue addJobsFromArray:jobs];
     }
 }
 
@@ -1489,5 +1536,143 @@
     [self applyPreset:preset];
     fPresetsView.selectedPreset = preset;
 }
+
+@end
+
+@implementation HBController (TouchBar)
+
+static NSTouchBarItemIdentifier HBTouchBarMain = @"fr.handbrake.mainWindowTouchBar";
+
+static NSTouchBarItemIdentifier HBTouchBarOpen = @"fr.handbrake.openSource";
+static NSTouchBarItemIdentifier HBTouchBarAddToQueue = @"fr.handbrake.addToQueue";
+static NSTouchBarItemIdentifier HBTouchBarRip = @"fr.handbrake.rip";
+static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
+static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
+
+- (NSTouchBar *)makeTouchBar
+{
+    NSTouchBar *bar = [[NSTouchBar alloc] init];
+    bar.delegate = self;
+
+    bar.defaultItemIdentifiers = @[HBTouchBarOpen, NSTouchBarItemIdentifierFixedSpaceSmall, HBTouchBarAddToQueue, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarRip, HBTouchBarPause, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarPreview];
+
+    bar.customizationIdentifier = HBTouchBarMain;
+    bar.customizationAllowedItemIdentifiers = @[HBTouchBarOpen, HBTouchBarAddToQueue, HBTouchBarRip, HBTouchBarPause, HBTouchBarPreview];
+
+    return bar;
+}
+
+- (NSTouchBarItem *)touchBar:(NSTouchBar *)touchBar makeItemForIdentifier:(NSTouchBarItemIdentifier)identifier
+{
+    if ([identifier isEqualTo:HBTouchBarOpen])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Open Source", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithTitle:NSLocalizedString(@"Open Source", @"Touch bar") target:self action:@selector(browseSources:)];
+
+        item.view = button;
+        return item;
+    }
+    else if ([identifier isEqualTo:HBTouchBarAddToQueue])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Add to Queue", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithTitle:NSLocalizedString(@"Add to Queue", @"Touch bar") target:self action:@selector(addToQueue:)];
+
+        item.view = button;
+        return item;
+    }
+    else if ([identifier isEqualTo:HBTouchBarRip])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Rip", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPlayTemplate] target:self action:@selector(rip:)];
+
+        item.view = button;
+        return item;
+    }
+    else if ([identifier isEqualTo:HBTouchBarPause])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Pause", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPauseTemplate] target:self action:@selector(pause:)];
+
+        item.view = button;
+        return item;
+    }
+    else if ([identifier isEqualTo:HBTouchBarPreview])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Show Preview", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarQuickLookTemplate] target:self action:@selector(showPreviewWindow:)];
+
+        item.view = button;
+        return item;
+    }
+
+    return nil;
+}
+
+- (void)updateButtonsStateForScanCore:(HBState)state
+{
+    NSButton *openButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarOpen] view];
+
+    NSButton *addToQueueButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarAddToQueue] view];
+    NSButton *previewButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarPreview] view];
+
+    if (state == HBStateIdle)
+    {
+        openButton.title = NSLocalizedString(@"Open Source", @"Touch bar");
+        addToQueueButton.enabled = NO;
+        previewButton.enabled = NO;
+    }
+    else
+    {
+        openButton.title = NSLocalizedString(@"Cancel scan", @"Touch bar");
+        addToQueueButton.enabled = YES;
+    }
+}
+
+- (void)updateButtonsStateForQueueCore:(HBState)state;
+{
+    NSButton *ripButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarRip] view];
+    NSButton *pauseButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarPause] view];
+
+    if (state == HBStateScanning || state == HBStateWorking || state == HBStateSearching || state == HBStateMuxing)
+    {
+        ripButton.image = [NSImage imageNamed:NSImageNameTouchBarRecordStopTemplate];
+        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPauseTemplate];
+    }
+    else if (state == HBStatePaused)
+    {
+        ripButton.image = [NSImage imageNamed:NSImageNameTouchBarRecordStopTemplate];
+        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPlayTemplate];
+    }
+    else if (state == HBStateIdle)
+    {
+        ripButton.image = [NSImage imageNamed:NSImageNameTouchBarPlayTemplate];
+        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPauseTemplate];
+    }
+}
+
+- (void)validateTouchBarsItems
+{
+    for (NSTouchBarItemIdentifier identifier in self.touchBar.itemIdentifiers) {
+        NSTouchBarItem *item = [self.touchBar itemForIdentifier:identifier];
+        NSView *view = item.view;
+        if ([view isKindOfClass:[NSButton class]]) {
+            NSButton *button = (NSButton *)view;
+            BOOL enabled = [self validateUserIterfaceItemForAction:button.action];
+            button.enabled = enabled;
+        }
+    }
+}
+
+@dynamic touchBar;
 
 @end

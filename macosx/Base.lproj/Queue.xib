@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.13.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.23.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.13.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.23.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -10,7 +10,9 @@
             <connections>
                 <outlet property="countTextField" destination="2511" id="7vs-Ty-tNx"/>
                 <outlet property="outlineView" destination="2597" id="dPQ-wg-8cy"/>
+                <outlet property="pauseToolbarItem" destination="s7o-pK-heI" id="SP7-Fq-gw9"/>
                 <outlet property="progressTextField" destination="2646" id="E60-Gv-b2q"/>
+                <outlet property="ripToolbarItem" destination="SX6-mq-Hck" id="va2-0n-3T0"/>
                 <outlet property="window" destination="2576" id="2645"/>
             </connections>
         </customObject>

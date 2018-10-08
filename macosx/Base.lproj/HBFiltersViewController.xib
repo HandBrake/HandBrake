@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14306.4" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.23.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14306.4"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.23.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -71,7 +71,7 @@
                         <outlet property="nextKeyView" destination="ipJ-z3-XnJ" id="fgB-Yd-xLt"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ipJ-z3-XnJ">
+                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ipJ-z3-XnJ">
                     <rect key="frame" x="332" y="300" width="180" height="19"/>
                     <string key="toolTip">Custom Detelecine parameters.
 
@@ -213,7 +213,7 @@ Decomb switches between multiple interpolation algorithms for speed and quality.
                         <binding destination="-2" name="contentValues" keyPath="self.filters.deinterlaceTypes" id="1XG-JZ-nFn"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r64-vI-ymx">
+                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r64-vI-ymx">
                     <rect key="frame" x="539" y="234" width="180" height="19"/>
                     <string key="toolTip">Custom Deinterlace parameters.
 
@@ -296,7 +296,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </popUpButton>
                 <popUpButton toolTip="Rotate the picture clockwise in 90 degree increments." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="dsH-ZQ-dBs">
-                    <rect key="frame" x="119" y="165" width="59" height="22"/>
+                    <rect key="frame" x="119" y="165" width="61" height="22"/>
                     <popUpButtonCell key="cell" type="push" title="0°" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="eZj-V7-e0o" id="ee3-w2-XRX">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -320,7 +320,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                     </connections>
                 </popUpButton>
                 <button toolTip="Flips (mirrors) the picture on the horizontal axis." translatesAutoresizingMaskIntoConstraints="NO" id="IWV-25-FSC">
-                    <rect key="frame" x="180" y="168" width="41" height="18"/>
+                    <rect key="frame" x="182" y="168" width="41" height="18"/>
                     <buttonCell key="cell" type="check" title="Flip" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Tvl-40-1Tc">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                         <font key="font" metaFont="smallSystem"/>
@@ -387,7 +387,7 @@ Bob attempts to better preserve motion for a slight penalty to perceived resolut
                         <outlet property="nextKeyView" destination="rPg-F2-gtl" id="46r-ZD-dTe"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rPg-F2-gtl">
+                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rPg-F2-gtl">
                     <rect key="frame" x="332" y="260" width="180" height="19"/>
                     <string key="toolTip">Custom Interlace Detection parameters.
 
@@ -403,14 +403,14 @@ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                     <connections>
-                        <binding destination="-2" name="hidden" keyPath="self.filters.customCombDetectionSelected" id="avq-Zl-5gA">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
                         <binding destination="-2" name="value" keyPath="self.filters.combDetectionCustomString" id="r46-bK-tom">
                             <dictionary key="options">
                                 <bool key="NSValidatesImmediately" value="YES"/>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customCombDetectionSelected" id="avq-Zl-5gA">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
                             </dictionary>
                         </binding>
                     </connections>
@@ -665,7 +665,7 @@ Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="s0f-8C-cZp"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZR9-YG-pfn">
+                <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZR9-YG-pfn">
                     <rect key="frame" x="540" y="95" width="180" height="19"/>
                     <string key="toolTip">Custom Denoise parameters.
 
@@ -767,7 +767,7 @@ Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="C4H-qZ-HMZ"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="Hht-Rt-VA0">
+                <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hht-Rt-VA0">
                     <rect key="frame" x="540" y="69" width="180" height="19"/>
                     <string key="toolTip">Custom Sharpen parameters.
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14313.3.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.23.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14313.3.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.23.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -23,9 +23,12 @@
                 <outlet property="fStatusField" destination="1123" id="mPD-cg-5dk"/>
                 <outlet property="fSubtitlesTab" destination="5194" id="PF0-qx-Iu4"/>
                 <outlet property="fVideoTab" destination="1477" id="hFY-kK-afW"/>
+                <outlet property="openSourceToolbarItem" destination="8r8-nZ-dYs" id="cEL-nv-D9F"/>
                 <outlet property="openTitleView" destination="lZQ-gl-3wX" id="Wh6-fB-pWi"/>
+                <outlet property="pauseToolbarItem" destination="wTQ-KF-5KW" id="htw-tK-A0X"/>
                 <outlet property="presetsItem" destination="qhv-9l-2FH" id="bEZ-nH-M9d"/>
                 <outlet property="presetsPopup" destination="bWH-Lp-mKY" id="vot-gQ-hLV"/>
+                <outlet property="ripToolbarItem" destination="byg-kj-sEM" id="C7B-wO-F1Q"/>
                 <outlet property="showQueueToolbarItem" destination="HCx-ku-nF7" id="CC6-Yu-j7N"/>
                 <outlet property="summaryTab" destination="BA0-eg-2Ka" id="wh5-Js-weO"/>
                 <outlet property="window" destination="21" id="qib-ZH-aNm"/>
@@ -44,14 +47,14 @@
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <tabView controlSize="small" translatesAutoresizingMaskIntoConstraints="NO" id="1474" customClass="HBTabView">
-                        <rect key="frame" x="13" y="116" width="859" height="381"/>
+                        <rect key="frame" x="13" y="116" width="859" height="382"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="334" id="Jdl-tV-liS"/>
                         </constraints>
                         <tabViewItems>
                             <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
                                 <view key="view" id="BjX-E2-6tb">
-                                    <rect key="frame" x="10" y="25" width="839" height="343"/>
+                                    <rect key="frame" x="10" y="29" width="839" height="340"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -103,7 +106,7 @@
                         </connections>
                     </tabView>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1538">
-                        <rect key="frame" x="18" y="569" width="48" height="15"/>
+                        <rect key="frame" x="18" y="570" width="48" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Source:" id="4905">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -115,7 +118,7 @@
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="1000" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1540">
-                        <rect key="frame" x="18" y="538" width="33" height="15"/>
+                        <rect key="frame" x="18" y="540" width="33" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Title:" id="4907">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -126,7 +129,7 @@
                         </connections>
                     </textField>
                     <popUpButton toolTip="Source range selection. By default, all chapters are selected and the entire source is encoded." horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5513">
-                        <rect key="frame" x="526" y="535" width="84" height="22"/>
+                        <rect key="frame" x="526" y="536" width="84" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="78" id="Zs8-pX-H7V"/>
                         </constraints>
@@ -148,7 +151,7 @@
                         </connections>
                     </popUpButton>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1552">
-                        <rect key="frame" x="18" y="94" width="52" height="15"/>
+                        <rect key="frame" x="18" y="94" width="52" height="14"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Save As:" id="4913">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -159,7 +162,7 @@
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="1000" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1553">
-                        <rect key="frame" x="754" y="538" width="57" height="15"/>
+                        <rect key="frame" x="754" y="540" width="57" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Duration:" id="4914">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -174,7 +177,7 @@
                         </connections>
                     </textField>
                     <textField toolTip="Duration of the selected source range in Hours:Minutes:Seconds." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1554">
-                        <rect key="frame" x="811" y="538" width="56" height="15"/>
+                        <rect key="frame" x="811" y="540" width="56" height="14"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="52" id="YAI-9M-gNt"/>
                         </constraints>
@@ -195,7 +198,7 @@
                         </connections>
                     </textField>
                     <textField toolTip="Source file name." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1539">
-                        <rect key="frame" x="70" y="569" width="44" height="14"/>
+                        <rect key="frame" x="70" y="570" width="44" height="14"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="xNw-RS-Hhf"/>
                         </constraints>
@@ -208,7 +211,7 @@
                             <accessibilityConnection property="title" destination="1538" id="rra-Xj-yD0"/>
                         </connections>
                     </textField>
-                    <textField toolTip="File name. This is what your new video will be named." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1561">
+                    <textField toolTip="File name. This is what your new video will be named." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1561">
                         <rect key="frame" x="76" y="91" width="347" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" continuous="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="4919">
                             <font key="font" metaFont="smallSystem"/>
@@ -230,7 +233,7 @@
                         </connections>
                     </textField>
                     <textField hidden="YES" toolTip="First second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5491" userLabel="Time Start Encoding Field">
-                        <rect key="frame" x="615" y="535" width="54" height="19"/>
+                        <rect key="frame" x="615" y="537" width="54" height="19"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="54" id="siy-Fa-XFI"/>
                         </constraints>
@@ -258,7 +261,7 @@
                         </connections>
                     </textField>
                     <textField hidden="YES" toolTip="First frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5521" userLabel="Frame Start Encoding Field">
-                        <rect key="frame" x="615" y="535" width="54" height="19"/>
+                        <rect key="frame" x="615" y="537" width="54" height="19"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="54" id="uYc-eu-FMx"/>
                         </constraints>
@@ -286,7 +289,7 @@
                         </connections>
                     </textField>
                     <textField hidden="YES" toolTip="Last second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5493" userLabel="Time End Encoding Field">
-                        <rect key="frame" x="687" y="535" width="54" height="19"/>
+                        <rect key="frame" x="687" y="537" width="54" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5494">
                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="tD5-HN-B7h">
                                 <real key="minimum" value="0.0"/>
@@ -311,7 +314,7 @@
                         </connections>
                     </textField>
                     <textField hidden="YES" toolTip="Last frame to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5523" userLabel="Frame End Encoding Field">
-                        <rect key="frame" x="687" y="535" width="54" height="19"/>
+                        <rect key="frame" x="687" y="537" width="54" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5524">
                             <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="WrK-kN-ZN0">
                                 <real key="minimum" value="0.0"/>
@@ -336,7 +339,7 @@
                         </connections>
                     </textField>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="1627">
-                        <rect key="frame" x="18" y="507" width="45" height="15"/>
+                        <rect key="frame" x="18" y="510" width="45" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Preset:" id="4923">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -347,10 +350,10 @@
                         </connections>
                     </textField>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="1628">
-                        <rect key="frame" x="470" y="514" width="395" height="5"/>
+                        <rect key="frame" x="470" y="515" width="395" height="5"/>
                     </box>
                     <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="3205">
-                        <rect key="frame" x="127" y="574" width="738" height="5"/>
+                        <rect key="frame" x="127" y="575" width="738" height="5"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="8eM-Lw-0wS"/>
                         </constraints>
@@ -362,7 +365,7 @@
                         </constraints>
                     </progressIndicator>
                     <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="5505">
-                        <rect key="frame" x="671" y="538" width="14" height="15"/>
+                        <rect key="frame" x="671" y="540" width="14" height="14"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="10" id="oZA-uv-S2L"/>
                         </constraints>
@@ -380,7 +383,7 @@
                         </connections>
                     </textField>
                     <popUpButton toolTip="First chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1545" userLabel="Chapter Start">
-                        <rect key="frame" x="612" y="535" width="60" height="22"/>
+                        <rect key="frame" x="612" y="536" width="60" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="54" id="LYd-Am-GKJ"/>
                         </constraints>
@@ -405,7 +408,7 @@
                         </connections>
                     </popUpButton>
                     <popUpButton toolTip="Last chapter to encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1548" userLabel="Chapter End">
-                        <rect key="frame" x="684" y="535" width="60" height="22"/>
+                        <rect key="frame" x="684" y="536" width="60" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="54" id="zhJ-ur-lHA"/>
                         </constraints>
@@ -430,7 +433,7 @@
                         </connections>
                     </popUpButton>
                     <popUpButton toolTip="Video angle to encode. Only applicable to multi-angle DVD and Blu-ray." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5181">
-                        <rect key="frame" x="426" y="535" width="44" height="22"/>
+                        <rect key="frame" x="426" y="536" width="44" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="38" id="xGF-g4-jWh"/>
                         </constraints>
@@ -466,7 +469,7 @@ IA
                         </connections>
                     </popUpButton>
                     <popUpButton verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="1541">
-                        <rect key="frame" x="54" y="535" width="318" height="22"/>
+                        <rect key="frame" x="54" y="536" width="318" height="22"/>
                         <string key="toolTip">Title, or video clip, to encode. The longest title is selected by default.
 
 Blu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature.</string>
@@ -492,7 +495,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </popUpButton>
                     <pathControl verticalHuggingPriority="750" allowsExpansionToolTips="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PJi-21-hie">
-                        <rect key="frame" x="471" y="92" width="328" height="20"/>
+                        <rect key="frame" x="471" y="91" width="328" height="20"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="328" id="Q5R-FC-z1x"/>
                         </constraints>
@@ -506,7 +509,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </pathControl>
                     <button toolTip="Browse to select a new destination path for your encode." horizontalHuggingPriority="1000" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1562">
-                        <rect key="frame" x="796" y="88" width="74" height="27"/>
+                        <rect key="frame" x="796" y="86" width="74" height="27"/>
                         <buttonCell key="cell" type="push" title="Browse…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" inset="2" id="4920">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -522,7 +525,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="50" translatesAutoresizingMaskIntoConstraints="NO" id="gfs-4j-YSE">
-                        <rect key="frame" x="441" y="94" width="22" height="15"/>
+                        <rect key="frame" x="441" y="94" width="22" height="14"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="To:" id="rfK-nQ-Aq2">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -568,7 +571,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </constraints>
                     </box>
                     <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bWH-Lp-mKY">
-                        <rect key="frame" x="66" y="504" width="210" height="22"/>
+                        <rect key="frame" x="66" y="505" width="210" height="22"/>
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="204" id="k4L-Sa-g4b"/>
                         </constraints>
@@ -595,7 +598,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </popUpButton>
                     <textField horizontalHuggingPriority="1000" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="5180">
-                        <rect key="frame" x="382" y="538" width="41" height="15"/>
+                        <rect key="frame" x="382" y="540" width="41" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Angle:" id="5185">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -611,7 +614,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </textField>
                     <textField horizontalHuggingPriority="1000" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="4NG-AB-JWs">
-                        <rect key="frame" x="480" y="538" width="43" height="15"/>
+                        <rect key="frame" x="480" y="540" width="43" height="14"/>
                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="Range:" id="IxV-PW-oYh">
                             <font key="font" metaFont="smallSystemBold"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -622,7 +625,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </textField>
                     <button toolTip="Reload the encoding settings for the currently selected preset. Modifications will be discarded." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="AhR-pK-Oz4">
-                        <rect key="frame" x="276" y="501" width="62" height="27"/>
+                        <rect key="frame" x="276" y="502" width="62" height="27"/>
                         <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="cgS-BU-Nfd">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -638,7 +641,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         </connections>
                     </button>
                     <button toolTip="Save New Preset…" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2vD-zN-YMe">
-                        <rect key="frame" x="336" y="501" width="124" height="27"/>
+                        <rect key="frame" x="336" y="502" width="124" height="27"/>
                         <buttonCell key="cell" type="push" title="Save New Preset…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IOU-3L-nvB">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -768,7 +771,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                         <popUpButton key="view" imageHugsTitle="YES" id="pJJ-0V-TQq">
                             <rect key="frame" x="28" y="14" width="58" height="32"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="addtitlestoqueue" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="BAK-n3-eIN">
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="center" lineBreakMode="truncatingTail" state="on" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="BAK-n3-eIN">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="menu"/>
                                 <menu key="menu" id="QCi-1O-Msg">
@@ -845,7 +848,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
             <connections>
                 <outlet property="delegate" destination="-2" id="M3v-Rc-7Ca"/>
             </connections>
-            <point key="canvasLocation" x="2182" y="-233"/>
+            <point key="canvasLocation" x="2460" y="-738"/>
         </window>
         <userDefaultsController representsSharedInstance="YES" id="5676"/>
         <customView id="lZQ-gl-3wX" userLabel="Open Panel View">
@@ -866,7 +869,7 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                             </connections>
                         </button>
                         <textField toolTip="Title to scan." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3w9-Iu-3u2">
-                            <rect key="frame" x="136" y="11" width="52" height="23"/>
+                            <rect key="frame" x="136" y="12" width="52" height="22"/>
                             <constraints>
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="52" id="BGA-yJ-Apd"/>
                             </constraints>

@@ -79,6 +79,10 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+    if (@available (macOS 10.12.2, *))
+    {
+        NSApplication.sharedApplication.automaticCustomizeTouchBarMenuItemEnabled = YES;
+    }
 
     self.presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsMenu
                                                                   action:@selector(selectPresetFromMenu:)
