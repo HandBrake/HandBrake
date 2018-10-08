@@ -16,7 +16,7 @@ Steps here.
 
 HandBrake version here.
 
-### Operating system and version (e.g., Ubuntu 16.04 LTS, macOS 10.3 High Sierra, Windows 10 Creators Update)
+### Operating system and version (e.g., Ubuntu 16.04 LTS, macOS 10.13 High Sierra, Windows 10 Creators Update)
 
 OS and version here.
 
