@@ -206,7 +206,7 @@ namespace HandBrakeWPF.ViewModels
 
             set
             {
-                if (!Equals(this.Task.OutputFormat, value))
+                if (this.Task != null && !Equals(this.Task.OutputFormat, value))
                 {
                     this.Task.OutputFormat = value;
                     this.Task.OutputFormat = value;
