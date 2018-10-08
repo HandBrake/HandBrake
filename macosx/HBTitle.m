@@ -35,7 +35,11 @@ extern NSString *keySubTrackType;
 @implementation HBMetadata
 - (instancetype)initWithMetadata:(hb_metadata_t *)data
 {
-    _hb_metadata = data;
+    self = [super init];
+    if (self)
+    {
+        _hb_metadata = data;
+    }
     return self;
 }
 
