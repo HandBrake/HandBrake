@@ -57,11 +57,11 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Subtitles -->
-                <TextBlock Text="{x:Static Properties:ResourcesUI.SubtitlesView_TrackSelectionBehaviour}"  Grid.Column="2" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <TextBlock Text="{x:Static Properties:Resources.SubtitlesView_TrackSelectionBehaviour}"  Grid.Column="2" Grid.Row="0" Margin="0,0,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <ComboBox Name="autoSubtitleMode"  Grid.Column="3" Grid.Row="0" HorizontalAlignment="Left"
                           ItemsSource="{Binding SubtitleBehaviourModeList, Converter={StaticResource subtitleBehaviourConverter}}" 
                           SelectedItem="{Binding SubtitleBehaviours.SelectedBehaviour, Converter={StaticResource subtitleBehaviourConverter}}" Width="210" Margin="0,0,5,0" />
-                <TextBlock Text="{x:Static Properties:ResourcesUI.SubtitlesView_BurnInBehaviour}"  Grid.Column="2" Grid.Row="1" Margin="0,5,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                <TextBlock Text="{x:Static Properties:Resources.SubtitlesView_BurnInBehaviour}"  Grid.Column="2" Grid.Row="1" Margin="0,5,5,0" HorizontalAlignment="Left" VerticalAlignment="Center" />
                 <ComboBox Name="burninBehaviour"  Grid.Column="3" Grid.Row="1" HorizontalAlignment="Left"
                           ItemsSource="{Binding SubtitleBurnInBehaviourModeList, Converter={StaticResource subtitleBurnInBehaviourConverter}}" 
                           SelectedItem="{Binding SubtitleBehaviours.SelectedBurnInBehaviour, Converter={StaticResource subtitleBurnInBehaviourConverter}}" Width="210" Margin="0,5,5,0">
@@ -69,13 +69,13 @@
                         <TextBlock Style="{StaticResource LongToolTip}" Text="{x:Static Properties:Resources.Subtitles_BurnInBehaviourModes}" />
                     </ComboBox.ToolTip>
                 </ComboBox>
-                <CheckBox Content="{x:Static Properties:ResourcesUI.SubtitlesView_AddCC}"  Grid.Column="3" Grid.Row="2" Margin="0,5,0,0" 
+                <CheckBox Content="{x:Static Properties:Resources.SubtitlesView_AddCC}"  Grid.Column="3" Grid.Row="2" Margin="0,5,0,0" 
                                   HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddClosedCaptions}"/>
-                <CheckBox Content="{x:Static Properties:ResourcesUI.SubtitlesView_AddForeignAudioSearch}"  Grid.Column="3" Grid.Row="3" Margin="0,5,0,0" 
+                <CheckBox Content="{x:Static Properties:Resources.SubtitlesView_AddForeignAudioSearch}"  Grid.Column="3" Grid.Row="3" Margin="0,5,0,0" 
                                   HorizontalAlignment="Left" IsChecked="{Binding SubtitleBehaviours.AddForeignAudioScanTrack}"/>
             </Grid>
 
-            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChooseLanguages}" Margin="5,15,0,0"/>
+            <TextBlock Text="{x:Static Properties:Resources.Shared_ChooseLanguages}" Margin="5,15,0,0"/>
 
             <Grid Margin="20,5,0,0">
                 <Grid.ColumnDefinitions>
@@ -91,7 +91,7 @@
                         </Grid.ColumnDefinitions>
 
                         <StackPanel Orientation="Vertical" Grid.Column="0">
-                            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_AvailableLanguages}" Margin="0,0,0,5"/>
+                            <TextBlock Text="{x:Static Properties:Resources.Shared_AvailableLanguages}" Margin="0,0,0,5"/>
                             <ListBox Name="availableLanguages" ItemsSource="{Binding AvailableLanguages}" 
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedAvailableToMove}" 
                                              SelectionMode="Extended" Width="140" Height="120" />
@@ -99,14 +99,14 @@
 
                         <DockPanel Grid.Column="1" Margin="10,0,10,0">
                             <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
-                                <Button Content="{x:Static Properties:ResourcesUI.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
-                                <Button Content="{x:Static Properties:ResourcesUI.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
+                                <Button Content="{x:Static Properties:Resources.Generic_MoveRight}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveRight]" MaxWidth="90" />
+                                <Button Content="{x:Static Properties:Resources.Generic_MoveLeft}"  VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageMoveLeft]" MaxWidth="90" />
+                                <Button Content="{x:Static Properties:Resources.Generic_Clear}" VerticalAlignment="Center" Margin="0,0,0,5" cal:Message.Attach="[Event Click] = [Action LanguageClearAll]" Width="80"/>
                             </StackPanel>
                         </DockPanel>
 
                         <StackPanel Orientation="Vertical" Grid.Column="2">
-                            <TextBlock Text="{x:Static Properties:ResourcesUI.Shared_ChosenLangages}"  Margin="0,0,0,5"/>
+                            <TextBlock Text="{x:Static Properties:Resources.Shared_ChosenLangages}"  Margin="0,0,0,5"/>
                             <ListBox Name="selectedLangauges" ItemsSource="{Binding SubtitleBehaviours.SelectedLangauges}" 
                                      helpers:ListBoxHelper.SelectedItems="{Binding SelectedLangaugesToMove}" 
                                              SelectionMode="Extended" Width="140" Height="120"

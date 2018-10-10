@@ -217,7 +217,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ShowAudioDefaults()
         {
-            IPopupWindowViewModel popup = new PopupWindowViewModel(this.AudioDefaultsViewModel, ResourcesUI.Preset_AudioDefaults_Title, ResourcesUI.AudioView_AudioDefaultsDescription);
+            IPopupWindowViewModel popup = new PopupWindowViewModel(this.AudioDefaultsViewModel, Resources.Preset_AudioDefaults_Title, Resources.AudioView_AudioDefaultsDescription);
             if (this.windowManager.ShowDialog(popup) == true)
             {
                 this.OnTabStatusChanged(null);

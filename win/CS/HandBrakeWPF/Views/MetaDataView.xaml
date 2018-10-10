@@ -22,7 +22,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{x:Static Properties:ResourcesUI.MetaDataView_Title}" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" />
+        <TextBlock Text="{x:Static Properties:Resources.MetaDataView_Title}" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" />
 
         <!-- Metadata Input Area -->
         <Grid Grid.Row="1"  Margin="10,10,0,0">

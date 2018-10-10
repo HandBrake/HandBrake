@@ -86,7 +86,7 @@
                                Source="Images/Play.png" />
                             <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.QueueView_Start}" />
+                               Content="{x:Static Properties:Resources.QueueView_Start}" />
                         </StackPanel>
                     </Button>
 
@@ -101,19 +101,19 @@
                                Source="Images/Pause.png" />
                             <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.QueueView_Pause}" />
+                               Content="{x:Static Properties:Resources.QueueView_Pause}" />
                         </StackPanel>
                     </Button>
 
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" HorizontalAlignment="Right">
                         <Menu HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent"
-                              AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_WhenDone}">
+                              AutomationProperties.Name="{x:Static Properties:Resources.QueueView_WhenDone}">
                             <MenuItem>
                                 <MenuItem.Header>
                                     <StackPanel Height="32" Orientation="Horizontal">
                                         <TextBlock VerticalAlignment="Center"
                                            FontWeight="Bold"
-                                           Text="{x:Static Properties:ResourcesUI.QueueView_WhenDone}" />
+                                           Text="{x:Static Properties:Resources.QueueView_WhenDone}" />
                                         <Label Margin="8,0,0,0"
                                        VerticalAlignment="Center"
                                        Content="{Binding WhenDoneAction}" />
@@ -126,25 +126,25 @@
 
                                 <MenuItem x:Name="doNothing"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(doNothing.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_DoNothing}" />
+                                  Header="{x:Static Properties:Resources.QueueView_DoNothing}" />
                                 <MenuItem x:Name="shutdown"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(shutdown.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Shutdown}" />
+                                  Header="{x:Static Properties:Resources.QueueView_Shutdown}" />
                                 <MenuItem x:Name="suspend"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(suspend.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Suspend}" />
+                                  Header="{x:Static Properties:Resources.QueueView_Suspend}" />
                                 <MenuItem x:Name="hibernate"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(hibernate.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Hibernate}"/>
+                                  Header="{x:Static Properties:Resources.QueueView_Hibernate}"/>
                                 <MenuItem x:Name="lock"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_LockSystem}" />
+                                  Header="{x:Static Properties:Resources.QueueView_LockSystem}" />
                                 <MenuItem x:Name="logoff"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(logoff.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Logoff}"/>
+                                  Header="{x:Static Properties:Resources.QueueView_Logoff}"/>
                                 <MenuItem x:Name="quit"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(quit.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_QuitHandBrake}"/>
+                                  Header="{x:Static Properties:Resources.QueueView_QuitHandBrake}"/>
                             </MenuItem>
                         </Menu>
                     </StackPanel>
@@ -179,21 +179,21 @@
 
                 <ListBox.ContextMenu>
                     <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" Opened="ContextMenu_OnOpened">
-                        <MenuItem cal:Message.Attach="[Event Click] = [Action StartQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Start}" />
-                        <MenuItem cal:Message.Attach="[Event Click] = [Action PauseQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Pause}" />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action StartQueue]" Header="{x:Static Properties:Resources.QueueView_Start}" />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action PauseQueue]" Header="{x:Static Properties:Resources.QueueView_Pause}" />
                         <Separator />
-                        <MenuItem cal:Message.Attach="[Event Click] = [Action ResetFailed]" Header="{x:Static Properties:ResourcesUI.QueueView_ResetFailed}" />
-                        <MenuItem cal:Message.Attach="[Event Click] = [Action ResetSelectedJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ResetSelectedJobs}" />
-                        <MenuItem cal:Message.Attach="[Event Click] = [Action ResetAllJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ResetAllJobs}" />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action ResetFailed]" Header="{x:Static Properties:Resources.QueueView_ResetFailed}" />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action ResetSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ResetSelectedJobs}" />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action ResetAllJobs]" Header="{x:Static Properties:Resources.QueueView_ResetAllJobs}" />
                         <Separator />
-                        <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearCompleted}" />
-                        <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearAll}" />
-                        <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearSelected}" />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:Resources.QueueView_ClearAll}" />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ClearSelected}" />
                         <Separator />
-                        <MenuItem Header="{x:Static Properties:ResourcesUI.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" />
-                        <MenuItem Header="{x:Static Properties:ResourcesUI.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" />
+                        <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" />
+                        <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" />
                         <Separator />
-                        <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" />
+                        <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.QueueView_Export}" />
                     </ContextMenu>
                 </ListBox.ContextMenu>
 
@@ -225,27 +225,27 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Source}" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
+                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Source}" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
                                     <TextBlock Text="{Binding Task.Source}" TextWrapping="Wrap" Grid.Row="0" Grid.Column="1" />
 
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Destination}" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
+                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Destination}" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
                                     <TextBlock Text="{Binding Task.Destination}" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" />
 
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_PictureSettings}" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
+                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_PictureSettings}" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
                                     <TextBlock Text="{Binding Task, Converter={StaticResource pictureSettingsDescConverter}}" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1"  />
 
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Video}" Grid.Row="3" Grid.Column="0" />
+                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Video}" Grid.Row="3" Grid.Column="0" />
                                     <TextBlock Text="{Binding Task, Converter={StaticResource videoOptionsTooltipConverter}}" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"  />
 
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Audio}"  Grid.Row="4" Grid.Column="0"/>
+                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Audio}"  Grid.Row="4" Grid.Column="0"/>
                                     <TextBlock Text="{Binding Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}"
                                            Grid.Row="4" Grid.Column="1"/>
 
-                                    <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="{x:Static Properties:ResourcesUI.QueueView_Subtitles}" Grid.Row="5" Grid.Column="0"  />
+                                    <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="{x:Static Properties:Resources.QueueView_Subtitles}" Grid.Row="5" Grid.Column="0"  />
                                     <TextBlock Text="{Binding Task.SubtitleTracks, Converter={StaticResource subtitleTrackDisplayConverter}}"
                                            Grid.Row="5" Grid.Column="1" />
 
-                                    <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="6" Grid.Column="0"  Text="{x:Static Properties:ResourcesUI.QueueView_Advanced}" />
+                                    <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="6" Grid.Column="0"  Text="{x:Static Properties:Resources.QueueView_Advanced}" />
                                     <TextBlock Text="{Binding Task, Converter={StaticResource encoderOptionsTooltipConverter}}" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap"  />
                                 </Grid>
 
@@ -332,9 +332,9 @@
                                 </StackPanel>
 
 
-                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Source}" Grid.Row="1" />
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Source}" Grid.Row="1" />
                                 <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}"  Margin="2,0,0,0" Grid.Row="1" Grid.Column="1"/>
-                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Destination}" Grid.Row="2" />
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Destination}" Grid.Row="2" />
                                 <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" Margin="2,0,0,0" TextTrimming="CharacterEllipsis" Grid.Row="2" Grid.Column="1" />
 
                                 <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" Margin="0,2,5,0" Grid.Row="3" Grid.ColumnSpan="2"
@@ -358,7 +358,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Button Visibility="{Binding Status, Converter={StaticResource queueStatusVisConverter}}"
-                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_Retry}"  ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}"
+                                        AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Retry}"  ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}"
                                     Grid.Row="0" Grid.Column="0" Margin="0,5,0,0">
                                     <Button.Template>
                                         <ControlTemplate>
@@ -378,7 +378,7 @@
                                 </Button>
 
                                 <Button Grid.Row="0" Grid.Column="1" Margin="10,5,0,0"
-                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_Edit}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_SendJobBack}" >
+                                        AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Edit}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_SendJobBack}" >
                                     <Button.Template>
                                         <ControlTemplate>
                                             <Image Width="20" 
@@ -398,7 +398,7 @@
                                 </Button>
 
                                 <Button Grid.Row="0" Grid.Column="2" Margin="10,5,0,0"
-                                        AutomationProperties.Name="{x:Static Properties:ResourcesUI.QueueView_Delete}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}">
+                                        AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Delete}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}">
                                     <Button.Template>
                                         <ControlTemplate>
                                             <Image Width="20" 

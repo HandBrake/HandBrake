@@ -1221,9 +1221,9 @@ namespace HandBrakeWPF.ViewModels
                         this.SelectedTitle.Resolution.Height, 
                         Math.Round(this.SelectedTitle.Fps, 2), 
                         this.SelectedTitle.AudioTracks.Count, 
-                        ResourcesUI.MainView_AudioTrackCount,
+                        Resources.MainView_AudioTrackCount,
                         this.SelectedTitle.Subtitles.Count,
-                        ResourcesUI.MainView_SubtitleTracksCount);
+                        Resources.MainView_SubtitleTracksCount);
                 }
 
                 return string.Empty;
@@ -1792,8 +1792,8 @@ namespace HandBrakeWPF.ViewModels
         public void StopEncode()
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
-                ResourcesUI.MainView_StopEncodeConfirm,
-                ResourcesUI.MainView_StopEncode,
+                Resources.MainView_StopEncodeConfirm,
+                Resources.MainView_StopEncode,
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
@@ -1873,7 +1873,7 @@ namespace HandBrakeWPF.ViewModels
                     if (this.SelectedTitle == null)
                     {
                         MessageBox.Show(
-                            ResourcesUI.MainView_SubtitleBeforeScanError,
+                            Resources.MainView_SubtitleBeforeScanError,
                             Resources.Error,
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);
@@ -2644,11 +2644,11 @@ namespace HandBrakeWPF.ViewModels
                         }
                         else if (e.IsMuxing)
                         {
-                            this.ProgramStatusLabel = ResourcesUI.MainView_Muxing;
+                            this.ProgramStatusLabel = Resources.MainView_Muxing;
                         }
                         else if (e.IsSearching)
                         {
-                            this.ProgramStatusLabel = string.Format(ResourcesUI.MainView_ProgressStatusWithTask, ResourcesUI.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft, jobsPending);
+                            this.ProgramStatusLabel = string.Format(Resources.MainView_ProgressStatusWithTask, Resources.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft, jobsPending);
                         }
                         else
                         {

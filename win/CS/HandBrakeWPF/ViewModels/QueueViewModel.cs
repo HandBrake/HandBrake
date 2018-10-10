@@ -693,7 +693,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.SelectedTask == null || this.SelectedTask.Status == QueueItemStatus.InProgress || this.SelectedTask.Status == QueueItemStatus.Waiting)
             {
-                this.ActivityLog = ResourcesUI.QueueView_LogNotAvailableYet;
+                this.ActivityLog = Resources.QueueView_LogNotAvailableYet;
             }
             else
             {
@@ -754,12 +754,12 @@ namespace HandBrakeWPF.ViewModels
                 }
                 else if (e.IsMuxing)
                 {
-                    this.JobStatus = ResourcesUI.MainView_Muxing;
+                    this.JobStatus = Resources.MainView_Muxing;
                     this.IntermediateProgress = true;
                 }
                 else if (e.IsSearching)
                 {
-                    this.JobStatus = string.Format(ResourcesUI.MainView_ProgressStatusWithTask, ResourcesUI.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft, null);
+                    this.JobStatus = string.Format(Resources.MainView_ProgressStatusWithTask, Resources.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft, null);
                     this.ProgressValue = e.PercentComplete;
                 }
                 else

@@ -69,7 +69,7 @@ namespace HandBrakeWPF.Views
             if (e.Source is TabControl && e.AddedItems.Count > 0)
             {
                 TabItem tab = e.AddedItems[0] as TabItem;
-                if (tab != null && Properties.ResourcesUI.MainView_SummaryTab.Equals(tab.Header))
+                if (tab != null && Properties.Resources.MainView_SummaryTab.Equals(tab.Header))
                 {
                     ((MainViewModel)this.DataContext).SummaryViewModel.UpdateDisplayedInfo();
                 }

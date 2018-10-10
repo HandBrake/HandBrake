@@ -73,7 +73,7 @@
                     </Style>
                 </Menu.Resources>
                 <MenuItem Header="_File">
-                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SourceOpen}" cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]" InputGestureText="Alt + O" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_SourceOpen}" cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]" InputGestureText="Alt + O" />
                     <Separator />
                     <MenuItem Header="_Exit" cal:Message.Attach="[Event Click] = [Action ExitApplication]"  InputGestureText="Alt + F4" />
                 </MenuItem>
@@ -101,9 +101,9 @@
 
                     <MenuItem Header="_Presets" ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
-                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
-                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_PresetRemove}" cal:Message.Attach="[Event Click] = [Action PresetRemove]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" cal:Message.Attach="[Event Click] = [Action PresetRemove]" />
                     <Separator />
                     <MenuItem Header="_Import from file" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
                     <MenuItem Header="_Export to file" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
@@ -120,11 +120,11 @@
                     <MenuItem Header="Add to Queue" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]"  InputGestureText="Ctrl + A" />
                     <MenuItem Header="All Selection to Queue" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" />
                     <Separator Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearCompleted}" Header="{x:Static Properties:ResourcesUI.QueueView_ClearCompleted}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearAll}" Header="{x:Static Properties:ResourcesUI.QueueView_ClearAll}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearSelected}" Header="{x:Static Properties:ResourcesUI.QueueView_ClearSelected}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearCompleted}" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearAll}" Header="{x:Static Properties:Resources.QueueView_ClearAll}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearSelected}" Header="{x:Static Properties:Resources.QueueView_ClearSelected}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     <Separator Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
-                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.Export}" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                    <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.Export}" Header="{x:Static Properties:Resources.QueueView_Export}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                 </MenuItem>
 
                 <MenuItem Header="_Help">
@@ -149,7 +149,7 @@
                      ToolBarTray.IsLocked="True"
                      KeyboardNavigation.TabNavigation="Continue">
 
-                <Button Name="SelectSource" x:Uid="Choose Source" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_SourceOpen}"
+                <Button Name="SelectSource" x:Uid="Choose Source" AutomationProperties.Name="{x:Static Properties:Resources.MainView_SourceOpen}"
                         cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]">
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
@@ -157,17 +157,17 @@
                                Source="Images/Movies_small.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_SourceOpen}"/>
+                               Content="{x:Static Properties:Resources.MainView_SourceOpen}"/>
                     </StackPanel>
                 </Button>
 
                 <Separator />
 
-                <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_AddToQueue}">
+                <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddToQueue}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="Images/AddToQueue_small.png" />
-                            <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:ResourcesUI.MainView_AddToQueue}" />
+                            <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.MainView_AddToQueue}" />
                         </StackPanel>
 
                         <Grid x:Name="dropdown" Background="Transparent" >
@@ -179,15 +179,15 @@
                     </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddCurrent}" cal:Message.Attach="[Event Click] = [Action AddToQueue]" AutomationProperties.Name="Add Current" />
-                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddAll}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]" AutomationProperties.Name="Add all to Queue" />
-                            <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" />
+                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddCurrent}" cal:Message.Attach="[Event Click] = [Action AddToQueue]" AutomationProperties.Name="Add Current" />
+                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddAll}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]" AutomationProperties.Name="Add all to Queue" />
+                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" />
                         </ContextMenu>
                     </Button.ContextMenu>
 
                 </Button>
 
-                <Button Name="Start" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_StartEncode}"
+                <Button Name="Start" AutomationProperties.Name="{x:Static Properties:Resources.MainView_StartEncode}"
                         cal:Message.Attach="[Event Click] = [Action StartEncode]"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
@@ -198,11 +198,11 @@
                                Source="Images/Play.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{Binding StartLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_StartEncode}'}"/>
+                               Content="{Binding StartLabel, FallbackValue='{x:Static Properties:Resources.MainView_StartEncode}'}"/>
                     </StackPanel>
                 </Button>
 
-                <Button Name="Stop" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_Stop}"
+                <Button Name="Stop" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Stop}"
                         cal:Message.Attach="[Event Click] = [Action StopEncode]"
                         Visibility="{Binding IsEncoding,
                                              Converter={StaticResource boolToVisConverter},
@@ -214,11 +214,11 @@
                                Source="Images/stop.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_Stop}"/>
+                               Content="{x:Static Properties:Resources.MainView_Stop}"/>
                     </StackPanel>
                 </Button>
 
-                <Button Name="Pause" AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_Pause}"
+                <Button Name="Pause" AutomationProperties.Name="{x:Static Properties:Resources.MainView_Pause}"
                         cal:Message.Attach="[Event Click] = [Action PauseEncode]"
                         Visibility="{Binding CanPause,
                                              Converter={StaticResource boolToVisConverter},
@@ -230,7 +230,7 @@
                                Source="Images/Pause.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_Pause}"/>
+                               Content="{x:Static Properties:Resources.MainView_Pause}"/>
                     </StackPanel>
                 </Button>
 
@@ -244,7 +244,7 @@
                                Source="Images/Queue_small.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:ResourcesUI.MainView_ShowQueue}'}"/>
+                               Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:Resources.MainView_ShowQueue}'}"/>
                     </StackPanel>
                 </Button>
 
@@ -256,7 +256,7 @@
                                Source="Images/picture_small.png"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="{x:Static Properties:ResourcesUI.MainView_ShowPreview}"/>
+                               Content="{x:Static Properties:Resources.MainView_ShowPreview}"/>
                     </StackPanel>
                 </Button>
 
@@ -317,7 +317,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Label Content="{x:Static Properties:ResourcesUI.MainView_Source}" FontWeight="Bold" Grid.Column="0" />
+                    <Label Content="{x:Static Properties:Resources.MainView_Source}" FontWeight="Bold" Grid.Column="0" />
                     <TextBlock Text="{Binding Path=SourceLabel}" ToolTip="{Binding Path=SourceLabel}" TextTrimming="CharacterEllipsis" MaxWidth="595" Grid.Column="1" Margin="7,0,0,0" />
                     <TextBlock Text="{Binding SourceInfo}" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="DimGray" Grid.Column="2" Margin="10,0,0,0" MaxWidth="360" />
                 </Grid>
@@ -329,7 +329,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <Label FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Title}"  Grid.Column="0"  />
+                    <Label FontWeight="Bold" Content="{x:Static Properties:Resources.MainView_Title}"  Grid.Column="0"  />
                     <ComboBox Name="Titles"  Grid.Column="1" 
                               MinWidth="100" Margin="16,0,0,0"
                               ItemsSource="{Binding ScannedSource.Titles}"
@@ -350,7 +350,7 @@
                         </ComboBox.Style>
                     </ComboBox>
                     <StackPanel Orientation="Horizontal" Grid.Column="2" >
-                        <Label Margin="5,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Angle}" />
+                        <Label Margin="5,0,0,0" FontWeight="Bold" Content="{x:Static Properties:Resources.MainView_Angle}" />
 
                         <ComboBox Name="Angles"
                                   MinWidth="60"
@@ -359,7 +359,7 @@
                                   SelectedItem="{Binding SelectedAngle}"
                                   ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Angle}" />
 
-                        <Label Margin="2,0,0,0" FontWeight="Bold" Content="{x:Static Properties:ResourcesUI.MainView_Range}" />
+                        <Label Margin="2,0,0,0" FontWeight="Bold" Content="{x:Static Properties:Resources.MainView_Range}" />
                         <ComboBox Name="PointToPointMode"
                                   MinWidth="80"
                                   Margin="5,0,0,0"
@@ -381,7 +381,7 @@
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}" />
 
-                        <Label Margin="4,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_through}" />
+                        <Label Margin="4,0,0,0" Content="{x:Static Properties:Resources.MainView_through}" />
                         <ComboBox Name="EndPoint"
                                   MinWidth="60"
                                   Margin="4,0,0,0"
@@ -398,7 +398,7 @@
                                                        Converter={StaticResource boolToVisConverter},
                                                        ConverterParameter=false}" />
 
-                        <Label Margin="2,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_Duration}" FontWeight="Bold" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
+                        <Label Margin="2,0,0,0" Content="{x:Static Properties:Resources.MainView_Duration}" FontWeight="Bold" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
                         <Label Margin="0,0,0,0" Content="{Binding Duration}" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Duration}" />
 
                     </StackPanel>
@@ -438,16 +438,16 @@
                         </Button.ContextMenu>
                     </Button>
 
-                    <Button Content="{x:Static Properties:ResourcesUI.MainView_Reload}" cal:Message.Attach="[Event Click] = [Action PresetSelect]"  Margin="15,0,0,0" VerticalAlignment="Center" />
-                    <Button Content="{x:Static Properties:ResourcesUI.MainView_SaveNewPreset}" cal:Message.Attach="[Event Click] = [Action PresetAdd]"  Margin="5,0,0,0" VerticalAlignment="Center" />
+                    <Button Content="{x:Static Properties:Resources.MainView_Reload}" cal:Message.Attach="[Event Click] = [Action PresetSelect]"  Margin="15,0,0,0" VerticalAlignment="Center" />
+                    <Button Content="{x:Static Properties:Resources.MainView_SaveNewPreset}" cal:Message.Attach="[Event Click] = [Action PresetAdd]"  Margin="5,0,0,0" VerticalAlignment="Center" />
                     
                     <Button x:Name="MorePresetOptionsButton"  Margin="15,0,0,0" VerticalAlignment="Center" Click="MorePresetOptionsButton_OnClick" Visibility="Collapsed">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Margin="0,0,5,0" Padding="0"
                                        VerticalAlignment="Center"
-                                       Text="{x:Static Properties:ResourcesUI.MainView_Options}"
-                                       AutomationProperties.Name="{x:Static Properties:ResourcesUI.MainView_PresetOptionsContextMenu}"
+                                       Text="{x:Static Properties:Resources.MainView_Options}"
+                                       AutomationProperties.Name="{x:Static Properties:Resources.MainView_PresetOptionsContextMenu}"
                                            ToolTip="{x:Static Properties:ResourcesTooltips.MainView_PresetOptionsContextMenu}"/> 
 
                                 <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -458,24 +458,24 @@
 
                         <Button.ContextMenu>
                             <ContextMenu x:Name="MainContextMenu">
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
                                 <Separator />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_PresetRemove}" cal:Message.Attach="[Event Click] = [Action PresetRemove]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" cal:Message.Attach="[Event Click] = [Action PresetRemove]" />
                                 <Separator />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
+                                <MenuItem Header="{x:Static Properties:Resources.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
+                                <MenuItem Header="{x:Static Properties:Resources.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
                                 <Separator />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>
                 </StackPanel>
                 <StackPanel Margin="8,0,0,0" Orientation="Horizontal" Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}">
-                    <TextBlock Text="{x:Static Properties:ResourcesUI.MainView_SelectedPreset}" Margin="5,0,0,0" />
+                    <TextBlock Text="{x:Static Properties:Resources.MainView_SelectedPreset}" Margin="5,0,0,0" />
                     <TextBlock Text="{Binding SelectedPreset.Name}" Margin="5,0,0,0" />
-                    <TextBlock Text="{x:Static Properties:ResourcesUI.MainView_ModifiedPreset}" FontStyle="Italic" Visibility="{Binding IsModifiedPreset, Converter={StaticResource boolToVisConverter}}" Margin="5,0,0,0" />
+                    <TextBlock Text="{x:Static Properties:Resources.MainView_ModifiedPreset}" FontStyle="Italic" Visibility="{Binding IsModifiedPreset, Converter={StaticResource boolToVisConverter}}" Margin="5,0,0,0" />
                 </StackPanel>
             </StackPanel>
 
@@ -487,28 +487,28 @@
                         VerticalAlignment="Stretch"
                         SelectionChanged="TabControl_OnSelectionChanged"
                         Visibility="{Binding IsQueueShowingInLine,  Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
-                <TabItem Name="summaryTab" Header="{x:Static Properties:ResourcesUI.MainView_SummaryTab}">
+                <TabItem Name="summaryTab" Header="{x:Static Properties:Resources.MainView_SummaryTab}">
                     <ContentControl x:Name="SummaryViewModel" />
                 </TabItem>
-                <TabItem Name="pictureTab" Header="{x:Static Properties:ResourcesUI.MainView_PictureTab}">
+                <TabItem Name="pictureTab" Header="{x:Static Properties:Resources.MainView_PictureTab}">
                     <ContentControl x:Name="PictureSettingsViewModel" />
                 </TabItem>
-                <TabItem Name="filtersTab" Header="{x:Static Properties:ResourcesUI.MainView_FiltersTab}">
+                <TabItem Name="filtersTab" Header="{x:Static Properties:Resources.MainView_FiltersTab}">
                     <ContentControl x:Name="FiltersViewModel" />
                 </TabItem>
-                <TabItem Name="videoTab" Header="{x:Static Properties:ResourcesUI.MainView_VideoTab}">
+                <TabItem Name="videoTab" Header="{x:Static Properties:Resources.MainView_VideoTab}">
                     <ContentControl x:Name="VideoViewModel" VerticalAlignment="Stretch" />
                 </TabItem>
-                <TabItem Name="audioTab" Header="{x:Static Properties:ResourcesUI.MainView_AudioTab}">
+                <TabItem Name="audioTab" Header="{x:Static Properties:Resources.MainView_AudioTab}">
                     <ContentControl x:Name="AudioViewModel" />
                 </TabItem>
-                <TabItem Name="subtitlesTab" Header="{x:Static Properties:ResourcesUI.MainView_SubtitlesTab}">
+                <TabItem Name="subtitlesTab" Header="{x:Static Properties:Resources.MainView_SubtitlesTab}">
                     <ContentControl x:Name="SubtitleViewModel" />
                 </TabItem>
-                <TabItem Name="chaptersTab" Header="{x:Static Properties:ResourcesUI.MainView_ChaptersTab}">
+                <TabItem Name="chaptersTab" Header="{x:Static Properties:Resources.MainView_ChaptersTab}">
                     <ContentControl x:Name="ChaptersViewModel" />
                 </TabItem>
-                <TabItem Name="advancedTab" Header="{x:Static Properties:ResourcesUI.MainView_AdvancedTab}" Visibility="{Binding CurrentTask.ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
+                <TabItem Name="advancedTab" Header="{x:Static Properties:Resources.MainView_AdvancedTab}" Visibility="{Binding CurrentTask.ShowAdvancedTab, Converter={StaticResource boolToVisConverter}}">
                     <ContentControl x:Name="AdvancedViewModel" />
                 </TabItem>
             </TabControl>
@@ -524,7 +524,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Label Margin="0,0,0,0" Content="{x:Static Properties:ResourcesUI.MainView_File}" FontWeight="Bold" />
+                    <Label Margin="0,0,0,0" Content="{x:Static Properties:Resources.MainView_File}" FontWeight="Bold" />
                     <TextBox Name="Destination"
                              Grid.Column="1"
                              Margin="5,0,0,0" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Destination}"
@@ -630,15 +630,15 @@
 
                         <TreeView.ContextMenu>
                             <ContextMenu AutomationProperties.Name="Presets List Context Menu">
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
                                 <Separator />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
                                 <Separator />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
+                                <MenuItem Header="{x:Static Properties:Resources.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
+                                <MenuItem Header="{x:Static Properties:Resources.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
                                 <Separator />
-                                <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
+                                <MenuItem Header="{x:Static Properties:Resources.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
                             </ContextMenu>
 
                         </TreeView.ContextMenu>
@@ -686,7 +686,7 @@
                                         <TextBlock Margin="2,0,0,0"
                                                    VerticalAlignment="Center"
                                                    Style="{StaticResource textBlockOrangeStyle}"
-                                                   Text="{x:Static Properties:ResourcesUI.Generic_Add}"
+                                                   Text="{x:Static Properties:Resources.Generic_Add}"
                                         />
                                     </StackPanel>
                                 </Button.Content>
@@ -703,7 +703,7 @@
                                         <TextBlock Margin="2,0,0,0"
                                                    VerticalAlignment="Center"
                                                    Style="{StaticResource textBlockOrangeStyle}"
-                                                   Text="{x:Static Properties:ResourcesUI.MainView_Remove}"
+                                                   Text="{x:Static Properties:Resources.MainView_Remove}"
                                         />
                                     </StackPanel>
                                 </Button.Content>
@@ -721,18 +721,18 @@
                                             <TextBlock Margin="2,0,0,0"
                                                        VerticalAlignment="Center"
                                                        Style="{StaticResource textBlockOrangeStyle}"
-                                                       Text="{x:Static Properties:ResourcesUI.MainView_Options}"
+                                                       Text="{x:Static Properties:Resources.MainView_Options}"
                                             />
                                         </StackPanel>
                                     </MenuItem.Header>
-                                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                                    <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
                                     <Separator />
-                                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
+                                    <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
                                     <Separator />
-                                    <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
-                                    <MenuItem Header="{x:Static Properties:ResourcesUI.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
+                                    <MenuItem Header="{x:Static Properties:Resources.Preset_Import}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
+                                    <MenuItem Header="{x:Static Properties:Resources.Preset_Export}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
                                     <Separator />
-                                    <MenuItem Header="{x:Static Properties:ResourcesUI.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
+                                    <MenuItem Header="{x:Static Properties:Resources.MainView_ResetBuiltInPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
                                 </MenuItem>
                             </Menu>
                         </ToolBarOverflowPanel>
@@ -793,7 +793,7 @@
                     <MenuItem>
                         <MenuItem.Header>
                             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" MinHeight="26">
-                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_WhenDone}" />
+                                <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_WhenDone}" />
                                 <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Text="{Binding QueueViewModel.WhenDoneAction}" />
                                 <Path Height="5"
                                       Margin="2,2,2,0"
@@ -804,25 +804,25 @@
 
                         <MenuItem x:Name="doNothing"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(doNothing.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_DoNothing}" />
+                                  Header="{x:Static Properties:Resources.QueueView_DoNothing}" />
                         <MenuItem x:Name="shutdownSystem"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(shutdownSystem.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Shutdown}" />
+                                  Header="{x:Static Properties:Resources.QueueView_Shutdown}" />
                         <MenuItem x:Name="suspend"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(suspend.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Suspend}"/>
+                                  Header="{x:Static Properties:Resources.QueueView_Suspend}"/>
                         <MenuItem x:Name="hibernate"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(hibernate.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Hibernate}" />
+                                  Header="{x:Static Properties:Resources.QueueView_Hibernate}" />
                         <MenuItem x:Name="lock"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_LockSystem}" />
+                                  Header="{x:Static Properties:Resources.QueueView_LockSystem}" />
                         <MenuItem x:Name="logoff"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(logoff.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_Logoff}"/>
+                                  Header="{x:Static Properties:Resources.QueueView_Logoff}"/>
                         <MenuItem x:Name="quit"
                                   cal:Message.Attach="[Event Click] = [Action WhenDone(quit.Header)]"
-                                  Header="{x:Static Properties:ResourcesUI.QueueView_QuitHandBrake}" />
+                                  Header="{x:Static Properties:Resources.QueueView_QuitHandBrake}" />
                     </MenuItem>
                 </Menu>
             </StatusBarItem>

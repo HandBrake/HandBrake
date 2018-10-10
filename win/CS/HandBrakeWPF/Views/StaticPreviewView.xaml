@@ -31,7 +31,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Slider Maximum="{Binding TotalPreviews}" Minimum="0" AutomationProperties.Name="{x:Static Properties:ResourcesUI.StaticPreviewView_SelectPreviewImage}"
+                <Slider Maximum="{Binding TotalPreviews}" Minimum="0" AutomationProperties.Name="{x:Static Properties:Resources.StaticPreviewView_SelectPreviewImage}"
                 Value="{Binding SelectedPreviewImage}"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Stretch"
@@ -40,13 +40,13 @@
                 />
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left">
-                    <Button Content="{x:Static Properties:ResourcesUI.StaticPreviewView_LivePreview}" Padding="8,2" cal:Message.Attach="[Event Click] = [Action Play]" />
-                    <TextBlock Margin="10,0,5,0" VerticalAlignment="Center" Foreground="White" Text="{x:Static Properties:ResourcesUI.StaticPreviewView_Duration}" />
+                    <Button Content="{x:Static Properties:Resources.StaticPreviewView_LivePreview}" Padding="8,2" cal:Message.Attach="[Event Click] = [Action Play]" />
+                    <TextBlock Margin="10,0,5,0" VerticalAlignment="Center" Foreground="White" Text="{x:Static Properties:Resources.StaticPreviewView_Duration}" />
                     <ComboBox Width="60"
                       ItemsSource="{Binding AvailableDurations}"
                       SelectedItem="{Binding Duration}" />
 
-                    <CheckBox VerticalAlignment="Center" Content="{x:Static Properties:ResourcesUI.StaticPreviewView_UseSystemDefault}" Foreground="White" Margin="10,0,0,0" IsChecked="{Binding UseSystemDefaultPlayer}" />
+                    <CheckBox VerticalAlignment="Center" Content="{x:Static Properties:Resources.StaticPreviewView_UseSystemDefault}" Foreground="White" Margin="10,0,0,0" IsChecked="{Binding UseSystemDefaultPlayer}" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,5,0,0">

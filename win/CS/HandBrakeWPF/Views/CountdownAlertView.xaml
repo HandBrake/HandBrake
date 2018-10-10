@@ -12,15 +12,15 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{x:Static Properties:ResourcesUI.CountdownAlterView_WhenDoneAction}" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
+        <TextBlock Text="{x:Static Properties:Resources.CountdownAlterView_WhenDoneAction}" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
         
         <TextBlock Text="{Binding NoticeMessage}" Grid.Row="1" Margin="40,0,10,0"/>
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,10,10,5" HorizontalAlignment="Right">
-            <Button Content="{x:Static Properties:ResourcesUI.CountdownAlterView_Proceed}"  HorizontalAlignment="Right"
+            <Button Content="{x:Static Properties:Resources.CountdownAlterView_Proceed}"  HorizontalAlignment="Right"
                 cal:Message.Attach="[Event Click] = [Action Proceed]" Padding="8,2" Margin="0,10,10,5"/>
 
-            <Button Content="{x:Static Properties:ResourcesUI.CountdownAlterView_CancelAction}"  HorizontalAlignment="Right" Margin="0,10,10,5"
+            <Button Content="{x:Static Properties:Resources.CountdownAlterView_CancelAction}"  HorizontalAlignment="Right" Margin="0,10,10,5"
                 cal:Message.Attach="[Event Click] = [Action Cancel]" Padding="8,2" IsDefault="True" />
         </StackPanel>
 

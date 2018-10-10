@@ -33,7 +33,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="{x:Static Properties:ResourcesUI.AddPresetView_AddPreset}" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
+        <TextBlock Text="{x:Static Properties:Resources.AddPresetView_AddPreset}" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" />
 
         <!--  Header  -->
         <Grid Grid.Row="1" Margin="10,0,10,0">
@@ -57,7 +57,7 @@
             <!--  Name  -->
             <TextBlock Grid.Row="0"
                        Grid.Column="0"
-                       Text="{x:Static Properties:ResourcesUI.AddPresetView_Name}" />
+                       Text="{x:Static Properties:Resources.AddPresetView_Name}" />
             <TextBox Grid.Row="0"
                      Grid.Column="1"
                      HorizontalAlignment="Stretch"
@@ -67,7 +67,7 @@
             <!--  Description  -->
             <TextBlock Grid.Row="2"
                        Grid.Column="0" Margin="0,10,0,0"
-                       Text="{x:Static Properties:ResourcesUI.AddPresetView_Description}" />
+                       Text="{x:Static Properties:Resources.AddPresetView_Description}" />
             <TextBox Grid.Row="2"
                      Grid.Column="1" Margin="0,10,0,0"
                      
@@ -75,7 +75,7 @@
 
             <TextBlock Grid.Row="3"
                        Grid.Column="0" Margin="0,10,0,0"
-                       Text="{x:Static Properties:ResourcesUI.AddPresetView_Category}" />
+                       Text="{x:Static Properties:Resources.AddPresetView_Category}" />
             <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Vertical" Margin="0,10,0,0">
 
                 <ComboBox ItemsSource="{Binding PresetCategories}" SelectedItem="{Binding SelectedPresetCategory}" DisplayMemberPath="Category" />
@@ -89,7 +89,7 @@
                        Style="{StaticResource LongToolTipHolder}"
                        VerticalAlignment="Center"
                        ToolTip="{x:Static Properties:Resources.AddPreset_PictureSizeMode}"
-                       Text="{x:Static Properties:ResourcesUI.AddPresetView_SavePictureSize}" />
+                       Text="{x:Static Properties:Resources.AddPresetView_SavePictureSize}" />
             <ComboBox Grid.Row="4" Margin="0,10,0,0"
                       Grid.Column="1"
                       Width="125"
@@ -139,13 +139,13 @@
             <Button Grid.Column="1"
                     Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Cancel]"
-                    Content="{x:Static Properties:ResourcesUI.Generic_Cancel}"
+                    Content="{x:Static Properties:Resources.Generic_Cancel}"
                     IsCancel="True"
                     Padding="8,2" />
             <Button Grid.Column="2"
                     Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Add]"
-                    Content="{x:Static Properties:ResourcesUI.Generic_Add}"
+                    Content="{x:Static Properties:Resources.Generic_Add}"
                     IsDefault="True"
                     Padding="8,2" />
         </Grid>

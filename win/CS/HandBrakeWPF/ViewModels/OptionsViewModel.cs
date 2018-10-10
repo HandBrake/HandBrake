@@ -1669,7 +1669,7 @@ namespace HandBrakeWPF.ViewModels
                     if (!isSilent)
                     {
                         this.errorService.ShowMessageBox(
-                            ResourcesUI.OptionsView_InvalidFileFormatChars,
+                            Resources.OptionsView_InvalidFileFormatChars,
                             Resources.Error,
                             MessageBoxButton.OK,
                             MessageBoxImage.Error);

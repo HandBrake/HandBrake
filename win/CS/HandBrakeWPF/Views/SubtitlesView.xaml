@@ -64,7 +64,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="0,0,5,0" Padding="0"
                                    VerticalAlignment="Center"
-                                   Text="{x:Static Properties:ResourcesUI.Shared_AddTrack}" />
+                                   Text="{x:Static Properties:Resources.Shared_AddTrack}" />
 
                         <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                               Data="M 0 0 L 4 4 L 8 0 Z"
@@ -74,7 +74,7 @@
 
                 <Button.ContextMenu>
                     <ContextMenu x:Name="MainContextMenu" PlacementRectangle="{Binding RelativeSource={RelativeSource Self}}">
-                        <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
+                        <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
                         <MenuItem Header="Add All Remaining Tracks" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
                         <MenuItem Header="Add All Remaining Closed Captions" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptions]" />
                         <MenuItem Header="Add All Remaining Selected Languages" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />
@@ -84,12 +84,12 @@
 
             <Button MinWidth="75" Grid.Column="1"
                     cal:Message.Attach="[Event Click] = [Action Import]"
-                    Content="{x:Static Properties:ResourcesUI.SubtitlesView_ImportSRT}"
+                    Content="{x:Static Properties:Resources.SubtitlesView_ImportSRT}"
                     Margin="0,0,10,0"/>
             <Button MinWidth="65" Grid.Column="2"
                     Margin="0,0,10,0"
                     cal:Message.Attach="[Event Click] = [Action Clear]"
-                    Content="{x:Static Properties:ResourcesUI.Generic_Clear}" />
+                    Content="{x:Static Properties:Resources.Generic_Clear}" />
 
             <Button MinWidth="65" Grid.Column="4"
                     Margin="0,0,10,0"
@@ -98,7 +98,7 @@
 
             <Button MinWidth="65" Grid.Column="5"
                     cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
-                    Content="{x:Static Properties:ResourcesUI.Shared_ReloadDefaults}" />
+                    Content="{x:Static Properties:Resources.Shared_ReloadDefaults}" />
         </Grid>
 
 
@@ -120,14 +120,14 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
-                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
-                    <MenuItem Header="{x:Static Properties:ResourcesUI.SubtitleView_AddAllCC}" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptions]" />
-                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />    
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddNewTrack}" cal:Message.Attach="[Event Click] = [Action Add]" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllRemaining}" cal:Message.Attach="[Event Click] = [Action AddAllRemaining]" />
+                    <MenuItem Header="{x:Static Properties:Resources.SubtitleView_AddAllCC}" cal:Message.Attach="[Event Click] = [Action AddAllClosedCaptions]" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_AddAllForSelected}" cal:Message.Attach="[Event Click] = [Action AddAllRemainingForSelectedLanguages]" />    
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:ResourcesUI.Generic_Clear}" cal:Message.Attach="[Event Click] = [Action Clear]" />
+                    <MenuItem Header="{x:Static Properties:Resources.Generic_Clear}" cal:Message.Attach="[Event Click] = [Action Clear]" />
                     <Separator />
-                    <MenuItem Header="{x:Static Properties:ResourcesUI.Shared_ConfigureDefaultBehaviours}" cal:Message.Attach="[Event Click] = [Action ShowSubtitleDefaultsPanel]" />
+                    <MenuItem Header="{x:Static Properties:Resources.Shared_ConfigureDefaultBehaviours}" cal:Message.Attach="[Event Click] = [Action ShowSubtitleDefaultsPanel]" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 

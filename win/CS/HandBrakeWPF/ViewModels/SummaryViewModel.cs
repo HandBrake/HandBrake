@@ -376,7 +376,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.selectedPreview = this.selectedPreview + 1;
             this.UpdatePreviewFrame();
-            this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, maxPreview);
+            this.PreviewInfo = string.Format(Resources.SummaryView_PreviewInfo, this.selectedPreview, maxPreview);
             this.NotifyOfPropertyChange(() => this.PreviewInfo);
 
             this.SetPreviewControlVisibility();
@@ -392,7 +392,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.selectedPreview = this.selectedPreview - 1;
             this.UpdatePreviewFrame();
-            this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, maxPreview);
+            this.PreviewInfo = string.Format(Resources.SummaryView_PreviewInfo, this.selectedPreview, maxPreview);
             this.NotifyOfPropertyChange(() => this.PreviewInfo);
 
             this.SetPreviewControlVisibility();
@@ -492,21 +492,21 @@ namespace HandBrakeWPF.ViewModels
             this.SubtitleTrackInfo = this.GetSubtitleDescription();
             this.NotifyOfPropertyChange(() => this.SubtitleTrackInfo);
 
-            this.ChapterInfo = this.Task.IncludeChapterMarkers ? ResourcesUI.SummaryView_Chapters : ResourcesUI.SummaryView_NoChapters;
+            this.ChapterInfo = this.Task.IncludeChapterMarkers ? Resources.SummaryView_Chapters : Resources.SummaryView_NoChapters;
             this.NotifyOfPropertyChange(() => this.ChapterInfo);
 
             this.FiltersInfo = this.GetFilterDescription();
             this.NotifyOfPropertyChange(() => this.FiltersInfo);
 
             // Picutre Section
-            this.DimensionInfo = string.Format("{0}x{1} {2}, {3}x{4} {5}", this.Task.Width, this.Task.Height, ResourcesUI.SummaryView_storage, this.Task.DisplayWidth, this.Task.Height, ResourcesUI.SummaryView_display);
+            this.DimensionInfo = string.Format("{0}x{1} {2}, {3}x{4} {5}", this.Task.Width, this.Task.Height, Resources.SummaryView_storage, this.Task.DisplayWidth, this.Task.Height, Resources.SummaryView_display);
             this.NotifyOfPropertyChange(() => this.DimensionInfo);
 
             this.AspectInfo = string.Empty;
             this.NotifyOfPropertyChange(() => this.AspectInfo);
 
             // Preview
-            this.PreviewInfo = string.Format(ResourcesUI.SummaryView_PreviewInfo, this.selectedPreview, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int)));
+            this.PreviewInfo = string.Format(Resources.SummaryView_PreviewInfo, this.selectedPreview, this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int)));
             this.NotifyOfPropertyChange(() => this.PreviewInfo);
 
             this.ShowPreview = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPreviewOnSummaryTab);
@@ -516,14 +516,14 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.Task == null)
             {
-                return ResourcesUI.SummaryView_NoFilters;
+                return Resources.SummaryView_NoFilters;
             }
 
             List<string> filters = new List<string>();
 
             if (this.Task.Detelecine != Detelecine.Off)
             {
-                filters.Add(ResourcesUI.SummaryView_Detelecine);
+                filters.Add(Resources.SummaryView_Detelecine);
             }
 
             if (this.Task.DeinterlaceFilter != DeinterlaceFilter.Off)
@@ -543,17 +543,17 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.Task.Deblock > 4)
             {
-                filters.Add(ResourcesUI.SummaryView_Deblock);
+                filters.Add(Resources.SummaryView_Deblock);
             }
 
             if (this.Task.Grayscale)
             {
-                filters.Add(ResourcesUI.SummaryView_Grayscale);
+                filters.Add(Resources.SummaryView_Grayscale);
             }
 
             if (this.Task.Rotation != 0 || this.task.FlipVideo)
             {
-                filters.Add(ResourcesUI.SummaryView_Rotation);
+                filters.Add(Resources.SummaryView_Rotation);
             }
 
             return string.Join(", ", filters).TrimEnd(',').Trim();
@@ -563,7 +563,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.Task.AudioTracks.Count == 0)
             {
-                return ResourcesUI.SummaryView_NoAudioTracks;
+                return Resources.SummaryView_NoAudioTracks;
             }
 
             StringBuilder desc = new StringBuilder();
@@ -586,7 +586,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (this.Task.AudioTracks.Count > 2)
             {
-                desc.AppendLine(string.Format("+ {0} {1}", this.Task.AudioTracks.Count - 2, ResourcesUI.SummaryView_AdditionalAudioTracks));
+                desc.AppendLine(string.Format("+ {0} {1}", this.Task.AudioTracks.Count - 2, Resources.SummaryView_AdditionalAudioTracks));
             }
 
             return desc.ToString().Trim();        
@@ -596,7 +596,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (this.Task.AudioTracks.Count == 0)
             {
-                return ResourcesUI.SummaryView_NoSubtitleTracks;
+                return Resources.SummaryView_NoSubtitleTracks;
             }
 
             StringBuilder desc = new StringBuilder();
@@ -605,7 +605,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 SubtitleTrack track1 = this.Task.SubtitleTracks[0];
                 string subtitleName = track1.IsSrtSubtitle ? track1.SrtFileName : track1.SourceTrack.ToString();
-                string burned = track1.Burned ? ", " + ResourcesUI.SummaryView_Burned : string.Empty;
+                string burned = track1.Burned ? ", " + Resources.SummaryView_Burned : string.Empty;
                 desc.AppendLine(string.Format("{0}{1}", subtitleName, burned));
             }
 
@@ -613,13 +613,13 @@ namespace HandBrakeWPF.ViewModels
             {
                 SubtitleTrack track2 = this.Task.SubtitleTracks[1];
                 string subtitleName = track2.IsSrtSubtitle ? track2.SrtFileName : track2.SourceTrack.ToString();
-                string burned = track2.Burned ? ", " + ResourcesUI.SummaryView_Burned : string.Empty;
+                string burned = track2.Burned ? ", " + Resources.SummaryView_Burned : string.Empty;
                 desc.AppendLine(string.Format("{0}{1}", subtitleName, burned));
             }
 
             if (this.Task.SubtitleTracks.Count > 2)
             {
-                desc.AppendLine(string.Format("+ {0} {1}", this.Task.SubtitleTracks.Count - 2, ResourcesUI.SummaryView_AdditionalSubtitleTracks));
+                desc.AppendLine(string.Format("+ {0} {1}", this.Task.SubtitleTracks.Count - 2, Resources.SummaryView_AdditionalSubtitleTracks));
             }
 
             return desc.ToString().Trim();
@@ -627,7 +627,7 @@ namespace HandBrakeWPF.ViewModels
 
         private void ClearDisplay()
         {
-            this.VideoTrackInfo = ResourcesUI.SummaryView_NoTracks;
+            this.VideoTrackInfo = Resources.SummaryView_NoTracks;
             this.NotifyOfPropertyChange(() => this.VideoTrackInfo);
 
             this.AudioTrackInfo = string.Empty;
@@ -639,10 +639,10 @@ namespace HandBrakeWPF.ViewModels
             this.ChapterInfo = string.Empty;
             this.NotifyOfPropertyChange(() => this.ChapterInfo);
 
-            this.FiltersInfo = ResourcesUI.SummaryView_NoFilters;
+            this.FiltersInfo = Resources.SummaryView_NoFilters;
             this.NotifyOfPropertyChange(() => this.FiltersInfo);
 
-            this.DimensionInfo = ResourcesUI.SummaryView_NoSource;
+            this.DimensionInfo = Resources.SummaryView_NoSource;
             this.NotifyOfPropertyChange(() => this.ChapterInfo);
 
             this.AspectInfo = string.Empty;

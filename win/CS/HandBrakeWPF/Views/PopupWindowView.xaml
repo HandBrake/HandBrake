@@ -49,14 +49,14 @@
                 <Button Grid.Column="1"
                     Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Cancel]"
-                    Content="{x:Static properties:ResourcesUI.Generic_Cancel}"
+                    Content="{x:Static properties:Resources.Generic_Cancel}"
                     IsCancel="True"
                     Visibility="Collapsed"
                     Padding="8,2" />
                 <Button Grid.Column="2"
                     Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Save]"
-                    Content="{x:Static properties:ResourcesUI.Generic_Save}"
+                    Content="{x:Static properties:Resources.Generic_Save}"
                     IsDefault="True"
                     Padding="8,2" />
             </Grid>

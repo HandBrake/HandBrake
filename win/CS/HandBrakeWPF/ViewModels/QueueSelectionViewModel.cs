@@ -264,7 +264,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (preset != null)
             {
-                this.CurrentPreset = string.Format(ResourcesUI.QueueSelection_UsingPreset, preset.Name);
+                this.CurrentPreset = string.Format(Resources.QueueSelection_UsingPreset, preset.Name);
             }
 
             this.NotifyOfPropertyChange(() => this.IsAutoNamingEnabled);

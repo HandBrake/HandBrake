@@ -81,7 +81,7 @@ namespace HandBrakeWPF.Services.Presets.Model
         {
             get
             {
-                string globalCateogry = this.IsBuildIn ? ResourcesUI.Preset_Official : ResourcesUI.Preset_Custom;
+                string globalCateogry = this.IsBuildIn ? Resources.Preset_Official : Resources.Preset_Custom;
                 return string.Format("{0}", this.Name);
             }
         }

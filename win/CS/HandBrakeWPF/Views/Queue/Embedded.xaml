@@ -64,14 +64,14 @@
 
             <ListBox.ContextMenu>
                 <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action StartQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Start}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action PauseQueue]" Header="{x:Static Properties:ResourcesUI.QueueView_Pause}" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action StartQueue]" Header="{x:Static Properties:Resources.QueueView_Start}" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action PauseQueue]" Header="{x:Static Properties:Resources.QueueView_Pause}" />
                     <Separator />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearCompleted}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearAll}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:ResourcesUI.QueueView_ClearSelected}" />                 
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:Resources.QueueView_ClearAll}" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ClearSelected}" />                 
                     <Separator />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:ResourcesUI.QueueView_Export}" />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.QueueView_Export}" />
                 </ContextMenu>
             </ListBox.ContextMenu>
 
@@ -103,27 +103,27 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Source}" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Source}" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
                                 <TextBlock Text="{Binding Task.Source}" TextWrapping="Wrap" Grid.Row="0" Grid.Column="1" />
 
-                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Destination}" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Destination}" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
                                 <TextBlock Text="{Binding Task.Destination}" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" />
 
-                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_PictureSettings}" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_PictureSettings}" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
                                 <TextBlock Text="{Binding Task, Converter={StaticResource pictureSettingsDescConverter}}" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1"  />
 
-                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Video}" Grid.Row="3" Grid.Column="0" />
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Video}" Grid.Row="3" Grid.Column="0" />
                                 <TextBlock Text="{Binding Task, Converter={StaticResource videoOptionsTooltipConverter}}" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"  />
 
-                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Audio}"  Grid.Row="4" Grid.Column="0"/>
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Audio}"  Grid.Row="4" Grid.Column="0"/>
                                 <TextBlock Text="{Binding Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}"
                                            Grid.Row="4" Grid.Column="1"/>
 
-                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="{x:Static Properties:ResourcesUI.QueueView_Subtitles}" Grid.Row="5" Grid.Column="0"  />
+                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="{x:Static Properties:Resources.QueueView_Subtitles}" Grid.Row="5" Grid.Column="0"  />
                                 <TextBlock Text="{Binding Task.SubtitleTracks, Converter={StaticResource subtitleTrackDisplayConverter}}"
                                            Grid.Row="5" Grid.Column="1" />
 
-                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="6" Grid.Column="0"  Text="{x:Static Properties:ResourcesUI.QueueView_Advanced}" />
+                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Grid.Row="6" Grid.Column="0"  Text="{x:Static Properties:Resources.QueueView_Advanced}" />
                                 <TextBlock Text="{Binding Task, Converter={StaticResource encoderOptionsTooltipConverter}}" Grid.Row="6" Grid.Column="1" TextWrapping="Wrap"  />
                             </Grid>
 
@@ -187,12 +187,12 @@
 
                             <!--  TODO Support Drive Label Name  -->
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Source}" />
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Source}" />
                                 <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:ResourcesUI.QueueView_Destination}" />
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Destination}" />
                                 <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" />
                             </StackPanel>
                         </StackPanel>
