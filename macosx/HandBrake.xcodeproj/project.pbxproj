@@ -199,6 +199,8 @@
 		A9736F171C7DA5FE008F1D18 /* HandBrakeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; };
 		A9736F181C7DA5FE008F1D18 /* HandBrakeKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A9736F021C7DA5FE008F1D18 /* HandBrakeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A9736F1F1C7DA667008F1D18 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F204014ADBC210021BE6D /* Foundation.framework */; };
+		A973E109216E74AC00D498EC /* HBImageUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A9CE0A931F57EC4600724577 /* HBImageUtilities.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A973E10C216E74E900D498EC /* HBThumbnailItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = A973E10B216E74E900D498EC /* HBThumbnailItemView.m */; };
 		A975B02220F7AF29004675CC /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A975B02020F7AF29004675CC /* Localizable.strings */; };
 		A98036CD1CCA91DD007661AA /* HBAVPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = A98036CC1CCA91DD007661AA /* HBAVPlayer.m */; };
 		A98B8E241C7DD2A200B810C9 /* HBPresetCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -524,6 +526,8 @@
 		A9736F061C7DA5FE008F1D18 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9736F0B1C7DA5FE008F1D18 /* HandBrakeKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HandBrakeKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9736F141C7DA5FE008F1D18 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A973E10A216E74E800D498EC /* HBThumbnailItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBThumbnailItemView.h; sourceTree = "<group>"; };
+		A973E10B216E74E900D498EC /* HBThumbnailItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBThumbnailItemView.m; sourceTree = "<group>"; };
 		A975B02120F7AF29004675CC /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A975C08C1AE8C5270061870D /* HBStateFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBStateFormatter.h; sourceTree = "<group>"; };
 		A975C08D1AE8C5270061870D /* HBStateFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBStateFormatter.m; sourceTree = "<group>"; };
@@ -1295,6 +1299,8 @@
 				A941ACB91CD75B4E0029D06A /* HBHUD.h */,
 				A92B148020CA9F7600146FD8 /* HBHUDView.h */,
 				A92B148120CA9F7600146FD8 /* HBHUDView.m */,
+				A973E10A216E74E800D498EC /* HBThumbnailItemView.h */,
+				A973E10B216E74E900D498EC /* HBThumbnailItemView.m */,
 				A96664B21CCE48F700DA4A57 /* HBPictureHUDController.h */,
 				A96664B31CCE48F700DA4A57 /* HBPictureHUDController.m */,
 				A9A96B8420CAD2C200A39AFB /* HBPictureHUDController.xib */,
@@ -1350,6 +1356,7 @@
 				A91CE2EB1C7DAEEE0068F46F /* HBDVDDetector.h in Headers */,
 				A91CE2EC1C7DAEEE0068F46F /* HBStateFormatter.h in Headers */,
 				A91CE2ED1C7DAEEE0068F46F /* HBUtilities.h in Headers */,
+				A973E109216E74AC00D498EC /* HBImageUtilities.h in Headers */,
 				A91CE2FB1C7DB99D0068F46F /* HBPresetsManager.h in Headers */,
 				A91CE2FC1C7DB99D0068F46F /* HBPreset.h in Headers */,
 				A91CE2FD1C7DB99D0068F46F /* HBMutablePreset.h in Headers */,
@@ -1590,6 +1597,7 @@
 			files = (
 				A916C99B1C844A0800C7B560 /* HBQueueOutlineView.m in Sources */,
 				A916C9991C8449E200C7B560 /* main.mm in Sources */,
+				A973E10C216E74E900D498EC /* HBThumbnailItemView.m in Sources */,
 				A916C9981C8449DB00C7B560 /* HBTitleSelectionController.m in Sources */,
 				A903C5601CCE78060026B0ED /* NSWindow+HBAdditions.m in Sources */,
 				A9A0CBE81CCEA3670045B3DF /* HBPlayerTrack.m in Sources */,

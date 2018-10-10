@@ -147,9 +147,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 @end
 
 @interface HBController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
-- (void)updateButtonsStateForScanCore:(HBState)state;
-- (void)updateButtonsStateForQueueCore:(HBState)state;
-- (void)validateTouchBarsItems;
+- (void)_touchBar_updateButtonsStateForScanCore:(HBState)state;
+- (void)_touchBar_updateButtonsStateForQueueCore:(HBState)state;
+- (void)_touchBar_validateUserInterfaceItems;
 @end
 
 #define WINDOW_HEIGHT_OFFSET_INIT 48
@@ -362,8 +362,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [self updateToolbarButtonsStateForScanCore:state];
         if (@available(macOS 10.12.2, *))
         {
-            [self updateButtonsStateForScanCore:state];
-            [self validateTouchBarsItems];
+            [self _touchBar_updateButtonsStateForScanCore:state];
+            [self _touchBar_validateUserInterfaceItems];
         }
     }
     else if (context == HBControllerQueueCoreContext)
@@ -373,9 +373,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [self.window.toolbar validateVisibleItems];
         if (@available(macOS 10.12.2, *))
         {
-            [self updateButtonsStateForQueueCore:state];
-            [self validateTouchBarsItems];
+            [self _touchBar_updateButtonsStateForQueueCore:state];
+            [self _touchBar_validateUserInterfaceItems];
         }
+        NSUInteger count = self.queue.pendingItemsCount;
+        self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : nil;
     }
     else
     {
@@ -697,7 +699,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
              [self.window.toolbar validateVisibleItems];
              if (@available(macOS 10.12.2, *))
              {
-                 [self validateTouchBarsItems];
+                 [self _touchBar_validateUserInterfaceItems];
              }
          }];
     }
@@ -1067,11 +1069,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 {
     fStatusField.stringValue = self.progressInfo;
     fRipIndicator.doubleValue = self.progress;
-}
-
-- (void)setQueueState:(NSUInteger)count
-{
-    self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : nil;
 }
 
 - (void)setQueueInfo:(NSString *)info progress:(double)progress hidden:(BOOL)hidden
@@ -1541,6 +1538,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 @implementation HBController (TouchBar)
 
+@dynamic touchBar;
+
 static NSTouchBarItemIdentifier HBTouchBarMain = @"fr.handbrake.mainWindowTouchBar";
 
 static NSTouchBarItemIdentifier HBTouchBarOpen = @"fr.handbrake.openSource";
@@ -1557,7 +1556,7 @@ static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
     bar.defaultItemIdentifiers = @[HBTouchBarOpen, NSTouchBarItemIdentifierFixedSpaceSmall, HBTouchBarAddToQueue, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarRip, HBTouchBarPause, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarPreview];
 
     bar.customizationIdentifier = HBTouchBarMain;
-    bar.customizationAllowedItemIdentifiers = @[HBTouchBarOpen, HBTouchBarAddToQueue, HBTouchBarRip, HBTouchBarPause, HBTouchBarPreview];
+    bar.customizationAllowedItemIdentifiers = @[HBTouchBarOpen, HBTouchBarAddToQueue, HBTouchBarRip, HBTouchBarPause, HBTouchBarPreview, NSTouchBarItemIdentifierFixedSpaceSmall, NSTouchBarItemIdentifierFixedSpaceLarge, NSTouchBarItemIdentifierFlexibleSpace];
 
     return bar;
 }
@@ -1577,9 +1576,9 @@ static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
     else if ([identifier isEqualTo:HBTouchBarAddToQueue])
     {
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
-        item.customizationLabel = NSLocalizedString(@"Add to Queue", @"Touch bar");
+        item.customizationLabel = NSLocalizedString(@"Add To Queue", @"Touch bar");
 
-        NSButton *button = [NSButton buttonWithTitle:NSLocalizedString(@"Add to Queue", @"Touch bar") target:self action:@selector(addToQueue:)];
+        NSButton *button = [NSButton buttonWithTitle:NSLocalizedString(@"Add To Queue", @"Touch bar") target:self action:@selector(addToQueue:)];
 
         item.view = button;
         return item;
@@ -1587,7 +1586,7 @@ static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
     else if ([identifier isEqualTo:HBTouchBarRip])
     {
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
-        item.customizationLabel = NSLocalizedString(@"Rip", @"Touch bar");
+        item.customizationLabel = NSLocalizedString(@"Start/Stop Encoding", @"Touch bar");
 
         NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPlayTemplate] target:self action:@selector(rip:)];
 
@@ -1597,7 +1596,7 @@ static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
     else if ([identifier isEqualTo:HBTouchBarPause])
     {
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
-        item.customizationLabel = NSLocalizedString(@"Pause", @"Touch bar");
+        item.customizationLabel = NSLocalizedString(@"Pause Encoding", @"Touch bar");
 
         NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPauseTemplate] target:self action:@selector(pause:)];
 
@@ -1607,7 +1606,7 @@ static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
     else if ([identifier isEqualTo:HBTouchBarPreview])
     {
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
-        item.customizationLabel = NSLocalizedString(@"Show Preview", @"Touch bar");
+        item.customizationLabel = NSLocalizedString(@"Show Preview Window", @"Touch bar");
 
         NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarQuickLookTemplate] target:self action:@selector(showPreviewWindow:)];
 
@@ -1618,27 +1617,23 @@ static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
     return nil;
 }
 
-- (void)updateButtonsStateForScanCore:(HBState)state
+- (void)_touchBar_updateButtonsStateForScanCore:(HBState)state
 {
     NSButton *openButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarOpen] view];
-
-    NSButton *addToQueueButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarAddToQueue] view];
-    NSButton *previewButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarPreview] view];
 
     if (state == HBStateIdle)
     {
         openButton.title = NSLocalizedString(@"Open Source", @"Touch bar");
-        addToQueueButton.enabled = NO;
-        previewButton.enabled = NO;
+        openButton.bezelColor = nil;
     }
     else
     {
-        openButton.title = NSLocalizedString(@"Cancel scan", @"Touch bar");
-        addToQueueButton.enabled = YES;
+        openButton.title = NSLocalizedString(@"Cancel Scan", @"Touch bar");
+        openButton.bezelColor = [NSColor systemRedColor];
     }
 }
 
-- (void)updateButtonsStateForQueueCore:(HBState)state;
+- (void)_touchBar_updateButtonsStateForQueueCore:(HBState)state;
 {
     NSButton *ripButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarRip] view];
     NSButton *pauseButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarPause] view];
@@ -1660,7 +1655,7 @@ static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
     }
 }
 
-- (void)validateTouchBarsItems
+- (void)_touchBar_validateUserInterfaceItems
 {
     for (NSTouchBarItemIdentifier identifier in self.touchBar.itemIdentifiers) {
         NSTouchBarItem *item = [self.touchBar itemForIdentifier:identifier];
@@ -1672,7 +1667,5 @@ static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
         }
     }
 }
-
-@dynamic touchBar;
 
 @end

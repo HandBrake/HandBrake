@@ -6,15 +6,19 @@
 //
 
 #import <Cocoa/Cocoa.h>
+
 #import "HBHUD.h"
+#import "HBPreviewGenerator.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol HBPictureHUDControllerDelegate <NSObject>
 
 - (void)displayPreviewAtIndex:(NSUInteger)idx;
+
 - (void)toggleScaleToScreen;
 - (void)showPictureSettings;
+
 - (void)createMoviePreviewWithPictureIndex:(NSUInteger)index duration:(NSUInteger)duration;
 
 @end
@@ -26,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSString *info;
 @property (nonatomic, copy) NSString *scale;
 
-@property (nonatomic) NSUInteger pictureCount;
+@property (nonatomic, weak) HBPreviewGenerator *generator;
 @property (nonatomic) NSUInteger selectedIndex;
 
 @end

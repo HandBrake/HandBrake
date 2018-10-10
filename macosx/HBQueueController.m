@@ -65,8 +65,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 @end
 
 @interface HBQueueController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
-- (void)updateButtonsStateForQueueCore:(HBState)state;
-- (void)validateTouchBarsItems;
+- (void)_touchBar_updateButtonsStateForQueueCore:(HBState)state;
+- (void)_touchBar_validateUserInterfaceItems;
 @end
 
 @implementation HBQueueController
@@ -134,8 +134,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [self.window.toolbar validateVisibleItems];
         if (@available(macOS 10.12.2, *))
         {
-            [self updateButtonsStateForQueueCore:state];
-            [self validateTouchBarsItems];
+            [self _touchBar_updateButtonsStateForQueueCore:state];
+            [self _touchBar_validateUserInterfaceItems];
         }
     }
     else
@@ -629,7 +629,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
 
     self.countTextField.stringValue = string;
-    [self.controller setQueueState:pendingCount];
 
     self.pendingItemsCount = pendingCount;
     self.completedItemsCount = completedCount;
@@ -1370,6 +1369,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     if (job != self.currentJob)
     {
         job.state = HBJobStateWorking;
+        [self updateQueueStats];
         [self.controller openJob:[job copy] completionHandler:^(BOOL result) {
             [self.jobs beginTransaction];
             if (result)
@@ -1716,6 +1716,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 @implementation HBQueueController (TouchBar)
 
+@dynamic touchBar;
+
 static NSTouchBarItemIdentifier HBTouchBarMain = @"fr.handbrake.queueWindowTouchBar";
 
 static NSTouchBarItemIdentifier HBTouchBarRip = @"fr.handbrake.rip";
@@ -1739,7 +1741,7 @@ static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
     if ([identifier isEqualTo:HBTouchBarRip])
     {
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
-        item.customizationLabel = NSLocalizedString(@"Rip", @"Touch bar");
+        item.customizationLabel = NSLocalizedString(@"Start/Stop Encoding", @"Touch bar");
 
         NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPlayTemplate] target:self action:@selector(toggleStartCancel:)];
 
@@ -1749,7 +1751,7 @@ static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
     else if ([identifier isEqualTo:HBTouchBarPause])
     {
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
-        item.customizationLabel = NSLocalizedString(@"Pause", @"Touch bar");
+        item.customizationLabel = NSLocalizedString(@"Pause/Resume Encoding", @"Touch bar");
 
         NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPauseTemplate] target:self action:@selector(togglePauseResume:)];
 
@@ -1760,7 +1762,7 @@ static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
     return nil;
 }
 
-- (void)updateButtonsStateForQueueCore:(HBState)state;
+- (void)_touchBar_updateButtonsStateForQueueCore:(HBState)state;
 {
     NSButton *ripButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarRip] view];
     NSButton *pauseButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarPause] view];
@@ -1782,7 +1784,7 @@ static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
     }
 }
 
-- (void)validateTouchBarsItems
+- (void)_touchBar_validateUserInterfaceItems
 {
     for (NSTouchBarItemIdentifier identifier in self.touchBar.itemIdentifiers) {
         NSTouchBarItem *item = [self.touchBar itemForIdentifier:identifier];
@@ -1795,7 +1797,4 @@ static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
     }
 }
 
-@dynamic touchBar;
-
 @end
-

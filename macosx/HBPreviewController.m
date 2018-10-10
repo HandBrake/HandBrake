@@ -159,14 +159,13 @@
     if (generator)
     {
         generator.delegate = self;
-
-        // adjust the preview slider length
-        self.pictureHUD.pictureCount = generator.imagesCount;
+        self.pictureHUD.generator = generator;
     }
     else
     {
         self.previewView.image = nil;
         self.window.title = NSLocalizedString(@"Preview", @"Preview -> window title");
+        self.pictureHUD.generator = nil;
     }
     [self switchStateToHUD:self.pictureHUD];
 }
@@ -298,7 +297,7 @@
     }
 
     // Show the current hud
-    NSMutableArray *huds = [@[self.pictureHUD, self.encodingHUD, self.playerHUD] mutableCopy];
+    NSMutableArray<NSViewController<HBHUD> *> *huds = [@[self.pictureHUD, self.encodingHUD, self.playerHUD] mutableCopy];
     [huds removeObject:hud];
     for (NSViewController *controller in huds) {
         controller.view.hidden = YES;

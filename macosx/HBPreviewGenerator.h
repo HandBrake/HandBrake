@@ -29,15 +29,29 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithCore:(HBCore *)core job:(HBJob *)job NS_DESIGNATED_INITIALIZER;
 
-/* Still image generator */
+#pragma mark - Still image generator
+
+/**
+ * Returns the picture preview at the specified index
+ *
+ * @param index picture index in title.
+ */
 - (nullable CGImageRef) copyImageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache CF_RETURNS_RETAINED;
+
+/**
+ * Returns a small picture preview at the specified index asynchronously
+ *
+ * @param index picture index in title.
+ */
+- (void) copySmallImageAtIndex: (NSUInteger) index completionHandler:(void (^)(__nullable CGImageRef result))handler;
+
 @property (nonatomic, readonly) NSUInteger imagesCount;
 @property (nonatomic, readonly) CGSize imageSize;
 - (void) purgeImageCache;
 
 @property (nonatomic, readonly, copy) NSString *info;
 
-/* Video generator */
+#pragma mark -  Video generator
 - (BOOL) createMovieAsyncWithImageAtIndex: (NSUInteger) index duration: (NSUInteger) seconds;
 - (void) cancel;
 

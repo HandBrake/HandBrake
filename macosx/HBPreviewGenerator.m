@@ -11,9 +11,13 @@
 
 @interface HBPreviewGenerator ()
 
-@property (nonatomic, readonly) NSCache *picturePreviews;
 @property (nonatomic, readonly, weak) HBCore *scanCore;
 @property (nonatomic, readonly, strong) HBJob *job;
+
+@property (nonatomic, readonly) NSCache<NSNumber *, id> *previewsCache;
+@property (nonatomic, readonly) NSCache<NSNumber *, id> *smallPreviewsCache;
+
+@property (nonatomic, readonly) dispatch_semaphore_t sem;
 
 @property (nonatomic, strong) HBCore *core;
 
@@ -36,11 +40,16 @@
         _scanCore = core;
         _job = job;
 
-        _picturePreviews = [[NSCache alloc] init];
+        _previewsCache = [[NSCache alloc] init];
         // Limit the cache to 60 1080p previews, the cost is in pixels
-        _picturePreviews.totalCostLimit = 60 * 1920 * 1080;
+        _previewsCache.totalCostLimit = 60 * 1920 * 1080;
+
+        _smallPreviewsCache = [[NSCache alloc] init];
+        _smallPreviewsCache.totalCostLimit = 60 * 320 * 180;
 
         _imagesCount = [_scanCore imagesCountForTitle:self.job.title];
+
+        _sem = dispatch_semaphore_create(4);
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBFiltersChangedNotification object:job.filters];
@@ -66,11 +75,13 @@
 - (CGImageRef) copyImageAtIndex: (NSUInteger) index shouldCache: (BOOL) cache
 {
     if (index >= self.imagesCount)
+    {
         return nil;
+    }
 
     // The preview for the specified index may not currently exist, so this method
     // generates it if necessary.
-    CGImageRef theImage = (__bridge CGImageRef)([self.picturePreviews objectForKey:@(index)]);
+    CGImageRef theImage = (__bridge CGImageRef)([_previewsCache objectForKey:@(index)]);
 
     if (!theImage)
     {
@@ -87,7 +98,7 @@
         {
             // The cost is the number of pixels of the image
             NSUInteger previewCost = CGImageGetWidth(theImage) * CGImageGetHeight(theImage);
-            [self.picturePreviews setObject:(__bridge id)(theImage) forKey:@(index) cost:previewCost];
+            [self.previewsCache setObject:(__bridge id)(theImage) forKey:@(index) cost:previewCost];
         }
     }
     else
@@ -104,7 +115,7 @@
  */
 - (void) purgeImageCache
 {
-    [self.picturePreviews removeAllObjects];
+    [self.previewsCache removeAllObjects];
 }
 
 - (CGSize)imageSize
@@ -112,7 +123,7 @@
     return CGSizeMake(self.job.picture.displayWidth, self.job.picture.height);
 }
 
-- (void) imagesSettingsDidChange
+- (void)imagesSettingsDidChange
 {
     // Purge the existing picture previews so they get recreated the next time
     // they are needed.
@@ -138,12 +149,65 @@
     return self.job.picture.info;
 }
 
+#pragma mark - Small previews
+
+- (void)copySmallImageAtIndex:(NSUInteger)index completionHandler:(void (^)(__nullable CGImageRef result))handler
+{
+    dispatch_semaphore_wait(_sem, DISPATCH_TIME_FOREVER);
+    if (index >= self.imagesCount)
+    {
+        handler(NULL);
+        dispatch_semaphore_signal(_sem);
+        return;
+    }
+
+    CGImageRef image;
+
+    // First try to look in the small previews cache
+    image = (__bridge CGImageRef)([_smallPreviewsCache objectForKey:@(index)]);
+
+    if (image != NULL)
+    {
+        handler(image);
+        dispatch_semaphore_signal(_sem);
+        return;
+    }
+
+    // Else try the normal cache
+    image = (__bridge CGImageRef)([_previewsCache objectForKey:@(index)]);
+
+    if (image == NULL)
+    {
+        image = (CGImageRef)[self.scanCore copyImageAtIndex:index
+                                                      forTitle:self.job.title
+                                                  pictureFrame:self.job.picture
+                                                   deinterlace:NO
+                                                        rotate:self.job.filters.rotate
+                                                       flipped:self.job.filters.flip];
+        CFAutorelease(image);
+    }
+
+    if (image != NULL)
+    {
+        CGImageRef scaledImage = CreateScaledCGImageFromCGImage(image, 30);
+        // The cost is the number of pixels of the image
+        NSUInteger previewCost = CGImageGetWidth(scaledImage) * CGImageGetHeight(scaledImage);
+        [self.smallPreviewsCache setObject:(__bridge id)(scaledImage) forKey:@(index) cost:previewCost];
+        handler(scaledImage);
+        dispatch_semaphore_signal(_sem);
+        return;
+    }
+
+    handler(NULL);
+    dispatch_semaphore_signal(_sem);
+}
+
 #pragma mark -
 #pragma mark Preview movie
 
 + (NSURL *) generateFileURLForType:(NSString *) type
 {
-    NSURL *previewDirectory =  [[HBUtilities appSupportURL] URLByAppendingPathComponent:[NSString stringWithFormat:@"/Previews/%d", getpid()] isDirectory:YES];
+    NSURL *previewDirectory = [[HBUtilities appSupportURL] URLByAppendingPathComponent:[NSString stringWithFormat:@"/Previews/%d", getpid()] isDirectory:YES];
 
     if (![[NSFileManager defaultManager] createDirectoryAtPath:previewDirectory.path
                                   withIntermediateDirectories:YES
@@ -242,7 +306,7 @@
 /**
  * Cancels the encoding process
  */
-- (void) cancel
+- (void)cancel
 {
     if (self.core.state == HBStateWorking || self.core.state == HBStatePaused)
     {

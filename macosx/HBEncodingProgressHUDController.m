@@ -51,3 +51,41 @@
 }
 
 @end
+
+@interface HBEncodingProgressHUDController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
+@end
+
+@implementation HBEncodingProgressHUDController (TouchBar)
+
+@dynamic touchBar;
+
+static NSTouchBarItemIdentifier HBTouchBarCancelEncoding = @"fr.handbrake.cancelEncoding";
+
+- (NSTouchBar *)makeTouchBar
+{
+    NSTouchBar *bar = [[NSTouchBar alloc] init];
+    bar.delegate = self;
+
+    bar.escapeKeyReplacementItemIdentifier = HBTouchBarCancelEncoding;
+
+    return bar;
+}
+
+- (NSTouchBarItem *)touchBar:(NSTouchBar *)touchBar makeItemForIdentifier:(NSTouchBarItemIdentifier)identifier
+{
+    if ([identifier isEqualTo:HBTouchBarCancelEncoding])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Cancel Encoding", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithTitle:NSLocalizedString(@"Cancel", @"Touch bar") target:self action:@selector(cancelEncoding:)];
+        button.bezelColor = NSColor.systemRedColor;
+
+        item.view = button;
+        return item;
+    }
+
+    return nil;
+}
+
+@end

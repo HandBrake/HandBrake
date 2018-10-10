@@ -6,6 +6,8 @@
 
 #import "HBPictureHUDController.h"
 
+#import "HBThumbnailItemView.h"
+
 @interface HBPictureHUDController ()
 
 @property (weak) IBOutlet NSTextField *scaleLabel;
@@ -20,8 +22,16 @@
 @property (weak) IBOutlet NSTextField *durationUnitLabel;
 
 @property (nonatomic) BOOL fitToView;
+@property (nonatomic) BOOL ignoreUpdates;
 
 @end
+
+@interface HBPictureHUDController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate, NSScrubberDataSource, NSScrubberDelegate>
+- (void)_touchBar_reloadScrubberData;
+- (void)_touchBar_updateScrubberSelectedIndex:(NSUInteger)selectedIndex;
+- (void)_touchBar_updateFitToView:(BOOL)fitToView;
+@end
+
 
 @implementation HBPictureHUDController
 
@@ -56,25 +66,34 @@
     return YES;
 }
 
-- (void)setPictureCount:(NSUInteger)pictureCount
+- (void)setGenerator:(HBPreviewGenerator *)generator
 {
-    self.slider.numberOfTickMarks = pictureCount;
-    self.slider.maxValue = pictureCount - 1;
+    _generator = generator;
+    NSUInteger imagesCount = generator.imagesCount;
 
-    if (self.selectedIndex > pictureCount)
+    self.slider.numberOfTickMarks = imagesCount;
+    self.slider.maxValue = imagesCount - 1;
+
+    if (self.selectedIndex > imagesCount)
     {
-        self.selectedIndex = pictureCount - 1;
+        self.selectedIndex = imagesCount - 1;
     }
-}
 
-- (NSUInteger)selectedIndex
-{
-    return self.slider.integerValue;
+    if (@available(macOS 10.12.2, *))
+    {
+        [self _touchBar_reloadScrubberData];
+    }
 }
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex
 {
+    _selectedIndex = selectedIndex;
     self.slider.integerValue = selectedIndex;
+    if (@available(macOS 10.12.2, *))
+    {
+        [self _touchBar_updateScrubberSelectedIndex:selectedIndex];
+    }
+    [self.delegate displayPreviewAtIndex:self.selectedIndex];
 }
 
 - (void)setInfo:(NSString *)info
@@ -87,20 +106,10 @@
     self.scaleLabel.stringValue = scale;
 }
 
-- (IBAction)previewDurationPopUpChanged:(id)sender
+- (void)setFitToView:(BOOL)fitToView
 {
-    [[NSUserDefaults standardUserDefaults] setObject:self.durationPopUp.titleOfSelectedItem forKey:@"PreviewLength"];
-}
-
-- (IBAction)pictureSliderChanged:(id)sender
-{
-    [self.delegate displayPreviewAtIndex:self.slider.integerValue];
-}
-
-- (IBAction)toggleScaleToScreen:(id)sender
-{
-    [self.delegate toggleScaleToScreen];
-    if (self.fitToView == YES)
+    _fitToView = fitToView;
+    if (fitToView == NO)
     {
         self.scaleToScreenButton.title = NSLocalizedString(@"Scale To Screen", @"Picture HUD -> scale button");
     }
@@ -108,6 +117,26 @@
     {
         self.scaleToScreenButton.title = NSLocalizedString(@"Actual Scale", @"Picture HUD -> scale button");
     }
+    if (@available(macOS 10.12.2, *))
+    {
+        [self _touchBar_updateFitToView:fitToView];
+    }
+}
+
+- (IBAction)previewDurationPopUpChanged:(id)sender
+{
+    [[NSUserDefaults standardUserDefaults] setObject:self.durationPopUp.titleOfSelectedItem forKey:@"PreviewLength"];
+}
+
+- (IBAction)pictureSliderChanged:(id)sender
+{
+    NSUInteger index = self.slider.integerValue;
+    self.selectedIndex = index;
+}
+
+- (IBAction)toggleScaleToScreen:(id)sender
+{
+    [self.delegate toggleScaleToScreen];
     self.fitToView = !self.fitToView;
 }
 
@@ -118,7 +147,7 @@
 
 - (IBAction)createMoviePreview:(id)sender
 {
-    [self.delegate createMoviePreviewWithPictureIndex:self.slider.integerValue duration:self.durationPopUp.titleOfSelectedItem.intValue];
+    [self.delegate createMoviePreviewWithPictureIndex:self.selectedIndex duration:self.durationPopUp.titleOfSelectedItem.intValue];
 }
 
 - (BOOL)HB_keyDown:(NSEvent *)event
@@ -126,14 +155,14 @@
     unichar key = [event.charactersIgnoringModifiers characterAtIndex:0];
     if (key == NSLeftArrowFunctionKey)
     {
-        self.slider.integerValue = self.selectedIndex > self.slider.minValue ? self.selectedIndex - 1 : self.selectedIndex;
-        [self.delegate displayPreviewAtIndex:self.slider.integerValue];
+        self.ignoreUpdates = YES;
+        self.selectedIndex = self.selectedIndex > 0 ? self.selectedIndex - 1 : self.selectedIndex;
         return YES;
     }
     else if (key == NSRightArrowFunctionKey)
     {
-        self.slider.integerValue = self.selectedIndex < self.slider.maxValue ? self.selectedIndex + 1 : self.selectedIndex;
-        [self.delegate displayPreviewAtIndex:self.slider.integerValue];
+        self.ignoreUpdates = YES;
+        self.selectedIndex = self.selectedIndex < self.generator.imagesCount - 1 ? self.selectedIndex + 1 : self.selectedIndex;
         return YES;
     }
     else
@@ -146,15 +175,159 @@
 {
     if (theEvent.deltaY < 0)
     {
-        self.slider.integerValue = self.selectedIndex < self.slider.maxValue ? self.selectedIndex + 1 : self.selectedIndex;
-        [self.delegate displayPreviewAtIndex:self.slider.integerValue];
+        self.selectedIndex = self.selectedIndex < self.generator.imagesCount - 1 ? self.selectedIndex + 1 : self.selectedIndex;
     }
     else if (theEvent.deltaY > 0)
     {
-        self.slider.integerValue = self.selectedIndex > self.slider.minValue ? self.selectedIndex - 1 : self.selectedIndex;
-        [self.delegate displayPreviewAtIndex:self.slider.integerValue];
+        self.selectedIndex = self.selectedIndex > 0 ? self.selectedIndex - 1 : self.selectedIndex;
     }
     return YES;
+}
+
+@end
+
+@implementation HBPictureHUDController (TouchBar)
+
+#pragma mark - NSScrubberDataSource
+
+NSString *thumbnailScrubberItemIdentifier = @"thumbnailItem";
+
+- (NSInteger)numberOfItemsForScrubber:(NSScrubber *)scrubber
+{
+    return self.generator.imagesCount;
+}
+
+- (NSScrubberItemView *)scrubber:(NSScrubber *)scrubber viewForItemAtIndex:(NSInteger)index
+{
+    HBThumbnailItemView *itemView = [scrubber makeItemWithIdentifier:thumbnailScrubberItemIdentifier owner:nil];
+    itemView.generator = self.generator;
+    itemView.thumbnailIndex = index;
+    return itemView;
+}
+
+#pragma mark - NSScrubberFlowLayoutDelegate
+
+// Scrubber is asking for the size for a particular item.
+- (NSSize)scrubber:(NSScrubber *)scrubber layout:(NSScrubberFlowLayout *)layout sizeForItemAtIndex:(NSInteger)itemIndex
+{
+    NSInteger val = 50;
+    return NSMakeSize(val, 30);
+}
+
+#pragma mark - NSScrubberDelegate
+
+- (void)scrubber:(NSScrubber *)scrubber didSelectItemAtIndex:(NSInteger)selectedIndex
+{
+    if (self.selectedIndex != selectedIndex && self.ignoreUpdates == NO)
+    {
+        self.selectedIndex = selectedIndex;
+    }
+    self.ignoreUpdates = NO;
+}
+
+#pragma mark - NSTouchBar
+
+static NSTouchBarItemIdentifier HBTouchBarMain = @"fr.handbrake.previewWindowTouchBar";
+
+static NSTouchBarItemIdentifier HBTouchBarRip = @"fr.handbrake.rip";
+static NSTouchBarItemIdentifier HBTouchBarScrubber = @"fr.handbrake.scrubbe";
+static NSTouchBarItemIdentifier HBTouchBarFitToScreen = @"fr.handbrake.fitToScreen";
+
+@dynamic touchBar;
+
+- (NSTouchBar *)makeTouchBar
+{
+    NSTouchBar *bar = [[NSTouchBar alloc] init];
+    bar.delegate = self;
+
+    bar.defaultItemIdentifiers = @[HBTouchBarRip, NSTouchBarItemIdentifierFlexibleSpace, HBTouchBarScrubber, NSTouchBarItemIdentifierFlexibleSpace, HBTouchBarFitToScreen];
+
+    bar.customizationIdentifier = HBTouchBarMain;
+    bar.customizationAllowedItemIdentifiers = @[HBTouchBarRip, HBTouchBarScrubber, HBTouchBarFitToScreen, NSTouchBarItemIdentifierFixedSpaceSmall, NSTouchBarItemIdentifierFixedSpaceLarge, NSTouchBarItemIdentifierFlexibleSpace];
+
+    return bar;
+}
+
+- (NSTouchBarItem *)touchBar:(NSTouchBar *)touchBar makeItemForIdentifier:(NSTouchBarItemIdentifier)identifier
+{
+    if ([identifier isEqualTo:HBTouchBarRip])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Live Preview", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPlayTemplate]
+                                              target:self action:@selector(createMoviePreview:)];
+
+        item.view = button;
+        return item;
+    }
+    else if ([identifier isEqualTo:HBTouchBarScrubber])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Previews", @"Touch bar");
+
+        NSScrubber *scrubber = [[NSScrubber alloc] init];
+        scrubber.delegate = self;
+        scrubber.dataSource = self;
+
+        [scrubber registerClass:[HBThumbnailItemView class] forItemIdentifier:thumbnailScrubberItemIdentifier];
+
+        NSScrubberLayout *scrubberLayout = [[NSScrubberFlowLayout alloc] init];
+        scrubber.scrubberLayout = scrubberLayout;
+        scrubber.showsAdditionalContentIndicators = YES;
+        scrubber.selectedIndex = 0;
+        scrubber.selectionOverlayStyle = [NSScrubberSelectionStyle outlineOverlayStyle];
+        scrubber.continuous = YES;
+        scrubber.mode = NSScrubberModeFree;
+        scrubber.itemAlignment = NSScrubberAlignmentCenter;
+
+        // Set the layout constraints on this scrubber so that it's 400 pixels wide.
+        NSDictionary *items = NSDictionaryOfVariableBindings(scrubber);
+        NSArray *theConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:[scrubber(500)]" options:0 metrics:nil views:items];
+        [NSLayoutConstraint activateConstraints:theConstraints];
+
+        item.view = scrubber;
+        return item;
+    }
+    else if ([identifier isEqualTo:HBTouchBarFitToScreen])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Scale To Screen", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarEnterFullScreenTemplate]
+                                              target:self action:@selector(toggleScaleToScreen:)];
+
+        item.view = button;
+        return item;
+    }
+
+    return nil;
+}
+
+- (void)_touchBar_reloadScrubberData
+{
+    NSScrubber *scrubber = (NSScrubber *)[[self.touchBar itemForIdentifier:HBTouchBarScrubber] view];
+    [scrubber reloadData];
+    scrubber.animator.selectedIndex = self.selectedIndex;
+}
+
+- (void)_touchBar_updateScrubberSelectedIndex:(NSUInteger)selectedIndex
+{
+    NSScrubber *scrubber = (NSScrubber *)[[self.touchBar itemForIdentifier:HBTouchBarScrubber] view];
+    scrubber.animator.selectedIndex = selectedIndex;
+}
+
+- (void)_touchBar_updateFitToView:(BOOL)fitToView
+{
+    NSButton *button = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarFitToScreen] view];
+    if (fitToView == NO)
+    {
+        button.image = [NSImage imageNamed:NSImageNameTouchBarEnterFullScreenTemplate];
+    }
+    else
+    {
+        button.image = [NSImage imageNamed:NSImageNameTouchBarExitFullScreenTemplate];
+    }
 }
 
 @end
