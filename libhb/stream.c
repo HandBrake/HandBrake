@@ -34,7 +34,7 @@
  * S - Subtitle
  * P - PCR
  */
-typedef enum { N, U, A, V, P, S } kind_t;
+typedef enum { U, N, A, V, P, S } kind_t;
 typedef struct {
     kind_t kind; /* not handled / unknown / audio / video */
     int codec;          /* HB worker object id of codec */
