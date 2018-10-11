@@ -112,6 +112,7 @@ struct hb_work_private_s
 {
     hb_job_t             * job;
     hb_title_t           * title;
+    AVCodec              * codec;
     AVCodecContext       * context;
     AVCodecParserContext * parser;
     AVFrame              * frame;
@@ -1349,9 +1350,8 @@ static void filter_video(hb_work_private_t *pv)
  * The output of this function is stored in 'pv->list', which contains a list
  * of zero or more decoded packets.
  */
-static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
+static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
 {
-    hb_work_private_t *pv = w->private_data;
     int got_picture = 0, oldlevel = 0, ret;
     AVPacket avp;
     reordered_data_t * reordered;
@@ -1449,9 +1449,283 @@ static int decodeFrame( hb_work_object_t *w, packet_info_t * packet_info )
     return got_picture;
 }
 
-static void decodeVideo( hb_work_object_t *w, hb_buffer_t * in)
+static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 {
-    hb_work_private_t *pv = w->private_data;
+
+    hb_work_private_t *pv = calloc( 1, sizeof( hb_work_private_t ) );
+
+    w->private_data = pv;
+    pv->job         = job;
+    pv->next_pts    = (int64_t)AV_NOPTS_VALUE;
+    if ( job )
+        pv->title = job->title;
+    else
+        pv->title = w->title;
+    if (pv->title->flags & HBTF_RAW_VIDEO)
+        pv->next_pts = 0;
+    hb_buffer_list_clear(&pv->list);
+
+#ifdef USE_QSV
+    if ((pv->qsv.decode = hb_qsv_decode_is_enabled(job)))
+    {
+        pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
+        pv->qsv.config.io_pattern = MFX_IOPATTERN_OUT_SYSTEM_MEMORY;
+#if 0 // TODO: re-implement QSV zerocopy path
+        hb_qsv_info_t *info = hb_qsv_info_get(job->vcodec);
+        if (info != NULL)
+        {
+            // setup the QSV configuration
+            pv->qsv.config.io_pattern         = MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
+            pv->qsv.config.impl_requested     = info->implementation;
+            pv->qsv.config.async_depth        = job->qsv.async_depth;
+            pv->qsv.config.sync_need          =  0;
+            pv->qsv.config.usage_threaded     =  1;
+            pv->qsv.config.additional_buffers = 64; // FIFO_LARGE
+            if (info->capabilities & HB_QSV_CAP_RATECONTROL_LA)
+            {
+                // more surfaces may be needed for the lookahead
+                pv->qsv.config.additional_buffers = 160;
+            }
+        }
+#endif // QSV zerocopy path
+    }
+#endif
+
+    if( pv->job && pv->job->title && !pv->job->title->has_resolution_change )
+    {
+        pv->threads = HB_FFMPEG_THREADS_AUTO;
+    }
+
+#ifdef USE_QSV
+    if (pv->qsv.decode)
+    {
+        pv->codec = avcodec_find_decoder_by_name(pv->qsv.codec_name);
+    }
+    else
+#endif
+    {
+        pv->codec = avcodec_find_decoder(w->codec_param);
+    }
+    if ( pv->codec == NULL )
+    {
+        hb_log( "decavcodecvInit: failed to find codec for id (%d)", w->codec_param );
+        return 1;
+    }
+
+    pv->context = avcodec_alloc_context3( pv->codec );
+    pv->context->workaround_bugs = FF_BUG_AUTODETECT;
+    pv->context->err_recognition = AV_EF_CRCCHECK;
+    pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
+
+    if ( pv->title->opaque_priv )
+    {
+        AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
+
+        avcodec_parameters_to_context(pv->context,
+                                  ic->streams[pv->title->video_id]->codecpar);
+
+#ifdef USE_QSV
+        if (pv->qsv.decode &&
+            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
+        {
+            // set the QSV configuration before opening the decoder
+            pv->context->hwaccel_context = &pv->qsv.config;
+        }
+#endif
+
+        // Set encoder opts...
+        AVDictionary * av_opts = NULL;
+        av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
+        if (pv->title->flags & HBTF_NO_IDR)
+        {
+            av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
+        }
+
+#ifdef USE_QSV
+        if (pv->qsv.decode && pv->context->codec_id == AV_CODEC_ID_HEVC)
+        {
+            av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );
+        }
+#endif
+
+        if ( hb_avcodec_open( pv->context, pv->codec, &av_opts, pv->threads ) )
+        {
+            av_dict_free( &av_opts );
+            hb_log( "decavcodecvInit: avcodec_open failed" );
+            return 1;
+        }
+        pv->context->pkt_timebase.num = pv->title->video_timebase.num;
+        pv->context->pkt_timebase.den = pv->title->video_timebase.den;
+        av_dict_free( &av_opts );
+
+        pv->video_codec_opened = 1;
+    }
+    else
+    {
+        pv->parser = av_parser_init( w->codec_param );
+    }
+
+    pv->frame = av_frame_alloc();
+    if (pv->frame == NULL)
+    {
+        hb_log("decavcodecvInit: av_frame_alloc failed");
+        return 1;
+    }
+
+    /*
+     * If not scanning, then are we supposed to extract Closed Captions
+     * and send them to the decoder?
+     */
+    if (job != NULL && hb_list_count(job->list_subtitle) > 0)
+    {
+        hb_subtitle_t *subtitle;
+        int i = 0;
+
+        while ((subtitle = hb_list_item(job->list_subtitle, i++)) != NULL)
+        {
+            if (subtitle->source == CC608SUB)
+            {
+                if (pv->list_subtitle == NULL)
+                {
+                    pv->list_subtitle = hb_list_init();
+                }
+                hb_list_add(pv->list_subtitle, subtitle);
+            }
+        }
+    }
+    return 0;
+}
+
+static int setup_extradata( hb_work_private_t * pv )
+{
+    // we can't call the avstream funcs but the read_header func in the
+    // AVInputFormat may set up some state in the AVContext. In particular
+    // vc1t_read_header allocates 'extradata' to deal with header issues
+    // related to Microsoft's bizarre engineering notions. We alloc a chunk
+    // of space to make vc1 work then associate the codec with the context.
+    if (pv->context->extradata == NULL)
+    {
+        if (pv->parser == NULL || pv->parser->parser == NULL ||
+            pv->parser->parser->split == NULL)
+        {
+            return 0;
+        }
+        else
+        {
+            int size;
+            size = pv->parser->parser->split(pv->context, pv->packet_info.data,
+                                             pv->packet_info.size);
+            if (size > 0)
+            {
+                pv->context->extradata_size = size;
+                pv->context->extradata =
+                                av_malloc(size + AV_INPUT_BUFFER_PADDING_SIZE);
+                if (pv->context->extradata == NULL)
+                    return 1;
+                memcpy(pv->context->extradata, pv->packet_info.data, size);
+                return 0;
+            }
+        }
+        return 1;
+    }
+
+    return 0;
+}
+
+static int decodePacket( hb_work_object_t * w )
+{
+    hb_work_private_t * pv     = w->private_data;
+
+    // if this is the first frame open the codec (we have to wait for the
+    // first frame because of M$ VC1 braindamage).
+    if ( !pv->video_codec_opened )
+    {
+        pv->context->workaround_bugs = FF_BUG_AUTODETECT;
+        pv->context->err_recognition = AV_EF_CRCCHECK;
+        pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
+
+        if (setup_extradata(pv))
+        {
+            // we didn't find the headers needed to set up extradata.
+            // the codec will abort if we open it so just free the buf
+            // and hope we eventually get the info we need.
+            return HB_WORK_OK;
+        }
+
+#ifdef USE_QSV
+        if (pv->qsv.decode &&
+            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
+        {
+            // set the QSV configuration before opening the decoder
+            pv->context->hwaccel_context = &pv->qsv.config;
+        }
+#endif
+
+        AVDictionary * av_opts = NULL;
+        av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
+        if (pv->title->flags & HBTF_NO_IDR)
+        {
+            av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
+        }
+
+        // disable threaded decoding for scan, can cause crashes
+        if ( hb_avcodec_open( pv->context, pv->codec, &av_opts, pv->threads ) )
+        {
+            av_dict_free( &av_opts );
+            hb_log( "decavcodecvWork: avcodec_open failed" );
+            // avcodec_open can fail due to incorrectly parsed extradata
+            // so try again when this fails
+            av_freep( &pv->context->extradata );
+            pv->context->extradata_size = 0;
+            return HB_WORK_OK;
+        }
+        pv->context->pkt_timebase.num = pv->title->video_timebase.num;
+        pv->context->pkt_timebase.den = pv->title->video_timebase.den;
+        av_dict_free( &av_opts );
+        pv->video_codec_opened = 1;
+    }
+
+    decodeFrame(pv, &pv->packet_info);
+
+    return HB_WORK_OK;
+}
+
+static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
+                            hb_buffer_t ** buf_out )
+{
+    hb_work_private_t * pv     = w->private_data;
+    hb_buffer_t       * in     = *buf_in;
+    int                 result = HB_WORK_OK;
+
+    *buf_out = NULL;
+
+    // libavcodec/mpeg12dec.c requires buffers to be zero padded.
+    // If not zero padded, it can get stuck in an infinite loop.
+    // It's likely there are other decoders that expect the same.
+    if (in->data != NULL)
+    {
+        memset(in->data + in->size, 0, in->alloc - in->size);
+    }
+    if (in->palette != NULL)
+    {
+        pv->palette = in->palette;
+        in->palette = NULL;
+    }
+
+    /* if we got an empty buffer signaling end-of-stream send it downstream */
+    if (in->s.flags & HB_BUF_FLAG_EOF)
+    {
+        if (pv->context != NULL && pv->context->codec != NULL)
+        {
+            while (decodeFrame(pv, NULL))
+            {
+                continue;
+            }
+        }
+        hb_buffer_list_append(&pv->list, in);
+        *buf_out = hb_buffer_list_clear(&pv->list);
+        return HB_WORK_DONE;
+    }
 
     /*
      * The following loop is a do..while because we need to handle both
@@ -1531,12 +1805,16 @@ static void decodeVideo( hb_work_object_t *w, hb_buffer_t * in)
             pv->packet_info.pts          = parser_pts;
             pv->packet_info.dts          = parser_dts;
 
-            decodeFrame(w, &pv->packet_info);
+            result = decodePacket(w);
+            if (result != HB_WORK_OK)
+            {
+                break;
+            }
             w->frame_count++;
 
-            // There could have been an unfinished packet when we entered
-            // decodeVideo that is now finished.  The next packet is associated
-            // with the input buffer, so set it's chapter and scr info.
+            // There could have been an unfinished packet that is now finished.
+            // The next packet is associated with the input buffer, so set
+            // it's chapter and scr info.
             pv->packet_info.scr_sequence = in->s.scr_sequence;
             pv->packet_info.new_chap     = in->s.new_chap;
             pv->packet_info.frametype    = in->s.frametype;
@@ -1544,332 +1822,14 @@ static void decodeVideo( hb_work_object_t *w, hb_buffer_t * in)
         }
         if (len > 0 && pout_len <= 0)
         {
-            pv->unfinished               = 1;
+            pv->unfinished = 1;
         }
     }
-
-    /* the stuff above flushed the parser, now flush the decoder */
-    if (in->s.flags & HB_BUF_FLAG_EOF)
-    {
-        while (decodeFrame(w, NULL))
-        {
-            continue;
-        }
-#ifdef USE_QSV
-        if (pv->qsv.decode &&
-            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
-        {
-            // flush a second time
-            while (decodeFrame(w, NULL))
-            {
-                continue;
-            }
-        }
-#endif
-        if (pv->list_subtitle != NULL)
-            cc_send_to_decoder(pv, hb_buffer_eof_init());
-    }
-}
-
-static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
-{
-
-    hb_work_private_t *pv = calloc( 1, sizeof( hb_work_private_t ) );
-
-    w->private_data = pv;
-    pv->job         = job;
-    pv->next_pts    = (int64_t)AV_NOPTS_VALUE;
-    if ( job )
-        pv->title = job->title;
-    else
-        pv->title = w->title;
-    if (pv->title->flags & HBTF_RAW_VIDEO)
-        pv->next_pts = 0;
-    hb_buffer_list_clear(&pv->list);
-
-#ifdef USE_QSV
-    if ((pv->qsv.decode = hb_qsv_decode_is_enabled(job)))
-    {
-        pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
-        pv->qsv.config.io_pattern = MFX_IOPATTERN_OUT_SYSTEM_MEMORY;
-#if 0 // TODO: re-implement QSV zerocopy path
-        hb_qsv_info_t *info = hb_qsv_info_get(job->vcodec);
-        if (info != NULL)
-        {
-            // setup the QSV configuration
-            pv->qsv.config.io_pattern         = MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
-            pv->qsv.config.impl_requested     = info->implementation;
-            pv->qsv.config.async_depth        = job->qsv.async_depth;
-            pv->qsv.config.sync_need          =  0;
-            pv->qsv.config.usage_threaded     =  1;
-            pv->qsv.config.additional_buffers = 64; // FIFO_LARGE
-            if (info->capabilities & HB_QSV_CAP_RATECONTROL_LA)
-            {
-                // more surfaces may be needed for the lookahead
-                pv->qsv.config.additional_buffers = 160;
-            }
-        }
-#endif // QSV zerocopy path
-    }
-#endif
-
-    if( pv->job && pv->job->title && !pv->job->title->has_resolution_change )
-    {
-        pv->threads = HB_FFMPEG_THREADS_AUTO;
-    }
-
-    AVCodec *codec = NULL;
-
-#ifdef USE_QSV
-    if (pv->qsv.decode)
-    {
-        codec = avcodec_find_decoder_by_name(pv->qsv.codec_name);
-    }
-    else
-#endif
-    {
-        codec = avcodec_find_decoder(w->codec_param);
-    }
-    if ( codec == NULL )
-    {
-        hb_log( "decavcodecvInit: failed to find codec for id (%d)", w->codec_param );
-        return 1;
-    }
-
-    if ( pv->title->opaque_priv )
-    {
-        AVFormatContext *ic = (AVFormatContext*)pv->title->opaque_priv;
-
-        pv->context = avcodec_alloc_context3(codec);
-        avcodec_parameters_to_context(pv->context,
-                                  ic->streams[pv->title->video_id]->codecpar);
-        pv->context->workaround_bugs = FF_BUG_AUTODETECT;
-        pv->context->err_recognition = AV_EF_CRCCHECK;
-        pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
-
-#ifdef USE_QSV
-        if (pv->qsv.decode &&
-            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
-        {
-            // set the QSV configuration before opening the decoder
-            pv->context->hwaccel_context = &pv->qsv.config;
-        }
-#endif
-
-        // Set encoder opts...
-        AVDictionary * av_opts = NULL;
-        av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
-        if (pv->title->flags & HBTF_NO_IDR)
-        {
-            av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
-        }
-
-#ifdef USE_QSV
-        if (pv->qsv.decode && pv->context->codec_id == AV_CODEC_ID_HEVC)
-        {
-            av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );
-        }
-#endif
-
-        if ( hb_avcodec_open( pv->context, codec, &av_opts, pv->threads ) )
-        {
-            av_dict_free( &av_opts );
-            hb_log( "decavcodecvInit: avcodec_open failed" );
-            return 1;
-        }
-        pv->context->pkt_timebase.num = pv->title->video_timebase.num;
-        pv->context->pkt_timebase.den = pv->title->video_timebase.den;
-        av_dict_free( &av_opts );
-
-        pv->video_codec_opened = 1;
-    }
-    else
-    {
-        pv->parser = av_parser_init( w->codec_param );
-    }
-
-    pv->frame = av_frame_alloc();
-    if (pv->frame == NULL)
-    {
-        hb_log("decavcodecvInit: av_frame_alloc failed");
-        return 1;
-    }
-
-    /*
-     * If not scanning, then are we supposed to extract Closed Captions
-     * and send them to the decoder?
-     */
-    if (job != NULL && hb_list_count(job->list_subtitle) > 0)
-    {
-        hb_subtitle_t *subtitle;
-        int i = 0;
-
-        while ((subtitle = hb_list_item(job->list_subtitle, i++)) != NULL)
-        {
-            if (subtitle->source == CC608SUB)
-            {
-                if (pv->list_subtitle == NULL)
-                {
-                    pv->list_subtitle = hb_list_init();
-                }
-                hb_list_add(pv->list_subtitle, subtitle);
-            }
-        }
-    }
-    return 0;
-}
-
-static int setup_extradata( hb_work_object_t *w, hb_buffer_t *in )
-{
-    hb_work_private_t *pv = w->private_data;
-
-    // we can't call the avstream funcs but the read_header func in the
-    // AVInputFormat may set up some state in the AVContext. In particular
-    // vc1t_read_header allocates 'extradata' to deal with header issues
-    // related to Microsoft's bizarre engineering notions. We alloc a chunk
-    // of space to make vc1 work then associate the codec with the context.
-    if (pv->context->extradata == NULL)
-    {
-        if (pv->parser == NULL || pv->parser->parser == NULL ||
-            pv->parser->parser->split == NULL)
-        {
-            return 0;
-        }
-        else
-        {
-            int size;
-            size = pv->parser->parser->split(pv->context, in->data, in->size);
-            if (size > 0)
-            {
-                pv->context->extradata_size = size;
-                pv->context->extradata =
-                                av_malloc(size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (pv->context->extradata == NULL)
-                    return 1;
-                memcpy(pv->context->extradata, in->data, size);
-                return 0;
-            }
-        }
-        return 1;
-    }
-
-    return 0;
-}
-
-static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
-                            hb_buffer_t ** buf_out )
-{
-    hb_work_private_t *pv = w->private_data;
-    hb_buffer_t *in = *buf_in;
-
-    *buf_in = NULL;
-    *buf_out = NULL;
-
-    // libavcodec/mpeg12dec.c requires buffers to be zero padded.
-    // If not zero padded, it can get stuck in an infinite loop.
-    // It's likely there are other decoders that expect the same.
-    if (in->data != NULL)
-    {
-        memset(in->data + in->size, 0, in->alloc - in->size);
-    }
-
-    /* if we got an empty buffer signaling end-of-stream send it downstream */
-    if (in->s.flags & HB_BUF_FLAG_EOF)
-    {
-        if (pv->context != NULL && pv->context->codec != NULL)
-        {
-            decodeVideo(w, in);
-        }
-        hb_buffer_list_append(&pv->list, in);
-        *buf_out = hb_buffer_list_clear(&pv->list);
-        return HB_WORK_DONE;
-    }
-
-    // if this is the first frame open the codec (we have to wait for the
-    // first frame because of M$ VC1 braindamage).
-    if ( !pv->video_codec_opened )
-    {
-
-        AVCodec *codec = NULL;
-#ifdef USE_QSV
-        if (pv->qsv.decode)
-        {
-            codec = avcodec_find_decoder_by_name(pv->qsv.codec_name);
-        }
-        else
-#endif
-        {
-            codec = avcodec_find_decoder(w->codec_param);
-        }
-
-        if ( codec == NULL )
-        {
-            hb_log( "decavcodecvWork: failed to find codec for id (%d)", w->codec_param );
-            *buf_out = hb_buffer_eof_init();
-            return HB_WORK_DONE;
-        }
-
-        if (pv->context == NULL)
-        {
-            pv->context = avcodec_alloc_context3( codec );
-        }
-        pv->context->workaround_bugs = FF_BUG_AUTODETECT;
-        pv->context->err_recognition = AV_EF_CRCCHECK;
-        pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
-
-        if ( setup_extradata( w, in ) )
-        {
-            // we didn't find the headers needed to set up extradata.
-            // the codec will abort if we open it so just free the buf
-            // and hope we eventually get the info we need.
-            hb_buffer_close( &in );
-            return HB_WORK_OK;
-        }
-
-#ifdef USE_QSV
-        if (pv->qsv.decode &&
-            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
-        {
-            // set the QSV configuration before opening the decoder
-            pv->context->hwaccel_context = &pv->qsv.config;
-        }
-#endif
-
-        AVDictionary * av_opts = NULL;
-        av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
-        if (pv->title->flags & HBTF_NO_IDR)
-        {
-            av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
-        }
-
-        // disable threaded decoding for scan, can cause crashes
-        if ( hb_avcodec_open( pv->context, codec, &av_opts, pv->threads ) )
-        {
-            av_dict_free( &av_opts );
-            hb_log( "decavcodecvWork: avcodec_open failed" );
-            // avcodec_open can fail due to incorrectly parsed extradata
-            // so try again when this fails
-            av_freep( &pv->context->extradata );
-            pv->context->extradata_size = 0;
-            hb_buffer_close( &in );
-            return HB_WORK_OK;
-        }
-        pv->context->pkt_timebase.num = pv->title->video_timebase.num;
-        pv->context->pkt_timebase.den = pv->title->video_timebase.den;
-        av_dict_free( &av_opts );
-        pv->video_codec_opened = 1;
-    }
-
-    if (in->palette != NULL)
-    {
-        pv->palette = in->palette;
-        in->palette = NULL;
-    }
-    decodeVideo(w, in);
-    hb_buffer_close( &in );
     *buf_out = hb_buffer_list_clear(&pv->list);
-    return HB_WORK_OK;
+
+    return result;
 }
+
 
 static void compute_frame_duration( hb_work_private_t *pv )
 {
@@ -2138,6 +2098,7 @@ static void decavcodecvFlush( hb_work_object_t *w )
                 av_parser_close(pv->parser);
             }
             pv->parser = av_parser_init( w->codec_param );
+            pv->context = avcodec_alloc_context3( pv->codec );
         }
         else
         {
