@@ -34,7 +34,7 @@
                   CanUserAddRows="False" CanUserDeleteRows="False" HeadersVisibility="Column"
                   HorizontalGridLinesBrush="#FFABADB3" VerticalGridLinesBrush="#FFABADB3">
             <DataGrid.CellStyle>
-                <Style TargetType="DataGridCell">
+                <Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
                     <Setter Property="MinHeight" Value="22" />
                 </Style>
             </DataGrid.CellStyle>

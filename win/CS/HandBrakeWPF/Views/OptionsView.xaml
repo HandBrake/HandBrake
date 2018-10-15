@@ -5,30 +5,30 @@
               xmlns:Properties="clr-namespace:HandBrakeWPF.Properties">
 
     <UserControl.Resources>
-        <Style TargetType="Button">
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Padding" Value="8,2" />
             <Setter Property="FontSize" Value="11.5" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="MinHeight" Value="22" />
         </Style>
 
-        <Style TargetType="TextBlock">
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
             <Setter Property="Margin" Value="0,0,5,0" />
         </Style>
 
-        <Style TargetType="TextBox">
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
             <Setter Property="Padding" Value="5,2" />
             <Setter Property="MinHeight" Value="22" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="ToolTipService.ShowDuration" Value="20000" />
         </Style>
 
-        <Style TargetType="CheckBox">
+        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
             <Setter Property="Margin" Value="0,2,0,2" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
-        <Style TargetType="ListBoxItem">
+        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
             <Setter Property="Padding" Value="8,4" />
         </Style>
 

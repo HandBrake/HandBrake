@@ -76,14 +76,14 @@
             </ListBox.ContextMenu>
 
             <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
+                <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="0,0,0,1" />
                     <Setter Property="ToolTip">
                         <Setter.Value>
                             <Grid MaxWidth="650" Margin="0,5,0,5" Style="{StaticResource LongToolTipHolder}">
                                 <Grid.Resources>
-                                    <Style TargetType="TextBlock">
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                         <Setter Property="Margin" Value="0,5,0,5" />
                                     </Style>
                                 </Grid.Resources>
@@ -149,7 +149,7 @@
                                Height="16"
                                Margin="10,0,10,0">
                             <Image.Style>
-                                <Style TargetType="{x:Type Image}">
+                                <Style TargetType="{x:Type Image}" BasedOn="{StaticResource {x:Type Image}}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
                                             <Setter Property="Source" Value="..\Images\Movies.png" />

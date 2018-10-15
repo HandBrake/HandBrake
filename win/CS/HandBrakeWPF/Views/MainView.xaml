@@ -23,7 +23,7 @@
         <Converters:LongToIntConverter x:Key="longToIntConverter" />
         <queue:InlineQueueConverter x:Key="InlineQueueConverter" />
 
-        <Style TargetType="Button">
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Padding" Value="8,2" />
             <Setter Property="VerticalAlignment" Value="Center" />
             <Setter Property="MinHeight" Value="22" />
@@ -31,16 +31,16 @@
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
 
-        <Style x:Key="textBlockOrangeStyle" TargetType="TextBlock">
+        <Style x:Key="textBlockOrangeStyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Padding" Value="5,5" />
         </Style>
 
-        <Style TargetType="ToolTip">
+        <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
             <Style.Resources>
-                <Style TargetType="ContentPresenter">
+                <Style TargetType="ContentPresenter" BasedOn="{StaticResource {x:Type ContentPresenter}}">
                     <Style.Resources>
-                        <Style TargetType="TextBlock">
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                             <Setter Property="TextWrapping" Value="Wrap" />
                         </Style>
                     </Style.Resources>
@@ -68,7 +68,7 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Top">
                 <Menu.Resources>
-                    <Style TargetType="MenuItem">
+                    <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
                         <Setter Property="Height" Value="23" />
                     </Style>
                 </Menu.Resources>
@@ -337,7 +337,7 @@
                               SelectedItem="{Binding Path=SelectedTitle}" >
 
                         <ComboBox.Style>
-                            <Style TargetType="{x:Type ComboBox}">
+                            <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding Path=IsDropDownOpen, ElementName=Titles}" Value="True">
                                         <Setter Property="DisplayMemberPath" Value="ItemDisplayText" />
@@ -580,7 +580,7 @@
                         <HierarchicalDataTemplate DataType="{x:Type loc:Preset}">
                             <StackPanel Orientation="Horizontal" >
                                 <StackPanel.Resources>
-                                    <Style TargetType="TextBlock">
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsDefault}" Value="True" >
                                                 <Setter Property="FontStyle" Value="Italic" />

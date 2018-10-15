@@ -148,7 +148,7 @@
                 </ListBox.ContextMenu>
 
                 <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                         <Setter Property="Margin" Value="0,0,0,1" />
                     </Style>
@@ -172,7 +172,7 @@
                                 </Image.LayoutTransform>
 
                                 <Image.Style>
-                                    <Style TargetType="{x:Type Image}">
+                                    <Style TargetType="{x:Type Image}" BasedOn="{StaticResource {x:Type Image}}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
                                                 <Setter Property="Source" Value="..\Images\Movies.png" />
@@ -254,7 +254,7 @@
                             <StackPanel Orientation="Horizontal" >
 
                                 <StackPanel.Resources>
-                                    <Style TargetType="Button">
+                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                                         <Setter Property="Padding" Value="8,2" />
                                     </Style>
                                 </StackPanel.Resources>
@@ -317,7 +317,7 @@
 
                             <Grid Style="{StaticResource LongToolTipHolder}" Margin="0,5,0,0" >
                                 <Grid.Resources>
-                                    <Style TargetType="TextBlock">
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                         <Setter Property="Margin" Value="0,5,0,5" />
                                     </Style>
                                 </Grid.Resources>
@@ -372,7 +372,7 @@
 
                             <Grid Style="{StaticResource LongToolTipHolder}" Margin="0,5,0,0" Visibility="{Binding StatsVisible, Converter={StaticResource boolToVisConverter}}">
                                 <Grid.Resources>
-                                    <Style TargetType="TextBlock">
+                                    <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                         <Setter Property="Margin" Value="0,5,0,5" />
                                     </Style>
                                 </Grid.Resources>

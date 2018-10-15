@@ -5,31 +5,31 @@
         <Setter Property="ToolTipService.ShowDuration" Value="20000" />
     </Style>
 
-    <Style TargetType="{x:Type ComboBox}">
+    <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
         <Setter Property="MinHeight" Value="22"/>
         <Setter Property="Margin" Value="0,2,0,2" />
     </Style>
 
-    <Style TargetType="{x:Type TextBlock}">
+    <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
-    
-    <Style TargetType="{x:Type TextBox}">
+
+    <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="MinHeight" Value="20"/>
     </Style>
 
-    <Style TargetType="{x:Type Button}">
+    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="MinHeight" Value="22"/>
     </Style>
 
-    <Style TargetType="{x:Type RadioButton}">
+    <Style TargetType="{x:Type RadioButton}" BasedOn="{StaticResource {x:Type RadioButton}}">
         <Setter Property="Margin" Value="0,0,0,8" />
     </Style>
 
     <SolidColorBrush x:Key="GlyphBrush" Color="#444"/>
 
-    <Style x:Key="DropButtonStyle" TargetType="ToggleButton" >
+    <Style x:Key="DropButtonStyle" TargetType="ToggleButton"  BasedOn="{StaticResource {x:Type ToggleButton}}">
         <Setter Property="Padding" Value="2,2" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
@@ -52,7 +52,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="hoverlessListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
+    <Style x:Key="hoverlessListBoxItemStyle" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
@@ -90,7 +90,7 @@
 
     <!-- Fixes HorizontalContentAlignment and VerticalContentAlignment binding errors that you get when you setup MenuItems by binding their ItemSource property -->
     <!-- https://social.msdn.microsoft.com/Forums/vstudio/en-US/42cd1554-de7a-473b-b977-ddbd6298b3d0/binding-error-when-using-compositecollection-for-menuitems?forum=wpf -->
-    <Style TargetType="MenuItem">
+    <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>

@@ -111,7 +111,7 @@
                  SelectionMode="Extended">
 
             <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
+                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="Margin" Value="0,0,0,1" />
                 </Style>
@@ -216,7 +216,7 @@
                             <ToggleButton Name="advancedOptionsToggle" VerticalAlignment="Center" Grid.Column="8" Grid.Row="0" Grid.ColumnSpan="2" Margin="5,0,0,0"
                                            Padding="3,0" Height="22" HorizontalAlignment="Left" >
                                 <ToggleButton.Style>
-                                    <Style TargetType="{x:Type ToggleButton}">
+                                    <Style TargetType="{x:Type ToggleButton}" BasedOn="{StaticResource {x:Type ToggleButton}}">
                                         <Setter Property="Content" Value="Show"/>
                                         <Setter Property="FontWeight" Value="Bold" />
                                         <Style.Triggers>
