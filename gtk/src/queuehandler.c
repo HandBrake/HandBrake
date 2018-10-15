@@ -1028,6 +1028,8 @@ queue_reload_clicked_cb(GtkWidget *widget, signal_user_data_t *ud)
         if (row < 0) return;
         if (row >= ghb_array_len(ud->queue)) return;
         ghb_update_status(ud, GHB_QUEUE_PENDING, row);
+        ghb_save_queue(ud->queue);
+        ghb_update_pending(ud);
     }
 }
 
