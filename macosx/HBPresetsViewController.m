@@ -79,6 +79,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
         _selectedPresetInternal = presetManager.defaultPreset;
         _expandedNodes = [[NSArray arrayWithArray:[[NSUserDefaults standardUserDefaults]
                                                    objectForKey:@"HBPreviewViewExpandedStatus"]] mutableCopy];
+        _showHeader = YES;
     }
     return self;
 }

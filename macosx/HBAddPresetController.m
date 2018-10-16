@@ -258,3 +258,51 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 }
 
 @end
+
+@interface HBAddPresetController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
+@end
+
+@implementation HBAddPresetController (TouchBar)
+
+@dynamic touchBar;
+
+static NSTouchBarItemIdentifier HBTouchBarGroup = @"fr.handbrake.buttonsGroup";
+static NSTouchBarItemIdentifier HBTouchBarAdd = @"fr.handbrake.openSource";
+static NSTouchBarItemIdentifier HBTouchBarCancel = @"fr.handbrake.addToQueue";
+
+- (NSTouchBar *)makeTouchBar
+{
+    NSTouchBar *bar = [[NSTouchBar alloc] init];
+    bar.delegate = self;
+
+    bar.defaultItemIdentifiers = @[HBTouchBarGroup, NSTouchBarItemIdentifierOtherItemsProxy];
+    bar.principalItemIdentifier = HBTouchBarGroup;
+
+    return bar;
+}
+
+- (NSTouchBarItem *)touchBar:(NSTouchBar *)touchBar makeItemForIdentifier:(NSTouchBarItemIdentifier)identifier
+{
+    if ([identifier isEqualTo:HBTouchBarGroup])
+    {
+        NSCustomTouchBarItem *cancelItem = [[NSCustomTouchBarItem alloc] initWithIdentifier:HBTouchBarAdd];
+        cancelItem.customizationLabel = NSLocalizedString(@"Cancel", @"Touch bar");
+        NSButton *cancelButton = [NSButton buttonWithTitle:NSLocalizedString(@"Cancel", @"Touch bar") target:self action:@selector(cancel:)];
+        [cancelButton.widthAnchor constraintGreaterThanOrEqualToConstant:200].active = YES;
+        cancelItem.view = cancelButton;
+
+        NSCustomTouchBarItem *addItem = [[NSCustomTouchBarItem alloc] initWithIdentifier:HBTouchBarCancel];
+        addItem.customizationLabel = NSLocalizedString(@"Add Preset", @"Touch bar");
+        NSButton *addButton = [NSButton buttonWithTitle:NSLocalizedString(@"Add Preset", @"Touch bar") target:self action:@selector(add:)];
+        [addButton.widthAnchor constraintGreaterThanOrEqualToConstant:200].active = YES;
+        addButton.keyEquivalent = @"\r";
+        addItem.view = addButton;
+
+        NSGroupTouchBarItem *item = [NSGroupTouchBarItem groupItemWithIdentifier:identifier items:@[cancelItem, addItem]];
+        return item;
+    }
+
+    return nil;
+}
+
+@end

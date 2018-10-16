@@ -49,6 +49,13 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  * HBCore is an Objective-C interface to the low-level HandBrake library.
  * HBCore monitors state changes of libhb. It can also be used
  * to implement properties that can be directly bound to elements of the gui.
+ *
+ * Instance methods must be called on the same queue as the queue
+ * passed to initWithLogLevel:queue:
+ * Convenience inits use the main queue by default.
+ *
+ * copyImageAtIndex: can be called on a different queue,
+ * but the caller must ensure the validity of the title.
  */
 @interface HBCore : NSObject
 

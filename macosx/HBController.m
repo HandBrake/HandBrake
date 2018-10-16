@@ -226,8 +226,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     fPresetsView = [[HBPresetsViewController alloc] initWithPresetManager:presetManager];
     fPresetsView.delegate = self;
 
-    fPresetsView.showHeader = YES;
-
     // Set up the presets popover
     self.presetsPopover = [[NSPopover alloc] init];
 
@@ -1544,6 +1542,7 @@ static NSTouchBarItemIdentifier HBTouchBarMain = @"fr.handbrake.mainWindowTouchB
 
 static NSTouchBarItemIdentifier HBTouchBarOpen = @"fr.handbrake.openSource";
 static NSTouchBarItemIdentifier HBTouchBarAddToQueue = @"fr.handbrake.addToQueue";
+static NSTouchBarItemIdentifier HBTouchBarAddTitlesToQueue = @"fr.handbrake.addTitlesToQueue";
 static NSTouchBarItemIdentifier HBTouchBarRip = @"fr.handbrake.rip";
 static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
 static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
@@ -1553,10 +1552,10 @@ static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
     NSTouchBar *bar = [[NSTouchBar alloc] init];
     bar.delegate = self;
 
-    bar.defaultItemIdentifiers = @[HBTouchBarOpen, NSTouchBarItemIdentifierFixedSpaceSmall, HBTouchBarAddToQueue, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarRip, HBTouchBarPause, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarPreview];
+    bar.defaultItemIdentifiers = @[HBTouchBarOpen, NSTouchBarItemIdentifierFixedSpaceSmall, HBTouchBarAddToQueue, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarRip, HBTouchBarPause, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarPreview, NSTouchBarItemIdentifierOtherItemsProxy];
 
     bar.customizationIdentifier = HBTouchBarMain;
-    bar.customizationAllowedItemIdentifiers = @[HBTouchBarOpen, HBTouchBarAddToQueue, HBTouchBarRip, HBTouchBarPause, HBTouchBarPreview, NSTouchBarItemIdentifierFixedSpaceSmall, NSTouchBarItemIdentifierFixedSpaceLarge, NSTouchBarItemIdentifierFlexibleSpace];
+    bar.customizationAllowedItemIdentifiers = @[HBTouchBarOpen, HBTouchBarAddToQueue, HBTouchBarAddTitlesToQueue, HBTouchBarRip, HBTouchBarPause, HBTouchBarPreview, NSTouchBarItemIdentifierFixedSpaceSmall, NSTouchBarItemIdentifierFixedSpaceLarge, NSTouchBarItemIdentifierFlexibleSpace];
 
     return bar;
 }
@@ -1579,6 +1578,16 @@ static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
         item.customizationLabel = NSLocalizedString(@"Add To Queue", @"Touch bar");
 
         NSButton *button = [NSButton buttonWithTitle:NSLocalizedString(@"Add To Queue", @"Touch bar") target:self action:@selector(addToQueue:)];
+
+        item.view = button;
+        return item;
+    }
+    else if ([identifier isEqualTo:HBTouchBarAddTitlesToQueue])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Add Titles To Queue", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithTitle:NSLocalizedString(@"Add Titles To Queue", @"Touch bar") target:self action:@selector(addTitlesToQueue:)];
 
         item.view = button;
         return item;

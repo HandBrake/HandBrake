@@ -18,6 +18,7 @@
 @property (nonatomic, readonly) NSCache<NSNumber *, id> *smallPreviewsCache;
 
 @property (nonatomic, readonly) dispatch_semaphore_t sem;
+@property (nonatomic, readonly) _Atomic bool invalidated;
 
 @property (nonatomic, strong) HBCore *core;
 
@@ -59,6 +60,8 @@
 
 - (void)dealloc
 {
+    _invalidated = true;
+
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [[NSRunLoop mainRunLoop] cancelPerformSelectorsWithTarget:self];
     [self.core cancelEncode];
@@ -154,7 +157,8 @@
 - (void)copySmallImageAtIndex:(NSUInteger)index completionHandler:(void (^)(__nullable CGImageRef result))handler
 {
     dispatch_semaphore_wait(_sem, DISPATCH_TIME_FOREVER);
-    if (index >= self.imagesCount)
+
+    if (_invalidated || index >= self.imagesCount)
     {
         handler(NULL);
         dispatch_semaphore_signal(_sem);
