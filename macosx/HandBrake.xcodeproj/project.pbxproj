@@ -1392,6 +1392,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 273F200714ADAE950021BE6D /* Build configuration list for PBXNativeTarget "HandBrakeCLI" */;
 			buildPhases = (
+				A9E356C72178B78A00E8E61B /* ShellScript */,
 				273F1FFB14ADAE950021BE6D /* Sources */,
 				273F1FFC14ADAE950021BE6D /* Frameworks */,
 				273F1FFD14ADAE950021BE6D /* CopyFiles */,
@@ -1429,6 +1430,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A9736F1D1C7DA5FE008F1D18 /* Build configuration list for PBXNativeTarget "HandBrakeKit" */;
 			buildPhases = (
+				A9E356C62178B68300E8E61B /* ShellScript */,
 				A9736EFD1C7DA5FE008F1D18 /* Sources */,
 				A9736EFE1C7DA5FE008F1D18 /* Frameworks */,
 				A9736EFF1C7DA5FE008F1D18 /* Headers */,
@@ -1579,6 +1581,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A9E356C62178B68300E8E61B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"\"$(EXTERNAL_BUILD)/libhb/hb_dict.h\"",
+				"\"$(EXTERNAL_BUILD)/libhb/hb.h\"",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+			showEnvVarsInLog = 0;
+		};
+		A9E356C72178B78A00E8E61B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"\"$(EXTERNAL_BUILD)/libhb/hb.h\"",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		273F1FFB14ADAE950021BE6D /* Sources */ = {
@@ -2128,7 +2172,6 @@
 		273F200814ADAE950021BE6D /* debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BOOL_CONVERSION = NO;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
@@ -2154,7 +2197,6 @@
 		273F200914ADAE950021BE6D /* release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BOOL_CONVERSION = NO;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
@@ -2551,7 +2593,6 @@
 		A9A5CD9B1E32072F00947914 /* debug-sandbox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BOOL_CONVERSION = NO;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
@@ -2798,7 +2839,6 @@
 		A9A5CDA11E32073800947914 /* release-sandbox */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = NO;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BOOL_CONVERSION = NO;
 				CLANG_WARN_CONSTANT_CONVERSION = NO;
