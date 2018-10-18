@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) NSString *album;
 @property (nonatomic, readonly, nullable) NSString *albumArtist;
 @property (nonatomic, readonly, nullable) NSString *genre;
-@property (nonatomic, readonly, nullable) NSString *description;
+@property (nonatomic, readonly, nullable) NSString *shortDescription;
 @property (nonatomic, readonly, nullable) NSString *longDescription;
 
 @end
