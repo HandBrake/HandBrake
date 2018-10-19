@@ -273,7 +273,7 @@
                                 </Image.LayoutTransform>
 
                                 <Image.Style>
-                                    <Style TargetType="{x:Type Image}" BasedOn="{StaticResource {x:Type Image}}">
+                                    <Style TargetType="{x:Type Image}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
                                                 <Setter Property="Source" Value="Images\Movies.png" />

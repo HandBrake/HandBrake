@@ -38,7 +38,7 @@
 
         <Style TargetType="ToolTip" BasedOn="{StaticResource {x:Type ToolTip}}">
             <Style.Resources>
-                <Style TargetType="ContentPresenter" BasedOn="{StaticResource {x:Type ContentPresenter}}">
+                <Style TargetType="ContentPresenter">
                     <Style.Resources>
                         <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                             <Setter Property="TextWrapping" Value="Wrap" />
