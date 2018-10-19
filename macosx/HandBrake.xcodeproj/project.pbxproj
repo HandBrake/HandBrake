@@ -6,6 +6,21 @@
 	objectVersion = 47;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		A96A4F7C217A4C2B00755E35 /* FakeTarget */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A96A4F81217A4C2B00755E35 /* Build configuration list for PBXAggregateTarget "FakeTarget" */;
+			buildPhases = (
+				A96A4F82217A4C3400755E35 /* ShellScript */,
+			);
+			dependencies = (
+				A96A4F8A217A4D1F00755E35 /* PBXTargetDependency */,
+			);
+			name = FakeTarget;
+			productName = FakeTarget;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		1C0695AC20BD193D001543DA /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C0695AA20BD193D001543DA /* libpostproc.a */; };
 		1C0695AD20BD193D001543DA /* libpostproc.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C0695AA20BD193D001543DA /* libpostproc.a */; };
@@ -258,20 +273,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		273F217614ADD2580021BE6D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 273F216E14ADD2170021BE6D;
-			remoteInfo = external;
-		};
-		A91CE2AE1C7DA74D0068F46F /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 273F216E14ADD2170021BE6D;
-			remoteInfo = external;
-		};
 		A91CE2EE1C7DB40D0068F46F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
@@ -285,6 +286,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 273F203814ADBC200021BE6D;
 			remoteInfo = HandBrake;
+		};
+		A96A4F85217A4C8900755E35 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A96A4F7C217A4C2B00755E35;
+			remoteInfo = FakeTarget;
+		};
+		A96A4F87217A4C8F00755E35 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A96A4F7C217A4C2B00755E35;
+			remoteInfo = FakeTarget;
+		};
+		A96A4F89217A4D1F00755E35 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 273F1FE014AD9DA40021BE6D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 273F216E14ADD2170021BE6D;
+			remoteInfo = external;
 		};
 		A9736F0D1C7DA5FE008F1D18 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -1392,7 +1414,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 273F200714ADAE950021BE6D /* Build configuration list for PBXNativeTarget "HandBrakeCLI" */;
 			buildPhases = (
-				A9E356C72178B78A00E8E61B /* ShellScript */,
 				273F1FFB14ADAE950021BE6D /* Sources */,
 				273F1FFC14ADAE950021BE6D /* Frameworks */,
 				273F1FFD14ADAE950021BE6D /* CopyFiles */,
@@ -1400,7 +1421,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				273F217714ADD2580021BE6D /* PBXTargetDependency */,
+				A96A4F86217A4C8900755E35 /* PBXTargetDependency */,
 			);
 			name = HandBrakeCLI;
 			productName = HandBrakeCLI;
@@ -1430,7 +1451,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A9736F1D1C7DA5FE008F1D18 /* Build configuration list for PBXNativeTarget "HandBrakeKit" */;
 			buildPhases = (
-				A9E356C62178B68300E8E61B /* ShellScript */,
 				A9736EFD1C7DA5FE008F1D18 /* Sources */,
 				A9736EFE1C7DA5FE008F1D18 /* Frameworks */,
 				A9736EFF1C7DA5FE008F1D18 /* Headers */,
@@ -1439,7 +1459,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				A91CE2AF1C7DA74D0068F46F /* PBXTargetDependency */,
+				A96A4F88217A4C8F00755E35 /* PBXTargetDependency */,
 			);
 			name = HandBrakeKit;
 			productName = HandBrakeKit;
@@ -1471,7 +1491,7 @@
 		273F1FE014AD9DA40021BE6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1000;
+				LastUpgradeCheck = 1010;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
 						SystemCapabilities = {
@@ -1485,6 +1505,10 @@
 								enabled = 0;
 							};
 						};
+					};
+					A96A4F7C217A4C2B00755E35 = {
+						CreatedOnToolsVersion = 10.1;
+						ProvisioningStyle = Automatic;
 					};
 					A9736F011C7DA5FE008F1D18 = {
 						CreatedOnToolsVersion = 7.3;
@@ -1511,6 +1535,7 @@
 			projectRoot = "";
 			targets = (
 				273F216E14ADD2170021BE6D /* external */,
+				A96A4F7C217A4C2B00755E35 /* FakeTarget */,
 				273F1FFE14ADAE950021BE6D /* HandBrakeCLI */,
 				A9736F011C7DA5FE008F1D18 /* HandBrakeKit */,
 				A9736F0A1C7DA5FE008F1D18 /* HandBrakeKitTests */,
@@ -1583,7 +1608,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A9E356C62178B68300E8E61B /* ShellScript */ = {
+		A96A4F82217A4C3400755E35 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -1596,25 +1621,6 @@
 			);
 			outputPaths = (
 				"\"$(EXTERNAL_BUILD)/libhb/hb_dict.h\"",
-				"\"$(EXTERNAL_BUILD)/libhb/hb.h\"",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n";
-			showEnvVarsInLog = 0;
-		};
-		A9E356C72178B78A00E8E61B /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
 				"\"$(EXTERNAL_BUILD)/libhb/hb.h\"",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1748,16 +1754,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		273F217714ADD2580021BE6D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 273F216E14ADD2170021BE6D /* external */;
-			targetProxy = 273F217614ADD2580021BE6D /* PBXContainerItemProxy */;
-		};
-		A91CE2AF1C7DA74D0068F46F /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 273F216E14ADD2170021BE6D /* external */;
-			targetProxy = A91CE2AE1C7DA74D0068F46F /* PBXContainerItemProxy */;
-		};
 		A91CE2EF1C7DB40D0068F46F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A9736F011C7DA5FE008F1D18 /* HandBrakeKit */;
@@ -1767,6 +1763,21 @@
 			isa = PBXTargetDependency;
 			target = 273F203814ADBC200021BE6D /* HandBrake */;
 			targetProxy = A91CE2FF1C7DBA2C0068F46F /* PBXContainerItemProxy */;
+		};
+		A96A4F86217A4C8900755E35 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A96A4F7C217A4C2B00755E35 /* FakeTarget */;
+			targetProxy = A96A4F85217A4C8900755E35 /* PBXContainerItemProxy */;
+		};
+		A96A4F88217A4C8F00755E35 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A96A4F7C217A4C2B00755E35 /* FakeTarget */;
+			targetProxy = A96A4F87217A4C8F00755E35 /* PBXContainerItemProxy */;
+		};
+		A96A4F8A217A4D1F00755E35 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 273F216E14ADD2170021BE6D /* external */;
+			targetProxy = A96A4F89217A4D1F00755E35 /* PBXContainerItemProxy */;
 		};
 		A9736F0E1C7DA5FE008F1D18 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -2294,6 +2305,42 @@
 				PRODUCT_NAME = external;
 			};
 			name = release;
+		};
+		A96A4F7D217A4C2B00755E35 /* debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = debug;
+		};
+		A96A4F7E217A4C2B00755E35 /* debug-sandbox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "debug-sandbox";
+		};
+		A96A4F7F217A4C2B00755E35 /* release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = release;
+		};
+		A96A4F80217A4C2B00755E35 /* release-sandbox */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_STYLE = Automatic;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = "release-sandbox";
 		};
 		A9736F191C7DA5FE008F1D18 /* debug */ = {
 			isa = XCBuildConfiguration;
@@ -3036,6 +3083,17 @@
 				A9A5CD9A1E32072F00947914 /* debug-sandbox */,
 				273F217314ADD2170021BE6D /* release */,
 				A9A5CDA01E32073800947914 /* release-sandbox */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = release;
+		};
+		A96A4F81217A4C2B00755E35 /* Build configuration list for PBXAggregateTarget "FakeTarget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A96A4F7D217A4C2B00755E35 /* debug */,
+				A96A4F7E217A4C2B00755E35 /* debug-sandbox */,
+				A96A4F7F217A4C2B00755E35 /* release */,
+				A96A4F80217A4C2B00755E35 /* release-sandbox */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = release;
