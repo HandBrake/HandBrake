@@ -1,6 +1,12 @@
 /* Preview -> size info label */
 " Scaled To Screen" = "An Bildschirm anpassen";
 
+/* No comment provided by engineer. */
+"- --:--" = "- --:--";
+
+/* No comment provided by engineer. */
+"--:--" = "--:--";
+
 /* Preview -> size info label */
 "(%.0f%% actual size)" = "(%.0f%% aktuelle Größe)";
 
@@ -32,6 +38,9 @@
 /* Queue undo action name */
 "Add Jobs To Queue" = "Aufgaben zu Warteschlange hinzufügen";
 
+/* Touch bar */
+"Add To Queue" = "Zur Warteschlange hinzufügen";
+
 /* Preferences Advanced Toolbar Item */
 "Advanced" = "Erweitert";
 
@@ -51,7 +60,8 @@
    Delete preset alert -> second button
    File already exists alert -> first button
    File already exists in queue alert -> first button
-   Preview -> live preview alert alternate button */
+   Preview -> live preview alert alternate button
+   Touch bar */
 "Cancel" = "Abbrechen";
 
 /* Queue Alert -> cancel rip third button */
@@ -60,11 +70,12 @@
 /* Queue Alert -> cancel rip second button */
 "Cancel Current and Stop" = "Alles abbrechen";
 
-/* Toolbar Open/Cancel Item */
-"Cancel Scan" = "Überprüfung abbrechen";
+/* Touch bar */
+"Cancel Encoding" = "Encodieren abbrechen";
 
-/* Toolbar Open/Cancel Item */
-"Cancel Scanning" = "Überprüfen abbrechen";
+/* Toolbar Open/Cancel Item
+   Touch bar */
+"Cancel Scan" = "Überprüfung abbrechen";
 
 /* Toolbar Open/Cancel Item */
 "Cancel Scanning Source" = "Quelle überprüfen abbrechen";
@@ -78,6 +89,9 @@
 /* Copy Protection Alert -> message */
 "Copy-Protected sources are not supported." = "Kopiergeschützte Quellen werden nicht unterstützt.";
 
+/* Touch bar */
+"Current Time" = "Momentane Zeit";
+
 /* Add preset window -> picture setting */
 "Custom" = "Eigene";
 
@@ -90,6 +104,9 @@
 
 /* Quit Alert -> second button */
 "Don't Quit" = "Nicht beenden";
+
+/* Touch bar */
+"Done" = "Fertig";
 
 /* Queue status */
 "Encode Canceled." = "Enkodierung abgebrochen.";
@@ -146,6 +163,9 @@
    Queue Stop Alert -> stop and remove first button */
 "Keep Encoding" = "Enkodierung beibehalten";
 
+/* Touch bar */
+"Live Preview" = "Live-Vorschau";
+
 /* Queue undo action name */
 "Move Job in Queue" = "Aufgabe zu Warteschlange hinzufügen";
 
@@ -174,25 +194,30 @@
 /* Preview -> live preview alert default button */
 "Open in external player" = "Extern öffnen";
 
-/* Toolbar Open/Cancel Item */
+/* Toolbar Open/Cancel Item
+   Touch bar */
 "Open Source" = "Quelle öffnen";
 
 /* File already exists alert -> second button
    File already exists in queue alert -> second button */
 "Overwrite" = "Überschreiben";
 
-/* Queue Toolbar -> pause/resume item title
-   Toolbar Pause Item */
+/* Toolbar Pause Item */
 "Pause" = "Anhalten";
 
-/* Pause Item
-   Queue -> pause/resume menu
-   Queue Toolbar -> pause/resume item tooltip
-   Toolbar Pause Item */
+/* Queue -> pause/resume menu
+   Toolbar Pause Item
+   Touch bar */
 "Pause Encoding" = "Enkodierung anhalten";
+
+/* Touch bar */
+"Pause/Resume Encoding" = "Enkodierung Pausieren/Fortsetzen";
 
 /* Video -> Framerate */
 "Peak Framerate (VFR)" = "Maximale Bildfrequenz (VFR)";
+
+/* Touch bar */
+"Play/Pause" = "Abspielen/Pause";
 
 /* Add preset window -> name alert informative text
    Rename preset window -> name alert informative text */
@@ -217,6 +242,9 @@
 /* Preview -> accessibility label */
 "Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Vorschaubild, Größe: %1$zu x %2$zu, Skalierung: %3$.0f%%";
 
+/* Touch bar */
+"Previews" = "Vorschau";
+
 /* Queue done alert message
    Queue notification alert message */
 "Put down that cocktail…" = "Stellen Sie den Cocktail ab…";
@@ -224,22 +252,24 @@
 /* Quit Alert -> first button */
 "Quit" = "Beenden";
 
+/* Touch bar */
+"Remaining Time" = "Verbleibende Zeit";
+
 /* Queue undo action name */
 "Remove Job From Queue" = "Aufgabe aus der Warteschlange entfernen";
 
 /* Queue undo action name */
 "Remove Jobs From Queue" = "Aufgaben aus der Warteschlange entfernen";
 
-/* Queue Toolbar -> pause/resume item title
-   Toolbar Pause Item */
+/* Toolbar Pause Item */
 "Resume" = "Fortsetzen";
 
 /* Queue -> pause/resume men
-   Queue Toolbar -> pause/resume item tooltip
    Toolbar Pause Item */
 "Resume Encoding" = "Enkodierung fortsetzen";
 
-/* Picture HUD -> scale button */
+/* Picture HUD -> scale button
+   Touch bar */
 "Scale To Screen" = "An Bildschirm anpassen";
 
 /* Preferences -> send to app destination open panel */
@@ -251,28 +281,33 @@
 /* Notification -> Show in Finder */
 "Show" = "Zeigen";
 
+/* Touch bar */
+"Show Preview Window" = "Vorschau zeigen";
+
+/* Touch bar */
+"Slider" = "Schieberegler";
+
 /* Add preset window -> picture setting */
 "Source Maximum" = "Quellenmaximum";
 
-/* Queue Toolbar -> start/stop item title
-   Toolbar Start/Stop Item */
+/* Toolbar Start/Stop Item */
 "Start" = "Start";
 
 /* Menu Start/Stop Item
    Queue -> start/stop menu
-   Queue Toolbar -> start/stop item tooltip
    Toolbar Start/Stop Item */
 "Start Encoding" = "Enkodierung starten";
 
 /* Toolbar Start/Stop Item */
 "Start Queue" = "Warteschlange starten";
 
-/* Queue Toolbar -> start/stop item title
-   Toolbar Start/Stop Item */
+/* Touch bar */
+"Start/Stop Encoding" = "Enkodierung Starten/Abbrechen";
+
+/* Toolbar Start/Stop Item */
 "Stop" = "Stop";
 
 /* Queue -> start/stop menu
-   Queue Toolbar -> start/stop item tooltip
    Toolbar Start/Stop Item */
 "Stop Encoding" = "Enkodierung stoppen";
 
@@ -362,306 +397,3 @@
    Queue Stop Alert -> stop and remove informative text */
 "Your movie will be lost if you don't continue encoding." = "Ihr Film wird verloren gehen, wenn Sie die Enkodierung nicht fortsetzen.";
 
-/* Video description */
-" - fastdecode" = "- Schnelldekodierung";
-
-/* HBStateFormatter -> work time format */
-" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)" = "(%1$.2f BpS, im Mittel %2$.2f BpS, ETA %3$d h%4$d m%5$ds s)";
-
-/* HBStateFormatter -> search time format
- HBStateFormatter -> work time format */
-" (ETA %02dh%02dm%02ds)" = "(ETA %1$dh%2$dm%3$ds)";
-
-/* Title description */
-" (Title %d, %@, %@) ▸ %@\n" = "(Titel %1$d, %2$@, %3$@) ▸ %4$@\n";
-
-/* Title description */
-" (Title %d, %@) ▸ %@\n" = "(Titel %1$d, %2$@) ▸ %3$@\n";
-
-/* Dimensions description */
-" Keep Aspect Ratio" = "Seitenverhältnis beibehalten";
-
-/* Title short description -> audio format */
-", %d audio tracks" = ", %d Tonspuren";
-
-/* Title short description -> subtitles format */
-", %d subtitles tracks" = ", %d Untertitelspuren";
-
-/* Title short description -> audio format */
-", 1 audio track" = ", 1 Tonspur";
-
-/* Title short description -> subtitles format */
-", 1 subtitles track" = ", 1 Untertitelspur";
-
-/* Format description */
-", Align A/V Start" = ", A/V synchron";
-
-/* HBJob -> subtitles short description */
-", Burned" = ", Eingebrannt";
-
-/* Format description */
-", Chapter Markers" = ", Kapitelmarker";
-
-/* Format description */
-", iPod 5G Support" = ", iPod 5G-Unterstützung";
-
-/* Format description */
-", Web Optimized" = ", Web-optimiert";
-
-/* HBStateFormatter -> work pass type format */
-"(subtitle scan)" = "(Untertitelscan)";
-
-/* Title short description -> video format */
-"%.6g FPS" = "%.6g BpS";
-
-/* Audio description */
-"%@ ▸ Encoder: %@" = "1$@ ▸ Enkodierer: %2$@";
-
-/* HBPicture -> short info */
-"%dx%d Storage, %dx%d Display" = "%1$d x %2$d Original, %3$d x %4$d Anzeige";
-
-/* HBJob -> audio short description */
-"+ %lu additional audio tracks" = "+ %lu zusätzliche Tonspuren";
-
-/* HBJob -> subtitles short description */
-"+ %lu additional subtitles tracks" = "+ %lu zusätzliche Untertitelspuren";
-
-/* HBJob -> audio short description */
-"+ 1 additional audio track" = "+ 1 zusätzliche Tonspur";
-
-/* HBJob -> subtitles short description */
-"+ 1 additional subtitles track" = "+ 1 zusätzliche Untertitelspur";
-
-/* Title description */
-"1 Foreign Language Search Pass - " = "1 Fremdsprachensuche-Durchgang -";
-
-/* Title description */
-"2 Video Passes" = "2 Videodurchgänge";
-
-/* Title description */
-"2 Video Passes First Turbo" = "2 Video-Durchgänge erster beschleunigt";
-
-/* Audio description */
-"Audio:" = "Audio:";
-
-/* Video description */
-"Bitrate: %d kbps" = "Bitrate: %d kbps";
-
-/* Subtitles description */
-"Burned In" = "Eingebrannt";
-
-/* Title -> chapter name
- Title description */
-"Chapter %d" = "Kapitel %d";
-
-/* HBJob -> chapters short description */
-"Chapter Markers" = "Kapitelmarker";
-
-/* HBRange -> display name */
-"Chapters" = "Kapitel";
-
-/* Title description */
-"Chapters %d through %d" = "Kapitel %1$d bis %2$d";
-
-/* HBJob -> filters short description */
-"Comb Detect" = "Comb Detect";
-
-/* Video description */
-"Constant Quality: %.2f %s" = "Konstante Qualität: %1$.2f %2$s";
-
-/* HBJob -> video short description framerate */
-"CRF" = "CRF";
-
-/* Filters description
- HBJob -> filters short description */
-"Deblock" = "Deblock";
-
-/* HBFilters -> filter display name */
-"Decomb" = "Decomb";
-
-/* Subtitles description */
-"Default" = "Standard";
-
-/* Video description */
-"default settings" = "Standardeinstellungen";
-
-/* Filters description */
-"Denoise" = "Entrauschen";
-
-/* Destination description */
-"Destination:" = "Ziel:";
-
-/* Dimensions description
- HBJob -> filters short description */
-"Detelecine" = "Detelecine";
-
-/* Dimensions description */
-"Dimensions:" = "Bildgröße:";
-
-/* Audio description */
-"DRC: %.2f" = "DRC: %.2f";
-
-/* Video description */
-"Encoder: %@, " = "Enkodierer: %@,";
-
-/* HBStateFormatter -> work pass display name */
-"Encoding %@ " = "Enkodiere %@";
-
-/* Filters description */
-"Filters:" = "Filter:";
-
-/* Subtitles description */
-"Forced Only" = "Nur erzwungene";
-
-/* HBSubtitles -> search pass name */
-"Foreign Audio Search" = "Fremdsprachentonsuche";
-
-/* Format description */
-"Format:" = "Format:";
-
-/* Video description */
-"Framerate: " = "Bildrate:";
-
-/* HBRange -> display name */
-"Frames" = "Bilder";
-
-/* Title description */
-"Frames %d through %d" = "Bilder %1$d bis %2$d";
-
-/* Audio description */
-"Gain: %.2f" = "Verstärkung: %.2f";
-
-/* Filters description
- HBJob -> filters short description */
-"Grayscale" = "Graustufen";
-
-/* HBFilters -> filter display name */
-"HQDN3D" = "HQDN3D";
-
-/* HBJob -> invalid name error description */
-"Invalid name" = "Ungültiger Name";
-
-/* HBFilters -> filter display name */
-"Lapsharp" = "Lapsharp";
-
-/* Video description */
-"Level: %@" = "Stufe: %@";
-
-/* Audio description */
-"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Abmischung: %1$@, Samplerate: %2$@, Bitrate: %3$d kbps";
-
-/* HBJob -> Format display name */
-"MKV File" = "MKV-Datei";
-
-/* HBJob -> Format display name */
-"MP4 File" = "MP4-Datei";
-
-/* HBStateFormatter -> pass display name */
-"Muxing…" = "Multiplexen…";
-
-/* HBFilters -> filter display name */
-"NLMeans" = "NLMeans";
-
-/* HBAudio -> none track name
- HBJob -> filters short description
- HBSubtitles -> none track name */
-"None" = "Ohne";
-
-/* HBFilters -> filter display name
- HBFilters -> filter summary
- HBFilters -> off display name */
-"Off" = "Aus";
-
-/* Video description */
-"Options: %@" = "Optionen: %@";
-
-/* HBStateFormatter -> work pass number format */
-"Pass %d %@ of %d, %.2f %%" = "Durchgang %1$d %2$@ von %3$d, %4$.2f %%";
-
-/* HBStateFormatter -> work pass number format */
-"Pass %d of %d, %.2f %%" = "Durchgang %1$d von %2$d, %3$.2f %%";
-
-/* HBStateFormatter -> pass display name */
-"Paused" = "Angehalten";
-
-/* Video description */
-"Peak %@ (constant frame rate)" = "Maximal %@ (konstante Bildfrequenz)";
-
-/* Video description */
-"Peak %@ (may be lower)" = "Maximal %@ (kann niedriger sein)";
-
-/* Preset description */
-"Preset:" = "Voreinstellung:";
-
-/* Video description */
-"Preset: %@" = "Voreinstellung: %@";
-
-/* Video description */
-"Profile: %@" = "Profil: %@";
-
-/* HBJob -> filters short description */
-"Rotation" = "Drehung";
-
-/* HBVideo -> frame rates display name */
-"Same as source" = "Wie die Quelle";
-
-/* Video description */
-"Same as source (constant)" = "Wie die Quelle (konstant)";
-
-/* Video description */
-"Same as source (variable)" = "Wie die Quelle (variabel)";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d, preview %d…" = "Titel %1$d von %2$d scannen, Vorschau  %3$d…";
-
-/* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d…" = "Titel %1$d von %2$d scannen…";
-
-/* HBStateFormatter -> search pass display name */
-"Searching for start point:  %.2f %%" = "Nach Startpunkt suchen: %.2f %%";
-
-/* HBRange -> display name */
-"Seconds" = "Sekunden";
-
-/* Title description */
-"Seconds %d through %d" = "Sekunden %1$d bis %2$d";
-
-/* Filters description */
-"Sharpen" = "Schärfen";
-
-/* Subtitles description */
-"Subtitles:" = "Untertitel:";
-
-/* HBJob -> invalid name error recovery suggestion */
-"The file name can't contain the / character." = "Der Dateinamen darf kein Zeichen / enthalten.";
-
-/* Preset -> import error description */
-"The preset \"%@\" could not be imported." = "Die Voreinstellung \"%@\" konnte nicht importiert werden.";
-
-/* Preset -> import error reason */
-"The selected preset is invalid." = "Die ausgewählte Voreinstellung ist ungültig.";
-
-/* Preset -> import error reason */
-"The selected preset was created with a newer version of HandBrake." = "Die ausgewählte Voreinstellung wurde mit einer neueren Version von HandBrake erstellt.";
-
-/* Video description */
-"Tune: " = "Abstimmung:";
-
-/* HBJob -> video short description encoder name
- Video description */
-"Unknown" = "Unbekannt";
-
-/* HBFilters -> filter display name */
-"Unsharp" = "Unscharf Maskieren";
-
-/* HBJob -> video short description framerate */
-"VFR" = "VFR";
-
-/* Video description */
-"Video Options:" = "Videooptionen:";
-
-/* Video description */
-"Video:" = "Video:";
-
-/* HBFilters -> filter display name */
-"Yadif" = "Yadif";

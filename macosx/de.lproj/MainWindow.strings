@@ -47,7 +47,9 @@
 "1539.ibShadowedToolTip" = "Name der Quelle.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Title, or video clip, to encode. The longest title is selected by default.\n\nBlu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature."; ObjectID = "1541"; */
-"1541.ibShadowedToolTip" = "Titel oder Videoclip zum Enkodieren. Standardmäßig wird der längste Titel ausgewählt.\n\nBlu-ray und DVD haben meistens mehrere Titel, der längste ist für gewöhnlich der Hauptfilm.";
+"1541.ibShadowedToolTip" = "Titel oder Videoclip zum Enkodieren. Standardmäßig wird der längste Titel ausgewählt.
+
+Blu-ray und DVD haben meistens mehrere Titel, der längste ist für gewöhnlich der Hauptfilm.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1542"; */
 "1542.title" = "OtherViews";

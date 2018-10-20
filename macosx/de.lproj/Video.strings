@@ -29,7 +29,7 @@
 "Biw-5K-pPD.ibShadowedToolTip" = "Videoenkodervoreinstellungen. Stellt die Enkodiereinstellungen so ein, dass Kompressionseffizienz und Geschwindigkeit im Gleichgewicht sind. Voreinstellungen mit langsamer Geschwindigkeit sind evtl. nicht kompatibel mit manchen Geräten.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "2-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
-"bnV-aE-FVh.ibShadowedToolTip" = "Die Enkodierung in zwei Durchgängenanalysiert das Video vor dem Enkodieren. Die daraus gewonnenen Informationen ermöglichen es dem Enkoder bessere Entscheidungen bezüglich Qualität und Datenrate im Modus mit durchschnittlicher Bitrate zu treffen.";
+"bnV-aE-FVh.ibShadowedToolTip" = "Die Enkodierung in zwei Durchgängen analysiert das Video vor dem Enkodieren. Die daraus gewonnenen Informationen ermöglichen es dem Enkoder bessere Entscheidungen bezüglich Qualität und Datenrate im Modus mit durchschnittlicher Bitrate zu treffen.";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
@@ -53,7 +53,13 @@
 "G8P-IF-mpl.title" = "Serialisieren:";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
-"GPu-Ht-bKg.ibShadowedToolTip" = "Konstante Qualität variiert die Bitrate um eine gleichbleibende visuelle Qualität über das ganze Video zu garantieren.\n\nWird der Qualitätsregler nach rechts bewegt erhöht sich die Qualität, nach links erniedrigt sie sich.\n\nEmpfohlene Werte für x264 und x265 sind zwischen RF 18-28. Höhere Qualitätseinstellungen produzieren evtl. sehr große Dateien.\n\nx264 ist verlustfrei bei RF 0.";
+"GPu-Ht-bKg.ibShadowedToolTip" = "Konstante Qualität variiert die Bitrate um eine gleichbleibende visuelle Qualität über das ganze Video zu garantieren.
+
+Wird der Qualitätsregler nach rechts bewegt erhöht sich die Qualität, nach links erniedrigt sie sich.
+
+Empfohlene Werte für x264 und x265 sind zwischen RF 18-28. Höhere Qualitätseinstellungen produzieren evtl. sehr große Dateien.
+
+x264 ist verlustfrei bei RF 0.";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "none"; ObjectID = "gu5-Qw-6oi"; */
 "gu5-Qw-6oi.ibShadowedIsNilPlaceholder" = "Keine";
@@ -71,7 +77,9 @@
 "Jj0-Qw-HF8.title" = "OtherViews";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "mL3-yC-hUj"; */
-"mL3-yC-hUj.ibShadowedToolTip" = "Zusätzliche Videoenkodieroptionen. Für erfahrene Anwender.\n\nSyntax: option-1=foo:opt2=bar";
+"mL3-yC-hUj.ibShadowedToolTip" = "Zusätzliche Videoenkodieroptionen. Für erfahrene Anwender.
+
+Syntax: option-1=foo:opt2=bar";
 
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
 "Mrb-6Q-0YM.title" = "Videoenkoder:";
@@ -80,7 +88,9 @@
 "nPA-nO-Eik.title" = "Enkodierung in 2 Durchgängen";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "oJk-ur-wgc"; */
-"oJk-ur-wgc.ibShadowedToolTip" = "Zusätzliche Videoenkodieroptionen. Für erfahrene Anwender.\n\nSyntax: option-1=foo:opt2=bar,baz";
+"oJk-ur-wgc.ibShadowedToolTip" = "Zusätzliche Videoenkodieroptionen. Für erfahrene Anwender.
+
+Syntax: option-1=foo:opt2=bar,baz";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the first pass of a 2-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
 "olm-zg-k9Y.ibShadowedToolTip" = "Der beschleunigte erste Durchgang beschleunigt die Enkodierung in zwei Durchgängen, ist aber mit einer etwas schlechteren Analyseleistung behaftet.";
@@ -92,7 +102,7 @@
 "pPu-oR-2R8.title" = "OtherViews";
 
 /* Class = "NSTextFieldCell"; title = "Level:"; ObjectID = "QyZ-rl-uGw"; */
-"QyZ-rl-uGw.title" = "Stufe:";
+"QyZ-rl-uGw.title" = "Level:";
 
 /* Class = "NSTextFieldCell"; title = "RF:"; ObjectID = "rRB-9F-pHn"; */
 "rRB-9F-pHn.title" = "RF:";
@@ -125,10 +135,12 @@
 "z7F-H2-Vfr.ibShadowedToolTip" = "Die Schnelle Dekodierung benutzt Einstellungen um die Prozessorauslastung beim Abspielen des enkodierten Videos zu reduzieren. Nützlich bei leistungsschwachen Abspielgeräten, bei denen das Video sonst nicht ruckelfrei läuft.";
 
 /* Class = "NSButtonCell"; title = "Constant Quality"; ObjectID = "ZjL-cY-O5f"; */
-"ZjL-cY-O5f.title" = "Konstante Bildfrequenz";
+"ZjL-cY-O5f.title" = "Konstante Qualität";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Use the Advanced Options Panel for x264 settings.\n\nThis setting is no longer supported and may be removed in a future version. Use at your own risk!"; ObjectID = "Zs7-1Y-50A"; */
-"Zs7-1Y-50A.ibShadowedToolTip" = "Verwende das Panel für die erweiterten x264-Videoeinstellungen.\n\nDiese Einstellung wird nicht mehr unterstützt und möglw. in einer zukünftigen Version entfernt. Benutzung auf eigene Gefahr!";
+"Zs7-1Y-50A.ibShadowedToolTip" = "Verwende das Panel für die erweiterten x264-Videoeinstellungen.
+
+Diese Einstellung wird nicht mehr unterstützt und möglicherweise in einer zukünftigen Version entfernt. Benutzung auf eigene Gefahr!";
 
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "zSD-4Y-1cI"; */
 "zSD-4Y-1cI.title" = "Abstimmung:";

@@ -14,10 +14,10 @@
 "aez-2b-JXx.ibShadowedToolTip" = "Das Auswahlverhalten bestimmt die Spur(en) und Einstellungen die verwendet werden, wenn die Voreinstellung ausgewählt wird.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Enter a name for the new preset. This name will be displayed in the presets list."; ObjectID = "aKg-n4-OUS"; */
-"aKg-n4-OUS.ibShadowedToolTip" = "Gib den Namen der Voreinstellung ein. Der Name wird in der Liste der Voreinstellungen angezeigt.";
+"aKg-n4-OUS.ibShadowedToolTip" = "Gebe den Namen der Voreinstellung ein. Der Name wird in der Liste der Voreinstellungen angezeigt.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Picture Size controls how video dimensions are applied when selecting the preset.\n\nNone uses the currently set dimensions.\n\nCustom allows you to set a maximum width and/or height.\n\nSource maximum uses the full dimensions of each source."; ObjectID = "bma-pS-phM"; */
-"bma-pS-phM.ibShadowedToolTip" = "Bildgröße kontrolliert wie die Dimensionen des Videos bei Auswahl der Voreinstellung angewendet werden.\n\nKeine: Benutzt die momentanen Dimensionen des Videos.\n\nEigene: Erlaubt die Auswahl der maximalen Höhe und/oder Breite.\n\nQuellenmaximum: Benutzt die maximale Größe des Ausgangsvideos.";
+"bma-pS-phM.ibShadowedToolTip" = "Bildgröße kontrolliert wie die Dimensionen des Videos bei Auswahl der Voreinstellung angewendet werden.\\n\\nKeine: Benutzt die momentanen Dimensionen des Videos.\\n\\nEigene: Erlaubt die Auswahl der maximalen Höhe und/oder Breite.\\n\\nQuellenmaximum: Benutzt die maximale Größe des Ausgangsvideos.";
 
 /* Class = "NSWindow"; title = "New Preset"; ObjectID = "dbZ-Wo-9nG"; */
 "dbZ-Wo-9nG.title" = "Neue Voreinstellung";
@@ -65,14 +65,14 @@
 "OYE-GG-Vo3.title" = "Untertitel:";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qsA-gt-zdK"; */
-"qsA-gt-zdK.title" = "Andere Ansicht";
+"qsA-gt-zdK.title" = "OtherViews";
 
 /* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "Sf8-HP-mhE"; */
 "Sf8-HP-mhE.title" = "Neue Kategorie…";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tQ1-PN-kvh"; */
-"tQ1-PN-kvh.title" = "Andere Ansicht";
+"tQ1-PN-kvh.title" = "OtherViews";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Picture Size controls how video dimensions are applied when selecting the preset.\n\nNone uses the currently set dimensions.\n\nCustom allows you to set a maximum width and/or height.\n\nSource maximum uses the full dimensions of each source."; ObjectID = "z6B-ig-ouq"; */
-"z6B-ig-ouq.ibShadowedToolTip" = "Bildgröße kontrolliert wie die Dimensionen des Videos bei Auswahl der Voreinstellung angewendet werden.\n\nKeine: Benutzt die momentanen Dimensionen des Videos.\n\nEigene: Erlaubt die Auswahl der maximalen Höhe und/oder Breite.\n\nQuellenmaximum: Benutzt die maximale Größe des Ausgangsvideos.";
+"z6B-ig-ouq.ibShadowedToolTip" = "Bildgröße kontrolliert wie die Dimensionen des Videos bei Auswahl der Voreinstellung angewendet werden.\\n\\nKeine: Benutzt die momentanen Dimensionen des Videos.\\n\\nEigene: Erlaubt die Auswahl der maximalen Höhe und/oder Breite.\\n\\nQuellenmaximum: Benutzt die maximale Größe des Ausgangsvideos.";
 

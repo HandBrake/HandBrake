@@ -13,8 +13,8 @@
 /* Class = "NSMenuItem"; title = "Clear All Jobs"; ObjectID = "2652"; */
 "2652.title" = "Alle Aufgaben löschen";
 
-/* Class = "NSMenuItem"; title = "Show In Finder"; ObjectID = "2655"; */
-"2655.title" = "Im Finder anzeigen";
+/* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "2655"; */
+"2655.title" = "Ziel im Finder zeigen";
 
 /* Class = "NSToolbarItem"; label = "When Done"; ObjectID = "a3c-kV-98E"; */
 "a3c-kV-98E.label" = "Wenn fertig";
@@ -30,6 +30,9 @@
 
 /* Class = "NSMenuItem"; title = "Alert"; ObjectID = "fAD-ky-zo6"; */
 "fAD-ky-zo6.title" = "Hinweis mit Alarm";
+
+/* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "gbW-g1-lEc"; */
+"gbW-g1-lEc.title" = "Zeige Quelle im Finder";
 
 /* Class = "NSMenuItem"; title = "Put Computer to Sleep"; ObjectID = "GUQ-xb-HVS"; */
 "GUQ-xb-HVS.title" = "Computer in den Ruhezustand setzen";

@@ -158,7 +158,7 @@
 "1950.title" = "Offizielle Voreinstellungen zurücksetzen";
 
 /* Class = "NSMenuItem"; title = "New Preset…"; ObjectID = "1955"; */
-"1955.title" = "Neue Voreinstellung…";
+"1955.title" = "Neue Voreinstellung sichern…";
 
 /* Class = "NSMenuItem"; title = "Online Documentation"; ObjectID = "1985"; */
 "1985.title" = "Online-Dokumentation";

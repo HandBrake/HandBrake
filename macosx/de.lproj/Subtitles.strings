@@ -73,8 +73,8 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "SRT Language. Language of the selected SRT format source track. Not applicable to other formats."; ObjectID = "Inz-O5-B8g"; */
 "Inz-O5-B8g.ibShadowedToolTip" = "SRT-Sprache. Sprache der ausgewählten SRT-Spur der Quelle. Nicht verfügbar bei anderen Formaten.";
 
-/* Class = "NSMenuItem"; title = "Reload Defaults"; ObjectID = "jcM-HL-QJ6"; */
-"jcM-HL-QJ6.title" = "Standard neu laden";
+/* Class = "NSMenuItem"; title = "Reload"; ObjectID = "jcM-HL-QJ6"; */
+"jcM-HL-QJ6.title" = "Neu laden";
 
 /* Class = "NSButtonCell"; title = "Reload"; ObjectID = "jG8-uo-1tv"; */
 "jG8-uo-1tv.title" = "Neu laden";
@@ -103,14 +103,14 @@
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
 "oxg-bs-1si.title" = "Auswahlverhalten…";
 
-/* Class = "NSMenuItem"; title = "Configure Defaults…"; ObjectID = "pwm-PV-1x4"; */
-"pwm-PV-1x4.title" = "Standard bearbeiten…";
+/* Class = "NSMenuItem"; title = "Selection Behavior…"; ObjectID = "pwm-PV-1x4"; */
+"pwm-PV-1x4.title" = "Verhalten wählen…";
 
 /* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
 "QRj-KI-a03.title" = "Text";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Configure subtitles track selection default settings."; ObjectID = "QsM-28-Pya"; */
-"QsM-28-Pya.ibShadowedToolTip" = "Die Standardeinstellung für die Auswahl einer Untertitelspur konfigurieren.";
+/* Class = "NSButton"; ibShadowedToolTip = "Configure subtitle tracks Selection Behavior. These settings affect which tracks will be added to the subtitle tracks list, and the settings used for each track."; ObjectID = "QsM-28-Pya"; */
+"QsM-28-Pya.ibShadowedToolTip" = "Konfiguriert das Auswahlverhalten der Untertitelspuren. Diese Einstellungen bestimmen welche Spuren zur Liste der Untertitelspuren hinzugefügt werden und die Einstellungen welche für jede Spur benutzt werden.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT Character Encoding"; ObjectID = "QV0-kE-4yR"; */
 "QV0-kE-4yR.ibExternalAccessibilityDescription" = "SRT-Charakter-Enkodierung";
@@ -130,8 +130,8 @@
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "S2I-Jd-Lyg"; */
 "S2I-Jd-Lyg.title" = "Alle Spuren hinzufügen";
 
-/* Class = "NSScrollView"; ibShadowedToolTip = "Subtitles tracks list. Default track selection and settings are loaded from the selected preset, and may be configured using the Configure Defaults dialog."; ObjectID = "Syo-rH-vof"; */
-"Syo-rH-vof.ibShadowedToolTip" = "Liste der Untertitelspuren. Die Standardspurenauswahl und deren Einstellungen werden von der ausgewählten Voreinstellung bestimmt und können vom entsprechenden Einstellldialog konfiguriert werden.";
+/* Class = "NSScrollView"; ibShadowedToolTip = "Subtitle tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the subtitle Selection Behavior dialog."; ObjectID = "Syo-rH-vof"; */
+"Syo-rH-vof.ibShadowedToolTip" = "Liste der Untertitelspuren. Das Auswahlverhalten und die Einstellungen der Spuren werden aus den ausgewählten Voreinstellungen geladen und möglicherweise vom Dialog des Untertitelspurenauswahlverhaltens konfiguriert.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Selected track"; ObjectID = "Tf3-cP-TGw"; */
 "Tf3-cP-TGw.ibExternalAccessibilityDescription" = "Ausgewählte Spur";
@@ -154,8 +154,8 @@
 /* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "vHW-fn-RSG"; */
 "vHW-fn-RSG.title" = "Pop Up";
 
-/* Class = "NSButton"; ibShadowedToolTip = "Reload subtitles track selection using the configured defaults."; ObjectID = "Vxx-gk-9kY"; */
-"Vxx-gk-9kY.ibShadowedToolTip" = "Die Untertitelauswahl basierend auf den Standardeinstellungen neu laden.";
+/* Class = "NSButton"; ibShadowedToolTip = "Reload the subtitles tracks list using the configured Selection Behavior."; ObjectID = "Vxx-gk-9kY"; */
+"Vxx-gk-9kY.ibShadowedToolTip" = "Läd die Liste der Untertitelspuren anhand des konfigurierten Auswahlverhaltens neu.";
 
 /* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "yDg-DK-z5D"; */
 "yDg-DK-z5D.title" = "Item 1";

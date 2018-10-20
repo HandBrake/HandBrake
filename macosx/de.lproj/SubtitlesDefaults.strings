@@ -17,7 +17,9 @@
 "bfV-9D-6dh.title" = "Blu-ray-Untertitel";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your playback software or device does not support DVD subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "ceZ-On-t5S"; */
-"ceZ-On-t5S.ibShadowedToolTip" = "Brenne den ersten ausgewählten Untertitel der DVD ein. Alle anderen Untertitel werden verworfen. Diese Option ist zu verwenden, wenn das Abspielgerät DVD-Untertitel nicht unterstützt.\n\nEs kann nur jeweils ein Untertitel eingebrannt werden.";
+"ceZ-On-t5S.ibShadowedToolTip" = "Brenne den ersten ausgewählten Untertitel der DVD ein. Alle anderen Untertitel werden verworfen. Diese Option ist zu verwenden, wenn das Abspielgerät DVD-Untertitel nicht unterstützt.
+
+Es kann nur jeweils ein Untertitel eingebrannt werden.";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio, then First Selected Track"; ObjectID = "d79-2j-fhc"; */
 "d79-2j-fhc.title" = "Fremdsprache, dann erste ausgewählte Spur";
@@ -47,7 +49,9 @@
 "Kwy-lU-VuU.title" = "OtherViews";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.\n\nOnly one subtitles track can be burned in."; ObjectID = "Lsa-kB-2BP"; */
-"Lsa-kB-2BP.ibShadowedToolTip" = "Einbrennverhalten. Zum Auswählen welche Untertitel permanent gemacht werden sollen indem sie mit dem Video überlagert werden.\n\nEs kann nur jeweils ein Untertitel eingebrannt werden.";
+"Lsa-kB-2BP.ibShadowedToolTip" = "Einbrennverhalten. Zum Auswählen welche Untertitel permanent gemacht werden sollen indem sie mit dem Video überlagert werden.
+
+Es kann nur jeweils ein Untertitel eingebrannt werden.";
 
 /* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
 "mAT-Jp-SG1.title" = "Sprache:";
@@ -65,7 +69,13 @@
 "NJl-q3-zXL.title" = "Optionen:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
-"oiD-QI-wly.ibShadowedToolTip" = "Verhalten der Spurauswahl.\n\nKeine: Wählt standardmäßig keinen Untertitel aus.\n\nErste passende ausgewählte Sprache: Fügt die erste Audiospur hinzu die zu den ausgewählten Sprachen passt.\n\nAlle passenden ausgewählten Sprachen: Fügt alle Audiospuren hinzu die zu den ausgewählten Sprachen passen.";
+"oiD-QI-wly.ibShadowedToolTip" = "Verhalten der Spurauswahl.
+
+Keine: Wählt standardmäßig keinen Untertitel aus.
+
+Erste passende ausgewählte Sprache: Fügt die erste Audiospur hinzu die zu den ausgewählten Sprachen passt.
+
+Alle passenden ausgewählten Sprachen: Fügt alle Audiospuren hinzu die zu den ausgewählten Sprachen passen.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default."; ObjectID = "OOC-GZ-OFA"; */
 "OOC-GZ-OFA.ibShadowedToolTip" = "Fremdsprachensuche durchsucht die Quelle nach kurzen Sequenzen an fremdsprachigem Audio die standardmäßig angezeigt werden.";
@@ -74,7 +84,9 @@
 "PiQ-bA-7P1.title" = "Alle anzeigen";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "Px8-G6-NVX"; */
-"Px8-G6-NVX.ibShadowedToolTip" = "Brenne den ersten ausgewählten Untertitel der Blu-Ray ein. Alle anderen Untertitel werden verworfen. Diese Option ist zu verwenden, wenn das Blu-Ray-Abspielgerät Untertitel nicht unterstützt.\n\nEs kann nur jeweils ein Untertitel eingebrannt werden.";
+"Px8-G6-NVX.ibShadowedToolTip" = "Brenne den ersten ausgewählten Untertitel der Blu-Ray ein. Alle anderen Untertitel werden verworfen. Diese Option ist zu verwenden, wenn das Blu-Ray-Abspielgerät Untertitel nicht unterstützt.
+
+Es kann nur jeweils ein Untertitel eingebrannt werden.";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Show all subtitles languages"; ObjectID = "QAt-5X-NBT"; */
 "QAt-5X-NBT.ibExternalAccessibilityDescription" = "Alle Untertitelsprachen anzeigen";

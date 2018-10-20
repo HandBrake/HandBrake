@@ -224,7 +224,9 @@
 "wo5-iR-2mb.title" = "Punktationen entfernen";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Show the Advanced Options Panel for x264 settings.\n\nThis setting is no longer supported and may be removed in a future version. Use at your own risk!"; ObjectID = "ybi-46-yhY"; */
-"ybi-46-yhY.ibShadowedToolTip" = "Zeige die Erweiterten Optionen zur x264-Einstellung.\n\nDiese Einstellungen werden nicht mehr unterstützt und in einer zukünftigen Version entfernt. Benutzung auf eigene Gefahr!";
+"ybi-46-yhY.ibShadowedToolTip" = "Zeige die Erweiterten Optionen zur x264-Einstellung.
+
+Diese Einstellungen werden nicht mehr unterstützt und in einer zukünftigen Version entfernt. Benutzung auf eigene Gefahr!";
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
 "yG9-mz-tqQ.title" = "Warteschlange anhalten wenn der verfügbare Speicherplatz kleiner ist als:";
