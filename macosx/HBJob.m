@@ -13,6 +13,7 @@
 #import "HBMutablePreset.h"
 
 #import "HBCodingUtilities.h"
+#import "HBLocalizationUtilities.h"
 #import "HBUtilities.h"
 #import "HBSecurityAccessToken.h"
 
@@ -178,8 +179,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         {
             if (outError)
             {
-                *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: NSLocalizedString(@"Invalid name", @"HBJob -> invalid name error description"),
-                                                                                  NSLocalizedRecoverySuggestionErrorKey: NSLocalizedString(@"The file name can't contain the / character.", @"HBJob -> invalid name error recovery suggestion")}];
+                *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid name", @"HBJob -> invalid name error description"),
+                                                                                  NSLocalizedRecoverySuggestionErrorKey: HBKitLocalizedString(@"The file name can't contain the / character.", @"HBJob -> invalid name error recovery suggestion")}];
             }
             return NO;
         }

@@ -250,6 +250,9 @@
 		A9ABD1A71E2A0F7500EC8B65 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */; };
 		A9ABD1A91E2A0F8200EC8B65 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A81E2A0F8200EC8B65 /* CoreGraphics.framework */; };
 		A9ABD1AA1E2A0F8F00EC8B65 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A9ABD1A81E2A0F8200EC8B65 /* CoreGraphics.framework */; };
+		A9B6B9EE217B38D200B957AE /* HBLocalizationUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = A9B6B9ED217B38D200B957AE /* HBLocalizationUtilities.h */; };
+		A9B6B9F1217B408E00B957AE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9B6B9EF217B408E00B957AE /* InfoPlist.strings */; };
+		A9B6B9F4217B408E00B957AE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9B6B9F2217B408E00B957AE /* Localizable.strings */; };
 		A9BC24C91A69293E007DC41A /* HBAttributedStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */; };
 		A9CE0A921F57EC3400724577 /* HBImageUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CE0A911F57EC3400724577 /* HBImageUtilities.m */; };
 		A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F61990D6820023F727 /* HBPresetsViewController.m */; };
@@ -605,6 +608,9 @@
 		A9ABD1A51E2A0F0700EC8B65 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		A9ABD1A81E2A0F8200EC8B65 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		A9B34D74197696FE00871B7D /* DiskArbitration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DiskArbitration.framework; path = System/Library/Frameworks/DiskArbitration.framework; sourceTree = SDKROOT; };
+		A9B6B9ED217B38D200B957AE /* HBLocalizationUtilities.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBLocalizationUtilities.h; sourceTree = "<group>"; };
+		A9B6B9F0217B408E00B957AE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A9B6B9F3217B408E00B957AE /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9BC24C71A69293E007DC41A /* HBAttributedStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAttributedStringAdditions.h; sourceTree = "<group>"; };
 		A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAttributedStringAdditions.m; sourceTree = "<group>"; };
 		A9C183931A716B8F00C897C2 /* HBTitleSelectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTitleSelectionController.h; sourceTree = "<group>"; };
@@ -1034,6 +1040,7 @@
 				A9CE0A931F57EC4600724577 /* HBImageUtilities.h */,
 				A9CE0A911F57EC3400724577 /* HBImageUtilities.m */,
 				A9160A331AE7A165009A7818 /* HBCodingUtilities.h */,
+				A9B6B9ED217B38D200B957AE /* HBLocalizationUtilities.h */,
 				A997D8EB1A4ABB0900E19B6F /* HBPresetCoding.h */,
 				A975C08C1AE8C5270061870D /* HBStateFormatter.h */,
 				A975C08D1AE8C5270061870D /* HBStateFormatter.m */,
@@ -1142,6 +1149,8 @@
 				A9AA44791970664A00D7DEFC /* HBUtilities.m */,
 				A9736F041C7DA5FE008F1D18 /* HandBrakeKit.h */,
 				A9736F061C7DA5FE008F1D18 /* Info.plist */,
+				A9B6B9F2217B408E00B957AE /* Localizable.strings */,
+				A9B6B9EF217B408E00B957AE /* InfoPlist.strings */,
 			);
 			path = HandBrakeKit;
 			sourceTree = "<group>";
@@ -1384,6 +1393,7 @@
 				A98B8E241C7DD2A200B810C9 /* HBPresetCoding.h in Headers */,
 				A9294CC91DC4BBF7004D3415 /* HBJob+Private.h in Headers */,
 				A91CE2FE1C7DB99D0068F46F /* HBTreeNode.h in Headers */,
+				A9B6B9EE217B38D200B957AE /* HBLocalizationUtilities.h in Headers */,
 				A91D54871E378ABD006D0997 /* HBSecurityAccessToken.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1592,6 +1602,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9B6B9F1217B408E00B957AE /* InfoPlist.strings in Resources */,
+				A9B6B9F4217B408E00B957AE /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2044,6 +2056,22 @@
 			name = HBPreviewViewController.xib;
 			sourceTree = "<group>";
 		};
+		A9B6B9EF217B408E00B957AE /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9B6B9F0217B408E00B957AE /* de */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		A9B6B9F2217B408E00B957AE /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A9B6B9F3217B408E00B957AE /* de */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -2103,6 +2131,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZED_STRING_MACRO_NAMES = (
+					NSLocalizedString,
+					CFLocalizedString,
+					HBKitLocalizedString,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_LDFLAGS = (
 					"-filelist",
@@ -2167,6 +2200,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZED_STRING_MACRO_NAMES = (
+					NSLocalizedString,
+					CFLocalizedString,
+					HBKitLocalizedString,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_LDFLAGS = (
 					"-filelist",
@@ -2615,6 +2653,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZED_STRING_MACRO_NAMES = (
+					NSLocalizedString,
+					CFLocalizedString,
+					HBKitLocalizedString,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_LDFLAGS = (
 					"-filelist",
@@ -2861,6 +2904,11 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_LABEL = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZED_STRING_MACRO_NAMES = (
+					NSLocalizedString,
+					CFLocalizedString,
+					HBKitLocalizedString,
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				OTHER_LDFLAGS = (
 					"-filelist",

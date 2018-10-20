@@ -7,6 +7,7 @@
 //
 
 #import "HBStateFormatter+Private.h"
+#import "HBLocalizationUtilities.h"
 
 @implementation HBStateFormatter (Private)
 
@@ -21,12 +22,12 @@
         case HB_STATE_SEARCHING:
         {
             [string appendFormat:
-             NSLocalizedString(@"Searching for start point:  %.2f %%", @"HBStateFormatter -> search pass display name"),
+             HBKitLocalizedString(@"Searching for start point:  %.2f %%", @"HBStateFormatter -> search pass display name"),
              100.0 * p.progress];
 
             if (p.seconds > -1)
             {
-                [string appendFormat:NSLocalizedString(@" (ETA %02dh%02dm%02ds)", @"HBStateFormatter -> search time format"), p.hours, p.minutes, p.seconds];
+                [string appendFormat:HBKitLocalizedString(@" (ETA %02dh%02dm%02ds)", @"HBStateFormatter -> search time format"), p.hours, p.minutes, p.seconds];
             }
 
             break;
@@ -34,7 +35,7 @@
 
         case HB_STATE_WORKING:
         {
-            [string appendFormat:NSLocalizedString(@"Encoding %@ ", @"HBStateFormatter -> work pass display name"), self.title];
+            [string appendFormat:HBKitLocalizedString(@"Encoding %@ ", @"HBStateFormatter -> work pass display name"), self.title];
 
             if (self.twoLines)
             {
@@ -46,15 +47,15 @@
                 if (p.pass_id == HB_PASS_SUBTITLE)
                 {
                     [string appendFormat:
-                     NSLocalizedString(@"Pass %d %@ of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
+                     HBKitLocalizedString(@"Pass %d %@ of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
                      p.pass,
-                     NSLocalizedString(@"(subtitle scan)", @"HBStateFormatter -> work pass type format"),
+                     HBKitLocalizedString(@"(subtitle scan)", @"HBStateFormatter -> work pass type format"),
                      p.pass_count, 100.0 * p.progress];
                 }
                 else
                 {
                     [string appendFormat:
-                     NSLocalizedString(@"Pass %d of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
+                     HBKitLocalizedString(@"Pass %d of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
                      p.pass, p.pass_count, 100.0 * p.progress];
                 }
             }
@@ -64,13 +65,13 @@
                 if (p.rate_cur > 0.0)
                 {
                     [string appendFormat:
-                     NSLocalizedString(@" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @"HBStateFormatter -> work time format"),
+                     HBKitLocalizedString(@" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @"HBStateFormatter -> work time format"),
                      p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
                 }
                 else
                 {
                     [string appendFormat:
-                     NSLocalizedString(@" (ETA %02dh%02dm%02ds)", @"HBStateFormatter -> work time format"),
+                     HBKitLocalizedString(@" (ETA %02dh%02dm%02ds)", @"HBStateFormatter -> work time format"),
                      p.hours, p.minutes, p.seconds];
                 }
             }
@@ -81,13 +82,13 @@
 
         case HB_STATE_MUXING:
         {
-            [string appendString:NSLocalizedString(@"Muxing…", @"HBStateFormatter -> pass display name")];
+            [string appendString:HBKitLocalizedString(@"Muxing…", @"HBStateFormatter -> pass display name")];
             break;
         }
 
         case HB_STATE_PAUSED:
         {
-            [string appendString:NSLocalizedString(@"Paused", @"HBStateFormatter -> pass display name")];
+            [string appendString:HBKitLocalizedString(@"Paused", @"HBStateFormatter -> pass display name")];
             break;
         }
 
@@ -97,14 +98,14 @@
             if (p.preview_cur)
             {
                 [string appendFormat:
-                 NSLocalizedString(@"Scanning title %d of %d, preview %d…", @"HBStateFormatter -> scan pass format"),
+                 HBKitLocalizedString(@"Scanning title %d of %d, preview %d…", @"HBStateFormatter -> scan pass format"),
                  p.title_cur, p.title_count,
                  p.preview_cur];
             }
             else
             {
                 [string appendFormat:
-                 NSLocalizedString(@"Scanning title %d of %d…", @"HBStateFormatter -> scan pass format"),
+                 HBKitLocalizedString(@"Scanning title %d of %d…", @"HBStateFormatter -> scan pass format"),
                  p.title_cur, p.title_count];
             }
 #undef p

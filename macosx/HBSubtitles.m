@@ -13,6 +13,7 @@
 #import "HBJob+HBJobConversion.h"
 #import "HBTitle.h"
 #import "HBCodingUtilities.h"
+#import "HBLocalizationUtilities.h"
 #import "HBUtilities.h"
 #import "HBJob+Private.h"
 #import "HBSecurityAccessToken.h"
@@ -63,10 +64,10 @@ extern NSString *keySubTrackSrtFileURLBookmark;
         int foreignAudioType = VOBSUB;
 
         // now set the name of the Foreign Audio Search track
-        NSMutableString *foreignAudioSearchTrackName = [NSLocalizedString(@"Foreign Audio Search", "HBSubtitles -> search pass name") mutableCopy];
+        NSMutableString *foreignAudioSearchTrackName = [HBKitLocalizedString(@"Foreign Audio Search", "HBSubtitles -> search pass name") mutableCopy];
 
         // Add the none and foreign track to the source array
-        NSDictionary *none = @{ keySubTrackName: NSLocalizedString(@"None", @"HBSubtitles -> none track name")};
+        NSDictionary *none = @{ keySubTrackName: HBKitLocalizedString(@"None", @"HBSubtitles -> none track name")};
         [sourceTracks insertObject:none atIndex:0];
 
         NSDictionary *foreign = @{ keySubTrackName: [foreignAudioSearchTrackName copy],

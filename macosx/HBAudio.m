@@ -14,6 +14,7 @@
 #import "HBAudioDefaults.h"
 
 #import "HBCodingUtilities.h"
+#import "HBLocalizationUtilities.h"
 #import "HBJob+Private.h"
 
 #include "hb.h"
@@ -44,7 +45,7 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
 
         // Add the none and foreign track to the source array
         NSMutableArray *sourceTracks = [job.title.audioTracks mutableCopy];
-        NSDictionary *none = @{keyAudioTrackName: NSLocalizedString(@"None", @"HBAudio -> none track name")};
+        NSDictionary *none = @{keyAudioTrackName: HBKitLocalizedString(@"None", @"HBAudio -> none track name")};
         [sourceTracks insertObject:none atIndex:0];
         _sourceTracks = [sourceTracks copy];
     }

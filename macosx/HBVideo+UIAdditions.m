@@ -6,6 +6,8 @@
 
 #import "HBVideo+UIAdditions.h"
 #import "HBJob+Private.h"
+#import "HBLocalizationUtilities.h"
+
 #include "hb.h"
 
 @implementation HBVideo (UIAdditions)
@@ -43,7 +45,7 @@
 {
     NSMutableArray *framerates = [NSMutableArray array];
 
-    [framerates addObject:NSLocalizedString(@"Same as source", @"HBVideo -> frame rates display name")];
+    [framerates addObject:HBKitLocalizedString(@"Same as source", @"HBVideo -> frame rates display name")];
 
     for (const hb_rate_t *video_framerate = hb_video_framerate_get_next(NULL);
          video_framerate != NULL;
@@ -265,7 +267,7 @@
     }
     else
     {
-        return NSLocalizedString(@"Same as source", @"HBVideo -> frame rates display name");
+        return HBKitLocalizedString(@"Same as source", @"HBVideo -> frame rates display name");
     }
 }
 
@@ -276,7 +278,7 @@
 
 - (id)reverseTransformedValue:(id)value
 {
-    if ([value isEqualTo:NSLocalizedString(@"Same as source", @"HBVideo -> frame rates display name")])
+    if ([value isEqualTo:HBKitLocalizedString(@"Same as source", @"HBVideo -> frame rates display name")])
     {
         return @0;
     }

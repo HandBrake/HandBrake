@@ -6,6 +6,7 @@
 
 #import "HBRange+UIAdditions.h"
 #import "HBTitle.h"
+#import "HBLocalizationUtilities.h"
 
 @implementation HBRange (UIAdditions)
 
@@ -20,9 +21,9 @@
 
 - (NSArray *)types
 {
-    return @[NSLocalizedString(@"Chapters", @"HBRange -> display name"),
-             NSLocalizedString(@"Seconds", @"HBRange -> display name"),
-             NSLocalizedString(@"Frames", @"HBRange -> display name")];
+    return @[HBKitLocalizedString(@"Chapters", @"HBRange -> display name"),
+             HBKitLocalizedString(@"Seconds", @"HBRange -> display name"),
+             HBKitLocalizedString(@"Frames", @"HBRange -> display name")];
 }
 
 - (BOOL)chaptersSelected

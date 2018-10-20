@@ -6,6 +6,8 @@
 
 #import "HBPicture+UIAdditions.h"
 #import "HBTitle.h"
+#import "HBLocalizationUtilities.h"
+
 #include "hb.h"
 
 @implementation HBPicture (UIAdditions)
@@ -91,7 +93,7 @@
 
 - (NSString *)shortInfo
 {
-    return [NSString stringWithFormat:NSLocalizedString(@"%dx%d Storage, %dx%d Display", @"HBPicture -> short info"), self.width, self.height, self.displayWidth, self.height];
+    return [NSString stringWithFormat:HBKitLocalizedString(@"%dx%d Storage, %dx%d Display", @"HBPicture -> short info"), self.width, self.height, self.displayWidth, self.height];
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingSummary
