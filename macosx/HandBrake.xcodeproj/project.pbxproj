@@ -412,7 +412,6 @@
 		27D6C72C14B102DA00B785E4 /* libbluray.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libbluray.a; path = external/contrib/lib/libbluray.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72E14B102DA00B785E4 /* libdvdnav.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdvdnav.a; path = external/contrib/lib/libdvdnav.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72F14B102DA00B785E4 /* libdvdread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdvdread.a; path = external/contrib/lib/libdvdread.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		27D6C73114B102DA00B785E4 /* libfontconfig.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfontconfig.a; path = external/contrib/lib/libfontconfig.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73214B102DA00B785E4 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = external/contrib/lib/libfreetype.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73314B102DA00B785E4 /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = external/contrib/lib/libfribidi.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73614B102DA00B785E4 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp3lame.a; path = external/contrib/lib/libmp3lame.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -788,7 +787,6 @@
 				27D6C72C14B102DA00B785E4 /* libbluray.a */,
 				27D6C72E14B102DA00B785E4 /* libdvdnav.a */,
 				27D6C72F14B102DA00B785E4 /* libdvdread.a */,
-				27D6C73114B102DA00B785E4 /* libfontconfig.a */,
 				27D6C73214B102DA00B785E4 /* libfreetype.a */,
 				27D6C73314B102DA00B785E4 /* libfribidi.a */,
 				27D6C73614B102DA00B785E4 /* libmp3lame.a */,
@@ -1622,6 +1620,7 @@
 			outputPaths = (
 				"\"$(EXTERNAL_BUILD)/libhb/hb_dict.h\"",
 				"\"$(EXTERNAL_BUILD)/libhb/hb.h\"",
+				"\"$(EXTERNAL_BUILD)/macosx/Info.plist\"",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
