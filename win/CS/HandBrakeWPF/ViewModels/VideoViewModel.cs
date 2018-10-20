@@ -14,6 +14,7 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.Globalization;
     using System.Linq;
+    using System.Windows;
 
     using Caliburn.Micro;
 
@@ -51,6 +52,7 @@ namespace HandBrakeWPF.ViewModels
 
         private const string SameAsSource = "Same as source";
         private readonly IUserSettingService userSettingService;
+        private readonly IErrorService errorService;
 
         private bool displayOptimiseOptions;
         private int qualityMax;
@@ -78,10 +80,11 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="userSettingService">
         /// The user Setting Service.
         /// </param>
-        public VideoViewModel(IUserSettingService userSettingService)
+        public VideoViewModel(IUserSettingService userSettingService, IErrorService errorService)
         {
             this.Task = new EncodeTask { VideoEncoder = VideoEncoder.X264 };
             this.userSettingService = userSettingService;
+            this.errorService = errorService;
             this.QualityMin = 0;
             this.QualityMax = 51;
             this.IsConstantQuantity = true;
@@ -1151,6 +1154,25 @@ namespace HandBrakeWPF.ViewModels
         public void CopyQuery()
         {
             Clipboard.SetDataObject(this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 ? this.GetActualx264Query() : this.ExtraArguments);
+        }
+
+        public void ToggleAdvancedTab()
+        {
+            if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab))
+            {
+                this.errorService.ShowMessageBox(
+                    "The 'Advanced' tab is no longer supported and will be removed in an upcoming release. We strongly recommend using the video tab instead.",
+                    "Advanced Tab Deprecated",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                this.userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, true);
+                this.UseAdvancedTab = true;
+            }
+            else
+            {
+                this.userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, false);
+                this.UseAdvancedTab = false;
+            }
         }
 
         #endregion

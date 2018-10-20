@@ -38,11 +38,7 @@
 
         <!-- X264 Query  -->
 
-        <TextBlock Text="{x:Static Properties:Resources.Advanced_NotInUse}" Grid.Row="0"
-                       TextWrapping="Wrap" Width="480" Margin="0, 100, 0, 0" FontSize="12"
-                       Visibility="{Binding ShowX264AdvancedOptions, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=true}" />
-
-        <Grid Grid.Row="1" Visibility="{Binding ShowX264AdvancedOptions, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=false}">
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
@@ -521,8 +517,7 @@
         <TextBlock Grid.Row="2" Margin="10,5,10,0"
                    VerticalAlignment="Center"
                    FontWeight="Bold"
-                   Text="x264 Encoder Options:"
-                   Visibility="{Binding ShowX264AdvancedOptions, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=false}" />
+                   Text="x264 Encoder Options:" />
         
         <TextBox Grid.Row="3"
                  Margin="10,2,10, 2"
@@ -533,7 +528,6 @@
                  ToolTip="{x:Static Properties:Resources.Advanced_EncoderOptions}"
                  Text="{Binding AdvancedOptionsString, UpdateSourceTrigger=PropertyChanged}"
                  TextWrapping="Wrap"
-                 Visibility="{Binding ShowX264AdvancedOptions, Converter={StaticResource BooleanVisibilityConverter}, ConverterParameter=false}"
                  />
     </Grid>
 </UserControl>

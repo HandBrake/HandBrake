@@ -211,6 +211,9 @@ namespace HandBrakeWPF.Services
                     this.userSettings.Add(item.Key, item.Value);
                     this.Save();
                 }
+
+                // Legacy Settings forced Reset.
+                this.userSettings[UserSettingConstants.ShowAdvancedTab] = false;
             }
             catch (Exception exc)
             {

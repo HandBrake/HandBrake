@@ -178,11 +178,9 @@ namespace HandBrakeWPF.ViewModels
         {
             if (e.PropertyName == UserSettingConstants.ShowAdvancedTab)
             {
-                ShowX264AdvancedOptions = this.Task.ShowAdvancedTab;
-                this.NotifyOfPropertyChange(() => ShowX264AdvancedOptions);
                 this.NotifyOfPropertyChange(() => this.AdvancedOptionsString);
 
-                if (ShowX264AdvancedOptions)
+                if (this.Task.ShowAdvancedTab)
                 {
                     this.UpdateUIFromAdvancedOptions();
                 }
@@ -195,10 +193,6 @@ namespace HandBrakeWPF.ViewModels
 
         #region Properties
 
-        /// <summary>
-        /// Gets or sets a value indicating whether show x 264 advanced options.
-        /// </summary>
-        public bool ShowX264AdvancedOptions { get; set; }
 
         /// <summary>
         /// Gets or sets AdaptiveBFrames.
@@ -936,12 +930,6 @@ namespace HandBrakeWPF.ViewModels
             this.Task = task;
             this.Task.PropertyChanged += this.Task_PropertyChanged;
             this.AdvancedOptionsString = preset.Task.AdvancedEncoderOptions;
-
-            if (task.ShowAdvancedTab && (task.VideoEncoder == VideoEncoder.X264 || task.VideoEncoder == VideoEncoder.X264_10))
-            {
-                this.ShowX264AdvancedOptions = true;
-                this.NotifyOfPropertyChange(() => ShowX264AdvancedOptions);
-            }
         }
 
         /// <summary>

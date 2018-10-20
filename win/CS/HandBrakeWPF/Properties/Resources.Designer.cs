@@ -365,19 +365,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The x264 Preset / Tune / Profile and Level options are currently in use on the Video Tab. 
-        ///
-        ///To enable this tab, check the &quot;Use Advanced Tab instead&quot; option on the Video Tab.
-        ///
-        ///If you do not use this tab, it can be hidden from: Tools Menu &gt; Options &gt; Advanced..
-        /// </summary>
-        public static string Advanced_NotInUse {
-            get {
-                return ResourceManager.GetString("Advanced_NotInUse", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Psychovisual Rate Distortion means x264 tries to retain detail, for better quality to the human eye, 
         ///as opposed to trying to maximize quality the way a computer understands it, through signal-to-noise ratios that have trouble telling apart fine detail and noise..
         /// </summary>
@@ -2489,15 +2476,6 @@ namespace HandBrakeWPF.Properties {
         public static string Options_AdvancedOptions {
             get {
                 return ResourceManager.GetString("Options_AdvancedOptions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Allow use of &apos;Advanced&apos; Tab for x264 options. (Deprecated).
-        /// </summary>
-        public static string Options_AdvancedTab {
-            get {
-                return ResourceManager.GetString("Options_AdvancedTab", resourceCulture);
             }
         }
         
@@ -5069,15 +5047,6 @@ namespace HandBrakeWPF.Properties {
         public static string VideoView_TurboFirstPass {
             get {
                 return ResourceManager.GetString("VideoView_TurboFirstPass", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use Advanced Tab instead.
-        /// </summary>
-        public static string VideoView_UseAdvancedTab {
-            get {
-                return ResourceManager.GetString("VideoView_UseAdvancedTab", resourceCulture);
             }
         }
         

@@ -131,7 +131,7 @@
 
                 <TextBlock Text="{x:Static Properties:Resources.VideoView_OptimiseVideo}" Margin="0,0,0,0" Grid.Row="0"  Grid.ColumnSpan="2" FontWeight="Bold" VerticalAlignment="Center" />
 
-                <CheckBox Content="{x:Static Properties:Resources.VideoView_UseAdvancedTab}" Grid.Row="1" IsChecked="{Binding UseAdvancedTab}" Margin="0,5,0,0"
+                <CheckBox Content="Use Legacy Advanced Tab" Grid.Row="1" IsChecked="{Binding UseAdvancedTab}" Margin="0,5,0,0"
                           Visibility="{Binding IsAdvancedTabOptionEnabled, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
                           ToolTip="{x:Static Properties:ResourcesTooltips.Video_AdvancedOptions}" />
 
@@ -193,6 +193,7 @@
                         <TextBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Copy Full Query" cal:Message.Attach="[Event Click] = [Action CopyQuery]"  />
+                                <MenuItem Header="Toggle Advanced Tab (Deprecated)" cal:Message.Attach="[Event Click] = [Action ToggleAdvancedTab]" />
                             </ContextMenu>
                         </TextBox.ContextMenu>
                     </TextBox>

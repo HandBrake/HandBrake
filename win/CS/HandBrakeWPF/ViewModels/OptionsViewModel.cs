@@ -85,7 +85,6 @@ namespace HandBrakeWPF.ViewModels
         private bool updateAvailable;
         private int downloadProgressPercentage;
         private UpdateCheckInformation updateInfo;
-        private bool showAdvancedTab;
         private bool removePunctuation;
         private bool resetWhenDoneAction;
         private bool enableQuickSyncDecoding;
@@ -979,22 +978,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether enable lib hb.
-        /// </summary>
-        public bool ShowAdvancedTab
-        {
-            get
-            {
-                return this.showAdvancedTab;
-            }
-            set
-            {
-                this.showAdvancedTab = value;
-                this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
-            }
-        }
-
         #endregion
 
         #region Video
@@ -1454,7 +1437,6 @@ namespace HandBrakeWPF.ViewModels
             // Minimise to Tray
             this.MinimiseToTray = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.MainWindowMinimize);
             this.ClearQueueOnEncodeCompleted = userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue);
-            this.ShowAdvancedTab = userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
 
             // Set the preview count
             this.PreviewPicturesToScan.Clear();
@@ -1574,7 +1556,6 @@ namespace HandBrakeWPF.ViewModels
             userSettingService.SetUserSetting(UserSettingConstants.ClearCompletedFromQueue, this.ClearQueueOnEncodeCompleted);
             userSettingService.SetUserSetting(UserSettingConstants.PreviewScanCount, this.SelectedPreviewCount);
             userSettingService.SetUserSetting(UserSettingConstants.X264Step, double.Parse(this.SelectedGranulairty, CultureInfo.InvariantCulture));
-            userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, this.ShowAdvancedTab);
 
             int value;
             if (int.TryParse(this.MinLength.ToString(CultureInfo.InvariantCulture), out value))

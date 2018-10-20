@@ -284,13 +284,6 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
   </data>
-  <data name="Advanced_NotInUse" xml:space="preserve">
-    <value>The x264 Preset / Tune / Profile and Level options are currently in use on the Video Tab. 
-
-To enable this tab, check the "Use Advanced Tab instead" option on the Video Tab.
-
-If you do not use this tab, it can be hidden from: Tools Menu &gt; Options &gt; Advanced.</value>
-  </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
     <value>WARNING: You do not have automatic file naming turned on. Please enable this in options.</value>
   </data>
@@ -1329,9 +1322,6 @@ Would you like to overwrite it?</value>
   <data name="Options_AdvancedOptions" xml:space="preserve">
     <value>Advanced Options</value>
   </data>
-  <data name="Options_AdvancedTab" xml:space="preserve">
-    <value>Allow use of 'Advanced' Tab for x264 options. (Deprecated)</value>
-  </data>
   <data name="Options_Arguments" xml:space="preserve">
     <value>Arguments:</value>
   </data>
@@ -1897,9 +1887,6 @@ This will not affect your current settings in the Subtitle tab.</value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
     <value>Turbo first pass</value>
-  </data>
-  <data name="VideoView_UseAdvancedTab" xml:space="preserve">
-    <value>Use Advanced Tab instead</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>Variable Framerate</value>
