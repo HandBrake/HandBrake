@@ -504,6 +504,7 @@
 		A9597A291A49749D00007771 /* HBRange+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBRange+UIAdditions.m"; sourceTree = "<group>"; };
 		A95BC1E51CD2548A008D6A33 /* volHighTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = volHighTemplate.pdf; sourceTree = "<group>"; };
 		A95BC1E61CD2548A008D6A33 /* volLowTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = volLowTemplate.pdf; sourceTree = "<group>"; };
+		A95CB2FB217B6D07001E9F51 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A9637D8920F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A9637D9120F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBEncodingProgressHUDController.strings; sourceTree = "<group>"; };
 		A9637D9220F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBTitleSelection.strings; sourceTree = "<group>"; };
@@ -2060,6 +2061,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				A9B6B9F0217B408E00B957AE /* de */,
+				A95CB2FB217B6D07001E9F51 /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
