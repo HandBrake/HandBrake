@@ -7378,6 +7378,7 @@ filter_output([
                         <child>
                           <object class="GtkCheckButton" id="auto_name">
                             <property name="label" translatable="yes">Use automatic naming (uses modified source name)</property>
+                            <property name="tooltip_text" translatable="yes">Create destination filename from source filename or volume label</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
@@ -7412,7 +7413,7 @@ filter_output([
                             </child>
                             <child>
                               <object class="GtkEntry" id="auto_name_template">
-                                <property name="tooltip_text" translatable="yes">Available Options: {source} {title} {preset} {chapters} {date} {time} {creation-date} {creation-time} {quality} {bitrate}</property>
+                                <property name="tooltip_text" translatable="yes">Available Options: {source_path} {source} {title} {preset} {chapters} {date} {time} {creation-date} {creation-time} {quality} {bitrate}</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
