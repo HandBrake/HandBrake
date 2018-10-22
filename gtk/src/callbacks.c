@@ -1118,9 +1118,27 @@ get_creation_date(const char *pattern, const char *metaValue, const char *file)
 }
 
 static void
+make_unique_dest(const gchar *dest_dir, GString *str, const gchar * extension)
+{
+    GString * uniq = g_string_new(str->str);
+    int       copy = 0;
+
+    g_string_printf(uniq, "%s/%s.%s", dest_dir, str->str, extension);
+    while (g_file_test(uniq->str, G_FILE_TEST_EXISTS))
+    {
+        g_string_printf(uniq, "%s/%s (%d).%s", dest_dir, str->str, ++copy, extension);
+    }
+    if (copy)
+    {
+        g_string_append_printf(str, " (%d)", copy);
+    }
+    g_string_free(uniq, TRUE);
+}
+
+static void
 set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
 {
-    const gchar *extension, *dest_file;
+    const gchar *extension, *dest_file, *dest_dir;
     gchar *filename;
 
     extension = get_extension(ud, settings);
@@ -1140,12 +1158,36 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
         ghb_dict_set_string(settings, "dest_file", filename);
         g_free(filename);
     }
+    ghb_dict_set(settings, "dest_dir", ghb_value_dup(
+                 ghb_dict_get_value(ud->prefs, "destination_dir")));
     if (ghb_dict_get_bool(ud->prefs, "auto_name"))
     {
         GString *str = g_string_new("");
         const gchar *p;
 
         p = ghb_dict_get_string(ud->prefs, "auto_name_template");
+        // {source_path} is only allowed as the first element of the
+        // template since the path must come first in the filename
+        if (p != NULL &&
+            !strncmp(p, "{source_path}", strlen("{source_path}")))
+        {
+            const gchar * source;
+
+            source = ghb_dict_get_string(ud->globals, "scan_source");
+            if (source != NULL)
+            {
+                char * dirname = g_path_get_dirname(source);
+                // if dirname is a directory and it is writable...
+                if (dirname != NULL &&
+                    g_file_test(dirname, G_FILE_TEST_IS_DIR) &&
+                    access(dirname, W_OK) == 0)
+                {
+                    ghb_dict_set_string(settings, "dest_dir", dirname);
+                }
+                g_free(dirname);
+            }
+            p += strlen("{source_path}");
+        }
         while (*p)
         {
             if (!strncmp(p, "{source}", strlen("{source}")))
@@ -1253,6 +1295,8 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 p++;
             }
         }
+        dest_dir = ghb_dict_get_string(settings, "dest_dir");
+        make_unique_dest(dest_dir, str, extension);
         g_string_append_printf(str, ".%s", extension);
         filename = g_string_free(str, FALSE);
         ghb_dict_set_string(settings, "dest_file", filename);
@@ -1974,7 +2018,20 @@ destination_grab_cb(
     return FALSE;
 }
 
-static gboolean update_default_destination = FALSE;
+static void
+update_default_destination(signal_user_data_t *ud)
+{
+    const gchar *dest_dir, *def_dest;
+
+    dest_dir = ghb_dict_get_string(ud->settings, "dest_dir");
+    def_dest = ghb_dict_get_string(ud->prefs, "destination_dir");
+    if (dest_dir != NULL && def_dest != NULL && dest_dir[0] != 0 &&
+        strcmp(dest_dir, def_dest) != 0)
+    {
+        ghb_dict_set_string(ud->prefs, "destination_dir", dest_dir);
+        ghb_pref_save(ud->prefs, "destination_dir");
+    }
+}
 
 G_MODULE_EXPORT void
 dest_dir_set_cb(GtkFileChooserButton *dest_chooser, signal_user_data_t *ud)
@@ -1991,7 +2048,7 @@ dest_dir_set_cb(GtkFileChooserButton *dest_chooser, signal_user_data_t *ud)
     GhbValue *dest_dict = ghb_get_job_dest_settings(ud->settings);
     ghb_dict_set_string(dest_dict, "File", dest);
     g_free(dest);
-    update_default_destination = TRUE;
+    update_default_destination(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2012,7 +2069,6 @@ dest_file_changed_cb(GtkEntry *entry, signal_user_data_t *ud)
     GhbValue *dest_dict = ghb_get_job_dest_settings(ud->settings);
     ghb_dict_set_string(dest_dict, "File", dest);
     g_free(dest);
-    update_default_destination = TRUE;
 }
 
 G_MODULE_EXPORT void
@@ -2669,8 +2725,6 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     }
 
     set_destination_settings(ud, settings);
-    ghb_dict_set(settings, "dest_dir", ghb_value_dup(
-                 ghb_dict_get_value(ud->prefs, "destination_dir")));
 
     const char *dest_file, *dest_dir;
     char *dest;
@@ -4289,21 +4343,6 @@ ghb_timer_cb(gpointer data)
 
     ghb_live_preview_progress(ud);
     ghb_backend_events(ud);
-    if (update_default_destination)
-    {
-        const gchar *dest, *def_dest;
-        gchar *dest_dir;
-        dest = ghb_dict_get_string(ud->settings, "destination");
-        dest_dir = g_path_get_dirname(dest);
-        def_dest = ghb_dict_get_string(ud->prefs, "destination_dir");
-        if (strcmp(dest_dir, def_dest) != 0)
-        {
-            ghb_dict_set_string(ud->prefs, "destination_dir", dest_dir);
-            ghb_pref_save(ud->prefs, "destination_dir");
-        }
-        g_free(dest_dir);
-        update_default_destination = FALSE;
-    }
     if (update_preview)
     {
         g_debug("Updating preview\n");
