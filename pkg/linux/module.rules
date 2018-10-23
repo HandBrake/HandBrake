@@ -49,7 +49,7 @@ $(PKG.native.rpm.stamp): $(PKG.rpm.src.tar.bz2)
 	echo "%define version $(PKG.rpm.hb.version)" >> $(RPM.out/)SPECS/ghb.spec
 	cat $(GTK.src/)ghb.spec >> $(RPM.out/)SPECS/ghb.spec
 	$(CP.exe) $(PKG.rpm.src.tar.bz2) $(RPM.out/)SOURCES
-	rpmbuild --define="_topdir $(PWD)/$(RPM.out)" --buildroot $(RPMROOT.out) -ba $(RPM.out/)SPECS/ghb.spec
+	rpmbuild --define="_topdir $(RPM.out)" --buildroot $(RPMROOT.out) -ba $(RPM.out/)SPECS/ghb.spec
 	$(TOUCH.exe) $(PKG.native.rpm.stamp)
 
 $(PKG.rpm.stamp): | $(dir $(PKG.gui.rpm))
@@ -89,11 +89,11 @@ $(PKG.cli.flatpak): GNUmakefile $(PKG.src.tar.bz2)
 $(PKG.gui.tmp.deb): | $(dir $(PKG.gui.tmp.deb))
 $(PKG.gui.tmp.deb): GNUmakefile
 	-$(RM.exe) $(SRC/)debian
-	ln -s $(PWD)/$(PKG.debian) $(SRC/)debian
+	ln -s $(PKG.debian) $(SRC/)debian
 	fakeroot $(MAKE) -C $(SRC/) -f debian/rules clean
-	$(MAKE) BUILDDIR=$(PWD)/$(BUILD) CONFIGURE=configure -C $(SRC/) -f debian/rules build
-	echo $(PKG.out/)
-	fakeroot $(MAKE) FORCEVERSION="-- -v$(HB.debversion)" BUILDDIR=$(PWD)/$(BUILD) CONFIGURE=configure PKGDESTDIR=$(PWD)/$(PKG.out/) -C $(SRC/) -f debian/rules binary
+	$(MAKE) BUILDDIR=$(abspath $(BUILD)) CONFIGURE=configure -C $(SRC/) -f debian/rules build
+	echo $(PKG.out.abs/)
+	fakeroot $(MAKE) FORCEVERSION="-- -v$(HB.debversion)" BUILDDIR=$(abspath $(BUILD)) CONFIGURE=configure PKGDESTDIR=$(PKG.out.abs/ -C $(SRC/) -f debian/rules binary
 
 
 $(PKG.gui.deb): | $(dir $(PKG.gui.deb))
@@ -118,7 +118,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	$(GIT.exe) -C $(SRC/) archive --format=tar --prefix=$(PKG.deb.basename)/ $(HB.repo.shorthash) | $(TAR.exe) -xC $(STAGE.out.src/)bionic/
 	$(SRC/)scripts/repo-info.sh $(SRC/) > $(STAGE.out.src/)bionic/$(PKG.deb.basename)/version.txt
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)bionic/$(PKG.deb.basename)
-	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)bionic/$(PKG.deb.basename)
+	cp -a $(PKG.debian) $(STAGE.out.src/)bionic/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/control.bionic $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/control
 	$(CP.exe) $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/rules.bionic $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/rules
 	echo "$(HB.name.lower) ($(HB.debversion)-zhb-1ppa1~bionic1) bionic; urgency=low" > $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
@@ -132,7 +132,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	$(GIT.exe) -C $(SRC/) archive --format=tar --prefix=$(PKG.deb.basename)/ $(HB.repo.shorthash) | $(TAR.exe) -xC $(STAGE.out.src/)cosmic/
 	$(SRC/)scripts/repo-info.sh $(SRC/) > $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/version.txt
 	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)cosmic/$(PKG.deb.basename)
-	cp -a $(PWD)/$(PKG.debian) $(STAGE.out.src/)cosmic/$(PKG.deb.basename)
+	cp -a $(PKG.debian) $(STAGE.out.src/)cosmic/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/control.cosmic $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/control
 	$(CP.exe) $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/rules.cosmic $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/rules
 	echo "$(HB.name.lower) ($(HB.debversion)-zhb-1ppa1~cosmic1) cosmic; urgency=low" > $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/changelog

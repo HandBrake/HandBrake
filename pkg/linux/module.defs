@@ -1,3 +1,8 @@
+PKG.in.abs/ = $(abspath $(PKG.in/))/
+PKG.out.abs/ = $(abspath $(PKG.out/))/
+STAGE.out.abs/ = $(abspath $(STAGE.out/))/
+STAGE.out.src.abs/ = $(abspath $(STAGE.out.src/))/
+
 PKG.deb.machine = `dpkg --print-architecture`
 PKG.rpm.machine = `rpm -E "%_target_cpu"`
 PKG.release = $(HB.repo.rev)
@@ -35,33 +40,33 @@ endif
 
 ###############################################################################
 
-PKG.cli.tar = $(PKG.out/)$(HB.name)-$(HB.version)-$(BUILD.machine)_CLI.tar.gz
+PKG.cli.tar = $(PKG.out.abs/)$(HB.name)-$(HB.version)-$(BUILD.machine)_CLI.tar.gz
 
-STAGE.out.cli/ = $(STAGE.out/)cli/
+STAGE.out.cli/ = $(STAGE.out.abs/)cli/
 
 ###############################################################################
 
 PKG.rpm.basename = $(HB.name.lower)-$(PKG.rpm.hb.version)
-PKG.rpm.src.tar.bz2 = $(STAGE.out.src/)rpm/$(PKG.rpm.basename).tar.bz2
-STAGE.out.rpm.src/ = $(STAGE.out.src/)rpm/
+PKG.rpm.src.tar.bz2 = $(STAGE.out.src.abs/)rpm/$(PKG.rpm.basename).tar.bz2
+STAGE.out.rpm.src/ = $(STAGE.out.src.abs/)rpm/
 
-PKG.debian  = $(PKG.in/)linux/debian
-PKG.flatpak/  = $(PKG.in/)linux/flatpak/
-PKG.cli.deb = $(PKG.out/)$(HB.name)-$(HB.debversion)-Ubuntu_CLI_$(BUILD.machine).deb
-PKG.gui.deb = $(PKG.out/)$(HB.name)-$(HB.debversion)-Ubuntu_GUI_$(BUILD.machine).deb
+PKG.debian  = $(PKG.in.abs/)linux/debian
+PKG.flatpak/  = $(PKG.in.abs/)linux/flatpak/
+PKG.cli.deb = $(PKG.out.abs/)$(HB.name)-$(HB.debversion)-Ubuntu_CLI_$(BUILD.machine).deb
+PKG.gui.deb = $(PKG.out.abs/)$(HB.name)-$(HB.debversion)-Ubuntu_GUI_$(BUILD.machine).deb
 PKG.deb.basename = $(HB.name.lower)-$(HB.debversion)
 PKG.src.deb.tar = $(HB.name.lower)_$(HB.debversion).tar.gz
-PKG.src.deb.stamp = $(STAGE.out.src/).debsrc.stamp
-PKG.src.deb = $(PKG.out/)$(HB.name.lower)_$(HB.debversion).deb
+PKG.src.deb.stamp = $(STAGE.out.src.abs/).debsrc.stamp
+PKG.src.deb = $(PKG.out.abs/)$(HB.name.lower)_$(HB.debversion).deb
 
-PKG.cli.tmp.deb = $(PKG.out/)$(HB.name.lower)-cli_$(HB.debversion)_$(PKG.deb.machine).deb
-PKG.gui.tmp.deb = $(PKG.out/)$(HB.name.lower)-gtk_$(HB.debversion)_$(PKG.deb.machine).deb
+PKG.cli.tmp.deb = $(PKG.out.abs/)$(HB.name.lower)-cli_$(HB.debversion)_$(PKG.deb.machine).deb
+PKG.gui.tmp.deb = $(PKG.out.abs/)$(HB.name.lower)-gtk_$(HB.debversion)_$(PKG.deb.machine).deb
 
 PKG.native.rpm.stamp = $(RPM.out/).rpm.stamp
-PKG.rpm.stamp = $(PKG.out/).rpm.stamp
+PKG.rpm.stamp = $(PKG.out.abs/).rpm.stamp
 
-PKG.out.flatpak/ = $(PKG.out/)flatpak/
-STAGE.out.flatpak/ = $(STAGE.out/)flatpak/
+PKG.out.flatpak/ = $(PKG.out.abs/)flatpak/
+STAGE.out.flatpak/ = $(STAGE.out.abs/)flatpak/
 PKG.gui.flathub.manifest = $(PKG.out.flatpak/)fr.handbrake.ghb.json
 PKG.cli.flathub.manifest = $(PKG.out.flatpak/)/fr.handbrake.HandBrakeCLI.json
 PKG.gui.manifest.flatpak = $(PKG.flatpak/)fr.handbrake.ghb.json
@@ -75,12 +80,12 @@ PKG.gui.flatpak = $(PKG.out.flatpak/)$(HB.name)-$(HB.version)-$(BUILD.machine).f
 PKG.gui.native.rpm = $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name.lower)-gui-$(PKG.rpm.hb.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm
 PKG.cli.native.rpm = $(RPM.out/)RPMS/$(PKG.rpm.machine)/$(HB.name.lower)-cli-$(PKG.rpm.hb.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm
 
-PKG.cli.rpm  = $(PKG.out/)$(HB.name.lower)-cli-$(PKG.rpm.hb.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm
-PKG.gui.rpm  = $(PKG.out/)$(HB.name.lower)-gui-$(PKG.rpm.hb.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm
-RPM.out  = $(STAGE.out/)rpm
-RPM.out/ = $(STAGE.out/)rpm/
-RPMROOT.out  = $(PWD)/$(STAGE.out/)rpmroot
-RPMROOT.out/ = $(PWD)/$(STAGE.out/)rpmroot/
+PKG.cli.rpm  = $(PKG.out.abs/)$(HB.name.lower)-cli-$(PKG.rpm.hb.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm
+PKG.gui.rpm  = $(PKG.out.abs/)$(HB.name.lower)-gui-$(PKG.rpm.hb.version)-$(PKG.release)$(PKG.rpm.dist).$(PKG.rpm.machine).rpm
+RPM.out  = $(STAGE.out.abs/)rpm
+RPM.out/ = $(RPM.out)/
+RPMROOT.out  = $(STAGE.out.abs/)rpmroot
+RPMROOT.out/ = $(RPMROOT.out)/
 
 ###############################################################################
 
