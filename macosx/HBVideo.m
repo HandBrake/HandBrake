@@ -106,7 +106,6 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
         [self validatePresetsSettings];
-        [self validateAdvancedOptions];
         [self validateVideoOptionExtra:previousEncoder];
     }
 
@@ -305,14 +304,6 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     }
 }
 
-- (void)validateAdvancedOptions
-{
-    if (self.encoder != HB_VCODEC_H264_MASK)
-    {
-        self.advancedOptions = NO;
-    }
-}
-
 - (void)validateVideoOptionExtra:(int)previousEncoder
 {
     if (!((previousEncoder & HB_VCODEC_X264_MASK &&
@@ -445,7 +436,6 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         copy->_twoPass = _twoPass;
         copy->_turboTwoPass = _turboTwoPass;
 
-        copy->_advancedOptions = _advancedOptions;
         copy->_preset = [_preset copy];
         copy->_tune = [_tune copy];
         copy->_profile = [_profile copy];
@@ -468,7 +458,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:1 forKey:@"HBVideoVersion"];
+    [coder encodeInt:2 forKey:@"HBVideoVersion"];
 
     encodeInt(_encoder);
 
@@ -485,7 +475,6 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     encodeBool(_twoPass);
     encodeBool(_turboTwoPass);
 
-    encodeBool(_advancedOptions);
     encodeObject(_preset);
     encodeObject(_tune);
     encodeObject(_profile);
@@ -515,7 +504,6 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     decodeBool(_twoPass);
     decodeBool(_turboTwoPass);
 
-    decodeBool(_advancedOptions);
     decodeObjectOrFail(_preset, NSString);
     decodeObjectOrFail(_tune, NSString);
     decodeObjectOrFail(_profile, NSString);
@@ -591,14 +579,12 @@ fail:
             self.fastDecode = NO;
 
             self.videoOptionExtra = preset[@"VideoOptionExtra"];
-            self.advancedOptions = YES;
         }
         else
         {
             // x264UseAdvancedOptions is set to 0 (disabled),
             // so we use the new preset system and
             // disable the advanced panel
-            self.advancedOptions = NO;
 
             self.preset = preset[@"VideoPreset"];
             self.tune   = preset[@"VideoTune"];
@@ -693,17 +679,7 @@ fail:
         preset[@"VideoOptionExtra"] = self.videoOptionExtra;
         preset[@"VideoProfile"]     = self.profile;
         preset[@"VideoLevel"]       = self.level;
-
-        // x264 Options, this will either be advanced panel or the video tabs x264 presets panel with modded option string
-        if (self.advancedOptions)
-        {
-            // use the old advanced panel.
-            preset[@"x264UseAdvancedOptions"] = @YES;
-        }
-        else
-        {
-            preset[@"x264UseAdvancedOptions"] = @NO;
-        }
+        preset[@"x264UseAdvancedOptions"] = @NO;
     }
     else
     {

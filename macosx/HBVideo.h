@@ -44,7 +44,6 @@ extern NSString * const HBVideoChangedNotification;
  *  Encoder specifics options
  */
 
-@property (nonatomic, readwrite) BOOL advancedOptions;
 @property (nonatomic, readwrite, copy) NSString *preset;
 @property (nonatomic, readwrite, copy) NSString *tune;
 @property (nonatomic, readwrite, copy) NSString *profile;

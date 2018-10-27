@@ -141,35 +141,26 @@
         const char *encoder_options = NULL;
         const char *encoder_profile = NULL;
         const char *encoder_level   = NULL;
-        if (self.video.advancedOptions)
+
+        // we are using the x264/x265 preset system
+        if ([(tmpString = self.video.completeTune) length])
         {
-            // we are using the advanced panel
-            if ([(tmpString = self.video.videoOptionExtra) length])
-            {
-                encoder_options = tmpString.UTF8String;
-            }
+            encoder_tune = [tmpString UTF8String];
         }
-        else
+        if ([(tmpString = self.video.videoOptionExtra) length])
         {
-            // we are using the x264/x265 preset system
-            if ([(tmpString = self.video.completeTune) length])
-            {
-                encoder_tune = [tmpString UTF8String];
-            }
-            if ([(tmpString = self.video.videoOptionExtra) length])
-            {
-                encoder_options = [tmpString UTF8String];
-            }
-            if ([(tmpString = self.video.profile) length])
-            {
-                encoder_profile = [tmpString UTF8String];
-            }
-            if ([(tmpString = self.video.level) length])
-            {
-                encoder_level = [tmpString UTF8String];
-            }
-            encoder_preset = self.video.preset.UTF8String;
+            encoder_options = [tmpString UTF8String];
         }
+        if ([(tmpString = self.video.profile) length])
+        {
+            encoder_profile = [tmpString UTF8String];
+        }
+        if ([(tmpString = self.video.level) length])
+        {
+            encoder_level = [tmpString UTF8String];
+        }
+        encoder_preset = self.video.preset.UTF8String;
+
         hb_job_set_encoder_preset (job, encoder_preset);
         hb_job_set_encoder_tune   (job, encoder_tune);
         hb_job_set_encoder_options(job, encoder_options);

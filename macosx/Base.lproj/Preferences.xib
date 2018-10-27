@@ -353,11 +353,11 @@
             <point key="canvasLocation" x="487" y="-196"/>
         </customView>
         <customView id="236" userLabel="Advanced">
-            <rect key="frame" x="0.0" y="0.0" width="454" height="292"/>
+            <rect key="frame" x="0.0" y="0.0" width="454" height="266"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="4UU-uq-R9U">
-                    <rect key="frame" x="16" y="0.0" width="422" height="292"/>
+                    <rect key="frame" x="16" y="0.0" width="422" height="266"/>
                     <subviews>
                         <popUpButton toolTip="Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="363">
                             <rect key="frame" x="174" y="89" width="90" height="22"/>
@@ -378,7 +378,7 @@
                             </connections>
                         </popUpButton>
                         <popUpButton toolTip="Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments." horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="387">
-                            <rect key="frame" x="294" y="253" width="60" height="22"/>
+                            <rect key="frame" x="294" y="227" width="60" height="22"/>
                             <popUpButtonCell key="cell" type="push" title="0.25" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="391" id="388">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -401,7 +401,7 @@
                             </connections>
                         </popUpButton>
                         <button toolTip="Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare)." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="398">
-                            <rect key="frame" x="82" y="126" width="219" height="18"/>
+                            <rect key="frame" x="82" y="125" width="219" height="18"/>
                             <buttonCell key="cell" type="check" title="Use libdvdnav (instead of libdvdread)" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="399">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -421,7 +421,7 @@
                             </connections>
                         </button>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="442">
-                            <rect key="frame" x="-2" y="128" width="81" height="14"/>
+                            <rect key="frame" x="-2" y="127" width="81" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="DVD Reader:" id="443">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -429,7 +429,7 @@
                             </textFieldCell>
                         </textField>
                         <textField horizontalHuggingPriority="248" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="IV7-SY-HLR">
-                            <rect key="frame" x="-2" y="199" width="81" height="14"/>
+                            <rect key="frame" x="-2" y="198" width="81" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Title Scan:" id="c0L-TU-WML">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -437,7 +437,7 @@
                             </textFieldCell>
                         </textField>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="jPa-4p-Y29">
-                            <rect key="frame" x="-2" y="258" width="81" height="14"/>
+                            <rect key="frame" x="-2" y="232" width="81" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="x264 Encoder:" id="cqp-xU-GOe">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -461,7 +461,7 @@
                             </textFieldCell>
                         </textField>
                         <textField toolTip="Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="359">
-                            <rect key="frame" x="83" y="177" width="195" height="14"/>
+                            <rect key="frame" x="83" y="176" width="195" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Number of picture previews to scan:" id="360">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -469,7 +469,7 @@
                             </textFieldCell>
                         </textField>
                         <textField toolTip="Minimum title duration in seconds. Shorter titles will be skipped." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="463">
-                            <rect key="frame" x="83" y="199" width="167" height="14"/>
+                            <rect key="frame" x="83" y="198" width="167" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Minimum title duration to scan:" id="464">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -477,7 +477,7 @@
                             </textFieldCell>
                         </textField>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="UXr-op-aKN">
-                            <rect key="frame" x="301" y="199" width="49" height="14"/>
+                            <rect key="frame" x="301" y="198" width="49" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="seconds" id="klQ-DW-Kc6">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -485,7 +485,7 @@
                             </textFieldCell>
                         </textField>
                         <textField toolTip="Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="395">
-                            <rect key="frame" x="83" y="258" width="208" height="14"/>
+                            <rect key="frame" x="83" y="232" width="208" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Constant Quality fractional granularity:" id="396">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -493,7 +493,7 @@
                             </textFieldCell>
                         </textField>
                         <textField toolTip="Minimum title duration in seconds. Shorter titles will be skipped." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="480">
-                            <rect key="frame" x="256" y="196" width="40" height="19"/>
+                            <rect key="frame" x="256" y="195" width="40" height="19"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="40" id="y5Z-y6-LMm"/>
                             </constraints>
@@ -508,7 +508,7 @@
                             </connections>
                         </textField>
                         <popUpButton toolTip="Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="352">
-                            <rect key="frame" x="281" y="172" width="56" height="22"/>
+                            <rect key="frame" x="281" y="171" width="56" height="22"/>
                             <constraints>
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="ASh-ct-Imw"/>
                             </constraints>
@@ -562,21 +562,8 @@
                                 <binding destination="61" name="value" keyPath="values.HBClearOldLogs" id="98r-xV-IVB"/>
                             </connections>
                         </button>
-                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ybi-46-yhY">
-                            <rect key="frame" x="82" y="235" width="254" height="18"/>
-                            <string key="toolTip">Show the Advanced Options Panel for x264 settings.
-
-This setting is no longer supported and may be removed in a future version. Use at your own risk!</string>
-                            <buttonCell key="cell" type="check" title="Show Advanced Options Panel (deprecated)" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Du1-9x-nHn">
-                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                <font key="font" metaFont="smallSystem"/>
-                            </buttonCell>
-                            <connections>
-                                <binding destination="61" name="value" keyPath="values.HBShowAdvancedTab" id="PgA-TV-kBr"/>
-                            </connections>
-                        </button>
                         <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="I0X-1x-9qe">
-                            <rect key="frame" x="0.0" y="156" width="422" height="5"/>
+                            <rect key="frame" x="0.0" y="155" width="422" height="5"/>
                         </box>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="sRQ-Oe-1xH">
                             <rect key="frame" x="-2" y="19" width="81" height="14"/>
@@ -624,10 +611,8 @@ This setting is no longer supported and may be removed in a future version. Use 
                         <constraint firstItem="jPa-4p-Y29" firstAttribute="leading" secondItem="4UU-uq-R9U" secondAttribute="leading" id="0XL-N8-hhe"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="363" secondAttribute="trailing" constant="20" id="0by-WQ-IEO"/>
                         <constraint firstItem="442" firstAttribute="leading" secondItem="jPa-4p-Y29" secondAttribute="leading" id="0y2-cf-8RZ"/>
-                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="ybi-46-yhY" secondAttribute="trailing" id="5KQ-eS-SOh"/>
                         <constraint firstItem="359" firstAttribute="baseline" secondItem="352" secondAttribute="baseline" id="7tL-h8-5AB"/>
                         <constraint firstItem="395" firstAttribute="baseline" secondItem="387" secondAttribute="baseline" id="80j-Xc-t7X"/>
-                        <constraint firstItem="463" firstAttribute="top" secondItem="ybi-46-yhY" secondAttribute="bottom" constant="25" id="ANO-Sf-GW8"/>
                         <constraint firstItem="347" firstAttribute="leading" secondItem="371" secondAttribute="leading" id="Bwa-R1-Sg0"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="UXr-op-aKN" secondAttribute="trailing" id="CRS-Yq-1Ur"/>
                         <constraint firstItem="htF-lD-ZBh" firstAttribute="baseline" secondItem="sRQ-Oe-1xH" secondAttribute="baseline" id="DMh-iO-Tvh"/>
@@ -639,8 +624,9 @@ This setting is no longer supported and may be removed in a future version. Use 
                         <constraint firstItem="Koh-5H-cdo" firstAttribute="leading" secondItem="PaR-zw-opS" secondAttribute="trailing" constant="7" id="Hd0-hx-WId"/>
                         <constraint firstItem="350" firstAttribute="baseline" secondItem="371" secondAttribute="baseline" id="KJC-CV-ZFy"/>
                         <constraint firstItem="Ndp-Xh-ohY" firstAttribute="top" secondItem="347" secondAttribute="bottom" constant="8" id="Kgc-7G-m3M"/>
+                        <constraint firstItem="463" firstAttribute="top" secondItem="395" secondAttribute="bottom" constant="20" id="LNo-ir-2Ih"/>
                         <constraint firstItem="jPa-4p-Y29" firstAttribute="top" secondItem="4UU-uq-R9U" secondAttribute="top" constant="20" id="Mib-9l-uBL"/>
-                        <constraint firstItem="371" firstAttribute="top" secondItem="398" secondAttribute="bottom" constant="21" id="Mt3-Wx-Kuh"/>
+                        <constraint firstItem="371" firstAttribute="top" secondItem="398" secondAttribute="bottom" constant="20" id="Mt3-Wx-Kuh"/>
                         <constraint firstItem="442" firstAttribute="width" secondItem="jPa-4p-Y29" secondAttribute="width" id="Pqh-h0-NeI"/>
                         <constraint firstItem="UXr-op-aKN" firstAttribute="leading" secondItem="480" secondAttribute="trailing" constant="7" id="TR5-Sj-PDx"/>
                         <constraint firstItem="htF-lD-ZBh" firstAttribute="leading" secondItem="sRQ-Oe-1xH" secondAttribute="trailing" constant="8" id="TW2-Vp-Dg8"/>
@@ -655,7 +641,6 @@ This setting is no longer supported and may be removed in a future version. Use 
                         <constraint firstItem="363" firstAttribute="leading" secondItem="371" secondAttribute="trailing" constant="8" id="ao3-b4-L3n"/>
                         <constraint firstItem="480" firstAttribute="baseline" secondItem="UXr-op-aKN" secondAttribute="baseline" id="bpm-N7-n6P"/>
                         <constraint firstItem="395" firstAttribute="leading" secondItem="jPa-4p-Y29" secondAttribute="trailing" constant="8" id="caX-fe-X6B"/>
-                        <constraint firstItem="ybi-46-yhY" firstAttribute="top" secondItem="395" secondAttribute="bottom" constant="8" id="dCc-Sn-atf"/>
                         <constraint firstItem="IV7-SY-HLR" firstAttribute="baseline" secondItem="463" secondAttribute="baseline" id="dGu-2J-ulw"/>
                         <constraint firstItem="398" firstAttribute="leading" secondItem="442" secondAttribute="trailing" constant="8" id="eps-Ux-xp1"/>
                         <constraint firstItem="IV7-SY-HLR" firstAttribute="leading" secondItem="jPa-4p-Y29" secondAttribute="leading" id="gET-Go-zxJ"/>
@@ -677,7 +662,6 @@ This setting is no longer supported and may be removed in a future version. Use 
                         <constraint firstItem="htF-lD-ZBh" firstAttribute="top" secondItem="Ndp-Xh-ohY" secondAttribute="bottom" constant="22" id="ujO-hF-lGo"/>
                         <constraint firstItem="463" firstAttribute="baseline" secondItem="480" secondAttribute="baseline" id="ulv-OM-ioh"/>
                         <constraint firstItem="359" firstAttribute="top" secondItem="463" secondAttribute="bottom" constant="8" id="uzg-mY-YoJ"/>
-                        <constraint firstItem="ybi-46-yhY" firstAttribute="leading" secondItem="395" secondAttribute="leading" id="vfq-uw-S0v"/>
                         <constraint firstItem="PaR-zw-opS" firstAttribute="baseline" secondItem="htF-lD-ZBh" secondAttribute="baseline" id="wLK-IO-wMW"/>
                         <constraint firstItem="I0X-1x-9qe" firstAttribute="leading" secondItem="4UU-uq-R9U" secondAttribute="leading" id="zfW-ta-RNq"/>
                     </constraints>

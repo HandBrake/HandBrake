@@ -22,7 +22,6 @@
 #import "HBVideoController.h"
 #import "HBAudioController.h"
 #import "HBSubtitlesController.h"
-#import "HBAdvancedController.h"
 #import "HBChapterTitlesController.h"
 
 #import "HBPreviewController.h"
@@ -34,7 +33,6 @@
 
 @import HandBrakeKit;
 
-static void *HBControllerContext = &HBControllerContext;
 static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
 static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
@@ -65,10 +63,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     // Chapters view controller
     HBChapterTitlesController    * fChapterTitlesController;
     IBOutlet NSTabViewItem       * fChaptersTitlesTab;
-
-    // Advanced options tab
-    HBAdvancedController         * fAdvancedOptions;
-    IBOutlet NSTabViewItem       * fAdvancedTab;
 
     // Picture Preview
     HBPreviewController           * fPreviewController;
@@ -256,12 +250,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     fAudioController = [[HBAudioController alloc] init];
     [fAudioTab setView:[fAudioController view]];
 
-    // setup the advanced view controller
-    fAdvancedOptions = [[HBAdvancedController alloc] init];
-    [fAdvancedTab setView:[fAdvancedOptions view]];
-
     // setup the video view controller
-    fVideoController = [[HBVideoController alloc] initWithAdvancedController:fAdvancedOptions];
+    fVideoController = [[HBVideoController alloc] init];
     [fVideoTab setView:[fVideoController view]];
 
     // setup the picture view controller
@@ -271,11 +261,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     // setup the filters view controller
     fFiltersViewController = [[HBFiltersViewController alloc] init];
     [fFiltersTab setView:[fFiltersViewController view]];
-
-    [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
-                                                              forKeyPath:@"values.HBShowAdvancedTab"
-                                                                 options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                                                                 context:HBControllerContext];
 
     [self.core addObserver:self forKeyPath:@"state"
                    options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
@@ -343,18 +328,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    if (context == HBControllerContext && [keyPath isEqualToString:@"values.HBShowAdvancedTab"])
-    {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"] && ![[fMainTabView tabViewItems] containsObject:fAdvancedTab])
-        {
-            [fMainTabView insertTabViewItem:fAdvancedTab atIndex:5];
-        }
-        else
-        {
-            [fMainTabView removeTabViewItem:fAdvancedTab];
-        }
-    }
-    else if (context == HBControllerScanCoreContext)
+    if (context == HBControllerScanCoreContext)
     {
         HBState state = [change[NSKeyValueChangeNewKey] intValue];
         [self updateToolbarButtonsStateForScanCore:state];
@@ -1546,16 +1520,17 @@ static NSTouchBarItemIdentifier HBTouchBarAddTitlesToQueue = @"fr.handbrake.addT
 static NSTouchBarItemIdentifier HBTouchBarRip = @"fr.handbrake.rip";
 static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
 static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
+static NSTouchBarItemIdentifier HBTouchBarActivity = @"fr.handbrake.activity";
 
 - (NSTouchBar *)makeTouchBar
 {
     NSTouchBar *bar = [[NSTouchBar alloc] init];
     bar.delegate = self;
 
-    bar.defaultItemIdentifiers = @[HBTouchBarOpen, NSTouchBarItemIdentifierFixedSpaceSmall, HBTouchBarAddToQueue, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarRip, HBTouchBarPause, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarPreview, NSTouchBarItemIdentifierOtherItemsProxy];
+    bar.defaultItemIdentifiers = @[HBTouchBarOpen, NSTouchBarItemIdentifierFixedSpaceSmall, HBTouchBarAddToQueue, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarRip, HBTouchBarPause, NSTouchBarItemIdentifierFixedSpaceLarge, HBTouchBarPreview, HBTouchBarActivity, NSTouchBarItemIdentifierOtherItemsProxy];
 
     bar.customizationIdentifier = HBTouchBarMain;
-    bar.customizationAllowedItemIdentifiers = @[HBTouchBarOpen, HBTouchBarAddToQueue, HBTouchBarAddTitlesToQueue, HBTouchBarRip, HBTouchBarPause, HBTouchBarPreview, NSTouchBarItemIdentifierFixedSpaceSmall, NSTouchBarItemIdentifierFixedSpaceLarge, NSTouchBarItemIdentifierFlexibleSpace];
+    bar.customizationAllowedItemIdentifiers = @[HBTouchBarOpen, HBTouchBarAddToQueue, HBTouchBarAddTitlesToQueue, HBTouchBarRip, HBTouchBarPause, HBTouchBarPreview, HBTouchBarActivity, NSTouchBarItemIdentifierFixedSpaceSmall, NSTouchBarItemIdentifierFixedSpaceLarge, NSTouchBarItemIdentifierFlexibleSpace];
 
     return bar;
 }
@@ -1618,6 +1593,16 @@ static NSTouchBarItemIdentifier HBTouchBarPreview = @"fr.handbrake.preview";
         item.customizationLabel = NSLocalizedString(@"Show Preview Window", @"Touch bar");
 
         NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarQuickLookTemplate] target:self action:@selector(showPreviewWindow:)];
+
+        item.view = button;
+        return item;
+    }
+    else if ([identifier isEqualTo:HBTouchBarActivity])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Show Activity Window", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarGetInfoTemplate] target:nil action:@selector(showOutputPanel:)];
 
         item.view = button;
         return item;

@@ -8,8 +8,8 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBVideoController">
             <connections>
+                <outlet property="additionalsOptions" destination="oJk-ur-wgc" id="OEm-fb-AY8"/>
                 <outlet property="fDisplayX264PresetsUnparseTextField" destination="wk1-2U-z4i" id="aIk-h1-bOP"/>
-                <outlet property="fDividerLine" destination="FHY-Ih-1rd" id="sc2-Iw-XH1"/>
                 <outlet property="fEncoderOptionsLabel" destination="mkM-81-g3d" id="eWq-95-kTO"/>
                 <outlet property="fFramerateVfrPfrButton" destination="Fc1-EX-DWd" id="0Jj-Pc-4iW"/>
                 <outlet property="fPresetView" destination="2dX-Hf-Hxl" id="OEP-rM-gGp"/>
@@ -17,7 +17,6 @@
                 <outlet property="fPresetsSlider" destination="Biw-5K-pPD" id="so9-VX-eit"/>
                 <outlet property="fSimplePresetView" destination="aRi-vN-oR0" id="e0P-NK-oHv"/>
                 <outlet property="fVidQualitySlider" destination="GPu-Ht-bKg" id="faR-df-PGL"/>
-                <outlet property="fX264UseAdvancedOptionsCheck" destination="Zs7-1Y-50A" id="WWx-OC-tor"/>
                 <outlet property="view" destination="wAC-5p-nXb" id="i3V-vv-tDn"/>
             </connections>
         </customObject>
@@ -548,24 +547,6 @@ Syntax: option-1=foo:opt2=bar,baz</string>
                         <binding destination="-2" name="value" keyPath="self.video.preset" id="yix-Fd-Qfi"/>
                     </connections>
                 </textField>
-                <button translatesAutoresizingMaskIntoConstraints="NO" id="Zs7-1Y-50A">
-                    <rect key="frame" x="116" y="178" width="174" height="18"/>
-                    <string key="toolTip">Use the Advanced Options Panel for x264 settings.
-
-This setting is no longer supported and may be removed in a future version. Use at your own risk!</string>
-                    <buttonCell key="cell" type="check" title="Use Advanced Options Panel" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="sa6-r3-eVr">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.video" id="GDV-uX-eAs">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.video.advancedOptions" id="sQg-ab-NdN"/>
-                    </connections>
-                </button>
                 <textField toolTip="Displays all internal video encoder options." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="1000" translatesAutoresizingMaskIntoConstraints="NO" id="wk1-2U-z4i">
                     <rect key="frame" x="18" y="12" width="884" height="50"/>
                     <constraints>
@@ -608,14 +589,15 @@ This setting is no longer supported and may be removed in a future version. Use 
                 </slider>
             </subviews>
             <constraints>
+                <constraint firstItem="FHY-Ih-1rd" firstAttribute="leading" secondItem="mkM-81-g3d" secondAttribute="trailing" constant="8" id="3G2-hx-8o2"/>
                 <constraint firstItem="wk1-2U-z4i" firstAttribute="leading" secondItem="2dX-Hf-Hxl" secondAttribute="leading" constant="20" id="3kM-Si-5bP"/>
-                <constraint firstItem="FHY-Ih-1rd" firstAttribute="centerY" secondItem="Zs7-1Y-50A" secondAttribute="centerY" id="4ke-iI-zRn"/>
                 <constraint firstItem="Biw-5K-pPD" firstAttribute="leading" secondItem="0sa-ep-yfr" secondAttribute="trailing" constant="8" id="508-6c-imQ"/>
                 <constraint firstItem="z7F-H2-Vfr" firstAttribute="leading" secondItem="A7d-wM-Xmp" secondAttribute="trailing" constant="21" id="5Fh-Ft-8yx"/>
                 <constraint firstItem="A7d-wM-Xmp" firstAttribute="leading" secondItem="gzq-SL-YVY" secondAttribute="trailing" constant="8" id="6Pp-Lz-PWg"/>
                 <constraint firstItem="Biw-5K-pPD" firstAttribute="top" secondItem="mkM-81-g3d" secondAttribute="bottom" constant="7" id="6Xb-Jy-J4E"/>
                 <constraint firstItem="A7d-wM-Xmp" firstAttribute="top" secondItem="Biw-5K-pPD" secondAttribute="bottom" constant="8" id="7Bq-IJ-UHE"/>
-                <constraint firstItem="FHY-Ih-1rd" firstAttribute="leading" secondItem="Zs7-1Y-50A" secondAttribute="leading" id="BD4-Ri-bQ2"/>
+                <constraint firstAttribute="trailing" secondItem="FHY-Ih-1rd" secondAttribute="trailing" constant="20" id="8Jj-Q6-WXo"/>
+                <constraint firstItem="FHY-Ih-1rd" firstAttribute="centerY" secondItem="mkM-81-g3d" secondAttribute="centerY" id="9JU-Qg-Nak"/>
                 <constraint firstItem="Biw-5K-pPD" firstAttribute="baseline" secondItem="0sa-ep-yfr" secondAttribute="baseline" id="Cbm-Km-GEi"/>
                 <constraint firstItem="ijg-ux-uvb" firstAttribute="leading" secondItem="CPP-lh-FbN" secondAttribute="trailing" constant="20" id="Fk2-g3-kkn"/>
                 <constraint firstItem="dY9-5D-mXX" firstAttribute="leading" secondItem="gzq-SL-YVY" secondAttribute="leading" id="GwZ-V8-Dqc"/>
@@ -644,16 +626,13 @@ This setting is no longer supported and may be removed in a future version. Use 
                 <constraint firstItem="FHY-Ih-1rd" firstAttribute="trailing" secondItem="oJk-ur-wgc" secondAttribute="trailing" id="lxq-Ja-WBX"/>
                 <constraint firstItem="BY1-IG-JvI" firstAttribute="leading" secondItem="dY9-5D-mXX" secondAttribute="leading" id="oNW-bu-AjP"/>
                 <constraint firstItem="CPP-lh-FbN" firstAttribute="baseline" secondItem="ijg-ux-uvb" secondAttribute="baseline" id="oZ8-v8-CmD"/>
-                <constraint firstItem="mkM-81-g3d" firstAttribute="baseline" secondItem="Zs7-1Y-50A" secondAttribute="baseline" id="omV-G5-hMn"/>
                 <constraint firstItem="Biw-5K-pPD" firstAttribute="width" secondItem="P7c-Zk-G99" secondAttribute="width" id="pJk-eY-1r2"/>
-                <constraint firstItem="Zs7-1Y-50A" firstAttribute="leading" secondItem="mkM-81-g3d" secondAttribute="trailing" constant="8" id="qe2-wu-PNj"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Zs7-1Y-50A" secondAttribute="trailing" constant="20" symbolic="YES" id="riE-Nn-yRP"/>
                 <constraint firstItem="0sa-ep-yfr" firstAttribute="leading" secondItem="mkM-81-g3d" secondAttribute="leading" constant="40" id="sdR-pt-ls6"/>
                 <constraint firstItem="oJk-ur-wgc" firstAttribute="leading" secondItem="ijg-ux-uvb" secondAttribute="trailing" constant="8" id="wsw-IM-Ooe"/>
                 <constraint firstItem="0sa-ep-yfr" firstAttribute="width" secondItem="dY9-5D-mXX" secondAttribute="width" id="xvU-on-9bJ"/>
                 <constraint firstItem="ijg-ux-uvb" firstAttribute="leading" secondItem="P7c-Zk-G99" secondAttribute="trailing" constant="20" id="zKk-dV-w0d"/>
             </constraints>
-            <point key="canvasLocation" x="166" y="479"/>
+            <point key="canvasLocation" x="-130" y="483"/>
         </customView>
         <customView id="aRi-vN-oR0" userLabel="ffmpeg presets view">
             <rect key="frame" x="0.0" y="0.0" width="920" height="34"/>

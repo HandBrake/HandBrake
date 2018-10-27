@@ -435,53 +435,39 @@ static NSDictionary            *shortHeightAttr;
     {
         NSMutableString *encoderPresetInfo = [NSMutableString string];
 
-        if (self.video.advancedOptions)
+        // we are using the x264 system
+        [encoderPresetInfo appendFormat:HBKitLocalizedString(@"Preset: %@", @"Video description"), self.video.preset];
+
+        if (self.video.tune.length || self.video.fastDecode)
         {
-            // we are using the old advanced panel
-            if (self.video.videoOptionExtra.length)
+            [encoderPresetInfo appendString:@", "];
+            [encoderPresetInfo appendString:HBKitLocalizedString(@"Tune: ", @"Video description")];
+
+            if (self.video.tune.length)
             {
-                [encoderPresetInfo appendString:self.video.videoOptionExtra];
+                [encoderPresetInfo appendString:self.video.tune];
             }
-            else
+            if (self.video.fastDecode)
             {
-                [encoderPresetInfo appendString:HBKitLocalizedString(@"default settings", @"Video description")];
+                [encoderPresetInfo appendString:HBKitLocalizedString(@" - fastdecode", @"Video description")];
             }
         }
-        else
+        if (self.video.videoOptionExtra.length)
         {
-            // we are using the x264 system
-            [encoderPresetInfo appendFormat:HBKitLocalizedString(@"Preset: %@", @"Video description"), self.video.preset];
-
-            if (self.video.tune.length || self.video.fastDecode)
-            {
-                [encoderPresetInfo appendString:@", "];
-                [encoderPresetInfo appendString:HBKitLocalizedString(@"Tune: ", @"Video description")];
-
-                if (self.video.tune.length)
-                {
-                    [encoderPresetInfo appendString:self.video.tune];
-                }
-                if (self.video.fastDecode)
-                {
-                    [encoderPresetInfo appendString:HBKitLocalizedString(@" - fastdecode", @"Video description")];
-                }
-            }
-            if (self.video.videoOptionExtra.length)
-            {
-                [encoderPresetInfo appendString:@", "];
-                [encoderPresetInfo appendFormat:HBKitLocalizedString(@"Options: %@", @"Video description"), self.video.videoOptionExtra];
-            }
-            if (self.video.profile.length)
-            {
-                [encoderPresetInfo appendString:@", "];
-                [encoderPresetInfo appendFormat:HBKitLocalizedString(@"Profile: %@", @"Video description"), self.video.profile];
-            }
-            if (self.video.level.length)
-            {
-                [encoderPresetInfo appendString:@", "];
-                [encoderPresetInfo appendFormat:HBKitLocalizedString(@"Level: %@", @"Video description"), self.video.level];
-            }
+            [encoderPresetInfo appendString:@", "];
+            [encoderPresetInfo appendFormat:HBKitLocalizedString(@"Options: %@", @"Video description"), self.video.videoOptionExtra];
         }
+        if (self.video.profile.length)
+        {
+            [encoderPresetInfo appendString:@", "];
+            [encoderPresetInfo appendFormat:HBKitLocalizedString(@"Profile: %@", @"Video description"), self.video.profile];
+        }
+        if (self.video.level.length)
+        {
+            [encoderPresetInfo appendString:@", "];
+            [encoderPresetInfo appendFormat:HBKitLocalizedString(@"Level: %@", @"Video description"), self.video.level];
+        }
+
         [attrString appendString:@"\t"                  withAttributes:detailAttr];
         [attrString appendString:HBKitLocalizedString(@"Video Options:", @"Video description") withAttributes:detailBoldAttr];
         [attrString appendString:@" \t"                 withAttributes:detailAttr];

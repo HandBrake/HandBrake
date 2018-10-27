@@ -25,8 +25,6 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     IBOutlet NSTextField *fEncoderOptionsLabel;
 
     // x264/x265 Presets Box
-    IBOutlet NSButton       *fX264UseAdvancedOptionsCheck;
-    IBOutlet NSBox          *fDividerLine;
     IBOutlet NSBox          *fPresetsBox;
     IBOutlet NSSlider       *fPresetsSlider;
 
@@ -34,25 +32,14 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     IBOutlet NSTextField *fDisplayX264PresetsUnparseTextField;
 }
 
-@property (nonatomic, strong, readwrite) HBAdvancedController *advancedController;
+@property (nonatomic, weak) IBOutlet NSTextField *additionalsOptions;
 
-@property (nonatomic, readwrite) BOOL presetViewEnabled;
-
-@property (nonatomic, readwrite) NSColor *labelColor;
+@property (nonatomic) BOOL presetViewEnabled;
+@property (nonatomic) NSColor *labelColor;
 
 @end
 
 @implementation HBVideoController
-
-- (instancetype)initWithAdvancedController:(HBAdvancedController *)advancedController
-{
-    self = [self init];
-    if (self)
-    {
-        _advancedController = advancedController;
-    }
-    return self;
-}
 
 - (instancetype)init
 {
@@ -83,6 +70,51 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     }
 
     return self;
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    SEL action = menuItem.action;
+
+    if (action == @selector(showAdvancedX264Panel:))
+    {
+        return [self.video isOldAdvancedPanelSupported:self.video.encoder];
+    }
+    return [self.nextResponder validateMenuItem:menuItem];
+}
+
+- (void)viewDidAppear
+{
+    NSText *defaultFieldEditor = [self.view.window fieldEditor:YES forObject:self.additionalsOptions];
+    //  defaultEditor.delegate = self; didn't help
+    NSMenu *mu = defaultFieldEditor.menu;
+    NSMenuItem *separator = [NSMenuItem separatorItem];
+    separator.tag = 1;
+    NSMenuItem *action = [[NSMenuItem alloc]
+                          initWithTitle:NSLocalizedString(@"Show advanced editor", @"Video -> Advanced editor")
+                          action:@selector(showAdvancedX264Panel:)
+                          keyEquivalent:@""];
+    action.tag = 2;
+    action.enabled = YES;
+    [mu insertItem:separator atIndex:0];
+    [mu insertItem:action atIndex:0];
+}
+
+- (void)viewWillDisappear
+{
+    NSText *defaultFieldEditor = [self.view.window fieldEditor:YES forObject:self.additionalsOptions];
+    NSMenu *mu = defaultFieldEditor.menu;
+    NSMenuItem *separator = [mu itemWithTag:1];
+    NSMenuItem *action = [mu itemWithTag:2];
+    if (separator) { [mu removeItem:separator]; }
+    if (action) { [mu removeItem:action]; }
+}
+
+- (IBAction)showAdvancedX264Panel:(id)sender
+{
+    HBAdvancedController *controller = [[HBAdvancedController alloc] init];
+    controller.videoSettings = self.video;
+    [self presentViewControllerAsSheet:controller];
 }
 
 - (void)setVideo:(HBVideo *)video
@@ -145,27 +177,6 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
                 fDisplayX264PresetsUnparseTextField.stringValue = @"";
             }
         }
-        else if ([keyPath isEqualToString:@"video.advancedOptions"])
-        {
-            if (self.video.advancedOptions)
-            {
-                // Do not enable the advanced panel it isn't visible.
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"])
-                {
-                    self.advancedController.videoSettings = self.video.advancedOptions ? self.video : nil;
-                }
-                else
-                {
-                    self.video.advancedOptions = NO;
-                }
-            }
-            // enable/disable, populate and update the various widgets
-            [self enableEncoderOptionsWidgets:(self.video != nil)];
-
-        } else if ([keyPath isEqualToString:@"values.HBShowAdvancedTab"])
-        {
-            [self toggleAdvancedOptionsCheckBoxForEncoder:self.video.encoder];
-        }
         else if ([keyPath isEqualToString:@"values.x264CqSliderFractional"])
         {
             [self setupQualitySlider];
@@ -215,19 +226,10 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
  */
 - (void)switchPresetView
 {
-    self.advancedController.hidden = YES;
-
     if ([self.video isPresetSystemSupported:self.video.encoder])
     {
-        [self toggleAdvancedOptionsCheckBoxForEncoder:self.video.encoder];
-
         fPresetsBox.contentView = fPresetView;
         [self setupPresetsSlider];
-
-        if ([self.video isOldAdvancedPanelSupported:self.video.encoder])
-        {
-            self.advancedController.hidden = NO;
-        }
     }
     else if ([self.video isSimpleOptionsPanelSupported:self.video.encoder])
     {
@@ -244,35 +246,8 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
  */
 - (void)enableEncoderOptionsWidgets:(BOOL)enable
 {
-    // check whether the x264 preset system and the advanced panel should be enabled
-    BOOL enable_x264_controls  = (enable && !self.video.advancedOptions);
-    BOOL enable_advanced_panel = (enable && self.video.advancedOptions);
-
     // enable/disable the checkbox and advanced panel
-    self.presetViewEnabled = enable_x264_controls;
-    self.advancedController.enabled = enable_advanced_panel;
-}
-
-/**
- *  Shows/Hides the advanced options checkbox
- *
- *  @param encoder the current encoder
- */
-- (void)toggleAdvancedOptionsCheckBoxForEncoder:(int)encoder
-{
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowAdvancedTab"] && [self.video isOldAdvancedPanelSupported:self.video.encoder])
-    {
-        fX264UseAdvancedOptionsCheck.hidden = NO;
-        fDividerLine.hidden = YES;
-        fEncoderOptionsLabel.stringValue = NSLocalizedString(@"Encoder Options:", @"Video -> Advanced panel checkbox");
-    }
-    else
-    {
-        fX264UseAdvancedOptionsCheck.hidden =YES;
-        fDividerLine.hidden = NO;
-        fEncoderOptionsLabel.stringValue = NSLocalizedString(@"Encoder Options", @"Video -> Encoder options title");
-        self.video.advancedOptions = NO;
-    }
+    self.presetViewEnabled = enable;
 }
 
 /**

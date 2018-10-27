@@ -10,14 +10,6 @@
 
 @interface HBAdvancedController ()
 {
-    /* Advanced Tab for opts fX264optView*/
-    IBOutlet NSBox              * fOptionsBox;
-
-    IBOutlet NSView             * fEmptyView;
-
-    IBOutlet NSView             * fX264optView;
-    IBOutlet NSTextField        * fX264optViewTitleLabel;
-    IBOutlet NSTextField        * fDisplayX264OptionsLabel;
     IBOutlet NSTextField        * fDisplayX264Options;
 
     IBOutlet NSTextField        * fX264optBframesLabel;
@@ -59,6 +51,8 @@
     IBOutlet NSTextField        * fX264optBAdaptLabel;
 }
 
+@property (nonatomic, readwrite) HBVideo *internalVideoSettings;
+
 - (IBAction) X264AdvancedOptionsAnimate: (id) sender;
 - (IBAction) X264AdvancedOptionsSet: (id) sender;
 - (IBAction) X264AdvancedOptionsStandardizeOptString: (id) sender;
@@ -73,28 +67,37 @@
 
 @implementation HBAdvancedController
 
-@synthesize enabled = _enabled;
-
 - (instancetype)init
 {
     self = [super initWithNibName:@"AdvancedView" bundle:nil];
-    if (self)
-    {
-
-    }
-
     return self;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self setHidden:NO];
+
+    fDisplayX264Options.stringValue = _videoSettings.unparseOptions;
+    [self X264AdvancedOptionsSet:nil];
+}
+
+- (IBAction)ok:(id)sender
+{
+    HBVideo *video = self.videoSettings;
+    video.preset = @"medium";
+    video.tune = @"";
+    video.profile = @"auto";
+    video.level = @"auto";
+    video.fastDecode = NO;
+    video.videoOptionExtra = self.internalVideoSettings.videoOptionExtra;
+
+    [self dismissViewController:self];
 }
 
 - (void)setVideoSettings:(HBVideo *)videoSettings
 {
     _videoSettings = videoSettings;
+    self.internalVideoSettings = [videoSettings copy];
 
     if (_videoSettings)
     {
@@ -106,52 +109,6 @@
     }
     [self X264AdvancedOptionsSet:nil];
 }
-
-- (void)setHidden:(BOOL)hidden
-{
-    if (hidden)
-    {
-        [fOptionsBox setContentView:fEmptyView];
-    }
-    else
-    {
-        [fOptionsBox setContentView:fX264optView];
-    }
-}
-
- - (void)setEnabled:(BOOL)flag
-{
-    _enabled = flag;
-
-    unsigned i;
-    NSControl * controls[] =
-      { fX264optViewTitleLabel,fDisplayX264Options,fDisplayX264OptionsLabel,fX264optBframesLabel,
-        fX264optBframesPopUp,fX264optRefLabel,fX264optRefPopUp,
-        fX264optNodctdcmtLabel,fX264optNodctdcmtSwitch,fX264optSubmeLabel,fX264optSubmePopUp,
-        fX264optTrellisLabel,fX264optTrellisPopUp, fX264optWeightPLabel, fX264optWeightPSwitch,
-        fX264optMotionEstLabel,fX264optMotionEstPopUp,fX264optMERangeLabel,fX264optMERangePopUp,
-        fX264optBPyramidLabel,fX264optBPyramidPopUp, fX264optAqLabel, fX264optAqSlider,
-        fX264optDirectPredLabel,fX264optDirectPredPopUp,fX264optDeblockLabel,fX264optAnalyseLabel,
-        fX264optAnalysePopUp,fX264opt8x8dctLabel,fX264opt8x8dctSwitch,fX264optCabacLabel,fX264optCabacSwitch,
-        fX264optAlphaDeblockPopUp,fX264optBetaDeblockPopUp, fX264optPsyRDSlider, fX264optPsyRDLabel, fX264optPsyTrellisSlider, fX264optPsyTrellisLabel, fX264optBAdaptPopUp, fX264optBAdaptLabel };
-
-    for( i = 0; i < sizeof( controls ) / sizeof( NSControl * ); i++ )
-    {
-        if( [[controls[i] className] isEqualToString: @"NSTextField"] )
-        {
-            NSTextField * tf = (NSTextField *) controls[i];
-            if( ![tf isBezeled] )
-            {
-                [tf setTextColor: flag ? [NSColor controlTextColor] :
-                    [NSColor disabledControlTextColor]];
-                continue;
-            }
-        }
-        [controls[i] setEnabled: flag];
-
-    }
-}
-
 
 /**
  * Populates the option widgets
@@ -462,7 +419,7 @@
     
     /* Change the option string to reflect the new standardized option string */
     [fDisplayX264Options setStringValue:changedOptString];
-    self.videoSettings.videoOptionExtra = changedOptString;
+    self.internalVideoSettings.videoOptionExtra = changedOptString;
 }
 
 /**
@@ -1401,7 +1358,7 @@
     
     /* We now need to reset the opt widgets since we changed some stuff */        
     [self X264AdvancedOptionsSet:sender];
-    self.videoSettings.videoOptionExtra = fDisplayX264Options.stringValue;
+    self.internalVideoSettings.videoOptionExtra = fDisplayX264Options.stringValue;
 }
 
 @end
