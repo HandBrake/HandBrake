@@ -854,7 +854,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     NSParameterAssert(job);
 
     // Reset the title in the job.
-    job.title = self.core.titles[0];
+    job.title = self.core.titles.firstObject;
+
+    NSParameterAssert(job);
 
     HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
     formatter.title = job.outputFileName;
