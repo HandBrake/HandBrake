@@ -1795,7 +1795,7 @@ static void ShowHelp()
 "                           Example: \"1,2,3\" for multiple tracks.\n"
 "                           If \"string\" is omitted, the first track is\n"
 "                           forced.\n"
-"      --subtitle-burned[=number]\n"
+"      --subtitle-burned[=number, \"native\", or \"none\"]\n"
 "                           \"Burn\" the selected subtitle into the video\n"
 "                           track. If \"subtitle\" is omitted, the first\n"
 "                           track is burned. \"subtitle\" is an index into\n"
@@ -2480,7 +2480,13 @@ static int ParseOptions( int argc, char ** argv )
                 {
                     if (!strcasecmp(optarg, "native") ||
                         !strcasecmp(optarg, "scan"))
+                    {
                         subburn_native = 1;
+                    }
+                    else if (!strcasecmp(optarg, "none"))
+                    {
+                        subburn = 0;
+                    }
                     else
                     {
                         subburn = strtol(optarg, NULL, 0);
@@ -3450,6 +3456,11 @@ static hb_dict_t * PreparePreset(const char *preset_name)
             }
         }
         hb_dict_set(preset, "SubtitleBurnBehavior", hb_value_string(burn));
+    }
+    if (subburn == 0)
+    {
+        hb_dict_set(preset, "SubtitleBurnDVDSub", hb_value_bool(0));
+        hb_dict_set(preset, "SubtitleBurnBDSub", hb_value_bool(0));
     }
     const char *selection = NULL;
     if (subtitle_track_count == 0 && subtitle_all != -1)
