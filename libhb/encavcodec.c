@@ -400,10 +400,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->color_trc       = job->color_transfer;
     context->colorspace      = job->color_matrix;
 
-    if( job->mux & HB_MUX_MASK_MP4 )
-    {
-        context->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
-    }
+    context->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
     if( job->grayscale )
     {
         context->flags |= AV_CODEC_FLAG_GRAY;
@@ -555,35 +552,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         job->areBframes = 1;
     }
 
-    if( ( job->mux & HB_MUX_MASK_MP4 ) && job->pass_id != HB_PASS_ENCODE_1ST )
+    if (context->extradata != NULL)
     {
-        if (w->codec_param == AV_CODEC_ID_H264) // FIXME: h265 as well?
-        {
-            // Scan extradata for the SPS/PPS headers
-            unsigned char *data = context->extradata;
-            unsigned char *dataEnd = context->extradata + context->extradata_size;
-            size_t len = dataEnd - data;
-
-            while ((data = hb_annexb_find_next_nalu(data, &len)) != NULL) {
-                if ((data[0] & 0x1f) == 7) {
-                    // SPS found, copy into work object
-                    w->config->h264.sps_length = len;
-                    memcpy(w->config->h264.sps, data, len);
-                }
-                if ((data[0] & 0x1f) == 8) {
-                    // PPS found, copy into work object
-                    w->config->h264.pps_length = len;
-                    memcpy(w->config->h264.pps, data, len);
-                }
-                len = dataEnd - data;
-            }
-        }
-        else
-        {
-            w->config->mpeg4.length = context->extradata_size;
-            memcpy( w->config->mpeg4.bytes, context->extradata,
-                    context->extradata_size );
-        }
+        memcpy(w->config->extradata.bytes, context->extradata,
+                                           context->extradata_size);
+        w->config->extradata.length = context->extradata_size;
     }
 
 done:
