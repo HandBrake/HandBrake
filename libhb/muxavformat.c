@@ -207,8 +207,6 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_X264_8BIT:
         case HB_VCODEC_X264_10BIT:
         case HB_VCODEC_QSV_H264:
-        case HB_VCODEC_FFMPEG_VCE_H264:
-        case HB_VCODEC_FFMPEG_NVENC_H264:
             track->st->codecpar->codec_id = AV_CODEC_ID_H264;
             if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
             {
@@ -252,35 +250,65 @@ static int avformatInit( hb_mux_object_t * m )
                    job->config.h264.pps, job->config.h264.pps_length );
             break;
 
-        case HB_VCODEC_FFMPEG_MPEG4:
-            track->st->codecpar->codec_id = AV_CODEC_ID_MPEG4;
-
-            if (job->config.mpeg4.length != 0)
+        case HB_VCODEC_FFMPEG_VCE_H264:
+        case HB_VCODEC_FFMPEG_NVENC_H264:
+            track->st->codecpar->codec_id = AV_CODEC_ID_H264;
+            if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
             {
-                priv_size = job->config.mpeg4.length;
+                track->st->codecpar->codec_tag = MKTAG('a','v','c','3');
+            }
+            else
+            {
+                track->st->codecpar->codec_tag = MKTAG('a','v','c','1');
+            }
+            if (job->config.extradata.length > 0)
+            {
+                priv_size = job->config.extradata.length;
                 priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("MPEG4 extradata: malloc failure");
+                    hb_error("h.265 extradata: malloc failure");
                     goto error;
                 }
-                memcpy(priv_data, job->config.mpeg4.bytes, priv_size);
+                memcpy(priv_data,
+                       job->config.extradata.bytes,
+                       job->config.extradata.length);
+            }
+            break;
+
+        case HB_VCODEC_FFMPEG_MPEG4:
+            track->st->codecpar->codec_id = AV_CODEC_ID_MPEG4;
+
+            if (job->config.extradata.length > 0)
+            {
+                priv_size = job->config.extradata.length;
+                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
+                if (priv_data == NULL)
+                {
+                    hb_error("h.265 extradata: malloc failure");
+                    goto error;
+                }
+                memcpy(priv_data,
+                       job->config.extradata.bytes,
+                       job->config.extradata.length);
             }
             break;
 
         case HB_VCODEC_FFMPEG_MPEG2:
             track->st->codecpar->codec_id = AV_CODEC_ID_MPEG2VIDEO;
 
-            if (job->config.mpeg4.length != 0)
+            if (job->config.extradata.length > 0)
             {
-                priv_size = job->config.mpeg4.length;
+                priv_size = job->config.extradata.length;
                 priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("MPEG2 extradata: malloc failure");
+                    hb_error("h.265 extradata: malloc failure");
                     goto error;
                 }
-                memcpy(priv_data, job->config.mpeg4.bytes, priv_size);
+                memcpy(priv_data,
+                       job->config.extradata.bytes,
+                       job->config.extradata.length);
             }
             break;
 
@@ -334,8 +362,6 @@ static int avformatInit( hb_mux_object_t * m )
         case HB_VCODEC_X265_16BIT:
         case HB_VCODEC_QSV_H265:
         case HB_VCODEC_QSV_H265_10BIT:
-        case HB_VCODEC_FFMPEG_VCE_H265:
-        case HB_VCODEC_FFMPEG_NVENC_H265:
             track->st->codecpar->codec_id  = AV_CODEC_ID_HEVC;
             if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
             {
@@ -356,6 +382,32 @@ static int avformatInit( hb_mux_object_t * m )
                     goto error;
                 }
                 memcpy(priv_data, job->config.h265.headers, priv_size);
+            }
+            break;
+
+        case HB_VCODEC_FFMPEG_VCE_H265:
+        case HB_VCODEC_FFMPEG_NVENC_H265:
+            track->st->codecpar->codec_id  = AV_CODEC_ID_HEVC;
+            if (job->mux == HB_MUX_AV_MP4 && job->inline_parameter_sets)
+            {
+                track->st->codecpar->codec_tag = MKTAG('h','e','v','1');
+            }
+            else
+            {
+                track->st->codecpar->codec_tag = MKTAG('h','v','c','1');
+            }
+            if (job->config.extradata.length > 0)
+            {
+                priv_size = job->config.extradata.length;
+                priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
+                if (priv_data == NULL)
+                {
+                    hb_error("h.265 extradata: malloc failure");
+                    goto error;
+                }
+                memcpy(priv_data,
+                       job->config.extradata.bytes,
+                       job->config.extradata.length);
             }
             break;
 
