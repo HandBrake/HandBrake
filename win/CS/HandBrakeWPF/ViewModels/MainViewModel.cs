@@ -23,6 +23,7 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrake.Interop.Interop;
+    using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Commands;
     using HandBrakeWPF.Commands.Menu;
@@ -1401,8 +1402,8 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenQueueWindow()
         {
-            bool showQueueInline = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline);
-            bool showNewQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowExperimentalQueue); ;
+            bool showQueueInline = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline) && VersionHelper.IsNightly();
+            bool showNewQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowExperimentalQueue) && VersionHelper.IsNightly();
 
             this.QueueViewModel.IsNewQueueVisible = showNewQueue;
             this.QueueViewModel.IsInline = showQueueInline;

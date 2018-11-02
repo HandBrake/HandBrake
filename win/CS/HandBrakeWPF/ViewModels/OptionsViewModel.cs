@@ -172,6 +172,14 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool IsNightly
+        {
+            get
+            {
+                return VersionHelper.IsNightly();
+            }
+        }
+
         #region General
 
         /// <summary>
