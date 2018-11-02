@@ -294,7 +294,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     for (HBJob *item in self.jobs)
     {
-        if ([item.completeOutputURL isEqualTo:url])
+        if ((item.state == HBJobStateReady || item.state == HBJobStateWorking)
+            && [item.completeOutputURL isEqualTo:url])
         {
             return YES;
         }
