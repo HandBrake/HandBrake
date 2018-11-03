@@ -154,8 +154,8 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
 {
     for (HBAudioTrack *track in tracks)
     {
-        [track removeObserver:self forKeyPath:@"encoder"];
-        [track removeObserver:self forKeyPath:@"mixdown"];
+        [track removeObserver:self forKeyPath:@"encoder" context:HBSummaryViewControllerAudioContext];
+        [track removeObserver:self forKeyPath:@"mixdown" context:HBSummaryViewControllerAudioContext];
     }
 }
 
@@ -171,7 +171,7 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
 {
     for (HBSubtitlesTrack *track in tracks)
     {
-        [track removeObserver:self forKeyPath:@"burnedIn"];
+        [track removeObserver:self forKeyPath:@"burnedIn" context:HBSummaryViewControllerSubsContext];
     }
 }
 
@@ -205,16 +205,16 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
         [[NSNotificationCenter defaultCenter] removeObserver:self name:HBPictureChangedNotification object:_job.picture];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:HBFiltersChangedNotification object:_job.filters];
 
-        [_job removeObserver:self forKeyPath:@"container"];
-        [_job removeObserver:self forKeyPath:@"chaptersEnabled"];
-        [_job removeObserver:self forKeyPath:@"video.encoder"];
-        [_job removeObserver:self forKeyPath:@"video.frameRate"];
-        [_job removeObserver:self forKeyPath:@"video.frameRateMode"];
-        [_job removeObserver:self forKeyPath:@"filters.deinterlace"];
-        [_job removeObserver:self forKeyPath:@"filters.rotate"];
-        [_job removeObserver:self forKeyPath:@"filters.flip"];
-        [_job removeObserver:self forKeyPath:@"audio.tracks"];
-        [_job removeObserver:self forKeyPath:@"subtitles.tracks"];
+        [_job removeObserver:self forKeyPath:@"container" context:HBSummaryViewControllerContainerContext];
+        [_job removeObserver:self forKeyPath:@"chaptersEnabled" context:HBSummaryViewControllerVideoContext];
+        [_job removeObserver:self forKeyPath:@"video.encoder" context:HBSummaryViewControllerVideoContext];
+        [_job removeObserver:self forKeyPath:@"video.frameRate" context:HBSummaryViewControllerVideoContext];
+        [_job removeObserver:self forKeyPath:@"video.frameRateMode" context:HBSummaryViewControllerVideoContext];
+        [_job removeObserver:self forKeyPath:@"filters.deinterlace" context:HBSummaryViewControllerFiltersContext];
+        [_job removeObserver:self forKeyPath:@"filters.rotate" context:HBSummaryViewControllerFiltersContext];
+        [_job removeObserver:self forKeyPath:@"filters.flip" context:HBSummaryViewControllerFiltersContext];
+        [_job removeObserver:self forKeyPath:@"audio.tracks" context:HBSummaryViewControllerAudioContext];
+        [_job removeObserver:self forKeyPath:@"subtitles.tracks" context:HBSummaryViewControllerSubsContext];
 
         [self removeAudioTracksObservers:_job.audio.tracks];
         [self removeSubtitlesTracksObservers:_job.subtitles.tracks];

@@ -111,20 +111,7 @@
 
 - (NSString *)constantQualityLabel
 {
-    if ((self.encoder & HB_VCODEC_X264_MASK) ||
-        (self.encoder & HB_VCODEC_X265_MASK))
-    {
-        return @"RF:";
-    }
-    else if (self.encoder == HB_VCODEC_FFMPEG_VP8 ||
-             self.encoder == HB_VCODEC_FFMPEG_VP9)
-    {
-        return @"CQ:";
-    }
-    else
-    {
-        return @"QP:";
-    }
+    return @(hb_video_quality_get_name(self.encoder));
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingUnparseOptions
