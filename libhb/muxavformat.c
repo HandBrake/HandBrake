@@ -267,7 +267,7 @@ static int avformatInit( hb_mux_object_t * m )
                 priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("h.265 extradata: malloc failure");
+                    hb_error("H.264 extradata: malloc failure");
                     goto error;
                 }
                 memcpy(priv_data,
@@ -285,7 +285,7 @@ static int avformatInit( hb_mux_object_t * m )
                 priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("h.265 extradata: malloc failure");
+                    hb_error("MPEG-4 extradata: malloc failure");
                     goto error;
                 }
                 memcpy(priv_data,
@@ -303,7 +303,7 @@ static int avformatInit( hb_mux_object_t * m )
                 priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("h.265 extradata: malloc failure");
+                    hb_error("MPEG-2 extradata: malloc failure");
                     goto error;
                 }
                 memcpy(priv_data,
@@ -402,7 +402,7 @@ static int avformatInit( hb_mux_object_t * m )
                 priv_data = av_malloc(priv_size + AV_INPUT_BUFFER_PADDING_SIZE);
                 if (priv_data == NULL)
                 {
-                    hb_error("h.265 extradata: malloc failure");
+                    hb_error("H.265 extradata: malloc failure");
                     goto error;
                 }
                 memcpy(priv_data,
