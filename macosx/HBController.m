@@ -31,6 +31,8 @@
 #import "HBAddPresetController.h"
 #import "HBRenamePresetController.h"
 
+#import "HBAutoNamer.h"
+
 @import HandBrakeKit;
 
 static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
@@ -104,7 +106,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 @property (nonatomic, readwrite, strong) HBTitleSelectionController *titlesSelectionController;
 
 /// The current job.
-@property (nonatomic, strong, nullable) HBJob *job;
+@property (nonatomic, nullable) HBJob *job;
+@property (nonatomic, nullable) HBAutoNamer *autoNamer;
 
 /// The current selected preset.
 @property (nonatomic, strong) HBPreset *currentPreset;
@@ -789,9 +792,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [[NSNotificationCenter defaultCenter] removeObserver:self name:HBPictureChangedNotification object:_job.picture];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:HBFiltersChangedNotification object:_job.filters];
         [[NSNotificationCenter defaultCenter] removeObserver:self name:HBVideoChangedNotification object:_job.video];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBAudioEncoderChangedNotification object:_job.audio];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBChaptersChangedNotification object:_job];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBRangeChangedNotification object:_job.range];
+        self.autoNamer = nil;
     }
 }
 
@@ -808,9 +809,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBPictureChangedNotification object:_job.picture];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBFiltersChangedNotification object:_job.filters];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:_job.video];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBAudioEncoderChangedNotification object:_job.audio];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateFileExtension:) name:HBChaptersChangedNotification object:_job];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chapterPopUpChanged:) name:HBRangeChangedNotification object:_job.range];
+        self.autoNamer = [[HBAutoNamer alloc] initWithJob:self.job];
     }
 }
 
@@ -955,48 +954,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     self.job = job;
 }
 
-- (void)chapterPopUpChanged:(NSNotification *)notification
-{
-    // We're changing the chapter range - we may need to flip the m4v/mp4 extension
-    if (self.job.container & 0x030000 /*HB_MUX_MASK_MP4*/)
-    {
-        [self updateFileExtension:notification];
-    }
-
-    // If Auto Naming is on it might need to be update if it includes the chapters range
-    [self updateFileName];
-}
-
 - (void)formatChanged:(NSNotification *)notification
 {
-    [self updateFileExtension:notification];
     [self customSettingUsed];
-}
-
-- (void)updateFileName
-{
-    [self updateFileExtension:nil];
-
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"] && self.job)
-    {
-        // Generate a new file name
-        NSString *fileName = [HBUtilities automaticNameForJob:self.job];
-
-        // Swap the old one with the new one
-        self.job.outputFileName = [NSString stringWithFormat:@"%@.%@", fileName, self.job.outputFileName.pathExtension];
-    }
-}
-
-- (void)updateFileExtension:(NSNotification *)notification
-{
-    if (self.job)
-    {
-        NSString *extension = [HBUtilities automaticExtForJob:self.job];
-        if (![extension isEqualTo:self.job.outputFileName.pathExtension])
-        {
-            self.job.outputFileName = [[self.job.outputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:extension];
-        }
-    }
 }
 
 /**
@@ -1018,7 +978,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
             self.job.presetName = [NSString stringWithFormat:@"%@ %@", self.job.presetName, NSLocalizedString(@"(Modified)", @"Main Window -> preset modified")];
         }
         self.edited = YES;
-        [self updateFileName];
     }
 }
 
@@ -1398,7 +1357,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [self.job applyPreset:self.currentPreset];
 
         // If Auto Naming is on, update the destination
-        [self updateFileName];
+        [self.autoNamer updateFileName];
 
         [self addJobObservers];
     }
