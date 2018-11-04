@@ -70,12 +70,20 @@ namespace HandBrakeWPF.Utilities
             {
                 if (!Directory.Exists(dirPath))
                 {
-                    MessageBoxResult result = errorService.ShowMessageBox(string.Format(Resources.DirectoryUtils_CreateFolderMsg, dirPath), Resources.DirectoryUtils_CreateFolder, MessageBoxButton.YesNo, MessageBoxImage.Question);
-                    if (result == MessageBoxResult.Yes)
+                    if (createDirectoryPrompt)
+                    {
+                        MessageBoxResult result = errorService.ShowMessageBox(string.Format(Resources.DirectoryUtils_CreateFolderMsg, dirPath), Resources.DirectoryUtils_CreateFolder, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                        if (result == MessageBoxResult.Yes)
+                        {
+                            Directory.CreateDirectory(dirPath);
+                        }
+                    }
+                    else
                     {
                         Directory.CreateDirectory(dirPath);
-                    }
+                    }  
                 }
+
                 using (File.Create(Path.Combine(dirPath, Path.GetRandomFileName()), 1, FileOptions.DeleteOnClose))
                 {
                 }
