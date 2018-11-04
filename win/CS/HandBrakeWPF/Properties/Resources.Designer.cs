@@ -4457,7 +4457,7 @@ namespace HandBrakeWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Unable to detect VLC Player. 
-        ///Please make sure VLC is installed and the directory specified in HandBrake&apos;s options is correct. (See: &quot;Tools Menu &gt; Options &gt; Picture Tab&quot;).
+        ///Please make sure VLC is installed and the directory specified in HandBrake&apos;s options is correct. (See: &quot;Tools Menu &gt; Preferences &gt; General&quot;).
         /// </summary>
         public static string StaticPreviewViewModel_UnableToFindVLC {
             get {

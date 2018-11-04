@@ -684,7 +684,7 @@ Are you sure you wish to exit HandBrake?</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
     <value>Unable to detect VLC Player. 
-Please make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: "Tools Menu &gt; Options &gt; Picture Tab")</value>
+Please make sure VLC is installed and the directory specified in HandBrake's options is correct. (See: "Tools Menu &gt; Preferences &gt; General")</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>Unable to find the preview file. Either the file was deleted or the encode failed. Check the activity log for details.</value>
