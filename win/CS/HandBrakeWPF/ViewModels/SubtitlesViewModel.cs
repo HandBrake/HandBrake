@@ -244,6 +244,15 @@ namespace HandBrakeWPF.ViewModels
                     Multiselect = true
                 };
 
+            if (this.Task != null && this.Task.Source != null)
+            {
+                string path = Path.GetDirectoryName(this.Task.Source);
+                if (Directory.Exists(path))
+                {
+                    dialog.InitialDirectory = path;
+                }
+            }
+
             dialog.ShowDialog();
 
             this.AddInputSubtitles(dialog.FileNames);
