@@ -50,6 +50,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// True if added, false if error
         /// </returns>
         bool AddToQueue();
+        void AddAllToQueue();
+        void AddSelectionToQueue();
 
         /// <summary>
         /// The launch help.

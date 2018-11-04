@@ -179,9 +179,9 @@
                     </StackPanel>
                     <Button.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddCurrent}" cal:Message.Attach="[Event Click] = [Action AddToQueue]" AutomationProperties.Name="Add Current" />
-                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddAll}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]" AutomationProperties.Name="Add all to Queue" />
-                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" />
+                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddCurrent}" cal:Message.Attach="[Event Click] = [Action AddToQueue]" AutomationProperties.Name="Add Current" InputGestureText="Ctrl + A" />
+                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddAll}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]" AutomationProperties.Name="Add all to Queue" InputGestureText="Alt + A" />
+                            <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" InputGestureText="Ctrl + Shift + A" />
                         </ContextMenu>
                     </Button.ContextMenu>
 
