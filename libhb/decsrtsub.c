@@ -225,7 +225,13 @@ read_time_from_string( const char* timeString, struct start_and_end *result )
                     &houres2, &minutes2, &seconds2, &milliseconds2);
     if (scanned != 8)
     {
-        return 0;
+        scanned = sscanf(timeString, "%ld:%ld:%ld.%ld --> %ld:%ld:%ld.%ld\n",
+                        &houres1, &minutes1, &seconds1, &milliseconds1,
+                        &houres2, &minutes2, &seconds2, &milliseconds2);
+        if (scanned != 8)
+        {
+            return 0;
+        }
     }
     result->start =
         milliseconds1 + seconds1*1000 + minutes1*60*1000 + houres1*60*60*1000;
