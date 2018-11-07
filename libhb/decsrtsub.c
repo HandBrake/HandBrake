@@ -693,6 +693,7 @@ fail:
             fclose(pv->file);
         }
         free(pv);
+        w->private_data = NULL;
     }
     return 1;
 }
@@ -733,9 +734,12 @@ static int decsrtWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 static void decsrtClose( hb_work_object_t * w )
 {
     hb_work_private_t * pv = w->private_data;
-    fclose( pv->file );
-    iconv_close(pv->iconv_context);
-    free( w->private_data );
+    if (pv != NULL)
+    {
+        fclose( pv->file );
+        iconv_close(pv->iconv_context);
+        free( w->private_data );
+    }
 }
 
 hb_work_object_t hb_decsrtsub =
