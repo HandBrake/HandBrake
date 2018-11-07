@@ -1722,7 +1722,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                 continue;
             }
         }
-        hb_buffer_list_append(&pv->list, in);
+        hb_buffer_list_append(&pv->list, hb_buffer_dup(in));
         *buf_out = hb_buffer_list_clear(&pv->list);
         return HB_WORK_DONE;
     }
