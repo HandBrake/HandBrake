@@ -1248,7 +1248,7 @@ Would you like to overwrite it?</value>
     <value>Stop Encode</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
-    <value>Are you sure you wish to stop thie encode?</value>
+    <value>Are you sure you wish to stop this encode?</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
     <value>Please choose a source to encode before trying to import a subtitle file.</value>

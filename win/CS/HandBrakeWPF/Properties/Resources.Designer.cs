@@ -2214,7 +2214,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you wish to stop thie encode?.
+        ///   Looks up a localized string similar to Are you sure you wish to stop this encode?.
         /// </summary>
         public static string MainView_StopEncodeConfirm {
             get {
