@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Views
 {
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
 
     /// <summary>
     /// Interaction logic for OptionsView.xaml
@@ -23,6 +24,11 @@ namespace HandBrakeWPF.Views
         public OptionsView()
         {
             InitializeComponent();
+        }
+
+        private void VersionTextBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            this.versionTextBox.SelectAll();
         }
     }
 }

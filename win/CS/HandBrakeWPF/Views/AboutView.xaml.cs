@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Views
 {
     using System.Diagnostics;
     using System.Windows.Controls;
+    using System.Windows.Input;
     using System.Windows.Navigation;
 
     /// <summary>
@@ -23,7 +24,7 @@ namespace HandBrakeWPF.Views
         /// </summary>
         public AboutView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
         /// <summary>
@@ -38,6 +39,16 @@ namespace HandBrakeWPF.Views
         private void HandbrakeWebsite_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             Process.Start("https://handbrake.fr");
+        }
+
+        private void GithubWebsite_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            Process.Start("https://github.com/HandBrake/HandBrake/issues");
+        }
+
+        private void AboutTextBox_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            this.versionTextBox.SelectAll();
         }
     }
 }

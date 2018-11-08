@@ -29,14 +29,16 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0"
                             Margin="5,10,0,0"
                             Orientation="Horizontal">
-                    <TextBlock Margin="0,0,5,0" FontSize="16" FontFamily="Segoe UI Light" Text="{x:Static Properties:Resources.AboutView_Version}" />
-                    <TextBlock Margin="0,0,0,1" FontSize="16" FontFamily="Segoe UI Light" VerticalAlignment="Bottom" Text="{Binding Version}" />
+                    <TextBlock Margin="0,0,0,0" FontSize="16" FontFamily="Segoe UI Light" Text="{x:Static Properties:Resources.AboutView_Version}" />
+                    <TextBox Margin="0,0,0,0" BorderThickness="0" FontSize="16" IsReadOnly="True" FontFamily="Segoe UI Light" VerticalAlignment="Bottom" Text="{Binding Version, Mode=OneWay}"
+                             MouseDoubleClick="AboutTextBox_OnMouseDoubleClick" x:Name="versionTextBox" />
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1"  Margin="5,5,0,0">
@@ -46,9 +48,16 @@
                     </TextBlock>
                 </StackPanel>
 
-                <TextBlock Grid.Row="2" Margin="5,10,0,5" Text="{x:Static Properties:Resources.AboutView_License}" />
+                <StackPanel Orientation="Horizontal" Grid.Row="2"  Margin="5,5,0,0">
+                    <TextBlock Text="GitHub Issue Tracker: " />
+                    <TextBlock>           
+                        <Hyperlink x:Name="githubWebsite" NavigateUri="/" RequestNavigate="GithubWebsite_OnRequestNavigate"  >https://github.com/HandBrake/HandBrake/issues</Hyperlink>
+                    </TextBlock>
+                </StackPanel>
 
-                <TextBox Text="{x:Static Properties:Resources.About_GPL}" Grid.Row="3" Margin="10,0,10,10" HorizontalAlignment="Stretch"
+                <TextBlock Grid.Row="3" Margin="5,10,0,5" Text="{x:Static Properties:Resources.AboutView_License}" />
+
+                <TextBox Text="{x:Static Properties:Resources.About_GPL}" Grid.Row="4" Margin="10,0,10,10" HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
 
          
