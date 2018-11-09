@@ -10,9 +10,11 @@
         "--filesystem=xdg-run/dconf",
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
+        "--talk-name=org.gtk.vfs.*",
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         "--env=PATH=/app/bin:/usr/bin:/app/extensions/bin",
         "--env=JAVA_HOME=/app/extensions/jre",
+        "--env=GIO_EXTRA_MODULES=/app/lib/gio/modules",
         "--filesystem=host"
     ],
     "add-extensions": {
@@ -27,6 +29,19 @@
         }
     },
     "modules": [
+        {
+            "name": "gvfs",
+            "cleanup": [ "/libexec/*", "/share/dbus-1/services/*", "/share/gvfs/mounts" ],
+            "config-opts": [ "--disable-hal", "--disable-gdu", "--disable-gcr", "--disable-obexftp",
+                             "--disable-avahi", "--disable-documentation", "--disable-admin" ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.gnome.org/sources/gvfs/1.36/gvfs-1.36.1.tar.xz",
+                    "sha256": "3840dff386c2c8a445337bea4ade0eb71339efaff8602767659fa2896792f026"
+                }
+            ]
+        },
         {
             "name": "fribidi",
             "make-args": ["-j1"],
