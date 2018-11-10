@@ -14,84 +14,32 @@ namespace HandBrakeWPF
     /// </summary>
     public class Constants
     {
-        /// <summary>
-        /// The appcast 64.
-        /// </summary>
+        /* Appcast URLs */
         public const string Appcast64 = "https://handbrake.fr/appcast.x86_64.xml";
-
-        /// <summary>
-        /// The appcast 32.
-        /// </summary>
         public const string AppcastUnstable64 = "https://handbrake.fr/appcast_unstable.x86_64.xml";
 
-        /// <summary>
-        /// The any.
-        /// </summary>
+        /* Languages */
         public const string Any = "(Any)";
-
-        /// <summary>
-        /// Undefined Language
-        /// </summary>
         public const string Undefined = "und";
 
-        /// <summary>
-        /// The chapters.
-        /// </summary>
+        /* Autoname Contanstants */
         public const string Chapters = "{chapters}";
-
-        /// <summary>
-        /// The title.
-        /// </summary>
         public const string Title = "{title}";
-
-        /// <summary>
-        /// The quality.
-        /// </summary>
         public const string Quality = "{quality}";
-
-        /// <summary>
-        /// The creation date of the new output file.
-        /// </summary>
         public const string Date = "{date}";
-
-        /// <summary>
-        /// The creation time of the new output file.
-        /// </summary>
         public const string Time = "{time}";
-
-        /// <summary>
-        /// The source creation date.
-        /// </summary>
         public const string CretaionDate = "{creation-date}";
-
-        /// <summary>
-        /// The source creation time.
-        /// </summary>
         public const string CreationTime = "{creation-time}";
-
-        /// <summary>
-        /// The bitrate.
-        /// </summary>
         public const string Bitrate = "{bitrate}";
-
-        /// <summary>
-        /// The preset.
-        /// </summary>
         public const string Preset = "{preset}";
+        public const string Source = "{source}";
 
-        /// <summary>
-        /// Preset Major Version
-        /// </summary>
+        public const string SourcePath = "{source_path}";
+        public const string SourceFolderName = "{source_folder_name}";
+
+        /* Preset Versions */
         public const string PresetVersionMajor = "11";
-
-        /// <summary>
-        /// Preset Minor Version
-        /// </summary>
         public const string PresetVersionMinor = "0";
-
-        /// <summary>
-        /// Preset Micro Version
-        /// </summary>
         public const string PresetVersionMicro = "0";
 
         public const string FileScanMru = "FileScanMru";

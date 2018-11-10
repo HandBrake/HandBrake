@@ -10,10 +10,8 @@
 namespace HandBrakeWPF.Extensions
 {
     using System.Globalization;
+    using System.Text.RegularExpressions;
 
-    /// <summary>
-    /// String Extensions
-    /// </summary>
     public static class StringExtensions
     { 
         /// <summary>
@@ -35,6 +33,11 @@ namespace HandBrakeWPF.Extensions
             }
 
             return 0;
+        }
+
+        public static string RegexReplace(this string input, string pattern, string repacelement)
+        {
+            return Regex.Replace(input, pattern, repacelement, RegexOptions.IgnoreCase);
         }
     }
 }

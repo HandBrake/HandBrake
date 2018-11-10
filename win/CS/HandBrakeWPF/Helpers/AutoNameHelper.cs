@@ -59,7 +59,6 @@ namespace HandBrakeWPF.Helpers
             {
                 // Get the Source Name and remove any invalid characters
                 string sourceName = Path.GetInvalidFileNameChars().Aggregate(sourceOrLabelName, (current, character) => current.Replace(character.ToString(), string.Empty));
-                // string sanitisedPresetName = presetName != null ? Path.GetInvalidFileNameChars().Aggregate(presetName.Name, (current, character) => current.Replace(character.ToString(), string.Empty)) : string.Empty;
 
                 // Remove Underscores
                 if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore))
@@ -124,14 +123,14 @@ namespace HandBrakeWPF.Helpers
                 {
                     destinationFilename = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat);
                     destinationFilename =
-                        destinationFilename.Replace("{source}", sourceName)
-                            .Replace(Constants.Title, dvdTitle)
-                            .Replace(Constants.Chapters, combinedChapterTag)
-                            .Replace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
-                            .Replace(Constants.Time, DateTime.Now.ToString("HH-mm"))
-                            .Replace(Constants.CretaionDate, createDate)
-                            .Replace(Constants.CreationTime, createTime);
-                    // .Replace(Constants.Preset, sanitisedPresetName);
+                        destinationFilename
+                            .RegexReplace(Constants.Source, sourceName)
+                            .RegexReplace(Constants.Title, dvdTitle)
+                            .RegexReplace(Constants.Chapters, combinedChapterTag)
+                            .RegexReplace(Constants.Date, DateTime.Now.Date.ToShortDateString().Replace('/', '-'))
+                            .RegexReplace(Constants.Time, DateTime.Now.ToString("HH-mm"))
+                            .RegexReplace(Constants.CretaionDate, createDate)
+                            .RegexReplace(Constants.CreationTime, createTime);
 
                     if (task.VideoEncodeRateType == VideoEncodeRateType.ConstantQuality)
                     {
@@ -248,8 +247,8 @@ namespace HandBrakeWPF.Helpers
             }
 
             // If there is an auto name path, use it...
-            return userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith("{source_path}") ||
-                (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source_folder_name}") ||
+            return userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith(Constants.SourcePath) ||
+                (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains(Constants.SourceFolderName) ||
                  Directory.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim()));
         }        
     }
