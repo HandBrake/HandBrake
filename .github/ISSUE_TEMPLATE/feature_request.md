@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: Suggest an idea for this project. Please note, 3rd party library update requests are not required. We priodically update these in batches.
 
 ---
 
