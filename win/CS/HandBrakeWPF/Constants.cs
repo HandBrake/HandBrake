@@ -22,7 +22,7 @@ namespace HandBrakeWPF
         public const string Any = "(Any)";
         public const string Undefined = "und";
 
-        /* Autoname Contanstants */
+        /* Auto-name Constants */
         public const string Chapters = "{chapters}";
         public const string Title = "{title}";
         public const string Quality = "{quality}";
