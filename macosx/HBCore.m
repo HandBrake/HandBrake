@@ -61,6 +61,9 @@ typedef void (^HBCoreCleanupHandler)(void);
 /// Cleanup handle, used for internal HBCore cleanup.
 @property (nonatomic, readwrite, copy) HBCoreCleanupHandler cleanupHandler;
 
+/// Progress
+@property (nonatomic, readwrite) NSProgress *progress;
+
 @end
 
 @implementation HBCore
@@ -429,7 +432,7 @@ typedef void (^HBCoreCleanupHandler)(void);
     hb_job_close(&hb_job);
 
     [self preventAutoSleep];
-
+    [self startProgressReporting:job.completeOutputURL];
     hb_start(_hb_handle);
 
     // Start the timer to handle libhb state changes
@@ -446,6 +449,8 @@ typedef void (^HBCoreCleanupHandler)(void);
 
 - (HBCoreResult)workDone
 {
+    [self stopProgressReporting];
+
     // HB_STATE_WORKDONE happpens as a result of libhb finishing all its jobs
     // or someone calling hb_stop. In the latter case, hb_stop does not clear
     // out the remaining passes/jobs in the queue. We'll do that here.
@@ -492,6 +497,28 @@ typedef void (^HBCoreCleanupHandler)(void);
     hb_resume(_hb_handle);
     self.state = HBStateWorking;
     [self preventAutoSleep];
+}
+
+#pragma mark - Progress
+
+- (void)startProgressReporting:(NSURL *)fileURL
+{
+    NSDictionary *userInfo = @{NSProgressFileURLKey : fileURL};
+
+    self.progress = [[NSProgress alloc] initWithParent:nil userInfo:userInfo];
+    self.progress.totalUnitCount = 100;
+    self.progress.kind = NSProgressKindFile;
+    self.progress.pausable = NO;
+    self.progress.cancellable = NO;
+
+    [self.progress publish];
+}
+
+- (void)stopProgressReporting
+{
+    self.progress.completedUnitCount = 100;
+    [self.progress unpublish];
+    self.progress = nil;
 }
 
 #pragma mark - State updates
@@ -585,6 +612,11 @@ typedef void (^HBCoreCleanupHandler)(void);
         NSString *info = [self.stateFormatter stateToString:state];
 
         self.progressHandler(self.state, progress, info);
+
+        if (self.progress.completedUnitCount < progress.percent * 100)
+        {
+            self.progress.completedUnitCount = progress.percent * 100;
+        }
     }
 }
 
