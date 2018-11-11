@@ -30,6 +30,7 @@
 - (void)_touchBar_reloadScrubberData;
 - (void)_touchBar_updateScrubberSelectedIndex:(NSUInteger)selectedIndex;
 - (void)_touchBar_updateFitToView:(BOOL)fitToView;
+- (void)_touchBar_validateUserInterfaceItems;
 @end
 
 
@@ -82,6 +83,7 @@
     if (@available(macOS 10.12.2, *))
     {
         [self _touchBar_reloadScrubberData];
+        [self _touchBar_validateUserInterfaceItems];
     }
 }
 
@@ -121,6 +123,15 @@
     {
         [self _touchBar_updateFitToView:fitToView];
     }
+}
+
+- (BOOL)validateUserIterfaceItemForAction:(SEL)action
+{
+    if (action == @selector(createMoviePreview:) || action == @selector(toggleScaleToScreen:))
+    {
+        return self.generator != nil;
+    }
+    return YES;
 }
 
 - (IBAction)previewDurationPopUpChanged:(id)sender
@@ -230,7 +241,7 @@ NSString *thumbnailScrubberItemIdentifier = @"thumbnailItem";
 static NSTouchBarItemIdentifier HBTouchBarMain = @"fr.handbrake.previewWindowTouchBar";
 
 static NSTouchBarItemIdentifier HBTouchBarRip = @"fr.handbrake.rip";
-static NSTouchBarItemIdentifier HBTouchBarScrubber = @"fr.handbrake.scrubbe";
+static NSTouchBarItemIdentifier HBTouchBarScrubber = @"fr.handbrake.scrubber";
 static NSTouchBarItemIdentifier HBTouchBarFitToScreen = @"fr.handbrake.fitToScreen";
 
 @dynamic touchBar;
@@ -327,6 +338,19 @@ static NSTouchBarItemIdentifier HBTouchBarFitToScreen = @"fr.handbrake.fitToScre
     else
     {
         button.image = [NSImage imageNamed:NSImageNameTouchBarExitFullScreenTemplate];
+    }
+}
+
+- (void)_touchBar_validateUserInterfaceItems
+{
+    for (NSTouchBarItemIdentifier identifier in self.touchBar.itemIdentifiers) {
+        NSTouchBarItem *item = [self.touchBar itemForIdentifier:identifier];
+        NSView *view = item.view;
+        if ([view isKindOfClass:[NSButton class]]) {
+            NSButton *button = (NSButton *)view;
+            BOOL enabled = [self validateUserIterfaceItemForAction:button.action];
+            button.enabled = enabled;
+        }
     }
 }
 

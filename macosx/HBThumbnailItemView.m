@@ -63,28 +63,24 @@
 
     _imageView.hidden = YES;
 
-    dispatch_async(dispatch_get_global_queue(QOS_CLASS_BACKGROUND, 0), ^{
-        HBPreviewGenerator *generator = self.generator;
+     [self.generator copySmallImageAtIndex:thumbnailIndex completionHandler:^(CGImageRef  _Nullable result)
+      {
+          if (result != NULL)
+          {
+              NSSize size = NSMakeSize(CGImageGetWidth(result), CGImageGetHeight(result));
+              NSImage *thumbnail = [[NSImage alloc] initWithCGImage:result size:size];
 
-        [generator copySmallImageAtIndex:thumbnailIndex completionHandler:^(CGImageRef  _Nullable result)
-         {
-             if (result != NULL)
-             {
-                 NSSize size = NSMakeSize(CGImageGetWidth(result), CGImageGetHeight(result));
-                 NSImage *thumbnail = [[NSImage alloc] initWithCGImage:result size:size];
-
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                     [self setThumbnail:thumbnail];
-                 });
-             }
-             else
-             {
-                 dispatch_async(dispatch_get_main_queue(), ^{
-                     [self setThumbnail:nil];
-                 });
-             }
-         }];
-    });
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  [self setThumbnail:thumbnail];
+              });
+          }
+          else
+          {
+              dispatch_async(dispatch_get_main_queue(), ^{
+                  [self setThumbnail:nil];
+              });
+          }
+      }];
 }
 
 @end

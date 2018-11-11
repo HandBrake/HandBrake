@@ -859,6 +859,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
     else
     {
+        [fPreviewController.generator invalidate];
         fPreviewController.generator = nil;
         self.summaryController.generator = nil;
     }

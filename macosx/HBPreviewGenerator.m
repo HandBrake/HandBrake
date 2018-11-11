@@ -17,7 +17,8 @@
 @property (nonatomic, readonly) NSCache<NSNumber *, id> *previewsCache;
 @property (nonatomic, readonly) NSCache<NSNumber *, id> *smallPreviewsCache;
 
-@property (nonatomic, readonly) dispatch_semaphore_t sem;
+@property (nonatomic, readonly) dispatch_queue_t queue;
+@property (nonatomic, readonly) dispatch_group_t group;
 @property (nonatomic, readonly) _Atomic bool invalidated;
 
 @property (nonatomic, strong) HBCore *core;
@@ -50,7 +51,8 @@
 
         _imagesCount = [_scanCore imagesCountForTitle:self.job.title];
 
-        _sem = dispatch_semaphore_create(4);
+        _queue = dispatch_queue_create("fr.handbrake.PreviewQueue", DISPATCH_QUEUE_SERIAL);
+        _group = dispatch_group_create();
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBPictureChangedNotification object:job.picture];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imagesSettingsDidChange) name:HBFiltersChangedNotification object:job.filters];
@@ -156,54 +158,57 @@
 
 - (void)copySmallImageAtIndex:(NSUInteger)index completionHandler:(void (^)(__nullable CGImageRef result))handler
 {
-    dispatch_semaphore_wait(_sem, DISPATCH_TIME_FOREVER);
-
     if (_invalidated || index >= self.imagesCount)
     {
         handler(NULL);
-        dispatch_semaphore_signal(_sem);
         return;
     }
 
-    CGImageRef image;
+    dispatch_group_async(_group, _queue,^{
 
-    // First try to look in the small previews cache
-    image = (__bridge CGImageRef)([_smallPreviewsCache objectForKey:@(index)]);
+        if (self->_invalidated || index >= self.imagesCount)
+        {
+            handler(NULL);
+            return;
+        }
 
-    if (image != NULL)
-    {
-        handler(image);
-        dispatch_semaphore_signal(_sem);
-        return;
-    }
+        CGImageRef image;
 
-    // Else try the normal cache
-    image = (__bridge CGImageRef)([_previewsCache objectForKey:@(index)]);
+        // First try to look in the small previews cache
+        image = (__bridge CGImageRef)([self->_smallPreviewsCache objectForKey:@(index)]);
 
-    if (image == NULL)
-    {
-        image = (CGImageRef)[self.scanCore copyImageAtIndex:index
-                                                      forTitle:self.job.title
-                                                  pictureFrame:self.job.picture
-                                                   deinterlace:NO
-                                                        rotate:self.job.filters.rotate
-                                                       flipped:self.job.filters.flip];
-        CFAutorelease(image);
-    }
+        if (image != NULL)
+        {
+            handler(image);
+            return;
+        }
 
-    if (image != NULL)
-    {
-        CGImageRef scaledImage = CreateScaledCGImageFromCGImage(image, 30);
-        // The cost is the number of pixels of the image
-        NSUInteger previewCost = CGImageGetWidth(scaledImage) * CGImageGetHeight(scaledImage);
-        [self.smallPreviewsCache setObject:(__bridge id)(scaledImage) forKey:@(index) cost:previewCost];
-        handler(scaledImage);
-        dispatch_semaphore_signal(_sem);
-        return;
-    }
+        // Else try the normal cache
+        image = (__bridge CGImageRef)([self->_previewsCache objectForKey:@(index)]);
 
-    handler(NULL);
-    dispatch_semaphore_signal(_sem);
+        if (image == NULL)
+        {
+            image = (CGImageRef)[self.scanCore copyImageAtIndex:index
+                                                       forTitle:self.job.title
+                                                   pictureFrame:self.job.picture
+                                                    deinterlace:NO
+                                                         rotate:self.job.filters.rotate
+                                                        flipped:self.job.filters.flip];
+            CFAutorelease(image);
+        }
+
+        if (image != NULL)
+        {
+            CGImageRef scaledImage = CreateScaledCGImageFromCGImage(image, 30);
+            // The cost is the number of pixels of the image
+            NSUInteger previewCost = CGImageGetWidth(scaledImage) * CGImageGetHeight(scaledImage);
+            [self.smallPreviewsCache setObject:(__bridge id)(scaledImage) forKey:@(index) cost:previewCost];
+            handler(scaledImage);
+            return;
+        }
+
+        handler(NULL);
+    });
 }
 
 #pragma mark -
@@ -316,6 +321,12 @@
     {
         [self.core cancelEncode];
     }
+}
+
+- (void)invalidate
+{
+    _invalidated = true;
+    dispatch_group_wait(_group, DISPATCH_TIME_FOREVER);
 }
 
 @end

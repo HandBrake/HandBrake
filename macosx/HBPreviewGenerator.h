@@ -29,6 +29,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithCore:(HBCore *)core job:(HBJob *)job NS_DESIGNATED_INITIALIZER;
 
+/**
+ * Wait until all the asyncronous operations are done.
+ */
+- (void)invalidate;
+
 #pragma mark - Still image generator
 
 /**
