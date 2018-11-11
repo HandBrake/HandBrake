@@ -11,14 +11,17 @@ namespace HandBrakeWPF
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.IO;
     using System.Linq;
+    using System.Threading;
     using System.Windows;
     using System.Windows.Controls;
 
     using Caliburn.Micro;
 
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Startup;
     using HandBrakeWPF.Utilities;
@@ -95,6 +98,21 @@ namespace HandBrakeWPF
             if (Portable.IsPortable())
             {
                 Portable.Initialise();
+            }
+
+            // Setup the UI Language
+            
+            IUserSettingService userSettingService =  IoC.Get<IUserSettingService>();
+            string culture = userSettingService.GetUserSetting<string>(UserSettingConstants.UiLanguage);
+            if (!string.IsNullOrEmpty(culture) && !"en".Equals(culture))
+            {
+                InterfaceLanguage language = InterfaceLanguageUtilities.FindInterfaceLanguage(culture);
+                if (language != null)
+                {
+                    CultureInfo ci = new CultureInfo(language.Culture);
+                    Thread.CurrentThread.CurrentCulture = ci;
+                    Thread.CurrentThread.CurrentUICulture = ci;
+                }
             }
 
             base.OnStartup(e);

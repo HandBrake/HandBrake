@@ -165,6 +165,7 @@
     <Compile Include="Model\DriveInformation.cs" />
     <Compile Include="Model\Filters\FilterTune.cs" />
     <Compile Include="Model\Filters\FilterPreset.cs" />
+    <Compile Include="Model\InterfaceLanguage.cs" />
     <Compile Include="Model\Picture\PresetPictureSettingsMode.cs" />
     <Compile Include="Model\Subtitles\SubtitleBurnInBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviourModes.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="Utilities\Input\ChapterImporterCsv.cs" />
     <Compile Include="Utilities\Input\ChapterImporterTxt.cs" />
     <Compile Include="Utilities\Input\ChapterImporterXml.cs" />
+    <Compile Include="Utilities\InterfaceLanguageUtilities.cs" />
     <Compile Include="Utilities\Interfaces\INotifyPropertyChangedEx.cs" />
     <Compile Include="Utilities\Output\CsvHelper.cs" />
     <Compile Include="Utilities\Portable.cs" />
@@ -467,6 +469,9 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.de.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\ResourcesTooltips.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ResourcesTooltips.Designer.cs</LastGenOutput>

@@ -101,7 +101,7 @@ namespace HandBrakeWPF.Services
 
                 // Treat String Arrays as StringCollections.  TODO refactor upstream code to more traditional string arrays.
                 object settingValue = this.userSettings[name];
-                if (settingValue.GetType() == typeof(JArray))
+                if (settingValue != null && settingValue.GetType() == typeof(JArray))
                 {
                     string[] stringArr = ((JArray)settingValue).ToObject<string[]>();
                     StringCollection stringCollection = new StringCollection();

@@ -412,7 +412,7 @@ The previous user_presets.xml file was backed up.</value>
     <value>You must first scan a source and setup your job before starting an encode. Click the 'Source' button on the toolbar to continue.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>Please select make sure you have selected one of your own presets. Please note that you cannot export built-in presets.</value>
+    <value>Please make sure you have selected one of your own presets. Please note that you cannot export built-in presets.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
     <value>Please select a preset to update.</value>
@@ -1893,5 +1893,11 @@ This will not affect your current settings in the Subtitle tab.</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
     <value>Video</value>
+  </data>
+  <data name="OptionsView_Language" xml:space="preserve">
+    <value>Language:</value>
+  </data>
+  <data name="Language_UseSystem" xml:space="preserve">
+    <value>Use System Language</value>
   </data>
 </root>

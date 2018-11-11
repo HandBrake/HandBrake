@@ -102,6 +102,8 @@ namespace HandBrakeWPF.ViewModels
         private bool enableNvencEncoder;
         private bool showExperimentalQueue;
 
+        private InterfaceLanguage selectedLanguage;
+
         #endregion
 
         #region Constructors and Destructors
@@ -181,6 +183,25 @@ namespace HandBrakeWPF.ViewModels
         }
 
         #region General
+
+        public BindingList<InterfaceLanguage> InterfaceLanguages
+        {
+            get
+            {
+                return new BindingList<InterfaceLanguage>(InterfaceLanguageUtilities.GetUserInterfaceLangauges());
+            }
+        }
+
+        public InterfaceLanguage SelectedLanguage
+        {
+            get => this.selectedLanguage;
+            set
+            {
+                if (Equals(value, this.selectedLanguage)) return;
+                this.selectedLanguage = value;
+                this.NotifyOfPropertyChange(() => this.SelectedLanguage);
+            }
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether CheckForUpdates.
@@ -1314,6 +1335,8 @@ namespace HandBrakeWPF.ViewModels
             // #############################
             // General
             // #############################
+            string culture = this.userSettingService.GetUserSetting<string>(UserSettingConstants.UiLanguage);
+            this.SelectedLanguage = InterfaceLanguageUtilities.FindInterfaceLanguage(culture);
 
             this.CheckForUpdates = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus);
 
@@ -1521,6 +1544,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenDone, this.PlaySoundWhenDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenQueueDone, this.PlaySoundWhenQueueDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenDoneAudioFile, this.WhenDoneAudioFileFullPath);
+            this.userSettingService.SetUserSetting(UserSettingConstants.UiLanguage, this.SelectedLanguage?.Culture);
 
             /* Experiments */
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);

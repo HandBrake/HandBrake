@@ -323,7 +323,8 @@ namespace HandBrakeWPF.Properties {
         ///Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.
         ///
         ///Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.
-        ///        /// [rest of string was truncated]&quot;;.
+        ///
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Advanced_MotionEstimationMethodToolTip {
             get {
@@ -1275,6 +1276,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use System Language.
+        /// </summary>
+        public static string Language_UseSystem {
+            get {
+                return ResourceManager.GetString("Language_UseSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy to clipboard.
         /// </summary>
         public static string LogView_CopyClipboard {
@@ -1673,7 +1683,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please select make sure you have selected one of your own presets. Please note that you cannot export built-in presets..
+        ///   Looks up a localized string similar to Please make sure you have selected one of your own presets. Please note that you cannot export built-in presets..
         /// </summary>
         public static string Main_SelectPreset {
             get {
@@ -3009,6 +3019,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_InvalidFileFormatChars {
             get {
                 return ResourceManager.GetString("OptionsView_InvalidFileFormatChars", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language:.
+        /// </summary>
+        public static string OptionsView_Language {
+            get {
+                return ResourceManager.GetString("OptionsView_Language", resourceCulture);
             }
         }
         

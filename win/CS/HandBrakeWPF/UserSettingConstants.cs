@@ -69,8 +69,8 @@ namespace HandBrakeWPF
         public const string EnableVceEncoder = "EnableVceEncoder";
         public const string EnableNvencEncoder = "EnableNvencEncoder";
         public const string ShowExperimentalQueue = "ShowExperimentalQueue";
+        public const string UiLanguage = "UiLanguage";
 
         #endregion
-
     }
 }
