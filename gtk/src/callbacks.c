@@ -1169,7 +1169,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
         // {source_path} is only allowed as the first element of the
         // template since the path must come first in the filename
         if (p != NULL &&
-            !strncmp(p, "{source_path}", strlen("{source_path}")))
+            !strncasecmp(p, "{source_path}", strlen("{source_path}")))
         {
             const gchar * source;
 
@@ -1190,28 +1190,28 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
         }
         while (*p)
         {
-            if (!strncmp(p, "{source}", strlen("{source}")))
+            if (!strncasecmp(p, "{source}", strlen("{source}")))
             {
                 const gchar *vol_name;
                 vol_name = ghb_dict_get_string(settings, "volume");
                 g_string_append_printf(str, "%s", vol_name);
                 p += strlen("{source}");
             }
-            else if (!strncmp(p, "{title}", strlen("{title}")))
+            else if (!strncasecmp(p, "{title}", strlen("{title}")))
             {
                 gint title = ghb_dict_get_int(settings, "title");
                 if (title >= 0)
                     g_string_append_printf(str, "%d", title);
                 p += strlen("{title}");
             }
-            else if (!strncmp(p, "{preset}", strlen("{preset}")))
+            else if (!strncasecmp(p, "{preset}", strlen("{preset}")))
             {
                 const gchar *preset_name;
                 preset_name = ghb_dict_get_string(settings, "PresetName");
                 g_string_append_printf(str, "%s", preset_name);
                 p += strlen("{preset}");
             }
-            else if (!strncmp(p, "{chapters}", strlen("{chapters}")))
+            else if (!strncasecmp(p, "{chapters}", strlen("{chapters}")))
             {
                 if (ghb_settings_combo_int(settings, "PtoPType") == 0)
                 {
@@ -1225,7 +1225,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 }
                 p += strlen("{chapters}");
             }
-            else if (!strncmp(p, "{time}", strlen("{time}")))
+            else if (!strncasecmp(p, "{time}", strlen("{time}")))
             {
                 char st[6];
                 struct tm *lt;
@@ -1236,7 +1236,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 g_string_append_printf(str, "%s", st);
                 p += strlen("{time}");
             }
-            else if (!strncmp(p, "{date}", strlen("{date}")))
+            else if (!strncasecmp(p, "{date}", strlen("{date}")))
             {
                 char dt[11];
                 struct tm *lt;
@@ -1247,7 +1247,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 g_string_append_printf(str, "%s", dt);
                 p += strlen("{date}");
             }
-            else if (!strncmp(p, "{creation-date}", strlen("{creation-date}")))
+            else if (!strncasecmp(p, "{creation-date}", strlen("{creation-date}")))
             {
                 gchar *val;
                 const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");
@@ -1256,7 +1256,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 p += strlen("{creation-date}");
                 g_free(val);
             }
-            else if (!strncmp(p, "{creation-time}", strlen("{creation-time}")))
+            else if (!strncasecmp(p, "{creation-time}", strlen("{creation-time}")))
             {
                 gchar *val;
                 const gchar *source = ghb_dict_get_string(ud->globals, "scan_source");
@@ -1265,7 +1265,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 p += strlen("{creation-time}");
                 g_free(val);
             }
-            else if (!strncmp(p, "{quality}", strlen("{quality}")))
+            else if (!strncasecmp(p, "{quality}", strlen("{quality}")))
             {
                 if (ghb_dict_get_bool(settings, "vquality_type_constant"))
                 {
@@ -1279,7 +1279,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 }
                 p += strlen("{quality}");
             }
-            else if (!strncmp(p, "{bitrate}", strlen("{bitrate}")))
+            else if (!strncasecmp(p, "{bitrate}", strlen("{bitrate}")))
             {
                 if (ghb_dict_get_bool(settings, "vquality_type_bitrate"))
                 {
