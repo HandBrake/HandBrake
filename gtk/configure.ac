@@ -214,7 +214,13 @@ fi
 if test "x$use_qsv" = "xyes" ; then
     HB_LIBS="$HB_LIBS -lmfx"
 fi
+if test "x$PYTHON" != "x" ; then
+    HB_PYTHON="$PYTHON"
+else
+    HB_PYTHON="python2"
+fi
 
+AC_SUBST(HB_PYTHON)
 AC_SUBST(HB_LIBS)
 AC_SUBST(GHB_CFLAGS)
 AC_SUBST(GHB_LIBS)

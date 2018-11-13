@@ -171,7 +171,7 @@ resources.o: data_res.h
 
 widget_reverse.deps: makedeps.py
 widget.deps: makedeps.py
-	python2 $(srcdir)/makedeps.py
+	$(HB_PYTHON) $(srcdir)/makedeps.py
 
 fr.handbrake.ghb.appdata.xml.in: fr.handbrake.ghb.appdata.xml.template
 	sed -e 's^RELEASE_TAG^<release version="$(HB.version)" date="$(word 1,$(HB.repo.date))" />^' $< > $@
