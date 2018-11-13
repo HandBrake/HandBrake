@@ -1535,6 +1535,7 @@ try:
 
         xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', abort=False )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo', abort=False )
+        python     = ToolProbe( 'PYTHON.exe', os.path.basename(sys.executable), abort=True )
 
     ## run tool probes
     for tool in ToolProbe.tools:
