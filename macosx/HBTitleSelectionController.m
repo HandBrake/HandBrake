@@ -128,13 +128,13 @@ static NSTouchBarItemIdentifier HBTouchBarCancel = @"fr.handbrake.addToQueue";
         NSCustomTouchBarItem *cancelItem = [[NSCustomTouchBarItem alloc] initWithIdentifier:HBTouchBarAdd];
         cancelItem.customizationLabel = NSLocalizedString(@"Cancel", @"Touch bar");
         NSButton *cancelButton = [NSButton buttonWithTitle:NSLocalizedString(@"Cancel", @"Touch bar") target:self action:@selector(cancel:)];
-        [cancelButton.widthAnchor constraintGreaterThanOrEqualToConstant:200].active = YES;
+        [cancelButton.widthAnchor constraintGreaterThanOrEqualToConstant:160].active = YES;
         cancelItem.view = cancelButton;
 
         NSCustomTouchBarItem *addItem = [[NSCustomTouchBarItem alloc] initWithIdentifier:HBTouchBarCancel];
         addItem.customizationLabel = NSLocalizedString(@"Add To Queue", @"Touch bar");
         NSButton *addButton = [NSButton buttonWithTitle:NSLocalizedString(@"Add To Queue", @"Touch bar") target:self action:@selector(add:)];
-        [addButton.widthAnchor constraintGreaterThanOrEqualToConstant:200].active = YES;
+        [addButton.widthAnchor constraintGreaterThanOrEqualToConstant:160].active = YES;
         addButton.keyEquivalent = @"\r";
         addItem.view = addButton;
 
