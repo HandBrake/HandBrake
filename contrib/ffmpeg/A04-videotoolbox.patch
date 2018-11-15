@@ -1,0 +1,27 @@
+diff --git a/libavcodec/videotoolboxenc.c b/libavcodec/videotoolboxenc.c
+index 7796a68..e8b6245 100644
+--- a/libavcodec/videotoolboxenc.c
++++ b/libavcodec/videotoolboxenc.c
+@@ -866,6 +866,14 @@ static int get_cv_color_primaries(AVCodecContext *avctx,
+             *primaries = NULL;
+             break;
+ 
++        case AVCOL_PRI_BT470BG:
++			*primaries = kCVImageBufferColorPrimaries_EBU_3213;
++            break;
++
++        case AVCOL_PRI_SMPTE170M:
++			*primaries = kCVImageBufferColorPrimaries_SMPTE_C;
++            break;
++
+         case AVCOL_PRI_BT709:
+             *primaries = kCVImageBufferColorPrimaries_ITU_R_709_2;
+             break;
+@@ -1302,6 +1310,7 @@ static av_cold int vtenc_init(AVCodecContext *avctx)
+         vtctx->get_param_set_func = compat_keys.CMVideoFormatDescriptionGetHEVCParameterSetAtIndex;
+         if (!vtctx->get_param_set_func) return AVERROR(EINVAL);
+         if (!get_vt_hevc_profile_level(avctx, &profile_level)) return AVERROR(EINVAL);
++        vtctx->has_b_frames = avctx->max_b_frames > 0;
+     }
+ 
+     vtctx->session = NULL;

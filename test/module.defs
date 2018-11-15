@@ -74,7 +74,7 @@ endif
 TEST.GCC.I += $(LIBHB.GCC.I)
 
 ifeq ($(BUILD.system),darwin)
-    TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox Foundation
+    TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox VideoToolbox CoreMedia CoreVideo Foundation
     TEST.GCC.l += iconv
 else ifeq ($(BUILD.system),linux)
     TEST.GCC.l += pthread dl m

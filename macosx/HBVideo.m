@@ -105,6 +105,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
     if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
+        [self validateQualityType];
         [self validatePresetsSettings];
         [self validateVideoOptionExtra:previousEncoder];
     }
@@ -281,11 +282,42 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     [self postChangedNotification];
 }
 
+- (void)validateQualityType
+{
+    if (self.qualityType != 0)
+    {
+        int direction;
+        float minValue, maxValue, granularity;
+        hb_video_quality_get_limits(self.encoder,
+                                    &minValue, &maxValue, &granularity, &direction);
+
+        if (minValue == 0 && maxValue == 0)
+        {
+            self.qualityType = 0;
+        }
+    }
+    else
+    {
+        if ((self.encoder & HB_VCODEC_FFMPEG_VT_H264) ||
+            (self.encoder & HB_VCODEC_FFMPEG_VT_H265))
+        {
+            self.twoPass = NO;
+        }
+    }
+}
+
 - (void)validatePresetsSettings
 {
     NSArray *presets = self.presets;
     if (presets.count && ![presets containsObject:self.preset]) {
-        self.preset = presets[self.mediumPresetIndex];
+        if (presets.count > self.mediumPresetIndex)
+        {
+            self.preset = presets[self.mediumPresetIndex];
+        }
+        else
+        {
+            self.preset = presets.firstObject;
+        }
     }
 
     NSArray *tunes = self.tunes;

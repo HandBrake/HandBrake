@@ -104,6 +104,17 @@
             (self.encoder & HB_VCODEC_X265_MASK));
 }
 
++ (NSSet<NSString *> *)keyPathsForValuesAffectingTwoPassSupported
+{
+    return [NSSet setWithObjects:@"encoder", nil];
+}
+
+- (BOOL)twoPassSupported
+{
+    return !((self.encoder & HB_VCODEC_FFMPEG_VT_H264) ||
+            (self.encoder & HB_VCODEC_FFMPEG_VT_H265));
+}
+
 + (NSSet<NSString *> *)keyPathsForValuesAffectingConstantQualityLabel
 {
     return [NSSet setWithObjects:@"encoder", nil];
@@ -112,6 +123,16 @@
 - (NSString *)constantQualityLabel
 {
     return @(hb_video_quality_get_name(self.encoder));
+}
+
++ (NSSet<NSString *> *)keyPathsForValuesAffectingIsConstantQualitySupported
+{
+    return [NSSet setWithObjects:@"encoder", nil];
+}
+
+- (BOOL)isConstantQualitySupported
+{
+    return (self.qualityMaxValue == 0 && self.qualityMinValue == 0) == NO;
 }
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingUnparseOptions
