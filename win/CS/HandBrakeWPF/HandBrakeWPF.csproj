@@ -734,10 +734,6 @@
       <Project>{087a2ba8-bac2-4577-a46f-07ff9d420016}</Project>
       <Name>HandBrake.Interop</Name>
     </ProjectReference>
-    <ProjectReference Include="..\HandBrake.Worker\HandBrake.Worker.csproj">
-      <Project>{f8370f37-b226-4830-aee7-6d7ae403e3d2}</Project>
-      <Name>HandBrake.Worker</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

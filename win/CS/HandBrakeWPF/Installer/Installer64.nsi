@@ -150,6 +150,11 @@ Section "HandBrake" SEC01
   File "*.config"
   File "*.pdb"
 
+ ; Copy the languages
+  SetOutPath "$INSTDIR\de"
+  SetOverwrite ifnewer
+  File "de\*.*"
+
   ; Copy the standard doc set into the doc folder
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
@@ -192,6 +197,9 @@ Section Uninstall
   Delete "$INSTDIR\*.*"
   Delete "$INSTDIR\doc\*.*"
   RMDir  "$INSTDIR\doc"
+  Delete "$INSTDIR\de\*.*"
+  RMDir  "$INSTDIR\de"
+
   Delete "$SMPROGRAMS\HandBrake\Uninstall.lnk"
   Delete "$DESKTOP\HandBrake.lnk"
   Delete "$SMPROGRAMS\HandBrake\HandBrake.lnk"
