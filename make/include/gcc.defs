@@ -1,5 +1,5 @@
 GCC.gcc = gcc
-GCC.gxx = $(dir $(GCC.gcc))$(subst clang,clang++,$(subst gcc,g++,$(notdir $(GCC.gcc))))
+GCC.gxx = $(dir $(GCC.gcc))$(subst cc,c++,$(subst clang,clang++,$(subst gcc,g++,$(notdir $(GCC.gcc)))))
 
 GCC.strip   = $$(if $$(filter none,$$(GCC.g)),1)
 GCC.dylib   = 1
@@ -91,7 +91,7 @@ GCC.args.extra.exe++   = $(LDFLAGS)
 
 define import.GCC
     $(1).GCC.gcc = $$(GCC.gcc)
-    $(1).GCC.gxx = $$(dir $$($(1).GCC.gcc))$$(subst clang,clang++,$$(subst gcc,g++,$$(notdir $$($(1).GCC.gcc))))
+    $(1).GCC.gxx = $$(dir $$($(1).GCC.gcc))$$(subst cc,c++,$$(subst clang,clang++,$$(subst gcc,g++,$$(notdir $$($(1).GCC.gcc)))))
 
     $(1).GCC.pipe    = $$(GCC.pipe)
     $(1).GCC.c_std   = $$(GCC.c_std)
