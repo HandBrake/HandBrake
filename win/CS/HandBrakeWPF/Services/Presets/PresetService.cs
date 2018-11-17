@@ -167,8 +167,6 @@ namespace HandBrakeWPF.Services.Presets
                 this.Update(preset);
                 return true;
             }
-
-            return false;
         }
 
         /// <summary>

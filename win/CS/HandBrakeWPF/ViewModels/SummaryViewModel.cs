@@ -42,7 +42,6 @@ namespace HandBrakeWPF.ViewModels
         private EncodeTask task;
         private Source source;
         private Title currentTitle;
-        private bool isMkv;
         private int selectedPreview = 2;
 
         private bool isPreviousPreviewControlVisible;

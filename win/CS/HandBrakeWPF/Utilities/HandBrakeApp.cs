@@ -53,7 +53,7 @@ namespace HandBrakeWPF.Utilities
                     File.Delete(file);
                 }
             }
-            catch (Exception exc)
+            catch (Exception)
             {
                 throw;
             }
