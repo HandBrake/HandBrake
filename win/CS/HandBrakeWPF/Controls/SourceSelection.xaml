@@ -44,14 +44,14 @@
 
             <!-- Title Specific Scan -->
             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left"  Margin="20,15,0,0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{x:Static Properties:Resources.SourceSelection_ChooseSpecificTitle}" />
+                <WrapPanel Orientation="Horizontal">
+                    <TextBlock Text="{x:Static Properties:Resources.SourceSelection_ChooseSpecificTitle}" TextWrapping="Wrap" />
 
                     <controls:NumberBox Width="60" Height="24" Margin="10,0,0,0" ToolTip="{x:Static Properties:ResourcesTooltips.SourceSelection_TitleSpecific}"
                                 Minimum="0" Maximum="5000" Number="{Binding TitleSpecificScan, Mode=TwoWay}" />
-                </StackPanel>
+                </WrapPanel>
 
-                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_ChooseVideo}" Margin="0,10,0,0" />
+                <TextBlock Text="{x:Static Properties:Resources.SourceSelection_ChooseVideo}" Margin="0,10,0,0" TextWrapping="Wrap" />
             </StackPanel>
 
             <!-- Source Types -->
