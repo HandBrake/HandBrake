@@ -60,25 +60,33 @@
             <Button Grid.Row="2"  AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseFolder}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FolderScan]"
                     Margin="20,5,0,0" Padding="8" HorizontalAlignment="Left">
 
-                <StackPanel Orientation="Horizontal" MinWidth="100">
-                    <Image Source="../Views/Images/folder32.png" Width="32" />
-                    <StackPanel Orientation="Vertical">
+                <Grid MinWidth="220">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image Source="../Views/Images/folder32.png" Width="32" Grid.Column="0" />
+                    <StackPanel Orientation="Vertical" Grid.Column="1">
                         <TextBlock Text="{x:Static Properties:Resources.SourceSelection_FolderBatchScan}" VerticalAlignment="Center" Margin="5,0,0,0" />
-                        <TextBlock Text="{x:Static Properties:Resources.SourceSelection_OpenFolderWIth}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="{x:Static Properties:Resources.SourceSelection_OpenFolderWIth}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="5,0,0,0" />
                     </StackPanel>
-                </StackPanel>
+                </Grid>
             </Button>
 
             <!--Ctrl + F-->
             <Button Grid.Row="3"  AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseFile}" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" cal:Message.Attach="[Event Click] = [Action FileScan]"
                     Margin="20,5,0,0" Padding="8" HorizontalAlignment="Left">
-                <StackPanel Orientation="Horizontal" MinWidth="100">
-                    <Image Source="../Views/Images/File32.png" Width="32" />
-                    <StackPanel Orientation="Vertical">
+                <Grid MinWidth="220">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image Source="../Views/Images/File32.png" Width="32" Grid.Column="0" />
+                    <StackPanel Orientation="Vertical" Grid.Column="1">
                         <TextBlock Text="{x:Static Properties:Resources.SourceSelection_File}" VerticalAlignment="Center" Margin="5,0,0,0" />
-                        <TextBlock Text="{x:Static Properties:Resources.SourceSelection_SingleVideoFile}" VerticalAlignment="Center" Margin="5,0,0,0" />
+                        <TextBlock Text="{x:Static Properties:Resources.SourceSelection_SingleVideoFile}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="5,0,0,0" />
                     </StackPanel>
-                </StackPanel>
+                </Grid>
             </Button>
 
             <ListBox Grid.Row="4" ItemsSource="{Binding Drives}" Background="Transparent"  BorderThickness="0" Margin="16,5,0,0" ItemContainerStyle="{StaticResource hoverlessListBoxItemStyle}">

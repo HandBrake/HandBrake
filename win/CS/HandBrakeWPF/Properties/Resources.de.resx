@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -118,120 +118,118 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Advanced_AdaptiveBFramesToolTip" xml:space="preserve">
-    <value>x264 has a variety of algorithms to decide when to use B-frames and how many to use.
+    <value>x264 hat eine Menge Algorithmen um zu entscheiden, wann B-Frames verwendet werden sollen und wie sie verwendet werden.
 
-Fast mode takes roughly the same amount of time no matter how many B-frames you specify.  However, while fast, its decisions are often suboptimal.
+Der schnelle Modus benötigt ungefähr die selbe Zeit, ganz egal wie viele B-Frames festgelegt sind.
 
-Optimal mode gets slower as the maximum number of B-Frames increases, but makes much more accurate decisions, especially when used with B-pyramid.</value>
+Der optimale Modus wird langsamer wenn sich die maximale Anzahl an B-Frames erhöht, aber macht viel exaktere Entscheidungen, speziell wenn B-Pyramid verwendet wird.</value>
   </data>
   <data name="Advanced_AdaptiveDirectModeToolTip" xml:space="preserve">
-    <value>H.264 allows for two different prediction modes, spatial and temporal, in B-frames.
+    <value>H.264 erlaubt in B-Frames zwei verschiedene Vorhersagemethoden, räumlich und zeitlich.
 
-Spatial, the default, is almost always better, but temporal is sometimes useful too.
+Räumlich, der Standard, ist in den meisten Fällen die besser Wahl, jedoch kann zeitlich in manchen Fällen auch nützlich sein.
 
-x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain), adaptively select which is better for each particular frame.</value>
+x264 kann, unter der Einbuße von etwas Geschwindigkeit (und demzufolge für einen kleinen Vorteil bezüglich der Kompression), adaptiv entscheiden welche Methode für das jeweilige Einzelbild die bessere ist.</value>
   </data>
   <data name="Advanced_AdaptiveQuantizationStrengthToolTip" xml:space="preserve">
-    <value>Adaptive quantization controls how the encoder distributes bits across the frame.
-Higher values take more bits away from edges and complex areas to improve areas with finer detail.</value>
+    <value>Die adaptive Quantisierung steuert, wie der Enkoder die Bits über das Einzelbild verteilt.
+Höhere Werte entfernen mehr Bits von Kanten und komplexen Bereichen, um Bereiche mit feineren Details zu verbessern.</value>
   </data>
   <data name="Advanced_AnalysisToolTip" xml:space="preserve">
-    <value>Mode decision picks from a variety of options to make its decision: this option chooses what options those are.  
-Fewer partitions to check means faster encoding, at the cost of worse decisions, since the best option might have been one that was turned off.</value>
+    <value>Die Modusentscheidung wählt aus einer Vielzahl von Optionen aus, um eine Entscheidung zu treffen: Diese Option wählt, welche Optionen das sind. 
+Weniger zu überprüfende Partitionen bedeuten eine schnellere Kodierung auf Kosten schlechterer Entscheidungen, da die beste Option möglicherweise eine deaktivierte war.</value>
   </data>
   <data name="Advanced_BFramesToolTip" xml:space="preserve">
-    <value>Sane values are ~2-5.  
-This specifies the maximum number of sequential B-frames that the encoder can use. 
- Large numbers generally won't help significantly unless Adaptive B-frames is set to Optimal.  
-Cel-animated source material and B-pyramid also significantly increase the usefulness of larger values. 
-Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off).</value>
+    <value>Vernünftige Werte liegen im Bereich ~2-5.
+Dies legt die maximale Anzahl aufeinanderfolgender B-Frames fest, die der Enkoder verwenden kann.
+Große Werte helfen in der Regel nicht viel, solange Adaptive B-Frames nicht auf Optimal eingestellt ist.
+Cel-animiertes Ausgangsmaterial und B-Pyramide erhöhen ebenfalls signifikant den Nutzen größerer Werte.
+Das Basisprofil, wie es für iPods und ähnliche Geräte erforderlich ist, erfordert, dass die B-Frames auf 0 (aus) gesetzt werden.</value>
   </data>
   <data name="Advanced_CabacToolTip" xml:space="preserve">
-    <value>After the encoder has done its work, it has a bunch of data that needs to be compressed losslessly, similar to ZIP or RAR. H.264 provides two options for this: CAVLC and CABAC.  CABAC decodes a lot slower but compresses significantly better (10-30%), especially at lower bitrates. If you're looking to minimize CPU requirements for video playback, disable this option. Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled.</value>
+    <value>Nachdem der Enkoder seine Arbeit getan hat, hat er eine Menge Daten, die verlustfrei komprimiert werden müssen, ähnlich wie ZIP oder RAR. H.264 bietet dafür zwei Möglichkeiten: CAVLC und CABAC. CABAC dekodiert viel langsamer, komprimiert aber deutlich besser (10-30%), insbesondere bei niedrigeren Bitraten. Wenn die CPU-Anforderungen für die Videowiedergabe minimieren werden soll, sollte diese Option deaktiviert sein. Das Basisprofil, wie es für iPods und ähnliche Geräte erforderlich ist, erfordert, dass CABAC deaktiviert wird.</value>
   </data>
   <data name="Advanced_DeblockingToolTip" xml:space="preserve">
-    <value>H.264 has a built-in deblocking filter that smooths out blocking artifacts after decoding each frame.  This not only improves visual quality, but also helps compression significantly. 
-The deblocking filter takes a lot of CPU power, so if you're looking to minimize CPU requirements for video playback, disable it.
-
-The deblocking filter has two adjustable parameters, "strength" and "threshold". 
-The former controls how strong (or weak) the deblocker is, while the latter controls how many (or few)  edges it applies to. 
-Lower values mean less deblocking, higher values mean more deblocking. The default is 0 (normal strength) for both parameters.</value>
+    <value>H.264 besitzt einen eingebauten Deblockingfilter, der nach jedem dekodierten Einzelbild Blockartefakte glättet. Dies verbessert nicht nur die visuelle Qualität, sondern verbessert auch signifikant die Kompression.
+Der Deblockingfilter benötigt viel CPU-Leistung, wenn also die CPU-Anforderungen beim Abspielen des Videos minimiert werden soll, sollte diese Option deaktiviert werden.
+Der Deblockingfilter hat zwei einstellbare Parameter,  "Stärke" und "Schwellenwert".
+Ersteres beeinflusst wie stark (oder schwach) der Deblocker ist, wohingegen letzteres festlegt auf wie viele (oder wenige) Kanten er angewandt wird.
+Kleinere Werte bedeuten weniger Deblocking, höhere Werte bedeuten mehr Deblocking. Der Standardwert ist 0 (normale Stärke) für beide Parameter.</value>
   </data>
   <data name="Advanced_EightByEightDctToolTip" xml:space="preserve">
-    <value>The 8x8 transform is the single most useful feature of x264 in terms of compression-per-speed.  
-It improves compression by at least 5% at a very small speed cost and may provide an unusually high visual quality benefit compared to its compression gain.  
-However, it requires High Profile, which many devices may not support.</value>
+    <value>Die 8x8-Transformation ist die nützlichste Funktion von x264 in Bezug auf Kompression pro Geschwindigkeit. 
+Es verbessert die Kompression um mindestens 5% bei sehr geringen Geschwindigkeitskosten und kann im Vergleich zu seiner Kompressionsverstärkung einen ungewöhnlich hohen visuellen Qualitätsvorteil bieten. 
+Allerdings erfordert es 'High Profile', das viele Geräte möglicherweise nicht unterstützen.</value>
   </data>
   <data name="Advanced_MotionEstimationMethodToolTip" xml:space="preserve">
-    <value>Controls the motion estimation method. Motion estimation is how the encoder estimates how each block of pixels in a frame has moved.  
-A better motion search method improves compression at the cost of speed.
+    <value>Steuert die Methode der Bewegungsschätzung. Die Bewegungsschätzung ist die Art und Weise, wie der Enkoder schätzt, wie sich jeder Pixelblock in einem Einzelbild bewegt hat. 
+Eine bessere Bewegungssuchmethode verbessert die Kompression auf Kosten der Geschwindigkeit.
 
-Diamond: performs an extremely fast and simple search using a diamond pattern.
+Diamond: Führt eine extrem schnelle und einfache Suche mit einem Diamantmuster durch.
 
-Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.
+Hexagon: Führt eine etwas effektivere, aber etwas langsamere Suche mit einem Hexagonmuster durch.
 
-Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.
+Uneven Multi-Hex: Führt eine sehr breite Suche mit einer Vielzahl von Mustern durch, um komplexe Bewegungen genauer zu erfassen. 
 
-Exhaustive: performs a "dumb" search of every pixel in a wide area.  Significantly slower for only a small compression gain.
+Exhaustive: Führt eine "dumme" Suche nach jedem Pixel in einem großen Bereich durch. Deutlich langsamer für nur eine geringe Kompressionsverstärkung.
 
-Transformed Exhaustive: Like exhaustive, but makes even more accurate decisions. Accordingly, somewhat slower, also for only a small improvement.</value>
+Transformed Exhaustive: Wie Exhaustive, aber trifft noch genauere Entscheidungen. Dementsprechend etwas langsamer, auch für nur eine kleine Verbesserung.</value>
   </data>
   <data name="Advanced_MotionEstimationRangeToolTip" xml:space="preserve">
-    <value>This is the distance x264 searches from its best guess at the motion of a block in order to try to find its actual motion.  
+    <value>Dies ist die Entfernung, die x264 aus seiner besten Schätzung bei der Bewegung eines Blocks sucht, um zu versuchen, seine tatsächliche Bewegung zu finden. 
 
-The default is fine for most content, but extremely high motion video, especially at HD resolutions, may benefit from higher ranges, albeit at a high speed cost.</value>
+Die Standardeinstellung ist für die meisten Inhalte in Ordnung, aber Videos mit extremen Bewegungen, insbesondere bei HD-Auflösungen, können von höheren Werten profitieren, wenn auch unter hohen Geschwindigkeitskosten.</value>
   </data>
   <data name="Advanced_NoDctDecimateToolTip" xml:space="preserve">
-    <value>x264 normally zeroes out nearly-empty data blocks to save bits to be better used for some other purpose in the video.  
-However, this can sometimes have slight negative effects on retention of subtle grain and dither.  
-Don't touch this unless you're having banding issues or other such cases where you are having trouble keeping fine noise.</value>
+    <value>x264 entfernt normalerweise fast leere Datenblöcke, um Bits zu speichern, die besser für einen anderen Zweck im Video verwendet werden können. 
+Dies kann jedoch manchmal leichte negative Auswirkungen auf die Beibehaltung von feiner Körnung und Dither haben. 
+Dies unberührt lassen, es sei denn bei Banding-Problemen oder oder Problemen bei denen geringes Rauschen behalten werden soll.</value>
   </data>
   <data name="Advanced_PsychovisualRateDistortionToolTip" xml:space="preserve">
-    <value>Psychovisual Rate Distortion means x264 tries to retain detail, for better quality to the human eye, 
-as opposed to trying to maximize quality the way a computer understands it, through signal-to-noise ratios that have trouble telling apart fine detail and noise.</value>
+    <value>Psychovisuelle Ratenverzerrung bedeutet, dass x264 versucht, Details zu erhalten, um eine bessere Qualität für das menschliche Auge zu erreichen, 
+im Gegensatz zu dem Versuch, die Qualität so zu maximieren, wie ein Computer sie versteht, durch Signal-Rausch-Abstände, welche Probleme haben, feine Details und Rauschen zu unterscheiden.</value>
   </data>
   <data name="Advanced_PsychovisualTrellisToolTip" xml:space="preserve">
-    <value>Psychovisual Trellis tries to retain more sharpness and detail, but can cause artifacting.
-It is considered experimental, which is why it's off by default. Good values are 0.1 to 0.2.</value>
+    <value>Psychovisuelles Trellis versucht, mehr Schärfe und Details zu erhalten, kann aber Artefakte verursachen.
+Es gilt als experimentell, weshalb es standardmäßig ausgeschaltet ist. Gute Werte sind 0.1 bis 0.2.</value>
   </data>
   <data name="Advanced_PyramidalBFramesToolTip" xml:space="preserve">
-    <value>B-pyramid improves compression by creating a pyramidal structure (hence the name) of B-frames, allowing B-frames to 
-reference each other to improve compression.  
+    <value>B-Pyramid verbessert die Kompression, indem sie eine pyramidenförmige Struktur (daher der Name) von B-Frames 
+erzeugt, die es B-Frames ermöglicht, sich gegenseitig zu referenzieren, um die Kompression zu verbessern. 
 
-Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit.</value>
+Erfordert Max B-Frames größer als 1; optimale adaptive B-Frames werden für den vollen Kompressionsvorteil dringend empfohlen.</value>
   </data>
   <data name="Advanced_ReferenceFramesToolTip" xml:space="preserve">
-    <value>Sane values are ~1-6.
+    <value>Vernünftige Werte liegen bei ~1-6.
 
-The more you add, the better the compression, but the slower the encode.
+Je mehr hinzugefügt wird, desto besser ist die Komprimierung, aber desto langsamer ist die Kodierung.
 
-Cel animation tends to benefit from more reference frames a lot more than film content.
+Cel-Animationen profitieren tendenziell von mehr Referenzeinzelbildern als Filminhalte.
 
-Note that many hardware devices have limitations on the number of supported reference frames, so if you're encoding for a handheld or standalone player, don't touch this unless you're absolutely sure you know what you're doing!</value>
+Beachten Sie, dass viele Hardwaregeräte eine Begrenzung der Anzahl der unterstützten Referenzeinzelbilder haben. Wenn also für einen Handheld oder Standalone-Player kodiert wird, sollte dies unberührt bleiben, es sei denn, man ist sich absolut sicher, dass man weiß was man tut!</value>
   </data>
   <data name="Advanced_SubpixelMotionEstimationToolTip" xml:space="preserve">
-    <value>This setting controls both subpixel-precision motion estimation and mode decision methods.
+    <value>Diese Einstellung steuert sowohl die Subpixel-Bewegungsabschätzung der Bewegungsschätzung als auch die Methoden zur Modusentscheidung.
 
-Subpixel motion estimation is used for refining motion estimates beyond mere pixel accuracy, improving compression.
+Die Subpixel-Bewegungsabschätzung wird verwendet, um Bewegungsschätzungen über die reine Pixelgenauigkeit hinaus zu verfeinern und die Kompression zu verbessern.
 
-Mode decision is the method used to choose how to encode each block of the frame: a very important decision.
+Die Modusentscheidung ist die Methode, mit der man wählt, wie man jeden Block des Einzelbildes kodiert: eine sehr wichtige Entscheidung.
 
-SAD is the fastest method, followed by SATD, RD, RD refinement, and the slowest, QPRD.
-6 or higher is strongly recommended: Psy-RD, a very powerful psy optimization that helps retain detail, requires RD.
-10, the most powerful and slowest option, requires trellis=2.</value>
+SAD ist die schnellste Methode, gefolgt von SATD, RD, RD-Verfeinerung und der langsamsten, QPRD.
+6 oder höher wird dringend empfohlen: Psy-RD, eine sehr leistungsstarke Psy-Optimierung, die hilft, Details zu erhalten, erfordert RD.
+10, die mächtigste und langsamste Option, erfordert trellis=2.</value>
   </data>
   <data name="Advanced_TrellisToolTip" xml:space="preserve">
-    <value>Trellis fine-tunes the rounding of transform coefficients to squeeze out 3-5% more compression at the cost of some speed. 
-"Always" uses trellis not only during the main encoding process, but also during analysis, which improves compression even more, albeit at great speed cost. 
+    <value>Trellis verfeinert die Rundung der Transformationskoeffizienten, um 3-5% mehr Kompression auf Kosten einer gewissen Geschwindigkeit zu erreichen. 
+"Immer" verwendet Trellis nicht nur während des Hauptkodierungsprozesses, sondern auch während der Analyse, was die Kompression noch weiter verbessert, wenn auch mit hohen Geschwindigkeitskosten. 
 
-Trellis costs more speed at higher bitrates.</value>
+Trellis kostet mehr Geschwindigkeit bei höheren Bitraten.</value>
   </data>
   <data name="Advanced_WeightPToolTip" xml:space="preserve">
-    <value>Performs extra analysis to decide upon weighting parameters for each frame.  
-This improves overall compression slightly and improves the quality of fades greatly. 
-Baseline profile, as required for iPods and similar devices, requires weighted P-frame prediction to be disabled.  
-Note that some devices and players, even those that support Main Profile, 
-may have problems with Weighted P-frame prediction: the Apple TV is completely incompatible with it, for example.</value>
+    <value>Führt zusätzliche Analysen durch, um die Gewichtungsparameter für jedes Einzelbild festzulegen. 
+Dies verbessert die Gesamtkompression leicht und verbessert die Qualität der Überblendungen stark. 
+Das Basisprofil, wie es für iPods und ähnliche Geräte erforderlich ist, erfordert, dass die gewichtete P-Frame-Vorhersage deaktiviert wird. 
+Beachtet werden sollte, dass einige Geräte und Player, auch solche, die das Hauptprofil unterstützen, Probleme mit der Vorhersage von gewichteten P-Frames haben können: Das Apple TV ist damit beispielsweise völlig inkompatibel.</value>
   </data>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>Komplette Liste der Enkoderparameter:
@@ -240,7 +238,7 @@ may have problems with Weighted P-frame prediction: the Apple TV is completely i
   <data name="Video_x264FastDecode" xml:space="preserve">
     <value>Reduziert die CPU-Auslastung des Dekoders.
 
-Dies auswählen, wenn das Abspielgerät Probleme beim wiedergeben hat (z.B. wenn Bilder ausgelassen werden).</value>
+Dies auswählen, wenn das Abspielgerät Probleme beim wiedergeben hat (z.B. wenn Einzelbilder ausgelassen werden).</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
     <value>Warnung: RF 0 ist verlustfrei!</value>
@@ -254,35 +252,34 @@ Bei x264 und x265 ist die Skala logarithmisch und kleinere Werte bedeuten eine h
 Daher ergeben schon kleine Erhöhungen der Werte eine schrittweiße zunehmende Erhöhung der Dateigröße.</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>You can optionally store a picture settings with this preset. There are 3 modes:
+    <value>Mit dieser Voreinstellung kann optional eine Bildeinstellung gespeichert werden. Es gibt 3 Modi: 
 
-None:  Picture settings are not stored in the preset. When loading a source, they will remain as-is within the bounds of the source resolution. This also affects Anamorphic, modulus, cropping etc.
+Keine: Die Bildeinstellungen werden nicht in der Voreinstellung gespeichert. Beim Laden einer Quelle bleiben sie innerhalb der Grenzen der Quellauflösung. Dies betrifft auch Anamorph, Modulus, Beschneidung usw. 
 
-Custom: You can optionally set a Maximum width and Height. When doing this an encode will be less than or equal to these values. Keep Aspect Ratio will be automatically turned on.
+Eigene: Es kann optional eine maximale Breite und Höhe eingestellt werden. Dabei ist eine Kodierung kleiner oder gleich diesen Werten. Das Seitenverhältnis beibehalten wird automatisch angestellt.
 
-Source Maximum:  Always encode at the sources resolution where possible.</value>
+Quellenmaximum: Kodiert nach Möglichkeit immer mit der Quellauflösung.</value>
   </data>
   <data name="Advanced_EncoderOptions" xml:space="preserve">
-    <value>The options passed to the x264 encoder. 
-The above controls are only a subset of useful x264 parameters. 
-This box allows you to add or modify additional or current parameters as desired. </value>
+    <value>Die Optionen werden an den x264-Enkoder weitergeleitet. 
+Die obigen Steuerelemente sind nur ein Teil nützlicher x264-Parameter. 
+In diesem Feld können zusätzliche oder aktuelle Parameter nach Belieben hinzugefügt oder geändert werden. </value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2018 The HandBrake Team
+    <value>Copyright (C) 2003-2018 Das HandBrake-Team
 
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
+Dieses Programm ist freie Software; es kann unter den 
+Bedingungen der GNU General Public License, wie sie von der 
+Free Software Foundation veröffentlicht wurde, weitergeben 
+und/oder verändert werden; entweder Version 2 der Lizenz oder 
+(nach eigener Wahl) jede spätere Version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+Dieses Programm wird in der Hoffnung verteilt, dass es nützlich 
+sein wird, aber OHNE JEGLICHE GEWÄHRLEISTUNG; auch ohne die stillschweigende Gewährleistung der MARKTREIFE oder 
+Tauglichkeit für einen bestimmten Zweck. Weitere Informationen finden Sie in der GNU General Public License.
 
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
+Sie sollten eine Kopie der GNU General Public License zusammen mit diesem Programm erhalten haben; wenn nicht, schreiben Sie an die Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
     <value>WARNUNG: Die automatische Dateibenennung ist nicht aktiviert. Bitte diese Funktion aktivieren.</value>
@@ -306,13 +303,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
     <value>Placebo Qualität |</value>
   </data>
   <data name="Video_QuickSyncNotAvailable" xml:space="preserve">
-    <value>QuickSync hardware not detected or enabled! 
+    <value>QuickSync-Hardware nicht erkannt oder aktiviert! 
 
-In order to use the QuickSync encoder, you must:
+Um den QuickSync-Kodierer verwenden zu können, muss: 
 
-- Have a Intel CPU with HD Graphics and QuickSync support. 4th Generation Haswell or newer parts are recommended for best quality.
-- Have the HD Graphics enabled.
-- On older versions of windows before 8, a monitor connected to the HD Graphics or GPU Virtualisation software installed is also required.</value>
+- Eine Intel CPU mit HD-Grafik und QuickSync-Unterstützung vorhanden sein. Haswell der vierten Generation oder neuer werden für beste Qualität empfohlen.
+- HD-Grafik muss aktiviert sein.
+- Bei älteren Versionen vor Windows 8 ist außerdem ein Monitor erforderlich, der an die installierte HD-Grafik- oder GPU-Virtualisierungssoftware angeschlossen ist.</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Fehler</value>
@@ -412,7 +409,7 @@ Von der vorherigen Datei user_presets.xml wurde ein Backup angelegt.</value>
     <value>Bevor eine Enkodierung gestartet werden kann muss eine Quelle überprüft und eine Aufgabe festgelegt werden. Bitte 'Quelle' in der Symbolleiste auswählen um fortzufahren.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>Bitte sicherstellen, dass eine eigene Voreinstellung ausgewählt ist. Eine installierte Voreinstellung kann nicht exportiert werden.</value>
+    <value>Bitte sicherstellen, dass eine eigene Voreinstellung ausgewählt ist. Installierte Voreinstellungen können nicht exportiert werden.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
     <value>Bitte eine Voreinstellung zum aktualisieren auswählen.</value>
@@ -469,10 +466,10 @@ Trotzdem fortfahren?</value>
     <value>Ausgabe: {0}</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>The format of the output file. In addition to any supported file system character, you can use the following placeholders that will be replaced when you change title or scan a source.
+    <value>Das Format der Ausgabedatei. Zusätzlich zu allen unterstützten Dateisystemzeichen können die folgenden Platzhalter verwendet werden, die ersetzt werden, wenn der Titel geändert oder eine Quelle überprüft wird.
 
-Live Update Options: {source} {title} {chapters} 
-Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
+Live-Update-Optionen: {source} {title} {chapters}  
+Nicht-Live-Optionen: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Diese ändern sich nur, wenn eine neue Quelle überprüft wird, der Titel oder die Kapitel geändert werden).</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
     <value>Verfügbare zusätzliche Optionen: {source_path} oder {source_folder_name} 
@@ -508,21 +505,21 @@ Bitte das Feld 'Zusätzliche Einstellungen' im Video-Tab verwenden um zusätzlic
 Bitte einen anderen Dateinamen wählen.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>None - Only tracks where the container does not support the format will be burned in.
-Foreign Audio Track - The Foreign Audio track will be burned in if available. 
-First Track - The first track will be burned in.
-Foreign Audio Preferred, else First - If the foreign audio track exists, it will be burned in, otherwise the first track will be chosen.</value>
+    <value>Keine - Es werden nur Spuren eingebrannt, bei denen der Container das Format nicht unterstützt.
+Fremdsprachenspur - Die Fremdsprachenspur wird eingebrannt, falls vorhanden. 
+Erste Spur - Die erste Spur wird eingebrannt.
+Fremdsprachenton bevorzugt, sonst Erste - Wenn die Fremdsprachenspur existiert, wird sie eingebrannt, sonst wird die erste Spur ausgewählt.</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
     <value>Keine gültige Quelle oder Titel gefunden</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake will not be able to encode the selected source as it did not find a valid source with titles to encode. 
-This could be due to one of the following reasons:
-- The source file is not a valid video file or is in a format that HandBrake does not support.
-- The source may be copy protected or include DRM. Please note that HandBrake does not support the removal of copy protections.
+    <value>HandBrake kann die ausgewählte Quelle nicht enkodieren, da es keine gültige Quelle mit zu enkodierenden Titeln gefunden hat. 
+Dies kann auf einen der folgenden Gründe zurückzuführen sein: 
+- Die Quelldatei ist keine gültige Videodatei oder befindet sich in einem Format, das HandBrake nicht unterstützt.
+- Die Quelle kann kopiergeschützt sein oder DRM enthalten.  HandBrake unterstützt nicht das Entfernen von Kopierschutzmaßnahmen. 
 
-The Activity log may have further information.</value>
+Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
     <value>Warteschlange {0}</value>
@@ -1395,7 +1392,7 @@ Soll sie überschrieben werden?</value>
     <value>Den Infobereich (System Tray) minimieren (erfordert einen Neustart)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>Minimale Länge der Titel zum überprüfen (Sekunden):</value>
+    <value>Min. Länge der Titel zum überprüf. (Sek.):</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4-Dateiendung:</value>
@@ -1894,7 +1891,10 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
   <data name="VideoView_Video" xml:space="preserve">
     <value>Video</value>
   </data>
+  <data name="OptionsView_Language" xml:space="preserve">
+    <value>Sprache:</value>
+  </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>Use System Language</value>
+    <value>Systemsprache verwenden</value>
   </data>
 </root>
