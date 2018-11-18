@@ -72,12 +72,15 @@
     _generator = generator;
     NSUInteger imagesCount = generator.imagesCount;
 
-    self.slider.numberOfTickMarks = imagesCount;
-    self.slider.maxValue = imagesCount - 1;
-
-    if (self.selectedIndex > imagesCount)
+    if (imagesCount > 0)
     {
-        self.selectedIndex = imagesCount - 1;
+        self.slider.numberOfTickMarks = imagesCount;
+        self.slider.maxValue = imagesCount - 1;
+
+        if (self.selectedIndex > imagesCount)
+        {
+            self.selectedIndex = imagesCount - 1;
+        }
     }
 
     if (@available(macOS 10.12.2, *))
@@ -319,7 +322,10 @@ static NSTouchBarItemIdentifier HBTouchBarFitToScreen = @"fr.handbrake.fitToScre
 {
     NSScrubber *scrubber = (NSScrubber *)[[self.touchBar itemForIdentifier:HBTouchBarScrubber] view];
     [scrubber reloadData];
-    scrubber.animator.selectedIndex = self.selectedIndex;
+    if (self.selectedIndex < scrubber.numberOfItems)
+    {
+        scrubber.animator.selectedIndex = self.selectedIndex;
+    }
 }
 
 - (void)_touchBar_updateScrubberSelectedIndex:(NSUInteger)selectedIndex
