@@ -33,5 +33,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// Refresh certain UI controls that can be updated outside preferences.
         /// </summary>
         void UpdateSettings();
+
+        void Close();
     }
 }
