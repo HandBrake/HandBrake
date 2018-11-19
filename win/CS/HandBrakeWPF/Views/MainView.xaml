@@ -72,53 +72,53 @@
                         <Setter Property="Height" Value="23" />
                     </Style>
                 </Menu.Resources>
-                <MenuItem Header="_File">
+                <MenuItem Header="{x:Static Properties:Resources.MainView_FileMenu}">
                     <MenuItem Header="{x:Static Properties:Resources.MainView_SourceOpen}" cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]" InputGestureText="Alt + O" />
                     <Separator />
-                    <MenuItem Header="_Exit" cal:Message.Attach="[Event Click] = [Action ExitApplication]"  InputGestureText="Alt + F4" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_Exit}" cal:Message.Attach="[Event Click] = [Action ExitApplication]"  InputGestureText="Alt + F4" />
                 </MenuItem>
 
-                <MenuItem Header="_Tools">
-                    <MenuItem Header="_Show Queue" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]" InputGestureText="Ctrl + Q">
+                <MenuItem Header="{x:Static Properties:Resources.MainView_ToolsMenu}">
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ShowQueueMenu}" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]" InputGestureText="Ctrl + Q">
                         <MenuItem.Icon>
                             <Image Width="16" Source="Images/Queue_Small.png" />
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="_Activity Log" cal:Message.Attach="[Event Click] = [Action OpenLogWindow]"  InputGestureText="Ctrl + L">
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ActivityLogMenu}" cal:Message.Attach="[Event Click] = [Action OpenLogWindow]"  InputGestureText="Ctrl + L">
                         <MenuItem.Icon>
                             <Image Width="16" Source="Images/Output_Small.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
-                    <MenuItem Header="_Preferences" cal:Message.Attach="[Event Click] = [Action OpenOptionsWindow]">
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_PreferencesMenu}" cal:Message.Attach="[Event Click] = [Action OpenOptionsWindow]">
                         <MenuItem.Icon>
                             <Image Width="16" Source="Images/Pref_Small.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
 
-                <MenuItem Header="_Presets" x:Name="presetMenu" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
+                <MenuItem Header="{x:Static Properties:Resources.MainView_PresetsMenu}" x:Name="presetMenu" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
 
-                    <MenuItem Header="_Presets" ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_PresetsMenu}" ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}" />
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_UpdateSelectedPreset}" cal:Message.Attach="[Event Click] = [Action PresetUpdate]" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PresetManage}" cal:Message.Attach="[Event Click] = [Action PresetManage]" />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PresetRemove}" cal:Message.Attach="[Event Click] = [Action PresetRemove]" />
                     <Separator />
-                    <MenuItem Header="_Import from file" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
-                    <MenuItem Header="_Export to file" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ImportFromFile}" cal:Message.Attach="[Event Click] = [Action PresetImport]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ExportToFile}" cal:Message.Attach="[Event Click] = [Action PresetExport]" />
                     <Separator />
-                    <MenuItem Header="_Set Current as Default" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
-                    <MenuItem Header="_Reset Built-In Presets" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_SetCurrentAsDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ResetPresets}" cal:Message.Attach="[Event Click] = [Action PresetReset]" />
                     <Separator />
-                    <MenuItem IsCheckable="True" x:Name="showPresetPanelMenuItem" IsChecked="{Binding IsPresetPanelShowing}" Header="S_how Preset Panel" />
+                    <MenuItem IsCheckable="True" x:Name="showPresetPanelMenuItem" IsChecked="{Binding IsPresetPanelShowing}" Header="{x:Static Properties:Resources.MainView_ShowPresetPanel}" />
                 </MenuItem>
 
-                <MenuItem Header="_Queue" x:Name="queueMenu" Visibility="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
-                    <MenuItem Header="Show Queue" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]"  InputGestureText="Ctrl + Q" />
+                <MenuItem Header="{x:Static Properties:Resources.MainView_QueueMenu}" x:Name="queueMenu" Visibility="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_ShowQueue}" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]"  InputGestureText="Ctrl + Q" />
                     <Separator />
-                    <MenuItem Header="Add to Queue" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]"  InputGestureText="Ctrl + A" />
-                    <MenuItem Header="All Selection to Queue" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_AddToQueue}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]"  InputGestureText="Ctrl + A" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" />
                     <Separator Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearCompleted}" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearAll}" Header="{x:Static Properties:Resources.QueueView_ClearAll}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
@@ -127,16 +127,16 @@
                     <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.Export}" Header="{x:Static Properties:Resources.QueueView_Export}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                 </MenuItem>
 
-                <MenuItem Header="_Help">
-                    <MenuItem Header="_HandBrake Documentation (HTTPS)" cal:Message.Attach="[Event Click] = [Action LaunchHelp]" InputGestureText="F1">
+                <MenuItem Header="{x:Static Properties:Resources.MainView_HelpMenu}">
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_HandBrakeDocs}" cal:Message.Attach="[Event Click] = [Action LaunchHelp]" InputGestureText="F1">
                         <MenuItem.Icon>
                             <Image Width="16" Height="16"  Source="Images/information.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator Visibility="{Binding IsUWP, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
-                    <MenuItem Header="_Check for Updates" cal:Message.Attach="[Event Click] = [Action CheckForUpdates]" Visibility="{Binding IsUWP, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_CheckForUpdates}" cal:Message.Attach="[Event Click] = [Action CheckForUpdates]" Visibility="{Binding IsUWP, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
                     <Separator />
-                    <MenuItem Header="_About..." cal:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_About}" cal:Message.Attach="[Event Click] = [Action OpenAboutApplication]" />
                 </MenuItem>
             </Menu>
 

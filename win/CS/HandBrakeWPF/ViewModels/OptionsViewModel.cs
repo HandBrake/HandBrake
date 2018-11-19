@@ -1234,7 +1234,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void BrowseAutoNamePath()
         {
-            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = "Please select a folder.", UseDescriptionForTitle = true, SelectedPath = this.AutoNameDefaultPath };
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.AutoNameDefaultPath };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
@@ -1260,7 +1260,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void BrowseLogPath()
         {
-            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = "Please select a folder.", UseDescriptionForTitle = true, SelectedPath = this.LogDirectory };
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog { Description = Resources.OptionsView_SelectFolder, UseDescriptionForTitle = true, SelectedPath = this.LogDirectory };
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult.HasValue && dialogResult.Value)
             {
@@ -1284,12 +1284,12 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ClearLogHistory()
         {
-            MessageBoxResult result = MessageBox.Show("Are you sure you wish to clear the log file directory?", "Clear Logs",
+            MessageBoxResult result = MessageBox.Show(Resources.OptionsView_ClearLogDirConfirm, Resources.OptionsView_ClearLogs,
                                                   MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 GeneralUtilities.ClearLogFiles(0);
-                MessageBox.Show("HandBrake's Log file directory has been cleared!", "Notice", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Resources.OptionsView_LogsCleared, Resources.OptionsView_Notice, MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -1298,7 +1298,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void DownloadUpdate()
         {
-            this.UpdateMessage = "Preparing for Update ...";
+            this.UpdateMessage = Resources.OptionsView_PreparingUpdate;
             this.updateService.DownloadFile(this.updateInfo.DownloadFile, this.updateInfo.Signature, this.DownloadComplete, this.DownloadProgress);
         }
 
@@ -1307,7 +1307,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void PerformUpdateCheck()
         {
-            this.UpdateMessage = "Checking for Updates ...";
+            this.UpdateMessage = Resources.OptionsView_CheckingForUpdates;
             this.updateService.CheckForUpdates(this.UpdateCheckComplete);
         }
 
@@ -1390,7 +1390,7 @@ namespace HandBrakeWPF.ViewModels
             // Store the auto name path
             this.AutoNameDefaultPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath) ?? string.Empty;
             if (string.IsNullOrEmpty(this.autoNameDefaultPath))
-                this.AutoNameDefaultPath = "Click 'Browse' to set the default location";
+                this.AutoNameDefaultPath = Resources.OptionsView_SetDefaultLocationOutputFIle;
 
             // Store auto name format
             string anf = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNameFormat) ?? string.Empty;
@@ -1644,7 +1644,7 @@ namespace HandBrakeWPF.ViewModels
             int.TryParse(p.ToString(CultureInfo.InvariantCulture), out progress);
             this.DownloadProgressPercentage = progress;
             this.UpdateMessage = string.Format(
-                "Downloading... {0}% - {1}k of {2}k", this.DownloadProgressPercentage, (info.BytesRead / 1024), (info.TotalBytes / 1024));
+                "{0} {1}% - {2}k of {3}k", Resources.OptionsView_Downloading, this.DownloadProgressPercentage, (info.BytesRead / 1024), (info.TotalBytes / 1024));
         }
 
         /// <summary>

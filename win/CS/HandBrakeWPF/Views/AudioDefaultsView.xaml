@@ -174,10 +174,10 @@
 
 
         <!-- Tracks -->
-        <TextBlock Text="Automatically add Tracks" FontWeight="Bold" Margin="0,10,0,5" Grid.Row="3" Grid.Column="0" />
+        <TextBlock Text="{x:Static Properties:Resources.AudioDefaultsView_AutoAddTracks}" FontWeight="Bold" Margin="0,10,0,5" Grid.Row="3" Grid.Column="0" />
         <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0">
-            <Button Content="Add Track" cal:Message.Attach="[Event Click] = [Action AddTrack]" Margin="10,0,10,0" Padding="8,2"/>
-            <Button Content="Clear" cal:Message.Attach="[Event Click] = [Action ClearTracks]" Padding="8,2"/>
+            <Button Content="{x:Static Properties:Resources.AudioDefaultsView_AddTrack}" cal:Message.Attach="[Event Click] = [Action AddTrack]" Margin="10,0,10,0" Padding="8,2"/>
+            <Button Content="{x:Static Properties:Resources.AudioDefaultsView_Clear}" cal:Message.Attach="[Event Click] = [Action ClearTracks]" Padding="8,2"/>
         </StackPanel>
 
         <ListBox VerticalAlignment="Stretch" MinHeight="50"
