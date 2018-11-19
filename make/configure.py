@@ -1513,7 +1513,7 @@ try:
         ar    = ToolProbe( 'AR.exe',    'ar', abort=True )
         cp    = ToolProbe( 'CP.exe',    'cp', abort=True )
         gcc_tools = ['GCC.gcc',
-                     IfHost( os.environ.get('CC', None), '*-*-freebsd*' ),
+                     os.environ.get('CC', None),
                      'gcc',
                      IfHost( 'clang', '*-*-freebsd*' ),
                      IfHost( 'gcc-4', '*-*-cygwin*' )]
