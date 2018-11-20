@@ -1,9 +1,9 @@
 $(eval $(call import.MODULE.defs,LIBOPUS,libopus))
 $(eval $(call import.CONTRIB.defs,LIBOPUS))
 
-LIBOPUS.FETCH.url     = https://download.handbrake.fr/contrib/opus-1.2.1.tar.gz
-LIBOPUS.FETCH.url    += https://archive.mozilla.org/pub/opus/opus-1.2.1.tar.gz
-LIBOPUS.FETCH.sha256  = cfafd339ccd9c5ef8d6ab15d7e1a412c054bf4cb4ecbbbcc78c12ef2def70732
+LIBOPUS.FETCH.url     = https://download.handbrake.fr/contrib/opus-1.3.tar.gz
+LIBOPUS.FETCH.url    += https://archive.mozilla.org/pub/opus/opus-1.3.tar.gz
+LIBOPUS.FETCH.sha256  = 4f3d69aefdf2dbaf9825408e452a8a414ffc60494c70633560700398820dc550
 
 LIBOPUS.CONFIGURE.shared = --enable-shared=no
 LIBOPUS.CONFIGURE.extra = --disable-doc --disable-extra-programs
