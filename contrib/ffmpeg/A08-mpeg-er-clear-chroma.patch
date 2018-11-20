@@ -1,0 +1,29 @@
+From d4c5f515f09076635bf5e1591e5ff9d21ac13572 Mon Sep 17 00:00:00 2001
+From: Marton Balint <cus@passwd.hu>
+Date: Sat, 17 Nov 2018 23:26:24 +0100
+Subject: [PATCH] avcodec/mpeg_er: fix clearing chroma blocks for 422 and 444
+
+Fixes ticket #7494.
+
+Signed-off-by: Marton Balint <cus@passwd.hu>
+(cherry picked from commit e3a96309826dd0ea33db0300f7c75414fdbea0a4)
+---
+ libavcodec/mpeg_er.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libavcodec/mpeg_er.c b/libavcodec/mpeg_er.c
+index ada1a16..f54cb85 100644
+--- a/libavcodec/mpeg_er.c
++++ b/libavcodec/mpeg_er.c
+@@ -78,6 +78,8 @@ static void mpeg_er_decode_mb(void *opaque, int ref, int mv_dir, int mv_type,
+     ff_update_block_index(s);
+ 
+     s->bdsp.clear_blocks(s->block[0]);
++    if (!s->chroma_y_shift)
++        s->bdsp.clear_blocks(s->block[6]);
+ 
+     s->dest[0] = s->current_picture.f->data[0] +
+                  s->mb_y * 16 * s->linesize +
+-- 
+1.9.1
+

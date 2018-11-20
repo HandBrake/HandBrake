@@ -1,0 +1,35 @@
+From 11dff170ef79d26d1de2bcd13b603a6c4c5c9815 Mon Sep 17 00:00:00 2001
+From: Mark Wu <wfwf1997@gmail.com>
+Date: Tue, 23 Oct 2018 12:49:08 +0800
+Subject: [PATCH] avcodec/hevcdec: fix non-ref frame judgement
+
+After inspecting the source code of x265, mpv and ffmpeg, I've found that
+ffmpeg mistakenly regards EVC_NAL_BLA_N_LP and HEVC_NAL_IDR_N_LP as non-
+reference frames, which are acutally reference frames according to the
+specification in x265, and drops them.
+
+This patch should address the problem. I have tested it with mpv.
+
+Signed-off-by: Mark Wu <wfwf1997@gmail.com>
+Signed-off-by: James Almer <jamrial@gmail.com>
+(cherry picked from commit 10bc4c3a7df7bb26303067b97311b7eeedfd453e)
+---
+ libavcodec/hevcdec.h | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/libavcodec/hevcdec.h b/libavcodec/hevcdec.h
+index f0f588f..dd951aa 100644
+--- a/libavcodec/hevcdec.h
++++ b/libavcodec/hevcdec.h
+@@ -559,8 +559,6 @@ static av_always_inline int ff_hevc_nal_is_nonref(enum HEVCNALUnitType type)
+     case HEVC_NAL_VCL_N10:
+     case HEVC_NAL_VCL_N12:
+     case HEVC_NAL_VCL_N14:
+-    case HEVC_NAL_BLA_N_LP:
+-    case HEVC_NAL_IDR_N_LP:
+         return 1;
+         break;
+     default: break;
+-- 
+1.9.1
+

@@ -1,0 +1,75 @@
+From fcffed470a5236bc1799bc3022d588704d9ae5ef Mon Sep 17 00:00:00 2001
+From: Paul B Mahol <onemda@gmail.com>
+Date: Wed, 21 Nov 2018 11:45:02 +0100
+Subject: [PATCH] avformat/movenc: fix size calculation in mov_write_eac3_tag()
+
+Otherwise it would assert when flushing bits.
+
+(cherry picked from commit 027f032bbce9bdf7bbec40665b98590cade33416)
+---
+ libavformat/movenc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libavformat/movenc.c b/libavformat/movenc.c
+index 33978ee..bee8e89 100644
+--- a/libavformat/movenc.c
++++ b/libavformat/movenc.c
+@@ -541,7 +541,7 @@ static int mov_write_eac3_tag(AVIOContext *pb, MOVTrack *track)
+         return AVERROR(EINVAL);
+ 
+     info = track->eac3_priv;
+-    size = 2 + 4 * (info->num_ind_sub + 1);
++    size = 2 + ((34 * (info->num_ind_sub + 1) + 7) >> 3);
+     buf = av_malloc(size);
+     if (!buf) {
+         size = AVERROR(ENOMEM);
+-- 
+1.9.1
+
+From 59e30c05d74e59d28f2ec4ffd4dbf1822f921f06 Mon Sep 17 00:00:00 2001
+From: Paul B Mahol <onemda@gmail.com>
+Date: Thu, 22 Nov 2018 21:28:59 +0100
+Subject: [PATCH] avformat/movenc: get number of written bytes from bitstream
+ writer
+
+Update fate test.
+
+(cherry picked from commit 97d1ee437bbf67d7e3897bc73df4f7d9771ac309)
+---
+ libavformat/movenc.c         | 2 +-
+ tests/ref/fate/copy-trac3074 | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/libavformat/movenc.c b/libavformat/movenc.c
+index bee8e89..6dab519 100644
+--- a/libavformat/movenc.c
++++ b/libavformat/movenc.c
+@@ -563,12 +563,12 @@ static int mov_write_eac3_tag(AVIOContext *pb, MOVTrack *track)
+         put_bits(&pbc, 4, info->substream[i].num_dep_sub);
+         if (!info->substream[i].num_dep_sub) {
+             put_bits(&pbc, 1, 0); /* reserved */
+-            size--;
+         } else {
+             put_bits(&pbc, 9, info->substream[i].chan_loc);
+         }
+     }
+     flush_put_bits(&pbc);
++    size = put_bits_count(&pbc) >> 3;
+ 
+     avio_wb32(pb, size + 8);
+     ffio_wfourcc(pb, "dec3");
+diff --git a/tests/ref/fate/copy-trac3074 b/tests/ref/fate/copy-trac3074
+index 5ce5694..ff66900 100644
+--- a/tests/ref/fate/copy-trac3074
++++ b/tests/ref/fate/copy-trac3074
+@@ -1,5 +1,5 @@
+-39aef1afff761d673fd1be07182941d1 *tests/data/fate/copy-trac3074.mp4
+-333991 tests/data/fate/copy-trac3074.mp4
++f92a201033712bda262f1e071e25544a *tests/data/fate/copy-trac3074.mp4
++333992 tests/data/fate/copy-trac3074.mp4
+ #tb 0: 1/48000
+ #media_type 0: audio
+ #codec_id 0: eac3
+-- 
+1.9.1
+
