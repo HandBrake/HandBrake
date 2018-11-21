@@ -112,7 +112,7 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Horizontal" Margin="30,0,0,0" Visibility="{Binding DisplayNonQSVControls, Converter={StaticResource boolToVisConverter}}">
-                    <CheckBox Content="{x:Static Properties:Resources.VideoView_2Pass}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
+                    <CheckBox Content="{x:Static Properties:Resources.VideoView_2Pass}" IsEnabled="{Binding IsTwoPassEnabled, Converter={StaticResource boolConverter}}"
                               IsChecked="{Binding TwoPass}" Margin="0,0,10,0" ToolTip="{x:Static Properties:ResourcesTooltips.Video_TwoPass}"  />
                     <CheckBox Content="{x:Static Properties:Resources.VideoView_TurboFirstPass}" IsEnabled="{Binding IsConstantQuantity, Converter={StaticResource boolConverter}, ConverterParameter=true}"
                               IsChecked="{Binding TurboFirstPass}" Visibility="{Binding DisplayTurboFirstPass, Converter={StaticResource boolToVisConverter}}"

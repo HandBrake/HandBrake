@@ -217,7 +217,29 @@ namespace HandBrakeWPF.ViewModels
                 }
 
                 this.NotifyOfPropertyChange(() => this.IsConstantQuantity);
+                this.NotifyOfPropertyChange(() => this.IsTwoPassEnabled);
                 this.OnTabStatusChanged(null);
+            }
+        }
+
+        public bool IsTwoPassEnabled
+        {
+            get
+            {
+                if (this.IsConstantQuantity)
+                {
+                    return false;
+                }
+
+                if (this.SelectedVideoEncoder == VideoEncoder.NvencH264
+                    || this.SelectedVideoEncoder == VideoEncoder.NvencH265
+                    || this.SelectedVideoEncoder == VideoEncoder.VceH264
+                    || this.SelectedVideoEncoder == VideoEncoder.VceH265)
+                {
+                    return false;
+                }
+
+                return true;
             }
         }
 
@@ -1511,6 +1533,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Rfqp);
             this.NotifyOfPropertyChange(() => this.IsAdvancedTabOptionEnabled);
             this.NotifyOfPropertyChange(() => this.HighQualityLabel);
+            this.NotifyOfPropertyChange(() => this.IsTwoPassEnabled);
 
             // Handle some quicksync specific options.
             if (selectedEncoder == VideoEncoder.QuickSync || selectedEncoder == VideoEncoder.QuickSyncH265 || selectedEncoder == VideoEncoder.QuickSyncH26510b)
@@ -1518,8 +1541,16 @@ namespace HandBrakeWPF.ViewModels
                 this.TwoPass = false;
                 this.TurboFirstPass = false;
                 this.Task.Framerate = null;
-                this.NotifyOfPropertyChange(() => SelectedFramerate);
+                this.NotifyOfPropertyChange(() => this.SelectedFramerate);
                 this.UseAdvancedTab = false;
+            }
+
+            if (selectedEncoder == VideoEncoder.NvencH264 || selectedEncoder == VideoEncoder.NvencH265 
+                                                          || selectedEncoder == VideoEncoder.VceH264 
+                                                          || selectedEncoder == VideoEncoder.VceH265)
+            {
+                this.TwoPass = false;
+                this.TurboFirstPass = false;
             }
 
             // Cleanup Extra Arguments
