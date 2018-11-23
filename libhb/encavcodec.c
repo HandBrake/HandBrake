@@ -358,13 +358,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             } else {
                 av_dict_set( &av_opts, "spatial-aq", "1", 0 ); // oops, nvenc_h264.c uses a dash
             }
-            hb_log( "encavcodec: encoding at rc=vbr CQ %.2f, init_qp 1, rc-lookahead 16, spatial_aq 1, aq-strength default", job->vquality );
+            hb_log( "encavcodec: encoding at rc=vbr CQ %.2f", job->vquality );
 
             //This value was chosen to make the bitrate high enough
             //for nvenc to "turn off" the maximum bitrate feature
             //that is normally applied to constant quality.
             context->bit_rate = bit_rate_ceiling;
-            hb_log( "encavcodec: bit_rate.4 %ld", context->bit_rate);
         }
         else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
         {
