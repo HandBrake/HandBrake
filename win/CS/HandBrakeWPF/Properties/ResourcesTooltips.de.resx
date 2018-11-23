@@ -129,7 +129,7 @@ Dies erhält die Bildqualität bei Einzelbildern die nicht zeilenverflochten sin
 Der klassische Deinterlace-Filter wird auf alle Einzelbilder angewandt. Einzelbilder die nicht zeilenverflochten sind leiden unter etwas Qualitätseinbuße.</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
-    <value>Entrauschen reduziert oder entfernt das Auftreten von Rauschen und Körnungen. Dies kann die Komprimierungseffizienz verbessern und Videos in höherer Qualität bei kleineren Dateigrößen erstellen. 
+    <value>Entrauschen reduziert oder entfernt das Auftreten von Rauschen und Körnung. Dies kann die Komprimierungseffizienz verbessern und Videos in höherer Qualität bei kleineren Dateigrößen erstellen. 
 Zu starke Entrauscheinstellungen können die Bildqualität beeinträchtigen, indem sie Details entfernen.
  
 NLMeans ist ein hochwertiger Entrauschungsfilter auf Kosten der Geschwindigkeit. Sollte dort verwendet werden wo Qualität wichtiger ist als Geschwindigkeit.
@@ -139,13 +139,13 @@ HQDN3D ist ein adaptiver Tiefpassfilter, schneller als NLMeans, aber weniger eff
   <data name="FilterView_Detelecine" xml:space="preserve">
     <value>Dieser Filter entfernt Kammartefakte, die das Ergebnis optischer Abtastung (Telecine) sind.
 
-Das Telecining ist ein Prozess, der Filmbilder mit einer Bildrate von 24 BpS an NTSC-Videobildraten von 30 BpS anpasst.</value>
+Telecining ist ein Prozess, der Filmbilder mit einer Bildfrequenz von 24 BpS an NTSC-Videobildraten von 30 BpS anpasst.</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
     <value>Graustufen entfernt die Farbkomponente des Videos. Oft auch als Schwarzweißvideo bezeichnet.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>Zielpfad, enthält Verzeichnis und Dateinamen. Dies ist wo das neue Video erstellt wird und wie es benannt wird.</value>
+    <value>Zielpfad, enthält Verzeichnis und Dateinamen. Dies ist der Ort an dem das neue Video erstellt wird und wie es benannt wird.</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
     <value>Fügt einen speziellen MP4-Marker hinzu, um die Wiedergabe auf älteren iPods der 5. Generation um 2006 zu ermöglichen. Andere Einstellungen können die Kompatibilität beeinträchtigen.</value>
@@ -154,7 +154,7 @@ Das Telecining ist ein Prozess, der Filmbilder mit einer Bildrate von 24 BpS an 
     <value>Kontainerformat. Video, Audio und andere Spuren werden zu einer einzigen Datei dieses Typs kombiniert. Beeinflusst die Kompatibilität.</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
-    <value>Optimiert MP4 für den schrittweißen Download. Nach der Enkodierung werden die Daten so umgeschrieben, dass ein direktes Abspielen übers Internet ermöglicht wird ohne den gesamten Film herunterladen zu müssen.</value>
+    <value>Optimiert MP4 für den schrittweisen Download. Nach der Enkodierung werden die Daten so umgeschrieben, dass ein direktes Abspielen übers Internet ermöglicht wird ohne den gesamten Film herunterladen zu müssen.</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
     <value>Bereichsauswahl der Quelle. Standardmäßig werden alle Kapitel ausgewählt und die gesamte Quelle enkodiert.</value>
@@ -172,7 +172,7 @@ Auto, maximiert die Auflösung der Ausgabe unter Beibehaltung des ursprüngliche
 
 Loose, ist ähnlich wie Auto, versucht aber, das Seitenverhältnis der Ausgabe zu erhalten. Dies kann zu einem leichten Verlust der Auflösung im Vergleich zu Auto führen.
 
-Eigene, ermöglicht die manuelle Einstellung aller Parameter. Nützlich zur Korrektur eines falschen Aussehens des Quellenmaterials und für Profis, die in der Postproduktion eine erweiterte Kontrolle benötigen.</value>
+Eigene, ermöglicht die manuelle Einstellung aller Parameter. Nützlich zur Korrektur eines falschen Aussehens des Quellmaterials und für Profis, die in der Postproduktion eine erweiterte Kontrolle benötigen.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>Automatisch schwarze Ränder um das Video beschneiden.</value>
@@ -203,7 +203,7 @@ Höhere Werte sind nur aus Kompatibilitätsgründen mit manchen Geräten sinnvol
 Empfohlen ist ein Wert von 2, es sei denn es gibt Kompatibilitätsbedenken.</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>Der Pixelformat definiert die Form der Pixel.
+    <value>Pixelformat definiert die Form der Pixel.
 Ein Verhältnis von 1:1 definiert ein quadratisches Pixel. Andere Werte definieren rechteckige Formen.
 Die Abspielgeräte werden das Bild skalieren, um das angegebene Format zu erreichen.</value>
   </data>
@@ -237,7 +237,7 @@ die momentane Bitrate begrenzt werden soll, sollten die Einstellungen von x264 f
     <value>Verfügbare Videoenkoder.</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
-    <value>Passet die Einstellungen an, um sie für gängige Szenarien zu optimieren.
+    <value>Passt die Einstellungen an, um sie für gängige Szenarien zu optimieren.
 
 Dies kann die Effizienz für bestimmte Quellmerkmale verbessern oder 
 Merkmale der Ausgabedatei festlegen. Änderungen werden nach der 
@@ -286,15 +286,15 @@ Die von jedem Videoenkoder verwendete Skalierung ist unterschiedlich.
 
 Die Skalierung von x264 ist logarithmisch und niedrigere Werte entsprechen einer höheren Qualität.
 Daher führen kleine Veringerungen der Werte zu einer fortschreitenden Vergrößerung 
-der resultierenden Dateigröße. Ein Wert von 0 bedeutet verlustfrei und wird führt zu
+der resultierenden Dateigröße. Ein Wert von 0 bedeutet verlustfrei und führt zu
 einer Dateigröße, die größer ist als die ursprüngliche Quelle, es sei denn, die Quelle war auch verlustfrei.
 Die empfohlenen Werte sind: 18 bis 20 für Quellen mit Standardauflösung und 20 bis 23 für Quellen mit hoher Auflösung.
 
-Die Skalierung von FFMpeg und Theora ist linearer.
+Die Skalierung von FFmpeg und Theora ist linearer.
 Diese Enkoder haben keinen verlustfreien Modus.</value>
   </data>
   <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>Verwendet  während des ersten Durchlaufs einer Enkodierung in zwei Durchgängen Einstellungen, die die Dinge beschleunigen.</value>
+    <value>Verwendet  während des ersten Durchlaufs einer Enkodierung in zwei Durchgängen Einstellungen, die den Vorgang beschleunigen.</value>
   </data>
   <data name="Video_TwoPass" xml:space="preserve">
     <value>Führt eine Enkodierung in zwei Durchgängen durch.
@@ -315,7 +315,7 @@ VFR ist nicht kompatibel mit manchen Abspielgeräten.</value>
     <value>Navigieren, um einen neuen Zielpfad und Dateinamen für die Enkodierung auszuwählen.</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Der Winkel des Videos zum Enkodierung. Nur auswählbar bei Multiangle-DVDs und -Blu-Rays.</value>
+    <value>Der Winkel des Videos zum Enkodieren. Nur auswählbar bei Multiangle-DVDs und -Blu-Rays.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
     <value>Eine neue Voreinstellung hinzufügen.</value>
@@ -351,15 +351,17 @@ HQDN3D-Standard: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=
   <data name="FilterView_DenoiseTune" xml:space="preserve">
     <value>Entrauschabstimmung. Weitere Beeinflussung des Entrauschfilters für spezielle Szenarien.
 
-Ohne: Verwendet die Standardeinstellungen.
+None: Verwendet die Standardeinstellungen.
 
-Film: Einstellung für die meisten Live-Action-Filme.\n\nGrain: Bearbeitet nur den Farbkanal. Nützlich um das filmtypische Aussehen mit körniger Luminanz zu erhalten, aber Farbrauschen zu entfernen.
+Film: Einstellung für die meisten Live-Action-Filme.
 
-Schnelle Bewegung: Reduziert farbige Nachzieheffekte bei schnellen Bewegungen indem es zeitweise den Farbkanal nicht bearbeitet. Hilfreich für Sport- und Action-Filme.
+Grain: Bearbeitet nur den Farbkanal. Nützlich um das filmtypische Aussehen mit körniger Luminanz zu erhalten, aber Farbrauschen zu entfernen.
+
+High Motion: Reduziert farbige Nachzieheffekte bei schnellen Bewegungen indem es zeitweise den Farbkanal nicht bearbeitet. Hilfreich für Sport- und Action-Filme.
 
 Animation: Ist nützlich für animierte Filme, wie Anime und Cartoons.
 
-Videoband: Ist gedacht für Filme von analogen Videobändern mit wenig Details, wie VHS, wenn die Film-Einstellung kein vernünftiges Ergebnis produziert.
+Tape: Ist gedacht für Filme von analogen Videobändern mit wenig Details, wie VHS, wenn die Film-Einstellung kein vernünftiges Ergebnis produziert.
 
 Sprite ist nützlich für 1-/4-/8-/16-bit 2D-Spiele. Sprite ist nicht geeignet für qualitativ hochwertige Videos.</value>
   </data>
@@ -440,9 +442,9 @@ Lapsharp schärft mit Hilfe von Convolution angenähert an den Laplaceschen Kant
 
 Ohne: Verwendet die Standardeinstellungen.
 
-Unscharf Maskieren kann abgestimmt werden auf Ultrafein, Fein, Medium, Groß, oder Sehr Grob. Die Auswahl sollte anhand der Auflösung des Ausgangsmaterials und der Feinheit der zu Erhöhenden Details getroffen werden.
+Unscharf Maskieren kann abgestimmt werden auf Ultrafein, Fein, Medium, Grob, oder Sehr Grob. Die Auswahl sollte anhand der Auflösung des Ausgangsmaterials und der Feinheit der zu Erhöhenden Details getroffen werden.
 
-Lapsharp's Abstimmung Film: Ist für die meisten Live-Action-Filme. Film benutzt einen isotropen Laplace-Algorithmus. um alle Kanten identisch zu schärfen und die Luminanz-Informationen werden mehr geschärft als die Farbinformationen.
+Lapsharp's Abstimmung Film: Ist für die meisten Live-Action-Filme. Film benutzt einen isotropen Laplace-Algorithmus um alle Kanten identisch zu schärfen. Luminanz-Informationen (Helligkeit) werden mehr geschärft als die Farbinformationen.
 
 Lapsharp's Abstimmung Grain: Ist ähnlich zu Film, aber verwendet einen benutzt einen isotropen Laplace-Gauss-Algorithmus um die Effekte von Rauschen und Körnung zu reduzieren. Nützlich um Körnungen zu erhalten bzw. als Alternative zur Film-Abstimmung.
 

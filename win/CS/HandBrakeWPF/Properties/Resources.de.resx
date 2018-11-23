@@ -122,12 +122,12 @@
 
 Der schnelle Modus benötigt ungefähr die selbe Zeit, ganz egal wie viele B-Frames festgelegt sind.
 
-Der optimale Modus wird langsamer wenn sich die maximale Anzahl an B-Frames erhöht, aber macht viel exaktere Entscheidungen, speziell wenn B-Pyramid verwendet wird.</value>
+Der optimale Modus wird langsamer wenn sich die maximale Anzahl an B-Frames erhöht, macht aber viel exaktere Entscheidungen, speziell wenn B-Pyramid verwendet wird.</value>
   </data>
   <data name="Advanced_AdaptiveDirectModeToolTip" xml:space="preserve">
     <value>H.264 erlaubt in B-Frames zwei verschiedene Vorhersagemethoden, räumlich und zeitlich.
 
-Räumlich, der Standard, ist in den meisten Fällen die besser Wahl, jedoch kann zeitlich in manchen Fällen auch nützlich sein.
+Räumlich, der Standard, ist in den meisten Fällen die besser Wahl, jedoch kann 'zeitlich' in manchen Fällen auch nützlich sein.
 
 x264 kann, unter der Einbuße von etwas Geschwindigkeit (und demzufolge für einen kleinen Vorteil bezüglich der Kompression), adaptiv entscheiden welche Methode für das jeweilige Einzelbild die bessere ist.</value>
   </data>
@@ -136,15 +136,15 @@ x264 kann, unter der Einbuße von etwas Geschwindigkeit (und demzufolge für ein
 Höhere Werte entfernen mehr Bits von Kanten und komplexen Bereichen, um Bereiche mit feineren Details zu verbessern.</value>
   </data>
   <data name="Advanced_AnalysisToolTip" xml:space="preserve">
-    <value>Die Modusentscheidung wählt aus einer Vielzahl von Optionen aus, um eine Entscheidung zu treffen: Diese Option wählt, welche Optionen das sind. 
+    <value>Die Modusentscheidung wählt aus einer Vielzahl von Optionen aus, um eine Entscheidung zu treffen: Diese Einstellung wählt, welche Optionen das sind. 
 Weniger zu überprüfende Partitionen bedeuten eine schnellere Kodierung auf Kosten schlechterer Entscheidungen, da die beste Option möglicherweise eine deaktivierte war.</value>
   </data>
   <data name="Advanced_BFramesToolTip" xml:space="preserve">
     <value>Vernünftige Werte liegen im Bereich ~2-5.
 Dies legt die maximale Anzahl aufeinanderfolgender B-Frames fest, die der Enkoder verwenden kann.
-Große Werte helfen in der Regel nicht viel, solange Adaptive B-Frames nicht auf Optimal eingestellt ist.
-Cel-animiertes Ausgangsmaterial und B-Pyramide erhöhen ebenfalls signifikant den Nutzen größerer Werte.
-Das Basisprofil, wie es für iPods und ähnliche Geräte erforderlich ist, erfordert, dass die B-Frames auf 0 (aus) gesetzt werden.</value>
+Große Werte helfen in der Regel nicht viel, solange adaptive B-Frames nicht auf Optimal eingestellt ist.
+Cel-animiertes Ausgangsmaterial und B-Pyramid erhöhen ebenfalls signifikant den Nutzen größerer Werte.
+Das Basisprofil, wie es für iPods und ähnliche Geräte erforderlich ist, erfordert, dass die B-Frames auf 0 (aus) gesetzt ist.</value>
   </data>
   <data name="Advanced_CabacToolTip" xml:space="preserve">
     <value>Nachdem der Enkoder seine Arbeit getan hat, hat er eine Menge Daten, die verlustfrei komprimiert werden müssen, ähnlich wie ZIP oder RAR. H.264 bietet dafür zwei Möglichkeiten: CAVLC und CABAC. CABAC dekodiert viel langsamer, komprimiert aber deutlich besser (10-30%), insbesondere bei niedrigeren Bitraten. Wenn die CPU-Anforderungen für die Videowiedergabe minimieren werden soll, sollte diese Option deaktiviert sein. Das Basisprofil, wie es für iPods und ähnliche Geräte erforderlich ist, erfordert, dass CABAC deaktiviert wird.</value>
@@ -159,7 +159,7 @@ Kleinere Werte bedeuten weniger Deblocking, höhere Werte bedeuten mehr Deblocki
   <data name="Advanced_EightByEightDctToolTip" xml:space="preserve">
     <value>Die 8x8-Transformation ist die nützlichste Funktion von x264 in Bezug auf Kompression pro Geschwindigkeit. 
 Es verbessert die Kompression um mindestens 5% bei sehr geringen Geschwindigkeitskosten und kann im Vergleich zu seiner Kompressionsverstärkung einen ungewöhnlich hohen visuellen Qualitätsvorteil bieten. 
-Allerdings erfordert es 'High Profile', das viele Geräte möglicherweise nicht unterstützen.</value>
+Allerdings erfordert es 'High Profile', das einige Geräte möglicherweise nicht unterstützen.</value>
   </data>
   <data name="Advanced_MotionEstimationMethodToolTip" xml:space="preserve">
     <value>Steuert die Methode der Bewegungsschätzung. Die Bewegungsschätzung ist die Art und Weise, wie der Enkoder schätzt, wie sich jeder Pixelblock in einem Einzelbild bewegt hat. 
@@ -171,7 +171,7 @@ Hexagon: Führt eine etwas effektivere, aber etwas langsamere Suche mit einem He
 
 Uneven Multi-Hex: Führt eine sehr breite Suche mit einer Vielzahl von Mustern durch, um komplexe Bewegungen genauer zu erfassen. 
 
-Exhaustive: Führt eine "dumme" Suche nach jedem Pixel in einem großen Bereich durch. Deutlich langsamer für nur eine geringe Kompressionsverstärkung.
+Exhaustive: Führt eine "dumme" Suche nach jedem Pixel in einem großen Bereich durch. Deutlich langsamer mit nur einem geringen Kompressionsgewinn.
 
 Transformed Exhaustive: Wie Exhaustive, aber trifft noch genauere Entscheidungen. Dementsprechend etwas langsamer, auch für nur eine kleine Verbesserung.</value>
   </data>
@@ -182,8 +182,8 @@ Die Standardeinstellung ist für die meisten Inhalte in Ordnung, aber Videos mit
   </data>
   <data name="Advanced_NoDctDecimateToolTip" xml:space="preserve">
     <value>x264 entfernt normalerweise fast leere Datenblöcke, um Bits zu speichern, die besser für einen anderen Zweck im Video verwendet werden können. 
-Dies kann jedoch manchmal leichte negative Auswirkungen auf die Beibehaltung von feiner Körnung und Dither haben. 
-Dies unberührt lassen, es sei denn bei Banding-Problemen oder oder Problemen bei denen geringes Rauschen behalten werden soll.</value>
+Dies kann jedoch manchmal leicht negative Auswirkungen auf die Beibehaltung von feiner Körnung und Dither haben. 
+Dies auf den Standardeinstellungen belassen, es sei denn bei Banding-Problemen oder oder Problemen bei denen geringes Rauschen beibehalten werden soll.</value>
   </data>
   <data name="Advanced_PsychovisualRateDistortionToolTip" xml:space="preserve">
     <value>Psychovisuelle Ratenverzerrung bedeutet, dass x264 versucht, Details zu erhalten, um eine bessere Qualität für das menschliche Auge zu erreichen, 
@@ -194,7 +194,7 @@ im Gegensatz zu dem Versuch, die Qualität so zu maximieren, wie ein Computer si
 Es gilt als experimentell, weshalb es standardmäßig ausgeschaltet ist. Gute Werte sind 0.1 bis 0.2.</value>
   </data>
   <data name="Advanced_PyramidalBFramesToolTip" xml:space="preserve">
-    <value>B-Pyramid verbessert die Kompression, indem sie eine pyramidenförmige Struktur (daher der Name) von B-Frames 
+    <value>B-Pyramid verbessert die Kompression, indem es eine pyramidenförmige Struktur (daher der Name) von B-Frames 
 erzeugt, die es B-Frames ermöglicht, sich gegenseitig zu referenzieren, um die Kompression zu verbessern. 
 
 Erfordert Max B-Frames größer als 1; optimale adaptive B-Frames werden für den vollen Kompressionsvorteil dringend empfohlen.</value>
@@ -204,9 +204,9 @@ Erfordert Max B-Frames größer als 1; optimale adaptive B-Frames werden für de
 
 Je mehr hinzugefügt wird, desto besser ist die Komprimierung, aber desto langsamer ist die Kodierung.
 
-Cel-Animationen profitieren tendenziell von mehr Referenzeinzelbildern als Filminhalte.
+Cel-Animationen profitieren tendenziell eher von mehr Referenzeinzelbildern als Filminhalte.
 
-Beachten Sie, dass viele Hardwaregeräte eine Begrenzung der Anzahl der unterstützten Referenzeinzelbilder haben. Wenn also für einen Handheld oder Standalone-Player kodiert wird, sollte dies unberührt bleiben, es sei denn, man ist sich absolut sicher, dass man weiß was man tut!</value>
+Beachten Sie, dass viele Hardwaregeräte eine Begrenzung der Anzahl der unterstützten Referenzeinzelbilder haben. Wenn also für einen Handheld oder Standalone-Player kodiert wird, sollte dies auf den Standardwerten bleiben, es sei denn, man ist sich absolut sicher, dass man weiß was man tut!</value>
   </data>
   <data name="Advanced_SubpixelMotionEstimationToolTip" xml:space="preserve">
     <value>Diese Einstellung steuert sowohl die Subpixel-Bewegungsabschätzung der Bewegungsschätzung als auch die Methoden zur Modusentscheidung.
@@ -216,12 +216,12 @@ Die Subpixel-Bewegungsabschätzung wird verwendet, um Bewegungsschätzungen übe
 Die Modusentscheidung ist die Methode, mit der man wählt, wie man jeden Block des Einzelbildes kodiert: eine sehr wichtige Entscheidung.
 
 SAD ist die schnellste Methode, gefolgt von SATD, RD, RD-Verfeinerung und der langsamsten, QPRD.
-6 oder höher wird dringend empfohlen: Psy-RD, eine sehr leistungsstarke Psy-Optimierung, die hilft, Details zu erhalten, erfordert RD.
+6 oder höher wird dringend empfohlen: Psy-RD, eine sehr leistungsstarke psychovisuelle Optimierung, die hilft, Details zu erhalten, erfordert RD.
 10, die mächtigste und langsamste Option, erfordert trellis=2.</value>
   </data>
   <data name="Advanced_TrellisToolTip" xml:space="preserve">
     <value>Trellis verfeinert die Rundung der Transformationskoeffizienten, um 3-5% mehr Kompression auf Kosten einer gewissen Geschwindigkeit zu erreichen. 
-"Immer" verwendet Trellis nicht nur während des Hauptkodierungsprozesses, sondern auch während der Analyse, was die Kompression noch weiter verbessert, wenn auch mit hohen Geschwindigkeitskosten. 
+"Immer" verwendet Trellis nicht nur während des Hauptkodierungsprozesses, sondern auch während der Analyse, was die Kompression noch weiter verbessert, wenn auch unter hohen Geschwindigkeitskosten. 
 
 Trellis kostet mehr Geschwindigkeit bei höheren Bitraten.</value>
   </data>
@@ -229,7 +229,7 @@ Trellis kostet mehr Geschwindigkeit bei höheren Bitraten.</value>
     <value>Führt zusätzliche Analysen durch, um die Gewichtungsparameter für jedes Einzelbild festzulegen. 
 Dies verbessert die Gesamtkompression leicht und verbessert die Qualität der Überblendungen stark. 
 Das Basisprofil, wie es für iPods und ähnliche Geräte erforderlich ist, erfordert, dass die gewichtete P-Frame-Vorhersage deaktiviert wird. 
-Beachtet werden sollte, dass einige Geräte und Player, auch solche, die das Hauptprofil unterstützen, Probleme mit der Vorhersage von gewichteten P-Frames haben können: Das Apple TV ist damit beispielsweise völlig inkompatibel.</value>
+Beachtet werden sollte, dass einige Geräte und Abspielgeräte auch solche, die das Hauptprofil unterstützen, Probleme mit der Vorhersage von gewichteten P-Frames haben können: Das Apple TV ist damit beispielsweise völlig inkompatibel.</value>
   </data>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>Komplette Liste der Enkoderparameter:
@@ -245,7 +245,7 @@ Dies auswählen, wenn das Abspielgerät Probleme beim wiedergeben hat (z.B. wenn
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
     <value>Ein Wert von 0 bedeutet verlustfrei und ergibt eine Datei die Größer als die Originaldatei ist,
-egal ob die Quelldatei auch schon verlustfrei war.
+es sei denn die Quelldatei ist auch schon verlustfrei.
 
 Bei x264 und x265 ist die Skala logarithmisch und kleinere Werte bedeuten eine höhere Qualität.
 
@@ -256,7 +256,7 @@ Daher ergeben schon kleine Erhöhungen der Werte eine schrittweiße zunehmende E
 
 Keine: Die Bildeinstellungen werden nicht in der Voreinstellung gespeichert. Beim Laden einer Quelle bleiben sie innerhalb der Grenzen der Quellauflösung. Dies betrifft auch Anamorph, Modulus, Beschneidung usw. 
 
-Eigene: Es kann optional eine maximale Breite und Höhe eingestellt werden. Dabei ist eine Kodierung kleiner oder gleich diesen Werten. Das Seitenverhältnis beibehalten wird automatisch angestellt.
+Eigene: Es kann optional eine maximale Breite und Höhe eingestellt werden. Dabei ist eine Kodierung kleiner oder gleich diesen Werten. 'Das Seitenverhältnis beibehalten' wird automatisch angewendet.
 
 Quellenmaximum: Kodiert nach Möglichkeit immer mit der Quellauflösung.</value>
   </data>
@@ -350,13 +350,13 @@ Möchten Sie fortfahren?</value>
     <value>Neue Standardvoreinstellungen: {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
-    <value>Ein neues Update ist verfügbar. Bitte zum Extras Menü &gt; Einstellungen gehen um es zu installieren.</value>
+    <value>Ein neues Update ist verfügbar. Bitte zum Menü Extras  &gt; Einstellungen gehen um es zu installieren.</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
     <value>Keine Voreinstellung ausgewählt.</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>Installierte Voreinstellungen können nicht verändert werden. Bitte eine eigene Voreinstellung auswählen.</value>
+    <value>Installierte Voreinstellungen können nicht geändert werden. Bitte eine eigene Voreinstellung auswählen.</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
     <value>Bitte einen Ordner wählen.</value>
@@ -391,7 +391,7 @@ Von der vorherigen Datei user_presets.xml wurde ein Backup angelegt.</value>
     <value>Überprüfen abgebrochen.</value>
   </data>
   <data name="Main_ScanCompleted" xml:space="preserve">
-    <value>Überprüfen abgeschlossen.</value>
+    <value>Überprüfen abgeschlossen</value>
   </data>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
     <value>Überprüfen fehlgeschlagen:</value>
@@ -472,12 +472,12 @@ Live-Update-Optionen: {source} {title} {chapters}
 Nicht-Live-Optionen: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Diese ändern sich nur, wenn eine neue Quelle überprüft wird, der Titel oder die Kapitel geändert werden).</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Verfügbare zusätzliche Optionen: {source_path} oder {source_folder_name} 
+    <value>Verfügbare zusätzliche Optionen: {source_path} oder {source_folder_name}
 
 Nicht beide zur selben Zeit!</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
-    <value>Es kann nicht in eine Datei mit dem selben Pfad und Dateinamen wie die Quelldatei enkodiert werden. Bitte den Namen der Zieldatei ändern, so dass er nicht der Quelldatei entspricht.</value>
+    <value>Es kann keine Datei mit dem selben Pfad und Dateinamen wie die Quelldatei enkodiert werden. Bitte den Namen der Zieldatei ändern, so dass er nicht der Quelldatei entspricht.</value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
     <value>Ihr System hat HandBrake daran gehindert einen Webbrowser zu starten.</value>
@@ -576,7 +576,7 @@ Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
     <value>Namen von Kapitelmarkern werden NICHT im Enkodierten gesichert.</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
-    <value>Die folgende Aktion '{0}' wird in {1} Sekunden ausgeführt.</value>
+    <value>Die Aktion '{0}' wird in {1} Sekunden ausgeführt.</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
     <value>Bitte Handbrake neu starten wenn das Problem anhält.</value>
@@ -610,10 +610,10 @@ Bitte die Webseite auf Versionshinweise prüfen.</value>
     <value>Anzeigegröße: {0}x{1}, PAR {2}x{3}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
-    <value>Zu Warteschlange hinzufügen</value>
+    <value>Zur Warteschlange hinzufügen</value>
   </data>
   <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
-    <value>Keine Enkodierenden anstehend</value>
+    <value>Keine Enkodierungen anstehend</value>
   </data>
   <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
     <value>Es werden momentan keine Aufgaben enkodiert</value>
@@ -681,7 +681,7 @@ Soll HandBrake wirklich beendet werden?</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
     <value>VLC-Player nicht gefunden.
-bitte sicherstellen, dass VLC installiert und der Pfad in den HandBrake-Einstellungen korrekt ist (siehe "Extras Menü &gt; Einstellungen &gt; Allgemein")</value>
+Bitte stellen Sie sicher, dass VLC installiert und der Pfad in den HandBrake-Einstellungen korrekt ist (siehe "Extras &gt; Einstellungen &gt; Allgemein")</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>Finden der Vorschaudatei fehlgeschlagen. Entweder wurde die Datei gelöscht oder die Enkodierung ist fehlgeschlagen. Bitte das Aktivitätsprotokoll für Details prüfen.</value>
@@ -705,7 +705,7 @@ bitte sicherstellen, dass VLC installiert und der Pfad in den HandBrake-Einstell
     <value>Archivierte Datei:</value>
   </data>
   <data name="PresetService_PresetsOutOfDate" xml:space="preserve">
-    <value>HandBrake hat hat festgestellt, dass die Voreinstellungsdatei von einer älteren Version stammt.
+    <value>HandBrake hat festgestellt, dass die Voreinstellungsdatei von einer älteren Version stammt.
 Es wird versucht die Datei trotzdem zu laden.
 Schlägt dies fehl, wird die Datei archiviert und eine neue erstellt.</value>
   </data>
@@ -713,7 +713,7 @@ Schlägt dies fehl, wird die Datei archiviert und eine neue erstellt.</value>
     <value>Laden der Voreinstellung fehlgeschlagen.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake konnte die Voreinstellungsdatei nicht laden. Es könnte von einer älteren und nicht mehr unterstützten HandBrake-Version stammen oder beschädigt sein.
+    <value>HandBrake konnte die Voreinstellungsdatei nicht laden. Sie könnte von einer älteren und nicht mehr unterstützten HandBrake-Version stammen oder beschädigt sein.
 
 Die alten Voreinstellungen wurden archiviert unter:</value>
   </data>
@@ -809,7 +809,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
-    <value>Öffnen des Zielverzeichnises fehlgeschlagen</value>
+    <value>Öffnen des Zielverzeichnises fehlgeschlagen.</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
     <value>Bitte überprüfen, dass das Zielverzeichnis gültig ist.</value>
@@ -837,16 +837,16 @@ Verbleibende Zeit: {4}</value>
     <value>Warteschlange angehalten</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Das Zielverzeichnis hat wenig freien Speicherplatz. Bitte mehr Speicherplatz freigeben. Alternativ kann der Wert angepasst werden bei dem diese Warnmeldung ausgelöst wird.</value>
+    <value>Das Zielverzeichnis hat wenig freien Speicherplatz. Bitte mehr Speicherplatz freigeben. Alternativ kann der Wert in den Einstellungen angepasst werden bei dem diese Warnmeldung ausgelöst wird.</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
-    <value>Der Status der Aufgabe kann nicht zurückgesetzt werden, da er sich nicht im Fehlerzustand oder im bearbeiteten Zustand  befindet.</value>
+    <value>Der Status der Aufgabe kann nicht zurückgesetzt werden, da er sich nicht im Fehlerzustand oder im bearbeiteten Zustand  befindet</value>
   </data>
   <data name="Queue_UnableToRestoreFile" xml:space="preserve">
-    <value>Wiederherstellen der Datei in der Warteschlange fehlgeschlagen</value>
+    <value>Wiederherstellen der Datei in der Warteschlange fehlgeschlagen.</value>
   </data>
   <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
-    <value>Die Datei ist möglicherweise beschädigt oder von einer älteren und inkompatiblen Version von HandBrake.</value>
+    <value>Die Datei ist möglicherweise beschädigt oder von einer älteren und inkompatiblen Version von HandBrake</value>
   </data>
   <data name="Queue_AlreadyEncoding" xml:space="preserve">
     <value>HandBrake enkodiert bereits eine Datei.</value>
@@ -951,7 +951,7 @@ Soll sie überschrieben werden?</value>
     <value>Spurenname</value>
   </data>
   <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>Spurauswahlverhalten:</value>
+    <value>Spurverhalten Sprache:</value>
   </data>
   <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
     <value>Für zusätzliche Spuren:</value>
@@ -975,10 +975,10 @@ Soll sie überschrieben werden?</value>
     <value>Dauer</value>
   </data>
   <data name="ChaptersView_Export" xml:space="preserve">
-    <value>Export</value>
+    <value>Exportieren</value>
   </data>
   <data name="ChaptersView_Import" xml:space="preserve">
-    <value>Import</value>
+    <value>Importieren</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
     <value>Namen exportieren</value>
@@ -996,7 +996,7 @@ Soll sie überschrieben werden?</value>
     <value>Fortfahren</value>
   </data>
   <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
-    <value>Aktion wenn fertig</value>
+    <value>Finale Aktion</value>
   </data>
   <data name="ErrorView_ErrorDetails" xml:space="preserve">
     <value>Fehlerdetails:</value>
@@ -1005,7 +1005,7 @@ Soll sie überschrieben werden?</value>
     <value>Eigene:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Deblock</value>
+    <value>Deblock:</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Decomb</value>
@@ -1050,7 +1050,7 @@ Soll sie überschrieben werden?</value>
     <value>Rotieren:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Schärfen</value>
+    <value>Schärfen:</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
     <value>Schärfen-Voreinstellung</value>
@@ -1077,10 +1077,10 @@ Soll sie überschrieben werden?</value>
     <value>In die Zwischenablage kopieren</value>
   </data>
   <data name="Generic_MoveLeft" xml:space="preserve">
-    <value>Nach links bewegen</value>
+    <value>Nach links</value>
   </data>
   <data name="Generic_MoveRight" xml:space="preserve">
-    <value>Nach rechts bewegen</value>
+    <value>Nach rechts</value>
   </data>
   <data name="Generic_Save" xml:space="preserve">
     <value>Sichern</value>
@@ -1110,7 +1110,7 @@ Soll sie überschrieben werden?</value>
     <value>Auswahl hinzufügen</value>
   </data>
   <data name="MainView_AddToQueue" xml:space="preserve">
-    <value>Zu Warteschlange hinzufügen</value>
+    <value>Zur Warteschlange hinzufügen</value>
   </data>
   <data name="MainView_AdvancedTab" xml:space="preserve">
     <value>Erweitert</value>
@@ -1257,16 +1257,13 @@ Soll sie überschrieben werden?</value>
     <value>Untertitelspuren</value>
   </data>
   <data name="MainView_SummaryTab" xml:space="preserve">
-    <value>Zusammenfassung</value>
+    <value>Übersicht</value>
   </data>
   <data name="MainView_through" xml:space="preserve">
     <value>-</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
     <value>Titel:</value>
-  </data>
-  <data name="MainView_Tools" xml:space="preserve">
-    <value>Extras</value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
     <value>Ausgewählte Voreinstellung aktualisieren</value>
@@ -1302,7 +1299,7 @@ Soll sie überschrieben werden?</value>
     <value>Einen Ton abspielen wenn die Warteschlange abgeschlossen ist</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>Vorschau im Zusammenfassung-Tab anzeigen</value>
+    <value>Vorschau im Übersicht-Tab anzeigen</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>Den Enkodierungsstatus in der Titelleiste des Programms anzeigen</value>
@@ -1344,7 +1341,7 @@ Soll sie überschrieben werden?</value>
     <value>Eine Kopie des Enkodierungsprotokolls am selben Speicherort wie das enkodierte Video ablegen</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
-    <value>Momentane Version</value>
+    <value>Aktuelle Version</value>
   </data>
   <data name="Options_Decoding" xml:space="preserve">
     <value>Dekodieren</value>
@@ -1380,7 +1377,7 @@ Soll sie überschrieben werden?</value>
     <value>Protokollieren</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>Ausführlichkeitsniveau des Aktivitätsprotokolls:</value>
+    <value>Aufzeichnungsumfang des Aktivitätsprotokolls:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
     <value>Aktivitätsprotokollpfad:</value>
@@ -1497,7 +1494,7 @@ Soll sie überschrieben werden?</value>
     <value>Eigene</value>
   </data>
   <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
-    <value>Anzeigebreite</value>
+    <value>Anzeigebreite:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
     <value>Höhe:</value>
@@ -1521,7 +1518,7 @@ Soll sie überschrieben werden?</value>
     <value>Rechts</value>
   </data>
   <data name="PictureSettingsView_Size" xml:space="preserve">
-    <value>Größe</value>
+    <value>Bildgröße</value>
   </data>
   <data name="PictureSettingsView_Source" xml:space="preserve">
     <value>Quelle:</value>
@@ -1534,7 +1531,7 @@ Soll sie überschrieben werden?</value>
   </data>
   <data name="Preset_AudioDefaults_SubText" xml:space="preserve">
     <value>Das Auswahlverhalten der Tonspur für diese Voreinstellung ändern.
-Dies beeinflusst nicht die momentanen Einstellungen im Ton-Tab. </value>
+Dies beeinflusst nicht die momentanen Einstellungen im Audio-Tab. </value>
   </data>
   <data name="Preset_AudioDefaults_Title" xml:space="preserve">
     <value>Audiostandard</value>
@@ -1562,7 +1559,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Titel wählen:</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
-    <value>Zu Warteschlange hinzufügen</value>
+    <value>Zur Warteschlange hinzufügen</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
     <value>Die ausgewählten Titel werden mit der Voreinstellung "{0}" hinzugefügt.</value>
@@ -1676,10 +1673,10 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Untertitel:</value>
   </data>
   <data name="QueueView_Summary" xml:space="preserve">
-    <value>Zusammenfassung</value>
+    <value>Übersicht</value>
   </data>
   <data name="QueueView_Suspend" xml:space="preserve">
-    <value>Aussetzen</value>
+    <value>Suspend</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
     <value>Video:</value>
@@ -1748,7 +1745,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Eine frühere archivierte Warteschlange ist verfügbar.</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Eine einzelne Videodatei öffnen</value>
+    <value>Eine einzelne Videodatei öffnen.</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
     <value>Quellenauswahl</value>
@@ -1769,7 +1766,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Wenn verfügbar CC-Untertitel hinzufügen</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>Fremdsprachenton-Scan hinzufügen</value>
+    <value>Fremdsprachensuche hinzufügen</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
     <value>Einbrennverhalten:</value>
@@ -1778,7 +1775,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>SRT importieren</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>Spurauswahlverhalten:</value>
+    <value>Spurverhalten:</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
     <value>Alle restlichen CC-Untertitel hinzufügen</value>
@@ -1844,7 +1841,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Mittlere Bitrate (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Videocodec:</value>
+    <value>Videoenkoder:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Konstante Bildfrequenz</value>
@@ -1853,16 +1850,16 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Konstante Qualität:</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>Enkoder-Level:</value>
+    <value>Level:</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>Enkodervoreinstellung:</value>
+    <value>Voreinstellung:</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>Enkoderprofil:</value>
+    <value>Profil:</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>Enkoderabstimmung:</value>
+    <value>Abstimmung:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
     <value>Zusätzliche Einstellungen:</value>
@@ -1896,5 +1893,113 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
     <value>Systemsprache verwenden</value>
+  </data>
+  <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
+    <value>Über HandBrake</value>
+  </data>
+  <data name="SourceSelection_DropFileHere" xml:space="preserve">
+    <value>Oder hier eine Datei/Ordner ablegen...</value>
+  </data>
+  <data name="SourceSelection_Help" xml:space="preserve">
+    <value>Hilfe</value>
+  </data>
+  <data name="SourceSelection_Preferences" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
+    <value>Spur hinzufügen</value>
+  </data>
+  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
+    <value>Spuren automatisch hinzufügen</value>
+  </data>
+  <data name="AudioDefaultsView_Clear" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>Eingebrannt</value>
+  </data>
+  <data name="SubtitlesView_Default" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
+    <value>Nur erzwungene</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>_Über...</value>
+  </data>
+  <data name="MainView_ActivityLogMenu" xml:space="preserve">
+    <value>_Aktivitätsprotokoll</value>
+  </data>
+  <data name="MainView_CheckForUpdates" xml:space="preserve">
+    <value>_Auf Updates prüfen</value>
+  </data>
+  <data name="MainView_Exit" xml:space="preserve">
+    <value>_Beenden</value>
+  </data>
+  <data name="MainView_ExportToFile" xml:space="preserve">
+    <value>_In Datei exportieren</value>
+  </data>
+  <data name="MainView_FileMenu" xml:space="preserve">
+    <value>_Datei</value>
+  </data>
+  <data name="MainView_HandBrakeDocs" xml:space="preserve">
+    <value>_HandBrake Dokumentation (HTTPS)</value>
+  </data>
+  <data name="MainView_HelpMenu" xml:space="preserve">
+    <value>_Hilfe</value>
+  </data>
+  <data name="MainView_ImportFromFile" xml:space="preserve">
+    <value>_Aus Datei importieren</value>
+  </data>
+  <data name="MainView_PreferencesMenu" xml:space="preserve">
+    <value>_Einstellungen</value>
+  </data>
+  <data name="MainView_PresetsMenu" xml:space="preserve">
+    <value>_Voreinstellungen</value>
+  </data>
+  <data name="MainView_QueueMenu" xml:space="preserve">
+    <value>_Warteschlange</value>
+  </data>
+  <data name="MainView_ResetPresets" xml:space="preserve">
+    <value>_Installierte Voreinstellungen zurücksetzen</value>
+  </data>
+  <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
+    <value>_Momentanes als Standard setzen</value>
+  </data>
+  <data name="MainView_ShowPresetPanel" xml:space="preserve">
+    <value>_Voreinstellungen zeigen</value>
+  </data>
+  <data name="MainView_ShowQueueMenu" xml:space="preserve">
+    <value>_Warteschlange zeigen</value>
+  </data>
+  <data name="MainView_ToolsMenu" xml:space="preserve">
+    <value>_Extras</value>
+  </data>
+  <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
+    <value>Auf Updates prüfen...</value>
+  </data>
+  <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
+    <value>Soll das Verzeichnis der Aktivitätsprotokolle wirklich bereinigt werden?</value>
+  </data>
+  <data name="OptionsView_ClearLogs" xml:space="preserve">
+    <value>Aktivitätsprotokolle bereinigen</value>
+  </data>
+  <data name="OptionsView_Downloading" xml:space="preserve">
+    <value>Herunterladen...</value>
+  </data>
+  <data name="OptionsView_LogsCleared" xml:space="preserve">
+    <value>Das Verlaufsprotokollverzeichnis von HandBrake wurde bereinigt!</value>
+  </data>
+  <data name="OptionsView_Notice" xml:space="preserve">
+    <value>Hinweis</value>
+  </data>
+  <data name="OptionsView_PreparingUpdate" xml:space="preserve">
+    <value>Update vorbereiten...</value>
+  </data>
+  <data name="OptionsView_SelectFolder" xml:space="preserve">
+    <value>Bitte einen Ordner wählen.</value>
+  </data>
+  <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
+    <value>'Wählen' auswählen um den Standardspeicherort festzulegen</value>
   </data>
 </root>
