@@ -1367,29 +1367,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please choose a destination for where you would like the encoded file to be saved..
-        /// </summary>
-        public static string Main_ChooseDestination {
-            get {
-                return ResourceManager.GetString("Main_ChooseDestination", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Unable to add the last job to the queue. Do you wish to proceed trying to add the rest?.
         /// </summary>
         public static string Main_ContinueAddingToQueue {
             get {
                 return ResourceManager.GetString("Main_ContinueAddingToQueue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The current file already exists, do you wish to overwrite it?.
-        /// </summary>
-        public static string Main_DestinationOverwrite {
-            get {
-                return ResourceManager.GetString("Main_DestinationOverwrite", resourceCulture);
             }
         }
         

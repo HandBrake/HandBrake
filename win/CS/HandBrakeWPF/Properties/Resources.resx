@@ -337,12 +337,6 @@ Do you wish to continue?</value>
   <data name="Main_AlreadyEncoding" xml:space="preserve">
     <value>HandBrake is already encoding.</value>
   </data>
-  <data name="Main_ChooseDestination" xml:space="preserve">
-    <value>Please choose a destination for where you would like the encoded file to be saved.</value>
-  </data>
-  <data name="Main_DestinationOverwrite" xml:space="preserve">
-    <value>The current file already exists, do you wish to overwrite it?</value>
-  </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
     <value>There are jobs on the queue with the same destination path. Please choose a different path for this job.</value>
   </data>

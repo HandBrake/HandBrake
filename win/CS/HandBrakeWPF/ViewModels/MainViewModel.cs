@@ -1719,16 +1719,10 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            // Otherwise, perform Santiy Checking then add to the queue and start if everything is ok.
+            // Otherwise, perform Sanity Checking then add to the queue and start if everything is ok.
             if (this.SelectedTitle == null)
             {
                 this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (string.IsNullOrEmpty(this.Destination))
-            {
-                this.errorService.ShowMessageBox(Resources.Main_ChooseDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -1738,21 +1732,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
-            }
-
-            if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.ToLower() == this.scannedSource.ScanPath.ToLower())
-            {
-                this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (File.Exists(this.Destination))
-            {
-                MessageBoxResult result = this.errorService.ShowMessageBox(Resources.Main_DestinationOverwrite, Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.No)
-                {
-                    return;
-                }
             }
 
             // Create the Queue Task and Start Processing
