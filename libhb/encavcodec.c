@@ -352,12 +352,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "init_qpP", "1", 0 );
             av_dict_set( &av_opts, "init_qpB", "1", 0 );
             av_dict_set( &av_opts, "init_qpI", "1", 0 );
-            av_dict_set( &av_opts, "rc-lookahead", "16", 0 ); // also adds b-frames (h264 only it seems for now), max 32 causes errors
-            if( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 ) {
-                av_dict_set( &av_opts, "spatial_aq", "1", 0 ); // oops, nvenc_hevc.c uses an underscore
-            } else {
-                av_dict_set( &av_opts, "spatial-aq", "1", 0 ); // oops, nvenc_h264.c uses a dash
-            }
             hb_log( "encavcodec: encoding at rc=vbr CQ %.2f", job->vquality );
 
             //This value was chosen to make the bitrate high enough
