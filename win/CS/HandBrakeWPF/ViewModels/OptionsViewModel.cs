@@ -1284,12 +1284,12 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ClearLogHistory()
         {
-            MessageBoxResult result = MessageBox.Show(Resources.OptionsView_ClearLogDirConfirm, Resources.OptionsView_ClearLogs,
+            MessageBoxResult result = this.errorService.ShowMessageBox(Resources.OptionsView_ClearLogDirConfirm, Resources.OptionsView_ClearLogs,
                                                   MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 GeneralUtilities.ClearLogFiles(0);
-                MessageBox.Show(Resources.OptionsView_LogsCleared, Resources.OptionsView_Notice, MessageBoxButton.OK, MessageBoxImage.Information);
+                this.errorService.ShowMessageBox(Resources.OptionsView_LogsCleared, Resources.OptionsView_Notice, MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
