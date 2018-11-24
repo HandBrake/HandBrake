@@ -323,7 +323,8 @@ namespace HandBrakeWPF.Properties {
         ///Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.
         ///
         ///Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.
-        ///        /// [rest of string was truncated]&quot;;.
+        ///
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Advanced_MotionEstimationMethodToolTip {
             get {
@@ -2034,6 +2035,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide.
+        /// </summary>
+        public static string MainView_Hide {
+            get {
+                return ResourceManager.GetString("MainView_Hide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Import from file.
         /// </summary>
         public static string MainView_ImportFromFile {
@@ -2282,6 +2292,33 @@ namespace HandBrakeWPF.Properties {
         public static string MainView_SetDefault {
             get {
                 return ResourceManager.GetString("MainView_SetDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show.
+        /// </summary>
+        public static string MainView_Show {
+            get {
+                return ResourceManager.GetString("MainView_Show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;Add All&apos; to Queue.
+        /// </summary>
+        public static string MainView_ShowAddAllToQueue {
+            get {
+                return ResourceManager.GetString("MainView_ShowAddAllToQueue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;Add Selection&apos; to Queue.
+        /// </summary>
+        public static string MainView_ShowAddSelectionToQueue {
+            get {
+                return ResourceManager.GetString("MainView_ShowAddSelectionToQueue", resourceCulture);
             }
         }
         

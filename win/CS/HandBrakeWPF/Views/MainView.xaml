@@ -144,10 +144,17 @@
             <ToolBar Name="mainToolBar"
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch"
-                     SnapsToDevicePixels="False"
-                     ToolBar.OverflowMode="Never"
+                     SnapsToDevicePixels="True"
+                     ToolBar.OverflowMode="AsNeeded"
                      ToolBarTray.IsLocked="True"
                      KeyboardNavigation.TabNavigation="Continue">
+
+                <ToolBar.ContextMenu>
+                    <ContextMenu AutomationProperties.Name="Presets List Context Menu">
+                        <MenuItem Header="{Binding ShowAddAllMenuName}" cal:Message.Attach="[Event Click] = [Action FlipAddAllToQueue]" />
+                        <MenuItem Header="{Binding ShowAddSelectionMenuName}" cal:Message.Attach="[Event Click] = [Action FlipAddSelectionToQueue]" />
+                    </ContextMenu>
+                </ToolBar.ContextMenu>
 
                 <Button Name="SelectSource" x:Uid="Choose Source" AutomationProperties.Name="{x:Static Properties:Resources.MainView_SourceOpen}"
                         cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]">
@@ -184,7 +191,34 @@
                             <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" AutomationProperties.Name="Add Selection to Queue" InputGestureText="Ctrl + Shift + A" />
                         </ContextMenu>
                     </Button.ContextMenu>
+                </Button>
 
+                <Button Name="AddSelectionToQueue" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddSelection}"
+                        cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]"
+                        Visibility="{Binding ShowAddSelectionToQueue,
+                                             Converter={StaticResource boolToVisConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="32"
+                               Height="32"
+                               Source="Images/AddToQueue_small.png"/>
+                        <Label Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Content="{x:Static Properties:Resources.MainView_AddSelection}"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Name="AddAllToQueue" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddAll}"
+                        cal:Message.Attach="[Event Click] = [Action AddAllToQueue]"
+                        Visibility="{Binding ShowAddAllToQueue,
+                                             Converter={StaticResource boolToVisConverter}}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="32"
+                               Height="32"
+                               Source="Images/AddToQueue_small.png"/>
+                        <Label Margin="8,0,0,0"
+                               VerticalAlignment="Center"
+                               Content="{x:Static Properties:Resources.MainView_AddAll}"/>
+                    </StackPanel>
                 </Button>
 
                 <Button Name="Start" AutomationProperties.Name="{x:Static Properties:Resources.MainView_StartEncode}"
@@ -440,7 +474,7 @@
 
                     <Button Content="{x:Static Properties:Resources.MainView_Reload}" cal:Message.Attach="[Event Click] = [Action PresetSelect]"  Margin="15,0,0,0" VerticalAlignment="Center" />
                     <Button Content="{x:Static Properties:Resources.MainView_SaveNewPreset}" cal:Message.Attach="[Event Click] = [Action PresetAdd]"  Margin="5,0,0,0" VerticalAlignment="Center" />
-                    
+
                     <Button x:Name="MorePresetOptionsButton"  Margin="15,0,0,0" VerticalAlignment="Center" Click="MorePresetOptionsButton_OnClick" Visibility="Collapsed">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal">
@@ -448,7 +482,7 @@
                                        VerticalAlignment="Center"
                                        Text="{x:Static Properties:Resources.MainView_Options}"
                                        AutomationProperties.Name="{x:Static Properties:Resources.MainView_PresetOptionsContextMenu}"
-                                           ToolTip="{x:Static Properties:ResourcesTooltips.MainView_PresetOptionsContextMenu}"/> 
+                                           ToolTip="{x:Static Properties:ResourcesTooltips.MainView_PresetOptionsContextMenu}"/>
 
                                 <Path Height="5" Margin="2,2,0,0" VerticalAlignment="Center" HorizontalAlignment="Center"
                                   Data="M 0 0 L 4 4 L 8 0 Z"
@@ -741,8 +775,6 @@
                 </Grid>
             </GroupBox>
         </Grid>
-        
-        
 
         <!-- Source Selection-->
         <Controls:SourceSelection x:Name="sourceSelection"
@@ -829,4 +861,3 @@
         </StatusBar>
     </Grid>
 </UserControl>
-

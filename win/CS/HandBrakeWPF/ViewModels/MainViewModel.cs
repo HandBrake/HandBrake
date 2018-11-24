@@ -1231,6 +1231,15 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool ShowAddAllToQueue => this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
+        public bool ShowAddSelectionToQueue => this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddSelectionToQueue);
+
+        public string ShowAddAllMenuName =>
+            string.Format("{0} {1}", (!this.ShowAddAllToQueue ? Resources.MainView_Show : Resources.MainView_Hide), Resources.MainView_ShowAddAllToQueue);
+
+        public string ShowAddSelectionMenuName =>
+            string.Format("{0} {1}", (!this.ShowAddSelectionToQueue ? Resources.MainView_Show : Resources.MainView_Hide), Resources.MainView_ShowAddSelectionToQueue);
+
         #endregion
 
         #region Commands 
@@ -2272,6 +2281,18 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.QueueRecoveryArchivesExist);
         }
 
+        public void FlipAddAllToQueue()
+        {
+            bool value = !this.ShowAddAllToQueue;
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddAllToQueue, value);
+        }
+
+        public void FlipAddSelectionToQueue()
+        {
+            bool value = !this.ShowAddSelectionToQueue;
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, value);
+        }
+
         #endregion
 
         #region Private Methods
@@ -2778,6 +2799,12 @@ namespace HandBrakeWPF.ViewModels
                     this.QueueViewModel.WhenDone(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction), false);
                     break;
             }
+
+
+            this.NotifyOfPropertyChange(() => this.ShowAddAllToQueue);
+            this.NotifyOfPropertyChange(() => this.ShowAddSelectionToQueue);
+            this.NotifyOfPropertyChange(() => this.ShowAddAllMenuName);
+            this.NotifyOfPropertyChange(() => this.ShowAddSelectionMenuName);
         }
 
         /// <summary>

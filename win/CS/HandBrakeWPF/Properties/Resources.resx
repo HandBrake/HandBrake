@@ -1999,4 +1999,16 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
     <value>Click 'Browse' to set the default location</value>
   </data>
+  <data name="MainView_Hide" xml:space="preserve">
+    <value>Hide</value>
+  </data>
+  <data name="MainView_Show" xml:space="preserve">
+    <value>Show</value>
+  </data>
+  <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
+    <value>'Add All' to Queue</value>
+  </data>
+  <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
+    <value>'Add Selection' to Queue</value>
+  </data>
 </root>
