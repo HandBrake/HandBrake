@@ -3,8 +3,6 @@ LOCALBASE  ?= /usr/local
 
 TARGET.dylib.ext = .so
 
-GCC.I       = $(LOCALBASE)/include
-GCC.L       = $(LOCALBASE)/lib
 GCC.D       = LIBICONV_PLUG
 
 GCC.args.dylib = -shared
