@@ -358,6 +358,9 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             //for nvenc to "turn off" the maximum bitrate feature
             //that is normally applied to constant quality.
             context->bit_rate = bit_rate_ceiling;
+
+            // Force IDR frames when we force a new keyframe for chapters
+            av_dict_set( &av_opts, "forced-idr", "1", 0 );
         }
         else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
         {
