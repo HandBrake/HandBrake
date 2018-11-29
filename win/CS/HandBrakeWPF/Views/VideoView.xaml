@@ -188,7 +188,7 @@
                     <TextBlock Text="{x:Static Properties:Resources.VideoView_ExtraOptions}" Grid.Row="4" Grid.Column="0" Margin="0,5,0,0" VerticalAlignment="Center" HorizontalAlignment="Left" />
                     <TextBox Text="{Binding ExtraArguments, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="WrapWithOverflow"
                              AutomationProperties.Name="{x:Static Properties:Resources.VideoView_ExtraOptions}" 
-                             MaxLines="4" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="5,5,5,2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch"
+                             Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="5,5,5,2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch"
                              ToolTip="{Binding FullOptionsTooltip}" Style="{StaticResource LongToolTipHolder}" >
                         <TextBox.ContextMenu>
                             <ContextMenu>
