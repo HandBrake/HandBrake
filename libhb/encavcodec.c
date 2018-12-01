@@ -70,7 +70,7 @@ static const char * const vpx_preset_names[] =
 
 static const char * const h26x_nvenc_preset_names[] =
 {
-    "llhp", "llhq", "ll", "bd", "hq", "hp", "fast", "medium", "slow", "default", NULL  // No Lossless "losslesshp", "lossless",
+    "hq", "hp", "fast", "medium", "slow", "default", NULL  // No Lossless "losslesshp", "lossless", "llhp", "llhq", "ll", "bd". We don't need them.
 };
 
 static const char * const h264_nvenc_profile_names[] =
@@ -316,6 +316,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         // ffmpeg's mpeg2 encoder requires that the bit_rate_tolerance be >=
         // bitrate * fps
         context->bit_rate_tolerance = context->bit_rate * av_q2d(fps) + 1;
+        
+        if ( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
+                  job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 ) {
+            av_dict_set( &av_opts, "rc", "cbr_hq", 0 );
+            hb_log( "encavcodec: encoding at rc=cbr_hq Bitrate %d", job->vbitrate );
+        }
     }
     else
     {
@@ -343,21 +349,30 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         else if ( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
                   job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 )
         {
+            char qualityI[7];
             char quality[7];
+            char qualityB[7];
+            double adjustedQualityI = job->vquality - 2;
+            double adjustedQualityB = job->vquality + 2;
+            if (adjustedQualityB > 51) {
+                adjustedQualityB = 51;
+            }
+            
+            if (adjustedQualityI < 0){
+                adjustedQualityI = 0;
+            }
+
             snprintf(quality, 7, "%.2f", job->vquality);
-            av_dict_set( &av_opts, "rc", "vbr", 0 );
+            snprintf(qualityI, 7, "%.2f", adjustedQualityI);
+            snprintf(qualityB, 7, "%.2f", adjustedQualityB);
+            av_dict_set( &av_opts, "rc", "constqp", 0 );
             av_dict_set( &av_opts, "cq", quality, 0 );
 
             // further Advanced Quality Settings in Constant Quality Mode
-            av_dict_set( &av_opts, "init_qpP", "1", 0 );
-            av_dict_set( &av_opts, "init_qpB", "1", 0 );
-            av_dict_set( &av_opts, "init_qpI", "1", 0 );
-            hb_log( "encavcodec: encoding at rc=vbr CQ %.2f", job->vquality );
-
-            //This value was chosen to make the bitrate high enough
-            //for nvenc to "turn off" the maximum bitrate feature
-            //that is normally applied to constant quality.
-            context->bit_rate = bit_rate_ceiling;
+            av_dict_set( &av_opts, "init_qpP", quality, 0 );
+            av_dict_set( &av_opts, "init_qpB", qualityB, 0 );
+            av_dict_set( &av_opts, "init_qpI", qualityI, 0 );
+            hb_log( "encavcodec: encoding at rc=constqp QP %.2f", job->vquality );
 
             // Force IDR frames when we force a new keyframe for chapters
             av_dict_set( &av_opts, "forced-idr", "1", 0 );
@@ -370,6 +385,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
             snprintf(quality, 7, "%.2f", job->vquality);
             snprintf(qualityB, 7, "%.2f", adjustedQualityB);
+            
+            if (adjustedQualityB > 51) {
+                adjustedQualityB = 51;
+            }
 
             av_dict_set( &av_opts, "rc", "cqp", 0 );
            
@@ -380,7 +399,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             {
                 av_dict_set( &av_opts, "qp_b", qualityB, 0 );
             }
-            hb_log( "encavcodec: encoding at CQ %.2f", job->vquality );
+            hb_log( "encavcodec: encoding at QP %.2f", job->vquality );
         }
         else
         {
@@ -513,6 +532,31 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
         // FIXME
         //context->tier = FF_TIER_UNKNOWN;
+    }
+    
+    if ( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 || job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 )
+    {
+        // Set profile and level
+        if (job->encoder_profile != NULL && *job->encoder_profile)
+        {
+            if (!strcasecmp(job->encoder_profile, "baseline"))
+                av_dict_set(&av_opts, "profile", "baseline", 0);
+            else if (!strcasecmp(job->encoder_profile, "main"))
+                av_dict_set(&av_opts, "profile", "main", 0);
+            else if (!strcasecmp(job->encoder_profile, "high"))
+                av_dict_set(&av_opts, "profile", "high", 0);
+        }
+
+        if (job->encoder_level != NULL && *job->encoder_level)
+        {
+            int i = 1;
+            while (hb_h264_level_names[i] != NULL)
+            {
+                if (!strcasecmp(job->encoder_level, hb_h264_level_names[i]))
+                    av_dict_set(&av_opts, "level", job->encoder_level, 0);
+                ++i;
+            }
+        }
     }
 
     if( job->pass_id == HB_PASS_ENCODE_1ST ||

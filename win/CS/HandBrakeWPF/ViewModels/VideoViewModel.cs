@@ -1472,7 +1472,7 @@ namespace HandBrakeWPF.ViewModels
 
                     if (selectedEncoder == VideoEncoder.NvencH264 || selectedEncoder == VideoEncoder.NvencH265)
                     {
-                        middlePreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "default"));
+                        middlePreset = this.VideoPresets.IndexOf(this.VideoPresets.FirstOrDefault(s => s.ShortName == "slow"));
                     }
 
                     this.VideoPresetValue = middlePreset;
