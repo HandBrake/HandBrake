@@ -62,7 +62,6 @@ namespace HandBrakeWPF.ViewModels
         private bool displayTurboFirstPass;
         private int videoPresetMaxValue;
         private int videoPresetValue;
-        private bool displayNonQsvControls;
         private VideoTune videoTune;
         private bool fastDecode;
         private bool displayTuneControls;
@@ -234,7 +233,10 @@ namespace HandBrakeWPF.ViewModels
                 if (this.SelectedVideoEncoder == VideoEncoder.NvencH264
                     || this.SelectedVideoEncoder == VideoEncoder.NvencH265
                     || this.SelectedVideoEncoder == VideoEncoder.VceH264
-                    || this.SelectedVideoEncoder == VideoEncoder.VceH265)
+                    || this.SelectedVideoEncoder == VideoEncoder.VceH265
+                    || this.SelectedVideoEncoder == VideoEncoder.QuickSync
+                    || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265
+                    || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH26510b)
                 {
                     return false;
                 }
@@ -620,21 +622,16 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets a value indicating whether display non qsv controls.
         /// </summary>
-        public bool DisplayNonQSVControls
+        public bool DisplayTwoPass
         {
             get
             {
-                return this.displayNonQsvControls;
-            }
+                return this.SelectedVideoEncoder != VideoEncoder.QuickSync
+                             && this.SelectedVideoEncoder != VideoEncoder.QuickSyncH265
+                             && this.SelectedVideoEncoder != VideoEncoder.QuickSyncH26510b
+                             && this.SelectedVideoEncoder != VideoEncoder.NvencH264
+                             && this.SelectedVideoEncoder != VideoEncoder.NvencH265;
 
-            set
-            {
-                if (value.Equals(this.displayNonQsvControls))
-                {
-                    return;
-                }
-                this.displayNonQsvControls = value;
-                this.NotifyOfPropertyChange(() => this.DisplayNonQSVControls);
             }
         }
 
@@ -1503,8 +1500,6 @@ namespace HandBrakeWPF.ViewModels
                                           this.SelectedVideoEncoder == VideoEncoder.NvencH264 || this.SelectedVideoEncoder == VideoEncoder.NvencH265 ||
                                           this.SelectedVideoEncoder == VideoEncoder.VP8 || this.SelectedVideoEncoder == VideoEncoder.VP9;
 
-            this.DisplayNonQSVControls = this.SelectedVideoEncoder != VideoEncoder.QuickSync && this.SelectedVideoEncoder != VideoEncoder.QuickSyncH265 && this.SelectedVideoEncoder != VideoEncoder.QuickSyncH26510b;
-
             this.DisplayTurboFirstPass = selectedEncoder == VideoEncoder.X264 || selectedEncoder == VideoEncoder.X264_10 ||
                                          selectedEncoder == VideoEncoder.X265 || selectedEncoder == VideoEncoder.X265_10 || selectedEncoder == VideoEncoder.X265_12;
 
@@ -1534,6 +1529,7 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.IsAdvancedTabOptionEnabled);
             this.NotifyOfPropertyChange(() => this.HighQualityLabel);
             this.NotifyOfPropertyChange(() => this.IsTwoPassEnabled);
+            this.NotifyOfPropertyChange(() => this.DisplayTwoPass);
 
             // Handle some quicksync specific options.
             if (selectedEncoder == VideoEncoder.QuickSync || selectedEncoder == VideoEncoder.QuickSyncH265 || selectedEncoder == VideoEncoder.QuickSyncH26510b)
