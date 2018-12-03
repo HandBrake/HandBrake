@@ -7,15 +7,17 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.\n\nNone uses the default preset settings.\n\nFilm refines settings for use with most live action content.\n\nGrain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.\n\nHigh Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.\n\nAnimation is useful for cel animation such as anime and cartoons.\n\nTape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.\n\nSprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video."; ObjectID = "1XQ-md-5cQ"; */
 "1XQ-md-5cQ.ibShadowedToolTip" = "Entrauschabstimmung. Weitere Beeinflussung des Entrauschfilters für spezielle Szenarien.
 
-Ohne: Verwendet die Standardeinstellungen.
+None: Verwendet die Standardeinstellungen.
 
-Film: Einstellung für die meisten Live-Action-Filme.\\n\\nGrain: Bearbeitet nur den Farbkanal. Nützlich um das filmtypische Aussehen mit körniger Luminanz zu erhalten, aber Farbrauschen zu entfernen.
+Film: Einstellung für die meisten Live-Action-Filme.
 
-Schnelle Bewegung: Reduziert farbige Nachzieheffekte bei schnellen Bewegungen indem es zeitweise den Farbkanal nicht bearbeitet. Hilfreich für Sport- und Action-Filme.
+Grain: Bearbeitet nur den Farbkanal. Nützlich um das filmtypische Aussehen mit körniger Luminanz zu erhalten, aber Farbrauschen zu entfernen.
+
+High Motion: Reduziert farbige Nachzieheffekte bei schnellen Bewegungen indem es zeitweise den Farbkanal nicht bearbeitet. Hilfreich für Sport- und Action-Filme.
 
 Animation: Ist nützlich für animierte Filme, wie Anime und Cartoons.
 
-Videoband: Ist gedacht für Filme von analogen Videobändern mit wenig Details, wie VHS, wenn die Film-Einstellung kein vernünftiges Ergebnis produziert.
+Tape: Ist gedacht für Filme von analogen Videobändern mit wenig Details, wie VHS, wenn die Film-Einstellung kein vernünftiges Ergebnis produziert.
 
 Sprite ist nützlich für 1-/4-/8-/16-bit 2D-Spiele. Sprite ist nicht geeignet für qualitativ hochwertige Videos.";
 
@@ -30,9 +32,9 @@ Sprite ist nützlich für 1-/4-/8-/16-bit 2D-Spiele. Sprite ist nicht geeignet f
 
 Ohne: Verwendet die Standardeinstellungen.
 
-Unscharf Maskieren kann abgestimmt werden auf Ultrafein, Fein, Medium, Groß, oder Sehr Grob. Die Auswahl sollte anhand der Auflösung des Ausgangsmaterials und der Feinheit der zu Erhöhenden Details getroffen werden.
+Unscharf Maskieren kann abgestimmt werden auf Ultrafein, Fein, Medium, Grob, oder Sehr Grob. Die Auswahl sollte anhand der Auflösung des Ausgangsmaterials und der Feinheit der zu Erhöhenden Details getroffen werden.
 
-Lapsharp's Abstimmung Film: Ist für die meisten Live-Action-Filme. Film benutzt einen isotropen Laplace-Algorithmus. um alle Kanten identisch zu schärfen und die Luminanz-Informationen werden mehr geschärft als die Farbinformationen.
+Lapsharp's Abstimmung Film: Ist für die meisten Live-Action-Filme. Film benutzt einen isotropen Laplace-Algorithmus um alle Kanten identisch zu schärfen. Luminanz-Informationen (Helligkeit) werden mehr geschärft als die Farbinformationen.
 
 Lapsharp's Abstimmung Grain: Ist ähnlich zu Film, aber verwendet einen benutzt einen isotropen Laplace-Gauss-Algorithmus um die Effekte von Rauschen und Körnung zu reduzieren. Nützlich um Körnungen zu erhalten bzw. als Alternative zur Film-Abstimmung.
 
@@ -134,7 +136,7 @@ Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=
 Standard: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames."; ObjectID = "IQG-Nn-HTb"; */
-"IQG-Nn-HTb.ibShadowedToolTip" = "Interlace-Erkennung, wenn aktiviert, erlaubt es dem Deinterlacefilter nur betroffene Videobilder zu bearbeiten.";
+"IQG-Nn-HTb.ibShadowedToolTip" = "Interlace-Erkennung, wenn aktiviert, erlaubt es dem Deinterlacefilter nur betroffene Einzelbilder zu bearbeiten.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Flips (mirrors) the picture on the horizontal axis."; ObjectID = "IWV-25-FSC"; */
 "IWV-25-FSC.ibShadowedToolTip" = "Spiegelt das Bild an der horizontalen Achse.";

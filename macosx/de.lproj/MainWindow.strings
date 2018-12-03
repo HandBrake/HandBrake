@@ -49,7 +49,7 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Title, or video clip, to encode. The longest title is selected by default.\n\nBlu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature."; ObjectID = "1541"; */
 "1541.ibShadowedToolTip" = "Titel oder Videoclip zum Enkodieren. Standardmäßig wird der längste Titel ausgewählt.
 
-Blu-ray und DVD haben meistens mehrere Titel, der längste ist für gewöhnlich der Hauptfilm.";
+Blu-rays und DVDs haben meistens mehrere Titel, der längste ist für gewöhnlich der Hauptfilm.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1542"; */
 "1542.title" = "OtherViews";
@@ -93,9 +93,6 @@ Blu-ray und DVD haben meistens mehrere Titel, der längste ist für gewöhnlich 
 /* Class = "NSTabViewItem"; label = "Chapters"; ObjectID = "1989"; */
 "1989.label" = "Kapitel";
 
-/* Class = "NSTabViewItem"; label = "Advanced"; ObjectID = "2015"; */
-"2015.label" = "Erweitert";
-
 /* Class = "NSTextFieldCell"; title = "DO NOT TRANSLATE THIS NIB FILE"; ObjectID = "4846"; */
 "4846.title" = "DO NOT TRANSLATE THIS NIB FILE";
 
@@ -106,7 +103,7 @@ Blu-ray und DVD haben meistens mehrere Titel, der längste ist für gewöhnlich 
 "4907.title" = "Titel:";
 
 /* Class = "NSTextFieldCell"; title = "Save As:"; ObjectID = "4913"; */
-"4913.title" = "Speichern als:";
+"4913.title" = "Speichern unter:";
 
 /* Class = "NSTextFieldCell"; title = "Duration:"; ObjectID = "4914"; */
 "4914.title" = "Dauer:";
@@ -151,22 +148,22 @@ Blu-ray und DVD haben meistens mehrere Titel, der längste ist für gewöhnlich 
 "5513.ibExternalAccessibilityDescription" = "Bereichsauswahl";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Source range selection. By default, all chapters are selected and the entire source is encoded."; ObjectID = "5513"; */
-"5513.ibShadowedToolTip" = "Bereichsauswahl der Quelle. Standardmäßig werden alle Kapitel ausgewählt und die gesammte Quelle enkodiert.";
+"5513.ibShadowedToolTip" = "Bereichsauswahl der Quelle. Standardmäßig werden alle Kapitel ausgewählt und die gesamte Quelle enkodiert.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "5515"; */
 "5515.title" = "OtherViews";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Start time in frames"; ObjectID = "5521"; */
-"5521.ibExternalAccessibilityDescription" = "Startzeit in Bildern";
+"5521.ibExternalAccessibilityDescription" = "Startzeit in Einzelbildern";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "First frame to encode."; ObjectID = "5521"; */
-"5521.ibShadowedToolTip" = "Erste Bilder zum Enkodieren.";
+"5521.ibShadowedToolTip" = "Erstes Einzelbilder zum Enkodieren.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "End time in frames"; ObjectID = "5523"; */
-"5523.ibExternalAccessibilityDescription" = "Endzeit in Bildern";
+"5523.ibExternalAccessibilityDescription" = "Endzeit in Einzelbildern";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Last frame to encode."; ObjectID = "5523"; */
-"5523.ibShadowedToolTip" = "Letzte Bilder zum Enkodieren.";
+"5523.ibShadowedToolTip" = "Letzte Einzelbilder zum Enkodieren.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the encoding settings for the currently selected preset. Modifications will be discarded."; ObjectID = "AhR-pK-Oz4"; */
 "AhR-pK-Oz4.ibShadowedToolTip" = "Läd die Enkodiereinstellungen der momentan ausgewählte Voreinstellung neu. Änderungen werden verworfen.";

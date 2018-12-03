@@ -68,7 +68,7 @@ x264 ist verlustfrei bei RF 0.";
 "hib-wi-BDx.title" = "Profil:";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "iab-iA-j04"; */
-"iab-iA-j04.title" = "Voreinstellungen:";
+"iab-iA-j04.title" = "Voreinstellung:";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "auto"; ObjectID = "ioS-p7-9Ri"; */
 "ioS-p7-9Ri.ibShadowedIsNilPlaceholder" = "Auto";
@@ -107,9 +107,6 @@ Syntax: option-1=foo:opt2=bar,baz";
 /* Class = "NSTextFieldCell"; title = "RF:"; ObjectID = "rRB-9F-pHn"; */
 "rRB-9F-pHn.title" = "RF:";
 
-/* Class = "NSButtonCell"; title = "Use Advanced Options Panel"; ObjectID = "sa6-r3-eVr"; */
-"sa6-r3-eVr.title" = "Erweiterte Optionen verwenden";
-
 /* Class = "NSTextFieldCell"; title = "Framerate (FPS):"; ObjectID = "SJc-tv-AMH"; */
 "SJc-tv-AMH.title" = "Bildfrequenz (BpS):";
 
@@ -136,11 +133,6 @@ Syntax: option-1=foo:opt2=bar,baz";
 
 /* Class = "NSButtonCell"; title = "Constant Quality"; ObjectID = "ZjL-cY-O5f"; */
 "ZjL-cY-O5f.title" = "Konstante Qualität";
-
-/* Class = "NSButton"; ibShadowedToolTip = "Use the Advanced Options Panel for x264 settings.\n\nThis setting is no longer supported and may be removed in a future version. Use at your own risk!"; ObjectID = "Zs7-1Y-50A"; */
-"Zs7-1Y-50A.ibShadowedToolTip" = "Verwende das Panel für die erweiterten x264-Videoeinstellungen.
-
-Diese Einstellung wird nicht mehr unterstützt und möglicherweise in einer zukünftigen Version entfernt. Benutzung auf eigene Gefahr!";
 
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "zSD-4Y-1cI"; */
 "zSD-4Y-1cI.title" = "Abstimmung:";

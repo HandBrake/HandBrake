@@ -11,7 +11,7 @@
 "De0-Je-MAm.title" = "A/V synchron";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists."; ObjectID = "fPv-Vw-I89"; */
-"fPv-Vw-I89.ibShadowedToolTip" = "Gleicht die Zeitleiste der Video- und Tonspur aneinander an, indem leere Bilder hinzugefügt werden oder Bilder entfernt werden. Kann die Audio/Video-Synchronisation bei manchen defekten Abspielgeräten verbessern, die keine MP4-Änderungslisten mehr berücksichtigen.";
+"fPv-Vw-I89.ibShadowedToolTip" = "Gleicht die Zeitleiste der Video- und Tonspur aneinander an, indem leere Einzelbilder hinzugefügt werden oder Einzelbilder entfernt werden. Kann die Audio/Video-Synchronisation bei manchen defekten Abspielgeräten verbessern, die keine MP4-Bearbeitungslisten berücksichtigen.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Size summary"; ObjectID = "Jaw-pH-rhf"; */
 "Jaw-pH-rhf.ibExternalAccessibilityDescription" = "Größenübersicht";
