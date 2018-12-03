@@ -39,16 +39,22 @@
 "Add Jobs To Queue" = "Aufgaben zu Warteschlange hinzufügen";
 
 /* Touch bar */
+"Add Preset" = "Voreinstellung hinzufügen";
+
+/* Touch bar */
+"Add Titles To Queue" = "Alle Titel zur Warteschlange hinzufügen";
+
+/* Touch bar */
 "Add To Queue" = "Zur Warteschlange hinzufügen";
 
 /* Preferences Advanced Toolbar Item */
 "Advanced" = "Erweitert";
 
 /* Delete preset alert -> message */
-"Are you sure you want to permanently delete the selected preset?" = "Sind Sie sicher, dass Sie die ausgewählte Voreinstellung endgültig löschen wollen?";
+"Are you sure you want to permanently delete the selected preset?" = "Soll die ausgewählte Voreinstellung wirklich endgültig gelöscht werden?";
 
 /* Quit Alert -> message */
-"Are you sure you want to quit HandBrake?" = "Sind Sie sicher, dass Sie HandBrake beenden wollen?";
+"Are you sure you want to quit HandBrake?" = "Soll HandBrake wirklich beendet werden?";
 
 /* Copy Protection Alert -> first button */
 "Attempt Scan Anyway" = "Trotzdem überprüfen";
@@ -64,12 +70,6 @@
    Touch bar */
 "Cancel" = "Abbrechen";
 
-/* Queue Alert -> cancel rip third button */
-"Cancel Current and Continue" = "Nur momentane Aufgabe abbrechen";
-
-/* Queue Alert -> cancel rip second button */
-"Cancel Current and Stop" = "Alles abbrechen";
-
 /* Touch bar */
 "Cancel Encoding" = "Encodieren abbrechen";
 
@@ -84,7 +84,7 @@
 "Choose" = "Auswählen";
 
 /* Queue Alert -> cancel rip first button */
-"Continue Encoding" = "Enkodierung fortfahren";
+"Continue Encoding" = "Enkodierung fortsetzen";
 
 /* Copy Protection Alert -> message */
 "Copy-Protected sources are not supported." = "Kopiergeschützte Quellen werden nicht unterstützt.";
@@ -120,20 +120,11 @@
 /* Queue status */
 "Encode Finished." = "Enkodierung beendet.";
 
-/* Video -> Encoder options title */
-"Encoder Options" = "Enkodierungsoptionen";
-
-/* Video -> Advanced panel checkbox */
-"Encoder Options:" = "Enkodierungsoptionen:";
-
 /* Export presets save panel title */
 "Export presets" = "Voreinstellungen exportieren";
 
 /* File already exists alert -> message */
 "File already exists." = "Die Datei existiert bereits.";
-
-/* Queue Alert -> cancel rip fourth button */
-"Finish Current and Stop" = "Nach momentaner Aufgabe abbrechen";
 
 /* Preferences General Toolbar Item */
 "General" = "Allgemein";
@@ -272,6 +263,9 @@
    Touch bar */
 "Scale To Screen" = "An Bildschirm anpassen";
 
+/* Queue Alert -> cancel rip informative text */
+"Select Continue Encoding to dismiss this dialog without making changes." = "Enkodierung fortsetzen wählen um diesen Dialog ohne weitere Änderungen zu schließen.";
+
 /* Preferences -> send to app destination open panel */
 "Select the desired external application" = "Die gewünschte externe Anwendung auswählen";
 
@@ -282,7 +276,16 @@
 "Show" = "Zeigen";
 
 /* Touch bar */
+"Show Activity Window" = "Aktivitätsfenster zeigen";
+
+/* Video -> Advanced editor */
+"Show advanced editor" = "Erweiterte Optionen einblenden";
+
+/* Touch bar */
 "Show Preview Window" = "Vorschau zeigen";
+
+/* Queue Alert -> cancel rip second button */
+"Skip Current Job" = "Momentane Aufgabe überspringen";
 
 /* Touch bar */
 "Slider" = "Schieberegler";
@@ -306,6 +309,12 @@
 
 /* Toolbar Start/Stop Item */
 "Stop" = "Stop";
+
+/* Queue Alert -> cancel rip third button */
+"Stop After Current Job" = "Nach momentaner Aufgabe abbrechen";
+
+/* Queue Alert -> cancel rip fourth button */
+"Stop All" = "Alles abbrechen";
 
 /* Queue -> start/stop menu
    Toolbar Start/Stop Item */
@@ -355,7 +364,7 @@
 "There is already an instance of HandBrake running." = "Es läuft schon eine Instanz von HandBrake.";
 
 /* Invalid destination alert -> informative text */
-"This is not a valid destination directory!" = "Dies ist kein gültiger Pfad für das Ziel.";
+"This is not a valid destination directory!" = "Dies ist kein gültiges Zielverzeichnis.";
 
 /* Video -> Framerate */
 "Variable Framerate" = "Variable Bildfrequenz";
@@ -386,9 +395,6 @@
 
 /* Queue done notification message */
 "Your encode %@ is done!" = "Die Enkodierung %@ ist fertig!";
-
-/* Queue Alert -> cancel rip informative text */
-"Your encode will be canceled if you don't continue encoding." = "Ihre Enkodierung wird abgebrochen, wenn Sie die Enkodierung nicht fortsetzen.";
 
 /* Queue done alert informative text */
 "Your HandBrake queue is done!" = "Alle Aufgaben in Ihrer HandBrake-Warteschlange wurde erfolgreich ausgeführt!";

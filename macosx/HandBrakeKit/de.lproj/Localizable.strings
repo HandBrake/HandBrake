@@ -2,11 +2,11 @@
 " - fastdecode" = "- Schnelldekodierung";
 
 /* HBStateFormatter -> work time format */
-" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)" = "(%1$.2f BpS, im Mittel %2$.2f BpS, ETA %3$dh%4$dm%5$ds)";
+" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)" = " (%1$.2f BpS, im Mittel %2$.2f BpS, ETA %3$dh%4$dm%5$ds)";
 
 /* HBStateFormatter -> search time format
    HBStateFormatter -> work time format */
-" (ETA %02dh%02dm%02ds)" = "(ETA %1$dh%2$dm%3$ds)";
+" (ETA %02dh%02dm%02ds)" = " (ETA %1$dh%2$dm%3$ds)";
 
 /* Dimensions description */
 " Keep Aspect Ratio" = "Seitenverhältnis beibehalten";
@@ -153,10 +153,10 @@
 "Framerate: " = "Bildrate:";
 
 /* HBRange -> display name */
-"Frames" = "Bilder";
+"Frames" = "Einzelbilder";
 
 /* Title description */
-"Frames %d through %d" = "Bilder %1$d bis %2$d";
+"Frames %d through %d" = "Einzelbilder %1$d bis %2$d";
 
 /* Audio description */
 "Gain: %.2f" = "Verstärkung: %.2f";

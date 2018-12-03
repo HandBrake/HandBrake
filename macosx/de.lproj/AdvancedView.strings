@@ -119,7 +119,7 @@
 "85.title" = "Item2";
 
 /* Class = "NSTextFieldCell"; title = "Reference Frames:"; ObjectID = "343"; */
-"343.title" = "Bezugsrahmen:";
+"343.title" = "Referenzeinzelbilder:";
 
 /* Class = "NSTextFieldCell"; title = "Maximum B-Frames:"; ObjectID = "344"; */
 "344.title" = "Maximale B-Frames:";
@@ -145,8 +145,8 @@
 /* Class = "NSTextFieldCell"; title = "Adaptive Direct Mode:"; ObjectID = "361"; */
 "361.title" = "Adaptiver Direktmodus:";
 
-/* Class = "NSTextFieldCell"; title = "Current x264 Advanced Option String:"; ObjectID = "363"; */
-"363.title" = "Erweiterte x264-Optionen:";
+/* Class = "NSTextFieldCell"; title = "Current x264 Advanced Option String"; ObjectID = "363"; */
+"363.title" = "Erweiterte x264-Optionen";
 
 /* Class = "NSTextFieldCell"; title = "Deblocking:"; ObjectID = "366"; */
 "366.title" = "Deblocking:";
@@ -208,9 +208,9 @@
 /* Class = "NSTextFieldCell"; title = "Analysis"; ObjectID = "443"; */
 "443.title" = "Analyse";
 
-/* Class = "NSTextFieldCell"; title = "Advanced options not available for the selected codec."; ObjectID = "lPc-aK-FOh"; */
-"lPc-aK-FOh.title" = "Für den ausgewählten Codec sind keine erweiterten Optionen verfügbar.";
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "lV4-j0-O2Y"; */
+"lV4-j0-O2Y.title" = "OK";
 
-/* Class = "NSBox"; title = "Box"; ObjectID = "sPV-JX-8CO"; */
-"sPV-JX-8CO.title" = "Box";
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "w0T-fl-8Fm"; */
+"w0T-fl-8Fm.title" = "Abbrechen";
 
