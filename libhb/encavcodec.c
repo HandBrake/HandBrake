@@ -807,15 +807,8 @@ static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
             hb_log("encavcodec: avcodec_receive_packet failed");
         }
 
-        if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H264)
-        {
-            out = hb_nal_bitstream_annexb_to_mp4(pkt.data, pkt.size);
-        }
-        else
-        {
-            out = hb_buffer_init(pkt.size);
-            memcpy(out->data, pkt.data, out->size);
-        }
+        out = hb_buffer_init(pkt.size);
+        memcpy(out->data, pkt.data, out->size);
 
         int64_t frameno = pkt.pts;
         out->size       = pkt.size;
