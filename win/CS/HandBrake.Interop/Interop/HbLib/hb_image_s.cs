@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+// ReSharper disable InconsistentNaming
+// ReSharper disable UnusedMember.Global
 namespace HandBrake.Interop.Interop.HbLib
 {
     using System;

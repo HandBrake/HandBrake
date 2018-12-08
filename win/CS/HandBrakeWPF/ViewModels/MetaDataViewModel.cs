@@ -42,7 +42,7 @@ namespace HandBrakeWPF.ViewModels
             this.task = new EncodeTask();
         }
 
-        public event EventHandler<TabStatusEventArgs> TabStatusChanged;
+        public event EventHandler<TabStatusEventArgs> TabStatusChanged { add { } remove { } }
 
         /// <summary>
         /// Gets or sets the meta data.

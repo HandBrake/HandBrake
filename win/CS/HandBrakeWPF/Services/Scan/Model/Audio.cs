@@ -187,7 +187,7 @@ namespace HandBrakeWPF.Services.Scan.Model
                 int result = this.TrackNumber;
                 result = (result * 397) ^ (this.Language != null ? this.Language.GetHashCode() : 0);
                 result = (result * 397) ^ (this.LanguageCode != null ? this.LanguageCode.GetHashCode() : 0);
-                result = (result * 397) ^ (this.Codec != null ? this.Codec.GetHashCode() : 0);
+                result = (result * 397) ^ (this.Codec.GetHashCode());
                 return result;
             }
         }

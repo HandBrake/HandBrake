@@ -179,6 +179,6 @@ namespace HandBrakeWPF.Commands
         /// <summary>
         /// Can Execute Changed
         /// </summary>
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged { add { } remove { } }
     }
 }
