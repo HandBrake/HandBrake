@@ -64,7 +64,7 @@ namespace HandBrake.Worker
 
                                     try
                                     {
-                                        string path = context.Request.RawUrl.TrimStart('/');
+                                        string path = context.Request.RawUrl.TrimStart('/').TrimEnd('/');
 
                                         if (this.apiHandlers.TryGetValue(path, out var actionToPerform))
                                         {
