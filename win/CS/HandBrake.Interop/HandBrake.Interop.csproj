@@ -58,7 +58,6 @@
     <Compile Include="Interop\HandBrakeEncoderHelpers.cs" />
     <Compile Include="Interop\HandBrakeFilterHelpers.cs" />
     <Compile Include="Interop\HandBrakeInstance.cs" />
-    <Compile Include="Interop\HandBrakeInstanceManager.cs" />
     <Compile Include="Interop\HandBrakeLanguagesHelper.cs" />
     <Compile Include="Interop\HandBrakePresetService.cs" />
     <Compile Include="Interop\HandBrakeUnitConversionHelpers.cs" />

@@ -23,6 +23,7 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrake.Interop.Interop.Model.Preview;
     using HandBrake.Interop.Model;
 
+    using HandBrakeWPF.Instance;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Scan.EventArgs;

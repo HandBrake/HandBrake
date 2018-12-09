@@ -9,6 +9,7 @@
 
 namespace HandBrake.Interop.Interop
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -22,39 +23,12 @@ namespace HandBrake.Interop.Interop
     /// </summary>
     public static class HandBrakeEncoderHelpers
     {
-        /// <summary>
-        /// The audio encoders.
-        /// </summary>
         private static List<HBAudioEncoder> audioEncoders;
-
-        /// <summary>
-        /// The video encoders.
-        /// </summary>
         private static List<HBVideoEncoder> videoEncoders;
-
-        /// <summary>
-        /// Video framerates in pts.
-        /// </summary>
         private static List<HBRate> videoFramerates;
-
-        /// <summary>
-        /// List of HandBrake mixdowns.
-        /// </summary>
         private static List<HBMixdown> mixdowns;
-
-        /// <summary>
-        /// List of HandBrake containers.
-        /// </summary> 
         private static List<HBContainer> containers;
-
-        /// <summary>
-        /// The audio bitrates.
-        /// </summary>
         private static List<int> audioBitrates;
-
-        /// <summary>
-        /// Audio sample rates in Hz.
-        /// </summary>
         private static List<HBRate> audioSampleRates;
 
         /// <summary>
@@ -432,9 +406,9 @@ namespace HandBrake.Interop.Interop
         /// <returns>
         /// True if DRC can be applied to the track with the given encoder.
         /// </returns>
-        public static bool CanApplyDrc(int trackNumber, HBAudioEncoder encoder, int title)
+        public static bool CanApplyDrc(IntPtr handle, int trackNumber, HBAudioEncoder encoder, int title)
         {
-            return HBFunctions.hb_audio_can_apply_drc2(HandBrakeInstanceManager.LastScanHandle, title, trackNumber, encoder.Id) > 0;
+            return HBFunctions.hb_audio_can_apply_drc2(handle, title, trackNumber, encoder.Id) > 0; 
         }
 
         /// <summary>

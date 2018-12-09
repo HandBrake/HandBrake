@@ -80,7 +80,7 @@ namespace HandBrakeWPF.Services.Encode
                 this.log.Reset(); // Reset so we have a clean log for the start of the encode.
                 this.ServiceLogMessage("Starting Encode ...");
 
-                this.instance = task.IsPreviewEncode ? HandBrake.Interop.Interop.HandBrakeInstanceManager.GetPreviewInstance(configuration.Verbosity, configuration) : HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity, configuration);
+                this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(configuration.Verbosity, configuration) : HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity, configuration);
                 
                 this.instance.EncodeCompleted += this.InstanceEncodeCompleted;
                 this.instance.EncodeProgress += this.InstanceEncodeProgress;

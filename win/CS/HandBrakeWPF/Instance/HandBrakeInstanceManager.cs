@@ -20,6 +20,8 @@ namespace HandBrakeWPF.Instance
     public static class HandBrakeInstanceManager
     {
         private static IEncodeInstance encodeInstance;
+        private static HandBrakeInstance scanInstance;
+        private static HandBrakeInstance previewInstance;
 
         /// <summary>
         /// Initializes static members of the <see cref="HandBrakeInstanceManager"/> class.
@@ -73,6 +75,59 @@ namespace HandBrakeWPF.Instance
             HandBrakeUtils.SetDvdNav(!configuration.IsDvdNavDisabled);
 
             return encodeInstance;
+        }
+
+        /// <summary>
+        /// Gets the scanInstance.
+        /// </summary>
+        /// <param name="verbosity">
+        /// The verbosity.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IHandBrakeInstance"/>.
+        /// </returns>
+        public static IHandBrakeInstance GetScanInstance(int verbosity)
+        {
+            if (scanInstance != null)
+            {
+                scanInstance.Dispose();
+                scanInstance = null;
+            }
+
+            HandBrakeInstance newInstance = new HandBrakeInstance();
+            newInstance.Initialize(verbosity);
+            scanInstance = newInstance;
+
+            return scanInstance;
+        }
+
+        /// <summary>
+        /// The get encode instance.
+        /// </summary>
+        /// <param name="verbosity">
+        /// The verbosity.
+        /// </param>
+        /// <param name="configuration">
+        /// The configuration.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IHandBrakeInstance"/>.
+        /// </returns>
+        public static IHandBrakeInstance GetPreviewInstance(int verbosity, HBConfiguration configuration)
+        {
+            if (previewInstance != null)
+            {
+                previewInstance.Dispose();
+                previewInstance = null;
+            }
+
+            HandBrakeInstance newInstance = new HandBrakeInstance();
+            newInstance.Initialize(verbosity);
+            previewInstance = newInstance;
+
+            HandBrakeUtils.SetDvdNav(!configuration.IsDvdNavDisabled);
+
+            return previewInstance;
         }
     }
 }
