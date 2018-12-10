@@ -95,7 +95,7 @@ static const char * const h264_vt_profile_name[] =
 
 static const char * const h265_vt_profile_name[] =
 {
-    "auto", "main", "main10", NULL
+    "auto", "main",  NULL // "main10" not currently supported. 
 };
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
