@@ -147,6 +147,9 @@ hb_rate_t *hb_audio_bitrates_last_item  = NULL;
 hb_rate_internal_t hb_audio_bitrates[]  =
 {
     // AC3-compatible bitrates
+    { {   "6",   6, }, NULL, 1, },
+    { {   "12",   12, }, NULL, 1, },
+    { {   "24",   24, }, NULL, 1, },
     { {   "32",   32, }, NULL, 1, },
     { {   "40",   40, }, NULL, 1, },
     { {   "48",   48, }, NULL, 1, },
