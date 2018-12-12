@@ -28,7 +28,8 @@ Please read our [guide to contributing](https://handbrake.fr/docs/en/latest/cont
 
 ## Translations
 
-We are now accepting translations via  [Transifex](https://www.transifex.com/HandBrakeProject/)
+We are now accepting translations via  [Transifex](https://www.transifex.com/HandBrakeProject/) 
+
 Initially we are planning to support a limited set of languages while we evaluate the servier and overheads. 
 
 ## Additional Information
