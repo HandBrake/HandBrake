@@ -1166,10 +1166,11 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
         const gchar *p;
 
         p = ghb_dict_get_string(ud->prefs, "auto_name_template");
-        // {source_path} is only allowed as the first element of the
+        // {source-path} is only allowed as the first element of the
         // template since the path must come first in the filename
         if (p != NULL &&
-            !strncasecmp(p, "{source_path}", strlen("{source_path}")))
+            (!strncasecmp(p, "{source-path}", strlen("{source-path}")) ||
+             !strncasecmp(p, "{source_path}", strlen("{source_path}"))))
         {
             const gchar * source;
 
@@ -1186,7 +1187,7 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 }
                 g_free(dirname);
             }
-            p += strlen("{source_path}");
+            p += strlen("{source-path}");
         }
         while (*p)
         {
