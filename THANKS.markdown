@@ -5,7 +5,7 @@
 HandBrake uses many cool libraries from the GNU/Linux world. We thank them and their authors.
 
 - [libass](https://github.com/libass/libass)
-- [libavcodec](https://libav.org/)
+- [ffmpeg](https://ffmpeg.org/)
 - [libbluray](https://www.videolan.org/developers/libbluray.html)
 - [libbzip2](http://bzip.org/)
 - [libdvdnav](https://dvdnav.mplayerhq.hu/)
@@ -31,6 +31,7 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 - [libx265](http://x265.org/)
 - [libxml2](http://xmlsoft.org/)
 - [libzlib](http://zlib.net/)
+- [libspeex](https://www.speex.org/)
 
 
 ## Services and Software
