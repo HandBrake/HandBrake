@@ -28,7 +28,7 @@
 - Improved extradata handling to accommodate all codecs
 - Added support for decoding TIFF/LZMA video
 
-### Audio
+#### Audio
 
 - Fixed potential decoding issue for audio lacking an explicit channel layout (intelligently guess the layout)
 - Fixed a potential crash during audio probe
