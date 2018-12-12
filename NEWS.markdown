@@ -13,11 +13,12 @@
   - Facilitates a number of the improvements and features in this release and planned for the future
 - Removed deprecated Legacy presets
   - See the [list of compatible replacements on GitHub](https://github.com/HandBrake/HandBrake-docs/blob/efb51cc2cd7d0c30fa5e9ee88366233ca34757a4/source/docs/en/latest/technical/official-presets.markdown#legacy-010x-presets)
-- Updated official presets descriptions to revise compatibility and mention recently released devices
-- Updated official presets to rename Fire TV to Amazon Fire and added Amazon Fire 720p30 preset
 - Updated official presets to use stereo instead of DPL2 mixdown
   - Avoids potential spatial positioning issues with the current DPL2 algorithm and wide pans in source material
   - Limited in impact since DPL2 decoding has not been in widespread use for years
+- Updated official presets descriptions to revise compatibility and mention recently released devices
+- Updated official presets to rename Fire TV to Amazon Fire
+- Added Amazon Fire 720p30 and Chromecast 1080p60 presets
 - Added `{creation-date}`, `{creation-time}`, and `{source-path}` to automatic file naming
   - `{source-path}` is not yet available on Mac
 
