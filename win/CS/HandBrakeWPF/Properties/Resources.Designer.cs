@@ -323,8 +323,7 @@ namespace HandBrakeWPF.Properties {
         ///Hexagon: performs a somewhat more effective but slightly slower search using a hexagon pattern.
         ///
         ///Uneven Multi-Hex: performs a very wide search using a variety of patterns, more accurately capturing complex motion.
-        ///
-        /// [rest of string was truncated]&quot;;.
+        ///        /// [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Advanced_MotionEstimationMethodToolTip {
             get {
@@ -589,7 +588,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reload Defaults.
+        ///   Looks up a localized string similar to Reload.
         /// </summary>
         public static string AudioView_ReloadDefaults {
             get {
@@ -4519,7 +4518,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reload Defaults.
+        ///   Looks up a localized string similar to Reload.
         /// </summary>
         public static string Shared_ReloadDefaults {
             get {

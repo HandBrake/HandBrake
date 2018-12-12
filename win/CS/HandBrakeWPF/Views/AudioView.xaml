@@ -95,7 +95,7 @@
 
                 <Button MinWidth="65" Grid.Column="4"
                     cal:Message.Attach="[Event Click] = [Action ReloadDefaults]"
-                    Content="{x:Static Properties:Resources.AudioView_ReloadDefaults}" />
+                    Content="{x:Static Properties:Resources.Shared_ReloadDefaults}" />
 
 
             </Grid>

@@ -936,7 +936,7 @@ Would you like to overwrite it?</value>
     <value>Fallback encoder:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
-    <value>Reload Defaults</value>
+    <value>Reload</value>
   </data>
   <data name="AudioView_Samplerate" xml:space="preserve">
     <value>Samplerate</value>
@@ -1706,7 +1706,7 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Configure Default Behaviours</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
-    <value>Reload Defaults</value>
+    <value>Reload</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
     <value>Choose Disc to Scan</value>
