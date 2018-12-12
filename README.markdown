@@ -32,6 +32,8 @@ We are now accepting translations via  [Transifex](https://www.transifex.com/Han
 
 Initially we are planning to support a limited set of languages while we evaluate the service and overheads. 
 
+Please get in touch if you'd like to contribute to a translation. 
+
 ## Additional Information
 
 [Authors](AUTHORS.markdown)  
