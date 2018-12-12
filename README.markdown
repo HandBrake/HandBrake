@@ -20,12 +20,16 @@ For information on HandBrake's community support channels, please see [Community
 Our [community rules](https://forum.handbrake.fr/app.php/rules) and [code of conduct](https://github.com/HandBrake/HandBrake/blob/master/CODE_OF_CONDUCT.md) apply to both our site and GitHub.
 
 
-## Contributing and Translations
+## Contributing
 
 We welcome most contributions. While it is our goal to allow everyone to contribute, contributions not meeting the project's goals or  standards may be rejected.
 
 Please read our [guide to contributing](https://handbrake.fr/docs/en/latest/contributing/contribute.html). This will provide you with all the information you need to start contributing to the project. 
 
+## Translations
+
+We are now accepting translations via  [Transifex](https://www.transifex.com/HandBrakeProject/)
+Initially we are planning to support a limited set of languages while we evaluate the servier and overheads. 
 
 ## Additional Information
 
