@@ -30,7 +30,7 @@ Please read our [guide to contributing](https://handbrake.fr/docs/en/latest/cont
 
 We are now accepting translations via  [Transifex](https://www.transifex.com/HandBrakeProject/) 
 
-Initially we are planning to support a limited set of languages while we evaluate the servier and overheads. 
+Initially we are planning to support a limited set of languages while we evaluate the service and overheads. 
 
 ## Additional Information
 
