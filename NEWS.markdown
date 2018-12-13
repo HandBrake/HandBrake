@@ -6,8 +6,6 @@
 
 #### General
 
-- Added project Code of Conduct and Contributing guide
-  - See [HandBrake on GitHub](https://github.com/HandBrake/HandBrake)
 - Switched core decoding library from Libav to FFmpeg
   - Fixes numerous sources previously unreadable or otherwise broken
   - Facilitates a number of the improvements and features in this release and planned for the future
@@ -61,7 +59,6 @@
 - Improved `configure.py` to always use the Python executable found by `configure`
 - Added script for creating Flatpak manifests
 - Added support for selecting a compiler via the CC environment variable
-- Added initial support for Travis CI
 - Miscellaneous bug fixes and improvements
 
 #### Third-party libraries
@@ -122,7 +119,6 @@
 - Fixed audio sample rate of 48 kHz being selected where Auto was the specified behavior
 - Removed preferences option to show the advanced tab (deprecated and slated for removal)
 - Removed options menu from queue in favor of contextual menu
-- Updated German translation
 - Improved layout to better support localization
 - Improved error handling when adding items to the queue
 - Improved multi-instance queue recovery to avoid loading queue files from the wrong instance
@@ -131,6 +127,7 @@
 - Improved SRT import default browse location (open source video location)
 - Improved keyboard shortcuts by making Ctrl-S open the destination save dialog (start encode is now Ctrl-E)
 - Added additional keyboard shortcuts for various actions
+- Added initial localization support and German translation
 - Added support for AMD VCE and Nvidia NVENC hardware-accelerated encoders
 - Added automatic queue archiving and option to select an archived queue for recovery (archives are removed after 7 days)
 - Added support for recovering specific queue files on start using `--recover-queue-ids=<id1,id2,...>`
@@ -139,7 +136,6 @@
 - Added option to disable preview image on summary tab
 - Added option to disable checking for update on start in portable mode
 - Added stop encoding confirmation dialog
-- Added initial NuGet packaging support
 - Miscellaneous bug fixes and improvements
 
 
