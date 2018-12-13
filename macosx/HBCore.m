@@ -154,12 +154,14 @@ typedef void (^HBCoreCleanupHandler)(void);
 {
     NSAssert(!self.automaticallyPreventSleep, @"[HBCore preventSleep:] called with automaticallyPreventSleep enabled.");
     hb_system_sleep_prevent(_hb_handle);
+    [HBUtilities writeToActivityLog:"%s prevented sleep", self.name.UTF8String];
 }
 
 - (void)allowSleep
 {
     NSAssert(!self.automaticallyPreventSleep, @"[HBCore allowSleep:] called with automaticallyPreventSleep enabled.");
     hb_system_sleep_allow(_hb_handle);
+    [HBUtilities writeToActivityLog:"%s stopped preventing sleep", self.name.UTF8String];
 }
 
 - (void)preventAutoSleep
