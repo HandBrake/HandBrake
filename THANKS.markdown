@@ -4,8 +4,8 @@
 
 HandBrake uses many cool libraries from the GNU/Linux world. We thank them and their authors.
 
-- [libass](https://github.com/libass/libass)
 - [ffmpeg](https://ffmpeg.org/)
+- [libass](https://github.com/libass/libass)
 - [libbluray](https://www.videolan.org/developers/libbluray.html)
 - [libbzip2](http://bzip.org/)
 - [libdvdnav](https://dvdnav.mplayerhq.hu/)
@@ -18,12 +18,14 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 - [libiconv](https://www.gnu.org/software/libiconv/)
 - [libjansson](http://www.digip.org/jansson/)
 - [liblame](http://lame.sourceforge.net/)
+- [liblzma (xz)](https://tukaani.org/xz/)
 - [libmfx](https://github.com/Rodeo314/libmfx)
 - [libmpeg2dec](http://libmpeg2.sourceforge.net/)
 - [libogg](https://xiph.org/ogg/)
 - [libopus](https://www.opus-codec.org/)
 - [libpthreadsw32](https://sourceware.org/pthreads-win32/)
 - [libsamplerate](http://mega-nerd.com/SRC/)
+- [libspeex](https://www.speex.org/)
 - [libtheora](https://theora.org/)
 - [libvorbis](http://vorbis.com/)
 - [libvpx](https://github.com/webmproject/libvpx/)
@@ -31,7 +33,6 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 - [libx265](http://x265.org/)
 - [libxml2](http://xmlsoft.org/)
 - [libzlib](http://zlib.net/)
-- [libspeex](https://www.speex.org/)
 
 
 ## Services and Software
