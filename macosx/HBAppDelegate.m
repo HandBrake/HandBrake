@@ -367,3 +367,39 @@
 }
 
 @end
+
+@interface NSApplication (TouchBar) <NSTouchBarDelegate>
+@end
+
+@implementation NSApplication (TouchBar)
+
+static NSTouchBarItemIdentifier HBTouchBarMain = @"fr.handbrake.appDelegateTouchBar";
+static NSTouchBarItemIdentifier HBTouchBarOpen = @"fr.handbrake.openSource";
+
+- (NSTouchBar *)makeTouchBar
+{
+    NSTouchBar *bar = [[NSTouchBar alloc] init];
+    bar.delegate = self;
+
+    bar.defaultItemIdentifiers = @[HBTouchBarOpen];
+
+    return bar;
+}
+
+- (NSTouchBarItem *)touchBar:(NSTouchBar *)touchBar makeItemForIdentifier:(NSTouchBarItemIdentifier)identifier
+{
+    if ([identifier isEqualTo:HBTouchBarOpen])
+    {
+        NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
+        item.customizationLabel = NSLocalizedString(@"Open Source", @"Touch bar");
+
+        NSButton *button = [NSButton buttonWithTitle:NSLocalizedString(@"Open Source", @"Touch bar") target:nil action:@selector(browseSources:)];
+
+        item.view = button;
+        return item;
+    }
+
+    return nil;
+}
+
+@end
