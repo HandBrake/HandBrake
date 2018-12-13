@@ -92,7 +92,6 @@
 - HandBrake now requires OS X 10.10 Yosemite or later
 - Removed preferences option to show the advanced tab (deprecated and slated for removal)
 - Fixed minor display issues on macOS 10.14 Mojave
-- Fixed closing add category dialog when presented as a modal
 - Fixed queue toolbar icon not updating
 - Removed Growl in favor of native system notifications
 - Updated Sparkle automatic update library
