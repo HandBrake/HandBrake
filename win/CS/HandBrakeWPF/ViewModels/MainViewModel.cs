@@ -1463,6 +1463,11 @@ namespace HandBrakeWPF.ViewModels
                 this.StaticPreviewViewModel.UpdatePreviewFrame(this.CurrentTask, this.ScannedSource);
                 this.windowManager.ShowWindow(this.StaticPreviewViewModel);
             }
+            else if (this.StaticPreviewViewModel.IsOpen)
+            {
+                Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(StaticPreviewView));
+                window?.Focus();
+            }
         }
 
         public void ShowPresetPane()
