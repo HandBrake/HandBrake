@@ -1,0 +1,30 @@
+From 5282db5929f25ca9566a47ad217794842b364afc Mon Sep 17 00:00:00 2001
+From: Andriy Gelman <andriy.gelman@gmail.com>
+Date: Wed, 12 Dec 2018 23:57:35 -0500
+Subject: [PATCH] avcodec/mpeg: Initialize quarter_sample parameter from
+ previous thread.
+
+Fixes #7410.
+The value of sub-pixel precision for me/mc can change during an Intra frame. In multi-threaded decoding this change is not propagated to other frame threads causing decoding artifacts. This patch initializes the sub-pixel precision parameter from previous thread, which fixes the issue.
+
+Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>
+---
+ libavcodec/mpegvideo.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libavcodec/mpegvideo.c b/libavcodec/mpegvideo.c
+index d4d3bea..dbb6ab9 100644
+--- a/libavcodec/mpegvideo.c
++++ b/libavcodec/mpegvideo.c
+@@ -538,6 +538,8 @@ int ff_mpeg_update_thread_context(AVCodecContext *dst,
+     s->avctx->width         = s1->avctx->width;
+     s->avctx->height        = s1->avctx->height;
+ 
++    s->quarter_sample       = s1->quarter_sample;
++
+     s->coded_picture_number = s1->coded_picture_number;
+     s->picture_number       = s1->picture_number;
+ 
+-- 
+1.9.1
+
