@@ -525,7 +525,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void Close()
         {
-            this.TryClose();
+            this.IsOpen = false;
         }
 
         /// <summary>

@@ -9,6 +9,7 @@
              mc:Ignorable="d" SizeToContent="WidthAndHeight"
              TextOptions.TextFormattingMode="Display"
              WindowStartupLocation="CenterScreen"
+             cal:Message.Attach="[Event Closing] = [Action Close]"
              Title="{Binding Title}">
 
     <Window.Resources>
