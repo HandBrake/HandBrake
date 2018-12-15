@@ -103,8 +103,8 @@
 - Improved stop encoding confirmation dialog
 - Improved notifications to no longer play sounds when alerts are disabled
 - Added initial localization support and German translation
-- Added initial support for VideoToolbox (hardware-accelerated) encoding
-- Added support for Dark Mode in macOS 10.14 Mojave (new Dark Mode toolbar icons require building with Xcode 10 on Mojave)
+- Added initial support for VideoToolbox hardware-accelerated encoding
+- Added support for Dark Mode on macOS 10.14 Mojave (new Dark Mode toolbar icons require building with Xcode 10 on Mojave)
 - Added Touch Bar support to various windows and dialogs
 - Added Finder progress bar to files currently encoding
 - Added Show Source in Finder to queue contextual menu (renamed Show in Finder to Show Destination in Finder)
