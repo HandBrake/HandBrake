@@ -161,7 +161,9 @@ namespace HandBrakeWPF.Services
                 switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction))
                 {
                     case "Shutdown":
-                        Process.Start("Shutdown", "-s -t 60");
+                        ProcessStartInfo shutdown = new ProcessStartInfo("Shutdown", "-s -t 60");
+                        shutdown.UseShellExecute = false;
+                        Process.Start(shutdown);
                         break;
                     case "Log off":
                         Win32.ExitWindowsEx(0, 0);
