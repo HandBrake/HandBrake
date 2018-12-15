@@ -117,9 +117,10 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetAction(string actionMsg)
         {
+            this.IsCancelled = false;
             this.Ticks = 0;
             timer.Start();
-            this.action = actionMsg;
+            this.action = actionMsg;    
         }
 
         #endregion

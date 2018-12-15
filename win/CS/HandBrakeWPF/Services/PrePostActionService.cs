@@ -157,7 +157,7 @@ namespace HandBrakeWPF.Services
 
             if (!titleSpecificView.IsCancelled)
             {
-                // Do something whent he encode ends.
+                // Do something when the encode ends.
                 switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction))
                 {
                     case "Shutdown":
