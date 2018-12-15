@@ -17,8 +17,7 @@
 - Updated official presets descriptions to revise compatibility and mention recently released devices
 - Updated official presets to rename Fire TV to Amazon Fire
 - Added Amazon Fire 720p30 and Chromecast 1080p60 presets
-- Added `{creation-date}`, `{creation-time}`, and `{source-path}` to automatic file naming
-  - `{source-path}` is not yet available on Mac
+- Added `{creation-date}` and `{creation-time}` to automatic file naming
 
 #### Video
 
@@ -85,6 +84,7 @@
 - Added initial support for GTK 4
 - Added ability to customize activity window font size and increased default from 7 to 8
 - Added destination overwrite protection (append number to file name on conflict)
+- Added `{source-path}` to automatic path setting
 - Miscellaneous bug fixes and improvements
 
 ### Mac
@@ -135,6 +135,7 @@
 - Added option to disable preview image on summary tab
 - Added option to disable checking for update on start in portable mode
 - Added stop encoding confirmation dialog
+- Added `{source-path}` to automatic path setting
 - Miscellaneous bug fixes and improvements
 
 
