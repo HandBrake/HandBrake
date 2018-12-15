@@ -135,7 +135,6 @@
 - Added option to disable preview image on summary tab
 - Added option to disable checking for update on start in portable mode
 - Added stop encoding confirmation dialog
-- Added `{source-path}` to automatic path setting
 - Miscellaneous bug fixes and improvements
 
 
