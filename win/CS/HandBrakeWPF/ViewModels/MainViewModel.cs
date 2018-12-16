@@ -1534,6 +1534,15 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
+
+            if (!DriveUtilities.HasMinimumDiskSpace(
+                this.Destination,
+                this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel)))
+            {
+                this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
             // Sanity check the filename
             if (!string.IsNullOrEmpty(this.Destination) && FileHelper.FilePathHasInvalidChars(this.Destination))
             {
@@ -1737,14 +1746,6 @@ namespace HandBrakeWPF.ViewModels
             if (this.SelectedTitle == null)
             {
                 this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (!DriveUtilities.HasMinimumDiskSpace(
-                this.Destination,
-                this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel)))
-            {
-                this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
