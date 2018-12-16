@@ -104,7 +104,7 @@ namespace HandBrakeWPF
             
             IUserSettingService userSettingService =  IoC.Get<IUserSettingService>();
             string culture = userSettingService.GetUserSetting<string>(UserSettingConstants.UiLanguage);
-            if (!string.IsNullOrEmpty(culture) && !"en".Equals(culture))
+            if (!string.IsNullOrEmpty(culture))
             {
                 InterfaceLanguage language = InterfaceLanguageUtilities.FindInterfaceLanguage(culture);
                 if (language != null)
