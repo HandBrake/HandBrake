@@ -20,6 +20,7 @@ namespace HandBrakeWPF.Services
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.EventArgs;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Utilities;
@@ -161,23 +162,28 @@ namespace HandBrakeWPF.Services
                 switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction))
                 {
                     case "Shutdown":
+                    case "Herunterfahren":
                         ProcessStartInfo shutdown = new ProcessStartInfo("Shutdown", "-s -t 60");
                         shutdown.UseShellExecute = false;
                         Process.Start(shutdown);
                         break;
                     case "Log off":
+                    case "Ausloggen":
                         Win32.ExitWindowsEx(0, 0);
                         break;
                     case "Suspend":
                         Application.SetSuspendState(PowerState.Suspend, true, true);
                         break;
                     case "Hibernate":
+                    case "Ruhezustand":
                         Application.SetSuspendState(PowerState.Hibernate, true, true);
                         break;
                     case "Lock System":
+                    case "System sperren":
                         Win32.LockWorkStation();
                         break;
                     case "Quit HandBrake":
+                    case "HandBrake beenden":
                         Execute.OnUIThread(() => System.Windows.Application.Current.Shutdown());
                         break;
                 }
