@@ -1143,7 +1143,10 @@ static void fixStreamTimestamps( sync_stream_t * stream )
     }
     else if (stream->type == SYNC_TYPE_VIDEO)
     {
-        dejitterVideo(stream);
+        if (stream->common->job->cfr==1)
+        {
+            dejitterVideo(stream);
+        }
         fixVideoOverlap(stream);
     }
     else if (stream->type == SYNC_TYPE_SUBTITLE)
