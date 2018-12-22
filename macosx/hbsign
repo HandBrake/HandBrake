@@ -94,7 +94,7 @@ for TARGET in "${@}"; do
         find "${TARGET}"/Contents/Frameworks -type f -name "*.textile" -exec rm '{}' \; >/dev/null 2>&1
         find "${TARGET}"/Contents/Frameworks -type f -name "*.txt" -exec rm '{}' \; >/dev/null 2>&1
         sign "${TARGET}"/Contents/Frameworks/HandBrakeKit.framework/Versions/A fr.handbrake.HandBrake
-        sign "${TARGET}"/Contents/Frameworks/Growl.framework/Versions/A com.growl.growlframework
+        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Autoupdate.app/Contents/MacOS/fileop
         sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Autoupdate.app org.sparkle-project.Sparkle.Autoupdate
         sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/A org.sparkle-project.Sparkle
         for FILE in $(find "${TARGET}"/Contents/Frameworks -type f -name "*.h" -o -name "*.nib" -o -name "*.plist" -o -name "*.strings" -exec echo {} \; >/dev/null 2>&1)
@@ -115,7 +115,6 @@ for TARGET in "${@}"; do
     if [[ "${TARGET##*/}" == 'HandBrake.app' ]]; then
         echo "  Validating Frameworks"
         codesign --verify -vv "${TARGET}"/Contents/Frameworks/HandBrakeKit.framework >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
-        codesign --verify -vv "${TARGET}"/Contents/Frameworks/Growl.framework >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
         codesign --verify -vv "${TARGET}"/Contents/Frameworks/Sparkle.framework >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
 
         echo "  Validating Autoupdate.app"
