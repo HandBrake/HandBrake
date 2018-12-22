@@ -121,7 +121,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	cp -a $(PKG.debian) $(STAGE.out.src/)bionic/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/control.bionic $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/control
 	$(CP.exe) $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/rules.bionic $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/rules
-	echo "$(HB.name.lower) ($(HB.debversion)-zhb-1ppa1~bionic1) bionic; urgency=low" > $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
+	echo "$(HB.name.lower) (1:$(HB.debversion)-zhb-1ppa1~bionic1) bionic; urgency=low" > $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
 	echo "    - See commit history at https://github.com/HandBrake/HandBrake/commits/master" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
@@ -135,7 +135,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	cp -a $(PKG.debian) $(STAGE.out.src/)cosmic/$(PKG.deb.basename)
 	$(CP.exe) $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/control.cosmic $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/control
 	$(CP.exe) $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/rules.cosmic $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/rules
-	echo "$(HB.name.lower) ($(HB.debversion)-zhb-1ppa1~cosmic1) cosmic; urgency=low" > $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/changelog
+	echo "$(HB.name.lower) (1:$(HB.debversion)-zhb-1ppa1~cosmic1) cosmic; urgency=low" > $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot" >> $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/changelog
 	echo "    - See commit history at https://github.com/HandBrake/HandBrake/commits/master" >> $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)cosmic/$(PKG.deb.basename)/debian/changelog
