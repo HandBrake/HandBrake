@@ -1357,10 +1357,12 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         // Apply the preset to the current job
         [self.job applyPreset:self.currentPreset];
 
+        [self addJobObservers];
+
+        [self.autoNamer updateFileExtension];
+
         // If Auto Naming is on, update the destination
         [self.autoNamer updateFileName];
-
-        [self addJobObservers];
     }
 }
 
