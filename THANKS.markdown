@@ -5,6 +5,7 @@
 HandBrake uses many cool libraries from the GNU/Linux world. We thank them and their authors.
 
 - [ffmpeg](https://ffmpeg.org/)
+- [libaom](https://aomedia.googlesource.com/aom/)
 - [libass](https://github.com/libass/libass)
 - [libbluray](https://www.videolan.org/developers/libbluray.html)
 - [libbzip2](http://bzip.org/)
