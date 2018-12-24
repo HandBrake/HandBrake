@@ -59,32 +59,32 @@
 {
     NSString *sizeInfo = @"";
 
-    sizeInfo = [NSString stringWithFormat:
-                @"Source: %dx%d, ",
+    sizeInfo = [NSString stringWithFormat:HBKitLocalizedString
+                (@"Source: %dx%d, ", @"HBPicture -> short info"),
                 self.sourceWidth, self.sourceHeight];
 
     if (self.anamorphicMode == HB_ANAMORPHIC_AUTO)
     {
-        sizeInfo = [NSString stringWithFormat:
-                    @"%@Output: %dx%d, Anamorphic: %dx%d Auto",
+        sizeInfo = [NSString stringWithFormat:HBKitLocalizedString
+                    (@"%@Output: %dx%d, Anamorphic: %dx%d Auto", @"HBPicture -> short info"),
                     sizeInfo, self.width, self.height, self.displayWidth, self.height];
     }
     else if (self.anamorphicMode == HB_ANAMORPHIC_LOOSE) // Loose Anamorphic
     {
-        sizeInfo = [NSString stringWithFormat:
-                    @"%@Output: %dx%d, Anamorphic: %dx%d Loose",
+        sizeInfo = [NSString stringWithFormat:HBKitLocalizedString
+                    (@"%@Output: %dx%d, Anamorphic: %dx%d Loose", @"HBPicture -> short info"),
                     sizeInfo, self.width, self.height, self.displayWidth, self.height];
     }
     else if (self.anamorphicMode == HB_ANAMORPHIC_CUSTOM) // Custom Anamorphic
     {
-        sizeInfo = [NSString stringWithFormat:
-                    @"%@Output: %dx%d, Anamorphic: %dx%d Custom",
+        sizeInfo = [NSString stringWithFormat:HBKitLocalizedString
+                    (@"%@Output: %dx%d, Anamorphic: %dx%d Custom", @"HBPicture -> short info"),
                     sizeInfo, self.width, self.height, self.displayWidth, self.height];
     }
     else // No Anamorphic
     {
-        sizeInfo = [NSString stringWithFormat:
-                    @"%@Output: %dx%d",
+        sizeInfo = [NSString stringWithFormat:HBKitLocalizedString
+                    (@"%@Output: %dx%d", @"HBPicture -> short info"),
                     sizeInfo, self.width, self.height];
     }
 
