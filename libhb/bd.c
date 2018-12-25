@@ -373,6 +373,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             bdvideo->coding_type == BLURAY_STREAM_TYPE_VIDEO_MPEG2 ? "MPEG2" :
             bdvideo->coding_type == BLURAY_STREAM_TYPE_VIDEO_VC1 ? "VC-1" :
             bdvideo->coding_type == BLURAY_STREAM_TYPE_VIDEO_H264 ? "H.264" :
+            bdvideo->coding_type == BLURAY_STREAM_TYPE_VIDEO_HEVC ? "HEVC" :
             "Unknown",
             bdvideo->format == BLURAY_VIDEO_FORMAT_480I ? "480i" :
             bdvideo->format == BLURAY_VIDEO_FORMAT_576I ? "576i" :
@@ -381,6 +382,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             bdvideo->format == BLURAY_VIDEO_FORMAT_720P ? "720p" :
             bdvideo->format == BLURAY_VIDEO_FORMAT_1080P ? "1080p" :
             bdvideo->format == BLURAY_VIDEO_FORMAT_576P ? "576p" :
+            bdvideo->format == BLURAY_VIDEO_FORMAT_2160P ? "2160p" :
             "Unknown"
           );
 
@@ -400,6 +402,11 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         case BLURAY_STREAM_TYPE_VIDEO_H264:
             title->video_codec = WORK_DECAVCODECV;
             title->video_codec_param = AV_CODEC_ID_H264;
+            break;
+
+        case BLURAY_STREAM_TYPE_VIDEO_HEVC:
+            title->video_codec = WORK_DECAVCODECV;
+            title->video_codec_param = AV_CODEC_ID_HEVC;
             break;
 
         default:
