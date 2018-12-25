@@ -5580,6 +5580,7 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
                         switch (rotation) {
                             case 0:
                                 title->rotation = HB_ROTATION_0;
+                                break;
                             case 90:
                                 title->rotation = HB_ROTATION_90;
                                 break;
