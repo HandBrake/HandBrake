@@ -804,10 +804,6 @@ static hb_dict_t * generate_lapsharp_settings(const char *preset,
             {
                 strength[0]  = strength[1]      = 0.375;
             }
-            else if (!strcasecmp(preset, "stronger"))
-            {
-                strength[0]  = strength[1]      = 0.375;
-            }
             else if (!strcasecmp(preset, "verystrong"))
             {
                 strength[0]  = strength[1]      = 0.75;
