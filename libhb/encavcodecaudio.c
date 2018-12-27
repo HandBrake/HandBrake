@@ -105,6 +105,11 @@ static int encavcodecaInit(hb_work_object_t *w, hb_job_t *job)
 
         case HB_ACODEC_FFAAC:
             codec_name = "aac";
+            // Use 5.1 back for AAC because 5.1 side uses a
+            // not-so-universally supported feature to signal the
+            // non-standard layout
+            if (channel_layout == AV_CH_LAYOUT_5POINT1)
+                channel_layout  = AV_CH_LAYOUT_5POINT1_BACK;
             break;
 
         case HB_ACODEC_FFFLAC:
