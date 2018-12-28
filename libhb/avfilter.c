@@ -499,22 +499,46 @@ convert_deint_settings(const hb_dict_t * settings)
     {
         return hb_value_null();
     }
-    int automatic  = !!(mode & MODE_DECOMB_SELECTIVE);
-    int bob        = !!(mode & MODE_YADIF_BOB);
-    int no_spatial = !(mode & MODE_YADIF_SPATIAL);
-    mode = bob | (no_spatial << 1);
 
     hb_dict_t * result = hb_dict_init();
     hb_dict_t * avsettings = hb_dict_init();
 
-    hb_dict_set(avsettings, "mode", hb_value_int(mode));
-    if (automatic)
+    if (mode & MODE_YADIF_BOB)
     {
-        hb_dict_set(avsettings, "auto", hb_value_int(automatic));
+        if (mode & MODE_YADIF_SPATIAL)
+        {
+            hb_dict_set(avsettings, "mode", hb_value_string("send_field"));
+        }
+        else
+        {
+            hb_dict_set(avsettings, "mode",
+                        hb_value_string("send_field_nospatial"));
+        }
     }
-    if (parity != -1)
+    else
     {
-        hb_dict_set(avsettings, "parity", hb_value_int(parity));
+        if (mode & MODE_YADIF_SPATIAL)
+        {
+            hb_dict_set(avsettings, "mode", hb_value_string("send_frame"));
+        }
+        else
+        {
+            hb_dict_set(avsettings, "mode",
+                        hb_value_string("send_frame_nospatial"));
+        }
+    }
+
+    if (mode & MODE_DECOMB_SELECTIVE)
+    {
+        hb_dict_set(avsettings, "deint", hb_value_string("interlaced"));
+    }
+    if (parity == 0)
+    {
+        hb_dict_set(avsettings, "parity", hb_value_string("tff"));
+    }
+    else if (parity == 1)
+    {
+        hb_dict_set(avsettings, "parity", hb_value_string("bff"));
     }
     hb_dict_set(result, "yadif", avsettings);
 
