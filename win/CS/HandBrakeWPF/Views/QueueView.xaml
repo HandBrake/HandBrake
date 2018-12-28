@@ -17,7 +17,7 @@
         xmlns:queue1="clr-namespace:HandBrakeWPF.Views.Queue"
         Title="{Binding Title}"
         Width="750"
-        Height="500"
+        Height="520"
         MinWidth="400"
         MinHeight="300"
         WindowStartupLocation="CenterScreen"
@@ -57,7 +57,6 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-
 
             <ToolBar Name="mainToolBar"
                  HorizontalAlignment="Stretch"
