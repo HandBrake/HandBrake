@@ -147,6 +147,29 @@
                                   Header="{x:Static Properties:Resources.QueueView_QuitHandBrake}"/>
                             </MenuItem>
                         </Menu>
+
+                        <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Center">
+                            <MenuItem>
+                                <MenuItem.Header>
+                                    <StackPanel Height="32" Orientation="Horizontal">
+                                        <Image Source="Images\Advanced.png" Width="20" Height="20" VerticalAlignment="Center" />
+                                        <TextBlock VerticalAlignment="Center"
+                                           Text="{x:Static Properties:Resources.QueueView_Options}" Margin="5,0,0,0" />
+                                        <Path Height="5"
+                                      Margin="2,2,2,0"
+                                      Data="M 0 0 L 4 4 L 8 0 Z"
+                                      Fill="{DynamicResource GlyphBrush}" />
+                                    </StackPanel>
+                                </MenuItem.Header>
+                                <MenuItem cal:Message.Attach="[Event Click] = [Action ResetFailed]" Header="{x:Static Properties:Resources.QueueView_ResetFailed}" />
+                                <MenuItem cal:Message.Attach="[Event Click] = [Action ResetAllJobs]" Header="{x:Static Properties:Resources.QueueView_ResetAllJobs}" />
+                                <Separator />
+                                <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" />
+                                <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:Resources.QueueView_ClearQueue}" />
+                                <Separator />
+                                <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.QueueView_Export}" />
+                            </MenuItem>
+                        </Menu>
                     </StackPanel>
 
                 </DockPanel>
