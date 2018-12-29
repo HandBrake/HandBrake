@@ -240,7 +240,7 @@ preset_is_folder(hb_preset_index_t *path)
 void
 ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
 {
-    // Remove troublesome x264Option
+    // Remove legacy x264Option
     ghb_dict_remove(settings, "x264Option");
 
     // Initialize defaults
@@ -316,21 +316,6 @@ ghb_preset_to_settings(GhbValue *settings, GhbValue *preset)
         ghb_dict_set_bool(settings, "VideoFramerateCFR", FALSE);
         ghb_dict_set_bool(settings, "VideoFrameratePFR", FALSE);
         ghb_dict_set_bool(settings, "VideoFramerateVFR", TRUE);
-    }
-
-    if (ghb_dict_get_bool(settings, "x264UseAdvancedOptions"))
-    {
-        // Force preset/tune/profile/level/opts to conform to option string
-        ghb_dict_set_string(settings, "VideoPreset", "medium");
-        ghb_dict_set_string(settings, "VideoTune", "none");
-        ghb_dict_set_string(settings, "VideoProfile", "auto");
-        ghb_dict_set_string(settings, "VideoLevel", "auto");
-        ghb_dict_set(settings, "VideoOptionExtra", ghb_value_dup(
-            ghb_dict_get_value(settings, "x264Option")));
-    }
-    else
-    {
-        ghb_dict_remove(settings, "x264Option");
     }
 
     int                 encoder;
@@ -1724,15 +1709,6 @@ ghb_settings_to_preset(GhbValue *settings)
 
     GhbValue *copy_mask = ghb_create_copy_mask(preset);
     ghb_dict_set(preset, "AudioCopyMask", copy_mask);
-
-    if (ghb_dict_get_bool(preset, "x264UseAdvancedOptions"))
-    {
-        ghb_dict_remove(preset, "VideoPreset");
-        ghb_dict_remove(preset, "VideoTune");
-        ghb_dict_remove(preset, "VideoProfile");
-        ghb_dict_remove(preset, "VideoLevel");
-        ghb_dict_remove(preset, "VideoOptionExtra");
-    }
 
     GString *str = g_string_new("");
     const char *sep = "";

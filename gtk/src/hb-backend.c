@@ -35,7 +35,6 @@
 #include "subtitlehandler.h"
 #include "audiohandler.h"
 #include "videohandler.h"
-#include "x264handler.h"
 #include "preview.h"
 #include "presets.h"
 #include "values.h"
@@ -604,54 +603,6 @@ combo_name_map_t combo_name_map[] =
     {
         "PictureRotate",
         &rotate_opts,
-        small_opts_set,
-        generic_opt_get
-    },
-    {
-        "x264_direct",
-        &direct_opts,
-        small_opts_set,
-        generic_opt_get
-    },
-    {
-        "x264_b_adapt",
-        &badapt_opts,
-        small_opts_set,
-        generic_opt_get
-    },
-    {
-        "x264_bpyramid",
-        &bpyramid_opts,
-        small_opts_set,
-        generic_opt_get
-    },
-    {
-        "x264_weighted_pframes",
-        &weightp_opts,
-        small_opts_set,
-        generic_opt_get
-    },
-    {
-        "x264_me",
-        &me_opts,
-        small_opts_set,
-        generic_opt_get
-    },
-    {
-        "x264_subme",
-        &subme_opts,
-        small_opts_set,
-        generic_opt_get
-    },
-    {
-        "x264_analyse",
-        &analyse_opts,
-        small_opts_set,
-        generic_opt_get
-    },
-    {
-        "x264_trellis",
-        &trellis_opts,
         small_opts_set,
         generic_opt_get
     },
@@ -1247,8 +1198,6 @@ ghb_grey_combo_options(signal_user_data_t *ud)
 
     mux_id = ghb_dict_get_string(ud->settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
-
-    grey_builder_combo_box_item(ud->builder, "x264_analyse", 4, TRUE);
 
     const hb_encoder_t *enc;
     for (enc = hb_audio_encoder_get_next(NULL); enc != NULL;
@@ -3152,24 +3101,6 @@ init_ui_combo_boxes(GtkBuilder *builder)
     for (ii = 0; combo_name_map[ii].name != NULL; ii++)
     {
         init_combo_box(builder, combo_name_map[ii].name);
-    }
-}
-
-// Construct the advanced options string
-// The result is allocated, so someone must free it at some point.
-const gchar*
-ghb_build_advanced_opts_string(GhbValue *settings)
-{
-    gint vcodec;
-    vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
-    switch (vcodec)
-    {
-        case HB_VCODEC_X264_8BIT:
-        case HB_VCODEC_X264_10BIT:
-            return ghb_dict_get_string(settings, "x264Option");
-
-        default:
-            return NULL;
     }
 }
 

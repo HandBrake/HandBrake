@@ -74,8 +74,6 @@ ghb_SOURCES = \
 	audiohandler.h \
 	subtitlehandler.c \
 	subtitlehandler.h \
-	x264handler.c \
-	x264handler.h \
 	main.c \
 	settings.c \
 	settings.h \

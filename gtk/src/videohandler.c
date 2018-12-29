@@ -31,7 +31,6 @@
 #include "presets.h"
 #include "preview.h"
 #include "hb-backend.h"
-#include "x264handler.h"
 
 int ghb_get_video_encoder(GhbValue *settings)
 {
@@ -106,12 +105,6 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_set_video_preset(ud->settings, encoder, "medium");
     GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
     ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
-
-    // Advanced options are only for x264
-    if (!(encoder & HB_VCODEC_X264_MASK))
-    {
-        ghb_ui_update(ud, "x264UseAdvancedOptions", ghb_boolean_value(FALSE));
-    }
 }
 
 char *video_option_tooltip = NULL;
@@ -126,8 +119,7 @@ update_adv_settings_tooltip(signal_user_data_t *ud)
     }
 
     int encoder = ghb_get_video_encoder(ud->settings);
-    if (!ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions") &&
-        (encoder & HB_VCODEC_X264_MASK))
+    if (encoder & HB_VCODEC_X264_MASK)
     {
         GString *str = g_string_new("");
         const char *preset;
@@ -195,10 +187,6 @@ update_adv_settings_tooltip(signal_user_data_t *ud)
         }
         new_opts = hb_x264_param_unparse(hb_video_encoder_get_depth(encoder),
                         preset, tunes, opts, profile, level, w, h);
-        if (new_opts)
-            ghb_update_x264Option(ud, new_opts);
-        else
-            ghb_update_x264Option(ud, "");
 
         GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
 
@@ -215,21 +203,6 @@ update_adv_settings_tooltip(signal_user_data_t *ud)
         g_free(new_opts);
 
         g_free(tunes);
-    }
-    else if (ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions"))
-    {
-        const char *opts = ghb_dict_get_string(ud->settings, "x264Option");
-
-        GtkWidget *eo = GTK_WIDGET(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
-        char * tt;
-        if (opts)
-            tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"%s\""),
-                                 video_option_tooltip, opts);
-        else
-            tt = g_strdup_printf(_("%s\n\nExpanded Options:\n\"\""),
-                                 video_option_tooltip);
-        gtk_widget_set_tooltip_text(eo, tt);
-        g_free(tt);
     }
 }
 
@@ -277,33 +250,6 @@ G_MODULE_EXPORT void
 video_setting_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_video_setting_changed(widget, ud);
-}
-
-G_MODULE_EXPORT void
-x264_use_advanced_options_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-    ghb_widget_to_setting(ud->settings, widget);
-
-    if (ghb_dict_get_bool(ud->prefs, "HideAdvancedVideoSettings") &&
-        ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions"))
-    {
-        ghb_ui_update(ud, "x264UseAdvancedOptions", ghb_boolean_value(FALSE));
-        return;
-    }
-
-    if (ghb_dict_get_bool(ud->settings, "x264UseAdvancedOptions"))
-    {
-        ghb_ui_update(ud, "VideoPresetSlider", ghb_int_value(5));
-        ghb_ui_update(ud, "VideoTune", ghb_string_value("none"));
-        ghb_ui_update(ud, "VideoProfile", ghb_string_value("auto"));
-        ghb_ui_update(ud, "VideoLevel", ghb_string_value("auto"));
-
-        const char *options = ghb_dict_get_string(ud->settings, "x264Option");
-        ghb_ui_update(ud, "VideoOptionExtra", ghb_string_value(options));
-    }
-
-    ghb_check_dependency(ud, widget, NULL);
-    ghb_clear_presets_selection(ud);
 }
 
 G_MODULE_EXPORT void

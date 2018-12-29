@@ -58,7 +58,6 @@
 #include "queuehandler.h"
 #include "audiohandler.h"
 #include "subtitlehandler.h"
-#include "x264handler.h"
 #include "settings.h"
 #include "resources.h"
 #include "presets.h"
@@ -714,7 +713,6 @@ watch_volumes(signal_user_data_t *ud)
 #endif
 }
 
-G_MODULE_EXPORT void x264_entry_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void video_option_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void plot_changed_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void position_overlay_cb(GtkWidget *widget, signal_user_data_t *ud);
@@ -1039,13 +1037,8 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
         HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
     ghb_init_dep_map();
 
-    // Need to connect x264_options textview buffer to the changed signal
-    // since it can't be done automatically
-    GtkTextView *textview;
-    GtkTextBuffer *buffer;
-    textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "x264Option"));
-    buffer = gtk_text_view_get_buffer(textview);
-    g_signal_connect(buffer, "changed", (GCallback)x264_entry_changed_cb, ud);
+    GtkTextView   * textview;
+    GtkTextBuffer * buffer;
 
     textview = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "VideoOptionExtra"));
     buffer = gtk_text_view_get_buffer(textview);
@@ -1075,9 +1068,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
 
     ghb_init_audio_defaults_ui(ud);
     ghb_init_subtitle_defaults_ui(ud);
-
-    // Parsing x264 options "" initializes x264 widgets to proper defaults
-    ghb_x264_init(ud);
 
     // Load prefs before presets.  Some preset defaults may depend
     // on preference settings.
@@ -1349,7 +1339,6 @@ main(int argc, char *argv[])
     ghb_value_free(&ud->settings_array);
     ghb_value_free(&ud->prefs);
     ghb_value_free(&ud->globals);
-    ghb_value_free(&ud->x264_priv);
 
     if (ud->activity_log != NULL)
         g_io_channel_unref(ud->activity_log);

@@ -88,7 +88,6 @@
 #include "hb-backend.h"
 #include "ghb-dvd.h"
 #include "ghbcellrenderertext.h"
-#include "x264handler.h"
 
 static void update_queue_labels(signal_user_data_t *ud);
 static void load_all_titles(signal_user_data_t *ud, int titleindex);
@@ -4977,16 +4976,6 @@ hbfd_action_cb(GSimpleAction *action, GVariant *value, signal_user_data_t *ud)
     ghb_dict_set(ud->prefs, "hbfd", ghb_boolean_value(state));
     ghb_hbfd(ud, state);
     ghb_pref_save(ud->prefs, "hbfd");
-}
-
-G_MODULE_EXPORT void
-advanced_video_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
-{
-    g_debug("advanced_video_changed_cb");
-    ghb_widget_to_setting(ud->prefs, widget);
-    const gchar *name = ghb_get_setting_key(widget);
-    ghb_pref_set(ud->prefs, name);
-    ghb_show_hide_advanced_video(ud);
 }
 
 G_MODULE_EXPORT void

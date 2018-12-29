@@ -75,7 +75,6 @@
         "DiskFreeLimit": 10000,
         "RemoveFinishedJobs": false,
         "SyncTitleSettings": true,
-        "HideAdvancedVideoSettings": true,
         "AutoScan": false,
         "AddCC": false,
         "EncodeLogLocation": false,

@@ -63,7 +63,6 @@ typedef struct
     gboolean              scale_busy;
     gint                  cancel_encode;
     GtkBuilder          * builder;
-    GhbValue            * x264_priv;
     GhbValue            * globals;
     GhbValue            * prefs;
     GhbValue            * settings;

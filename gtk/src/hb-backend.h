@@ -145,7 +145,6 @@ void ghb_add_all_subtitles(signal_user_data_t *ud, gint titleindex);
 gint ghb_find_subtitle_track(const hb_title_t * title, const gchar * lang, int start);
 gint ghb_pick_subtitle_track(signal_user_data_t *ud);
 gint ghb_longest_title(void);
-const gchar* ghb_build_advanced_opts_string(GhbValue *settings);
 GdkPixbuf* ghb_get_preview_image(
     const hb_title_t *title, gint index, signal_user_data_t *ud,
     gint *out_width, gint *out_height);

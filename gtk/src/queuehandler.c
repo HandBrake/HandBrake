@@ -569,8 +569,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
 
     // Next line in the display (Video Encoder Options)
     // Video Options: Preset - Tune - Profile - Level
-    if ((video_encoder->codec & HB_VCODEC_X264_MASK) &&
-        !ghb_dict_get_bool(uiDict, "x264UseAdvancedOptions"))
+    if (video_encoder->codec & HB_VCODEC_X264_MASK)
     {
         const gchar *extra_opt = NULL;
 
@@ -626,20 +625,10 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
         }
 
         // Next line in the display (Video Encoder Options)
-        // Video Advanced Options: detailed settings
+        // Video Extra Options: detailed settings
         if (extra_opt != NULL && extra_opt[0] != 0)
         {
-            XPRINT(_("<b>Advanced Options:</b> <small>%s</small>\n"), extra_opt);
-        }
-    }
-    else if (video_encoder->codec & HB_VCODEC_X264_MASK)
-    {
-        // Next line in the display (Video Encoder Options)
-        // Video Advanced Options: detailed settings
-        const gchar *opts = ghb_build_advanced_opts_string(uiDict);
-        if (opts != NULL && opts[0] != 0)
-        {
-            XPRINT(_("<b>Advanced Options:</b> <small>%s</small>\n"), opts);
+            XPRINT(_("<b>Extra Options:</b> <small>%s</small>\n"), extra_opt);
         }
     }
 
