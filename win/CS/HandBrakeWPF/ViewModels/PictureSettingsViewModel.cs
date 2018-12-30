@@ -729,6 +729,17 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Height);
             this.NotifyOfPropertyChange(() => this.SelectedAnamorphicMode);
             this.NotifyOfPropertyChange(() => this.SelectedModulus);
+            this.NotifyOfPropertyChange(() => this.CropTop);
+            this.NotifyOfPropertyChange(() => this.CropBottom);
+            this.NotifyOfPropertyChange(() => this.CropLeft);
+            this.NotifyOfPropertyChange(() => this.CropRight);
+            this.NotifyOfPropertyChange(() => this.IsCustomCrop);
+            this.NotifyOfPropertyChange(() => this.MaintainAspectRatio);
+            this.NotifyOfPropertyChange(() => this.DisplayWidth);
+            this.NotifyOfPropertyChange(() => this.ParWidth);
+            this.NotifyOfPropertyChange(() => this.ParHeight);
+
+            this.UpdateVisibileControls();
         }
 
         /// <summary>
