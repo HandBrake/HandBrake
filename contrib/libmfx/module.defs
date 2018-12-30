@@ -1,8 +1,8 @@
 $(eval $(call import.MODULE.defs,LIBMFX,libmfx))
 $(eval $(call import.CONTRIB.defs,LIBMFX))
 
-LIBMFX.FETCH.url    = https://download.handbrake.fr/contrib/mfx_dispatch-5d6f1b6.tar.gz
-LIBMFX.FETCH.sha256 = 45d8ae5e525a51bfcb924c91b7153b5f0899c94d87d933913e4297b2ae7a3f8e
+LIBMFX.FETCH.url    = https://download.handbrake.fr/contrib/mfx_dispatch-a7d95e5.tar.gz
+LIBMFX.FETCH.sha256 = 9dc8bcb67f5df3dfac29a2777c1bdc9ac2bb6b0e68169af4059089f517518a6b
 
 LIBMFX.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
 
