@@ -393,24 +393,6 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Task);
         }
 
-        /// <summary>
-        /// Add all remaining for selected languages.
-        /// </summary>
-        public void AddAllRemainingForSelectedLanguages()
-        {
-            // Add them if they are not already added.
-            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
-            {
-                // Step 2: Check if the track list already contrains this track
-                bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
-                if (!found)
-                {
-                    // If it doesn't, add it.
-                    this.Add(sourceTrack, true);
-                }
-            }
-        }
-
         #endregion
 
         #region Methods
@@ -480,24 +462,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Add all source tracks that don't currently exist on the list.
-        /// </summary>
-        private void AddAllRemainingTracks()
-        {
-            // For all the source audio tracks
-            foreach (Audio sourceTrack in this.SourceTracks)
-            {
-                // Step 2: Check if the track list already contrains this track
-                bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
-                if (!found)
-                {
-                    // If it doesn't, add it.
-                    this.Add(sourceTrack, true);
-                }
-            }
-        }
-
-        /// <summary>
         /// Attempt to automatically select the correct audio tracks based on the users settings.
         /// </summary>
         private void SetupTracks()
@@ -549,6 +513,13 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         private void AddFirstForSelectedLanguages()
         {
+            bool anyLanguageSelected = this.AudioBehaviours.SelectedLangauges.Contains(Constants.Any);
+
+            if (anyLanguageSelected && this.Task.AudioTracks.Count >= 1)
+            {
+                return;
+            }
+
             foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
             {
                 // Step 2: Check if the track list already contrains this track
@@ -567,6 +538,48 @@ namespace HandBrakeWPF.ViewModels
                         continue;
                     }
 
+                    // If it doesn't, add it.
+                    this.Add(sourceTrack, true);
+
+                    // If we are using "(Any)" then break here. We only add the first track in this instance.
+                    if (anyLanguageSelected)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add all source tracks that don't currently exist on the list.
+        /// </summary>
+        private void AddAllRemainingTracks()
+        {
+            // For all the source audio tracks
+            foreach (Audio sourceTrack in this.SourceTracks)
+            {
+                // Step 2: Check if the track list already contrains this track
+                bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
+                if (!found)
+                {
+                    // If it doesn't, add it.
+                    this.Add(sourceTrack, true);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add all remaining for selected languages.
+        /// </summary>
+        public void AddAllRemainingForSelectedLanguages()
+        {
+            // Add them if they are not already added.
+            foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
+            {
+                // Step 2: Check if the track list already contrains this track
+                bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
+                if (!found)
+                {
                     // If it doesn't, add it.
                     this.Add(sourceTrack, true);
                 }
@@ -605,21 +618,15 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private IEnumerable<Audio> GetSelectedLanguagesTracks()
         {
-            List<Audio> trackList = new List<Audio>();
+            // Translate to Iso Codes
+            List<string> iso6392Codes = this.AudioBehaviours.SelectedLangauges.Contains(Constants.Any)
+                ? LanguageUtilities.GetIsoCodes()
+                : LanguageUtilities.GetLanguageCodes(this.AudioBehaviours.SelectedLangauges.ToArray());
 
-            List<string> isoCodes = LanguageUtilities.GetLanguageCodes(this.AudioBehaviours.SelectedLangauges.ToArray());
+            List<Audio> availableTracks =
+                this.SourceTracks.Where(audio => iso6392Codes.Contains(audio.LanguageCode.Trim())).ToList();
 
-            if (isoCodes.Contains(Constants.Undefined))
-            {
-                isoCodes = LanguageUtilities.GetIsoCodes();
-            }
-
-            foreach (string code in isoCodes)
-            {
-                trackList.AddRange(this.SourceTracks.Where(source => source.LanguageCode.Trim() == code));
-            }
-
-            return trackList;
+            return availableTracks;
         }
 
         #endregion

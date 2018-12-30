@@ -183,14 +183,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void AddAllRemainingForSelectedLanguages()
         {
-            // Translate to Iso Codes
-            List<string> iso6392Codes = this.SubtitleBehaviours.SelectedLangauges.Contains(Constants.Any)
-                                            ? LanguageUtilities.GetIsoCodes()
-                                            : LanguageUtilities.GetLanguageCodes(
-                                                this.SubtitleBehaviours.SelectedLangauges.ToArray());
-                                 
-            List<Subtitle> availableTracks =
-                this.SourceTracks.Where(subtitle => iso6392Codes.Contains(subtitle.LanguageCodeClean)).ToList();
+            List<Subtitle> availableTracks = this.GetSelectedLanguagesTracks();
 
             foreach (Subtitle subtitle in this.SourceTitlesSubset(availableTracks))
             {
@@ -203,9 +196,10 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void AddFirstForSelectedLanguages()
         {
+            bool anyLanguageSelected = this.SubtitleBehaviours.SelectedLangauges.Contains(Constants.Any);
             foreach (Subtitle sourceTrack in this.GetSelectedLanguagesTracks())
             {
-                // Step 2: Check if the track list already contrains this track
+                // Step 2: Check if the track list already contains this track
                 bool found = this.Task.SubtitleTracks.Any(track => Equals(track.SourceTrack, sourceTrack));
                 if (!found)
                 {
@@ -228,6 +222,12 @@ namespace HandBrakeWPF.ViewModels
 
                     // If it doesn't, add it.
                     this.Add(sourceTrack);
+
+                    // If we are using "(Any)" then break here. We only add the first track in this instance.
+                    if (anyLanguageSelected)
+                    {
+                        break;
+                    }
                 }
             }
         }
@@ -632,21 +632,18 @@ namespace HandBrakeWPF.ViewModels
         /// <returns>
         /// A list of source subtitle tracks.
         /// </returns>
-        private IEnumerable<Subtitle> GetSelectedLanguagesTracks()
+        private List<Subtitle> GetSelectedLanguagesTracks()
         {
-            List<Subtitle> trackList = new List<Subtitle>();
+            // Translate to Iso Codes
+            List<string> iso6392Codes = this.SubtitleBehaviours.SelectedLangauges.Contains(Constants.Any)
+                ? LanguageUtilities.GetIsoCodes()
+                : LanguageUtilities.GetLanguageCodes(
+                    this.SubtitleBehaviours.SelectedLangauges.ToArray());
 
-            List<string> isoCodes = this.SubtitleBehaviours.SelectedLangauges.Contains(Constants.Any)
-                                            ? LanguageUtilities.GetIsoCodes()
-                                            : LanguageUtilities.GetLanguageCodes(
-                                                this.SubtitleBehaviours.SelectedLangauges.ToArray());
+            List<Subtitle> availableTracks =
+                this.SourceTracks.Where(subtitle => iso6392Codes.Contains(subtitle.LanguageCodeClean)).ToList();
 
-            foreach (string code in isoCodes)
-            {
-                trackList.AddRange(this.SourceTracks.Where(source => source.LanguageCode == code));
-            }
-
-            return trackList;
+           return availableTracks;
         }
 
         /// <summary>
