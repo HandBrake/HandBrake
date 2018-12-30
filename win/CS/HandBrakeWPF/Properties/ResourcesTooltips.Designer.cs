@@ -204,9 +204,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This filter removes &apos;combing&apos; artifacts that are the result of telecining.
-        ///
-        ///Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps..
+        ///   Looks up a localized string similar to Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates..
         /// </summary>
         public static string FilterView_Detelecine {
             get {
