@@ -29,6 +29,9 @@ SetCompressor lzma
 !define MUI_ABORTWARNING
 !define MUI_ICON "HandBrakepineapple.ico"
 !define MUI_UNICON "HandBrakepineapple.ico"
+; GPL is not an EULA, no need to agree to it.
+!define MUI_LICENSEPAGE_BUTTON $(^NextBtn)
+!define MUI_LICENSEPAGE_TEXT_BOTTOM "You are now aware of your rights. Click Next to continue."
 
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
