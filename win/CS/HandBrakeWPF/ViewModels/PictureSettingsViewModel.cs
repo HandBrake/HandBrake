@@ -653,8 +653,12 @@ namespace HandBrakeWPF.ViewModels
                     }
                     else
                     {
-                        this.MaxWidth = preset.Task.MaxWidth ?? this.sourceResolution.Width;
-                        this.MaxHeight = preset.Task.MaxHeight ?? this.sourceResolution.Height;                        
+
+                        int presetWidth = preset.Task.MaxWidth ?? this.sourceResolution.Width;
+                        int presetHeight = preset.Task.MaxHeight ?? this.sourceResolution.Height;
+
+                        this.MaxWidth = presetWidth <= this.sourceResolution.Width ? presetWidth : this.sourceResolution.Width;
+                        this.MaxHeight = presetHeight <= this.sourceResolution.Height ? presetHeight : this.sourceResolution.Height;                        
                     }             
 
                     // Set the width, then check the height doesn't breach the max height and correct if necessary.
