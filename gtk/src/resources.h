@@ -1,6 +1,6 @@
 /*
  * resources.h
- * Copyright (C) John Stebbins 2008-2018 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2019 <stebbins@stebbins>
  *
  * resources.h is free software.
  *

@@ -1,6 +1,6 @@
 /*
  * ghbcompat.h
- * Copyright (C) John Stebbins 2008-2018 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2019 <stebbins@stebbins>
  *
  * ghbcompat.h is free software.
  *
