@@ -1253,6 +1253,11 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private string GetActualx264Query()
         {
+            if (this.SelectedVideoEncoder != VideoEncoder.X264 && this.SelectedVideoEncoder != VideoEncoder.X264_10)
+            {
+                return string.Empty;
+            }
+
             string preset = this.VideoPreset != null ? this.VideoPreset.ShortName : string.Empty;
             string profile = this.VideoProfile != null ? this.VideoProfile.ShortName : string.Empty;
 
