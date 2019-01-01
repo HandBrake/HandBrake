@@ -266,7 +266,7 @@ Die obigen Steuerelemente sind nur ein Teil nützlicher x264-Parameter.
 In diesem Feld können zusätzliche oder aktuelle Parameter nach Belieben hinzugefügt oder geändert werden. </value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2018 Das HandBrake-Team
+    <value>Copyright (C) 2003-2019 Das HandBrake-Team
 
 Dieses Programm ist freie Software; es kann unter den 
 Bedingungen der GNU General Public License, wie sie von der 
