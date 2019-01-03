@@ -12,12 +12,12 @@ namespace HandBrakeWPF.Services
     using System;
     using System.Collections.Generic;
     using System.Collections.Specialized;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Xml.Serialization;
 
+    using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Collections;
@@ -198,11 +198,6 @@ namespace HandBrakeWPF.Services
                         this.userSettings = deserialisedSettings;
                     }
                 }
-                else
-                {
-                    Dictionary<string, object> deserialisedSettings = this.GetLegacySettings(); // Check for Legacy files
-                    this.userSettings = deserialisedSettings ?? new SerializableDictionary<string, object>();
-                }
 
                 // Add any missing / new settings
                 SerializableDictionary<string, object> defaults = this.GetDefaults();
@@ -214,6 +209,7 @@ namespace HandBrakeWPF.Services
 
                 // Legacy Settings forced Reset.
                 this.userSettings[UserSettingConstants.ShowAdvancedTab] = false;
+                this.userSettings[UserSettingConstants.ScalingMode] = VideoScaler.Lanczos;
             }
             catch (Exception exc)
             {
@@ -261,53 +257,6 @@ namespace HandBrakeWPF.Services
             }
 
             return new SerializableDictionary<string, object>();
-        }
-
-        private SerializableDictionary<string, object> GetLegacySettings()
-        {
-            // TODO can be removed after 1.2 releases. Useful for 1 version to upgrade users settings to the new format.
-            SerializableDictionary<string, object> oldAppSettings = null;
-
-            try
-            {
-                string legacyReleaseFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(false), "settings.xml");
-                string legacyNightlyFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(true), "settings.xml");
-
-                if (VersionHelper.IsNightly())
-                {
-                    if (File.Exists(legacyNightlyFile))
-                    {
-                        using (StreamReader reader = new StreamReader(legacyNightlyFile))
-                        {
-                            XmlSerializer serializer =
-                                new XmlSerializer(typeof(SerializableDictionary<string, object>));
-                            oldAppSettings = (SerializableDictionary<string, object>)serializer.Deserialize(reader);
-                        }
-
-                        File.Delete(legacyNightlyFile);
-                    }
-                }
-                else
-                {
-                    if (File.Exists(legacyReleaseFile))
-                    {
-                        using (StreamReader reader = new StreamReader(legacyReleaseFile))
-                        {
-                            XmlSerializer serializer =
-                                new XmlSerializer(typeof(SerializableDictionary<string, object>));
-                            oldAppSettings = (SerializableDictionary<string, object>)serializer.Deserialize(reader);
-                        }
-
-                        File.Delete(legacyReleaseFile);
-                    }
-                }
-            }
-            catch (Exception exc)
-            {
-                Debug.WriteLine(exc);
-            }
-
-            return oldAppSettings;
         }
     }
 }
