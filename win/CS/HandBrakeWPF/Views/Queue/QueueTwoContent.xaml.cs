@@ -25,7 +25,7 @@ namespace HandBrakeWPF.Views.Queue
         private QueueTask mouseActiveQueueTask;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Queue2View"/> class.
+        /// Initializes a new instance of the <see cref="QueueTwoContent"/> class.
         /// </summary>
         public QueueTwoContent()
         {
@@ -92,6 +92,17 @@ namespace HandBrakeWPF.Views.Queue
         private void OpenDestDir_OnClick(object sender, RoutedEventArgs e)
         {
             ((QueueViewModel)this.DataContext).OpenDestinationDirectory(this.mouseActiveQueueTask);
+        }
+
+        private void QueueOptionsDropButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            var button = sender as FrameworkElement;
+            if (button != null && button.ContextMenu != null)
+            {
+                button.ContextMenu.PlacementTarget = button;
+                button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                button.ContextMenu.IsOpen = true;
+            }
         }
     }
 }

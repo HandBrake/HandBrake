@@ -176,7 +176,7 @@
 
             <StackPanel Grid.Row="1" Margin="10,20,10,0">
                 <TextBlock Text="{Binding JobsPending}" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" />
-                <TextBlock Text="{Binding JobStatus}" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis"/>
+                <TextBlock Text="{Binding JobStatus}" Visibility="{Binding IsJobStatusVisible, Converter={StaticResource boolToVisConverter}}"  TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis"/>
             </StackPanel>
 
             <ListBox Grid.Row="2" Tag="{Binding}" x:Name="queueJobs"

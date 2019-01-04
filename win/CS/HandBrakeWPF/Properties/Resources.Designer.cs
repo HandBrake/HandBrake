@@ -4122,6 +4122,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Play File.
+        /// </summary>
+        public static string QueueView_PlayMediaFile {
+            get {
+                return ResourceManager.GetString("QueueView_PlayMediaFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Quit HandBrake.
         /// </summary>
         public static string QueueView_QuitHandBrake {

@@ -15,6 +15,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Windows;
 
     using Caliburn.Micro;
@@ -74,7 +75,7 @@ namespace HandBrakeWPF.ViewModels
             this.errorService = errorService;
             this.Title = Resources.QueueViewModel_Queue;
             this.JobsPending = Resources.QueueViewModel_NoEncodesPending;
-            this.JobStatus = Resources.QueueViewModel_NoJobsPending;
+            this.JobStatus = string.Empty;
             this.SelectedItems = new BindingList<QueueTask>();
             this.DisplayName = "Queue";
             this.IsQueueRunning = false;
@@ -118,8 +119,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.jobStatus = value;
                 this.NotifyOfPropertyChange(() => this.JobStatus);
+                this.NotifyOfPropertyChange(() => this.IsJobStatusVisible);
             }
         }
+
+        public bool IsJobStatusVisible => !string.IsNullOrEmpty(this.JobStatus);
 
         /// <summary>
         /// Gets or sets JobsPending.
@@ -188,6 +192,8 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.CanRetryJob);
                 this.NotifyOfPropertyChange(() => this.CanEditJob);
                 this.NotifyOfPropertyChange(() => this.CanRemoveJob);
+                this.NotifyOfPropertyChange(() => this.CanPerformActionOnSource);
+                this.NotifyOfPropertyChange(() => this.CanPlayFile);
                 this.NotifyOfPropertyChange(() => this.StatsVisible);
             }
         }
@@ -199,6 +205,12 @@ namespace HandBrakeWPF.ViewModels
         public bool CanEditJob => this.SelectedTask != null;
 
         public bool CanRemoveJob => this.SelectedTask != null;
+
+        public bool CanPerformActionOnSource => this.SelectedTask != null;
+
+        public bool CanPlayFile =>
+            this.SelectedTask != null && this.SelectedTask.Task.Destination != null && 
+            this.SelectedTask.Status == QueueItemStatus.Completed && File.Exists(this.SelectedTask.Task.Destination);
 
         public double ProgressValue
         {
@@ -348,7 +360,6 @@ namespace HandBrakeWPF.ViewModels
         {
             this.queueProcessor.Pause();
 
-            this.JobStatus = Resources.QueueViewModel_QueuePending;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = false;
 
@@ -447,7 +458,6 @@ namespace HandBrakeWPF.ViewModels
             task.Status = QueueItemStatus.Waiting;
             this.queueProcessor.BackupQueue(null);
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-            this.JobStatus = Resources.QueueViewModel_QueueReady;
             this.NotifyOfPropertyChange(() => this.CanRetryJob);
         }
 
@@ -471,7 +481,6 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            this.JobStatus = Resources.QueueViewModel_QueueStarted;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = true;
 
@@ -536,6 +545,17 @@ namespace HandBrakeWPF.ViewModels
             mvm.EditQueueJob(task);
         }
 
+        public void OpenSourceDir()
+        {
+            this.OpenSourceDirectory(this.SelectedTask);
+
+        }
+
+        public void OpenDestDir()
+        {
+            this.OpenDestinationDirectory(this.SelectedTask);
+        }
+
         public void OpenSourceDirectory(QueueTask task)
         {
             if (task != null)
@@ -585,6 +605,23 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void PlayFile()
+        {
+            if (this.SelectedTask != null && this.SelectedTask.Task != null && File.Exists(this.SelectedTask.Task.Destination))
+            {
+                Process.Start(this.SelectedTask.Task.Destination);
+            }
+        }
+
+        public void MoveUp()
+        {
+            this.errorService.ShowMessageBox("Not Implemented yet. You can drag / drop re-organise the queue for now.", "Coming Soon!", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        public void MoveDown()
+        {
+            this.errorService.ShowMessageBox("Not Implemented yet. You can drag / drop re-organise the queue for now.", "Coming Soon!", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
 
         #endregion
 
@@ -615,7 +652,6 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.QueuePaused += this.QueueProcessor_QueuePaused;
 
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
-            this.JobStatus = Resources.QueueViewModel_QueueReady;
 
             base.OnActivate();
         }
@@ -794,13 +830,14 @@ namespace HandBrakeWPF.ViewModels
 
             if (!queueProcessor.IsProcessing)
             {
-                this.JobStatus = Resources.QueueViewModel_QueueNotRunning;
                 this.IsQueueRunning = false;
             }
 
             this.NotifyOfPropertyChange(() => this.CanRetryJob);
             this.NotifyOfPropertyChange(() => this.CanEditJob);
             this.NotifyOfPropertyChange(() => this.CanRemoveJob);
+            this.NotifyOfPropertyChange(() => this.CanPerformActionOnSource);
+            this.NotifyOfPropertyChange(() => this.CanPlayFile);
             this.NotifyOfPropertyChange(() => this.StatsVisible);
             this.HandleLogData();
         }
@@ -816,12 +853,13 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void queueProcessor_QueueCompleted(object sender, EventArgs e)
         {
-            this.JobStatus = Resources.QueueViewModel_QueueCompleted;
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.IsQueueRunning = false;
             this.NotifyOfPropertyChange(() => this.SelectedTask);
             this.NotifyOfPropertyChange(() => this.StatsVisible);
             this.NotifyOfPropertyChange(() => this.CanRetryJob);
+
+            this.JobStatus = string.Empty;
         }
 
         /// <summary>
@@ -837,7 +875,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (!this.queueProcessor.IsProcessing)
             {
-                this.JobStatus = Resources.QueueViewModel_LastJobFinished;
+                this.JobStatus = string.Empty;
             }
         }
 

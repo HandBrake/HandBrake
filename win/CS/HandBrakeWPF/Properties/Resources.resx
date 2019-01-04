@@ -2011,4 +2011,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
     <value>'Add Selection' to Queue</value>
   </data>
+  <data name="QueueView_PlayMediaFile" xml:space="preserve">
+    <value>Play File</value>
+  </data>
 </root>
