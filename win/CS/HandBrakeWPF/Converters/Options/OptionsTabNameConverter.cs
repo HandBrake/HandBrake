@@ -13,8 +13,6 @@ namespace HandBrakeWPF.Converters.Options
     using System.Globalization;
     using System.Windows.Data;
 
-    using HandBrake.Interop.Utilities;
-
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Utilities;
 
@@ -43,7 +41,12 @@ namespace HandBrakeWPF.Converters.Options
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return EnumHelper<OptionsTab>.GetDisplay((OptionsTab)value);
+            if (value != null)
+            {
+                return EnumHelper<OptionsTab>.GetDisplay((OptionsTab)value);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -66,7 +69,12 @@ namespace HandBrakeWPF.Converters.Options
         /// </returns>
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return EnumHelper<OptionsTab>.GetValue(value.ToString());
+            if (value != null)
+            {
+                return EnumHelper<OptionsTab>.GetValue(value.ToString());
+            }
+
+            return null;
         }
     }
 }
