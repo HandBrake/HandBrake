@@ -1104,15 +1104,7 @@ update_preview_labels(signal_user_data_t *ud, gboolean active)
     GtkToolButton *button;
 
     button   = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_preview"));
-
-    if (!active)
-    {
-        gtk_tool_button_set_label(button, "Preview");
-    }
-    else
-    {
-        gtk_tool_button_set_label(button, "Preview");
-    }
+    gtk_tool_button_set_label(button, "Preview");
 }
 
 G_MODULE_EXPORT void
