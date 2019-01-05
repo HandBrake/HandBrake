@@ -4510,15 +4510,7 @@ update_activity_labels(signal_user_data_t *ud, gboolean active)
     GtkToolButton *button;
 
     button   = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_activity"));
-
-    if (!active)
-    {
-        gtk_tool_button_set_label(button, "Activity");
-    }
-    else
-    {
-        gtk_tool_button_set_label(button, "Activity");
-    }
+    gtk_tool_button_set_label(button, "Activity");
 }
 
 G_MODULE_EXPORT void
@@ -4654,14 +4646,7 @@ update_queue_labels(signal_user_data_t *ud)
     active  = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(button));
     pending = queue_pending_count(ud->queue);
 
-    if (!active)
-    {
-        show_hide = _("Queue");
-    }
-    else
-    {
-        show_hide = _("Queue");
-    }
+    show_hide = _("Queue");
     if (pending > 0)
     {
         str = g_strdup_printf("%s (%d)", show_hide, pending);
