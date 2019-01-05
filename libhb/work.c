@@ -600,7 +600,7 @@ void hb_display_job_info(hb_job_t *job)
                         subtitle->lang, subtitle->track, subtitle->id,
                         subtitle->format == PICTURESUB ? "Picture" : "Text");
             }
-            else if( subtitle->source == SRTSUB )
+            else if (subtitle->source == IMPORTSRT)
             {
                 /* For SRT, print offset and charset too */
                 hb_log(" * subtitle track %d, %s (track %d, id 0x%x, Text) -> "
@@ -1619,10 +1619,10 @@ static void do_job(hb_job_t *job)
         // Since that number is unbounded, the FIFO must be made
         // (effectively) unbounded in capacity.
         subtitle->fifo_raw  = hb_fifo_init( FIFO_UNBOUNDED, FIFO_UNBOUNDED_WAKE );
-        if (w->id != WORK_DECSRTSUB)
+        // Check if input comes from a file.
+        if (subtitle->source != IMPORTSRT &&
+            subtitle->source != IMPORTSSA)
         {
-            // decsrtsub is a buffer source like reader.  It's input comes
-            // from a file.
             subtitle->fifo_in  = hb_fifo_init( FIFO_SMALL, FIFO_SMALL_WAKE );
         }
         if (!job->indepth_scan)

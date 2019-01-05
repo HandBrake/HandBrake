@@ -135,6 +135,11 @@ static char ** srtoffset                 = NULL;
 static char ** srtlang                   = NULL;
 static int     srtdefault                = -1;
 static int     srtburn                   = -1;
+static char ** ssafile                   = NULL;
+static char ** ssaoffset                 = NULL;
+static char ** ssalang                   = NULL;
+static int     ssadefault                = -1;
+static int     ssaburn                   = -1;
 static int      width                    = 0;
 static int      height                   = 0;
 static int      crop[4]                  = { -1,-1,-1,-1 };
@@ -1848,6 +1853,26 @@ static void ShowHelp()
 "                           the video track.\n"
 "                           If 'number' is omitted, the first SRT is burned.\n"
 "                           'number' is a 1-based index into the 'srt-file' list\n"
+"     --ssa-file <string>   SubStationAlpha SSA filename(s), separated by\n"
+"                           commas.\n"
+"     --ssa-offset <string> Offset (in milliseconds) to apply to the SSA\n"
+"                           file(s), separated by commas. If not specified,\n"
+"                           zero is assumed. Offsets may be negative.\n"
+"     --ssa-lang <string>   SSA track language as an ISO 639-2 code\n"
+"                           (e.g. fre, eng, spa, dut, et cetera)\n"
+"                           If not specified, then 'und' is used.\n"
+"                           Separate by commas.\n"
+"     --ssa-default[=number]\n"
+"                           Flag the selected SSA as the default subtitle\n"
+"                           to be displayed during playback.\n"
+"                           Setting no default means no subtitle will be\n"
+"                           automatically displayed. If 'number' is omitted,\n"
+"                           the first SSA is the default.\n"
+"                           'number' is a 1-based index into the 'ssa-file' list\n"
+"     --ssa-burn[=number]   \"Burn\" the selected SSA subtitle into\n"
+"                           the video track.\n"
+"                           If 'number' is omitted, the first SSA is burned.\n"
+"                           'number' is a 1-based index into the 'ssa-file' list\n"
 "\n"
     );
 
@@ -2095,6 +2120,11 @@ static int ParseOptions( int argc, char ** argv )
     #define FILTER_LAPSHARP      314
     #define FILTER_LAPSHARP_TUNE 315
     #define JSON_LOGGING         316
+    #define SSA_FILE             317
+    #define SSA_OFFSET           318
+    #define SSA_LANG             319
+    #define SSA_DEFAULT          320
+    #define SSA_BURN             321
 
     for( ;; )
     {
@@ -2156,6 +2186,11 @@ static int ParseOptions( int argc, char ** argv )
             { "srt-lang",    required_argument, NULL, SRT_LANG },
             { "srt-default", optional_argument, NULL, SRT_DEFAULT },
             { "srt-burn",    optional_argument, NULL, SRT_BURN },
+            { "ssa-file",    required_argument, NULL, SSA_FILE },
+            { "ssa-offset",  required_argument, NULL, SSA_OFFSET },
+            { "ssa-lang",    required_argument, NULL, SSA_LANG },
+            { "ssa-default", optional_argument, NULL, SSA_DEFAULT },
+            { "ssa-burn",    optional_argument, NULL, SSA_BURN },
             { "native-language", required_argument, NULL,'N' },
             { "native-dub",  no_argument,       NULL,    NATIVE_DUB },
             { "encoder",     required_argument, NULL,    'e' },
@@ -2568,6 +2603,35 @@ static int ParseOptions( int argc, char ** argv )
                 else
                 {
                     srtburn = 1 ;
+                }
+                break;
+            case SSA_FILE:
+                ssafile = hb_str_vsplit( optarg, ',' );
+                break;
+            case SSA_OFFSET:
+                ssaoffset = hb_str_vsplit( optarg, ',' );
+                break;
+            case SSA_LANG:
+                ssalang = hb_str_vsplit( optarg, ',' );
+                break;
+            case SSA_DEFAULT:
+                if( optarg != NULL )
+                {
+                    ssadefault = atoi( optarg );
+                }
+                else
+                {
+                    ssadefault = 1 ;
+                }
+                break;
+            case SSA_BURN:
+                if( optarg != NULL )
+                {
+                    ssaburn = atoi( optarg );
+                }
+                else
+                {
+                    ssaburn = 1 ;
                 }
                 break;
             case '2':
@@ -4242,7 +4306,7 @@ static int add_srt(hb_value_array_t *list, int track, int *one_burned)
     int64_t offset = 0;
     char *iso639_2 = "und";
     int burn = !*one_burned && srtburn == track + 1 &&
-               hb_subtitle_can_burn(SRTSUB);
+               hb_subtitle_can_burn(IMPORTSRT);
     *one_burned |= burn;
     int def  = srtdefault == track + 1;
 
@@ -4266,13 +4330,52 @@ static int add_srt(hb_value_array_t *list, int track, int *one_burned)
 
     hb_dict_t *subtitle_dict = hb_dict_init();
     hb_dict_t *srt_dict = hb_dict_init();
-    hb_dict_set(subtitle_dict, "SRT", srt_dict);
+    hb_dict_set(subtitle_dict, "Import", srt_dict);
     hb_dict_set(subtitle_dict, "Default", hb_value_bool(def));
     hb_dict_set(subtitle_dict, "Burn", hb_value_bool(burn));
     hb_dict_set(subtitle_dict, "Offset", hb_value_int(offset));
+    hb_dict_set(srt_dict, "Format", hb_value_string("SRT"));
     hb_dict_set(srt_dict, "Filename", hb_value_string(srtfile[track]));
     hb_dict_set(srt_dict, "Language", hb_value_string(iso639_2));
     hb_dict_set(srt_dict, "Codeset", hb_value_string(codeset));
+    hb_value_array_append(list, subtitle_dict);
+    return 0;
+}
+
+static int add_ssa(hb_value_array_t *list, int track, int *one_burned)
+{
+    int64_t offset = 0;
+    char *iso639_2 = "und";
+    int burn = !*one_burned && ssaburn == track + 1 &&
+               hb_subtitle_can_burn(IMPORTSRT);
+    *one_burned |= burn;
+    int def  = ssadefault == track + 1;
+
+    if (ssaoffset && track < hb_str_vlen(ssaoffset) && ssaoffset[track])
+        offset = strtoll(ssaoffset[track], NULL, 0);
+    if (ssalang && track < hb_str_vlen(ssalang) && ssalang[track])
+    {
+        const iso639_lang_t *lang = lang_lookup(ssalang[track]);
+        if (lang != NULL)
+        {
+            iso639_2 = lang->iso639_2;
+        }
+        else
+        {
+            fprintf(stderr, "Warning: Invalid SRT language (%s)\n",
+                    ssalang[track]);
+        }
+    }
+
+    hb_dict_t *subtitle_dict = hb_dict_init();
+    hb_dict_t *ssa_dict = hb_dict_init();
+    hb_dict_set(subtitle_dict, "Import", ssa_dict);
+    hb_dict_set(subtitle_dict, "Default", hb_value_bool(def));
+    hb_dict_set(subtitle_dict, "Burn", hb_value_bool(burn));
+    hb_dict_set(subtitle_dict, "Offset", hb_value_int(offset));
+    hb_dict_set(ssa_dict, "Format", hb_value_string("SSA"));
+    hb_dict_set(ssa_dict, "Filename", hb_value_string(ssafile[track]));
+    hb_dict_set(ssa_dict, "Language", hb_value_string(iso639_2));
     hb_value_array_append(list, subtitle_dict);
     return 0;
 }
@@ -4866,6 +4969,14 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
         for (ii = 0; srtfile[ii] != NULL; ii++)
         {
             add_srt(subtitle_array, ii, &one_burned);
+        }
+    }
+    if (ssafile != NULL)
+    {
+        int ii;
+        for (ii = 0; ssafile[ii] != NULL; ii++)
+        {
+            add_ssa(subtitle_array, ii, &one_burned);
         }
     }
 

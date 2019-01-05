@@ -164,6 +164,9 @@ hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src);
 hb_list_t *hb_subtitle_list_copy(const hb_list_t *src);
 void hb_subtitle_close( hb_subtitle_t **sub );
 int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, int track);
+int hb_import_subtitle_add( const hb_job_t * job,
+                const hb_subtitle_config_t * subtitlecfg,
+                const char *lang_code, int source );
 int hb_srt_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, 
                const char *lang);
 int hb_subtitle_can_force( int source );
@@ -926,7 +929,9 @@ struct hb_subtitle_s
     hb_subtitle_config_t config;
 
     enum subtype { PICTURESUB, TEXTSUB } format;
-    enum subsource { VOBSUB, SRTSUB, CC608SUB, /*unused*/CC708SUB, UTF8SUB, TX3GSUB, SSASUB, PGSSUB } source;
+    enum subsource { VOBSUB, CC608SUB, /*unused*/CC708SUB,
+                     UTF8SUB, TX3GSUB, SSASUB, PGSSUB,
+                     IMPORTSRT, IMPORTSSA, SRTSUB = IMPORTSRT } source;
     char lang[1024];
     char iso639_2[4];
     uint32_t attributes; /* Closed Caption, Childrens, Directors etc */

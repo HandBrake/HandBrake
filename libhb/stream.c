@@ -5371,7 +5371,8 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s [%s]",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name,
              hb_subsource_name(subtitle->source));
-    strncpy(subtitle->iso639_2, lang->iso639_2, 4);
+    strncpy(subtitle->iso639_2, lang->iso639_2, 3);
+    subtitle->iso639_2[3] = 0;
 
     // Copy the extradata for the subtitle track
     if (codecpar->extradata != NULL)

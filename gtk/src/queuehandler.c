@@ -82,18 +82,20 @@ char *
 ghb_subtitle_short_description(const GhbValue *subsource,
                                const GhbValue *subsettings)
 {
-    GhbValue *srt;
+    GhbValue *import;
     char *desc = NULL;
 
-    srt = ghb_dict_get(subsettings, "SRT");
-    if (srt != NULL)
+    import = ghb_dict_get(subsettings, "Import");
+    if (import != NULL)
     {
+        const gchar *format = "SRT";
         const gchar *code;
         const gchar *lang;
         const iso639_lang_t *iso;
 
-        lang = ghb_dict_get_string(srt, "Language");
-        code = ghb_dict_get_string(srt, "Codeset");
+        format = ghb_dict_get_string(import, "Format");
+        lang = ghb_dict_get_string(import, "Language");
+        code = ghb_dict_get_string(import, "Codeset");
 
         iso = lang_lookup(lang);
         if (iso != NULL)
@@ -104,7 +106,14 @@ ghb_subtitle_short_description(const GhbValue *subsource,
                 lang = iso->eng_name;
         }
 
-        desc = g_strdup_printf("%s (%s)(SRT)", lang, code);
+        if (code != NULL)
+        {
+            desc = g_strdup_printf("%s (%s)(%s)", lang, code, format);
+        }
+        else
+        {
+            desc = g_strdup_printf("%s (%s)", lang, format);
+        }
     }
     else if (subsource == NULL)
     {
@@ -123,19 +132,21 @@ static char *
 subtitle_get_track_description(const GhbValue *subsource,
                                const GhbValue *subsettings)
 {
-    GhbValue *srt;
+    GhbValue *import;
     char *desc = NULL;
 
-    srt = ghb_dict_get(subsettings, "SRT");
-    if (srt != NULL)
+    import = ghb_dict_get(subsettings, "Import");
+    if (import != NULL)
     {
+        const gchar *format = "SRT";
         const gchar *filename, *code;
         const gchar *lang;
         const iso639_lang_t *iso;
 
-        lang = ghb_dict_get_string(srt, "Language");
-        code = ghb_dict_get_string(srt, "Codeset");
-        filename = ghb_dict_get_string(srt, "Filename");
+        format = ghb_dict_get_string(import, "Format");
+        lang = ghb_dict_get_string(import, "Language");
+        code = ghb_dict_get_string(import, "Codeset");
+        filename = ghb_dict_get_string(import, "Filename");
 
         iso = lang_lookup(lang);
         if (iso != NULL)
@@ -151,12 +162,27 @@ subtitle_get_track_description(const GhbValue *subsource,
             gchar *basename;
 
             basename = g_path_get_basename(filename);
-            desc = g_strdup_printf("%s (%s)(SRT)(%s)", lang, code, basename);
+            if (code != NULL)
+            {
+                desc = g_strdup_printf("%s (%s)(%s)(%s)",
+                                       lang, code, format, basename);
+            }
+            else
+            {
+                desc = g_strdup_printf("%s (%s)(%s)", lang, format, basename);
+            }
             g_free(basename);
         }
         else
         {
-            desc = g_strdup_printf("%s (%s)(SRT)", lang, code);
+            if (code != NULL)
+            {
+                desc = g_strdup_printf("%s (%s)(%s)", lang, code, format);
+            }
+            else
+            {
+                desc = g_strdup_printf("%s (%s)", lang, format);
+            }
         }
     }
     else if (subsource == NULL)
@@ -745,7 +771,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
     }
     for (ii = 0; ii < count; ii++)
     {
-        GhbValue *subsettings, *subsource, *srt;
+        GhbValue *subsettings, *subsource, *import;
         int track;
         gboolean force, burn, def;
         char * desc;
@@ -754,14 +780,14 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
         track       = ghb_dict_get_int(subsettings, "Track");
         subsource   = ghb_array_get(titleSubtitleList, track);
         desc        = subtitle_get_track_description(subsource, subsettings);
-        srt         = ghb_dict_get(subsettings, "SRT");
+        import      = ghb_dict_get(subsettings, "Import");
         force       = ghb_dict_get_bool(subsettings, "Forced");
         burn        = ghb_dict_get_bool(subsettings, "Burn");
         def         = ghb_dict_get_bool(subsettings, "Default");
         if (count + search > 1)
             XPRINT("\t");
 
-        if (srt == NULL)
+        if (import == NULL)
         {
             XPRINT("<small>%s%s%s%s</small>\n", desc,
                     force ? _(" (Forced Only)") : "",
