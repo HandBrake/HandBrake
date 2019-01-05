@@ -649,7 +649,7 @@ combo_name_map_t combo_name_map[] =
         NULL
     },
     {
-        "SrtLanguage",
+        "ImportLanguage",
         NULL,
         language_opts_set,
         NULL
@@ -1067,7 +1067,7 @@ ghb_subtitle_track_source(GhbValue *settings, gint track)
     const hb_title_t *title;
 
     if (track == -2)
-        return SRTSUB;
+        return IMPORTSRT;
     if (track < 0)
         return VOBSUB;
     title_id = ghb_dict_get_int(settings, "title");
@@ -4336,7 +4336,7 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
         return FALSE;
     }
 
-    const GhbValue *slist, *subtitle, *srt;
+    const GhbValue *slist, *subtitle, *import;
     gint count, ii, track;
     gboolean burned, one_burned = FALSE;
 
@@ -4346,7 +4346,7 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
     {
         subtitle = ghb_array_get(slist, ii);
         track = ghb_dict_get_int(subtitle, "Track");
-        srt = ghb_dict_get(subtitle, "SRT");
+        import = ghb_dict_get(subtitle, "Import");
         burned = track != -1 && ghb_dict_get_bool(subtitle, "Burn");
         if (burned && one_burned)
         {
@@ -4369,11 +4369,11 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
         {
             one_burned = TRUE;
         }
-        if (srt != NULL)
+        if (import != NULL)
         {
             const gchar *filename;
 
-            filename = ghb_dict_get_string(srt, "Filename");
+            filename = ghb_dict_get_string(import, "Filename");
             if (!g_file_test(filename, G_FILE_TEST_IS_REGULAR))
             {
                 message = g_strdup_printf(

@@ -158,7 +158,7 @@ namespace HandBrake.Interop.Interop
         {
             get
             {
-                return HBFunctions.hb_subtitle_can_burn((int)hb_subtitle_s_subsource.SRTSUB) > 0;
+                return HBFunctions.hb_subtitle_can_burn((int)hb_subtitle_s_subsource.IMPORTSRT) > 0;
             }
         }
 
@@ -304,7 +304,7 @@ namespace HandBrake.Interop.Interop
                     return "CC608";
                 case hb_subtitle_s_subsource.CC708SUB:
                     return "CC708";
-                case hb_subtitle_s_subsource.SRTSUB:
+                case hb_subtitle_s_subsource.IMPORTSRT:
                     return "SRT";
                 case hb_subtitle_s_subsource.SSASUB:
                     return "SSA";

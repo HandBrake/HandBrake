@@ -842,9 +842,10 @@ static int avformatInit( hb_mux_object_t * m )
             case CC608SUB:
             case CC708SUB:
             case TX3GSUB:
-            case SRTSUB:
             case UTF8SUB:
             case SSASUB:
+            case IMPORTSRT:
+            case IMPORTSSA:
             {
                 if (job->mux == HB_MUX_AV_MP4)
                 {

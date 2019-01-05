@@ -981,7 +981,8 @@ static int hb_rendersub_post_init( hb_filter_object_t * filter, hb_job_t *job )
             return ssa_post_init( filter, job );
         } break;
 
-        case SRTSUB:
+        case IMPORTSRT:
+        case IMPORTSSA:
         case UTF8SUB:
         case TX3GSUB:
         {
@@ -1024,7 +1025,8 @@ static int hb_rendersub_work( hb_filter_object_t * filter,
             return ssa_work( filter, buf_in, buf_out );
         } break;
 
-        case SRTSUB:
+        case IMPORTSRT:
+        case IMPORTSSA:
         case CC608SUB:
         case UTF8SUB:
         case TX3GSUB:
@@ -1065,7 +1067,8 @@ static void hb_rendersub_close( hb_filter_object_t * filter )
             ssa_close( filter );
         } break;
 
-        case SRTSUB:
+        case IMPORTSRT:
+        case IMPORTSSA:
         case CC608SUB:
         case UTF8SUB:
         case TX3GSUB:

@@ -8133,7 +8133,7 @@ filter_output([
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="icon_name">gtk-ok</property>
   </object>
-  <object class="GtkImage" id="srt_add_image">
+  <object class="GtkImage" id="import_add_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -8195,7 +8195,7 @@ filter_output([
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="subtitle_srt_switch_box">
+          <object class="GtkBox" id="subtitle_import_switch_box">
             <property name="orientation">horizontal</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -8210,7 +8210,7 @@ filter_output([
                 <property name="tooltip_text" translatable="yes">Enable settings to import an SRT subtitle file</property>
                 <property name="halign">start</property>
                 <property name="draw_indicator">True</property>
-                <signal name="toggled" handler="subtitle_srt_radio_toggled_cb" swapped="no"/>
+                <signal name="toggled" handler="subtitle_import_radio_toggled_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -8244,14 +8244,14 @@ filter_output([
             <property name="can_focus">False</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkGrid" id="subtitle_srt_grid">
+              <object class="GtkGrid" id="subtitle_import_grid">
                 <property name="visible">True</property>
                 <property name="row-spacing">2</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <property name="column_spacing">4</property>
                 <child>
-                  <object class="GtkLabel" id="srt_lang_label">
+                  <object class="GtkLabel" id="import_lang_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -8279,7 +8279,7 @@ filter_output([
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="srt_file_label">
+                  <object class="GtkLabel" id="import_file_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -8294,7 +8294,7 @@ filter_output([
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="srt_offset_label">
+                  <object class="GtkLabel" id="import_offset_label">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -8308,14 +8308,14 @@ filter_output([
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkComboBox" id="SrtLanguage">
+                  <object class="GtkComboBox" id="ImportLanguage">
                     <property name="valign">GTK_ALIGN_CENTER</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Set the language of this subtitle.
 This value will be used by players in subtitle menus.</property>
-                    <signal name="changed" handler="srt_lang_changed_cb" swapped="no"/>
+                    <signal name="changed" handler="import_lang_changed_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="top_attach">1</property>
@@ -8352,14 +8352,14 @@ The source's character code is needed in order to perform this translation.</pro
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkFileChooserButton" id="SrtFile">
+                  <object class="GtkFileChooserButton" id="ImportFile">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes">Select the SRT file to import.</property>
                     <property name="local_only">False</property>
                     <property name="hexpand">True</property>
-                    <property name="title" translatable="yes">Srt File</property>
-                    <signal name="selection-changed" handler="srt_file_changed_cb" swapped="no"/>
+                    <property name="title" translatable="yes">Import File</property>
+                    <signal name="selection-changed" handler="import_file_changed_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="top_attach">2</property>
@@ -8369,14 +8369,14 @@ The source's character code is needed in order to perform this translation.</pro
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSpinButton" id="SrtOffset">
+                  <object class="GtkSpinButton" id="ImportOffset">
                     <property name="width-chars">8</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="tooltip_text" translatable="yes">Adjust the offset in milliseconds between video and SRT timestamps</property>
                     <property name="adjustment">adjustment31</property>
-                    <signal name="value-changed" handler="srt_offset_changed_cb" swapped="no"/>
+                    <signal name="value-changed" handler="import_offset_changed_cb" swapped="no"/>
                   </object>
                   <packing>
                     <property name="top_attach">1</property>

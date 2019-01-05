@@ -11,8 +11,6 @@ namespace HandBrake.Interop.Interop.HbLib
     {
         VOBSUB,
 
-        SRTSUB,
-
         CC608SUB,
 
         CC708SUB,
@@ -23,6 +21,10 @@ namespace HandBrake.Interop.Interop.HbLib
 
         SSASUB,
 
-        PGSSUB
+        PGSSUB,
+
+        IMPORTSRT,
+
+        IMPORTSSA
     }
 }

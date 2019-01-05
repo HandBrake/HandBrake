@@ -46,9 +46,17 @@ static void clear_subtitle_list_ui(GtkBuilder *builder);
 
 static int get_sub_source(GhbValue *settings, GhbValue *subsettings)
 {
-    if (ghb_dict_get(subsettings, "SRT") != NULL)
+    GhbValue *import;
+
+    import  = ghb_dict_get(subsettings, "Import");
+    if (import != NULL)
     {
-        return SRTSUB;
+        const char * format = ghb_dict_get_string(import, "Format");
+        if (format != NULL && !strcasecmp(format, "SSA"))
+        {
+            return IMPORTSSA;
+        }
+        return IMPORTSRT;
     }
 
     int title_id = ghb_dict_get_int(settings, "title");
@@ -91,7 +99,7 @@ subtitle_refresh_list_row_ui(
     desc = subtitle_get_track_description(settings, subsettings);
     info_src = g_strdup_printf("<small>%s</small>", desc);
     g_free(desc);
-    if (ghb_dict_get(subsettings, "SRT") != NULL)
+    if (ghb_dict_get(subsettings, "Import") != NULL)
     {
         gint offset;
         offset = ghb_dict_get_int(subsettings, "Offset");
@@ -329,19 +337,21 @@ subtitle_add_to_settings(GhbValue *settings, GhbValue *subsettings)
 static char *
 subtitle_get_track_description(GhbValue *settings, GhbValue *subsettings)
 {
-    GhbValue *srt;
+    GhbValue * import;
     char *desc = NULL;
 
-    srt = ghb_dict_get(subsettings, "SRT");
-    if (srt != NULL)
+    import = ghb_dict_get(subsettings, "Import");
+    if (import != NULL)
     {
-        const gchar *filename, *code;
-        const gchar *lang;
-        const iso639_lang_t *iso;
+        const gchar * format = "SRT";
+        const gchar * filename, * code;
+        const gchar * lang;
+        const iso639_lang_t * iso;
 
-        lang = ghb_dict_get_string(srt, "Language");
-        code = ghb_dict_get_string(srt, "Codeset");
-        filename = ghb_dict_get_string(srt, "Filename");
+        format   = ghb_dict_get_string(import, "Format");
+        filename = ghb_dict_get_string(import, "Filename");
+        lang     = ghb_dict_get_string(import, "Language");
+        code     = ghb_dict_get_string(import, "Codeset");
 
         iso = lang_lookup(lang);
         if (iso != NULL)
@@ -357,12 +367,27 @@ subtitle_get_track_description(GhbValue *settings, GhbValue *subsettings)
             gchar *basename;
 
             basename = g_path_get_basename(filename);
-            desc = g_strdup_printf("%s (%s)(SRT)(%s)", lang, code, basename);
+            if (code != NULL)
+            {
+                desc = g_strdup_printf("%s (%s)(%s)(%s)",
+                                       lang, code, format, basename);
+            }
+            else
+            {
+                desc = g_strdup_printf("%s (%s)(%s)", lang, format, basename);
+            }
             g_free(basename);
         }
         else
         {
-            desc = g_strdup_printf("%s (%s)(SRT)", lang, code);
+            if (code != NULL)
+            {
+                desc = g_strdup_printf("%s (%s)(%s)", lang, code, format);
+            }
+            else
+            {
+                desc = g_strdup_printf("%s (%s)", lang, format);
+            }
         }
     }
     else
@@ -401,20 +426,15 @@ static GhbValue*  subtitle_add_track(
     int track,
     int mux,
     gboolean default_track,
-    gboolean srt,
+    gboolean import,
+    int source,
     gboolean burn,
     gboolean *burned)
 {
-    int source = VOBSUB;
-
-    if (track >= 0 && !srt)
+    if (track >= 0 && !import)
     {
         hb_subtitle_t *subtitle = hb_list_item(title->list_subtitle, track);
         source = subtitle->source;
-    }
-    else if (srt)
-    {
-        source = SRTSUB;
     }
 
     burn |= !hb_subtitle_can_pass(source, mux);
@@ -426,23 +446,25 @@ static GhbValue*  subtitle_add_track(
     }
 
     GhbValue *subsettings = ghb_dict_new();
-    if (srt)
+    if (import)
     {
         // Set default SRT settings
-        GhbValue *srt_dict;
+        GhbValue *import_dict;
         const gchar *pref_lang, *dir;
         gchar *filename;
 
-        srt_dict = ghb_dict_new();
-        hb_dict_set(subsettings, "SRT", srt_dict);
+        import_dict = ghb_dict_new();
+        hb_dict_set(subsettings, "Import", import_dict);
 
+        ghb_dict_set_string(import_dict, "Format",
+                            source == IMPORTSRT ? "SRT" : "SSA");
         pref_lang = ghb_dict_get_string(settings, "PreferredLanguage");
-        ghb_dict_set_string(srt_dict, "Language", pref_lang);
-        ghb_dict_set_string(srt_dict, "Codeset", "UTF-8");
+        ghb_dict_set_string(import_dict, "Language", pref_lang);
+        ghb_dict_set_string(import_dict, "Codeset", "UTF-8");
 
         dir = ghb_dict_get_string(ud->prefs, "SrtDir");
         filename = g_strdup_printf("%s/none", dir);
-        ghb_dict_set_string(srt_dict, "Filename", filename);
+        ghb_dict_set_string(import_dict, "Filename", filename);
         g_free(filename);
     }
 
@@ -600,7 +622,7 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
     if (subsettings != NULL)
     {
         // Update widgets with subsettings
-        GhbValue *val, *srt;
+        GhbValue *val, *import;
         gboolean burn, force, def;
         int source;
 
@@ -610,7 +632,7 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
         mux_id = ghb_dict_get_string(ud->settings, "FileFormat");
         mux    = ghb_lookup_container_by_name(mux_id);
 
-        srt    = ghb_dict_get(subsettings, "SRT");
+        import = ghb_dict_get(subsettings, "Import");
         source = get_sub_source(ud->settings, subsettings);
         val    = ghb_dict_get(subsettings, "Track");
 
@@ -620,13 +642,18 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
 
             // Hide regular subtitle widgets
             widget = GHB_WIDGET(ud->builder, "subtitle_track_box");
-            gtk_widget_set_visible(widget, srt == NULL);
+            gtk_widget_set_visible(widget, import == NULL);
 
-            // Show SRT subitle widgets
-            widget = GHB_WIDGET(ud->builder, "subtitle_srt_grid");
-            gtk_widget_set_visible(widget, srt != NULL);
+            // Show import subitle widgets
+            widget = GHB_WIDGET(ud->builder, "subtitle_import_grid");
+            gtk_widget_set_visible(widget, source == IMPORTSRT ||
+                                           source == IMPORTSSA);
+            widget = GHB_WIDGET(ud->builder, "srt_code_label");
+            gtk_widget_set_visible(widget, source == IMPORTSRT);
+            widget = GHB_WIDGET(ud->builder, "SrtCodeset");
+            gtk_widget_set_visible(widget, source == IMPORTSRT);
 
-            widget = GHB_WIDGET(ud->builder, "subtitle_srt_switch_box");
+            widget = GHB_WIDGET(ud->builder, "subtitle_import_switch_box");
             gtk_widget_set_visible(widget, TRUE);
         }
         else
@@ -635,24 +662,24 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
             widget = GHB_WIDGET(ud->builder, "subtitle_track_box");
             gtk_widget_set_visible(widget, FALSE);
 
-            widget = GHB_WIDGET(ud->builder, "subtitle_srt_grid");
+            widget = GHB_WIDGET(ud->builder, "subtitle_import_grid");
             gtk_widget_set_visible(widget, FALSE);
 
-            widget = GHB_WIDGET(ud->builder, "subtitle_srt_switch_box");
+            widget = GHB_WIDGET(ud->builder, "subtitle_import_switch_box");
             gtk_widget_set_visible(widget, FALSE);
         }
 
-        if (srt != NULL)
+        if (import != NULL)
         {
             ghb_ui_update(ud, "SubtitleSrtEnable", ghb_boolean_value(TRUE));
-            val = ghb_dict_get(srt, "Language");
-            ghb_ui_update(ud, "SrtLanguage", val);
-            val = ghb_dict_get(srt, "Codeset");
+            val = ghb_dict_get(import, "Language");
+            ghb_ui_update(ud, "ImportLanguage", val);
+            val = ghb_dict_get(import, "Codeset");
             ghb_ui_update(ud, "SrtCodeset", val);
-            val = ghb_dict_get(srt, "Filename");
-            ghb_ui_update(ud, "SrtFile", val);
+            val = ghb_dict_get(import, "Filename");
+            ghb_ui_update(ud, "ImportFile", val);
             val = ghb_dict_get(subsettings, "Offset");
-            ghb_ui_update(ud, "SrtOffset", val);
+            ghb_ui_update(ud, "ImportOffset", val);
         }
         else
         {
@@ -698,7 +725,7 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
     else
     {
         // Hide SRT subitle widgets
-        widget = GHB_WIDGET(ud->builder, "subtitle_srt_grid");
+        widget = GHB_WIDGET(ud->builder, "subtitle_import_grid");
         gtk_widget_set_visible(widget, FALSE);
 
         // Show regular subtitle widgets
@@ -793,7 +820,7 @@ subtitle_default_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-subtitle_srt_radio_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
+subtitle_import_radio_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     GhbValue *subsettings;
 
@@ -807,7 +834,7 @@ subtitle_srt_radio_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
             gchar *filename;
             GhbValue *srt = ghb_dict_new();
 
-            ghb_dict_set(subsettings, "SRT", srt);
+            ghb_dict_set(subsettings, "Import", srt);
             pref_lang = ghb_dict_get_string(ud->settings, "PreferredLanguage");
             ghb_dict_set_string(srt, "Language", pref_lang);
             ghb_dict_set_string(srt, "Codeset", "UTF-8");
@@ -819,7 +846,7 @@ subtitle_srt_radio_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
         }
         else
         {
-            ghb_dict_remove(subsettings, "SRT");
+            ghb_dict_remove(subsettings, "Import");
         }
         subtitle_update_dialog_widgets(ud, subsettings);
         subtitle_list_refresh_selected(ud, subsettings);
@@ -851,17 +878,17 @@ ghb_subtitle_list_refresh_all(signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-srt_setting_update(GhbValue *val, const char *name, signal_user_data_t *ud)
+import_setting_update(GhbValue *val, const char *name, signal_user_data_t *ud)
 {
     GhbValue *subsettings;
     subsettings = subtitle_get_selected_settings(ud, NULL);
     if (subsettings != NULL)
     {
-        GhbValue *srt;
-        srt = ghb_dict_get(subsettings, "SRT");
-        if (srt != NULL)
+        GhbValue * import;
+        import = ghb_dict_get(subsettings, "Import");
+        if (import != NULL)
         {
-            ghb_dict_set(srt, name, val);
+            ghb_dict_set(import, name, val);
             subtitle_list_refresh_selected(ud, subsettings);
             ghb_update_summary_info(ud);
             ghb_live_reset(ud);
@@ -878,7 +905,7 @@ srt_setting_update(GhbValue *val, const char *name, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-srt_offset_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+import_offset_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
     GhbValue *val = ghb_widget_value(widget);
@@ -894,17 +921,17 @@ srt_codeset_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_check_dependency(ud, widget, NULL);
 
     GhbValue *val = ghb_dict_get(ud->settings, "SrtCodeset");
-    srt_setting_update(ghb_value_dup(val), "Codeset", ud);
+    import_setting_update(ghb_value_dup(val), "Codeset", ud);
 }
 
 G_MODULE_EXPORT void
-srt_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+import_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
 
-    GhbValue *val = ghb_dict_get(ud->settings, "SrtFile");
-    srt_setting_update(ghb_value_dup(val), "Filename", ud);
+    GhbValue *val = ghb_dict_get(ud->settings, "ImportFile");
+    import_setting_update(ghb_value_dup(val), "Filename", ud);
 
     // Update SrtDir preference
     const gchar *filename;
@@ -925,13 +952,13 @@ srt_file_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 }
 
 G_MODULE_EXPORT void
-srt_lang_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+import_lang_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
 
-    GhbValue *val = ghb_dict_get(ud->settings, "SrtLanguage");
-    srt_setting_update(ghb_value_dup(val), "Language", ud);
+    GhbValue *val = ghb_dict_get(ud->settings, "ImportLanguage");
+    import_setting_update(ghb_value_dup(val), "Language", ud);
 }
 
 static void
@@ -1074,12 +1101,14 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
          subsettings == NULL && track < count; track++)
     {
         subsettings = subtitle_add_track(ud, ud->settings, title, track,
-                                mux->format, FALSE, FALSE, FALSE, &one_burned);
+                                mux->format, FALSE, FALSE, VOBSUB,
+                                FALSE, &one_burned);
     }
     if (subsettings == NULL)
     {
         subsettings = subtitle_add_track(ud, ud->settings, title, 0,
-                                mux->format, FALSE, TRUE, FALSE, &one_burned);
+                                mux->format, FALSE, TRUE, IMPORTSRT,
+                                FALSE, &one_burned);
     }
     if (subsettings != NULL)
     {
@@ -1190,7 +1219,7 @@ subtitle_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     for (track = 0; track < count; track++)
     {
         subtitle_add_track(ud, ud->settings, title, track, mux->format,
-                           FALSE, FALSE, FALSE, &one_burned);
+                           FALSE, FALSE, VOBSUB, FALSE, &one_burned);
     }
     subtitle_refresh_list_ui(ud);
     ghb_update_summary_info(ud);

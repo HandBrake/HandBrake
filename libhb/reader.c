@@ -432,8 +432,10 @@ static void reader_send_eof( hb_work_private_t * r )
     hb_subtitle_t *subtitle;
     for (ii = 0; (subtitle = hb_list_item(r->job->list_subtitle, ii)); ++ii)
     {
-        if (subtitle->fifo_in && subtitle->source != SRTSUB)
+        if (subtitle->fifo_in)
+        {
             push_buf(r, subtitle->fifo_in, hb_buffer_eof_init());
+        }
     }
     hb_log("reader: done. %d scr changes", r->demux.scr_changes);
 }

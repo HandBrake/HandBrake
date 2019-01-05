@@ -4857,9 +4857,9 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
     return 1;
 }
 
-int hb_srt_add( const hb_job_t * job,
+int hb_import_subtitle_add( const hb_job_t * job,
                 const hb_subtitle_config_t * subtitlecfg,
-                const char *lang_code )
+                const char *lang_code, int source )
 {
     hb_subtitle_t *subtitle;
     iso639_lang_t *lang = NULL;
@@ -4873,8 +4873,8 @@ int hb_srt_add( const hb_job_t * job,
 
     subtitle->id = (hb_list_count(job->list_subtitle) << 8) | 0xFF;
     subtitle->format = TEXTSUB;
-    subtitle->source = SRTSUB;
-    subtitle->codec = WORK_DECSRTSUB;
+    subtitle->source = source;
+    subtitle->codec = source == IMPORTSRT ? WORK_DECSRTSUB : WORK_DECSSASUB;
     subtitle->timebase.num = 1;
     subtitle->timebase.den = 90000;
 
@@ -4895,6 +4895,13 @@ int hb_srt_add( const hb_job_t * job,
     return 1;
 }
 
+int hb_srt_add( const hb_job_t * job,
+                const hb_subtitle_config_t * subtitlecfg,
+                const char *lang_code )
+{
+    return hb_import_subtitle_add(job, subtitlecfg, lang_code, IMPORTSRT);
+}
+
 int hb_subtitle_can_force( int source )
 {
     return source == VOBSUB || source == PGSSUB;
@@ -4902,9 +4909,9 @@ int hb_subtitle_can_force( int source )
 
 int hb_subtitle_can_burn( int source )
 {
-    return source == VOBSUB  || source == PGSSUB   || source == SSASUB  ||
-           source == SRTSUB  || source == CC608SUB || source == UTF8SUB ||
-           source == TX3GSUB;
+    return source == VOBSUB    || source == PGSSUB    || source == SSASUB  ||
+           source == CC608SUB  || source == UTF8SUB   || source == TX3GSUB ||
+           source == IMPORTSRT || source == IMPORTSSA;
 }
 
 int hb_subtitle_can_pass( int source, int mux )
@@ -4917,11 +4924,12 @@ int hb_subtitle_can_pass( int source, int mux )
                 case PGSSUB:
                 case VOBSUB:
                 case SSASUB:
-                case SRTSUB:
                 case UTF8SUB:
                 case TX3GSUB:
                 case CC608SUB:
                 case CC708SUB:
+                case IMPORTSRT:
+                case IMPORTSSA:
                     return 1;
 
                 default:
@@ -4933,11 +4941,12 @@ int hb_subtitle_can_pass( int source, int mux )
             {
                 case VOBSUB:
                 case SSASUB:
-                case SRTSUB:
                 case UTF8SUB:
                 case TX3GSUB:
                 case CC608SUB:
                 case CC708SUB:
+                case IMPORTSRT:
+                case IMPORTSSA:
                     return 1;
 
                 default:
@@ -5446,7 +5455,7 @@ const char * hb_subsource_name( int source )
     {
         case VOBSUB:
             return "VOBSUB";
-        case SRTSUB:
+        case IMPORTSRT:
             return "SRT";
         case CC608SUB:
             return "CC608";
@@ -5456,6 +5465,7 @@ const char * hb_subsource_name( int source )
             return "UTF-8";
         case TX3GSUB:
             return "TX3G";
+        case IMPORTSSA:
         case SSASUB:
             return "SSA";
         case PGSSUB:

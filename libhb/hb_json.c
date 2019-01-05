@@ -823,17 +823,25 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
         hb_dict_t *subtitle_dict;
         hb_subtitle_t *subtitle = hb_list_item(job->list_subtitle, ii);
 
-        if (subtitle->source == SRTSUB)
+        if (subtitle->source == IMPORTSRT ||
+            subtitle->source == IMPORTSSA)
         {
             subtitle_dict = json_pack_ex(&error, 0,
                 "{s:o, s:o, s:o, s:{s:o, s:o, s:o}}",
                 "Default",  hb_value_bool(subtitle->config.default_track),
                 "Burn",     hb_value_bool(subtitle->config.dest == RENDERSUB),
                 "Offset",   hb_value_int(subtitle->config.offset),
-                "SRT",
+                "Import",
+                    "Format",   hb_value_string(subtitle->source == IMPORTSRT ?
+                                                "SRT" : "SSA"),
                     "Filename", hb_value_string(subtitle->config.src_filename),
-                    "Language", hb_value_string(subtitle->iso639_2),
-                    "Codeset",  hb_value_string(subtitle->config.src_codeset));
+                    "Language", hb_value_string(subtitle->iso639_2));
+            if (subtitle->source == IMPORTSRT)
+            {
+                hb_dict_t *import_dict = hb_dict_get(subtitle_dict, "Import");
+                hb_dict_set(import_dict, "Codeset",
+                            hb_value_string(subtitle->config.src_codeset));
+            }
         }
         else
         {
@@ -1509,14 +1517,17 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             hb_subtitle_config_t sub_config;
             int track = -1;
             int burn = 0;
-            const char *srtfile = NULL;
+            const char *importfile = NULL;
             json_int_t offset = 0;
 
             result = json_unpack_ex(subtitle_dict, &error, 0,
-                                    "{s?i, s?{s:s}}",
+                                    "{s?i, s?{s:s}, s?{s:s}}",
                                     "Track", unpack_i(&track),
+                                    // Support legacy "SRT" import
                                     "SRT",
-                                        "Filename", unpack_s(&srtfile));
+                                        "Filename", unpack_s(&importfile),
+                                    "Import",
+                                        "Filename", unpack_s(&importfile));
             if (result < 0)
             {
                 hb_error("json unpack failure: %s", error.text);
@@ -1524,7 +1535,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 return NULL;
             }
             // Embedded subtitle track
-            if (track >= 0 && srtfile == NULL)
+            if (track >= 0 && importfile == NULL)
             {
                 hb_subtitle_t *subtitle;
                 subtitle = hb_list_item(job->title->list_subtitle, track);
@@ -1548,22 +1559,30 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                     hb_subtitle_add(job, &sub_config, track);
                 }
             }
-            else if (srtfile != NULL)
+            else if (importfile != NULL)
             {
-                strncpy(sub_config.src_filename, srtfile, 255);
+                strncpy(sub_config.src_filename, importfile, 255);
                 sub_config.src_filename[255] = 0;
 
-                const char *srtlang = "und";
-                const char *srtcodeset = "UTF-8";
+                const char * lang = "und";
+                const char * srtcodeset = "UTF-8";
+                const char * format = "SRT";
+                int          source = IMPORTSRT;
                 result = json_unpack_ex(subtitle_dict, &error, 0,
-                    "{s?b, s?b, s?I, "      // Common
-                    "s?{s?s, s?s, s?s}}",   // SRT
+                    "{s?b, s?b, s?I, "         // Common
+                    "s?{s?s, s?s, s?s},"       // Legacy SRT settings
+                    "s?{s?s, s?s, s?s, s?s}}", // Import settings
                     "Default",  unpack_b(&sub_config.default_track),
                     "Burn",     unpack_b(&burn),
                     "Offset",   unpack_I(&offset),
                     "SRT",
-                        "Filename", unpack_s(&srtfile),
-                        "Language", unpack_s(&srtlang),
+                        "Filename", unpack_s(&importfile),
+                        "Language", unpack_s(&lang),
+                        "Codeset",  unpack_s(&srtcodeset),
+                    "Import",
+                        "Format",   unpack_s(&format),
+                        "Filename", unpack_s(&importfile),
+                        "Language", unpack_s(&lang),
                         "Codeset",  unpack_s(&srtcodeset));
                 if (result < 0)
                 {
@@ -1575,7 +1594,11 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 sub_config.dest = burn ? RENDERSUB : PASSTHRUSUB;
                 strncpy(sub_config.src_codeset, srtcodeset, 39);
                 sub_config.src_codeset[39] = 0;
-                hb_srt_add(job, &sub_config, srtlang);
+                if (!strcasecmp(format, "SSA"))
+                {
+                    source = IMPORTSSA;
+                }
+                hb_import_subtitle_add(job, &sub_config, lang, source);
             }
         }
     }
