@@ -8,6 +8,7 @@
         "--share=ipc", "--socket=x11",
         "--socket=wayland",
         "--filesystem=xdg-run/dconf",
+        "--filesystem=xdg-run/gvfs",
         "--filesystem=~/.config/dconf:ro",
         "--talk-name=ca.desrt.dconf",
         "--talk-name=org.gtk.vfs.*",
