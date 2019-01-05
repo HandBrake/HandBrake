@@ -125,14 +125,6 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <binding destination="-2" name="enabled3" keyPath="self.video.twoPassSupported" previousBinding="c4g-dz-q05" id="rwS-GN-5Dd">
-                            <dictionary key="options">
-                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
-                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
-                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
-                                <integer key="NSNullPlaceholder" value="-1"/>
-                            </dictionary>
-                        </binding>
                         <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="7aV-7j-MzB" id="c4g-dz-q05">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
@@ -148,6 +140,14 @@
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="value" keyPath="self.video.twoPass" id="mOJ-b3-YKx"/>
+                        <binding destination="-2" name="enabled3" keyPath="self.video.twoPassSupported" previousBinding="c4g-dz-q05" id="rwS-GN-5Dd">
+                            <dictionary key="options">
+                                <integer key="NSMultipleValuesPlaceholder" value="-1"/>
+                                <integer key="NSNoSelectionPlaceholder" value="-1"/>
+                                <integer key="NSNotApplicablePlaceholder" value="-1"/>
+                                <integer key="NSNullPlaceholder" value="-1"/>
+                            </dictionary>
+                        </binding>
                     </connections>
                 </button>
                 <button toolTip="Turbo first pass speeds up the first pass of a 2-pass encode for a slight penalty to analysis." translatesAutoresizingMaskIntoConstraints="NO" id="olm-zg-k9Y">
@@ -270,13 +270,6 @@ x264 is lossless at RF 0.</string>
                                 <integer key="NSNullPlaceholder" value="-1"/>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="value" keyPath="self.video.quality" previousBinding="nAO-gB-Jbd" id="C3d-pR-fJ2">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBQualityTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="maxValue" keyPath="self.video.qualityMaxValue" id="FrR-GV-xnx"/>
-                        <binding destination="-2" name="minValue" keyPath="self.video.qualityMinValue" previousBinding="FrR-GV-xnx" id="nAO-gB-Jbd"/>
                         <binding destination="-2" name="enabled" keyPath="self.video.qualityType" id="wCA-ag-GHJ"/>
                     </connections>
                 </slider>
@@ -307,17 +300,17 @@ x264 is lossless at RF 0.</string>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.video" id="Ewd-OO-T3Z">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
                         <binding destination="-2" name="enabled2" keyPath="self.video.isConstantQualitySupported" previousBinding="Ewd-OO-T3Z" id="cEw-6S-gon">
                             <dictionary key="options">
                                 <integer key="NSMultipleValuesPlaceholder" value="-1"/>
                                 <integer key="NSNoSelectionPlaceholder" value="-1"/>
                                 <integer key="NSNotApplicablePlaceholder" value="-1"/>
                                 <integer key="NSNullPlaceholder" value="-1"/>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="enabled" keyPath="self.video" id="Ewd-OO-T3Z">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
                             </dictionary>
                         </binding>
                         <binding destination="-2" name="value" keyPath="self.video.qualityType" id="X1H-PE-sRI"/>

@@ -196,8 +196,8 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
  */
 - (void)setupQualitySlider
 {
-    int direction;
-    float minValue, maxValue, granularity;
+    int direction = 1;
+    float minValue = 0, maxValue = 0, granularity = 0;
     [self.video qualityLimitsForEncoder:self.video.encoder low:&minValue high:&maxValue granularity:&granularity direction:&direction];
 
     if (granularity < 1.0f)
@@ -209,8 +209,9 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     }
     fVidQualitySlider.minValue = minValue;
     fVidQualitySlider.maxValue = maxValue;
-    [fVidQualitySlider setNumberOfTickMarks:(int)((maxValue - minValue) *
-                                             (1.0f / granularity)) + 1];
+
+    NSInteger numberOfTickMarks = (NSInteger)((maxValue - minValue) * (1.0f / granularity)) + 1;
+    fVidQualitySlider.numberOfTickMarks = numberOfTickMarks;
 
     // Replace the slider transformer with a new one,
     // configured with the new max/min/direction values.
