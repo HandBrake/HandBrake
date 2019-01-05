@@ -1,12 +1,15 @@
 {
     "app-id": "fr.handbrake.ghb",
     "runtime": "org.freedesktop.Platform",
-    "runtime-version": "1.6",
+    "runtime-version": "18.08",
     "sdk": "org.freedesktop.Sdk",
     "command": "ghb",
     "finish-args": [
-        "--share=ipc", "--socket=x11",
+        "--device=dri",
+        "--share=ipc",
+        "--socket=x11",
         "--socket=wayland",
+        "--filesystem=host",
         "--filesystem=xdg-run/dconf",
         "--filesystem=xdg-run/gvfs",
         "--filesystem=~/.config/dconf:ro",
@@ -15,8 +18,7 @@
         "--env=DCONF_USER_CONFIG_DIR=.config/dconf",
         "--env=PATH=/app/bin:/usr/bin:/app/extensions/bin",
         "--env=JAVA_HOME=/app/extensions/jre",
-        "--env=GIO_EXTRA_MODULES=/app/lib/gio/modules",
-        "--filesystem=host"
+        "--env=GIO_EXTRA_MODULES=/app/lib/gio/modules"
     ],
     "add-extensions": {
         "fr.handbrake.plugin": {
@@ -40,17 +42,6 @@
                     "type": "archive",
                     "url": "https://download.gnome.org/sources/gvfs/1.36/gvfs-1.36.1.tar.xz",
                     "sha256": "3840dff386c2c8a445337bea4ade0eb71339efaff8602767659fa2896792f026"
-                }
-            ]
-        },
-        {
-            "name": "fribidi",
-            "make-args": ["-j1"],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://download.handbrake.fr/handbrake/contrib/fribidi-0.19.7.tar.gz",
-                    "sha256": "3fc96fa9473bd31dcb5500bdf1aa78b337ba13eb8c301e7c28923fea982453a8"
                 }
             ]
         },
@@ -91,8 +82,8 @@
                     "sources": [
                         {
                             "type": "archive",
-                            "url": "http://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.xz",
-                            "sha256": "8ac3235f49a6838ff7a8d7ef7c19a4430d0deecc0c2d3e3e237b5e9f53291757"
+                            "url": "https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.xz",
+                            "sha256": "e24ade3e928f7253aa8c14aa44726d1edf3f98643f87c9d72ec1df44b26be8f5"
                         }
                     ]
                 }
