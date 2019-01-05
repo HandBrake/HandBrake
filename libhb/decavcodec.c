@@ -479,8 +479,8 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     for (pos = 0; pos < in->size; pos += len)
     {
-        uint8_t * pout;
-        int       pout_len;
+        uint8_t * pout = NULL;
+        int       pout_len = 0;
         int64_t   parser_pts;
 
         if ( pv->parser != NULL )
