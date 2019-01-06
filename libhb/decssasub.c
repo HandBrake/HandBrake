@@ -233,8 +233,9 @@ static int extradataInit( hb_work_private_t * pv )
 
     while (1)
     {
-        char   * line = NULL;
-        size_t   len, size = 0;
+        char    * line = NULL;
+        ssize_t   len;
+        size_t    size = 0;
 
         len = getline(&line, &size, pv->file);
         if (len < 0)
@@ -243,7 +244,7 @@ static int extradataInit( hb_work_private_t * pv )
             free(header);
             return 1;
         }
-        if (len > 0)
+        if (len > 0 && line != NULL)
         {
             if (header != NULL)
             {
@@ -255,23 +256,22 @@ static int extradataInit( hb_work_private_t * pv )
             {
                 header = strdup(line);
             }
-        }
-        if (!events)
-        {
-            if (len >= events_len && !strncasecmp(line, events_tag, events_len))
+            if (!events)
             {
-                events = 1;
+                if (len >= events_len &&
+                    !strncasecmp(line, events_tag, events_len))
+                {
+                    events = 1;
+                }
             }
-        }
-        else
-        {
-            if (len >= format_len && !strncasecmp(line, format_tag, format_len))
+            else
             {
-                free(line);
-                break;
-            }
-            if (len > 0)
-            {
+                if (len >= format_len &&
+                    !strncasecmp(line, format_tag, format_len))
+                {
+                    free(line);
+                    break;
+                }
                 // Improperly formatted SSA header
                 free(header);
                 return 1;
@@ -468,11 +468,12 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
 
     while (!feof(pv->file))
     {
-        char   * line = NULL;
-        size_t   len, size = 0;
+        char    * line = NULL;
+        ssize_t   len;
+        size_t    size = 0;
 
         len = getline(&line, &size, pv->file);
-        if (len > 0)
+        if (len > 0 && line != NULL)
         {
             out = decode_line_to_mkv_ssa(pv, line, len);
             if (out != NULL)
