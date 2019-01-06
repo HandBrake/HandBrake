@@ -1445,14 +1445,18 @@ size_t hb_getline(char ** lineptr, size_t * n, FILE * fp)
     p = bufptr;
     while (c != EOF)
     {
-        if ((p - bufptr) > (size - 1))
+        if ((p - bufptr) >= (size - 1))
         {
+            char * tmp;
             size = size + 128;
-            bufptr = realloc(bufptr, size);
-            if (bufptr == NULL)
+            tmp = realloc(bufptr, size);
+            if (tmp == NULL)
             {
+                free(bufptr);
                 return -1;
             }
+            p = tmp + (p - bufptr);
+            bufptr = tmp;
         }
         *p++ = c;
         if (c == '\n')
