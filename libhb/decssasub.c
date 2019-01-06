@@ -441,9 +441,9 @@ decode_line_to_mkv_ssa( hb_work_private_t * pv, char * line, int size )
 
     out->size           = strlen(mkvSSA) + 1;
     out->s.frametype    = HB_FRAME_SUBTITLE;
-    out->s.start        = start;
+    out->s.start        = start + pv->subtitle->config.offset * 90;
     out->s.duration     = stop - start;
-    out->s.stop         = stop;
+    out->s.stop         = stop + pv->subtitle->config.offset * 90;
 
     if( out->size == 0 )
     {
