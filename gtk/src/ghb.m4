@@ -8217,7 +8217,24 @@ filter_output([
               </packing>
             </child>
             <child>
-              <object class="GtkRadioButton" id="SubtitleSrtDisable">
+              <object class="GtkRadioButton" id="SubtitleSsaEnable">
+                <property name="label" translatable="yes">Import SSA</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text" translatable="yes">Enable settings to import an SSA subtitle file</property>
+                <property name="halign">start</property>
+                <property name="draw_indicator">True</property>
+                <property name="group">SubtitleSrtEnable</property>
+                <signal name="toggled" handler="subtitle_import_radio_toggled_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkRadioButton" id="SubtitleImportDisable">
                 <property name="label" translatable="yes">Embedded Subtitle List</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
@@ -8227,6 +8244,7 @@ filter_output([
                 <property name="halign">start</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">SubtitleSrtEnable</property>
+                <signal name="toggled" handler="subtitle_import_radio_toggled_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="position">1</property>

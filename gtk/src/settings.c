@@ -699,11 +699,12 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
             }
             else
             {
-                gchar *dirname;
+                gchar * dirname;
 
                 dirname = g_path_get_dirname(str);
                 gtk_file_chooser_set_current_folder(
                     GTK_FILE_CHOOSER(widget), dirname);
+                gtk_file_chooser_unselect_all(GTK_FILE_CHOOSER(widget));
                 g_free(dirname);
             }
         }

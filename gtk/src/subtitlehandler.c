@@ -346,6 +346,7 @@ subtitle_get_track_description(GhbValue *settings, GhbValue *subsettings)
         const gchar * format = "SRT";
         const gchar * filename, * code;
         const gchar * lang;
+        int           source = IMPORTSRT;
         const iso639_lang_t * iso;
 
         format   = ghb_dict_get_string(import, "Format");
@@ -353,6 +354,10 @@ subtitle_get_track_description(GhbValue *settings, GhbValue *subsettings)
         lang     = ghb_dict_get_string(import, "Language");
         code     = ghb_dict_get_string(import, "Codeset");
 
+        if (format != NULL && !strcasecmp(format, "SSA"))
+        {
+            source = IMPORTSSA;
+        }
         iso = lang_lookup(lang);
         if (iso != NULL)
         {
@@ -367,7 +372,7 @@ subtitle_get_track_description(GhbValue *settings, GhbValue *subsettings)
             gchar *basename;
 
             basename = g_path_get_basename(filename);
-            if (code != NULL)
+            if (source == IMPORTSRT)
             {
                 desc = g_strdup_printf("%s (%s)(%s)(%s)",
                                        lang, code, format, basename);
@@ -380,7 +385,7 @@ subtitle_get_track_description(GhbValue *settings, GhbValue *subsettings)
         }
         else
         {
-            if (code != NULL)
+            if (source == IMPORTSRT)
             {
                 desc = g_strdup_printf("%s (%s)(%s)", lang, code, format);
             }
@@ -502,7 +507,7 @@ ghb_subtitle_title_change(signal_user_data_t *ud, gboolean show)
     const hb_title_t *title = ghb_lookup_title(title_id, NULL);
     if (title != NULL)
     {
-        w = GHB_WIDGET(ud->builder, "SubtitleSrtDisable");
+        w = GHB_WIDGET(ud->builder, "SubtitleImportDisable");
         gtk_widget_set_sensitive(w, !!hb_list_count(title->list_subtitle));
     }
 }
@@ -528,12 +533,12 @@ ghb_set_pref_subtitle(signal_user_data_t *ud)
     if (sub_count == 0)
     {
         // No source subtitles
-        widget = GHB_WIDGET(ud->builder, "SubtitleSrtDisable");
-        gtk_widget_set_sensitive(widget, FALSE);
+        widget = GHB_WIDGET(ud->builder, "SubtitleSrtEnable");
+        gtk_widget_set_sensitive(widget, TRUE);
     }
     else
     {
-        widget = GHB_WIDGET(ud->builder, "SubtitleSrtDisable");
+        widget = GHB_WIDGET(ud->builder, "SubtitleImportDisable");
         gtk_widget_set_sensitive(widget, TRUE);
     }
     GhbValue *job = ghb_get_job_settings(ud->settings);
@@ -671,7 +676,14 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
 
         if (import != NULL)
         {
-            ghb_ui_update(ud, "SubtitleSrtEnable", ghb_boolean_value(TRUE));
+            if (source == IMPORTSSA)
+            {
+                ghb_ui_update(ud, "SubtitleSsaEnable", ghb_boolean_value(TRUE));
+            }
+            else
+            {
+                ghb_ui_update(ud, "SubtitleSrtEnable", ghb_boolean_value(TRUE));
+            }
             val = ghb_dict_get(import, "Language");
             ghb_ui_update(ud, "ImportLanguage", val);
             val = ghb_dict_get(import, "Codeset");
@@ -683,7 +695,7 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
         }
         else
         {
-            ghb_ui_update(ud, "SubtitleSrtDisable", ghb_boolean_value(TRUE));
+            ghb_ui_update(ud, "SubtitleImportDisable", ghb_boolean_value(TRUE));
         }
 
         widget = GHB_WIDGET(ud->builder, "SubtitleBurned");
@@ -825,24 +837,40 @@ subtitle_import_radio_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
     GhbValue *subsettings;
 
     ghb_widget_to_setting(ud->settings, widget);
+    if (!ghb_dict_get_bool(ud->settings, "SubtitleSrtEnable") &&
+        !ghb_dict_get_bool(ud->settings, "SubtitleSsaEnable") &&
+        !ghb_dict_get_bool(ud->settings, "SubtitleImportDisable"))
+    {
+        // Radio buttons are in an in-between state with none enabled.
+        // Wait for the next toggle when something gets enabled.
+        return;
+    }
     subsettings = subtitle_get_selected_settings(ud, NULL);
     if (subsettings != NULL)
     {
-        if (ghb_dict_get_bool(ud->settings, "SubtitleSrtEnable"))
+        if (ghb_dict_get_bool(ud->settings, "SubtitleSrtEnable") ||
+            ghb_dict_get_bool(ud->settings, "SubtitleSsaEnable"))
         {
             const gchar *pref_lang, *dir;
             gchar *filename;
-            GhbValue *srt = ghb_dict_new();
+            GhbValue *import = ghb_dict_get(subsettings, "Import");
 
-            ghb_dict_set(subsettings, "Import", srt);
-            pref_lang = ghb_dict_get_string(ud->settings, "PreferredLanguage");
-            ghb_dict_set_string(srt, "Language", pref_lang);
-            ghb_dict_set_string(srt, "Codeset", "UTF-8");
+            if (import == NULL)
+            {
+                import = ghb_dict_new();
+                ghb_dict_set(subsettings, "Import", import);
+                pref_lang = ghb_dict_get_string(ud->settings, "PreferredLanguage");
+                ghb_dict_set_string(import, "Language", pref_lang);
+                ghb_dict_set_string(import, "Codeset", "UTF-8");
 
-            dir = ghb_dict_get_string(ud->prefs, "SrtDir");
-            filename = g_strdup_printf("%s/none", dir);
-            ghb_dict_set_string(srt, "Filename", filename);
-            g_free(filename);
+                dir = ghb_dict_get_string(ud->prefs, "SrtDir");
+                filename = g_strdup_printf("%s/none", dir);
+                ghb_dict_set_string(import, "Filename", filename);
+                g_free(filename);
+            }
+            ghb_dict_set_string(import, "Format",
+                        hb_dict_get_bool(ud->settings, "SubtitleSrtEnable") ?
+                            "SRT" : "SSA");
         }
         else
         {
