@@ -1387,6 +1387,8 @@ const char * hb_x264_encopt_name( const char * name );
 const char * hb_x265_encopt_name( const char * name );
 #endif
 
+size_t hb_getline(char **lineptr, size_t *n, FILE *fp);
+
 #define HB_NEG_FLOAT_REG "(([-])?(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
 #define HB_FLOAT_REG     "(([0-9]+([.,][0-9]+)?)|([.,][0-9]+))"
 #define HB_NEG_INT_REG   "(([-]?[0-9]+)"

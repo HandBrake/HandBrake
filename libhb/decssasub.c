@@ -237,7 +237,7 @@ static int extradataInit( hb_work_private_t * pv )
         ssize_t   len;
         size_t    size = 0;
 
-        len = getline(&line, &size, pv->file);
+        len = hb_getline(&line, &size, pv->file);
         if (len < 0)
         {
             // Incomplete SSA header
@@ -472,7 +472,7 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
         ssize_t   len;
         size_t    size = 0;
 
-        len = getline(&line, &size, pv->file);
+        len = hb_getline(&line, &size, pv->file);
         if (len > 0 && line != NULL)
         {
             out = decode_line_to_mkv_ssa(pv, line, len);
