@@ -396,7 +396,11 @@ class LDProbe( Action ):
 
         os.remove( 'conftest.c' )
         if not self.fail:
-            os.remove( 'conftest' )
+            try:
+                os.remove( 'conftest.exe' )
+                os.remove( 'conftest' )
+            except:
+                pass
 
     def _dumpSession( self, printf ):
         printf( '  + %s\n', self.command )
