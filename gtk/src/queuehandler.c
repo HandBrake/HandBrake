@@ -88,15 +88,20 @@ ghb_subtitle_short_description(const GhbValue *subsource,
     import = ghb_dict_get(subsettings, "Import");
     if (import != NULL)
     {
-        const gchar *format = "SRT";
-        const gchar *code;
-        const gchar *lang;
+        const gchar * format = "SRT";
+        const gchar * code;
+        const gchar * lang;
+        int           source = IMPORTSRT;
         const iso639_lang_t *iso;
 
         format = ghb_dict_get_string(import, "Format");
-        lang = ghb_dict_get_string(import, "Language");
-        code = ghb_dict_get_string(import, "Codeset");
+        lang   = ghb_dict_get_string(import, "Language");
+        code   = ghb_dict_get_string(import, "Codeset");
 
+        if (format != NULL && !strcasecmp(format, "SSA"))
+        {
+            source = IMPORTSSA;
+        }
         iso = lang_lookup(lang);
         if (iso != NULL)
         {
@@ -106,7 +111,7 @@ ghb_subtitle_short_description(const GhbValue *subsource,
                 lang = iso->eng_name;
         }
 
-        if (code != NULL)
+        if (source == IMPORTSRT)
         {
             desc = g_strdup_printf("%s (%s)(%s)", lang, code, format);
         }
@@ -138,16 +143,21 @@ subtitle_get_track_description(const GhbValue *subsource,
     import = ghb_dict_get(subsettings, "Import");
     if (import != NULL)
     {
-        const gchar *format = "SRT";
-        const gchar *filename, *code;
-        const gchar *lang;
+        const gchar * format = "SRT";
+        const gchar * filename, *code;
+        const gchar * lang;
+        int           source = IMPORTSRT;
         const iso639_lang_t *iso;
 
-        format = ghb_dict_get_string(import, "Format");
-        lang = ghb_dict_get_string(import, "Language");
-        code = ghb_dict_get_string(import, "Codeset");
+        format   = ghb_dict_get_string(import, "Format");
+        lang     = ghb_dict_get_string(import, "Language");
+        code     = ghb_dict_get_string(import, "Codeset");
         filename = ghb_dict_get_string(import, "Filename");
 
+        if (format != NULL && !strcasecmp(format, "SSA"))
+        {
+            source = IMPORTSSA;
+        }
         iso = lang_lookup(lang);
         if (iso != NULL)
         {
@@ -162,7 +172,7 @@ subtitle_get_track_description(const GhbValue *subsource,
             gchar *basename;
 
             basename = g_path_get_basename(filename);
-            if (code != NULL)
+            if (source == IMPORTSRT)
             {
                 desc = g_strdup_printf("%s (%s)(%s)(%s)",
                                        lang, code, format, basename);
@@ -175,7 +185,7 @@ subtitle_get_track_description(const GhbValue *subsource,
         }
         else
         {
-            if (code != NULL)
+            if (source == IMPORTSRT)
             {
                 desc = g_strdup_printf("%s (%s)(%s)", lang, code, format);
             }
