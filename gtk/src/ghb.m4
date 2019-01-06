@@ -8230,7 +8230,7 @@ filter_output([
                 <signal name="toggled" handler="subtitle_import_radio_toggled_cb" swapped="no"/>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -8247,7 +8247,7 @@ filter_output([
                 <signal name="toggled" handler="subtitle_import_radio_toggled_cb" swapped="no"/>
               </object>
               <packing>
-                <property name="position">1</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </object>
