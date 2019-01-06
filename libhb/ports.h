@@ -88,6 +88,7 @@ char * hb_strr_dir_sep(const char *path);
  ***********************************************************************/
 char * hb_get_temporary_directory(void);
 char * hb_get_temporary_filename( char *fmt, ... );
+size_t hb_getline(char **lineptr, size_t *n, FILE *fp);
 
 #ifdef __LIBHB__
 
