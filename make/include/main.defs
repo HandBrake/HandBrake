@@ -28,11 +28,10 @@ ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
     MODULES += contrib/lame
     MODULES += contrib/x264
     MODULES += contrib/jansson
+    MODULES += contrib/libvpx
 endif
 
 ifeq (1,$(FEATURE.flatpak))
-    MODULES += contrib/libopus
-    MODULES += contrib/lame
     MODULES += contrib/jansson
     MODULES += contrib/x264
 endif
@@ -49,7 +48,6 @@ ifeq (1,$(FEATURE.x265))
 endif
 
 MODULES += contrib/ffmpeg
-MODULES += contrib/libvpx
 MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
 MODULES += contrib/libbluray
