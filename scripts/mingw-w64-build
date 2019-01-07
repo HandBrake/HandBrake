@@ -1,20 +1,29 @@
 #!/usr/bin/env bash
 # mingw-w64-build - download and build mingw-w64 toolchain
 #
-# Copyright 2018 Bradley Sepos
+# Copyright 2019 Bradley Sepos
 # Released under the MIT License. See LICENSE for details.
 # https://github.com/bradleysepos/mingw-w64-build
 
 # checks for required external tools
 function check_dependencies {  # check_dependencies $DEP1 $DEP2 ...
-    local DEPS ERRORS
+    local DEPS DEPS_EACH DEPS_MULTI ERRORS FOUND
     DEPS=("${@}");
     ERRORS=()
-    for DEP in ${DEPS[@]}; do
-        if echo "${DEP}" | grep '/' >/dev/null 2>&1 && [[ ! -x "${DEP}" ]]; then
-            ERRORS+=("${DEP}")
-        elif ! hash "${DEP}" >/dev/null 2>&1; then
-            ERRORS+=("${DEP}")
+    for DEPS_EACH in ${DEPS[@]}; do
+        DEPS_MULTI=(${DEPS_EACH//|/ })
+        FOUND=false
+        for DEP in ${DEPS_MULTI[@]}; do
+            if echo "${DEP}" | grep '/' >/dev/null 2>&1 && [[ -x "${DEP}" ]]; then
+                FOUND=true
+                break
+            elif hash "${DEP}" >/dev/null 2>&1; then
+                FOUND=true
+                break
+            fi
+        done
+        if [[ "${FOUND}" == false ]]; then
+            ERRORS+=("$(echo ${DEPS_MULTI[@]} | sed 's/ /|/')")
         fi
     done
     if [[ "${#ERRORS[@]}" -ne 0 ]]; then
@@ -96,8 +105,18 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
 
     # dependencies
     local DEPS
-    DEPS=("bison" "bzip2" "curl" "flex" "g++" "gcc" "gunzip" "m4" "make" "pax")
+    DEPS=("bison" "bzip2" "curl" "flex" "g++" "gcc" "gunzip" "m4" "make" "pax" "shasum|sha256sum")
     check_dependencies "${DEPS[@]}" || return 1
+
+    # sha256 binary
+    local SHA256
+    if hash shasum >/dev/null 2>&1; then
+        SHA256="shasum -a 256"
+    elif hash sha256sum >/dev/null 2>&1; then
+        SHA256="sha256sum"
+    else
+        return 1
+    fi
 
     # package names
     local CONFIG_NAME BINUTILS_NAME MINGW_W64_NAME GMP_NAME MPFR_NAME MPC_NAME ISL_NAME GCC_NAME NAMES
@@ -162,7 +181,7 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="4.1.0"
+    VERSION="4.1.1"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -268,11 +287,11 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER
         printf "Downloading [%02i/%02i] %s " "$((I+1))" "${#PKGS[@]}" "${NAMES[I]} ${VERSIONS[I]}"
         URLS_IREF="${URLS_VARNAMES[I]}[@]"
         URLS="${!URLS_IREF}"
-        CHECKSUM=$(shasum -a 256 "${PKG_DIR}/${PKGS[I]}" 2>/dev/null | awk '{ print $1 }')
+        CHECKSUM=$(${SHA256} "${PKG_DIR}/${PKGS[I]}" 2>/dev/null | awk '{ print $1 }')
         if [[ "${CHECKSUM}" != "${CHECKSUMS[I]}" ]] >/dev/null 2>&1; then
             download_url "${DOWNLOAD_VERBOSE}" "${PKG_DIR}/${PKGS[I]}" ${URLS[@]} || return 1
         fi
-        CHECKSUM=$(shasum -a 256 "${PKG_DIR}/${PKGS[I]}" 2>/dev/null | awk '{ print $1 }')
+        CHECKSUM=$(${SHA256} "${PKG_DIR}/${PKGS[I]}" 2>/dev/null | awk '{ print $1 }')
         if [[ "${CHECKSUM}" != "${CHECKSUMS[I]}" ]]; then
             echo "checksum mismatch for package: ${PKG_DIR}/${PKGS[I]}" >&2
             echo "expected: ${CHECKSUMS[I]}" >&2
@@ -499,4 +518,9 @@ wait "${PID}" || CODE=$?
 
 trap - EXIT INT TERM
 
-exit "${CODE:-0}"
+if [[ "${CODE}" -ne 0 ]]; then
+    echo "error: subprocess returned non-zero error code (${CODE})" >&2
+    echo "logs and temporary files may exist at ${2:-$HOME/toolchains}" >&2
+    exit 1
+fi
+exit 0
