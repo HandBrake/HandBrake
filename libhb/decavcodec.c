@@ -424,6 +424,34 @@ static void decavcodecClose( hb_work_object_t * w )
     }
 }
 
+static void audioParserFlush(hb_work_object_t * w)
+{
+    hb_work_private_t * pv = w->private_data;
+    uint8_t * pout;
+    int       pout_len;
+    int64_t   parser_pts;
+
+    do
+    {
+        if (pv->parser)
+        {
+            av_parser_parse2(pv->parser, pv->context, &pout, &pout_len,
+                                   NULL, 0,
+                                   AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0 );
+            parser_pts = pv->parser->pts;
+        }
+
+        if (pout != NULL && pout_len > 0)
+        {
+            pv->packet_info.data         = pout;
+            pv->packet_info.size         = pout_len;
+            pv->packet_info.pts          = parser_pts;
+
+            decodeAudio(pv, &pv->packet_info);
+        }
+    } while (pout != NULL && pout_len > 0);
+}
+
 /***********************************************************************
  * Work
  ***********************************************************************
@@ -446,6 +474,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     if (in->s.flags & HB_BUF_FLAG_EOF)
     {
         /* EOF on input stream - send it downstream & say that we're done */
+        audioParserFlush(w);
         decodeAudio(pv, NULL);
         hb_buffer_list_append(&pv->list, in);
         *buf_in = NULL;
@@ -1690,6 +1719,42 @@ static int decodePacket( hb_work_object_t * w )
     return HB_WORK_OK;
 }
 
+static void videoParserFlush(hb_work_object_t * w)
+{
+    hb_work_private_t * pv = w->private_data;
+    int       result;
+    uint8_t * pout;
+    int       pout_len;
+    int64_t   parser_pts, parser_dts;
+
+    do
+    {
+        if (pv->parser)
+        {
+            av_parser_parse2(pv->parser, pv->context, &pout, &pout_len,
+                                   NULL, 0,
+                                   AV_NOPTS_VALUE, AV_NOPTS_VALUE, 0 );
+            parser_pts = pv->parser->pts;
+            parser_dts = pv->parser->dts;
+        }
+
+        if (pout != NULL && pout_len > 0)
+        {
+            pv->packet_info.data         = pout;
+            pv->packet_info.size         = pout_len;
+            pv->packet_info.pts          = parser_pts;
+            pv->packet_info.dts          = parser_dts;
+
+            result = decodePacket(w);
+            if (result != HB_WORK_OK)
+            {
+                break;
+            }
+            w->frame_count++;
+        }
+    } while (pout != NULL && pout_len > 0);
+}
+
 static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                             hb_buffer_t ** buf_out )
 {
@@ -1717,6 +1782,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     {
         if (pv->context != NULL && pv->context->codec != NULL)
         {
+            videoParserFlush(w);
             while (decodeFrame(pv, NULL))
             {
                 continue;
