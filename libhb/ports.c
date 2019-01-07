@@ -1475,3 +1475,33 @@ size_t hb_getline(char ** lineptr, size_t * n, FILE * fp)
     return getline(lineptr, n, fp);
 #endif
 }
+
+char * hb_strndup(const char * src, size_t len)
+{
+#ifdef SYS_MINGW
+    char * result, * end;
+
+    if (src == NULL)
+    {
+        return NULL;
+    }
+
+    end = memchr(src, 0, len);
+    if (end != NULL)
+    {
+        len = end - src;
+    }
+
+    result = malloc(len + 1);
+    if (result == NULL)
+    {
+        return NULL;
+    }
+    memcpy(result, src, len);
+    result[len] = 0;
+
+    return result;
+#else
+    return strndup(src, len);
+#endif
+}

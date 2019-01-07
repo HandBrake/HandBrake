@@ -147,7 +147,7 @@ static int ssa_update_style(const char *ssa, hb_subtitle_style_context_t *ctx)
         if (ssa[pos] == 'r')
         {
             // Style reset
-            char * style = strndup(ssa + pos + 1, end - (pos + 1));
+            char * style = hb_strndup(ssa + pos + 1, end - (pos + 1));
             ssa_style_set(ctx, style);
             free(style);
         }
@@ -284,7 +284,7 @@ static char * get_field(char ** pos)
     char * end = strchr(start, ',');
     if (end != NULL)
     {
-        result = strndup(start, end - start);
+        result = hb_strndup(start, end - start);
         *pos = end + 1;
     }
     else
@@ -315,7 +315,7 @@ static char * sgetline(char * str)
     }
     if (eol != NULL)
     {
-        return strndup(str, eol - str);
+        return hb_strndup(str, eol - str);
     }
     else
     {
