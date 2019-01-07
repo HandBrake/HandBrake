@@ -13,6 +13,7 @@
 #include "libavutil/intreadwrite.h"
 
 #include "hb.h"
+#include "ssautil.h"
 #include "lang.h"
 
 struct hb_mux_data_s
@@ -33,7 +34,8 @@ struct hb_mux_data_s
     int64_t  prev_chapter_tc;
     int16_t  current_chapter;
 
-    AVBSFContext             * bitstream_context;
+    AVBSFContext            * bitstream_context;
+    hb_tx3g_style_context_t * tx3g;
 };
 
 struct hb_mux_object_s
@@ -850,6 +852,8 @@ static int avformatInit( hb_mux_object_t * m )
                 if (job->mux == HB_MUX_AV_MP4)
                 {
                     track->st->codecpar->codec_id = AV_CODEC_ID_MOV_TEXT;
+                    track->tx3g = hb_tx3g_style_init(
+                                job->height, (char*)subtitle->extradata);
                 }
                 else
                 {
@@ -1344,8 +1348,8 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
                      * creating style atoms for them.
                      */
                     hb_muxmp4_process_subtitle_style(
-                        job->height, buf->data, &buffer,
-                        &styleatom, &stylesize );
+                        track->tx3g, buf->data, &buffer,
+                        &styleatom, &stylesize);
 
                     if (buffer != NULL)
                     {
@@ -1452,6 +1456,10 @@ static int avformatEnd(hb_mux_object_t *m)
         if (m->tracks[ii]->bitstream_context)
         {
             av_bsf_free(&m->tracks[ii]->bitstream_context);
+        }
+        if (m->tracks[ii]->tx3g)
+        {
+            hb_tx3g_style_close(&m->tracks[ii]->tx3g);
         }
     }
 

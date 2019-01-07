@@ -494,10 +494,6 @@ DECLARE_MUX( mp4 );
 DECLARE_MUX( mkv );
 DECLARE_MUX( avformat );
 
-void hb_muxmp4_process_subtitle_style(int        height,
-                                      uint8_t  * input, uint8_t  ** output,
-                                      uint8_t ** style, uint16_t  * stylesize);
-
 void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src);
 void hb_avfilter_combine( hb_list_t * list );
 char * hb_append_filter_string(char * graph_str, char * filter_str);
