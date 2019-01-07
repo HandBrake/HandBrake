@@ -4942,7 +4942,8 @@ static hb_buffer_t * hb_ts_stream_decode( hb_stream_t *stream )
             // end of file - we didn't finish filling our ps write buffer
             // so just discard the remainder (the partial buffer is useless)
             hb_log("hb_ts_stream_decode - eof");
-            return NULL;
+            b = flush_ts_streams(stream);
+            return b;
         }
 
         b = hb_ts_decode_pkt( stream, buf, 0, 0 );
