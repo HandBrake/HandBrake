@@ -350,7 +350,6 @@ static char ** get_fields(char * line, int last)
     for (ii = 0; ii < count - 1; ii++)
     {
         result[ii] = get_field(&pos);
-        printf("field (%s)\n", result[ii]);
     }
     result[ii] = strdup(pos);
 
