@@ -44,184 +44,6 @@ struct hb_work_private_s
 
 #define SSA_VERBOSE_PACKETS 0
 
-static int ssa_update_style(char *ssa, hb_subtitle_style_t *style)
-{
-    int pos, end, index;
-
-    if (ssa[0] != '{')
-        return 0;
-
-    pos = 1;
-    while (ssa[pos] != '}' && ssa[pos] != '\0')
-    {
-        index = -1;
-
-        // Skip any malformed markup junk
-        while (strchr("\\}", ssa[pos]) == NULL) pos++;
-        pos++;
-        // Check for an index that is in some markup (e.g. font color)
-        if (isdigit(ssa[pos]))
-        {
-            index = ssa[pos++] - 0x30;
-        }
-        // Find the end of this markup clause
-        end = pos;
-        while (strchr("\\}", ssa[end]) == NULL) end++;
-        // Handle simple integer valued attributes
-        if (strchr("ibu", ssa[pos]) != NULL && isdigit(ssa[pos+1]))
-        {
-            int val = strtol(ssa + pos + 1, NULL, 0);
-            switch (ssa[pos])
-            {
-                case 'i':
-                    style->flags = (style->flags & ~HB_STYLE_FLAG_ITALIC) |
-                                   !!val * HB_STYLE_FLAG_ITALIC;
-                    break;
-                case 'b':
-                    style->flags = (style->flags & ~HB_STYLE_FLAG_BOLD) |
-                                   !!val * HB_STYLE_FLAG_BOLD;
-                    break;
-                case 'u':
-                    style->flags = (style->flags & ~HB_STYLE_FLAG_UNDERLINE) |
-                                   !!val * HB_STYLE_FLAG_UNDERLINE;
-                    break;
-            }
-        }
-        if (ssa[pos] == 'c' && ssa[pos+1] == '&' && ssa[pos+2] == 'H')
-        {
-            // Font color markup
-            char *endptr;
-            uint32_t bgr;
-
-            bgr = strtol(ssa + pos + 3, &endptr, 16);
-            if (*endptr == '&')
-            {
-                switch (index)
-                {
-                    case -1:
-                    case 1:
-                        style->fg_rgb = HB_BGR_TO_RGB(bgr);
-                        break;
-                    case 2:
-                        style->alt_rgb = HB_BGR_TO_RGB(bgr);
-                        break;
-                    case 3:
-                        style->ol_rgb = HB_BGR_TO_RGB(bgr);
-                        break;
-                    case 4:
-                        style->bg_rgb = HB_BGR_TO_RGB(bgr);
-                        break;
-                    default:
-                        // Unknown color index, ignore
-                        break;
-                }
-            }
-        }
-        if ((ssa[pos] == 'a' && ssa[pos+1] == '&' && ssa[pos+2] == 'H') ||
-            (!strcmp(ssa+pos, "alpha") && ssa[pos+5] == '&' && ssa[pos+6] == 'H'))
-        {
-            // Font alpha markup
-            char *endptr;
-            uint8_t alpha;
-            int alpha_pos = 3;
-
-            if (ssa[1] == 'l')
-                alpha_pos = 7;
-
-            alpha = strtol(ssa + pos + alpha_pos, &endptr, 16);
-            if (*endptr == '&')
-            {
-                // SSA alpha is inverted 0 is opaque
-                alpha = 255 - alpha;
-                switch (index)
-                {
-                    case -1:
-                    case 1:
-                        style->fg_alpha = alpha;
-                        break;
-                    case 2:
-                        style->alt_alpha = alpha;
-                        break;
-                    case 3:
-                        style->ol_alpha = alpha;
-                        break;
-                    case 4:
-                        style->bg_alpha = alpha;
-                        break;
-                    default:
-                        // Unknown alpha index, ignore
-                        break;
-                }
-            }
-        }
-        pos = end;
-    }
-    if (ssa[pos] == '}')
-        pos++;
-    return pos;
-}
-
-char * hb_ssa_to_text(char *in, int *consumed, hb_subtitle_style_t *style)
-{
-    int markup_len = 0;
-    int in_pos = 0;
-    int out_pos = 0;
-    char *out = malloc(strlen(in) + 1); // out will never be longer than in
-
-    for (in_pos = 0; in[in_pos] != '\0'; in_pos++)
-    {
-        if ((markup_len = ssa_update_style(in + in_pos, style)))
-        {
-            *consumed = in_pos + markup_len;
-            out[out_pos++] = '\0';
-            return out;
-        }
-        // Check escape codes
-        if (in[in_pos] == '\\')
-        {
-            in_pos++;
-            switch (in[in_pos])
-            {
-                case '\0':
-                    in_pos--;
-                    break;
-                case 'N':
-                case 'n':
-                    out[out_pos++] = '\n';
-                    break;
-                case 'h':
-                    out[out_pos++] = ' ';
-                    break;
-                default:
-                    out[out_pos++] = in[in_pos];
-                    break;
-            }
-        }
-        else
-        {
-            out[out_pos++] = in[in_pos];
-        }
-    }
-    *consumed = in_pos;
-    out[out_pos++] = '\0';
-    return out;
-}
-
-void hb_ssa_style_init(hb_subtitle_style_t *style)
-{
-    style->flags = 0;
-
-    style->fg_rgb    = 0x00FFFFFF;
-    style->alt_rgb   = 0x00FFFFFF;
-    style->ol_rgb    = 0x000F0F0F;
-    style->bg_rgb    = 0x000F0F0F;
-
-    style->fg_alpha  = 0xFF;
-    style->alt_alpha = 0xFF;
-    style->ol_alpha  = 0xFF;
-    style->bg_alpha  = 0xFF;
-}
-
 static int extradataInit( hb_work_private_t * pv )
 {
     int    events = 0;
@@ -350,7 +172,7 @@ static int parse_timing( char *line, int64_t *start, int64_t *stop )
     // specifier is placed directly next to the ':' so that the next
     // expected ' ' after the ':' will be the character it matches on
     // when there is no layer field.
-    int numPartsRead = sscanf( (char *) line, "Dialogue:%*128[^,],"
+    int numPartsRead = sscanf(line, "Dialogue:%*128[^,],"
         "%d:%d:%d.%d,"  // Start
         "%d:%d:%d.%d,", // End
         &start_hr, &start_min, &start_sec, &start_centi,
@@ -478,9 +300,11 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
             out = decode_line_to_mkv_ssa(pv, line, len);
             if (out != NULL)
             {
+                free(line);
                 return out;
             }
         }
+        free(line);
         if (len < 0)
         {
             // Error or EOF

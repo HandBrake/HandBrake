@@ -2639,7 +2639,20 @@ static hb_buffer_t * merge_ssa(hb_buffer_t *a, hb_buffer_t *b)
     }
     if (text != NULL)
     {
-        len = sprintf((char*)buf->data, "%s\n%s", a->data, text);
+        // Strip trailing CR and/or LF
+        len = strlen((char*)a->data);
+        if (len > 0 && a->data[len - 1] == '\n')
+        {
+            a->data[len - 1] = 0;
+            len--;
+            if (len > 0 && a->data[len - 1] == '\r')
+            {
+                a->data[len - 1] = 0;
+            }
+        }
+        // Text subtitles are SSA internally.  Use SSA newline code
+        // and force style reset at beginning of new line.
+        len = sprintf((char*)buf->data, "%s\\N{\\r}%s", a->data, text);
         if (len >= 0)
             buf->size = len + 1;
     }
