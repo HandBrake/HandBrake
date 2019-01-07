@@ -84,6 +84,11 @@ FILE * hb_fopen(const char *path, const char *mode);
 char * hb_strr_dir_sep(const char *path);
 
 /************************************************************************
+ * String utils
+ ***********************************************************************/
+char * hb_strndup(const char * src, size_t len);
+
+/************************************************************************
  * File utils
  ***********************************************************************/
 char * hb_get_temporary_directory(void);
