@@ -427,8 +427,8 @@ static void decavcodecClose( hb_work_object_t * w )
 static void audioParserFlush(hb_work_object_t * w)
 {
     hb_work_private_t * pv = w->private_data;
-    uint8_t * pout;
-    int       pout_len;
+    uint8_t * pout = NULL;
+    int       pout_len = 0;
     int64_t   parser_pts;
 
     do
@@ -1723,8 +1723,8 @@ static void videoParserFlush(hb_work_object_t * w)
 {
     hb_work_private_t * pv = w->private_data;
     int       result;
-    uint8_t * pout;
-    int       pout_len;
+    uint8_t * pout = NULL;
+    int       pout_len = 0;
     int64_t   parser_pts, parser_dts;
 
     do
@@ -1842,8 +1842,8 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
     for (pos = 0; pos < in->size; pos += len)
     {
-        uint8_t * pout;
-        int       pout_len;
+        uint8_t * pout = NULL;
+        int       pout_len = 0;
         int64_t   parser_pts, parser_dts;
 
         if (pv->parser)
