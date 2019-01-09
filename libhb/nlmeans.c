@@ -81,11 +81,13 @@
 #define NLMEANS_PREFILTER_MODE_EDGEBOOST  1024
 #define NLMEANS_PREFILTER_MODE_PASSTHRU   2048
 
-#define NLMEANS_SORT(a,b) { if (a > b) NLMEANS_SWAP(a, b); }
-#define NLMEANS_SWAP(a,b) { a = (a ^ b); b = (a ^ b); a = (b ^ a); }
-
+#define NLMEANS_ALIGNMENT   32
 #define NLMEANS_FRAMES_MAX  32
 #define NLMEANS_EXPSIZE     128
+
+#define NLMEANS_ALIGN(x)  ((x + NLMEANS_ALIGNMENT-1) &~ (NLMEANS_ALIGNMENT-1))
+#define NLMEANS_SORT(a,b) { if (a > b) NLMEANS_SWAP(a, b); }
+#define NLMEANS_SWAP(a,b) { a = (a ^ b); b = (a ^ b); a = (b ^ a); }
 
 typedef struct
 {
@@ -776,9 +778,9 @@ static void nlmeans_plane(NLMeansFunctions *functions,
     struct PixelSum *tmp_data = calloc(dst_w * dst_h, sizeof(struct PixelSum));
 
     // Allocate integral image
-    const int integral_stride    = ((dst_w + 15) / 16 * 16) + 2 * 16;
+    const int integral_stride    = NLMEANS_ALIGN(dst_w) + 2 * NLMEANS_ALIGNMENT;
     uint32_t* const integral_mem = calloc(integral_stride * (dst_h+1), sizeof(uint32_t));
-    uint32_t* const integral     = integral_mem + integral_stride + 16;
+    uint32_t* const integral     = integral_mem + integral_stride + NLMEANS_ALIGNMENT;
 
     // Iterate through available frames
     for (int f = 0; f < nframes; f++)
@@ -1167,7 +1169,7 @@ static void nlmeans_add_frame(hb_filter_private_t *pv, hb_buffer_t *buf)
     for (int c = 0; c < 3; c++)
     {
         // Extend copy of plane with extra border and place in buffer
-        const int border = ((pv->range[c] + 2) / 2 + 15) / 16 * 16;
+        const int border = NLMEANS_ALIGN((pv->range[c] + 2) / 2);
         nlmeans_alloc(buf->plane[c].data,
                       buf->plane[c].width,
                       buf->plane[c].stride,
