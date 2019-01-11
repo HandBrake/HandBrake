@@ -20,6 +20,7 @@
 !define MIN_FRA_BUILD "*"
 
 SetCompressor lzma
+ManifestDPIAware true
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
