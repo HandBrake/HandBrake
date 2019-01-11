@@ -33,6 +33,8 @@ SetCompressor lzma
 !define MUI_LICENSEPAGE_BUTTON $(^NextBtn)
 !define MUI_LICENSEPAGE_TEXT_BOTTOM "You are now aware of your rights. Click Next to continue."
 
+!define MUI_WELCOMEFINISHPAGE_BITMAP "InstallerBackground.bmp"
+
 ; Welcome page
 !insertmacro MUI_PAGE_WELCOME
 ; License page
@@ -106,10 +108,11 @@ Function .onInit
 
  ;Run the uninstaller
   uninst:
+   CopyFiles /SILENT /FILESONLY "$INSTDIR\uninst.exe" "$TEMP\uninstallhb.exe"
    IfSilent +3
-   ExecWait $INSTDIR\uninst.exe
+   ExecWait '"$TEMP\uninstallhb.exe" _?=$INSTDIR'
    goto done
-   ExecWait '"$INSTDIR\uninst.exe" /S'
+   ExecWait '"$TEMP\uninstallhb.exe" _?=$INSTDIR /S'
   done:
 FunctionEnd
 
