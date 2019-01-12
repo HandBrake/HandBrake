@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
 
     using Caliburn.Micro;
@@ -92,6 +93,23 @@ namespace HandBrakeWPF.ViewModels
             if (!string.IsNullOrEmpty(filePath) && Directory.Exists(filePath))
             {
                 return filePath;
+            }
+
+            // Check if the parent directory still exists.
+            if (!string.IsNullOrEmpty(filePath) )
+            {
+                try
+                {
+                    DirectoryInfo parentDirectory = Directory.GetParent(filePath);
+                    if (parentDirectory != null && filePath.Contains(parentDirectory.FullName))
+                    {
+                        return parentDirectory.FullName;
+                    }
+                }
+                catch (Exception exc)
+                {
+                    Debug.WriteLine(exc);
+                }
             }
 
             return null;
