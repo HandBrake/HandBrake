@@ -111,51 +111,6 @@ namespace HandBrakeWPF.ViewModels
         public EncodeTask Task { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether show advanced tab.
-        /// </summary>
-        public bool IsAdvancedTabOptionEnabled
-        {
-            get
-            {
-                bool showAdvTabSetting = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
-                if (!showAdvTabSetting)
-                {
-                    this.UseAdvancedTab = false;
-                }
-
-                if (this.SelectedVideoEncoder != VideoEncoder.X264 && this.SelectedVideoEncoder != VideoEncoder.X264_10)
-                {
-                    this.UseAdvancedTab = false;
-                    return false;
-                }
-
-                return showAdvTabSetting;
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether use video tab.
-        /// </summary>
-        public bool UseAdvancedTab
-        {
-            get
-            {
-                return this.Task.ShowAdvancedTab;
-            }
-            set
-            {
-                if (!Equals(value, this.Task.ShowAdvancedTab))
-                {
-                    // Set the Advanced Tab up with the current settings, if we can.
-                    this.Task.AdvancedEncoderOptions = value ? this.GetActualx264Query() : string.Empty;
-                    this.Task.ShowAdvancedTab = value;
-
-                    this.NotifyOfPropertyChange(() => this.UseAdvancedTab);
-                }
-            }
-        }
-
-        /// <summary>
         /// Gets Framerates.
         /// </summary>
         public IEnumerable<string> Framerates
@@ -1005,7 +960,6 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.ExtraArguments = preset.Task.ExtraAdvancedArguments;
-            this.UseAdvancedTab = this.IsAdvancedTabOptionEnabled && preset.Task.ShowAdvancedTab;
         }
 
         /// <summary>
@@ -1175,25 +1129,6 @@ namespace HandBrakeWPF.ViewModels
             Clipboard.SetDataObject(this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 ? this.GetActualx264Query() : this.ExtraArguments);
         }
 
-        public void ToggleAdvancedTab()
-        {
-            if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab))
-            {
-                this.errorService.ShowMessageBox(
-                    "The 'Advanced' tab is no longer supported and will be removed in an upcoming release. We strongly recommend using the video tab instead.",
-                    "Advanced Tab Deprecated",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-                this.userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, true);
-                this.UseAdvancedTab = true;
-            }
-            else
-            {
-                this.userSettingService.SetUserSetting(UserSettingConstants.ShowAdvancedTab, false);
-                this.UseAdvancedTab = false;
-            }
-        }
-
         #endregion
 
         protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
@@ -1313,9 +1248,8 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void UserSettingServiceSettingChanged(object sender, SettingChangedEventArgs e)
         {
-            if (e.Key == UserSettingConstants.ShowAdvancedTab)
+            if (e.Key == UserSettingConstants.EnableVceEncoder || e.Key == UserSettingConstants.EnableNvencEncoder || e.Key == UserSettingConstants.EnableQuickSyncEncoding)
             {
-                this.NotifyOfPropertyChange(() => this.IsAdvancedTabOptionEnabled);
                 this.NotifyOfPropertyChange(() => this.VideoEncoders);
             }
         }
@@ -1400,11 +1334,6 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         private void HandleEncoderChange(VideoEncoder selectedEncoder)
         {
-            if (selectedEncoder != VideoEncoder.X264)
-            {
-                this.UseAdvancedTab = false;
-            }
-
             HBVideoEncoder encoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == EnumHelper<VideoEncoder>.GetShortName(selectedEncoder));
             if (encoder != null)
             {
@@ -1485,19 +1414,10 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
-            // Tell the Advanced Panel off the change
-            IX264ViewModel advancedViewModel = IoC.Get<IX264ViewModel>();
-            advancedViewModel.SetEncoder(this.Task.VideoEncoder);
-
             // Update the Quality Slider. Make sure the bounds are up to date with the users settings.
             this.SetQualitySliderBounds();
 
             // Update control display
-            this.UseAdvancedTab = selectedEncoder != VideoEncoder.QuickSync && selectedEncoder != VideoEncoder.QuickSyncH265 && selectedEncoder != VideoEncoder.QuickSyncH26510b
-                               && selectedEncoder != VideoEncoder.VceH264 && selectedEncoder != VideoEncoder.VceH265
-                               && selectedEncoder != VideoEncoder.NvencH264 && selectedEncoder != VideoEncoder.NvencH265
-                               && this.UseAdvancedTab;
-
             this.DisplayOptimiseOptions = this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 ||
                                           this.SelectedVideoEncoder == VideoEncoder.X265 || this.SelectedVideoEncoder == VideoEncoder.X265_10 || this.SelectedVideoEncoder == VideoEncoder.X265_12 ||
                                           this.SelectedVideoEncoder == VideoEncoder.QuickSync || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265 || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH26510b ||
@@ -1531,7 +1451,6 @@ namespace HandBrakeWPF.ViewModels
 
             // Refresh Display
             this.NotifyOfPropertyChange(() => this.Rfqp);
-            this.NotifyOfPropertyChange(() => this.IsAdvancedTabOptionEnabled);
             this.NotifyOfPropertyChange(() => this.HighQualityLabel);
             this.NotifyOfPropertyChange(() => this.IsTwoPassEnabled);
             this.NotifyOfPropertyChange(() => this.DisplayTwoPass);
@@ -1543,7 +1462,6 @@ namespace HandBrakeWPF.ViewModels
                 this.TurboFirstPass = false;
                 this.Task.Framerate = null;
                 this.NotifyOfPropertyChange(() => this.SelectedFramerate);
-                this.UseAdvancedTab = false;
             }
 
             if (selectedEncoder == VideoEncoder.NvencH264 || selectedEncoder == VideoEncoder.NvencH265 

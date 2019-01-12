@@ -339,7 +339,6 @@
     <Compile Include="Services\Interfaces\IPrePostActionService.cs" />
     <Compile Include="Services\UpdateService.cs" />
     <Compile Include="Services\PrePostActionService.cs" />
-    <Compile Include="ViewModels\Interfaces\IX264ViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IQueueSelectionViewModel.cs" />
     <Compile Include="ViewModels\QueueSelectionViewModel.cs" />
     <Compile Include="Views\QueueSelectionView.xaml.cs">
@@ -373,11 +372,9 @@
     <Compile Include="Converters\QueueStatusToVisibilityConverter.cs" />
     <Compile Include="Converters\EnumComboConverter.cs" />
     <Compile Include="Converters\FullPathToFileNameConverter.cs" />
-    <Compile Include="Helpers\AdvancedChoicesHelper.cs" />
     <Compile Include="Helpers\AutoNameHelper.cs" />
     <Compile Include="Helpers\ListBoxHelper.cs" />
     <Compile Include="Helpers\QueueRecoveryHelper.cs" />
-    <Compile Include="Model\AdvancedChoice.cs" />
     <Compile Include="Services\ErrorService.cs" />
     <Compile Include="Services\Interfaces\IErrorService.cs" />
     <Compile Include="Startup\AppBootstrapper.cs" />
@@ -385,7 +382,6 @@
     <Compile Include="ViewModels\AboutViewModel.cs" />
     <Compile Include="ViewModels\AddPresetViewModel.cs" />
     <Compile Include="ViewModels\AudioViewModel.cs" />
-    <Compile Include="ViewModels\X264ViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ITabInterface.cs" />
     <Compile Include="ViewModels\VideoViewModel.cs" />
     <Compile Include="ViewModels\FiltersViewModel.cs" />
@@ -424,9 +420,6 @@
     </Compile>
     <Compile Include="Views\SummaryView.xaml.cs">
       <DependentUpon>SummaryView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\X264View.xaml.cs">
-      <DependentUpon>X264View.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AudioView.xaml.cs">
       <DependentUpon>AudioView.xaml</DependentUpon>
@@ -583,10 +576,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\X264View.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Resource Include="Views\Styles\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -735,11 +724,9 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-
   <PropertyGroup>
     <TargetFrameworkSDKToolsDirectory Condition=" '$(Platform)' == 'x64'">$(TargetFrameworkSDKToolsDirectory)$(Platform)\</TargetFrameworkSDKToolsDirectory>
   </PropertyGroup>
-
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

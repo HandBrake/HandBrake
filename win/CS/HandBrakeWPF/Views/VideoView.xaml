@@ -193,7 +193,6 @@
                         <TextBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Copy Full Query" cal:Message.Attach="[Event Click] = [Action CopyQuery]"  />
-                                <MenuItem Header="Toggle Advanced Tab (Deprecated)" cal:Message.Attach="[Event Click] = [Action ToggleAdvancedTab]" />
                             </ContextMenu>
                         </TextBox.ContextMenu>
                     </TextBox>

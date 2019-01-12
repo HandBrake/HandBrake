@@ -31,7 +31,6 @@ namespace HandBrakeWPF
         public const string VLCPath = "VLC_Path";
         public const string InstanceId = "InstanceId";
         public const string X264Step = "X264Step";
-        public const string ShowAdvancedTab = "ShowAdvancedTab";
         public const string LastPreviewDuration = "LastPreviewDuration";
         public const string WhenCompleteAction = "WhenCompleteAction";
         public const string SendFile = "SendFile";

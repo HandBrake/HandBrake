@@ -444,10 +444,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Chapter Marker Settings */
             preset.Task.IncludeChapterMarkers = importedPreset.ChapterMarkers;
 
-            /* Advanced Settings */
-            preset.Task.ShowAdvancedTab = importedPreset.x264UseAdvancedOptions;
-            preset.Task.AdvancedEncoderOptions = importedPreset.x264Option;
-
             /* Not Supported Yet */
             // public int VideoColorMatrixCode { get; set; }
             // public string VideoScaler { get; set; }
@@ -645,10 +641,6 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.VideoColorMatrixCode = 0; // TODO not supported.
             preset.VideoTurboTwoPass = export.Task.TurboFirstPass;
             preset.VideoTwoPass = export.Task.TwoPass;
-
-            // Advanced
-            preset.x264Option = export.Task.AdvancedEncoderOptions;
-            preset.x264UseAdvancedOptions = export.Task.ShowAdvancedTab;
 
             // Unknown
             preset.ChildrenArray = new List<object>(); // We don't support nested presets.

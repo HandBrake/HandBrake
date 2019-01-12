@@ -82,7 +82,6 @@ namespace HandBrakeWPF.Startup
 
             // Tab Components
             this.container.Singleton<IAudioViewModel, AudioViewModel>();
-            this.container.Singleton<IX264ViewModel, X264ViewModel>();
             this.container.Singleton<IPictureSettingsViewModel, PictureSettingsViewModel>();
             this.container.Singleton<IChaptersViewModel, ChaptersViewModel>();
             this.container.Singleton<ISubtitlesViewModel, SubtitlesViewModel>();

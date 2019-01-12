@@ -59,7 +59,6 @@ namespace HandBrakeWPF.ViewModels
     using Execute = Caliburn.Micro.Execute;
     using HandBrakeInstanceManager = HandBrakeWPF.Instance.HandBrakeInstanceManager;
     using LogManager = HandBrakeWPF.Helpers.LogManager;
-    using MessageBox = System.Windows.MessageBox;
     using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
     using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
@@ -169,7 +168,7 @@ namespace HandBrakeWPF.ViewModels
             IErrorService errorService, IUpdateService updateService, 
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, ISummaryViewModel summaryViewModel,
             IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
-            IX264ViewModel advancedViewModel, IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
+            IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
             IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel, INotifyIconService notifyIconService)
             : base(userSettingService)
         {
@@ -193,13 +192,11 @@ namespace HandBrakeWPF.ViewModels
             this.AudioViewModel = audioViewModel;
             this.SubtitleViewModel = subtitlesViewModel;
             this.ChaptersViewModel = chaptersViewModel;
-            this.AdvancedViewModel = advancedViewModel;
             this.StaticPreviewViewModel = staticPreviewViewModel;
 
             // Setup Properties
             this.WindowTitle = Resources.HandBrake_Title;
             this.CurrentTask = new EncodeTask();
-            this.CurrentTask.PropertyChanged += this.CurrentTask_PropertyChanged;
             this.ScannedSource = new Source();
             this.HasSource = false;
 
@@ -268,11 +265,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets or sets ChaptersViewModel.
         /// </summary>
         public IChaptersViewModel ChaptersViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets AdvancedViewModel.
-        /// </summary>
-        public IX264ViewModel AdvancedViewModel { get; set; }
 
         /// <summary>
         /// Gets or sets VideoViewModel.
@@ -959,17 +951,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets a value indicating whether show advanced tab.
-        /// </summary>
-        public bool ShowAdvancedTab
-        {
-            get
-            {
-                return this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAdvancedTab);
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether is preset panel showing.
         /// </summary>
         public bool IsPresetPanelShowing
@@ -1315,7 +1296,6 @@ namespace HandBrakeWPF.ViewModels
             this.AudioViewModel.TabStatusChanged += this.TabStatusChanged;
             this.SubtitleViewModel.TabStatusChanged += this.TabStatusChanged;
             this.ChaptersViewModel.TabStatusChanged += this.TabStatusChanged;
-            this.AdvancedViewModel.TabStatusChanged += this.TabStatusChanged;
             this.MetaDataViewModel.TabStatusChanged += this.TabStatusChanged;
             this.SummaryViewModel.TabStatusChanged += this.TabStatusChanged;
         }
@@ -1361,7 +1341,6 @@ namespace HandBrakeWPF.ViewModels
             this.AudioViewModel.TabStatusChanged -= this.TabStatusChanged;
             this.SubtitleViewModel.TabStatusChanged -= this.TabStatusChanged;
             this.ChaptersViewModel.TabStatusChanged -= this.TabStatusChanged;
-            this.AdvancedViewModel.TabStatusChanged -= this.TabStatusChanged;
             this.MetaDataViewModel.TabStatusChanged -= this.TabStatusChanged;
             this.SummaryViewModel.TabStatusChanged -= this.TabStatusChanged;
         }
@@ -2227,7 +2206,6 @@ namespace HandBrakeWPF.ViewModels
                     this.AudioViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.SubtitleViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.ChaptersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
-                    this.AdvancedViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.MetaDataViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.isSettingPreset = false;
                 }
@@ -2355,7 +2333,6 @@ namespace HandBrakeWPF.ViewModels
                 this.AudioViewModel.UpdateTask(this.CurrentTask);
                 this.SubtitleViewModel.UpdateTask(this.CurrentTask);
                 this.ChaptersViewModel.UpdateTask(this.CurrentTask);
-                this.AdvancedViewModel.UpdateTask(this.CurrentTask);
                 this.MetaDataViewModel.UpdateTask(this.CurrentTask);
               
                 // Cleanup
@@ -2380,7 +2357,6 @@ namespace HandBrakeWPF.ViewModels
                 this.AudioViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.SubtitleViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.ChaptersViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
-                this.AdvancedViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.MetaDataViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.SummaryViewModel.SetSource(this.ScannedSource, this.SelectedTitle, this.selectedPreset, this.CurrentTask);
                 this.isSettingPreset = false;
@@ -2427,11 +2403,6 @@ namespace HandBrakeWPF.ViewModels
             }
 
             if (!this.ChaptersViewModel.MatchesPreset(this.selectedPreset))
-            {
-                matchesPreset = false;
-            }
-
-            if (!this.AdvancedViewModel.MatchesPreset(this.selectedPreset))
             {
                 matchesPreset = false;
             }
@@ -2797,10 +2768,6 @@ namespace HandBrakeWPF.ViewModels
         {
             switch (e.Key)
             {
-                case UserSettingConstants.ShowAdvancedTab:
-                    this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
-                    break;
-
                 case UserSettingConstants.WhenCompleteAction:
                     this.QueueViewModel.WhenDone(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction), false);
                     break;
@@ -2813,23 +2780,6 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.ShowAddSelectionMenuName);
         }
 
-        /// <summary>
-        /// Handle the property changed event of the encode task. 
-        /// Allows the main window to respond to changes.
-        /// </summary>
-        /// <param name="sender">
-        /// The sender.
-        /// </param>
-        /// <param name="e">
-        /// The e.
-        /// </param>
-        private void CurrentTask_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == UserSettingConstants.ShowAdvancedTab)
-            {
-                this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
-            }
-        }
         #endregion
     }
 }

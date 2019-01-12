@@ -273,24 +273,16 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 video.Encoder = videoEncoder.ShortName;
             }
 
-            string advancedOptions = job.ShowAdvancedTab ? job.AdvancedEncoderOptions : string.Empty;
-            if (!string.IsNullOrEmpty(advancedOptions))
-            {
-                video.Options = advancedOptions;
-            }
-            else
-            {
-                video.Level = job.VideoLevel != null ? job.VideoLevel.ShortName : null;
-                video.Options = job.ExtraAdvancedArguments;
-                video.Preset = job.VideoPreset != null ? job.VideoPreset.ShortName : null;
-                video.Profile = job.VideoProfile != null ? job.VideoProfile.ShortName : null;
+            video.Level = job.VideoLevel?.ShortName;
+            video.Options = job.ExtraAdvancedArguments;
+            video.Preset = job.VideoPreset?.ShortName;
+            video.Profile = job.VideoProfile?.ShortName;
 
-                if (job.VideoTunes != null && job.VideoTunes.Count > 0)
+            if (job.VideoTunes != null && job.VideoTunes.Count > 0)
+            {
+                foreach (var item in job.VideoTunes)
                 {
-                    foreach (var item in job.VideoTunes)
-                    {
-                        video.Tune += string.IsNullOrEmpty(video.Tune) ? item.ShortName : "," + item.ShortName;
-                    }
+                    video.Tune += string.IsNullOrEmpty(video.Tune) ? item.ShortName : "," + item.ShortName;
                 }
             }
 

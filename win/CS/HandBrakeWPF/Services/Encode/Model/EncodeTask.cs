@@ -12,42 +12,29 @@ namespace HandBrakeWPF.Services.Encode.Model
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
 
-    using Caliburn.Micro;
-
     using HandBrake.Interop.Interop.Model;
     using HandBrake.Interop.Interop.Model.Encoding;
 
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model.Models;
 
-    using AllowedPassthru = HandBrakeWPF.Services.Encode.Model.Models.AllowedPassthru;
-    using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
-    using ChapterMarker = HandBrakeWPF.Services.Encode.Model.Models.ChapterMarker;
-    using DenoisePreset = HandBrakeWPF.Services.Encode.Model.Models.DenoisePreset;
-    using DenoiseTune = HandBrakeWPF.Services.Encode.Model.Models.DenoiseTune;
-    using FramerateMode = HandBrakeWPF.Services.Encode.Model.Models.FramerateMode;
-    using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
-    using PointToPointMode = HandBrakeWPF.Services.Encode.Model.Models.PointToPointMode;
-    using SubtitleTrack = HandBrakeWPF.Services.Encode.Model.Models.SubtitleTrack;
-    using VideoLevel = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoLevel;
-    using VideoPreset = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoPreset;
-    using VideoProfile = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoProfile;
-    using VideoTune = HandBrakeWPF.Services.Encode.Model.Models.Video.VideoTune;
+    using AllowedPassthru = Models.AllowedPassthru;
+    using AudioTrack = Models.AudioTrack;
+    using ChapterMarker = Models.ChapterMarker;
+    using DenoisePreset = Models.DenoisePreset;
+    using DenoiseTune = Models.DenoiseTune;
+    using FramerateMode = Models.FramerateMode;
+    using OutputFormat = Models.OutputFormat;
+    using PointToPointMode = Models.PointToPointMode;
+    using SubtitleTrack = Models.SubtitleTrack;
+    using VideoLevel = Models.Video.VideoLevel;
+    using VideoPreset = Models.Video.VideoPreset;
+    using VideoProfile = Models.Video.VideoProfile;
+    using VideoTune = Models.Video.VideoTune;
 
-    public class EncodeTask : PropertyChangedBase
+    public class EncodeTask 
     {
-        #region Private Fields
 
-        /// <summary>
-        /// The advanced panel enabled.
-        /// </summary>
-        private bool showAdvancedTab;
-
-        #endregion
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EncodeTask"/> class.
-        /// </summary>
         public EncodeTask()
         {
             this.Cropping = new Cropping();
@@ -70,7 +57,6 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// </param>
         public EncodeTask(EncodeTask task)
         {
-            this.AdvancedEncoderOptions = task.AdvancedEncoderOptions;
             this.AllowedPassthruOptions = new AllowedPassthru(task.AllowedPassthruOptions);
             this.Anamorphic = task.Anamorphic;
             this.Angle = task.Angle;
@@ -153,8 +139,6 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.ExtraAdvancedArguments = task.ExtraAdvancedArguments;
 
             this.MetaData = new MetaData(task.MetaData);
-
-            this.ShowAdvancedTab = task.ShowAdvancedTab;
         }
 
         #region Source
@@ -381,6 +365,31 @@ namespace HandBrakeWPF.Services.Encode.Model
         public VideoEncoder VideoEncoder { get; set; }
 
         /// <summary>
+        /// Gets or sets the video profile.
+        /// </summary>
+        public VideoProfile VideoProfile { get; set; }
+
+        /// <summary>
+        /// Gets or sets the video level.
+        /// </summary>
+        public VideoLevel VideoLevel { get; set; }
+
+        /// <summary>
+        /// Gets or sets the video preset.
+        /// </summary>
+        public VideoPreset VideoPreset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the video tunes.
+        /// </summary>
+        public List<VideoTune> VideoTunes { get; set; }
+
+        /// <summary>
+        /// Gets or sets Extra Advanced Arguments for the Video Tab.
+        /// </summary>
+        public string ExtraAdvancedArguments { get; set; }
+
+        /// <summary>
         /// Gets or sets the Video Encode Mode
         /// </summary>
         public FramerateMode FramerateMode { get; set; }
@@ -452,59 +461,6 @@ namespace HandBrakeWPF.Services.Encode.Model
         /// Gets or sets ChapterNames.
         /// </summary>
         public ObservableCollection<ChapterMarker> ChapterNames { get; set; }
-
-        #endregion
-
-        #region Advanced
-
-        /// <summary>
-        /// Gets or sets AdvancedEncoderOptions.
-        /// </summary>
-        public string AdvancedEncoderOptions { get; set; }
-
-        /// <summary>
-        /// Gets or sets the video profile.
-        /// </summary>
-        public VideoProfile VideoProfile { get; set; }
-
-        /// <summary>
-        /// Gets or sets the video level.
-        /// </summary>
-        public VideoLevel VideoLevel { get; set; }
-
-        /// <summary>
-        /// Gets or sets the video preset.
-        /// </summary>
-        public VideoPreset VideoPreset { get; set; }
-
-        /// <summary>
-        /// Gets or sets the video tunes.
-        /// </summary>
-        public List<VideoTune> VideoTunes { get; set; }
-
-        /// <summary>
-        /// Gets or sets Extra Advanced Arguments for the Video Tab.
-        /// </summary>
-        public string ExtraAdvancedArguments { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether advanced panel enabled.
-        /// </summary>
-        public bool ShowAdvancedTab
-        {
-            get
-            {
-                return this.showAdvancedTab;
-            }
-            set
-            {
-                if (!Equals(value, this.showAdvancedTab))
-                {
-                    this.showAdvancedTab = value;
-                    this.NotifyOfPropertyChange(() => this.ShowAdvancedTab);
-                }
-            }
-        }
 
         #endregion
 

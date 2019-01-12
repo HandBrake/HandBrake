@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string"/>
-              <xsd:attribute name="type" type="xsd:string"/>
-              <xsd:attribute name="mimetype" type="xsd:string"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string"/>
-              <xsd:attribute name="name" type="xsd:string"/>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
-              <xsd:attribute ref="xml:space"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required"/>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -117,120 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Advanced_AdaptiveBFramesToolTip" xml:space="preserve">
-    <value>x264 hat eine Menge Algorithmen um zu entscheiden, wann B-Frames verwendet werden sollen und wie sie verwendet werden.
-
-Der schnelle Modus benötigt ungefähr die selbe Zeit, ganz egal wie viele B-Frames festgelegt sind.
-
-Der optimale Modus wird langsamer wenn sich die maximale Anzahl an B-Frames erhöht, macht aber viel exaktere Entscheidungen, speziell wenn B-Pyramid verwendet wird.</value>
-  </data>
-  <data name="Advanced_AdaptiveDirectModeToolTip" xml:space="preserve">
-    <value>H.264 erlaubt in B-Frames zwei verschiedene Vorhersagemethoden, räumlich und zeitlich.
-
-Räumlich, der Standard, ist in den meisten Fällen die besser Wahl, jedoch kann 'zeitlich' in manchen Fällen auch nützlich sein.
-
-x264 kann, unter der Einbuße von etwas Geschwindigkeit (und demzufolge für einen kleinen Vorteil bezüglich der Kompression), adaptiv entscheiden welche Methode für das jeweilige Einzelbild die bessere ist.</value>
-  </data>
-  <data name="Advanced_AdaptiveQuantizationStrengthToolTip" xml:space="preserve">
-    <value>Die adaptive Quantisierung steuert, wie der Enkoder die Bits über das Einzelbild verteilt.
-Höhere Werte entfernen mehr Bits von Kanten und komplexen Bereichen, um Bereiche mit feineren Details zu verbessern.</value>
-  </data>
-  <data name="Advanced_AnalysisToolTip" xml:space="preserve">
-    <value>Die Modusentscheidung wählt aus einer Vielzahl von Optionen aus, um eine Entscheidung zu treffen: Diese Einstellung wählt, welche Optionen das sind. 
-Weniger zu überprüfende Partitionen bedeuten eine schnellere Kodierung auf Kosten schlechterer Entscheidungen, da die beste Option möglicherweise eine deaktivierte war.</value>
-  </data>
-  <data name="Advanced_BFramesToolTip" xml:space="preserve">
-    <value>Vernünftige Werte liegen im Bereich ~2-5.
-Dies legt die maximale Anzahl aufeinanderfolgender B-Frames fest, die der Enkoder verwenden kann.
-Große Werte helfen in der Regel nicht viel, solange adaptive B-Frames nicht auf Optimal eingestellt ist.
-Cel-animiertes Ausgangsmaterial und B-Pyramid erhöhen ebenfalls signifikant den Nutzen größerer Werte.
-Das Basisprofil, wie es für iPods und ähnliche Geräte erforderlich ist, erfordert, dass die B-Frames auf 0 (aus) gesetzt ist.</value>
-  </data>
-  <data name="Advanced_CabacToolTip" xml:space="preserve">
-    <value>Nachdem der Enkoder seine Arbeit getan hat, hat er eine Menge Daten, die verlustfrei komprimiert werden müssen, ähnlich wie ZIP oder RAR. H.264 bietet dafür zwei Möglichkeiten: CAVLC und CABAC. CABAC dekodiert viel langsamer, komprimiert aber deutlich besser (10-30%), insbesondere bei niedrigeren Bitraten. Wenn die CPU-Anforderungen für die Videowiedergabe minimieren werden soll, sollte diese Option deaktiviert sein. Das Basisprofil, wie es für iPods und ähnliche Geräte erforderlich ist, erfordert, dass CABAC deaktiviert wird.</value>
-  </data>
-  <data name="Advanced_DeblockingToolTip" xml:space="preserve">
-    <value>H.264 besitzt einen eingebauten Deblockingfilter, der nach jedem dekodierten Einzelbild Blockartefakte glättet. Dies verbessert nicht nur die visuelle Qualität, sondern verbessert auch signifikant die Kompression.
-Der Deblockingfilter benötigt viel CPU-Leistung, wenn also die CPU-Anforderungen beim Abspielen des Videos minimiert werden soll, sollte diese Option deaktiviert werden.
-Der Deblockingfilter hat zwei einstellbare Parameter,  "Stärke" und "Schwellenwert".
-Ersteres beeinflusst wie stark (oder schwach) der Deblocker ist, wohingegen letzteres festlegt auf wie viele (oder wenige) Kanten er angewandt wird.
-Kleinere Werte bedeuten weniger Deblocking, höhere Werte bedeuten mehr Deblocking. Der Standardwert ist 0 (normale Stärke) für beide Parameter.</value>
-  </data>
-  <data name="Advanced_EightByEightDctToolTip" xml:space="preserve">
-    <value>Die 8x8-Transformation ist die nützlichste Funktion von x264 in Bezug auf Kompression pro Geschwindigkeit. 
-Es verbessert die Kompression um mindestens 5% bei sehr geringen Geschwindigkeitskosten und kann im Vergleich zu seiner Kompressionsverstärkung einen ungewöhnlich hohen visuellen Qualitätsvorteil bieten. 
-Allerdings erfordert es 'High Profile', das einige Geräte möglicherweise nicht unterstützen.</value>
-  </data>
-  <data name="Advanced_MotionEstimationMethodToolTip" xml:space="preserve">
-    <value>Steuert die Methode der Bewegungsschätzung. Die Bewegungsschätzung ist die Art und Weise, wie der Enkoder schätzt, wie sich jeder Pixelblock in einem Einzelbild bewegt hat. 
-Eine bessere Bewegungssuchmethode verbessert die Kompression auf Kosten der Geschwindigkeit.
-
-Diamond: Führt eine extrem schnelle und einfache Suche mit einem Diamantmuster durch.
-
-Hexagon: Führt eine etwas effektivere, aber etwas langsamere Suche mit einem Hexagonmuster durch.
-
-Uneven Multi-Hex: Führt eine sehr breite Suche mit einer Vielzahl von Mustern durch, um komplexe Bewegungen genauer zu erfassen. 
-
-Exhaustive: Führt eine "dumme" Suche nach jedem Pixel in einem großen Bereich durch. Deutlich langsamer mit nur einem geringen Kompressionsgewinn.
-
-Transformed Exhaustive: Wie Exhaustive, aber trifft noch genauere Entscheidungen. Dementsprechend etwas langsamer, auch für nur eine kleine Verbesserung.</value>
-  </data>
-  <data name="Advanced_MotionEstimationRangeToolTip" xml:space="preserve">
-    <value>Dies ist die Entfernung, die x264 aus seiner besten Schätzung bei der Bewegung eines Blocks sucht, um zu versuchen, seine tatsächliche Bewegung zu finden. 
-
-Die Standardeinstellung ist für die meisten Inhalte in Ordnung, aber Videos mit extremen Bewegungen, insbesondere bei HD-Auflösungen, können von höheren Werten profitieren, wenn auch unter hohen Geschwindigkeitskosten.</value>
-  </data>
-  <data name="Advanced_NoDctDecimateToolTip" xml:space="preserve">
-    <value>x264 entfernt normalerweise fast leere Datenblöcke, um Bits zu speichern, die besser für einen anderen Zweck im Video verwendet werden können. 
-Dies kann jedoch manchmal leicht negative Auswirkungen auf die Beibehaltung von feiner Körnung und Dither haben. 
-Dies auf den Standardeinstellungen belassen, es sei denn bei Banding-Problemen oder oder Problemen bei denen geringes Rauschen beibehalten werden soll.</value>
-  </data>
-  <data name="Advanced_PsychovisualRateDistortionToolTip" xml:space="preserve">
-    <value>Psychovisuelle Ratenverzerrung bedeutet, dass x264 versucht, Details zu erhalten, um eine bessere Qualität für das menschliche Auge zu erreichen, 
-im Gegensatz zu dem Versuch, die Qualität so zu maximieren, wie ein Computer sie versteht, durch Signal-Rausch-Abstände, welche Probleme haben, feine Details und Rauschen zu unterscheiden.</value>
-  </data>
-  <data name="Advanced_PsychovisualTrellisToolTip" xml:space="preserve">
-    <value>Psychovisuelles Trellis versucht, mehr Schärfe und Details zu erhalten, kann aber Artefakte verursachen.
-Es gilt als experimentell, weshalb es standardmäßig ausgeschaltet ist. Gute Werte sind 0.1 bis 0.2.</value>
-  </data>
-  <data name="Advanced_PyramidalBFramesToolTip" xml:space="preserve">
-    <value>B-Pyramid verbessert die Kompression, indem es eine pyramidenförmige Struktur (daher der Name) von B-Frames 
-erzeugt, die es B-Frames ermöglicht, sich gegenseitig zu referenzieren, um die Kompression zu verbessern. 
-
-Erfordert Max B-Frames größer als 1; optimale adaptive B-Frames werden für den vollen Kompressionsvorteil dringend empfohlen.</value>
-  </data>
-  <data name="Advanced_ReferenceFramesToolTip" xml:space="preserve">
-    <value>Vernünftige Werte liegen bei ~1-6.
-
-Je mehr hinzugefügt wird, desto besser ist die Komprimierung, aber desto langsamer ist die Kodierung.
-
-Cel-Animationen profitieren tendenziell eher von mehr Referenzeinzelbildern als Filminhalte.
-
-Beachten Sie, dass viele Hardwaregeräte eine Begrenzung der Anzahl der unterstützten Referenzeinzelbilder haben. Wenn also für einen Handheld oder Standalone-Player kodiert wird, sollte dies auf den Standardwerten bleiben, es sei denn, man ist sich absolut sicher, dass man weiß was man tut!</value>
-  </data>
-  <data name="Advanced_SubpixelMotionEstimationToolTip" xml:space="preserve">
-    <value>Diese Einstellung steuert sowohl die Subpixel-Bewegungsabschätzung der Bewegungsschätzung als auch die Methoden zur Modusentscheidung.
-
-Die Subpixel-Bewegungsabschätzung wird verwendet, um Bewegungsschätzungen über die reine Pixelgenauigkeit hinaus zu verfeinern und die Kompression zu verbessern.
-
-Die Modusentscheidung ist die Methode, mit der man wählt, wie man jeden Block des Einzelbildes kodiert: eine sehr wichtige Entscheidung.
-
-SAD ist die schnellste Methode, gefolgt von SATD, RD, RD-Verfeinerung und der langsamsten, QPRD.
-6 oder höher wird dringend empfohlen: Psy-RD, eine sehr leistungsstarke psychovisuelle Optimierung, die hilft, Details zu erhalten, erfordert RD.
-10, die mächtigste und langsamste Option, erfordert trellis=2.</value>
-  </data>
-  <data name="Advanced_TrellisToolTip" xml:space="preserve">
-    <value>Trellis verfeinert die Rundung der Transformationskoeffizienten, um 3-5% mehr Kompression auf Kosten einer gewissen Geschwindigkeit zu erreichen. 
-"Immer" verwendet Trellis nicht nur während des Hauptkodierungsprozesses, sondern auch während der Analyse, was die Kompression noch weiter verbessert, wenn auch unter hohen Geschwindigkeitskosten. 
-
-Trellis kostet mehr Geschwindigkeit bei höheren Bitraten.</value>
-  </data>
-  <data name="Advanced_WeightPToolTip" xml:space="preserve">
-    <value>Führt zusätzliche Analysen durch, um die Gewichtungsparameter für jedes Einzelbild festzulegen. 
-Dies verbessert die Gesamtkompression leicht und verbessert die Qualität der Überblendungen stark. 
-Das Basisprofil, wie es für iPods und ähnliche Geräte erforderlich ist, erfordert, dass die gewichtete P-Frame-Vorhersage deaktiviert wird. 
-Beachtet werden sollte, dass einige Geräte und Abspielgeräte auch solche, die das Hauptprofil unterstützen, Probleme mit der Vorhersage von gewichteten P-Frames haben können: Das Apple TV ist damit beispielsweise völlig inkompatibel.</value>
-  </data>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
     <value>Komplette Liste der Enkoderparameter:
 {0}</value>
@@ -259,11 +145,6 @@ Keine: Die Bildeinstellungen werden nicht in der Voreinstellung gespeichert. Bei
 Eigene: Es kann optional eine maximale Breite und Höhe eingestellt werden. Dabei ist eine Kodierung kleiner oder gleich diesen Werten. 'Das Seitenverhältnis beibehalten' wird automatisch angewendet.
 
 Quellenmaximum: Kodiert nach Möglichkeit immer mit der Quellauflösung.</value>
-  </data>
-  <data name="Advanced_EncoderOptions" xml:space="preserve">
-    <value>Die Optionen werden an den x264-Enkoder weitergeleitet. 
-Die obigen Steuerelemente sind nur ein Teil nützlicher x264-Parameter. 
-In diesem Feld können zusätzliche oder aktuelle Parameter nach Belieben hinzugefügt oder geändert werden. </value>
   </data>
   <data name="About_GPL" xml:space="preserve">
     <value>Copyright (C) 2003-2019 Das HandBrake-Team
@@ -485,11 +366,6 @@ Nicht beide zur selben Zeit!</value>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
     <value>Die Voreinstellung könnte beschädigt sein oder von einer älteren Version von HandBrake stammen welche nicht mehr unterstützt wird.
 Voreinstellungen aus älteren Versionen müssen mit einer aktuellen Version neu erstellt werden.</value>
-  </data>
-  <data name="Advanced_NoOptionsPaneAvailable" xml:space="preserve">
-    <value>Für diesen Enkoder ist kein Einstellungsfenster verfügbar.
-
-Bitte das Feld 'Zusätzliche Einstellungen' im Video-Tab verwenden um zusätzliche benötigte Enkoderparameter einzugeben.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
     <value>Zusätzliche erweiterte Argumente, die vom Videoenkoder angewendet werden.</value>

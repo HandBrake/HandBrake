@@ -208,7 +208,6 @@ namespace HandBrakeWPF.Services
                 }
 
                 // Legacy Settings forced Reset.
-                this.userSettings[UserSettingConstants.ShowAdvancedTab] = false;
                 this.userSettings[UserSettingConstants.ScalingMode] = VideoScaler.Lanczos;
             }
             catch (Exception exc)
