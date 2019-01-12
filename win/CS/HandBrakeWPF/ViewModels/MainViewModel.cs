@@ -57,8 +57,8 @@ namespace HandBrakeWPF.ViewModels
     using DataFormats = System.Windows.DataFormats;
     using DragEventArgs = System.Windows.DragEventArgs;
     using Execute = Caliburn.Micro.Execute;
-    using HandBrakeInstanceManager = HandBrakeWPF.Instance.HandBrakeInstanceManager;
-    using LogManager = HandBrakeWPF.Helpers.LogManager;
+    using HandBrakeInstanceManager = Instance.HandBrakeInstanceManager;
+    using LogManager = Helpers.LogManager;
     using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
     using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
@@ -108,62 +108,7 @@ namespace HandBrakeWPF.ViewModels
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
         /// The viewmodel for HandBrakes main window.
         /// </summary>
-        /// <param name="userSettingService">
-        /// The User Setting Service
-        /// </param>
-        /// <param name="scanService">
-        /// The scan Service.
-        /// </param>
-        /// <param name="presetService">
-        /// The preset Service.
-        /// </param>
-        /// <param name="errorService">
-        /// The Error Service
-        /// </param>
-        /// <param name="updateService">
-        /// The update Service.
-        /// </param>
-        /// <param name="whenDoneService">
-        /// The when Done Service.
-        /// *** Leave in Constructor. *** 
-        /// </param>
-        /// <param name="windowManager">
-        /// The window Manager.
-        /// </param>
-        /// <param name="pictureSettingsViewModel">
-        /// The picture Settings View Model.
-        /// </param>
-        /// <param name="videoViewModel">
-        /// The video View Model.
-        /// </param>
-        /// <param name="summaryViewModel">
-        /// The summary view model.
-        /// </param>
-        /// <param name="filtersViewModel">
-        /// The filters View Model.
-        /// </param>
-        /// <param name="audioViewModel">
-        /// The audio View Model.
-        /// </param>
-        /// <param name="subtitlesViewModel">
-        /// The subtitles View Model.
-        /// </param>
-        /// <param name="advancedViewModel">
-        /// The advanced View Model.
-        /// </param>
-        /// <param name="chaptersViewModel">
-        /// The chapters View Model.
-        /// </param>
-        /// <param name="staticPreviewViewModel">
-        /// The static Preview View Model.
-        /// </param>
-        /// <param name="queueViewModel">
-        /// The queue View Model.
-        /// </param>
-        /// <param name="metaDataViewModel">
-        /// The Meta Data View Model
-        /// </param>
-        /// <param name="notifyIconService">Wrapper around the WinForms NotifyIcon for this app. </param>
+        /// <remarks>whenDoneService must be a serivce here!</remarks>
         public MainViewModel(IUserSettingService userSettingService, IScan scanService, IPresetService presetService, 
             IErrorService errorService, IUpdateService updateService, 
             IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, ISummaryViewModel summaryViewModel,
@@ -246,68 +191,23 @@ namespace HandBrakeWPF.ViewModels
 
         #region View Model Properties
 
-        /// <summary>
-        /// Gets or sets PictureSettingsViewModel.
-        /// </summary>
         public IPictureSettingsViewModel PictureSettingsViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets AudioViewModel.
-        /// </summary>
         public IAudioViewModel AudioViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets SubtitleViewModel.
-        /// </summary>
         public ISubtitlesViewModel SubtitleViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets ChaptersViewModel.
-        /// </summary>
         public IChaptersViewModel ChaptersViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets VideoViewModel.
-        /// </summary>
         public IVideoViewModel VideoViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets FiltersViewModel.
-        /// </summary>
         public IFiltersViewModel FiltersViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets the queue view model.
-        /// </summary>
         public IQueueViewModel QueueViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets the static preview view model.
-        /// </summary>
         public IStaticPreviewViewModel StaticPreviewViewModel { get; set; }
-
-        /// <summary>
-        /// Gets or sets the The MetaData View Model
-        /// </summary>
         public IMetaDataViewModel MetaDataViewModel { get; set; }
-
         public ISummaryViewModel SummaryViewModel { get; set; }
 
-        /// <summary>
-        /// Active Tab.
-        /// </summary>
-        /// <remarks>
-        ///  Should move this to the view when refactoring the keyboard shotcut handling.
-        /// </remarks>
         public int SelectedTab { get; set; }
 
         #endregion
 
         #region Properties
 
-        /// <summary>
-        /// Gets or sets TestProperty.
-        /// </summary>
         public string WindowTitle
         {
             get
@@ -369,9 +269,6 @@ namespace HandBrakeWPF.ViewModels
 
         public bool QueueRecoveryArchivesExist { get; set; }
 
-        /// <summary>
-        /// Gets or sets Presets.
-        /// </summary>
         public IEnumerable<IPresetObject> PresetsCategories { get; set; }
 
         public IPresetObject SelectedPresetCategory
@@ -411,9 +308,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets SelectedPreset.
-        /// </summary>
         public Preset SelectedPreset
         {
             get
@@ -448,12 +342,6 @@ namespace HandBrakeWPF.ViewModels
                 this.isModifiedPreset = value;
                 this.NotifyOfPropertyChange();
             }
-        }
-
-        public void TrickPresetDisplayUpdate()
-        {
-            this.NotifyOfPropertyChange(() => this.SelectedPreset);
-            this.selectedPreset.IsSelected = true;
         }
 
         /// <summary>
@@ -580,13 +468,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets a value indicating whether ShowTextEntryForPointToPointMode.
         /// </summary>
-        public bool ShowTextEntryForPointToPointMode
-        {
-            get
-            {
-                return this.SelectedPointToPoint != PointToPointMode.Chapters;
-            }
-        }
+        public bool ShowTextEntryForPointToPointMode => this.SelectedPointToPoint != PointToPointMode.Chapters;
 
         /// <summary>
         /// Gets StartEndRangeItems.
@@ -595,12 +477,7 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                if (this.SelectedTitle == null)
-                {
-                    return null;
-                }
-
-                return this.SelectedTitle.Chapters.Select(item => item.ChapterNumber).Select(dummy => dummy).ToList();
+                return this.SelectedTitle?.Chapters.Select(item => item.ChapterNumber).Select(dummy => dummy).ToList();
             }
         }
 
@@ -679,16 +556,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets RangeMode.
         /// </summary>
-        public IEnumerable<OutputFormat> OutputFormats
-        {
-            get
-            {
-                return new List<OutputFormat>
-                    {
-                         OutputFormat.Mp4, OutputFormat.Mkv
-                    };
-            }
-        }
+        public IEnumerable<OutputFormat> OutputFormats => new List<OutputFormat> { OutputFormat.Mp4, OutputFormat.Mkv };
 
         /// <summary>
         /// Gets or sets Destination.
@@ -1045,24 +913,12 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets the cancel action.
         /// </summary>
-        public Action CancelAction
-        {
-            get
-            {
-                return this.CancelScan;
-            }
-        }
+        public Action CancelAction => this.CancelScan;
 
         /// <summary>
         /// Action for the status window.
         /// </summary>
-        public Action OpenLogWindowAction
-        {
-            get
-            {
-                return this.OpenLogWindow;
-            }
-        }
+        public Action OpenLogWindowAction => this.OpenLogWindow;
 
         /// <summary>
         /// Gets or sets a value indicating whether show alert window.
@@ -1127,35 +983,17 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets the alert window close.
         /// </summary>
-        public Action AlertWindowClose
-        {
-            get
-            {
-                return this.CloseAlertWindow;
-            }
-        }
+        public Action AlertWindowClose => this.CloseAlertWindow;
 
         /// <summary>
         /// Gets the add to queue label.
         /// </summary>
-        public string QueueLabel
-        {
-            get
-            {
-                return string.Format(Resources.Main_QueueLabel, this.queueProcessor.Count > 0 ? string.Format(" ({0})", this.queueProcessor.Count) : string.Empty);
-            }
-        }
+        public string QueueLabel => string.Format(Resources.Main_QueueLabel, this.queueProcessor.Count > 0 ? string.Format(" ({0})", this.queueProcessor.Count) : string.Empty);
 
         /// <summary>
         /// Gets the start label.
         /// </summary>
-        public string StartLabel
-        {
-            get
-            {
-                return this.queueProcessor.Count > 0 ? Resources.Main_StartQueue : Resources.Main_Start;
-            }
-        }
+        public string StartLabel => this.queueProcessor.Count > 0 ? Resources.Main_StartQueue : Resources.Main_Start;
 
         /// <summary>
         /// Gets or sets a value indicating whether has source.
@@ -1311,9 +1149,6 @@ namespace HandBrakeWPF.ViewModels
             this.AudioViewModel.RefreshTask();
         }
 
-        /// <summary>
-        /// Shutdown this View
-        /// </summary>
         public void Shutdown()
         {
             // Shutdown Service
