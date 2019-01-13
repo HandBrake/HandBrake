@@ -32,13 +32,14 @@ static void build_integral_avx2(uint32_t *integral,
 {
     const __m256i zero = _mm256_set1_epi8(0);
     const int bw = w + 2 * border;
+    const int bs = NLMEANS_ALIGN(bw);
 
     for (int y = 0; y < dst_h; y++)
     {
         __m256i prevadd = _mm256_set1_epi32(0);
 
-        const uint8_t *p1 = src_pre + y*bw;
-        const uint8_t *p2 = compare_pre + (y+dy)*bw + dx;
+        const uint8_t *p1 = src_pre + y*bs;
+        const uint8_t *p2 = compare_pre + (y+dy)*bs + dx;
         uint32_t *out = integral + (y*integral_stride);
 
         for (int x = 0; x < dst_w; x += 32)
@@ -167,13 +168,14 @@ static void build_integral_sse2(uint32_t *integral,
 {
     const __m128i zero = _mm_set1_epi8(0);
     const int bw = w + 2 * border;
+    const int bs = NLMEANS_ALIGN(bw);
 
     for (int y = 0; y < dst_h; y++)
     {
         __m128i prevadd = _mm_set1_epi32(0);
 
-        const uint8_t *p1 = src_pre + y*bw;
-        const uint8_t *p2 = compare_pre + (y+dy)*bw + dx;
+        const uint8_t *p1 = src_pre + y*bs;
+        const uint8_t *p2 = compare_pre + (y+dy)*bs + dx;
         uint32_t *out = integral + (y*integral_stride);
 
         for (int x = 0; x < dst_w; x += 16)
