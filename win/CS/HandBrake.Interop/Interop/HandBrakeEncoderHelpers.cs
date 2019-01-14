@@ -163,6 +163,17 @@ namespace HandBrake.Interop.Interop
         }
 
         /// <summary>
+        /// Gets a value indicating whether SRT subtitles can be burnt in.
+        /// </summary>
+        public static bool CanBurnSSA
+        {
+            get
+            {
+                return HBFunctions.hb_subtitle_can_burn((int)hb_subtitle_s_subsource.IMPORTSSA) > 0;
+            }
+        }
+
+        /// <summary>
         /// Gets the audio encoder with the specified short name.
         /// </summary>
         /// <param name="shortName">
@@ -306,6 +317,7 @@ namespace HandBrake.Interop.Interop
                     return "CC708";
                 case hb_subtitle_s_subsource.IMPORTSRT:
                     return "SRT";
+                case hb_subtitle_s_subsource.IMPORTSSA:
                 case hb_subtitle_s_subsource.SSASUB:
                     return "SSA";
                 case hb_subtitle_s_subsource.TX3GSUB:
