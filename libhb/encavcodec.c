@@ -437,7 +437,10 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     context->color_trc       = job->color_transfer;
     context->colorspace      = job->color_matrix;
 
-    context->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+    if (!job->inline_parameter_sets)
+    {
+        context->flags |= AV_CODEC_FLAG_GLOBAL_HEADER;
+    }
     if( job->grayscale )
     {
         context->flags |= AV_CODEC_FLAG_GRAY;
