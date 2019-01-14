@@ -1888,4 +1888,13 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
     <value>Play File</value>
   </data>
+  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+    <value>Application Toolbar</value>
+  </data>
+  <data name="Options_ShowToolbarAddAll" xml:space="preserve">
+    <value>Show 'Add All to Queue' on the toolbar</value>
+  </data>
+  <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
+    <value>Show 'Add Selection to Queue' on the toolbar</value>
+  </data>
 </root>

@@ -104,6 +104,10 @@ namespace HandBrakeWPF.ViewModels
 
         private InterfaceLanguage selectedLanguage;
 
+        private bool showAddSelectionToQueue;
+
+        private bool showAddAllToQueue;
+
         #endregion
 
         #region Constructors and Destructors
@@ -488,6 +492,28 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.playSoundWhenQueueDone) return;
                 this.playSoundWhenQueueDone = value;
                 this.NotifyOfPropertyChange(() => this.PlaySoundWhenQueueDone);
+            }
+        }
+
+        public bool ShowAddSelectionToQueue
+        {
+            get => this.showAddSelectionToQueue;
+            set
+            {
+                if (value == this.showAddSelectionToQueue) return;
+                this.showAddSelectionToQueue = value;
+                this.NotifyOfPropertyChange(() => this.ShowAddSelectionToQueue);
+            }
+        }
+
+        public bool ShowAddAllToQueue
+        {
+            get => this.showAddAllToQueue;
+            set
+            {
+                if (value == this.showAddAllToQueue) return;
+                this.showAddAllToQueue = value;
+                this.NotifyOfPropertyChange(() => this.ShowAddAllToQueue);
             }
         }
 
@@ -1351,7 +1377,7 @@ namespace HandBrakeWPF.ViewModels
                 this.CheckForUpdatesFrequency = 1;
             }
 
-            // On Encode Completeion Action
+            // On Encode Completion Action
             this.whenDoneOptions.Clear();
             this.whenDoneOptions.Add("Do nothing");
             this.whenDoneOptions.Add("Shutdown");
@@ -1379,7 +1405,10 @@ namespace HandBrakeWPF.ViewModels
             this.PlaySoundWhenDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone);
             this.PlaySoundWhenQueueDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenQueueDone);
             this.ShowExperimentalQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowExperimentalQueue);
-            
+
+            this.ShowAddAllToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
+            this.ShowAddSelectionToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddSelectionToQueue);
+
             // #############################
             // Output Settings
             // #############################
@@ -1545,6 +1574,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenQueueDone, this.PlaySoundWhenQueueDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenDoneAudioFile, this.WhenDoneAudioFileFullPath);
             this.userSettingService.SetUserSetting(UserSettingConstants.UiLanguage, this.SelectedLanguage?.Culture);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddAllToQueue, this.ShowAddAllToQueue);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, this.ShowAddSelectionToQueue);
 
             /* Experiments */
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);

@@ -2437,6 +2437,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application Toolbar.
+        /// </summary>
+        public static string Options_ApplicaitonToolbar {
+            get {
+                return ResourceManager.GetString("Options_ApplicaitonToolbar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Arguments:.
         /// </summary>
         public static string Options_Arguments {
@@ -2840,6 +2849,24 @@ namespace HandBrakeWPF.Properties {
         public static string Options_ShowQueueInline {
             get {
                 return ResourceManager.GetString("Options_ShowQueueInline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show &apos;Add All to Queue&apos; on the toolbar.
+        /// </summary>
+        public static string Options_ShowToolbarAddAll {
+            get {
+                return ResourceManager.GetString("Options_ShowToolbarAddAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show &apos;Add Selection to Queue&apos; on the toolbar.
+        /// </summary>
+        public static string Options_ShowToolbarAddSelection {
+            get {
+                return ResourceManager.GetString("Options_ShowToolbarAddSelection", resourceCulture);
             }
         }
         

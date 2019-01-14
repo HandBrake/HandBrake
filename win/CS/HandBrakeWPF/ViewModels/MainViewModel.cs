@@ -2606,15 +2606,16 @@ namespace HandBrakeWPF.ViewModels
                 case UserSettingConstants.WhenCompleteAction:
                     this.QueueViewModel.WhenDone(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction), false);
                     break;
+
+                case UserSettingConstants.ShowAddAllToQueue:
+                case UserSettingConstants.ShowAddSelectionToQueue:
+                    this.NotifyOfPropertyChange(() => this.ShowAddAllToQueue);
+                    this.NotifyOfPropertyChange(() => this.ShowAddSelectionToQueue);
+                    this.NotifyOfPropertyChange(() => this.ShowAddAllMenuName);
+                    this.NotifyOfPropertyChange(() => this.ShowAddSelectionMenuName);
+                    break;
             }
-
-
-            this.NotifyOfPropertyChange(() => this.ShowAddAllToQueue);
-            this.NotifyOfPropertyChange(() => this.ShowAddSelectionToQueue);
-            this.NotifyOfPropertyChange(() => this.ShowAddAllMenuName);
-            this.NotifyOfPropertyChange(() => this.ShowAddSelectionMenuName);
         }
-
         #endregion
     }
 }
