@@ -4637,13 +4637,11 @@ static void
 update_queue_labels(signal_user_data_t *ud)
 {
     GtkToolButton *button;
-    gboolean       active;
     gint           pending;
     const gchar   *show_hide;
     gchar         *str;
 
     button  = GTK_TOOL_BUTTON(GHB_WIDGET(ud->builder, "show_queue"));
-    active  = gtk_toggle_tool_button_get_active(GTK_TOGGLE_TOOL_BUTTON(button));
     pending = queue_pending_count(ud->queue);
 
     show_hide = _("Queue");
