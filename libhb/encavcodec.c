@@ -791,7 +791,6 @@ static hb_buffer_t * process_delay_list( hb_work_private_t * pv, hb_buffer_t * b
 static void get_packets( hb_work_object_t * w, hb_buffer_list_t * list )
 {
     hb_work_private_t * pv = w->private_data;
-    hb_job_t * job = pv->job;
 
     while (1)
     {
