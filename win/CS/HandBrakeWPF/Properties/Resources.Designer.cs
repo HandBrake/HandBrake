@@ -4660,11 +4660,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import SRT.
+        ///   Looks up a localized string similar to Import Subtitle.
         /// </summary>
-        public static string SubtitlesView_ImportSRT {
+        public static string SubtitlesView_ImportSubtitle {
             get {
-                return ResourceManager.GetString("SubtitlesView_ImportSRT", resourceCulture);
+                return ResourceManager.GetString("SubtitlesView_ImportSubtitle", resourceCulture);
             }
         }
         

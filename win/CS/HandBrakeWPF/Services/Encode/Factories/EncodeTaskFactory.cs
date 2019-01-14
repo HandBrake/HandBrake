@@ -234,9 +234,10 @@ namespace HandBrakeWPF.Services.Encode.Factories
                         Default = item.Default,
                         Offset = item.SrtOffset,
                         Burn = item.Burned,
-                        SRT =
-                            new SRT
+                        Import =
+                            new SubImport
                             {
+                                Format = item.SrtPath.EndsWith("srt") ? "SRT" : "SSA",
                                 Filename = item.SrtPath,
                                 Codeset = item.SrtCharCode,
                                 Language = item.SrtLangCode

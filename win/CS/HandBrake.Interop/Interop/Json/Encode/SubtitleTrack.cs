@@ -47,6 +47,6 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// <summary>
         /// Gets or sets the srt.
         /// </summary>
-        public SRT SRT { get; set; }
+        public SubImport Import { get; set; }
     }
 }

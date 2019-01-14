@@ -105,7 +105,7 @@
     <Compile Include="Interop\Json\Encode\Range.cs" />
     <Compile Include="Interop\Json\Encode\SubtitleSearch.cs" />
     <Compile Include="Interop\Json\Encode\Source.cs" />
-    <Compile Include="Interop\Json\Encode\SRT.cs" />
+    <Compile Include="Interop\Json\Encode\SubImport.cs" />
     <Compile Include="Interop\Json\Encode\Subtitles.cs" />
     <Compile Include="Interop\Json\Encode\SubtitleTrack.cs" />
     <Compile Include="Interop\Json\Encode\Video.cs" />

@@ -1642,8 +1642,8 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
     <value>Burn-In Behaviour:</value>
   </data>
-  <data name="SubtitlesView_ImportSRT" xml:space="preserve">
-    <value>Import SRT</value>
+  <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
+    <value>Import Subtitle</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
     <value>Track Selection Behaviour:</value>

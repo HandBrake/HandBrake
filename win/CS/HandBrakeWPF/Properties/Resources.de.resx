@@ -1641,8 +1641,8 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
     <value>Einbrennverhalten:</value>
   </data>
-  <data name="SubtitlesView_ImportSRT" xml:space="preserve">
-    <value>SRT importieren</value>
+  <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
+    <value>SRT / SSA importieren</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
     <value>Spurverhalten:</value>

@@ -12,7 +12,7 @@ namespace HandBrake.Interop.Interop.Json.Encode
     /// <summary>
     /// The srt.
     /// </summary>
-    public class SRT
+    public class SubImport
     {
         /// <summary>
         /// Gets or sets the codeset.
@@ -28,5 +28,7 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// Gets or sets the language.
         /// </summary>
         public string Language { get; set; }
+
+        public string Format { get; set; }
     }
 }

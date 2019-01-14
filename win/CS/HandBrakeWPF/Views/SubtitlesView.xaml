@@ -84,7 +84,7 @@
 
             <Button MinWidth="75" Grid.Column="1"
                     cal:Message.Attach="[Event Click] = [Action Import]"
-                    Content="{x:Static Properties:Resources.SubtitlesView_ImportSRT}"
+                    Content="{x:Static Properties:Resources.SubtitlesView_ImportSubtitle}"
                     Margin="0,0,10,0"/>
             <Button MinWidth="65" Grid.Column="2"
                     Margin="0,0,10,0"

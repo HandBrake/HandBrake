@@ -238,11 +238,11 @@ namespace HandBrakeWPF.ViewModels
         public void Import()
         {
             OpenFileDialog dialog = new OpenFileDialog
-                {
-                    Filter = "SRT files (*.srt)|*.srt",
-                    CheckFileExists = true,
-                    Multiselect = true
-                };
+            {
+                Filter = "Subtitle files (*.srt, *.ssa)|*.srt;*.ssa",
+                CheckFileExists = true,
+                Multiselect = true
+            };
 
             if (this.Task != null && this.Task.Source != null)
             {
