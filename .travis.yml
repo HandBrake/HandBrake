@@ -7,6 +7,8 @@ os:
 dist: xenial
 
 addons:
+  homebrew:
+    brewfile: true
   apt:
     packages:
       - autoconf
