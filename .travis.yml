@@ -1,7 +1,9 @@
 git:
   depth: 1
 
-os: linux
+os:
+  - linux
+  - osx
 dist: xenial
 
 addons:
