@@ -1,0 +1,78 @@
+From patchwork Mon Jan 14 19:02:20 2019
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Subject: [FFmpeg-devel] amfenc: Add support for pict_type field
+From: Michael Fabian 'Xaymar' Dirks <info@xaymar.com>
+X-Patchwork-Id: 11748
+Message-Id: <20190114190220.16236-1-info@xaymar.com>
+To: ffmpeg-devel@ffmpeg.org
+Cc: Michael Fabian 'Xaymar' Dirks <info@xaymar.com>
+Date: Mon, 14 Jan 2019 20:02:20 +0100
+
+Adds support for the pict_type field in AVFrame to amf_h264 and amf_h265 simultaneously. This field is needed in cases where the application wishes to override the frame type with another one, such as forcefully inserting a key frame for chapter markers or similar.
+
+Additionally this abuses AV_PICTURE_TYPE_S for marking Skip frames, a special type of frame in AVC, SVC and HEVC which is a flag for the decoder to repeat the last frame.
+
+Signed-off-by: Michael Fabian 'Xaymar' Dirks <info@xaymar.com>
+---
+ libavcodec/amfenc.c | 46 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
+
+diff --git a/libavcodec/amfenc.c b/libavcodec/amfenc.c
+index 384d8efc92..eb4b65e4f2 100644
+--- a/libavcodec/amfenc.c
++++ b/libavcodec/amfenc.c
+@@ -680,6 +680,52 @@ int ff_amf_send_frame(AVCodecContext *avctx, const AVFrame *frame)
+             break;
+         }
+ 
++        // Override Picture Type for Frame
++        if (avctx->codec->id == AV_CODEC_ID_H264) {
++            switch (frame->pict_type) {
++            case AV_PICTURE_TYPE_I:
++                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_PICTURE_TYPE_I);
++                break;
++            case AV_PICTURE_TYPE_P:
++                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_PICTURE_TYPE_P);
++                break;
++            case AV_PICTURE_TYPE_B:
++                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_PICTURE_TYPE_B);
++                break;
++            case AV_PICTURE_TYPE_S:
++                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_PICTURE_TYPE_SKIP);
++                break;
++            default:
++                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_PICTURE_TYPE_NONE);
++                break;
++            }
++            // Keyframe overrides previous assignment.
++            if (frame->key_frame) {
++                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_PICTURE_TYPE_IDR);
++            }
++        } else if (avctx->codec->id == AV_CODEC_ID_HEVC) {
++            switch (frame->pict_type) {
++            case AV_PICTURE_TYPE_I:
++                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_HEVC_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_HEVC_PICTURE_TYPE_I);
++                break;
++            case AV_PICTURE_TYPE_P:
++                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_HEVC_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_HEVC_PICTURE_TYPE_P);
++                break;
++            case AV_PICTURE_TYPE_B:
++                av_log(ctx, AV_LOG_WARNING, "Ignoring B-Frame, unsupported by AMD AMF H.265 Encoder.");
++                break;
++            case AV_PICTURE_TYPE_S:
++                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_HEVC_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_HEVC_PICTURE_TYPE_SKIP);
++                break;
++            default:
++                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_HEVC_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_HEVC_PICTURE_TYPE_NONE);
++                break;
++            }
++            // Keyframe overrides previous assignment.
++            if (frame->key_frame) {
++                AMF_ASSIGN_PROPERTY_INT64(res, surface, AMF_VIDEO_ENCODER_HEVC_FORCE_PICTURE_TYPE, AMF_VIDEO_ENCODER_HEVC_PICTURE_TYPE_IDR);
++            }
++        }
+ 
+         // submit surface
+         res = ctx->encoder->pVtbl->SubmitInput(ctx->encoder, (AMFData*)surface);
