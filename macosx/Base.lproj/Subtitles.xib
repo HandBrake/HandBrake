@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -31,18 +30,18 @@
                                 <menuItem title="Tracks" state="on" hidden="YES" id="TJO-RZ-jgb"/>
                                 <menuItem title="Add All Tracks" id="4PX-In-DpF">
                                     <connections>
-                                        <action selector="addAll:" target="-2" id="tuS-uF-dje"/>
+                                        <action selector="browseImportExternalFile:" target="-2" id="tuS-uF-dje"/>
                                     </connections>
                                 </menuItem>
-                                <menuItem title="Add External SRT…" toolTip="Add new SRT subtitle to the list." id="HW0-PS-t0U">
+                                <menuItem title="Add External Subtitles Track…" toolTip="Add new SRT/SSA subtitle to the list." id="HW0-PS-t0U">
                                     <connections>
-                                        <action selector="browseImportSrtFile:" target="-2" id="dog-BP-my4"/>
+                                        <action selector="browseImportExternalFile:" target="-2" id="dog-BP-my4"/>
                                     </connections>
                                 </menuItem>
                                 <menuItem isSeparatorItem="YES" id="2hO-bG-5qB"/>
                                 <menuItem title="Remove All Tracks" id="mVi-zH-KUq">
                                     <connections>
-                                        <action selector="removeAll:" target="-2" id="QsA-lb-0rD"/>
+                                        <action selector="browseImportExternalFile:" target="-2" id="QsA-lb-0rD"/>
                                     </connections>
                                 </menuItem>
                             </items>
@@ -57,14 +56,14 @@
                     </connections>
                 </popUpButton>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QsM-28-Pya">
-                    <rect key="frame" x="110" y="282" width="132" height="28"/>
+                    <rect key="frame" x="110" y="282" width="132" height="27"/>
                     <string key="toolTip">Configure subtitle tracks Selection Behavior. These settings affect which tracks will be added to the subtitle tracks list, and the settings used for each track.</string>
                     <buttonCell key="cell" type="push" title="Selection Behavior…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="oxg-bs-1si">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <action selector="showSettingsSheet:" target="-2" id="OAA-S8-tfS"/>
+                        <action selector="browseImportExternalFile:" target="-2" id="OAA-S8-tfS"/>
                         <binding destination="-2" name="enabled" keyPath="self.subtitles" id="dpe-kM-iMF">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
@@ -73,13 +72,13 @@
                     </connections>
                 </button>
                 <button toolTip="Reload the subtitles tracks list using the configured Selection Behavior." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vxx-gk-9kY">
-                    <rect key="frame" x="240" y="282" width="62" height="28"/>
+                    <rect key="frame" x="240" y="282" width="62" height="27"/>
                     <buttonCell key="cell" type="push" title="Reload" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jG8-uo-1tv">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <action selector="addTracksFromDefaults:" target="-2" id="GOz-FT-Atg"/>
+                        <action selector="browseImportExternalFile:" target="-2" id="GOz-FT-Atg"/>
                         <binding destination="-2" name="enabled" keyPath="self.subtitles" id="CSa-3s-GD6">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
@@ -95,7 +94,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" rowSizeStyle="automatic" headerView="IiW-3a-Drv" viewBased="YES" id="0yM-wE-D2x">
-                                <rect key="frame" x="0.0" y="0.0" width="884" height="234"/>
+                                <rect key="frame" x="0.0" y="0.0" width="886" height="234"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -166,7 +165,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button toolTip="Forced Only. Use only subtitles marked as “forced” in the selected source track." translatesAutoresizingMaskIntoConstraints="NO" id="HC5-ql-Vcr">
-                                                        <rect key="frame" x="26" y="3" width="23" height="20"/>
+                                                        <rect key="frame" x="26" y="2" width="23" height="21"/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="SPR-9q-XBK">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -203,7 +202,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button toolTip="Burned In. Make the selected subtitles permanent by overlaying them onto the video track." translatesAutoresizingMaskIntoConstraints="NO" id="zpm-9Z-Hsq">
-                                                        <rect key="frame" x="20" y="3" width="23" height="20"/>
+                                                        <rect key="frame" x="20" y="2" width="23" height="21"/>
                                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="s2E-1o-mGs">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -264,7 +263,7 @@
                                         </prototypeCellViews>
                                     </tableColumn>
                                     <tableColumn identifier="srt_lang" width="171" minWidth="10" maxWidth="3.4028229999999999e+38" id="9ka-9O-WDj">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="SRT Language">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Language">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -284,7 +283,7 @@
                                                 <rect key="frame" x="526" y="1" width="171" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <popUpButton toolTip="SRT Language. Language of the selected SRT format source track. Not applicable to other formats." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Inz-O5-B8g">
+                                                    <popUpButton toolTip="Language of the selected SRT/SSA format source track. Not applicable to other formats." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Inz-O5-B8g">
                                                         <rect key="frame" x="0.0" y="0.0" width="171" height="22"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="zIn-sc-xak">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -297,9 +296,9 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
-                                                        <accessibility description="SRT Language"/>
+                                                        <accessibility description="SRT/SSA Language"/>
                                                         <connections>
-                                                            <binding destination="4bh-my-GeM" name="enabled" keyPath="objectValue.isSrt" id="p69-lt-dgE"/>
+                                                            <binding destination="4bh-my-GeM" name="enabled" keyPath="objectValue.isExternal" id="cQ5-cT-bqm"/>
                                                             <binding destination="4bh-my-GeM" name="selectedValue" keyPath="objectValue.isoLanguage" previousBinding="OIo-fF-3vU" id="Ubv-kn-nf5">
                                                                 <dictionary key="options">
                                                                     <string key="NSValueTransformerName">HBIsoLanguageTrasformer</string>
@@ -318,7 +317,7 @@
                                         </prototypeCellViews>
                                     </tableColumn>
                                     <tableColumn identifier="srt_charcode" width="113" minWidth="10" maxWidth="3.4028229999999999e+38" id="1Qg-We-ltR">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="SRT Encoding">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Encoding">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -334,7 +333,7 @@
                                                 <rect key="frame" x="700" y="1" width="113" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <popUpButton toolTip="SRT Encoding. Character encoding/codeset of the selected SRT format source track. Not applicable to other formats." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QV0-kE-4yR">
+                                                    <popUpButton toolTip="Character encoding/codeset of the selected SRT/SSA format source track. Not applicable to other formats." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QV0-kE-4yR">
                                                         <rect key="frame" x="0.0" y="0.0" width="113" height="22"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="jFr-2c-3Vv">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -347,11 +346,11 @@
                                                                 </items>
                                                             </menu>
                                                         </popUpButtonCell>
-                                                        <accessibility description="SRT Character Encoding"/>
+                                                        <accessibility description="SRT/SSA Character Encoding"/>
                                                         <connections>
+                                                            <binding destination="ZBK-cc-m0z" name="enabled" keyPath="objectValue.isExternal" id="g9q-4R-uuX"/>
                                                             <binding destination="ZBK-cc-m0z" name="selectedValue" keyPath="objectValue.charCode" previousBinding="NGt-sB-Sg2" id="eBc-20-eSF"/>
                                                             <binding destination="ZBK-cc-m0z" name="content" keyPath="objectValue.encodings" id="NGt-sB-Sg2"/>
-                                                            <binding destination="ZBK-cc-m0z" name="enabled" keyPath="objectValue.isSrt" id="ZIt-gt-iqy"/>
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
@@ -363,8 +362,8 @@
                                             </tableCellView>
                                         </prototypeCellViews>
                                     </tableColumn>
-                                    <tableColumn identifier="srt_offset" width="66" minWidth="10" maxWidth="3.4028229999999999e+38" id="Fgh-pZ-6uu">
-                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="SRT Offset">
+                                    <tableColumn identifier="srt_offset" width="68" minWidth="10" maxWidth="3.4028229999999999e+38" id="Fgh-pZ-6uu">
+                                        <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Offset">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -377,21 +376,20 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="9tV-iL-oaF">
-                                                <rect key="frame" x="816" y="1" width="66" height="17"/>
+                                                <rect key="frame" x="816" y="1" width="68" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
-                                                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aJi-zQ-0cg">
-                                                        <rect key="frame" x="0.0" y="-3" width="66" height="14"/>
-                                                        <string key="toolTip">SRT Offset. Positive or negative offset in milliseconds (ms) for the selected SRT format source track. Not applicable to other formats.</string>
+                                                    <textField toolTip="Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aJi-zQ-0cg">
+                                                        <rect key="frame" x="0.0" y="-3" width="68" height="14"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" alignment="center" title="0" id="hhH-c3-gD0">
                                                             <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="Jui-oB-oVO"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
-                                                        <accessibility description="SRT Offset"/>
+                                                        <accessibility description="SRT/SSA Offset"/>
                                                         <connections>
-                                                            <binding destination="9tV-iL-oaF" name="enabled" keyPath="objectValue.isSrt" id="noe-Kh-7pa"/>
+                                                            <binding destination="9tV-iL-oaF" name="enabled" keyPath="objectValue.isExternal" id="ab2-et-mrD"/>
                                                             <binding destination="9tV-iL-oaF" name="value" keyPath="objectValue.offset" id="NlM-1C-Udf">
                                                                 <dictionary key="options">
                                                                     <integer key="NSNullPlaceholder" value="0"/>
@@ -425,15 +423,15 @@
                             </tableView>
                         </subviews>
                     </clipView>
-                    <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="toe-s0-pVk">
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="toe-s0-pVk">
                         <rect key="frame" x="-100" y="-100" width="685" height="15"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
-                    <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="GfM-TU-Tmr">
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="GfM-TU-Tmr">
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <tableHeaderView key="headerView" id="IiW-3a-Drv">
-                        <rect key="frame" x="0.0" y="0.0" width="884" height="23"/>
+                        <rect key="frame" x="0.0" y="0.0" width="886" height="23"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </tableHeaderView>
                 </scrollView>
@@ -463,29 +461,29 @@
                 <menuItem title="Add All Tracks" id="S2I-Jd-Lyg">
                     <attributedString key="attributedTitle"/>
                     <connections>
-                        <action selector="addAll:" target="-2" id="ojh-vi-2gX"/>
+                        <action selector="browseImportExternalFile:" target="-2" id="ojh-vi-2gX"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Add External SRT…" id="fXD-7h-jMl">
+                <menuItem title="Add External Subtitles Track…" id="fXD-7h-jMl">
                     <connections>
-                        <action selector="browseImportSrtFile:" target="-2" id="tEu-2l-wjN"/>
+                        <action selector="browseImportExternalFile:" target="-2" id="tEu-2l-wjN"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="Pr7-iM-rgd"/>
                 <menuItem title="Remove All Tracks" id="R8a-qg-ASg">
                     <connections>
-                        <action selector="removeAll:" target="-2" id="8yF-Gu-7bi"/>
+                        <action selector="browseImportExternalFile:" target="-2" id="8yF-Gu-7bi"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="eER-z8-aB9"/>
                 <menuItem title="Selection Behavior…" id="pwm-PV-1x4">
                     <connections>
-                        <action selector="showSettingsSheet:" target="-2" id="aQq-Fi-0Ro"/>
+                        <action selector="browseImportExternalFile:" target="-2" id="aQq-Fi-0Ro"/>
                     </connections>
                 </menuItem>
                 <menuItem title="Reload" id="jcM-HL-QJ6">
                     <connections>
-                        <action selector="addTracksFromDefaults:" target="-2" id="IQq-bX-u1t"/>
+                        <action selector="browseImportExternalFile:" target="-2" id="IQq-bX-u1t"/>
                     </connections>
                 </menuItem>
             </items>

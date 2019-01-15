@@ -24,8 +24,8 @@ extern NSString *keySubTrackName;
 extern NSString *keySubTrackLanguageIsoCode;
 extern NSString *keySubTrackType;
 
-extern NSString *keySubTrackSrtFileURL;
-extern NSString *keySubTrackSrtFileURLBookmark;
+extern NSString *keySubTrackExternalFileURL;
+extern NSString *keySubTrackExternalFileURLBookmark;
 
 #define NONE_TRACK_INDEX        0
 #define FOREIGN_TRACK_INDEX     1
@@ -200,11 +200,13 @@ extern NSString *keySubTrackSrtFileURLBookmark;
     [self addDefaultTracksFromJobSettings:self.job.jobDict];
 }
 
-- (void)addSrtTrackFromURL:(NSURL *)srtURL
+- (void)addExternalTrackFromURL:(NSURL *)fileURL
 {
+    int type = [fileURL.pathExtension.lowercaseString isEqualToString:@"srt"] ? IMPORTSRT : IMPORTSSA;
+
 #ifdef __SANDBOX_ENABLED__
     // Create the security scoped bookmark
-    NSData *bookmark = [HBUtilities bookmarkFromURL:srtURL
+    NSData *bookmark = [HBUtilities bookmarkFromURL:fileURL
                                     options:NSURLBookmarkCreationWithSecurityScope |
                                             NSURLBookmarkCreationSecurityScopeAllowOnlyReadAccess];
 #endif
@@ -212,14 +214,14 @@ extern NSString *keySubTrackSrtFileURLBookmark;
     // Create a new entry for the subtitle source array so it shows up in our subtitle source list
     NSMutableArray *sourceTrack = [self.sourceTracks mutableCopy];
 #ifdef __SANDBOX_ENABLED__
-    [sourceTrack addObject:@{keySubTrackName: srtURL.lastPathComponent,
-                             keySubTrackType: @(SRTSUB),
-                             keySubTrackSrtFileURL: srtURL,
-                             keySubTrackSrtFileURLBookmark: bookmark}];
+    [sourceTrack addObject:@{keySubTrackName: fileURL.lastPathComponent,
+                             keySubTrackType: @(type),
+                             keySubTrackExternalFileURL: fileURL,
+                             keySubTrackExternalFileURLBookmark: bookmark}];
 #else
-    [sourceTrack addObject:@{keySubTrackName: srtURL.lastPathComponent,
-                             keySubTrackType: @(SRTSUB),
-                             keySubTrackSrtFileURL: srtURL}];
+    [sourceTrack addObject:@{keySubTrackName: fileURL.lastPathComponent,
+                             keySubTrackType: @(type),
+                             keySubTrackExternalFileURL: fileURL}];
 #endif
     self.sourceTracks = [sourceTrack copy];
     HBSubtitlesTrack *track = [self trackFromSourceTrackIndex:self.sourceTracksArray.count - 1];
@@ -404,9 +406,9 @@ extern NSString *keySubTrackSrtFileURLBookmark;
     {
         for (NSDictionary *sourceTrack in self.sourceTracks)
         {
-            if (sourceTrack[keySubTrackSrtFileURLBookmark])
+            if (sourceTrack[keySubTrackExternalFileURLBookmark])
             {
-                [self.tokens addObject:[HBSecurityAccessToken tokenWithObject:sourceTrack[keySubTrackSrtFileURL]]];
+                [self.tokens addObject:[HBSecurityAccessToken tokenWithObject:sourceTrack[keySubTrackExternalFileURL]]];
             }
         }
     }
@@ -488,13 +490,13 @@ extern NSString *keySubTrackSrtFileURLBookmark;
     NSMutableArray *sourceTracks = [NSMutableArray array];
     for (NSDictionary *sourceTrack in _sourceTracks)
     {
-        if (sourceTrack[keySubTrackSrtFileURLBookmark])
+        if (sourceTrack[keySubTrackExternalFileURLBookmark])
         {
             NSMutableDictionary<NSString *, id> *copy =  [sourceTrack mutableCopy];
-            NSURL *srtURL = [HBUtilities URLFromBookmark:sourceTrack[keySubTrackSrtFileURLBookmark]];
+            NSURL *srtURL = [HBUtilities URLFromBookmark:sourceTrack[keySubTrackExternalFileURLBookmark]];
             if (srtURL)
             {
-                copy[keySubTrackSrtFileURL] = srtURL;
+                copy[keySubTrackExternalFileURL] = srtURL;
             }
             [sourceTracks addObject:copy];
         }

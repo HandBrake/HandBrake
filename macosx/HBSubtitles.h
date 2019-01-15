@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)removeAll;
 - (void)reloadDefaults;
 
-- (void)addSrtTrackFromURL:(NSURL *)srtURL;
+- (void)addExternalTrackFromURL:(NSURL *)fileURL;
 
 @property (nonatomic, readonly) NSArray<NSDictionary *> *sourceTracks;
 @property (nonatomic, readonly) NSMutableArray<HBSubtitlesTrack *> *tracks;

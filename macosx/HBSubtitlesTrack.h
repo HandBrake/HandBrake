@@ -69,7 +69,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// A complete list of the possible encodings.
 - (NSArray<NSString *> *)encodings;
 
-@property (nonatomic, readonly) BOOL isSrt;
+@property (nonatomic, readonly) BOOL isExternal;
 @property (nonatomic, readonly) BOOL isEnabled;
 @property (nonatomic, readonly) BOOL isForcedSupported;
 @property (nonatomic, readonly) BOOL canPassthru;

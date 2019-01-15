@@ -10,7 +10,7 @@
 #include "common.h"
 #include "lang.h"
 
-#define CHAR_CODE_DEFAULT_INDEX 11
+#define CHAR_CODE_DEFAULT_INDEX 28
 
 static NSArray *charEncodingArray = nil;
 static NSArray *_languagesArray = nil;
@@ -18,8 +18,8 @@ static NSArray *_languagesArray = nil;
 NSString *keySubTrackName = @"keySubTrackName";
 NSString *keySubTrackLanguageIsoCode = @"keySubTrackLanguageIsoCode";
 NSString *keySubTrackType = @"keySubTrackType";
-NSString *keySubTrackSrtFileURL = @"keySubTrackSrtFileURL";
-NSString *keySubTrackSrtFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
+NSString *keySubTrackExternalFileURL = @"keySubTrackSrtFileURL";
+NSString *keySubTrackExternalFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
 
 @interface HBSubtitlesTrack ()
 @property (nonatomic, readwrite) BOOL validating;
@@ -98,9 +98,9 @@ NSString *keySubTrackSrtFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
     }
 
     // check to see if we are an srt, in which case set our file path and source track type kvp's
-    if (_type == SRTSUB)
+    if (_type == IMPORTSRT || _type == IMPORTSSA)
     {
-        self.fileURL = [sourceTrack[keySubTrackSrtFileURL] copy];
+        self.fileURL = [sourceTrack[keySubTrackExternalFileURL] copy];
         self.isoLanguage = @"eng";
         self.charCode = charEncodingArray[CHAR_CODE_DEFAULT_INDEX];
     }
@@ -207,7 +207,7 @@ NSString *keySubTrackSrtFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
     }
 }
 
-#pragma mark - Srt only properties
+#pragma mark - External subtitles track only properties
 
 - (void)setFileURL:(NSURL *)fileURL
 {
@@ -252,9 +252,9 @@ NSString *keySubTrackSrtFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
     return [self.dataSource sourceTracksArray];
 }
 
-- (BOOL)isSrt
+- (BOOL)isExternal
 {
-    return self.type == SRTSUB;
+    return self.type == IMPORTSRT || self.type == IMPORTSSA;
 }
 
 - (BOOL)isEnabled
@@ -288,7 +288,7 @@ NSString *keySubTrackSrtFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
 {
     NSSet *retval = nil;
 
-    if ([key isEqualToString: @"isSrt"])
+    if ([key isEqualToString: @"isExternal"])
     {
         retval = [NSSet setWithObjects: @"type", nil];
     }

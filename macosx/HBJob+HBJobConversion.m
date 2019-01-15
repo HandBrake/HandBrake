@@ -254,10 +254,11 @@
             }
             else
             {
-                // if we are getting the subtitles from an external srt file
-                if (subTrack.type == SRTSUB)
+                // if we are getting the subtitles from an external file
+                if (subTrack.type == IMPORTSRT || subTrack.type == IMPORTSSA)
                 {
                     hb_subtitle_config_t sub_config;
+                    int type = subTrack.type;
 
                     sub_config.offset = subTrack.offset;
 
@@ -267,18 +268,18 @@
                     strncpy(sub_config.src_codeset, subTrack.charCode.UTF8String, 39);
                     sub_config.src_codeset[39] = 0;
 
-                    if (!subTrack.burnedIn && hb_subtitle_can_pass(SRTSUB, job->mux))
+                    if (!subTrack.burnedIn && hb_subtitle_can_pass(type, job->mux))
                     {
                         sub_config.dest = PASSTHRUSUB;
                     }
-                    else if (hb_subtitle_can_burn(SRTSUB))
+                    else if (hb_subtitle_can_burn(type))
                     {
                         sub_config.dest = RENDERSUB;
                     }
 
                     sub_config.force = 0;
                     sub_config.default_track = subTrack.def;
-                    hb_srt_add( job, &sub_config, subTrack.isoLanguage.UTF8String);
+                    hb_import_subtitle_add( job, &sub_config, subTrack.isoLanguage.UTF8String, type);
                 }
                 else
                 {
