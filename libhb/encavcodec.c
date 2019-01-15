@@ -859,6 +859,7 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
            when this frame finally pops out of the encoder we'll mark
            its buffer as the start of a chapter. */
         frame.pict_type = AV_PICTURE_TYPE_I;
+        frame.key_frame = 1;
         hb_chapter_enqueue(pv->chapter_queue, in);
     }
 
