@@ -798,7 +798,6 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                 // Apply special weight tuning to origin patch
                 if (dx == 0 && dy == 0 && f == 0)
                 {
-                    // TODO: Parallelize this
                     for (int y = n_half; y < dst_h-n + n_half; y++)
                     {
                         for (int x = n_half; x < dst_w-n + n_half; x++)
@@ -825,7 +824,6 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                                           dy);
 
                 // Average displacement
-                // TODO: Parallelize this
                 for (int y = 0; y <= dst_h-n; y++)
                 {
                     const uint32_t *integral_ptr1 = integral + (y  -1)*integral_stride - 1;
