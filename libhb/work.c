@@ -530,6 +530,8 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_NVENC_H264:
                 case HB_VCODEC_FFMPEG_NVENC_H265:
+                case HB_VCODEC_FFMPEG_VT_H264:
+                case HB_VCODEC_FFMPEG_VT_H265:
                     hb_log("     + profile: %s", job->encoder_profile);
                 default:
                     break;
@@ -548,6 +550,9 @@ void hb_display_job_info(hb_job_t *job)
                 case HB_VCODEC_FFMPEG_VCE_H265:
                 case HB_VCODEC_FFMPEG_NVENC_H264:
                 case HB_VCODEC_FFMPEG_NVENC_H265:
+                case HB_VCODEC_FFMPEG_VT_H264:
+                // VT h.265 currently only supports auto level
+                // case HB_VCODEC_FFMPEG_VT_H265:
                     hb_log("     + level:   %s", job->encoder_level);
                 default:
                     break;
