@@ -239,7 +239,7 @@ static void nlmeans_alloc(const uint8_t *src,
     const int bs = NLMEANS_ALIGN(bw);
     const int bh = src_h + 2 * border;
 
-    uint8_t *mem   = malloc(bs * bh * sizeof(uint8_t));
+    uint8_t *mem   = av_malloc(bs * bh * sizeof(uint8_t));
     uint8_t *image = mem + border + bs * border;
 
     // Copy main image
@@ -508,7 +508,7 @@ static void nlmeans_filter_edgeboost(const uint8_t *src,
     const int offset_max =   (kernel_size + 1) /2;
     uint16_t pixel1;
     uint16_t pixel2;
-    uint8_t *mask_mem = calloc(bs * bh, sizeof(uint8_t));
+    uint8_t *mask_mem = av_calloc(bs * bh, sizeof(uint8_t));
     uint8_t *mask = mask_mem + border + bs * border;
     for (int y = 0; y < h; y++)
     {
@@ -587,7 +587,7 @@ static void nlmeans_filter_edgeboost(const uint8_t *src,
         }
     }
 
-    free(mask_mem);
+    av_free(mask_mem);
 }
 
 static void nlmeans_prefilter(BorderedPlane *src,
@@ -619,7 +619,7 @@ static void nlmeans_prefilter(BorderedPlane *src,
         const int bh         = h + 2 * border;
 
         // Duplicate plane
-        uint8_t *mem_pre = malloc(bs * bh * sizeof(uint8_t));
+        uint8_t *mem_pre = av_malloc(bs * bh * sizeof(uint8_t));
         uint8_t *image_pre = mem_pre + border + bs * border;
         for (int y = 0; y < h; y++)
         {
@@ -787,7 +787,7 @@ static void nlmeans_plane(NLMeansFunctions *functions,
 
     // Allocate integral image
     const int integral_stride    = NLMEANS_ALIGN(dst_w) + 2 * NLMEANS_ALIGNMENT;
-    uint32_t* const integral_mem = calloc(integral_stride * (dst_h+1), sizeof(uint32_t));
+    uint32_t* const integral_mem = av_calloc(integral_stride * (dst_h+1), sizeof(uint32_t));
     uint32_t* const integral     = integral_mem + integral_stride + NLMEANS_ALIGNMENT;
 
     // Iterate through available frames
@@ -894,7 +894,7 @@ static void nlmeans_plane(NLMeansFunctions *functions,
     }
 
     free(tmp_data);
-    free(integral_mem);
+    av_free(integral_mem);
 
 }
 
@@ -1017,7 +1017,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
     }
     hb_log("NLMeans using %i threads", pv->threads);
 
-    pv->frame = calloc(pv->threads + pv->max_frames, sizeof(Frame));
+    pv->frame = av_calloc(pv->threads + pv->max_frames, sizeof(Frame));
     for (int ii = 0; ii < pv->threads + pv->max_frames; ii++)
     {
         for (int c = 0; c < 3; c++)
@@ -1078,12 +1078,12 @@ static void nlmeans_close(hb_filter_object_t *filter)
             if (pv->frame[f].plane[c].mem_pre != NULL &&
                 pv->frame[f].plane[c].mem_pre != pv->frame[f].plane[c].mem)
             {
-                free(pv->frame[f].plane[c].mem_pre);
+                av_free(pv->frame[f].plane[c].mem_pre);
                 pv->frame[f].plane[c].mem_pre = NULL;
             }
             if (pv->frame[f].plane[c].mem != NULL)
             {
-                free(pv->frame[f].plane[c].mem);
+                av_free(pv->frame[f].plane[c].mem);
                 pv->frame[f].plane[c].mem = NULL;
             }
         }
@@ -1097,7 +1097,7 @@ static void nlmeans_close(hb_filter_object_t *filter)
         }
     }
 
-    free(pv->frame);
+    av_free(pv->frame);
     free(pv->thread_data);
     free(pv);
     filter->private_data = NULL;
@@ -1210,12 +1210,12 @@ static hb_buffer_t * nlmeans_filter(hb_filter_private_t *pv)
             if (pv->frame[t].plane[c].mem_pre != NULL &&
                 pv->frame[t].plane[c].mem_pre != pv->frame[t].plane[c].mem)
             {
-                free(pv->frame[t].plane[c].mem_pre);
+                av_free(pv->frame[t].plane[c].mem_pre);
                 pv->frame[t].plane[c].mem_pre = NULL;
             }
             if (pv->frame[t].plane[c].mem != NULL)
             {
-                free(pv->frame[t].plane[c].mem);
+                av_free(pv->frame[t].plane[c].mem);
                 pv->frame[t].plane[c].mem = NULL;
             }
         }
