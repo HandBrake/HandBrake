@@ -650,9 +650,19 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     pv->context = context;
 
     job->areBframes = 0;
-    if ( context->has_b_frames )
+    if (context->has_b_frames > 0)
     {
-        job->areBframes = 1;
+        if (job->vcodec == HB_VCODEC_FFMPEG_VT_H265)
+        {
+            // VT appears to enable b-pyramid by default and there
+            // is no documented way of modifying this behaviour or
+            // querying if it is enabled.
+            job->areBframes = 2;
+        }
+        else
+        {
+            job->areBframes = context->has_b_frames;
+        }
     }
 
     if (context->extradata != NULL)
