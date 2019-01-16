@@ -1234,10 +1234,20 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         // have zero duration.
         if (track->type == MUX_TYPE_SUBTITLE &&
             track->st->codecpar->codec_id != AV_CODEC_ID_HDMV_PGS_SUBTITLE)
+        {
             duration = av_rescale_q(10, (AVRational){1,1},
                                     track->st->time_base);
+        }
+        else if (track->type == MUX_TYPE_VIDEO)
+        {
+            duration = av_rescale_q(
+                            (int64_t)job->vrate.den * 90000 / job->vrate.num,
+                            (AVRational){1,90000}, track->st->time_base);
+        }
         else
+        {
             duration = 0;
+        }
     }
 
     av_init_packet(&pkt);
