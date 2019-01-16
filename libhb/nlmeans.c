@@ -994,8 +994,20 @@ static int nlmeans_init(hb_filter_object_t *filter,
         exptable[NLMEANS_EXPSIZE-1] = 0;
     }
 
-    // Sanitize
-    if (pv->threads < 1) { pv->threads = hb_get_cpu_count(); }
+    // Threads
+    if (pv->threads < 1) {
+        pv->threads = hb_get_cpu_count();
+
+        // Reduce internal thread count where we have many logical cores
+        // Too many threads increases CPU cache pressure, reducing performance
+        if (pv->threads >= 32) {
+            pv->threads = pv->threads / 2;
+        }
+        else if (pv->threads >= 16) {
+            pv->threads = (pv->threads / 4) * 3;
+        }
+    }
+    hb_log("NLMeans using %i threads", pv->threads);
 
     pv->frame = calloc(pv->threads + pv->max_frames, sizeof(Frame));
     for (int ii = 0; ii < pv->threads + pv->max_frames; ii++)
