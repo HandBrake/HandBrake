@@ -58,4 +58,4 @@ addons:
 language: c
 
 script:
-- ./configure --disable-gtk --disable-gst --launch --launch-jobs=0
+- travis_wait 50 ./configure --disable-gtk --disable-gst --launch --launch-jobs=0
