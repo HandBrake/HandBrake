@@ -450,8 +450,11 @@ void hb_buffer_realloc( hb_buffer_t * b, int size )
         {
             return;
         }
-        memcpy(tmp, b->data, b->alloc);
-        av_free(b->data);
+        if (b->data != NULL)
+        {
+            memcpy(tmp, b->data, b->alloc);
+            av_free(b->data);
+        }
         b->data  = tmp;
         b->alloc = size;
 
