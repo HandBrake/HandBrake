@@ -295,7 +295,7 @@ void hb_buffer_pool_free( void )
             if( b->data )
             {
                 freed += b->alloc;
-                free(b->data);
+                av_free(b->data);
             }
             free( b );
             count++;
@@ -395,15 +395,7 @@ hb_buffer_t * hb_buffer_init_internal( int size )
 
     if (size)
     {
-#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined( SYS_MINGW )
-        b->data  = malloc( b->alloc );
-#elif defined( SYS_CYGWIN )
-        /* FIXME */
-        b->data  = malloc( b->alloc + 17 );
-#else
-        b->data  = memalign( 16, b->alloc );
-#endif
-
+        b->data = av_malloc(b->alloc);
         if( !b->data )
         {
             hb_log( "out of memory" );
@@ -445,13 +437,22 @@ void hb_buffer_realloc( hb_buffer_t * b, int size )
 {
     if ( size > b->alloc || b->data == NULL )
     {
-        uint32_t orig = b->data != NULL ? b->alloc : 0;
-        hb_fifo_t *buffer_pool = size_to_pool(size);
+        uint8_t   * tmp;
+        uint32_t    orig = b->data != NULL ? b->alloc : 0;
+        hb_fifo_t * buffer_pool = size_to_pool(size);
+
         if (buffer_pool != NULL)
         {
             size = buffer_pool->buffer_size;
         }
-        b->data  = realloc( b->data, size );
+        tmp = av_malloc(size);
+        if (tmp == NULL)
+        {
+            return;
+        }
+        memcpy(tmp, b->data, b->alloc);
+        av_free(b->data);
+        b->data  = tmp;
         b->alloc = size;
 
         hb_lock(buffers.lock);
@@ -779,7 +780,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
         // free the buf 
         if( b->data )
         {
-            free(b->data);
+            av_free(b->data);
             hb_lock(buffers.lock);
             buffers.allocated -= b->alloc;
             hb_unlock(buffers.lock);
@@ -821,14 +822,7 @@ hb_image_t * hb_image_init(int pix_fmt, int width, int height)
     {
         return NULL;
     }
-#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined( SYS_MINGW )
-    image->data  = malloc(size);
-#elif defined( SYS_CYGWIN )
-    /* FIXME */
-    image->data  = malloc(size + 17);
-#else
-    image->data  = memalign(16, size);
-#endif
+    image->data  = av_malloc(size);
     if (image->data == NULL)
     {
         free(image);
@@ -862,14 +856,7 @@ hb_image_t * hb_buffer_to_image(hb_buffer_t *buf)
 {
     hb_image_t *image = calloc(1, sizeof(hb_image_t));
 
-#if defined( SYS_DARWIN ) || defined( SYS_FREEBSD ) || defined ( __FreeBSD__ ) || defined( SYS_MINGW )
-    image->data  = malloc( buf->size );
-#elif defined( SYS_CYGWIN )
-    /* FIXME */
-    image->data  = malloc( buf->size + 17 );
-#else
-    image->data  = memalign( 16, buf->size );
-#endif
+    image->data  = av_malloc( buf->size );
     if (image->data == NULL)
     {
         free(image);
@@ -904,7 +891,7 @@ void hb_image_close(hb_image_t **_image)
     hb_image_t * image = *_image;
     if (image != NULL)
     {
-        free(image->data);
+        av_free(image->data);
         free(image);
         *_image = NULL;
     }
