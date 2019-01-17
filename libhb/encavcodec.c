@@ -562,6 +562,12 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
+    // Make VCE h.265 encoder emit an IDR for every GOP
+    if (job->vcodec == HB_VCODEC_FFMPEG_VCE_H265)
+    {
+        av_dict_set(&av_opts, "gops_per_idr", "1", 0);
+    }
+
     if( job->pass_id == HB_PASS_ENCODE_1ST ||
         job->pass_id == HB_PASS_ENCODE_2ND )
     {
