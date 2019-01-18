@@ -883,15 +883,23 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
     // doesn't do the trick.  It must be set in the AVFrame.
     frame.quality = pv->context->global_quality;
 
-    // Remember info about this frame that we need to pass across
-    // the avcodec_encode_video call (since it reorders frames).
+    // Bizarro ffmpeg requires timestamp time_base to be == framerate
+    // for the encoders we care about.  It writes AVCodecContext.time_base
+    // to the framerate field of encoded bitstream headers, so if we
+    // want correct bitstreams, we must set time_base = framerate.
+    // We can't pass timestamps that are not based on the time_base
+    // because encoders require accurately based timestamps in order to
+    // do proper rate control.
+    //
+    // I.e. ffmpeg doesn't support VFR timestamps.
+    //
+    // Because of this, we have to do some fugly things, like storing
+    // PTS values and computing DTS ourselves.
+    //
+    // Remember timestamp info about this frame
     save_frame_info(pv, in);
     compute_dts_offset(pv, in);
 
-    // Bizarro ffmpeg appears to require the input AVFrame.pts to be
-    // set to a frame number.  Setting it to an actual pts causes
-    // jerky video.
-    // frame->pts = in->s.start;
     frame.pts = pv->frameno_in++;
 
     // Encode
