@@ -101,13 +101,6 @@ namespace HandBrakeWPF.Services.Presets
         /// </summary>
         public void Load()
         {
-            // If the preset file doesn't exist. Create it.
-            if (!File.Exists(this.presetFile))
-            {
-                this.UpdateBuiltInPresets();
-                return;
-            }
-
             // Load the presets from file
             this.LoadPresets();
         }
@@ -466,7 +459,7 @@ namespace HandBrakeWPF.Services.Presets
         /// </summary>
         public void UpdateBuiltInPresets()
         {
-            // Clear the current built in Presets and now parse the tempory Presets file.
+            // Clear the current built in Presets and now parse the temporary Presets file.
             this.ClearBuiltIn();
 
             IList<PresetCategory> presetCategories = HandBrakePresetService.GetBuiltInPresets();
@@ -680,17 +673,8 @@ namespace HandBrakeWPF.Services.Presets
                 // If we don't have a presets file. Create one for first load.
                 if (!File.Exists(this.presetFile))
                 {
-                    // If this is a nightly, and we don't have a presets file, try port the main version if it exists.
-                    string releasePresetFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(false), "presets.json");
-                    if (VersionHelper.IsNightly() && File.Exists(releasePresetFile))
-                    {
-                        File.Copy(releasePresetFile, DirectoryUtilities.GetUserStoragePath(true));
-                    }
-                    else
-                    {
-                        this.UpdateBuiltInPresets();
-                        return; // Update built-in presets stores the presets locally, so just return.
-                    }
+                    this.UpdateBuiltInPresets();
+                    return;
                 }
 
                 // Otherwise, we already have a file, so lets try load it.
@@ -724,6 +708,7 @@ namespace HandBrakeWPF.Services.Presets
                 // Version Check
                 // If we have old presets, or the container wasn't parseable, or we have a version mismatch, backup the user preset file 
                 // incase something goes wrong and reset built-in presets, then re-save.
+                bool ignoreBuildIn = false;
                 if (container.VersionMajor != Constants.PresetVersionMajor || container.VersionMinor != Constants.PresetVersionMinor || container.VersionMicro != Constants.PresetVersionMicro)
                 {
                     string fileName = this.ArchivePresetFile(this.presetFile);
@@ -732,9 +717,9 @@ namespace HandBrakeWPF.Services.Presets
                         + Environment.NewLine + Environment.NewLine + Resources.PresetService_ArchiveFile + fileName,
                         Resources.PresetService_UnableToLoad,
                         MessageBoxButton.OK,
-                        MessageBoxImage.Exclamation);
+                        MessageBoxImage.Information);
                     this.UpdateBuiltInPresets(); // Update built-in presets stores the presets locally, so just return.
-                    return;
+                    ignoreBuildIn = true;
                 }
 
                 // Force Upgrade of presets
@@ -748,54 +733,44 @@ namespace HandBrakeWPF.Services.Presets
                         + Environment.NewLine + Environment.NewLine + Resources.PresetService_ArchiveFile + fileName,
                         Resources.PresetService_UnableToLoad,
                         MessageBoxButton.OK,
-                        MessageBoxImage.Exclamation);
+                        MessageBoxImage.Information);
                     this.UpdateBuiltInPresets(); // Update built-in presets stores the presets locally, so just return.
                     return;
                 }
 
-                // The presets file loaded was OK, so process it.
-                foreach (var item in container.PresetList)
+                this.ProcessPresetList(container, ignoreBuildIn);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                this.RecoverFromCorruptedPresetFile(this.presetFile);
+                this.UpdateBuiltInPresets();
+            }
+        }
+
+        private void ProcessPresetList(PresetTransportContainer container, bool ignoreOldBuiltIn)
+        {
+            // The presets file loaded was OK, so process it.
+            foreach (var item in container.PresetList)
+            {
+                object deserialisedItem = JsonConvert.DeserializeObject<PresetCategory>(item.ToString());
+
+                // Handle Categorised Presets.
+                PresetCategory category = deserialisedItem as PresetCategory;
+                if (category != null && category.Folder)
                 {
-                    object deserialisedItem = JsonConvert.DeserializeObject<PresetCategory>(item.ToString());
-
-                    // Handle Categorised Presets.
-                    PresetCategory category = deserialisedItem as PresetCategory;
-                    if (category != null && category.Folder)
+                    foreach (HBPreset hbpreset in category.ChildrenArray)
                     {
-                        foreach (HBPreset hbpreset in category.ChildrenArray)
+                        Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
+
+                        if (preset.IsBuildIn && ignoreOldBuiltIn)
                         {
-                            Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
-                            
-                            // Migration
-                            if (category.PresetName == "User Presets")
-                            {
-                                preset.Category = UserPresetCatgoryName;
-                            }
-                            else
-                            {
-                                preset.Category = category.PresetName;
-                            }
-                            preset.IsBuildIn = hbpreset.Type == 0;
-
-                            // IF we are using Source Max, Set the Max Width / Height values.
-                            if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
-                            {
-                                preset.Task.MaxWidth = preset.Task.Height;
-                                preset.Task.MaxHeight = preset.Task.Width;
-                            }
-
-                            this.Add(preset, true);
+                            continue;
                         }
-                    }
 
-                    // Uncategorised Presets
-                    deserialisedItem = JsonConvert.DeserializeObject<HBPreset>(item.ToString());
-                    HBPreset hbPreset = deserialisedItem as HBPreset;
-                    if (hbPreset != null && !hbPreset.Folder)
-                    {
-                        Preset preset = JsonPresetFactory.ImportPreset(hbPreset);
-                        preset.Category = UserPresetCatgoryName;
-                        preset.IsBuildIn = hbPreset.Type == 1;
+                        // Migration
+                        preset.Category = category.PresetName == "User Presets" ? UserPresetCatgoryName : category.PresetName;
+                        preset.IsBuildIn = hbpreset.Type == 0;
 
                         // IF we are using Source Max, Set the Max Width / Height values.
                         if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
@@ -807,13 +782,27 @@ namespace HandBrakeWPF.Services.Presets
                         this.Add(preset, true);
                     }
                 }
+
+                // Uncategorised Presets
+                deserialisedItem = JsonConvert.DeserializeObject<HBPreset>(item.ToString());
+                HBPreset hbPreset = deserialisedItem as HBPreset;
+                if (hbPreset != null && !hbPreset.Folder)
+                {
+                    Preset preset = JsonPresetFactory.ImportPreset(hbPreset);
+                    preset.Category = UserPresetCatgoryName;
+                    preset.IsBuildIn = hbPreset.Type == 1;
+
+                    // IF we are using Source Max, Set the Max Width / Height values.
+                    if (preset.PictureSettingsMode == PresetPictureSettingsMode.SourceMaximum)
+                    {
+                        preset.Task.MaxWidth = preset.Task.Height;
+                        preset.Task.MaxHeight = preset.Task.Width;
+                    }
+
+                    this.Add(preset, true);
+                }
             }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex);
-                this.RecoverFromCorruptedPresetFile(this.presetFile);
-                this.UpdateBuiltInPresets();
-            }
+
         }
 
         /// <summary>
