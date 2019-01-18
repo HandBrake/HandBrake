@@ -283,6 +283,7 @@ static int hb_lapsharp_work(hb_filter_object_t *filter,
         return HB_FILTER_DONE;
     }
 
+    hb_frame_buffer_blank_stride(in);
     out = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
 
     int c;
