@@ -597,6 +597,34 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
     return buf;
 }
 
+void hb_frame_buffer_blank_stride(hb_buffer_t * buf)
+{
+    int pp, xx, yy, stride;
+
+    for (pp = 0; pp < 4; pp++)
+    {
+        if (buf->plane[pp].data != NULL)
+        {
+            stride = buf->plane[pp].stride;
+            for (yy = 0; yy < buf->plane[pp].height; yy++)
+            {
+                for (xx = buf->plane[pp].width; xx < stride; xx++)
+                {
+                    *(buf->plane[pp].data + (yy * stride) + xx) = 0x80;
+                }
+            }
+            for (yy = buf->plane[pp].height;
+                 yy < buf->plane[pp].height_stride; yy++)
+            {
+                for (xx = 0; xx < stride; xx++)
+                {
+                    *(buf->plane[pp].data + (yy * stride) + xx) = 0x80;
+                }
+            }
+        }
+    }
+}
+
 // this routine reallocs a buffer for an uncompressed YUV420 video frame
 // with dimensions width x height.
 void hb_video_buffer_realloc( hb_buffer_t * buf, int width, int height )
