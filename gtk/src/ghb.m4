@@ -6572,7 +6572,7 @@ filter_output([
                           <object class="GtkLabel" id="label70">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Filter short titles (seconds)</property>
+                            <property name="label" translatable="yes">Filter short DVD and Blu-ray titles (seconds)</property>
                             <property name="use_markup">True</property>
                           </object>
                           <packing>
