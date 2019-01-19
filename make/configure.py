@@ -398,6 +398,9 @@ class LDProbe( Action ):
         if not self.fail:
             try:
                 os.remove( 'conftest.exe' )
+            except:
+                pass
+            try:
                 os.remove( 'conftest' )
             except:
                 pass
