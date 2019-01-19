@@ -301,8 +301,7 @@ typedef struct hb_batch_s hb_batch_t;
 hb_batch_t  * hb_batch_init( hb_handle_t *h, char * path );
 void          hb_batch_close( hb_batch_t ** _d );
 int           hb_batch_title_count( hb_batch_t * d );
-hb_title_t  * hb_batch_title_scan( hb_batch_t * d, int t,
-                                   uint64_t min_duration );
+hb_title_t  * hb_batch_title_scan( hb_batch_t * d, int t );
 
 /***********************************************************************
  * dvd.c
