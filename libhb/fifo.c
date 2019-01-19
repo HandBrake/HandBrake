@@ -599,27 +599,72 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
 
 void hb_frame_buffer_blank_stride(hb_buffer_t * buf)
 {
-    int pp, xx, yy, stride;
+    uint8_t * data;
+    int       pp, yy, width, height, stride, height_stride;
 
     for (pp = 0; pp < 4; pp++)
     {
-        if (buf->plane[pp].data != NULL)
+        data          = buf->plane[pp].data;
+        width         = buf->plane[pp].width;
+        height        = buf->plane[pp].height;
+        stride        = buf->plane[pp].stride;
+        height_stride = buf->plane[pp].height_stride;
+
+        if (data != NULL)
         {
-            stride = buf->plane[pp].stride;
-            for (yy = 0; yy < buf->plane[pp].height; yy++)
+            // Blank right margin
+            for (yy = 0; yy < height; yy++)
             {
-                for (xx = buf->plane[pp].width; xx < stride; xx++)
+                memset(data + yy * stride + width, 0x80, stride - width);
+            }
+            // Blank bottom margin
+            for (yy = height; yy < height_stride; yy++)
+            {
+                memset(data + yy * stride, 0x80, stride);
+            }
+        }
+    }
+}
+
+void hb_frame_buffer_mirror_stride(hb_buffer_t * buf)
+{
+    uint8_t * data;
+    int       pp, ii, yy, width, height, stride, height_stride;
+    int       pos, margin, margin_front, margin_back;
+
+    for (pp = 0; pp < 4; pp++)
+    {
+        data          = buf->plane[pp].data;
+        width         = buf->plane[pp].width;
+        height        = buf->plane[pp].height;
+        stride        = buf->plane[pp].stride;
+        height_stride = buf->plane[pp].height_stride;
+        if (data != NULL)
+        {
+            margin       = stride - width;
+            margin_front = margin / 2;
+            margin_back  = margin - margin_front;
+            for (yy = 0; yy < height; yy++)
+            {
+                // Mirror final row pixels into front of stride region
+                pos = yy * stride + width;
+                for (ii = 0; ii < margin_back; ii++)
                 {
-                    *(buf->plane[pp].data + (yy * stride) + xx) = 0x80;
+                    *(data + pos + ii) = *(data + pos - ii - 1);
+                }
+                // Mirror start of next row into end of stride region
+                pos = (yy + 1) * stride - 1;
+                for (ii = 0; ii < margin_front; ii++)
+                {
+                    *(data + pos - ii) = *(data + pos + ii + 1);
                 }
             }
-            for (yy = buf->plane[pp].height;
-                 yy < buf->plane[pp].height_stride; yy++)
+            // Mirror bottom rows into height_stride
+            pos = height * stride;
+            for (ii = 0; ii < height_stride - height; ii++)
             {
-                for (xx = 0; xx < stride; xx++)
-                {
-                    *(buf->plane[pp].data + (yy * stride) + xx) = 0x80;
-                }
+                memcpy(data + pos + ii * stride,
+                       data + pos - ((ii + 1) * stride), stride);
             }
         }
     }
