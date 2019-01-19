@@ -162,6 +162,7 @@ hb_buffer_t * hb_buffer_init( int size );
 hb_buffer_t * hb_buffer_eof_init( void );
 hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int w, int h);
 void          hb_frame_buffer_blank_stride(hb_buffer_t * buf);
+void          hb_frame_buffer_mirror_stride(hb_buffer_t * buf);
 void          hb_buffer_init_planes( hb_buffer_t * b );
 void          hb_buffer_realloc( hb_buffer_t *, int size );
 void          hb_video_buffer_realloc( hb_buffer_t * b, int w, int h );
