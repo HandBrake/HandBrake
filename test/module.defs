@@ -78,7 +78,7 @@ ifeq ($(BUILD.system),darwin)
     TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox VideoToolbox CoreMedia CoreVideo Foundation
     TEST.GCC.l += iconv
 else ifeq ($(BUILD.system),linux)
-    TEST.GCC.l += pthread dl m
+    TEST.GCC.l += pthread dl m numa
 else ifeq ($(BUILD.system),kfreebsd)
     TEST.GCC.l += pthread dl m
 else ifeq ($(BUILD.system),freebsd)

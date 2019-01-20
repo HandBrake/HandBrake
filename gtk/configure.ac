@@ -197,7 +197,7 @@ case $host in
     HB_LIBS="$HB_LIBS -lpthread"
     ;;
   *)
-    HB_LIBS="$HB_LIBS -ldl -lpthread"
+    HB_LIBS="$HB_LIBS -ldl -lpthread -lnuma"
     ;;
 esac
 
