@@ -24,6 +24,8 @@ namespace HandBrake.Interop.Interop.Model.Encoding
         [DisplayName("MP4")]
         MP4,
         [DisplayName("MKV")]
-        MKV
+        MKV,
+        [DisplayName("WebM")]
+        WebM
     }
 }

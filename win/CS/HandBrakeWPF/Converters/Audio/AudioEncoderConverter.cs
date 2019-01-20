@@ -64,7 +64,7 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.fdkheaac);
                 }
 
-                if (task != null && task.OutputFormat != OutputFormat.Mkv)
+                if (task != null && task.OutputFormat == OutputFormat.Mp4)
                 {
                     encoders.Remove(AudioEncoder.Vorbis);
                     encoders.Remove(AudioEncoder.ffflac);
@@ -73,6 +73,10 @@ namespace HandBrakeWPF.Converters.Audio
                     encoders.Remove(AudioEncoder.Opus);
 
                     encoders.Remove(AudioEncoder.TrueHDPassthrough);
+                }
+                else if (task != null && task.OutputFormat == OutputFormat.WebM)
+                {
+                    encoders.RemoveAll(ae => !(ae.Equals(AudioEncoder.Vorbis) || ae.Equals(AudioEncoder.Opus)));
                 }
 
                 // Hide the Passthru options and show the "None" option

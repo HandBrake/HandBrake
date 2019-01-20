@@ -556,7 +556,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets RangeMode.
         /// </summary>
-        public IEnumerable<OutputFormat> OutputFormats => new List<OutputFormat> { OutputFormat.Mp4, OutputFormat.Mkv };
+        public IEnumerable<OutputFormat> OutputFormats => new List<OutputFormat> { OutputFormat.Mp4, OutputFormat.Mkv, OutputFormat.WebM };
 
         /// <summary>
         /// Gets or sets Destination.
@@ -607,6 +607,9 @@ namespace HandBrakeWPF.ViewModels
                             case ".mp4":
                             case ".m4v":
                                 this.SummaryViewModel.SetContainer(OutputFormat.Mp4);
+                                break;
+                            case ".webm":
+                                this.SummaryViewModel.SetContainer(OutputFormat.WebM);
                                 break;
                         }
                     }
@@ -1731,7 +1734,7 @@ namespace HandBrakeWPF.ViewModels
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv", 
+                Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv|webm|*.webm", 
                 CheckPathExists = true, 
                 AddExtension = true, 
                 DefaultExt = ".mp4", 
@@ -1743,7 +1746,9 @@ namespace HandBrakeWPF.ViewModels
             saveFileDialog.FilterIndex = !string.IsNullOrEmpty(this.CurrentTask.Destination)
                                          && !string.IsNullOrEmpty(extension)
                                              ? (extension == ".mp4" || extension == ".m4v" ? 1 : 2)
-                                             : (this.CurrentTask.OutputFormat == OutputFormat.Mkv ? 2 : 0);
+                                             : (this.CurrentTask.OutputFormat == OutputFormat.Mkv 
+                                                 ? 2 
+                                                 : (this.CurrentTask.OutputFormat == OutputFormat.WebM ? 3 : 0));
 
             string mruDir = this.GetMru(Constants.FileSaveMru);
             if (!string.IsNullOrEmpty(mruDir))
@@ -1780,6 +1785,9 @@ namespace HandBrakeWPF.ViewModels
                         case ".mp4":
                         case ".m4v":
                             this.SummaryViewModel.SetContainer(OutputFormat.Mp4);
+                            break;
+                        case ".webm":
+                            this.SummaryViewModel.SetContainer(OutputFormat.WebM);
                             break;
                     }
 

@@ -123,7 +123,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return new List<OutputFormat>
                        {
-                           OutputFormat.Mp4, OutputFormat.Mkv
+                           OutputFormat.Mp4, OutputFormat.Mkv, OutputFormat.WebM
                        };
             }
         }
@@ -211,8 +211,9 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.OutputFormat = value;
                     this.NotifyOfPropertyChange(() => this.SelectedOutputFormat);
                     this.NotifyOfPropertyChange(() => this.Task.OutputFormat);
-                    this.NotifyOfPropertyChange(() => this.IsMkv);
+                    this.NotifyOfPropertyChange(() => this.IsMkvOrWebm);
                     this.SetExtension(string.Format(".{0}", this.Task.OutputFormat.ToString().ToLower()));
+                    this.UpdateDisplayedInfo(); // output format may coreced to another due to container incompatibility
 
                     this.OnOutputFormatChanged(new OutputFormatChangedEventArgs(null));
                     this.OnTabStatusChanged(null);
@@ -221,13 +222,13 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether IsMkv.
+        /// Gets or sets a value indicating whether IsMkvOrWebm.
         /// </summary>
-        public bool IsMkv
+        public bool IsMkvOrWebm
         {
             get
             {
-                return this.SelectedOutputFormat == OutputFormat.Mkv;
+                return this.SelectedOutputFormat == OutputFormat.Mkv || this.SelectedOutputFormat == OutputFormat.WebM;
             }
         }
 
@@ -316,8 +317,8 @@ namespace HandBrakeWPF.ViewModels
             this.UpdateDisplayedInfo();
 
             this.NotifyOfPropertyChange(() => this.SelectedOutputFormat);
-            this.NotifyOfPropertyChange(() => this.IsMkv);
-
+            this.NotifyOfPropertyChange(() => this.IsMkvOrWebm);
+ 
             this.NotifyOfPropertyChange(() => this.OptimizeMP4);
             this.NotifyOfPropertyChange(() => this.IPod5GSupport);
             this.NotifyOfPropertyChange(() => this.AlignAVStart);
@@ -454,14 +455,14 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Now disable controls that are not required. The Following are for MP4 only!
-            if (newExtension == ".mkv")
+            if (newExtension == ".mkv" || newExtension == ".webm")
             {
                 this.OptimizeMP4 = false;
                 this.IPod5GSupport = false;
                 this.AlignAVStart = false;
             }
 
-            this.NotifyOfPropertyChange(() => this.IsMkv);
+            this.NotifyOfPropertyChange(() => this.IsMkvOrWebm);
 
             // Update The browse file extension display
             if (Path.HasExtension(newExtension))

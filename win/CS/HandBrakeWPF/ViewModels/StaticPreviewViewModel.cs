@@ -570,7 +570,21 @@ namespace HandBrakeWPF.ViewModels
             // Filename handling.
             if (string.IsNullOrEmpty(encodeTask.Destination))
             {
-                string filename = Path.ChangeExtension(Path.GetTempFileName(), encodeTask.OutputFormat == OutputFormat.Mkv ? "m4v" : "mkv");
+                string formatExtension;
+                switch (encodeTask.OutputFormat)
+                {
+                    case OutputFormat.WebM:
+                        formatExtension = "webm";
+                        break;
+                    case OutputFormat.Mp4:
+                        formatExtension = "m4v";
+                        break;
+                    case OutputFormat.Mkv:
+                    default:
+                        formatExtension = "mkv";
+                        break;
+                }
+                string filename = Path.ChangeExtension(Path.GetTempFileName(), formatExtension);
                 encodeTask.Destination = filename;
                 this.CurrentlyPlaying = filename;
             }
