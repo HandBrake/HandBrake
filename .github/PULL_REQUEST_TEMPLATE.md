@@ -1,8 +1,9 @@
 
 **Before Posting:**
 
-- [ ] For moderate to large issues, please create a new issue to discuss the change before raising a pull request. 
-This will allow us to confirm the change is suitable for HandBrake and make any suggestions that may be relevant.
+- [ ] Create an issue describing the change. If an issue already exists, please use this.
+- [ ] Discuss the issue with the HandBrake team to ensure that the idea has been accepted. (An open enhancement request does not equal acceptance). This will avoid any time wasted on features that are outside the project scope!
+
 
 **Description of Change:**
 
