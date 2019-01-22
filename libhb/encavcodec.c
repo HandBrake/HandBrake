@@ -1023,14 +1023,27 @@ static int apply_vpx_preset(AVDictionary ** av_opts, const char * preset)
     return 0;
 }
 
+// VP8 and VP9 have some options in common and some different
+static int apply_vp8_preset(AVDictionary ** av_opts, const char * preset)
+{
+    return apply_vpx_preset(av_opts, preset);
+}
+
+static int apply_vp9_preset(AVDictionary ** av_opts, const char * preset)
+{
+    av_dict_set(av_opts, "row-mt", "1", 0);
+    return apply_vpx_preset(av_opts, preset);
+}
+
 static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
                                 const char * preset)
 {
     switch (vcodec)
     {
         case HB_VCODEC_FFMPEG_VP8:
+            return apply_vp8_preset(av_opts, preset);
         case HB_VCODEC_FFMPEG_VP9:
-            return apply_vpx_preset(av_opts, preset);
+            return apply_vp9_preset(av_opts, preset);
         case HB_VCODEC_FFMPEG_NVENC_H264:
         case HB_VCODEC_FFMPEG_NVENC_H265:
              av_dict_set( av_opts, "preset", preset, 0);
