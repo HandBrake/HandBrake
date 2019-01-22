@@ -74,7 +74,7 @@ GCC.args.l         = -l$(1)
 GCC.args.end       = -Wl,--end-group
 
 ifeq (x86_64,$(BUILD.machine))
-    GCC.args.extra = $(CFLAGS) $(CPPFLAGS) -mfpmath=sse -msse2 -mavx -mavx2 -mno-sse2avx
+    GCC.args.extra = $(CFLAGS) $(CPPFLAGS) -mfpmath=sse -msse2 -mavx -mavx2
 else
     GCC.args.extra = $(CFLAGS) $(CPPFLAGS)
 endif
