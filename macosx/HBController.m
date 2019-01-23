@@ -5,6 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
 
 #import "HBController.h"
+#import "HBAppDelegate.h"
 #import "HBFocusRingView.h"
 #import "HBToolbarBadgedItem.h"
 #import "HBQueueController.h"

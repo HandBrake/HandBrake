@@ -197,7 +197,7 @@ static volatile int work_done = 0;
 static void SigHandler( int );
 
 /* Utils */
-static void ShowHelp();
+static void ShowHelp(void);
 static void ShowCommands()
 {
     fprintf(stdout, "\nCommands:\n");
@@ -2832,6 +2832,7 @@ static int ParseOptions( int argc, char ** argv )
             case PAD:
             {
                 free(pad);
+                pad = NULL;
                 if (optarg != NULL)
                 {
                     pad = strdup(optarg);
