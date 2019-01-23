@@ -101,6 +101,7 @@ namespace HandBrakeWPF.ViewModels
         private bool isSettingPreset;
         private IPresetObject selectedPresetCategory;
         private bool isModifiedPreset;
+        private bool isWebmOutputFormat;
 
         #endregion
 
@@ -341,6 +342,28 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.isModifiedPreset) return;
                 this.isModifiedPreset = value;
                 this.NotifyOfPropertyChange();
+            }
+        }
+
+        public bool IsWebmOutputFormat
+        {
+            get
+            {
+                return this.isWebmOutputFormat;
+            }
+            set
+            {
+                this.isWebmOutputFormat = value;
+                this.NotifyOfPropertyChange(() => this.IsWebmOutputFormat);
+                this.NotifyOfPropertyChange(() => this.IsSubtitleTabEnabled);
+            }
+        }
+
+        public bool IsSubtitleTabEnabled
+        {
+            get
+            {
+                return !this.IsWebmOutputFormat;
             }
         }
 
@@ -2052,6 +2075,7 @@ namespace HandBrakeWPF.ViewModels
                     // Tab Settings
                     this.isSettingPreset = true;
                     this.IsModifiedPreset = false;
+
                     this.SummaryViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.PictureSettingsViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.VideoViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
@@ -2061,6 +2085,10 @@ namespace HandBrakeWPF.ViewModels
                     this.ChaptersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.MetaDataViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.isSettingPreset = false;
+
+                    // Evaluate if the output format changed after setting preset
+                    this.IsWebmOutputFormat = this.SummaryViewModel.IsWebmOutputFormat();
+                    this.NotifyOfPropertyChange(() => this.IsWebmOutputFormat);
                 }
             }
         }
@@ -2271,6 +2299,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.IsModifiedPreset = !matchesPreset;
+            this.IsWebmOutputFormat = this.SummaryViewModel.IsWebmOutputFormat();
         }
 
         /// <summary>

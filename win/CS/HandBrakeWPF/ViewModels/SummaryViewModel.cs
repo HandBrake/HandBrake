@@ -213,7 +213,7 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.Task.OutputFormat);
                     this.NotifyOfPropertyChange(() => this.IsMkvOrWebm);
                     this.SetExtension(string.Format(".{0}", this.Task.OutputFormat.ToString().ToLower()));
-                    this.UpdateDisplayedInfo(); // output format may coreced to another due to container incompatibility
+                    this.UpdateDisplayedInfo(); // output format may coerced to another due to container incompatibility
 
                     this.OnOutputFormatChanged(new OutputFormatChangedEventArgs(null));
                     this.OnTabStatusChanged(null);
@@ -364,6 +364,11 @@ namespace HandBrakeWPF.ViewModels
         public void SetContainer(OutputFormat container)
         {
             this.SelectedOutputFormat = container;
+        }
+
+        public bool IsWebmOutputFormat()
+        {
+            return this.SelectedOutputFormat == OutputFormat.WebM;
         }
 
         public void NextPreview()

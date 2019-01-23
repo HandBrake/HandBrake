@@ -539,8 +539,8 @@
                 <TabItem Name="audioTab" Header="{x:Static Properties:Resources.MainView_AudioTab}">
                     <ContentControl x:Name="AudioViewModel" />
                 </TabItem>
-                <TabItem Name="subtitlesTab" Header="{x:Static Properties:Resources.MainView_SubtitlesTab}">
-                    <ContentControl x:Name="SubtitleViewModel" />
+                <TabItem Name="subtitlesTab" Header="{x:Static Properties:Resources.MainView_SubtitlesTab}" IsEnabled="{Binding IsSubtitleTabEnabled, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
+                    <ContentControl x:Name="SubtitleViewModel" IsEnabled="{Binding IsSubtitleTabEnabled, Converter={StaticResource booleanConverter}, ConverterParameter=false}" />
                 </TabItem>
                 <TabItem Name="chaptersTab" Header="{x:Static Properties:Resources.MainView_ChaptersTab}">
                     <ContentControl x:Name="ChaptersViewModel" />
