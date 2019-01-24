@@ -2673,7 +2673,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Minimum length of title to scan (seconds):.
+        ///   Looks up a localized string similar to Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped:.
         /// </summary>
         public static string Options_MinTitleScanLength {
             get {
