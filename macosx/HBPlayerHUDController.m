@@ -43,13 +43,8 @@
 {
     [super viewDidLoad];
 
-    if ([[NSFont class] respondsToSelector:@selector(monospacedDigitSystemFontOfSize:weight:)]) {
-        _normalMonospacedAttr = @{NSFontAttributeName: [NSFont monospacedDigitSystemFontOfSize:15 weight:NSFontWeightRegular]};
-        _monospacedAttr = @{NSFontAttributeName: [NSFont monospacedDigitSystemFontOfSize:[NSFont smallSystemFontSize] weight:NSFontWeightRegular]};
-    }
-    else {
-        _monospacedAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:[NSFont smallSystemFontSize]]};
-    }
+    _normalMonospacedAttr = @{NSFontAttributeName: [NSFont monospacedDigitSystemFontOfSize:15 weight:NSFontWeightRegular]};
+    _monospacedAttr = @{NSFontAttributeName: [NSFont monospacedDigitSystemFontOfSize:[NSFont smallSystemFontSize] weight:NSFontWeightRegular]};
 }
 
 - (BOOL)canBeHidden

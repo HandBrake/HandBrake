@@ -649,10 +649,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
         if (volumeURL)
         {
-            if ([volumeURL respondsToSelector:@selector(removeCachedResourceValueForKey:)])
-            {
-                [volumeURL removeCachedResourceValueForKey:NSURLVolumeAvailableCapacityKey];
-            }
+            [volumeURL removeCachedResourceValueForKey:NSURLVolumeAvailableCapacityKey];
             attrs = [volumeURL resourceValuesForKeys:@[NSURLVolumeAvailableCapacityKey] error:NULL];
 
             if (attrs[NSURLVolumeAvailableCapacityKey])

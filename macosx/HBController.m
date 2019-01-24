@@ -898,13 +898,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
                                                        isDirectory:YES];
 	}
 
-    [panel setDirectoryURL:sourceDirectory];
-    [panel setAccessoryView:self.openTitleView];
-
-    if ([panel respondsToSelector:@selector(isAccessoryViewDisclosed)])
-    {
-        panel.accessoryViewDisclosed = YES;
-    }
+    panel.directoryURL = sourceDirectory;
+    panel.accessoryView = self.openTitleView;
+    panel.accessoryViewDisclosed = YES;
 
     [panel beginSheetModalForWindow:self.window completionHandler: ^(NSInteger result)
     {

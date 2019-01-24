@@ -293,10 +293,7 @@
             view.hidden = YES;
 
             [NSAnimationContext runAnimationGroup:^(NSAnimationContext *context) {
-                if ([context respondsToSelector:@selector(setAllowsImplicitAnimation:)])
-                {
-                    context.allowsImplicitAnimation = YES;
-                }
+                context.allowsImplicitAnimation = YES;
                 [window layoutIfNeeded];
 
             } completionHandler:^{

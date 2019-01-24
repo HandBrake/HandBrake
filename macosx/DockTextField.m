@@ -41,14 +41,7 @@
     shadow.shadowOffset = NSMakeSize(2, -2);
     shadow.shadowBlurRadius = 6;
 
-    NSFont *font;
-    if ([[NSFont class] respondsToSelector:@selector(monospacedDigitSystemFontOfSize:weight:)]) {
-        // On macOS 10.11+ the monospaced digit system is available.
-        font = [NSFont monospacedDigitSystemFontOfSize:fontSize weight:NSFontWeightBold];
-    } else {
-        // macOS 10.10- use the default system font.
-        font = [NSFont boldSystemFontOfSize:fontSize];
-    }
+    NSFont *font = [NSFont monospacedDigitSystemFontOfSize:fontSize weight:NSFontWeightBold];
 
     return @{ NSForegroundColorAttributeName: [NSColor whiteColor],
               NSFontAttributeName: font,
