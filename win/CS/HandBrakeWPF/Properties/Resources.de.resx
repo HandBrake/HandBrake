@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -147,20 +147,7 @@ Eigene: Es kann optional eine maximale Breite und Höhe eingestellt werden. Dabe
 Quellenmaximum: Kodiert nach Möglichkeit immer mit der Quellauflösung.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2019 Das HandBrake-Team
-
-Dieses Programm ist freie Software; es kann unter den 
-Bedingungen der GNU General Public License, wie sie von der 
-Free Software Foundation veröffentlicht wurde, weitergeben 
-und/oder verändert werden; entweder Version 2 der Lizenz oder 
-(nach eigener Wahl) jede spätere Version.
-
-Dieses Programm wird in der Hoffnung verteilt, dass es nützlich 
-sein wird, aber OHNE JEGLICHE GEWÄHRLEISTUNG; auch ohne die stillschweigende Gewährleistung der MARKTREIFE oder 
-Tauglichkeit für einen bestimmten Zweck. Weitere Informationen finden Sie in der GNU General Public License.
-
-Sie sollten eine Kopie der GNU General Public License zusammen mit diesem Programm erhalten haben; wenn nicht, schreiben Sie an die Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
+    <value>Copyright (C) 2003-2019 Das HandBrake-TeamDieses Programm ist freie Software; es kann unter den Bedingungen der GNU General Public License, wie sie von der Free Software Foundation veröffentlicht wurde, weitergeben und/oder verändert werden; entweder Version 2 der Lizenz oder (nach eigener Wahl) jede spätere Version.Dieses Programm wird in der Hoffnung verteilt, dass es nützlich sein wird, aber OHNE JEGLICHE GEWÄHRLEISTUNG; auch ohne die stillschweigende Gewährleistung der MARKTREIFE oder Tauglichkeit für einen bestimmten Zweck. Weitere Informationen finden Sie in der GNU General Public License.Sie sollten eine Kopie der GNU General Public License zusammen mit diesem Programm erhalten haben; wenn nicht, schreiben Sie an die Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
     <value>WARNUNG: Die automatische Dateibenennung ist nicht aktiviert. Bitte diese Funktion aktivieren.</value>
@@ -272,10 +259,10 @@ Von der vorherigen Datei user_presets.xml wurde ein Backup angelegt.</value>
     <value>Überprüfen fehlgeschlagen:</value>
   </data>
   <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
-    <value>Überprüfen fehlgeschlagen... Details im Aktivitätsprotokoll.</value>
+    <value>Überprüfen fehlgeschlagen ... Details im Aktivitätsprotokoll.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>Quelle überprüfen, bitte warten...</value>
+    <value>Quelle überprüfen, bitte warten ...</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
     <value>Titel {0} von {1} überprüfen ({2} %)</value>
@@ -685,7 +672,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
     <value>Bitte überprüfen, dass das Zielverzeichnis gültig ist.</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>Bearbeite Durchgang {0} von {1}, (Untertitelscan) {2:00.00}%, Verbleibende Zeit Überprüfung: {3}, Vergangen:  {4:d\:hh\:mm\:ss}</value>
+    <value>Bearbeite Durchgang {0} von {1}, (Untertitelüberprüfung) {2:00.00}%, Verbleibende Zeit Überprüfung: {3}, Vergangen:  {4:d\:hh\:mm\:ss}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
     <value>Keine zusätzlichen Informationen</value>
@@ -730,7 +717,7 @@ BpS: {3:000.0}, Mittlere BpS: {4:000.0}
 Verbleibende Zeit: {5}, Vergangene Zeit: {6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
-    <value>Vorschau ({0}% aktuelle Größe)</value>
+    <value>Vorschau ({0}% tatsächliche Größe)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
     <value>HandBrake benötigt eine 64bit-Version von Windows 7 oder neuer.</value>
@@ -809,7 +796,7 @@ Soll sie überschrieben werden?</value>
     <value>Ausweichenkoder:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
-    <value>Standard neu laden</value>
+    <value>Neu laden</value>
   </data>
   <data name="AudioView_Samplerate" xml:space="preserve">
     <value>Samplerate</value>
@@ -1034,7 +1021,7 @@ Soll sie überschrieben werden?</value>
     <value>(Modifiziert)</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
-    <value>Multiplexen: Dies kann etwas dauern...</value>
+    <value>Multiplexen: Dies kann etwas dauern ...</value>
   </data>
   <data name="MainView_Options" xml:space="preserve">
     <value>Einstellungen</value>
@@ -1283,7 +1270,7 @@ Soll sie überschrieben werden?</value>
     <value>Das System daran hindern während der Enkodierung in den Ruhezustand zu fahren</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Anzahl an Vorschaubildern für den Scan:</value>
+    <value>Anzahl an Vorschaubildern für die Überprüfung:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
     <value>Prioritätslevel:</value>
@@ -1579,7 +1566,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Standardverhalten konfigurieren</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
-    <value>Standard neu laden</value>
+    <value>Neu laden</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
     <value>Disk zum überprüfen wählen</value>
@@ -1642,7 +1629,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Einbrennverhalten:</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
-    <value>SRT / SSA importieren</value>
+    <value>Untertitel importieren</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
     <value>Spurverhalten:</value>
@@ -1768,7 +1755,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Über HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Oder hier eine Datei/Ordner ablegen...</value>
+    <value>Oder hier eine Datei/Ordner ablegen ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Hilfe</value>
@@ -1795,7 +1782,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Nur erzwungene</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>_Über...</value>
+    <value>_Über ...</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
     <value>_Aktivitätsprotokoll</value>
@@ -1846,7 +1833,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>_Extras</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>Auf Updates prüfen...</value>
+    <value>Auf Updates prüfen ...</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
     <value>Soll das Verzeichnis der Aktivitätsprotokolle wirklich bereinigt werden?</value>
@@ -1855,7 +1842,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Aktivitätsprotokolle bereinigen</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
-    <value>Herunterladen...</value>
+    <value>Herunterladen ...</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
     <value>Das Verlaufsprotokollverzeichnis von HandBrake wurde bereinigt!</value>
@@ -1864,7 +1851,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Hinweis</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>Update vorbereiten...</value>
+    <value>Update vorbereiten ...</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
     <value>Bitte einen Ordner wählen.</value>
@@ -1883,5 +1870,17 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
     <value>Auswahl zur Warteschlange hinzufügen</value>
+  </data>
+  <data name="QueueView_PlayMediaFile" xml:space="preserve">
+    <value>Datei abspielen</value>
+  </data>
+  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+    <value>Programm-Symbolleiste</value>
+  </data>
+  <data name="Options_ShowToolbarAddAll" xml:space="preserve">
+    <value>Zeige 'Alles zur Warteschlange hinzufügen' in der Symbolleiste</value>
+  </data>
+  <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
+    <value>Zeige 'Auswahl zur Warteschlange hinzufügen' in der Symbolleiste</value>
   </data>
 </root>
