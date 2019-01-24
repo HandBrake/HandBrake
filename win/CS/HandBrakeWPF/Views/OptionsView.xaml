@@ -314,8 +314,8 @@
                                 <ComboBox Name="numberOfPreviews" ItemsSource="{Binding PreviewPicturesToScan}" SelectedItem="{Binding SelectedPreviewCount}" Width="120" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="{x:Static Properties:Resources.Options_MinTitleScanLength}" VerticalAlignment="Center" Width="250" />
-                                <TextBox x:Name="MinTitleLength" Text="{Binding MinLength}"  Width="120"/>
+                                <TextBlock Text="{x:Static Properties:Resources.Options_MinTitleScanLength}" TextWrapping="Wrap" VerticalAlignment="Center" Width="250" />
+                                <TextBox x:Name="MinTitleLength" VerticalAlignment="Center" Text="{Binding MinLength}"  Width="120"/>
                                 <!-- Find a control for this-->
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">

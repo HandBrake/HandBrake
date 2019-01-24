@@ -1377,7 +1377,7 @@ Would you like to overwrite it?</value>
     <value>Minimize to system tray (Requires Restart)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>Minimum length of title to scan (seconds):</value>
+    <value>Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped:</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4 File Extension:</value>
