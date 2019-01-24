@@ -740,7 +740,7 @@ Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss}</value>
     <value>HandBrake requires Windows 7 or later to run. Version 0.9.9 (XP) and 0.10.5 (Vista) was the last version to support these versions.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>Unable to add the last job to the queue. Do you wish to proceed trying to add the rest?</value>
+    <value>Do you wish to proceed trying to add the rest?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
     <value>The file '{0}' already exists!

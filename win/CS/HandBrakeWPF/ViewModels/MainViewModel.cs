@@ -1319,18 +1319,16 @@ namespace HandBrakeWPF.ViewModels
         /// <returns>
         /// True if added, false if error.
         /// </returns>
-        public bool AddToQueue()
+        public AddQueueError AddToQueue()
         {
             if (this.ScannedSource == null || string.IsNullOrEmpty(this.ScannedSource.ScanPath) || this.ScannedSource.Titles.Count == 0)
             {
-                this.errorService.ShowMessageBox(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
+                return new AddQueueError(Resources.Main_ScanSource, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (string.IsNullOrEmpty(this.CurrentTask.Destination))
             {
-                this.errorService.ShowMessageBox(Resources.Main_SetDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
+                return new AddQueueError(Resources.Main_SetDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (File.Exists(this.CurrentTask.Destination))
@@ -1338,44 +1336,38 @@ namespace HandBrakeWPF.ViewModels
                 MessageBoxResult result = this.errorService.ShowMessageBox(string.Format(Resources.Main_QueueOverwritePrompt, Path.GetFileName(this.CurrentTask.Destination)), Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.No)
                 {
-                    return false;
-                }           
+                    return null; // Handled by the above action.
+                }
             }
 
             if (!DirectoryUtilities.IsWritable(Path.GetDirectoryName(this.CurrentTask.Destination), false, this.errorService))
             {
-                this.errorService.ShowMessageBox(Resources.Main_NoPermissionsOrMissingDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
+                return new AddQueueError(Resources.Main_NoPermissionsOrMissingDirectory, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
 
             if (!DriveUtilities.HasMinimumDiskSpace(
                 this.Destination,
                 this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel)))
             {
-                this.errorService.ShowMessageBox(Resources.Main_LowDiskspace, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
+                return new AddQueueError(Resources.Main_LowDiskspace, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             // Sanity check the filename
             if (!string.IsNullOrEmpty(this.Destination) && FileHelper.FilePathHasInvalidChars(this.Destination))
             {
-                this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 this.NotifyOfPropertyChange(() => this.Destination);
-                return false;
+                return new AddQueueError(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (this.Destination == this.ScannedSource.ScanPath)
             {
-                this.errorService.ShowMessageBox(Resources.Main_SourceDestinationMatchError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 this.Destination = null;
-                return false;
+                return new AddQueueError(Resources.Main_SourceDestinationMatchError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.ToLower() == this.scannedSource.ScanPath.ToLower())
             {
-                this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
+                return new AddQueueError(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create(), this.ScannedSource.ScanPath, this.SelectedPreset);
@@ -1386,8 +1378,7 @@ namespace HandBrakeWPF.ViewModels
             }
             else
             {
-                this.errorService.ShowMessageBox(Resources.Main_DuplicateDestinationOnQueue, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
-                return false;
+                return new AddQueueError(Resources.Main_DuplicateDestinationOnQueue, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             if (!this.IsEncoding)
@@ -1395,7 +1386,7 @@ namespace HandBrakeWPF.ViewModels
                 this.ProgramStatusLabel = string.Format(Resources.Main_XEncodesPending, this.queueProcessor.Count);
             }
 
-            return true;
+            return null;
         }
 
         /// <summary>
@@ -1436,9 +1427,10 @@ namespace HandBrakeWPF.ViewModels
             foreach (Title title in this.ScannedSource.Titles)
             {
                 this.SelectedTitle = title;
-                if (!this.AddToQueue())
+                var addError = this.AddToQueue();
+                if (addError != null)
                 {
-                   MessageBoxResult result = this.errorService.ShowMessageBox(Resources.Main_ContinueAddingToQueue, Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    MessageBoxResult result = this.errorService.ShowMessageBox(addError.Message + Environment.NewLine + Environment.NewLine + Resources.Main_ContinueAddingToQueue, addError.Header, MessageBoxButton.YesNo, addError.ErrorType);
 
                     if (result == MessageBoxResult.No)
                     {
@@ -1473,7 +1465,16 @@ namespace HandBrakeWPF.ViewModels
                 foreach (SelectionTitle title in tasks)
                 {
                     this.SelectedTitle = title.Title;
-                    this.AddToQueue();
+                    var addError = this.AddToQueue();
+                    if (addError != null)
+                    {
+                        MessageBoxResult result = this.errorService.ShowMessageBox(addError.Message + Environment.NewLine + Environment.NewLine + Resources.Main_ContinueAddingToQueue, addError.Header, MessageBoxButton.YesNo, addError.ErrorType);
+
+                        if (result == MessageBoxResult.No)
+                        {
+                            break;
+                        }
+                    }
                 }
             }, this.selectedPreset);
 
@@ -1564,10 +1565,19 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Create the Queue Task and Start Processing
-            if (this.AddToQueue())
+            var addError = this.AddToQueue();
+            if (addError == null)
             {
                 this.IsEncoding = true;
                 this.queueProcessor.Start(this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));               
+            }
+            else
+            {
+                this.errorService.ShowMessageBox(
+                    addError.Message,
+                    addError.Header,
+                    addError.Buttons,
+                    addError.ErrorType);
             }
         }
 

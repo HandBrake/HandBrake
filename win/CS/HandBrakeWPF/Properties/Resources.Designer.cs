@@ -1126,7 +1126,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to add the last job to the queue. Do you wish to proceed trying to add the rest?.
+        ///   Looks up a localized string similar to Do you wish to proceed trying to add the rest?.
         /// </summary>
         public static string Main_ContinueAddingToQueue {
             get {

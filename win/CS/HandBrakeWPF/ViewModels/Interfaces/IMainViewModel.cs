@@ -11,6 +11,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
 {
     using System.Windows;
 
+    using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Queue.Model;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
@@ -49,7 +50,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <returns>
         /// True if added, false if error
         /// </returns>
-        bool AddToQueue();
+        AddQueueError AddToQueue();
         void AddAllToQueue();
         void AddSelectionToQueue();
 

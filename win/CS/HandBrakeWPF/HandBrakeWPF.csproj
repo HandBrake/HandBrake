@@ -158,6 +158,7 @@
     <Compile Include="Instance\HandBrakeInstanceManager.cs" />
     <Compile Include="Instance\Model\ServerResponse.cs" />
     <Compile Include="Instance\RemoteInstance.cs" />
+    <Compile Include="Model\AddQueueError.cs" />
     <Compile Include="Model\Audio\AudioBehaviourTrack.cs" />
     <Compile Include="Model\Audio\AudioTrackDefaultsMode.cs" />
     <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
