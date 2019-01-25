@@ -191,7 +191,7 @@ case $host in
     else
         HB_LIBS="$HB_LIBS -lpthreadGC2"
 	fi
-    HB_LIBS="$HB_LIBS -lregex -luuid"
+    HB_LIBS="$HB_LIBS -lbcrypt -lregex -luuid"
     ;;
   *-*-freebsd*)
     HB_LIBS="$HB_LIBS -lpthread"
