@@ -2109,6 +2109,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool CanRecoverQueue()
+        {
+            return this.QueueRecoveryArchivesExist;
+        }
+
         public void RecoverQueue()
         {
             QueueRecoveryHelper.ResetArchives();

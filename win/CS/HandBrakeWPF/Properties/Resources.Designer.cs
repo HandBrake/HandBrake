@@ -4449,7 +4449,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Queue Recovery.
+        ///   Looks up a localized string similar to Recover Queue Files.
         /// </summary>
         public static string SourceSelection_QueueArchiveRecovery {
             get {

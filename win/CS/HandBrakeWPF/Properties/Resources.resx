@@ -1610,7 +1610,7 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Open a folder with one or more files.</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
-    <value>Queue Recovery</value>
+    <value>Recover Queue Files</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
     <value>A previous queue archive is available. </value>

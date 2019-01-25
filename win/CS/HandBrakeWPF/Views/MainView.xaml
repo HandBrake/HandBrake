@@ -125,6 +125,9 @@
                     <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearSelected}" Header="{x:Static Properties:Resources.QueueView_ClearSelected}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     <Separator Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.Export}" Header="{x:Static Properties:Resources.QueueView_Export}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
+                    <Separator />
+                    <MenuItem x:Name="queueRecoveryMenuItem" Header="{x:Static Properties:Resources.SourceSelection_QueueArchiveRecovery}" cal:Message.Attach="[Event Click] = [Action RecoverQueue]" />
+
                 </MenuItem>
 
                 <MenuItem Header="{x:Static Properties:Resources.MainView_HelpMenu}">
