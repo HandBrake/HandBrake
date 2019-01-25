@@ -722,6 +722,13 @@ namespace HandBrakeWPF.ViewModels
                                 this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                                 return;
                             }
+
+                            if (value == this.ScannedSource.ScanPath)
+                            {
+                                this.Destination = null;
+                                this.errorService.ShowMessageBox(Resources.Main_SourceDestinationMatchError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                                return;
+                            }
                         }
                         catch (Exception exc)
                         {
