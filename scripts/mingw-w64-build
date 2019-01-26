@@ -132,14 +132,14 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
 
     # versions
     local CONFIG_VER BINUTILS_VER MINGW_W64_VER GMP_VER MPFR_VER MPC_VER ISL_VER GCC_VER
-    CONFIG_VER="b75cdc9"  # config.guess 2018-05-05
-    BINUTILS_VER="2.29.1"
-    MINGW_W64_VER="5.0.3"
+    CONFIG_VER="5fe51ff"  # config.guess 2019-01-03
+    BINUTILS_VER="2.31.1"
+    MINGW_W64_VER="6.0.0"
     GMP_VER="6.1.2"
     MPFR_VER="4.0.1"
     MPC_VER="1.1.0"
     ISL_VER="0.19"
-    GCC_VER="7.3.0"
+    GCC_VER="8.2.0"
     VERSIONS=("${CONFIG_VER}" "${BINUTILS_VER}" "${MINGW_W64_VER}" "${GMP_VER}" "${MPFR_VER}" "${MPC_VER}" "${ISL_VER}" "${GCC_VER}")
 
     # filenames
@@ -156,7 +156,7 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
 
     # urls
     local CONFIG_URLS BINUTILS_URLS MINGW_W64_URLS GMP_URLS MPFR_URLS MPC_URLS ISL_URLS GCC_URLS URLS_VARNAMES
-    CONFIG_URLS=("http://git.savannah.gnu.org/gitweb/?p=config.git;a=snapshot;h=${CONFIG_VER};sf=tgz")
+    CONFIG_URLS=("https://git.savannah.gnu.org/gitweb/?p=config.git;a=snapshot;h=${CONFIG_VER};sf=tgz")
     BINUTILS_URLS=("https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.bz2")
     MINGW_W64_URLS=("http://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v${MINGW_W64_VER}.tar.bz2")
     GMP_URLS=("https://ftp.gnu.org/gnu/gmp/gmp-${GMP_VER}.tar.bz2")
@@ -168,20 +168,20 @@ function mingw-w64-build {  # mingw-w64-build $TARGET_PARAM $TARGET_DIR
 
     # checksums
     local CONFIG_SHA256 BINUTILS_SHA256 MINGW_W64_SHA256 GMP_SHA256 MPFR_SHA256 MPC_SHA256 ISL_SHA256 GCC_SHA256 CHECKSUMS
-    CONFIG_SHA256="beb9c183e86a6a461be0ba38b2409826003aa36bf2d716d1eb9a66148e6faf0c"
-    BINUTILS_SHA256="1509dff41369fb70aed23682351b663b56db894034773e6dbf7d5d6071fc55cc"
-    MINGW_W64_SHA256="2a601db99ef579b9be69c775218ad956a24a09d7dabc9ff6c5bd60da9ccc9cb4"
+    CONFIG_SHA256="6ba0228df0895f24c6cf61679c684a179db071384e12b07f8b1c84c2c180bf0a"
+    BINUTILS_SHA256="ffcc382695bf947da6135e7436b8ed52d991cf270db897190f19d6f9838564d0"
+    MINGW_W64_SHA256="805e11101e26d7897fce7d49cbb140d7bac15f3e085a91e0001e80b2adaf48f0"
     GMP_SHA256="5275bb04f4863a13516b2f39392ac5e272f5e1bb8057b18aec1c9b79d73d8fb2"
     MPFR_SHA256="e650f8723bfc6eca4f222c021db3d5d4cebe2e21c82498329bb9e6815b99c88c"
     MPC_SHA256="6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e"
     ISL_SHA256="d59726f34f7852a081fbd3defd1ab2136f174110fc2e0c8d10bb122173fa9ed8"
-    GCC_SHA256="fa06e455ca198ddc11ea4ddf2a394cf7cfb66aa7e0ab98cc1184189f1d405870"
+    GCC_SHA256="1b0f36be1045ff58cbb9c83743835367b860810f17f0195a4e093458b372020f"
     CHECKSUMS=("${CONFIG_SHA256}" "${BINUTILS_SHA256}" "${MINGW_W64_SHA256}" "${GMP_SHA256}" "${MPFR_SHA256}" "${MPC_SHA256}" "${ISL_SHA256}" "${GCC_SHA256}")
 
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="4.1.1"
+    VERSION="5.0.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -519,6 +519,7 @@ wait "${PID}" || CODE=$?
 trap - EXIT INT TERM
 
 if [[ "${CODE}" -ne 0 ]]; then
+    echo ""
     echo "error: subprocess returned non-zero error code (${CODE})" >&2
     echo "logs and temporary files may exist at ${2:-$HOME/toolchains}" >&2
     exit 1
