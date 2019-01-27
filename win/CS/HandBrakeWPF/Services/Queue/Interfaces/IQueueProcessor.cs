@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Services.Queue.Interfaces
 {
     using System;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
 
     using HandBrakeWPF.Services.Queue.Model;
@@ -77,7 +78,7 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// <summary>
         /// Gets The current queue.
         /// </summary>
-        BindingList<QueueTask> Queue { get; }
+        ObservableCollection<QueueTask> Queue { get; }
 
         #endregion
 

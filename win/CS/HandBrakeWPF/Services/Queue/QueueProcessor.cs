@@ -11,6 +11,7 @@ namespace HandBrakeWPF.Services.Queue
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.IO;
     using System.Linq;
@@ -46,7 +47,7 @@ namespace HandBrakeWPF.Services.Queue
         #region Constants and Fields
         private static readonly object QueueLock = new object();
         private readonly IUserSettingService userSettingService;
-        private readonly BindingList<QueueTask> queue = new BindingList<QueueTask>();
+        private readonly ObservableCollection<QueueTask> queue = new ObservableCollection<QueueTask>();
         private readonly string queueFile;
         private bool clearCompleted;
 
@@ -174,7 +175,7 @@ namespace HandBrakeWPF.Services.Queue
         /// <summary>
         /// Gets The current queue.
         /// </summary>
-        public BindingList<QueueTask> Queue
+        public ObservableCollection<QueueTask> Queue
         {
             get
             {

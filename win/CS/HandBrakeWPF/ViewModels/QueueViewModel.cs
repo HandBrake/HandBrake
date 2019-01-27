@@ -11,6 +11,7 @@ namespace HandBrakeWPF.ViewModels
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
@@ -21,6 +22,7 @@ namespace HandBrakeWPF.ViewModels
     using Caliburn.Micro;
 
     using HandBrakeWPF.EventArgs;
+    using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Interfaces;
@@ -162,7 +164,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets the queue tasks.
         /// </summary>
-        public BindingList<QueueTask> QueueTasks
+        public ObservableCollection<QueueTask> QueueTasks
         {
             get
             {
@@ -615,12 +617,30 @@ namespace HandBrakeWPF.ViewModels
 
         public void MoveUp()
         {
-            this.errorService.ShowMessageBox("Not Implemented yet. You can drag / drop re-organise the queue for now.", "Coming Soon!", MessageBoxButton.OK, MessageBoxImage.Information);
+            Dictionary<int, QueueTask> tasks = new Dictionary<int, QueueTask>();
+            foreach (var item in this.SelectedItems)
+            {
+                tasks.Add(this.QueueTasks.IndexOf(item), item);
+            }
+
+            foreach (var item in tasks.OrderBy(s => s.Key))
+            {
+                this.QueueTasks.MoveUp(item.Value);
+            }
         }
 
         public void MoveDown()
         {
-            this.errorService.ShowMessageBox("Not Implemented yet. You can drag / drop re-organise the queue for now.", "Coming Soon!", MessageBoxButton.OK, MessageBoxImage.Information);
+            Dictionary<int, QueueTask> tasks = new Dictionary<int, QueueTask>();
+            foreach (var item in this.SelectedItems)
+            {
+                tasks.Add(this.QueueTasks.IndexOf(item), item);
+            }
+
+            foreach (var item in tasks.OrderByDescending(s => s.Key))
+            {
+                this.QueueTasks.MoveDown(item.Value);
+            }
         }
 
         #endregion
