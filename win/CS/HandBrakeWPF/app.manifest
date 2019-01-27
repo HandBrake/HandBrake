@@ -21,10 +21,6 @@
     </security>
   </trustInfo>
 
-  <startup>
-    <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.7.1"/>
-  </startup>
-
   <compatibility xmlns="urn:schemas-microsoft-com:compatibility.v1">
     <application>
       <!-- A list of the Windows versions that this application has been tested on and is
