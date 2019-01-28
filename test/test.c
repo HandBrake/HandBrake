@@ -1332,11 +1332,11 @@ static void ShowHelp()
 "   --start-at <string:number>\n"
 "                           Start encoding at a given offset in seconds,\n"
 "                           frames, or pts (on a 90kHz clock)\n"
-"                           (e.g. duration:10, frame:300, pts:900000).\n"
+"                           (e.g. seconds:10, frames:300, pts:900000).\n"
 "   --stop-at  <string:number>\n"
 "                           Stop encoding after a given duration in seconds,\n"
 "                           frames, or pts (on a 90kHz clock) has passed\n"
-"                           (e.g. duration:10, frame:300, pts:900000).\n"
+"                           (e.g. seconds:10, frames:300, pts:900000).\n"
 "                           Duration is relative to --start-at, if specified.\n"
 "\n"
 "\n"
@@ -2937,7 +2937,8 @@ static int ParseOptions( int argc, char ** argv )
                 char * start_at_token = NULL;
                 start_at_string = strdup( optarg );
                 start_at_token = strtok( start_at_string, ":");
-                if( !strcmp( start_at_token, "frame" ) )
+                if( !strcmp( start_at_token, "frame"  ) ||
+                    !strcmp( start_at_token, "frames" ) )
                 {
                     start_at_token = strtok( NULL, ":");
                     start_at_frame = atoi(start_at_token);
@@ -2947,7 +2948,9 @@ static int ParseOptions( int argc, char ** argv )
                     start_at_token = strtok( NULL, ":");
                     sscanf( start_at_token, "%"SCNd64, &start_at_pts );
                 }
-                else if( !strcmp( start_at_token, "duration" ) )
+                else if( !strcmp( start_at_token, "duration" ) ||
+                         !strcmp( start_at_token, "second"   ) ||
+                         !strcmp( start_at_token, "seconds"  ) )
                 {
                     double duration_seconds = parse_hhmmss_strtok();
                     start_at_pts = (int64_t)(duration_seconds * 90e3);
@@ -2961,7 +2964,8 @@ static int ParseOptions( int argc, char ** argv )
                 char * stop_at_token = NULL;
                 stop_at_string = strdup( optarg );
                 stop_at_token = strtok( stop_at_string, ":");
-                if( !strcmp( stop_at_token, "frame" ) )
+                if( !strcmp( stop_at_token, "frame"  ) ||
+                    !strcmp( stop_at_token, "frames" ) )
                 {
                     stop_at_token = strtok( NULL, ":");
                     stop_at_frame = atoi(stop_at_token);
@@ -2971,7 +2975,9 @@ static int ParseOptions( int argc, char ** argv )
                     stop_at_token = strtok( NULL, ":");
                     sscanf( stop_at_token, "%"SCNd64, &stop_at_pts );
                 }
-                else if( !strcmp( stop_at_token, "duration" ) )
+                else if( !strcmp( stop_at_token, "duration" ) ||
+                         !strcmp( stop_at_token, "second"   ) ||
+                         !strcmp( stop_at_token, "seconds"  ) )
                 {
                     double duration_seconds = parse_hhmmss_strtok();
                     stop_at_pts = (int64_t)(duration_seconds * 90e3);
