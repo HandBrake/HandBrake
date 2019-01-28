@@ -331,7 +331,10 @@ void hb_remove_previews( hb_handle_t * h )
             {
                 free(filename);
                 filename = hb_strdup_printf("%s/%s", dirname, entry->d_name);
-                unlink( filename );
+                int ulerr = unlink( filename );
+                if (ulerr < 0) {
+                    hb_log("Unable to remove preview: %i - %s", ulerr, filename);
+                }
                 free(filename);
                 break;
             }
