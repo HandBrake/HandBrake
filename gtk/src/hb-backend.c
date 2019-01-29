@@ -4527,7 +4527,7 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
             if (codec != HB_ACODEC_VORBIS && codec != HB_ACODEC_OPUS)
             {
                 a_unsup = hb_audio_encoder_get_short_name(codec);
-                codec = HB_ACODEC_OPUS;
+                codec = hb_audio_encoder_get_default(mux->format);
             }
         }
         if (a_unsup)
