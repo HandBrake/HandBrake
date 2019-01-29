@@ -493,6 +493,7 @@ typedef struct hb_mux_data_s   hb_mux_data_t;
 
 DECLARE_MUX( mp4 );
 DECLARE_MUX( mkv );
+DECLARE_MUX( webm );
 DECLARE_MUX( avformat );
 
 void hb_deinterlace(hb_buffer_t *dst, hb_buffer_t *src);

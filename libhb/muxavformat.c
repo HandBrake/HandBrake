@@ -70,6 +70,7 @@ enum
 {
     META_MUX_MP4,
     META_MUX_MKV,
+    META_MUX_WEBM,
     META_MUX_LAST
 };
 
@@ -98,6 +99,7 @@ static char* lookup_lang_code(int mux, char *iso639_2)
             out = iso639_2;
             break;
         case HB_MUX_AV_MKV:
+        case HB_MUX_AV_WEBM: // webm is a subset of mkv
             // MKV lang codes should be ISO-639-2B if it exists,
             // else ISO-639-2
             lang =  lang_for_code2( iso639_2 );
@@ -162,6 +164,15 @@ static int avformatInit( hb_mux_object_t * m )
             m->time_base.den = 1000;
             muxer_name = "matroska";
             meta_mux = META_MUX_MKV;
+            break;
+
+        case HB_MUX_AV_WEBM:
+            // libavformat is essentially hard coded such that it only
+            // works with a timebase of 1/1000
+            m->time_base.num = 1;
+            m->time_base.den = 1000;
+            muxer_name = "webm";
+            meta_mux = META_MUX_WEBM;
             break;
 
         default:
@@ -1184,7 +1195,9 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         return 0;
     }
 
-    if (track->type == MUX_TYPE_VIDEO && (job->mux & HB_MUX_MASK_MKV) &&
+    // @TODO: Find out if libav's webm muxing is subject to this.
+    if (track->type == MUX_TYPE_VIDEO &&
+        (job->mux & (HB_MUX_MASK_MKV | HB_MUX_MASK_WEBM)) &&
         buf->s.renderOffset < 0)
     {
         // libav matroska muxer doesn't write dts to the output, but

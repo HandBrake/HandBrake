@@ -853,7 +853,7 @@ static int decavcodecaBSInfo( hb_work_object_t *w, const hb_buffer_t *buf,
                     {
                         // Parse ADTS AAC streams for AudioSpecificConfig.
                         // This data is required in order to write
-                        // proper headers in MP4 and MKV files.
+                        // proper headers in MP4, WebM, and MKV files.
                         parse_adts_extradata(audio, context, &avp);
                     }
 
