@@ -1126,6 +1126,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
         SourceFilterEVO
         SourceFilterVOB
         SourceFilterMKV
+        SourceFilterWebM
         SourceFilterMP4
         SourceFilterAVI
         SourceFilterMOV
@@ -1173,6 +1174,10 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     gtk_file_filter_set_name(filter, "MKV");
     gtk_file_filter_add_pattern(filter, "*.mkv");
     gtk_file_filter_add_pattern(filter, "*.MKV");
+    gtk_file_chooser_add_filter(chooser, filter);
+    filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterWebM"));
+    gtk_file_filter_set_name(filter, "WebM");
+    gtk_file_filter_add_pattern(filter, "*.webm");
     gtk_file_chooser_add_filter(chooser, filter);
     filter = GTK_FILE_FILTER(GHB_OBJECT(ud->builder, "SourceFilterMP4"));
     gtk_file_filter_set_name(filter, "MP4");
