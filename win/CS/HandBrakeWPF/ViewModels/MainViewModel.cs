@@ -1157,6 +1157,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.VideoViewModel.RefreshTask();
             this.AudioViewModel.RefreshTask();
+            this.SubtitleViewModel.RefreshTask();
         }
 
         public void Shutdown()
@@ -1378,6 +1379,12 @@ namespace HandBrakeWPF.ViewModels
             if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.ToLower() == this.scannedSource.ScanPath.ToLower())
             {
                 return new AddQueueError(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            // defer to subtitle's validation messages
+            if (!this.SubtitleViewModel.ValidateSubtitles())
+            {
+                return false;
             }
 
             QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create(), this.ScannedSource.ScanPath, this.SelectedPreset);
