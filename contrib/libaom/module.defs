@@ -1,0 +1,71 @@
+$(eval $(call import.MODULE.defs,LIBAOM,libaom,PTHREADW32))
+$(eval $(call import.CONTRIB.defs,LIBAOM))
+
+# TODO: Mirror 1.0.0-errata1 on download.handbrake.fr
+LIBAOM.FETCH.url     = https://aomedia.googlesource.com/aom/+archive/add4b15580e410c00c927ee366fa65545045a5d9.tar.gz
+# Google's tgz seems to have its checksum change every time *shrug*
+# LIBAOM.FETCH.sha256  = 61efbfbeb540c4bf5611bb493035adf00563fad0fc21fe808b959133a08f9429
+
+# Custom extraction because of how aom needs cmake called in a special way
+define LIBAOM.EXTRACT
+    $(RM.exe) -fr $(LIBAOM.EXTRACT.dir/)
+    $(MKDIR.exe) -p $(LIBAOM.EXTRACT.dir/)
+    $(TAR.exe) xfC $(LIBAOM.FETCH.distfile) $(LIBAOM.EXTRACT.dir/)
+    $(TOUCH.exe) $@
+endef
+
+LIBAOM.CONFIGURE.dir         = contrib/libaom/build
+LIBAOM.CONFIGURE.exe         = cmake
+LIBAOM.CONFIGURE.args.prefix =
+LIBAOM.CONFIGURE.deps        =
+LIBAOM.CONFIGURE.static      =
+LIBAOM.CONFIGURE.shared      =
+LIBAOM.CONFIGURE.extra       =
+## find CMakeLists.txt
+LIBAOM.CONFIGURE.args.prefix += "$(call fn.ABSOLUTE,$(LIBAOM.EXTRACT.dir/)/)"
+
+LIBAOM.BUILD.dir             = contrib/libaom/build # aom wants `make` called inside its cmake directory
+LIBAOM.INSTALL.dir           = contrib/libaom/build
+
+ifneq (none,$(LIBAOM.GCC.g))
+    ifeq (darwin,$(BUILD.system))
+        LIBAOM.CONFIGURE.extra += -G Xcode
+        LIBAOM.CONFIGURE.extra += -DCMAKE_CONFIGURATION_TYPES=Debug
+    else
+        LIBAOM.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+    endif
+endif
+
+ifeq (1,$(BUILD.cross))
+    ifeq (mingw,$(BUILD.system))
+        ifeq (x86_64,$(BUILD.machine))
+            LIBAOM.CONFIGURE.extra += -DCMAKE_TOOLCHAIN_FILE=build/cmake/toolchains/x86_64-mingw-gcc.cmake
+        else
+            LIBAOM.CONFIGURE.extra += -DCMAKE_TOOLCHAIN_FILE=build/cmake/toolchains/x86-mingw-gcc.cmake
+        endif
+    endif
+    ifeq (darwin,$(BUILD.system))
+        LIBAOM.CONFIGURE.extra += -DCMAKE_TOOLCHAIN_FILE=build/cmake/toolchains/x86-macos.cmake
+    endif
+    ifeq (linux,$(BUILD.system))
+        ifneq (x86_64,$(BUILD.machine))
+            LIBAOM.CONFIGURE.extra += -DCMAKE_TOOLCHAIN_FILE=build/cmake/toolchains/x86_64-mingw-gcc.cmake
+        endif
+    endif
+endif
+
+ifneq (none,$(LIBAOM.GCC.g))
+    LIBAOM.CONFIGURE.extra += -DAOM_TARGET_CPU=generic # aids in debugging for Visual Studio
+else
+    ifeq (x86_64,$(BUILD.machine))
+        LIBAOM.CONFIGURE.extra += -DAOM_TARGET_CPU=x86_64
+    else
+        LIBAOM.CONFIGURE.extra += -DAOM_TARGET_CPU=x86
+    endif
+endif
+
+## TODO: what do I do for INSTALL?
+LIBAOM.INSTALL.make = $(MV.exe)
+LIBAOM.INSTALL.args.dir = cd $(1);
+LIBAOM.INSTALL.extra = *.a ../lib/
+LIBAOM.INSTALL.args = @dir !make !extra

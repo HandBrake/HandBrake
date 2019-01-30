@@ -1,4 +1,4 @@
-__deps__ := BZIP2 ZLIB FDKAAC LIBVPX LAME LIBOPUS LIBSPEEX XZ
+__deps__ := BZIP2 ZLIB FDKAAC LIBVPX LIBAOM LAME LIBOPUS LIBSPEEX XZ
 ifeq (1,$(FEATURE.qsv))
 __deps__ += LIBMFX
 endif
@@ -55,6 +55,9 @@ FFMPEG.CONFIGURE.extra = \
     --disable-decoder=libvpx_* \
     --enable-encoder=libvpx_vp8 \
     --enable-encoder=libvpx_vp9 \
+    --enable-libaom \
+    --enable-decoder=libaom-av1 \
+    --enable-encoder=libaom-av1 \
     --disable-decoder=*_crystalhd \
     --cc="$(FFMPEG.GCC.gcc)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
