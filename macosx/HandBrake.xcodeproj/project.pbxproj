@@ -46,7 +46,6 @@
 		273F208A14ADBE3B0021BE6D /* parsecsv.c in Sources */ = {isa = PBXBuildFile; fileRef = 273F208614ADBE3B0021BE6D /* parsecsv.c */; };
 		273F208B14ADBE3B0021BE6D /* test.c in Sources */ = {isa = PBXBuildFile; fileRef = 273F208814ADBE3B0021BE6D /* test.c */; };
 		273F20AC14ADBE670021BE6D /* HBController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F208F14ADBE670021BE6D /* HBController.m */; };
-		273F20AD14ADBE670021BE6D /* HBAdvancedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209014ADBE670021BE6D /* HBAdvancedController.m */; };
 		273F20AF14ADBE670021BE6D /* HBAudioController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209414ADBE670021BE6D /* HBAudioController.m */; };
 		273F20B214ADBE670021BE6D /* HBImageAndTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209A14ADBE670021BE6D /* HBImageAndTextCell.m */; };
 		273F20B314ADBE670021BE6D /* HBOutputPanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = 273F209C14ADBE670021BE6D /* HBOutputPanelController.m */; };
@@ -235,7 +234,6 @@
 		A9A96BB920CAD5EE00A39AFB /* HBPictureViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BB720CAD5ED00A39AFB /* HBPictureViewController.xib */; };
 		A9A96BBC20CAD5F400A39AFB /* HBFiltersViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BBA20CAD5F300A39AFB /* HBFiltersViewController.xib */; };
 		A9A96BBF20CAD5F800A39AFB /* Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BBD20CAD5F700A39AFB /* Video.xib */; };
-		A9A96BC220CAD60400A39AFB /* AdvancedView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BC020CAD60300A39AFB /* AdvancedView.xib */; };
 		A9A96BC520CAD60A00A39AFB /* Audio.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BC320CAD60900A39AFB /* Audio.xib */; };
 		A9A96BC820CAD61000A39AFB /* AudioDefaults.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BC620CAD61000A39AFB /* AudioDefaults.xib */; };
 		A9A96BCB20CAD61800A39AFB /* Subtitles.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A96BC920CAD61800A39AFB /* Subtitles.xib */; };
@@ -379,7 +377,6 @@
 		273F208814ADBE3B0021BE6D /* test.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = test.c; sourceTree = "<group>"; };
 		273F208E14ADBE670021BE6D /* HBController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBController.h; sourceTree = "<group>"; };
 		273F208F14ADBE670021BE6D /* HBController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBController.m; sourceTree = "<group>"; };
-		273F209014ADBE670021BE6D /* HBAdvancedController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAdvancedController.m; sourceTree = "<group>"; };
 		273F209114ADBE670021BE6D /* HBAudioTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioTrack.h; sourceTree = "<group>"; };
 		273F209214ADBE670021BE6D /* HBAudioTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTrack.m; sourceTree = "<group>"; };
 		273F209314ADBE670021BE6D /* HBAudioController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioController.h; sourceTree = "<group>"; };
@@ -402,7 +399,6 @@
 		273F20AA14ADBE670021BE6D /* HBPictureController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPictureController.m; sourceTree = "<group>"; };
 		273F20BD14ADC09F0021BE6D /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		273F20C014ADC1250021BE6D /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
-		273F217D14ADDDA10021BE6D /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = InfoPlist.strings; sourceTree = "<group>"; };
 		275916DA14B2AB27007211E9 /* native.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = native.xcconfig; sourceTree = "<group>"; };
 		276941FA14B161B70027798C /* osx107.i386.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx107.i386.xcconfig; sourceTree = "<group>"; };
 		277A3FD014AE84C500A835E4 /* osx106.i386.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx106.i386.xcconfig; sourceTree = "<group>"; };
@@ -532,7 +528,6 @@
 		A9637DA220F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBSummaryViewController.strings; sourceTree = "<group>"; };
 		A9637DA320F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/PicturePreview.strings; sourceTree = "<group>"; };
 		A9637DA420F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/SubtitlesDefaults.strings; sourceTree = "<group>"; };
-		A9637DA520F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/AdvancedView.strings; sourceTree = "<group>"; };
 		A9637DA620F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/AudioDefaults.strings; sourceTree = "<group>"; };
 		A9637DA720F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Queue.strings; sourceTree = "<group>"; };
 		A9637DA820F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBPictureViewController.strings; sourceTree = "<group>"; };
@@ -581,6 +576,7 @@
 		A9A0CBE51CCEA1D10045B3DF /* HBPlayerTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPlayerTrack.h; sourceTree = "<group>"; };
 		A9A0CBE61CCEA1D10045B3DF /* HBPlayerTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPlayerTrack.m; sourceTree = "<group>"; };
 		A9A25D9B21182741005A8A0F /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		A9A70DB621FB1A980038085A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A9A7E2791FE2A0B5006BE79F /* HBPreviewViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreviewViewController.h; sourceTree = "<group>"; };
 		A9A7E27A1FE2A0B5006BE79F /* HBPreviewViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBPreviewViewController.m; sourceTree = "<group>"; };
 		A9A96B8320CAD2C200A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBPictureHUDController.xib; sourceTree = "<group>"; };
@@ -595,7 +591,6 @@
 		A9A96BB820CAD5ED00A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBPictureViewController.xib; sourceTree = "<group>"; };
 		A9A96BBB20CAD5F300A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBFiltersViewController.xib; sourceTree = "<group>"; };
 		A9A96BBE20CAD5F700A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Video.xib; sourceTree = "<group>"; };
-		A9A96BC120CAD60300A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AdvancedView.xib; sourceTree = "<group>"; };
 		A9A96BC420CAD60900A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Audio.xib; sourceTree = "<group>"; };
 		A9A96BC720CAD61000A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/AudioDefaults.xib; sourceTree = "<group>"; };
 		A9A96BCA20CAD61800A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/Subtitles.xib; sourceTree = "<group>"; };
@@ -609,7 +604,6 @@
 		A9A96BE220CAD6CD00A39AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/HBPreviewViewController.xib; sourceTree = "<group>"; };
 		A9AA44781970664A00D7DEFC /* HBUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HBUtilities.h; path = ../HBUtilities.h; sourceTree = "<group>"; };
 		A9AA44791970664A00D7DEFC /* HBUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HBUtilities.m; path = ../HBUtilities.m; sourceTree = "<group>"; };
-		A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAdvancedController.h; sourceTree = "<group>"; };
 		A9AA447C1970726500D7DEFC /* HBQueueController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueController.h; sourceTree = "<group>"; };
 		A9AA447D1970729300D7DEFC /* HBPreviewGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBPreviewGenerator.h; sourceTree = "<group>"; };
 		A9AB9AA4211819A500BB3C7E /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
@@ -1300,9 +1294,6 @@
 				A93E0ED01972957000FD67FB /* HBVideoController.h */,
 				A93E0ED11972957000FD67FB /* HBVideoController.m */,
 				A9A96BBD20CAD5F700A39AFB /* Video.xib */,
-				A9AA447B1970724D00D7DEFC /* HBAdvancedController.h */,
-				273F209014ADBE670021BE6D /* HBAdvancedController.m */,
-				A9A96BC020CAD60300A39AFB /* AdvancedView.xib */,
 				273F209314ADBE670021BE6D /* HBAudioController.h */,
 				273F209414ADBE670021BE6D /* HBAudioController.m */,
 				A9A96BC320CAD60900A39AFB /* Audio.xib */,
@@ -1548,11 +1539,10 @@
 			};
 			buildConfigurationList = 273F1FE314AD9DA40021BE6D /* Build configuration list for PBXProject "HandBrake" */;
 			compatibilityVersion = "Xcode 6.3";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				English,
 				Base,
 				de,
 			);
@@ -1579,7 +1569,6 @@
 				A9A96BC520CAD60A00A39AFB /* Audio.xib in Resources */,
 				A9A96B8220CAD2C200A39AFB /* HBPictureHUDController.xib in Resources */,
 				1C7776A5202301D5001C31EB /* HBRenamePresetController.xib in Resources */,
-				A9A96BC220CAD60400A39AFB /* AdvancedView.xib in Resources */,
 				273F218B14ADDDA10021BE6D /* InfoPlist.strings in Resources */,
 				A94DC2DE20CADA2C00EAC8FD /* MainWindow.xib in Resources */,
 				D86C9DD51C6D372500F06F1B /* Assets.xcassets in Resources */,
@@ -1697,7 +1686,6 @@
 				A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */,
 				1C7776A2202300DD001C31EB /* HBRenamePresetController.m in Sources */,
 				A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */,
-				273F20AD14ADBE670021BE6D /* HBAdvancedController.m in Sources */,
 				A9906B2C1A710920001D82D5 /* HBQueueController.m in Sources */,
 				A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */,
 				A98C29C41977B10600AF5DED /* HBLanguagesSelection.m in Sources */,
@@ -1829,7 +1817,7 @@
 		273F217C14ADDDA10021BE6D /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				273F217D14ADDDA10021BE6D /* English */,
+				A9A70DB621FB1A980038085A /* en */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1957,15 +1945,6 @@
 				A9637D9820F7A252001EAE7C /* de */,
 			);
 			name = Video.xib;
-			sourceTree = "<group>";
-		};
-		A9A96BC020CAD60300A39AFB /* AdvancedView.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A9A96BC120CAD60300A39AFB /* Base */,
-				A9637DA520F7A252001EAE7C /* de */,
-			);
-			name = AdvancedView.xib;
 			sourceTree = "<group>";
 		};
 		A9A96BC320CAD60900A39AFB /* Audio.xib */ = {
@@ -2157,6 +2136,7 @@
 					HBKitLocalizedString,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-filelist",
 					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
@@ -2226,6 +2206,7 @@
 					HBKitLocalizedString,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-filelist",
 					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
@@ -2249,6 +2230,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_SHADOW = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
@@ -2274,6 +2256,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_SHADOW = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
@@ -2679,6 +2662,7 @@
 					HBKitLocalizedString,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-filelist",
 					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
@@ -2711,6 +2695,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_SHADOW = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
@@ -2930,6 +2915,7 @@
 					HBKitLocalizedString,
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.11;
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-filelist",
 					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
@@ -2962,6 +2948,7 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = NO;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_SHADOW = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",

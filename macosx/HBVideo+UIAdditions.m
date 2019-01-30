@@ -440,11 +440,6 @@
     return (encoder & HB_VCODEC_FFMPEG_MASK) != 0;
 }
 
-- (BOOL)isOldAdvancedPanelSupported:(int)encoder
-{
-    return (encoder & HB_VCODEC_X264_MASK) != 0;
-}
-
 - (void)qualityLimitsForEncoder:(int)encoder low:(float *)low high:(float *)high granularity:(float *)granularity direction:(int *)direction
 {
     hb_video_quality_get_limits(encoder, low, high, granularity, direction);

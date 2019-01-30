@@ -5,7 +5,6 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBVideoController.h"
-#import "HBAdvancedController.h"
 
 @import HandBrakeKit;
 
@@ -48,12 +47,6 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     {
         _labelColor = [NSColor disabledControlTextColor];
 
-        // Observe the advanced tab pref shown/hided state.
-        [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
-                                                                  forKeyPath:@"values.HBShowAdvancedTab"
-                                                                     options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                                                                     context:HBVideoControllerContext];
-
         // Observe the x264 slider granularity, to update the slider when the pref is changed.
         [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
                                                                   forKeyPath:@"values.x264CqSliderFractional"
@@ -66,55 +59,9 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         [self addObserver:self forKeyPath:@"video.quality" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
         [self addObserver:self forKeyPath:@"video.preset" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
         [self addObserver:self forKeyPath:@"video.unparseOptions" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
-        [self addObserver:self forKeyPath:@"video.advancedOptions" options:NSKeyValueObservingOptionInitial context:HBVideoControllerContext];
     }
 
     return self;
-}
-
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
-{
-    SEL action = menuItem.action;
-
-    if (action == @selector(showAdvancedX264Panel:))
-    {
-        return [self.video isOldAdvancedPanelSupported:self.video.encoder];
-    }
-    return [self.nextResponder validateMenuItem:menuItem];
-}
-
-- (void)viewDidAppear
-{
-    NSText *defaultFieldEditor = [self.view.window fieldEditor:YES forObject:self.additionalsOptions];
-    //  defaultEditor.delegate = self; didn't help
-    NSMenu *mu = defaultFieldEditor.menu;
-    NSMenuItem *separator = [NSMenuItem separatorItem];
-    separator.tag = 1;
-    NSMenuItem *action = [[NSMenuItem alloc]
-                          initWithTitle:NSLocalizedString(@"Show advanced editor", @"Video -> Advanced editor")
-                          action:@selector(showAdvancedX264Panel:)
-                          keyEquivalent:@""];
-    action.tag = 2;
-    action.enabled = YES;
-    [mu insertItem:separator atIndex:0];
-    [mu insertItem:action atIndex:0];
-}
-
-- (void)viewWillDisappear
-{
-    NSText *defaultFieldEditor = [self.view.window fieldEditor:YES forObject:self.additionalsOptions];
-    NSMenu *mu = defaultFieldEditor.menu;
-    NSMenuItem *separator = [mu itemWithTag:1];
-    NSMenuItem *action = [mu itemWithTag:2];
-    if (separator) { [mu removeItem:separator]; }
-    if (action) { [mu removeItem:action]; }
-}
-
-- (IBAction)showAdvancedX264Panel:(id)sender
-{
-    HBAdvancedController *controller = [[HBAdvancedController alloc] init];
-    controller.videoSettings = self.video;
-    [self presentViewControllerAsSheet:controller];
 }
 
 - (void)setVideo:(HBVideo *)video
@@ -243,11 +190,10 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 }
 
 /**
- *  Enables/disables the advanced panel and the preset panel.
+ *  Enables/disables the preset panel.
  */
 - (void)enableEncoderOptionsWidgets:(BOOL)enable
 {
-    // enable/disable the checkbox and advanced panel
     self.presetViewEnabled = enable;
 }
 
