@@ -78,6 +78,10 @@ static NSDictionary            *shortHeightAttr;
         {
             title = HBKitLocalizedString(@"MKV File", @"HBJob -> Format display name");
         }
+        else if (container->format & HB_MUX_MASK_WEBM)
+        {
+            title = HBKitLocalizedString(@"WebM File", @"HBJob -> Format display name");
+        }
         else
         {
             title = @(container->name);
@@ -922,6 +926,10 @@ static NSDictionary            *shortHeightAttr;
     {
         return HBKitLocalizedString(@"MKV File", @"HBJob -> Format display name");
     }
+    else if (container & HB_MUX_MASK_WEBM)
+    {
+        return HBKitLocalizedString(@"WebM File", @"HBJob -> Format display name");
+    }
     else
     {
         const char *name = hb_container_get_name(container);
@@ -950,6 +958,10 @@ static NSDictionary            *shortHeightAttr;
     else if ([value isEqualToString:HBKitLocalizedString(@"MKV File", @"HBJob -> Format display name")])
     {
         return @(HB_MUX_AV_MKV);
+    }
+    else if ([value isEqualToString:HBKitLocalizedString(@"WebM File", @"HBJob -> Format display name")])
+    {
+        return @(HB_MUX_AV_WEBM);
     }
 
     return @(hb_container_get_from_name([value UTF8String]));

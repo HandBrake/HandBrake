@@ -255,6 +255,10 @@
     {
         destURL = [HBPreviewGenerator generateFileURLForType:@"mkv"];
     }
+    else if (self.job.container & 0x400000 /*HB_MUX_MASK_WEBM*/)
+    {
+        destURL = [HBPreviewGenerator generateFileURLForType:@"webm"];
+    }
 
     // return if we couldn't get the fileURL.
     if (!destURL)
