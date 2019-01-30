@@ -1767,13 +1767,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.SetMru(Constants.FileSaveMru, Path.GetDirectoryName(saveFileDialog.FileName));
 
-                if (saveFileDialog.FileName == this.ScannedSource.ScanPath)
-                {
-                    this.errorService.ShowMessageBox(Resources.Main_SourceDestinationMatchError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                    this.Destination = null;
-                    return;
-                }
-
                 this.Destination = saveFileDialog.FileName;
 
                 // Set the Extension Dropdown. This will also set Mp4/m4v correctly.
