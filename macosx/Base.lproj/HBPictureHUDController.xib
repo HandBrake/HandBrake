@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.55" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14269.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.55"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -21,7 +21,7 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="agq-EJ-miM" userLabel="Picture Controls" customClass="HBHUDView">
-            <rect key="frame" x="0.0" y="0.0" width="460" height="100"/>
+            <rect key="frame" x="0.0" y="0.0" width="476" height="100"/>
             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <button toolTip="Encode and play a preview video using current settings." horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="16b-R9-bBU">
@@ -38,7 +38,7 @@
                     </connections>
                 </button>
                 <button toolTip="Show picture settings." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="mV7-hU-tMt">
-                    <rect key="frame" x="383" y="11" width="61" height="16"/>
+                    <rect key="frame" x="399" y="11" width="61" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="xea-W9-xGB"/>
                     </constraints>
@@ -73,9 +73,9 @@
                     </textFieldCell>
                 </textField>
                 <popUpButton toolTip="Duration to encode in seconds." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ASA-X8-16P">
-                    <rect key="frame" x="158" y="12" width="53" height="15"/>
+                    <rect key="frame" x="158" y="11" width="53" height="16"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="50" id="JLd-YP-qt1"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="JLd-YP-qt1"/>
                     </constraints>
                     <popUpButtonCell key="cell" type="push" title="240" bezelStyle="rounded" alignment="left" controlSize="mini" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" inset="2" selectedItem="XYh-Ls-slf" id="yDS-gf-Y4N">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
@@ -92,7 +92,7 @@
                     </connections>
                 </popUpButton>
                 <slider toolTip="Starting point for the preview encode." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wUk-SQ-GhS">
-                    <rect key="frame" x="17" y="38" width="426" height="15"/>
+                    <rect key="frame" x="17" y="38" width="442" height="15"/>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" alignment="left" maxValue="9" tickMarkPosition="above" numberOfTickMarks="10" allowsTickMarkValuesOnly="YES" sliderType="linear" id="dPk-jb-w9o">
                         <font key="font" metaFont="miniSystem"/>
                     </sliderCell>
@@ -102,7 +102,7 @@
                     </connections>
                 </slider>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="426" translatesAutoresizingMaskIntoConstraints="NO" id="MkW-KN-I1h">
-                    <rect key="frame" x="15" y="54" width="430" height="20"/>
+                    <rect key="frame" x="15" y="54" width="446" height="20"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="20" id="Wqt-oa-eQj"/>
                     </constraints>
@@ -113,7 +113,7 @@
                     </textFieldCell>
                 </textField>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="600" translatesAutoresizingMaskIntoConstraints="NO" id="7UR-Zz-7iX">
-                    <rect key="frame" x="15" y="76" width="430" height="12"/>
+                    <rect key="frame" x="15" y="76" width="446" height="12"/>
                     <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="left" id="CeL-Pu-NS6">
                         <font key="font" metaFont="miniSystemBold"/>
                         <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
@@ -121,7 +121,7 @@
                     </textFieldCell>
                 </textField>
                 <button toolTip="Scale preview to fill the display." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="12K-c3-Z7A">
-                    <rect key="frame" x="282" y="11" width="95" height="16"/>
+                    <rect key="frame" x="298" y="11" width="95" height="16"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="N0p-GD-cNh"/>
                     </constraints>
@@ -139,7 +139,7 @@
                 <constraint firstAttribute="trailing" secondItem="MkW-KN-I1h" secondAttribute="trailing" constant="17" id="51b-ga-cex"/>
                 <constraint firstItem="16b-R9-bBU" firstAttribute="top" secondItem="wUk-SQ-GhS" secondAttribute="bottom" constant="11" id="GV8-xv-F3F"/>
                 <constraint firstItem="7UR-Zz-7iX" firstAttribute="leading" secondItem="agq-EJ-miM" secondAttribute="leading" constant="17" id="JPF-0p-EcT"/>
-                <constraint firstItem="mV7-hU-tMt" firstAttribute="leading" secondItem="12K-c3-Z7A" secondAttribute="trailing" constant="8" id="Kuw-QY-Ctl"/>
+                <constraint firstItem="mV7-hU-tMt" firstAttribute="leading" secondItem="12K-c3-Z7A" secondAttribute="trailing" constant="8" symbolic="YES" id="Kuw-QY-Ctl"/>
                 <constraint firstItem="MkW-KN-I1h" firstAttribute="top" secondItem="7UR-Zz-7iX" secondAttribute="bottom" constant="2" id="LMS-rl-nxL"/>
                 <constraint firstAttribute="trailing" secondItem="wUk-SQ-GhS" secondAttribute="trailing" constant="17" id="Nwp-nu-Nm6"/>
                 <constraint firstItem="5T3-Vx-mC1" firstAttribute="leading" secondItem="16b-R9-bBU" secondAttribute="trailing" constant="17" id="NyV-CH-jxk"/>
@@ -159,7 +159,7 @@
                 <constraint firstItem="12K-c3-Z7A" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Vrm-He-CjP" secondAttribute="trailing" constant="8" symbolic="YES" id="ybz-88-aqy"/>
                 <constraint firstItem="16b-R9-bBU" firstAttribute="leading" secondItem="agq-EJ-miM" secondAttribute="leading" constant="17" id="zmJ-qN-Z7W"/>
             </constraints>
-            <point key="canvasLocation" x="7" y="106"/>
+            <point key="canvasLocation" x="15" y="106"/>
         </customView>
     </objects>
 </document>
