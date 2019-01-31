@@ -20,7 +20,7 @@ LIBAOM.CONFIGURE.args.prefix =
 LIBAOM.CONFIGURE.deps        =
 LIBAOM.CONFIGURE.static      =
 LIBAOM.CONFIGURE.shared      =
-LIBAOM.CONFIGURE.extra       =
+LIBAOM.CONFIGURE.extra       = "-DCMAKE_INSTALL_PREFIX=$(call fn.ABSOLUTE,$(CONTRIB.build/))"
 ## find CMakeLists.txt
 LIBAOM.CONFIGURE.args.prefix += "$(call fn.ABSOLUTE,$(LIBAOM.EXTRACT.dir/)/)"
 
@@ -63,9 +63,3 @@ else
         LIBAOM.CONFIGURE.extra += -DAOM_TARGET_CPU=x86
     endif
 endif
-
-## TODO: what do I do for INSTALL?
-LIBAOM.INSTALL.make = $(MV.exe)
-LIBAOM.INSTALL.args.dir = cd $(1);
-LIBAOM.INSTALL.extra = *.a ../lib/
-LIBAOM.INSTALL.args = @dir !make !extra
