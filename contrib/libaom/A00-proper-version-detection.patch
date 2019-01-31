@@ -1,0 +1,13 @@
+diff -ur aom_v1.0.0-errata1.orig/CHANGELOG aom_v1.0.0-errata1/CHANGELOG
+--- aom_v1.0.0-errata1.orig/CHANGELOG	2017-05-12 17:11:38 -0700
++++ aom_v1.0.0-errata1/CHANGELOG	2019-01-31 10:31:11.216396293 -0500
+@@ -1,7 +1,5 @@
+-Next Release
+-  - Incompatible changes:
+-    The AV1 encoder's default keyframe interval changed to 128 from 9999.
+-    Support for armv6 was removed.
++2018-06-28 v1.0.0
++  AOMedia Codec Workgroup Approved version 1.0
+ 
+ 2016-04-07 v0.1.0 "AOMedia Codec 1"
+   This release is the first Alliance for Open Media codec.
