@@ -1,0 +1,2 @@
+$(eval $(call import.MODULE.rules,LIBDAV1D))
+$(eval $(call import.CONTRIB.rules,LIBDAV1D))

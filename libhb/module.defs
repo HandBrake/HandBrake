@@ -1,7 +1,7 @@
 __deps__ := A52DEC BZIP2 LIBVPX FFMPEG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBOGG \
     LIBXML2 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX LIBGNURX JANSSON \
-    HARFBUZZ LIBOPUS LIBSPEEX
+    HARFBUZZ LIBOPUS LIBSPEEX LIBDAV1D
 
 ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
     __deps__ += FONTCONFIG
@@ -103,7 +103,7 @@ LIBHB.lib = $(LIBHB.build/)hb.lib
 LIBHB.dll.libs = $(foreach n, \
         ass avformat avfilter avcodec avutil swresample postproc dvdnav dvdread \
         freetype mp3lame swscale vpx theora vorbis vorbisenc ogg \
-        x264 xml2 bluray jansson harfbuzz opus speex, \
+        x264 xml2 bluray jansson harfbuzz opus speex dav1d, \
         $(CONTRIB.build/)lib/lib$(n).a )
 
 ifeq (1,$(FEATURE.fdk_aac))

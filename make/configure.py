@@ -1562,7 +1562,9 @@ try:
             gmake  = ToolProbe( 'GMAKE.exe',      'make',       'gmake', 'make', abort=True )
 
         m4         = ToolProbe( 'M4.exe',         'm4',         'gm4', 'm4', abort=True )
+        meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True )
         mkdir      = ToolProbe( 'MKDIR.exe',      'mkdir',      'mkdir', abort=True )
+        ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja', abort=True )
         patch      = ToolProbe( 'PATCH.exe',      'patch',      'gpatch', 'patch', abort=True )
         rm         = ToolProbe( 'RM.exe',         'rm',         'rm', abort=True )
         ranlib     = ToolProbe( 'RANLIB.exe',     'ranlib',     'ranlib', abort=True )
