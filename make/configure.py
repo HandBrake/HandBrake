@@ -1436,8 +1436,9 @@ class Launcher:
         timeEnd = time.time()
         elapsed = timeEnd - timeBegin
 
-        if pipe.returncode:
-            result = 'FAILURE (code %d)' % pipe.returncode
+        self.build_exitcode = pipe.returncode
+        if self.build_exitcode:
+            result = 'FAILURE (code %d)' % self.build_exitcode
         else:
             result = 'SUCCESS'
 
@@ -2021,4 +2022,7 @@ except AbortError as x:
         pass
     sys.exit( 1 )
 
-sys.exit( 0 )
+if launcher:
+    sys.exit ( launcher.build_exitcode )
+else:
+    sys.exit( 0 )
