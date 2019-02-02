@@ -5,6 +5,8 @@ matrix:
   include:
     - os: linux
       dist: xenial
+    - name: "Windows Cross-Compilation (x86_64)"
+      env: CROSS=x86_64-w64-mingw32
 
 before_install:
 - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update -qq ; fi
@@ -14,4 +16,4 @@ before_install:
 language: c
 
 script:
-- ./configure --disable-gtk --disable-gst --launch --launch-jobs=0
+- ./configure --cross=$CROSS --disable-gtk --disable-gst --launch --launch-jobs=0
