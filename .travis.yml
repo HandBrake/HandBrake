@@ -73,7 +73,7 @@ script:
 - |
   if [[ "$TRAVIS_OS_NAME" == "linux" && ! $CROSS ]]
   then
-    ./configure --disable-gst --launch --launch-jobs=1
+    ./configure --disable-gtk --disable-gst --launch --launch-jobs=1
   fi
 - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./configure  ; fi
 
