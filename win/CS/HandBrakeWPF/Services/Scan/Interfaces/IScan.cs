@@ -43,7 +43,7 @@ namespace HandBrakeWPF.Services.Scan.Interfaces
     /// <summary>
     /// The IScan Interface
     /// </summary>
-    public interface IScan
+    public interface IScan : IDisposable
     {
         /// <summary>
         /// Scan has Started

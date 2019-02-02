@@ -20,9 +20,11 @@ namespace HandBrakeWPF.Services
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.EventArgs;
+    using HandBrakeWPF.Instance;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Interfaces;
+    using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
@@ -34,20 +36,10 @@ namespace HandBrakeWPF.Services
     /// </summary>
     public class PrePostActionService : IPrePostActionService
     {
-        /// <summary>
-        /// The queue processor.
-        /// </summary>
         private readonly IQueueProcessor queueProcessor;
-
-        /// <summary>
-        /// The user setting service.
-        /// </summary>
         private readonly IUserSettingService userSettingService;
-
-        /// <summary>
-        /// The window manager.
-        /// </summary>
         private readonly IWindowManager windowManager;
+        private readonly IScan scanService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PrePostActionService"/> class.
@@ -61,11 +53,12 @@ namespace HandBrakeWPF.Services
         /// <param name="windowManager">
         /// The window Manager.
         /// </param>
-        public PrePostActionService(IQueueProcessor queueProcessor, IUserSettingService userSettingService, IWindowManager windowManager)
+        public PrePostActionService(IQueueProcessor queueProcessor, IUserSettingService userSettingService, IWindowManager windowManager, IScan scanService)
         {
             this.queueProcessor = queueProcessor;
             this.userSettingService = userSettingService;
             this.windowManager = windowManager;
+            this.scanService = scanService;
 
             this.queueProcessor.QueueCompleted += QueueProcessorQueueCompleted;
             this.queueProcessor.EncodeService.EncodeCompleted += EncodeService_EncodeCompleted;
@@ -157,7 +150,7 @@ namespace HandBrakeWPF.Services
                     });
 
             if (!titleSpecificView.IsCancelled)
-            {
+            {               
                 // Do something when the encode ends.
                 switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction))
                 {
@@ -166,9 +159,11 @@ namespace HandBrakeWPF.Services
                         ProcessStartInfo shutdown = new ProcessStartInfo("Shutdown", "-s -t 60");
                         shutdown.UseShellExecute = false;
                         Process.Start(shutdown);
+                        Execute.OnUIThread(() => System.Windows.Application.Current.Shutdown());
                         break;
                     case "Log off":
                     case "Ausloggen":
+                        this.scanService.Dispose();
                         Win32.ExitWindowsEx(0, 0);
                         break;
                     case "Suspend":
