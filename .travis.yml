@@ -36,4 +36,4 @@ before_install:
 language: c
 
 script:
-- ./configure --cross=$CROSS --disable-gtk --disable-gst --launch --launch-jobs=0
+- ./configure --cross=$CROSS --disable-gtk --disable-gst --launch --launch-jobs=1
