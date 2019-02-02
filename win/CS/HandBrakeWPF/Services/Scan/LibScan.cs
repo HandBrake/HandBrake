@@ -15,7 +15,6 @@ namespace HandBrakeWPF.Services.Scan
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.Interop;
-    using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Json.Scan;
     using HandBrake.Interop.Interop.Model;
@@ -25,26 +24,23 @@ namespace HandBrakeWPF.Services.Scan
 
     using HandBrakeWPF.Instance;
     using HandBrakeWPF.Services.Encode.Model;
-    using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Scan.EventArgs;
     using HandBrakeWPF.Services.Scan.Factories;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
 
-    using Chapter = Model.Chapter;
     using ILog = Logging.Interfaces.ILog;
     using LogLevel = Logging.Model.LogLevel;
     using LogMessageType = Logging.Model.LogMessageType;
     using LogService = Logging.LogService;
     using ScanProgressEventArgs = HandBrake.Interop.Interop.EventArgs.ScanProgressEventArgs;
-    using Subtitle = Model.Subtitle;
     using Title = Model.Title;
 
     /// <summary>
     /// Scan a Source
     /// </summary>
-    public class LibScan : IScan
+    public class LibScan : IScan, IDisposable
     {
         #region Private Variables
 
@@ -149,7 +145,16 @@ namespace HandBrakeWPF.Services.Scan
             {
                 this.ServiceLogMessage("Manually Stopping Scan ...");
                 this.IsScanning = false;
-                this.instance.StopScan();              
+              
+                var handBrakeInstance = this.instance;
+                if (handBrakeInstance != null)
+                {
+                    handBrakeInstance.StopScan();
+                    handBrakeInstance.ScanProgress -= this.InstanceScanProgress;
+                    handBrakeInstance.ScanCompleted -= this.InstanceScanCompleted;
+                    handBrakeInstance.Dispose();
+                    this.instance = null;
+                }
             }
             catch (Exception exc)
             {
@@ -158,6 +163,7 @@ namespace HandBrakeWPF.Services.Scan
             finally
             {
                 this.ScanCompleted?.Invoke(this, new ScanCompletedEventArgs(this.isCancelled, null, null, null));
+                this.instance = null;
                 this.ServiceLogMessage("Scan Stopped ...");
             }
         }
@@ -250,7 +256,7 @@ namespace HandBrakeWPF.Services.Scan
         /// The preview Count.
         /// </param>
         /// <param name="configuraiton">
-        /// The configuraiton.
+        /// The configuration.
         /// </param>
         private void ScanSource(object sourcePath, int title, int previewCount, HBConfiguration configuraiton)
         {
@@ -293,44 +299,58 @@ namespace HandBrakeWPF.Services.Scan
         /// </param>
         private void InstanceScanCompleted(object sender, System.EventArgs e)
         {
-            this.ServiceLogMessage("Processing Scan Information ...");
-            bool cancelled = this.isCancelled;
-            this.isCancelled = false;
-
-            // TODO -> Might be a better place to fix this.
-            string path = this.currentSourceScanPath;
-            if (this.currentSourceScanPath.Contains("\""))
+            try
             {
-                path = this.currentSourceScanPath.Trim('\"');
-            }
+                this.ServiceLogMessage("Processing Scan Information ...");
+                bool cancelled = this.isCancelled;
+                this.isCancelled = false;
 
-            // Process into internal structures.
-            Source sourceData = null;
-            if (this.instance?.Titles != null)
-            {
-                sourceData = new Source { Titles = ConvertTitles(this.instance.Titles), ScanPath = path };
-            }
-
-            this.IsScanning = false;
-
-            if (this.postScanOperation != null)
-            {
-                try
+                // TODO -> Might be a better place to fix this.
+                string path = this.currentSourceScanPath;
+                if (this.currentSourceScanPath.Contains("\""))
                 {
-                    this.postScanOperation(true, sourceData);
-                }
-                catch (Exception exc)
-                {
-                    Debug.WriteLine(exc);
+                    path = this.currentSourceScanPath.Trim('\"');
                 }
 
-                this.postScanOperation = null; // Reset
-                this.ServiceLogMessage("Scan Finished for Queue Edit ...");
+                // Process into internal structures.
+                Source sourceData = null;
+                if (this.instance?.Titles != null)
+                {
+                    sourceData = new Source { Titles = this.ConvertTitles(this.instance.Titles), ScanPath = path };
+                }
+
+                this.IsScanning = false;
+
+                if (this.postScanOperation != null)
+                {
+                    try
+                    {
+                        this.postScanOperation(true, sourceData);
+                    }
+                    catch (Exception exc)
+                    {
+                        Debug.WriteLine(exc);
+                    }
+
+                    this.postScanOperation = null; // Reset
+                    this.ServiceLogMessage("Scan Finished for Queue Edit ...");
+                }
+                else
+                {
+                    this.ScanCompleted?.Invoke(
+                        this,
+                        new ScanCompletedEventArgs(cancelled, null, string.Empty, sourceData));
+                    this.ServiceLogMessage("Scan Finished ...");
+                }
             }
-            else
+            finally
             {
-                this.ScanCompleted?.Invoke(this, new ScanCompletedEventArgs(cancelled, null, string.Empty, sourceData));
-                this.ServiceLogMessage("Scan Finished ...");
+                var handBrakeInstance = this.instance;
+                if (handBrakeInstance != null)
+                {
+                    handBrakeInstance.ScanProgress -= this.InstanceScanProgress;
+                    handBrakeInstance.ScanCompleted -= this.InstanceScanCompleted;
+                }
             }
         }
 
@@ -380,5 +400,21 @@ namespace HandBrakeWPF.Services.Scan
             return titleList;
         }
         #endregion
+
+        public void Dispose()
+        {
+            if (this.instance != null)
+            {
+                try
+                {
+                    this.instance.Dispose();
+                    this.instance = null;
+                }
+                catch (Exception e)
+                {
+                    this.ServiceLogMessage("Unable to Dispose of LibScan: " + e);
+                }            
+            }
+        }
     }
 }
