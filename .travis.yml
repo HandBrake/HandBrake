@@ -57,8 +57,11 @@ before_install:
   if [[ "$TRAVIS_OS_NAME" == "osx" ]]
   then
     wget https://www.nasm.us/pub/nasm/releasebuilds/2.14/nasm-2.14.tar.gz
-    tar xvfz nasm-2.14.tar.gz && cd nasm-2.14/ && ./configure && make -j 2 && cd ..
-    export PATH=${pwd}/nasm-2.14/:$PATH
+    tar xvfz nasm-2.14.tar.gz
+    cd nasm-2.14/
+    ./configure
+    make -j 2
+    sudo make install
   fi
 
 language: c
