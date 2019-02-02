@@ -31,22 +31,34 @@ before_install:
     sudo apt-get install -qq intltool libappindicator-dev libdbus-glib-1-dev \
       libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       libgtk-3-dev libgudev-1.0-dev libnotify-dev libwebkitgtk-3.0-dev
-
+  fi
+- |
+  if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+  then
     # xenial does not have meson version >=0.47.0 in apt
     sudo pip3 install meson
-
+  fi
+- |
+  if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+  then
     # xenial does not have nasm version >=2.13 in apt
     wget https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/linux/nasm-2.14.02-0.fc27.x86_64.rpm
     sudo alien nasm-2.14.02-0.fc27.x86_64.rpm
     sudo dpkg -i nasm_2.14.02-1_amd64.deb
   fi
-  if [[ "$CROSS" == "x86_64-w64-mingw32" ]]
+
+# Windows cross-compile toolchain and requirements
+- if [[ "$CROSS" == "x86_64-w64-mingw32" ]]; then sudo apt-get install -qq bison bzip2 flex g++ gzip pax  ; fi
+- if [[ "$CROSS" == "x86_64-w64-mingw32" && -d "~/toolchains/mingw-w64-x86_64" ]]; then ./scripts/mingw-w64-build x86_64 ~/toolchains/  ; fi
+
+# MacOS Toolchain and requirements
+- if [[ "$TRAVIS_OS_NAME" == "osx" && -d "~/toolchains/mac" ]]; then ./scripts/mac-toolchain-build ~/toolchains/  ; fi
+- |
+  if [[ "$TRAVIS_OS_NAME" == "osx" ]]
   then
-    sudo apt-get install -qq bison bzip2 flex g++ gzip pax
-    if [[ -d "~/toolchains/mingw-w64-x86_64" ]]; then ./scripts/mingw-w64-build x86_64 ~/toolchains/ ; fi
-  elif [[ "$TRAVIS_OS_NAME" == "osx" && -d "~/toolchains/mac" ]]
-  then
-    ./scripts/mac-toolchain-build ~/toolchains/
+    wget https://www.nasm.us/pub/nasm/releasebuilds/2.14/nasm-2.14.tar.gz
+    tar xvfz nasm-2.14.tar.gz && cd nasm-2.14/ && ./configure && make -j 2 && cd ..
+    export PATH=${pwd}/nasm-2.14/:$PATH
   fi
 
 language: c
@@ -55,13 +67,15 @@ script:
 - |
   if [[ "$CROSS" == "x86_64-w64-mingw32" ]]
   then
-    ./configure --cross=$CROSS --disable-gtk --disable-gst --enable-nvenc --enable-qsv --enable-vce --launch --launch-jobs=2
-  elif [[ "$TRAVIS_OS_NAME" == "osx" ]]
-  then
-    ./configure
-  else
-    ./configure --disable-gst --launch --launch-jobs=1 # no parallelism for debugging
+    ./configure --cross=$CROSS --disable-gtk --disable-gst --enable-nvenc \
+                --enable-qsv --enable-vce --launch --launch-jobs=2
   fi
+- |
+  if [[ "$TRAVIS_OS_NAME" == "linux" && ! $CROSS ]]
+  then
+    ./configure --disable-gst --launch --launch-jobs=1
+  fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./configure  ; fi
 
 cache:
   directories:
