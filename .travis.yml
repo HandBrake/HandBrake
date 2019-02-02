@@ -6,6 +6,15 @@ matrix:
     - name: "Xenial"
       os: linux
       dist: xenial
+    - name: "Xenial - Windows Cross-Compilation (x86_64)"
+      env: CROSS=x86_64-w64-mingw32 PATH=${HOME}/toolchains/mingw-w64-x86_64/bin:${PATH}
+      os: linux
+      dist: xenial
+    - name: "MacOS"
+      os: osx
+      env: PATH=${HOME}/toolchains/mac/bin:${PATH}
+      osx_image: xcode10.1
+      nv: PATH=${HOME}/toolchains/mac/bin:${PATH}
 
 before_install:
 - |
@@ -31,8 +40,29 @@ before_install:
     sudo alien nasm-2.14.02-0.fc27.x86_64.rpm
     sudo dpkg -i nasm_2.14.02-1_amd64.deb
   fi
+  if [[ "$CROSS" == "x86_64-w64-mingw32" ]]
+  then
+    sudo apt-get install -qq bison bzip2 flex g++ gzip pax
+    ./scripts/mingw-w64-build x86_64 ~/toolchains/
+  elif [[ "$TRAVIS_OS_NAME" == "osx" ]]
+  then
+    ./scripts/mac-toolchain-build ~/toolchains/
+  fi
 
 language: c
 
 script:
-- ./configure --disable-gtk --disable-gst --launch --launch-jobs=1
+- |
+  if [[ "$CROSS" == "x86_64-w64-mingw32" ]]
+  then
+    ./configure --cross=$CROSS --disable-gtk --disable-gst --enable-nvenc --enable-qsv --enable-vce --launch --launch-jobs=2
+  elif [[ "$TRAVIS_OS_NAME" == "osx" ]]
+  then
+    ./configure
+  else
+    ./configure --disable-gst --launch --launch-jobs=1 # no parallelism for debugging
+  fi
+
+cache:
+  directories:
+    - $HOME/toolchains
