@@ -6,10 +6,6 @@ matrix:
     - name: "Xenial"
       os: linux
       dist: xenial
-    - name: "Windows Cross-Compilation (x86_64)"
-      env: CROSS=x86_64-w64-mingw32 PATH=/tmp/toolchains/mingw-w64-x86_64/bin:${PATH}
-      os: linux
-      dist: xenial
 
 before_install:
 - |
@@ -26,14 +22,8 @@ before_install:
       libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       libgtk-3-dev libgudev-1.0-dev libnotify-dev libwebkitgtk-3.0-dev
   fi
-- |
-  if [[ "$CROSS" == "x86_64-w64-mingw32" ]]
-  then
-    sudo apt-get install -qq bison bzip2 flex g++ gzip pax
-    scripts/mingw-w64-build x86_64 /tmp/toolchains/
-  fi
 
 language: c
 
 script:
-- ./configure --cross=$CROSS --disable-gtk --disable-gst --launch --launch-jobs=1
+- ./configure --disable-gtk --disable-gst --launch --launch-jobs=1
