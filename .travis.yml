@@ -12,15 +12,24 @@ before_install:
   if [[ "$TRAVIS_OS_NAME" == "linux" ]]
   then
     sudo apt-get update -qq
-    sudo apt-get install -qq autoconf automake build-essential cmake git \
+    sudo apt-get install -qq alien autoconf automake build-essential cmake git \
       libass-dev libbz2-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev \
       libharfbuzz-dev libjansson-dev liblzma-dev libmp3lame-dev libogg-dev \
       libopus-dev libsamplerate-dev libspeex-dev libtheora-dev libtool \
       libtool-bin libvorbis-dev libvpx-dev libx264-dev libxml2-dev m4 make \
-      nasm patch pkg-config python tar yasm zlib1g-dev
+      ninja-build patch pkg-config python python3 python3-pip \
+      python3-setuptools tar yasm zlib1g-dev
     sudo apt-get install -qq intltool libappindicator-dev libdbus-glib-1-dev \
       libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       libgtk-3-dev libgudev-1.0-dev libnotify-dev libwebkitgtk-3.0-dev
+
+    # xenial does not have meson version >=0.47.0 in apt
+    sudo pip3 install meson
+
+    # xenial does not have nasm version >=2.13 in apt
+    wget https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/linux/nasm-2.14.02-0.fc27.x86_64.rpm
+    sudo alien nasm-2.14.02-0.fc27.x86_64.rpm
+    sudo dpkg -i nasm_2.14.02-1_amd64.deb
   fi
 
 language: c
