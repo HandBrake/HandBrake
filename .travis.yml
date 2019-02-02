@@ -43,8 +43,8 @@ before_install:
   if [[ "$CROSS" == "x86_64-w64-mingw32" ]]
   then
     sudo apt-get install -qq bison bzip2 flex g++ gzip pax
-    ./scripts/mingw-w64-build x86_64 ~/toolchains/
-  elif [[ "$TRAVIS_OS_NAME" == "osx" ]]
+    if [[ -d "~/toolchains/mingw-w64-x86_64" ]]; then ./scripts/mingw-w64-build x86_64 ~/toolchains/ ; fi
+  elif [[ "$TRAVIS_OS_NAME" == "osx" && -d "~/toolchains/mac" ]]
   then
     ./scripts/mac-toolchain-build ~/toolchains/
   fi
