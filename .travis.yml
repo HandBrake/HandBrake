@@ -70,8 +70,7 @@ script:
 - |
   if [[ "$CROSS" == "x86_64-w64-mingw32" ]]
   then
-    ./configure --cross=$CROSS --disable-gtk --disable-gst --enable-nvenc \
-                --enable-qsv --enable-vce --launch --launch-jobs=2
+    ./configure --cross=$CROSS --enable-qsv --enable-vce --enable-nvenc --launch --launch-jobs=2
   fi
 - |
   if [[ "$TRAVIS_OS_NAME" == "linux" && ! $CROSS ]]
