@@ -1989,9 +1989,10 @@ int main()
     if IfHost( True, '*-*-mingw*', none=False ).value is True:
         stdout.write( 'Enable VCE:        %s\n' % options.enable_vce )
 
+    launcher = None
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )
-        Launcher( targets )
+        launcher = Launcher( targets )
 
     cfg.record_log()
 
@@ -2020,10 +2021,8 @@ except AbortError as x:
         cfg.record_log()
     except:
         pass
-    sys.exit( 1 )
-
-try:
     if launcher:
         sys.exit ( launcher.build_exitcode )
-finally:
-    sys.exit( 0 )
+    sys.exit( 1 )
+
+sys.exit( 0 )
