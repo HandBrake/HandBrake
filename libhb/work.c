@@ -77,7 +77,7 @@ static void InitWorkState(hb_handle_t *h, int pass_id, int pass, int pass_count)
 
 }
 
-static void SetWorkdoneState(hb_job_t *job)
+static void SetWorkStateInfo(hb_job_t *job)
 {
     hb_state_t state;
 
@@ -88,7 +88,6 @@ static void SetWorkdoneState(hb_job_t *job)
     }
     hb_get_state2(job->h, &state);
 
-    state.state                     = HB_STATE_WORKDONE;
     state.param.working.error       = *job->done_error;
     state.param.working.sequence_id = job->sequence_id;
 
@@ -155,7 +154,7 @@ static void work_func( void * _work )
             do_job( job );
             *(work->current_job) = NULL;
         }
-        SetWorkdoneState(job);
+        SetWorkStateInfo(job);
 
         // Clean job passes
         for (pass = 0; pass < pass_count; pass++)
