@@ -78,6 +78,23 @@ namespace HandBrakeWPF.Services.Encode
                 // Create a new HandBrake instance
                 // Setup the HandBrake Instance
                 this.log.Reset(); // Reset so we have a clean log for the start of the encode.
+
+                if (this.instance != null)
+                {
+                    // Cleanup
+                    try
+                    {
+                        this.instance.EncodeCompleted -= this.InstanceEncodeCompleted;
+                        this.instance.EncodeProgress -= this.InstanceEncodeProgress;
+                        this.instance.Dispose();
+                        this.instance = null;
+                    }
+                    catch (Exception exc)
+                    {
+                        this.ServiceLogMessage("Failed to cleanup previous instance: " + exc);
+                    }
+                }
+
                 this.ServiceLogMessage("Starting Encode ...");
 
                 this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(configuration.Verbosity, configuration) : HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity, configuration);
@@ -143,10 +160,6 @@ namespace HandBrakeWPF.Services.Encode
                 if (this.instance != null)
                 {
                     this.instance.StopEncode();
-                    this.instance.EncodeCompleted -= this.InstanceEncodeCompleted;
-                    this.instance.EncodeProgress -= this.InstanceEncodeProgress;
-                    this.instance.Dispose();
-                    this.instance = null;
                     this.ServiceLogMessage("Encode Stopped");
                 }
             }
@@ -218,19 +231,6 @@ namespace HandBrakeWPF.Services.Encode
                 e.Error
                     ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Destination, hbLog, filesize)
                     : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Destination, hbLog, filesize));
-
-            // Cleanup
-            try
-            {
-                this.instance.EncodeCompleted -= this.InstanceEncodeCompleted;
-                this.instance.EncodeProgress -= this.InstanceEncodeProgress;
-                this.instance.Dispose();
-                this.instance = null;
-            }
-            catch (Exception exc)
-            {
-                this.ServiceLogMessage("Failed to cleanup Encode instance: " + exc );
-            }
         }
 
         private long GetFilesize(string destination)
