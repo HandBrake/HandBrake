@@ -58,7 +58,7 @@ before_install:
     else
       echo "Toolchain differs from one in cache (or malformed checksum file), recompiling..."
       ./scripts/mingw-w64-build x86_64 ~/toolchains/
-      sha256sum ${TRAVIS_BUILD_DIR}/HandBrake/HandBrake/scripts/mingw-w64-build > ~/toolchains/sha256sum_win.txt
+      sha256sum ${TRAVIS_BUILD_DIR}/scripts/mingw-w64-build > ~/toolchains/sha256sum_win.txt
     fi
   fi
 
@@ -72,7 +72,7 @@ before_install:
     else
       echo "Toolchain differs from one in cache (or malformed checksum file), recompiling..."
       ./scripts/mac-toolchain-build ~/toolchains/
-      shasum -a 256 ${TRAVIS_BUILD_DIR}/HandBrake/HandBrake/scripts/mac-toolchain-build > ~/toolchains/sha256sum_mac.txt
+      shasum -a 256 ${TRAVIS_BUILD_DIR}/scripts/mac-toolchain-build > ~/toolchains/sha256sum_mac.txt
     fi
   fi
 - |
