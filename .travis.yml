@@ -92,14 +92,16 @@ script:
 - |
   if [[ "$CROSS" == "x86_64-w64-mingw32" ]]
   then
+    cd ${TRAVIS_BUILD_DIR}
     ./configure --cross=$CROSS --enable-qsv --enable-vce --enable-nvenc --launch --launch-jobs=2
   fi
 - |
   if [[ "$TRAVIS_OS_NAME" == "linux" && ! $CROSS ]]
   then
+    cd ${TRAVIS_BUILD_DIR}
     ./configure --disable-gtk --disable-gst --launch --launch-jobs=2
   fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./configure && cd build && make -j 2  ; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd ${TRAVIS_BUILD_DIR} && ./configure && cd build && make -j 2  ; fi
 
 cache:
   directories:
