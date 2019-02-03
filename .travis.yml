@@ -49,10 +49,32 @@ before_install:
 
 # Windows cross-compile toolchain and requirements
 - if [[ "$CROSS" == "x86_64-w64-mingw32" ]]; then sudo apt-get install -qq bison bzip2 flex g++ gzip pax  ; fi
-- if [[ "$CROSS" == "x86_64-w64-mingw32" && -d "~/toolchains/mingw-w64-x86_64" ]]; then ./scripts/mingw-w64-build x86_64 ~/toolchains/  ; fi
+- |
+  if [[ "$CROSS" == "x86_64-w64-mingw32" ]]
+  then
+    if sha256sum --status -c ~/toolchains/sha256sum_win.txt
+    then
+      echo "Toolchain has not changed, using previous compiled bins from cache..."
+    else
+      echo "Toolchain differs from one in cache (or malformed checksum file), recompiling..."
+      ./scripts/mingw-w64-build x86_64 ~/toolchains/
+      sha256sum ${TRAVIS_BUILD_DIR}/HandBrake/HandBrake/scripts/mingw-w64-build > ~/toolchains/sha256sum_win.txt
+    fi
+  fi
 
-# MacOS Toolchain and requirements
-- if [[ "$TRAVIS_OS_NAME" == "osx" && -d "~/toolchains/mac" ]]; then ./scripts/mac-toolchain-build ~/toolchains/  ; fi
+# MacOS Toolchain and requirements. `sha256sum` is `shasum -a` in MacOS world
+- |
+  if [[ "$TRAVIS_OS_NAME" == "osx" ]]
+  then
+    if shasum -a 256 --check ~/toolchains/sha256sum_mac.txt
+    then
+      echo "Toolchain has not changed, using previous compiled bins from cache..."
+    else
+      echo "Toolchain differs from one in cache (or malformed checksum file), recompiling..."
+      ./scripts/mac-toolchain-build ~/toolchains/
+      shasum -a 256 ${TRAVIS_BUILD_DIR}/HandBrake/HandBrake/scripts/mac-toolchain-build > ~/toolchains/sha256sum_mac.txt
+    fi
+  fi
 - |
   if [[ "$TRAVIS_OS_NAME" == "osx" && ! -f "~/bin/nasm" ]]
   then
