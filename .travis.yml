@@ -12,9 +12,9 @@ matrix:
       dist: xenial
     - name: "MacOS"
       os: osx
-      env: PATH=${HOME}/toolchains/mac/bin:${PATH}
+      env: PATH=${HOME}/bin:${HOME}/toolchains/mac/bin:${PATH}
       osx_image: xcode10.1
-      nv: PATH=${HOME}/toolchains/mac/bin:${PATH}
+      nv: PATH=${HOME}/bin:${HOME}/toolchains/mac/bin:${PATH}
 
 before_install:
 - |
@@ -54,14 +54,14 @@ before_install:
 # MacOS Toolchain and requirements
 - if [[ "$TRAVIS_OS_NAME" == "osx" && -d "~/toolchains/mac" ]]; then ./scripts/mac-toolchain-build ~/toolchains/  ; fi
 - |
-  if [[ "$TRAVIS_OS_NAME" == "osx" ]]
+  if [[ "$TRAVIS_OS_NAME" == "osx" && ! -f "~/bin/nasm" ]]
   then
     wget https://www.nasm.us/pub/nasm/releasebuilds/2.14/nasm-2.14.tar.gz
     tar xvfz nasm-2.14.tar.gz
     cd nasm-2.14/
-    ./configure
+    ./configure --prefix=$HOME
     make -j 2
-    sudo make install
+    make install -j 2
   fi
 
 language: c
@@ -83,3 +83,4 @@ script:
 cache:
   directories:
     - $HOME/toolchains
+    - $HOME/bin
