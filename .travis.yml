@@ -78,7 +78,7 @@ script:
   then
     ./configure --disable-gtk --disable-gst --launch --launch-jobs=1
   fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./configure  ; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./configure && cd build && make -j 2  ; fi
 
 cache:
   directories:
