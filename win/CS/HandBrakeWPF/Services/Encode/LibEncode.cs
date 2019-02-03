@@ -160,10 +160,6 @@ namespace HandBrakeWPF.Services.Encode
                 if (this.instance != null)
                 {
                     this.instance.StopEncode();
-                    this.instance.EncodeCompleted -= this.InstanceEncodeCompleted;
-                    this.instance.EncodeProgress -= this.InstanceEncodeProgress;
-                    this.instance.Dispose();
-                    this.instance = null;
                     this.ServiceLogMessage("Encode Stopped");
                 }
             }
@@ -235,19 +231,6 @@ namespace HandBrakeWPF.Services.Encode
                 e.Error
                     ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Destination, hbLog, filesize)
                     : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Destination, hbLog, filesize));
-
-            // Cleanup
-            try
-            {
-                this.instance.EncodeCompleted -= this.InstanceEncodeCompleted;
-                this.instance.EncodeProgress -= this.InstanceEncodeProgress;
-                this.instance.Dispose();
-                this.instance = null;
-            }
-            catch (Exception exc)
-            {
-                this.ServiceLogMessage("Failed to cleanup Encode instance: " + exc );
-            }
         }
 
         private long GetFilesize(string destination)
