@@ -2022,7 +2022,8 @@ except AbortError as x:
         pass
     sys.exit( 1 )
 
-if launcher:
-    sys.exit ( launcher.build_exitcode )
-else:
+try:
+    if launcher:
+        sys.exit ( launcher.build_exitcode )
+finally:
     sys.exit( 0 )
