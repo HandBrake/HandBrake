@@ -94,7 +94,7 @@ before_install:
     fi
   fi
 - |
-  if [[ "$TRAVIS_OS_NAME" == "osx" && ! -f "~/bin/nasm" ]]
+  if [[ "$TRAVIS_OS_NAME" == "osx" && ! -f ~/bin/nasm ]]
   then
     wget https://www.nasm.us/pub/nasm/releasebuilds/2.14/nasm-2.14.tar.gz
     tar xvfz nasm-2.14.tar.gz
