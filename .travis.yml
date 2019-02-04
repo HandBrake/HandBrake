@@ -101,7 +101,8 @@ script:
     cd ${TRAVIS_BUILD_DIR}
     ./configure --disable-gtk --disable-gst --launch --launch-jobs=2
   fi
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd ${TRAVIS_BUILD_DIR} && ./configure && cd build && make -j 2  ; fi
+# without -s, >4MB of output occurs in `make` which forces TravisCI to abort
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd ${TRAVIS_BUILD_DIR} && ./configure && cd build && make -s -j 2  ; fi
 
 cache:
   directories:
