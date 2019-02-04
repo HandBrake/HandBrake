@@ -18,6 +18,24 @@ matrix:
 
 before_install:
 - |
+  # prints continuous output to avoid timeouts on build systems like Travis
+  function display_progress {
+      local str=""
+      while [ "$(ps a | awk '{print $1}' | grep ${1})" ]; do
+          printf "%c" "$str"
+          sleep 1
+          str="."
+      done
+  }
+
+  # kills child processes
+  function die_gracefully {
+      trap - EXIT INT
+      trap ":" INT  # prevent recursion due to spamming ctrl-c
+      echo ""
+      trap - TERM && kill -- -$$
+  }
+- |
   if [[ "$TRAVIS_OS_NAME" == "linux" ]]
   then
     sudo apt-get update -qq
@@ -101,8 +119,27 @@ script:
     cd ${TRAVIS_BUILD_DIR}
     ./configure --disable-gtk --disable-gst --launch --launch-jobs=2
   fi
-# without piping to null, >4MB of output occurs in `make` which forces TravisCI to abort
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cd ${TRAVIS_BUILD_DIR} && ./configure && cd build && make -j 2 > /dev/null  ; fi
+# `make` prints >4MB of output which forces TravisCI to abort. We print progress dots instead
+- |
+  if [[ "$TRAVIS_OS_NAME" == "osx" ]]
+  then
+    cd ${TRAVIS_BUILD_DIR}
+    ./configure
+    cd build
+    trap die_gracefully EXIT INT TERM
+    echo "Building for OSX:"
+    make > /dev/null &
+    PID=$!
+    display_progress "${PID}"
+    wait "${PID}" || CODE=$?
+    trap - EXIT INT TERM
+    if [[ "${CODE}" -ne 0 ]]; then
+      echo ""
+      echo "error: make returned non-zero error code (${CODE})" >&2
+      exit 1
+    fi
+    echo "Finished! Successfully built for macOS"
+  fi
 
 cache:
   directories:
