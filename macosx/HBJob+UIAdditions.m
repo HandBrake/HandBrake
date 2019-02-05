@@ -604,6 +604,12 @@ static NSDictionary            *shortHeightAttr;
     return attrString;
 }
 
+- (NSAttributedString *)attributedTitleDescription
+{
+    [self initStyles];
+    return [self titleAttributedDescription];
+}
+
 - (NSAttributedString *)attributedDescription
 {
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];

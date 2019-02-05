@@ -9,7 +9,8 @@
 #import "HBController.h"
 #import "HBAppDelegate.h"
 
-#import "HBQueueOutlineView.h"
+#import "HBTableView.h"
+#import "HBQueueItemView.h"
 
 #import "NSArray+HBAdditions.h"
 #import "HBUtilities.h"
@@ -23,14 +24,14 @@
 @import HandBrakeKit;
 
 // Pasteboard type for or drag operations
-#define DragDropSimplePboardType    @"HBQueueCustomOutlineViewPboardType"
+#define DragDropSimplePboardType    @"HBQueueCustomTableViewPboardType"
 
 // DockTile update frequency in total percent increment
 #define dockTileUpdateFrequency     0.1f
 
 static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
-@interface HBQueueController () <NSOutlineViewDataSource, HBQueueOutlineViewDelegate, NSUserNotificationCenterDelegate>
+@interface HBQueueController () <NSTableViewDataSource, HBTableViewDelegate, HBQueueItemViewDelegate, NSUserNotificationCenterDelegate>
 
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly
@@ -44,12 +45,15 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 @property (unsafe_unretained) IBOutlet NSTextField *progressTextField;
 @property (unsafe_unretained) IBOutlet NSTextField *countTextField;
-@property (unsafe_unretained) IBOutlet HBQueueOutlineView *outlineView;
+@property (unsafe_unretained) IBOutlet HBTableView *tableView;
 
 @property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
 
-@property (nonatomic, readonly) NSMutableDictionary *descriptions;
+@property (nonatomic, readonly) NSMutableDictionary<NSString *, NSNumber *> *expanded;
+@property (nonatomic) NSTableCellView *dummyCell;
+@property (nonatomic) NSLayoutConstraint *dummyCellWidth;
+
 
 @property (nonatomic, readonly) HBDistributedArray<HBJob *> *jobs;
 @property (nonatomic)   HBJob *currentJob;
@@ -77,8 +81,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     if (self = [super initWithWindowNibName:@"Queue"])
     {
-        // Cached queue items descriptions
-        _descriptions = [[NSMutableDictionary alloc] init];
+        // Cached queue items expanded state
+        _expanded = [[NSMutableDictionary alloc] init];
 
         // Load the dockTile and instiante initial text fields
         _dockTile = [[HBDockTile alloc] initWithDockTile:[[NSApplication sharedApplication] dockTile]
@@ -110,10 +114,10 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (void)windowDidLoad
 {
-    // lets setup our queue list outline view for drag and drop here
-    [self.outlineView registerForDraggedTypes:@[DragDropSimplePboardType]];
-    [self.outlineView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
-    [self.outlineView setVerticalMotionCanBeginDrag:YES];
+    // lets setup our queue list table view for drag and drop here
+    [self.tableView registerForDraggedTypes:@[DragDropSimplePboardType]];
+    [self.tableView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
+    [self.tableView setVerticalMotionCanBeginDrag:YES];
 
     [self updateQueueStats];
 
@@ -213,12 +217,12 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         action == @selector(removeSelectedQueueItem:) ||
         action == @selector(revealSelectedQueueItems:))
     {
-        return (self.outlineView.selectedRow != -1 || self.outlineView.clickedRow != -1);
+        return (self.tableView.selectedRow != -1 || self.tableView.clickedRow != -1);
     }
 
     if (action == @selector(resetJobState:))
     {
-        return self.outlineView.targetedRowIndexes.count > 0;
+        return self.tableView.targetedRowIndexes.count > 0;
     }
 
     if (action == @selector(clearAll:))
@@ -365,7 +369,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 - (void)reloadQueue
 {
     [self updateQueueStats];
-    [self.outlineView reloadData];
+    [self.tableView reloadData];
     [self.window.undoManager removeAllActions];
 }
 
@@ -376,10 +380,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (void)reloadQueueItemsAtIndexes:(NSIndexSet *)indexes
 {
-    NSMutableIndexSet *outlineIndexes = [NSMutableIndexSet indexSet];
-    [outlineIndexes addIndex:0];
-    [outlineIndexes addIndex:2];
-    [self.outlineView reloadDataForRowIndexes:indexes columnIndexes:outlineIndexes];
+    NSIndexSet *columnIndexes = [NSIndexSet indexSetWithIndex:0];
+    [self.tableView reloadDataForRowIndexes:indexes columnIndexes:columnIndexes];
     [self updateQueueStats];
 }
 
@@ -395,7 +397,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     NSParameterAssert(items);
     NSParameterAssert(indexes);
     [self.jobs beginTransaction];
-    [self.outlineView beginUpdates];
+    [self.tableView beginUpdates];
 
     // Forward
     NSUInteger currentIndex = indexes.firstIndex;
@@ -407,8 +409,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         currentObjectIndex++;
     }
 
-    [self.outlineView insertItemsAtIndexes:indexes
-                                  inParent:nil
+    [self.tableView insertRowsAtIndexes:indexes
                              withAnimation:NSTableViewAnimationSlideDown];
 
     NSUndoManager *undo = self.window.undoManager;
@@ -426,7 +427,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         }
     }
 
-    [self.outlineView endUpdates];
+    [self.tableView endUpdates];
     [self updateQueueStats];
     [self.jobs commit];
 }
@@ -446,7 +447,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
 
     [self.jobs beginTransaction];
-    [self.outlineView beginUpdates];
+    [self.tableView beginUpdates];
 
     NSArray<HBJob *> *removeJobs = [self.jobs objectsAtIndexes:indexes];
 
@@ -457,11 +458,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     for (HBJob *job in removeJobs)
     {
-        [self.descriptions removeObjectForKey:job.uuid];
+        [self.expanded removeObjectForKey:job.uuid];
     }
 
-    [self.outlineView removeItemsAtIndexes:indexes inParent:nil withAnimation:NSTableViewAnimationSlideUp];
-    [self.outlineView selectRowIndexes:[NSIndexSet indexSetWithIndex:indexes.firstIndex] byExtendingSelection:NO];
+    [self.tableView removeRowsAtIndexes:indexes withAnimation:NSTableViewAnimationSlideUp];
+    [self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:indexes.firstIndex] byExtendingSelection:NO];
 
     NSUndoManager *undo = self.window.undoManager;
     [[undo prepareWithInvocationTarget:self] addQueueItems:removeJobs atIndexes:indexes];
@@ -478,7 +479,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         }
     }
 
-    [self.outlineView endUpdates];
+    [self.tableView endUpdates];
     [self updateQueueStats];
     [self.jobs commit];
 }
@@ -486,7 +487,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 - (void)moveQueueItems:(NSArray *)items toIndex:(NSUInteger)index
 {
     [self.jobs beginTransaction];
-    [self.outlineView beginUpdates];
+    [self.tableView beginUpdates];
 
     NSMutableArray *source = [NSMutableArray array];
     NSMutableArray *dest = [NSMutableArray array];
@@ -507,7 +508,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [source addObject:@(index)];
         [dest addObject:@(sourceIndex)];
 
-        [self.outlineView moveItemAtIndex:sourceIndex inParent:nil toIndex:index inParent:nil];
+        [self.tableView moveRowAtIndex:sourceIndex toIndex:index];
     }
 
     NSUndoManager *undo = self.window.undoManager;
@@ -525,14 +526,14 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         }
     }
 
-    [self.outlineView endUpdates];
+    [self.tableView endUpdates];
     [self.jobs commit];
 }
 
 - (void)moveQueueItemsAtIndexes:(NSArray *)source toIndexes:(NSArray *)dest
 {
     [self.jobs beginTransaction];
-    [self.outlineView beginUpdates];
+    [self.tableView beginUpdates];
 
     NSMutableArray *newSource = [NSMutableArray array];
     NSMutableArray *newDest = [NSMutableArray array];
@@ -549,7 +550,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [self.jobs removeObjectAtIndex:sourceIndex];
         [self.jobs insertObject:obj atIndex:destIndex];
 
-        [self.outlineView moveItemAtIndex:sourceIndex inParent:nil toIndex:destIndex inParent:nil];
+        [self.tableView moveRowAtIndex:sourceIndex toIndex:destIndex];
     }
 
     NSUndoManager *undo = self.window.undoManager;
@@ -567,7 +568,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         }
     }
 
-    [self.outlineView endUpdates];
+    [self.tableView endUpdates];
     [self.jobs commit];
 }
 
@@ -1087,11 +1088,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 #pragma mark - Queue Item Controls
 
-- (void)HB_deleteSelectionFromTableView:(NSTableView *)tableView
-{
-    [self removeSelectedQueueItem:tableView];
-}
-
 /**
  * Delete encodes from the queue window and accompanying array
  * Also handling first cancelling the encode if in fact its currently encoding.
@@ -1105,7 +1101,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         return;
     }
 
-    NSMutableIndexSet *targetedRows = [[self.outlineView targetedRowIndexes] mutableCopy];
+    NSMutableIndexSet *targetedRows = [[self.tableView targetedRowIndexes] mutableCopy];
 
     if (targetedRows.count)
     {
@@ -1167,7 +1163,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
  */
 - (IBAction)revealSelectedQueueItems:(id)sender
 {
-    NSIndexSet *targetedRows = [self.outlineView targetedRowIndexes];
+    NSIndexSet *targetedRows = [self.tableView targetedRowIndexes];
     NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
 
     NSUInteger currentIndex = [targetedRows firstIndex];
@@ -1182,7 +1178,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (IBAction)revealSelectedQueueItemsSources:(id)sender
 {
-    NSIndexSet *targetedRows = [self.outlineView targetedRowIndexes];
+    NSIndexSet *targetedRows = [self.tableView targetedRowIndexes];
     NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
 
     NSUInteger currentIndex = [targetedRows firstIndex];
@@ -1342,7 +1338,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         return;
     }
 
-    NSIndexSet *targetedRows = [self.outlineView targetedRowIndexes];
+    NSIndexSet *targetedRows = [self.tableView targetedRowIndexes];
     NSMutableIndexSet *updatedIndexes = [NSMutableIndexSet indexSet];
 
     NSUInteger currentIndex = [targetedRows firstIndex];
@@ -1369,7 +1365,10 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     if (job != self.currentJob)
     {
         job.state = HBJobStateWorking;
-        [self updateQueueStats];
+
+        NSUInteger row = [self.jobs indexOfObject:job];
+        [self reloadQueueItemAtIndex:row];
+
         [self.controller openJob:[job copy] completionHandler:^(BOOL result) {
             [self.jobs beginTransaction];
             if (result)
@@ -1407,7 +1406,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         return;
     }
 
-    NSInteger row = self.outlineView.clickedRow;
+    NSInteger row = self.tableView.clickedRow;
     if (row != NSNotFound)
     {
         // if this is a currently encoding job, we need to be sure to alert the user,
@@ -1468,198 +1467,132 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [self.jobs commit];
 }
 
-#pragma mark -
-#pragma mark NSOutlineView data source
+#pragma mark - NSTableView data source
 
-- (id)outlineView:(NSOutlineView *)fOutlineView child:(NSInteger)index ofItem:(id)item
+- (NSView *)tableView:(NSTableView *)tableView
+   viewForTableColumn:(NSTableColumn *)tableColumn
+                  row:(NSInteger)row {
+
+    HBQueueItemView *view = [tableView makeViewWithIdentifier:@"MainCell" owner:self];
+    HBJob *job = self.jobs[row];
+
+    view.expanded = [self.expanded[job.uuid] boolValue];
+    view.delegate = self;
+
+    view.job = job;
+
+    return view;
+}
+
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
-    if (item == nil)
-    {
-        return self.jobs[index];
+    return self.jobs.count;
+}
+
+- (NSTableCellView *)dummyCell
+{
+    if (!_dummyCell) {
+        _dummyCell = [self.tableView makeViewWithIdentifier:@"MainCell" owner: self];
+        _dummyCellWidth = [NSLayoutConstraint constraintWithItem:_dummyCell
+                                                       attribute:NSLayoutAttributeWidth
+                                                       relatedBy:NSLayoutRelationEqual
+                                                          toItem:nil
+                                                       attribute:NSLayoutAttributeNotAnAttribute
+                                                      multiplier:1.0f
+                                                        constant:500];
+        [_dummyCell addConstraint:_dummyCellWidth];
     }
-
-    // We are only one level deep, so we can't be asked about children
-    NSAssert(NO, @"HBQueueController outlineView:child:ofItem: can't handle nested items.");
-    return nil;
+    return _dummyCell;
 }
 
-- (BOOL)outlineView:(NSOutlineView *)fOutlineView isItemExpandable:(id)item
+- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
-    // Our outline view has no levels, but we can still expand every item. Doing so
-    // just makes the row taller. See heightOfRowByItem below.
-    return YES;
-}
+    HBJob *job = self.jobs[row];
+    BOOL expanded = [self.expanded[job.uuid] boolValue];
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView shouldExpandItem:(id)item
-{
-    // Our outline view has no levels, but we can still expand every item. Doing so
-    // just makes the row taller. See heightOfRowByItem below.
-    return ![(HBQueueOutlineView *)outlineView isDragging];
-}
-
-- (NSInteger)outlineView:(NSOutlineView *)fOutlineView numberOfChildrenOfItem:(id)item
-{
-    // Our outline view has no levels, so number of children will be zero for all
-    // top-level items.
-    if (item == nil)
+    if (expanded)
     {
-        return self.jobs.count;
-    }
-    else
-    {
-        return 0;
-    }
-}
+        CGFloat width = tableView.frame.size.width;
+        self.dummyCellWidth.constant = width;
+        self.dummyCell.textField.preferredMaxLayoutWidth = width;
+        self.dummyCell.textField.attributedStringValue = job.attributedDescription;
 
-#pragma mark NSOutlineView delegate
-
-- (void)outlineViewItemDidCollapse:(NSNotification *)notification
-{
-    id item = notification.userInfo[@"NSObject"];
-    NSInteger row = [self.outlineView rowForItem:item];
-    [self.outlineView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(row,1)]];
-}
-
-- (void)outlineViewItemDidExpand:(NSNotification *)notification
-{
-    id item = notification.userInfo[@"NSObject"];
-    NSInteger row = [self.outlineView rowForItem:item];
-    [self.outlineView noteHeightOfRowsWithIndexesChanged:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(row,1)]];
-}
-
-#define HB_ROW_HEIGHT_TITLE_ONLY 17.0
-#define HB_ROW_HEIGHT_PADDING 6.0
-
-- (CGFloat)outlineView:(NSOutlineView *)outlineView heightOfRowByItem:(id)item
-{
-    if ([outlineView isItemExpanded:item])
-    {
-        // It is important to use a constant value when calculating the height. Querying the tableColumn width will not work, since it dynamically changes as the user resizes -- however, we don't get a notification that the user "did resize" it until after the mouse is let go. We use the latter as a hook for telling the table that the heights changed. We must return the same height from this method every time, until we tell the table the heights have changed. Not doing so will quicly cause drawing problems.
-        NSTableColumn *tableColumnToWrap = (NSTableColumn *) [outlineView tableColumns][1];
-        NSInteger columnToWrap = [outlineView.tableColumns indexOfObject:tableColumnToWrap];
-        
-        // Grab the fully prepared cell with our content filled in. Note that in IB the cell's Layout is set to Wraps.
-        NSCell *cell = [outlineView preparedCellAtColumn:columnToWrap row:[outlineView rowForItem:item]];
-        
-        // See how tall it naturally would want to be if given a restricted with, but unbound height
-        NSRect constrainedBounds = NSMakeRect(0, 0, tableColumnToWrap.width, CGFLOAT_MAX);
-        NSSize naturalSize = [cell cellSizeForBounds:constrainedBounds];
-        
-        // Make sure we have a minimum height -- use the table's set height as the minimum.
-        if (naturalSize.height > outlineView.rowHeight)
-            return naturalSize.height + HB_ROW_HEIGHT_PADDING;
-        else
-            return outlineView.rowHeight;
+        CGFloat height = self.dummyCell.fittingSize.height;
+        return height;
     }
     else
     {
-        return HB_ROW_HEIGHT_TITLE_ONLY;
+        return 20;
     }
 }
 
-- (id)outlineView:(NSOutlineView *)fOutlineView objectValueForTableColumn:(NSTableColumn *)tableColumn byItem:(id)item
+- (void)toggleRowsAtIndexes:(NSIndexSet *)rowIndexes expand:(BOOL)expand
 {
-    if ([tableColumn.identifier isEqualToString:@"desc"])
-    {
-        HBJob *job = item;
-        NSAttributedString *description = self.descriptions[job.uuid];
-
-        if (description == nil)
+    NSMutableIndexSet *rowsToExpand = [NSMutableIndexSet indexSet];
+    [rowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
+        HBJob *job = self.jobs[index];
+        BOOL expanded = [self.expanded[job.uuid] boolValue];
+        if (expanded != expand)
         {
-            description = job.attributedDescription;
-            self.descriptions[job.uuid] = description;
+            self.expanded[job.uuid] = @(!expanded);
+            [rowsToExpand addIndex:index];
         }
 
-        return description;
-    }
-    else if ([tableColumn.identifier isEqualToString:@"icon"])
-    {
-        HBJob *job = item;
-        if (job.state == HBJobStateCompleted)
+        HBQueueItemView *itemView = (HBQueueItemView *)[self.tableView viewAtColumn:0 row:index makeIfNecessary:NO];
+        if (expand)
         {
-            return [NSImage imageNamed:@"EncodeComplete"];
-        }
-        else if (job.state == HBJobStateWorking)
-        {
-            return [NSImage imageNamed:@"EncodeWorking0"];
-        }
-        else if (job.state == HBJobStateCanceled)
-        {
-            return [NSImage imageNamed:@"EncodeCanceled"];
-        }
-        else if (job.state == HBJobStateFailed)
-        {
-            return [NSImage imageNamed:@"EncodeFailed"];
+            [itemView expand];
         }
         else
         {
-            return [NSImage imageNamed:@"JobSmall"];
+            [itemView collapse];
         }
-    }
-    else
-    {
-        return @"";
-    }
+    }];
+    [self.tableView noteHeightOfRowsWithIndexesChanged:rowsToExpand];
 }
 
-/**
- * This method inserts the proper action icons into the far right of the queue window
- */
-- (void)outlineView:(NSOutlineView *)outlineView willDisplayCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item
-{
-    if ([tableColumn.identifier isEqualToString:@"action"])
-    {
-        [cell setEnabled: YES];
-        BOOL highlighted = [outlineView isRowSelected:[outlineView rowForItem: item]] && [[outlineView window] isKeyWindow] && ([[outlineView window] firstResponder] == outlineView);
+#pragma mark NSQueueItemView delegate
 
-        HBJob *job = item;
-        if (job.state == HBJobStateCompleted)
-        {
-            [cell setAction: @selector(revealSelectedQueueItems:)];
-            if (highlighted)
-            {
-                [cell setImage:[NSImage imageNamed:@"RevealHighlight"]];
-                [cell setAlternateImage:[NSImage imageNamed:@"RevealHighlightPressed"]];
-            }
-            else
-            {
-                [cell setImage:[NSImage imageNamed:@"Reveal"]];
-            }
-        }
-        else
-        {
-            [cell setAction: @selector(removeSelectedQueueItem:)];
-            if (highlighted)
-            {
-                [cell setImage:[NSImage imageNamed:@"DeleteHighlight"]];
-                [cell setAlternateImage:[NSImage imageNamed:@"DeleteHighlightPressed"]];
-            }
-            else
-            {
-                [cell setImage:[NSImage imageNamed:@"Delete"]];
-            }
-        }
-    }
+- (void)removeQueueItem:(nonnull HBJob *)job
+{
+    NSUInteger index = [self.jobs indexOfObject:job];
+    [self removeQueueItemAtIndex:index];
 }
 
-- (void)outlineView:(NSOutlineView *)outlineView willDisplayOutlineCell:(id)cell forTableColumn:(NSTableColumn *)tableColumn item:(id)item
+- (void)revealQueueItem:(nonnull HBJob *)job
 {
-    // By default, the disclosure image gets centered vertically in the cell. We want
-    // always at the top.
-    if ([outlineView isItemExpanded:item])
-    {
-        [cell setImagePosition: NSImageAbove];
-    }
-    else
-    {
-        [cell setImagePosition: NSImageOnly];
-    }
+    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[job.completeOutputURL]];
 }
 
-#pragma mark NSOutlineView drag & drop
-
-- (BOOL)outlineView:(NSOutlineView *)outlineView writeItems:(NSArray<HBJob *> *)items toPasteboard:(NSPasteboard *)pboard
+- (void)toggleQueueItemHeight:(nonnull HBJob *)job
 {
+    NSInteger row = [self.jobs indexOfObject:job];
+    BOOL expanded = [self.expanded[job.uuid] boolValue];
+    [self toggleRowsAtIndexes:[NSIndexSet indexSetWithIndex:row] expand:!expanded];
+}
+
+#pragma mark NSTableView delegate
+
+- (void)HB_deleteSelectionFromTableView:(NSTableView *)tableView
+{
+    [self removeSelectedQueueItem:tableView];
+}
+
+- (void)HB_expandSelectionFromTableView:(NSTableView *)tableView
+{
+    NSIndexSet *rowIndexes = [self.tableView selectedRowIndexes];
+    [self toggleRowsAtIndexes:rowIndexes expand:YES];
+}
+
+- (void)HB_collapseSelectionFromTableView:(NSTableView *)tableView;
+{
+    NSIndexSet *rowIndexes = [self.tableView selectedRowIndexes];
+    [self toggleRowsAtIndexes:rowIndexes expand:NO];
+}
+
+- (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard;
+{
+    NSArray<HBJob *> *items = [self.jobs objectsAtIndexes:rowIndexes];
     // Dragging is only allowed of the pending items.
     if ([items[0] state] != HBJobStateReady)
     {
@@ -1677,38 +1610,30 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     return YES;
 }
 
-- (NSDragOperation)outlineView:(NSOutlineView *)outlineView validateDrop:(id <NSDraggingInfo>)info proposedItem:(id)item proposedChildIndex:(NSInteger)index
+- (NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
 {
     // Don't allow dropping ONTO an item since they can't really contain any children.
-    BOOL isOnDropTypeProposal = index == NSOutlineViewDropOnItemIndex;
+    BOOL isOnDropTypeProposal = dropOperation == NSTableViewDropOn;
     if (isOnDropTypeProposal)
     {
         return NSDragOperationNone;
     }
-    
-    // Don't allow dropping INTO an item since they can't really contain any children.
-    if (item != nil)
-    {
-        index = [self.outlineView rowForItem:item] + 1;
-        item = nil;
-    }
 
     // We do not let the user drop a pending job before or *above*
     // already finished or currently encoding jobs.
-    NSInteger encodingIndex = [self.jobs indexOfObject:self.currentJob];
-    if (encodingIndex != NSNotFound && index <= encodingIndex)
+    NSInteger encodingRow = [self.jobs indexOfObject:self.currentJob];
+    if (encodingRow != NSNotFound && row <= encodingRow)
     {
         return NSDragOperationNone;
-        index = MAX(index, encodingIndex);
+        row = MAX(row, encodingRow);
 	}
 
-    [outlineView setDropItem:item dropChildIndex:index];
-    return NSDragOperationGeneric;
+    return NSDragOperationMove;
 }
 
-- (BOOL)outlineView:(NSOutlineView *)outlineView acceptDrop:(id <NSDraggingInfo>)info item:(id)item childIndex:(NSInteger)index
+- (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation
 {
-    [self moveQueueItems:self.dragNodesArray toIndex:index];
+    [self moveQueueItems:self.dragNodesArray toIndex:row];
     return YES;
 }
 
