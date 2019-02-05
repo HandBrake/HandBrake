@@ -4078,6 +4078,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_vfr;
             break;
 
+        case HB_FILTER_DESKEETER:
+            filter = &hb_filter_deskeeter;
+            break;
+
         case HB_FILTER_DEBLOCK:
             filter = &hb_filter_deblock;
             break;
@@ -4151,6 +4155,7 @@ hb_filter_object_t * hb_filter_init( int filter_id )
 {
     switch (filter_id)
     {
+        case HB_FILTER_DESKEETER:
         case HB_FILTER_UNSHARP:
         case HB_FILTER_LAPSHARP:
         {

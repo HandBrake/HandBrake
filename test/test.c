@@ -46,6 +46,7 @@
 #include <sys/mount.h>
 #endif
 
+#define DESKEETER_DEFAULT_PRESET    "medium"
 #define LAPSHARP_DEFAULT_PRESET     "medium"
 #define UNSHARP_DEFAULT_PRESET      "medium"
 #define NLMEANS_DEFAULT_PRESET      "medium"
@@ -74,6 +75,10 @@ static int     native_dub          = 0;
 static int     twoPass             = -1;
 static int     pad_disable         = 0;
 static char *  pad                 = NULL;
+static int     deskeeter_disable   = 0;
+static int     deskeeter_custom    = 0;
+static char *  deskeeter           = NULL;
+static char *  deskeeter_tune      = NULL;
 static int     deinterlace_disable = 0;
 static int     deinterlace_custom  = 0;
 static char *  deinterlace         = NULL;
@@ -611,6 +616,8 @@ cleanup:
     free(encoder_profile);
     free(encoder_level);
     free(rotate);
+    free(deskeeter);
+    free(deskeeter_tune);
     free(deblock);
     free(detelecine);
     free(deinterlace);
@@ -1197,6 +1204,9 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_DEINTERLACE:
             preset = DEINTERLACE_DEFAULT_PRESET;
             break;
+        case HB_FILTER_DESKEETER:
+            preset = DESKEETER_DEFAULT_PRESET;
+            break;
         case HB_FILTER_DECOMB:
             preset = DECOMB_DEFAULT_PRESET;
             break;
@@ -1218,6 +1228,7 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_NLMEANS:
         case HB_FILTER_UNSHARP:
         case HB_FILTER_LAPSHARP:
+        case HB_FILTER_DESKEETER:
         case HB_FILTER_DECOMB:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
@@ -1741,6 +1752,19 @@ static void ShowHelp()
     fprintf( out,
 "                           Applies to lapsharp presets only (does not affect\n"
 "                           custom settings)\n"
+"   --deskeeter[=string]    Remove mosquito noise with deskeeter filter\n");
+    showFilterPresets(out, HB_FILTER_DESKEETER);
+    showFilterKeys(out, HB_FILTER_DESKEETER);
+    showFilterDefault(out, HB_FILTER_DESKEETER);
+    fprintf( out,
+
+"   --no-deskeeter          Disable preset deskeeter filter\n"
+"   --deskeeter-tune <string>\n"
+"                           Tune deskeeter filter\n");
+    showFilterTunes(out, HB_FILTER_DESKEETER);
+    fprintf( out,
+"                           Applies to deskeeter presets only (does not affect\n"
+"                           custom settings)\n"
 "   -7, --deblock[=string]  Deblock video with pp7 filter\n");
     showFilterKeys(out, HB_FILTER_DEBLOCK);
     showFilterDefault(out, HB_FILTER_DEBLOCK);
@@ -2126,6 +2150,8 @@ static int ParseOptions( int argc, char ** argv )
     #define SSA_LANG             319
     #define SSA_DEFAULT          320
     #define SSA_BURN             321
+    #define FILTER_DESKEETER      322
+    #define FILTER_DESKEETER_TUNE 323
 
     for( ;; )
     {
@@ -2200,6 +2226,9 @@ static int ParseOptions( int argc, char ** argv )
             { "no-two-pass", no_argument,       &twoPass, 0 },
             { "deinterlace", optional_argument, NULL,    'd' },
             { "no-deinterlace", no_argument,    &deinterlace_disable, 1 },
+            { "deskeeter",   optional_argument, NULL,    FILTER_DESKEETER },
+            { "no-deskeeter",   no_argument,    &deskeeter_disable,   1 },
+            { "deskeeter-tune", required_argument, NULL, FILTER_DESKEETER_TUNE },
             { "deblock",     optional_argument, NULL,    '7' },
             { "no-deblock",  no_argument,       &deblock_disable,     1 },
             { "denoise",     optional_argument, NULL,    '8' },
@@ -2649,6 +2678,21 @@ static int ParseOptions( int argc, char ** argv )
                     deinterlace = strdup(DEINTERLACE_DEFAULT_PRESET);
                 }
                 break;
+            case FILTER_DESKEETER:
+                free(deskeeter);
+                if (optarg != NULL)
+                {
+                    deskeeter = strdup(optarg);
+                }
+                else
+                {
+                    deskeeter = strdup(DESKEETER_DEFAULT_PRESET);
+                }
+                break;
+            case FILTER_DESKEETER_TUNE:
+                free(deskeeter_tune);
+                deskeeter_tune = strdup(optarg);
+                break;
             case '7':
                 free(deblock);
                 if( optarg != NULL )
@@ -3031,6 +3075,32 @@ static int ParseOptions( int argc, char ** argv )
 
         }
 
+    }
+
+    if (deskeeter != NULL)
+    {
+        if (deskeeter_disable)
+        {
+            fprintf(stderr,
+                    "Incompatible options --deskeeter and --no-deskeeter\n");
+            return -1;
+        }
+        if (!hb_validate_filter_preset(HB_FILTER_DESKEETER, deskeeter,
+                                       deskeeter_tune, NULL))
+        {
+            // Nothing to do, but must validate preset before
+            // attempting to validate custom settings to prevent potential
+            // false positive
+        }
+        else if (!hb_validate_filter_string(HB_FILTER_DESKEETER, deskeeter))
+        {
+            deskeeter_custom = 1;
+        }
+        else
+        {
+            fprintf(stderr, "Invalid deskeeter option %s\n", deskeeter);
+            return -1;
+        }
     }
 
     if (deblock != NULL)
@@ -4242,6 +4312,31 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                         hb_value_string("custom"));
             hb_dict_set(preset, "PictureSharpenCustom",
                         hb_value_string(lapsharp));
+        }
+    }
+    if (deskeeter_disable && !strcasecmp(s, "deskeeter"))
+    {
+        hb_dict_set(preset, "PictureMosquitoFilter", hb_value_string("off"));
+    }
+    if (deskeeter != NULL)
+    {
+        hb_dict_set(preset, "PictureMosquitoFilter", hb_value_string("deskeeter"));
+        if (!deskeeter_custom)
+        {
+            hb_dict_set(preset, "PictureMosquitoPreset",
+                        hb_value_string(deskeeter));
+            if (deskeeter_tune != NULL)
+            {
+                hb_dict_set(preset, "PictureMosquitoTune",
+                            hb_value_string(deskeeter_tune));
+            }
+        }
+        else
+        {
+            hb_dict_set(preset, "PictureMosquitoPreset",
+                        hb_value_string("custom"));
+            hb_dict_set(preset, "PictureMosquitoCustom",
+                        hb_value_string(deskeeter));
         }
     }
     if (deblock_disable)
