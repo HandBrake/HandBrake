@@ -215,7 +215,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     if (action == @selector(editSelectedQueueItem:) ||
         action == @selector(removeSelectedQueueItem:) ||
-        action == @selector(revealSelectedQueueItems:))
+        action == @selector(revealSelectedQueueItems:) ||
+        action == @selector(revealSelectedQueueItemsSources:))
     {
         return (self.tableView.selectedRow != -1 || self.tableView.clickedRow != -1);
     }
