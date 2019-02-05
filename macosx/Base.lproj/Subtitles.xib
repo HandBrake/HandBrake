@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.59" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.59"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -63,7 +63,7 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <action selector="browseImportExternalFile:" target="-2" id="OAA-S8-tfS"/>
+                        <action selector="showSettingsSheet:" target="-2" id="IA5-Hf-clS"/>
                         <binding destination="-2" name="enabled" keyPath="self.subtitles" id="dpe-kM-iMF">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
@@ -78,7 +78,7 @@
                         <font key="font" metaFont="smallSystem"/>
                     </buttonCell>
                     <connections>
-                        <action selector="browseImportExternalFile:" target="-2" id="GOz-FT-Atg"/>
+                        <action selector="addTracksFromDefaults:" target="-2" id="MNV-gt-ylF"/>
                         <binding destination="-2" name="enabled" keyPath="self.subtitles" id="CSa-3s-GD6">
                             <dictionary key="options">
                                 <string key="NSValueTransformerName">NSIsNotNil</string>
@@ -94,13 +94,13 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="25" rowSizeStyle="automatic" headerView="IiW-3a-Drv" viewBased="YES" id="0yM-wE-D2x">
-                                <rect key="frame" x="0.0" y="0.0" width="886" height="234"/>
+                                <rect key="frame" x="0.0" y="0.0" width="884" height="234"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                 <tableColumns>
-                                    <tableColumn identifier="track" editable="NO" width="322" minWidth="40" maxWidth="1000" id="N3S-st-yGv">
+                                    <tableColumn identifier="track" editable="NO" width="320" minWidth="40" maxWidth="1000" id="N3S-st-yGv">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Track">
                                             <font key="font" metaFont="smallSystem"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -118,11 +118,11 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="EZp-rc-7mo">
-                                                <rect key="frame" x="1" y="1" width="322" height="25"/>
+                                                <rect key="frame" x="1" y="1" width="320" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton toolTip="Subtitles language and type." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Tf3-cP-TGw">
-                                                        <rect key="frame" x="0.0" y="1" width="322" height="22"/>
+                                                        <rect key="frame" x="0.0" y="1" width="320" height="22"/>
                                                         <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" id="JWk-Ab-hdY">
                                                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
@@ -161,7 +161,7 @@
                                         </buttonCell>
                                         <prototypeCellViews>
                                             <tableCellView id="zKg-by-KFV">
-                                                <rect key="frame" x="326" y="1" width="76" height="25"/>
+                                                <rect key="frame" x="324" y="1" width="76" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button toolTip="Forced Only. Use only subtitles marked as “forced” in the selected source track." translatesAutoresizingMaskIntoConstraints="NO" id="HC5-ql-Vcr">
@@ -198,7 +198,7 @@
                                         </buttonCell>
                                         <prototypeCellViews>
                                             <tableCellView id="gxH-yz-YRK">
-                                                <rect key="frame" x="405" y="1" width="64" height="25"/>
+                                                <rect key="frame" x="403" y="1" width="64" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button toolTip="Burned In. Make the selected subtitles permanent by overlaying them onto the video track." translatesAutoresizingMaskIntoConstraints="NO" id="zpm-9Z-Hsq">
@@ -239,7 +239,7 @@
                                         </buttonCell>
                                         <prototypeCellViews>
                                             <tableCellView id="mQ6-s6-Zm2">
-                                                <rect key="frame" x="472" y="1" width="51" height="25"/>
+                                                <rect key="frame" x="470" y="1" width="51" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button toolTip="Default flag. Mark the selected subtitles track as the default to be displayed on playback." translatesAutoresizingMaskIntoConstraints="NO" id="mdO-Qu-3Pb">
@@ -280,7 +280,7 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="4bh-my-GeM">
-                                                <rect key="frame" x="526" y="1" width="171" height="25"/>
+                                                <rect key="frame" x="524" y="1" width="171" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton toolTip="Language of the selected SRT/SSA format source track. Not applicable to other formats." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Inz-O5-B8g">
@@ -330,7 +330,7 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="ZBK-cc-m0z">
-                                                <rect key="frame" x="700" y="1" width="113" height="25"/>
+                                                <rect key="frame" x="698" y="1" width="113" height="25"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <popUpButton toolTip="Character encoding/codeset of the selected SRT/SSA format source track. Not applicable to other formats." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="QV0-kE-4yR">
@@ -348,9 +348,9 @@
                                                         </popUpButtonCell>
                                                         <accessibility description="SRT/SSA Character Encoding"/>
                                                         <connections>
-                                                            <binding destination="ZBK-cc-m0z" name="enabled" keyPath="objectValue.isExternal" id="g9q-4R-uuX"/>
                                                             <binding destination="ZBK-cc-m0z" name="selectedValue" keyPath="objectValue.charCode" previousBinding="NGt-sB-Sg2" id="eBc-20-eSF"/>
                                                             <binding destination="ZBK-cc-m0z" name="content" keyPath="objectValue.encodings" id="NGt-sB-Sg2"/>
+                                                            <binding destination="ZBK-cc-m0z" name="enabled" keyPath="objectValue.isExternal" id="g9q-4R-uuX"/>
                                                         </connections>
                                                     </popUpButton>
                                                 </subviews>
@@ -376,7 +376,7 @@
                                         <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                         <prototypeCellViews>
                                             <tableCellView id="9tV-iL-oaF">
-                                                <rect key="frame" x="816" y="1" width="68" height="17"/>
+                                                <rect key="frame" x="814" y="1" width="68" height="17"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField toolTip="Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aJi-zQ-0cg">
@@ -431,7 +431,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                     <tableHeaderView key="headerView" id="IiW-3a-Drv">
-                        <rect key="frame" x="0.0" y="0.0" width="886" height="23"/>
+                        <rect key="frame" x="0.0" y="0.0" width="884" height="23"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </tableHeaderView>
                 </scrollView>
@@ -461,7 +461,7 @@
                 <menuItem title="Add All Tracks" id="S2I-Jd-Lyg">
                     <attributedString key="attributedTitle"/>
                     <connections>
-                        <action selector="browseImportExternalFile:" target="-2" id="ojh-vi-2gX"/>
+                        <action selector="addAll:" target="-2" id="505-vt-RDf"/>
                     </connections>
                 </menuItem>
                 <menuItem title="Add External Subtitles Track…" id="fXD-7h-jMl">
@@ -472,21 +472,22 @@
                 <menuItem isSeparatorItem="YES" id="Pr7-iM-rgd"/>
                 <menuItem title="Remove All Tracks" id="R8a-qg-ASg">
                     <connections>
-                        <action selector="browseImportExternalFile:" target="-2" id="8yF-Gu-7bi"/>
+                        <action selector="removeAll:" target="-2" id="qSF-WG-802"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="eER-z8-aB9"/>
                 <menuItem title="Selection Behavior…" id="pwm-PV-1x4">
                     <connections>
-                        <action selector="browseImportExternalFile:" target="-2" id="aQq-Fi-0Ro"/>
+                        <action selector="showSettingsSheet:" target="-2" id="hjH-4w-HUH"/>
                     </connections>
                 </menuItem>
                 <menuItem title="Reload" id="jcM-HL-QJ6">
                     <connections>
-                        <action selector="browseImportExternalFile:" target="-2" id="IQq-bX-u1t"/>
+                        <action selector="addTracksFromDefaults:" target="-2" id="pW8-ZH-jPf"/>
                     </connections>
                 </menuItem>
             </items>
+            <point key="canvasLocation" x="-18" y="437"/>
         </menu>
     </objects>
 </document>
