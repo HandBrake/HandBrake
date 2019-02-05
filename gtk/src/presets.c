@@ -2062,6 +2062,8 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
         exportDir = ".";
     }
     filename = g_strdup_printf("%s.json", name);
+    // Sanitize generated filename
+    g_strdelimit(filename, GHB_UNSAFE_FILENAME_CHARS, '_');
     gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), exportDir);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), filename);
     g_free(filename);
@@ -2929,4 +2931,3 @@ preset_widget_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     ghb_widget_to_setting(ud->settings, widget);
     ghb_check_dependency(ud, widget, NULL);
 }
-

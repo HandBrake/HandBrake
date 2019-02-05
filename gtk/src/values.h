@@ -28,6 +28,8 @@
 #include <glib-object.h>
 #include "hb_dict.h"
 
+#define GHB_UNSAFE_FILENAME_CHARS "/:<>\"\\|?*"
+
 #define GHB_DICT    HB_VALUE_TYPE_DICT
 #define GHB_ARRAY   HB_VALUE_TYPE_ARRAY
 #define GHB_STRING  HB_VALUE_TYPE_STRING
