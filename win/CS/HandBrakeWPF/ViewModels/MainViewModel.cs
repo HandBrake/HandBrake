@@ -585,7 +585,7 @@ namespace HandBrakeWPF.ViewModels
 
                             if (value == this.ScannedSource.ScanPath)
                             {
-                                this.Destination = null;
+                                this.Destination = this.CurrentTask.Destination;
                                 this.errorService.ShowMessageBox(Resources.Main_SourceDestinationMatchError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                                 return;
                             }
