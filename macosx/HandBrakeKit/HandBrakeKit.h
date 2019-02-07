@@ -36,7 +36,6 @@ FOUNDATION_EXPORT const unsigned char HandBrakeKitVersionString[];
 #import <HandBrakeKit/HBDVDDetector.h>
 
 #import <HandBrakeKit/HBStateFormatter.h>
-#import <HandBrakeKit/HBDistributedArray.h>
 #import <HandBrakeKit/HBUtilities.h>
 #import <HandBrakeKit/HBImageUtilities.h>
 

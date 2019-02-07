@@ -83,8 +83,6 @@
 		A91119A21C7DD58B001C463C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F203B14ADBC210021BE6D /* Cocoa.framework */; };
 		A91119A31C7DD591001C463C /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 273F202214ADB8650021BE6D /* IOKit.framework */; };
 		A91119A41C7DD614001C463C /* HBSubtitlesDefaults.h in Headers */ = {isa = PBXBuildFile; fileRef = A9F4728B1976BAA70009EC65 /* HBSubtitlesDefaults.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A91119A51C7DD644001C463C /* HBDistributedArray.h in Headers */ = {isa = PBXBuildFile; fileRef = A9E66D6E1A67A2A8007B641D /* HBDistributedArray.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A91119A61C7DD64A001C463C /* HBDistributedArray.m in Sources */ = {isa = PBXBuildFile; fileRef = A9E66D6F1A67A2A8007B641D /* HBDistributedArray.m */; };
 		A91485FE1F61296100374C12 /* HBFiltersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91485FD1F61296100374C12 /* HBFiltersViewController.m */; };
 		A914BCB31BC441C700157917 /* HBPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = A914BCB21BC441C700157917 /* HBPreviewView.m */; };
 		A916180E1C845161000556C6 /* NSDictionary+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A93B0DF71C804CF50051A3FA /* NSDictionary+HBAdditions.m */; };
@@ -201,6 +199,8 @@
 		A95121E61B5F7BE700FD773D /* NSArray+HBAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A95121E51B5F7BE700FD773D /* NSArray+HBAdditions.m */; };
 		A955128B1A320B02001BFC6F /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A95512881A320A12001BFC6F /* libjansson.a */; };
 		A957EBCD218DBE5900007988 /* HBAutoNamer.m in Sources */ = {isa = PBXBuildFile; fileRef = A957EBCC218DBE5900007988 /* HBAutoNamer.m */; };
+		A95BA15D220C968500A2F9F9 /* HBQueueItem.m in Sources */ = {isa = PBXBuildFile; fileRef = A95BA15C220C968500A2F9F9 /* HBQueueItem.m */; };
+		A95BA161220CA5DB00A2F9F9 /* HBDistributedArray.m in Sources */ = {isa = PBXBuildFile; fileRef = A95BA160220CA5DB00A2F9F9 /* HBDistributedArray.m */; };
 		A95BC1E71CD2548A008D6A33 /* volHighTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A95BC1E51CD2548A008D6A33 /* volHighTemplate.pdf */; };
 		A95BC1E81CD2548A008D6A33 /* volLowTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A95BC1E61CD2548A008D6A33 /* volLowTemplate.pdf */; };
 		A96664B01CCE45BF00DA4A57 /* HBPlayerHUDController.m in Sources */ = {isa = PBXBuildFile; fileRef = A96664AE1CCE45BF00DA4A57 /* HBPlayerHUDController.m */; };
@@ -506,6 +506,10 @@
 		A957EBCC218DBE5900007988 /* HBAutoNamer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBAutoNamer.m; sourceTree = "<group>"; };
 		A9597A281A49749D00007771 /* HBRange+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBRange+UIAdditions.h"; sourceTree = "<group>"; };
 		A9597A291A49749D00007771 /* HBRange+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBRange+UIAdditions.m"; sourceTree = "<group>"; };
+		A95BA15B220C968500A2F9F9 /* HBQueueItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueItem.h; sourceTree = "<group>"; };
+		A95BA15C220C968500A2F9F9 /* HBQueueItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBQueueItem.m; sourceTree = "<group>"; };
+		A95BA15F220CA5DB00A2F9F9 /* HBDistributedArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBDistributedArray.h; sourceTree = "<group>"; };
+		A95BA160220CA5DB00A2F9F9 /* HBDistributedArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBDistributedArray.m; sourceTree = "<group>"; };
 		A95BC1E51CD2548A008D6A33 /* volHighTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = volHighTemplate.pdf; sourceTree = "<group>"; };
 		A95BC1E61CD2548A008D6A33 /* volLowTemplate.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = volLowTemplate.pdf; sourceTree = "<group>"; };
 		A95CB2FB217B6D07001E9F51 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -657,8 +661,6 @@
 		A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAddPresetController.h; sourceTree = "<group>"; };
 		A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAddPresetController.m; sourceTree = "<group>"; };
 		A9E52CD7218DD52A00E17B86 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ExceptionAlert.xib; sourceTree = "<group>"; };
-		A9E66D6E1A67A2A8007B641D /* HBDistributedArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = HBDistributedArray.h; path = ../HBDistributedArray.h; sourceTree = "<group>"; };
-		A9E66D6F1A67A2A8007B641D /* HBDistributedArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = HBDistributedArray.m; path = ../HBDistributedArray.m; sourceTree = "<group>"; };
 		A9EA43661A2210C400785E95 /* HBTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTableView.h; sourceTree = "<group>"; };
 		A9EA43671A2210C400785E95 /* HBTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTableView.m; sourceTree = "<group>"; };
 		A9F217E41E2F897D00C10C6E /* HandBrake.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HandBrake.entitlements; sourceTree = "<group>"; };
@@ -1019,6 +1021,8 @@
 		A901C2401BC7CFDC00D77735 /* Queue */ = {
 			isa = PBXGroup;
 			children = (
+				A95BA15B220C968500A2F9F9 /* HBQueueItem.h */,
+				A95BA15C220C968500A2F9F9 /* HBQueueItem.m */,
 				A9D3634F2209C08500D8EFEA /* HBQueueItemView.h */,
 				A9D363502209C08500D8EFEA /* HBQueueItemView.m */,
 				A9EA43661A2210C400785E95 /* HBTableView.h */,
@@ -1077,6 +1081,8 @@
 			children = (
 				A9706CB21AC1436F00BAEAA8 /* HBApplication.h */,
 				A9706CB31AC1436F00BAEAA8 /* HBApplication.m */,
+				A95BA15F220CA5DB00A2F9F9 /* HBDistributedArray.h */,
+				A95BA160220CA5DB00A2F9F9 /* HBDistributedArray.m */,
 				A9706CB51AC1437800BAEAA8 /* HBExceptionAlertController.h */,
 				A9706CB61AC1437800BAEAA8 /* HBExceptionAlertController.m */,
 				A9E52CD6218DD52A00E17B86 /* ExceptionAlert.xib */,
@@ -1162,8 +1168,6 @@
 			children = (
 				A98C29C51977C00000AF5DED /* Core */,
 				A952392E199A647F00588AEF /* Presets */,
-				A9E66D6E1A67A2A8007B641D /* HBDistributedArray.h */,
-				A9E66D6F1A67A2A8007B641D /* HBDistributedArray.m */,
 				A9AA44781970664A00D7DEFC /* HBUtilities.h */,
 				A9AA44791970664A00D7DEFC /* HBUtilities.m */,
 				A9736F041C7DA5FE008F1D18 /* HandBrakeKit.h */,
@@ -1383,7 +1387,6 @@
 				A91CE2DB1C7DAEEE0068F46F /* HBVideo.h in Headers */,
 				A91CE2DC1C7DAEEE0068F46F /* HBPicture.h in Headers */,
 				A91CE2DD1C7DAEEE0068F46F /* HBFilters.h in Headers */,
-				A91119A51C7DD644001C463C /* HBDistributedArray.h in Headers */,
 				A91CE2DE1C7DAEEE0068F46F /* HBChapter.h in Headers */,
 				A91CE2DF1C7DAEEE0068F46F /* HBAudio.h in Headers */,
 				A91CE2E01C7DAEEE0068F46F /* HBAudioTrack.h in Headers */,
@@ -1669,6 +1672,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A95BA161220CA5DB00A2F9F9 /* HBDistributedArray.m in Sources */,
 				A916C99B1C844A0800C7B560 /* HBTableView.m in Sources */,
 				A916C9991C8449E200C7B560 /* main.mm in Sources */,
 				A973E10C216E74E900D498EC /* HBThumbnailItemView.m in Sources */,
@@ -1707,6 +1711,7 @@
 				273F20B214ADBE670021BE6D /* HBImageAndTextCell.m in Sources */,
 				273F20B314ADBE670021BE6D /* HBOutputPanelController.m in Sources */,
 				273F20B414ADBE670021BE6D /* HBOutputRedirect.m in Sources */,
+				A95BA15D220C968500A2F9F9 /* HBQueueItem.m in Sources */,
 				A9D0FA771C1C284D0003F2A9 /* HBFocusRingView.m in Sources */,
 				A9D0FA7A1C1C36820003F2A9 /* HBTabView.m in Sources */,
 				A91AFD0C1A948827009BECED /* HBOutputFileWriter.m in Sources */,
@@ -1757,7 +1762,6 @@
 				A91CE2A21C7DA7320068F46F /* HBVideo+UIAdditions.m in Sources */,
 				A91CE2A41C7DA7320068F46F /* HBPicture+UIAdditions.m in Sources */,
 				A91D54881E378ABD006D0997 /* HBSecurityAccessToken.m in Sources */,
-				A91119A61C7DD64A001C463C /* HBDistributedArray.m in Sources */,
 				A91CE2A61C7DA7320068F46F /* HBFilters+UIAdditions.m in Sources */,
 				A91CE2A81C7DA7320068F46F /* HBDVDDetector.m in Sources */,
 				A91CE2AD1C7DA7320068F46F /* HBStateFormatter.m in Sources */,

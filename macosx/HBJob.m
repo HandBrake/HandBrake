@@ -45,8 +45,6 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 @implementation HBJob
 
-@synthesize uuid = _uuid;
-
 - (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset
 {
     self = [super init];
@@ -72,11 +70,6 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _subtitles = [[HBSubtitles alloc] initWithJob:self];
 
         _chapterTitles = [title.chapters copy];
-
-        CFUUIDRef theUUID = CFUUIDCreate(NULL);
-        CFStringRef string = CFUUIDCreateString(NULL, theUUID);
-        CFRelease(theUUID);
-        _uuid = CFBridgingRelease(string);
 
         [self applyPreset:preset];
     }
@@ -312,15 +305,9 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
     if (copy)
     {
-        copy->_state = HBJobStateReady;
         copy->_name = [_name copy];
         copy->_presetName = [_presetName copy];
         copy->_titleIdx = _titleIdx;
-
-        CFUUIDRef theUUID = CFUUIDCreate(NULL);
-        CFStringRef string = CFUUIDCreateString(NULL, theUUID);
-        CFRelease(theUUID);
-        copy->_uuid = CFBridgingRelease(string);
 
         copy->_fileURLBookmark = [_fileURLBookmark copy];
         copy->_outputURLFolderBookmark = [_outputURLFolderBookmark copy];
@@ -363,13 +350,11 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:3 forKey:@"HBJobVersion"];
+    [coder encodeInt:4 forKey:@"HBJobVersion"];
 
-    encodeInt(_state);
     encodeObject(_name);
     encodeObject(_presetName);
     encodeInt(_titleIdx);
-    encodeObject(_uuid);
 
 #ifdef __SANDBOX_ENABLED__
     if (!_fileURLBookmark)
@@ -418,13 +403,11 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 {
     int version = [decoder decodeIntForKey:@"HBJobVersion"];
 
-    if (version == 3 && (self = [super init]))
+    if (version == 4 && (self = [super init]))
     {
-        decodeInt(_state);
         decodeObjectOrFail(_name, NSString);
         decodeObjectOrFail(_presetName, NSString);
         decodeInt(_titleIdx);
-        decodeObjectOrFail(_uuid, NSString);
 
 #ifdef __SANDBOX_ENABLED__
         _fileURLBookmark = [decoder decodeObjectOfClass:[NSData class] forKey:@"_fileURLBookmark"];

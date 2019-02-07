@@ -30,7 +30,7 @@
                                 <menuItem title="Tracks" state="on" hidden="YES" id="TJO-RZ-jgb"/>
                                 <menuItem title="Add All Tracks" id="4PX-In-DpF">
                                     <connections>
-                                        <action selector="browseImportExternalFile:" target="-2" id="tuS-uF-dje"/>
+                                        <action selector="addAll:" target="-2" id="fKo-J5-i2V"/>
                                     </connections>
                                 </menuItem>
                                 <menuItem title="Add External Subtitles Track…" toolTip="Add new SRT/SSA subtitle to the list." id="HW0-PS-t0U">
@@ -41,7 +41,7 @@
                                 <menuItem isSeparatorItem="YES" id="2hO-bG-5qB"/>
                                 <menuItem title="Remove All Tracks" id="mVi-zH-KUq">
                                     <connections>
-                                        <action selector="browseImportExternalFile:" target="-2" id="QsA-lb-0rD"/>
+                                        <action selector="removeAll:" target="-2" id="2Lg-Sg-OPL"/>
                                     </connections>
                                 </menuItem>
                             </items>

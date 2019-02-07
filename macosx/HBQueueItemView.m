@@ -5,8 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBQueueItemView.h"
-#import "HBJob.h"
-#import "HBJob+UIAdditions.h"
+#import "HBQueueItem.h"
 
 @interface HBQueueItemView ()
 
@@ -17,9 +16,9 @@
 
 @implementation HBQueueItemView
 
-- (void)setJob:(HBJob *)job
+- (void)setItem:(HBQueueItem *)item
 {
-    _job = job;
+    _item = item;
     [self reload];
 }
 
@@ -38,12 +37,12 @@
 {
     if (_expanded)
     {
-        self.textField.attributedStringValue = self.job.attributedDescription;
+        self.textField.attributedStringValue = self.item.attributedDescription;
         self.expandButton.state = NSOnState;
     }
     else
     {
-        self.textField.attributedStringValue = self.job.attributedTitleDescription;
+        self.textField.attributedStringValue = self.item.attributedTitleDescription;
         self.expandButton.state = NSOffState;
     }
 }
@@ -51,17 +50,17 @@
 - (void)HB_updateState
 {
     NSImage *state = nil;
-    switch (self.job.state) {
-        case HBJobStateCompleted:
+    switch (self.item.state) {
+        case HBQueueItemStateCompleted:
             state = [NSImage imageNamed:@"EncodeComplete"];
             break;
-        case HBJobStateWorking:
+        case HBQueueItemStateWorking:
             state = [NSImage imageNamed:@"EncodeWorking0"];
             break;
-        case HBJobStateCanceled:
+        case HBQueueItemStateCanceled:
             state = [NSImage imageNamed:@"EncodeCanceled"];
             break;
-        case HBJobStateFailed:
+        case HBQueueItemStateFailed:
             state = [NSImage imageNamed:@"EncodeFailed"];
             break;
         default:
@@ -74,7 +73,14 @@
 
 - (void)HB_updateRightButton
 {
-    if (self.job.state == HBJobStateCompleted)
+    BOOL darkAqua = NO;
+
+    if (@available(macOS 10.14, *))
+    {
+        darkAqua = [self.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameDarkAqua]] == NSAppearanceNameDarkAqua ? YES : NO;
+    }
+
+    if (self.item.state == HBQueueItemStateCompleted)
     {
         [_removeButton setAction: @selector(revealQueueItem:)];
         if (self.backgroundStyle == NSBackgroundStyleEmphasized)
@@ -84,7 +90,7 @@
         }
         else
         {
-            [_removeButton setImage:[NSImage imageNamed:@"Reveal"]];
+            [_removeButton setImage:[NSImage imageNamed:darkAqua ? @"RevealHighlight" : @"Reveal"]];
         }
     }
     else
@@ -97,7 +103,7 @@
         }
         else
         {
-            [_removeButton setImage:[NSImage imageNamed:@"Delete"]];
+            [_removeButton setImage:[NSImage imageNamed:darkAqua ? @"DeleteHighlight" : @"Delete"]];
         }
     }
 }
@@ -112,14 +118,14 @@
 {
     self.expandButton.state = NSOnState;
     self.expanded = YES;
-    self.textField.attributedStringValue = self.job.attributedDescription;
+    self.textField.attributedStringValue = self.item.attributedDescription;
 }
 
 - (void)collapse
 {
     self.expandButton.state = NSOffState;
     self.expanded = NO;
-    self.textField.attributedStringValue = self.job.attributedTitleDescription;
+    self.textField.attributedStringValue = self.item.attributedTitleDescription;
 }
 
 - (BOOL)isFlipped
@@ -127,19 +133,24 @@
     return YES;
 }
 
+- (void)viewDidChangeEffectiveAppearance
+{
+    [self HB_updateRightButton];
+}
+
 - (IBAction)revealQueueItem:(id)sender
 {
-    [self.delegate revealQueueItem:self.job];
+    [self.delegate revealQueueItem:self.item];
 }
 
 - (IBAction)removeQueueItem:(id)sender
 {
-    [self.delegate removeQueueItem:self.job];
+    [self.delegate removeQueueItem:self.item];
 }
 
 - (IBAction)toggleHeight:(id)sender
 {
-    [self.delegate toggleQueueItemHeight:self.job];
+    [self.delegate toggleQueueItemHeight:self.item];
 }
 
 @end

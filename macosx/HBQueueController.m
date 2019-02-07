@@ -6,6 +6,8 @@
 
 #import "HBQueueController.h"
 
+#import "HBQueueItem.h"
+
 #import "HBController.h"
 #import "HBAppDelegate.h"
 
@@ -50,21 +52,20 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 @property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
 
-@property (nonatomic, readonly) NSMutableDictionary<NSString *, NSNumber *> *expanded;
 @property (nonatomic) NSTableCellView *dummyCell;
 @property (nonatomic) NSLayoutConstraint *dummyCellWidth;
 
+@property (nonatomic, readonly) HBDistributedArray<HBQueueItem *> *items;
 
-@property (nonatomic, readonly) HBDistributedArray<HBJob *> *jobs;
-@property (nonatomic)   HBJob *currentJob;
-@property (nonatomic)   HBJobOutputFileWriter *currentLog;
+@property (nonatomic) HBQueueItem *currentItem;
+@property (nonatomic) HBJobOutputFileWriter *currentLog;
 
 @property (nonatomic, readwrite) BOOL stop;
 
 @property (nonatomic, readwrite) NSUInteger pendingItemsCount;
 @property (nonatomic, readwrite) NSUInteger completedItemsCount;
 
-@property (nonatomic) NSArray<HBJob *> *dragNodesArray;
+@property (nonatomic) NSArray<HBQueueItem *> *dragNodesArray;
 
 @end
 
@@ -81,9 +82,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     if (self = [super initWithWindowNibName:@"Queue"])
     {
-        // Cached queue items expanded state
-        _expanded = [[NSMutableDictionary alloc] init];
-
         // Load the dockTile and instiante initial text fields
         _dockTile = [[HBDockTile alloc] initWithDockTile:[[NSApplication sharedApplication] dockTile]
                                                   image:[[NSApplication sharedApplication] applicationIconImage]];
@@ -98,8 +96,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         _progressInfo = @"";
 
         // Load the queue from disk.
-        _jobs = [[HBDistributedArray alloc] initWithURL:queueURL class:[HBJob class]];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadQueue) name:HBDistributedArrayChanged object:_jobs];
+        _items = [[HBDistributedArray alloc] initWithURL:queueURL class:[HBQueueItem class]];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadQueue) name:HBDistributedArrayChanged object:_items];
 
         [NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
     }
@@ -228,7 +226,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     if (action == @selector(clearAll:))
     {
-        return self.jobs.count > 0;
+        return self.items.count > 0;
     }
 
     if (action == @selector(clearCompleted:))
@@ -284,12 +282,18 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [self addJobsFromArray:@[item]];
 }
 
-- (void)addJobsFromArray:(NSArray<HBJob *> *)items;
+- (void)addJobsFromArray:(NSArray<HBJob *> *)jobs;
 {
-    NSParameterAssert(items);
-    if (items.count)
+    NSParameterAssert(jobs);
+    NSMutableArray *itemsToAdd = [NSMutableArray array];
+    for (HBJob *job in jobs)
     {
-        [self addQueueItems:items];
+        HBQueueItem *item = [[HBQueueItem alloc] initWithJob:job];
+        [itemsToAdd addObject:item];
+    }
+    if (itemsToAdd.count)
+    {
+        [self addQueueItems:itemsToAdd];
     }
 }
 
@@ -297,9 +301,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 {
     NSParameterAssert(url);
 
-    for (HBJob *item in self.jobs)
+    for (HBQueueItem *item in self.items)
     {
-        if ((item.state == HBJobStateReady || item.state == HBJobStateWorking)
+        if ((item.state == HBQueueItemStateReady || item.state == HBQueueItemStateWorking)
             && [item.completeOutputURL isEqualTo:url])
         {
             return YES;
@@ -310,7 +314,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (NSUInteger)count
 {
-    return self.jobs.count;
+    return self.items.count;
 }
 
 /**
@@ -319,12 +323,12 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
  */
 - (void)removeCompletedJobs
 {
-    [self.jobs beginTransaction];
-    NSIndexSet *indexes = [self.jobs indexesOfObjectsUsingBlock:^BOOL(HBJob *item) {
-        return (item.state == HBJobStateCompleted || item.state == HBJobStateCanceled);
+    [self.items beginTransaction];
+    NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
+        return (item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateCanceled);
     }];
     [self removeQueueItemsAtIndexes:indexes];
-    [self.jobs commit];
+    [self.items commit];
 }
 
 /**
@@ -332,9 +336,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
  */
 - (void)removeAllJobs
 {
-    [self.jobs beginTransaction];
-    [self removeQueueItemsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.jobs.count)]];
-    [self.jobs commit];
+    [self.items beginTransaction];
+    [self removeQueueItemsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.items.count)]];
+    [self.items commit];
 }
 
 /**
@@ -343,22 +347,22 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
  */
 - (void)setEncodingJobsAsPending
 {
-    [self.jobs beginTransaction];
+    [self.items beginTransaction];
 
     NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
     NSUInteger idx = 0;
-    for (HBJob *job in self.jobs)
+    for (HBQueueItem *item in self.items)
     {
         // We want to keep any queue item that is pending or was previously being encoded
-        if (job.state == HBJobStateWorking)
+        if (item.state == HBQueueItemStateWorking)
         {
-            job.state = HBJobStateReady;
+            item.state = HBQueueItemStateReady;
             [indexes addIndex:idx];
         }
         idx++;
     }
     [self reloadQueueItemsAtIndexes:indexes];
-    [self.jobs commit];
+    [self.items commit];
 }
 
 #pragma mark - Private queue editing methods
@@ -386,10 +390,10 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [self updateQueueStats];
 }
 
-- (void)addQueueItems:(NSArray *)items
+- (void)addQueueItems:(NSArray<HBQueueItem *> *)items
 {
     NSParameterAssert(items);
-    NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.jobs.count, items.count)];
+    NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.items.count, items.count)];
     [self addQueueItems:items atIndexes:indexes];
 }
 
@@ -397,7 +401,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 {
     NSParameterAssert(items);
     NSParameterAssert(indexes);
-    [self.jobs beginTransaction];
+    [self.items beginTransaction];
     [self.tableView beginUpdates];
 
     // Forward
@@ -405,7 +409,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     NSUInteger currentObjectIndex = 0;
     while (currentIndex != NSNotFound)
     {
-        [self.jobs insertObject:items[currentObjectIndex] atIndex:currentIndex];
+        [self.items insertObject:items[currentObjectIndex] atIndex:currentIndex];
         currentIndex = [indexes indexGreaterThanIndex:currentIndex];
         currentObjectIndex++;
     }
@@ -430,7 +434,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     [self.tableView endUpdates];
     [self updateQueueStats];
-    [self.jobs commit];
+    [self.items commit];
 }
 
 - (void)removeQueueItemAtIndex:(NSUInteger)index
@@ -447,26 +451,21 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         return;
     }
 
-    [self.jobs beginTransaction];
+    [self.items beginTransaction];
     [self.tableView beginUpdates];
 
-    NSArray<HBJob *> *removeJobs = [self.jobs objectsAtIndexes:indexes];
+    NSArray<HBQueueItem *> *removeItems = [self.items objectsAtIndexes:indexes];
 
-    if (self.jobs.count > indexes.lastIndex)
+    if (self.items.count > indexes.lastIndex)
     {
-        [self.jobs removeObjectsAtIndexes:indexes];
-    }
-
-    for (HBJob *job in removeJobs)
-    {
-        [self.expanded removeObjectForKey:job.uuid];
+        [self.items removeObjectsAtIndexes:indexes];
     }
 
     [self.tableView removeRowsAtIndexes:indexes withAnimation:NSTableViewAnimationSlideUp];
     [self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:indexes.firstIndex] byExtendingSelection:NO];
 
     NSUndoManager *undo = self.window.undoManager;
-    [[undo prepareWithInvocationTarget:self] addQueueItems:removeJobs atIndexes:indexes];
+    [[undo prepareWithInvocationTarget:self] addQueueItems:removeItems atIndexes:indexes];
 
     if (!undo.isUndoing)
     {
@@ -482,12 +481,12 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     [self.tableView endUpdates];
     [self updateQueueStats];
-    [self.jobs commit];
+    [self.items commit];
 }
 
 - (void)moveQueueItems:(NSArray *)items toIndex:(NSUInteger)index
 {
-    [self.jobs beginTransaction];
+    [self.items beginTransaction];
     [self.tableView beginUpdates];
 
     NSMutableArray *source = [NSMutableArray array];
@@ -495,8 +494,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     for (id object in items.reverseObjectEnumerator)
     {
-        NSUInteger sourceIndex = [self.jobs indexOfObject:object];
-        [self.jobs removeObjectAtIndex:sourceIndex];
+        NSUInteger sourceIndex = [self.items indexOfObject:object];
+        [self.items removeObjectAtIndex:sourceIndex];
 
 
         if (sourceIndex < index)
@@ -504,7 +503,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
             index--;
         }
 
-        [self.jobs insertObject:object atIndex:index];
+        [self.items insertObject:object atIndex:index];
 
         [source addObject:@(index)];
         [dest addObject:@(sourceIndex)];
@@ -528,12 +527,12 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
 
     [self.tableView endUpdates];
-    [self.jobs commit];
+    [self.items commit];
 }
 
 - (void)moveQueueItemsAtIndexes:(NSArray *)source toIndexes:(NSArray *)dest
 {
-    [self.jobs beginTransaction];
+    [self.items beginTransaction];
     [self.tableView beginUpdates];
 
     NSMutableArray *newSource = [NSMutableArray array];
@@ -547,9 +546,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [newSource addObject:@(destIndex)];
         [newDest addObject:@(sourceIndex)];
 
-        id obj = [self.jobs objectAtIndex:sourceIndex];
-        [self.jobs removeObjectAtIndex:sourceIndex];
-        [self.jobs insertObject:obj atIndex:destIndex];
+        id obj = [self.items objectAtIndex:sourceIndex];
+        [self.items removeObjectAtIndex:sourceIndex];
+        [self.items insertObject:obj atIndex:destIndex];
 
         [self.tableView moveRowAtIndex:sourceIndex toIndex:destIndex];
     }
@@ -570,7 +569,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
 
     [self.tableView endUpdates];
-    [self.jobs commit];
+    [self.items commit];
 }
 
 - (void)windowDidChangeOcclusionState:(NSNotification *)notification
@@ -605,13 +604,13 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     NSUInteger pendingCount = 0;
     NSUInteger completedCount = 0;
 
-    for (HBJob *job in self.jobs)
+    for (HBQueueItem *item in self.items)
     {
-        if (job.state == HBJobStateReady)
+        if (item.state == HBQueueItemStateReady)
         {
             pendingCount++;
         }
-        if (job.state == HBJobStateCompleted)
+        if (item.state == HBQueueItemStateCompleted)
         {
             completedCount++;
         }
@@ -670,13 +669,13 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 /**
  * Used to get the next pending queue item and return it if found
  */
-- (HBJob *)getNextPendingQueueItem
+- (HBQueueItem *)getNextPendingQueueItem
 {
-    for (HBJob *job in self.jobs)
+    for (HBQueueItem *item in self.items)
     {
-        if (job.state == HBJobStateReady)
+        if (item.state == HBQueueItemStateReady)
         {
-            return job;
+            return item;
         }
     }
     return nil;
@@ -687,8 +686,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
  */
 - (void)encodeNextQueueItem
 {
-    [self.jobs beginTransaction];
-    self.currentJob = nil;
+    [self.items beginTransaction];
+    self.currentItem = nil;
 
     // since we have completed an encode, we go to the next
     if (self.stop)
@@ -701,9 +700,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     else
     {
         // Check to see if there are any more pending items in the queue
-        HBJob *nextJob = [self getNextPendingQueueItem];
+        HBQueueItem *nextItem = [self getNextPendingQueueItem];
 
-        if (nextJob && [self _isDiskSpaceLowAtURL:nextJob.outputURL])
+        if (nextItem && [self _isDiskSpaceLowAtURL:nextItem.outputURL])
         {
             // Disk space is low, show an alert
             [HBUtilities writeToActivityLog:"Queue Stopped, low space on destination disk"];
@@ -711,24 +710,24 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
             [self queueLowDiskSpaceAlert];
         }
         // If we still have more pending items in our queue, lets go to the next one
-        else if (nextJob)
+        else if (nextItem)
         {
             // now we mark the queue item as working so another instance can not come along and try to scan it while we are scanning
-            nextJob.state = HBJobStateWorking;
+            nextItem.state = HBQueueItemStateWorking;
 
             // Tell HB to output a new activity log file for this encode
-            self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:nextJob];
+            self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:nextItem.job];
             if (self.currentLog)
             {
                 [[HBOutputRedirect stderrRedirect] addListener:self.currentLog];
                 [[HBOutputRedirect stdoutRedirect] addListener:self.currentLog];
             }
 
-            self.currentJob = nextJob;
-            [self reloadQueueItemAtIndex:[self.jobs indexOfObject:nextJob]];
+            self.currentItem = nextItem;
+            [self reloadQueueItemAtIndex:[self.items indexOfObject:nextItem]];
 
             // now we can go ahead and scan the new pending queue item
-            [self encodeJob:nextJob];
+            [self encodeItem:nextItem];
 
             // erase undo manager history
             [self.window.undoManager removeAllActions];
@@ -744,13 +743,13 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
             [self.core allowSleep];
         }
     }
-    [self.jobs commit];
+    [self.items commit];
 }
 
-- (void)completedJob:(HBJob *)job result:(HBCoreResult)result;
+- (void)completedItem:(HBQueueItem *)item result:(HBCoreResult)result;
 {
-    NSParameterAssert(job);
-    [self.jobs beginTransaction];
+    NSParameterAssert(item);
+    [self.items beginTransaction];
 
     // Since we are done with this encode, tell output to stop writing to the
     // individual encode log.
@@ -764,42 +763,42 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     if (result != HBCoreResultCanceled)
     {
         // Send to tagger
-        [self sendToExternalApp:job];
+        [self sendToExternalApp:item];
     }
 
     // Mark the encode just finished
     switch (result) {
         case HBCoreResultDone:
-            job.state = HBJobStateCompleted;
+            item.state = HBQueueItemStateCompleted;
             break;
         case HBCoreResultCanceled:
-            job.state = HBJobStateCanceled;
+            item.state = HBQueueItemStateCanceled;
             break;
         default:
-            job.state = HBJobStateFailed;
+            item.state = HBQueueItemStateFailed;
             break;
     }
 
-    if ([self.jobs containsObject:job])
+    if ([self.items containsObject:item])
     {
-        [self reloadQueueItemAtIndex:[self.jobs indexOfObject:job]];
+        [self reloadQueueItemAtIndex:[self.items indexOfObject:item]];
     }
     [self.window.toolbar validateVisibleItems];
-    [self.jobs commit];
+    [self.items commit];
 
     // Update UI
     NSString *info = nil;
     switch (result) {
         case HBCoreResultDone:
             info = NSLocalizedString(@"Encode Finished.", @"Queue status");
-            [self jobCompletedAlerts:job result:result];
+            [self itemCompletedAlerts:item result:result];
             break;
         case HBCoreResultCanceled:
             info = NSLocalizedString(@"Encode Canceled.", @"Queue status");
             break;
         default:
             info = NSLocalizedString(@"Encode Failed.", @"Queue status");
-            [self jobCompletedAlerts:job result:result];
+            [self itemCompletedAlerts:item result:result];
             break;
     }
     [self updateProgress:info progress:1.0 hidden:YES];
@@ -812,9 +811,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 /**
  * Here we actually tell hb_scan to perform the source scan, using the path to source and title number
  */
-- (void)encodeJob:(HBJob *)job
+- (void)encodeItem:(HBQueueItem *)item
 {
-    NSParameterAssert(job);
+    NSParameterAssert(item);
 
     // Progress handler
     void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
@@ -827,19 +826,19 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     {
         if (result == HBCoreResultDone)
         {
-            [self realEncodeJob:job];
+            [self realEncodeItem:item];
         }
         else
         {
-            [self completedJob:job result:result];
+            [self completedItem:item result:result];
             [self encodeNextQueueItem];
         }
     };
 
     // Only scan 10 previews before an encode - additional previews are
     // only useful for autocrop and static previews, which are already taken care of at this point
-    [self.core scanURL:job.fileURL
-            titleIndex:job.titleIdx
+    [self.core scanURL:item.fileURL
+            titleIndex:item.job.titleIdx
               previews:10
            minDuration:0
        progressHandler:progressHandler
@@ -849,9 +848,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 /**
  * This assumes that we have re-scanned and loaded up a new queue item to send to libhb
  */
-- (void)realEncodeJob:(HBJob *)job
+- (void)realEncodeItem:(HBQueueItem *)item
 {
-    NSParameterAssert(job);
+    NSParameterAssert(item);
+
+    HBJob *job = item.job;
 
     // Reset the title in the job.
     job.title = self.core.titles.firstObject;
@@ -886,7 +887,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     // Completion handler
     void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
     {
-        [self completedJob:job result:result];
+        [self completedItem:item result:result];
         [self encodeNextQueueItem];
     };
 
@@ -900,7 +901,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 /**
  * Cancels the current job
  */
-- (void)doCancelCurrentJob
+- (void)doCancelCurrentItem
 {
     if (self.core.state == HBStateScanning)
     {
@@ -915,18 +916,18 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 /**
  * Cancels the current job and starts processing the next in queue.
  */
-- (void)cancelCurrentJobAndContinue
+- (void)cancelCurrentItemAndContinue
 {
-    [self doCancelCurrentJob];
+    [self doCancelCurrentItem];
 }
 
 /**
  * Cancels the current job and stops libhb from processing the remaining encodes.
  */
-- (void)cancelCurrentJobAndStop
+- (void)cancelCurrentItemAndStop
 {
     self.stop = YES;
-    [self doCancelCurrentJob];
+    [self doCancelCurrentItem];
 }
 
 /**
@@ -968,13 +969,13 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
  *
  *  @param job the job of the file to send
  */
-- (void)sendToExternalApp:(HBJob *)job
+- (void)sendToExternalApp:(HBQueueItem *)item
 {
     // This end of encode action is called as each encode rolls off of the queue
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBSendToAppEnabled"] == YES)
     {
 #ifdef __SANDBOX_ENABLED__
-        BOOL accessingSecurityScopedResource = [job.outputURL startAccessingSecurityScopedResource];
+        BOOL accessingSecurityScopedResource = [item.outputURL startAccessingSecurityScopedResource];
 #endif
 
         NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
@@ -982,7 +983,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
         if (app)
         {
-            if (![workspace openFile:job.completeOutputURL.path withApplication:app])
+            if (![workspace openFile:item.completeOutputURL.path withApplication:app])
             {
                 [HBUtilities writeToActivityLog:"Failed to send file to: %s", app];
             }
@@ -995,7 +996,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 #ifdef __SANDBOX_ENABLED__
         if (accessingSecurityScopedResource)
         {
-            [job.outputURL stopAccessingSecurityScopedResource];
+            [item.outputURL stopAccessingSecurityScopedResource];
         }
 #endif
     }
@@ -1004,7 +1005,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 /**
  *  Runs the alert for a single job
  */
-- (void)jobCompletedAlerts:(HBJob *)job result:(HBCoreResult)result
+- (void)itemCompletedAlerts:(HBQueueItem *)item result:(HBCoreResult)result
 {
     // Both the Notification and Sending to tagger can be done as encodes roll off the queue
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionNotification ||
@@ -1019,19 +1020,19 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         {
             title = NSLocalizedString(@"Put down that cocktail…", @"Queue notification alert message");
             description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ is done!", @"Queue done notification message"),
-                                     job.outputFileName];
+                                     item.outputFileName];
 
         }
         else
         {
             title = NSLocalizedString(@"Encode failed", @"Queue done notification failed message");
             description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ couldn't be completed.", @"Queue done notification message"),
-                           job.outputFileName];
+                           item.outputFileName];
         }
 
         [self showNotificationWithTitle:title
                             description:description
-                                    url:job.completeOutputURL
+                                    url:item.completeOutputURL
                                 playSound:playSound];
     }
 }
@@ -1095,10 +1096,10 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
  */
 - (IBAction)removeSelectedQueueItem:(id)sender
 {
-    if ([self.jobs beginTransaction] == HBDistributedArrayContentReload)
+    if ([self.items beginTransaction] == HBDistributedArrayContentReload)
     {
         // Do not execture the action if the array changed.
-        [self.jobs commit];
+        [self.items commit];
         return;
     }
 
@@ -1109,18 +1110,18 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         // if this is a currently encoding job, we need to be sure to alert the user,
         // to let them decide to cancel it first, then if they do, we can come back and
         // remove it
-        NSIndexSet *workingIndexes = [self.jobs indexesOfObjectsUsingBlock:^BOOL(HBJob *item) {
-            return item.state == HBJobStateWorking;
+        NSIndexSet *workingIndexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
+            return item.state == HBQueueItemStateWorking;
         }];
 
         if ([targetedRows containsIndexes:workingIndexes])
         {
             [targetedRows removeIndexes:workingIndexes];
-            NSArray<HBJob *> *workingJobs = [self.jobs filteredArrayUsingBlock:^BOOL(HBJob *item) {
-                return item.state == HBJobStateWorking;
+            NSArray<HBQueueItem *> *workingItems = [self.items filteredArrayUsingBlock:^BOOL(HBQueueItem *item) {
+                return item.state == HBQueueItemStateWorking;
             }];
 
-            if ([workingJobs containsObject:self.currentJob])
+            if ([workingItems containsObject:self.currentItem])
             {
                 NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", @"Queue Stop Alert -> stop and remove message")];
 
@@ -1141,13 +1142,13 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
                 [alert beginSheetModalForWindow:targetWindow completionHandler:^(NSModalResponse returnCode) {
                     if (returnCode == NSAlertSecondButtonReturn)
                     {
-                        [self.jobs beginTransaction];
+                        [self.items beginTransaction];
 
-                        NSInteger index = [self.jobs indexOfObject:self.currentJob];
-                        [self cancelCurrentJobAndContinue];
+                        NSInteger index = [self.items indexOfObject:self.currentItem];
+                        [self cancelCurrentItemAndContinue];
 
                         [self removeQueueItemAtIndex:index];
-                        [self.jobs commit];
+                        [self.items commit];
                     }
                 }];
             }
@@ -1156,7 +1157,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         // remove the non working items immediately
         [self removeQueueItemsAtIndexes:targetedRows];
     }
-    [self.jobs commit];
+    [self.items commit];
 }
 
 /**
@@ -1169,7 +1170,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     NSUInteger currentIndex = [targetedRows firstIndex];
     while (currentIndex != NSNotFound) {
-        NSURL *url = [[self.jobs objectAtIndex:currentIndex] completeOutputURL];
+        NSURL *url = [[self.items objectAtIndex:currentIndex] completeOutputURL];
         [urls addObject:url];
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
@@ -1184,7 +1185,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     NSUInteger currentIndex = [targetedRows firstIndex];
     while (currentIndex != NSNotFound) {
-        NSURL *url = [[self.jobs objectAtIndex:currentIndex] fileURL];
+        NSURL *url = [[self.items objectAtIndex:currentIndex] fileURL];
         [urls addObject:url];
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
@@ -1242,7 +1243,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     {
         [self cancelRip:sender];
     }
-    // If there are pending jobs in the queue, then this is a rip the queue
+    // If there are pending items in the queue, then this is a rip the queue
     else if (self.pendingItemsCount > 0)
     {
         // We check to see if we need to warn the user that the computer will go to sleep
@@ -1255,9 +1256,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 }
 
 /**
- * Displays an alert asking user if the want to cancel encoding of current job.
+ * Displays an alert asking user if the want to cancel encoding of current item.
  * Cancel: returns immediately after posting the alert. Later, when the user
- * acknowledges the alert, doCancelCurrentJob is called.
+ * acknowledges the alert, doCancelCurrentItem is called.
  */
 - (IBAction)cancelRip:(id)sender
 {
@@ -1280,7 +1281,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSAlertSecondButtonReturn)
         {
-            [self cancelCurrentJobAndContinue];
+            [self cancelCurrentItemAndContinue];
         }
         else if (returnCode == NSAlertThirdButtonReturn)
         {
@@ -1288,13 +1289,13 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         }
         else if (returnCode == NSAlertThirdButtonReturn + 1)
         {
-            [self cancelCurrentJobAndStop];
+            [self cancelCurrentItemAndStop];
         }
     }];
 }
 
 /**
- * Starts or cancels the processing of jobs depending on the current state
+ * Starts or cancels the processing of items depending on the current state
  */
 - (IBAction)toggleStartCancel:(id)sender
 {
@@ -1328,14 +1329,14 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 }
 
 /**
- *  Resets the job state to ready.
+ *  Resets the item state to ready.
  */
 - (IBAction)resetJobState:(id)sender
 {
-    if ([self.jobs beginTransaction] == HBDistributedArrayContentReload)
+    if ([self.items beginTransaction] == HBDistributedArrayContentReload)
     {
         // Do not execture the action if the array changed.
-        [self.jobs commit];
+        [self.items commit];
         return;
     }
 
@@ -1344,47 +1345,47 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     NSUInteger currentIndex = [targetedRows firstIndex];
     while (currentIndex != NSNotFound) {
-        HBJob *job = self.jobs[currentIndex];
+        HBQueueItem *item = self.items[currentIndex];
 
-        if (job.state == HBJobStateCanceled || job.state == HBJobStateCompleted || job.state == HBJobStateFailed)
+        if (item.state == HBQueueItemStateCanceled || item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateFailed)
         {
-            job.state = HBJobStateReady;
+            item.state = HBQueueItemStateReady;
             [updatedIndexes addIndex:currentIndex];
         }
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
 
     [self reloadQueueItemsAtIndexes:updatedIndexes];
-    [self.jobs commit];
+    [self.items commit];
 }
 
-- (void)editQueueItem:(HBJob *)job
+- (void)editQueueItem:(HBQueueItem *)item
 {
-    NSParameterAssert(job);
-    [self.jobs beginTransaction];
+    NSParameterAssert(item);
+    [self.items beginTransaction];
 
-    if (job != self.currentJob)
+    if (item != self.currentItem)
     {
-        job.state = HBJobStateWorking;
+        item.state = HBQueueItemStateWorking;
 
-        NSUInteger row = [self.jobs indexOfObject:job];
+        NSUInteger row = [self.items indexOfObject:item];
         [self reloadQueueItemAtIndex:row];
 
-        [self.controller openJob:[job copy] completionHandler:^(BOOL result) {
-            [self.jobs beginTransaction];
+        [self.controller openJob:[item.job copy] completionHandler:^(BOOL result) {
+            [self.items beginTransaction];
             if (result)
             {
                 // Now that source is loaded and settings applied, delete the queue item from the queue
-                NSInteger index = [self.jobs indexOfObject:job];
-                job.state = HBJobStateReady;
+                NSInteger index = [self.items indexOfObject:item];
+                item.state = HBQueueItemStateReady;
                 [self removeQueueItemAtIndex:index];
             }
             else
             {
-                job.state = HBJobStateFailed;
+                item.state = HBQueueItemStateFailed;
                 NSBeep();
             }
-            [self.jobs commit];
+            [self.items commit];
         }];
     }
     else
@@ -1392,7 +1393,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         NSBeep();
     }
 
-    [self.jobs commit];
+    [self.items commit];
 }
 
 /**
@@ -1400,21 +1401,21 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
  */
 - (IBAction)editSelectedQueueItem:(id)sender
 {
-    if ([self.jobs beginTransaction] == HBDistributedArrayContentReload)
+    if ([self.items beginTransaction] == HBDistributedArrayContentReload)
     {
         // Do not execture the action if the array changed.
-        [self.jobs commit];
+        [self.items commit];
         return;
     }
 
     NSInteger row = self.tableView.clickedRow;
     if (row != NSNotFound)
     {
-        // if this is a currently encoding job, we need to be sure to alert the user,
+        // if this is a currently encoding item, we need to be sure to alert the user,
         // to let them decide to cancel it first, then if they do, we can come back and
         // remove it
-        HBJob *job = self.jobs[row];
-        if (job == self.currentJob)
+        HBQueueItem *item = self.items[row];
+        if (item == self.currentItem)
         {
             NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Edit It?", @"Queue Edit Alert -> stop and edit message")];
 
@@ -1435,37 +1436,37 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
             [alert beginSheetModalForWindow:docWindow completionHandler:^(NSModalResponse returnCode) {
                 if (returnCode == NSAlertSecondButtonReturn)
                 {
-                    [self editQueueItem:job];
+                    [self editQueueItem:item];
                 }
             }];
         }
-        else if (job.state != HBJobStateWorking)
+        else if (item.state != HBQueueItemStateWorking)
         {
-            [self editQueueItem:job];
+            [self editQueueItem:item];
         }
     }
 
-    [self.jobs commit];
+    [self.items commit];
 }
 
 - (IBAction)clearAll:(id)sender
 {
-    [self.jobs beginTransaction];
-    NSIndexSet *indexes = [self.jobs indexesOfObjectsUsingBlock:^BOOL(HBJob *item) {
-        return (item.state != HBJobStateWorking);
+    [self.items beginTransaction];
+    NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
+        return (item.state != HBQueueItemStateWorking);
     }];
     [self removeQueueItemsAtIndexes:indexes];
-    [self.jobs commit];
+    [self.items commit];
 }
 
 - (IBAction)clearCompleted:(id)sender
 {
-    [self.jobs beginTransaction];
-    NSIndexSet *indexes = [self.jobs indexesOfObjectsUsingBlock:^BOOL(HBJob *item) {
-        return (item.state == HBJobStateCompleted);
+    [self.items beginTransaction];
+    NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
+        return (item.state == HBQueueItemStateCompleted);
     }];
     [self removeQueueItemsAtIndexes:indexes];
-    [self.jobs commit];
+    [self.items commit];
 }
 
 #pragma mark - NSTableView data source
@@ -1475,25 +1476,23 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
                   row:(NSInteger)row {
 
     HBQueueItemView *view = [tableView makeViewWithIdentifier:@"MainCell" owner:self];
-    HBJob *job = self.jobs[row];
+    HBQueueItem *item = self.items[row];
 
-    view.expanded = [self.expanded[job.uuid] boolValue];
     view.delegate = self;
-
-    view.job = job;
+    view.item = item;
 
     return view;
 }
 
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return self.jobs.count;
+    return self.items.count;
 }
 
 - (NSTableCellView *)dummyCell
 {
     if (!_dummyCell) {
-        _dummyCell = [self.tableView makeViewWithIdentifier:@"MainCell" owner: self];
+        _dummyCell = [self.tableView makeViewWithIdentifier:@"MainCellForSizing" owner: self];
         _dummyCellWidth = [NSLayoutConstraint constraintWithItem:_dummyCell
                                                        attribute:NSLayoutAttributeWidth
                                                        relatedBy:NSLayoutRelationEqual
@@ -1508,15 +1507,14 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
-    HBJob *job = self.jobs[row];
-    BOOL expanded = [self.expanded[job.uuid] boolValue];
+    HBQueueItem *item = self.items[row];
 
-    if (expanded)
+    if (item.expanded)
     {
         CGFloat width = tableView.frame.size.width;
         self.dummyCellWidth.constant = width;
-        self.dummyCell.textField.preferredMaxLayoutWidth = width;
-        self.dummyCell.textField.attributedStringValue = job.attributedDescription;
+        self.dummyCell.textField.preferredMaxLayoutWidth = width - 60;
+        self.dummyCell.textField.attributedStringValue = item.attributedDescription;
 
         CGFloat height = self.dummyCell.fittingSize.height;
         return height;
@@ -1531,11 +1529,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 {
     NSMutableIndexSet *rowsToExpand = [NSMutableIndexSet indexSet];
     [rowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
-        HBJob *job = self.jobs[index];
-        BOOL expanded = [self.expanded[job.uuid] boolValue];
+        HBQueueItem *item = self.items[index];
+        BOOL expanded = item.expanded;
         if (expanded != expand)
         {
-            self.expanded[job.uuid] = @(!expanded);
+            item.expanded = !expanded;
             [rowsToExpand addIndex:index];
         }
 
@@ -1554,22 +1552,21 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 #pragma mark NSQueueItemView delegate
 
-- (void)removeQueueItem:(nonnull HBJob *)job
+- (void)removeQueueItem:(nonnull HBQueueItem *)item
 {
-    NSUInteger index = [self.jobs indexOfObject:job];
+    NSUInteger index = [self.items indexOfObject:item];
     [self removeQueueItemAtIndex:index];
 }
 
-- (void)revealQueueItem:(nonnull HBJob *)job
+- (void)revealQueueItem:(nonnull HBQueueItem *)item
 {
-    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[job.completeOutputURL]];
+    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[item.completeOutputURL]];
 }
 
-- (void)toggleQueueItemHeight:(nonnull HBJob *)job
+- (void)toggleQueueItemHeight:(nonnull HBQueueItem *)item
 {
-    NSInteger row = [self.jobs indexOfObject:job];
-    BOOL expanded = [self.expanded[job.uuid] boolValue];
-    [self toggleRowsAtIndexes:[NSIndexSet indexSetWithIndex:row] expand:!expanded];
+    NSInteger row = [self.items indexOfObject:item];
+    [self toggleRowsAtIndexes:[NSIndexSet indexSetWithIndex:row] expand:!item.expanded];
 }
 
 #pragma mark NSTableView delegate
@@ -1593,9 +1590,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard;
 {
-    NSArray<HBJob *> *items = [self.jobs objectsAtIndexes:rowIndexes];
+    NSArray<HBQueueItem *> *items = [self.items objectsAtIndexes:rowIndexes];
     // Dragging is only allowed of the pending items.
-    if ([items[0] state] != HBJobStateReady)
+    if (items[0].state != HBQueueItemStateReady)
     {
         return NO;
     }
@@ -1620,9 +1617,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         return NSDragOperationNone;
     }
 
-    // We do not let the user drop a pending job before or *above*
-    // already finished or currently encoding jobs.
-    NSInteger encodingRow = [self.jobs indexOfObject:self.currentJob];
+    // We do not let the user drop a pending item before or *above*
+    // already finished or currently encoding items.
+    NSInteger encodingRow = [self.items indexOfObject:self.currentItem];
     if (encodingRow != NSNotFound && row <= encodingRow)
     {
         return NSDragOperationNone;

@@ -6,21 +6,21 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class HBJob;
+@class HBQueueItem;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol HBQueueItemViewDelegate
 
-- (void)revealQueueItem:(HBJob *)job;
-- (void)removeQueueItem:(HBJob *)job;
-- (void)toggleQueueItemHeight:(HBJob *)job;
+- (void)revealQueueItem:(HBQueueItem *)job;
+- (void)removeQueueItem:(HBQueueItem *)job;
+- (void)toggleQueueItemHeight:(HBQueueItem *)job;
 
 @end
 
 @interface HBQueueItemView : NSTableCellView
 
-@property (nonatomic, weak, nullable) HBJob *job;
+@property (nonatomic, weak, nullable) HBQueueItem *item;
 @property (nonatomic, weak, nullable) id <HBQueueItemViewDelegate> delegate;
 @property (nonatomic) BOOL expanded;
 

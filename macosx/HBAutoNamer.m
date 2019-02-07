@@ -6,6 +6,8 @@
 
 #import "HBAutoNamer.h"
 
+#import <AppKit/AppKit.h>
+
 #import "HBJob.h"
 #import "HBUtilities.h"
 

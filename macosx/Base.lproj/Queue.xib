@@ -74,8 +74,65 @@
                                             </textFieldCell>
                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                             <prototypeCellViews>
-                                                <tableCellView identifier="MainCell" id="WdL-72-BXn" customClass="HBQueueItemView">
+                                                <tableCellView identifier="MainCellForSizing" id="fwz-hO-Ryv" customClass="HBQueueItemView">
                                                     <rect key="frame" x="1" y="1" width="538" height="20"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                    <subviews>
+                                                        <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zFo-Hu-qOb">
+                                                            <rect key="frame" x="3" y="4" width="13" height="13"/>
+                                                            <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="above" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vwa-tA-Eef">
+                                                                <behavior key="behavior" pushIn="YES" changeBackground="YES" changeGray="YES" lightByContents="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                        </button>
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ytl-nJ-QF2">
+                                                            <rect key="frame" x="36" y="2" width="482" height="17"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="KX1-hQ-cAs"/>
+                                                            </constraints>
+                                                            <textFieldCell key="cell" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Table View Cell" id="anR-ZS-eOK">
+                                                                <font key="font" metaFont="system"/>
+                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                            </textFieldCell>
+                                                        </textField>
+                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iLH-IM-e3U">
+                                                            <rect key="frame" x="20" y="4" width="14" height="14"/>
+                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="Fd0-UE-Y9E"/>
+                                                        </imageView>
+                                                        <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3iF-mi-Ofb">
+                                                            <rect key="frame" x="519" y="3" width="16" height="16"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="16" id="YU8-rD-aOs"/>
+                                                                <constraint firstAttribute="height" constant="16" id="zUz-oi-p3D"/>
+                                                            </constraints>
+                                                            <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Delete" imagePosition="only" alignment="center" alternateImage="DeleteHighlightPressed" id="6ta-Ak-dc3">
+                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                <font key="font" metaFont="system"/>
+                                                            </buttonCell>
+                                                        </button>
+                                                    </subviews>
+                                                    <constraints>
+                                                        <constraint firstItem="3iF-mi-Ofb" firstAttribute="leading" secondItem="ytl-nJ-QF2" secondAttribute="trailing" constant="3" id="B8U-H8-LVU"/>
+                                                        <constraint firstItem="3iF-mi-Ofb" firstAttribute="top" secondItem="fwz-hO-Ryv" secondAttribute="top" constant="1" id="Fc7-bU-swQ"/>
+                                                        <constraint firstAttribute="bottom" secondItem="ytl-nJ-QF2" secondAttribute="bottom" constant="2" id="PoD-SD-75N"/>
+                                                        <constraint firstItem="zFo-Hu-qOb" firstAttribute="leading" secondItem="fwz-hO-Ryv" secondAttribute="leading" constant="3" id="Tlt-5u-MdO"/>
+                                                        <constraint firstItem="iLH-IM-e3U" firstAttribute="centerY" secondItem="zFo-Hu-qOb" secondAttribute="centerY" id="XMi-MB-91O"/>
+                                                        <constraint firstItem="zFo-Hu-qOb" firstAttribute="top" secondItem="fwz-hO-Ryv" secondAttribute="top" constant="3" id="ita-PD-WDw"/>
+                                                        <constraint firstAttribute="trailing" secondItem="3iF-mi-Ofb" secondAttribute="trailing" constant="3" id="pYB-wp-Ngx"/>
+                                                        <constraint firstItem="ytl-nJ-QF2" firstAttribute="leading" secondItem="iLH-IM-e3U" secondAttribute="trailing" constant="4" id="uLz-ZO-W6Z"/>
+                                                        <constraint firstItem="iLH-IM-e3U" firstAttribute="leading" secondItem="zFo-Hu-qOb" secondAttribute="trailing" constant="4" id="utq-Rq-M1K"/>
+                                                        <constraint firstItem="ytl-nJ-QF2" firstAttribute="top" secondItem="fwz-hO-Ryv" secondAttribute="top" constant="1" id="wzO-Uy-p6R"/>
+                                                    </constraints>
+                                                    <connections>
+                                                        <outlet property="expandButton" destination="zFo-Hu-qOb" id="DCW-dQ-Jt2"/>
+                                                        <outlet property="imageView" destination="iLH-IM-e3U" id="pnj-VU-8lk"/>
+                                                        <outlet property="removeButton" destination="3iF-mi-Ofb" id="okE-58-pJ0"/>
+                                                        <outlet property="textField" destination="ytl-nJ-QF2" id="ujr-58-CSG"/>
+                                                    </connections>
+                                                </tableCellView>
+                                                <tableCellView identifier="MainCell" id="WdL-72-BXn" customClass="HBQueueItemView">
+                                                    <rect key="frame" x="1" y="23" width="538" height="20"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
                                                         <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hDo-Zl-9lr">
@@ -85,12 +142,12 @@
                                                                 <font key="font" metaFont="system"/>
                                                             </buttonCell>
                                                         </button>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="93s-90-w6h">
+                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93s-90-w6h">
                                                             <rect key="frame" x="36" y="2" width="482" height="17"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="fPa-ff-vgB"/>
                                                             </constraints>
-                                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Table View Cell" id="F1i-sW-mz6">
+                                                            <textFieldCell key="cell" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Table View Cell" id="F1i-sW-mz6">
                                                                 <font key="font" metaFont="system"/>
                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -216,7 +273,7 @@
             <connections>
                 <outlet property="delegate" destination="-2" id="2579"/>
             </connections>
-            <point key="canvasLocation" x="-598" y="51"/>
+            <point key="canvasLocation" x="-773" y="15"/>
         </window>
         <menu id="2649" userLabel="ContextMenu">
             <items>
