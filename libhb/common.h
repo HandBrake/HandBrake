@@ -334,7 +334,7 @@ struct hb_subtitle_config_s
  *
  */
 
-void hb_common_global_init(void);
+void hb_common_global_init(int);
 
 int              hb_video_framerate_get_from_name(const char *name);
 const char*      hb_video_framerate_get_name(int framerate);

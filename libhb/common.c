@@ -270,14 +270,43 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "Theora",              "theora",     "Theora (libtheora)",      HB_VCODEC_THEORA,                            HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_THEORA, },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
-static int hb_video_encoder_is_enabled(int encoder)
+static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
 {
-#ifdef USE_QSV
-    if (encoder & HB_VCODEC_QSV_MASK)
+    // Hardware Encoders
+    if (!disable_hardware)
     {
-        return hb_qsv_video_encoder_is_enabled(encoder);
-    }
+#ifdef USE_QSV
+        if (encoder & HB_VCODEC_QSV_MASK)
+        {
+            return hb_qsv_video_encoder_is_enabled(encoder);
+        }
 #endif
+
+        switch (encoder){
+#ifdef USE_VCE
+            case HB_VCODEC_FFMPEG_VCE_H264:
+               return hb_vce_h264_available();
+            case HB_VCODEC_FFMPEG_VCE_H265:
+                return hb_vce_h265_available();
+#endif
+
+#ifdef USE_NVENC
+            case HB_VCODEC_FFMPEG_NVENC_H264:
+                return hb_nvenc_h264_available();
+            case HB_VCODEC_FFMPEG_NVENC_H265:
+                return hb_nvenc_h265_available();
+#endif
+
+#ifdef __APPLE__
+            case HB_VCODEC_FFMPEG_VT_H264:
+                return hb_vt_h264_is_available();
+            case HB_VCODEC_FFMPEG_VT_H265:
+                return hb_vt_h265_is_available();
+#endif
+        }
+    }
+
+    // Software Encoders
     switch (encoder)
     {
         // the following encoders are always enabled
@@ -287,27 +316,6 @@ static int hb_video_encoder_is_enabled(int encoder)
         case HB_VCODEC_FFMPEG_VP8:
         case HB_VCODEC_FFMPEG_VP9:
             return 1;
-
-#ifdef USE_VCE
-        case HB_VCODEC_FFMPEG_VCE_H264:
-			return hb_vce_h264_available();
-        case HB_VCODEC_FFMPEG_VCE_H265:
-            return hb_vce_h265_available();
-#endif
-
-#ifdef USE_NVENC
-        case HB_VCODEC_FFMPEG_NVENC_H264:
-            return hb_nvenc_h264_available();
-        case HB_VCODEC_FFMPEG_NVENC_H265:
-            return hb_nvenc_h265_available();
-#endif
-
-#ifdef __APPLE__
-        case HB_VCODEC_FFMPEG_VT_H264:
-            return hb_vt_h264_is_available();
-        case HB_VCODEC_FFMPEG_VT_H265:
-            return hb_vt_h265_is_available();
-#endif
 
 #ifdef USE_X265
         case HB_VCODEC_X265_8BIT:
@@ -458,7 +466,7 @@ static int hb_container_is_enabled(int format)
     }
 }
 
-void hb_common_global_init()
+void hb_common_global_init(int disable_hardware)
 {
     static int common_init_done = 0;
     if (common_init_done)
@@ -568,7 +576,7 @@ void hb_common_global_init()
         {
             // we still need to check
             hb_video_encoders[i].enabled =
-                hb_video_encoder_is_enabled(hb_video_encoders[i].item.codec);
+                hb_video_encoder_is_enabled(hb_video_encoders[i].item.codec, disable_hardware);
         }
         if (hb_video_encoders[i].enabled)
         {
@@ -590,7 +598,7 @@ void hb_common_global_init()
         if (!hb_video_encoders[i].enabled)
         {
             if ((hb_video_encoders[i].item.codec & HB_VCODEC_MASK) &&
-                (hb_video_encoder_is_enabled(hb_video_encoders[i].item.codec)))
+                (hb_video_encoder_is_enabled(hb_video_encoders[i].item.codec, disable_hardware)))
             {
                 // we have a specific fallback and it's enabled
                 continue;

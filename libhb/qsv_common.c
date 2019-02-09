@@ -147,6 +147,11 @@ static int qsv_implementation_is_hardware(mfxIMPL implementation)
 
 int hb_qsv_available()
 {
+    if (is_hardware_disabled())
+    {
+        return 0;
+    } 
+    
     return ((hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H264) ? HB_VCODEC_QSV_H264 : 0) |
             (hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H265) ? HB_VCODEC_QSV_H265 : 0) |
             (hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H265_10BIT) ? HB_VCODEC_QSV_H265_10BIT : 0));
