@@ -35,14 +35,14 @@
 
 - (void)HB_updateLabel
 {
-    if (_expanded)
+    if (_item.expanded)
     {
-        self.textField.attributedStringValue = self.item.attributedDescription;
+        self.textField.attributedStringValue = _item.attributedDescription;
         self.expandButton.state = NSOnState;
     }
     else
     {
-        self.textField.attributedStringValue = self.item.attributedTitleDescription;
+        self.textField.attributedStringValue = _item.attributedTitleDescription;
         self.expandButton.state = NSOffState;
     }
 }
@@ -50,7 +50,7 @@
 - (void)HB_updateState
 {
     NSImage *state = nil;
-    switch (self.item.state) {
+    switch (_item.state) {
         case HBQueueItemStateCompleted:
             state = [NSImage imageNamed:@"EncodeComplete"];
             break;
@@ -80,7 +80,7 @@
         darkAqua = [self.effectiveAppearance bestMatchFromAppearancesWithNames:@[NSAppearanceNameDarkAqua]] == NSAppearanceNameDarkAqua ? YES : NO;
     }
 
-    if (self.item.state == HBQueueItemStateCompleted)
+    if (_item.state == HBQueueItemStateCompleted)
     {
         [_removeButton setAction: @selector(revealQueueItem:)];
         if (self.backgroundStyle == NSBackgroundStyleEmphasized)
@@ -117,15 +117,13 @@
 - (void)expand
 {
     self.expandButton.state = NSOnState;
-    self.expanded = YES;
-    self.textField.attributedStringValue = self.item.attributedDescription;
+    self.textField.attributedStringValue = _item.attributedDescription;
 }
 
 - (void)collapse
 {
     self.expandButton.state = NSOffState;
-    self.expanded = NO;
-    self.textField.attributedStringValue = self.item.attributedTitleDescription;
+    self.textField.attributedStringValue = _item.attributedTitleDescription;
 }
 
 - (BOOL)isFlipped
@@ -140,17 +138,17 @@
 
 - (IBAction)revealQueueItem:(id)sender
 {
-    [self.delegate revealQueueItem:self.item];
+    [self.delegate revealQueueItem:_item];
 }
 
 - (IBAction)removeQueueItem:(id)sender
 {
-    [self.delegate removeQueueItem:self.item];
+    [self.delegate removeQueueItem:_item];
 }
 
 - (IBAction)toggleHeight:(id)sender
 {
-    [self.delegate toggleQueueItemHeight:self.item];
+    [self.delegate toggleQueueItemHeight:_item];
 }
 
 @end

@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak, nullable) HBQueueItem *item;
 @property (nonatomic, weak, nullable) id <HBQueueItemViewDelegate> delegate;
-@property (nonatomic) BOOL expanded;
 
 - (void)expand;
 - (void)collapse;
