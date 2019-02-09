@@ -8,6 +8,7 @@
  */
 
 #include "hbffmpeg.h"
+#include "hb.h"
 
 #ifdef USE_NVENC
 #include <ffnvcodec/nvEncodeAPI.h>
@@ -34,6 +35,11 @@ int hb_nvenc_h265_available()
 
 int hb_check_nvenc_available() 
 {
+    if (is_hardware_disabled())
+    {
+        return 0;
+    } 
+    
     #ifdef USE_NVENC
         uint32_t nvenc_ver;
         void *context;
