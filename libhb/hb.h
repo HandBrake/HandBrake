@@ -134,6 +134,7 @@ void          hb_close( hb_handle_t ** );
 /* hb_global_init()
    Performs process initialization. */
 int           hb_global_init(void);
+int           hb_global_init_no_hardware();
 /* hb_global_close()
    Performs final cleanup for the process. */
 void          hb_global_close(void);
@@ -141,6 +142,8 @@ void          hb_global_close(void);
 /* hb_get_instance_id()
    Return the unique instance id of an libhb instance created by hb_init. */
 int hb_get_instance_id( hb_handle_t * h );
+
+int is_hardware_disabled(void);
 
 #ifdef __cplusplus
 }

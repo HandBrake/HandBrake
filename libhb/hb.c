@@ -68,6 +68,7 @@ struct hb_handle_s
 
 hb_work_object_t * hb_objects = NULL;
 int hb_instance_counter = 0;
+int disable_hardware = 0;
 
 static void thread_func( void * );
 
@@ -411,8 +412,11 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     hb_log(" - logical processor count: %d", hb_get_cpu_count());
 
 #ifdef USE_QSV
-    /* Print QSV info here so that it's in all scan and encode logs */
-    hb_qsv_info_print();
+    if (!is_hardware_disabled())
+    {
+        /* Print QSV info here so that it's in all scan and encode logs */
+        hb_qsv_info_print();
+    }
 #endif
 
     hb_log( "hb_scan: path=%s, title_index=%d", path, title_index );
@@ -1635,6 +1639,12 @@ void hb_close( hb_handle_t ** _h )
     *_h = NULL;
 }
 
+int hb_global_init_no_hardware()
+{
+    disable_hardware = 1;
+    hb_global_init();
+}
+
 int hb_global_init()
 {
     int result = 0;
@@ -1647,13 +1657,16 @@ int hb_global_init()
     }
 
 #ifdef USE_QSV
-    result = hb_qsv_info_init();
-    if (result < 0)
+    if (!disable_hardware) 
     {
-        hb_error("hb_qsv_info_init failed!");
-        return -1;
+        result = hb_qsv_info_init();
+        if (result < 0)
+        {
+            hb_error("hb_qsv_info_init failed!");
+            return -1;
+        }
+        hb_param_configure_qsv();
     }
-    hb_param_configure_qsv();
 #endif
 
     /* libavcodec */
@@ -1689,11 +1702,14 @@ int hb_global_init()
     hb_register(&hb_encx265);
 #endif
 #ifdef USE_QSV
-    hb_register(&hb_encqsv);
+    if (!disable_hardware) 
+    {
+        hb_register(&hb_encqsv);
+    }
 #endif
 
     hb_x264_global_init();
-    hb_common_global_init();
+    hb_common_global_init(disable_hardware);
 
     /*
      * Initialise buffer pool
@@ -1906,4 +1922,8 @@ void hb_system_sleep_prevent(hb_handle_t *h)
 hb_interjob_t * hb_interjob_get( hb_handle_t * h )
 {
     return h->interjob;
+}
+
+int is_hardware_disabled(void){
+    return disable_hardware;
 }
