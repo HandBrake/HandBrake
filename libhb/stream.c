@@ -18,6 +18,7 @@
 
 #define min(a, b) a < b ? a : b
 #define HB_MAX_PROBE_SIZE (1*1024*1024)
+#define HB_MAX_PROBES     3
 
 /*
  * This table defines how ISO MPEG stream type codes map to HandBrake
@@ -47,7 +48,7 @@ typedef struct {
 
 static const stream2codec_t st2codec[256] = {
     st(0x00, U, 0,                0,                      NULL),
-    st(0x01, V, WORK_DECAVCODECV, AV_CODEC_ID_MPEG2VIDEO, "MPEG1"),
+    st(0x01, V, WORK_DECAVCODECV, AV_CODEC_ID_MPEG1VIDEO, "MPEG1"),
     st(0x02, V, WORK_DECAVCODECV, AV_CODEC_ID_MPEG2VIDEO, "MPEG2"),
     st(0x03, A, HB_ACODEC_FFMPEG, AV_CODEC_ID_MP2,        "MPEG1"),
     st(0x04, A, HB_ACODEC_FFMPEG, AV_CODEC_ID_MP2,        "MPEG2"),
@@ -154,6 +155,7 @@ typedef struct {
                             // hb_pes_stream_t
     hb_buffer_t  *probe_buf;
     int      probe_next_size;
+    int      probe_count;
 } hb_pes_stream_t;
 
 struct hb_stream_s
@@ -4006,24 +4008,106 @@ static int probe_dts_profile( hb_stream_t *stream, hb_pes_stream_t *pes )
     return 1;
 }
 
+static int
+do_deep_probe(hb_stream_t *stream, hb_pes_stream_t *pes)
+{
+    int       result = 0;
+    AVCodec * codec = avcodec_find_decoder(pes->codec_param);
+
+    if (codec == NULL)
+    {
+        return -1;
+    }
+
+    AVCodecContext       * context = avcodec_alloc_context3(codec);
+    AVCodecParserContext * parser  = av_parser_init(codec->id);
+
+    if (context == NULL)
+    {
+        return -1;
+    }
+    if (parser == NULL)
+    {
+        return -1;
+    }
+    if (hb_avcodec_open(context, codec, NULL, 0))
+    {
+        return -1;
+    }
+
+    int pos = 0;
+    while (pos < pes->probe_buf->size)
+    {
+        int       len, out_size;
+        uint8_t * out;
+
+        len = av_parser_parse2(parser, context, &out, &out_size,
+                               pes->probe_buf->data + pos,
+                               pes->probe_buf->size - pos, 0, 0, 0);
+        pos += len;
+        if (out_size == 0)
+        {
+            continue;
+        }
+        // Parser changes context->codec_id if it detects a different but
+        // related stream type.  E.g. AV_CODEC_ID_MPEG2VIDEO gets changed
+        // to AV_CODEC_ID_MPEG1VIDEO when the stream is MPEG-1
+        switch (context->codec_id)
+        {
+            case AV_CODEC_ID_MPEG1VIDEO:
+                pes->codec_param = context->codec_id;
+                pes->stream_type = 0x01;
+                pes->stream_kind = V;
+                result = 1;
+                break;
+
+            case AV_CODEC_ID_MPEG2VIDEO:
+                pes->codec_param = context->codec_id;
+                pes->stream_type = 0x02;
+                pes->stream_kind = V;
+                result = 1;
+                break;
+
+            default:
+                hb_error("do_deep_probe: unexpected codec_id (%d)",
+                         context->codec_id);
+                result = -1;
+                break;
+        }
+    }
+    av_parser_close(parser);
+    hb_avcodec_free_context(&context);
+
+    return result;
+}
+
 static int do_probe(hb_stream_t *stream, hb_pes_stream_t *pes, hb_buffer_t *buf)
 {
+    int result = 0;
+
     // Check upper limit of per stream data to probe
     if ( pes->probe_buf == NULL )
     {
         pes->probe_buf = hb_buffer_init( 0 );
+        pes->probe_next_size = 0;
+        pes->probe_count = 0;
     }
+
     if ( pes->probe_buf->size > HB_MAX_PROBE_SIZE )
     {
+        // Max size reached before finding anything.  Try again from
+        // another start PES
+        pes->probe_count++;
         hb_buffer_close( &pes->probe_buf );
+        if (pes->probe_count >= HB_MAX_PROBES)
+        {
+            return -1;
+        }
+        pes->probe_buf = hb_buffer_init( 0 );
         pes->probe_next_size = 0;
-        return 1;
     }
 
     // Add this stream buffer to probe buffer and perform probe
-    AVInputFormat *fmt = NULL;
-    int score = 0;
-    AVProbeData pd = {0,};
     int size = pes->probe_buf->size + buf->size;
 
     hb_buffer_realloc(pes->probe_buf, size + AVPROBE_PADDING_SIZE );
@@ -4041,8 +4125,25 @@ static int do_probe(hb_stream_t *stream, hb_pes_stream_t *pes, hb_buffer_t *buf)
     // by a factor of 2 before probing again.
     if ( pes->probe_buf->size < pes->probe_next_size )
         return 0;
-
     pes->probe_next_size = pes->probe_buf->size * 2;
+
+    if (pes->codec_param != AV_CODEC_ID_NONE)
+    {
+        // Already did a format probe, but some stream types require a
+        // deeper parser probe. E.g. MPEG-1/2, av_probe_input_format2
+        // resolves to AV_CODEC_ID_MPEG2VIDEO for both MPEG-1 and MPEG-2
+        result = do_deep_probe(stream, pes);
+        if (result)
+        {
+            hb_buffer_close(&pes->probe_buf);
+        }
+        return result;
+    }
+
+    AVInputFormat *fmt = NULL;
+    int score = 0;
+    AVProbeData pd = {0,};
+
     pd.buf = pes->probe_buf->data;
     pd.buf_size = pes->probe_buf->size;
     fmt = av_probe_input_format2( &pd, 1, &score );
@@ -4093,12 +4194,12 @@ static int do_probe(hb_stream_t *stream, hb_pes_stream_t *pes, hb_buffer_t *buf)
             pes->codec_param = codec->id;
             if ( codec->type == AVMEDIA_TYPE_VIDEO )
             {
-                pes->stream_kind = V;
                 switch ( codec->id )
                 {
                     case AV_CODEC_ID_MPEG1VIDEO:
                         pes->codec = WORK_DECAVCODECV;
                         pes->stream_type = 0x01;
+                        pes->stream_kind = V;
                         break;
 
                     case AV_CODEC_ID_MPEG2VIDEO:
@@ -4109,15 +4210,19 @@ static int do_probe(hb_stream_t *stream, hb_pes_stream_t *pes, hb_buffer_t *buf)
                     case AV_CODEC_ID_H264:
                         pes->codec = WORK_DECAVCODECV;
                         pes->stream_type = 0x1b;
+                        pes->stream_kind = V;
                         break;
 
                     case AV_CODEC_ID_VC1:
                         pes->codec = WORK_DECAVCODECV;
                         pes->stream_type = 0xea;
+                        pes->stream_kind = V;
                         break;
 
                     default:
                         pes->codec = WORK_DECAVCODECV;
+                        pes->stream_kind = V;
+                        break;
                 }
             }
             else if ( codec->type == AVMEDIA_TYPE_AUDIO )
@@ -4135,10 +4240,13 @@ static int do_probe(hb_stream_t *stream, hb_pes_stream_t *pes, hb_buffer_t *buf)
             strncpy(pes->codec_name, codec->name, 79);
             pes->codec_name[79] = 0;
         }
-        hb_buffer_close( &pes->probe_buf );
-        return 1;
+        if (pes->codec_param != AV_CODEC_ID_MPEG2VIDEO)
+        {
+            hb_buffer_close( &pes->probe_buf );
+            result = 1;
+        }
     }
-    return 0;
+    return result;
 }
 
 static void hb_ts_resolve_pid_types(hb_stream_t *stream)
@@ -4253,7 +4361,7 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
 
         if ( ts_stream_kind( stream, ii ) == U )
         {
-            probe = 3;
+            probe++;
         }
     }
 
@@ -4268,7 +4376,7 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
 
     while ( probe && ( buf = hb_ts_stream_decode( stream ) ) != NULL )
     {
-        int idx;
+        int idx, result;
         idx = index_of_id( stream, buf->s.id );
 
         if (idx < 0 || stream->pes.list[idx].stream_kind != U )
@@ -4279,24 +4387,19 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
 
         hb_pes_stream_t *pes = &stream->pes.list[idx];
 
-        if ( do_probe( stream, pes, buf ) )
+        result = do_probe(stream, pes, buf);
+        if (result < 0)
         {
-            if ( pes->stream_kind != U )
-            {
-                hb_log("    Probe: Found stream %s. stream id 0x%x-0x%x",
-                        pes->codec_name, pes->stream_id, pes->stream_id_ext);
-                probe = 0;
-            }
-            else
-            {
-                probe--;
-                if (!probe)
-                {
-                    hb_log("    Probe: Unsupported stream %s. stream id 0x%x-0x%x",
-                            pes->codec_name, pes->stream_id, pes->stream_id_ext);
-                    pes->stream_kind = N;
-                }
-            }
+            hb_log("    Probe: Unsupported stream %s. stream id 0x%x-0x%x",
+                    pes->codec_name, pes->stream_id, pes->stream_id_ext);
+            pes->stream_kind = N;
+            probe--;
+        }
+        else if (result && pes->stream_kind != U)
+        {
+            hb_log("    Probe: Found stream %s. stream id 0x%x-0x%x",
+                    pes->codec_name, pes->stream_id, pes->stream_id_ext);
+            probe--;
         }
         hb_buffer_close(&buf);
     }
@@ -4332,7 +4435,7 @@ static void hb_ps_resolve_stream_types(hb_stream_t *stream)
 
         if ( stream->pes.list[ii].stream_kind == U )
         {
-            probe = 3;
+            probe++;
         }
     }
 
@@ -4347,7 +4450,7 @@ static void hb_ps_resolve_stream_types(hb_stream_t *stream)
 
     while ( probe && ( buf = hb_ps_stream_decode( stream ) ) != NULL )
     {
-        int idx;
+        int idx, result;
         idx = index_of_id( stream, buf->s.id );
 
         if (idx < 0 || stream->pes.list[idx].stream_kind != U )
@@ -4358,24 +4461,19 @@ static void hb_ps_resolve_stream_types(hb_stream_t *stream)
 
         hb_pes_stream_t *pes = &stream->pes.list[idx];
 
-        if ( do_probe( stream, pes, buf ) )
+        result = do_probe(stream, pes, buf);
+        if (result < 0)
         {
-            if ( pes->stream_kind != U )
-            {
-                hb_log("    Probe: Found stream %s. stream id 0x%x-0x%x",
-                        pes->codec_name, pes->stream_id, pes->stream_id_ext);
-                probe = 0;
-            }
-            else
-            {
-                probe--;
-                if (!probe)
-                {
-                    hb_log("    Probe: Unsupported stream %s. stream id 0x%x-0x%x",
-                            pes->codec_name, pes->stream_id, pes->stream_id_ext);
-                    pes->stream_kind = N;
-                }
-            }
+            hb_log("    Probe: Unsupported stream %s. stream id 0x%x-0x%x",
+                    pes->codec_name, pes->stream_id, pes->stream_id_ext);
+            pes->stream_kind = N;
+            probe--;
+        }
+        else if (result && pes->stream_kind != U)
+        {
+            hb_log("    Probe: Found stream %s. stream id 0x%x-0x%x",
+                    pes->codec_name, pes->stream_id, pes->stream_id_ext);
+            probe--;
         }
         hb_buffer_close(&buf);
     }
