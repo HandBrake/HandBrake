@@ -928,6 +928,24 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
             goto fail;
     }
 
+    switch( ifo->vtsi_mat->vts_video_attr.mpeg_version )
+    {
+        case 0:
+            title->video_codec       = WORK_DECAVCODECV;
+            title->video_codec_param = AV_CODEC_ID_MPEG1VIDEO;
+            break;
+        case 1:
+            title->video_codec       = WORK_DECAVCODECV;
+            title->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
+            break;
+        default:
+            hb_log("scan: unknown/reserved MPEG version %d",
+                    ifo->vtsi_mat->vts_video_attr.mpeg_version);
+            title->video_codec       = WORK_DECAVCODECV;
+            title->video_codec_param = AV_CODEC_ID_MPEG2VIDEO;
+            break;
+    }
+
     hb_log("scan: aspect = %d:%d",
            title->container_dar.num, title->container_dar.den);
 
