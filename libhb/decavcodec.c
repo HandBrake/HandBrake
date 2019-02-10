@@ -1669,10 +1669,6 @@ static int decodePacket( hb_work_object_t * w )
     // first frame because of M$ VC1 braindamage).
     if ( !pv->video_codec_opened )
     {
-        pv->context->workaround_bugs = FF_BUG_AUTODETECT;
-        pv->context->err_recognition = AV_EF_CRCCHECK;
-        pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
-
         if (setup_extradata(pv))
         {
             // we didn't find the headers needed to set up extradata.
@@ -1680,6 +1676,14 @@ static int decodePacket( hb_work_object_t * w )
             // and hope we eventually get the info we need.
             return HB_WORK_OK;
         }
+
+        hb_avcodec_free_context(&pv->context);
+        pv->context = avcodec_alloc_context3(pv->codec);
+
+        pv->context->workaround_bugs   = FF_BUG_AUTODETECT;
+        pv->context->err_recognition   = AV_EF_CRCCHECK;
+        pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
+
 
 #ifdef USE_QSV
         if (pv->qsv.decode &&
@@ -1848,6 +1852,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 
         if (pv->parser)
         {
+            int codec_id = pv->context->codec_id;
             len = av_parser_parse2(pv->parser, pv->context, &pout, &pout_len,
                                    in->data + pos, in->size - pos,
                                    pts, dts, 0 );
@@ -1855,6 +1860,14 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             parser_dts = pv->parser->dts;
             pts = AV_NOPTS_VALUE;
             dts = AV_NOPTS_VALUE;
+
+            if (codec_id != pv->context->codec_id)
+            {
+                // The parser has decided to change the decoder underneath
+                // us.  Update our context to match.  This can happen
+                // for MPEG-1/2 video, perhaps others
+                pv->codec = avcodec_find_decoder(pv->context->codec_id);
+            }
         }
         else
         {
