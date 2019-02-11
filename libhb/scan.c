@@ -1298,21 +1298,20 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
                 break;
         }
     }
-
     if (codec_name != NULL && profile_name != NULL)
     {
-        sprintf(audio->config.lang.description, "%s (%s %s)",
-                audio->config.lang.simple, codec_name, profile_name);
+        snprintf(audio->config.lang.description, sizeof(audio->config.lang.description),
+                "%s (%s %s)", audio->config.lang.simple, codec_name, profile_name);
     }
     else if (codec_name != NULL)
     {
-        sprintf(audio->config.lang.description, "%s (%s)",
-                audio->config.lang.simple, codec_name);
+        snprintf(audio->config.lang.description, sizeof(audio->config.lang.description),
+                "%s (%s)", audio->config.lang.simple, codec_name);
     }
     else if (profile_name != NULL)
     {
-        sprintf(audio->config.lang.description, "%s (%s)",
-                audio->config.lang.simple, profile_name);
+        snprintf(audio->config.lang.description, sizeof(audio->config.lang.description),
+                "%s (%s)", audio->config.lang.simple, profile_name);
     }
 
     if (audio->config.lang.attributes & HB_AUDIO_ATTR_VISUALLY_IMPAIRED)
