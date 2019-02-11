@@ -457,7 +457,8 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     title->type = HB_DVD_TYPE;
     if (dvdnav_get_title_string(d->dvdnav, &name) == DVDNAV_STATUS_OK)
     {
-        strncpy( title->name, name, sizeof( title->name ) );
+        strncpy(title->name, name, sizeof(title->name) - 1);
+        title->name[sizeof(title->name) - 1] = 0;
     }
 
     if (strlen(title->name) == 0)
