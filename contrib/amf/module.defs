@@ -1,10 +1,10 @@
 $(eval $(call import.MODULE.defs,AMF,amf))
 $(eval $(call import.CONTRIB.defs,AMF))
 
-AMF.FETCH.url      = https://download.handbrake.fr/contrib/AMF-1.4.7.0.tar.gz
-AMF.FETCH.url     += https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/v1.4.7.0.tar.gz
-AMF.FETCH.sha256   = ea91c8627fb16eaaf66c9c12b88a9fb8969879c244f782e807d2fb78f8f323bd
-AMF.FETCH.basename = AMF-1.4.7.0.tar.gz
+AMF.FETCH.url      = https://download.handbrake.fr/contrib/AMF-1.4.9.tar.gz
+AMF.FETCH.url     += https://github.com/GPUOpen-LibrariesAndSDKs/AMF/archive/v1.4.9.tar.gz
+AMF.FETCH.sha256   = d10f75612da5bcbc26325adecc5d398dcddf216c0dae3406d9a29b9d0b44b112
+AMF.FETCH.basename = AMF-1.4.9.tar.gz
 
 AMF.CONFIGURE = $(TOUCH.exe) $@
 AMF.BUILD     = $(TOUCH.exe) $@
