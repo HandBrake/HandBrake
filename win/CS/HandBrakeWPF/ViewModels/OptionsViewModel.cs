@@ -19,6 +19,7 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.Interop.Interop;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
 
@@ -1134,6 +1135,8 @@ namespace HandBrakeWPF.ViewModels
                 return new BindingList<VideoScaler>(EnumHelper<VideoScaler>.GetEnumList().ToList());
             }
         }
+
+        public bool IsHardwareFallbackMode => HandBrakeUtils.IsUsingNoHardwareFallback();
 
         #endregion
 

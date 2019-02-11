@@ -3337,6 +3337,17 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hardware encoding support has been automatically disabled on your system due to an issue detected during hardware detection. Please make sure you are running up-to-date drivers for all graphics adaptors in this system.
+        ///
+        ///This will not impact any of the software encoders..
+        /// </summary>
+        public static string OptionsView_HardwareDetectFailed {
+            get {
+                return ResourceManager.GetString("OptionsView_HardwareDetectFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your system supports the 64bit version of HandBrake! This offers performance and stability improvements over this 32bit version.
         ///    Please check the website for release notes..
         /// </summary>
@@ -5228,21 +5239,6 @@ namespace HandBrakeWPF.Properties {
         public static string Video_PlaceboQuality {
             get {
                 return ResourceManager.GetString("Video_PlaceboQuality", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to QuickSync hardware not detected or enabled! 
-        ///
-        ///In order to use the QuickSync encoder, you must:
-        ///
-        ///- Have a Intel CPU with HD Graphics and QuickSync support. 4th Generation Haswell or newer parts are recommended for best quality.
-        ///- Have the HD Graphics enabled.
-        ///- On older versions of windows before 8, a monitor connected to the HD Graphics or GPU Virtualisation software installed is also required..
-        /// </summary>
-        public static string Video_QuickSyncNotAvailable {
-            get {
-                return ResourceManager.GetString("Video_QuickSyncNotAvailable", resourceCulture);
             }
         }
         
