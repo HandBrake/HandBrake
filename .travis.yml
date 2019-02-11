@@ -50,7 +50,7 @@ before_install:
     sudo apt-get install -qq intltool libappindicator-dev libdbus-glib-1-dev \
       libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       libgtk-3-dev libgudev-1.0-dev libnotify-dev libwebkitgtk-3.0-dev
-    sudo apt-get remove mingw-w64* -y
+    sudo apt-get remove mingw-w64* nasm -y
     sudo apt-get autoremove -y
   fi
 - |
@@ -122,7 +122,8 @@ script:
 - |
   if [[ "$CROSS" == "x86_64-w64-mingw32" ]]
   then
-    whereis x86_64-w64-mingw32-gcc
+    whereis nasm
+    nasm -v
     cd ${TRAVIS_BUILD_DIR}
     ./configure --cross=$CROSS --enable-qsv --enable-vce --enable-nvenc --launch --launch-jobs=2
   fi
