@@ -17,7 +17,7 @@
 "G9p-Cg-wyC.title" = "1";
 
 /* Class = "NSButtonCell"; title = "Export Chapters…"; ObjectID = "h0O-zg-OF9"; */
-"h0O-zg-OF9.title" = "Kapitel exportieren…";
+"h0O-zg-OF9.title" = "Kapitel exportieren …";
 
 /* Class = "NSTableView"; ibExternalAccessibilityDescription = "Chapter titles"; ObjectID = "InF-gR-Lia"; */
 "InF-gR-Lia.ibExternalAccessibilityDescription" = "Kapiteltitel";
@@ -35,7 +35,7 @@
 "pAo-XM-bvP.title" = "Text Cell";
 
 /* Class = "NSButtonCell"; title = "Import Chapters…"; ObjectID = "PM3-Ue-0kW"; */
-"PM3-Ue-0kW.title" = "Kapitel importieren…";
+"PM3-Ue-0kW.title" = "Kapitel importieren …";
 
 /* Class = "NSTableColumn"; headerCell.title = "Duration"; ObjectID = "QVB-Cw-DJD"; */
 "QVB-Cw-DJD.headerCell.title" = "Dauer";

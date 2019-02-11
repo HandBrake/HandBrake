@@ -8,7 +8,7 @@
 "75B-xq-Qbe.title" = "Bildgröße:";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
-"a0j-nw-n23.title" = "Auswahlverhalten…";
+"a0j-nw-n23.title" = "Auswahlverhalten …";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Selection Behavior determines the track(s) and settings used when the preset is selected."; ObjectID = "aez-2b-JXx"; */
 "aez-2b-JXx.ibShadowedToolTip" = "Das Auswahlverhalten bestimmt die Spur(en) und Einstellungen die verwendet werden, wenn die Voreinstellung ausgewählt wird.";
@@ -47,7 +47,7 @@
 "jhj-Et-ncF.title" = "Voreinstellungsname:";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "LPX-Rc-KLa"; */
-"LPX-Rc-KLa.title" = "Verhalten wählen…";
+"LPX-Rc-KLa.title" = "Auswahlverhalten …";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "PictureHeight"; ObjectID = "Mga-dS-8BF"; */
 "Mga-dS-8BF.ibExternalAccessibilityDescription" = "Bildhöhe";
@@ -68,7 +68,7 @@
 "qsA-gt-zdK.title" = "OtherViews";
 
 /* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "Sf8-HP-mhE"; */
-"Sf8-HP-mhE.title" = "Neue Kategorie…";
+"Sf8-HP-mhE.title" = "Neue Kategorie …";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tQ1-PN-kvh"; */
 "tQ1-PN-kvh.title" = "OtherViews";

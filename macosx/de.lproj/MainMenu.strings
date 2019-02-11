@@ -2,7 +2,7 @@
 "0te-ai-fgD.title" = "Dienste";
 
 /* Class = "NSMenuItem"; title = "Rename Preset…"; ObjectID = "1GQ-n3-jfY"; */
-"1GQ-n3-jfY.title" = "Voreinstellung umbenennen…";
+"1GQ-n3-jfY.title" = "Voreinstellung umbenennen …";
 
 /* Class = "NSMenuItem"; title = "Video"; ObjectID = "6rE-SM-AGi"; */
 "6rE-SM-AGi.title" = "Video";
@@ -44,7 +44,7 @@
 "1192.title" = "Fenster";
 
 /* Class = "NSMenuItem"; title = "Open Source…"; ObjectID = "1198"; */
-"1198.title" = "Quelle öffnen…";
+"1198.title" = "Quelle öffnen …";
 
 /* Class = "NSMenuItem"; title = "File"; ObjectID = "1200"; */
 "1200.title" = "Ablage";
@@ -65,7 +65,7 @@
 "1433.title" = "Online-Community-Forum";
 
 /* Class = "NSMenuItem"; title = "Preferences…"; ObjectID = "1445"; */
-"1445.title" = "Einstellungen…";
+"1445.title" = "Einstellungen …";
 
 /* Class = "NSMenuItem"; title = "Edit"; ObjectID = "1795"; */
 "1795.title" = "Bearbeiten";
@@ -95,7 +95,7 @@
 "1804.title" = "Auswahl anzeigen";
 
 /* Class = "NSMenuItem"; title = "Find…"; ObjectID = "1805"; */
-"1805.title" = "Suchen…";
+"1805.title" = "Suchen …";
 
 /* Class = "NSMenuItem"; title = "Find Next"; ObjectID = "1806"; */
 "1806.title" = "Weitersuchen (vorwärts)";
@@ -113,7 +113,7 @@
 "1811.title" = "Rechtschreibung und Grammatik";
 
 /* Class = "NSMenuItem"; title = "Spelling…"; ObjectID = "1812"; */
-"1812.title" = "Rechtschreibung…";
+"1812.title" = "Rechtschreibung …";
 
 /* Class = "NSMenuItem"; title = "Check Spelling"; ObjectID = "1813"; */
 "1813.title" = "Rechtschreibung prüfen";
@@ -158,7 +158,7 @@
 "1950.title" = "Offizielle Voreinstellungen zurücksetzen";
 
 /* Class = "NSMenuItem"; title = "New Preset…"; ObjectID = "1955"; */
-"1955.title" = "Neue Voreinstellung sichern…";
+"1955.title" = "Neue Voreinstellung sichern …";
 
 /* Class = "NSMenuItem"; title = "Online Documentation"; ObjectID = "1985"; */
 "1985.title" = "Online-Dokumentation";
@@ -188,22 +188,22 @@
 "2508.title" = "Schließen";
 
 /* Class = "NSMenuItem"; title = "Check for Updates…"; ObjectID = "4964"; */
-"4964.title" = "Auf Updates prüfen…";
+"4964.title" = "Auf Updates prüfen …";
 
 /* Class = "NSMenuItem"; title = "Preview Window"; ObjectID = "5157"; */
 "5157.title" = "Vorschau";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "5188"; */
-"5188.title" = "Exportieren…";
+"5188.title" = "Exportieren …";
 
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "5192"; */
-"5192.title" = "Importieren…";
+"5192.title" = "Importieren …";
 
 /* Class = "NSMenuItem"; title = "Show All"; ObjectID = "5280"; */
 "5280.title" = "Alle einblenden";
 
 /* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "5897"; */
-"5897.title" = "Titel zur Warteschlange hinzufügen…";
+"5897.title" = "Titel zur Warteschlange hinzufügen …";
 
 /* Class = "NSMenuItem"; title = "Audio"; ObjectID = "brQ-mu-8JM"; */
 "brQ-mu-8JM.title" = "Audio";
@@ -230,7 +230,7 @@
 "Jef-U4-eQT.title" = "Bild";
 
 /* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "KKV-n0-Fmr"; */
-"KKV-n0-Fmr.title" = "Werkzeugleiste anpassen…";
+"KKV-n0-Fmr.title" = "Werkzeugleiste anpassen …";
 
 /* Class = "NSMenuItem"; title = "Chapters"; ObjectID = "lCU-PH-gal"; */
 "lCU-PH-gal.title" = "Kapitel";

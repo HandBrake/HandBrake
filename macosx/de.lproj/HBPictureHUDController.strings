@@ -11,7 +11,7 @@
 "KrC-nR-rYk.title" = "OtherViews";
 
 /* Class = "NSTextFieldCell"; title = "sec"; ObjectID = "ksF-Ma-hB1"; */
-"ksF-Ma-hB1.title" = "Sek";
+"ksF-Ma-hB1.title" = "Sek.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Show picture settings."; ObjectID = "mV7-hU-tMt"; */
 "mV7-hU-tMt.ibShadowedToolTip" = "Zeige die Bildeinstellungen";
