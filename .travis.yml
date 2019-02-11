@@ -120,6 +120,7 @@ script:
 - |
   if [[ "$CROSS" == "x86_64-w64-mingw32" ]]
   then
+    echo $PATH
     cd ${TRAVIS_BUILD_DIR}
     ./configure --cross=$CROSS --enable-qsv --enable-vce --enable-nvenc --launch --launch-jobs=2
   fi
