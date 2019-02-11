@@ -485,7 +485,7 @@ ghb_settings_to_ui(signal_user_data_t *ud, GhbValue *dict)
 }
 
 char*
-preset_get_fullname(hb_preset_index_t *path, const char * sep)
+preset_get_fullname(hb_preset_index_t *path, const char * sep, gboolean escape)
 {
     int                ii;
     GString           *gstr;
@@ -507,7 +507,16 @@ preset_get_fullname(hb_preset_index_t *path, const char * sep)
         if (name != NULL)
         {
             g_string_append(gstr, sep);
-            g_string_append(gstr, name);
+            if (escape)
+            {
+                char * esc = g_markup_escape_text(name, -1);
+                g_string_append(gstr, esc);
+                g_free(esc);
+            }
+            else
+            {
+                g_string_append(gstr, name);
+            }
         }
     }
     free(tmp);
@@ -527,7 +536,7 @@ set_preset_menu_button_label(signal_user_data_t *ud, hb_preset_index_t *path)
 
     dict = hb_preset_get(path);
     type = ghb_dict_get_int(dict, "Type");
-    fullname = preset_get_fullname(path, " <span alpha=\"70%\">></span> ");
+    fullname = preset_get_fullname(path, " <span alpha=\"70%\">></span> ", TRUE);
     label = GTK_LABEL(GHB_WIDGET(ud->builder, "presets_menu_button_label"));
     text = g_strdup_printf("%s%s", type == HB_PRESET_TYPE_CUSTOM ?
                                    "Custom" : "Official", fullname);
@@ -2146,7 +2155,7 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
         ghb_dict_set_string(ud->settings, "PresetDescription", desc);
         free(desc);
 
-        char * full = preset_get_fullname(path, "/");
+        char * full = preset_get_fullname(path, "/", FALSE);
         ghb_dict_set_string(ud->settings, "PresetFullName", full);
         ghb_dict_set_string(ud->settings, "PresetName", name);
         free(full);
@@ -2786,7 +2795,7 @@ ghb_get_current_preset(signal_user_data_t *ud)
             char *fullname;
 
             preset   = hb_value_dup(preset);
-            fullname = preset_get_fullname(path, "/");
+            fullname = preset_get_fullname(path, "/", FALSE);
             ghb_dict_set_string(preset, "PresetFullName", fullname);
             free(fullname);
         }
@@ -2808,7 +2817,7 @@ presets_list_selection_changed_cb(GtkTreeSelection *selection, signal_user_data_
             !ghb_dict_get_bool(ud->settings, "preset_reload"))
         {
             ghb_preset_to_settings(ud->settings, dict);
-            char *fullname = preset_get_fullname(path, "/");
+            char *fullname = preset_get_fullname(path, "/", FALSE);
             ghb_dict_set_string(ud->settings, "PresetFullName", fullname);
             free(fullname);
             ghb_set_current_title_settings(ud);
