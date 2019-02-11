@@ -1,0 +1,19 @@
+Only in libvpx-1.8.0: .DS_Store
+Only in libvpx-1.8.0/build: .DS_Store
+diff -ur libvpx-1.8.0.orig/libs.mk libvpx-1.8.0/libs.mk
+--- libvpx-1.8.0.orig/libs.mk	2019-02-04 12:02:33.000000000 -0500
++++ libvpx-1.8.0/libs.mk	2019-02-28 10:43:03.000000000 -0500
+@@ -321,11 +321,10 @@
+ 	$(qexec)echo 'Version: $(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_PATCH)' >> $@
+ 	$(qexec)echo 'Requires:' >> $@
+ 	$(qexec)echo 'Conflicts:' >> $@
+-	$(qexec)echo 'Libs: -L$${libdir} -lvpx -lm' >> $@
+ ifeq ($(HAVE_PTHREAD_H),yes)
+-	$(qexec)echo 'Libs.private: -lm -lpthread' >> $@
++	$(qexec)echo 'Libs: -L$${libdir} -lvpx -lm -lpthread' >> $@
+ else
+-	$(qexec)echo 'Libs.private: -lm' >> $@
++	$(qexec)echo 'Libs: -L$${libdir} -lvpx -lm' >> $@
+ endif
+ 	$(qexec)echo 'Cflags: -I$${includedir}' >> $@
+ INSTALL-LIBS-yes += $(LIBSUBDIR)/pkgconfig/vpx.pc
