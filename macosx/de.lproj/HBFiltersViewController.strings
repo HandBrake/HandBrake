@@ -84,7 +84,7 @@ Bob versucht besser Bewegungen zu erhalten, mit kleinen Einbußen in der Auflös
 "Da7-pY-5vu.title" = "Eigene:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates."; ObjectID = "DER-tS-cLx"; */
-"DER-tS-cLx.ibShadowedToolTip" = "Detelecine entfernt Kammartefakte, Resultat der optischen Abtastung, ein Prozess um Filmbilder in Fernsehbilder umzuwandeln.";
+"DER-tS-cLx.ibShadowedToolTip" = "Detelecine entfernt Kammartefakte, ein Resultat der optischen Abtastung (Telecine), ein Prozess um Bildraten optischer Filme in Fernsehbildraten umzuwandeln.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "dsH-ZQ-dBs"; */
 "dsH-ZQ-dBs.ibShadowedToolTip" = "Dreht das Bild im Uhrzeigersinn in 90°-Schritten.";

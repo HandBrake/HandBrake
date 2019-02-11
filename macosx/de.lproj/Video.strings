@@ -8,7 +8,7 @@
 "6Dd-IP-Pwt.title" = "Konstante Bildfrequenz";
 
 /* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "7bP-tR-sAX"; */
-"7bP-tR-sAX.title" = "Enkoderoptionen:";
+"7bP-tR-sAX.title" = "Enkodereinstellungen:";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "7CG-ga-88H"; */
 "7CG-ga-88H.title" = "OtherViews";
@@ -77,7 +77,7 @@ x264 ist verlustfrei bei RF 0.";
 "Jj0-Qw-HF8.title" = "OtherViews";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "mL3-yC-hUj"; */
-"mL3-yC-hUj.ibShadowedToolTip" = "Zusätzliche Videoenkodieroptionen. Für erfahrene Anwender.
+"mL3-yC-hUj.ibShadowedToolTip" = "Zusätzliche Videoenkodiereinstellungen. Für erfahrene Anwender.
 
 Syntax: option-1=foo:opt2=bar";
 
@@ -88,7 +88,7 @@ Syntax: option-1=foo:opt2=bar";
 "nPA-nO-Eik.title" = "Enkodierung in 2 Durchgängen";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "oJk-ur-wgc"; */
-"oJk-ur-wgc.ibShadowedToolTip" = "Zusätzliche Videoenkodieroptionen. Für erfahrene Anwender.
+"oJk-ur-wgc.ibShadowedToolTip" = "Zusätzliche Videoenkodiereinstellungen. Für erfahrene Anwender.
 
 Syntax: option-1=foo:opt2=bar,baz";
 
@@ -120,10 +120,10 @@ Syntax: option-1=foo:opt2=bar,baz";
 "vSc-VB-NEv.title" = "Ersten Durchgang beschleunigen";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Displays all internal video encoder options."; ObjectID = "wk1-2U-z4i"; */
-"wk1-2U-z4i.ibShadowedToolTip" = "Zeigt alle internen Videoenkodieroptionen.";
+"wk1-2U-z4i.ibShadowedToolTip" = "Zeigt alle internen Videoenkodiereinstellungen.";
 
 /* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "XIe-8Z-tIF"; */
-"XIe-8Z-tIF.title" = "Enkoderoptionen:";
+"XIe-8Z-tIF.title" = "Enkodereinstellungen:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder. Determines video type and settings used during encoding."; ObjectID = "xwK-Yu-a1e"; */
 "xwK-Yu-a1e.ibShadowedToolTip" = "Videoenkoder. Legt den Videotyp und die Einstellungen während des Enkodierens fest.";
@@ -138,7 +138,7 @@ Syntax: option-1=foo:opt2=bar,baz";
 "zSD-4Y-1cI.title" = "Abstimmung:";
 
 /* Class = "NSTextFieldCell"; title = "Additional Options:"; ObjectID = "ZSm-03-g0B"; */
-"ZSm-03-g0B.title" = "Zusätzliche Optionen:";
+"ZSm-03-g0B.title" = "Zusätzliche Einstellungen:";
 
 /* Class = "NSButtonCell"; title = "Variable Framerate"; ObjectID = "zZo-75-1WG"; */
 "zZo-75-1WG.title" = "Variable Bildfrequenz";

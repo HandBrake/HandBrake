@@ -8,10 +8,10 @@
 "--:--" = "--:--";
 
 /* Preview -> size info label */
-"(%.0f%% actual size)" = "(%.0f%% aktuelle Größe)";
+"(%.0f%% actual size)" = "(%.0f%% effektive Größe)";
 
 /* Preview -> size info label */
-"(Actual size)" = "(Aktuelle Größe)";
+"(Actual size)" = "(Effektive Größe)";
 
 /* Language selection */
 "(Any)" = "(Beliebig)";
@@ -30,7 +30,7 @@
 "A file already exists at the selected destination." = "Am ausgewählten Ziel existiert schon eine Datei.";
 
 /* Picture HUD -> scale button */
-"Actual Scale" = "Aktuelle Skalierung";
+"Actual Scale" = "Ursprüngliche Skalierung";
 
 /* Queue undo action name */
 "Add Job To Queue" = "Aufgabe zu Warteschlange hinzufügen";
@@ -219,7 +219,7 @@
 
 /* Queue Done Alert -> shut down second button
    Queue Done Alert -> sleep second button */
-"Preferences…" = "Einstellungen…";
+"Preferences…" = "Einstellungen …";
 
 /* Preview -> progress formatter title */
 "preview" = "Vorschau";
@@ -238,7 +238,7 @@
 
 /* Queue done alert message
    Queue notification alert message */
-"Put down that cocktail…" = "Stellen Sie den Cocktail ab…";
+"Put down that cocktail…" = "Stellen Sie den Cocktail ab …";
 
 /* Quit Alert -> first button */
 "Quit" = "Beenden";

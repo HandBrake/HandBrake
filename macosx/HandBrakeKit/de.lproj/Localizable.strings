@@ -39,7 +39,7 @@
 ", Web Optimized" = ", Web-optimiert";
 
 /* HBStateFormatter -> work pass type format */
-"(subtitle scan)" = "(Untertitelscan)";
+"(subtitle scan)" = "(Untertitelüberprüfung)";
 
 /* Title short description -> video format */
 "%.6g FPS" = "%.6g BpS";
@@ -211,7 +211,7 @@
 "MP4 File" = "MP4-Datei";
 
 /* HBStateFormatter -> pass display name */
-"Muxing…" = "Multiplexen…";
+"Muxing…" = "Multiplexen …";
 
 /* HBFilters -> filter display name */
 "NLMeans" = "NLMeans";
@@ -227,7 +227,7 @@
 "Off" = "Aus";
 
 /* Video description */
-"Options: %@" = "Optionen: %@";
+"Options: %@" = "Einstellungen: %@";
 
 /* HBStateFormatter -> work pass number format */
 "Pass %d %@ of %d, %.2f %%" = "Durchgang %1$d %2$@ von %3$d, %4$.2f %% ";
@@ -266,10 +266,10 @@
 "Same as source (variable)" = "Wie die Quelle (variabel)";
 
 /* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d, preview %d…" = "Titel %1$d von %2$d scannen, Vorschau  %3$d…";
+"Scanning title %d of %d, preview %d…" = "Titel %1$d von %2$d überprüfen, Vorschau  %3$d …";
 
 /* HBStateFormatter -> scan pass format */
-"Scanning title %d of %d…" = "Titel %1$d von %2$d scannen…";
+"Scanning title %d of %d…" = "Titel %1$d von %2$d überprüfen …";
 
 /* HBStateFormatter -> search pass display name */
 "Searching for start point:  %.2f %%" = "Nach Startpunkt suchen: %.2f %%";
@@ -312,7 +312,7 @@
 "VFR" = "VFR";
 
 /* Video description */
-"Video Options:" = "Videooptionen:";
+"Video Options:" = "Videoeinstellungen:";
 
 /* Video description */
 "Video:" = "Video:";

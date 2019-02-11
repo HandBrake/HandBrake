@@ -2,10 +2,10 @@
 "0UB-bG-kwS.label" = "Filter";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Save New Preset…"; ObjectID = "2vD-zN-YMe"; */
-"2vD-zN-YMe.ibShadowedToolTip" = "Neue Voreinstellung speichern…";
+"2vD-zN-YMe.ibShadowedToolTip" = "Neue Voreinstellung speichern …";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
-"3w9-Iu-3u2.ibShadowedToolTip" = "Titel zum durchsuchen";
+"3w9-Iu-3u2.ibShadowedToolTip" = "Titel zum überprüfen.";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "6E4-AG-PEh"; */
 "6E4-AG-PEh.title" = "0";
@@ -32,7 +32,7 @@
 "38K-hd-P5J.toolTip" = "Alle Titel zur Warteschlange hinzufügen";
 
 /* Class = "NSMenuItem"; title = "Add Titles To Queue…"; ObjectID = "046-kc-MnL"; */
-"046-kc-MnL.title" = "Titel zur Warteschlange hinzufügen…";
+"046-kc-MnL.title" = "Titel zur Warteschlange hinzufügen …";
 
 /* Class = "NSTabViewItem"; label = "Audio"; ObjectID = "1475"; */
 "1475.label" = "Audio";
@@ -112,7 +112,7 @@ Blu-rays und DVDs haben meistens mehrere Titel, der längste ist für gewöhnlic
 "4915.title" = "00:00:00";
 
 /* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "4920"; */
-"4920.title" = "Wählen…";
+"4920.title" = "Wählen …";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "4923"; */
 "4923.title" = "Voreinstellung:";
@@ -199,7 +199,7 @@ Blu-rays und DVDs haben meistens mehrere Titel, der längste ist für gewöhnlic
 "dK4-jt-v4K.toolTip" = "Vorschau zeigen";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Scan only the specified title instead of all titles."; ObjectID = "DN4-48-aOI"; */
-"DN4-48-aOI.ibShadowedToolTip" = "Nur den ausgewählten statt allen Titeln durchsuchen.";
+"DN4-48-aOI.ibShadowedToolTip" = "Nur den ausgewählten statt alle Titel überprüfen.";
 
 /* Class = "NSToolbarItem"; label = "Add To Queue"; ObjectID = "DZZ-Fe-wjw"; */
 "DZZ-Fe-wjw.label" = "Zur Warteschlange hinzufügen";
@@ -229,7 +229,7 @@ Blu-rays und DVDs haben meistens mehrere Titel, der längste ist für gewöhnlic
 "INL-y9-Gwp.title" = "Alle Titel zur Warteschlange hinzufügen";
 
 /* Class = "NSButtonCell"; title = "Save New Preset…"; ObjectID = "IOU-3L-nvB"; */
-"IOU-3L-nvB.title" = "Neue Voreinstellung speichern…";
+"IOU-3L-nvB.title" = "Neue Voreinstellung speichern …";
 
 /* Class = "NSTextFieldCell"; title = "Range:"; ObjectID = "IxV-PW-oYh"; */
 "IxV-PW-oYh.title" = "Bereich:";

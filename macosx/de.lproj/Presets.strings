@@ -26,7 +26,7 @@
 "LQk-kD-5sj.title" = "Voreinstellungsmenüoptionen";
 
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
-"LUl-ag-Iu6.title" = "Importieren…";
+"LUl-ag-Iu6.title" = "Importieren …";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
 "oBC-Nh-TwB.title" = "Table View Cell";
@@ -43,11 +43,11 @@
 Überschreibt alle Enkodiereinstellungen. Die Einstellungen können noch feinjustiert werden nachdem eine Voreinstellung ausgewählt wurde.";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
-"xEQ-Un-J0n.title" = "Exportieren…";
+"xEQ-Un-J0n.title" = "Exportieren …";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Additional Options"; ObjectID = "Ybq-Zt-sta"; */
-"Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Zusätzliche Optionen";
+"Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Zusätzliche Einstellungen";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Show additional options."; ObjectID = "Ybq-Zt-sta"; */
-"Ybq-Zt-sta.ibShadowedToolTip" = "Zeige zusätzliche Optionen.";
+"Ybq-Zt-sta.ibShadowedToolTip" = "Zeige zusätzliche Einstellungen.";
 

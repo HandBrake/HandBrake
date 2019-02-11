@@ -35,7 +35,7 @@
 "351.title" = "Protokoll:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "352"; */
-"352.ibShadowedToolTip" = "Anzahl der zu durchsuchenden Vorschaubilder. Höhere Werte verbessern die Genauigkeit der automatischen Bildbeschneidung auf Kosten einer längeren Scanzeit.";
+"352.ibShadowedToolTip" = "Anzahl der zu überprüfenden Vorschaubilder. Höhere Werte verbessern die Genauigkeit der automatischen Bildbeschneidung auf Kosten einer längeren Scanzeit.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "354"; */
 "354.title" = "OtherViews";
@@ -119,7 +119,7 @@
 "449.title" = "Keine";
 
 /* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "451"; */
-"451.title" = "Auswählen…";
+"451.title" = "Auswählen …";
 
 /* Class = "NSButtonCell"; title = "Play System Alert Sound"; ObjectID = "458"; */
 "458.title" = "Systemton abspielen";
@@ -182,7 +182,7 @@
 "519.title" = "60";
 
 /* Class = "NSTextFieldCell"; title = "Title Scan:"; ObjectID = "c0L-TU-WML"; */
-"c0L-TU-WML.title" = "Titelscan:";
+"c0L-TU-WML.title" = "Titelüberprüfung:";
 
 /* Class = "NSTextFieldCell"; title = "x264 Encoder:"; ObjectID = "cqp-xU-GOe"; */
 "cqp-xU-GOe.title" = "x264-Enkoder:";
