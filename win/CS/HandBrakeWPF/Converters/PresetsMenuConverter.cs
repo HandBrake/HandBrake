@@ -41,7 +41,7 @@ namespace HandBrakeWPF.Converters
             }
             
             Dictionary<string, MenuItem> groupedMenu = new Dictionary<string, MenuItem>();
-            foreach (IPresetObject item in presets.OrderBy(p => p.Category))
+            foreach (IPresetObject item in presets)
             {
                 PresetDisplayCategory category = item as PresetDisplayCategory;
                 if (category != null)
@@ -103,7 +103,7 @@ namespace HandBrakeWPF.Converters
 
         private void ProcessCategory(Dictionary<string, MenuItem> groupedMenu, PresetDisplayCategory category)
         {
-            foreach (Preset preset in category.Presets.OrderBy(p => p.Name))
+            foreach (Preset preset in category.Presets)
             {
                 this.ProcessPreset(groupedMenu, preset);
             }
