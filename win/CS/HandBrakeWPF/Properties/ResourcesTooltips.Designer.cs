@@ -623,15 +623,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use advanced options Tab for x264 settings..
-        /// </summary>
-        public static string Video_AdvancedOptions {
-            get {
-                return ResourceManager.GetString("Video_AdvancedOptions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Set the average bitrate.
         ///
         ///The instantaneous bitrate can be much higher or lower at any point in time.

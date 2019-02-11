@@ -125,17 +125,12 @@
             <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,5,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <TextBlock Text="{x:Static Properties:Resources.VideoView_OptimiseVideo}" Margin="0,0,0,0" Grid.Row="0"  Grid.ColumnSpan="2" FontWeight="Bold" VerticalAlignment="Center" />
 
-                <CheckBox Content="Use Legacy Advanced Tab" Grid.Row="1" IsChecked="{Binding UseAdvancedTab}" Margin="0,5,0,0"
-                          Visibility="{Binding IsAdvancedTabOptionEnabled, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}"
-                          ToolTip="{x:Static Properties:ResourcesTooltips.Video_AdvancedOptions}" />
-
-                <Grid Grid.Row="2" Margin="0,8,0,0" IsEnabled="{Binding UseAdvancedTab, Converter={StaticResource inverseConverter}}">
+                <Grid Grid.Row="1" Margin="0,8,0,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />

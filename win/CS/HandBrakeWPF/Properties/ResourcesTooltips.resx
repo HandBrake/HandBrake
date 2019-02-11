@@ -219,9 +219,6 @@ The actual display dimensions will differ if the pixel aspect ratio is not 1:1.<
   <data name="QueueView_SendJobBack" xml:space="preserve">
     <value>Send the job back to the main window for editing.</value>
   </data>
-  <data name="Video_AdvancedOptions" xml:space="preserve">
-    <value>Use advanced options Tab for x264 settings.</value>
-  </data>
   <data name="Video_AvgBitrate" xml:space="preserve">
     <value>Set the average bitrate.
 
