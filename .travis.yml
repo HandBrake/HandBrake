@@ -51,6 +51,7 @@ before_install:
       libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       libgtk-3-dev libgudev-1.0-dev libnotify-dev libwebkitgtk-3.0-dev
     sudo apt-get remove mingw-w64* -y
+    sudo apt-get autoremove -y
   fi
 - |
   if [[ "$TRAVIS_OS_NAME" == "linux" ]]
