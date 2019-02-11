@@ -51,7 +51,8 @@ namespace HandBrakeWPF.Services.Presets
         public static string UserPresetCatgoryName = "Custom Presets";
         private readonly string presetFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly()), "presets.json");
         private readonly ObservableCollection<IPresetObject> presets = new ObservableCollection<IPresetObject>(); // Can store Presets and PresetDisplayCategory objects.
-        private readonly Dictionary<string, Preset> flatPresetList = new Dictionary<string, Preset>();
+        private readonly Dictionary<string, Preset> flatPresetDict = new Dictionary<string, Preset>();
+        private readonly List<Preset> flatPresetList = new List<Preset>();
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
 
@@ -90,7 +91,7 @@ namespace HandBrakeWPF.Services.Presets
         {
             get
             {
-                return this.flatPresetList.Values.FirstOrDefault(p => p.IsDefault);
+                return this.flatPresetList.FirstOrDefault(p => p.IsDefault);
             }
         }
 
@@ -145,7 +146,8 @@ namespace HandBrakeWPF.Services.Presets
                     this.presets.Add(preset);
                 }
 
-                this.flatPresetList.Add(preset.Name, preset);
+                this.flatPresetDict.Add(preset.Name, preset);
+                this.flatPresetList.Add(preset);
 
                 // Update the presets file
                 if (!isLoading)
@@ -251,7 +253,7 @@ namespace HandBrakeWPF.Services.Presets
         public void Update(Preset update)
         {
             Preset preset;
-            if (this.flatPresetList.TryGetValue(update.Name, out preset))
+            if (this.flatPresetDict.TryGetValue(update.Name, out preset))
             {
                 preset.Task = update.Task;
                 preset.PictureSettingsMode = update.PictureSettingsMode;
@@ -299,7 +301,8 @@ namespace HandBrakeWPF.Services.Presets
             {
                 // Remove the preset, and cleanup the category if it's not got any presets in it.
                 cateogry.Presets.Remove(preset);
-                this.flatPresetList.Remove(preset.Name);
+                this.flatPresetList.Remove(preset);
+                this.flatPresetDict.Remove(preset.Name);
                 if (cateogry.Presets.Count == 0)
                 {
                     this.presets.Remove(cateogry);
@@ -308,7 +311,8 @@ namespace HandBrakeWPF.Services.Presets
             else
             {
                 this.presets.Remove(preset);
-                this.flatPresetList.Remove(preset.Name);
+                this.flatPresetList.Remove(preset);
+                this.flatPresetDict.Remove(preset.Name);
             }
 
             this.SavePresetFiles();
@@ -336,7 +340,8 @@ namespace HandBrakeWPF.Services.Presets
                     }
 
                     this.presets.Remove(preset);
-                    this.flatPresetList.Remove(preset.Name);
+                    this.flatPresetList.Remove(preset);
+                    this.flatPresetDict.Remove(preset.Name);
                 }
 
                 // Cleanup the category if we can.
@@ -358,7 +363,7 @@ namespace HandBrakeWPF.Services.Presets
         public void SetDefault(Preset preset)
         {
             // Set IsDefault false for everything.
-            foreach (Preset item in this.flatPresetList.Values)
+            foreach (Preset item in this.flatPresetList)
             {
                 item.IsDefault = false;
             }
@@ -381,7 +386,7 @@ namespace HandBrakeWPF.Services.Presets
         public Preset GetPreset(string name)
         {
             Preset preset;
-            if (this.flatPresetList.TryGetValue(name, out preset))
+            if (this.flatPresetDict.TryGetValue(name, out preset))
             {
                 return preset;
             }
@@ -422,7 +427,8 @@ namespace HandBrakeWPF.Services.Presets
                     foreach (Preset toRemove in presetsToRemove)
                     {
                         foundCategory.Presets.Remove(toRemove);
-                        this.flatPresetList.Remove(toRemove.Name);
+                        this.flatPresetList.Remove(toRemove);
+                        this.flatPresetDict.Remove(toRemove.Name);
                     }
 
                     // Check if we can remove this category.
@@ -440,7 +446,8 @@ namespace HandBrakeWPF.Services.Presets
 
                 if (item.GetType() == typeof(Preset))
                 {
-                    this.flatPresetList.Remove(((Preset)item).Name);
+                    this.flatPresetList.Remove(((Preset)item));
+                    this.flatPresetDict.Remove(((Preset)item).Name);
                 }
             }
         }
@@ -498,7 +505,7 @@ namespace HandBrakeWPF.Services.Presets
         /// </returns>
         public bool CheckIfPresetExists(string name)
         {
-            if (this.flatPresetList.ContainsKey(name))
+            if (this.flatPresetDict.ContainsKey(name))
             {
                 return true;
             }
@@ -518,7 +525,7 @@ namespace HandBrakeWPF.Services.Presets
         public bool CanUpdatePreset(string name)
         {
             Preset preset;
-            if (this.flatPresetList.TryGetValue(name, out preset))
+            if (this.flatPresetDict.TryGetValue(name, out preset))
             {
                 return !preset.IsBuildIn;
             }
@@ -532,7 +539,7 @@ namespace HandBrakeWPF.Services.Presets
         /// <param name="selectedPreset">The preset we want to select.</param>
         public void SetSelected(Preset selectedPreset)
         {
-            foreach (var item in this.flatPresetList.Values)
+            foreach (var item in this.flatPresetList)
             {
                 item.IsSelected = false;
             }
@@ -823,33 +830,12 @@ namespace HandBrakeWPF.Services.Presets
                 Dictionary<string, PresetCategory> presetCategories = new Dictionary<string, PresetCategory>();
                 List<HBPreset> uncategorisedPresets = new List<HBPreset>();
 
-                // Handle User Presets first.
-                foreach (Preset item in this.flatPresetList.Values.OrderBy(o => o.IsBuildIn))
-                {
-                    if (string.IsNullOrEmpty(item.Category))
-                    {
-                        uncategorisedPresets.Add(JsonPresetFactory.CreateHbPreset(item, HBConfigurationFactory.Create()));
-                    }
-                    else
-                    {
-                        HBPreset preset = JsonPresetFactory.CreateHbPreset(item, HBConfigurationFactory.Create());
-                        if (presetCategories.ContainsKey(item.Category))
-                        {
-                            presetCategories[item.Category].ChildrenArray.Add(preset);
-                        }
-                        else
-                        {
-                            presetCategories[item.Category] = new PresetCategory
-                                                              {
-                                                                  ChildrenArray = new List<HBPreset> { preset },
-                                                                  Folder = true,
-                                                                  PresetName = item.Category,
-                                                                  Type = item.IsBuildIn ? 0 : 1
-                                                              };
-                        }
-                    }
-                }
+                // Handle Built-in Presets
+                this.HandlePresetListsForSave(this.flatPresetList.Where(o => o.IsBuildIn).ToList(), presetCategories, uncategorisedPresets);
 
+                // Handle User Presets.
+                this.HandlePresetListsForSave(this.flatPresetList.Where(o => !o.IsBuildIn).ToList(), presetCategories, uncategorisedPresets);
+    
                 // Wrap the categories in a container. 
                 JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
                 PresetTransportContainer container = new PresetTransportContainer(
@@ -874,6 +860,35 @@ namespace HandBrakeWPF.Services.Presets
             {
                 Debug.WriteLine(exc);
                 throw new GeneralApplicationException("Unable to write to the presets file.", "The details section below may indicate why this error has occurred.", exc);
+            }
+        }
+
+        private void HandlePresetListsForSave(List<Preset> processList, Dictionary<string, PresetCategory> presetCategories, List<HBPreset> uncategorisedPresets)
+        {
+            foreach (Preset item in processList)
+            {
+                if (string.IsNullOrEmpty(item.Category))
+                {
+                    uncategorisedPresets.Add(JsonPresetFactory.CreateHbPreset(item, HBConfigurationFactory.Create()));
+                }
+                else
+                {
+                    HBPreset preset = JsonPresetFactory.CreateHbPreset(item, HBConfigurationFactory.Create());
+                    if (presetCategories.ContainsKey(item.Category))
+                    {
+                        presetCategories[item.Category].ChildrenArray.Add(preset);
+                    }
+                    else
+                    {
+                        presetCategories[item.Category] = new PresetCategory
+                                                          {
+                                                              ChildrenArray = new List<HBPreset> { preset },
+                                                              Folder = true,
+                                                              PresetName = item.Category,
+                                                              Type = item.IsBuildIn ? 0 : 1
+                                                          };
+                    }
+                }
             }
         }
 
