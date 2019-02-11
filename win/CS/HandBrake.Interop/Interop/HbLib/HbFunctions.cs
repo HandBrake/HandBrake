@@ -27,6 +27,9 @@ namespace HandBrake.Interop.Interop.HbLib
         [DllImport("hb", EntryPoint = "hb_global_init", CallingConvention = CallingConvention.Cdecl)]
         public static extern int hb_global_init();
 
+        [DllImport("hb", EntryPoint = "hb_global_init_no_hardware", CallingConvention = CallingConvention.Cdecl)]
+        public static extern int hb_global_init_no_hardware();
+
         /// Return Type: hb_handle_t*
         ///verbose: int
         ///update_check: int

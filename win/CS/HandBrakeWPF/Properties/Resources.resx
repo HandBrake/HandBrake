@@ -184,15 +184,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.<
   <data name="Video_PlaceboQuality" xml:space="preserve">
     <value>Placebo Quality |</value>
   </data>
-  <data name="Video_QuickSyncNotAvailable" xml:space="preserve">
-    <value>QuickSync hardware not detected or enabled! 
-
-In order to use the QuickSync encoder, you must:
-
-- Have a Intel CPU with HD Graphics and QuickSync support. 4th Generation Haswell or newer parts are recommended for best quality.
-- Have the HD Graphics enabled.
-- On older versions of windows before 8, a monitor connected to the HD Graphics or GPU Virtualisation software installed is also required.</value>
-  </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
@@ -1896,5 +1887,10 @@ This will not affect your current settings in the Subtitle tab.</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
     <value>Show 'Add Selection to Queue' on the toolbar</value>
+  </data>
+  <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
+    <value>Hardware encoding support has been automatically disabled on your system due to an issue detected during hardware detection. Please make sure you are running up-to-date drivers for all graphics adaptors in this system.
+
+This will not impact any of the software encoders.</value>
   </data>
 </root>

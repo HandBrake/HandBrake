@@ -11,6 +11,8 @@ namespace HandBrake.Interop.Interop
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq.Expressions;
+    using System.Runtime.CompilerServices;
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.EventArgs;
@@ -40,6 +42,8 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         private static bool globalInitialized;
 
+        private static bool failedWithHardware = false;
+
         /// <summary>
         /// Fires when HandBrake has logged a message.
         /// </summary>
@@ -50,6 +54,7 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         public static event EventHandler<MessageLoggedEventArgs> ErrorLogged;
 
+
         /// <summary>
         /// Initializes static members of the HandBrakeUtils class.
         /// </summary>
@@ -57,9 +62,26 @@ namespace HandBrake.Interop.Interop
         {
             if (!globalInitialized)
             {
-                if (HBFunctions.hb_global_init() == -1)
+                try
                 {
-                    throw new InvalidOperationException("HB global init failed.");
+
+                    if (HBFunctions.hb_global_init() == -1)
+                    {
+                        throw new InvalidOperationException("HB global init failed.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    failedWithHardware = true;
+                }
+
+                // Try without Hardware support. Bad drivers can sometimes cause issues.
+                if (failedWithHardware)
+                {
+                    if (HBFunctions.hb_global_init_no_hardware() == -1)
+                    {
+                        throw new InvalidOperationException("HB global init failed.");
+                    }
                 }
 
                 globalInitialized = true;
@@ -318,6 +340,11 @@ namespace HandBrake.Interop.Interop
         public static void SendErrorEvent(string message)
         {
             ErrorLogged?.Invoke(null, new MessageLoggedEventArgs(message));
+        }
+
+        public static bool IsUsingNoHardwareFallback()
+        {
+            return failedWithHardware;
         }
     }
 }
