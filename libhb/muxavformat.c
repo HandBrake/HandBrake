@@ -1195,7 +1195,6 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         return 0;
     }
 
-    // @TODO: Find out if libav's webm muxing is subject to this.
     if (track->type == MUX_TYPE_VIDEO &&
         (job->mux & (HB_MUX_MASK_MKV | HB_MUX_MASK_WEBM)) &&
         buf->s.renderOffset < 0)

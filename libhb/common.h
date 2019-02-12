@@ -615,7 +615,7 @@ struct hb_job_s
 #define HB_MUX_AV_MKV    0x200000
 #define HB_MUX_AV_WEBM   0x400000
 #define HB_MUX_MASK_MKV  0x300000
-#define HB_MUX_MASK_AV   0x220000
+#define HB_MUX_MASK_AV   0x620000
 #define HB_MUX_MASK_WEBM 0x400000
 
 /* default muxer for each container */

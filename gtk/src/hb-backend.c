@@ -4508,8 +4508,8 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
             const char *name = hb_audio_encoder_get_short_name(codec);
             ghb_dict_set_string(asettings, "Encoder", name);
         }
-        gchar *a_unsup = NULL;
-        gchar *mux_s = NULL;
+        const gchar *a_unsup = NULL;
+        const gchar *mux_s = NULL;
         if (mux->format & HB_MUX_MASK_MP4)
         {
             mux_s = "MP4";
