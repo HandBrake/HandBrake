@@ -28,6 +28,12 @@
 #include <gdk/gdk.h>
 #include <string.h>
 
+#if defined(_WIN32)
+#define GHB_UNSAFE_FILENAME_CHARS "/:<>\"\\|?*"
+#else
+#define GHB_UNSAFE_FILENAME_CHARS "/"
+#endif
+
 static inline void ghb_widget_get_preferred_width(
     GtkWidget *widget, gint *min_width, gint * natural_width)
 {

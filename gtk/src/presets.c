@@ -2050,17 +2050,18 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
                         signal_user_data_t *ud)
 {
     hb_preset_index_t *path;
-    const gchar       *name;
     GtkWindow         *hb_window;
     GtkWidget         *dialog;
     GtkResponseType    response;
     const gchar       *exportDir;
     gchar             *filename;
     GhbValue          *dict;
+    char              *preset_name;
 
     path = get_selected_path(ud);
     if (path == NULL || path->depth <= 0)
     {
+        const gchar       *name;
         char * new_name;
 
         free(path);
@@ -2080,7 +2081,7 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     {
         return;
     }
-    name = ghb_dict_get_string(dict, "PresetName");
+    preset_name = g_strdup(ghb_dict_get_string(dict, "PresetName"));
 
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     dialog = gtk_file_chooser_dialog_new(_("Export Preset"), hb_window,
@@ -2094,10 +2095,16 @@ preset_export_action_cb(GSimpleAction *action, GVariant *param,
     {
         exportDir = ".";
     }
-    filename = g_strdup_printf("%s.json", name);
+
+    // Clean up preset name for use as a filename.  Removing leading
+    // and trailing whitespace and filename illegal characters.
+    g_strstrip(preset_name);
+    g_strdelimit(preset_name, GHB_UNSAFE_FILENAME_CHARS, '_');
+    filename = g_strdup_printf("%s.json", preset_name);
     gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), exportDir);
     gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(dialog), filename);
     g_free(filename);
+    g_free(preset_name);
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
