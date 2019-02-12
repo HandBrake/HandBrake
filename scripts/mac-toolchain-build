@@ -86,8 +86,8 @@ function mac_toolchain_build {
     printf "Downloading [%02i/%02i] %s " "5" "${TOTAL}" "pkg-config 0.29.2"
     curl -Lf --connect-timeout 30 https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz -o "pkg-config-0.29.2.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
     echo -en "${CREL}"
-    printf "Downloading [%02i/%02i] %s " "6" "${TOTAL}" "nasm 2.13.02"
-    curl -Lf --connect-timeout 30 https://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.bz2 -o "nasm-2.13.02.tar.bz2" >/dev/null 2>&1 || print_fail_and_exit
+    printf "Downloading [%02i/%02i] %s " "6" "${TOTAL}" "nasm 2.14"
+    curl -Lf --connect-timeout 30 https://www.nasm.us/pub/nasm/releasebuilds/2.14/nasm-2.14.tar.gz -o "nasm-2.14.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
     echo -en "${CREL}"
     printf "Downloading [%02i/%02i] complete.\n" "${TOTAL}" "${TOTAL}"
 
@@ -148,13 +148,13 @@ function mac_toolchain_build {
 
     # nasm
     cd "${TEMP_DIR}"
-    printf "Building    [%02i/%02i] %s " "6" "${TOTAL}" "nasm 2.13.02"
+    printf "Building    [%02i/%02i] %s " "6" "${TOTAL}" "nasm 2.14"
     [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xf nasm-2.13.02.tar.bz2 >/dev/null 2>&1 || print_fail_and_exit
-    cd nasm-2.13.02 >/dev/null 2>&1 || print_fail_and_exit
-    ./configure --prefix="${PREFIX}" --enable-sections --enable-lto >../nasm-2.13.02.log 2>&1 || print_fail_and_exit
-    make --jobs="${MAKEJOBS}" AR=ar RANLIB=ranlib >>../nasm-2.13.02.log 2>&1 || print_fail_and_exit
-    ${SUDO} make install >>../nasm-2.13.02.log 2>&1 || print_fail_and_exit
+    tar -xfz nasm-2.14.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+    cd nasm-2.14 >/dev/null 2>&1 || print_fail_and_exit
+    ./configure --prefix="${PREFIX}" --enable-sections --enable-lto >../nasm-2.14.log 2>&1 || print_fail_and_exit
+    make --jobs="${MAKEJOBS}" AR=ar RANLIB=ranlib >>../nasm-2.14.log 2>&1 || print_fail_and_exit
+    ${SUDO} make install >>../nasm-2.14.log 2>&1 || print_fail_and_exit
     echo -en "${CREL}"
 
     # done

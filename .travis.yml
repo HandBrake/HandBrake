@@ -12,9 +12,9 @@ matrix:
       dist: xenial
     - name: "MacOS"
       os: osx
-      env: PATH=${HOME}/bin:${HOME}/toolchains/mac/bin:${PATH}
+      env: PATH=${HOME}/bin:${HOME}/toolchains/bin:${PATH}
       osx_image: xcode10.1
-      nv: PATH=${HOME}/bin:${HOME}/toolchains/mac/bin:${PATH}
+      nv: PATH=${HOME}/bin:${HOME}/toolchains/bin:${PATH}
 
 before_install:
 - |
@@ -105,16 +105,6 @@ before_install:
       shasum -a 256 ${TRAVIS_BUILD_DIR}/scripts/mac-toolchain-build > ~/toolchains/sha256sum_mac.txt
     fi
   fi
-- |
-  if [[ "$TRAVIS_OS_NAME" == "osx" && ! -f ~/bin/nasm ]]
-  then
-    wget https://www.nasm.us/pub/nasm/releasebuilds/2.14/nasm-2.14.tar.gz
-    tar xvfz nasm-2.14.tar.gz
-    cd nasm-2.14/
-    ./configure --prefix=$HOME
-    make -j 2
-    make install -j 2
-  fi
 
 language: c
 
@@ -141,7 +131,7 @@ script:
     ./configure
     cd build
     trap die_gracefully EXIT INT TERM
-    echo "Building for OSX:"
+    echo "Building for MacOS:"
     make > /dev/null &
     PID=$!
     display_progress "${PID}"
