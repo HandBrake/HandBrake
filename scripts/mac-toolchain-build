@@ -87,7 +87,10 @@ function mac_toolchain_build {
     curl -Lf --connect-timeout 30 https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz -o "pkg-config-0.29.2.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
     echo -en "${CREL}"
     printf "Downloading [%02i/%02i] %s " "6" "${TOTAL}" "nasm 2.14"
-    curl -Lf --connect-timeout 30 https://www.nasm.us/pub/nasm/releasebuilds/2.14/nasm-2.14.tar.gz -o "nasm-2.14.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+    # Sometimes nasm.us goes down, use the official git repo as a backup
+    curl -Lf --connect-timeout 30 https://www.nasm.us/pub/nasm/releasebuilds/2.14/nasm-2.14.02.tar.gz -o "nasm-2.14.02.tar.gz" >/dev/null 2>&1 || \
+        curl -Lf --connect-timeout 30 https://repo.or.cz/nasm.git/snapshot/74246c499ea4313fb8837977dc0c135fc50567c0.tar.gz -o "nasm-2.14.02.tar.gz" >/dev/null 2>&1 || \
+        print_fail_and_exit
     echo -en "${CREL}"
     printf "Downloading [%02i/%02i] complete.\n" "${TOTAL}" "${TOTAL}"
 
@@ -150,11 +153,12 @@ function mac_toolchain_build {
     cd "${TEMP_DIR}"
     printf "Building    [%02i/%02i] %s " "6" "${TOTAL}" "nasm 2.14"
     [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xfz nasm-2.14.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-    cd nasm-2.14 >/dev/null 2>&1 || print_fail_and_exit
-    ./configure --prefix="${PREFIX}" --enable-sections --enable-lto >../nasm-2.14.log 2>&1 || print_fail_and_exit
-    make --jobs="${MAKEJOBS}" AR=ar RANLIB=ranlib >>../nasm-2.14.log 2>&1 || print_fail_and_exit
-    ${SUDO} make install >>../nasm-2.14.log 2>&1 || print_fail_and_exit
+    tar -xfz nasm-2.14.02.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+    # backup source may have dirname `nasm-$COMMIT`
+    cd nasm-* >/dev/null 2>&1 || print_fail_and_exit
+    ./configure --prefix="${PREFIX}" --enable-sections --enable-lto >../nasm-2.14.02.log 2>&1 || print_fail_and_exit
+    make --jobs="${MAKEJOBS}" AR=ar RANLIB=ranlib >>../nasm-2.14.02.log 2>&1 || print_fail_and_exit
+    ${SUDO} make install >>../nasm-2.14.02.log 2>&1 || print_fail_and_exit
     echo -en "${CREL}"
 
     # done

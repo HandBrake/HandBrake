@@ -10,7 +10,7 @@ matrix:
       env: CROSS=x86_64-w64-mingw32 PATH=${HOME}/toolchains/mingw-w64-x86_64/bin:${PATH}
       os: linux
       dist: xenial
-    - name: "MacOS"
+    - name: "macOS"
       os: osx
       env: PATH=${HOME}/bin:${HOME}/toolchains/bin:${PATH}
       osx_image: xcode10.1
@@ -63,7 +63,7 @@ before_install:
   if [[ "$TRAVIS_OS_NAME" == "linux" ]]
   then
     # xenial does not have nasm version >=2.13 in apt
-    wget https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/linux/nasm-2.14.02-0.fc27.x86_64.rpm
+    wget https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/linux/nasm-2.14.02-0.fc27.x86_64.rpm || echo "nasm.us is down! Unable to get RPM" && exit 1
     sudo alien nasm-2.14.02-0.fc27.x86_64.rpm
     sudo dpkg -i nasm_2.14.02-1_amd64.deb
   fi
@@ -92,7 +92,7 @@ before_install:
     fi
   fi
 
-# MacOS Toolchain and requirements. `sha256sum` is `shasum -a` in MacOS world
+# macOS Toolchain and requirements. `sha256sum` is `shasum -a` in macOS world
 - |
   if [[ "$TRAVIS_OS_NAME" == "osx" ]]
   then
@@ -131,7 +131,7 @@ script:
     ./configure
     cd build
     trap die_gracefully EXIT INT TERM
-    echo "Building for MacOS:"
+    echo "Building for macOS:"
     make > /dev/null &
     PID=$!
     display_progress "${PID}"
@@ -142,7 +142,7 @@ script:
       echo "error: make returned non-zero error code (${CODE})" >&2
       exit 1
     fi
-    echo "Finished! Successfully built for macOS"
+    echo " Finished! Successfully built for macOS"
   fi
 
 cache:
