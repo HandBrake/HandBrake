@@ -86,7 +86,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         _dockTile = [[HBDockTile alloc] initWithDockTile:[[NSApplication sharedApplication] dockTile]
                                                   image:[[NSApplication sharedApplication] applicationIconImage]];
 
-        int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
+        NSInteger loggingLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"LoggingLevel"];
 
         // Init a separate instance of libhb for the queue
         _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];

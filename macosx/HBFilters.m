@@ -816,7 +816,7 @@ fail:
 {
     self.notificationsEnabled = NO;
 
-    // If the preset has an objectForKey:@"UsesPictureFilters", and handle the filters here
+    // If the preset has "UsesPictureFilters", handle the filters here
     if ([preset[@"UsesPictureFilters"] boolValue])
     {
         // Deinterlace

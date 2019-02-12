@@ -280,7 +280,7 @@
     job.video.twoPass = NO;
 
     // Init the libhb core
-    int level = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
+    NSInteger level = [[NSUserDefaults standardUserDefaults] integerForKey:@"LoggingLevel"];
     self.core = [[HBCore alloc] initWithLogLevel:level name:@"PreviewCore"];
 
     HBStateFormatter *formatter = [[HBStateFormatter alloc] init];

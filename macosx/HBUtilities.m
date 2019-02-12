@@ -220,9 +220,10 @@ static NSDateFormatter *_releaseDateFormatter = nil;
         BOOL chapterMarkers = (job.chaptersEnabled) &&
         (job.range.type != HBRangeTypeChapters || job.range.chapterStart < job.range.chapterStop);
 
-        if ([[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString:@".m4v"] ||
-            ((YES == anyCodecAC3 || YES == chapterMarkers) &&
-             [[[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"] isEqualToString:@"Auto"]))
+        NSString *defaultExtension = [[NSUserDefaults standardUserDefaults] objectForKey:@"DefaultMpegExtension"];
+
+        if ([defaultExtension isEqualToString:@".m4v"] ||
+            ((YES == anyCodecAC3 || YES == chapterMarkers) && [defaultExtension isEqualToString:@"Auto"]))
         {
             extension = @"m4v";
         }

@@ -161,7 +161,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     if (self)
     {
         // Init libhb
-        int loggingLevel = [[[NSUserDefaults standardUserDefaults] objectForKey:@"LoggingLevel"] intValue];
+        NSInteger loggingLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"LoggingLevel"];
         _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"ScanCore"];
 
         // Inits the controllers
@@ -626,8 +626,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     if (canScan)
     {
-        int hb_num_previews = [[[NSUserDefaults standardUserDefaults] objectForKey:@"PreviewsNumber"] intValue];
-        int min_title_duration_seconds = [[[NSUserDefaults standardUserDefaults] objectForKey:@"MinTitleScanSeconds"] intValue];
+        NSUInteger hb_num_previews = [[NSUserDefaults standardUserDefaults] integerForKey:@"PreviewsNumber"];
+        NSUInteger min_title_duration_seconds = [[NSUserDefaults standardUserDefaults] integerForKey:@"MinTitleScanSeconds"];
 
         [self.core scanURL:mediaURL
                 titleIndex:index

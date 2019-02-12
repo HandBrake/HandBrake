@@ -96,7 +96,7 @@ typedef void (^HBCoreCleanupHandler)(void);
     return [self initWithLogLevel:0 queue:dispatch_get_main_queue()];
 }
 
-- (instancetype)initWithLogLevel:(int)level queue:(dispatch_queue_t)queue
+- (instancetype)initWithLogLevel:(NSInteger)level queue:(dispatch_queue_t)queue
 {
     self = [super init];
     if (self)
@@ -122,7 +122,7 @@ typedef void (^HBCoreCleanupHandler)(void);
     return self;
 }
 
-- (instancetype)initWithLogLevel:(int)level name:(NSString *)name
+- (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name
 {
     self = [self initWithLogLevel:level queue:dispatch_get_main_queue()];
     if (self)

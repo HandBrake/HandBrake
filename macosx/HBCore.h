@@ -91,7 +91,7 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  * @param level         the desired libhb logging level.
  * @param queue         the queue on which the callbacks will be called.
  */
-- (instancetype)initWithLogLevel:(int)level queue:(dispatch_queue_t)queue NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithLogLevel:(NSInteger)level queue:(dispatch_queue_t)queue NS_DESIGNATED_INITIALIZER;
 
 /**
  *  Opens low level HandBrake library. This should be called once before other
@@ -100,12 +100,12 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  *  @param level the desired libhb logging level
  *  @param name  the instance debug name
  */
-- (instancetype)initWithLogLevel:(int)level name:(NSString *)name;
+- (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name;
 
 /**
  *  Log level.
  */
-@property (nonatomic, readwrite) int logLevel;
+@property (nonatomic, readwrite) NSInteger logLevel;
 
 /**
  * Set whether system sleep will be disable or not during a scan/encode
