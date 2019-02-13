@@ -1384,7 +1384,7 @@ namespace HandBrakeWPF.ViewModels
             // defer to subtitle's validation messages
             if (!this.SubtitleViewModel.ValidateSubtitles())
             {
-                return false;
+                return new AddQueueError(Resources.Subtitles_WebmSubtitleIncompatibilityHeader, Resources.Main_PleaseFixSubtitleSettings, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create(), this.ScannedSource.ScanPath, this.SelectedPreset);

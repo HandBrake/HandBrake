@@ -1225,6 +1225,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please correct your subtitle settings before continuing. .
+        /// </summary>
+        public static string Main_PleaseFixSubtitleSettings {
+            get {
+                return ResourceManager.GetString("Main_PleaseFixSubtitleSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select a folder..
         /// </summary>
         public static string Main_PleaseSelectFolder {

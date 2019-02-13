@@ -1903,4 +1903,7 @@ This will not affect your current settings in the Subtitle tab.</value>
 
 This will not impact any of the software encoders.</value>
   </data>
+  <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
+    <value>Please correct your subtitle settings before continuing. </value>
+  </data>
 </root>
