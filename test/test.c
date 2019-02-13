@@ -3642,37 +3642,66 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                     MAX(hb_str_vlen(acodecs),
                         hb_str_vlen(anames)))))))))));
 
-        hb_dict_t *audio_dict;
+        hb_dict_t *audio_dict, *last_audio_dict = NULL;
         // Add audio dict entries to list if needed
         for (ii = 0; ii < count; ii++)
         {
             audio_dict = hb_value_array_get(list, ii);
             if (audio_dict == NULL)
             {
-                audio_dict = hb_dict_init();
-                hb_value_array_append(list, audio_dict);
+                break;
             }
+            last_audio_dict = audio_dict;
+        }
+        // More settings specified than preset currently supports.
+        // Duplicate the last audio encoder settings in the preset.
+        for (; ii < count && last_audio_dict != NULL; ii++)
+        {
+            audio_dict = hb_value_dup(last_audio_dict);
+            hb_value_array_append(list, audio_dict);
         }
 
         // Update codecs
         if (hb_str_vlen(acodecs) > 0)
         {
-            for (ii = 0; acodecs[ii] != NULL; ii++)
+            int last = -1;
+            for (ii = 0; acodecs[ii] != NULL &&
+                         acodecs[ii][0] != 0; ii++)
             {
                 audio_dict = hb_value_array_get(list, ii);
                 hb_dict_set(audio_dict, "AudioEncoder",
                                     hb_value_string(acodecs[ii]));
+                last = ii;
             }
-            // Apply last codec in list to all other entries
-            for (; ii < count; ii++)
+            if (last_audio_dict == NULL && last >= 0)
+            {
+                // No defaults exist in original preset.
+                // Apply last codec in list to all other entries
+                for (; ii < count; ii++)
+                {
+                    audio_dict = hb_value_array_get(list, ii);
+                    hb_dict_set(audio_dict, "AudioEncoder",
+                                        hb_value_string(acodecs[last]));
+                }
+            }
+        }
+
+        // Update bitrates
+        int last_bitrate = -1;
+        if (hb_str_vlen(abitrates) > 0)
+        {
+            for (ii = 0; abitrates[ii]    != NULL &&
+                         abitrates[ii][0] != 0; ii++)
             {
                 audio_dict = hb_value_array_get(list, ii);
-                hb_dict_set(audio_dict, "AudioEncoder",
-                                    hb_value_string(acodecs[ii-1]));
+                hb_dict_set(audio_dict, "AudioBitrate",
+                    hb_value_int(atoi(abitrates[ii])));
+                last_bitrate = ii;
             }
         }
 
         // Update qualities
+        int last_quality = -1;
         if (hb_str_vlen(aqualities) > 0)
         {
             for (ii = 0; aqualities[ii] != NULL &&
@@ -3683,104 +3712,118 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                             hb_value_bool(1));
                 hb_dict_set(audio_dict, "AudioTrackQuality",
                     hb_value_double(strtod(aqualities[ii], NULL)));
+                last_quality = ii;
+            }
+            if (last_audio_dict == NULL)
+            {
+                // No defaults exist in original preset.
+                // Apply last bitrate/quality in list to all other entries
+                if (last_bitrate > last_quality)
+                {
+                    ii = last_bitrate + 1;
+                    for (; ii < count; ii++)
+                    {
+                        hb_dict_set(audio_dict, "AudioBitrate",
+                            hb_value_int(atoi(abitrates[last_bitrate])));
+                    }
+                }
+                else if (last_quality >= 0)
+                {
+                    ii = last_quality + 1;
+                    for (; ii < count; ii++)
+                    {
+                        audio_dict = hb_value_array_get(list, ii);
+                        hb_dict_set(audio_dict, "AudioTrackQualityEnable",
+                                    hb_value_bool(1));
+                        hb_dict_set(audio_dict, "AudioTrackQuality",
+                            hb_value_double(strtod(aqualities[last_quality], NULL)));
+                    }
+                }
             }
         }
 
-        // Update bitrates
-        if (hb_str_vlen(abitrates) > 0)
-        {
-            for (ii = 0; abitrates[ii]    != NULL &&
-                         abitrates[ii][0] != 0; ii++)
-            {
-                audio_dict = hb_value_array_get(list, ii);
-                if (hb_value_get_bool(hb_dict_get(audio_dict,
-                                      "AudioTrackQualityEnable")))
-                {
-                    continue;
-                }
-                hb_dict_set(audio_dict, "AudioBitrate",
-                    hb_value_int(atoi(abitrates[ii])));
-            }
-            // Apply last bitrate in list to all other entries
-            if (abitrates[ii-1][0] != 0)
-                for (; ii < count; ii++)
-                {
-                    audio_dict = hb_value_array_get(list, ii);
-                    if (hb_value_get_bool(hb_dict_get(audio_dict,
-                                        "AudioTrackQualityEnable")))
-                    {
-                        continue;
-                    }
-                    hb_dict_set(audio_dict, "AudioBitrate",
-                        hb_value_int(atoi(abitrates[ii-1])));
-                }
-        }
 
         // Update samplerates
         if (hb_str_vlen(arates) > 0)
         {
+            int last = -1;
             for (ii = 0; arates[ii]    != NULL &&
                          arates[ii][0] != 0; ii++)
             {
                 audio_dict = hb_value_array_get(list, ii);
                 hb_dict_set(audio_dict, "AudioSamplerate",
                             hb_value_string(arates[ii]));
+                last = ii;
             }
-            // Apply last samplerate in list to all other entries
-            if (arates[ii-1][0] != 0)
+            if (last_audio_dict == NULL && last >= 0)
+            {
+                // No defaults exist in original preset.
+                // Apply last samplerate in list to all other entries
                 for (; ii < count; ii++)
                 {
                     audio_dict = hb_value_array_get(list, ii);
                     hb_dict_set(audio_dict, "AudioSamplerate",
-                                hb_value_string(arates[ii-1]));
+                                hb_value_string(arates[last]));
                 }
+            }
         }
 
         // Update mixdowns
         if (hb_str_vlen(mixdowns) > 0)
         {
+            int last = -1;
             for (ii = 0; mixdowns[ii]    != NULL &&
                          mixdowns[ii][0] != 0; ii++)
             {
                 audio_dict = hb_value_array_get(list, ii);
                 hb_dict_set(audio_dict, "AudioMixdown",
                             hb_value_string(mixdowns[ii]));
+                last = ii;
             }
-            // Apply last codec in list to all other entries
-            if (mixdowns[ii-1][0] != 0)
+            if (last_audio_dict == NULL && last >= 0)
+            {
+                // No defaults exist in original preset.
+                // Apply last codec in list to all other entries
                 for (; ii < count; ii++)
                 {
                     audio_dict = hb_value_array_get(list, ii);
                     hb_dict_set(audio_dict, "AudioMixdown",
-                                hb_value_string(mixdowns[ii-1]));
+                                hb_value_string(mixdowns[last]));
                 }
+            }
         }
 
         // Update mixdowns normalization
         if (hb_str_vlen(normalize_mix_level) > 0)
         {
+            int last = -1;
             for (ii = 0; normalize_mix_level[ii]    != NULL &&
                          normalize_mix_level[ii][0] != 0; ii++)
             {
                 audio_dict = hb_value_array_get(list, ii);
                 hb_dict_set(audio_dict, "AudioNormalizeMixLevel",
                     hb_value_bool(atoi(normalize_mix_level[ii])));
+                last = ii;
             }
-            // Apply last mix norm in list to all other entries
-            if (normalize_mix_level[ii-1][0] != 0)
+            if (last_audio_dict == NULL && last >= 0)
+            {
+                // No defaults exist in original preset.
+                // Apply last mix norm in list to all other entries
                 for (; ii < count; ii++)
                 {
                     audio_dict = hb_value_array_get(list, ii);
                     hb_dict_set(audio_dict,
                                 "AudioNormalizeMixLevel",
                         hb_value_bool(
-                            atoi(normalize_mix_level[ii-1])));
+                            atoi(normalize_mix_level[last])));
                 }
+            }
         }
 
         // Update DRC
         if (hb_str_vlen(dynamic_range_compression) > 0)
         {
+            int last = -1;
             for (ii = 0;dynamic_range_compression[ii]    != NULL &&
                         dynamic_range_compression[ii][0] != 0; ii++)
             {
@@ -3788,22 +3831,27 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                 hb_dict_set(audio_dict, "AudioTrackDRCSlider",
                   hb_value_double(
                     strtod(dynamic_range_compression[ii], NULL)));
+                last = ii;
             }
-            // Apply last DRC in list to all other entries
-            if (dynamic_range_compression[ii-1][0] != 0)
+            if (last_audio_dict == NULL && last >= 0)
+            {
+                // No defaults exist in original preset.
+                // Apply last DRC in list to all other entries
                 for (; ii < count; ii++)
                 {
                     audio_dict = hb_value_array_get(list, ii);
                     hb_dict_set(audio_dict, "AudioTrackDRCSlider",
                         hb_value_double(
-                            strtod(dynamic_range_compression[ii-1],
+                            strtod(dynamic_range_compression[last],
                                    NULL)));
                 }
+            }
         }
 
         // Update Gain
         if (hb_str_vlen(audio_gain) > 0)
         {
+            int last = -1;
             for (ii = 0; audio_gain[ii]    != NULL &&
                          audio_gain[ii][0] != 0; ii++)
             {
@@ -3811,41 +3859,51 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                 hb_dict_set(audio_dict, "AudioTrackGainSlider",
                   hb_value_double(
                     strtod(audio_gain[ii], NULL)));
+                last = ii;
             }
-            // Apply last gain in list to all other entries
-            if (audio_gain[ii-1][0] != 0)
+            if (last_audio_dict == NULL && last >= 0)
+            {
+                // No defaults exist in original preset.
+                // Apply last gain in list to all other entries
                 for (; ii < count; ii++)
                 {
                     audio_dict = hb_value_array_get(list, ii);
                     hb_dict_set(audio_dict, "AudioTrackGainSlider",
                       hb_value_double(
-                        strtod(audio_gain[ii-1], NULL)));
+                        strtod(audio_gain[last], NULL)));
                 }
+            }
         }
 
         // Update dither method
         if (hb_str_vlen(audio_dither) > 0)
         {
+            int last = -1;
             for (ii = 0; audio_dither[ii]    != NULL &&
                          audio_dither[ii][0] != 0; ii++)
             {
                 audio_dict = hb_value_array_get(list, ii);
                 hb_dict_set(audio_dict, "AudioDitherMethod",
                             hb_value_string(audio_dither[ii]));
+                last = ii;
             }
-            // Apply last dither in list to all other entries
-            if (audio_dither[ii-1][0] != 0)
+            if (last_audio_dict == NULL && last >= 0)
+            {
+                // No defaults exist in original preset.
+                // Apply last dither in list to all other entries
                 for (; ii < count; ii++)
                 {
                     audio_dict = hb_value_array_get(list, ii);
                     hb_dict_set(audio_dict, "AudioDitherMethod",
-                            hb_value_string(audio_dither[ii-1]));
+                            hb_value_string(audio_dither[last]));
                 }
+            }
         }
 
         // Update compression
         if (hb_str_vlen(acompressions) > 0)
         {
+            int last = -1;
             for (ii = 0; acompressions[ii]    != NULL &&
                          acompressions[ii][0] != 0; ii++)
             {
@@ -3853,16 +3911,20 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                 hb_dict_set(audio_dict, "AudioCompressionLevel",
                   hb_value_double(
                     strtod(acompressions[ii], NULL)));
+                last = ii;
             }
-            // Apply last compression in list to all other entries
-            if (acompressions[ii-1][0] != 0)
+            if (last_audio_dict == NULL && last >= 0)
+            {
+                // No defaults exist in original preset.
+                // Apply last compression in list to all other entries
                 for (; ii < count; ii++)
                 {
                     audio_dict = hb_value_array_get(list, ii);
                     hb_dict_set(audio_dict, "AudioCompressionLevel",
                       hb_value_double(
-                        strtod(acompressions[ii-1], NULL)));
+                        strtod(acompressions[last], NULL)));
                 }
+            }
         }
 
         // Update track names
