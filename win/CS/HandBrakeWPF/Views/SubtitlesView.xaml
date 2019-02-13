@@ -11,12 +11,14 @@
              xmlns:splitButton="clr-namespace:HandBrakeWPF.Controls.SplitButton"
              xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
              xmlns:subtitles="clr-namespace:HandBrakeWPF.Converters.Subtitles"
+             xmlns:viewModels="clr-namespace:HandBrakeWPF.ViewModels"
              d:DesignHeight="350"
              d:DesignWidth="500"
              mc:Ignorable="d"
              x:Name="subTab">
     <UserControl.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="booleanToVisConverter" />
+        <Converters:BooleanConverter x:Key="booleanConverter" />
         <subtitles:CanBurnSubtitleConverter x:Key="canBurnSubtitleConverter" />
 
         <Style x:Key="LongToolTip" TargetType="TextBlock">
@@ -190,7 +192,8 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-                            <CheckBox Grid.Column="5" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Default}" Content="{x:Static Properties:Resources.SubtitlesView_Default}" FontWeight="Bold">
+                            <CheckBox Grid.Column="5" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Default}" Content="{x:Static Properties:Resources.SubtitlesView_Default}" FontWeight="Bold"
+                                      IsEnabled="{Binding DataContext.IsBurnableOnly, Converter={StaticResource booleanConverter}, ConverterParameter=true, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
                                         <cal:ActionMessage MethodName="SelectDefaultTrack">
@@ -251,7 +254,8 @@
                                 </i:Interaction.Triggers>
                             </CheckBox>
 
-                            <CheckBox Grid.Column="9" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Default}" Content="Default" FontWeight="Bold">
+                            <CheckBox Grid.Column="9" Margin="5,0,5,0" VerticalAlignment="Center" IsChecked="{Binding Default}" Content="Default" FontWeight="Bold"
+                                      IsEnabled="{Binding DataContext.IsBurnableOnly, Converter={StaticResource booleanConverter}, ConverterParameter=true, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="Click">
                                         <cal:ActionMessage MethodName="SelectDefaultTrack">

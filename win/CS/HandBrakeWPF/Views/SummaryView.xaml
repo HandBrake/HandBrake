@@ -65,17 +65,17 @@
                               Content="{x:Static Properties:Resources.MainView_WebOptimized}"
                               IsChecked="{Binding Path=OptimizeMP4}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Optimise}"
-                              Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                              Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
             <CheckBox Name="AlignAVStart" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"
                               Content="{x:Static Properties:Resources.MainView_AlignAVStart}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AlignAVStart}"
                               IsChecked="{Binding Path=AlignAVStart}"
-                              Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
+                              Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}" />
             <CheckBox Name="iPod5G" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"
                               Content="{x:Static Properties:Resources.MainView_iPod5G}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_IpodAtom}"
                               IsChecked="{Binding Path=IPod5GSupport}"
-                              Visibility="{Binding IsMkv, Converter={StaticResource boolToVisConverter},  ConverterParameter=true}" />
+                              Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter},  ConverterParameter=true}" />
 
             <TextBlock Text="Tracks:" FontWeight="Bold" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding VideoTrackInfo}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" />

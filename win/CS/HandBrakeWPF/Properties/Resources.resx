@@ -372,6 +372,16 @@ Foreign Audio Track - The Foreign Audio track will be burned in if available.
 First Track - The first track will be burned in.
 Foreign Audio Preferred, else First - If the foreign audio track exists, it will be burned in, otherwise the first track will be chosen.</value>
   </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
+    <value>WebM Subtitle Compatibility</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
+    <value>WebM in HandBrake only supports burned subtitles.
+
+You should change your subtitle selections.
+
+If you continue, your non-burned subtitles will be lost.</value>
+  </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
     <value>No valid source or titles found.</value>
   </data>

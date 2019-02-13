@@ -80,6 +80,7 @@ enum
     HB_GID_ACODEC_OPUS,
     HB_GID_MUX_MKV,
     HB_GID_MUX_MP4,
+    HB_GID_MUX_WEBM,
 };
 
 #define HB_VIDEO_CLOCK    27000000 // 27MHz clock
@@ -265,8 +266,8 @@ hb_encoder_internal_t hb_video_encoders[]  =
     { { "H.265 (VideoToolbox)","vt_h265",    "H.265 (libavcodec)",      HB_VCODEC_FFMPEG_VT_H265,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_H265,   },
     { { "MPEG-4",              "mpeg4",      "MPEG-4 (libavcodec)",     HB_VCODEC_FFMPEG_MPEG4,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG4,  },
     { { "MPEG-2",              "mpeg2",      "MPEG-2 (libavcodec)",     HB_VCODEC_FFMPEG_MPEG2,      HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_MPEG2,  },
-    { { "VP8",                 "VP8",        "VP8 (libvpx)",            HB_VCODEC_FFMPEG_VP8,                        HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_VP8,    },
-    { { "VP9",                 "VP9",        "VP9 (libvpx)",            HB_VCODEC_FFMPEG_VP9,                        HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_VP9,    },
+    { { "VP8",                 "VP8",        "VP8 (libvpx)",            HB_VCODEC_FFMPEG_VP8,       HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_VP8,    },
+    { { "VP9",                 "VP9",        "VP9 (libvpx)",            HB_VCODEC_FFMPEG_VP9,       HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_VP9,    },
     { { "Theora",              "theora",     "Theora (libtheora)",      HB_VCODEC_THEORA,                            HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_VCODEC_THEORA, },
 };
 int hb_video_encoders_count = sizeof(hb_video_encoders) / sizeof(hb_video_encoders[0]);
@@ -375,11 +376,11 @@ hb_encoder_internal_t hb_audio_encoders[]  =
     { { "DTS-HD Passthru",    "copy:dtshd", "DTS-HD Passthru",             HB_ACODEC_DCA_HD_PASS, HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_DTSHD_PASS, },
     { { "MP3",                "mp3",        "MP3 (libmp3lame)",            HB_ACODEC_LAME,        HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_MP3,        },
     { { "MP3 Passthru",       "copy:mp3",   "MP3 Passthru",                HB_ACODEC_MP3_PASS,    HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_MP3_PASS,   },
-    { { "Vorbis",             "vorbis",     "Vorbis (libvorbis)",          HB_ACODEC_VORBIS,                      HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_VORBIS,     },
+    { { "Vorbis",             "vorbis",     "Vorbis (libvorbis)",          HB_ACODEC_VORBIS,     HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_VORBIS,     },
     { { "FLAC 16-bit",        "flac16",     "FLAC 16-bit (libavcodec)",    HB_ACODEC_FFFLAC,                      HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC,       },
     { { "FLAC 24-bit",        "flac24",     "FLAC 24-bit (libavcodec)",    HB_ACODEC_FFFLAC24,                    HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC,       },
     { { "FLAC Passthru",      "copy:flac",  "FLAC Passthru",               HB_ACODEC_FLAC_PASS,                   HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_FLAC_PASS,  },
-    { { "Opus",               "opus",     "Opus (libopus)",                HB_ACODEC_OPUS,                        HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_OPUS,     },
+    { { "Opus",               "opus",     "Opus (libopus)",                HB_ACODEC_OPUS,       HB_MUX_MASK_WEBM|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_OPUS,     },
     { { "Auto Passthru",      "copy",       "Auto Passthru",               HB_ACODEC_AUTO_PASS,   HB_MUX_MASK_MP4|HB_MUX_MASK_MKV, }, NULL, 1, HB_GID_ACODEC_AUTO_PASS,  },
 };
 int hb_audio_encoders_count = sizeof(hb_audio_encoders) / sizeof(hb_audio_encoders[0]);
@@ -443,14 +444,15 @@ hb_container_t *hb_containers_last_item  = NULL;
 hb_container_internal_t hb_containers[]  =
 {
     // legacy muxers, back to HB 0.9.4 whenever possible (disabled)
-    { { "M4V file",            "m4v",    NULL,                     "m4v",  0,             }, NULL, 0, HB_GID_MUX_MP4, },
-    { { "MP4 file",            "mp4",    NULL,                     "mp4",  0,             }, NULL, 0, HB_GID_MUX_MP4, },
-    { { "MKV file",            "mkv",    NULL,                     "mkv",  0,             }, NULL, 0, HB_GID_MUX_MKV, },
+    { { "M4V file",            "m4v",     NULL,                     "m4v",  0,              }, NULL, 0, HB_GID_MUX_MP4,  },
+    { { "MP4 file",            "mp4",     NULL,                     "mp4",  0,              }, NULL, 0, HB_GID_MUX_MP4,  },
+    { { "MKV file",            "mkv",     NULL,                     "mkv",  0,              }, NULL, 0, HB_GID_MUX_MKV,  },
     // actual muxers
-    { { "MPEG-4 (avformat)",   "av_mp4", "MPEG-4 (libavformat)",   "mp4",  HB_MUX_AV_MP4, }, NULL, 1, HB_GID_MUX_MP4, },
-    { { "MPEG-4 (mp4v2)",      "mp4v2",  "MPEG-4 (libmp4v2)",      "mp4",  HB_MUX_MP4V2,  }, NULL, 1, HB_GID_MUX_MP4, },
-    { { "Matroska (avformat)", "av_mkv", "Matroska (libavformat)", "mkv",  HB_MUX_AV_MKV, }, NULL, 1, HB_GID_MUX_MKV, },
-    { { "Matroska (libmkv)",   "libmkv", "Matroska (libmkv)",      "mkv",  HB_MUX_LIBMKV, }, NULL, 1, HB_GID_MUX_MKV, },
+    { { "MPEG-4 (avformat)",   "av_mp4",  "MPEG-4 (libavformat)",   "mp4",  HB_MUX_AV_MP4,  }, NULL, 1, HB_GID_MUX_MP4,  },
+    { { "MPEG-4 (mp4v2)",      "mp4v2",   "MPEG-4 (libmp4v2)",      "mp4",  HB_MUX_MP4V2,   }, NULL, 1, HB_GID_MUX_MP4,  },
+    { { "Matroska (avformat)", "av_mkv",  "Matroska (libavformat)", "mkv",  HB_MUX_AV_MKV,  }, NULL, 1, HB_GID_MUX_MKV,  },
+    { { "Matroska (libmkv)",   "libmkv",  "Matroska (libmkv)",      "mkv",  HB_MUX_LIBMKV,  }, NULL, 1, HB_GID_MUX_MKV,  },
+    { { "WebM (avformat)",     "av_webm", "WebM (libavformat)",     "webm", HB_MUX_AV_WEBM, }, NULL, 1, HB_GID_MUX_WEBM, },
 };
 int hb_containers_count = sizeof(hb_containers) / sizeof(hb_containers[0]);
 static int hb_container_is_enabled(int format)
@@ -459,6 +461,7 @@ static int hb_container_is_enabled(int format)
     {
         case HB_MUX_AV_MP4:
         case HB_MUX_AV_MKV:
+        case HB_MUX_AV_WEBM:
             return 1;
 
         default:
@@ -4961,6 +4964,10 @@ int hb_subtitle_can_pass( int source, int mux )
                     return 0;
             } break;
 
+        // webm can't support subtitles unless they're burned.
+        // there's ambiguity in the spec about WebVTT... TODO
+        case HB_MUX_AV_WEBM:
+            return 0;
         default:
             // Internal error. Should never get here.
             hb_error("internal error.  Bad mux %d\n", mux);

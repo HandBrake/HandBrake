@@ -202,7 +202,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
     if (!encoderSupported)
     {
-        self.encoder = HB_VCODEC_X264;
+        self.encoder = hb_video_encoder_get_default(self.job.container);
     }
 }
 

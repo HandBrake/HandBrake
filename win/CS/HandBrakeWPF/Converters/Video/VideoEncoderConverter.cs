@@ -79,11 +79,15 @@ namespace HandBrakeWPF.Converters.Video
                     encoders.Remove(VideoEncoder.X265_12);
                 }
 
-                if (task != null && task.OutputFormat != OutputFormat.Mkv)
+                if (task != null && task.OutputFormat == OutputFormat.Mp4)
                 {
                     encoders.Remove(VideoEncoder.Theora);
                     encoders.Remove(VideoEncoder.VP8);
                     encoders.Remove(VideoEncoder.VP9);
+                }
+                else if (task != null && task.OutputFormat == OutputFormat.WebM)
+                {
+                    encoders.RemoveAll(ve => !(ve.Equals(VideoEncoder.VP9) || ve.Equals(VideoEncoder.VP8)));
                 }
 
                 if (!isQsvEnabled || !SystemInfo.IsQsvAvailableH264)

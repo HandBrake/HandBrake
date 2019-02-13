@@ -4617,6 +4617,28 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to WebM in HandBrake only supports burned subtitles.
+        ///
+        ///You should change your subtitle selections.
+        ///
+        ///If you continue, your non-burned subtitles will be lost..
+        /// </summary>
+        public static string Subtitles_WebmSubtitleIncompatibilityError {
+            get {
+                return ResourceManager.GetString("Subtitles_WebmSubtitleIncompatibilityError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WebM Subtitle Compatibility.
+        /// </summary>
+        public static string Subtitles_WebmSubtitleIncompatibilityHeader {
+            get {
+                return ResourceManager.GetString("Subtitles_WebmSubtitleIncompatibilityHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Closed Captions when available.
         /// </summary>
         public static string SubtitlesView_AddCC {

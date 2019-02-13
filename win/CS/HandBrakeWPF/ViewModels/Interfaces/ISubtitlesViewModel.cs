@@ -28,5 +28,15 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// String array of files.
         /// </param>
         void Import(string[] subtitleFiles);
+
+        /// <summary>
+        /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
+        /// </summary>
+        void RefreshTask();
+
+        /// <summary>
+        /// Checks the configuration of the subtitles and warns the user about any potential issues.
+        /// </summary>
+        bool ValidateSubtitles();
     }
 }

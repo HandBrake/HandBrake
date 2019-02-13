@@ -4298,6 +4298,8 @@ ghb_validate_video(GhbValue *settings, GtkWindow *parent)
     mux_id = ghb_dict_get_string(settings, "FileFormat");
     mux = ghb_lookup_container_by_name(mux_id);
 
+    gboolean v_unsup = FALSE;
+
     vcodec = ghb_settings_video_encoder_codec(settings, "VideoEncoder");
     if ((mux->format & HB_MUX_MASK_MP4) && (vcodec == HB_VCODEC_THEORA))
     {
@@ -4306,6 +4308,21 @@ ghb_validate_video(GhbValue *settings, GtkWindow *parent)
                     _("Theora is not supported in the MP4 container.\n\n"
                     "You should choose a different video codec or container.\n"
                     "If you continue, FFMPEG will be chosen for you."));
+        v_unsup = TRUE;
+    }
+    else if ((mux->format & HB_MUX_MASK_WEBM) &&
+             (vcodec != HB_VCODEC_FFMPEG_VP8 && vcodec != HB_VCODEC_FFMPEG_VP9))
+    {
+        // webm only supports vp8 and vp9.
+        message = g_strdup_printf(
+                    _("Only VP8 or VP9 is supported in the WebM container.\n\n"
+                    "You should choose a different video codec or container.\n"
+                    "If you continue, one will be chosen for you."));
+        v_unsup = TRUE;
+    }
+
+    if (v_unsup)
+    {
         if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
                                 message, _("Cancel"), _("Continue")))
         {
@@ -4317,6 +4334,7 @@ ghb_validate_video(GhbValue *settings, GtkWindow *parent)
         ghb_dict_set_string(settings, "VideoEncoder",
                                 hb_video_encoder_get_short_name(vcodec));
     }
+
     return TRUE;
 }
 
@@ -4339,6 +4357,12 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
     const GhbValue *slist, *subtitle, *import;
     gint count, ii, track;
     gboolean burned, one_burned = FALSE;
+
+    const char *mux_id;
+    const hb_container_t *mux;
+
+    mux_id = ghb_dict_get_string(settings, "FileFormat");
+    mux = ghb_lookup_container_by_name(mux_id);
 
     slist = ghb_get_job_subtitle_list(settings);
     count = ghb_array_len(slist);
@@ -4368,6 +4392,22 @@ ghb_validate_subtitles(GhbValue *settings, GtkWindow *parent)
         else if (burned)
         {
             one_burned = TRUE;
+        }
+        else if (mux->format & HB_MUX_MASK_WEBM)
+        {
+            // WebM can only handle burned subs afaik. Their specs are ambiguous here
+            message = g_strdup_printf(
+            _("WebM in HandBrake only supports burned subtitles.\n\n"
+                "You should change your subtitle selections.\n"
+                "If you continue, some subtitles will be lost."));
+            if (!ghb_message_dialog(parent, GTK_MESSAGE_WARNING,
+                                    message, _("Cancel"), _("Continue")))
+            {
+                g_free(message);
+                return FALSE;
+            }
+            g_free(message);
+            break;
         }
         if (import != NULL)
         {
@@ -4457,6 +4497,10 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
             {
                 codec = HB_ACODEC_LAME;
             }
+            else if (mux->format & HB_MUX_MASK_WEBM)
+            {
+                codec = hb_audio_encoder_get_default(mux->format);
+            }
             else
             {
                 codec = HB_ACODEC_FFAAC;
@@ -4464,8 +4508,8 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
             const char *name = hb_audio_encoder_get_short_name(codec);
             ghb_dict_set_string(asettings, "Encoder", name);
         }
-        gchar *a_unsup = NULL;
-        gchar *mux_s = NULL;
+        const gchar *a_unsup = NULL;
+        const gchar *mux_s = NULL;
         if (mux->format & HB_MUX_MASK_MP4)
         {
             mux_s = "MP4";
@@ -4474,6 +4518,16 @@ ghb_validate_audio(GhbValue *settings, GtkWindow *parent)
             {
                 a_unsup = "Vorbis";
                 codec = HB_ACODEC_FFAAC;
+            }
+        }
+        if (mux->format & HB_MUX_MASK_WEBM)
+        {
+            mux_s = "WebM";
+            // WebM only supports Vorbis and Opus codecs
+            if (codec != HB_ACODEC_VORBIS && codec != HB_ACODEC_OPUS)
+            {
+                a_unsup = hb_audio_encoder_get_short_name(codec);
+                codec = hb_audio_encoder_get_default(mux->format);
             }
         }
         if (a_unsup)

@@ -251,7 +251,7 @@ NSString *keyAudioTrackLanguageIsoCode = @"keyAudioTrackLanguageIsoCode";
             }
         }
 
-        return HB_ACODEC_CA_AAC;
+        return hb_audio_encoder_get_default(self.container);
     }
     else
     {

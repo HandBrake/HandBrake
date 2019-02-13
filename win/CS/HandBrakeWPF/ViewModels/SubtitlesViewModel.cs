@@ -14,6 +14,7 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Windows;
 
     using Caliburn.Micro;
 
@@ -22,6 +23,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -38,6 +40,7 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class SubtitlesViewModel : ViewModelBase, ISubtitlesViewModel
     {
+        private readonly IErrorService errorService;
         private readonly IWindowManager windowManager;
 
         #region Constants and Fields
@@ -52,11 +55,15 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Initializes a new instance of the <see cref="HandBrakeWPF.ViewModels.SubtitlesViewModel"/> class.
         /// </summary>
+        /// <param name="errorService">
+        /// The Error Service
+        /// </param>
         /// <param name="windowManager">
         /// The window Manager.
         /// </param>
-        public SubtitlesViewModel(IWindowManager windowManager)
+        public SubtitlesViewModel(IErrorService errorService, IWindowManager windowManager)
         {
+            this.errorService = errorService;
             this.windowManager = windowManager;
             this.SubtitleDefaultsViewModel = new SubtitlesDefaultsViewModel();
             this.Task = new EncodeTask();
@@ -141,6 +148,14 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 return this.SubtitleDefaultsViewModel.SubtitleBehaviours;
+            }
+        }
+
+        public bool IsBurnableOnly
+        {
+            get
+            {
+                return this.Task.OutputFormat == OutputFormat.WebM;
             }
         }
 
@@ -453,6 +468,26 @@ namespace HandBrakeWPF.ViewModels
             this.AutomaticSubtitleSelection();
         }
 
+        /// <summary>
+        /// Trigger a Notify Property Changed on the Task to force various UI elements to update.
+        /// </summary>
+        public void RefreshTask()
+        {
+            this.NotifyOfPropertyChange(() => this.Task);
+            this.NotifyOfPropertyChange(() => this.IsBurnableOnly);
+
+            if (this.IsBurnableOnly)
+            {
+                foreach (var subtitleTrack in this.Task.SubtitleTracks)
+                {
+                    if (subtitleTrack.Default)
+                    {
+                        subtitleTrack.Default = false;
+                    }
+                }
+            }
+        }
+
         #endregion
 
         #region Implemented Interfaces
@@ -551,6 +586,43 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.Task);
 
             this.AutomaticSubtitleSelection();
+        }
+
+        /// <summary>
+        /// Checks the configuration of the subtitles and warns the user about any potential issues.
+        /// </summary>
+        public bool ValidateSubtitles()
+        {
+            var nonBurnedSubtitles = this.Task.SubtitleTracks.Where(subtitleTrack => !subtitleTrack.Burned).ToList();
+
+            if (nonBurnedSubtitles.Count > 0 && this.IsBurnableOnly)
+            {
+                MessageBoxResult result = this.errorService.ShowMessageBox(
+                    Resources.Subtitles_WebmSubtitleIncompatibilityError,
+                    Resources.Subtitles_WebmSubtitleIncompatibilityHeader,
+                    MessageBoxButton.OKCancel,
+                    MessageBoxImage.Warning);
+                if (result == MessageBoxResult.OK)
+                {
+                    foreach (var subtitleTrack in nonBurnedSubtitles)
+                    {
+                        if (!subtitleTrack.Burned)
+                        {
+                            this.Remove(subtitleTrack);
+                        }
+                    }
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         #endregion

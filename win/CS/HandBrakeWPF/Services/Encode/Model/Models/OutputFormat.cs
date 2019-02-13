@@ -23,5 +23,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         [DisplayName("MKV")]
         [ShortName("mkv")]
         Mkv,
+
+        [DisplayName("WebM")]
+        [ShortName("webm")]
+        WebM
     }
 }

@@ -16,6 +16,7 @@ filter_output([
   <object class="GtkFileFilter" id="SourceFilterEVO"/>
   <object class="GtkFileFilter" id="SourceFilterFLV"/>
   <object class="GtkFileFilter" id="SourceFilterMKV"/>
+  <object class="GtkFileFilter" id="SourceFilterWebM"/>
   <object class="GtkFileFilter" id="SourceFilterMOV"/>
   <object class="GtkFileFilter" id="SourceFilterMP4"/>
   <object class="GtkFileFilter" id="SourceFilterMPG"/>

@@ -209,6 +209,14 @@ namespace HandBrakeWPF.ViewModels
                 }
             }
 
+            if (this.Task.OutputFormat == OutputFormat.WebM)
+            {
+                foreach (AudioTrack track in this.Task.AudioTracks.Where(track => track.Encoder != AudioEncoder.Vorbis && track.Encoder != AudioEncoder.Opus))
+                {
+                    track.Encoder = AudioEncoder.Vorbis;
+                }
+            }
+
             this.AudioDefaultsViewModel.RefreshTask();
         }
 

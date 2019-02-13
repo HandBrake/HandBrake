@@ -556,7 +556,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets RangeMode.
         /// </summary>
-        public IEnumerable<OutputFormat> OutputFormats => new List<OutputFormat> { OutputFormat.Mp4, OutputFormat.Mkv };
+        public IEnumerable<OutputFormat> OutputFormats => new List<OutputFormat> { OutputFormat.Mp4, OutputFormat.Mkv, OutputFormat.WebM };
 
         /// <summary>
         /// Gets or sets Destination.
@@ -607,6 +607,9 @@ namespace HandBrakeWPF.ViewModels
                             case ".mp4":
                             case ".m4v":
                                 this.SummaryViewModel.SetContainer(OutputFormat.Mp4);
+                                break;
+                            case ".webm":
+                                this.SummaryViewModel.SetContainer(OutputFormat.WebM);
                                 break;
                         }
                     }
@@ -1154,6 +1157,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.VideoViewModel.RefreshTask();
             this.AudioViewModel.RefreshTask();
+            this.SubtitleViewModel.RefreshTask();
         }
 
         public void Shutdown()
@@ -1375,6 +1379,12 @@ namespace HandBrakeWPF.ViewModels
             if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.ToLower() == this.scannedSource.ScanPath.ToLower())
             {
                 return new AddQueueError(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            // defer to subtitle's validation messages
+            if (!this.SubtitleViewModel.ValidateSubtitles())
+            {
+                return false;
             }
 
             QueueTask task = new QueueTask(new EncodeTask(this.CurrentTask), HBConfigurationFactory.Create(), this.ScannedSource.ScanPath, this.SelectedPreset);
@@ -1731,7 +1741,7 @@ namespace HandBrakeWPF.ViewModels
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv", 
+                Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv|webm|*.webm", 
                 CheckPathExists = true, 
                 AddExtension = true, 
                 DefaultExt = ".mp4", 
@@ -1743,7 +1753,9 @@ namespace HandBrakeWPF.ViewModels
             saveFileDialog.FilterIndex = !string.IsNullOrEmpty(this.CurrentTask.Destination)
                                          && !string.IsNullOrEmpty(extension)
                                              ? (extension == ".mp4" || extension == ".m4v" ? 1 : 2)
-                                             : (this.CurrentTask.OutputFormat == OutputFormat.Mkv ? 2 : 0);
+                                             : (this.CurrentTask.OutputFormat == OutputFormat.Mkv 
+                                                 ? 2 
+                                                 : (this.CurrentTask.OutputFormat == OutputFormat.WebM ? 3 : 0));
 
             string mruDir = this.GetMru(Constants.FileSaveMru);
             if (!string.IsNullOrEmpty(mruDir))
@@ -1780,6 +1792,9 @@ namespace HandBrakeWPF.ViewModels
                         case ".mp4":
                         case ".m4v":
                             this.SummaryViewModel.SetContainer(OutputFormat.Mp4);
+                            break;
+                        case ".webm":
+                            this.SummaryViewModel.SetContainer(OutputFormat.WebM);
                             break;
                     }
 

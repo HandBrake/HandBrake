@@ -1934,7 +1934,7 @@ dvd_source_activate_cb(GtkWidget *widget, signal_user_data_t *ud)
 void
 ghb_update_destination_extension(signal_user_data_t *ud)
 {
-    static gchar *containers[] = {".mkv", ".mp4", ".m4v", ".error", NULL};
+    static gchar *containers[] = {".mkv", ".mp4", ".m4v", ".webm", ".error", NULL};
     gchar *filename;
     const gchar *extension;
     gint ii;

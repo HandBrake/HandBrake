@@ -208,6 +208,9 @@
 "MKV File" = "MKV-Datei";
 
 /* HBJob -> Format display name */
+"WebM File" = "WebM-Datei";
+
+/* HBJob -> Format display name */
 "MP4 File" = "MP4-Datei";
 
 /* HBStateFormatter -> pass display name */

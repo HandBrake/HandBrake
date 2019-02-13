@@ -172,6 +172,10 @@ namespace HandBrakeWPF.Helpers
                 {
                     destinationFilename += ".mkv";
                 }
+                else if (task.OutputFormat == OutputFormat.WebM)
+                {
+                    destinationFilename += ".webm";
+                }
 
                 /*
                  * File Destination Path
