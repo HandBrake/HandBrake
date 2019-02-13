@@ -1,4 +1,4 @@
-/*  DockTextField.h $
+/*  HBDockTextField.h $
  
  This file is part of the HandBrake source code.
  Homepage: <http://handbrake.fr/>.
@@ -6,7 +6,7 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface DockTextField : NSTextField
+@interface HBDockTextField : NSTextField
 
 @property (nonatomic, copy) NSString *textToDisplay;
 @property (nonatomic, copy) NSColor *startColor;

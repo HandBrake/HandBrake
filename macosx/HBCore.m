@@ -112,7 +112,7 @@ typedef void (^HBCoreCleanupHandler)(void);
         bzero(_hb_state, sizeof(hb_state_t));
         _logLevel = level;
 
-        _hb_handle = hb_init(level);
+        _hb_handle = hb_init((int)level);
         if (!_hb_handle)
         {
             return nil;
@@ -144,10 +144,10 @@ typedef void (^HBCoreCleanupHandler)(void);
     free(_hb_state);
 }
 
-- (void)setLogLevel:(int)logLevel
+- (void)setLogLevel:(NSInteger)logLevel
 {
     _logLevel = logLevel;
-    hb_log_level_set(_hb_handle, logLevel);
+    hb_log_level_set(_hb_handle, (int)logLevel);
 }
 
 - (void)preventSleep

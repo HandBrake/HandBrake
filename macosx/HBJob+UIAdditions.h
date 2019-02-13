@@ -12,7 +12,8 @@
 @property (nonatomic, readonly) BOOL mp4OptionsEnabled;
 @property (nonatomic, readonly) BOOL mp4iPodCompatibleEnabled;
 
-@property (nonatomic, readonly) NSArray *angles;
+@property (nonatomic, readonly) NSArray<NSString *> *angles;
+@property (nonatomic, readonly) NSArray<NSString *> *containers;
 
 @property (nonatomic, readonly) NSAttributedString *attributedTitleDescription;
 @property (nonatomic, readonly) NSAttributedString *attributedDescription;

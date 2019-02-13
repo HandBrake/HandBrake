@@ -1,9 +1,8 @@
-//
-//  HBQueueItem.m
-//  HandBrake
-//
-//  Created by Damiano Galassi on 07/02/2019.
-//
+/*  HBQueueItem.m $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
 
 #import "HBQueueItem.h"
 
@@ -90,7 +89,7 @@ static NSString *versionKey = @"HBQueueItemVersion";
     if (version == 1 && (self = [super init]))
     {
         decodeInt(_state);
-        if (_state > HBQueueItemStateFailed)
+        if (_state < HBQueueItemStateReady || _state > HBQueueItemStateFailed)
         {
             goto fail;
         }

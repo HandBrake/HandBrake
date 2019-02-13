@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBDockTile.h"
-#import "DockTextField.h"
+#import "HBDockTextField.h"
 
 NSString *dockTilePercentFormat = @"%2.1f%%";
 
@@ -13,8 +13,8 @@ NSString *dockTilePercentFormat = @"%2.1f%%";
 
 @property (nonatomic, strong) NSDockTile *dockTile;
 @property (nonatomic, strong) NSImage *image;
-@property (nonatomic, strong) DockTextField * percentField;
-@property (nonatomic, strong) DockTextField * timeField;
+@property (nonatomic, strong) HBDockTextField * percentField;
+@property (nonatomic, strong) HBDockTextField * timeField;
 
 @end
 
@@ -37,11 +37,11 @@ NSString *dockTilePercentFormat = @"%2.1f%%";
         [iv setImage:_image];
         [dockTile setContentView:iv];
 
-        _percentField = [[DockTextField alloc] initWithFrame:NSMakeRect(0.0f, 32.0f, [dockTile size].width, 30.0f)];
+        _percentField = [[HBDockTextField alloc] initWithFrame:NSMakeRect(0.0f, 32.0f, [dockTile size].width, 30.0f)];
         [_percentField changeGradientColors:[NSColor colorWithDeviceRed:0.4f green:0.6f blue:0.4f alpha:1.0f] endColor:[NSColor colorWithDeviceRed:0.2f green:0.4f blue:0.2f alpha:1.0f]];
         [iv addSubview:_percentField];
 
-        _timeField = [[DockTextField alloc] initWithFrame:NSMakeRect(0.0f, 0.0f, [dockTile size].width, 30.0f)];
+        _timeField = [[HBDockTextField alloc] initWithFrame:NSMakeRect(0.0f, 0.0f, [dockTile size].width, 30.0f)];
         [_timeField changeGradientColors:[NSColor colorWithDeviceRed:0.6f green:0.4f blue:0.4f alpha:1.0f] endColor:[NSColor colorWithDeviceRed:0.4f green:0.2f blue:0.2f alpha:1.0f]];
         [iv addSubview:_timeField];
     }

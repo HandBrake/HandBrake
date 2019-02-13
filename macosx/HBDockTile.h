@@ -20,7 +20,7 @@
 
 
 /**
- *  Updates two DockTextFields on the dockTile,
+ *  Updates two HBDockTextFields on the dockTile,
  *  one with total percentage, the other one with the ETA.
  *
  *  ETA format is [XX]X:XX:XX when ETA is greater than one hour

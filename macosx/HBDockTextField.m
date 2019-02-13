@@ -1,15 +1,15 @@
-/*  DockTextField.m $
+/*  HBDockTextField.m $
  
  This file is part of the HandBrake source code.
  Homepage: <http://handbrake.fr/>.
  It may be used under the terms of the GNU General Public License. */
 
-#import "DockTextField.h"
+#import "HBDockTextField.h"
 
 #define DOCK_TEXTFIELD_ALPHA 0.8
 #define DOCK_TEXTFIELD_FONTSIZE 28.0
 
-@interface DockTextField ()
+@interface HBDockTextField ()
 
 @property (nonatomic, readonly) NSDictionary *textAttributes;
 @property (nonatomic, readonly) NSDictionary *smallTextAttributes;
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation DockTextField
+@implementation HBDockTextField
 
 - (instancetype)initWithFrame:(NSRect)frame
 {

@@ -51,9 +51,9 @@ static NSDictionary            *shortHeightAttr;
     return [NSSet setWithObjects:@"container", @"video.encoder", nil];
 }
 
-- (NSArray *)angles
+- (NSArray<NSString *> *)angles
 {
-    NSMutableArray *angles = [NSMutableArray array];
+    NSMutableArray<NSString *> *angles = [NSMutableArray array];
     for (int i = 1; i <= self.title.angles; i++)
     {
         [angles addObject:[NSString stringWithFormat: @"%d", i]];
@@ -61,9 +61,9 @@ static NSDictionary            *shortHeightAttr;
     return angles;
 }
 
-- (NSArray *)containers
+- (NSArray<NSString *> *)containers
 {
-    NSMutableArray *containers = [NSMutableArray array];
+    NSMutableArray<NSString *> *containers = [NSMutableArray array];
 
     for (const hb_container_t *container = hb_container_get_next(NULL);
          container != NULL;
