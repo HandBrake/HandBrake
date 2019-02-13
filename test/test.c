@@ -3536,7 +3536,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     }
 
     // Audio overrides
-    if (atracks == NULL && (
+    if (atracks == NULL && audio_all != 1 && (
         acodecs                   != NULL ||
         abitrates                 != NULL ||
         arates                    != NULL ||
@@ -3551,6 +3551,8 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     {
         // No explicit audio tracks, but track settings modified.
         // Modify the presets audio settings.
+        //
+        // Note that --all-audio is explicitely asking for all tracks
         hb_value_array_t *list;
         list = hb_dict_get(preset, "AudioList");
         if (list == NULL)
@@ -4453,11 +4455,12 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
     hb_dict_t *audio_dict;
 
     /* Grab audio tracks */
-    if (atracks != NULL)
+    if (atracks != NULL || audio_all == 1)
     {
         int track_count;
         int ii;
-        if (atracks[0] != NULL && strcasecmp("none", atracks[0]))
+        if (atracks != NULL && atracks[0] != NULL &&
+            strcasecmp("none", atracks[0]))
         {
             // First "track" is not "none", add tracks
             for (ii = 0; atracks[ii] != NULL; ii++)
