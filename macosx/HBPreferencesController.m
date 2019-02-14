@@ -209,10 +209,48 @@
 {
     if ([representedObject rangeOfString: @"{"].location == 0 && [representedObject length] > 1)
     {
-        return [(NSString *)representedObject substringWithRange:NSMakeRange(1, [(NSString*)representedObject length]-2)];
+        return [self localizedStringForToken:representedObject];
     }
 
     return representedObject;
+}
+
+- (NSString *)localizedStringForToken:(NSString *)tokenString
+{
+    if ([tokenString isEqualToString:@"{Source}"])
+    {
+        return NSLocalizedString(@"Source", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Title}"])
+    {
+        return NSLocalizedString(@"Title", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Date}"])
+    {
+        return NSLocalizedString(@"Date", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Time}"])
+    {
+        return NSLocalizedString(@"Time", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Creation-Date}"])
+    {
+        return NSLocalizedString(@"Creation-Date", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Creation-Time}"])
+    {
+        return NSLocalizedString(@"Creation-Time", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Chapters}"])
+    {
+        return NSLocalizedString(@"Chapters", "Preferences -> Output Name Token");
+    }
+    else if ([tokenString isEqualToString:@"{Quality/Bitrate}"])
+    {
+        return NSLocalizedString(@"Quality/Bitrate", "Preferences -> Output Name Token");
+    }
+
+    return tokenString;
 }
 
 - (NSTokenStyle)tokenField:(NSTokenField *)tokenField styleForRepresentedObject:(id)representedObject

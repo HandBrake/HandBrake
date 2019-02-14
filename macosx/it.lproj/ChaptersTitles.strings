@@ -1,0 +1,57 @@
+/* Class = "NSTableColumn"; headerCell.title = "Index"; ObjectID = "0iF-eL-NOC"; */
+"0iF-eL-NOC.headerCell.title" = "Indice";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Export the list of chapter names to a CSV file."; ObjectID = "3SP-6e-RPS"; */
+"3SP-6e-RPS.ibShadowedToolTip" = "Esporta l'elenco dei nomi dei capitoli in un documento CSV";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Add a chapter markers track to the video."; ObjectID = "7Xf-c0-jsr"; */
+"7Xf-c0-jsr.ibShadowedToolTip" = "Aggiungi una traccia di marcatori di capitoli al video.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "All-Bz-NLv"; */
+"All-Bz-NLv.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "FyM-2X-9xs"; */
+"FyM-2X-9xs.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "1"; ObjectID = "G9p-Cg-wyC"; */
+"G9p-Cg-wyC.title" = "1";
+
+/* Class = "NSButtonCell"; title = "Export Chapters…"; ObjectID = "h0O-zg-OF9"; */
+"h0O-zg-OF9.title" = "Esporta capitoli…";
+
+/* Class = "NSTableView"; ibExternalAccessibilityDescription = "Chapter titles"; ObjectID = "InF-gR-Lia"; */
+"InF-gR-Lia.ibExternalAccessibilityDescription" = "Titoli capitoli";
+
+/* Class = "NSButtonCell"; title = "Create chapter markers"; ObjectID = "lJL-wX-DVP"; */
+"lJL-wX-DVP.title" = "Crea marcatori dei capitoli";
+
+/* Class = "NSTableColumn"; headerCell.title = "Start"; ObjectID = "NlF-th-Cg9"; */
+"NlF-th-Cg9.headerCell.title" = "Inizio";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "ozt-ED-g1M"; */
+"ozt-ED-g1M.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "pAo-XM-bvP"; */
+"pAo-XM-bvP.title" = "Text Cell";
+
+/* Class = "NSButtonCell"; title = "Import Chapters…"; ObjectID = "PM3-Ue-0kW"; */
+"PM3-Ue-0kW.title" = "Importa capitoli…";
+
+/* Class = "NSTableColumn"; headerCell.title = "Duration"; ObjectID = "QVB-Cw-DJD"; */
+"QVB-Cw-DJD.headerCell.title" = "Durata";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Import a list of chapter names from a CSV file."; ObjectID = "Ron-3B-rYg"; */
+"Ron-3B-rYg.ibShadowedToolTip" = "Importa un elenco di nomi dei capitoli da un documento CSV";
+
+/* Class = "NSTextFieldCell"; title = "Title"; ObjectID = "UjY-nz-uSt"; */
+"UjY-nz-uSt.title" = "Titolo";
+
+/* Class = "NSTextFieldCell"; title = "Duration"; ObjectID = "Vmq-zJ-NEA"; */
+"Vmq-zJ-NEA.title" = "Durata";
+
+/* Class = "NSTableColumn"; headerCell.title = "Title"; ObjectID = "Z6H-lJ-ipr"; */
+"Z6H-lJ-ipr.headerCell.title" = "Titolo";
+
+/* Class = "NSTextFieldCell"; title = "Timestamp"; ObjectID = "zaN-qY-tke"; */
+"zaN-qY-tke.title" = "Marcatore di tempo";
+

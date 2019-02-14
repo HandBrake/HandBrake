@@ -25,6 +25,9 @@ static NSArray * filterParamsToNamesArray(hb_filter_param_t * (f)(int), int filt
         if ([name isEqualToString:@"Off"]) {
             name = NSLocalizedStringFromTableInBundle(@"Off", nil, [NSBundle bundleForClass:[HBFilters class]], "HBFilters -> off display name");
         }
+//        else if ([name isEqualToString:@"Custom"]) {
+//            name = NSLocalizedStringFromTableInBundle(@"Custom", nil, [NSBundle bundleForClass:[HBFilters class]], "HBFilters -> custom display name");
+//        }
         [presets addObject:name];
     }
 

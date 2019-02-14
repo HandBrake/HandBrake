@@ -1,0 +1,84 @@
+/* Class = "NSWindow"; title = "Queue"; ObjectID = "2576"; */
+"2576.title" = "Coda";
+
+/* Class = "NSTextFieldCell"; title = "Pending Jobs"; ObjectID = "2637"; */
+"2637.title" = "Lavori in sospeso";
+
+/* Class = "NSTextFieldCell"; title = "There are no jobs currently encoding"; ObjectID = "2647"; */
+"2647.title" = "Non c'è alcun lavoro in conversione";
+
+/* Class = "NSMenuItem"; title = "Edit Job Settings"; ObjectID = "2650"; */
+"2650.title" = "Modifica impostazioni lavoro";
+
+/* Class = "NSMenuItem"; title = "Clear All Jobs"; ObjectID = "2652"; */
+"2652.title" = "Cancella tutti i lavori";
+
+/* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "2655"; */
+"2655.title" = "Mostra destinazione nel Finder";
+
+/* Class = "NSToolbarItem"; label = "When Done"; ObjectID = "a3c-kV-98E"; */
+"a3c-kV-98E.label" = "Al completamento";
+
+/* Class = "NSToolbarItem"; paletteLabel = "When Done"; ObjectID = "a3c-kV-98E"; */
+"a3c-kV-98E.paletteLabel" = "Al completamento";
+
+/* Class = "NSToolbarItem"; toolTip = "Action to perform when encoding is complete."; ObjectID = "a3c-kV-98E"; */
+"a3c-kV-98E.toolTip" = "Azione da eseguire quando la codifica è completa.";
+
+/* Class = "NSMenuItem"; title = "Alert and Notification"; ObjectID = "aat-1N-Odn"; */
+"aat-1N-Odn.title" = "Avviso e notifica";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "anR-ZS-eOK"; */
+"anR-ZS-eOK.title" = "Table View Cell";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "F1i-sW-mz6"; */
+"F1i-sW-mz6.title" = "Table View Cell";
+
+/* Class = "NSMenuItem"; title = "Alert"; ObjectID = "fAD-ky-zo6"; */
+"fAD-ky-zo6.title" = "Avviso";
+
+/* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "gbW-g1-lEc"; */
+"gbW-g1-lEc.title" = "Mostra sorgente nel Finder";
+
+/* Class = "NSMenuItem"; title = "Put Computer to Sleep"; ObjectID = "GUQ-xb-HVS"; */
+"GUQ-xb-HVS.title" = "Metti il computer in stop";
+
+/* Class = "NSMenuItem"; title = "Notification"; ObjectID = "jDL-sB-8e3"; */
+"jDL-sB-8e3.title" = "Notifica";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "MWq-ie-HjX"; */
+"MWq-ie-HjX.title" = "Text Cell";
+
+/* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "QmP-SQ-XKK"; */
+"QmP-SQ-XKK.title" = "Spegni il computer";
+
+/* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "s7o-pK-heI"; */
+"s7o-pK-heI.label" = "Pausa";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Pause/Resume"; ObjectID = "s7o-pK-heI"; */
+"s7o-pK-heI.paletteLabel" = "Pausa/Riprendi";
+
+/* Class = "NSToolbarItem"; toolTip = "Pause Encoding"; ObjectID = "s7o-pK-heI"; */
+"s7o-pK-heI.toolTip" = "Metti la conversione in pausa";
+
+/* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "sm5-26-sAg"; */
+"sm5-26-sAg.title" = "Non far nulla";
+
+/* Class = "NSToolbarItem"; label = "Start"; ObjectID = "SX6-mq-Hck"; */
+"SX6-mq-Hck.label" = "Avvia";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Start/Cancel"; ObjectID = "SX6-mq-Hck"; */
+"SX6-mq-Hck.paletteLabel" = "Avvia/Interrompi";
+
+/* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "SX6-mq-Hck"; */
+"SX6-mq-Hck.toolTip" = "Avvia conversione";
+
+/* Class = "NSMenuItem"; title = "Clear Selected Job"; ObjectID = "Wfz-Kj-Vtx"; */
+"Wfz-Kj-Vtx.title" = "Cancella lavori selezionati";
+
+/* Class = "NSMenuItem"; title = "Clear Completed Jobs"; ObjectID = "XdJ-Sl-pwu"; */
+"XdJ-Sl-pwu.title" = "Cancella lavori completi";
+
+/* Class = "NSMenuItem"; title = "Reset Stopped Job"; ObjectID = "zy6-ab-ush"; */
+"zy6-ab-ush.title" = "Ripristina lavori interrotti";
+

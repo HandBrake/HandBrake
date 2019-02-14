@@ -1,0 +1,39 @@
+/* Class = "NSButton"; ibShadowedToolTip = "Scale preview to fill the display."; ObjectID = "12K-c3-Z7A"; */
+"12K-c3-Z7A.ibShadowedToolTip" = "Ridimensiona anteprima per riempire lo schermo.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Encode and play a preview video using current settings."; ObjectID = "16b-R9-bBU"; */
+"16b-R9-bBU.ibShadowedToolTip" = "Converti e riproduci un'anteprima video usando le impostazioni attuali.";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Duration to encode in seconds."; ObjectID = "ASA-X8-16P"; */
+"ASA-X8-16P.ibShadowedToolTip" = "Durata da convertire in secondi.";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "KrC-nR-rYk"; */
+"KrC-nR-rYk.title" = "OtherViews";
+
+/* Class = "NSTextFieldCell"; title = "sec"; ObjectID = "ksF-Ma-hB1"; */
+"ksF-Ma-hB1.title" = "s";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Show picture settings."; ObjectID = "mV7-hU-tMt"; */
+"mV7-hU-tMt.ibShadowedToolTip" = "Mostra impostazioni immagine.";
+
+/* Class = "NSButtonCell"; title = "Settings"; ObjectID = "NWd-Lq-c1A"; */
+"NWd-Lq-c1A.title" = "Impostazioni";
+
+/* Class = "NSButtonCell"; title = "Scale To Screen"; ObjectID = "STc-Po-p1X"; */
+"STc-Po-p1X.title" = "Adatta allo schermo";
+
+/* Class = "NSTextFieldCell"; title = "Duration:"; ObjectID = "USR-Qf-N5v"; */
+"USR-Qf-N5v.title" = "Durata:";
+
+/* Class = "NSButtonCell"; title = "Live Preview"; ObjectID = "vkh-GY-5qx"; */
+"vkh-GY-5qx.title" = "Anteprima Live";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "preview image"; ObjectID = "wUk-SQ-GhS"; */
+"wUk-SQ-GhS.ibExternalAccessibilityDescription" = "immagine d'anteprima";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Starting point for the preview encode."; ObjectID = "wUk-SQ-GhS"; */
+"wUk-SQ-GhS.ibShadowedToolTip" = "Punto di inizio dell'anteprima di conversione.";
+
+/* Class = "NSMenuItem"; title = "240"; ObjectID = "XYh-Ls-slf"; */
+"XYh-Ls-slf.title" = "240";
+

@@ -1,0 +1,21 @@
+/* Class = "NSWindow"; title = "Activity"; ObjectID = "5"; */
+"5.title" = "Attività";
+
+/* Class = "NSMenu"; title = "Menu"; ObjectID = "11"; */
+"11.title" = "Menu";
+
+/* Class = "NSMenuItem"; title = "Clear Window Contents"; ObjectID = "12"; */
+"12.title" = "Cancella contenuto finestra";
+
+/* Class = "NSMenuItem"; title = "Copy Window Contents"; ObjectID = "24"; */
+"24.title" = "Copia contenuto finestra";
+
+/* Class = "NSMenuItem"; title = "Open Activity Log For This Session In Default Application"; ObjectID = "33"; */
+"33.title" = "Apri resoconto di attività per questa sessione nell'applicazione di default";
+
+/* Class = "NSMenuItem"; title = "Clear Activity Log For This Session"; ObjectID = "35"; */
+"35.title" = "Cancella il resoconto di attività per questa sessione";
+
+/* Class = "NSMenuItem"; title = "Open Activity Logs Directory In Finder"; ObjectID = "43"; */
+"43.title" = "Apri la cartella dei resoconti di attività nel Finder";
+

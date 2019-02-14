@@ -1,0 +1,75 @@
+/* Class = "NSTextFieldCell"; title = "00:00:00"; ObjectID = "6A0-9h-5UY"; */
+"6A0-9h-5UY.title" = "00:00:00";
+
+/* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "6BQ-wU-p2C"; */
+"6BQ-wU-p2C.title" = "Tracce";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "End Live Preview"; ObjectID = "84p-08-fGK"; */
+"84p-08-fGK.ibExternalAccessibilityDescription" = "Chiudi Anteprima Live";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Exit player and return to still image previews."; ObjectID = "84p-08-fGK"; */
+"84p-08-fGK.ibShadowedToolTip" = "Chiudi la riproduzione e torna all'anteprima statica.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
+"CQ0-pk-SFk.ibExternalAccessibilityDescription" = "Vai alla fine";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
+"CQ0-pk-SFk.ibShadowedToolTip" = "Vai alla fine";
+
+/* Class = "NSTextFieldCell"; title = "00:00:00"; ObjectID = "dGi-LK-P1E"; */
+"dGi-LK-P1E.title" = "00:00:00";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
+"euL-Tg-dmT.ibExternalAccessibilityDescription" = "Muto";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
+"euL-Tg-dmT.ibShadowedToolTip" = "Muto";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Volume Control"; ObjectID = "gzA-no-jdv"; */
+"gzA-no-jdv.ibExternalAccessibilityDescription" = "Controllo volume";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Drag to change volume."; ObjectID = "gzA-no-jdv"; */
+"gzA-no-jdv.ibShadowedToolTip" = "Trascina per modificare il volume.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
+"Kiv-cL-wYI.ibExternalAccessibilityDescription" = "Volume massimo";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
+"Kiv-cL-wYI.ibShadowedToolTip" = "Volume massimo";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Timeline"; ObjectID = "lBp-JT-ehn"; */
+"lBp-JT-ehn.ibExternalAccessibilityDescription" = "Sequenza temporale";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Drag to change timeline position."; ObjectID = "lBp-JT-ehn"; */
+"lBp-JT-ehn.ibShadowedToolTip" = "Trascina per modificare la posizione nella sequenza temporale.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Play/Pause"; ObjectID = "mLA-ei-4sK"; */
+"mLA-ei-4sK.ibExternalAccessibilityDescription" = "Riproduci/Pausa";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Toggle Play/Pause"; ObjectID = "mLA-ei-4sK"; */
+"mLA-ei-4sK.ibShadowedToolTip" = "Riproduci/Pausa";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Time Remaining"; ObjectID = "PVD-pq-1ZG"; */
+"PVD-pq-1ZG.ibExternalAccessibilityDescription" = "Tempo rimanente";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Time remaining."; ObjectID = "PVD-pq-1ZG"; */
+"PVD-pq-1ZG.ibShadowedToolTip" = "Tempo rimanente.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Current Timeline Position"; ObjectID = "uYx-2C-8et"; */
+"uYx-2C-8et.ibExternalAccessibilityDescription" = "Posizione attuale nella sequenza del tempo";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Current timeline position."; ObjectID = "uYx-2C-8et"; */
+"uYx-2C-8et.ibShadowedToolTip" = "Posizione attuale nella sequenza del tempo.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Tracks Selection"; ObjectID = "Vj1-Za-AUV"; */
+"Vj1-Za-AUV.ibExternalAccessibilityDescription" = "Selezione tracce";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Enable or disable tracks."; ObjectID = "Vj1-Za-AUV"; */
+"Vj1-Za-AUV.ibShadowedToolTip" = "Abilita o disabilita tracce.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
+"WuP-9l-8AN.ibExternalAccessibilityDescription" = "Vai all'inizio";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
+"WuP-9l-8AN.ibShadowedToolTip" = "Vai all'inizio";
+

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.23.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.59" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.23.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.59"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -412,7 +412,7 @@ Custom allows for manual settings.</string>
                         <outlet property="nextKeyView" destination="rFi-0b-3BX" id="IBQ-5n-k0g"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="vOY-Ix-eha">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="vOY-Ix-eha">
                     <rect key="frame" x="18" y="222" width="74" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="PAR:" id="gVj-RG-PcL">
                         <font key="font" metaFont="smallSystem"/>
@@ -425,7 +425,7 @@ Custom allows for manual settings.</string>
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FwZ-6T-zJe">
                     <rect key="frame" x="153" y="298" width="15" height="22"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="NP7-P2-Qga">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="NP7-P2-Qga">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <accessibility description="Storage Width"/>
@@ -496,7 +496,7 @@ Custom allows for manual settings.</string>
                         <outlet property="nextKeyView" destination="FwZ-6T-zJe" id="FVz-Ke-KDt"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="JBo-0E-AsU">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="JBo-0E-AsU">
                     <rect key="frame" x="18" y="187" width="74" height="14"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Anamorphic:" id="8vS-Mw-bny">
                         <font key="font" metaFont="smallSystem"/>
@@ -568,7 +568,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="selectedTag" keyPath="self.picture.anamorphicMode" id="ugL-AX-WF2"/>
                     </connections>
                 </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="tHY-g2-oWj">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="tHY-g2-oWj">
                     <rect key="frame" x="18" y="161" width="74" height="14"/>
                     <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Modulus:" id="jXn-fo-wNU">
                         <font key="font" metaFont="smallSystem"/>
@@ -579,7 +579,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="fh5-vf-5Tr"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="9oG-zm-Y0W">
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="9oG-zm-Y0W">
                     <rect key="frame" x="18" y="303" width="74" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Storage Size:" id="L7V-2e-qf9">
                         <font key="font" metaFont="smallSystem"/>
@@ -591,7 +591,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                         <outlet property="nextKeyView" destination="9hH-As-JSa" id="XO3-A3-WZr"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="250" translatesAutoresizingMaskIntoConstraints="NO" id="hei-Cd-vcN">
+                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="251" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="hei-Cd-vcN">
                     <rect key="frame" x="18" y="249" width="74" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Display Size:" id="SPg-s0-Oh0">
                         <font key="font" metaFont="smallSystem"/>
@@ -655,7 +655,7 @@ Custom allows manually setting all parameters. Useful for correcting an incorrec
                 </textField>
                 <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="2s0-5k-fjU">
                     <rect key="frame" x="242" y="298" width="15" height="22"/>
-                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="59" id="MwK-aS-Oaf">
+                    <stepperCell key="cell" controlSize="small" continuous="YES" alignment="left" increment="16" minValue="64" maxValue="59" doubleValue="64" id="MwK-aS-Oaf">
                         <font key="font" metaFont="smallSystem"/>
                     </stepperCell>
                     <accessibility description="Storage Height"/>

@@ -1,0 +1,147 @@
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "2c7-G5-4KL"; */
+"2c7-G5-4KL.ibExternalAccessibilityDescription" = "Guadagno";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "2c7-G5-4KL"; */
+"2c7-G5-4KL.ibShadowedToolTip" = "Guadagno audio in decibel (dB). Aumenta o diminuisce il volume dell'audio.";
+
+/* Class = "NSTableColumn"; headerCell.title = "Gain"; ObjectID = "5xO-DR-4cR"; */
+"5xO-DR-4cR.headerCell.title" = "Guadagno";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Selected track"; ObjectID = "6iN-2G-JDF"; */
+"6iN-2G-JDF.ibExternalAccessibilityDescription" = "Traccia selezionata";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio language and type."; ObjectID = "6iN-2G-JDF"; */
+"6iN-2G-JDF.ibShadowedToolTip" = "Lingua e formato audio.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "6Iz-D8-zzz"; */
+"6Iz-D8-zzz.title" = "Text Cell";
+
+/* Class = "NSTableColumn"; headerCell.title = "Track"; ObjectID = "7sz-4X-5jA"; */
+"7sz-4X-5jA.headerCell.title" = "Traccia";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "aaP-HB-s4f"; */
+"aaP-HB-s4f.title" = "Text Cell";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "AMA-Ul-v2f"; */
+"AMA-Ul-v2f.title" = "Aggiungi tutte le tracce.";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "aYF-d5-Ya6"; */
+"aYF-d5-Ya6.title" = "Comportamento di selezione…";
+
+/* Class = "NSSliderCell"; ibExternalAccessibilityDescription = "Gain"; ObjectID = "BBQ-FP-aQN"; */
+"BBQ-FP-aQN.ibExternalAccessibilityDescription" = "Guadagno";
+
+/* Class = "NSTableColumn"; headerCell.title = "DRC"; ObjectID = "eAS-E5-fip"; */
+"eAS-E5-fip.headerCell.title" = "DRC";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "eFn-1M-3hk"; */
+"eFn-1M-3hk.title" = "Text Cell";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "fqs-Q8-hNY"; */
+"fqs-Q8-hNY.title" = "Rimuovi tutte le tracce";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Audio gain in decibels (dB). Increases or decreases audio volume."; ObjectID = "gtC-MM-esd"; */
+"gtC-MM-esd.ibShadowedToolTip" = "Guadagno audio in decibel (dB). Aumenta o diminuisce il volume dell'audio.";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "HKE-hO-jOm"; */
+"HKE-hO-jOm.title" = "Text Cell";
+
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Auto"; ObjectID = "hlm-8l-ATk"; */
+"hlm-8l-ATk.ibShadowedIsNilPlaceholder" = "Auto";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "HM0-a4-pm5"; */
+"HM0-a4-pm5.title" = "Aggiungi tutte le tracce.";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "Ifq-hI-oCs"; */
+"Ifq-hI-oCs.title" = "0";
+
+/* Class = "NSTableColumn"; headerCell.title = "Samplerate"; ObjectID = "jub-Uq-qYL"; */
+"jub-Uq-qYL.headerCell.title" = "Frequenza di campionamento";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "kmi-ru-dRe"; */
+"kmi-ru-dRe.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "l8E-uG-8fo"; */
+"l8E-uG-8fo.title" = "Text Cell";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Mixdown"; ObjectID = "LLW-KN-65P"; */
+"LLW-KN-65P.ibExternalAccessibilityDescription" = "Missaggio";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.\n\nDolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility."; ObjectID = "LLW-KN-65P"; */
+"LLW-KN-65P.ibShadowedToolTip" = "Tipologia missaggio. Controlla come l'audio multi-canale è missato in meno canali, o se i canali originari sono conversati.\n\nDolby Surround e Dolby Pro Logic II convertono l'audio multi-canale a stereo e codificano con una matrice i canali aggiuntivi per la riproduzione del surround su dispositivi compatibili, mantenendo la compatibilità stereo.";
+
+/* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "lnO-sZ-6xv"; */
+"lnO-sZ-6xv.headerCell.title" = "Codec";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "MZ7-W1-uGl"; */
+"MZ7-W1-uGl.title" = "Text Cell";
+
+/* Class = "NSSliderCell"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "nII-CW-aWc"; */
+"nII-CW-aWc.ibExternalAccessibilityDescription" = "DRC";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "o3M-fP-6Ps"; */
+"o3M-fP-6Ps.ibShadowedToolTip" = "Compressione della gamma dinamica. Riduce la differenza di volume tra suoni forti e silenziosi. Si applica solo alle tracce sorgente AC-3 durante la codifica in un altro formato.\n\n0: Non applicare DRC.\n1: applica DRC in base ai suggerimenti di compressione incorporati nella traccia sorgente\n\nValori maggiori di 1 aumentano ulteriormente il volume dei suoni silenziosi. Valori superiori a 2,5 sono in genere non necessari e possono introdurre distorsioni udibili.";
+
+/* Class = "NSTableColumn"; headerCell.title = "Bitrate"; ObjectID = "obP-lK-sY0"; */
+"obP-lK-sY0.headerCell.title" = "Velocità dati";
+
+/* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "Pfh-Bc-83k"; */
+"Pfh-Bc-83k.title" = "Tracce";
+
+/* Class = "NSButtonCell"; title = "Reload"; ObjectID = "q2P-Tg-cBJ"; */
+"q2P-Tg-cBJ.title" = "Ricarica";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "Q4T-80-wxf"; */
+"Q4T-80-wxf.title" = "0";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Samplerate"; ObjectID = "QA9-1y-Pyj"; */
+"QA9-1y-Pyj.ibExternalAccessibilityDescription" = "Frequenza di campionamento";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio sample rate in kilohertz (kHz). Auto is recommended."; ObjectID = "QA9-1y-Pyj"; */
+"QA9-1y-Pyj.ibShadowedToolTip" = "Frequenza di campionamento audio in kilohertz (kHz). Auto è consigliata.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Bitrate"; ObjectID = "Qg1-iw-07b"; */
+"Qg1-iw-07b.ibExternalAccessibilityDescription" = "Velocità dati";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio bit rate in kilobits per second (kbps). Smaller values reduce audio quality. Larger values use more data and may be less compatible."; ObjectID = "Qg1-iw-07b"; */
+"Qg1-iw-07b.ibShadowedToolTip" = "Frequenza dati audio in kilobit al secondo (kbps). Valori inferiori riducono la qualità audio. Valori superiori usano più dati e potrebbero essere meno compatibili.";
+
+/* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "qS7-Xr-9N8"; */
+"qS7-Xr-9N8.headerCell.title" = "Mixdown";
+
+/* Class = "NSMenuItem"; title = "Reload"; ObjectID = "sq7-Ux-T6D"; */
+"sq7-Ux-T6D.title" = "Ricarica";
+
+/* Class = "NSMenuItem"; title = "Selection Behavior…"; ObjectID = "TK6-fY-4Sk"; */
+"TK6-fY-4Sk.title" = "Comportamento di selezione…";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Codec"; ObjectID = "tYY-w7-ZIq"; */
+"tYY-w7-ZIq.ibExternalAccessibilityDescription" = "Codec";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "tYY-w7-ZIq"; */
+"tYY-w7-ZIq.ibShadowedToolTip" = "Codificatore audio:";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Configure audio tracks Selection Behavior. These settings affect which tracks will be added to the audio tracks list, and the settings used for each track."; ObjectID = "vFP-nq-IQg"; */
+"vFP-nq-IQg.ibShadowedToolTip" = "Configura il comportamento di selezione delle tracce audio. Queste impostazioni influenzano quali tracce verranno aggiunte all'elenco delle tracce audio e le impostazioni utilizzate per ciascuna traccia.";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Vxo-66-Mrx"; */
+"Vxo-66-Mrx.title" = "OtherViews";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Reload the audio tracks list using the configured Selection Behavior."; ObjectID = "wcL-rL-aYS"; */
+"wcL-rL-aYS.ibShadowedToolTip" = "Ricarica l'elenco delle tracce audio usando il comportamento di selezione configurato.";
+
+/* Class = "NSTableView"; ibExternalAccessibilityDescription = "Audio tracks"; ObjectID = "yix-PF-sqH"; */
+"yix-PF-sqH.ibExternalAccessibilityDescription" = "Tracce audio";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "YlA-ue-5oE"; */
+"YlA-ue-5oE.title" = "Rimuovi tutte le tracce";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "DRC"; ObjectID = "yPh-4R-HRQ"; */
+"yPh-4R-HRQ.ibExternalAccessibilityDescription" = "DRC";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Dynamic Range Compression. Reduces the volume difference between loud and quiet sounds. Only applies to AC-3 source tracks when encoding to another format.\n\n0: Do not apply DRC.\n1: Apply DRC according to the compression hints embedded in the source track.\n\nValues greater than 1 further increase the volume of quiet sounds. Values greater than 2.5 are typically unnecessary and may introduce audible distortion."; ObjectID = "yPh-4R-HRQ"; */
+"yPh-4R-HRQ.ibShadowedToolTip" = "Compressione della gamma dinamica. Riduce la differenza di volume tra suoni forti e silenziosi. Si applica solo alle tracce sorgente AC-3 durante la codifica in un altro formato.\n\n0: Non applicare DRC.\n1: applica DRC in base ai suggerimenti di compressione incorporati nella traccia sorgente\n\nValori maggiori di 1 aumentano ulteriormente il volume dei suoni silenziosi. Valori superiori a 2,5 sono in genere non necessari e possono introdurre distorsioni udibili.";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Audio tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the audio Selection Behavior dialog."; ObjectID = "Yzu-Rk-hTv"; */
+"Yzu-Rk-hTv.ibShadowedToolTip" = "Elenco tracce audio. Il comportamento della selezione delle tracce e le impostazioni sono caricate dal preset selezionato, e possono essere configurate usando il pannello di comportamento della selezione audio.";
+
