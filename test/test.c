@@ -3653,6 +3653,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                     ii = last_bitrate + 1;
                     for (; ii < count; ii++)
                     {
+                        audio_dict = hb_value_array_get(list, ii);
                         hb_dict_set(audio_dict, "AudioBitrate",
                             hb_value_int(atoi(abitrates[last_bitrate])));
                     }
