@@ -1,0 +1,22 @@
+diff --git a/source/x265.h b/source/x265.h
+--- a/source/x265.h
++++ b/source/x265.h
+@@ -1835,17 +1835,17 @@ static const char * const x265_preset_na
+  *      with ultrafast mapping to "0" and placebo mapping to "9".  This mapping may
+  *      of course change if new presets are added in between, but will always be
+  *      ordered from fastest to slowest.
+  *
+  *      Warning: the speed of these presets scales dramatically.  Ultrafast is a full
+  *      100 times faster than placebo!
+  *
+  *      Currently available tunings are: */
+-static const char * const x265_tune_names[] = { "psnr", "ssim", "grain", "zerolatency", "fastdecode", 0 };
++static const char * const x265_tune_names[] = { "psnr", "ssim", "grain", "zerolatency", "animation", "fastdecode", 0 };
+ 
+ /*      returns 0 on success, negative on failure (e.g. invalid preset/tune name). */
+ int x265_param_default_preset(x265_param *, const char *preset, const char *tune);
+ 
+ /* x265_picture_alloc:
+  *  Allocates an x265_picture instance. The returned picture structure is not
+  *  special in any way, but using this method together with x265_picture_free()
+  *  and x265_picture_init() allows some version safety. New picture fields will
