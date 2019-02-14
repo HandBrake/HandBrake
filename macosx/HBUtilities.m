@@ -57,6 +57,11 @@ static NSDateFormatter *_releaseDateFormatter = nil;
     return appSupportURL;
 }
 
++ (NSURL *)documentationURL
+{
+    return [NSURL URLWithString:@"https://handbrake.fr/docs/en/1.2.0/"];
+}
+
 + (void)writeToActivityLog:(const char *)format, ...
 {
     va_list args;

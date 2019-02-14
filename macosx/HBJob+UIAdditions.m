@@ -23,7 +23,6 @@
 #include "hb.h"
 
 // Text Styles
-static NSMutableParagraphStyle *ps;
 static NSDictionary            *detailAttr;
 static NSDictionary            *detailBoldAttr;
 static NSDictionary            *titleAttr;
@@ -96,10 +95,10 @@ static NSDictionary            *shortHeightAttr;
 
 - (void)initStyles
 {
-    if (!ps)
+    if (!detailAttr)
     {
         // Attributes
-        ps = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        NSMutableParagraphStyle *ps = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         ps.headIndent = 88.0;
         ps.paragraphSpacing = 1.0;
         ps.tabStops = @[[[NSTextTab alloc] initWithType:
@@ -1000,4 +999,3 @@ static NSDictionary            *shortHeightAttr;
 }
 
 @end
-

@@ -244,21 +244,9 @@
         return NO;
     }
 
-    NSURL *destURL = nil;
     // Generate the file url and directories.
-    if (self.job.container & 0x030000 /*HB_MUX_MASK_MP4*/)
-    {
-        // we use .m4v for our mp4 files so that ac3 and chapters in mp4 will play properly.
-        destURL = [HBPreviewGenerator generateFileURLForType:@"m4v"];
-    }
-    else if (self.job.container & 0x300000 /*HB_MUX_MASK_MKV*/)
-    {
-        destURL = [HBPreviewGenerator generateFileURLForType:@"mkv"];
-    }
-    else if (self.job.container & 0x400000 /*HB_MUX_MASK_WEBM*/)
-    {
-        destURL = [HBPreviewGenerator generateFileURLForType:@"webm"];
-    }
+    NSString *extension = [HBUtilities automaticExtForJob:self.job];
+    NSURL *destURL = [HBPreviewGenerator generateFileURLForType:extension];
 
     // return if we couldn't get the fileURL.
     if (!destURL)

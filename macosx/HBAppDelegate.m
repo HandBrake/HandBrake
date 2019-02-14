@@ -362,8 +362,7 @@
 }
 - (IBAction)openUserGuide:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL
-                                            URLWithString:@"https://handbrake.fr/docs/en/1.1.0/"]];
+    [[NSWorkspace sharedWorkspace] openURL:HBUtilities.documentationURL];
 }
 
 @end

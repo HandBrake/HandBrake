@@ -23,6 +23,11 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSURL *)appSupportURL;
 
 /**
+ * Returns the url of the current version documentation.
+ */
+@property (nonatomic, readonly, class) NSURL *documentationURL;
+
+/**
  *  Writes a message to standard error.
  *  The message will show up in the output panel and in the activity log.
  *

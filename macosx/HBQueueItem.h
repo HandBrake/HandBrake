@@ -34,13 +34,13 @@ typedef NS_ENUM(NSUInteger, HBQueueItemState){
 @property (nonatomic, readonly) NSURL *fileURL;
 
 /// The file URL at which the new file will be created.
-@property (nonatomic, readwrite, copy, nullable) NSURL *outputURL;
+@property (nonatomic, readonly, copy) NSURL *outputURL;
 
 /// The name of the new file that will be created.
-@property (nonatomic, readwrite, copy, nullable) NSString *outputFileName;
+@property (nonatomic, readonly, copy) NSString *outputFileName;
 
 /// The file URL at which the new file will be created.
-@property (nonatomic, readwrite, copy, nullable) NSURL *completeOutputURL;
+@property (nonatomic, readonly, copy) NSURL *completeOutputURL;
 
 @property (nonatomic, readonly) NSAttributedString *attributedTitleDescription;
 @property (nonatomic, readonly) NSAttributedString *attributedDescription;

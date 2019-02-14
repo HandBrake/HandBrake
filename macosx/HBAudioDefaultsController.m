@@ -97,8 +97,7 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 
 - (IBAction)openUserGuide:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL
-                                            URLWithString:@"https://handbrake.fr/docs/en/1.1.0/advanced/audio-subtitle-defaults.html"]];
+    [[NSWorkspace sharedWorkspace] openURL:[HBUtilities.documentationURL URLByAppendingPathComponent:@"advanced/audio-subtitle-defaults.html"]];
 }
 
 - (void)dealloc
