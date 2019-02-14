@@ -1625,14 +1625,14 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     return 0;
 }
 
-static int setup_extradata( hb_work_private_t * pv )
+static int setup_extradata( hb_work_private_t * pv, AVCodecContext * context )
 {
     // we can't call the avstream funcs but the read_header func in the
     // AVInputFormat may set up some state in the AVContext. In particular
     // vc1t_read_header allocates 'extradata' to deal with header issues
     // related to Microsoft's bizarre engineering notions. We alloc a chunk
     // of space to make vc1 work then associate the codec with the context.
-    if (pv->context->extradata == NULL)
+    if (context->extradata == NULL)
     {
         if (pv->parser == NULL || pv->parser->parser == NULL ||
             pv->parser->parser->split == NULL)
@@ -1646,12 +1646,12 @@ static int setup_extradata( hb_work_private_t * pv )
                                              pv->packet_info.size);
             if (size > 0)
             {
-                pv->context->extradata_size = size;
-                pv->context->extradata =
+                context->extradata_size = size;
+                context->extradata =
                                 av_malloc(size + AV_INPUT_BUFFER_PADDING_SIZE);
-                if (pv->context->extradata == NULL)
+                if (context->extradata == NULL)
                     return 1;
-                memcpy(pv->context->extradata, pv->packet_info.data, size);
+                memcpy(context->extradata, pv->packet_info.data, size);
                 return 0;
             }
         }
@@ -1669,7 +1669,8 @@ static int decodePacket( hb_work_object_t * w )
     // first frame because of M$ VC1 braindamage).
     if ( !pv->video_codec_opened )
     {
-        if (setup_extradata(pv))
+        AVCodecContext * context = avcodec_alloc_context3(pv->codec);
+        if (setup_extradata(pv, context))
         {
             // we didn't find the headers needed to set up extradata.
             // the codec will abort if we open it so just free the buf
@@ -1678,7 +1679,7 @@ static int decodePacket( hb_work_object_t * w )
         }
 
         hb_avcodec_free_context(&pv->context);
-        pv->context = avcodec_alloc_context3(pv->codec);
+        pv->context = context;
 
         pv->context->workaround_bugs   = FF_BUG_AUTODETECT;
         pv->context->err_recognition   = AV_EF_CRCCHECK;
