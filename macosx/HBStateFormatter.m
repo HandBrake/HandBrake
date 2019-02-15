@@ -37,7 +37,7 @@
 
             if (p.seconds > -1)
             {
-                [string appendFormat:HBKitLocalizedString(@" (ETA %02dh%02dm%02ds)", @"HBStateFormatter -> search time format"), p.hours, p.minutes, p.seconds];
+                [string appendFormat:HBKitLocalizedString(@" (ETA %02d:%02d:%02d)", @"HBStateFormatter -> search time format"), p.hours, p.minutes, p.seconds];
             }
 
             break;
@@ -77,13 +77,13 @@
                 if (p.rate_cur > 0.0)
                 {
                     [string appendFormat:
-                     HBKitLocalizedString(@" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)", @"HBStateFormatter -> work time format"),
+                     HBKitLocalizedString(@" (%.2f fps, avg %.2f fps, ETA %02d:%02d:%02d)", @"HBStateFormatter -> work time format"),
                      p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
                 }
                 else
                 {
                     [string appendFormat:
-                     HBKitLocalizedString(@" (ETA %02dh%02dm%02ds)", @"HBStateFormatter -> work time format"),
+                     HBKitLocalizedString(@" (ETA %02d:%02d:%02d)", @"HBStateFormatter -> work time format"),
                      p.hours, p.minutes, p.seconds];
                 }
             }
