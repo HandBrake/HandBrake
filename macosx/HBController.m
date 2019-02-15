@@ -211,6 +211,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (void)windowDidLoad
 {
+    if (@available (macOS 10.12, *))
+    {
+        self.window.tabbingMode = NSWindowTabbingModeDisallowed;
+    }
+
     [self enableUI:NO];
 
     // Bottom

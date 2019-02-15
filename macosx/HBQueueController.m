@@ -112,6 +112,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (void)windowDidLoad
 {
+    if (@available (macOS 10.12, *))
+    {
+        self.window.tabbingMode = NSWindowTabbingModeDisallowed;
+    }
+
     // lets setup our queue list table view for drag and drop here
     [self.tableView registerForDraggedTypes:@[DragDropSimplePboardType]];
     [self.tableView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
