@@ -273,7 +273,6 @@
 		A9E52CD8218DD52B00E17B86 /* ExceptionAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9E52CD6218DD52A00E17B86 /* ExceptionAlert.xib */; };
 		A9F217E61E2F934C00C10C6E /* container-migration.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9F217E51E2F934C00C10C6E /* container-migration.plist */; };
 		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
-		A9F5E3332215D85A0046FA4B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9F5E3312215D85A0046FA4B /* Localizable.strings */; };
 		A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F7102519A475EC00F61301 /* HBDockTile.m */; };
 		D86C9DD51C6D372500F06F1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D86C9DD41C6D372500F06F1B /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -501,6 +500,7 @@
 		A95512881A320A12001BFC6F /* libjansson.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjansson.a; path = external/contrib/lib/libjansson.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A957EBCB218DBE5900007988 /* HBAutoNamer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAutoNamer.h; sourceTree = "<group>"; };
 		A957EBCC218DBE5900007988 /* HBAutoNamer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBAutoNamer.m; sourceTree = "<group>"; };
+		A958605B2216A5E5002092B1 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9597A281A49749D00007771 /* HBRange+UIAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HBRange+UIAdditions.h"; sourceTree = "<group>"; };
 		A9597A291A49749D00007771 /* HBRange+UIAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "HBRange+UIAdditions.m"; sourceTree = "<group>"; };
 		A95BA15B220C968500A2F9F9 /* HBQueueItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBQueueItem.h; sourceTree = "<group>"; };
@@ -665,7 +665,6 @@
 		A9F4728B1976BAA70009EC65 /* HBSubtitlesDefaults.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesDefaults.h; sourceTree = "<group>"; };
 		A9F4728C1976BAA70009EC65 /* HBSubtitlesDefaults.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesDefaults.m; sourceTree = "<group>"; };
 		A9F5E3302215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A9F5E3322215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9F5E3342215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9F5E3352215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/HBEncodingProgressHUDController.strings; sourceTree = "<group>"; };
 		A9F5E3362215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/HBTitleSelection.strings; sourceTree = "<group>"; };
@@ -862,7 +861,6 @@
 		273F1FDE14AD9DA40021BE6D = {
 			isa = PBXGroup;
 			children = (
-				A9F5E3312215D85A0046FA4B /* Localizable.strings */,
 				273F204114ADBC210021BE6D /* HandBrake */,
 				273F200214ADAE950021BE6D /* HandBrakeCLI */,
 				A9736F031C7DA5FE008F1D18 /* HandBrakeKit */,
@@ -1618,7 +1616,6 @@
 				A9E1468216BC2AD800C307BC /* PlayTemplate.pdf in Resources */,
 				A9A96BAD20CAD5A200A39AFB /* MainMenu.xib in Resources */,
 				A9A96BD720CAD64300A39AFB /* PictureSettings.xib in Resources */,
-				A9F5E3332215D85A0046FA4B /* Localizable.strings in Resources */,
 				A9A96BD120CAD62500A39AFB /* ChaptersTitles.xib in Resources */,
 				A91AD3441FB5D9A500AEA822 /* HBAddCategoryController.xib in Resources */,
 				A9A96B8520CAD2CC00A39AFB /* HBEncodingProgressHUDController.xib in Resources */,
@@ -1898,6 +1895,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				A975B02120F7AF29004675CC /* de */,
+				A958605B2216A5E5002092B1 /* it */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2128,15 +2126,6 @@
 				A9F5E33A2215D85A0046FA4B /* it */,
 			);
 			name = ExceptionAlert.xib;
-			sourceTree = "<group>";
-		};
-		A9F5E3312215D85A0046FA4B /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A9F5E3322215D85A0046FA4B /* it */,
-			);
-			name = Localizable.strings;
-			path = build/release/external/macosx;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
