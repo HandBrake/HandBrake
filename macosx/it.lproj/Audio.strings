@@ -23,7 +23,7 @@
 "aaP-HB-s4f.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "AMA-Ul-v2f"; */
-"AMA-Ul-v2f.title" = "Aggiungi tutte le tracce.";
+"AMA-Ul-v2f.title" = "Aggiungi tutte le tracce";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "aYF-d5-Ya6"; */
 "aYF-d5-Ya6.title" = "Comportamento di selezione…";
@@ -50,7 +50,7 @@
 "hlm-8l-ATk.ibShadowedIsNilPlaceholder" = "Auto";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "HM0-a4-pm5"; */
-"HM0-a4-pm5.title" = "Aggiungi tutte le tracce.";
+"HM0-a4-pm5.title" = "Aggiungi tutte le tracce";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "Ifq-hI-oCs"; */
 "Ifq-hI-oCs.title" = "0";
@@ -107,7 +107,7 @@
 "Qg1-iw-07b.ibShadowedToolTip" = "Frequenza dati audio in kilobit al secondo (kbps). Valori inferiori riducono la qualità audio. Valori superiori usano più dati e potrebbero essere meno compatibili.";
 
 /* Class = "NSTableColumn"; headerCell.title = "Mixdown"; ObjectID = "qS7-Xr-9N8"; */
-"qS7-Xr-9N8.headerCell.title" = "Mixdown";
+"qS7-Xr-9N8.headerCell.title" = "Missaggio";
 
 /* Class = "NSMenuItem"; title = "Reload"; ObjectID = "sq7-Ux-T6D"; */
 "sq7-Ux-T6D.title" = "Ricarica";
@@ -119,7 +119,7 @@
 "tYY-w7-ZIq.ibExternalAccessibilityDescription" = "Codec";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "tYY-w7-ZIq"; */
-"tYY-w7-ZIq.ibShadowedToolTip" = "Codificatore audio:";
+"tYY-w7-ZIq.ibShadowedToolTip" = "Codificatore audio.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Configure audio tracks Selection Behavior. These settings affect which tracks will be added to the audio tracks list, and the settings used for each track."; ObjectID = "vFP-nq-IQg"; */
 "vFP-nq-IQg.ibShadowedToolTip" = "Configura il comportamento di selezione delle tracce audio. Queste impostazioni influenzano quali tracce verranno aggiunte all'elenco delle tracce audio e le impostazioni utilizzate per ciascuna traccia.";

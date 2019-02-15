@@ -2,10 +2,10 @@
 "0yM-wE-D2x.ibExternalAccessibilityDescription" = "Traccia sottotitoli";
 
 /* Class = "NSTableColumn"; headerCell.title = "Encoding"; ObjectID = "1Qg-We-ltR"; */
-"1Qg-We-ltR.headerCell.title" = "Conversione";
+"1Qg-We-ltR.headerCell.title" = "Codifica";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "4PX-In-DpF"; */
-"4PX-In-DpF.title" = "Aggiungi tutte le tracce.";
+"4PX-In-DpF.title" = "Aggiungi tutte le tracce";
 
 /* Class = "NSTableColumn"; headerCell.title = "Language"; ObjectID = "9ka-9O-WDj"; */
 "9ka-9O-WDj.headerCell.title" = "Lingue";
@@ -128,7 +128,7 @@
 "Rj8-KI-k4L.title" = "Item 1";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "S2I-Jd-Lyg"; */
-"S2I-Jd-Lyg.title" = "Aggiungi tutte le tracce.";
+"S2I-Jd-Lyg.title" = "Aggiungi tutte le tracce";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Subtitle tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the subtitle Selection Behavior dialog."; ObjectID = "Syo-rH-vof"; */
 "Syo-rH-vof.ibShadowedToolTip" = "Elenco tracce sottotitoli. Il comportamento della selezione delle tracce e le impostazioni sono caricate dal preset selezionato, e possono essere configurate usando il pannello di comportamento della selezione sottotitoli.";

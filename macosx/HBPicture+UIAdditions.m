@@ -105,9 +105,9 @@
 {
     NSMutableString *summary = [NSMutableString stringWithString:@""];
     [summary appendString:self.info];
-    [summary appendFormat:@", Modulus: %d", self.modulus];
-    [summary appendFormat:@", Crop: %s %d/%d/%d/%d",
-     self.autocrop ? "Auto" : "Custom",
+    [summary appendFormat:HBKitLocalizedString(@", Modulus: %d", @"HBPicture -> summary"), self.modulus];
+    [summary appendFormat:HBKitLocalizedString(@", Crop: %@ %d/%d/%d/%d", @"HBPicture -> summary"),
+     self.autocrop ? HBKitLocalizedString(@"Auto", @"HBPicture -> summary") : HBKitLocalizedString(@"Custom", @"HBPicture -> summary"),
      self.cropTop, self.cropBottom,
      self.cropLeft, self.cropRight];
 

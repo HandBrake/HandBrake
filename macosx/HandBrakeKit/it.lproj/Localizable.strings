@@ -2,11 +2,11 @@
 " - fastdecode" = " - decodifica veloce";
 
 /* HBStateFormatter -> work time format */
-" (%.2f fps, avg %.2f fps, ETA %02dh%02dm%02ds)" = " (%1$.2f fps, avg %2$.2f fps, ETA %3$do%4$dm%5$ds)";
+" (%.2f fps, avg %.2f fps, ETA %02d:%02d:%02d)" = " (%1$.2f fps, media %2$.2f fps, ETA %3$d:%4$d:%5$d)";
 
 /* HBStateFormatter -> search time format
    HBStateFormatter -> work time format */
-" (ETA %02dh%02dm%02ds)" = " (ETA %1$do%2$dm%3$ds)";
+" (ETA %02d:%02d:%02d)" = " (ETA %1$d:%2$d:%3$d)";
 
 /* Title description */
 " (Title %d, %@, %@) ▸ %@\n" = " (Titolo %1$d, %2$@, %3$@) ▸ %4$@\n";
@@ -38,8 +38,14 @@
 /* Format description */
 ", Chapter Markers" = ", marcatori dei capitoli";
 
+/* HBPicture -> summary */
+", Crop: %@ %d/%d/%d/%d" = ", Ritaglio: %1$@ %2$d/%3$d/%4$d/%5$d";
+
 /* Format description */
 ", iPod 5G Support" = ", supporto iPod 5G";
+
+/* HBPicture -> summary */
+", Modulus: %d" = ", Modulo: %d";
 
 /* Format description */
 ", Web Optimized" = ", ottimizza per web";
@@ -92,6 +98,9 @@
 /* Audio description */
 "Audio:" = "Audio:";
 
+/* HBPicture -> summary */
+"Auto" = "Auto";
+
 /* Video description */
 "Bitrate: %d kbps" = "Frequenza dati: %d kbps";
 
@@ -120,7 +129,8 @@
 /* HBJob -> video short description framerate */
 "CRF" = "CRF";
 
-/* HBFilters -> custom display name */
+/* HBFilters -> custom display name
+   HBPicture -> summary */
 "Custom" = "Personalizzato";
 
 /* Filters description

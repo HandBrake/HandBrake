@@ -14,7 +14,7 @@
 "6lx-af-rBL.ibExternalAccessibilityDescription" = "Codec";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "6lx-af-rBL"; */
-"6lx-af-rBL.ibShadowedToolTip" = "Codificatore audio:";
+"6lx-af-rBL.ibShadowedToolTip" = "Codificatore audio.";
 
 /* Class = "NSTextFieldCell"; title = "Audio encoder settings for each selected track:"; ObjectID = "007-WM-RmC"; */
 "007-WM-RmC.title" = "Impostazioni del codificatore audio per ogni traccia selezionata:";
@@ -155,7 +155,7 @@
 "OVr-Jm-VrK.title" = "0";
 
 /* Class = "NSButtonCell"; title = "Show All"; ObjectID = "PiQ-bA-7P1"; */
-"PiQ-bA-7P1.title" = "Mostra tutti";
+"PiQ-bA-7P1.title" = "Mostra tutte";
 
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "pR9-d4-SNf"; */
 "pR9-d4-SNf.headerCell.title" = "Codec";
