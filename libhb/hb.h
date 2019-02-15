@@ -134,7 +134,7 @@ void          hb_close( hb_handle_t ** );
 /* hb_global_init()
    Performs process initialization. */
 int           hb_global_init(void);
-int           hb_global_init_no_hardware();
+int           hb_global_init_no_hardware(void);
 /* hb_global_close()
    Performs final cleanup for the process. */
 void          hb_global_close(void);
