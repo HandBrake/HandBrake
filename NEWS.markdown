@@ -69,16 +69,14 @@
 - Fixed official presets not updating when a newer HandBrake version is installed
 - Fixed maximum resolution limit when selecting a preset (source or preset, whichever is smaller)
 - Fixed crop and anamorphic settings not being restored when editing a queued job
-- Fixed audio and subtitle selection behavior where any language + first track are selected
+- Fixed audio and subtitle selection behaviour where any language + first track are selected
 - Restored options control on the queue window previously removed in HandBrake 1.2.0
 - Improved user interface on displays close to the minimum recommended resolution
-- Improved quality of text rendering on high density displays
+- Improved quality of text rendering on the installer for high density displays
 - Improved ordering of presets and preset categories
 - Improved QSV compatibility with newer Intel drivers by updating libmfx
 - Improved relaunch stability by falling back to software only mode after hardware encoder initialization failure
-- Improved validation of the destination field
 - Improved removal of small temporary files that could be left behind in certain cases
-- Updated installer background image
 - Miscellaneous bug fixes and improvements
 
 
