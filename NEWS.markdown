@@ -1,5 +1,87 @@
 # HandBrake News
 
+## HandBrake 1.2.1
+
+### All platforms
+
+#### General
+
+- Fixed potential crashes due to use of uninitialized variables
+- Improved minimum duration to only apply to DVD and BD sources
+- Miscellaneous bug fixes and improvements
+
+#### Video
+
+- Fixed incorrect video rotation where rotation is explicitly flagged as none
+- Fixed yadif deinterlace filter not properly deinterlacing all frames
+- Fixed missing frame at the end of encodes from m2ts sources
+- Fixed detection of MPEG-1 video in program streams by improving probing of unknown streams
+- Fixed decoding of MPEG-1 video in DVD sources
+- Fixed Apple VideoToolbox encoding issues related to pyramidal B-frames
+- Fixed lapsharp filter corrupting frame edges
+- Improved NLMeans performance by reducing number of threads used with CPUs with high logical core counts
+- Improved AMD VCE encoding to enable placing key frames at chapter markers
+- Improved calculation of final frame duration
+- Improved support for BT.2020 color space
+
+#### Audio
+
+- Fixed channel mapping for AAC 5.1 encoding (signal 5.1 Back instead of 5.1 Side which is less compatible)
+
+#### Command line interface
+
+- Fixed selection of encoders applied to tracks selected with `--all-audio`
+- Fixed audio settings where more are specified than exist in the preset
+- Fixed overriding audio bit rate set by the preset
+
+#### Build system
+
+- Fixed libvpx cross compilation with GCC 8 by disabling AVX-512
+- Fixed x265 cross compilation with GCC 8
+- Updated to mingw-w64-build 4.1.1 with improvements to error reporting and support for sha256sum on systems without shasum
+- Miscellaneous bug fixes and improvements
+
+#### Third-party libraries
+
+- Updated libraries
+  - libmfx (upstream API 1.27)
+
+### Linux
+
+- Fixed Flatpak icon validation by reducing resolution to pass new restrictions
+- Fixed Flatpak accessing gvfs mounted filesystems by adding an additional access permission
+- Fixed display of special characters in preset names
+- Fixed exporting presets to sanitize system reserved characters 
+- Miscellaneous bug fixes and improvements
+
+### Mac
+
+- Fixed incorrect file extension when selecting a preset
+- Fixed potential user interface hang on macOS 10.12 Sierra
+- Fixed potential issue caused by setting work state to done before all threads have closed
+- Improved usability of preview controls overlay by increasing its size
+- Miscellaneous bug fixes and improvements
+
+### Windows
+
+- Fixed application uninstaller sometimes appearing behind the installer
+- Fixed potential crash when loading settings from older HandBrake versions
+- Fixed official presets not updating when a newer HandBrake version is installed
+- Fixed maximum resolution limit when selecting a preset (source or preset, whichever is smaller)
+- Fixed crop and anamorphic settings not being restored when editing a queued job
+- Fixed audio and subtitle selection behavior where any language + first track are selected
+- Restored options control on the queue window previously removed in HandBrake 1.2.0
+- Improved user interface on displays close to the minimum recommended resolution
+- Improved quality of text rendering on high density displays
+- Improved ordering of presets and preset categories
+- Improved QSV compatibility with newer Intel drivers by updating libmfx
+- Improved relaunch stability by falling back to software only mode after hardware encoder initialization failure
+- Improved validation of the destination field
+- Improved removal of small temporary files that could be left behind in certain cases
+- Updated installer background image
+- Miscellaneous bug fixes and improvements
+
+
 ## HandBrake 1.2.0
 
 ### All platforms
