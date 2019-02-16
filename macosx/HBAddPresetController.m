@@ -254,7 +254,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 - (IBAction)openUserGuide:(id)sender
 {
     [[NSWorkspace sharedWorkspace] openURL:[NSURL
-                                            URLWithString:@"https://handbrake.fr/docs/en/1.1.0/advanced/custom-presets.html"]];
+                                            URLWithString:@"https://handbrake.fr/docs/en/1.2.0/advanced/custom-presets.html"]];
 }
 
 @end
