@@ -65,7 +65,11 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-                    TryInit();
+                    bool passed = TryInit();
+                    if (!passed)
+                    {
+                        failedWithHardware = true;
+                    }
                 }
                 catch (Exception e)
                 {
@@ -86,12 +90,25 @@ namespace HandBrake.Interop.Interop
         }
 
         [HandleProcessCorruptedStateExceptions]
-        static void TryInit()
+        static bool TryInit()
         {
-            if (HBFunctions.hb_global_init() == -1)
+            try
             {
-                throw new InvalidOperationException("HB global init failed.");
+                if (HBFunctions.hb_global_init() == -1)
+                {
+                    throw new InvalidOperationException("HB global init failed.");
+                }
             }
+            catch (AccessViolationException e)
+            {
+                return false;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
