@@ -13,6 +13,7 @@ namespace HandBrake.Interop.Interop
     using System.Collections.Generic;
     using System.Linq.Expressions;
     using System.Runtime.CompilerServices;
+    using System.Runtime.ExceptionServices;
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.EventArgs;
@@ -64,11 +65,7 @@ namespace HandBrake.Interop.Interop
             {
                 try
                 {
-
-                    if (HBFunctions.hb_global_init() == -1)
-                    {
-                        throw new InvalidOperationException("HB global init failed.");
-                    }
+                    TryInit();
                 }
                 catch (Exception e)
                 {
@@ -85,6 +82,15 @@ namespace HandBrake.Interop.Interop
                 }
 
                 globalInitialized = true;
+            }
+        }
+
+        [HandleProcessCorruptedStateExceptions]
+        static void TryInit()
+        {
+            if (HBFunctions.hb_global_init() == -1)
+            {
+                throw new InvalidOperationException("HB global init failed.");
             }
         }
 
