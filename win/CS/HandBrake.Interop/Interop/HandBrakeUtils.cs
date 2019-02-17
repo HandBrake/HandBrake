@@ -89,20 +89,20 @@ namespace HandBrake.Interop.Interop
             }
         }
 
-        [HandleProcessCorruptedStateExceptions]
+        //[HandleProcessCorruptedStateExceptions]
         static bool TryInit()
         {
             try
             {
-                if (HBFunctions.hb_global_init() == -1)
+                if (HBFunctions.hb_global_init_no_hardware() == -1)
                 {
                     throw new InvalidOperationException("HB global init failed.");
                 }
             }
-            catch (AccessViolationException e)
-            {
-                return false;
-            }
+            //catch (AccessViolationException e)
+            //{
+            //    return false;
+            //}
             catch (Exception e)
             {
                 return false;
