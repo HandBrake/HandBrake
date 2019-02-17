@@ -75,7 +75,6 @@
 - Improved quality of text rendering on the installer for high density displays
 - Improved ordering of presets and preset categories
 - Improved QSV compatibility with newer Intel drivers by updating libmfx
-- Improved relaunch stability by falling back to software only mode after hardware encoder initialization failure
 - Improved removal of small temporary files that could be left behind in certain cases
 - Miscellaneous bug fixes and improvements
 
