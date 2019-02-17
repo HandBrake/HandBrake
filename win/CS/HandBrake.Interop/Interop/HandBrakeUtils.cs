@@ -94,7 +94,7 @@ namespace HandBrake.Interop.Interop
         {
             try
             {
-                if (HBFunctions.hb_global_init_no_hardware() == -1)
+                if (HBFunctions.hb_global_init() == -1)
                 {
                     throw new InvalidOperationException("HB global init failed.");
                 }
