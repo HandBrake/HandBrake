@@ -306,7 +306,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void EditAudioDefaults()
         {
-            IPopupWindowViewModel popup = new PopupWindowViewModel(this.audioDefaultsViewModel, Resources.Preset_AudioDefaults_Title, Resources.Preset_AudioDefaults_SubText);
+            IPopupWindowViewModel popup = new PopupWindowViewModel(this.audioDefaultsViewModel, Resources.Preset_AudioDefaults_Title, Resources.Preset_AudioDefaults_SubText, null);
             if (this.windowManager.ShowDialog(popup) == true)
             {
                 this.Preset.AudioTrackBehaviours = this.audioDefaultsViewModel.AudioBehaviours.Clone();
@@ -322,7 +322,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void EditSubtitleDefaults()
         {
-            IPopupWindowViewModel popup = new PopupWindowViewModel(this.subtitlesDefaultsViewModel, Resources.Preset_SubtitleDefaults_Title, Resources.Preset_SubtitleDefaults_SubText);
+            IPopupWindowViewModel popup = new PopupWindowViewModel(this.subtitlesDefaultsViewModel, Resources.Preset_SubtitleDefaults_Title, Resources.Preset_SubtitleDefaults_SubText, null);
             
             if (this.windowManager.ShowDialog(popup) == true)
             {

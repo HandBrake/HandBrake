@@ -1906,4 +1906,7 @@ This will not impact any of the software encoders.</value>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
     <value>Please correct your subtitle settings before continuing. </value>
   </data>
+  <data name="Generic_Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
 </root>

@@ -56,7 +56,7 @@
                 <Button Grid.Column="2"
                     Margin="0,5,10,10"
                     cal:Message.Attach="[Event Click] = [Action Save]"
-                    Content="{x:Static properties:Resources.Generic_Save}"
+                    Content="{Binding SaveButtonText}"
                     IsDefault="True"
                     Padding="8,2" />
             </Grid>

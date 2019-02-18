@@ -453,7 +453,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ShowSubtitleDefaultsPanel()
         {
-            IPopupWindowViewModel popup = new PopupWindowViewModel(this.SubtitleDefaultsViewModel, Resources.Preset_SubtitleDefaults_Title, Resources.SubtitleView_SubtitleDefaultsDescription);
+            IPopupWindowViewModel popup = new PopupWindowViewModel(this.SubtitleDefaultsViewModel, Resources.Preset_SubtitleDefaults_Title, Resources.SubtitleView_SubtitleDefaultsDescription, Resources.Generic_Apply);
             if (this.windowManager.ShowDialog(popup) == true)
             {
                 this.OnTabStatusChanged(null);

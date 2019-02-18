@@ -9,6 +9,7 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -19,24 +20,15 @@ namespace HandBrakeWPF.ViewModels
         private string windowTitle;
         private string subText;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PopupWindowViewModel"/> class.
-        /// </summary>
-        /// <param name="contentViewModel">
-        /// The content View Model.
-        /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="subText">
-        /// The sub Text.
-        /// </param>
-        public PopupWindowViewModel(IViewModelBase contentViewModel, string title, string subText)
+        private string saveButtonText;
+
+        public PopupWindowViewModel(IViewModelBase contentViewModel, string title, string subText, string saveBtnText)
         {
             this.ContentViewModel = contentViewModel;
             this.WindowTitle = title;
             this.Title = title;
             this.SubText = subText;
+            this.saveButtonText = saveBtnText;
         }
 
         /// <summary>
@@ -85,6 +77,17 @@ namespace HandBrakeWPF.ViewModels
 
                 this.NotifyOfPropertyChange(() => this.SubText);
                 this.NotifyOfPropertyChange(() => this.SubTextVisible);
+            }
+        }
+
+        public string SaveButtonText
+        {
+            get => this.saveButtonText  ?? Resources.Generic_Save;
+            set
+            {
+                if (value == this.saveButtonText) return;
+                this.saveButtonText = value;
+                this.NotifyOfPropertyChange(() => this.SaveButtonText);
             }
         }
 
