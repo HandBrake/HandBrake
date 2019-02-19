@@ -198,6 +198,10 @@ namespace HandBrakeWPF.Services
                         this.userSettings = deserialisedSettings;
                     }
                 }
+                else
+                {
+                    this.userSettings = new Dictionary<string, object>();
+                }
 
                 // Add any missing / new settings
                 SerializableDictionary<string, object> defaults = this.GetDefaults();
