@@ -8345,7 +8345,7 @@ This value will be used by players in subtitle menus.</property>
                 </child>
                 <child>
                   <object class="GtkComboBox" id="SrtCodeset">
-                    <property name="valign">GTK_ALIGN_CENTER</property>
+                    <property name="valign">GTK_ALIGN_FILL</property>
                     <property name="width_request">150</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
@@ -8355,8 +8355,8 @@ This value will be used by players in subtitle menus.</property>
 SRTs come in all flavours of character sets.
 We translate the character set to UTF-8.
 The source's character code is needed in order to perform this translation.</property>
-                    <property name="has_entry">True</property>
                     <signal name="changed" handler="srt_codeset_changed_cb" swapped="no"/>
+                    <property name="has_entry">True</property>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="combobox-entry1">
                         <property name="can_focus">True</property>
@@ -8389,6 +8389,8 @@ The source's character code is needed in order to perform this translation.</pro
                 </child>
                 <child>
                   <object class="GtkSpinButton" id="ImportOffset">
+                    <property name="valign">GTK_ALIGN_FILL</property>
+                    <property name="vexpand">False</property>
                     <property name="width-chars">8</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
