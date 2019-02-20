@@ -2067,6 +2067,8 @@ namespace HandBrakeWPF.ViewModels
                     this.SubtitleViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.ChaptersViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
                     this.MetaDataViewModel.SetPreset(this.selectedPreset, this.CurrentTask);
+                    this.SummaryViewModel.UpdateDisplayedInfo();
+
                     this.isSettingPreset = false;
                 }
             }
