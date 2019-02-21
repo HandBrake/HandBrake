@@ -1,0 +1,12 @@
+diff -ur fribidi-1.0.5.orig/Makefile.am fribidi-1.0.5/Makefile.am
+--- fribidi-1.0.5.orig/Makefile.am	2018-07-22 17:09:31.000000000 -0400
++++ fribidi-1.0.5/Makefile.am	2019-02-21 11:38:35.000000000 -0500
+@@ -4,7 +4,7 @@
+ ACLOCAL_AMFLAGS = -I m4
+ 
+ ## The order of subdirs is important, don't change without a reason.
+-SUBDIRS = gen.tab lib bin doc test
++SUBDIRS = gen.tab lib bin
+ 
+ EXTRA_DIST = autogen.sh ChangeLog.old \
+ 	meson.build meson_options.txt bin/meson.build doc/meson.build \
