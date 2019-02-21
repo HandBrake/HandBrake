@@ -2,9 +2,9 @@ __deps__ := LIBICONV
 $(eval $(call import.MODULE.defs,LIBXML2,libxml2,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,LIBXML2))
 
-LIBXML2.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libxml2-2.9.4.tar.gz
-LIBXML2.FETCH.url    += https://download.videolan.org/pub/contrib/libxml2/libxml2-2.9.4.tar.gz
-LIBXML2.FETCH.sha256  = ffb911191e509b966deb55de705387f14156e1a56b21824357cdf0053233633c
+LIBXML2.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/libxml2-2.9.9.tar.gz
+LIBXML2.FETCH.url    += https://download.videolan.org/pub/contrib/libxml2/libxml2-2.9.9.tar.gz
+LIBXML2.FETCH.sha256  = 94fb70890143e3c6549f265cee93ec064c80a84c42ad0f23e85ee1fd6540a871
 
 # We don't need LZMA support
 LIBXML2.CONFIGURE.extra = --without-lzma
