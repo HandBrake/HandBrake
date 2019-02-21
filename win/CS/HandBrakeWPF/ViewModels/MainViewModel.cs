@@ -421,20 +421,19 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 // Sanity Check
-                if (ScannedSource == null || ScannedSource.ScanPath == null)
+                if (this.ScannedSource == null || this.ScannedSource.ScanPath == null || this.selectedTitle == null)
                 {
                     return string.Empty;
                 }
 
-                // The title that is selected has a source name. This means it's part of a batch scan.
-                if (selectedTitle != null && !string.IsNullOrEmpty(selectedTitle.SourceName) && !selectedTitle.SourceName.EndsWith("\\"))
+                if (File.Exists(this.ScannedSource.ScanPath)) // Scan Path is a File.
                 {
-                    return Path.GetFileNameWithoutExtension(selectedTitle.SourceName);
+                    return Path.GetFileNameWithoutExtension(this.ScannedSource.ScanPath);
                 }
 
-                // Check if we have a Folder, if so, check if it's a DVD / Bluray drive and get the label.
-                if (ScannedSource.ScanPath.EndsWith("\\"))
+                if (Directory.Exists(this.ScannedSource.ScanPath)) // Scan Path is a folder.
                 {
+                    // Check to see if it's a Drive. If yes, use the volume label.
                     foreach (DriveInformation item in DriveUtilities.GetDrives())
                     {
                         if (item.RootDirectory.Contains(this.ScannedSource.ScanPath.Replace("\\\\", "\\")))
@@ -442,12 +441,19 @@ namespace HandBrakeWPF.ViewModels
                             return item.VolumeLabel;
                         }
                     }
+
+                    // Otherwise, it may be a path of files.
+                    if (!string.IsNullOrEmpty(this.selectedTitle.SourceName) && File.Exists(this.selectedTitle.SourceName)) // Selected Title is a file
+                    {
+                        return Path.GetFileNameWithoutExtension(this.selectedTitle.SourceName);
+                    }
+                    else if (Directory.Exists(this.selectedTitle.SourceName)) // Selected Title is a structured source.
+                    {
+                        return Path.GetFileName(this.ScannedSource.ScanPath);
+                    }
                 }
 
-                if (Path.GetFileNameWithoutExtension(this.ScannedSource.ScanPath) != "VIDEO_TS")
-                    return Path.GetFileNameWithoutExtension(this.ScannedSource.ScanPath);
-
-                return Path.GetFileNameWithoutExtension(Path.GetDirectoryName(this.ScannedSource.ScanPath));
+                return null;
             }
         }
 
