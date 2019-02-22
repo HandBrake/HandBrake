@@ -68,6 +68,7 @@ typedef struct hb_qsv_info_s
 } hb_qsv_info_t;
 
 /* Intel Quick Sync Video utilities */
+hb_display_t * hb_qsv_display_init(void);
 int            hb_qsv_video_encoder_is_enabled(int encoder);
 int            hb_qsv_audio_encoder_is_enabled(int encoder);
 int            hb_qsv_info_init();

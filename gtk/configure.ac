@@ -212,7 +212,7 @@ if test "x$use_x265" = "xyes" ; then
 fi
 
 if test "x$use_qsv" = "xyes" ; then
-    HB_LIBS="$HB_LIBS -lmfx"
+    HB_LIBS="$HB_LIBS -lmfx -lva -lva-drm"
 fi
 if test "x$PYTHON" != "x" ; then
     HB_PYTHON="$PYTHON"

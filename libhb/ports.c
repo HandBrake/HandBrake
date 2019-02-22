@@ -70,6 +70,7 @@
 #include <linux/cdrom.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#include <libdrm/drm.h>
 #elif defined( SYS_OPENBSD )
 #include <sys/dvdio.h>
 #include <fcntl.h>
@@ -1505,3 +1506,150 @@ char * hb_strndup(const char * src, size_t len)
     return strndup(src, len);
 #endif
 }
+
+#ifdef USE_QSV
+#ifdef SYS_LINUX
+
+#define MAX_NODES             16
+#define DRI_RENDER_NODE_START 128
+#define DRI_RENDER_NODE_LAST  (DRI_RENDER_NODE_START + MAX_NODES - 1)
+#define DRI_CARD_NODE_START   0
+#define DRI_CARD_NODE_LAST    (DRI_CARD_NODE_START + MAX_NODES - 1)
+
+const char* DRI_PATH = "/dev/dri/";
+const char* DRI_NODE_RENDER = "renderD";
+const char* DRI_NODE_CARD = "card";
+
+static int try_adapter(const char * name, const char * dir,
+                const char * prefix, int node_start, int node_last)
+{
+    int             node;
+    int             len        = strlen(name);
+    char          * driverName = malloc(len + 1);
+    drm_version_t   version = {};
+
+    version.name_len = len + 1;
+    version.name     = driverName;
+    for (node = node_start; node <= node_last; node++)
+    {
+        char * adapter = hb_strdup_printf("%s%s%d", dir, prefix, node);
+        int    fd      = open(adapter, O_RDWR);
+
+        free(adapter);
+        if (fd < 0)
+        {
+            continue;
+        }
+
+        if (!ioctl(fd, DRM_IOCTL_VERSION, &version) &&
+            version.name_len == len && !strncmp(driverName, name, len))
+        {
+            free(driverName);
+            return fd;
+        }
+        close(fd);
+    }
+
+    free(driverName);
+    return -1;
+}
+
+static int open_adapter(const char * name)
+{
+    int fd = try_adapter(name, DRI_PATH, DRI_NODE_RENDER,
+                         DRI_RENDER_NODE_START, DRI_RENDER_NODE_LAST);
+    if (fd < 0)
+    {
+        fd = try_adapter(name, DRI_PATH, DRI_NODE_CARD,
+                         DRI_CARD_NODE_START, DRI_CARD_NODE_LAST);
+    }
+    return fd;
+}
+
+hb_display_t * hb_display_init(const char * driver_name,
+                               const char * interface_name)
+{
+    hb_display_t * hbDisplay = calloc(sizeof(hb_display_t), 1);
+
+    hbDisplay->vaDisplay = NULL;
+    hbDisplay->vaFd      = open_adapter(driver_name);
+    if (hbDisplay->vaFd < 0)
+    {
+        hb_deep_log( 3, "hb_va_display_init: no display found" );
+        free(hbDisplay);
+        return NULL;
+    }
+
+    setenv("LIBVA_DRIVER_NAME", interface_name, 1);
+    hbDisplay->vaDisplay = vaGetDisplayDRM(hbDisplay->vaFd);
+    if (hbDisplay->vaDisplay == NULL)
+    {
+        close(hbDisplay->vaFd);
+        free(hbDisplay);
+        return NULL;
+    }
+
+    int major = 0, minor = 0;
+    VAStatus vaRes = vaInitialize(hbDisplay->vaDisplay, &major, &minor);
+    if (vaRes != VA_STATUS_SUCCESS)
+    {
+        vaTerminate(hbDisplay->vaDisplay);
+        close(hbDisplay->vaFd);
+        free(hbDisplay);
+        return NULL;
+    }
+    hbDisplay->handle = hbDisplay->vaDisplay;
+    hbDisplay->mfxType = MFX_HANDLE_VA_DISPLAY;
+
+    return hbDisplay;
+}
+
+void hb_display_close(hb_display_t ** _d)
+{
+    hb_display_t * hbDisplay = *_d;
+
+    if (hbDisplay == NULL)
+    {
+        return;
+    }
+    if (hbDisplay->vaDisplay)
+    {
+        vaTerminate(hbDisplay->vaDisplay);
+    }
+    if (hbDisplay->vaFd >= 0)
+    {
+        close(hbDisplay->vaFd);
+    }
+    free(hbDisplay);
+
+    *_d = NULL;
+}
+
+#else // !SYS_LINUX
+
+hb_display_t * hb_display_init(const char * driver_name,
+                               const char * interface_name)
+{
+    return NULL;
+}
+
+void hb_display_close(hb_display_t ** _d)
+{
+    (void)_d;
+}
+
+#endif // SYS_LINUX
+#else // !USE_QSV
+
+hb_display_t * hb_display_init(const char * driver_name,
+                               const char * interface_name)
+{
+    return NULL;
+}
+
+void hb_display_close(hb_display_t ** _d)
+{
+    (void)_d;
+}
+
+#endif // USE_QSV
