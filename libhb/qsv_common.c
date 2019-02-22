@@ -316,13 +316,15 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
         }
         else
         {
+            mfxStatus mfxRes;
             init_video_param(&inputParam);
             inputParam.mfx.CodecId = info->codec_id;
 
             memset(&videoParam, 0, sizeof(mfxVideoParam));
             videoParam.mfx.CodecId = inputParam.mfx.CodecId;
 
-            if (MFXVideoENCODE_Query(session, &inputParam, &videoParam) >= MFX_ERR_NONE &&
+            mfxRes = MFXVideoENCODE_Query(session, &inputParam, &videoParam);
+            if (mfxRes >= MFX_ERR_NONE &&
                 videoParam.mfx.CodecId == info->codec_id)
             {
                 /*
@@ -636,6 +638,14 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
     return 0;
 }
 
+const char* DRM_INTEL_DRIVER_NAME = "i915";
+const char* VA_INTEL_DRIVER_NAME = "iHD";
+
+hb_display_t * hb_qsv_display_init(void)
+{
+    return hb_display_init(DRM_INTEL_DRIVER_NAME, VA_INTEL_DRIVER_NAME);
+}
+
 int hb_qsv_info_init()
 {
     static int init_done = 0;
@@ -680,6 +690,15 @@ int hb_qsv_info_init()
     do{
         if (MFXInit(MFX_IMPL_HARDWARE_ANY | hw_preference, &version, &session) == MFX_ERR_NONE)
         {
+            // On linux, the handle to the VA display must be set.
+            // This code is essentiall a NOP other platforms.
+            hb_display_t * display = hb_qsv_display_init();
+
+            if (display != NULL)
+            {
+                MFXVideoCORE_SetHandle(session, display->mfxType,
+                                       (mfxHDL)display->handle);
+            }
             // Media SDK hardware found, but check that our minimum is supported
             //
             // Note: this-party hardware (QSV_G0) is unsupported for the time being
@@ -697,6 +716,7 @@ int hb_qsv_info_init()
                 // available, we can set the preferred implementation
                 hb_qsv_impl_set_preferred("hardware");
             }
+            hb_display_close(&display);
             MFXClose(session);
             hw_preference = 0;
         }
@@ -897,19 +917,17 @@ hb_list_t* hb_qsv_load_plugins(hb_qsv_info_t *info, mfxSession session, mfxVersi
             if (HB_CHECK_MFX_VERSION(version, 1, 15) &&
                 qsv_implementation_is_hardware(info->implementation))
             {
-                if (MFXVideoUSER_Load(session, &MFX_PLUGINID_HEVCE_HW, 0) < MFX_ERR_NONE)
+                if (MFXVideoUSER_Load(session, &MFX_PLUGINID_HEVCE_HW, 0) == MFX_ERR_NONE)
                 {
-                    goto fail;
+                    hb_list_add(mfxPluginList, (void*)&MFX_PLUGINID_HEVCE_HW);
                 }
-                hb_list_add(mfxPluginList, (void*)&MFX_PLUGINID_HEVCE_HW);
             }
             else if (HB_CHECK_MFX_VERSION(version, 1, 15))
             {
-                if (MFXVideoUSER_Load(session, &MFX_PLUGINID_HEVCE_SW, 0) < MFX_ERR_NONE)
+                if (MFXVideoUSER_Load(session, &MFX_PLUGINID_HEVCE_SW, 0) == MFX_ERR_NONE)
                 {
-                    goto fail;
+                    hb_list_add(mfxPluginList, (void*)&MFX_PLUGINID_HEVCE_SW);
                 }
-                hb_list_add(mfxPluginList, (void*)&MFX_PLUGINID_HEVCE_SW);
             }
         }
     }

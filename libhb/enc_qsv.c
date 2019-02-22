@@ -75,6 +75,7 @@ struct hb_work_private_s
     hb_qsv_param_t       param;
     hb_qsv_space         enc_space;
     hb_qsv_info_t      * qsv_info;
+    hb_display_t       * display;
 
     hb_chapter_queue_t * chapter_queue;
 
@@ -1084,6 +1085,18 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         return -1;
     }
 
+    if (pv->qsv_info->implementation & MFX_IMPL_HARDWARE_ANY)
+    {
+        // On linux, the handle to the VA display must be set.
+        // This code is essentiall a NOP other platforms.
+        pv->display = hb_qsv_display_init();
+        if (pv->display != NULL)
+        {
+            MFXVideoCORE_SetHandle(session, pv->display->mfxType,
+                                   (mfxHDL)pv->display->handle);
+        }
+    }
+
     /* Query the API version for hb_qsv_load_plugins */
     err = MFXQueryVersion(session, &version);
     if (err != MFX_ERR_NONE)
@@ -1429,6 +1442,8 @@ void encqsvClose(hb_work_object_t *w)
 
             /* QSV context cleanup and MFXClose */
             hb_qsv_context_clean(qsv_ctx);
+
+            hb_display_close(&pv->display);
 
             if (qsv_enc_space != NULL)
             {
