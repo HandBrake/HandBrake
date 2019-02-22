@@ -1909,4 +1909,7 @@ This will not impact any of the software encoders.</value>
   <data name="Generic_Apply" xml:space="preserve">
     <value>Apply</value>
   </data>
+  <data name="Main_ResumeEncode" xml:space="preserve">
+    <value>Resume Encode</value>
+  </data>
 </root>

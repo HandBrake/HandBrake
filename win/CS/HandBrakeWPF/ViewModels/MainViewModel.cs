@@ -1009,7 +1009,18 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets the start label.
         /// </summary>
-        public string StartLabel => this.queueProcessor.Count > 0 ? Resources.Main_StartQueue : Resources.Main_Start;
+        public string StartLabel
+        {
+            get
+            {
+                if (this.queueProcessor.EncodeService.IsPasued)
+                {
+                    return Resources.Main_ResumeEncode;
+                }
+
+                return this.queueProcessor.Count > 0 ? Resources.Main_StartQueue : Resources.Main_Start;
+            } 
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether has source.

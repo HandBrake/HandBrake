@@ -1382,6 +1382,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resume Encode.
+        /// </summary>
+        public static string Main_ResumeEncode {
+            get {
+                return ResourceManager.GetString("Main_ResumeEncode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scan Cancelled..
         /// </summary>
         public static string Main_ScanCancelled {
