@@ -1298,36 +1298,37 @@ def createCLI():
     grp.add_option( '--disable-gtk', default=False, action='store_true', help=h )
 
     h = IfHost( 'disable GTK GUI update checks', '*-*-linux*', '*-*-freebsd*', none=optparse.SUPPRESS_HELP ).value
-
     grp.add_option( '--disable-gtk-update-checks', default=False, action='store_true', help=h )
 
     h = IfHost( 'enable GTK GUI (mingw)', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
     grp.add_option( '--enable-gtk-mingw', default=False, action='store_true', help=h )
 
     h = IfHost( 'disable GStreamer (live preview)', '*-*-linux*', '*-*-freebsd*', none=optparse.SUPPRESS_HELP ).value
-
     grp.add_option( '--disable-gst', default=False, action='store_true', help=h )
 
-    h = IfHost( 'enable Intel Quick Sync Video (QSV) hardware acceleration. (Windows and Linux only)', '*-*-linux*', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-qsv', default=False, action='store_true', help=h )
+    h = IfHost( 'Intel Quick Sync Video (QSV) hardware acceleration (Windows and Linux only)', '*-*-linux*', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-qsv', dest="enable_qsv", default=host.match( '*-*-mingw*' ), action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    grp.add_option( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
 
-    h = IfHost( 'enable AMD VCE hardware acceleration. (Windows only)', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-vce', default=False, action='store_true', help=h )
+    h = IfHost( 'AMD VCE hardware acceleration (Windows only)', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-vce', dest="enable_vce", default=host.match( '*-*-mingw*' ), action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    grp.add_option( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
 
-    h = IfHost( 'enable x265 video encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-x265', dest="enable_x265", default=True, action='store_true', help=h )
-    grp.add_option( '--disable-x265', dest="enable_x265", action='store_false' )
+    h = IfHost( 'x265 video encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-x265', dest="enable_x265", default=True, action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    grp.add_option( '--disable-x265', dest="enable_x265", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
 
-    h = IfHost( 'enable FDK AAC audio encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-fdk-aac', dest="enable_fdk_aac", default=False, action='store_true', help=h )
-    grp.add_option( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false' )
+    h = IfHost( 'FDK AAC audio encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-fdk-aac', dest="enable_fdk_aac", default=False, action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    grp.add_option( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
 
-    h = IfHost( 'enable FFmpeg AAC audio encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=h )
-    grp.add_option( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false' )
+    h = IfHost( 'FFmpeg AAC audio encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    grp.add_option( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
 
-    h = IfHost( 'enable Nvidia NVEnc video encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-nvenc', dest="enable_nvenc", default=not (host.match( '*-*-darwin*' ) or host.match( '*-*-freebsd*' )), action='store_true', help=h )
+    h = IfHost( 'Nvidia NVEnc video encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-nvenc', dest="enable_nvenc", default=not (host.match( '*-*-darwin*' ) or host.match( '*-*-freebsd*' )), action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    grp.add_option( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
 
 
     cli.add_option_group( grp )
@@ -1981,6 +1982,17 @@ int main()
         nocd = True
     else:
         nocd = False
+
+    stdout.write( '%s\n' % ('-' * 79) )
+    stdout.write( 'Configured options:\n' )
+    stdout.write( 'Enable FDK-AAC:    %s\n' % options.enable_fdk_aac )
+    stdout.write( 'Enable FFmpeg AAC: %s\n' % options.enable_ffmpeg_aac )
+
+    if IfHost( True, '*-*-linux*', '*-*-mingw*', none=False ).value is True:
+        stdout.write( 'Enable NVEnc:      %s\n' % options.enable_nvenc )
+        stdout.write( 'Enable QSV:        %s\n' % options.enable_qsv )
+    if IfHost( True, '*-*-mingw*', none=False ).value is True:
+        stdout.write( 'Enable VCE:        %s\n' % options.enable_vce )
 
     stdout.write( '%s\n' % ('-' * 79) )
     if options.launch:
