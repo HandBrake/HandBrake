@@ -1912,4 +1912,10 @@ This will not impact any of the software encoders.</value>
   <data name="Main_ResumeEncode" xml:space="preserve">
     <value>Resume Encode</value>
   </data>
+  <data name="QueueView_Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>Import</value>
+  </data>
 </root>

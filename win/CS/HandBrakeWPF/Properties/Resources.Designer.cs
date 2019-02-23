@@ -3730,6 +3730,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actions.
+        /// </summary>
+        public static string QueueView_Actions {
+            get {
+                return ResourceManager.GetString("QueueView_Actions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Advanced:.
         /// </summary>
         public static string QueueView_Advanced {
@@ -3861,6 +3870,15 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_Hibernate {
             get {
                 return ResourceManager.GetString("QueueView_Hibernate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string QueueView_Import {
+            get {
+                return ResourceManager.GetString("QueueView_Import", resourceCulture);
             }
         }
         
