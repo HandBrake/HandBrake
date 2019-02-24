@@ -59,9 +59,10 @@ FFMPEG.CONFIGURE.extra = \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
 
 ifeq (1-linux,$(FEATURE.qsv)-$(BUILD.system))
-FFMPEG.CONFIGURE.extra += --enable-vaapi
+    FFMPEG.CONFIGURE.extra += --enable-vaapi
+    FFMPEG.CONFIGURE.extra += --disable-xlib
 else
-FFMPEG.CONFIGURE.extra += --disable-vaapi
+    FFMPEG.CONFIGURE.extra += --disable-vaapi
 endif
 
 ifeq (1,$(FEATURE.fdk_aac))
