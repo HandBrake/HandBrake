@@ -1,0 +1,106 @@
+{
+    "app-id": "fr.handbrake.plugin.IntelMediaSDK",
+    "branch": "1",
+    "runtime": "fr.handbrake.ghb",
+    "runtime-version": "development",
+    "sdk": "org.freedesktop.Sdk//18.08",
+    "build-extension": true,
+    "separate-locales": false,
+    "appstream-compose": false,
+    "modules": [
+        {
+            "name": "intel-gmmlib",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/intel/gmmlib/archive/intel-gmmlib-18.4.1.tar.gz",
+                    "sha256": "7970a8ae4e16efb98f38fbbc0346eea03227fc4462a9bd8e8077277cc3430a84"
+                }
+            ],
+            "buildsystem": "cmake",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release"
+            ],
+            "build-options": {
+                "prefix" : "/app/extensions/IntelMediaSDK",
+                "make-args": [
+                    "VERBOSE=1"
+                ],
+                "make-install-args": [
+                    "VERBOSE=1"
+                ]
+            }
+        },
+        {
+            "name": "libva",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/intel/libva/releases/download/2.4.0/libva-2.4.0.tar.bz2",
+                    "sha256": "99263056c21593a26f2ece812aee6fe60142b49e6cd46cb33c8dddf18fc19391"
+                }
+            ],
+            "no-autogen": true,
+            "config-opts": ["--with-drivers-path=/app/extensions/IntelMediaSDK/lib/dri"],
+            "build-options": {
+                "prefix" : "/app/extensions/IntelMediaSDK"
+            }
+        },
+        {
+            "name": "libva-utils",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/intel/libva-utils/releases/download/2.4.0/libva-utils-2.4.0.tar.bz2",
+                    "sha256": "5b7d1954b40fcb2c0544be20125c71a0852049715ab85a3e8aba60434a40c6b3"
+                }
+            ],
+            "no-autogen": true,
+            "build-options": {
+                "prefix" : "/app/extensions/IntelMediaSDK",
+                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig"
+            }
+        },
+        {
+            "name": "intel-media-driver",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/VCDP/media-driver/archive/intel-media-kbl-19.1.0.tar.gz",
+                    "sha256": "d494f8cf395e9996beda9846afdc736998de6978481aab0e483d818a0c836d66"
+                }
+            ],
+            "buildsystem": "cmake",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release"
+            ],
+            "build-options": {
+                "prefix" : "/app/extensions/IntelMediaSDK",
+                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig"
+            }
+        },
+        {
+            "name": "mediasdk",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/MSS-KBL-2019-R1.tar.gz",
+                    "sha256": "ec3d23a2ca4f18144b52d2257b3050ba0f9a98f2688418dd40e8335a215be765"
+                }
+            ],
+            "buildsystem": "cmake",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DMFX_ENABLE_SW_FALLBACK=OFF"
+            ],
+            "build-options": {
+                "prefix" : "/app/extensions/IntelMediaSDK",
+                "prepend-pkg-config-path": "/app/extensions/IntelMediaSDK/lib/pkgconfig"
+            }
+        }
+    ]
+}
+

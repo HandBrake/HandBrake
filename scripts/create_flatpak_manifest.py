@@ -32,6 +32,18 @@ class SourceEntry:
         self.entry_type = entry_type
         self.sha256     = sha256
 
+class FlatpakPluginManifest:
+    def __init__(self, runtime, template=None):
+        if template != None:
+            with open(template, 'r') as fp:
+                self.manifest = json.load(fp, object_pairs_hook=OrderedDict)
+
+        else:
+            self.manifest    = OrderedDict()
+
+        if runtime != None:
+            self.manifest["runtime-version"] = runtime
+
 class FlatpakManifest:
     def __init__(self, source_list, runtime, qsv, template=None):
         if template != None:
@@ -99,13 +111,14 @@ def usage():
     print "     -t --template   - Flatpak manifest template"
     print "     -r --runtime    - Flatpak SDK runtime version"
     print "     -q --qsv        - Build with Intel QSV support"
+    print "     -p --plugin     - Manifest if for a HandBrake flatpak plugin"
     print "     -h --help       - Show this message"
 
 if __name__ == "__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:t:r:qh",
+        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:t:r:qph",
             ["archive=", "contrib=", "sha265=",
-             "template=", "runtime=", "qsv", "help"])
+             "template=", "runtime=", "qsv", "plugin", "help"])
     except getopt.GetoptError:
         print "Error: Invalid option"
         usage()
@@ -118,6 +131,7 @@ if __name__ == "__main__":
     source_list = OrderedDict()
     current_source = None
     runtime = None
+    plugin = 0
     qsv = 0
     for opt, arg in opts:
         if opt in ("-h", "--help"):
@@ -144,13 +158,19 @@ if __name__ == "__main__":
             runtime = arg
         elif opt in ("-q", "--qsv"):
             qsv = 1;
+        elif opt in ("-p", "--plugin"):
+            plugin = 1;
 
     if len(args) > 0:
         dst = args[0]
     else:
         dst = None
 
-    manifest = FlatpakManifest(source_list, runtime, qsv, template)
+    if plugin:
+        manifest = FlatpakPluginManifest(runtime, template)
+    else:
+        manifest = FlatpakManifest(source_list, runtime, qsv, template)
+
     if dst != None:
         with open(dst, 'w') as fp:
             json.dump(manifest.manifest, fp, ensure_ascii=False, indent=4)
