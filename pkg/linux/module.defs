@@ -28,6 +28,10 @@ ifneq ($(PGP_ID),)
     PGPSIGN = --gpg-sign=$(PGP_ID)
 endif
 
+ifeq (1,$(FEATURE.qsv))
+    FPQSV = -q
+endif
+
 ifneq ($(FP_RUNTIME),)
     FPRUNTIME = -r $(FP_RUNTIME)
 endif

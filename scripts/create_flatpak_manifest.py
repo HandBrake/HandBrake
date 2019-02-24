@@ -33,7 +33,7 @@ class SourceEntry:
         self.sha256     = sha256
 
 class FlatpakManifest:
-    def __init__(self, source_list, runtime, template=None):
+    def __init__(self, source_list, runtime, qsv, template=None):
         if template != None:
             with open(template, 'r') as fp:
                 self.manifest = json.load(fp, object_pairs_hook=OrderedDict)
@@ -41,6 +41,7 @@ class FlatpakManifest:
             self.finish_args = self.manifest["finish-args"]
             self.modules     = self.manifest["modules"]
             self.hbmodule    = self.modules[len(self.modules) - 1]
+            self.hbconfig    = self.hbmodule["config-opts"]
             self.sources     = [None]
 
             self.hbmodule["sources"]     = self.sources
@@ -54,9 +55,13 @@ class FlatpakManifest:
             self.manifest["modules"]     = self.modules
             self.modules[0]              = self.hbmodule
             self.hbmodule["sources"]     = self.sources
+            self.hbconfig                = [None]
 
         if runtime != None:
             self.manifest["runtime-version"] = runtime
+
+        if qsv:
+            self.hbconfig.append("--enable-qsv");
 
         handbrake_found = False
         for key, value in source_list.items():
@@ -93,13 +98,14 @@ def usage():
     print "     -s --sha256     - sha256 of previous file on command line"
     print "     -t --template   - Flatpak manifest template"
     print "     -r --runtime    - Flatpak SDK runtime version"
+    print "     -q --qsv        - Build with Intel QSV support"
     print "     -h --help       - Show this message"
 
 if __name__ == "__main__":
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:t:r:h",
+        opts, args = getopt.getopt(sys.argv[1:], "a:c:s:t:r:qh",
             ["archive=", "contrib=", "sha265=",
-             "template=", "runtime=", "help"])
+             "template=", "runtime=", "qsv", "help"])
     except getopt.GetoptError:
         print "Error: Invalid option"
         usage()
@@ -112,6 +118,7 @@ if __name__ == "__main__":
     source_list = OrderedDict()
     current_source = None
     runtime = None
+    qsv = 0
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             usage()
@@ -135,13 +142,15 @@ if __name__ == "__main__":
             template = arg
         elif opt in ("-r", "--runtime"):
             runtime = arg
+        elif opt in ("-q", "--qsv"):
+            qsv = 1;
 
     if len(args) > 0:
         dst = args[0]
     else:
         dst = None
 
-    manifest = FlatpakManifest(source_list, runtime, template)
+    manifest = FlatpakManifest(source_list, runtime, qsv, template)
     if dst != None:
         with open(dst, 'w') as fp:
             json.dump(manifest.manifest, fp, ensure_ascii=False, indent=4)
