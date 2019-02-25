@@ -41,7 +41,7 @@ def start_element_handler(tag, attr):
             try:
                 with open(fname) as fp:
                     val = json.load(fp)
-            except Exception, err:
+            except Exception as err:
                 print >> sys.stderr, ("Error: %s" % str(err))
         elif fname is None:
             print >> sys.stderr, ("Error: No such json file %s" % fbase)
@@ -63,7 +63,7 @@ def start_element_handler(tag, attr):
             try:
                 with open(fname) as fp:
                     val = fp.read()
-            except Exception, err:
+            except Exception as err:
                 print >> sys.stderr, ("Error: %s" % str(err))
                 sys.exit(1)
         elif fname is None:
@@ -74,9 +74,9 @@ def start_element_handler(tag, attr):
         val = attr["value"]
 
     if val is not None:
-        if isinstance(current, types.DictType):
+        if isinstance(current, dict):
             current[key] = val
-        elif isinstance(current, types.TupleType):
+        elif isinstance(current, tuple):
             current.append(val)
 
 
@@ -91,8 +91,9 @@ def resource_parse_file(infile):
     parser.CharacterDataHandler = cdata_handler
 
     try:
-        parser.ParseFile(infile)
-    except ExpatError, err:
+        with open(infile.name, 'rb') as file:
+            parser.ParseFile(file)
+    except ExpatError as err:
         print >> sys.stderr, ("Error: %s" % str(err))
         return None
 

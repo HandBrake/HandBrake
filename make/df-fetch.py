@@ -121,7 +121,7 @@ class Tool(hb_distfile.Tool):
                 url.download(error)
                 if not self.options.exhaust_url:
                     break
-            except Exception, x:
+            except Exception as x:
                 ## propagate exception if no remaining urls
                 if not urls:
                     raise
@@ -131,7 +131,7 @@ class Tool(hb_distfile.Tool):
         error = hb_distfile.ToolError(self.name)
         try:
             self._run(error)
-        except Exception, x:
+        except Exception as x:
             self.debug_exception()
             self.errln('%s failure; %s' % (error.op,x), exit=1)
 

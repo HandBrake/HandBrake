@@ -1,8 +1,6 @@
 ###############################################################################
 ##
-## This script is coded for minimum version of Python 2.7 .
-##
-## Python3 is incompatible.
+## This script is coded for Python 2.7 through Python 3.x
 ##
 ## Authors: konablend
 ##
@@ -142,7 +140,7 @@ class Configure( object ):
 
         try:
             return open( *args )
-        except Exception, x:
+        except Exception as x:
             self.errln( 'open failure: %s', x )
 
     def record_log( self ):
@@ -430,7 +428,7 @@ class HostTupleProbe( ShellProbe, list ):
         super( HostTupleProbe, self ).__init__( 'host tuple', '%s/config.guess' % (cfg.dir), abort=True, head=True )
 
     def _parseSession( self ):
-        self.spec = self.session[0] if self.session else ''
+        self.spec = self.session[0].decode('utf-8') if self.session else ''
 
         ## grok GNU host tuples
         m = re.match( HostTupleProbe.GNU_TUPLE_RE, self.spec )
@@ -670,7 +668,7 @@ class SelectMode( dict ):
         self.mode = value
 
     def toString( self, nodefault=False ):
-        keys = self.keys()
+        keys = list(self.copy().keys())
         keys.sort()
         if len(self) == 1:
             value = self.mode
@@ -720,6 +718,8 @@ class RepoProbe( ShellProbe ):
 
     def _parseSession( self ):
         for line in self.session:
+            line = line.decode('utf-8')
+
             ## grok fields
             m = re.match( '([^\=]+)\=(.*)', line )
             if not m:
@@ -900,8 +900,12 @@ class ToolProbe( Action ):
         self.names  = []
         self.kwargs = kwargs
         for name in names:
-            if name:
-                self.names.append( str(name) )
+            try:
+                name = str(name)
+            except:
+                name = None
+            if name is not None:
+                self.names.append( name )
         self.name = self.names[0]
         self.pretext = self.name
         self.pathname = self.names[0]
@@ -984,7 +988,7 @@ class VersionProbe( Action ):
                 self._parse()
             self.fail = False
             self.msg_end = self.svers
-        except Exception, x:
+        except Exception as x:
             self.svers = '0.0.0'
             self.ivers = [0,0,0]
             self.msg_end = str(x)
@@ -994,7 +998,7 @@ class VersionProbe( Action ):
         super( VersionProbe, self )._dumpSession( printf )
 
     def _parse( self ):
-        mo = re.match( self.rexpr, self.session[0], re.IGNORECASE )
+        mo = re.match( self.rexpr, self.session[0].decode('utf-8'), re.IGNORECASE )
         md = mo.groupdict()
         self.svers = md['svers']
         if 'i0' in md and md['i0']:
@@ -1163,7 +1167,7 @@ class ConfigDocument:
         elif type == 'm4':
             fname = os.path.join( 'project', project.name_lower + '.m4' )
         else:
-            raise ValueError, 'unknown file type: ' + type
+            raise ValueError('unknown file type: ' + type)
 
         ftmp = cfg.mktmpname(fname)
         try:
@@ -1175,16 +1179,16 @@ class ConfigDocument:
                     out_file.close()
                 except:
                     pass
-        except Exception, x:
+        except Exception as x:
             try:
                 os.remove( ftmp )
-            except Exception, x:
+            except Exception as x:
                 pass
             cfg.errln( 'failed writing to %s\n%s', ftmp, x )
 
         try:
             os.rename( ftmp, fname )
-        except Exception, x:
+        except Exception as x:
             cfg.errln( 'failed writing to %s\n%s', fname, x )
 
 ###############################################################################
@@ -1210,16 +1214,16 @@ def encodeDistfileConfig():
                 out_file.close()
             except:
                 pass
-    except Exception, x:
+    except Exception as x:
         try:
             os.remove( ftmp )
-        except Exception, x:
+        except Exception as x:
             pass
         cfg.errln( 'failed writing to %s\n%s', ftmp, x )
 
     try:
         os.rename( ftmp, fname )
-    except Exception, x:
+    except Exception as x:
         cfg.errln( 'failed writing to %s\n%s', fname, x )
 
 ###############################################################################
@@ -1419,7 +1423,7 @@ class Launcher:
         ## launch/pipe
         try:
             pipe = subprocess.Popen( cmd, shell=True, bufsize=1, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
-        except Exception, x:
+        except Exception as x:
             cfg.errln( 'launch failure: %s', x )
         for line in pipe.stdout:
             self.echof( '%s', line )
@@ -2009,7 +2013,7 @@ int main()
         else:
             stdout.write( 'You may now cd into %s and run make (%s).\n' % (cfg.build_dir,Tools.gmake.pathname) )
 
-except AbortError, x:
+except AbortError as x:
     stderr.write( 'ERROR: %s\n' % (x) )
     try:
         cfg.record_log()

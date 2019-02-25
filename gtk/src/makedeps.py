@@ -62,13 +62,13 @@ def main():
 
     try:
         depsfile = open("widget.deps", "w")
-    except Exception, err:
+    except Exception as err:
         print >> sys.stderr, ( "Error: %s"  % str(err) )
         sys.exit(1)
 
     try:
         revfile = open("widget_reverse.deps", "w")
-    except Exception, err:
+    except Exception as err:
         print >> sys.stderr, ( "Error: %s"  % str(err))
         sys.exit(1)
 

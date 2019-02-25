@@ -90,7 +90,7 @@ class Tool(hb_distfile.Tool):
         error = hb_distfile.ToolError(self.name)
         try:
             self._run(error)
-        except Exception, x:
+        except Exception as x:
             self.debug_exception()
             self.errln('%s failure; %s' % (error.op,x), exit=1)
 
