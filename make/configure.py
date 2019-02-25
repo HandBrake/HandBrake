@@ -1973,16 +1973,6 @@ int main()
     doc.write( 'm4' )
     encodeDistfileConfig()
 
-    if options.launch:
-        Launcher( targets )
-
-    cfg.record_log()
-
-    if os.path.normpath( cfg.build_dir ) == os.curdir:
-        nocd = True
-    else:
-        nocd = False
-
     stdout.write( '%s\n' % ('-' * 79) )
     stdout.write( 'Configured options:\n' )
     stdout.write( 'Enable FDK-AAC:    %s\n' % options.enable_fdk_aac )
@@ -1993,6 +1983,17 @@ int main()
         stdout.write( 'Enable QSV:        %s\n' % options.enable_qsv )
     if IfHost( True, '*-*-mingw*', none=False ).value is True:
         stdout.write( 'Enable VCE:        %s\n' % options.enable_vce )
+
+    if options.launch:
+        stdout.write( '%s\n' % ('-' * 79) )
+        Launcher( targets )
+
+    cfg.record_log()
+
+    if os.path.normpath( cfg.build_dir ) == os.curdir:
+        nocd = True
+    else:
+        nocd = False
 
     stdout.write( '%s\n' % ('-' * 79) )
     if options.launch:
