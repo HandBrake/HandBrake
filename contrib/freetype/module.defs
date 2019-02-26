@@ -1,4 +1,4 @@
-__deps__ := BZIP ZLIB
+__deps__ := BZIP2 ZLIB
 $(eval $(call import.MODULE.defs,FREETYPE,freetype,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FREETYPE))
 
