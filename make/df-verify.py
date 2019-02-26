@@ -1,8 +1,6 @@
 ###############################################################################
 ##
-## Coded for minimum version of Python 2.7 .
-##
-## Python3 is incompatible.
+## This script is coded for Python 2.7 through Python 3.x
 ##
 ## Authors: konablend
 ##
@@ -50,7 +48,7 @@ class Tool(hb_distfile.Tool):
     def _scan(self, filename):
         self.verbosef('scanning %s\n' % filename)
         hasher = hashlib.sha256()
-        with open(filename, 'r') as o:
+        with open(filename, 'rb') as o:
             data_total = 0
             while True:
                 data = o.read(65536)

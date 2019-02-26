@@ -1,8 +1,6 @@
 ###############################################################################
 ##
-## Coded for minimum version of Python 2.7 .
-##
-## Python3 is incompatible.
+## This script is coded for Python 2.7 through Python 3.x
 ##
 ## Authors: konablend
 ##
@@ -16,7 +14,11 @@ import os
 import signal
 import sys
 import time
-import urllib2
+
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, os.path.join(sys.path[0], 'lib'))
@@ -176,12 +178,12 @@ class URL(object):
         if filename:
             tool.infof('downloading %s to %s\n' % (self.url,filename))
             ftmp = tool.mktmpname(filename)
-            hout = open(ftmp, 'w')
+            hout = open(ftmp, 'wb')
             ensure.unlink_ftmp = lambda: os.unlink(ftmp)
             ensure.close_hout = lambda: hout.close()
         else:
             tool.infof('downloading %s\n' % (self.url))
-        hin = urllib2.urlopen(self.url, None, 30)
+        hin = urlopen(self.url, None, 30)
         ensure.close_hin = lambda: hin.close()
         info = hin.info()
         try:
