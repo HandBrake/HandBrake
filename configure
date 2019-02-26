@@ -14,7 +14,7 @@ inpath()
 }
 
 if ( inpath bash ); then
-    for p in python3 python2
+    for p in python3 python2 python
     do
         if ( inpath $p ); then
             exec $p `dirname $0`/make/configure.py "$@"
