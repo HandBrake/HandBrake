@@ -1,0 +1,15 @@
+/* Class = "NSWindow"; title = "Internal Error"; ObjectID = "1"; */
+"1.title" = "Interner Fehler";
+
+/* Class = "NSTextFieldCell"; title = "An internal error has occurred. You can choose to continue in an unstable state, or crash."; ObjectID = "10"; */
+"10.title" = "Ein interner Fehler ist aufgetreten. Soll in einem instabilen Modus fortgefahren werden oder soll das Programm abstürzen?";
+
+/* Class = "NSTextFieldCell"; title = "Reason contents go here."; ObjectID = "12"; */
+"12.title" = "Der Grund folgt hier.";
+
+/* Class = "NSButtonCell"; title = "Crash"; ObjectID = "14"; */
+"14.title" = "Abstürzen";
+
+/* Class = "NSButtonCell"; title = "Continue"; ObjectID = "16"; */
+"16.title" = "Fortfahren";
+

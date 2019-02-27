@@ -124,11 +124,11 @@
 /* Class = "NSButtonCell"; title = "Play System Alert Sound"; ObjectID = "458"; */
 "458.title" = "Systemton abspielen";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "463"; */
-"463.ibShadowedToolTip" = "Minimale Zeit für den Titelscan in Sekunden. Kürzere Titel werden übersprungen.";
+/* Class = "NSTextField"; ibShadowedToolTip = "Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped."; ObjectID = "463"; */
+"463.ibShadowedToolTip" = "Minimale Dauer des DVD- und Blu-ray-Titels in Sekunden. Kürzere Titel werden übersprungen.";
 
-/* Class = "NSTextFieldCell"; title = "Minimum title duration to scan:"; ObjectID = "464"; */
-"464.title" = "Minimale Zeit für den Titelscan:";
+/* Class = "NSTextFieldCell"; title = "Ignore DVD and Blu-ray titles shorter than:"; ObjectID = "464"; */
+"464.title" = "DVD- und Blu-ray-Titel ignorieren, falls kürzer als:";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "480"; */
 "480.ibShadowedToolTip" = "Minimale Dauer des Titels in Sekunden. Kürzere Titel werden übersprungen.";

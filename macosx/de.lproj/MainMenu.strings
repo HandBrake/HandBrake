@@ -4,8 +4,8 @@
 /* Class = "NSMenuItem"; title = "Rename Preset…"; ObjectID = "1GQ-n3-jfY"; */
 "1GQ-n3-jfY.title" = "Voreinstellung umbenennen …";
 
-/* Class = "NSMenuItem"; title = "Video"; ObjectID = "6rE-SM-AGi"; */
-"6rE-SM-AGi.title" = "Video";
+/* Class = "NSMenuItem"; title = "Filters"; ObjectID = "6rE-SM-AGi"; */
+"6rE-SM-AGi.title" = "Filter";
 
 /* Class = "NSMenuItem"; title = "Summary"; ObjectID = "9ie-b7-RaS"; */
 "9ie-b7-RaS.title" = "Zusammenfassung";
@@ -226,8 +226,8 @@
 /* Class = "NSMenuItem"; title = "Show Toolbar"; ObjectID = "IsV-5A-bqx"; */
 "IsV-5A-bqx.title" = "Werkzeugleiste zeigen";
 
-/* Class = "NSMenuItem"; title = "Picture"; ObjectID = "Jef-U4-eQT"; */
-"Jef-U4-eQT.title" = "Bild";
+/* Class = "NSMenuItem"; title = "Video"; ObjectID = "Jef-U4-eQT"; */
+"Jef-U4-eQT.title" = "Video";
 
 /* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "KKV-n0-Fmr"; */
 "KKV-n0-Fmr.title" = "Werkzeugleiste anpassen …";

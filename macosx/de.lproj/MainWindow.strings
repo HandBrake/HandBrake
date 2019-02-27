@@ -264,6 +264,9 @@ Blu-rays und DVDs haben meistens mehrere Titel, der längste ist für gewöhnlic
 /* Class = "NSTextFieldCell"; title = "To:"; ObjectID = "rfK-nQ-Aq2"; */
 "rfK-nQ-Aq2.title" = "Zielort:";
 
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "sbX-LU-uOW"; */
+"sbX-LU-uOW.ibShadowedIsNilPlaceholder" = "bae99e1761724952e7893d509131ea79_tr";
+
 /* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "wTQ-KF-5KW"; */
 "wTQ-KF-5KW.label" = "Pause";
 

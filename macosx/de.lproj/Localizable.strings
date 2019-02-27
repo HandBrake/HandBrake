@@ -1,5 +1,5 @@
 /* Preview -> size info label */
-" Scaled To Screen" = "An Bildschirm anpassen";
+" Scaled To Screen" = " An Bildschirm anpassen";
 
 /* No comment provided by engineer. */
 "- --:--" = "- --:--";
@@ -80,6 +80,9 @@
 /* Toolbar Open/Cancel Item */
 "Cancel Scanning Source" = "Quelle überprüfen abbrechen";
 
+/* Preferences -> Output Name Token */
+"Chapters" = "Kapitel";
+
 /* Main Window -> Destination open panel */
 "Choose" = "Auswählen";
 
@@ -89,11 +92,20 @@
 /* Copy Protection Alert -> message */
 "Copy-Protected sources are not supported." = "Kopiergeschützte Quellen werden nicht unterstützt.";
 
+/* Preferences -> Output Name Token */
+"Creation-Date" = "Erstellungsdatum";
+
+/* Preferences -> Output Name Token */
+"Creation-Time" = "Erstellungsuhrzeit";
+
 /* Touch bar */
 "Current Time" = "Momentane Zeit";
 
 /* Add preset window -> picture setting */
 "Custom" = "Eigene";
+
+/* Preferences -> Output Name Token */
+"Date" = "Datum";
 
 /* Delete preset alert -> first button */
 "Delete Preset" = "Voreinstellung löschen";
@@ -240,6 +252,9 @@
    Queue notification alert message */
 "Put down that cocktail…" = "Stellen Sie den Cocktail ab …";
 
+/* Preferences -> Output Name Token */
+"Quality/Bitrate" = "Qualität/Bitrate";
+
 /* Quit Alert -> first button */
 "Quit" = "Beenden";
 
@@ -278,9 +293,6 @@
 /* Touch bar */
 "Show Activity Window" = "Aktivitätsfenster zeigen";
 
-/* Video -> Advanced editor */
-"Show advanced editor" = "Erweiterte Optionen einblenden";
-
 /* Touch bar */
 "Show Preview Window" = "Vorschau zeigen";
 
@@ -289,6 +301,9 @@
 
 /* Touch bar */
 "Slider" = "Schieberegler";
+
+/* Preferences -> Output Name Token */
+"Source" = "Quelle";
 
 /* Add preset window -> picture setting */
 "Source Maximum" = "Quellenmaximum";
@@ -365,6 +380,12 @@
 
 /* Invalid destination alert -> informative text */
 "This is not a valid destination directory!" = "Dies ist kein gültiges Zielverzeichnis.";
+
+/* Preferences -> Output Name Token */
+"Time" = "Zeit";
+
+/* Preferences -> Output Name Token */
+"Title" = "Titel";
 
 /* Video -> Framerate */
 "Variable Framerate" = "Variable Bildfrequenz";

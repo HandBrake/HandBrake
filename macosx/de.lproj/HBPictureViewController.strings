@@ -155,6 +155,9 @@ Eigene: Erlaubt benutzerdefinierte Einstellungen.";
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "und-OA-MLn"; */
 "und-OA-MLn.title" = "OtherViews";
 
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = " "; ObjectID = "uqQ-uA-3xF"; */
+"uqQ-uA-3xF.ibExternalAccessibilityDescription" = "0b36a71978ca057bf0594fec41410ec0_tr";
+
 /* Class = "NSMenuItem"; title = "16"; ObjectID = "uTT-yC-MFJ"; */
 "uTT-yC-MFJ.title" = "16";
 

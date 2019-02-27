@@ -1,23 +1,23 @@
 /* Class = "NSTableView"; ibExternalAccessibilityDescription = "Subtitles tracks"; ObjectID = "0yM-wE-D2x"; */
 "0yM-wE-D2x.ibExternalAccessibilityDescription" = "Untertitelspuren";
 
-/* Class = "NSTableColumn"; headerCell.title = "SRT Encoding"; ObjectID = "1Qg-We-ltR"; */
-"1Qg-We-ltR.headerCell.title" = "SRT-Enkodierung";
+/* Class = "NSTableColumn"; headerCell.title = "Encoding"; ObjectID = "1Qg-We-ltR"; */
+"1Qg-We-ltR.headerCell.title" = "Enkodierung";
 
 /* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "4PX-In-DpF"; */
 "4PX-In-DpF.title" = "Alle Spuren hinzufügen";
 
-/* Class = "NSTableColumn"; headerCell.title = "SRT Language"; ObjectID = "9ka-9O-WDj"; */
-"9ka-9O-WDj.headerCell.title" = "SRT-Sprache";
+/* Class = "NSTableColumn"; headerCell.title = "Language"; ObjectID = "9ka-9O-WDj"; */
+"9ka-9O-WDj.headerCell.title" = "Sprache";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ABd-Ec-K2L"; */
 "ABd-Ec-K2L.title" = "OtherViews";
 
-/* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT Offset"; ObjectID = "aJi-zQ-0cg"; */
-"aJi-zQ-0cg.ibExternalAccessibilityDescription" = "SRT-Versatz";
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT/SSA Offset"; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibExternalAccessibilityDescription" = "SRT/SSA-Versatz";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "SRT Offset. Positive or negative offset in milliseconds (ms) for the selected SRT format source track. Not applicable to other formats."; ObjectID = "aJi-zQ-0cg"; */
-"aJi-zQ-0cg.ibShadowedToolTip" = "SRT-Versatz. Positiver oder negativer Versatz in Millisekunden (ms) der ausgewählten SRT-Spur. Nicht anwendbar bei anderen Formaten.";
+/* Class = "NSTextField"; ibShadowedToolTip = "Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibShadowedToolTip" = "Positiver oder negativer Versatz in Millisekunden (ms) der ausgewählten SRT/SSA-Spur. Nicht anwendbar bei anderen Formaten.";
 
 /* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "cSW-OC-qKA"; */
 "cSW-OC-qKA.title" = "Pop Up";
@@ -28,8 +28,8 @@
 /* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "fAW-To-EeP"; */
 "fAW-To-EeP.title" = "Item 3";
 
-/* Class = "NSTableColumn"; headerCell.title = "SRT Offset"; ObjectID = "Fgh-pZ-6uu"; */
-"Fgh-pZ-6uu.headerCell.title" = "SRT-Versatz";
+/* Class = "NSTableColumn"; headerCell.title = "Offset"; ObjectID = "Fgh-pZ-6uu"; */
+"Fgh-pZ-6uu.headerCell.title" = "Versatz";
 
 /* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
 "fIe-Fg-ufj.headerCell.title" = "Eingebrannte";
@@ -40,8 +40,8 @@
 /* Class = "NSTableColumn"; headerCell.title = "Default"; ObjectID = "fvq-pE-sOC"; */
 "fvq-pE-sOC.headerCell.title" = "Standard";
 
-/* Class = "NSMenuItem"; title = "Add External SRT…"; ObjectID = "fXD-7h-jMl"; */
-"fXD-7h-jMl.title" = "Externe SRTs hinzufügen…";
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "fXD-7h-jMl"; */
+"fXD-7h-jMl.title" = "Externe Untertitelspur hinzufügen …";
 
 /* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "g4b-FM-qX4"; */
 "g4b-FM-qX4.title" = "Item 2";
@@ -53,7 +53,7 @@
 "HC5-ql-Vcr.ibExternalAccessibilityDescription" = "Nur erzwungene Untertitel";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Forced Only. Use only subtitles marked as “forced” in the selected source track."; ObjectID = "HC5-ql-Vcr"; */
-"HC5-ql-Vcr.ibShadowedToolTip" = "Nur erzwungene. Benutze nur Untertitel die in der ausgewählten Quelle als “erzwungen” markiert sind.";
+"HC5-ql-Vcr.ibShadowedToolTip" = "Erzwungene. Benutze nur Untertitel die in der ausgewählten Quelle als “erzwungen” markiert sind.";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hhH-c3-gD0"; */
 "hhH-c3-gD0.title" = "0";
@@ -61,17 +61,17 @@
 /* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "HQq-Mp-4sI"; */
 "HQq-Mp-4sI.title" = "Item 2";
 
-/* Class = "NSMenuItem"; ibShadowedToolTip = "Add new SRT subtitle to the list."; ObjectID = "HW0-PS-t0U"; */
-"HW0-PS-t0U.ibShadowedToolTip" = "Füge neue SRT-Untertitel zur Liste hinzu.";
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Add new SRT/SSA subtitle to the list."; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.ibShadowedToolTip" = "Einen neuen SRT/SSA-Untertitel zur Liste hinzufügen.";
 
-/* Class = "NSMenuItem"; title = "Add External SRT…"; ObjectID = "HW0-PS-t0U"; */
-"HW0-PS-t0U.title" = "Externe SRT hinzufügen…";
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.title" = "Externe Untertitelspur hinzufügen …";
 
-/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT Language"; ObjectID = "Inz-O5-B8g"; */
-"Inz-O5-B8g.ibExternalAccessibilityDescription" = "SRT-Sprache";
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Language"; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibExternalAccessibilityDescription" = "SRT/SSA-Sprache";
 
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "SRT Language. Language of the selected SRT format source track. Not applicable to other formats."; ObjectID = "Inz-O5-B8g"; */
-"Inz-O5-B8g.ibShadowedToolTip" = "SRT-Sprache. Sprache der ausgewählten SRT-Spur der Quelle. Nicht verfügbar bei anderen Formaten.";
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Language of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibShadowedToolTip" = "Sprache der ausgewählten SRT/SSA-Spur der Quelle. Nicht verfügbar bei anderen Formaten.";
 
 /* Class = "NSMenuItem"; title = "Reload"; ObjectID = "jcM-HL-QJ6"; */
 "jcM-HL-QJ6.title" = "Neu laden";
@@ -83,7 +83,7 @@
 "JLr-Qi-X0X.title" = "Check";
 
 /* Class = "NSTableColumn"; headerCell.title = "Forced Only"; ObjectID = "klV-Gy-igk"; */
-"klV-Gy-igk.headerCell.title" = "Nur erzwungene";
+"klV-Gy-igk.headerCell.title" = "Erzwungene";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Default"; ObjectID = "mdO-Qu-3Pb"; */
 "mdO-Qu-3Pb.ibExternalAccessibilityDescription" = "Standard";
@@ -112,11 +112,11 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Configure subtitle tracks Selection Behavior. These settings affect which tracks will be added to the subtitle tracks list, and the settings used for each track."; ObjectID = "QsM-28-Pya"; */
 "QsM-28-Pya.ibShadowedToolTip" = "Konfiguriert das Auswahlverhalten der Untertitelspuren. Diese Einstellungen bestimmen welche Spuren zur Liste der Untertitelspuren hinzugefügt werden und die Einstellungen welche für jede Spur benutzt werden.";
 
-/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT Character Encoding"; ObjectID = "QV0-kE-4yR"; */
-"QV0-kE-4yR.ibExternalAccessibilityDescription" = "SRT-Charakter-Enkodierung";
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Character Encoding"; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibExternalAccessibilityDescription" = "SRT/SSA-Zeichenkodierung";
 
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "SRT Encoding. Character encoding/codeset of the selected SRT format source track. Not applicable to other formats."; ObjectID = "QV0-kE-4yR"; */
-"QV0-kE-4yR.ibShadowedToolTip" = "SRT-Enkodierung. Charakter-Enkodierung und -Zeichensatz der ausgewählten SRT-Spur. Nicht verfügbar bei anderen Formaten";
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Character encoding/codeset of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibShadowedToolTip" = "Zeichenkodierung/Codeliste des ausgewählten SRT/SSA-Spur der Quelle. Nicht verfügbar bei anderen Formaten.";
 
 /* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "R8a-qg-ASg"; */
 "R8a-qg-ASg.title" = "Alle Spuren entfernen";
