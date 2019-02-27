@@ -718,7 +718,8 @@ class RepoProbe( ShellProbe ):
 
     def _parseSession( self ):
         for line in self.session:
-            line = line.decode('utf-8')
+            if isinstance(line, bytes):
+                line = line.decode('utf-8')
 
             ## grok fields
             m = re.match( '([^\=]+)\=(.*)', line )
@@ -785,7 +786,7 @@ class RepoProbe( ShellProbe ):
                     self.session = in_file.readlines()
                 if self.session:
                     self._parseSession()
-            if self.hash is not empty and self.hash is not 'deadbeaf':
+            if self.hash and self.hash != 'deadbeaf':
                 cfg.infof( '(pass)\n' )
             else:
                 cfg.infof( '(fail)\n' )
