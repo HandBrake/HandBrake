@@ -28,6 +28,12 @@
 /* Class = "NSMenuItem"; title = "Alert and Notification"; ObjectID = "aat-1N-Odn"; */
 "aat-1N-Odn.title" = "Hinweis mit Nachricht und Alarm";
 
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "anR-ZS-eOK"; */
+"anR-ZS-eOK.title" = "Table View Cell";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "F1i-sW-mz6"; */
+"F1i-sW-mz6.title" = "Table View Cell";
+
 /* Class = "NSMenuItem"; title = "Alert"; ObjectID = "fAD-ky-zo6"; */
 "fAD-ky-zo6.title" = "Hinweis mit Alarm";
 
@@ -39,6 +45,9 @@
 
 /* Class = "NSMenuItem"; title = "Notification"; ObjectID = "jDL-sB-8e3"; */
 "jDL-sB-8e3.title" = "Hinweis mit Nachricht";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "MWq-ie-HjX"; */
+"MWq-ie-HjX.title" = "Text Cell";
 
 /* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "QmP-SQ-XKK"; */
 "QmP-SQ-XKK.title" = "Computer herunterfahren";
