@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>去块滤波减少了由低质量视频压缩引起的块效应。</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>选择Decomb滤镜或反交错滤镜选项。
+
+Decomb滤镜选择性的对出现交错扫描的单个帧进行去交错处理。
+这将保持非交错帧的质量。
+
+传统的反交错滤镜会对所有帧进行去交错处理。
+非交错的帧将遭受一些质量下降。</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>降噪可以减少或消除图像的噪点。这可以提高压缩效率，以较小的文件创建更高质量的视频。
+过强的降噪设置可能会由于丢弃细节而损坏图像质量。
+
+NLMEans是一种高质量的降噪滤镜，速度快。在质量比速度更重要的地方使用。
+
+HQDN3D是一种自适应的低通滤镜，比NLMEans更快，但在保持细节方面效果较差。</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>反交错消除经过Telecine处理产生的梳状横纹，这是一种将交错扫描（即隔行扫描）转换为逐行扫描的过程。</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>灰度消除了视频的颜色分量。通常被称为黑白视频。</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>目标路径，包括目录和文件名。这就是将创建新视频的位置，以及它的名称。</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>添加一个特殊的MP4标记，允许在大约2006年的老式iPod5代设备上播放。其他设置可能会影响兼容性。</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>容器格式。视频，音频和其他轨道组合成这种类型的单个文件。 影响兼容性。</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>优化MP4以进行渐进式下载。编码之后，数据被重新组织和重写，以允许在网络上即时回放，而不需要下载整个文件。</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>源范围选择。 默认情况下，会选择所有章节并对整个源进行编码。</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>要编码的标题或视频剪辑。
+蓝光和DVD源通常有多个标题，通常时间最长的是正片。</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>变形允许任意存储尺寸，同时在回放期间保留原始高宽。
+
+None 禁用变形。视频存储尺寸和显示尺寸将相同。仅对与某些传统设备兼容有用。
+
+Auto 最大化存储分辨率，同时保留原始显示宽高比。（推荐）
+
+Loose 与Auto类似，但尝试保留存储宽高比。与Auto相比，这可能导致轻微的存储分辨率损失。
+
+Custom 允许手动设置所有参数。 用于纠正不正确的源显示高宽以及在后期制作中需要高级控制的专业人员。</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>自动参见视频周围的黑边。</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>从底部裁剪该视频。</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>从左侧裁剪该视频。</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>从右侧裁剪该视频。</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>从顶部裁剪该视频。</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>这是视频将会被保存的高度。
+如果像素宽高比不为1:1则实际显示尺寸将有不同。</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>手动裁剪该视频。</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>将存储尺寸与此值的倍数对齐。
+
+只有与某些设备兼容时才需要此设置。
+除非遇到兼容性问题，否则应使用2。</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>定义像素的形状。
+1:1 的比例定义正方形像素。其他值定义矩形形状。
+播放时将缩放图像以达到指定的效果。</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>这是视频将会被保存的宽度。
+如果像素宽高比不为1:1则实际显示尺寸将有不同。</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>从队列中删除该任务。</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>将作业状态重置为等待。</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>把任务发送回主界面以编辑。</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>设置平均比码率。
+
+瞬时码率在任何时间点都可以更高或更低。
+但是长时间内的平均值将是此处设定的值。
+如果您需要限制瞬时码率，请查看 x264 的 vbv-bufsize 和 vbv-maxrate 设置。</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>启用恒定帧速率输出。</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>可用的视频编码器。</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>调整设置以优化常见方案。
+
+这可以提高特定源特性或设置输出文件特性的效率。
+更改将在预设之后但在所有其他参数之前应用。</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>附加编码器设置。
+
+编码器选项列表以冒号分隔。</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>减少解码器对CPU的占用。
+
+当你的设备无法流畅播放输出时选择此选项。（例如： 丢帧）</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>输出帧率。
+
+建议使用“与源视频相同”。如果源视频的帧速率可变，“与源视频相同”将保留它。</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>设置并确保符合指定的级别。
+
+覆盖所有其他设置。</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>启用可变帧速率输出，峰值速率由帧速率设置决定。</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>调整编码器设置以权衡压缩效率与编码速度。
+
+这将建立默认编码器设置。
+Tunes, profiles, levels 和高级选项字符串将应用于此。
+您通常应该将此选项设置为可以承受的最慢速度，
+因为较慢的设置将导致更好的质量或更小的文件。</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>设置并确保符合指定的配置文件。
+
+覆盖所有其他设置。</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>设置所需的品质因子。
+编码器以固定的质量为目标。
+每个视频编码器使用的比例是不同的。
+
+x264的比例是对数的，较低的值对应于较高的质量。
+因此，即使值的小幅下降也会导致文件大小逐渐增大。
+值为“0”表示无损，并且将导致文件大小大于原始源，除非源文件也是无损的。
+建议值为：标准清晰度源为18至20，高清源为20至23。
+
+FFMpeg和Theora的比例更加线性。
+这些编码器没有无损模式。</value>
+  </data>
+  <data name="Video_TurboFirstPass" xml:space="preserve">
+    <value>会加快 2 Pass 编码的第一遍的速度，而对画质的降低非常小。</value>
+  </data>
+  <data name="Video_TwoPass" xml:space="preserve">
+    <value>执行 2 Pass 编码。
+
+'Bitrate' 选项是先决条件。这种方式可以精确的得到想要的平均码率。
+2pass代表需要做2次编码，第一遍编码先分析全片，得到一个stats文件和一个mbtree文件。
+第二遍编码以这两个文件作参考分配合理的码率。</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>允许可变帧率输出。
+
+某些播放器不兼容可变帧率。</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>当 HandBrake 完成当前队列或编码时，它将执行此操作。</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>浏览来为编码文件选择一个新的目标路径和文件名称。</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>要编码的视频角度。仅适用于多角度DVD和蓝光。</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>添加新预设。</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>添加额外的预设选项。</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>预设是针对特定场景定制的一组编码设置。选择最符合你意图的一个。
+
+覆盖所有编码设置。在选择预置后，可以进一步调整设置。</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>移除选中的预设。</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>只扫描指定的标题。</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>自定义降噪参数。
+ 
+NLMeans 语法: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+NLMeans 默认值: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D 语法: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D 默认值: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>降噪滤镜预设。 设置滤镜的强度。</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>降噪调优。进一步调整降噪预设以优化特定场景的设置。
+ 
+- None 使用默认预设设置。
+ 
+- Film 优化设置以用于大多数真人类型电影。
+ 
+- Grain 只处理颜色通道。有助于减少或消除颜色噪点。
+
+- High Motion 通过避免对色彩通道进行时间处理来减少高运动场景中的颜色模糊。适用于体育和动作视频。
+
+- Animation 适用于CEL动画，如动画和卡通。
+
+- Tape 对于低细节模拟磁带源非常有用，例如VHS。其中Film不会产生理想的结果。
+
+- Sprite 适用于1-/4-/8-/16-bit的2D游戏。Sprite 不是为高清视频设计的。</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>反交错从图像中删除梳状横纹。
+
+Yadif 是一种流行且快速的去交错扫描器。
+
+Decomb 在多种插值算法之间切换，以提高速度和质量。</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>自定义反交错参数。
+ 
+ Yadif 语法: mode=m:parity=p
+ 
+ Yadif 默认值: mode=3
+ 
+ Decomb 语法: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ 
+ Decomb 默认值: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>反交错滤镜预设。
+
+Default 在速度和质量上都很好地平衡。
+
+Skip Spatial Check 让 Yadif 跳过纠正某些可避免的拉丝，以获得轻微的速度提升。
+
+EEDI2 为 Decomb 使用更慢、更高质量的插值算法。对于最难处理的来源很有用。
+
+Bob 运动物体边缘有锯齿，另外画面有闪烁、抖动感，文字、较细线条部分能明显感觉出来。</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>水平翻转（镜像）图像。</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>隔行扫描检测，当启用时，允许解交错滤镜仅处理逐行扫描的帧。</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>自定义交错扫描检测参数。
+ 
+ 语法: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+ 
+ 默认值: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>将图像顺时针旋转90度。</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>所选源范围的持续时间（小时：分钟：秒）</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>保持宽高比，保持源视频的显示比例。 禁用此功能可能会导致图片拉伸或挤压。</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>自定义锐化参数。
+
+Unsharp 语法: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Unsharp 默认值: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Lapsharp 语法: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Lapsharp 默认值: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>锐化增强图像中某一部的位细节，尤其是轮廓。过强的锐化设置可能会产生拉丝和更多的噪点从而损害图像质量降低压缩效率。
+
+Unsharp 是一种通用的反锐化掩模滤镜。它通过将原图像进行模糊预处理，然后计算模糊图片和原始图像之间的差异来锐化。
+
+Lapsharp 使用近似拉普拉斯边缘滤镜的卷积核锐化，有时比反锐化掩模产生更高质量的效果。</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>锐化滤镜预设。 设置滤镜的强度。</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>锐化调优。进一步调整锐化预设以优化特定场景的设置。
+
+None 使用默认预设设置。
+
+Unsharp 预设可用 Ultrafine, Fine, Medium, Coarse, 或 Very Coarse 等优化方案对锐化进行调整。根据输出图像的分辨率和细节的精细度来选择。
+
+Lapsharp 预设 Film 优化设置以用于大多数实时动作内容。Film 使用各向同性拉普拉斯内核来锐化所有边缘，并且亮度（亮度）信息比色度（颜色）信息更尖锐。
+
+Lapsharp 预设 Grain 优化类似 Film，但使用高斯各向同性拉普拉斯算子来减少对噪点和纹理的影响。
+
+Lapsharp 预设 Animation 优化适用于动画和卡通片等CEL动画。Animation与Film相同，但整体强度降低，以避免产生伪影。
+
+Lapsharp 预设 Sprite 优化适用于 1-/4-/8-/16-bit 2D游戏。Sprite使用4邻域拉普拉斯算子内核，比边缘检测算子更能增强垂直和水平边缘。</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>通过插入空白帧或删除帧来对齐所有音频和视频流的初始时间戳。可以改善MP4音画不同步的问题。</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>预设控制选项。</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>此范围的终点。</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>此范围的起点。</value>
+  </data>
+</root>

@@ -1,0 +1,1911 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Video_EncoderExtraArgs" xml:space="preserve">
+    <value>完整的编码器参数列表：
+{0}</value>
+  </data>
+  <data name="Video_x264FastDecode" xml:space="preserve">
+    <value>减少解码器对CPU的占用。
+
+当你的设备无法流畅播放输出时选择此选项。（例如： 丢帧）</value>
+  </data>
+  <data name="Video_LosslessWarning" xml:space="preserve">
+    <value>警告： RF 0 表示无损！</value>
+  </data>
+  <data name="Video_LosslessWarningTooltip" xml:space="preserve">
+    <value>值为“0”表示无损，将导致文件大小大于原始源，除非源文件也是无损的。
+
+使用x264和x265时比例是对数的，较低的值对应于较高的质量。
+
+因此，即使值的小幅减少也会导致文件大小逐渐增大。</value>
+  </data>
+  <data name="AddPreset_PictureSizeMode" xml:space="preserve">
+    <value>您可以选择使用此预设存储图像设置。有3种模式：
+None: 图像设置不存储在预设中。加载源时，它们将保持在源分辨率的范围内。这也会影响变形、模量、裁剪等。
+
+Custom: 您可以选择设置最大宽度和高度。这样做时，编码将小于或等于这些值。保持宽高比将自动打开。
+Source Maximum: 始终在源分辨率下进行编码。</value>
+  </data>
+  <data name="About_GPL" xml:space="preserve">
+    <value>版权所有 (C) 2003-2019 HandBrake 团队
+
+这个程序是免费软件；您可以依据自由软件基金会发布的
+GNU通用公共许可证的条款重新分发和/或修改它；无论你依据的是
+本授权的第2版，或（根据您的选择）任何更高版本。
+
+本程序是基于使用的目的而加以发布，但没有任何担保责任；甚至没有适销性或
+特定用途适用性的暗示性担保。有关更多详细信息，请参阅GNU通用公共许可证。
+
+您应已收到附随此程序的GNU通用公共许可证的副本；如果没有，请写信给自由软件基金会
+51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
+  </data>
+  <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
+    <value>警告：自动文件命名选项未打开。请在设置中开启。</value>
+  </data>
+  <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
+    <value>警告：您当前没有自动选择音频和字幕轨道的设置。您可以在选项中设置默认轨道选择行为。</value>
+  </data>
+  <data name="Presets_ResetComplete" xml:space="preserve">
+    <value>内置的预设已被重置。</value>
+  </data>
+  <data name="Presets_ResetHeader" xml:space="preserve">
+    <value>重置完成</value>
+  </data>
+  <data name="Video_HigherQuality" xml:space="preserve">
+    <value>高质量 |</value>
+  </data>
+  <data name="Video_LowQuality" xml:space="preserve">
+    <value>| 低质量</value>
+  </data>
+  <data name="Video_PlaceboQuality" xml:space="preserve">
+    <value>Placebo 质量 |</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
+    <value>警告：如果您希望为要列队的每个项目添加字幕，请确认您在字幕选项卡上正确设置了字幕默认设置。
+    
+你想继续吗？</value>
+  </data>
+  <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
+    <value>在添加到队列之前，必须启用自动文件命名并在首选项中设置默认路径。</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>你确定吗？</value>
+  </data>
+  <data name="HandBrake_Title" xml:space="preserve">
+    <value>HandBrake</value>
+  </data>
+  <data name="Main_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake 已经在编码。</value>
+  </data>
+  <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
+    <value>队列中的作业具有相同的目标路径。请为此作业选择不同的路径。</value>
+  </data>
+  <data name="Main_JobsPending_addon" xml:space="preserve">
+    <value>   等待工作 {0}</value>
+  </data>
+  <data name="Main_NewDefaultPreset" xml:space="preserve">
+    <value>新的默认预设集：{0}</value>
+  </data>
+  <data name="Main_NewUpdate" xml:space="preserve">
+    <value>有新的更新可用。转到“工具”菜单 &gt; “选项”安装</value>
+  </data>
+  <data name="Main_NoPresetSelected" xml:space="preserve">
+    <value>未选择预设。</value>
+  </data>
+  <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
+    <value>您无法修改内置预设。请选择一个您自己的预设。</value>
+  </data>
+  <data name="Main_PleaseSelectFolder" xml:space="preserve">
+    <value>请选择一个文件夹。</value>
+  </data>
+  <data name="Main_PreparingToEncode" xml:space="preserve">
+    <value>正在准备编码…</value>
+  </data>
+  <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
+    <value>您无法导入与内置预设同名的预设。</value>
+  </data>
+  <data name="Main_PresetOverwriteWarning" xml:space="preserve">
+    <value>预设 "{0}" 已经存在。你想覆盖它吗？</value>
+  </data>
+  <data name="Main_Presets" xml:space="preserve">
+    <value>预设</value>
+  </data>
+  <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
+    <value>您确定要更新所选预设吗？</value>
+  </data>
+  <data name="Main_PresetUpdated" xml:space="preserve">
+    <value>预设现在已使用您当前的设置进行更新。</value>
+  </data>
+  <data name="Main_PresetUpdateNotification" xml:space="preserve">
+    <value>HandBrake 已确认你的内置预设已过期... 现在将更新这些预设。
+您的自定义预设尚未更新，因此您可能需要通过删除和重新添加来重新创建这些预设。
+以前的 user_presets.xml 文件已备份。</value>
+  </data>
+  <data name="Main_QueueFinished" xml:space="preserve">
+    <value>队列完成</value>
+  </data>
+  <data name="Main_ScanCancelled" xml:space="preserve">
+    <value>扫描取消。</value>
+  </data>
+  <data name="Main_ScanCompleted" xml:space="preserve">
+    <value>扫描完成</value>
+  </data>
+  <data name="Main_ScanFailed_NoReason" xml:space="preserve">
+    <value>扫描失败：</value>
+  </data>
+  <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
+    <value>扫描失败...有关详细信息，请参阅活动日志。</value>
+  </data>
+  <data name="Main_ScanningPleaseWait" xml:space="preserve">
+    <value>正在扫描源，请稍候…</value>
+  </data>
+  <data name="Main_ScanningTitleXOfY" xml:space="preserve">
+    <value>正在扫描标题 {0}/{1} ({2}%)</value>
+  </data>
+  <data name="Main_ScanSource" xml:space="preserve">
+    <value>在开始编码之前，必须首先扫描源并设置作业。单击工具栏上的“添加源”按钮继续。</value>
+  </data>
+  <data name="Main_SelectPreset" xml:space="preserve">
+    <value>请确保您已选择自己的预设。请注意，您无法导出内置预设。</value>
+  </data>
+  <data name="Main_SelectPresetForUpdate" xml:space="preserve">
+    <value>请选择要更新的预设。</value>
+  </data>
+  <data name="Main_SelectSource" xml:space="preserve">
+    <value>选择“源”以继续</value>
+  </data>
+  <data name="Main_XEncodesPending" xml:space="preserve">
+    <value>{0} 等待编码</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>注意</value>
+  </data>
+  <data name="Overwrite" xml:space="preserve">
+    <value>覆盖？</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>问题</value>
+  </data>
+  <data name="State_Ready" xml:space="preserve">
+    <value>准备</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Preset_OldVersion_Header" xml:space="preserve">
+    <value>预设版本</value>
+  </data>
+  <data name="Preset_OldVersion_Message" xml:space="preserve">
+    <value>您尝试导入的预设来自不同版本的 HandBrake。
+可能无法从此预设中导入所有值。
+
+你要继续吗？</value>
+  </data>
+  <data name="Preset_UnableToImport_Header" xml:space="preserve">
+    <value>无法导入预设！</value>
+  </data>
+  <data name="Preset_UnableToImport_Message" xml:space="preserve">
+    <value>无法导入预设，因为它似乎已损坏或来自旧版本的 HandBrake。</value>
+  </data>
+  <data name="Main_SetDestination" xml:space="preserve">
+    <value>在添加到队列之前，必须先为输出文件设置目标路径。</value>
+  </data>
+  <data name="Main_InvalidDestination" xml:space="preserve">
+    <value>输入的目标路径包含非法字符，将不会更新。</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>预览{0}</value>
+  </data>
+  <data name="Preview_Scaled" xml:space="preserve">
+    <value>预览（缩放）</value>
+  </data>
+  <data name="PictureSettings_OutputResolution" xml:space="preserve">
+    <value>输出：{0}</value>
+  </data>
+  <data name="Options_AdditionalFormatOptions" xml:space="preserve">
+    <value>输出文件的格式。除了任何受支持的文件系统字符之外，您还可以使用以下占位符，这些占位符将在更改标题或扫描源时被替换。
+
+实时更新选项：{source} {title} {chapters} 
+非实时选项：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （只有扫描新源、更改标题或章节时才会更改）</value>
+  </data>
+  <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
+    <value>可用的附加选项：{source_path} 或 {source_folder_name} 
+
+两个不能同时存在！</value>
+  </data>
+  <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
+    <value>您不能编码到与源文件具有相同路径和文件名的文件。请更新目标文件名，使其与源文件不匹配。</value>
+  </data>
+  <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
+    <value>您的系统阻止了 HandBrake 启动Web浏览器。</value>
+  </data>
+  <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
+    <value>您仍然可以直接访问网站的帮助页面：https://handbrake.fr</value>
+  </data>
+  <data name="Main_PresetImportFailed" xml:space="preserve">
+    <value>无法导入所选预设。</value>
+  </data>
+  <data name="Main_PresetImportFailedSolution" xml:space="preserve">
+    <value>预设可能已损坏，或者来自不受支持的旧版 HandBrake。
+必须在当前版本中重新创建旧版本的预设。</value>
+  </data>
+  <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
+    <value>可以传递给视频编码器的其他高级参数。</value>
+  </data>
+  <data name="Main_SourceDestinationMatchError" xml:space="preserve">
+    <value>您无法覆盖要转换的源文件。
+请选择其他文件名。</value>
+  </data>
+  <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
+    <value>None - 只有容器不支持的轨道才会被烧入。
+Foreign Audio Track - 如果可用，外语轨道将被烧入。
+First Track - 第一条轨道会被烧入。
+Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧入，否则将选择第一条轨道。</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
+    <value>WebM 字幕兼容性</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
+    <value>HandBrake中的WebM格式仅支持内镶字幕。
+
+您应该更改字幕选择。
+
+如果继续，您未烧录的字幕将丢失。</value>
+  </data>
+  <data name="Main_ScanNoTitlesFound" xml:space="preserve">
+    <value>找不到有效的源或标题。</value>
+  </data>
+  <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
+    <value>HandBrake不能对选定的来源进行编码，因为它没有找到一个可以编码的有效来源。
+这可能是由于以下原因之一：
+- 源文件不是有效的视频文件或HandBrake不支持的格式。
+- 源文件可能受复制保护或包含DRM。请注意，HandBrake不支持除去复制保护。
+
+活动日志可能包含更多信息。</value>
+  </data>
+  <data name="Main_QueueLabel" xml:space="preserve">
+    <value>队列{0}</value>
+  </data>
+  <data name="Main_Start" xml:space="preserve">
+    <value>开始编码</value>
+  </data>
+  <data name="Main_StartQueue" xml:space="preserve">
+    <value>启动队列</value>
+  </data>
+  <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
+    <value>不能删除默认预设。请先将另一个预设设置为默认值。</value>
+  </data>
+  <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
+    <value>您确定要删除预设：</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>编码中：Pass {0}/{1},  {2:00.00}%, FPS: {3:000.0}, 平均FPS: {4:000.0},  剩余时间：{5},  已用时间：{6:d\:hh\:mm\:ss} {7}</value>
+  </data>
+  <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
+    <value>预设必须有名称。请填写预设名称字段。</value>
+  </data>
+  <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
+    <value>已存在具有此名称的预设。 你想覆盖它吗？</value>
+  </data>
+  <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
+    <value>必须先扫描源才能使用“源最大值”选项。</value>
+  </data>
+  <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
+    <value>必须为“自定义”选项填写自定义宽度或高度字段。</value>
+  </data>
+  <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
+    <value>无法添加预设</value>
+  </data>
+  <data name="UnknownError" xml:space="preserve">
+    <value>未知错误</value>
+  </data>
+  <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
+    <value>音频默认值</value>
+  </data>
+  <data name="AudioViewModel_AudioTracks" xml:space="preserve">
+    <value>音轨</value>
+  </data>
+  <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>选择行为</value>
+  </data>
+  <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
+    <value>切换回轨道</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
+    <value>无法保存章节标记文件！</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
+    <value>章节标记名称不会保存在您的编码中。</value>
+  </data>
+  <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
+    <value>以下操作 “{0}”将在{1}内发生。</value>
+  </data>
+  <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
+    <value>如果问题仍然存在，请尝试重新启动 HandBrake。</value>
+  </data>
+  <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
+    <value>没有关于此错误的更多信息。</value>
+  </data>
+  <data name="ErrorViewModel_UnknownError" xml:space="preserve">
+    <value>出现未知错误。</value>
+  </data>
+  <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
+    <value>有一个新的更新！ 请查看网站上的发行说明。</value>
+  </data>
+  <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
+    <value>您的系统支持64位版本的 HandBrake！ 与32位版本相比，提供了性能和稳定性改进。
+    请查看网站上的发行说明。</value>
+  </data>
+  <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
+    <value>目前没有新的更新。</value>
+  </data>
+  <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
+    <value>更新已下载</value>
+  </data>
+  <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
+    <value>更新服务不可用。您可以尝试从 https://handbrake.fr 下载更新</value>
+  </data>
+  <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
+    <value>更新失败。您可以尝试从 https://handbrake.fr 下载更新</value>
+  </data>
+  <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
+    <value>显示尺寸： {0}x{1},  PAR {2}x{3}</value>
+  </data>
+  <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
+    <value>添加到队列中</value>
+  </data>
+  <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
+    <value>没有在等待的编码</value>
+  </data>
+  <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
+    <value>当前没有编码作业</value>
+  </data>
+  <data name="QueueViewModel_Queue" xml:space="preserve">
+    <value>队列</value>
+  </data>
+  <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
+    <value>你确定要清除队列吗？</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>确认</value>
+  </data>
+  <data name="QueueViewModel_JobsPending" xml:space="preserve">
+    <value>{0} 等待作业</value>
+  </data>
+  <data name="QueueViewModel_QueuePending" xml:space="preserve">
+    <value>列队已暂停</value>
+  </data>
+  <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
+    <value>队列已暂停。当前正在运行的作业将运行完成，不会再启动其他作业。</value>
+  </data>
+  <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
+    <value>您确定要删除所选作业吗？</value>
+  </data>
+  <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
+    <value>此编码目前正在进行中。如果删除它，编码将停止。你确定要继续吗？</value>
+  </data>
+  <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
+    <value>没有待处理的作业。</value>
+  </data>
+  <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
+    <value>是否确实要编辑此作业？它将从队列中删除并发送到主窗口。</value>
+  </data>
+  <data name="QueueViewModel_QueueReady" xml:space="preserve">
+    <value>队列已就绪</value>
+  </data>
+  <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
+    <value>队列未运行</value>
+  </data>
+  <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
+    <value>队列已完成</value>
+  </data>
+  <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
+    <value>上次列队的作业已完成</value>
+  </data>
+  <data name="QueueViewModel_QueueStarted" xml:space="preserve">
+    <value>列队已开始</value>
+  </data>
+  <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
+    <value>编码中：Pass {0}/{1},  {2:00.00}%, FPS: {3:000.0}, 平均FPS: {4:000.0}, 剩余时间：{5},  已用时间：{6:d\:hh\:mm\:ss}</value>
+  </data>
+  <data name="ShellViewModel_CanClose" xml:space="preserve">
+    <value>当前正在运行编码。退出 HandBrake 将停止此编码。
+你确定要退出 HandBrake 吗？</value>
+  </data>
+  <data name="StaticPreviewViewModel_Title" xml:space="preserve">
+    <value>图片预览</value>
+  </data>
+  <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
+    <value>无法删除以前的预览文件。您可能需要重新启动应用程序。</value>
+  </data>
+  <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
+    <value>在创建预览之前，必须先扫描源并设置编码。</value>
+  </data>
+  <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
+    <value>无法检测到 VLC 播放器。
+请确保已安装 VLC 并且 HandBrake 选项中指定的目录是正确的。（请参阅：“工具菜单&gt;首选项&gt;常规”）</value>
+  </data>
+  <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
+    <value>无法找到预览文件。文件已删除或编码失败。检查活动日志以获取详细信息。</value>
+  </data>
+  <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
+    <value>Handbrake 已经在编码视频了！ 一次只能编码一个文件。</value>
+  </data>
+  <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
+    <value>字幕默认值</value>
+  </data>
+  <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
+    <value>字幕轨道</value>
+  </data>
+  <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
+    <value>切换回轨道</value>
+  </data>
+  <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
+    <value>选择行为</value>
+  </data>
+  <data name="PresetService_ArchiveFile" xml:space="preserve">
+    <value>存档的文件：</value>
+  </data>
+  <data name="PresetService_PresetsOutOfDate" xml:space="preserve">
+    <value>HandBrake 检测到预设文件来自旧版本。
+它将尝试加载文件。
+如果失败，它将存档旧文件并创建新文件。</value>
+  </data>
+  <data name="PresetService_UnableToLoad" xml:space="preserve">
+    <value>无法加载预设。</value>
+  </data>
+  <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
+    <value>HandBrake 无法加载您的预设文件。它可能来自较旧的不受支持的 HandBrake 版本或已损坏。
+
+您的旧预设文件已归档为：</value>
+  </data>
+  <data name="Main_QueueFinishedErrors" xml:space="preserve">
+    <value> 有{0} 个错误或取消检测。</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
+    <value>磁盘空间不足</value>
+  </data>
+  <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
+    <value>警告，您的磁盘空间不足。如果空间不足，HandBrake 将无法完成此编码。</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
+    <value>第{0}行无效。不会导入任何内容。</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
+    <value>无法导入章节文件</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
+    <value>章节文件中的所有行必须至少有2列数据</value>
+  </data>
+  <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
+    <value>章节文件中的第一列只能包含大于零（0）的整数值</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
+    <value>目前不支持类型为 '{0}' 的章节文件。</value>
+  </data>
+  <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
+    <value>不支持的章节文件类型</value>
+  </data>
+  <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
+    <value>源媒体的章节信息无效</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
+    <value>媒体源的章节数和输入文件的章节数不匹配( {0} vs {1}).
+
+你依然要导入章节名吗？</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
+    <value>媒体源的章节数和输入文件的章节数不匹配( {0} vs {1}).
+
+你依然要导入章节名吗？</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
+    <value>源文件和输入文件的章节数不匹配</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
+    <value>源媒体上各章的持续时长和输入文件中各章的持续时长相差很大。
+
+本章节文件很可能是从其他源媒体生成的。
+
+确实要导入章节名称吗？</value>
+  </data>
+  <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
+    <value>源文件和输入文件的章节时长不匹配</value>
+  </data>
+  <data name="ScanService_ScanStopFailed" xml:space="preserve">
+    <value>尝试停止扫描时发生了错误。请重启HandBrake。</value>
+  </data>
+  <data name="Presets_PresetForceReset" xml:space="preserve">
+    <value>HandBrake 无法将预设文件升级为新版本格式。
+您的预设文件将被存档。您需要重新创建自己的预设。</value>
+  </data>
+  <data name="SettingService_SaveErrorReset" xml:space="preserve">
+    <value>你所更改的任何设置可能会在下次HandBrake 启动时被重置。</value>
+  </data>
+  <data name="UserSettings_AnErrorOccured" xml:space="preserve">
+    <value>尝试保存你的偏好设置时出现了问题。</value>
+  </data>
+  <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
+    <value>警告，你的设置已被重置！</value>
+  </data>
+  <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
+    <value>你的用户设置文件已损坏或不可访问。设置已经被恢复为默认。</value>
+  </data>
+  <data name="UserSettings_UnableToLoad" xml:space="preserve">
+    <value>无法加载用户设置文件: {0}</value>
+  </data>
+  <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
+    <value>你的用户设置文件似乎无法访问或已损坏。你可能需要删除它并让HandBrake 生成一份新的。</value>
+  </data>
+  <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
+    <value>你选择的输出目录不存在或者没有写入文件的权限。</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
+    <value>创建文件夹？</value>
+  </data>
+  <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
+    <value>要写入的文件夹并不存在。你希望HandBrake创建该文件夹吗？
+{0}</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
+    <value>无法启动目标目录。</value>
+  </data>
+  <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
+    <value>请检查目标目录是否有效。</value>
+  </data>
+  <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
+    <value>处理中 Pass {0}/{1}, (字幕扫描)  {2:00.00}%, 扫描剩余时间：{3},  已用时间：{4:d\:hh\:mm\:ss}</value>
+  </data>
+  <data name="NoAdditionalInformation" xml:space="preserve">
+    <value>没有附加信息</value>
+  </data>
+  <data name="WindowTitleStatus" xml:space="preserve">
+    <value>{0} - ({1}%, 已完成 {2} /{3} )</value>
+  </data>
+  <data name="TaskTrayStatusTitle" xml:space="preserve">
+    <value>{1}%, 已完成 {2} / {3}
+剩余时间: {4}</value>
+  </data>
+  <data name="PauseOnLowDiskspace" xml:space="preserve">
+    <value>队列已暂停。警告，您编码的驱动器磁盘空间不足。请释放一些空间，然后按开始继续。您还可以调整首选项中的最小空间级别。</value>
+  </data>
+  <data name="Main_QueuePaused" xml:space="preserve">
+    <value>列队已暂停</value>
+  </data>
+  <data name="QueueViewModel_QueuePaused" xml:space="preserve">
+    <value>列队已暂停</value>
+  </data>
+  <data name="Main_LowDiskspace" xml:space="preserve">
+    <value>目标目录的磁盘空间不足。请在目标驱动器上释放一些磁盘空间。或者，您可以在“选项”中更改此警报触发的级别。</value>
+  </data>
+  <data name="Queue_UnableToResetJob" xml:space="preserve">
+    <value>无法重置作业状态，因为它未处于错误或已完成状态</value>
+  </data>
+  <data name="Queue_UnableToRestoreFile" xml:space="preserve">
+    <value>无法恢复队列文件。</value>
+  </data>
+  <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
+    <value>文件可能损坏或是来自旧的不兼容版本的HandBrake</value>
+  </data>
+  <data name="Queue_AlreadyEncoding" xml:space="preserve">
+    <value>HandBrake已经在编码文件中。</value>
+  </data>
+  <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
+    <value>请停止当前编码。如果问题依然存在，请重启HandBrake。</value>
+  </data>
+  <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>编码中: Pass {0}/{1},  {2:00.00}%
+FPS: {3:000.0},  平均FPS: {4:000.0}
+剩余时间: {5},  已用时间: {6:d\:hh\:mm\:ss}</value>
+  </data>
+  <data name="StaticPreviewView_Title" xml:space="preserve">
+    <value>预览 ({0}% 实际大小)</value>
+  </data>
+  <data name="OsBitnessWarning" xml:space="preserve">
+    <value>HandBrake需要在64bit Windows 7或更高版本中运行。</value>
+  </data>
+  <data name="OsVersionWarning" xml:space="preserve">
+    <value>HandBrake 需要Windows 7或更高版本才能运行。版本0.9.9 (XP)和版本0.10.5 (Vista)是支持这些版本的最后一个版本。</value>
+  </data>
+  <data name="Main_ContinueAddingToQueue" xml:space="preserve">
+    <value>你希望继续尝试添加剩下的吗？</value>
+  </data>
+  <data name="Main_QueueOverwritePrompt" xml:space="preserve">
+    <value>文件 '{0}' 已存在!
+你想要覆盖它吗?</value>
+  </data>
+  <data name="Clipboard_Unavailable" xml:space="preserve">
+    <value>系统剪贴板目前无法使用。</value>
+  </data>
+  <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
+    <value>这可能是由于另外的应用程序正监视或锁定了剪贴板。当剪贴板解锁后你才能继续使用它。</value>
+  </data>
+  <data name="AboutView_License" xml:space="preserve">
+    <value>许可：</value>
+  </data>
+  <data name="AboutView_Version" xml:space="preserve">
+    <value>版本：</value>
+  </data>
+  <data name="AddPresetView_AddNewCategory" xml:space="preserve">
+    <value>-- 添加新类别 --</value>
+  </data>
+  <data name="AddPresetView_AddPreset" xml:space="preserve">
+    <value>添加预设</value>
+  </data>
+  <data name="AddPresetView_Category" xml:space="preserve">
+    <value>类别：</value>
+  </data>
+  <data name="AddPresetView_Description" xml:space="preserve">
+    <value>描述：</value>
+  </data>
+  <data name="AddPresetView_Name" xml:space="preserve">
+    <value>名字：</value>
+  </data>
+  <data name="AddPresetView_SavePictureSize" xml:space="preserve">
+    <value>尺寸：</value>
+  </data>
+  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
+    <value>选择行为：</value>
+  </data>
+  <data name="AudioView_AllowPassThruOf" xml:space="preserve">
+    <value>允许 Passthru：</value>
+  </data>
+  <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
+    <value>配置在选择新标题或源视频时如何自动选择和配置音频轨道。</value>
+  </data>
+  <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
+    <value>“Auto Passthru” 行为：</value>
+  </data>
+  <data name="AudioView_Bitrate" xml:space="preserve">
+    <value>Bitrate</value>
+  </data>
+  <data name="AudioView_Codec" xml:space="preserve">
+    <value>编码</value>
+  </data>
+  <data name="AudioView_DRC" xml:space="preserve">
+    <value>DRC</value>
+  </data>
+  <data name="AudioView_Gain" xml:space="preserve">
+    <value>增益</value>
+  </data>
+  <data name="AudioView_Hide" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
+  <data name="AudioView_Mixdown" xml:space="preserve">
+    <value>混音</value>
+  </data>
+  <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
+    <value>后备编码器：</value>
+  </data>
+  <data name="AudioView_ReloadDefaults" xml:space="preserve">
+    <value>重新加载</value>
+  </data>
+  <data name="AudioView_Samplerate" xml:space="preserve">
+    <value>采样率</value>
+  </data>
+  <data name="AudioView_Show" xml:space="preserve">
+    <value>显示</value>
+  </data>
+  <data name="AudioView_TrackName" xml:space="preserve">
+    <value>轨道名称</value>
+  </data>
+  <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>轨道选择行为：</value>
+  </data>
+  <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
+    <value>额外的轨道：</value>
+  </data>
+  <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
+    <value>选择“Auto Passthru”作为音频编解码器时。</value>
+  </data>
+  <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
+    <value>章节标记</value>
+  </data>
+  <data name="ChaptersView_ChapterName" xml:space="preserve">
+    <value>章节名称</value>
+  </data>
+  <data name="ChaptersView_ChapterNumber" xml:space="preserve">
+    <value>章节编号</value>
+  </data>
+  <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
+    <value>创建章节标记</value>
+  </data>
+  <data name="ChaptersView_Duration" xml:space="preserve">
+    <value>时长</value>
+  </data>
+  <data name="ChaptersView_Export" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="ChaptersView_Import" xml:space="preserve">
+    <value>导入</value>
+  </data>
+  <data name="ChapterView_ExportNames" xml:space="preserve">
+    <value>导出名称</value>
+  </data>
+  <data name="ChapterView_ImportNames" xml:space="preserve">
+    <value>导入名称</value>
+  </data>
+  <data name="ChapterView_ResetChapterNames" xml:space="preserve">
+    <value>重置章节名称</value>
+  </data>
+  <data name="CountdownAlterView_CancelAction" xml:space="preserve">
+    <value>取消操作</value>
+  </data>
+  <data name="CountdownAlterView_Proceed" xml:space="preserve">
+    <value>继续</value>
+  </data>
+  <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
+    <value>完成操作时</value>
+  </data>
+  <data name="ErrorView_ErrorDetails" xml:space="preserve">
+    <value>错误详情：</value>
+  </data>
+  <data name="FiltersView_Custom" xml:space="preserve">
+    <value>自定义：</value>
+  </data>
+  <data name="FiltersView_Deblock" xml:space="preserve">
+    <value>去块滤波</value>
+  </data>
+  <data name="FiltersView_Decomb" xml:space="preserve">
+    <value>Decomb</value>
+  </data>
+  <data name="FiltersView_Deinterlace" xml:space="preserve">
+    <value>反交错：</value>
+  </data>
+  <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
+    <value>预设：</value>
+  </data>
+  <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
+    <value>反交错预设</value>
+  </data>
+  <data name="FiltersView_Denoise" xml:space="preserve">
+    <value>降噪：</value>
+  </data>
+  <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
+    <value>降噪预设</value>
+  </data>
+  <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
+    <value>降噪调优</value>
+  </data>
+  <data name="FiltersView_Detelecine" xml:space="preserve">
+    <value>反胶卷过带：</value>
+  </data>
+  <data name="FiltersView_Filters" xml:space="preserve">
+    <value>滤镜</value>
+  </data>
+  <data name="FiltersView_FlipVideo" xml:space="preserve">
+    <value>翻转</value>
+  </data>
+  <data name="FiltersView_Grayscale" xml:space="preserve">
+    <value>灰度</value>
+  </data>
+  <data name="FiltersView_InterlaceDetection" xml:space="preserve">
+    <value>交错扫描检测：</value>
+  </data>
+  <data name="FiltersView_Preset" xml:space="preserve">
+    <value>预设：</value>
+  </data>
+  <data name="FiltersView_Rotate" xml:space="preserve">
+    <value>旋转：</value>
+  </data>
+  <data name="FiltersView_Sharpen" xml:space="preserve">
+    <value>锐化</value>
+  </data>
+  <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
+    <value>锐化预设</value>
+  </data>
+  <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
+    <value>锐化调优</value>
+  </data>
+  <data name="FiltersView_Tune" xml:space="preserve">
+    <value>调优：</value>
+  </data>
+  <data name="Generic_Add" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="Generic_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Generic_Clear" xml:space="preserve">
+    <value>明白</value>
+  </data>
+  <data name="Generic_Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Generic_CopyToClipboard" xml:space="preserve">
+    <value>复制到剪贴板</value>
+  </data>
+  <data name="Generic_MoveLeft" xml:space="preserve">
+    <value>左移</value>
+  </data>
+  <data name="Generic_MoveRight" xml:space="preserve">
+    <value>右移</value>
+  </data>
+  <data name="Generic_Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="LogView_CopyClipboard" xml:space="preserve">
+    <value>复制到剪贴板</value>
+  </data>
+  <data name="LogView_EncodeLog" xml:space="preserve">
+    <value>编码日志</value>
+  </data>
+  <data name="LogView_OpenLogDir" xml:space="preserve">
+    <value>打开日志目录</value>
+  </data>
+  <data name="LogView_ScanLog" xml:space="preserve">
+    <value>扫描日志</value>
+  </data>
+  <data name="MainView_ActivityLog" xml:space="preserve">
+    <value>活动日志</value>
+  </data>
+  <data name="MainView_AddAll" xml:space="preserve">
+    <value>全部添加</value>
+  </data>
+  <data name="MainView_AddCurrent" xml:space="preserve">
+    <value>添加当前</value>
+  </data>
+  <data name="MainView_AddSelection" xml:space="preserve">
+    <value>添加选中</value>
+  </data>
+  <data name="MainView_AddToQueue" xml:space="preserve">
+    <value>添加到队列中</value>
+  </data>
+  <data name="MainView_AdvancedTab" xml:space="preserve">
+    <value>高级</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>音视频起始对齐</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>角度</value>
+  </data>
+  <data name="MainView_AudioTab" xml:space="preserve">
+    <value>音频</value>
+  </data>
+  <data name="MainView_AudioTrackCount" xml:space="preserve">
+    <value>音轨</value>
+  </data>
+  <data name="MainView_Browser" xml:space="preserve">
+    <value>浏览</value>
+  </data>
+  <data name="MainView_ChaptersTab" xml:space="preserve">
+    <value>章节</value>
+  </data>
+  <data name="MainView_Container" xml:space="preserve">
+    <value>容器</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>目标路径</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>时长：</value>
+  </data>
+  <data name="MainView_File" xml:space="preserve">
+    <value>保存为：</value>
+  </data>
+  <data name="MainView_FiltersTab" xml:space="preserve">
+    <value>滤镜</value>
+  </data>
+  <data name="MainView_Format" xml:space="preserve">
+    <value>格式：</value>
+  </data>
+  <data name="MainView_Help" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="MainView_iPod5G" xml:space="preserve">
+    <value>iPod 5代 支持</value>
+  </data>
+  <data name="MainView_MetaDataTab" xml:space="preserve">
+    <value>元数据</value>
+  </data>
+  <data name="MainView_ModifiedPreset" xml:space="preserve">
+    <value>(修改的)</value>
+  </data>
+  <data name="MainView_Muxing" xml:space="preserve">
+    <value>开始合并：这可能需要一段时间…</value>
+  </data>
+  <data name="MainView_Options" xml:space="preserve">
+    <value>选项</value>
+  </data>
+  <data name="MainView_OutputSettings" xml:space="preserve">
+    <value>输出设置</value>
+  </data>
+  <data name="MainView_Pause" xml:space="preserve">
+    <value>暂停</value>
+  </data>
+  <data name="MainView_PictureTab" xml:space="preserve">
+    <value>尺寸</value>
+  </data>
+  <data name="MainView_PresetManage" xml:space="preserve">
+    <value>重命名预设</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>预设选项上下文菜单</value>
+  </data>
+  <data name="MainView_PresetRemove" xml:space="preserve">
+    <value>删除预设</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>预设</value>
+  </data>
+  <data name="MainView_Preview" xml:space="preserve">
+    <value>预览</value>
+  </data>
+  <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
+    <value>编码中: {0}, {1:00.00}%, 剩余时间: {2}, {3}</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>范围：</value>
+  </data>
+  <data name="MainView_Reload" xml:space="preserve">
+    <value>重新加载</value>
+  </data>
+  <data name="MainView_Remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
+    <value>重置内置预设</value>
+  </data>
+  <data name="MainView_SaveNewPreset" xml:space="preserve">
+    <value>保存新预设</value>
+  </data>
+  <data name="MainView_Searching" xml:space="preserve">
+    <value>正在寻找开始时间</value>
+  </data>
+  <data name="MainView_SelectedPreset" xml:space="preserve">
+    <value>选中的预设：</value>
+  </data>
+  <data name="MainView_SetDefault" xml:space="preserve">
+    <value>设置为默认</value>
+  </data>
+  <data name="MainView_ShowPreview" xml:space="preserve">
+    <value>预览</value>
+  </data>
+  <data name="MainView_ShowQueue" xml:space="preserve">
+    <value>队列</value>
+  </data>
+  <data name="MainView_Source" xml:space="preserve">
+    <value>源：</value>
+  </data>
+  <data name="MainView_SourceOpen" xml:space="preserve">
+    <value>打开源</value>
+  </data>
+  <data name="MainView_StartEncode" xml:space="preserve">
+    <value>开始编码</value>
+  </data>
+  <data name="MainView_StartQueue" xml:space="preserve">
+    <value>启动队列</value>
+  </data>
+  <data name="MainView_Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="MainView_StopEncode" xml:space="preserve">
+    <value>停止编码</value>
+  </data>
+  <data name="MainView_StopEncodeConfirm" xml:space="preserve">
+    <value>你确定要停止此编码吗？</value>
+  </data>
+  <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
+    <value>请在导入字幕文件前选择一个要编码的源</value>
+  </data>
+  <data name="MainView_SubtitlesTab" xml:space="preserve">
+    <value>字幕</value>
+  </data>
+  <data name="MainView_SubtitleTracksCount" xml:space="preserve">
+    <value>字幕轨道</value>
+  </data>
+  <data name="MainView_SummaryTab" xml:space="preserve">
+    <value>摘要</value>
+  </data>
+  <data name="MainView_through" xml:space="preserve">
+    <value> - </value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>标题：</value>
+  </data>
+  <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
+    <value>更新选中的预设</value>
+  </data>
+  <data name="MainView_VideoTab" xml:space="preserve">
+    <value>视频</value>
+  </data>
+  <data name="MainView_WebOptimized" xml:space="preserve">
+    <value>网页优化</value>
+  </data>
+  <data name="ManagePresetView_ManagePreset" xml:space="preserve">
+    <value>管理预设</value>
+  </data>
+  <data name="MetaDataView_Title" xml:space="preserve">
+    <value>元数据</value>
+  </data>
+  <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
+    <value>允许 NVIDIA NVENC 编码器</value>
+  </data>
+  <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
+    <value>允许 Intel QuickSync 编码器</value>
+  </data>
+  <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
+    <value>允许 AMD VCE 编码器</value>
+  </data>
+  <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
+    <value>输入的文件格式包含无效的字符。这些字符已被移除。</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
+    <value>每个编码完成时都发出提示音</value>
+  </data>
+  <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
+    <value>队列完成时发出提示音</value>
+  </data>
+  <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
+    <value>在摘要栏中显示预览。</value>
+  </data>
+  <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
+    <value>在应用程序标题栏中显示编码进度。</value>
+  </data>
+  <data name="Options_30DayLogClear" xml:space="preserve">
+    <value>清理30天前的日志文件</value>
+  </data>
+  <data name="Options_About" xml:space="preserve">
+    <value>关于 HandBrake</value>
+  </data>
+  <data name="Options_Advanced" xml:space="preserve">
+    <value>高级</value>
+  </data>
+  <data name="Options_AdvancedOptions" xml:space="preserve">
+    <value>高级选项</value>
+  </data>
+  <data name="Options_Arguments" xml:space="preserve">
+    <value>参数：</value>
+  </data>
+  <data name="Options_AutomaticFileNaming" xml:space="preserve">
+    <value>自动文件命名</value>
+  </data>
+  <data name="Options_AutoNameOutput" xml:space="preserve">
+    <value>自动命名输出文件</value>
+  </data>
+  <data name="Options_CheckForUpdates" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="Options_ClearCompleted" xml:space="preserve">
+    <value>每当编码完成时总是清除已完成的队列任务</value>
+  </data>
+  <data name="Options_ClearLogs" xml:space="preserve">
+    <value>清理日志历史</value>
+  </data>
+  <data name="Options_CopyLogToDir" xml:space="preserve">
+    <value>复制编码日志文件到指定位置：</value>
+  </data>
+  <data name="Options_CopyLogToEncDir" xml:space="preserve">
+    <value>复制编码日志文件到编码视频所在位置</value>
+  </data>
+  <data name="Options_CurVersion" xml:space="preserve">
+    <value>当前版本</value>
+  </data>
+  <data name="Options_Decoding" xml:space="preserve">
+    <value>解码中</value>
+  </data>
+  <data name="Options_DefaultPath" xml:space="preserve">
+    <value>默认路径：</value>
+  </data>
+  <data name="Options_DownloadUpdates" xml:space="preserve">
+    <value>下载更新</value>
+  </data>
+  <data name="Options_DVD" xml:space="preserve">
+    <value>DVD 读取中</value>
+  </data>
+  <data name="Options_DvdRead" xml:space="preserve">
+    <value>禁止LibDVDNav。(将会使用livdvdread)</value>
+  </data>
+  <data name="Options_Encoding" xml:space="preserve">
+    <value>编码中</value>
+  </data>
+  <data name="Options_Experimental" xml:space="preserve">
+    <value>实验功能</value>
+  </data>
+  <data name="Options_ExperimentalFeatures" xml:space="preserve">
+    <value>实验特性是我们正在研究的想法。这些可能或不可能使其成为最终版本，也可能不起作用！</value>
+  </data>
+  <data name="Options_Format" xml:space="preserve">
+    <value>文件格式：</value>
+  </data>
+  <data name="Options_General" xml:space="preserve">
+    <value>通用</value>
+  </data>
+  <data name="Options_Logging" xml:space="preserve">
+    <value>日志记录</value>
+  </data>
+  <data name="Options_LogLevel" xml:space="preserve">
+    <value>日志详细级别：</value>
+  </data>
+  <data name="Options_LogPath" xml:space="preserve">
+    <value>日志文件路径：</value>
+  </data>
+  <data name="Options_LowDiskspaceSize" xml:space="preserve">
+    <value>硬盘空间不足多少时警告(GB)：</value>
+  </data>
+  <data name="Options_MinimiseTray" xml:space="preserve">
+    <value>最小化到系统托盘(需要重启)</value>
+  </data>
+  <data name="Options_MinTitleScanLength" xml:space="preserve">
+    <value>DVD和蓝光标题的最短持续时间（秒）。将跳过较短的标题：</value>
+  </data>
+  <data name="Options_MP4FileExtension" xml:space="preserve">
+    <value>MP4 文件扩展名：</value>
+  </data>
+  <data name="Options_OnStartup" xml:space="preserve">
+    <value>启动时</value>
+  </data>
+  <data name="Options_Output" xml:space="preserve">
+    <value>输出文件</value>
+  </data>
+  <data name="Options_Path" xml:space="preserve">
+    <value>路径：</value>
+  </data>
+  <data name="Options_PathToVLC" xml:space="preserve">
+    <value>VLC Player程序路径</value>
+  </data>
+  <data name="Options_PauseQueueOnLowDiskSpace" xml:space="preserve">
+    <value>如果在开始一项任务时磁盘空间不足则暂停队列。</value>
+  </data>
+  <data name="Options_PreventSleep" xml:space="preserve">
+    <value>在编码时防止系统进入睡眠状态</value>
+  </data>
+  <data name="Options_PreviewScanCount" xml:space="preserve">
+    <value>要扫描的预览图片数：</value>
+  </data>
+  <data name="Options_PriorityLevel" xml:space="preserve">
+    <value>优先级：</value>
+  </data>
+  <data name="Options_QsvDecode" xml:space="preserve">
+    <value>允许使用QuickSync 解码</value>
+  </data>
+  <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
+    <value>在没有使用QuickSync 编码器时使用QSV 解码器。(如 x265)</value>
+  </data>
+  <data name="Options_RemovePunctuation" xml:space="preserve">
+    <value>移除常见的标点符号</value>
+  </data>
+  <data name="Options_ReplaceUnderscores" xml:space="preserve">
+    <value>用空格替换下划线</value>
+  </data>
+  <data name="Options_ResetDoNothing" xml:space="preserve">
+    <value>当应用重启时重置为“无操作”。</value>
+  </data>
+  <data name="Options_Scaler" xml:space="preserve">
+    <value>选择缩放器：</value>
+  </data>
+  <data name="Options_Scaling" xml:space="preserve">
+    <value>缩放</value>
+  </data>
+  <data name="Options_SendFileTo" xml:space="preserve">
+    <value>发送文件至：</value>
+  </data>
+  <data name="Options_ShowExperimentalQueueDesign" xml:space="preserve">
+    <value>显示新的测试中的队列设计。</value>
+  </data>
+  <data name="Options_ShowQueueInline" xml:space="preserve">
+    <value>在主界面显示列队。</value>
+  </data>
+  <data name="Options_TitleCase" xml:space="preserve">
+    <value>更改大写格式为词首字母大写</value>
+  </data>
+  <data name="Options_Updates" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Options_UserInterface" xml:space="preserve">
+    <value>用户界面</value>
+  </data>
+  <data name="Options_Version" xml:space="preserve">
+    <value>版本：</value>
+  </data>
+  <data name="Options_Video" xml:space="preserve">
+    <value>视频</value>
+  </data>
+  <data name="Options_VideoPreviewPath" xml:space="preserve">
+    <value>此路径仅被用作视频预览功能。</value>
+  </data>
+  <data name="Options_ViewLogDirectory" xml:space="preserve">
+    <value>查看日志目录</value>
+  </data>
+  <data name="Options_WhenDone" xml:space="preserve">
+    <value>当完成时</value>
+  </data>
+  <data name="Options_x264" xml:space="preserve">
+    <value>x264/5 设置</value>
+  </data>
+  <data name="Options_x264Granularity" xml:space="preserve">
+    <value>固定质量模式的最小刻度：</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>变形：</value>
+  </data>
+  <data name="PictureSettingsView_Automatic" xml:space="preserve">
+    <value>自动</value>
+  </data>
+  <data name="PictureSettingsView_Bottom" xml:space="preserve">
+    <value>下</value>
+  </data>
+  <data name="PictureSettingsView_Cropping" xml:space="preserve">
+    <value>裁剪</value>
+  </data>
+  <data name="PictureSettingsView_Custom" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
+    <value>显示宽度：</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>高度：</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>保持宽高比</value>
+  </data>
+  <data name="PictureSettingsView_Left" xml:space="preserve">
+    <value>左</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>系数：</value>
+  </data>
+  <data name="PictureSettingsView_Output" xml:space="preserve">
+    <value>输出</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>像素宽高比：</value>
+  </data>
+  <data name="PictureSettingsView_Right" xml:space="preserve">
+    <value>右</value>
+  </data>
+  <data name="PictureSettingsView_Size" xml:space="preserve">
+    <value>大小：</value>
+  </data>
+  <data name="PictureSettingsView_Source" xml:space="preserve">
+    <value>源：</value>
+  </data>
+  <data name="PictureSettingsView_Top" xml:space="preserve">
+    <value>上</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>宽度：</value>
+  </data>
+  <data name="Preset_AudioDefaults_SubText" xml:space="preserve">
+    <value>更改此预设的音轨选择行为。
+这不会影响“音频”选项卡中当前的设置。</value>
+  </data>
+  <data name="Preset_AudioDefaults_Title" xml:space="preserve">
+    <value>音频默认值</value>
+  </data>
+  <data name="Preset_Custom" xml:space="preserve">
+    <value>自定义</value>
+  </data>
+  <data name="Preset_Export" xml:space="preserve">
+    <value>导出文件</value>
+  </data>
+  <data name="Preset_Import" xml:space="preserve">
+    <value>导入文件</value>
+  </data>
+  <data name="Preset_Official" xml:space="preserve">
+    <value>官方的</value>
+  </data>
+  <data name="Preset_SubtitleDefaults_SubText" xml:space="preserve">
+    <value>更改此预设的字幕轨道选择行为。
+这不会影响“字幕”选项卡中当前的设置。</value>
+  </data>
+  <data name="Preset_SubtitleDefaults_Title" xml:space="preserve">
+    <value>字幕默认值</value>
+  </data>
+  <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
+    <value>选择标题：</value>
+  </data>
+  <data name="QueueSelectionView_Title" xml:space="preserve">
+    <value>添加到队列中</value>
+  </data>
+  <data name="QueueSelection_UsingPreset" xml:space="preserve">
+    <value>选中的标题将会使用 "{0}" 预设添加</value>
+  </data>
+  <data name="QueueView_Advanced" xml:space="preserve">
+    <value>高级：</value>
+  </data>
+  <data name="QueueView_Audio" xml:space="preserve">
+    <value>音频：</value>
+  </data>
+  <data name="QueueView_ClearAll" xml:space="preserve">
+    <value>清除全部</value>
+  </data>
+  <data name="QueueView_ClearCompleted" xml:space="preserve">
+    <value>清除已完成的</value>
+  </data>
+  <data name="QueueView_ClearQueue" xml:space="preserve">
+    <value>清除队列</value>
+  </data>
+  <data name="QueueView_ClearSelected" xml:space="preserve">
+    <value>清除选中的</value>
+  </data>
+  <data name="QueueView_Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="QueueView_Destination" xml:space="preserve">
+    <value>目标路径：</value>
+  </data>
+  <data name="QueueView_DoNothing" xml:space="preserve">
+    <value>无操作</value>
+  </data>
+  <data name="QueueView_Duration" xml:space="preserve">
+    <value>编码时间：</value>
+  </data>
+  <data name="QueueView_Edit" xml:space="preserve">
+    <value>编辑</value>
+  </data>
+  <data name="QueueView_EndTime" xml:space="preserve">
+    <value>结束时间：</value>
+  </data>
+  <data name="QueueView_Export" xml:space="preserve">
+    <value>导出队列至命令行界面</value>
+  </data>
+  <data name="QueueView_FileSize" xml:space="preserve">
+    <value>文件大小：</value>
+  </data>
+  <data name="QueueView_Hibernate" xml:space="preserve">
+    <value>休眠</value>
+  </data>
+  <data name="QueueView_LockSystem" xml:space="preserve">
+    <value>锁定系统</value>
+  </data>
+  <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
+    <value>日志将在编码完成后可用。</value>
+  </data>
+  <data name="QueueView_Logoff" xml:space="preserve">
+    <value>登出</value>
+  </data>
+  <data name="QueueView_OpenDestDir" xml:space="preserve">
+    <value>打开目标目录</value>
+  </data>
+  <data name="QueueView_OpenSourceDir" xml:space="preserve">
+    <value>打开源目录</value>
+  </data>
+  <data name="QueueView_Options" xml:space="preserve">
+    <value>选项</value>
+  </data>
+  <data name="QueueView_Pause" xml:space="preserve">
+    <value>暂停队列</value>
+  </data>
+  <data name="QueueView_PausedDuration" xml:space="preserve">
+    <value>暂停时常：</value>
+  </data>
+  <data name="QueueView_PictureSettings" xml:space="preserve">
+    <value>图像设置：</value>
+  </data>
+  <data name="QueueView_QuitHandBrake" xml:space="preserve">
+    <value>退出HandBrake</value>
+  </data>
+  <data name="QueueView_ResetAllJobs" xml:space="preserve">
+    <value>重试所有任务</value>
+  </data>
+  <data name="QueueView_ResetFailed" xml:space="preserve">
+    <value>重试失败的</value>
+  </data>
+  <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
+    <value>重试选中的任务</value>
+  </data>
+  <data name="QueueView_Retry" xml:space="preserve">
+    <value>重试</value>
+  </data>
+  <data name="QueueView_Shutdown" xml:space="preserve">
+    <value>关机</value>
+  </data>
+  <data name="QueueView_Source" xml:space="preserve">
+    <value>源：</value>
+  </data>
+  <data name="QueueView_Start" xml:space="preserve">
+    <value>启动队列</value>
+  </data>
+  <data name="QueueView_StartTime" xml:space="preserve">
+    <value>开始时间：</value>
+  </data>
+  <data name="QueueView_Statistics" xml:space="preserve">
+    <value>统计数据</value>
+  </data>
+  <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
+    <value>统计数据将在编码完成后可用。</value>
+  </data>
+  <data name="QueueView_Subtitles" xml:space="preserve">
+    <value>字幕：</value>
+  </data>
+  <data name="QueueView_Summary" xml:space="preserve">
+    <value>概要</value>
+  </data>
+  <data name="QueueView_Suspend" xml:space="preserve">
+    <value>推迟</value>
+  </data>
+  <data name="QueueView_Video" xml:space="preserve">
+    <value>视频：</value>
+  </data>
+  <data name="QueueView_WhenDone" xml:space="preserve">
+    <value>当完成时：</value>
+  </data>
+  <data name="Shared_AddAllForSelected" xml:space="preserve">
+    <value>添加所有剩余选中的语言</value>
+  </data>
+  <data name="Shared_AddAllRemaining" xml:space="preserve">
+    <value>添加所有剩余的轨道</value>
+  </data>
+  <data name="Shared_AddNewTrack" xml:space="preserve">
+    <value>添加新轨道</value>
+  </data>
+  <data name="Shared_AddTrack" xml:space="preserve">
+    <value>添加轨道</value>
+  </data>
+  <data name="Shared_AvailableLanguages" xml:space="preserve">
+    <value>可用的语言：</value>
+  </data>
+  <data name="Shared_ChooseLanguages" xml:space="preserve">
+    <value>选择语言：</value>
+  </data>
+  <data name="Shared_ChosenLangages" xml:space="preserve">
+    <value>选择语言：</value>
+  </data>
+  <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
+    <value>配置默认行为</value>
+  </data>
+  <data name="Shared_ReloadDefaults" xml:space="preserve">
+    <value>重新加载</value>
+  </data>
+  <data name="SourceSelection_ChooseDisc" xml:space="preserve">
+    <value>选择要扫描的唱片</value>
+  </data>
+  <data name="SourceSelection_ChooseFile" xml:space="preserve">
+    <value>选择要扫描的文件</value>
+  </data>
+  <data name="SourceSelection_ChooseFolder" xml:space="preserve">
+    <value>选择要扫描的文件夹</value>
+  </data>
+  <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
+    <value>视需要选择一个具体的标题：</value>
+  </data>
+  <data name="SourceSelection_ChooseVideo" xml:space="preserve">
+    <value>然后选择你想编码的视频：</value>
+  </data>
+  <data name="SourceSelection_File" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
+    <value>文件夹(按批扫描)</value>
+  </data>
+  <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
+    <value>打开此DVD或蓝光驱动器</value>
+  </data>
+  <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
+    <value>打开有一个或多个文件的文件夹。</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
+    <value>恢复队列文件</value>
+  </data>
+  <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
+    <value>以前的队列存档可用。</value>
+  </data>
+  <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
+    <value>打开单个视频文件。</value>
+  </data>
+  <data name="SourceSelection_SourceSelection" xml:space="preserve">
+    <value>源选取</value>
+  </data>
+  <data name="StaticPreviewView_Duration" xml:space="preserve">
+    <value>时长：</value>
+  </data>
+  <data name="StaticPreviewView_LivePreview" xml:space="preserve">
+    <value>即时预览</value>
+  </data>
+  <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
+    <value>选择预览图片</value>
+  </data>
+  <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
+    <value>使用系统默认视频播放器</value>
+  </data>
+  <data name="SubtitlesView_AddCC" xml:space="preserve">
+    <value>当可用时添加CC字幕</value>
+  </data>
+  <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
+    <value>添加“Foreign Audio Scan”</value>
+  </data>
+  <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
+    <value>烧录行为：</value>
+  </data>
+  <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
+    <value>导入字幕</value>
+  </data>
+  <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
+    <value>轨道选择行为：</value>
+  </data>
+  <data name="SubtitleView_AddAllCC" xml:space="preserve">
+    <value>添加所有剩余的CC字幕</value>
+  </data>
+  <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
+    <value>配置选择新标题或源视频时自动选择和配置字幕轨道的方式。</value>
+  </data>
+  <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
+    <value>额外的音频轨道</value>
+  </data>
+  <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
+    <value>额外的字幕轨道</value>
+  </data>
+  <data name="SummaryView_Burned" xml:space="preserve">
+    <value>已烧录</value>
+  </data>
+  <data name="SummaryView_Chapters" xml:space="preserve">
+    <value>章节标记</value>
+  </data>
+  <data name="SummaryView_Deblock" xml:space="preserve">
+    <value>去块滤波</value>
+  </data>
+  <data name="SummaryView_Detelecine" xml:space="preserve">
+    <value>反胶卷过带</value>
+  </data>
+  <data name="SummaryView_display" xml:space="preserve">
+    <value>显示</value>
+  </data>
+  <data name="SummaryView_Grayscale" xml:space="preserve">
+    <value>灰度</value>
+  </data>
+  <data name="SummaryView_NoAudioTracks" xml:space="preserve">
+    <value>没有音频轨道</value>
+  </data>
+  <data name="SummaryView_NoChapters" xml:space="preserve">
+    <value>没有章节标记</value>
+  </data>
+  <data name="SummaryView_NoFilters" xml:space="preserve">
+    <value>无滤镜</value>
+  </data>
+  <data name="SummaryView_NoSource" xml:space="preserve">
+    <value>没有源</value>
+  </data>
+  <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
+    <value>没有字幕轨</value>
+  </data>
+  <data name="SummaryView_NoTracks" xml:space="preserve">
+    <value>无轨道</value>
+  </data>
+  <data name="SummaryView_PreviewInfo" xml:space="preserve">
+    <value>预览 {0} / {1}</value>
+  </data>
+  <data name="SummaryView_Rotation" xml:space="preserve">
+    <value>旋转</value>
+  </data>
+  <data name="SummaryView_storage" xml:space="preserve">
+    <value>存储空间</value>
+  </data>
+  <data name="VideoView_2Pass" xml:space="preserve">
+    <value>2-Pass 编码</value>
+  </data>
+  <data name="VideoView_AverageBitrate" xml:space="preserve">
+    <value>平均码率(kbps)：</value>
+  </data>
+  <data name="VideoView_Codec" xml:space="preserve">
+    <value>视频编解码器：</value>
+  </data>
+  <data name="VideoView_ConstantFramerate" xml:space="preserve">
+    <value>固定帧率</value>
+  </data>
+  <data name="VideoView_ConstantQuality" xml:space="preserve">
+    <value>固定质量：</value>
+  </data>
+  <data name="VideoView_EncoderLevel" xml:space="preserve">
+    <value>编码器级别：</value>
+  </data>
+  <data name="VideoView_EncoderPreset" xml:space="preserve">
+    <value>编码器预设：</value>
+  </data>
+  <data name="VideoView_EncoderProfile" xml:space="preserve">
+    <value>编码器配置文件：</value>
+  </data>
+  <data name="VideoView_EncodeTune" xml:space="preserve">
+    <value>编码器调优：</value>
+  </data>
+  <data name="VideoView_ExtraOptions" xml:space="preserve">
+    <value>额外选项：</value>
+  </data>
+  <data name="VideoView_FastDecode" xml:space="preserve">
+    <value>快速解码</value>
+  </data>
+  <data name="VideoView_Framerate" xml:space="preserve">
+    <value>帧率 (FPS):</value>
+  </data>
+  <data name="VideoView_OptimiseVideo" xml:space="preserve">
+    <value>优化视频：</value>
+  </data>
+  <data name="VideoView_PeakFramerate" xml:space="preserve">
+    <value>峰值帧率</value>
+  </data>
+  <data name="VideoView_Quality" xml:space="preserve">
+    <value>质量</value>
+  </data>
+  <data name="VideoView_TurboFirstPass" xml:space="preserve">
+    <value>Turbo first pass</value>
+  </data>
+  <data name="VideoView_VariableFramerate" xml:space="preserve">
+    <value>可变帧率</value>
+  </data>
+  <data name="VideoView_Video" xml:space="preserve">
+    <value>视频</value>
+  </data>
+  <data name="OptionsView_Language" xml:space="preserve">
+    <value>语言：</value>
+  </data>
+  <data name="Language_UseSystem" xml:space="preserve">
+    <value>使用系统语言</value>
+  </data>
+  <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
+    <value>关于 HandBrake</value>
+  </data>
+  <data name="SourceSelection_DropFileHere" xml:space="preserve">
+    <value>或者在此处删除文件或文件夹...</value>
+  </data>
+  <data name="SourceSelection_Help" xml:space="preserve">
+    <value>帮助</value>
+  </data>
+  <data name="SourceSelection_Preferences" xml:space="preserve">
+    <value>首选项</value>
+  </data>
+  <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
+    <value>添加轨道</value>
+  </data>
+  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
+    <value>自动添加轨道</value>
+  </data>
+  <data name="AudioDefaultsView_Clear" xml:space="preserve">
+    <value>明白</value>
+  </data>
+  <data name="SubtitlesView_BurnIn" xml:space="preserve">
+    <value>烧入</value>
+  </data>
+  <data name="SubtitlesView_Default" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
+    <value>仅限强制</value>
+  </data>
+  <data name="MainView_About" xml:space="preserve">
+    <value>_关于...</value>
+  </data>
+  <data name="MainView_ActivityLogMenu" xml:space="preserve">
+    <value>_活动日志</value>
+  </data>
+  <data name="MainView_CheckForUpdates" xml:space="preserve">
+    <value>_检查更新</value>
+  </data>
+  <data name="MainView_Exit" xml:space="preserve">
+    <value>_退出</value>
+  </data>
+  <data name="MainView_ExportToFile" xml:space="preserve">
+    <value>_导出到文件</value>
+  </data>
+  <data name="MainView_FileMenu" xml:space="preserve">
+    <value>_文件</value>
+  </data>
+  <data name="MainView_HandBrakeDocs" xml:space="preserve">
+    <value>_HandBrake 文档 (HTTPS)</value>
+  </data>
+  <data name="MainView_HelpMenu" xml:space="preserve">
+    <value>_帮助</value>
+  </data>
+  <data name="MainView_ImportFromFile" xml:space="preserve">
+    <value>_从文件导入</value>
+  </data>
+  <data name="MainView_PreferencesMenu" xml:space="preserve">
+    <value>_首选项</value>
+  </data>
+  <data name="MainView_PresetsMenu" xml:space="preserve">
+    <value>_预设</value>
+  </data>
+  <data name="MainView_QueueMenu" xml:space="preserve">
+    <value>_队列</value>
+  </data>
+  <data name="MainView_ResetPresets" xml:space="preserve">
+    <value>_重置内置预设</value>
+  </data>
+  <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
+    <value>_将当前设置为默认值</value>
+  </data>
+  <data name="MainView_ShowPresetPanel" xml:space="preserve">
+    <value>_显示预设面板</value>
+  </data>
+  <data name="MainView_ShowQueueMenu" xml:space="preserve">
+    <value>_显示队列</value>
+  </data>
+  <data name="MainView_ToolsMenu" xml:space="preserve">
+    <value>_工具</value>
+  </data>
+  <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
+    <value>检查更新 ...</value>
+  </data>
+  <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
+    <value>您确定要清除日志文件目录吗？</value>
+  </data>
+  <data name="OptionsView_ClearLogs" xml:space="preserve">
+    <value>清除日志</value>
+  </data>
+  <data name="OptionsView_Downloading" xml:space="preserve">
+    <value>正在下载...</value>
+  </data>
+  <data name="OptionsView_LogsCleared" xml:space="preserve">
+    <value>HandBrake 的日志文件目录已被清除！</value>
+  </data>
+  <data name="OptionsView_Notice" xml:space="preserve">
+    <value>注意</value>
+  </data>
+  <data name="OptionsView_PreparingUpdate" xml:space="preserve">
+    <value>准备更新...</value>
+  </data>
+  <data name="OptionsView_SelectFolder" xml:space="preserve">
+    <value>请选择一个文件夹。</value>
+  </data>
+  <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
+    <value>单击“浏览”以设置默认位置</value>
+  </data>
+  <data name="MainView_Hide" xml:space="preserve">
+    <value>隐藏</value>
+  </data>
+  <data name="MainView_Show" xml:space="preserve">
+    <value>显示</value>
+  </data>
+  <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
+    <value>“添加所有”至队列</value>
+  </data>
+  <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
+    <value>“添加选中”至队列</value>
+  </data>
+  <data name="QueueView_PlayMediaFile" xml:space="preserve">
+    <value>播放文件</value>
+  </data>
+  <data name="Options_ApplicaitonToolbar" xml:space="preserve">
+    <value>应用程序工具栏</value>
+  </data>
+  <data name="Options_ShowToolbarAddAll" xml:space="preserve">
+    <value>在工具栏中显示“添加所有至队列”</value>
+  </data>
+  <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
+    <value>在工具栏中显示“添加选中至队列”</value>
+  </data>
+  <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
+    <value>由于在检测硬件时发现了问题，硬件编码支持已被自动禁用。请确认您系统中所有图形适配器都运行了最新的驱动程序。
+
+这不会对软件编码器产生任何影响。</value>
+  </data>
+  <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
+    <value>请更正您的字幕设置然后再继续。</value>
+  </data>
+  <data name="Generic_Apply" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="Main_ResumeEncode" xml:space="preserve">
+    <value>继续编码</value>
+  </data>
+  <data name="QueueView_Actions" xml:space="preserve">
+    <value>活动</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>导入</value>
+  </data>
+</root>
