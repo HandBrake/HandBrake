@@ -1918,4 +1918,11 @@ This will not impact any of the software encoders.</value>
   <data name="QueueView_Import" xml:space="preserve">
     <value>Import</value>
   </data>
+  <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
+Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss} {7}</value>
+  </data>
+  <data name="QueueView_DeleteSelected" xml:space="preserve">
+    <value>Delete Selected</value>
+  </data>
 </root>

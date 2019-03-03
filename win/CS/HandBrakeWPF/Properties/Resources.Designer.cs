@@ -3802,6 +3802,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete Selected.
+        /// </summary>
+        public static string QueueView_DeleteSelected {
+            get {
+                return ResourceManager.GetString("QueueView_DeleteSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Destination: .
         /// </summary>
         public static string QueueView_Destination {
@@ -4140,6 +4149,16 @@ namespace HandBrakeWPF.Properties {
         public static string QueueViewModel_EditConfrimation {
             get {
                 return ResourceManager.GetString("QueueViewModel_EditConfrimation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
+        ///Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss} {7}.
+        /// </summary>
+        public static string QueueViewModel_EncodeStatusChanged_StatusLabel {
+            get {
+                return ResourceManager.GetString("QueueViewModel_EncodeStatusChanged_StatusLabel", resourceCulture);
             }
         }
         

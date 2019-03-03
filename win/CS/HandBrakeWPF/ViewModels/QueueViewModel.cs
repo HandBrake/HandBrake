@@ -125,7 +125,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsJobStatusVisible => !string.IsNullOrEmpty(this.JobStatus);
+        public bool IsJobStatusVisible => !string.IsNullOrEmpty(this.JobStatus)  && this.SelectedTask?.Status == QueueItemStatus.InProgress;
 
         /// <summary>
         /// Gets or sets JobsPending.
@@ -819,7 +819,7 @@ namespace HandBrakeWPF.ViewModels
                 else
                 {
                     this.JobStatus =
-                        string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel,
+                        string.Format(Resources.QueueViewModel_EncodeStatusChanged_StatusLabel,
                             e.Task,
                             e.TaskCount,
                             e.PercentComplete,

@@ -160,21 +160,16 @@
 
                     <ListBox.ContextMenu>
                         <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" Opened="ContextMenu_OnOpened">
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action StartQueue]" Header="{x:Static Properties:Resources.QueueView_Start}" />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action PauseQueue]" Header="{x:Static Properties:Resources.QueueView_Pause}" />
+                            <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" cal:Message.Attach="[Event Click] = [Action PlayFile]" />
                             <Separator />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action ResetFailed]" Header="{x:Static Properties:Resources.QueueView_ResetFailed}" />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action ResetSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ResetSelectedJobs}" />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action ResetAllJobs]" Header="{x:Static Properties:Resources.QueueView_ResetAllJobs}" />
+                            <MenuItem x:Name="RetryMenuItem" Header="{x:Static Properties:Resources.QueueView_Retry}" Click="QueueItem_Retry" />
+                            <MenuItem x:Name="DeleteMenuItem" Header="{x:Static Properties:Resources.QueueView_Delete}" Click="QueueItem_Delete" />
                             <Separator />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:Resources.QueueView_ClearAll}" />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ClearSelected}" />
+                            <MenuItem x:Name="EditMenuItem" Header="{x:Static Properties:Resources.QueueView_Edit}" Click="QueueItem_Edit" />
                             <Separator />
                             <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenSourceDir}" x:Name="openSourceDir" Click="OpenSourceDir_OnClick" />
                             <MenuItem Header="{x:Static Properties:Resources.QueueView_OpenDestDir}" x:Name="openDestDir" Click="OpenDestDir_OnClick" />
-                            <Separator />
-                            <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.QueueView_Export}" />
+
                         </ContextMenu>
                     </ListBox.ContextMenu>
 
@@ -390,7 +385,6 @@
                                     </i:Interaction.Triggers>
                                 </Button>
 
-
                                 <Button x:Name="queueOptionsDropButton" Margin="10,0,0,0" Click="QueueOptionsDropButton_OnClick"
                                         AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Actions}" IsEnabled="{Binding CanPerformActionOnSource}">
                                     <Button.Content>
@@ -420,8 +414,10 @@
                                 </Button>
                             </StackPanel>
 
+
+                            <TextBlock FontWeight="Bold" Text="Status:" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" Margin="0,15,10,5" Visibility="{Binding IsJobStatusVisible, Converter={StaticResource boolToVisConverter}}"  />
                             <TextBlock Text="{Binding JobStatus}" Visibility="{Binding IsJobStatusVisible, Converter={StaticResource boolToVisConverter}}" 
-                                       Margin="0,15,10,5" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" />
+                                       TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" Margin="0,0,0,5" />
 
                             <Grid Style="{StaticResource LongToolTipHolder}" Margin="0,10,0,0" >
                                 <Grid.Resources>
@@ -457,11 +453,11 @@
                                 <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Video}" Grid.Row="3" Grid.Column="0" />
                                 <TextBlock Text="{Binding SelectedTask.Task, Converter={StaticResource videoOptionsTooltipConverter}}" Grid.Row="3" Grid.Column="1" TextWrapping="Wrap"  />
 
-                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Audio}"  Grid.Row="4" Grid.Column="0"/>
+                                <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Audio}"  Grid.Row="4" Grid.Column="0" VerticalAlignment="Top"/>
                                 <TextBlock Text="{Binding SelectedTask.Task.AudioTracks, Converter={StaticResource audioTrackDisplayConverter}}"
-                                           Grid.Row="4" Grid.Column="1"/>
+                                           Grid.Row="4" Grid.Column="1" />
 
-                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="{x:Static Properties:Resources.QueueView_Subtitles}" Grid.Row="5" Grid.Column="0"  />
+                                <TextBlock FontWeight="Bold" VerticalAlignment="Top" Text="{x:Static Properties:Resources.QueueView_Subtitles}" Grid.Row="5" Grid.Column="0"   />
                                 <TextBlock Text="{Binding SelectedTask.Task.SubtitleTracks, Converter={StaticResource subtitleTrackDisplayConverter}}"
                                            Grid.Row="5" Grid.Column="1" />
 
@@ -530,12 +526,12 @@
                             <ContextMenu>
                                 <MenuItem Header="{x:Static Properties:Resources.LogView_CopyClipboard}" cal:Message.Attach="[Event Click] = [Action CopyLog]" >
                                     <MenuItem.Icon>
-                                        <Image Width="16" Source="../Images/copy.png" />
+                                        <Image Width="16" Source="Images/copy.png" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem Header="{x:Static Properties:Resources.LogView_OpenLogDir}" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]">
                                     <MenuItem.Icon>
-                                        <Image Width="16" Source="../Images/folder.png" />
+                                        <Image Width="16" Source="Images/folder.png" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </ContextMenu>
