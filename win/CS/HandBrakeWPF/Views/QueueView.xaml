@@ -132,8 +132,8 @@
                     </Button>
 
                     <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
-                        <Button Content="^" Width="20" Height="20" Margin="0" cal:Message.Attach="[Event Click] = [Action MoveUp]" />
-                        <Button Content="v" Width="20" Height="20" Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action MoveDown]" />
+                        <Button Content="^" Width="20" Margin="0" cal:Message.Attach="[Event Click] = [Action MoveUp]" />
+                        <Button Content="v" Width="20" Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action MoveDown]" />
                     </StackPanel>
                 </Grid>
 
