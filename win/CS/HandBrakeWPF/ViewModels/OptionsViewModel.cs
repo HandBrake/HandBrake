@@ -101,7 +101,6 @@ namespace HandBrakeWPF.ViewModels
         private bool enableQuickSyncEncoding;
         private bool enableVceEncoder;    
         private bool enableNvencEncoder;
-        private bool showExperimentalQueue;
 
         private InterfaceLanguage selectedLanguage;
 
@@ -395,17 +394,6 @@ namespace HandBrakeWPF.ViewModels
                 }
                 this.showQueueInline = value;
                 this.NotifyOfPropertyChange(() => this.ShowQueueInline);
-            }
-        }
-
-        public bool ShowExperimentalQueue
-        {
-            get => this.showExperimentalQueue;
-            set
-            {
-                if (value == this.showExperimentalQueue) return;
-                this.showExperimentalQueue = value;
-                this.NotifyOfPropertyChange(() => this.ShowExperimentalQueue);
             }
         }
 
@@ -1407,7 +1395,6 @@ namespace HandBrakeWPF.ViewModels
             this.WhenDoneAudioFileFullPath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
             this.PlaySoundWhenDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone);
             this.PlaySoundWhenQueueDone = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenQueueDone);
-            this.ShowExperimentalQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowExperimentalQueue);
 
             this.ShowAddAllToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
             this.ShowAddSelectionToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddSelectionToQueue);
@@ -1582,8 +1569,6 @@ namespace HandBrakeWPF.ViewModels
 
             /* Experiments */
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);
-            this.userSettingService.SetUserSetting(UserSettingConstants.ShowExperimentalQueue, this.ShowExperimentalQueue);
-
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);

@@ -14,11 +14,6 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface IQueueViewModel
     {
-        /// <summary>
-        /// Temporary variable to toggle the new style experimental queue.
-        /// </summary>
-        bool IsNewQueueVisible { set; }
-
         bool IsInline { set; }
 
         /// <summary>

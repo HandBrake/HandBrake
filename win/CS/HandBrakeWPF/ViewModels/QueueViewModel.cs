@@ -247,8 +247,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsNewQueueVisible { get; set; }
-
         public bool IsInline { get; set; }
 
         public bool StatsVisible

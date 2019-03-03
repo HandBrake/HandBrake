@@ -830,12 +830,12 @@ namespace HandBrakeWPF.Services.Presets
                 Dictionary<string, PresetCategory> presetCategories = new Dictionary<string, PresetCategory>();
                 List<HBPreset> uncategorisedPresets = new List<HBPreset>();
 
+                // Handle User Presets.
+                this.HandlePresetListsForSave(this.flatPresetList.Where(o => !o.IsBuildIn).ToList(), presetCategories, uncategorisedPresets);
+
                 // Handle Built-in Presets
                 this.HandlePresetListsForSave(this.flatPresetList.Where(o => o.IsBuildIn).ToList(), presetCategories, uncategorisedPresets);
 
-                // Handle User Presets.
-                this.HandlePresetListsForSave(this.flatPresetList.Where(o => !o.IsBuildIn).ToList(), presetCategories, uncategorisedPresets);
-    
                 // Wrap the categories in a container. 
                 JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
                 PresetTransportContainer container = new PresetTransportContainer(

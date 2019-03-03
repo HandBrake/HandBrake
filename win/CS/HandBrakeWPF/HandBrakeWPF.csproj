@@ -349,12 +349,6 @@
     <Compile Include="Views\MiniView.xaml.cs">
       <DependentUpon>MiniView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Queue\QueueTwoContent.xaml.cs">
-      <DependentUpon>QueueTwoContent.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Queue\QueueTwoView.xaml.cs">
-      <DependentUpon>QueueTwoView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Queue\Embedded.xaml.cs">
       <DependentUpon>Embedded.xaml</DependentUpon>
     </Compile>
@@ -543,14 +537,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MiniView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Queue\QueueTwoContent.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Queue\QueueTwoView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
