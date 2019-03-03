@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -357,6 +357,16 @@ Bitte einen anderen Dateinamen wählen.</value>
 Fremdsprachenspur - Die Fremdsprachenspur wird eingebrannt, falls vorhanden. 
 Erste Spur - Die erste Spur wird eingebrannt.
 Fremdsprachenton bevorzugt, sonst Erste - Wenn die Fremdsprachenspur existiert, wird sie eingebrannt, sonst wird die erste Spur ausgewählt.</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
+    <value>WebM-Untertitel-Kompatibilität</value>
+  </data>
+  <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
+    <value>WebM in HandBrake unterstützt nur eingebrannte Untertitel.
+
+Die Untertitelauswahl sollte geändert werden.
+
+Beim Fortfahren werden nicht-eingebrannte Untertitel verlorengehen.</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
     <value>Keine gültige Quelle oder Titel gefunden</value>
@@ -717,7 +727,7 @@ Verbleibende Zeit: {5}, Vergangene Zeit: {6:d\:hh\:mm\:ss}</value>
     <value>HandBrake benötigt Windows 7 oder neuer. Version 0.9.9 (XP) und 0.10.5 (Vista) waren die letzten mit einer Unterstützung für diese Version.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>Die letzte Aufgabe konnte nicht zur Zwischenablage hinzugefügt werden. Soll fortgefahren und der Rest hinzugefügt werden?</value>
+    <value>Soll versucht werden den Rest hinzuzufügen?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
     <value>Die Datei '{0}' existiert bereits!
@@ -1237,7 +1247,7 @@ Soll sie überschrieben werden?</value>
     <value>Den Infobereich (System Tray) minimieren (erfordert einen Neustart)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>Min. Länge der Titel zum überprüf. (Sek.):</value>
+    <value>Minimale Länge von DVD- und Blu-ray-Titeln in Sekunden. Kürzere Titel werden übersprungen:</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4-Dateiendung:</value>
@@ -1587,7 +1597,7 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
     <value>Einen Ordner mit einer oder mehreren Dateien öffnen.</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
-    <value>Wiederherstellung der Warteschlange</value>
+    <value>Warteschlange wiederherstellen</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
     <value>Eine frühere archivierte Warteschlange ist verfügbar.</value>
@@ -1873,5 +1883,25 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
     <value>Zeige 'Auswahl zur Warteschlange hinzufügen' in der Symbolleiste</value>
+  </data>
+  <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
+    <value>Die Unterstützung für die Hardwarekodierung wurde auf diesem System aufgrund eines Problems, das bei der Hardwareerkennung erkannt wurde, automatisch deaktiviert. Bitte stellen Sie sicher, dass aktuelle Treiber für alle Grafikkarten in diesem System verwendet werden.
+
+Dies hat keinen Einfluss auf die Software-Encoder. </value>
+  </data>
+  <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
+    <value>Bitte die Untertiteleinstellungen vor den Fortfahren korrigieren.</value>
+  </data>
+  <data name="Generic_Apply" xml:space="preserve">
+    <value>Anwenden</value>
+  </data>
+  <data name="Main_ResumeEncode" xml:space="preserve">
+    <value>Enkodierung fortsetzen</value>
+  </data>
+  <data name="QueueView_Actions" xml:space="preserve">
+    <value>Aktionen</value>
+  </data>
+  <data name="QueueView_Import" xml:space="preserve">
+    <value>Importieren</value>
   </data>
 </root>
