@@ -46,14 +46,22 @@ int ghb_set_video_preset(GhbValue *settings, int encoder, const char * preset)
     int                  ii, result = 0;
 
     videoPresets = hb_video_encoder_get_presets(encoder);
-    for (ii = 0; preset && videoPresets && videoPresets[ii]; ii++)
+    for (ii = 0; videoPresets && videoPresets[ii]; ii++)
     {
-        if (!strcasecmp(preset, videoPresets[ii]))
+        if (preset != NULL && !strcasecmp(preset, videoPresets[ii]))
         {
             ghb_dict_set_int(settings, "VideoPresetSlider", ii);
             result = 1;
             break;
         }
+    }
+    if (preset == NULL && videoPresets != NULL)
+    {
+        // Pick the center 'medium' preset
+        ii = ii / 2;
+        preset = videoPresets[ii];
+        ghb_dict_set_int(settings, "VideoPresetSlider", ii);
+        result = 1;
     }
     if (preset != NULL)
     {
@@ -103,7 +111,7 @@ vcodec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     {
         gtk_range_set_range(GTK_RANGE(presetSlider), 0, count-1);
     }
-    ghb_set_video_preset(ud->settings, encoder, "medium");
+    ghb_set_video_preset(ud->settings, encoder, NULL);
     GhbValue *gval = ghb_dict_get_value(ud->settings, "VideoPresetSlider");
     ghb_ui_settings_update(ud, ud->settings, "VideoPresetSlider", gval);
 
