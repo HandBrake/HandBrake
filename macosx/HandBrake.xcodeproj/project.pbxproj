@@ -147,7 +147,6 @@
 		A91CE2C81C7DABBC0068F46F /* libx264.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73F14B102DA00B785E4 /* libx264.a */; };
 		A91CE2C91C7DABBC0068F46F /* libx265.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 22CC9E74191EBEA500C69D81 /* libx265.a */; };
 		A91CE2CA1C7DABBC0068F46F /* libxml2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C74014B102DA00B785E4 /* libxml2.a */; };
-		A91CE2CE1C7DABBC0068F46F /* libvorbisfile.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2CC1C7DABBC0068F46F /* libvorbisfile.a */; };
 		A91CE2D01C7DABCE0068F46F /* libbz2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */; };
 		A91CE2D21C7DABDA0068F46F /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2D11C7DABDA0068F46F /* libz.tbd */; };
 		A91CE2D41C7DABE40068F46F /* libiconv.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = A91CE2D31C7DABE40068F46F /* libiconv.tbd */; };
@@ -356,8 +355,6 @@
 		22CC9E74191EBEA500C69D81 /* libx265.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libx265.a; path = external/contrib/lib/libx265.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		22DD2C49177B94DB00EF50D3 /* libvpx.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvpx.a; path = external/contrib/lib/libvpx.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		271BA4C014B119F800BC1D2C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = external/macosx/Info.plist; sourceTree = BUILT_PRODUCTS_DIR; };
-		271E74EF182F260C0077C311 /* osx109.i386.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx109.i386.xcconfig; sourceTree = "<group>"; };
-		271E74F0182F260C0077C311 /* osx109.x86_64.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx109.x86_64.xcconfig; sourceTree = "<group>"; };
 		273F1FFF14ADAE950021BE6D /* HandBrakeCLI */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = HandBrakeCLI; sourceTree = BUILT_PRODUCTS_DIR; };
 		273F202214ADB8650021BE6D /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		273F202514ADB8A40021BE6D /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -397,12 +394,6 @@
 		273F20BD14ADC09F0021BE6D /* main.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		273F20C014ADC1250021BE6D /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		275916DA14B2AB27007211E9 /* native.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = native.xcconfig; sourceTree = "<group>"; };
-		276941FA14B161B70027798C /* osx107.i386.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = osx107.i386.xcconfig; sourceTree = "<group>"; };
-		277A3FD014AE84C500A835E4 /* osx106.i386.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx106.i386.xcconfig; sourceTree = "<group>"; };
-		277A3FD114AE84C500A835E4 /* osx106.x86_64.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx106.x86_64.xcconfig; sourceTree = "<group>"; };
-		277A3FD214AE84C500A835E4 /* osx107.x86_64.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx107.x86_64.xcconfig; sourceTree = "<group>"; };
-		277EFE8917ED4F5D001D4A6A /* osx108.i386.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx108.i386.xcconfig; sourceTree = "<group>"; };
-		277EFE8B17ED4F63001D4A6A /* osx108.x86_64.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = osx108.x86_64.xcconfig; sourceTree = "<group>"; };
 		277EFE8D17ED5628001D4A6A /* supplemental.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = supplemental.xcconfig; sourceTree = "<group>"; };
 		277EFE9217ED799E001D4A6A /* libfdk-aac.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libfdk-aac.a"; path = "external/contrib/lib/libfdk-aac.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C72414B1019100B785E4 /* libhandbrake.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libhandbrake.a; path = external/libhb/libhandbrake.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -453,7 +444,6 @@
 		A91AFD0B1A948827009BECED /* HBOutputFileWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBOutputFileWriter.m; sourceTree = "<group>"; };
 		A91AFD0D1A949472009BECED /* HBJobOutputFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBJobOutputFileWriter.h; sourceTree = "<group>"; };
 		A91AFD0E1A949472009BECED /* HBJobOutputFileWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBJobOutputFileWriter.m; sourceTree = "<group>"; };
-		A91CE2CC1C7DABBC0068F46F /* libvorbisfile.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbisfile.a; path = "../../../Library/Developer/Xcode/DerivedData/HandBrake-bmmnjzrlaitphwcfpfkndzpwsyph/Build/Products/release/external/contrib/lib/libvorbisfile.a"; sourceTree = "<group>"; };
 		A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
 		A91CE2D11C7DABDA0068F46F /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		A91CE2D31C7DABE40068F46F /* libiconv.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.tbd; path = usr/lib/libiconv.tbd; sourceTree = SDKROOT; };
@@ -775,7 +765,6 @@
 				1C0695AF20BD193D001543DA /* libswresample.a in Frameworks */,
 				A91CE2D01C7DABCE0068F46F /* libbz2.tbd in Frameworks */,
 				A900E6BD1D7B1B5A00CB6C0A /* libopus.a in Frameworks */,
-				A91CE2CE1C7DABBC0068F46F /* libvorbisfile.a in Frameworks */,
 				A91CE2B31C7DABBC0068F46F /* libass.a in Frameworks */,
 				A91CE2B41C7DABBC0068F46F /* libavcodec.a in Frameworks */,
 				A91CE2B51C7DABBC0068F46F /* libavfilter.a in Frameworks */,
@@ -907,7 +896,6 @@
 				A91CE2D31C7DABE40068F46F /* libiconv.tbd */,
 				A91CE2D11C7DABDA0068F46F /* libz.tbd */,
 				A91CE2CF1C7DABCE0068F46F /* libbz2.tbd */,
-				A91CE2CC1C7DABBC0068F46F /* libvorbisfile.a */,
 				A9B34D74197696FE00871B7D /* DiskArbitration.framework */,
 				273F202F14ADB9790021BE6D /* AudioToolbox.framework */,
 				273F203B14ADBC210021BE6D /* Cocoa.framework */,
@@ -993,14 +981,6 @@
 			isa = PBXGroup;
 			children = (
 				275916DA14B2AB27007211E9 /* native.xcconfig */,
-				277A3FD014AE84C500A835E4 /* osx106.i386.xcconfig */,
-				277A3FD114AE84C500A835E4 /* osx106.x86_64.xcconfig */,
-				276941FA14B161B70027798C /* osx107.i386.xcconfig */,
-				277A3FD214AE84C500A835E4 /* osx107.x86_64.xcconfig */,
-				277EFE8917ED4F5D001D4A6A /* osx108.i386.xcconfig */,
-				277EFE8B17ED4F63001D4A6A /* osx108.x86_64.xcconfig */,
-				271E74EF182F260C0077C311 /* osx109.i386.xcconfig */,
-				271E74F0182F260C0077C311 /* osx109.x86_64.xcconfig */,
 				277EFE8D17ED5628001D4A6A /* supplemental.xcconfig */,
 			);
 			path = xcconfig;
@@ -1666,9 +1646,9 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"\"$(EXTERNAL_BUILD)/libhb/hb_dict.h\"",
-				"\"$(EXTERNAL_BUILD)/libhb/hb.h\"",
-				"\"$(EXTERNAL_BUILD)/macosx/Info.plist\"",
+				"$(EXTERNAL_BUILD)/libhb/hb_dict.h",
+				"$(EXTERNAL_BUILD)/libhb/hb.h",
+				"$(EXTERNAL_BUILD)/macosx/Info.plist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
