@@ -86,3 +86,52 @@
 }
 
 @end
+
+@implementation HBTimeInSecondsTransformer
+
++ (Class)transformedValueClass
+{
+    return [NSString class];
+}
+
+- (id)transformedValue:(id)value
+{
+    uint64_t duration = [value integerValue];
+    uint64_t hours    = duration / 3600;
+    uint64_t minutes  = (duration % 3600) / 60;
+    uint64_t seconds  = duration % 60;
+
+    NSString *result = [NSString stringWithFormat:@"%02llu:%02llu:%02llu", hours, minutes, seconds];
+    return result;
+}
+
++ (BOOL)allowsReverseTransformation
+{
+    return YES;
+}
+
+- (id)reverseTransformedValue:(id)value
+{
+    const char *time = [value UTF8String];
+    if (time)
+    {
+        unsigned hour, minute, second, timeval;
+
+        if (sscanf(time, "%2u:%u:%u", &hour, &minute, &second) < 3) {
+            if (sscanf(time, "%u:%u:%u", &hour, &minute, &second) < 3) {
+                return 0;
+            }
+        }
+
+        if (second > 60) {
+            second = 0;
+        }
+
+        timeval = hour * 60 * 60 + minute * 60 + second;
+
+        return @(timeval);
+    }
+    return @"00:00:00";
+}
+
+@end

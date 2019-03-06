@@ -22,3 +22,6 @@
 
 @interface HBTimeTransformer : NSValueTransformer
 @end
+
+@interface HBTimeInSecondsTransformer: NSValueTransformer
+@end

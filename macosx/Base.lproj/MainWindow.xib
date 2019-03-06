@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.59" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.68" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.59"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.68"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -228,9 +228,6 @@
                             <constraint firstAttribute="width" constant="54" id="siy-Fa-XFI"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" drawsBackground="YES" id="5492">
-                            <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="Fdv-uE-tUA">
-                                <real key="minimum" value="0.0"/>
-                            </numberFormatter>
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -242,10 +239,11 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="-2" name="value" keyPath="self.job.range.secondsStart" id="0Cj-wW-5Se">
+                            <binding destination="-2" name="value" keyPath="self.job.range.secondsStart" id="ETl-ke-STQ">
                                 <dictionary key="options">
                                     <bool key="NSContinuouslyUpdatesValue" value="YES"/>
                                     <bool key="NSValidatesImmediately" value="YES"/>
+                                    <string key="NSValueTransformerName">HBTimeInSecondsTransformer</string>
                                 </dictionary>
                             </binding>
                         </connections>
@@ -281,9 +279,6 @@
                     <textField hidden="YES" toolTip="Last second to encode." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5493" userLabel="Time End Encoding Field">
                         <rect key="frame" x="687" y="537" width="54" height="19"/>
                         <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="left" drawsBackground="YES" id="5494">
-                            <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="tD5-HN-B7h">
-                                <real key="minimum" value="0.0"/>
-                            </numberFormatter>
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -295,10 +290,11 @@
                                     <string key="NSValueTransformerName">NSNegateBoolean</string>
                                 </dictionary>
                             </binding>
-                            <binding destination="-2" name="value" keyPath="self.job.range.secondsStop" id="5SR-rs-7eh">
+                            <binding destination="-2" name="value" keyPath="self.job.range.secondsStop" id="AL1-NB-med">
                                 <dictionary key="options">
                                     <bool key="NSContinuouslyUpdatesValue" value="YES"/>
                                     <bool key="NSValidatesImmediately" value="YES"/>
+                                    <string key="NSValueTransformerName">HBTimeInSecondsTransformer</string>
                                 </dictionary>
                             </binding>
                         </connections>
