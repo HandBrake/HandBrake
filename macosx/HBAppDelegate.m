@@ -79,6 +79,14 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+    NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
+
+    // Reset "When done" action
+    if ([ud boolForKey:@"HBResetWhenDoneOnLaunch"])
+    {
+        [ud setInteger:HBDoneActionDoNothing forKey:@"HBAlertWhenDone"];
+    }
+
     if (@available (macOS 10.12.2, *))
     {
         NSApplication.sharedApplication.automaticCustomizeTouchBarMenuItemEnabled = YES;
@@ -94,7 +102,7 @@
     NSUInteger instances = [NSRunningApplication runningApplicationsWithBundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]].count;
 
     // Open debug output window now if it was visible when HB was closed
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"OutputPanelIsOpen"])
+    if ([ud boolForKey:@"OutputPanelIsOpen"])
         [self showOutputPanel:nil];
 
     // On Screen Notification
@@ -122,7 +130,7 @@
     else
     {
         // Open queue window now if it was visible when HB was closed
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"QueueWindowIsOpen"])
+        if ([ud boolForKey:@"QueueWindowIsOpen"])
             [self showQueueWindow:nil];
 
         [self showMainWindow:self];
@@ -131,7 +139,7 @@
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         // Remove encodes logs older than a month
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBClearOldLogs"])
+        if ([ud boolForKey:@"HBClearOldLogs"])
         {
             [self cleanEncodeLogs];
         }

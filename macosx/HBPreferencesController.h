@@ -6,6 +6,7 @@
 #import <Cocoa/Cocoa.h>
 
 typedef NS_ENUM(NSUInteger, HBDoneAction) {
+    HBDoneActionDoNothing = 0,
     HBDoneActionAlert = 1,
     HBDoneActionNotification = 2,
     HBDoneActionAlertAndNotification = 3,

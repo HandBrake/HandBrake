@@ -62,6 +62,7 @@
         @"HBLastSourceDirectory":           [NSKeyedArchiver archivedDataWithRootObject:desktopURL],
         @"DefaultAutoNaming":               @NO,
         @"HBAlertWhenDone":                 @(HBDoneActionNotification),
+        @"HBResetWhenDoneOnLaunch":         @NO,
         @"HBAlertWhenDoneSound":            @YES,
         @"LoggingLevel":                    @"1",
         @"HBClearOldLogs":                  @YES,
