@@ -69,7 +69,7 @@
         @"EncodeLogLocation":               @"NO",
         @"MinTitleScanSeconds":             @"10",
         @"PreviewsNumber":                  @"10",
-        @"x264CqSliderFractional":          @"0.50",
+        @"HBx264CqSliderFractional":        @2,
         @"HBShowAdvancedTab":               @NO,
         @"HBAutoNamingFormat":              @[@"{Source}", @" ", @"{Title}"],
         @"HBQueuePauseIfLowSpace":          @YES,

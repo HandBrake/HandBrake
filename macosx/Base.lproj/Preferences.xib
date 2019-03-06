@@ -392,17 +392,17 @@
                         </popUpButton>
                         <popUpButton toolTip="Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments." horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="387">
                             <rect key="frame" x="294" y="227" width="60" height="22"/>
-                            <popUpButtonCell key="cell" type="push" title="0.25" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="391" id="388">
+                            <popUpButtonCell key="cell" type="push" title="0.25" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="4" imageScaling="proportionallyDown" inset="2" selectedItem="391" id="388">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
                                 <menu key="menu" title="OtherViews" id="389">
                                     <items>
-                                        <menuItem title="1.0" id="394"/>
-                                        <menuItem title="0.50" id="393"/>
-                                        <menuItem title="0.25" state="on" id="391">
+                                        <menuItem title="1.0" tag="1" id="394"/>
+                                        <menuItem title="0.50" tag="2" id="393"/>
+                                        <menuItem title="0.25" state="on" tag="4" id="391">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
-                                        <menuItem title="0.20" id="390">
+                                        <menuItem title="0.20" tag="5" id="390">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                     </items>
@@ -410,7 +410,7 @@
                             </popUpButtonCell>
                             <connections>
                                 <accessibilityConnection property="title" destination="395" id="NVF-jL-QpH"/>
-                                <binding destination="61" name="selectedValue" keyPath="values.x264CqSliderFractional" id="397"/>
+                                <binding destination="61" name="selectedTag" keyPath="values.HBx264CqSliderFractional" id="XKV-6r-lP5"/>
                             </connections>
                         </popUpButton>
                         <button toolTip="Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare)." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="398">

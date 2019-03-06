@@ -49,7 +49,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 
         // Observe the x264 slider granularity, to update the slider when the pref is changed.
         [[NSUserDefaultsController sharedUserDefaultsController] addObserver:self
-                                                                  forKeyPath:@"values.x264CqSliderFractional"
+                                                                  forKeyPath:@"values.HBx264CqSliderFractional"
                                                                      options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                                                                      context:HBVideoControllerContext];
 
@@ -124,7 +124,7 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
                 fDisplayX264PresetsUnparseTextField.stringValue = @"";
             }
         }
-        else if ([keyPath isEqualToString:@"values.x264CqSliderFractional"])
+        else if ([keyPath isEqualToString:@"values.HBx264CqSliderFractional"])
         {
             [self setupQualitySlider];
         }
@@ -151,8 +151,8 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     {
          // Encoders that allow fractional CQ values often have a low granularity
          // which makes the slider hard to use, so use a value from preferences.
-        granularity = [[NSUserDefaults standardUserDefaults]
-                       floatForKey:@"x264CqSliderFractional"];
+        granularity = 1.0f / [[NSUserDefaults standardUserDefaults]
+                       integerForKey:@"HBx264CqSliderFractional"];
     }
     fVidQualitySlider.minValue = minValue;
     fVidQualitySlider.maxValue = maxValue;
