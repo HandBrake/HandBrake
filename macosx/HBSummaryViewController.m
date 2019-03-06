@@ -20,8 +20,6 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
 
 @interface HBSummaryViewController ()
 
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint *bottomOptionsConstrain;
-
 @property (nonatomic, strong) IBOutlet NSTextField *tracksLabel;
 @property (nonatomic, strong) IBOutlet NSTextField *filtersLabel;
 @property (nonatomic, strong) IBOutlet NSTextField *dimensionLabel;
@@ -46,7 +44,6 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
     if (self)
     {
         _labelColor = [NSColor disabledControlTextColor];
-
         _previewViewController = [[HBPreviewViewController alloc] init];
     }
     return self;
@@ -117,14 +114,6 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
     }
     else if (context == HBSummaryViewControllerContainerContext)
     {
-        if ([change[NSKeyValueChangeNewKey] integerValue] & 0x030000)
-        {
-            self.bottomOptionsConstrain.active = YES;
-        }
-        else
-        {
-            self.bottomOptionsConstrain.active = NO;
-        }
         [self updateTracks:nil];
     }
     else if (context == HBSummaryViewControllerVideoContext)

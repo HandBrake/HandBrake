@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14269.12" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.68" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14269.12"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.68"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBSummaryViewController">
             <connections>
-                <outlet property="bottomOptionsConstrain" destination="fRQ-Wj-Pis" id="ZDv-p3-Q7h"/>
                 <outlet property="dimensionLabel" destination="Jaw-pH-rhf" id="L85-25-Ec7"/>
                 <outlet property="filtersLabel" destination="BHq-Mt-3eA" id="EGb-du-wYa"/>
                 <outlet property="previewView" destination="m5a-0z-QQ4" id="1G9-3A-dM4"/>
@@ -19,244 +18,323 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="871" height="366"/>
+            <rect key="frame" x="0.0" y="0.0" width="883" height="366"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
-                <popUpButton toolTip="Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="txV-1R-WoD">
-                    <rect key="frame" x="66" y="330" width="136" height="22"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="JWl-qc-DOw"/>
-                    </constraints>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="4NR-1i-weK" id="tqd-2J-YTU">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="Q1Z-yT-7iY">
-                            <items>
-                                <menuItem state="on" id="4NR-1i-weK"/>
-                            </items>
-                        </menu>
-                    </popUpButtonCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="bpr-UY-4al" id="2Lk-cn-fRD"/>
-                        <binding destination="-2" name="enabled" keyPath="self.job" id="vIZ-WQ-JdM">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="selectedValue" keyPath="self.job.container" previousBinding="jJg-8o-rNS" id="bdl-aP-vCs">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBContainerTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="content" keyPath="self.job.containers" id="jJg-8o-rNS"/>
-                    </connections>
-                </popUpButton>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-UY-4al" userLabel="Format">
-                    <rect key="frame" x="18" y="334" width="45" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="RXJ-DZ-4mh">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="yCO-fl-3Lt"/>
-                    </connections>
-                </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="GCn-2c-Fql" userLabel="Tracks">
-                    <rect key="frame" x="18" y="249" width="45" height="14"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Tracks:" id="3mF-Bb-Gon">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="oGS-ya-5m8"/>
-                    </connections>
-                </textField>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="0kh-Uy-Yo3" userLabel="Filters">
-                    <rect key="frame" x="18" y="219" width="45" height="14"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Filters:" id="OCw-f6-uA0">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Y59-Gp-EZi"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="yRE-5c-FhX">
-                    <rect key="frame" x="67" y="249" width="214" height="14"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="210" id="I7F-Rh-oaP"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="xzc-qg-AMn">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <accessibility description="Tracks summary"/>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="yvf-9M-R6G"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="BHq-Mt-3eA">
-                    <rect key="frame" x="67" y="219" width="214" height="14"/>
-                    <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="RIB-ME-Yhh">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <accessibility description="Filters summary"/>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="lMO-Nm-o0r"/>
-                    </connections>
-                </textField>
-                <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m5a-0z-QQ4">
-                    <rect key="frame" x="287" y="16" width="564" height="334"/>
-                    <accessibility description="Preview"/>
-                </customView>
-                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="Jgq-K8-z3W" userLabel="Size">
-                    <rect key="frame" x="18" y="189" width="45" height="14"/>
-                    <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Size:" id="B4a-co-0ly">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="EMw-0U-JBu"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" preferredMaxLayoutWidth="170" translatesAutoresizingMaskIntoConstraints="NO" id="Jaw-pH-rhf">
-                    <rect key="frame" x="67" y="189" width="214" height="14"/>
-                    <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="xmy-Jl-mR4">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <accessibility description="Size summary"/>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="4UW-2D-uWZ"/>
-                    </connections>
-                </textField>
-                <customView translatesAutoresizingMaskIntoConstraints="NO" id="9OK-03-grs">
-                    <rect key="frame" x="69" y="279" width="210" height="48"/>
+                <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="20" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V6l-Pf-x6b">
+                    <rect key="frame" x="20" y="18" width="843" height="334"/>
                     <subviews>
-                        <button translatesAutoresizingMaskIntoConstraints="NO" id="lUi-Oc-208">
-                            <rect key="frame" x="-3" y="33" width="205" height="18"/>
-                            <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
-                            <buttonCell key="cell" type="check" title="Web Optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="wcc-5d-Dgj">
-                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                <font key="font" metaFont="smallSystem"/>
-                            </buttonCell>
-                            <connections>
-                                <binding destination="-2" name="enabled" keyPath="self.job" id="IF3-Zz-8Fc">
-                                    <dictionary key="options">
-                                        <string key="NSValueTransformerName">NSIsNotNil</string>
-                                    </dictionary>
-                                </binding>
-                                <binding destination="-2" name="value" keyPath="self.job.mp4HttpOptimize" id="LYj-Km-ze0"/>
-                                <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" previousBinding="IF3-Zz-8Fc" id="PQl-de-g6C">
-                                    <dictionary key="options">
-                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                    </dictionary>
-                                </binding>
-                            </connections>
-                        </button>
-                        <button translatesAutoresizingMaskIntoConstraints="NO" id="QKv-GR-d2g">
-                            <rect key="frame" x="-3" y="-3" width="205" height="18"/>
-                            <string key="toolTip">Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility.</string>
-                            <buttonCell key="cell" type="check" title="iPod 5G Support" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zz5-qY-GSA">
-                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                <font key="font" metaFont="smallSystem"/>
-                            </buttonCell>
-                            <connections>
-                                <binding destination="-2" name="enabled" keyPath="self.job" id="EiY-3n-cN6">
-                                    <dictionary key="options">
-                                        <string key="NSValueTransformerName">NSIsNotNil</string>
-                                    </dictionary>
-                                </binding>
-                                <binding destination="-2" name="value" keyPath="self.job.mp4iPodCompatible" id="bd3-gE-z8c"/>
-                                <binding destination="-2" name="hidden" keyPath="self.job.mp4iPodCompatibleEnabled" previousBinding="EiY-3n-cN6" id="P6W-O6-CHv">
-                                    <dictionary key="options">
-                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                    </dictionary>
-                                </binding>
-                            </connections>
-                        </button>
-                        <button translatesAutoresizingMaskIntoConstraints="NO" id="fPv-Vw-I89">
-                            <rect key="frame" x="-3" y="15" width="205" height="18"/>
-                            <string key="toolTip">Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</string>
-                            <buttonCell key="cell" type="check" title="Align A/V Start" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="De0-Je-MAm">
-                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                <font key="font" metaFont="smallSystem"/>
-                            </buttonCell>
-                            <connections>
-                                <binding destination="-2" name="enabled" keyPath="self.job" id="RwG-S7-r6y">
-                                    <dictionary key="options">
-                                        <string key="NSValueTransformerName">NSIsNotNil</string>
-                                    </dictionary>
-                                </binding>
-                                <binding destination="-2" name="value" keyPath="self.job.alignAVStart" id="lzG-ib-d7T"/>
-                                <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" previousBinding="RwG-S7-r6y" id="JjJ-W0-rqv">
-                                    <dictionary key="options">
-                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
-                                    </dictionary>
-                                </binding>
-                            </connections>
-                        </button>
+                        <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="13" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ksS-7u-OU5">
+                            <rect key="frame" x="0.0" y="181" width="259" height="153"/>
+                            <subviews>
+                                <stackView distribution="fill" orientation="vertical" alignment="trailing" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="t30-II-1w2">
+                                    <rect key="frame" x="0.0" y="81" width="189" height="72"/>
+                                    <subviews>
+                                        <stackView distribution="fill" orientation="horizontal" alignment="centerY" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Vuy-Er-bln">
+                                            <rect key="frame" x="0.0" y="54" width="189" height="18"/>
+                                            <subviews>
+                                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bpr-UY-4al" userLabel="Format">
+                                                    <rect key="frame" x="-2" y="2" width="45" height="14"/>
+                                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Format:" id="RXJ-DZ-4mh">
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                                    </textFieldCell>
+                                                    <connections>
+                                                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="yCO-fl-3Lt"/>
+                                                    </connections>
+                                                </textField>
+                                                <popUpButton toolTip="Container format. Video, audio, and other tracks are combined into a single file of this type. Affects compatibility." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="txV-1R-WoD">
+                                                    <rect key="frame" x="46" y="-3" width="146" height="22"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="em9-IL-zmS"/>
+                                                    </constraints>
+                                                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" state="on" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="4NR-1i-weK" id="tqd-2J-YTU">
+                                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <menu key="menu" title="OtherViews" id="Q1Z-yT-7iY">
+                                                            <items>
+                                                                <menuItem state="on" id="4NR-1i-weK"/>
+                                                            </items>
+                                                        </menu>
+                                                    </popUpButtonCell>
+                                                    <connections>
+                                                        <accessibilityConnection property="title" destination="bpr-UY-4al" id="2Lk-cn-fRD"/>
+                                                        <binding destination="-2" name="enabled" keyPath="self.job" id="vIZ-WQ-JdM">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="selectedValue" keyPath="self.job.container" previousBinding="jJg-8o-rNS" id="bdl-aP-vCs">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">HBContainerTransformer</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="content" keyPath="self.job.containers" id="jJg-8o-rNS"/>
+                                                    </connections>
+                                                </popUpButton>
+                                            </subviews>
+                                            <visibilityPriorities>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                            </visibilityPriorities>
+                                            <customSpacing>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                            </customSpacing>
+                                        </stackView>
+                                        <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="6" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M1l-8s-m3Z">
+                                            <rect key="frame" x="49" y="0.0" width="140" height="48"/>
+                                            <subviews>
+                                                <button translatesAutoresizingMaskIntoConstraints="NO" id="lUi-Oc-208">
+                                                    <rect key="frame" x="-3" y="33" width="103" height="18"/>
+                                                    <string key="toolTip">Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file.</string>
+                                                    <buttonCell key="cell" type="check" title="Web Optimized" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="wcc-5d-Dgj">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <binding destination="-2" name="enabled" keyPath="self.job" id="IF3-Zz-8Fc">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="value" keyPath="self.job.mp4HttpOptimize" id="LYj-Km-ze0"/>
+                                                        <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" previousBinding="IF3-Zz-8Fc" id="PQl-de-g6C">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                    </connections>
+                                                </button>
+                                                <button translatesAutoresizingMaskIntoConstraints="NO" id="fPv-Vw-I89">
+                                                    <rect key="frame" x="-3" y="15" width="100" height="18"/>
+                                                    <string key="toolTip">Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</string>
+                                                    <buttonCell key="cell" type="check" title="Align A/V Start" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="De0-Je-MAm">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <binding destination="-2" name="enabled" keyPath="self.job" id="RwG-S7-r6y">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="value" keyPath="self.job.alignAVStart" id="lzG-ib-d7T"/>
+                                                        <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" previousBinding="RwG-S7-r6y" id="JjJ-W0-rqv">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                    </connections>
+                                                </button>
+                                                <button translatesAutoresizingMaskIntoConstraints="NO" id="QKv-GR-d2g">
+                                                    <rect key="frame" x="-3" y="-3" width="109" height="18"/>
+                                                    <string key="toolTip">Add a special MP4 marker to allow playback on vintage iPod 5th Generation devices circa 2006. Other settings may affect compatibility.</string>
+                                                    <buttonCell key="cell" type="check" title="iPod 5G Support" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zz5-qY-GSA">
+                                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                        <font key="font" metaFont="smallSystem"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <binding destination="-2" name="enabled" keyPath="self.job" id="EiY-3n-cN6">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                        <binding destination="-2" name="value" keyPath="self.job.mp4iPodCompatible" id="bd3-gE-z8c"/>
+                                                        <binding destination="-2" name="hidden" keyPath="self.job.mp4iPodCompatibleEnabled" previousBinding="EiY-3n-cN6" id="P6W-O6-CHv">
+                                                            <dictionary key="options">
+                                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                            </dictionary>
+                                                        </binding>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <visibilityPriorities>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                                <integer value="1000"/>
+                                            </visibilityPriorities>
+                                            <customSpacing>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                                <real value="3.4028234663852886e+38"/>
+                                            </customSpacing>
+                                            <connections>
+                                                <binding destination="-2" name="hidden" keyPath="self.job.mp4OptionsEnabled" id="Boc-dA-C5S">
+                                                    <dictionary key="options">
+                                                        <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                                    </dictionary>
+                                                </binding>
+                                            </connections>
+                                        </stackView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="M1l-8s-m3Z" firstAttribute="leading" secondItem="txV-1R-WoD" secondAttribute="leading" id="BJz-S1-bm3"/>
+                                    </constraints>
+                                    <visibilityPriorities>
+                                        <integer value="1000"/>
+                                        <integer value="1000"/>
+                                    </visibilityPriorities>
+                                    <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
+                                        <real value="3.4028234663852886e+38"/>
+                                    </customSpacing>
+                                </stackView>
+                                <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u22-zk-2gT">
+                                    <rect key="frame" x="0.0" y="54" width="259" height="14"/>
+                                    <subviews>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GCn-2c-Fql" userLabel="Tracks">
+                                            <rect key="frame" x="-2" y="0.0" width="45" height="14"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Tracks:" id="3mF-Bb-Gon">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <binding destination="-2" name="textColor" keyPath="self.labelColor" id="oGS-ya-5m8"/>
+                                            </connections>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="yRE-5c-FhX">
+                                            <rect key="frame" x="47" y="0.0" width="214" height="14"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="210" id="gqV-xA-TUl"/>
+                                            </constraints>
+                                            <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="xzc-qg-AMn">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <accessibility description="Tracks summary"/>
+                                            <connections>
+                                                <binding destination="-2" name="textColor" keyPath="self.labelColor" id="yvf-9M-R6G"/>
+                                            </connections>
+                                        </textField>
+                                    </subviews>
+                                    <visibilityPriorities>
+                                        <integer value="1000"/>
+                                        <integer value="1000"/>
+                                    </visibilityPriorities>
+                                    <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
+                                        <real value="3.4028234663852886e+38"/>
+                                    </customSpacing>
+                                </stackView>
+                                <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PVH-BQ-dOC">
+                                    <rect key="frame" x="0.0" y="27" width="259" height="14"/>
+                                    <subviews>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0kh-Uy-Yo3" userLabel="Filters">
+                                            <rect key="frame" x="-2" y="0.0" width="45" height="14"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Filters:" id="OCw-f6-uA0">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Y59-Gp-EZi"/>
+                                            </connections>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="BHq-Mt-3eA">
+                                            <rect key="frame" x="47" y="0.0" width="214" height="14"/>
+                                            <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="RIB-ME-Yhh">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <accessibility description="Filters summary"/>
+                                            <connections>
+                                                <binding destination="-2" name="textColor" keyPath="self.labelColor" id="lMO-Nm-o0r"/>
+                                            </connections>
+                                        </textField>
+                                    </subviews>
+                                    <visibilityPriorities>
+                                        <integer value="1000"/>
+                                        <integer value="1000"/>
+                                    </visibilityPriorities>
+                                    <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
+                                        <real value="3.4028234663852886e+38"/>
+                                    </customSpacing>
+                                </stackView>
+                                <stackView distribution="fill" orientation="horizontal" alignment="top" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8JZ-RV-cxj">
+                                    <rect key="frame" x="0.0" y="0.0" width="259" height="14"/>
+                                    <subviews>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Jgq-K8-z3W" userLabel="Size">
+                                            <rect key="frame" x="-2" y="0.0" width="45" height="14"/>
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Size:" id="B4a-co-0ly">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <connections>
+                                                <binding destination="-2" name="textColor" keyPath="self.labelColor" id="EMw-0U-JBu"/>
+                                            </connections>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Jaw-pH-rhf">
+                                            <rect key="frame" x="47" y="0.0" width="214" height="14"/>
+                                            <textFieldCell key="cell" controlSize="mini" selectable="YES" sendsActionOnEndEditing="YES" title="None" id="xmy-Jl-mR4">
+                                                <font key="font" metaFont="smallSystem"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                            <accessibility description="Size summary"/>
+                                            <connections>
+                                                <binding destination="-2" name="textColor" keyPath="self.labelColor" id="4UW-2D-uWZ"/>
+                                            </connections>
+                                        </textField>
+                                    </subviews>
+                                    <visibilityPriorities>
+                                        <integer value="1000"/>
+                                        <integer value="1000"/>
+                                    </visibilityPriorities>
+                                    <customSpacing>
+                                        <real value="3.4028234663852886e+38"/>
+                                        <real value="3.4028234663852886e+38"/>
+                                    </customSpacing>
+                                </stackView>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="yRE-5c-FhX" firstAttribute="width" secondItem="BHq-Mt-3eA" secondAttribute="width" id="92O-ob-Erd"/>
+                                <constraint firstItem="0kh-Uy-Yo3" firstAttribute="width" secondItem="Jgq-K8-z3W" secondAttribute="width" id="WoV-bO-QqT"/>
+                                <constraint firstItem="Jaw-pH-rhf" firstAttribute="width" secondItem="BHq-Mt-3eA" secondAttribute="width" id="j6Y-bb-0Kb"/>
+                                <constraint firstItem="GCn-2c-Fql" firstAttribute="width" secondItem="0kh-Uy-Yo3" secondAttribute="width" id="q6E-r3-ucu"/>
+                                <constraint firstItem="bpr-UY-4al" firstAttribute="width" secondItem="GCn-2c-Fql" secondAttribute="width" id="xZ2-bC-3Qy"/>
+                            </constraints>
+                            <visibilityPriorities>
+                                <integer value="1000"/>
+                                <integer value="1000"/>
+                                <integer value="1000"/>
+                                <integer value="1000"/>
+                            </visibilityPriorities>
+                            <customSpacing>
+                                <real value="3.4028234663852886e+38"/>
+                                <real value="3.4028234663852886e+38"/>
+                                <real value="3.4028234663852886e+38"/>
+                                <real value="3.4028234663852886e+38"/>
+                            </customSpacing>
+                        </stackView>
+                        <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m5a-0z-QQ4">
+                            <rect key="frame" x="279" y="0.0" width="564" height="334"/>
+                            <accessibility description="Preview"/>
+                        </customView>
                     </subviews>
-                    <constraints>
-                        <constraint firstItem="lUi-Oc-208" firstAttribute="width" secondItem="QKv-GR-d2g" secondAttribute="width" id="6B4-6F-d1r"/>
-                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fPv-Vw-I89" secondAttribute="trailing" constant="10" id="Apa-Yn-CNO"/>
-                        <constraint firstAttribute="trailing" secondItem="lUi-Oc-208" secondAttribute="trailing" constant="10" id="DVl-wu-O0z"/>
-                        <constraint firstItem="lUi-Oc-208" firstAttribute="width" secondItem="fPv-Vw-I89" secondAttribute="width" id="O7b-Be-Tb0"/>
-                        <constraint firstItem="fPv-Vw-I89" firstAttribute="top" secondItem="lUi-Oc-208" secondAttribute="bottom" constant="6" id="ON4-tC-jGx"/>
-                        <constraint firstAttribute="height" priority="250" id="Pmh-ss-VSz"/>
-                        <constraint firstItem="QKv-GR-d2g" firstAttribute="top" secondItem="fPv-Vw-I89" secondAttribute="bottom" constant="6" id="Svh-gm-4QO"/>
-                        <constraint firstItem="lUi-Oc-208" firstAttribute="top" secondItem="9OK-03-grs" secondAttribute="top" id="ToU-SS-Vfu"/>
-                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="QKv-GR-d2g" secondAttribute="trailing" constant="10" id="YHA-pt-eTX"/>
-                        <constraint firstAttribute="bottom" secondItem="QKv-GR-d2g" secondAttribute="bottom" id="fRQ-Wj-Pis"/>
-                        <constraint firstItem="fPv-Vw-I89" firstAttribute="leading" secondItem="lUi-Oc-208" secondAttribute="leading" id="gqB-mT-Ukd"/>
-                        <constraint firstItem="lUi-Oc-208" firstAttribute="leading" secondItem="9OK-03-grs" secondAttribute="leading" id="h93-5a-HbT"/>
-                        <constraint firstItem="QKv-GR-d2g" firstAttribute="leading" secondItem="lUi-Oc-208" secondAttribute="leading" id="h94-9l-arp"/>
-                    </constraints>
-                </customView>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
             </subviews>
             <constraints>
-                <constraint firstItem="m5a-0z-QQ4" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="16" id="2Lv-KO-aKx"/>
-                <constraint firstItem="0kh-Uy-Yo3" firstAttribute="width" secondItem="bpr-UY-4al" secondAttribute="width" id="3C6-tC-wvc"/>
-                <constraint firstItem="bpr-UY-4al" firstAttribute="baseline" secondItem="txV-1R-WoD" secondAttribute="baseline" id="5R4-0i-jLq"/>
-                <constraint firstAttribute="bottom" secondItem="m5a-0z-QQ4" secondAttribute="bottom" constant="16" id="8OB-rB-CmU"/>
-                <constraint firstItem="yRE-5c-FhX" firstAttribute="top" secondItem="9OK-03-grs" secondAttribute="bottom" constant="16" id="AHo-Iy-t0F"/>
-                <constraint firstItem="BHq-Mt-3eA" firstAttribute="width" secondItem="yRE-5c-FhX" secondAttribute="width" id="EmD-2D-gyj"/>
-                <constraint firstItem="Jgq-K8-z3W" firstAttribute="width" secondItem="bpr-UY-4al" secondAttribute="width" id="FW9-Qf-7Hf"/>
-                <constraint firstAttribute="trailing" secondItem="m5a-0z-QQ4" secondAttribute="trailing" constant="20" id="GYQ-6W-S3N"/>
-                <constraint firstItem="GCn-2c-Fql" firstAttribute="width" secondItem="bpr-UY-4al" secondAttribute="width" id="HE8-Du-yhU"/>
-                <constraint firstItem="txV-1R-WoD" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="trailing" constant="8" symbolic="YES" id="I9H-1U-iqt"/>
-                <constraint firstItem="BHq-Mt-3eA" firstAttribute="top" secondItem="yRE-5c-FhX" secondAttribute="bottom" constant="16" id="IVl-m1-yLo"/>
-                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" secondItem="yRE-5c-FhX" secondAttribute="trailing" constant="8" symbolic="YES" id="J92-rN-Hgk"/>
-                <constraint firstItem="9OK-03-grs" firstAttribute="top" secondItem="txV-1R-WoD" secondAttribute="bottom" constant="6" id="MgV-fX-yfE"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Jaw-pH-rhf" secondAttribute="trailing" constant="20" symbolic="YES" id="Ndp-Pa-1Wq"/>
-                <constraint firstItem="yRE-5c-FhX" firstAttribute="leading" secondItem="GCn-2c-Fql" secondAttribute="trailing" constant="8" id="Ok2-zj-HHS"/>
-                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="Jaw-pH-rhf" secondAttribute="bottom" constant="8" id="U19-5y-ann"/>
-                <constraint firstItem="bpr-UY-4al" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="18" id="VFQ-Vg-ESJ"/>
-                <constraint firstItem="0kh-Uy-Yo3" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="ZSW-w5-hfn"/>
-                <constraint firstItem="Jaw-pH-rhf" firstAttribute="leading" secondItem="Jgq-K8-z3W" secondAttribute="trailing" constant="8" id="beE-wT-2DH"/>
-                <constraint firstItem="BHq-Mt-3eA" firstAttribute="leading" secondItem="0kh-Uy-Yo3" secondAttribute="trailing" constant="8" id="dZN-9S-z89"/>
-                <constraint firstItem="9OK-03-grs" firstAttribute="leading" secondItem="txV-1R-WoD" secondAttribute="leading" id="f5M-zK-Y35"/>
-                <constraint firstItem="Jaw-pH-rhf" firstAttribute="top" secondItem="BHq-Mt-3eA" secondAttribute="bottom" constant="16" id="htU-Bs-Wje"/>
-                <constraint firstItem="GCn-2c-Fql" firstAttribute="top" secondItem="yRE-5c-FhX" secondAttribute="top" id="jTa-bA-Weo"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="BHq-Mt-3eA" secondAttribute="trailing" constant="20" symbolic="YES" id="l0V-AR-5yD"/>
-                <constraint firstItem="Jgq-K8-z3W" firstAttribute="top" secondItem="Jaw-pH-rhf" secondAttribute="top" id="l2y-8G-v9J"/>
-                <constraint firstItem="0kh-Uy-Yo3" firstAttribute="top" secondItem="BHq-Mt-3eA" secondAttribute="top" id="nwz-Xj-cMt"/>
-                <constraint firstItem="Jgq-K8-z3W" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="ogm-2d-HB7"/>
-                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" secondItem="9OK-03-grs" secondAttribute="trailing" constant="8" symbolic="YES" id="onT-fu-ioj"/>
-                <constraint firstItem="bpr-UY-4al" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="ptr-Mh-cla"/>
-                <constraint firstItem="Jaw-pH-rhf" firstAttribute="width" secondItem="yRE-5c-FhX" secondAttribute="width" id="tyw-5Q-kCp"/>
-                <constraint firstItem="GCn-2c-Fql" firstAttribute="leading" secondItem="bpr-UY-4al" secondAttribute="leading" id="utH-I5-f9B"/>
-                <constraint firstItem="m5a-0z-QQ4" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="txV-1R-WoD" secondAttribute="trailing" constant="16" id="vr4-76-FcH"/>
+                <constraint firstAttribute="bottom" secondItem="V6l-Pf-x6b" secondAttribute="bottom" constant="18" id="7oG-cF-ubM"/>
+                <constraint firstAttribute="trailing" secondItem="V6l-Pf-x6b" secondAttribute="trailing" constant="20" id="Tjh-em-eBh"/>
+                <constraint firstItem="V6l-Pf-x6b" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="XPg-bY-4Pm"/>
+                <constraint firstItem="V6l-Pf-x6b" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="14" id="YMe-A4-2v9"/>
             </constraints>
-            <point key="canvasLocation" x="-51.5" y="-145"/>
+            <point key="canvasLocation" x="-88.5" y="-145"/>
         </customView>
     </objects>
 </document>
