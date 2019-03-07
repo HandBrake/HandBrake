@@ -1389,6 +1389,41 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         }
     }
 
+    // Chroma Smooth filter
+    const char *chroma_smooth_preset, *chroma_smooth_tune, *chroma_smooth_custom;
+    chroma_smooth_preset = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureChromaSmoothPreset"));
+    chroma_smooth_tune   = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureChromaSmoothTune"));
+    chroma_smooth_custom = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureChromaSmoothCustom"));
+    if (chroma_smooth_preset != NULL &&
+        strcasecmp(chroma_smooth_preset, "off"))
+    {
+        int filter_id = HB_FILTER_CHROMA_SMOOTH;
+        filter_settings = hb_generate_filter_settings(filter_id,
+                            chroma_smooth_preset, chroma_smooth_tune, chroma_smooth_custom);
+        if (filter_settings == NULL)
+        {
+            hb_error("Invalid chroma smooth filter settings (%s%s%s)",
+                     chroma_smooth_preset,
+                     chroma_smooth_tune ? "," : "",
+                     chroma_smooth_tune ? chroma_smooth_tune : "");
+            return -1;
+        }
+        else if (!hb_dict_get_bool(filter_settings, "disable"))
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+        else
+        {
+            hb_value_free(&filter_settings);
+        }
+    }
+
     // Sharpen filter
     const char *sharpen_filter, *sharpen_preset, *sharpen_tune, *sharpen_custom;
     sharpen_filter = hb_value_get_string(hb_dict_get(preset,

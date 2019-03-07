@@ -453,6 +453,7 @@ extern hb_filter_object_t hb_filter_vfr;
 extern hb_filter_object_t hb_filter_deblock;
 extern hb_filter_object_t hb_filter_denoise;
 extern hb_filter_object_t hb_filter_nlmeans;
+extern hb_filter_object_t hb_filter_chroma_smooth;
 extern hb_filter_object_t hb_filter_render_sub;
 extern hb_filter_object_t hb_filter_crop_scale;
 extern hb_filter_object_t hb_filter_rotate;

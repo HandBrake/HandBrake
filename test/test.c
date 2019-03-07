@@ -46,16 +46,17 @@
 #include <sys/mount.h>
 #endif
 
-#define LAPSHARP_DEFAULT_PRESET     "medium"
-#define UNSHARP_DEFAULT_PRESET      "medium"
-#define NLMEANS_DEFAULT_PRESET      "medium"
-#define DEINTERLACE_DEFAULT_PRESET  "default"
-#define DECOMB_DEFAULT_PRESET       "default"
-#define DETELECINE_DEFAULT_PRESET   "default"
-#define COMB_DETECT_DEFAULT_PRESET  "default"
-#define HQDN3D_DEFAULT_PRESET       "medium"
-#define ROTATE_DEFAULT              "angle=180:hflip=0"
-#define DEBLOCK_DEFAULT             "qp=5"
+#define LAPSHARP_DEFAULT_PRESET      "medium"
+#define UNSHARP_DEFAULT_PRESET       "medium"
+#define CHROMA_SMOOTH_DEFAULT_PRESET "medium"
+#define NLMEANS_DEFAULT_PRESET       "medium"
+#define DEINTERLACE_DEFAULT_PRESET   "default"
+#define DECOMB_DEFAULT_PRESET        "default"
+#define DETELECINE_DEFAULT_PRESET    "default"
+#define COMB_DETECT_DEFAULT_PRESET   "default"
+#define HQDN3D_DEFAULT_PRESET        "medium"
+#define ROTATE_DEFAULT               "angle=180:hflip=0"
+#define DEBLOCK_DEFAULT              "qp=5"
 
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
@@ -86,6 +87,10 @@ static int     nlmeans_disable     = 0;
 static int     nlmeans_custom      = 0;
 static char *  nlmeans             = NULL;
 static char *  nlmeans_tune        = NULL;
+static int     chroma_smooth_disable = 0;
+static int     chroma_smooth_custom  = 0;
+static char *  chroma_smooth         = NULL;
+static char *  chroma_smooth_tune    = NULL;
 static int     unsharp_disable     = 0;
 static int     unsharp_custom      = 0;
 static char *  unsharp             = NULL;
@@ -618,6 +623,8 @@ cleanup:
     free(hqdn3d);
     free(nlmeans);
     free(nlmeans_tune);
+    free(chroma_smooth);
+    free(chroma_smooth_tune);
     free(unsharp);
     free(unsharp_tune);
     free(lapsharp);
@@ -1191,6 +1198,9 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_LAPSHARP:
             preset = LAPSHARP_DEFAULT_PRESET;
             break;
+        case HB_FILTER_CHROMA_SMOOTH:
+            preset = CHROMA_SMOOTH_DEFAULT_PRESET;
+            break;
         case HB_FILTER_NLMEANS:
             preset = NLMEANS_DEFAULT_PRESET;
             break;
@@ -1216,6 +1226,7 @@ static void showFilterDefault(FILE* const out, int filter_id)
     {
         case HB_FILTER_DEINTERLACE:
         case HB_FILTER_NLMEANS:
+        case HB_FILTER_CHROMA_SMOOTH:
         case HB_FILTER_UNSHARP:
         case HB_FILTER_LAPSHARP:
         case HB_FILTER_DECOMB:
@@ -1716,6 +1727,18 @@ static void ShowHelp()
     fprintf( out,
 "                           Applies to NLMeans presets only (does not affect\n"
 "                           custom settings)\n"
+"   --chroma-smooth[=string]      Sharpen video with chroma smooth filter\n");
+    showFilterPresets(out, HB_FILTER_CHROMA_SMOOTH);
+    showFilterKeys(out, HB_FILTER_CHROMA_SMOOTH);
+    showFilterDefault(out, HB_FILTER_CHROMA_SMOOTH);
+    fprintf( out,
+
+"   --no-chroma-smooth            Disable preset chroma smooth filter\n"
+"   --chroma-smooth-tune <string> Tune chroma smooth filter\n");
+    showFilterTunes(out, HB_FILTER_CHROMA_SMOOTH);
+    fprintf( out,
+"                                 Applies to chroma smooth presets only (does\n"
+"                                 not affect custom settings)\n"
 "   --unsharp[=string]      Sharpen video with unsharp filter\n");
     showFilterPresets(out, HB_FILTER_UNSHARP);
     showFilterKeys(out, HB_FILTER_UNSHARP);
@@ -2126,6 +2149,8 @@ static int ParseOptions( int argc, char ** argv )
     #define SSA_LANG             319
     #define SSA_DEFAULT          320
     #define SSA_BURN             321
+    #define FILTER_CHROMA_SMOOTH      322
+    #define FILTER_CHROMA_SMOOTH_TUNE 323
 
     for( ;; )
     {
@@ -2208,6 +2233,9 @@ static int ParseOptions( int argc, char ** argv )
             { "nlmeans",     optional_argument, NULL,    FILTER_NLMEANS },
             { "no-nlmeans",  no_argument,       &nlmeans_disable,     1 },
             { "nlmeans-tune",required_argument, NULL,    FILTER_NLMEANS_TUNE },
+            { "chroma-smooth",     optional_argument, NULL, FILTER_CHROMA_SMOOTH },
+            { "no-chroma-smooth",  no_argument,       &chroma_smooth_disable,     1 },
+            { "chroma-smooth-tune",required_argument, NULL, FILTER_CHROMA_SMOOTH_TUNE },
             { "unsharp",     optional_argument, NULL,    FILTER_UNSHARP },
             { "no-unsharp",  no_argument,       &unsharp_disable,     1 },
             { "unsharp-tune",required_argument, NULL,    FILTER_UNSHARP_TUNE },
@@ -2685,6 +2713,21 @@ static int ParseOptions( int argc, char ** argv )
             case FILTER_NLMEANS_TUNE:
                 free(nlmeans_tune);
                 nlmeans_tune = strdup(optarg);
+                break;
+            case FILTER_CHROMA_SMOOTH:
+                free(chroma_smooth);
+                if (optarg != NULL)
+                {
+                    chroma_smooth = strdup(optarg);
+                }
+                else
+                {
+                    chroma_smooth = strdup(CHROMA_SMOOTH_DEFAULT_PRESET);
+                }
+                break;
+            case FILTER_CHROMA_SMOOTH_TUNE:
+                free(chroma_smooth_tune);
+                chroma_smooth_tune = strdup(optarg);
                 break;
             case FILTER_UNSHARP:
                 free(unsharp);
@@ -3213,6 +3256,32 @@ static int ParseOptions( int argc, char ** argv )
         else
         {
             fprintf(stderr, "Invalid nlmeans option %s\n", nlmeans);
+            return -1;
+        }
+    }
+
+    if (chroma_smooth != NULL)
+    {
+        if (chroma_smooth_disable)
+        {
+            fprintf(stderr,
+                    "Incompatible options --chroma-smooth and --no-chroma-smooth\n");
+            return -1;
+        }
+        if (!hb_validate_filter_preset(HB_FILTER_CHROMA_SMOOTH, chroma_smooth,
+                                       chroma_smooth_tune, NULL))
+        {
+            // Nothing to do, but must validate preset before
+            // attempting to validate custom settings to prevent potential
+            // false positive
+        }
+        else if (!hb_validate_filter_string(HB_FILTER_CHROMA_SMOOTH, chroma_smooth))
+        {
+            chroma_smooth_custom = 1;
+        }
+        else
+        {
+            fprintf(stderr, "Invalid chroma smooth option %s\n", chroma_smooth);
             return -1;
         }
     }
@@ -4257,6 +4326,30 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                         hb_value_string("custom"));
             hb_dict_set(preset, "PictureDenoiseCustom",
                         hb_value_string(nlmeans));
+        }
+    }
+    if (chroma_smooth_disable)
+    {
+        hb_dict_set(preset, "PictureChromaSmoothPreset", hb_value_string("off"));
+    }
+    if (chroma_smooth != NULL)
+    {
+        if (!chroma_smooth_custom)
+        {
+            hb_dict_set(preset, "PictureChromaSmoothPreset",
+                        hb_value_string(chroma_smooth));
+            if (chroma_smooth_tune != NULL)
+            {
+                hb_dict_set(preset, "PictureChromaSmoothTune",
+                            hb_value_string(chroma_smooth_tune));
+            }
+        }
+        else
+        {
+            hb_dict_set(preset, "PictureChromaSmoothPreset",
+                        hb_value_string("custom"));
+            hb_dict_set(preset, "PictureChromaSmoothCustom",
+                        hb_value_string(chroma_smooth));
         }
     }
     if (unsharp_disable && !strcasecmp(s, "unsharp"))

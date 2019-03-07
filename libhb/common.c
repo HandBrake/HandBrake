@@ -4101,6 +4101,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_nlmeans;
             break;
 
+        case HB_FILTER_CHROMA_SMOOTH:
+            filter = &hb_filter_chroma_smooth;
+            break;
+
         case HB_FILTER_RENDER_SUB:
             filter = &hb_filter_render_sub;
             break;
@@ -4164,6 +4168,7 @@ hb_filter_object_t * hb_filter_init( int filter_id )
     {
         case HB_FILTER_UNSHARP:
         case HB_FILTER_LAPSHARP:
+        case HB_FILTER_CHROMA_SMOOTH:
         {
             hb_filter_object_t * wrapper;
 
