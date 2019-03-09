@@ -29,6 +29,9 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging;
+    using HandBrakeWPF.Services.Logging.Interfaces;
+    using HandBrakeWPF.Services.Logging.Model;
     using HandBrakeWPF.Services.Presets.Factories;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
@@ -43,10 +46,6 @@ namespace HandBrakeWPF.Services.Presets
     /// </summary>
     public class PresetService : IPresetService
     {
-        // TODO Strip out the error handling from this service and let upstream UI layer handle it.
-
-        #region Private Variables
-
         public const int ForcePresetReset = 3;
         public static string UserPresetCatgoryName = "Custom Presets";
         private readonly string presetFile = Path.Combine(DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly()), "presets.json");
@@ -55,8 +54,8 @@ namespace HandBrakeWPF.Services.Presets
         private readonly List<Preset> flatPresetList = new List<Preset>();
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
+        private ILog log = LogService.GetLogger();
 
-        #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PresetService"/> class.
@@ -94,8 +93,6 @@ namespace HandBrakeWPF.Services.Presets
                 return this.flatPresetList.FirstOrDefault(p => p.IsDefault);
             }
         }
-
-        #region Public Methods
 
         /// <summary>
         /// The load.
@@ -487,6 +484,7 @@ namespace HandBrakeWPF.Services.Presets
             // Verify we have presets.
             if (this.presets.Count == 0)
             {
+                this.ServiceLogMessage("Failed to load built-in presets.");
                 throw new GeneralApplicationException("Failed to load built-in presets.", "Restarting HandBrake may resolve this issue", null);
             }
 
@@ -601,10 +599,6 @@ namespace HandBrakeWPF.Services.Presets
             return categoriesList;
         }
 
-        #endregion
-
-        #region Private Helpers
-
         /// <summary>
         /// Recover from a corrupted preset file
         /// Add .old to the current filename, and delete the current file.
@@ -632,8 +626,9 @@ namespace HandBrakeWPF.Services.Presets
 
                 return disabledFile;
             }
-            catch (IOException)
+            catch (IOException e)
             {
+                this.ServiceLogMessage(e.ToString());
                 // Give up
             }
 
@@ -694,13 +689,14 @@ namespace HandBrakeWPF.Services.Presets
                     }
                     catch (Exception exc)
                     {
-                        Debug.WriteLine("Failed to parse presets file: " + exc);
+                        this.ServiceLogMessage("Corrupted Presets File Detected: " + Environment.NewLine + exc);
                     }
                 }
 
                 // Sanity Check. Did the container deserialise.
-                if (container == null || container.PresetList == null)
+                if (container?.PresetList == null)
                 {
+                    this.ServiceLogMessage("Attempting Preset Recovery ...");
                     string filename = this.RecoverFromCorruptedPresetFile(this.presetFile);
                     this.errorService.ShowMessageBox(
                         Resources.PresetService_UnableToLoadPresets + filename,
@@ -709,6 +705,7 @@ namespace HandBrakeWPF.Services.Presets
                         MessageBoxImage.Exclamation);
 
                     this.UpdateBuiltInPresets();
+                    this.ServiceLogMessage("Recovery Completed!");
                     return; // Update built-in presets stores the presets locally, so just return.
                 }
 
@@ -749,7 +746,7 @@ namespace HandBrakeWPF.Services.Presets
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
+                this.ServiceLogMessage(ex.ToString());
                 this.RecoverFromCorruptedPresetFile(this.presetFile);
                 this.UpdateBuiltInPresets();
             }
@@ -858,7 +855,6 @@ namespace HandBrakeWPF.Services.Presets
             }
             catch (Exception exc)
             {
-                Debug.WriteLine(exc);
                 throw new GeneralApplicationException("Unable to write to the presets file.", "The details section below may indicate why this error has occurred.", exc);
             }
         }
@@ -937,6 +933,9 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        #endregion
+        protected void ServiceLogMessage(string message)
+        {
+            this.log.LogMessage(string.Format("Preset Service: {0}{1}{0}", Environment.NewLine, message), LogMessageType.Application, LogLevel.Info);
+        }
     }
 }
