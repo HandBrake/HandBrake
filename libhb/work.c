@@ -152,9 +152,9 @@ static void work_func( void * _work )
             *(work->current_job) = job;
             InitWorkState(job->h, job->pass_id, pass + 1, pass_count);
             do_job( job );
-            *(work->current_job) = NULL;
         }
         SetWorkStateInfo(job);
+        *(work->current_job) = NULL;
 
         // Clean job passes
         for (pass = 0; pass < pass_count; pass++)
