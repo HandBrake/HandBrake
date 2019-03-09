@@ -70,7 +70,9 @@
 #include <linux/cdrom.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
+#ifdef USE_QSV
 #include <libdrm/drm.h>
+#endif
 #elif defined( SYS_OPENBSD )
 #include <sys/dvdio.h>
 #include <fcntl.h>
