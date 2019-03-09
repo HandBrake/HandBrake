@@ -97,7 +97,11 @@ namespace HandBrakeWPF
             // Portable Mode
             if (Portable.IsPortable())
             {
-                Portable.Initialise();
+                if(!Portable.Initialise())
+                {
+                    Application.Current.Shutdown();
+                    return;
+                }
             }
 
             // Setup the UI Language

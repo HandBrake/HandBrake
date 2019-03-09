@@ -1925,4 +1925,17 @@ Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss} {7}</value>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>Delete Selected</value>
   </data>
+  <data name="Portable_TmpNotWritable" xml:space="preserve">
+    <value>Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.
+
+    {0}</value>
+  </data>
+  <data name="Portable_StorageNotWritable" xml:space="preserve">
+    <value>Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.
+
+    {0}</value>
+  </data>
+  <data name="Portable_IniFileError" xml:space="preserve">
+    <value>Portable Mode: Unable to read portable.ini. There may be an error in this file. Please retry using portable.ini.template as a guide.</value>
+  </data>
 </root>

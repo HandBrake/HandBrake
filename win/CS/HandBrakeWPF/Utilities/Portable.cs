@@ -12,6 +12,7 @@ namespace HandBrakeWPF.Utilities
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Windows;
 
     /// <summary>
     /// This class is responsible for reading the Portable.ini file that allows HandBrake to be run out of a directory.
@@ -24,50 +25,93 @@ namespace HandBrakeWPF.Utilities
         /// <summary>
         /// Initializes a new instance of the <see cref="Portable"/> class.
         /// </summary>
-        public static void Initialise()
+        public static bool Initialise()
         {
             if (!IsPortable())
             {
-                return; // Nothing to do.
+                return true;
             }
 
             // Read the INI file     
             if (File.Exists(portableFile))
             {
-                using (StreamReader fileReader = new StreamReader(portableFile))
+                try
                 {
-                    string line;
-                    while ((line = fileReader.ReadLine()) != null)
+                    using (StreamReader fileReader = new StreamReader(portableFile))
                     {
-                        line = line.Trim();
-
-                        if (line.StartsWith("#"))
+                        string line;
+                        while ((line = fileReader.ReadLine()) != null)
                         {
-                            continue; // Ignore Comments
-                        }
+                            line = line.Trim();
 
-                        string[] setting = line.Split('=');
-                        if (setting.Length == 2)
-                        {
-                            keyPairs.Add(setting[0].Trim(), setting[1].Trim());
+                            if (line.StartsWith("#"))
+                            {
+                                continue; // Ignore Comments
+                            }
+
+                            string[] setting = line.Split('=');
+                            if (setting.Length == 2)
+                            {
+                                keyPairs.Add(setting[0].Trim(), setting[1].Trim());
+                            }
                         }
                     }
+                }
+                catch 
+                {
+                    MessageBox.Show(
+                        HandBrakeWPF.Properties.Resources.Portable_IniFileError,
+                        Properties.Resources.Error,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return false;
                 }
             }
 
             // Create any missing directories
-            if (!Directory.Exists(GetTempDirectory()))
+            string tmpDir = GetTempDirectory();
+            if (!string.IsNullOrEmpty(tmpDir) && !Directory.Exists(tmpDir))
             {
-                Directory.CreateDirectory(GetTempDirectory());
+                try
+                {
+                    Directory.CreateDirectory(tmpDir);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show(
+                        string.Format(Properties.Resources.Portable_TmpNotWritable, tmpDir),
+                        Properties.Resources.Error,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return false;
+                }
             }
 
-            if (!Directory.Exists(GetStorageDirectory()))
+            string stroageDir = GetStorageDirectory();
+            if (!Directory.Exists(stroageDir))
             {
-                Directory.CreateDirectory(GetStorageDirectory());
+                try
+                {
+                    Directory.CreateDirectory(stroageDir);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show(
+                        string.Format(HandBrakeWPF.Properties.Resources.Portable_StorageNotWritable, stroageDir),
+                        Properties.Resources.Error,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return false;
+                }
             }
 
             // Setup environment variables for this instance.
-            Environment.SetEnvironmentVariable("TMP", GetTempDirectory());
+            if (!string.IsNullOrEmpty(tmpDir))
+            {
+                Environment.SetEnvironmentVariable("TMP", GetTempDirectory());
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -101,7 +145,7 @@ namespace HandBrakeWPF.Utilities
                 string directory = keyPairs["storage.dir"];
 
                 // If "cwd", then treat that as Current Working Directory.
-                if (directory == "cwd")
+                if (!string.IsNullOrEmpty(directory) && directory == "cwd")
                 {
                     storagePath = Path.Combine(Environment.CurrentDirectory, "storage");
                 }
@@ -111,7 +155,7 @@ namespace HandBrakeWPF.Utilities
                 {
                     storagePath = directory;
                 }
-            }
+            } 
 
             // Return what path we figured out to use.
             return storagePath;

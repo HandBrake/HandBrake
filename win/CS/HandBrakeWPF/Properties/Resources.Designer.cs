@@ -3423,6 +3423,37 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Portable Mode: Unable to read portable.ini. There may be an error in this file. Please retry using portable.ini.template as a guide..
+        /// </summary>
+        public static string Portable_IniFileError {
+            get {
+                return ResourceManager.GetString("Portable_IniFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Portable Mode: Unable to create Storage directory. Please check the path is correct and is writable.
+        ///
+        ///    {0}.
+        /// </summary>
+        public static string Portable_StorageNotWritable {
+            get {
+                return ResourceManager.GetString("Portable_StorageNotWritable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Portable Mode: Unable to create TMP directory. Please check the path is correct and is writable.
+        ///
+        ///    {0}.
+        /// </summary>
+        public static string Portable_TmpNotWritable {
+            get {
+                return ResourceManager.GetString("Portable_TmpNotWritable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change the behaviour of the audio track selection for this preset.  
         ///This will not affect your current settings in the Audio tab..
         /// </summary>
