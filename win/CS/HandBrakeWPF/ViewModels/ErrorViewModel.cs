@@ -10,10 +10,13 @@
 namespace HandBrakeWPF.ViewModels
 {
     using System;
+    using System.Diagnostics;
+    using System.IO;
     using System.Windows;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -27,26 +30,14 @@ namespace HandBrakeWPF.ViewModels
         private string errorMessage;
         private string solution;
 
-        #region Constructors and Destructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ErrorViewModel"/> class.
-        /// </summary>
         public ErrorViewModel(IErrorService errorService)
         {
             this.errorService = errorService;
             this.Title = Resources.Error;
             this.ErrorMessage = Resources.ErrorViewModel_UnknownError;
-            this.Details = Resources.ErrorViewModel_NoFurtherInformation;
+            this.Details = Resources.ErrorViewModel_NoFurtherInformation; 
         }
 
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets Details.
-        /// </summary>
         public string Details
         {
             get
@@ -58,12 +49,13 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.details = value;
                 this.NotifyOfPropertyChange("Details");
+                if (this.details != Resources.ErrorViewModel_NoFurtherInformation)
+                {
+                    this.AppendExceptionLog(this.Details);
+                }
             }
         }
 
-        /// <summary>
-        /// Gets or sets ErrorMessage.
-        /// </summary>
         public string ErrorMessage
         {
             get
@@ -78,9 +70,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets Solution.
-        /// </summary>
         public string Solution
         {
             get
@@ -95,11 +84,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        #endregion
-
-        /// <summary>
-        /// Close this window.
-        /// </summary>
         public void Close()
         {
             try
@@ -112,9 +96,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Copy the Error to the clipboard.
-        /// </summary>
         public void Copy()
         {
             try
@@ -124,6 +105,24 @@ namespace HandBrakeWPF.ViewModels
             catch (Exception exc)
             {
                 this.errorService.ShowError(Resources.Clipboard_Unavailable, Resources.Clipboard_Unavailable_Solution, exc);
+            }
+        }
+
+        public void AppendExceptionLog(string exc)
+        {
+            try
+            {
+                string logDir = DirectoryUtilities.GetLogDirectory();
+                string logFile = Path.Combine(logDir, string.Format("exception_log{0}.txt", GeneralUtilities.ProcessId));
+                using (StreamWriter sw = File.AppendText(logFile))
+                {
+                    sw.WriteLine(exc + Environment.NewLine);
+                }
+
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
             }
         }
     }
