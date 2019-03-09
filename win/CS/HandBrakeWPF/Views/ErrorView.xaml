@@ -56,6 +56,7 @@
                  VerticalAlignment="Stretch"
                  IsReadOnly="True"
                  Text="{Binding Details}"
+                 x:Name="errorText"
                  TextWrapping="Wrap"
                  VerticalScrollBarVisibility="Auto" />
 
