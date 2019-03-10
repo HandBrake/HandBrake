@@ -49,7 +49,7 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <Grid HorizontalAlignment="Stretch" Grid.Row="0" Visibility="{Binding IsNewQueueVisible, Converter={StaticResource boolToVisConverter}}">
+        <Grid HorizontalAlignment="Stretch" Grid.Row="0" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />

@@ -588,7 +588,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Label Content="Queue" FontWeight="Bold" Grid.Row="0"/>
-                <ContentControl cal:View.Model="{Binding QueueViewModel}" cal:View.Context="QueueTwoContent" Grid.Row="1" />
+                <ContentControl cal:View.Model="{Binding QueueViewModel}" cal:View.Context="Embedded" Grid.Row="1" />
             </Grid>
 
             <!--  Presets  -->
