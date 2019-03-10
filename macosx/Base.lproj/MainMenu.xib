@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.59" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.68" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.59"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.68"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -462,7 +462,7 @@
                 </menuItem>
             </items>
         </menu>
-        <customObject id="4963" customClass="SUUpdater"/>
+        <customObject id="4963" customClass="SPUStandardUpdaterController"/>
         <customObject id="6lr-Yy-GMc" customClass="HBAppDelegate">
             <connections>
                 <outlet property="presetsMenu" destination="1949" id="7YL-mr-2tO"/>
