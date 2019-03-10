@@ -201,10 +201,10 @@
                                         <Style TargetType="{x:Type Image}">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
-                                                    <Setter Property="Source" Value="Images\Movies.png" />
+                                                    <Setter Property="Source" Value="Images/Movies.png" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="In Progress">
-                                                    <Setter Property="Source" Value="Images\Working0.png" />
+                                                    <Setter Property="Source" Value="Images/Working0.png" />
                                                     <DataTrigger.EnterActions>
                                                         <BeginStoryboard>
                                                             <Storyboard>
@@ -221,10 +221,10 @@
                                                     </DataTrigger.ExitActions>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Completed">
-                                                    <Setter Property="Source" Value="Images\Complete.png" />
+                                                    <Setter Property="Source" Value="Images/Complete.png" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Error">
-                                                    <Setter Property="Source" Value="Images\WarningSmall.png" />
+                                                    <Setter Property="Source" Value="Images/WarningSmall.png" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
