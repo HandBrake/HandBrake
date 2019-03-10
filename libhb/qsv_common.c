@@ -2219,13 +2219,13 @@ const char* hb_qsv_impl_get_name(int impl)
 
 const char* hb_qsv_impl_get_via_name(int impl)
 {
-    if (impl & MFX_IMPL_VIA_VAAPI)
+    if      ((impl & 0xF00) == MFX_IMPL_VIA_VAAPI)
         return "via VAAPI";
-    else if (impl & MFX_IMPL_VIA_D3D11)
+    else if ((impl & 0xF00) == MFX_IMPL_VIA_D3D11)
         return "via D3D11";
-    else if (impl & MFX_IMPL_VIA_D3D9)
+    else if ((impl & 0xF00) == MFX_IMPL_VIA_D3D9)
         return "via D3D9";
-    else if (impl & MFX_IMPL_VIA_ANY)
+    else if ((impl & 0xF00) == MFX_IMPL_VIA_ANY)
         return "via ANY";
     else return NULL;
 }
