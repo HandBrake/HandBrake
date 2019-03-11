@@ -67,8 +67,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/VCDP/media-driver/archive/intel-media-kbl-19.1.0.tar.gz",
-                    "sha256": "d494f8cf395e9996beda9846afdc736998de6978481aab0e483d818a0c836d66"
+                    "url": "https://github.com/intel/media-driver/archive/intel-media-18.4.1.tar.gz",
+                    "sha256": "f04467e725a530c2fb80e081a45d5b7910d1b3ccbf89ff2d0b1ea7996dd93ce1"
                 }
             ],
             "buildsystem": "cmake",
@@ -86,8 +86,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/MSS-KBL-2019-R1.tar.gz",
-                    "sha256": "ec3d23a2ca4f18144b52d2257b3050ba0f9a98f2688418dd40e8335a215be765"
+                    "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/intel-mediasdk-18.4.1.tar.gz",
+                    "sha256": "2a7b282f71e12f626a6cc70024a5b571a71ffdc5f673e2c8fc4858e9a1e1187b"
                 }
             ],
             "buildsystem": "cmake",
