@@ -1,7 +1,3 @@
-ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-__deps__ := PTHREADW32
-endif
-
 $(eval $(call import.MODULE.defs,FRIBIDI,fribidi))
 $(eval $(call import.CONTRIB.defs,FRIBIDI))
 

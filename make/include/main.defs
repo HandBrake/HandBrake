@@ -52,14 +52,6 @@ MODULES += contrib/libdvdread
 MODULES += contrib/libdvdnav
 MODULES += contrib/libbluray
 
-ifneq (,$(filter $(BUILD.system),mingw))
-ifneq ($(HAS.pthread),1)
-ifneq ($(HAS.pthreadGC2),1)
-    MODULES += contrib/pthreadw32
-endif
-endif
-endif
-
 ifeq (1,$(FEATURE.qsv))
     MODULES += contrib/libmfx
 endif

@@ -1,6 +1,6 @@
 __deps__ := A52DEC BZIP2 LIBVPX FFMPEG FREETYPE LAME LIBASS LIBDCA \
     LIBDVDREAD LIBDVDNAV LIBICONV LIBSAMPLERATE LIBTHEORA LIBVORBIS LIBOGG \
-    LIBXML2 PTHREADW32 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX LIBGNURX JANSSON \
+    LIBXML2 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX LIBGNURX JANSSON \
     HARFBUZZ LIBOPUS LIBSPEEX
 
 ifeq (,$(filter $(BUILD.system),darwin cygwin mingw))
@@ -153,10 +153,6 @@ endif
 
 ifeq ($(HAS.pthread),1)
     LIBHB.GCC.l += pthread
-else ifneq ($(HAS.pthreadGC2),1)
-LIBHB.dll.libs += $(CONTRIB.build/)lib/libpthreadGC2.a
-else
-    LIBHB.GCC.l += pthreadGC2
 endif
 
 ifneq ($(HAS.bz2),1)

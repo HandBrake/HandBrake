@@ -1,4 +1,4 @@
-$(eval $(call import.MODULE.defs,LIBVPX,libvpx,PTHREADW32))
+$(eval $(call import.MODULE.defs,LIBVPX,libvpx))
 $(eval $(call import.CONTRIB.defs,LIBVPX))
 
 LIBVPX.FETCH.url     = https://download.handbrake.fr/contrib/libvpx-1.7.0.tar.gz
