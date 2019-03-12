@@ -145,10 +145,12 @@ int hb_picture_crop(uint8_t *data[], int stride[], hb_buffer_t *buf,
               (left >> x_shift);
     data[2] = buf->plane[2].data + (top >> y_shift) * buf->plane[2].stride +
               (left >> x_shift);
+    data[3] = NULL;
 
     stride[0] = buf->plane[0].stride;
     stride[1] = buf->plane[1].stride;
     stride[2] = buf->plane[2].stride;
+    stride[3] = 0;
 
     return 0;
 }
