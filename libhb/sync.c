@@ -93,8 +93,8 @@ typedef struct
 
     // frame statistics
     int64_t             first_pts;
-    int64_t             min_frame_duration;
-    int64_t             max_frame_duration;
+    double              min_frame_duration;
+    double              max_frame_duration;
     int64_t             current_duration;
     int                 frame_count;
 
