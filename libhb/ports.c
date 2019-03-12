@@ -1582,7 +1582,10 @@ hb_display_t * hb_display_init(const char * driver_name,
         return NULL;
     }
 
-    setenv("LIBVA_DRIVER_NAME", interface_name, 1);
+    if (getenv("LIBVA_DRIVER_NAME") == NULL)
+    {
+        setenv("LIBVA_DRIVER_NAME", interface_name, 1);
+    }
     hbDisplay->vaDisplay = vaGetDisplayDRM(hbDisplay->vaFd);
     if (hbDisplay->vaDisplay == NULL)
     {
