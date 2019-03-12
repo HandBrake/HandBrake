@@ -1568,10 +1568,39 @@ static int open_adapter(const char * name)
     return fd;
 }
 
-hb_display_t * hb_display_init(const char * driver_name,
-                               const char * interface_name)
+static int try_va_interface(hb_display_t * hbDisplay,
+                            const char * interface_name)
+{
+    if (interface_name != NULL)
+    {
+        setenv("LIBVA_DRIVER_NAME", interface_name, 1);
+    }
+
+    hbDisplay->vaDisplay = vaGetDisplayDRM(hbDisplay->vaFd);
+    if (hbDisplay->vaDisplay == NULL)
+    {
+        return -1;
+    }
+
+    int major = 0, minor = 0;
+    VAStatus vaRes = vaInitialize(hbDisplay->vaDisplay, &major, &minor);
+    if (vaRes != VA_STATUS_SUCCESS)
+    {
+        vaTerminate(hbDisplay->vaDisplay);
+        return -1;
+    }
+    hbDisplay->handle = hbDisplay->vaDisplay;
+    hbDisplay->mfxType = MFX_HANDLE_VA_DISPLAY;
+
+    return 0;
+}
+
+hb_display_t * hb_display_init(const char         *  driver_name,
+                               const char * const * interface_names)
 {
     hb_display_t * hbDisplay = calloc(sizeof(hb_display_t), 1);
+    char         * env;
+    int            ii;
 
     hbDisplay->vaDisplay = NULL;
     hbDisplay->vaFd      = open_adapter(driver_name);
@@ -1582,30 +1611,39 @@ hb_display_t * hb_display_init(const char * driver_name,
         return NULL;
     }
 
-    if (getenv("LIBVA_DRIVER_NAME") == NULL)
+    if ((env = getenv("LIBVA_DRIVER_NAME")) != NULL)
     {
-        setenv("LIBVA_DRIVER_NAME", interface_name, 1);
+        // Use only environment if it's set
+        hb_log("hb_display_init: using VA driver '%s'", env);
+        if (try_va_interface(hbDisplay, NULL) != 0)
+        {
+            close(hbDisplay->vaFd);
+            free(hbDisplay);
+            return NULL;
+        }
     }
-    hbDisplay->vaDisplay = vaGetDisplayDRM(hbDisplay->vaFd);
-    if (hbDisplay->vaDisplay == NULL)
+    else
     {
-        close(hbDisplay->vaFd);
-        free(hbDisplay);
-        return NULL;
+        // Try list of VA driver names
+        for (ii = 0; interface_names[ii] != NULL; ii++)
+        {
+            hb_log("hb_display_init: attempting VA driver '%s'",
+                   interface_names[ii]);
+            if (try_va_interface(hbDisplay, interface_names[ii]) == 0)
+            {
+                return hbDisplay;
+            }
+        }
+        // Try default
+        unsetenv("LIBVA_DRIVER_NAME");
+        hb_log("hb_display_init: attempting VA default driver");
+        if (try_va_interface(hbDisplay, NULL) != 0)
+        {
+            close(hbDisplay->vaFd);
+            free(hbDisplay);
+            return NULL;
+        }
     }
-
-    int major = 0, minor = 0;
-    VAStatus vaRes = vaInitialize(hbDisplay->vaDisplay, &major, &minor);
-    if (vaRes != VA_STATUS_SUCCESS)
-    {
-        vaTerminate(hbDisplay->vaDisplay);
-        close(hbDisplay->vaFd);
-        free(hbDisplay);
-        return NULL;
-    }
-    hbDisplay->handle = hbDisplay->vaDisplay;
-    hbDisplay->mfxType = MFX_HANDLE_VA_DISPLAY;
-
     return hbDisplay;
 }
 
