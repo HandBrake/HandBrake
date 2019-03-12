@@ -105,7 +105,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
     AVCodec * codec = NULL;
     AVCodecContext * context;
     AVRational fps;
-    int64_t bit_rate_ceiling = -1;
 
     hb_work_private_t * pv = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data   = pv;
@@ -268,20 +267,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         lavc_opts = hb_encopts_to_dict(job->encoder_options, job->vcodec);
     }
 
-    bit_rate_ceiling = (int64_t)job->width * (int64_t)job->height * (int64_t)fps.num / (int64_t)fps.den;
- 
-    if (job->vquality != HB_INVALID_VIDEO_QUALITY)
-    {
-        if ( w->codec_param == AV_CODEC_ID_VP8 ||
-             w->codec_param == AV_CODEC_ID_VP9 )
-        {
-            //This value was chosen to make the bitrate high enough
-            //for libvpx to "turn off" the maximum bitrate feature
-            //that is normally applied to constant quality.
-            context->bit_rate = bit_rate_ceiling;
-        }
-    }
-
     AVDictionary * av_opts = NULL;
     if (apply_encoder_preset(job->vcodec, &av_opts, job->encoder_preset))
     {
@@ -342,7 +327,8 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             //This value was chosen to make the bitrate high enough
             //for libvpx to "turn off" the maximum bitrate feature
             //that is normally applied to constant quality.
-            context->bit_rate = job->width * job->height * fps.num / fps.den;
+            context->bit_rate = (int64_t)job->width * job->height *
+                                         fps.num / fps.den;
             hb_log( "encavcodec: encoding at CQ %.2f", job->vquality );
         }
         //Set constant quality for nvenc
