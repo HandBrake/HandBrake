@@ -226,8 +226,8 @@ static int chroma_smooth_init(hb_filter_object_t *filter,
         }
 
         // Sanitize
-        if (ctx->strength < 0)   ctx->strength = 0;
-        if (ctx->strength > 1.5) ctx->strength = 1.5;
+        if (ctx->strength < 0) ctx->strength = 0;
+        if (ctx->strength > 3) ctx->strength = 3;
         if (ctx->size % 2 == 0) ctx->size--;
         if (ctx->size < CHROMA_SMOOTH_SIZE_MIN) ctx->size = CHROMA_SMOOTH_SIZE_MIN;
         if (ctx->size > CHROMA_SMOOTH_SIZE_MAX) ctx->size = CHROMA_SMOOTH_SIZE_MAX;

@@ -513,155 +513,63 @@ static hb_dict_t * generate_chroma_smooth_settings(const char *preset,
         double strength;
         int    size;
 
-        if (tune == NULL || !strcasecmp(tune, "none"))
+        // Strength
+        if ((tune == NULL || !strcasecmp(tune, "none")) ||
+           (!strcasecmp(tune, "tiny"))   ||
+           (!strcasecmp(tune, "small"))  ||
+           (!strcasecmp(tune, "medium")) ||
+           (!strcasecmp(tune, "wide"))   ||
+           (!strcasecmp(tune, "verywide")))
         {
-            strength = 0.25;
-            size     = 7;
+            strength = 1.2;
             if (!strcasecmp(preset, "ultralight"))
             {
-                strength = 0.05;
+                strength = 0.4;
             }
             else if (!strcasecmp(preset, "light"))
             {
-                strength = 0.15;
+                strength = 0.8;
             }
             else if (!strcasecmp(preset, "strong"))
             {
-                strength = 0.5;
+                strength = 1.6;
             }
             else if (!strcasecmp(preset, "stronger"))
             {
-                strength = 0.8;
+                strength = 2.0;
             }
             else if (!strcasecmp(preset, "verystrong"))
             {
-                strength = 1.2;
+                strength = 2.4;
             }
         }
-        else if (!strcasecmp(tune, "tiny"))
+        else
         {
-            strength = 0.4;
-            size     = 3;
-            if (!strcasecmp(preset, "ultralight"))
-            {
-                strength = 0.15;
-            }
-            else if (!strcasecmp(preset, "light"))
-            {
-                strength = 0.25;
-            }
-            else if (!strcasecmp(preset, "strong"))
-            {
-                strength = 0.8;
-            }
-            else if (!strcasecmp(preset, "stronger"))
-            {
-                strength = 1.2;
-            }
-            else if (!strcasecmp(preset, "verystrong"))
-            {
-                strength = 1.5;
-            }
+            fprintf(stderr, "Unrecognized chroma smooth tune (%s).\n", tune);
+            return NULL;
+        }
+
+        // Size
+        if (!strcasecmp(tune, "tiny"))
+        {
+            size = 3;
         }
         else if (!strcasecmp(tune, "small"))
         {
-            strength = 0.275;
-            size     = 7;
-            if (!strcasecmp(preset, "ultralight"))
-            {
-                strength = 0.055;
-            }
-            else if (!strcasecmp(preset, "light"))
-            {
-                strength = 0.165;
-            }
-            else if (!strcasecmp(preset, "strong"))
-            {
-                strength = 0.55;
-            }
-            else if (!strcasecmp(preset, "stronger"))
-            {
-                strength = 0.9;
-            }
-            else if (!strcasecmp(preset, "verystrong"))
-            {
-                strength = 1.35;
-            }
+            size = 5;
         }
-        else if (!strcasecmp(tune, "medium"))
+        else if ((tune == NULL || !strcasecmp(tune, "none")) ||
+                (!strcasecmp(tune, "medium")))
         {
-            strength = 0.275;
-            size     = 9;
-            if (!strcasecmp(preset, "ultralight"))
-            {
-                strength = 0.055;
-            }
-            else if (!strcasecmp(preset, "light"))
-            {
-                strength = 0.165;
-            }
-            else if (!strcasecmp(preset, "strong"))
-            {
-                strength = 0.55;
-            }
-            else if (!strcasecmp(preset, "stronger"))
-            {
-                strength = 0.9;
-            }
-            else if (!strcasecmp(preset, "verystrong"))
-            {
-                strength = 1.35;
-            }
+            size = 7;
         }
         else if (!strcasecmp(tune, "wide"))
         {
-            strength = 0.275;
-            size     = 11;
-            if (!strcasecmp(preset, "ultralight"))
-            {
-                strength = 0.055;
-            }
-            else if (!strcasecmp(preset, "light"))
-            {
-                strength = 0.165;
-            }
-            else if (!strcasecmp(preset, "strong"))
-            {
-                strength = 0.55;
-            }
-            else if (!strcasecmp(preset, "stronger"))
-            {
-                strength = 0.9;
-            }
-            else if (!strcasecmp(preset, "verystrong"))
-            {
-                strength = 1.35;
-            }
+            size = 9;
         }
         else if (!strcasecmp(tune, "verywide"))
         {
-            strength = 0.275;
-            size     = 13;
-            if (!strcasecmp(preset, "ultralight"))
-            {
-                strength = 0.055;
-            }
-            else if (!strcasecmp(preset, "light"))
-            {
-                strength = 0.165;
-            }
-            else if (!strcasecmp(preset, "strong"))
-            {
-                strength = 0.55;
-            }
-            else if (!strcasecmp(preset, "stronger"))
-            {
-                strength = 0.9;
-            }
-            else if (!strcasecmp(preset, "verystrong"))
-            {
-                strength = 1.35;
-            }
+            size = 11;
         }
         else
         {
