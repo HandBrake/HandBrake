@@ -1670,8 +1670,8 @@ void hb_display_close(hb_display_t ** _d)
 
 #else // !SYS_LINUX
 
-hb_display_t * hb_display_init(const char * driver_name,
-                               const char * interface_name)
+hb_display_t * hb_display_init(const char         *  driver_name,
+                               const char * const * interface_names)
 {
     return NULL;
 }
@@ -1684,8 +1684,8 @@ void hb_display_close(hb_display_t ** _d)
 #endif // SYS_LINUX
 #else // !USE_QSV
 
-hb_display_t * hb_display_init(const char * driver_name,
-                               const char * interface_name)
+hb_display_t * hb_display_init(const char         *  driver_name,
+                               const char * const * interface_names)
 {
     return NULL;
 }
