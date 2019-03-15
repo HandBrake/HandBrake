@@ -5752,6 +5752,8 @@ const char * hb_get_format_name(int format)
             return "yuv444p";
         case AV_PIX_FMT_YUV444P10:
             return "yuv444p10";
+        case AV_PIX_FMT_YUV444P12:
+            return "yuv444p12";
         default:
             return NULL;
     }
