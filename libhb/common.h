@@ -273,6 +273,7 @@ struct hb_geometry_settings_s
 struct hb_image_s
 {
     int format;
+    int max_plane;
     int width;
     int height;
     uint8_t *data;
@@ -1250,23 +1251,29 @@ typedef struct hb_filter_init_s
 {
     hb_job_t      * job;
     int             pix_fmt;
+    int             color_prim;
+    int             color_transfer;
+    int             color_matrix;
     hb_geometry_t   geometry;
     int             crop[4];
     hb_rational_t   vrate;
     int             cfr;
     int             grayscale;
+    hb_rational_t   time_base;
 } hb_filter_init_t;
 
 typedef struct hb_filter_info_s
 {
     char             * human_readable_desc;
-    hb_filter_init_t   out;
+    hb_filter_init_t   output;
 } hb_filter_info_t;
 
 struct hb_filter_object_s
 {
     int                   id;
     int                   enforce_order;
+    int                   skip;
+    int                   aliased;
     char                * name;
     hb_dict_t           * settings;
 

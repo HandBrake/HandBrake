@@ -21,6 +21,24 @@ static int get_frame_type(int type)
     }
 }
 
+void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t * buf)
+{
+    frame->data[0]     = buf->plane[0].data;
+    frame->data[1]     = buf->plane[1].data;
+    frame->data[2]     = buf->plane[2].data;
+    frame->linesize[0] = buf->plane[0].stride;
+    frame->linesize[1] = buf->plane[1].stride;
+    frame->linesize[2] = buf->plane[2].stride;
+
+    frame->pts              = buf->s.start;
+    frame->reordered_opaque = buf->s.duration;
+    frame->width            = buf->f.width;
+    frame->height           = buf->f.height;
+    frame->format           = buf->f.fmt;
+    frame->interlaced_frame = !!buf->s.combed;
+    frame->top_field_first  = !!(buf->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
+}
+
 void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
                                        AVRational time_base)
 {
@@ -68,19 +86,19 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
     hb_avframe_set_video_buffer_flags(buf, frame, time_base);
 
     int pp;
-    for (pp = 0; pp < 3; pp++)
+    for (pp = 0; pp <= buf->f.max_plane; pp++)
     {
         int yy;
-        int width     = buf->plane[pp].width;
         int stride    = buf->plane[pp].stride;
         int height    = buf->plane[pp].height;
         int linesize  = frame->linesize[pp];
+        int size = linesize < stride ? linesize : stride;
         uint8_t * dst = buf->plane[pp].data;
         uint8_t * src = frame->data[pp];
 
         for (yy = 0; yy < height; yy++)
         {
-            memcpy(dst, src, width);
+            memcpy(dst, src, size);
             dst += stride;
             src += linesize;
         }

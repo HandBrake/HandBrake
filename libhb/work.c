@@ -10,6 +10,7 @@
 #include "hb.h"
 #include "libavformat/avformat.h"
 #include "decomb.h"
+#include "hbavfilter.h"
 
 #ifdef USE_QSV
 #include "qsv_common.h"
@@ -444,6 +445,10 @@ void hb_display_job_info(hb_job_t *job)
         for( i = 0; i < hb_list_count( job->list_filter ); i++ )
         {
             hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+            if (filter->aliased && global_verbosity_level < 2)
+            {
+                continue;
+            }
             char * settings = hb_filter_settings_string(filter->id,
                                                         filter->settings);
             if (settings != NULL)
@@ -1388,9 +1393,6 @@ static void sanitize_filter_list(hb_list_t *list)
             }
         }
     }
-
-    // Combine HB_FILTER_AVFILTERs that are sequential
-    hb_avfilter_combine(list);
 }
 
 /**
@@ -1459,8 +1461,13 @@ static void do_job(hb_job_t *job)
         sanitize_filter_list(job->list_filter);
 
         memset(&init, 0, sizeof(init));
+        init.time_base.num = 1;
+        init.time_base.den = 90000;
         init.job = job;
         init.pix_fmt = AV_PIX_FMT_YUV420P;
+        init.color_prim = title->color_prim;
+        init.color_transfer = title->color_transfer;
+        init.color_matrix = title->color_matrix;
         init.geometry.width = title->geometry.width;
         init.geometry.height = title->geometry.height;
 
@@ -1469,11 +1476,12 @@ static void do_job(hb_job_t *job)
         init.vrate = job->vrate;
         init.cfr = 0;
         init.grayscale = 0;
+
         for( i = 0; i < hb_list_count( job->list_filter ); )
         {
             hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
             filter->done = &job->done;
-            if (filter->init(filter, &init))
+            if (filter->init != NULL && filter->init(filter, &init))
             {
                 hb_log( "Failure to initialise filter '%s', disabling",
                         filter->name );
@@ -1491,12 +1499,16 @@ static void do_job(hb_job_t *job)
         job->cfr = init.cfr;
         job->grayscale = init.grayscale;
 
+        // Combine HB_FILTER_AVFILTERs that are sequential
+        hb_avfilter_combine(job->list_filter);
+
         // Perform filter post_init which informs filters of final
         // job configuration. e.g. rendersub filter needs to know the
         // final crop dimensions.
         for( i = 0; i < hb_list_count( job->list_filter ); )
         {
             hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
+            filter->done = &job->done;
             if (filter->post_init != NULL && filter->post_init(filter, job))
             {
                 hb_log( "Failure to initialise filter '%s', disabling",
@@ -1696,9 +1708,12 @@ static void do_job(hb_job_t *job)
             for (i = 0; i < hb_list_count(job->list_filter); i++)
             {
                 hb_filter_object_t * filter = hb_list_item(job->list_filter, i);
-                filter->fifo_in = fifo_in;
-                filter->fifo_out = hb_fifo_init( FIFO_MINI, FIFO_MINI_WAKE );
-                fifo_in = filter->fifo_out;
+                if (!filter->skip)
+                {
+                    filter->fifo_in = fifo_in;
+                    filter->fifo_out = hb_fifo_init(FIFO_MINI, FIFO_MINI_WAKE);
+                    fifo_in = filter->fifo_out;
+                }
             }
             job->fifo_render = fifo_in;
         }
@@ -1776,10 +1791,13 @@ static void do_job(hb_job_t *job)
         {
             hb_filter_object_t * filter = hb_list_item(job->list_filter, i);
 
-            // Filters were initialized earlier, so we just need
-            // to start the filter's thread
-            filter->thread = hb_thread_init( filter->name, filter_loop, filter,
-                                             HB_LOW_PRIORITY );
+            if (!filter->skip)
+            {
+                // Filters were initialized earlier, so we just need
+                // to start the filter's thread
+                filter->thread = hb_thread_init(filter->name, filter_loop,
+                                                filter, HB_LOW_PRIORITY);
+            }
         }
     }
 
@@ -1869,7 +1887,10 @@ cleanup:
         for (i = 0; i < hb_list_count( job->list_filter ); i++)
         {
             hb_filter_object_t * filter = hb_list_item( job->list_filter, i );
-            hb_fifo_close( &filter->fifo_out );
+            if (!filter->skip)
+            {
+                hb_fifo_close( &filter->fifo_out );
+            }
         }
     }
 

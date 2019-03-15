@@ -520,70 +520,52 @@ int hb_buffer_copy(hb_buffer_t * dst, const hb_buffer_t * src)
     return 0;
 }
 
-static void hb_buffer_init_planes_internal( hb_buffer_t * b, uint8_t * has_plane )
+void hb_buffer_init_planes(hb_buffer_t * b)
 {
-    uint8_t * plane = b->data;
-    int p;
+    uint8_t * data = b->data;
+    int       pp;
 
-    for( p = 0; p < 4; p++ )
+    for( pp = 0; pp <= b->f.max_plane; pp++ )
     {
-        if ( has_plane[p] )
-        {
-            b->plane[p].data = plane;
-            b->plane[p].stride = hb_image_stride( b->f.fmt, b->f.width, p );
-            b->plane[p].height_stride = hb_image_height_stride( b->f.fmt, b->f.height, p );
-            b->plane[p].width  = hb_image_width( b->f.fmt, b->f.width, p );
-            b->plane[p].height = hb_image_height( b->f.fmt, b->f.height, p );
-            b->plane[p].size   = b->plane[p].stride * b->plane[p].height_stride;
-            plane += b->plane[p].size;
-        }
+        b->plane[pp].data = data;
+        b->plane[pp].stride        = hb_image_stride(b->f.fmt, b->f.width, pp);
+        b->plane[pp].height_stride = hb_image_height_stride(b->f.fmt,
+                                                            b->f.height, pp);
+        b->plane[pp].width         = hb_image_width(b->f.fmt, b->f.width, pp);
+        b->plane[pp].height        = hb_image_height(b->f.fmt, b->f.height, pp);
+        b->plane[pp].size          = b->plane[pp].stride *
+                                     b->plane[pp].height_stride;
+        data                      += b->plane[pp].size;
     }
-}
-
-void hb_buffer_init_planes( hb_buffer_t * b )
-{
-    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(b->f.fmt);
-    int p;
-
-    if (desc == NULL)
-    {
-        return;
-    }
-
-    uint8_t has_plane[4] = {0,};
-
-    for( p = 0; p < 4; p++ )
-    {
-        has_plane[desc->comp[p].plane] = 1;
-    }
-    hb_buffer_init_planes_internal( b, has_plane );
 }
 
 // this routine gets a buffer for an uncompressed picture
 // with pixel format pix_fmt and dimensions width x height.
 hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
 {
-    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
-    hb_buffer_t * buf;
-    int p;
-    uint8_t has_plane[4] = {0,};
+    const AVPixFmtDescriptor * desc = av_pix_fmt_desc_get(pix_fmt);
+    hb_buffer_t              * buf;
+    uint8_t                    has_plane[4] = {0,};
+    int                        ii, pp, max_plane = 0;
 
     if (desc == NULL)
     {
         return NULL;
     }
-    for( p = 0; p < 4; p++ )
-    {
-        has_plane[desc->comp[p].plane] = 1;
-    }
 
     int size = 0;
-    for( p = 0; p < 4; p++ )
+    for (ii = 0; ii < desc->nb_components; ii++)
     {
-        if ( has_plane[p] )
+        pp    = desc->comp[ii].plane;
+        if (pp > max_plane)
         {
-            size += hb_image_stride( pix_fmt, width, p ) * 
-                    hb_image_height_stride( pix_fmt, height, p );
+            max_plane = pp;
+        }
+        if (!has_plane[pp])
+        {
+            has_plane[pp] = 1;
+            size += hb_image_stride( pix_fmt, width, pp ) *
+                    hb_image_height_stride( pix_fmt, height, pp );
         }
     }
 
@@ -592,12 +574,13 @@ hb_buffer_t * hb_frame_buffer_init( int pix_fmt, int width, int height )
     if( buf == NULL )
         return NULL;
 
+    buf->f.max_plane = max_plane;
     buf->s.type = FRAME_BUF;
     buf->f.width = width;
     buf->f.height = height;
     buf->f.fmt = pix_fmt;
 
-    hb_buffer_init_planes_internal( buf, has_plane );
+    hb_buffer_init_planes(buf);
     return buf;
 }
 
@@ -606,7 +589,7 @@ void hb_frame_buffer_blank_stride(hb_buffer_t * buf)
     uint8_t * data;
     int       pp, yy, width, height, stride, height_stride;
 
-    for (pp = 0; pp < 4; pp++)
+    for (pp = 0; pp <= buf->f.max_plane; pp++)
     {
         data          = buf->plane[pp].data;
         width         = buf->plane[pp].width;
@@ -636,7 +619,7 @@ void hb_frame_buffer_mirror_stride(hb_buffer_t * buf)
     int       pp, ii, yy, width, height, stride, height_stride;
     int       pos, margin, margin_front, margin_back;
 
-    for (pp = 0; pp < 4; pp++)
+    for (pp = 0; pp <= buf->f.max_plane; pp++)
     {
         data          = buf->plane[pp].data;
         width         = buf->plane[pp].width;
@@ -678,26 +661,29 @@ void hb_frame_buffer_mirror_stride(hb_buffer_t * buf)
 // with dimensions width x height.
 void hb_video_buffer_realloc( hb_buffer_t * buf, int width, int height )
 {
-    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(buf->f.fmt);
-    int p;
-    uint8_t has_plane[4] = {0,};
+    const AVPixFmtDescriptor * desc = av_pix_fmt_desc_get(buf->f.fmt);
+    uint8_t                    has_plane[4] = {0,};
+    int                        ii, pp;
 
     if (desc == NULL)
     {
         return;
     }
-    for( p = 0; p < 4; p++ )
-    {
-        has_plane[desc->comp[p].plane] = 1;
-    }
 
+    buf->f.max_plane = 0;
     int size = 0;
-    for( p = 0; p < 4; p++ )
+    for (ii = 0; ii < desc->nb_components; ii++)
     {
-        if ( has_plane[p] )
+        pp = desc->comp[ii].plane;
+        if (pp > buf->f.max_plane)
         {
-            size += hb_image_stride( buf->f.fmt, width, p ) * 
-                    hb_image_height_stride( buf->f.fmt, height, p );
+            buf->f.max_plane = pp;
+        }
+        if (!has_plane[pp])
+        {
+            has_plane[pp] = 1;
+            size += hb_image_stride(buf->f.fmt, width, pp) *
+                    hb_image_height_stride(buf->f.fmt, height, pp );
         }
     }
 
@@ -707,7 +693,7 @@ void hb_video_buffer_realloc( hb_buffer_t * buf, int width, int height )
     buf->f.height = height;
     buf->size = size;
 
-    hb_buffer_init_planes_internal( buf, has_plane );
+    hb_buffer_init_planes(buf);
 }
 
 // this routine 'moves' data from src to dst by interchanging 'data',
@@ -797,27 +783,13 @@ void hb_buffer_close( hb_buffer_t ** _b )
 
 hb_image_t * hb_image_init(int pix_fmt, int width, int height)
 {
-    const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(pix_fmt);
-    int p;
-    uint8_t has_plane[4] = {0,};
+    const AVPixFmtDescriptor * desc = av_pix_fmt_desc_get(pix_fmt);
+    uint8_t                    has_plane[4] = {0,};
+    int                        ii, pp;
 
     if (desc == NULL)
     {
         return NULL;
-    }
-    for (p = 0; p < 4; p++)
-    {
-        has_plane[desc->comp[p].plane] = 1;
-    }
-
-    int size = 0;
-    for (p = 0; p < 4; p++)
-    {
-        if (has_plane[p])
-        {
-            size += hb_image_stride( pix_fmt, width, p ) * 
-                    hb_image_height_stride( pix_fmt, height, p );
-        }
     }
 
     hb_image_t *image = calloc(1, sizeof(hb_image_t));
@@ -825,6 +797,25 @@ hb_image_t * hb_image_init(int pix_fmt, int width, int height)
     {
         return NULL;
     }
+
+    int size = 0;
+    for (ii = 0; ii < desc->nb_components; ii++)
+    {
+        // For non-planar formats, comp[ii].plane can contain the
+        // same value for multiple comp.
+        pp = desc->comp[ii].plane;
+        if (pp > image->max_plane)
+        {
+            image->max_plane = pp;
+        }
+        if (!has_plane[pp])
+        {
+            has_plane[pp] = 1;
+            size += hb_image_stride( pix_fmt, width, pp ) *
+                    hb_image_height_stride( pix_fmt, height, pp );
+        }
+    }
+
     image->data  = av_malloc(size);
     if (image->data == NULL)
     {
@@ -836,21 +827,18 @@ hb_image_t * hb_image_init(int pix_fmt, int width, int height)
     image->height = height;
     memset(image->data, 0, size);
 
-    uint8_t * plane = image->data;
-    for (p = 0; p < 4; p++)
+    uint8_t * data = image->data;
+    for (pp = 0; pp <= image->max_plane; pp++)
     {
-        if (has_plane[p])
-        {
-            image->plane[p].data = plane;
-            image->plane[p].stride = hb_image_stride(pix_fmt, width, p );
-            image->plane[p].height_stride =
-                                    hb_image_height_stride(pix_fmt, height, p );
-            image->plane[p].width  = hb_image_width(pix_fmt, width, p );
-            image->plane[p].height = hb_image_height(pix_fmt, height, p );
-            image->plane[p].size   =
-                        image->plane[p].stride * image->plane[p].height_stride;
-            plane += image->plane[p].size;
-        }
+        image->plane[pp].data   = data;
+        image->plane[pp].stride = hb_image_stride(pix_fmt, width, pp);
+        image->plane[pp].height_stride =
+                                hb_image_height_stride(pix_fmt, height, pp);
+        image->plane[pp].width  = hb_image_width(pix_fmt, width, pp);
+        image->plane[pp].height = hb_image_height(pix_fmt, height, pp);
+        image->plane[pp].size   = image->plane[pp].stride *
+                                  image->plane[pp].height_stride;
+        data                   += image->plane[pp].size;
     }
     return image;
 }
@@ -873,7 +861,7 @@ hb_image_t * hb_buffer_to_image(hb_buffer_t *buf)
 
     int p;
     uint8_t *data = image->data;
-    for (p = 0; p < 4; p++)
+    for (p = 0; p <= buf->f.max_plane; p++)
     {
         image->plane[p].data = data;
         image->plane[p].width = buf->plane[p].width;

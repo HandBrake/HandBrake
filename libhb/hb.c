@@ -114,7 +114,7 @@ int hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *buf)
 {
     int ret, ii;
 
-    for (ii = 0; ii < 4; ii++)
+    for (ii = 0; ii <= buf->f.max_plane; ii++)
         stride[ii] = buf->plane[ii].stride;
 
     ret = av_image_fill_pointers(data, buf->f.fmt,
@@ -472,7 +472,7 @@ int hb_save_preview( hb_handle_t * h, int title, int preview, hb_buffer_t *buf )
     }
 
     int pp, hh;
-    for( pp = 0; pp < 3; pp++ )
+    for( pp = 0; pp <= buf->f.max_plane; pp++ )
     {
         uint8_t *data = buf->plane[pp].data;
         int stride = buf->plane[pp].stride;
@@ -705,7 +705,7 @@ int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int thre
     }
 
     /* One pas for Y, one pass for Cb, one pass for Cr */
-    for( k = 0; k < 3; k++ )
+    for( k = 0; k <= buf->f.max_plane; k++ )
     {
         uint8_t * data = buf->plane[k].data;
         int width = buf->plane[k].width;

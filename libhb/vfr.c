@@ -445,7 +445,7 @@ static hb_filter_info_t * hb_vfr_info( hb_filter_object_t * filter )
     info->human_readable_desc = malloc(128);
     info->human_readable_desc[0] = 0;
 
-    info->out.vrate      = pv->input_vrate;
+    info->output.vrate      = pv->input_vrate;
     if (pv->cfr == 2)
     {
         // For PFR, we want the framerate based on the source's actual
@@ -456,14 +456,14 @@ static hb_filter_info_t * hb_vfr_info( hb_filter_object_t * filter )
         {
             // peak framerate is lower than the source framerate.
             // so signal that the framerate will be the peak fps.
-            info->out.vrate = pv->vrate;
+            info->output.vrate = pv->vrate;
         }
     }
     else
     {
-        info->out.vrate = pv->vrate;
+        info->output.vrate = pv->vrate;
     }
-    info->out.cfr = pv->cfr;
+    info->output.cfr = pv->cfr;
     if ( pv->cfr == 0 )
     {
         /* Ensure we're using "Same as source" FPS */

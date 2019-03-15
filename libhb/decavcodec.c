@@ -40,6 +40,7 @@
 
 #include "hb.h"
 #include "hbffmpeg.h"
+#include "hbavfilter.h"
 #include "libavfilter/avfilter.h"
 #include "libavfilter/buffersrc.h"
 #include "libavfilter/buffersink.h"
@@ -98,14 +99,11 @@ struct reordered_data_s
 
 struct video_filters_s
 {
-    AVFilterGraph   * graph;
-    AVFilterContext * last;
-    AVFilterContext * input;
-    AVFilterContext * output;
+    hb_avfilter_graph_t * graph;
 
-    int               width;
-    int               height;
-    int               pix_fmt;
+    int                   width;
+    int                   height;
+    int                   pix_fmt;
 };
 
 struct hb_work_private_s
@@ -339,21 +337,7 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
  **********************************************************************/
 static void close_video_filters(hb_work_private_t *pv)
 {
-    if (pv->video_filters.input != NULL)
-    {
-        avfilter_free(pv->video_filters.input);
-        pv->video_filters.input = NULL;
-    }
-    if (pv->video_filters.output != NULL)
-    {
-        avfilter_free(pv->video_filters.output);
-        pv->video_filters.output = NULL;
-    }
-    if (pv->video_filters.graph != NULL)
-    {
-        avfilter_graph_free(&pv->video_filters.graph);
-    }
-    pv->video_filters.last = NULL;
+    hb_avfilter_graph_close(&pv->video_filters.graph);
 }
 
 static void closePrivData( hb_work_private_t ** ppv )
@@ -1127,42 +1111,13 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     return out;
 }
 
-static AVFilterContext * append_filter(hb_work_private_t * pv,
-                                       const char * name, const char * args)
-{
-    AVFilterContext * filter;
-    int               result;
-
-    result = avfilter_graph_create_filter(&filter, avfilter_get_by_name(name),
-                                          name, args, NULL,
-                                          pv->video_filters.graph);
-    if (result < 0)
-    {
-        return NULL;
-    }
-    if (pv->video_filters.last != NULL)
-    {
-        result = avfilter_link(pv->video_filters.last, 0, filter, 0);
-        if (result < 0)
-        {
-            avfilter_free(filter);
-            return NULL;
-        }
-    }
-    pv->video_filters.last = filter;
-
-    return filter;
-}
-
 int reinit_video_filters(hb_work_private_t * pv)
 {
-    char            * sws_flags;
-    int               result;
-    AVFilterContext * avfilter;
-    char            * graph_str = NULL, * filter_str;
-    AVFilterInOut   * in = NULL, * out = NULL;
-    int               orig_width;
-    int               orig_height;
+    int                orig_width;
+    int                orig_height;
+    hb_value_array_t * filters;
+    hb_dict_t        * settings;
+    hb_filter_init_t   filter_init;
 
 #ifdef USE_QSV
     if (pv->qsv.decode &&
@@ -1220,19 +1175,6 @@ int reinit_video_filters(hb_work_private_t * pv)
 
     // New filter required, create filter graph
     close_video_filters(pv);
-    pv->video_filters.graph = avfilter_graph_alloc();
-    if (pv->video_filters.graph == NULL)
-    {
-        hb_log("reinit_video_filters: avfilter_graph_alloc failed");
-        goto fail;
-    }
-    sws_flags = hb_strdup_printf("flags=%d", SWS_LANCZOS|SWS_ACCURATE_RND);
-    // avfilter_graph_free uses av_free to release scale_sws_opts.  Due
-    // to the hacky implementation of av_free/av_malloc on windows,
-    // you must av_malloc anything that is av_free'd.
-    pv->video_filters.graph->scale_sws_opts = av_malloc(strlen(sws_flags) + 1);
-    strcpy(pv->video_filters.graph->scale_sws_opts, sws_flags);
-    free(sws_flags);
 
     int clock_min, clock_max, clock;
     hb_rational_t vrate;
@@ -1241,100 +1183,65 @@ int reinit_video_filters(hb_work_private_t * pv)
     vrate.num = clock;
     vrate.den = pv->duration * (clock / 90000.);
 
+    filters = hb_value_array_init();
     if (AV_PIX_FMT_YUV420P != pv->frame->format ||
         orig_width         != pv->frame->width  ||
         orig_height        != pv->frame->height)
     {
 
-        filter_str = hb_strdup_printf(
-                        "scale='w=%d:h=%d:flags=lanczos+accurate_rnd',"
-                        "format='pix_fmts=yuv420p'",
-                        orig_width, orig_height);
-        graph_str = hb_append_filter_string(graph_str, filter_str);
-        free(filter_str);
+        settings = hb_dict_init();
+        hb_dict_set(settings, "w", hb_value_int(orig_width));
+        hb_dict_set(settings, "h", hb_value_int(orig_height));
+        hb_dict_set(settings, "flags", hb_value_string("lanczos+accurate_rnd"));
+        hb_append_filter_dict(filters, "scale", settings);
+
+        settings = hb_dict_init();
+        hb_dict_set(settings, "pix_fmts", hb_value_string("yuv420p"));
+        hb_append_filter_dict(filters, "format", settings);
     }
     if (pv->title->rotation != HB_ROTATION_0)
     {
         switch (pv->title->rotation)
         {
             case HB_ROTATION_90:
-                filter_str = "transpose='dir=cclock'";
+                settings = hb_dict_init();
+                hb_dict_set(settings, "dir", hb_value_string("cclock"));
+                hb_append_filter_dict(filters, "transpose", settings);
                 break;
             case HB_ROTATION_180:
-                filter_str = "hflip,vflip";
+                hb_append_filter_dict(filters, "hflip", hb_value_null());
+                hb_append_filter_dict(filters, "vflip", hb_value_null());
                 break;
             case HB_ROTATION_270:
-                filter_str = "transpose='dir=clock'";
+                settings = hb_dict_init();
+                hb_dict_set(settings, "dir", hb_value_string("clock"));
+                hb_append_filter_dict(filters, "transpose", settings);
                 break;
             default:
                 hb_log("reinit_video_filters: Unknown rotation, failed");
-                goto fail;
         }
-        graph_str = hb_append_filter_string(graph_str, filter_str);
     }
 
-    // Build filter input
-    filter_str = hb_strdup_printf(
-                "width=%d:height=%d:pix_fmt=%d:sar=%d/%d:"
-                "time_base=%d/%d:frame_rate=%d/%d",
-                pv->frame->width, pv->frame->height,
-                pv->frame->format,
-                pv->frame->sample_aspect_ratio.num,
-                pv->frame->sample_aspect_ratio.den,
-                1, 1, vrate.num, vrate.den);
+    filter_init.geometry.width    = pv->frame->width;
+    filter_init.geometry.height   = pv->frame->height;
+    filter_init.pix_fmt           = pv->frame->format;
+    filter_init.geometry.par.num  = pv->frame->sample_aspect_ratio.num;
+    filter_init.geometry.par.den  = pv->frame->sample_aspect_ratio.den;
+    filter_init.time_base.num     = 1;
+    filter_init.time_base.den     = 1;
+    filter_init.vrate.num         = vrate.num;
+    filter_init.vrate.den         = vrate.den;
 
-    avfilter = append_filter(pv, "buffer", filter_str);
-    free(filter_str);
-    if (avfilter == NULL)
+    pv->video_filters.graph = hb_avfilter_graph_init(filters, &filter_init);
+    if (pv->video_filters.graph == NULL)
     {
-        hb_error("reinit_video_filters: failed to create buffer source filter");
-        goto fail;
-    }
-    pv->video_filters.input = avfilter;
-
-    // Build the filter graph
-    result = avfilter_graph_parse2(pv->video_filters.graph,
-                                   graph_str, &in, &out);
-    if (result < 0 || in == NULL || out == NULL)
-    {
-        hb_error("reinit_video_filters: avfilter_graph_parse2 failed (%s)",
-                 graph_str);
+        hb_error("reinit_video_filters: failed to create filter graph");
         goto fail;
     }
 
-    // Link input to filter graph
-    result = avfilter_link(pv->video_filters.last, 0, in->filter_ctx, 0);
-    if (result < 0)
-    {
-        goto fail;
-    }
-    pv->video_filters.last  = out->filter_ctx;
-
-    // Build filter output and append to filter graph
-    avfilter = append_filter(pv, "buffersink", NULL);
-    if (avfilter == NULL)
-    {
-        hb_error("reinit_video_filters: failed to create buffer output filter");
-        goto fail;
-    }
-    pv->video_filters.output = avfilter;
-
-    result = avfilter_graph_config(pv->video_filters.graph, NULL);
-    if (result < 0)
-    {
-        hb_error("reinit_video_filters: failed to configure filter graph");
-        goto fail;
-    }
-
-    free(graph_str);
-    avfilter_inout_free(&in);
-    avfilter_inout_free(&out);
     return 0;
 
 fail:
-    free(graph_str);
-    avfilter_inout_free(&in);
-    avfilter_inout_free(&out);
     close_video_filters(pv);
 
     return 1;
@@ -1347,21 +1254,15 @@ static void filter_video(hb_work_private_t *pv)
     {
         int result;
 
-        result = av_buffersrc_add_frame(pv->video_filters.input, pv->frame);
-        if (result < 0) {
-            hb_error("filter_video: failed to add frame");
-        } else {
-            result = av_buffersink_get_frame(pv->video_filters.output, pv->frame);
-        }
+        hb_avfilter_add_frame(pv->video_filters.graph, pv->frame);
+        result = hb_avfilter_get_frame(pv->video_filters.graph, pv->frame);
         while (result >= 0)
         {
             hb_buffer_t * buf = copy_frame(pv);
             hb_buffer_list_append(&pv->list, buf);
             av_frame_unref(pv->frame);
             ++pv->nframes;
-
-            result = av_buffersink_get_frame(pv->video_filters.output,
-                                             pv->frame);
+            result = hb_avfilter_get_frame(pv->video_filters.graph, pv->frame);
         }
     }
     else

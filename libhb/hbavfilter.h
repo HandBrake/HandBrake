@@ -1,0 +1,28 @@
+/* hbffmpeg.h
+
+   Copyright (c) 2003-2019 HandBrake Team
+   This file is part of the HandBrake source code
+   Homepage: <http://handbrake.fr/>.
+   It may be used under the terms of the GNU General Public License v2.
+   For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
+ */
+
+#ifndef HB_AVFILTER_H
+#define HB_AVFILTER_H
+
+typedef struct hb_avfilter_graph_s hb_avfilter_graph_t;
+
+hb_avfilter_graph_t * hb_avfilter_graph_init(hb_value_t * settings,
+                                             hb_filter_init_t * init);
+void        hb_avfilter_graph_close(hb_avfilter_graph_t ** _g);
+
+int         hb_avfilter_add_frame(hb_avfilter_graph_t * graph, AVFrame * frame);
+int         hb_avfilter_get_frame(hb_avfilter_graph_t * graph, AVFrame * frame);
+int         hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t * in);
+hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph);
+
+void        hb_append_filter_dict(hb_value_array_t * filters,
+                                  const char * name, hb_dict_t * settings);
+
+void        hb_avfilter_combine(hb_list_t * list);
+#endif // HB_AVFILTER_H
