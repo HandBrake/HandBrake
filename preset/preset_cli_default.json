@@ -94,7 +94,7 @@
                     ],
                     "SubtitleTrackSelectionBehavior": "none",
                     "VideoAvgBitrate": 6000,
-                    "VideoColorMatrixCode": 0,
+                    "VideoColorMatrixCodeOverride": 0,
                     "VideoEncoder": "x264",
                     "VideoFramerate": "auto",
                     "VideoFramerateMode": "vfr",

@@ -1909,12 +1909,23 @@ static int get_color_prim(int color_primaries, hb_geometry_t geometry, hb_ration
     {
         case AVCOL_PRI_BT709:
             return HB_COLR_PRI_BT709;
+        case AVCOL_PRI_BT470M:
+            return HB_COLR_PRI_BT470M;
         case AVCOL_PRI_BT470BG:
             return HB_COLR_PRI_EBUTECH;
-        case AVCOL_PRI_BT470M:
         case AVCOL_PRI_SMPTE170M:
         case AVCOL_PRI_SMPTE240M:
             return HB_COLR_PRI_SMPTEC;
+        case AVCOL_PRI_FILM:
+            return HB_COLR_PRI_FILM;
+        case AVCOL_PRI_SMPTE428:
+            return HB_COLR_PRI_SMPTE428;
+        case AVCOL_PRI_SMPTE431:
+            return HB_COLR_PRI_SMPTE431;
+        case AVCOL_PRI_SMPTE432:
+            return HB_COLR_PRI_SMPTE432;
+        case AVCOL_PRI_JEDEC_P22:
+            return HB_COLR_PRI_JEDEC_P22;
         case AVCOL_PRI_BT2020:
             return HB_COLR_PRI_BT2020;
         default:
@@ -1937,6 +1948,24 @@ static int get_color_transfer(int color_trc)
 {
     switch (color_trc)
     {
+        case AVCOL_TRC_GAMMA22:
+            return HB_COLR_TRA_GAMMA22;
+        case AVCOL_TRC_GAMMA28:
+            return HB_COLR_TRA_GAMMA28;
+        case AVCOL_TRC_SMPTE170M:
+            return HB_COLR_TRA_SMPTE170M;
+        case AVCOL_TRC_LINEAR:
+            return HB_COLR_TRA_LINEAR;
+        case AVCOL_TRC_LOG:
+            return HB_COLR_TRA_LOG;
+        case AVCOL_TRC_LOG_SQRT:
+            return HB_COLR_TRA_LOG_SQRT;
+        case AVCOL_TRC_IEC61966_2_4:
+            return HB_COLR_TRA_IEC61966_2_4;
+        case AVCOL_TRC_BT1361_ECG:
+            return HB_COLR_TRA_BT1361_ECG;
+        case AVCOL_TRC_IEC61966_2_1:
+            return HB_COLR_TRA_IEC61966_2_1;
         case AVCOL_TRC_SMPTE240M:
             return HB_COLR_TRA_SMPTE240M;
         case AVCOL_TRC_SMPTEST2084:
@@ -1957,19 +1986,30 @@ static int get_color_matrix(int colorspace, hb_geometry_t geometry)
 {
     switch (colorspace)
     {
+        case AVCOL_SPC_RGB:
+            return HB_COLR_MAT_RGB;
         case AVCOL_SPC_BT709:
             return HB_COLR_MAT_BT709;
         case AVCOL_SPC_FCC:
+            return HB_COLR_MAT_FCC;
         case AVCOL_SPC_BT470BG:
+            return HB_COLR_MAT_BT470BG;
         case AVCOL_SPC_SMPTE170M:
-        case AVCOL_SPC_RGB: // libswscale rgb2yuv
             return HB_COLR_MAT_SMPTE170M;
         case AVCOL_SPC_SMPTE240M:
             return HB_COLR_MAT_SMPTE240M;
+        case AVCOL_SPC_YCGCO:
+            return HB_COLR_MAT_YCGCO;
         case AVCOL_SPC_BT2020_NCL:
             return HB_COLR_MAT_BT2020_NCL;
         case AVCOL_SPC_BT2020_CL:
             return HB_COLR_MAT_BT2020_CL;
+        case AVCOL_SPC_CHROMA_DERIVED_NCL:
+            return HB_COLR_MAT_CD_NCL;
+        case AVCOL_SPC_CHROMA_DERIVED_CL:
+            return HB_COLR_MAT_CD_CL;
+        case AVCOL_SPC_ICTCP:
+            return HB_COLR_MAT_ICTCP;
         default:
         {
             if ((geometry.width >= 1280 || geometry.height >= 720)||

@@ -1644,7 +1644,7 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
     video_dict = hb_dict_get(job_dict, "Video");
     hb_dict_set(video_dict, "Encoder", hb_value_string(encoder->short_name));
 
-    color_matrix_code = hb_value_get_int(hb_dict_get(preset, "VideoColorMatrixCode"));
+    color_matrix_code = hb_value_get_int(hb_dict_get(preset, "VideoColorMatrixCodeOveride"));
     if (color_matrix_code != 0)
     {
         int color_prim, color_transfer, color_matrix;
@@ -1678,9 +1678,12 @@ int hb_preset_apply_video(const hb_dict_t *preset, hb_dict_t *job_dict)
                 break;
         }
 
-        hb_dict_set(video_dict, "ColorPrimaries", hb_value_int(color_prim));
-        hb_dict_set(video_dict, "ColorTransfer", hb_value_int(color_transfer));
-        hb_dict_set(video_dict, "ColorMatrix", hb_value_int(color_matrix));
+        hb_dict_set(video_dict, "ColorPrimariesOverride",
+                    hb_value_int(color_prim));
+        hb_dict_set(video_dict, "ColorTransferOverride",
+                    hb_value_int(color_transfer));
+        hb_dict_set(video_dict, "ColorMatrixOverride",
+                    hb_value_int(color_matrix));
     }
     hb_dict_set(video_dict, "Encoder", hb_value_dup(vcodec_value));
 

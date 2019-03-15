@@ -714,9 +714,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->AsyncDepth = job->qsv.async_depth;
 
     // set and enable colorimetry (video signal information)
-    pv->param.videoSignalInfo.ColourPrimaries          = job->color_prim;
-    pv->param.videoSignalInfo.TransferCharacteristics  = job->color_transfer;
-    pv->param.videoSignalInfo.MatrixCoefficients       = job->color_matrix;
+    pv->param.videoSignalInfo.ColourPrimaries          = hb_output_color_prim(job);
+    pv->param.videoSignalInfo.TransferCharacteristics  = hb_output_color_transfer(job);
+    pv->param.videoSignalInfo.MatrixCoefficients       = hb_output_color_matrix(job);
     pv->param.videoSignalInfo.ColourDescriptionPresent = 1;
 
     // parse user-specified encoder options, if present
@@ -764,9 +764,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     // reload colorimetry in case values were set in encoder_options
     if (pv->param.videoSignalInfo.ColourDescriptionPresent)
     {
-        job->color_prim        = pv->param.videoSignalInfo.ColourPrimaries;
-        job->color_transfer    = pv->param.videoSignalInfo.TransferCharacteristics;
-        job->color_matrix      = pv->param.videoSignalInfo.MatrixCoefficients;
+        job->color_prim_override     = pv->param.videoSignalInfo.ColourPrimaries;
+        job->color_transfer_override = pv->param.videoSignalInfo.TransferCharacteristics;
+        job->color_matrix_override   = pv->param.videoSignalInfo.MatrixCoefficients;
     }
 
     // sanitize values that may exceed the Media SDK variable size

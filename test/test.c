@@ -1660,6 +1660,7 @@ static void ShowHelp()
 "                           (default: set by preset, typically 2)\n"
 "   -M, --color-matrix <string>\n"
 "                           Set the color space signaled by the output:\n"
+"                           Overrides color signalling with no conversion.\n"
 "                               2020\n"
 "                               709\n"
 "                               601\n"
@@ -4118,7 +4119,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
     }
     if (color_matrix_code > 0)
     {
-        hb_dict_set(preset, "VideoColorMatrixCode",
+        hb_dict_set(preset, "VideoColorMatrixCodeOverride",
                     hb_value_int(color_matrix_code));
     }
 #ifdef USE_QSV
