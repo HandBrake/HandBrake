@@ -42,6 +42,9 @@ struct hb_filter_private_s
     unsharp_plane_context_t     plane_ctx[3];
     unsharp_thread_context3_t * thread_ctx;
     int                         threads;
+
+    hb_filter_init_t            input;
+    hb_filter_init_t            output;
 };
 
 static int unsharp_init(hb_filter_object_t *filter,
@@ -167,6 +170,8 @@ static int unsharp_init(hb_filter_object_t *filter,
     }
     hb_filter_private_t * pv = filter->private_data;
 
+    pv->input = *init;
+
     // Mark parameters unset
     for (int c = 0; c < 3; c++)
     {
@@ -235,6 +240,8 @@ static int unsharp_init(hb_filter_object_t *filter,
         unsharp_close(filter);
         return -1;
     }
+
+    pv->output = *init;
 
     return 0;
 }
@@ -318,7 +325,11 @@ static int unsharp_work_thread(hb_filter_object_t *filter,
         return HB_FILTER_DONE;
     }
 
-    out = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
+    out = hb_frame_buffer_init(pv->output.pix_fmt, in->f.width, in->f.height);
+    out->f.color_prim     = pv->output.color_prim;
+    out->f.color_transfer = pv->output.color_transfer;
+    out->f.color_matrix   = pv->output.color_matrix;
+    out->f.color_range    = pv->output.color_range ;
 
     int c;
     for (c = 0; c < 3; c++)

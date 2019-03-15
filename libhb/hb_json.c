@@ -231,8 +231,8 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         "s:{s:o, s:o, s:{s:o, s:o}},"
         // Crop[Top, Bottom, Left, Right]}
         "s:[oooo],"
-        // Color {Primary, Transfer, Matrix}
-        "s:{s:o, s:o, s:o},"
+        // Color {Format, Range, Primary, Transfer, Matrix}
+        "s:{s:o, s:o, s:o, s:o, s:o},"
         // FrameRate {Num, Den}
         "s:{s:o, s:o},"
         // InterlaceDetected, VideoCodec
@@ -262,6 +262,8 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
                             hb_value_int(title->crop[2]),
                             hb_value_int(title->crop[3]),
     "Color",
+        "Format",           hb_value_int(title->pix_fmt),
+        "Range",            hb_value_int(title->color_range),
         "Primary",          hb_value_int(title->color_prim),
         "Transfer",         hb_value_int(title->color_transfer),
         "Matrix",           hb_value_int(title->color_matrix),
@@ -645,6 +647,10 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     hb_dict_set(source_dict, "Range", range_dict);
 
     hb_dict_t *video_dict = hb_dict_get(dict, "Video");
+    hb_dict_set(video_dict, "ColorFormat",
+                hb_value_int(job->pix_fmt));
+    hb_dict_set(video_dict, "ColorRange",
+                hb_value_int(job->color_range));
     hb_dict_set(video_dict, "ColorPrimaries",
                 hb_value_int(job->color_prim));
     hb_dict_set(video_dict, "ColorTransfer",
@@ -1004,10 +1010,12 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     // PAR {Num, Den}
     "s?{s:i, s:i},"
     // Video {Codec, Quality, Bitrate, Preset, Tune, Profile, Level, Options
-    //        TwoPass, Turbo, ColorPrimaries, ColorTransfer, ColorMatrix,
+    //        TwoPass, Turbo, ColorFormat, ColorRange, ColorPrimaries,
+    //        ColorTransfer, ColorMatrix,
     //        QSV {Decode, AsyncDepth}}
     "s:{s:o, s?f, s?i, s?s, s?s, s?s, s?s, s?s,"
     "   s?b, s?b, s?i, s?i, s?i,"
+    "   s?i, s?i,"
     "   s?{s?b, s?i}},"
     // Audio {CopyMask, FallbackEncoder, AudioList}
     "s?{s?o, s?o, s?o},"
@@ -1051,6 +1059,8 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             "Options",              unpack_s(&video_options),
             "TwoPass",              unpack_b(&job->twopass),
             "Turbo",                unpack_b(&job->fastfirstpass),
+            "ColorFormat",          unpack_i(&job->pix_fmt),
+            "ColorRange",           unpack_i(&job->color_range),
             "ColorPrimaries",       unpack_i(&job->color_prim),
             "ColorTransfer",        unpack_i(&job->color_transfer),
             "ColorMatrix",          unpack_i(&job->color_matrix),

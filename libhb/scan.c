@@ -1005,9 +1005,11 @@ skip_preview:
         {
             title->geometry.par = vid_info.geometry.par;
         }
+        title->pix_fmt = vid_info.pix_fmt;
         title->color_prim = vid_info.color_prim;
         title->color_transfer = vid_info.color_transfer;
         title->color_matrix = vid_info.color_matrix;
+        title->color_range = vid_info.color_range;
 
         title->video_decode_support = vid_info.video_decode_support;
 

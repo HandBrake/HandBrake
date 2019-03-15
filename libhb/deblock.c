@@ -47,6 +47,9 @@ struct hb_filter_private_s
     int           pp7_mpeg2;
     int           pp7_temp_stride;
     uint8_t     * pp7_src;
+
+    hb_filter_init_t  input;
+    hb_filter_init_t  output;
 };
 
 static int hb_deblock_init( hb_filter_object_t * filter,
@@ -346,6 +349,7 @@ static int hb_deblock_init( hb_filter_object_t * filter,
     filter->private_data = calloc( sizeof(struct hb_filter_private_s), 1 );
     hb_filter_private_t * pv = filter->private_data;
 
+    pv->input     = *init;
     pv->pp7_qp    = PP7_QP_DEFAULT;
     pv->pp7_mode  = PP7_MODE_DEFAULT;
     pv->pp7_mpeg2 = 1; /*mpi->qscale_type;*/
@@ -378,6 +382,7 @@ static int hb_deblock_init( hb_filter_object_t * filter,
     pv->pp7_temp_stride = (init->geometry.width + 16 + 15) & (~15);
 
     pv->pp7_src = (uint8_t*)malloc( pv->pp7_temp_stride*(h+8)*sizeof(uint8_t) );
+    pv->output = *init;
 
     return 0;
 }
@@ -411,7 +416,12 @@ static int hb_deblock_work( hb_filter_object_t * filter,
 
     if( /*TODO: mpi->qscale ||*/ pv->pp7_qp )
     {
-        out = hb_video_buffer_init( in->f.width, in->f.height );
+        out = hb_frame_buffer_init(pv->output.pix_fmt,
+                                   in->f.width, in->f.height );
+        out->f.color_prim     = pv->output.color_prim;
+        out->f.color_transfer = pv->output.color_transfer;
+        out->f.color_matrix   = pv->output.color_matrix;
+        out->f.color_range    = pv->output.color_range ;
 
         pp7_filter( pv,
                 out->plane[0].data,

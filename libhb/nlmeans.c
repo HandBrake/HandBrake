@@ -143,7 +143,10 @@ struct hb_filter_private_s
     int         max_frames;
 
     taskset_t   taskset;
-    nlmeans_thread_arg_t **thread_data;
+    nlmeans_thread_arg_t ** thread_data;
+
+    hb_filter_init_t        input;
+    hb_filter_init_t        output;
 };
 
 static int nlmeans_init(hb_filter_object_t *filter, hb_filter_init_t *init);
@@ -895,6 +898,8 @@ static int nlmeans_init(hb_filter_object_t *filter,
     hb_filter_private_t *pv = filter->private_data;
     NLMeansFunctions *functions = &pv->functions;
 
+    pv->input = *init;
+
     functions->build_integral = build_integral_scalar;
 #if defined(ARCH_X86)
     nlmeans_init_x86(functions);
@@ -1041,6 +1046,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
             goto fail;
         }
     }
+    pv->output = *init;
 
     return 0;
 
@@ -1113,7 +1119,13 @@ static void nlmeans_filter_thread(void *thread_args_v)
 
         Frame *frame = &pv->frame[segment];
         hb_buffer_t *buf;
-        buf = hb_frame_buffer_init(frame->fmt, frame->width, frame->height);
+        buf = hb_frame_buffer_init(pv->output.pix_fmt,
+                                   frame->width, frame->height);
+        buf->f.color_prim     = pv->output.color_prim;
+        buf->f.color_transfer = pv->output.color_transfer;
+        buf->f.color_matrix   = pv->output.color_matrix;
+        buf->f.color_range    = pv->output.color_range ;
+
 
         NLMeansFunctions *functions = &pv->functions;
 
@@ -1244,7 +1256,12 @@ static hb_buffer_t * nlmeans_filter_flush(hb_filter_private_t *pv)
     {
         Frame *frame = &pv->frame[f];
         hb_buffer_t *buf;
-        buf = hb_frame_buffer_init(frame->fmt, frame->width, frame->height);
+        buf = hb_frame_buffer_init(pv->output.pix_fmt,
+                                   frame->width, frame->height);
+        buf->f.color_prim     = pv->output.color_prim;
+        buf->f.color_transfer = pv->output.color_transfer;
+        buf->f.color_matrix   = pv->output.color_matrix;
+        buf->f.color_range    = pv->output.color_range ;
 
         NLMeansFunctions *functions = &pv->functions;
 

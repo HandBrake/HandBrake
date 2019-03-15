@@ -1464,10 +1464,11 @@ static void do_job(hb_job_t *job)
         init.time_base.num = 1;
         init.time_base.den = 90000;
         init.job = job;
-        init.pix_fmt = AV_PIX_FMT_YUV420P;
+        init.pix_fmt = title->pix_fmt;
         init.color_prim = title->color_prim;
         init.color_transfer = title->color_transfer;
         init.color_matrix = title->color_matrix;
+        init.color_range = title->color_range;
         init.geometry.width = title->geometry.width;
         init.geometry.height = title->geometry.height;
 

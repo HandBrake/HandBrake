@@ -68,6 +68,9 @@ static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init);
 static int deinterlace_init(hb_filter_object_t * filter,
                             hb_filter_init_t * init);
 
+static int colorspace_init(hb_filter_object_t * filter,
+                           hb_filter_init_t * init);
+
 hb_filter_object_t hb_filter_avfilter =
 {
     .id            = HB_FILTER_AVFILTER,
@@ -147,6 +150,23 @@ hb_filter_object_t hb_filter_deinterlace =
     .work              = null_work,
     .close             = avfilter_alias_close,
     .settings_template = deint_template,
+};
+
+const char colorspace_template[] =
+    "format=^"HB_ALL_REG"$:range=^"HB_ALL_REG"$:primaries=^"HB_ALL_REG"$:"
+    "matrix=^"HB_ALL_REG"$:transfer=^"HB_ALL_REG"$";
+
+hb_filter_object_t hb_filter_colorspace =
+{
+    .id                = HB_FILTER_COLORSPACE,
+    .enforce_order     = 1,
+    .skip              = 1,
+    .name              = "Colorspace",
+    .settings          = NULL,
+    .init              = colorspace_init,
+    .work              = null_work,
+    .close             = avfilter_alias_close,
+    .settings_template = colorspace_template,
 };
 
 static int  null_work( hb_filter_object_t * filter,
@@ -241,14 +261,6 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
     }
     graph->input = avfilter;
 
-    // Convert input to pix fmt YUV420P
-    avfilter = append_filter(graph, "format", "yuv420p");
-    if (avfilter == NULL)
-    {
-        hb_error("hb_avfilter_graph_init: failed to create pix format filter");
-        goto fail;
-    }
-
     // Link input to filter chain created by avfilter_graph_parse2
     result = avfilter_link(graph->last, 0, in->filter_ctx, 0);
     if (result < 0)
@@ -267,8 +279,8 @@ hb_avfilter_graph_init(hb_value_t * settings, hb_filter_init_t * init)
 #if 0
     // Set output pix fmt to YUV420P
     enum AVPixelFormat pix_fmts[2] = {AV_PIX_FMT_YUV420P, AV_PIX_FMT_NONE};
-    if ((ret = av_opt_set_int_list(avfilter, "pix_fmts", pix_fmts,
-                                 AV_PIX_FMT_NONE, AV_OPT_SEARCH_CHILDREN)) < 0)
+    if (av_opt_set_int_list(avfilter, "pix_fmts", pix_fmts,
+                            AV_PIX_FMT_NONE, AV_OPT_SEARCH_CHILDREN) < 0)
     {
         hb_error("hb_avfilter_graph_init: failed to set buffersink pix_fmt");
         goto fail;
@@ -697,7 +709,7 @@ void hb_append_filter_dict(hb_value_array_t * filters,
     hb_value_array_append(filters, filter_dict);
 }
 
-static const char * color_format_range(enum AVPixelFormat format)
+static const char * color_format_range(enum AVPixelFormat format, int range)
 {
     switch (format)
     {
@@ -707,7 +719,7 @@ static const char * color_format_range(enum AVPixelFormat format)
         case AV_PIX_FMT_YUVJ440P:
             return "full";
         default:
-            return "limited";
+            return range == AVCOL_RANGE_JPEG ? "full" : "limited";
     }
 }
 
@@ -772,11 +784,15 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
         case HB_COLR_MAT_BT709:
             matrix = "bt709";
             break;
-        case HB_COLR_MAT_SMPTE170M:
-            matrix = "smpte170m";
+        case HB_COLR_MAT_FCC:
+            matrix = "fcc";
             break;
         case HB_COLR_MAT_SMPTE240M:
             matrix = "smpte240m";
+            break;
+        case HB_COLR_MAT_BT470BG:
+        case HB_COLR_MAT_SMPTE170M:
+            matrix = "smpte170m";
             break;
         case HB_COLR_MAT_BT2020_NCL:
         case HB_COLR_MAT_BT2020_CL:
@@ -784,16 +800,18 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
             break;
         default:
         case HB_COLR_MAT_UNDEF:
-            matrix = "bt601";
+            matrix = NULL;
             break;
 
     }
-    hb_dict_set_string(avsettings, "in_color_matrix", matrix);
-    hb_dict_set_string(avsettings, "out_color_matrix", matrix);
+    if (matrix != NULL)
+    {
+        hb_dict_set_string(avsettings, "in_color_matrix", matrix);
+        hb_dict_set_string(avsettings, "out_color_matrix", matrix);
+    }
     hb_dict_set_string(avsettings, "in_range",
-                       color_format_range(init->pix_fmt));
-    hb_dict_set_string(avsettings, "out_range",
-                       color_format_range(AV_PIX_FMT_YUV420P));
+                       color_format_range(init->pix_fmt, init->color_range));
+    hb_dict_set_string(avsettings, "out_range", "limited");
     hb_dict_set(avfilter, "scale", avsettings);
     hb_value_array_append(avfilters, avfilter);
 
@@ -1141,6 +1159,65 @@ static int deinterlace_init(hb_filter_object_t * filter,
         hb_dict_set(avsettings, "parity", hb_value_string("bff"));
     }
     hb_dict_set(avfilter, "yadif", avsettings);
+    pv->avfilters = avfilter;
+
+    pv->output = *init;
+
+    return 0;
+}
+
+static int colorspace_init(hb_filter_object_t * filter, hb_filter_init_t * init)
+{
+    hb_filter_private_t * pv = NULL;
+
+    pv = calloc(1, sizeof(struct hb_filter_private_s));
+    filter->private_data = pv;
+    if (pv == NULL)
+    {
+        return 1;
+    }
+    pv->input = *init;
+
+    hb_dict_t        * settings = filter->settings;
+
+    char * format = NULL, * range = NULL;
+    char * primaries = NULL, * transfer = NULL, * matrix = NULL;
+
+    hb_dict_extract_string(&format, settings, "format");
+    hb_dict_extract_string(&range, settings, "range");
+    hb_dict_extract_string(&primaries, settings, "primaries");
+    hb_dict_extract_string(&transfer, settings, "transfer");
+    hb_dict_extract_string(&matrix, settings, "matrix");
+
+    if (!(format || range || primaries || transfer || matrix))
+    {
+        return 0;
+    }
+
+    hb_dict_t * avfilter   = hb_dict_init();
+    hb_dict_t * avsettings = hb_dict_init();
+
+    if (format)
+    {
+        hb_dict_set_string(avsettings, "format", format);
+    }
+    if (range)
+    {
+        hb_dict_set_string(avsettings, "range", range);
+    }
+    if (primaries)
+    {
+        hb_dict_set_string(avsettings, "primaries", primaries);
+    }
+    if (transfer)
+    {
+        hb_dict_set_string(avsettings, "trc", transfer);
+    }
+    if (matrix)
+    {
+        hb_dict_set_string(avsettings, "space", matrix);
+    }
+    hb_dict_set(avfilter, "colorspace", avsettings);
     pv->avfilters = avfilter;
 
     pv->output = *init;

@@ -630,7 +630,7 @@ hb_image_t* hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
                         geo->crop[0], geo->crop[2] );
     }
 
-    int colorspace = hb_ff_get_colorspace(title->color_matrix);
+    int colorspace = hb_sws_get_colorspace(title->color_matrix);
 
     // Get scaling context
     context = hb_sws_get_context(

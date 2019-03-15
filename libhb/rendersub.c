@@ -34,6 +34,9 @@ struct hb_filter_private_s
     // SRT
     int                 line;
     hb_buffer_t       * current_sub;
+
+    hb_filter_init_t    input;
+    hb_filter_init_t    output;
 };
 
 // VOBSUB
@@ -224,7 +227,14 @@ static hb_buffer_t * ScaleSubtitle(hb_filter_private_t *pv,
 
         width       = sub->f.width  * xfactor;
         height      = sub->f.height * yfactor;
-        scaled      = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P, width, height);
+        scaled      = hb_frame_buffer_init(pv->output.pix_fmt, width, height);
+        if (scaled == NULL)
+            return NULL;
+        scaled->f.color_prim     = pv->output.color_prim;
+        scaled->f.color_transfer = pv->output.color_transfer;
+        scaled->f.color_matrix   = pv->output.color_matrix;
+        scaled->f.color_range    = pv->output.color_range ;
+
         scaled->f.x = sub->f.x * xfactor;
         scaled->f.y = sub->f.y * yfactor;
 
@@ -456,9 +466,13 @@ static hb_buffer_t * RenderSSAFrame( hb_filter_private_t * pv, ASS_Image * frame
     unsigned frameV = (yuv >> 8 ) & 0xff;
     unsigned frameU = (yuv >> 0 ) & 0xff;
 
-    sub = hb_frame_buffer_init( AV_PIX_FMT_YUVA420P, frame->w, frame->h );
-    if( sub == NULL )
+    sub = hb_frame_buffer_init(pv->output.pix_fmt, frame->w, frame->h);
+    if (sub == NULL)
         return NULL;
+    sub->f.color_prim     = pv->output.color_prim;
+    sub->f.color_transfer = pv->output.color_transfer;
+    sub->f.color_matrix   = pv->output.color_matrix;
+    sub->f.color_range    = pv->output.color_range ;
 
     uint8_t *y_out, *u_out, *v_out, *a_out;
     y_out = sub->plane[0].data;
@@ -940,6 +954,8 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
     hb_subtitle_t *subtitle;
     int ii;
 
+    pv->input = *init;
+
     // Find the subtitle we need
     for( ii = 0; ii < hb_list_count(init->job->list_subtitle); ii++ )
     {
@@ -957,6 +973,8 @@ static int hb_rendersub_init( hb_filter_object_t * filter,
         hb_log("rendersub: no subtitle marked for burn");
         return 1;
     }
+    pv->output = *init;
+
     return 0;
 }
 

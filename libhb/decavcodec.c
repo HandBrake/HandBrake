@@ -1118,6 +1118,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     hb_value_array_t * filters;
     hb_dict_t        * settings;
     hb_filter_init_t   filter_init;
+    enum AVPixelFormat pix_fmt;
 
 #ifdef USE_QSV
     if (pv->qsv.decode &&
@@ -1134,6 +1135,7 @@ int reinit_video_filters(hb_work_private_t * pv)
         // of incoming video if not even.
         orig_width = pv->context->width & ~1;
         orig_height = pv->context->height & ~1;
+        pix_fmt = AV_PIX_FMT_YUV420P;
     }
     else
     {
@@ -1148,9 +1150,10 @@ int reinit_video_filters(hb_work_private_t * pv)
             orig_width = pv->job->title->geometry.width;
             orig_height = pv->job->title->geometry.height;
         }
+        pix_fmt = pv->job->pix_fmt;
     }
 
-    if (AV_PIX_FMT_YUV420P == pv->frame->format  &&
+    if (pix_fmt            == pv->frame->format  &&
         orig_width         == pv->frame->width   &&
         orig_height        == pv->frame->height  &&
         HB_ROTATION_0      == pv->title->rotation)
@@ -1184,7 +1187,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     vrate.den = pv->duration * (clock / 90000.);
 
     filters = hb_value_array_init();
-    if (AV_PIX_FMT_YUV420P != pv->frame->format ||
+    if (pix_fmt            != pv->frame->format ||
         orig_width         != pv->frame->width  ||
         orig_height        != pv->frame->height)
     {
@@ -1222,9 +1225,9 @@ int reinit_video_filters(hb_work_private_t * pv)
         }
     }
 
+    filter_init.pix_fmt           = pv->frame->format;
     filter_init.geometry.width    = pv->frame->width;
     filter_init.geometry.height   = pv->frame->height;
-    filter_init.pix_fmt           = pv->frame->format;
     filter_init.geometry.par.num  = pv->frame->sample_aspect_ratio.num;
     filter_init.geometry.par.den  = pv->frame->sample_aspect_ratio.den;
     filter_init.time_base.num     = 1;
@@ -2027,9 +2030,13 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
     info->level = pv->context->level;
     info->name = pv->context->codec->name;
 
-    info->color_prim = get_color_prim(pv->context->color_primaries, info->geometry, info->rate);
+    info->pix_fmt        = pv->context->pix_fmt;
+    info->color_prim     = get_color_prim(pv->context->color_primaries,
+                                          info->geometry, info->rate);
     info->color_transfer = get_color_transfer(pv->context->color_trc);
-    info->color_matrix = get_color_matrix(pv->context->colorspace, info->geometry);
+    info->color_matrix   = get_color_matrix(pv->context->colorspace,
+                                            info->geometry);
+    info->color_range    = pv->context->color_range;
 
     info->video_decode_support = HB_DECODE_SUPPORT_SW;
 

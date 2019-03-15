@@ -37,6 +37,12 @@ void hb_video_buffer_to_avframe(AVFrame *frame, hb_buffer_t * buf)
     frame->format           = buf->f.fmt;
     frame->interlaced_frame = !!buf->s.combed;
     frame->top_field_first  = !!(buf->s.flags & PIC_FLAG_TOP_FIELD_FIRST);
+
+    frame->format          = buf->f.fmt;
+    frame->color_primaries = hb_colr_pri_hb_to_ff(buf->f.color_prim);
+    frame->color_trc       = hb_colr_tra_hb_to_ff(buf->f.color_transfer);
+    frame->colorspace      = hb_colr_mat_hb_to_ff(buf->f.color_matrix);
+    frame->color_range     = buf->f.color_range;
 }
 
 void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
@@ -70,7 +76,12 @@ void hb_avframe_set_video_buffer_flags(hb_buffer_t * buf, AVFrame *frame,
     {
         buf->s.flags |= PIC_FLAG_REPEAT_FRAME;
     }
-    buf->s.frametype = get_frame_type(frame->pict_type);
+    buf->s.frametype      = get_frame_type(frame->pict_type);
+    buf->f.fmt            = frame->format;
+    buf->f.color_prim     = hb_colr_pri_ff_to_hb(frame->color_primaries);
+    buf->f.color_transfer = hb_colr_tra_ff_to_hb(frame->color_trc);
+    buf->f.color_matrix   = hb_colr_mat_ff_to_hb(frame->colorspace);
+    buf->f.color_range    = frame->color_range;
 }
 
 hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
@@ -163,7 +174,7 @@ hb_sws_get_context(int srcW, int srcH, enum AVPixelFormat srcFormat,
     return ctx;
 }
 
-int hb_ff_get_colorspace(int color_matrix)
+int hb_sws_get_colorspace(int color_matrix)
 {
     int color_space = SWS_CS_DEFAULT;
 
@@ -187,6 +198,229 @@ int hb_ff_get_colorspace(int color_matrix)
     }
 
     return color_space;
+}
+
+int hb_colr_pri_hb_to_ff(int colr_prim)
+{
+    switch (colr_prim)
+    {
+        case HB_COLR_PRI_BT709:
+            return AVCOL_PRI_BT709;
+        case HB_COLR_PRI_EBUTECH:
+            return AVCOL_PRI_BT470BG;
+        case HB_COLR_PRI_BT470M:
+            return AVCOL_PRI_BT470M;
+        case HB_COLR_PRI_SMPTEC:
+            return AVCOL_PRI_SMPTE170M;
+        case HB_COLR_PRI_SMPTE240M:
+            return AVCOL_PRI_SMPTE240M;
+        case HB_COLR_PRI_BT2020:
+            return AVCOL_PRI_BT2020;
+        case HB_COLR_PRI_SMPTE428:
+            return AVCOL_PRI_SMPTE428;
+        case HB_COLR_PRI_SMPTE431:
+            return AVCOL_PRI_SMPTE431;
+        case HB_COLR_PRI_SMPTE432:
+            return AVCOL_PRI_SMPTE432;
+        case HB_COLR_PRI_JEDEC_P22:
+            return AVCOL_PRI_JEDEC_P22;
+        default:
+        case HB_COLR_PRI_UNDEF:
+            return AVCOL_PRI_UNSPECIFIED;
+    }
+}
+
+int hb_colr_tra_hb_to_ff(int colr_tra)
+{
+    switch (colr_tra)
+    {
+        case HB_COLR_TRA_BT709:
+            return AVCOL_TRC_BT709;
+        case HB_COLR_TRA_GAMMA22:
+            return AVCOL_TRC_GAMMA22;
+        case HB_COLR_TRA_GAMMA28:
+            return AVCOL_TRC_GAMMA28;
+        case HB_COLR_TRA_SMPTE170M:
+            return AVCOL_TRC_SMPTE170M;
+        case HB_COLR_TRA_SMPTE240M:
+            return AVCOL_TRC_SMPTE240M;
+        case HB_COLR_TRA_LINEAR:
+            return AVCOL_TRC_LINEAR;
+        case HB_COLR_TRA_LOG:
+            return AVCOL_TRC_LOG;
+        case HB_COLR_TRA_LOG_SQRT:
+            return AVCOL_TRC_LOG_SQRT;
+        case HB_COLR_TRA_IEC61966_2_4:
+            return AVCOL_TRC_IEC61966_2_4;
+        case HB_COLR_TRA_BT1361_ECG:
+            return AVCOL_TRC_BT1361_ECG;
+        case HB_COLR_TRA_IEC61966_2_1:
+            return AVCOL_TRC_IEC61966_2_1;
+        case HB_COLR_TRA_BT2020_10:
+            return AVCOL_TRC_BT2020_10;
+        case HB_COLR_TRA_BT2020_12:
+            return AVCOL_TRC_BT2020_12;
+        case HB_COLR_TRA_SMPTEST2084:
+            return AVCOL_TRC_SMPTE2084;
+        case HB_COLR_TRA_SMPTE428:
+            return AVCOL_TRC_SMPTE428;
+        case HB_COLR_TRA_ARIB_STD_B67:
+            return AVCOL_TRC_ARIB_STD_B67;
+        default:
+        case HB_COLR_TRA_UNDEF:
+            return AVCOL_TRC_UNSPECIFIED;
+    }
+}
+
+int hb_colr_mat_hb_to_ff(int colr_mat)
+{
+    switch (colr_mat)
+    {
+        case HB_COLR_MAT_RGB:
+            return AVCOL_SPC_RGB;
+        case HB_COLR_MAT_BT709:
+            return AVCOL_SPC_BT709;
+        case HB_COLR_MAT_FCC:
+            return AVCOL_SPC_FCC;
+        case HB_COLR_MAT_BT470BG:
+            return AVCOL_SPC_BT470BG;
+        case HB_COLR_MAT_SMPTE170M:
+            return AVCOL_SPC_SMPTE170M;
+        case HB_COLR_MAT_SMPTE240M:
+            return AVCOL_SPC_SMPTE240M;
+        case HB_COLR_MAT_YCGCO:
+            return AVCOL_SPC_YCGCO;
+        case HB_COLR_MAT_BT2020_NCL:
+            return AVCOL_SPC_BT2020_NCL;
+        case HB_COLR_MAT_BT2020_CL:
+            return AVCOL_SPC_BT2020_CL;
+        case HB_COLR_MAT_SMPTE2085:
+            return AVCOL_SPC_SMPTE2085;
+        case HB_COLR_MAT_CD_NCL:
+            return AVCOL_SPC_CHROMA_DERIVED_NCL;
+        case HB_COLR_MAT_CD_CL:
+            return AVCOL_SPC_CHROMA_DERIVED_CL;
+        case HB_COLR_MAT_ICTCP:
+            return AVCOL_SPC_ICTCP;
+        default:
+        case HB_COLR_MAT_UNDEF:
+            return AVCOL_SPC_UNSPECIFIED;
+    }
+}
+
+int hb_colr_pri_ff_to_hb(int colr_prim)
+{
+    switch (colr_prim)
+    {
+        case AVCOL_PRI_BT709:
+            return HB_COLR_PRI_BT709;
+        case AVCOL_PRI_BT470M:
+            return HB_COLR_PRI_BT470M;
+        case AVCOL_PRI_BT470BG:
+            return HB_COLR_PRI_EBUTECH;
+        case AVCOL_PRI_SMPTE170M:
+            return HB_COLR_PRI_SMPTEC;
+        case AVCOL_PRI_SMPTE240M:
+            return HB_COLR_PRI_SMPTE240M;
+        case AVCOL_PRI_FILM:
+            return HB_COLR_PRI_FILM;
+        case AVCOL_PRI_BT2020:
+            return HB_COLR_PRI_BT2020;
+        case AVCOL_PRI_SMPTE428:
+            return HB_COLR_PRI_SMPTE428;
+        case AVCOL_PRI_SMPTE431:
+            return HB_COLR_PRI_SMPTE431;
+        case AVCOL_PRI_SMPTE432:
+            return HB_COLR_PRI_SMPTE432;
+        case AVCOL_PRI_JEDEC_P22:
+            return HB_COLR_PRI_JEDEC_P22;
+        default:
+        case AVCOL_PRI_RESERVED:
+        case AVCOL_PRI_RESERVED0:
+        case AVCOL_PRI_UNSPECIFIED:
+            return HB_COLR_PRI_UNDEF;
+    }
+}
+
+int hb_colr_tra_ff_to_hb(int colr_tra)
+{
+    switch (colr_tra)
+    {
+        case AVCOL_TRC_BT709:
+            return HB_COLR_TRA_BT709;
+        case AVCOL_TRC_GAMMA22:
+            return HB_COLR_TRA_GAMMA22;
+        case AVCOL_TRC_GAMMA28:
+            return HB_COLR_TRA_GAMMA28;
+        case AVCOL_TRC_SMPTE170M:
+            return HB_COLR_TRA_SMPTE170M;
+        case AVCOL_TRC_SMPTE240M:
+            return HB_COLR_TRA_SMPTE240M;
+        case AVCOL_TRC_LINEAR:
+            return HB_COLR_TRA_LINEAR;
+        case AVCOL_TRC_LOG:
+            return HB_COLR_TRA_LOG;
+        case AVCOL_TRC_LOG_SQRT:
+            return HB_COLR_TRA_LOG_SQRT;
+        case AVCOL_TRC_IEC61966_2_4:
+            return HB_COLR_TRA_IEC61966_2_4;
+        case AVCOL_TRC_BT1361_ECG:
+            return HB_COLR_TRA_BT1361_ECG;
+        case AVCOL_TRC_IEC61966_2_1:
+            return HB_COLR_TRA_IEC61966_2_1;
+        case AVCOL_TRC_BT2020_10:
+            return HB_COLR_TRA_BT2020_10;
+        case AVCOL_TRC_BT2020_12:
+            return HB_COLR_TRA_BT2020_12;
+        case AVCOL_TRC_SMPTE2084:
+            return HB_COLR_TRA_SMPTEST2084;
+        case AVCOL_TRC_SMPTE428:
+            return HB_COLR_TRA_SMPTE428;
+        case AVCOL_TRC_ARIB_STD_B67:
+            return HB_COLR_TRA_ARIB_STD_B67;
+        default:
+        case AVCOL_TRC_UNSPECIFIED:
+        case AVCOL_TRC_RESERVED:
+        case AVCOL_TRC_RESERVED0:
+            return HB_COLR_TRA_UNDEF;
+    }
+}
+
+int hb_colr_mat_ff_to_hb(int colr_mat)
+{
+    switch (colr_mat)
+    {
+        case AVCOL_SPC_RGB:
+            return HB_COLR_MAT_RGB;
+        case AVCOL_SPC_BT709:
+            return HB_COLR_MAT_BT709;
+        case AVCOL_SPC_FCC:
+            return HB_COLR_MAT_FCC;
+        case AVCOL_SPC_BT470BG:
+            return HB_COLR_MAT_BT470BG;
+        case AVCOL_SPC_SMPTE170M:
+            return HB_COLR_MAT_SMPTE170M;
+        case AVCOL_SPC_SMPTE240M:
+            return HB_COLR_MAT_SMPTE240M;
+        case AVCOL_SPC_YCGCO:
+            return HB_COLR_MAT_YCGCO;
+        case AVCOL_SPC_BT2020_NCL:
+            return HB_COLR_MAT_BT2020_NCL;
+        case AVCOL_SPC_BT2020_CL:
+            return HB_COLR_MAT_BT2020_CL;
+        case AVCOL_SPC_SMPTE2085:
+            return HB_COLR_MAT_SMPTE2085;
+        case AVCOL_SPC_CHROMA_DERIVED_NCL:
+            return HB_COLR_MAT_CD_NCL;
+        case AVCOL_SPC_CHROMA_DERIVED_CL:
+            return HB_COLR_MAT_CD_CL;
+        case AVCOL_SPC_ICTCP:
+            return HB_COLR_MAT_ICTCP;
+        default:
+        case AVCOL_SPC_UNSPECIFIED:
+        case AVCOL_SPC_RESERVED:
+            return HB_COLR_MAT_UNDEF;
+    }
 }
 
 uint64_t hb_ff_mixdown_xlat(int hb_mixdown, int *downmix_mode)

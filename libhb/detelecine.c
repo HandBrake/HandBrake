@@ -92,6 +92,9 @@ struct hb_filter_private_s
     struct pullup_context * pullup_ctx;
     int                     pullup_fakecount;
     int                     pullup_skipflag;
+
+    hb_filter_init_t        input;
+    hb_filter_init_t        output;
 };
 
 static int hb_detelecine_init( hb_filter_object_t * filter,
@@ -821,10 +824,12 @@ void pullup_flush_fields( struct pullup_context * c )
 static int hb_detelecine_init( hb_filter_object_t * filter,
                                hb_filter_init_t * init )
 {
-    filter->private_data = calloc( sizeof(struct hb_filter_private_s), 1 );
-    hb_filter_private_t * pv = filter->private_data;
+    filter->private_data = calloc(sizeof(struct hb_filter_private_s), 1);
 
+    hb_filter_private_t   * pv = filter->private_data;
     struct pullup_context * ctx;
+
+    pv->input      = *init;
     pv->pullup_ctx = ctx = pullup_alloc_context();
 
     ctx->junk_left = ctx->junk_right  = 1;
@@ -877,6 +882,7 @@ static int hb_detelecine_init( hb_filter_object_t * filter,
     pv->pullup_skipflag = 0;
 
     init->job->use_detelecine = 1;
+    pv->output = *init;
 
     return 0;
 }
@@ -1017,7 +1023,11 @@ static int hb_detelecine_work( hb_filter_object_t * filter,
         pullup_pack_frame( ctx, frame );
     }
 
-    out = hb_video_buffer_init( in->f.width, in->f.height );
+    out = hb_frame_buffer_init(pv->output.pix_fmt, in->f.width, in->f.height);
+    out->f.color_prim     = pv->output.color_prim;
+    out->f.color_transfer = pv->output.color_transfer;
+    out->f.color_matrix   = pv->output.color_matrix;
+    out->f.color_range    = pv->output.color_range ;
 
     /* Copy pullup frame buffer into output buffer */
     memcpy( out->plane[0].data, frame->buffer->planes[0], frame->buffer->size[0] );

@@ -3786,9 +3786,11 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->pass_id    = HB_PASS_ENCODE;
     job->vrate      = title->vrate;
 
+    job->pix_fmt        = AV_PIX_FMT_YUV420P;
     job->color_prim     = title->color_prim;
     job->color_transfer = title->color_transfer;
     job->color_matrix   = title->color_matrix;
+    job->color_range    = title->color_range;
 
     job->mux = HB_MUX_MP4;
 
@@ -4083,6 +4085,10 @@ hb_filter_object_t * hb_filter_get( int filter_id )
 
         case HB_FILTER_DEINTERLACE:
             filter = &hb_filter_deinterlace;
+            break;
+
+        case HB_FILTER_COLORSPACE:
+            filter = &hb_filter_colorspace;
             break;
 
         case HB_FILTER_VFR:
@@ -5722,5 +5728,131 @@ void hb_chapter_dequeue(hb_chapter_queue_t *q, hb_buffer_t *buf)
         hb_list_rem(q->list_chapter, item);
         buf->s.new_chap = item->new_chap;
         free(item);
+    }
+}
+
+// Only return values supported by 'colorspace' avfilter:
+const char * hb_get_format_name(int format)
+{
+    switch (format)
+    {
+        case AV_PIX_FMT_YUV420P:
+            return "yuv420p";
+        case AV_PIX_FMT_YUV420P10:
+            return "yuv420p10";
+        case AV_PIX_FMT_YUV420P12:
+            return "yuv420p12";
+        case AV_PIX_FMT_YUV422P:
+            return "yuv422p";
+        case AV_PIX_FMT_YUV422P10:
+            return "yuv422p10";
+        case AV_PIX_FMT_YUV422P12:
+            return "yuv422p12";
+        case AV_PIX_FMT_YUV444P:
+            return "yuv444p";
+        case AV_PIX_FMT_YUV444P10:
+            return "yuv444p10";
+        default:
+            return NULL;
+    }
+}
+
+// Only return values supported by 'colorspace' avfilter:
+const char * hb_get_primaries_name(int primaries)
+{
+    switch (primaries)
+    {
+        case HB_COLR_PRI_BT709:
+            return "bt709";
+        case HB_COLR_PRI_BT470M:
+            return "bt470m";
+        case HB_COLR_PRI_EBUTECH:
+            return "bt470bg";
+        case HB_COLR_PRI_SMPTEC:
+            return "smpte170m";
+        case HB_COLR_PRI_SMPTE240M:
+            return "smpte240m";
+        case HB_COLR_PRI_SMPTE428:
+            return "smpte428";
+        case HB_COLR_PRI_FILM:
+            return "film";
+        case HB_COLR_PRI_SMPTE431:
+            return "smpte431";
+        case HB_COLR_PRI_SMPTE432:
+            return "smpte432";
+        case HB_COLR_PRI_BT2020:
+            return "bt2020";
+        case HB_COLR_PRI_JEDEC_P22:
+            return "jedec-p22";
+        default:
+            return NULL;
+    }
+}
+
+// Only return values supported by 'colorspace' avfilter:
+const char * hb_get_transfer_name(int transfer)
+{
+    switch (transfer)
+    {
+        case HB_COLR_TRA_BT709:
+            return "bt709";
+        case HB_COLR_TRA_GAMMA22:
+            return "gamma22";
+        case HB_COLR_TRA_GAMMA28:
+            return "gamma28";
+        case HB_COLR_TRA_SMPTE170M:
+            return "smpte170m";
+        case HB_COLR_TRA_SMPTE240M:
+            return "smpte240m";
+        case HB_COLR_TRA_IEC61966_2_1:
+            return "iec61966-2-1";
+        case HB_COLR_TRA_IEC61966_2_4:
+            return "iec61966-2-4";
+        case HB_COLR_TRA_BT2020_10:
+            return "bt2020-10";
+        case HB_COLR_TRA_BT2020_12:
+            return "bt2020-12";
+        default:
+            return NULL;
+    }
+}
+
+// Only return values supported by 'colorspace' avfilter:
+const char * hb_get_matrix_name(int matrix)
+{
+    switch (matrix)
+    {
+        case HB_COLR_MAT_BT709:
+            return "bt709";
+        case HB_COLR_MAT_FCC:
+            return "fcc";
+        case HB_COLR_MAT_BT470BG:
+            return "bt470bg";
+        case HB_COLR_MAT_SMPTE170M:
+            return "smpte170m";
+        case HB_COLR_MAT_SMPTE240M:
+            return "smpte240m";
+        case HB_COLR_MAT_YCGCO:
+            return "ycgco";
+        case HB_COLR_MAT_RGB:
+            return "gbr";
+        case HB_COLR_MAT_BT2020_NCL:
+            return "bt2020ncl";
+        default:
+            return NULL;
+    }
+}
+
+// Only return values supported by 'colorspace' avfilter:
+const char * hb_get_color_range_name(int range)
+{
+    switch (range)
+    {
+        case AVCOL_RANGE_MPEG:
+            return "mpeg";
+        case AVCOL_RANGE_JPEG:
+            return "jpeg";
+        default:
+            return "mpeg";
     }
 }
