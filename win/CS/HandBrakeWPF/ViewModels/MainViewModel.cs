@@ -1541,7 +1541,7 @@ namespace HandBrakeWPF.ViewModels
             OpenFileDialog dialog = new OpenFileDialog { Filter = "All files (*.*)|*.*" };
 
             string mruDir = this.GetMru(Constants.FileScanMru);
-            if (!string.IsNullOrEmpty(mruDir))
+            if (!string.IsNullOrEmpty(mruDir) && Directory.Exists(mruDir))
             {
                 dialog.InitialDirectory = mruDir;
             }
@@ -1772,7 +1772,7 @@ namespace HandBrakeWPF.ViewModels
                                                  : (this.CurrentTask.OutputFormat == OutputFormat.WebM ? 3 : 0));
 
             string mruDir = this.GetMru(Constants.FileSaveMru);
-            if (!string.IsNullOrEmpty(mruDir))
+            if (!string.IsNullOrEmpty(mruDir) && Directory.Exists(mruDir))
             {
                 saveFileDialog.InitialDirectory = mruDir;
             }
