@@ -58,19 +58,7 @@ static int avfilter_init( hb_filter_object_t * filter, hb_filter_init_t * init )
     }
 
     // Retrieve the parameters of the output filter
-    AVFilterLink *link     = pv->graph->output->inputs[0];
-    init->geometry.width   = link->w;
-    init->geometry.height  = link->h;
-    init->geometry.par.num = link->sample_aspect_ratio.num;
-    init->geometry.par.den = link->sample_aspect_ratio.den;
-    init->pix_fmt          = link->format;
-    // avfilter can generate "unknown" framerates.  If this happens
-    // just pass along the source framerate.
-    if (link->frame_rate.num > 0 && link->frame_rate.den > 0)
-    {
-        init->vrate.num        = link->frame_rate.num;
-        init->vrate.den        = link->frame_rate.den;
-    }
+    hb_avfilter_graph_update_init(pv->graph, init);
     pv->output = *init;
 
     hb_buffer_list_clear(&pv->list);
@@ -109,21 +97,8 @@ static int avfilter_post_init( hb_filter_object_t * filter, hb_job_t * job )
     }
 
     // Retrieve the parameters of the output filter
-    hb_filter_init_t * init = &pv->output;
-    AVFilterLink *link      = pv->graph->output->inputs[0];
-    *init                   = pv->input;
-    init->geometry.width    = link->w;
-    init->geometry.height   = link->h;
-    init->geometry.par.num  = link->sample_aspect_ratio.num;
-    init->geometry.par.den  = link->sample_aspect_ratio.den;
-    init->pix_fmt           = link->format;
-    // avfilter can generate "unknown" framerates.  If this happens
-    // just pass along the source framerate.
-    if (link->frame_rate.num > 0 && link->frame_rate.den > 0)
-    {
-        init->vrate.num     = link->frame_rate.num;
-        init->vrate.den     = link->frame_rate.den;
-    }
+    pv->output = pv->input;
+    hb_avfilter_graph_update_init(pv->graph, &pv->output);
 
     hb_buffer_list_clear(&pv->list);
 
@@ -167,8 +142,8 @@ static hb_filter_info_t * avfilter_info(hb_filter_object_t * filter)
     }
     info->human_readable_desc[0] = 0;
 
-    char * dst   = info->human_readable_desc;
-    char * start = pv->graph->settings;
+    char       * dst   = info->human_readable_desc;
+    const char * start = hb_avfilter_graph_settings(pv->graph);
     while (start != NULL && *start != 0)
     {
         // Find end of a filter

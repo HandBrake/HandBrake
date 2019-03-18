@@ -15,6 +15,17 @@
 #include "hbavfilter.h"
 #include "avfilter_priv.h"
 
+struct hb_avfilter_graph_s
+{
+    AVFilterGraph    * avgraph;
+    AVFilterContext  * last;
+    AVFilterContext  * input;
+    AVFilterContext  * output;
+    char             * settings;
+    AVFrame          * frame;
+    AVRational         out_time_base;
+};
+
 static AVFilterContext * append_filter( hb_avfilter_graph_t * graph,
                                         const char * name, const char * args)
 {
@@ -157,6 +168,11 @@ fail:
     return NULL;
 }
 
+const char * hb_avfilter_graph_settings(hb_avfilter_graph_t * graph)
+{
+    return graph->settings;
+}
+
 void hb_avfilter_graph_close(hb_avfilter_graph_t ** _g)
 {
     hb_avfilter_graph_t * graph = *_g;
@@ -173,6 +189,25 @@ void hb_avfilter_graph_close(hb_avfilter_graph_t ** _g)
     av_frame_free(&graph->frame);
     free(graph);
     *_g = NULL;
+}
+
+void hb_avfilter_graph_update_init(hb_avfilter_graph_t * graph,
+                                   hb_filter_init_t    * init)
+{
+    // Retrieve the parameters of the output filter
+    AVFilterLink *link     = graph->output->inputs[0];
+    init->geometry.width   = link->w;
+    init->geometry.height  = link->h;
+    init->geometry.par.num = link->sample_aspect_ratio.num;
+    init->geometry.par.den = link->sample_aspect_ratio.den;
+    init->pix_fmt          = link->format;
+    // avfilter can generate "unknown" framerates.  If this happens
+    // just pass along the source framerate.
+    if (link->frame_rate.num > 0 && link->frame_rate.den > 0)
+    {
+        init->vrate.num        = link->frame_rate.num;
+        init->vrate.den        = link->frame_rate.den;
+    }
 }
 
 int hb_avfilter_add_frame(hb_avfilter_graph_t * graph, AVFrame * frame)

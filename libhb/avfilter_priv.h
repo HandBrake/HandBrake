@@ -13,17 +13,6 @@
 #include "libavfilter/avfilter.h"
 #include "hbavfilter.h"
 
-struct hb_avfilter_graph_s
-{
-    AVFilterGraph    * avgraph;
-    AVFilterContext  * last;
-    AVFilterContext  * input;
-    AVFilterContext  * output;
-    char             * settings;
-    AVFrame          * frame;
-    AVRational         out_time_base;
-};
-
 struct hb_filter_private_s
 {
     int                   initialized;
