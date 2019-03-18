@@ -1475,14 +1475,16 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     }
 
     // Deblock filter
-    char *deblock = hb_value_get_string_xform(
-                        hb_dict_get(preset, "PictureDeblock"));
+    const char * deblock = hb_value_get_string(
+                                hb_dict_get(preset, "PictureDeblockPreset"));
     if (deblock != NULL)
     {
+        const char * deblock_tune   = hb_value_get_string(
+                                hb_dict_get(preset, "PictureDeblockTune"));
         const char * deblock_custom = hb_value_get_string(
                                 hb_dict_get(preset, "PictureDeblockCustom"));
         filter_settings = hb_generate_filter_settings(HB_FILTER_DEBLOCK,
-                                              deblock, NULL, deblock_custom);
+                                    deblock, deblock_tune, deblock_custom);
         if (filter_settings == NULL)
         {
             hb_error("Invalid deblock filter settings (%s)", deblock);
@@ -1500,7 +1502,6 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
             hb_value_free(&filter_settings);
         }
     }
-    free(deblock);
 
     // Rotate filter
     char *rotate = hb_value_get_string_xform(
@@ -2489,6 +2490,28 @@ static hb_value_t * import_hierarchy_29_0_0(hb_value_t *presets)
     return hb_value_dup(presets);
 }
 
+static void import_deblock_35_0_0(hb_value_t *preset)
+{
+    int deblock = hb_dict_get_int(preset, "PictureDeblock");
+
+    if (deblock < 5)
+    {
+        hb_dict_set_string(preset, "PictureDeblockPreset", "off");
+    }
+    else if (deblock < 7)
+    {
+        hb_dict_set_string(preset, "PictureDeblockPreset", "medium");
+    }
+    else
+    {
+        hb_dict_set_string(preset, "PictureDeblockPreset", "strong");
+    }
+    hb_dict_set_string(preset, "PictureDeblockTune", "medium");
+    hb_dict_set_string(preset, "PictureDeblockCustom",
+                       "strength=strong:thresh=20");
+    hb_dict_remove(preset, "PictureDeblock");
+}
+
 static void import_video_scaler_25_0_0(hb_value_t *preset)
 {
     hb_dict_set(preset, "VideoScaler", hb_value_string("swscale"));
@@ -3106,9 +3129,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_35_0_0(hb_value_t *preset)
+{
+    import_deblock_35_0_0(preset);
+}
+
 static void import_25_0_0(hb_value_t *preset)
 {
     import_video_scaler_25_0_0(preset);
+
+    import_35_0_0(preset);
 }
 
 static void import_20_0_0(hb_value_t *preset)
@@ -3214,6 +3244,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 25, 0, 0) <= 0)
         {
             import_25_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 35, 0, 0) <= 0)
+        {
+            import_35_0_0(preset);
             result = 1;
         }
         preset_clean(preset, hb_preset_template);

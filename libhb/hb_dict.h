@@ -43,6 +43,7 @@ int               hb_dict_elements(hb_dict_t * dict);
 /* add value to dictionary.  dictionary takes ownership of value */
 void              hb_dict_set(hb_dict_t * dict, const char * key,
                               hb_value_t * value);
+void              hb_dict_merge(hb_dict_t * dict, hb_dict_t *value);
 void              hb_dict_case_set(hb_dict_t * dict, const char *key,
                                    hb_value_t *value);
 /* remove value from dictionary.  releases reference to value */

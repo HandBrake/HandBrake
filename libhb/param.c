@@ -40,6 +40,27 @@ static hb_filter_param_t nlmeans_tunes[] =
     { 0, NULL,          NULL,         NULL              }
 };
 
+static hb_filter_param_t deblock_presets[] =
+{
+    { 0, "Off",         "off",        "disable=1"                  },
+    { 1, "Custom",      "custom",     NULL                         },
+    { 2, "Ultralight",  "ultralight", "strength=weak:thresh=20"    },
+    { 3, "Light",       "light",      "strength=weak:thresh=50"    },
+    { 4, "Medium",      "medium",     "strength=strong:thresh=20"  },
+    { 5, "Strong",      "strong",     "strength=strong:thresh=50"  },
+    { 5, "Stronger",    "stronger",   "strength=strong:thresh=75"  },
+    { 5, "Very Strong", "verystrong", "strength=strong:thresh=100" },
+    { 0, NULL,          NULL,         NULL                         }
+};
+
+static hb_filter_param_t deblock_tunes[] =
+{
+    { 1, "Small (4x4)",   "small",  "blocksize=4"  },
+    { 2, "Medium (8x8)",  "medium", NULL           },
+    { 3, "Large (16x16)", "large",  "blocksize=16" },
+    { 0, NULL,            NULL,     NULL           }
+};
+
 static hb_filter_param_t hqdn3d_presets[] =
 {
     { 1, "Custom",      "custom",     NULL              },
@@ -235,6 +256,10 @@ static filter_param_map_t param_map[] =
 
     { HB_FILTER_DEINTERLACE, deinterlace_presets, NULL,
       sizeof(deinterlace_presets) / sizeof(hb_filter_param_t), 0, },
+
+    { HB_FILTER_DEBLOCK, deblock_presets, deblock_tunes,
+      sizeof(deblock_presets) / sizeof(hb_filter_param_t),
+      sizeof(deblock_tunes)   / sizeof(hb_filter_param_t),        },
 
     { HB_FILTER_INVALID,     NULL,                NULL,     0, 0, },
 };
@@ -1130,42 +1155,44 @@ filter_param_get_entry(hb_filter_param_t *table, const char *name, int count)
     return NULL;
 }
 
-static hb_dict_t *
-generate_generic_settings(int filter_id, const char *preset, const char *custom)
+static hb_value_t *
+generate_generic_settings(int filter_id, const char * preset,
+                          const char * tune, const char * custom)
 {
-    int preset_count;
-    hb_filter_param_t *preset_table;
-    hb_filter_param_t *preset_entry;
-
-    if (preset == NULL || !strcasecmp(preset, "custom"))
+    if ((preset == NULL || !strcasecmp(preset, "custom")))
     {
         return hb_parse_filter_settings(custom);
     }
 
-    preset_table = filter_param_get_presets_internal(filter_id, &preset_count);
-    preset_entry = filter_param_get_entry(preset_table, preset, preset_count);
-    if (preset_entry != NULL && preset_entry->settings != NULL)
-    {
-        return hb_parse_filter_settings(preset_entry->settings);
-    }
-    return NULL;
-}
+    int count;
+    hb_filter_param_t *table;
+    hb_filter_param_t *entry;
 
-static hb_value_t *
-generate_deblock_settings(const char * preset, const char * custom)
-{
-    hb_dict_t * settings = NULL;
+    hb_value_t * settings, * tune_settings;
 
-    // Deblock "presets" are just the QP value.  0 disables.
-    if ((preset == NULL || !strcasecmp(preset, "custom")))
+    table = filter_param_get_presets_internal(filter_id, &count);
+    entry = filter_param_get_entry(table, preset, count);
+    if (entry != NULL && entry->settings != NULL)
     {
-        settings = hb_parse_filter_settings(custom);
-    }
-    else
-    {
-        settings = hb_dict_init();
-        int qp = strtol(preset, NULL, 0);
-        hb_dict_set(settings, "qp", hb_value_int(qp));
+        settings = hb_parse_filter_settings(entry->settings);
+        if (settings == NULL)
+        {
+            return NULL;
+        }
+
+        table = filter_param_get_tunes_internal(filter_id, &count);
+        entry = filter_param_get_entry(table, tune, count);
+        if (entry != NULL && entry->settings != NULL)
+        {
+            tune_settings = hb_parse_filter_settings(entry->settings);
+            if (tune_settings == NULL)
+            {
+                hb_value_free(&settings);
+                return NULL;
+            }
+            hb_dict_merge(settings, tune_settings);
+            hb_value_free(&tune_settings);
+        }
     }
 
     return settings;
@@ -1187,11 +1214,6 @@ static void check_filter_status(int filter_id, hb_value_t *settings)
             int hflip = hb_dict_get_int(settings, "hflip");
             disable = angle == 0 && hflip == 0;
         } break;
-        case HB_FILTER_DEBLOCK:
-        {
-            int qp = hb_dict_get_int(settings, "qp");
-            disable = qp < 5;
-        } break;
         default:
         {
         } break;
@@ -1210,9 +1232,6 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
 
     switch (filter_id)
     {
-        case HB_FILTER_DEBLOCK:
-            settings = generate_deblock_settings(preset, custom);
-            break;
         case HB_FILTER_PAD:
         case HB_FILTER_ROTATE:
         case HB_FILTER_CROP_SCALE:
@@ -1234,12 +1253,14 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
         case HB_FILTER_UNSHARP:
             settings = generate_unsharp_settings(preset, tune, custom);
             break;
+        case HB_FILTER_DEBLOCK:
         case HB_FILTER_COMB_DETECT:
         case HB_FILTER_DECOMB:
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
         case HB_FILTER_DEINTERLACE:
-            settings = generate_generic_settings(filter_id, preset, custom);
+            settings = generate_generic_settings(filter_id, preset,
+                                                 tune, custom);
             break;
         default:
             fprintf(stderr,

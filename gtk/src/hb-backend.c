@@ -360,6 +360,18 @@ typedef struct
     gboolean preset;
 } filter_opts_t;
 
+static filter_opts_t deblock_preset_opts =
+{
+    .filter_id = HB_FILTER_DEBLOCK,
+    .preset    = TRUE
+};
+
+static filter_opts_t deblock_tune_opts =
+{
+    .filter_id = HB_FILTER_DEBLOCK,
+    .preset    = FALSE
+};
+
 static filter_opts_t deint_preset_opts =
 {
     .filter_id = HB_FILTER_DECOMB,
@@ -561,6 +573,18 @@ combo_name_map_t combo_name_map[] =
     {
         "PictureDetelecine",
         &detel_opts,
+        filter_opts_set,
+        filter_opt_get
+    },
+    {
+        "PictureDeblockPreset",
+        &deblock_preset_opts,
+        filter_opts_set,
+        filter_opt_get
+    },
+    {
+        "PictureDeblockTune",
+        &deblock_tune_opts,
         filter_opts_set,
         filter_opt_get
     },

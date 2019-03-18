@@ -56,7 +56,7 @@
 #define COMB_DETECT_DEFAULT_PRESET   "default"
 #define HQDN3D_DEFAULT_PRESET        "medium"
 #define ROTATE_DEFAULT               "angle=180:hflip=0"
-#define DEBLOCK_DEFAULT              "qp=5"
+#define DEBLOCK_DEFAULT_PRESET       "medium"
 
 /* Options */
 static int     debug               = HB_DEBUG_ALL;
@@ -79,7 +79,9 @@ static int     deinterlace_disable = 0;
 static int     deinterlace_custom  = 0;
 static char *  deinterlace         = NULL;
 static int     deblock_disable     = 0;
+static int     deblock_custom      = 0;
 static char *  deblock             = NULL;
+static char *  deblock_tune        = NULL;
 static int     hqdn3d_disable      = 0;
 static int     hqdn3d_custom       = 0;
 static char *  hqdn3d              = NULL;
@@ -617,6 +619,7 @@ cleanup:
     free(encoder_level);
     free(rotate);
     free(deblock);
+    free(deblock_tune);
     free(detelecine);
     free(deinterlace);
     free(decomb);
@@ -1219,6 +1222,9 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_COMB_DETECT:
             preset = COMB_DETECT_DEFAULT_PRESET;
             break;
+        case HB_FILTER_DEBLOCK:
+            preset = DEBLOCK_DEFAULT_PRESET;
+            break;
         default:
             break;
     }
@@ -1233,6 +1239,7 @@ static void showFilterDefault(FILE* const out, int filter_id)
         case HB_FILTER_DETELECINE:
         case HB_FILTER_HQDN3D:
         case HB_FILTER_COMB_DETECT:
+        case HB_FILTER_DEBLOCK:
         {
             hb_dict_t * settings;
             settings = hb_generate_filter_settings(filter_id, preset,
@@ -1265,9 +1272,6 @@ static void showFilterDefault(FILE* const out, int filter_id)
         } break;
         case HB_FILTER_ROTATE:
             fprintf(out, "%s", ROTATE_DEFAULT);
-            break;
-        case HB_FILTER_DEBLOCK:
-            fprintf(out, "%s", DEBLOCK_DEFAULT);
             break;
         default:
             break;
@@ -1765,11 +1769,18 @@ static void ShowHelp()
     fprintf( out,
 "                           Applies to lapsharp presets only (does not affect\n"
 "                           custom settings)\n"
-"   -7, --deblock[=string]  Deblock video with pp7 filter\n");
+"   -7, --deblock[=string]  Deblock video with avfilter deblock\n");
+    showFilterPresets(out, HB_FILTER_DEBLOCK);
     showFilterKeys(out, HB_FILTER_DEBLOCK);
     showFilterDefault(out, HB_FILTER_DEBLOCK);
     fprintf( out,
 "   --no-deblock            Disable preset deblock filter\n"
+"   --deblock-tune <string>\n"
+"                           Tune deblock filter\n");
+    showFilterTunes(out, HB_FILTER_DEBLOCK);
+    fprintf( out,
+"                           Applies to deblock presets only (does not affect\n"
+"                           custom settings)\n"
 "   --rotate[=string]       Rotate image or flip its axes.\n"
 "                           angle rotates clockwise, can be one of:\n"
 "                               0, 90, 180, 270\n"
@@ -2152,6 +2163,7 @@ static int ParseOptions( int argc, char ** argv )
     #define SSA_BURN             321
     #define FILTER_CHROMA_SMOOTH      322
     #define FILTER_CHROMA_SMOOTH_TUNE 323
+    #define FILTER_DEBLOCK_TUNE  324
 
     for( ;; )
     {
@@ -2228,6 +2240,7 @@ static int ParseOptions( int argc, char ** argv )
             { "no-deinterlace", no_argument,    &deinterlace_disable, 1 },
             { "deblock",     optional_argument, NULL,    '7' },
             { "no-deblock",  no_argument,       &deblock_disable,     1 },
+            { "deblock-tune",required_argument, NULL,    FILTER_DEBLOCK_TUNE },
             { "denoise",     optional_argument, NULL,    '8' },
             { "hqdn3d",      optional_argument, NULL,    '8' },
             { "no-hqdn3d",   no_argument,       &hqdn3d_disable,      1 },
@@ -2680,14 +2693,18 @@ static int ParseOptions( int argc, char ** argv )
                 break;
             case '7':
                 free(deblock);
-                if( optarg != NULL )
+                if (optarg != NULL)
                 {
                     deblock = strdup(optarg);
                 }
                 else
                 {
-                    deblock = strdup(DEBLOCK_DEFAULT);
+                    deblock = strdup(DEBLOCK_DEFAULT_PRESET);
                 }
+                break;
+            case FILTER_DEBLOCK_TUNE:
+                free(deblock_tune);
+                deblock_tune = strdup(optarg);
                 break;
             case '8':
                 free(hqdn3d);
@@ -3085,7 +3102,18 @@ static int ParseOptions( int argc, char ** argv )
                     "Incompatible options --deblock and --no-deblock\n");
             return -1;
         }
-        if (hb_validate_filter_string(HB_FILTER_DEBLOCK, deblock))
+        if (!hb_validate_filter_preset(HB_FILTER_DEBLOCK, deblock,
+                                       deblock_tune, NULL))
+        {
+            // Nothing to do, but must validate preset before
+            // attempting to validate custom settings to prevent potential
+            // false positive
+        }
+        else if (!hb_validate_filter_string(HB_FILTER_DEBLOCK, deblock))
+        {
+            deblock_custom = 1;
+        }
+        else
         {
             fprintf(stderr, "Invalid deblock option %s\n", deblock);
             return -1;
@@ -4403,14 +4431,26 @@ static hb_dict_t * PreparePreset(const char *preset_name)
                         hb_value_string(lapsharp));
         }
     }
-    if (deblock_disable)
-    {
-        hb_dict_set(preset, "PictureDeblock", hb_value_string("0"));
-    }
     if (deblock != NULL)
     {
-        hb_dict_set(preset, "PictureDeblock", hb_value_string("custom"));
-        hb_dict_set(preset, "PictureDeblockCustom", hb_value_string(deblock));
+        if (!deblock_custom)
+        {
+            hb_dict_set_string(preset, "PictureDeblockPreset", deblock);
+            if (deblock_tune != NULL)
+            {
+                hb_dict_set_string(preset, "PictureDeblockTune",
+                                   deblock_tune);
+            }
+        }
+        else
+        {
+            hb_dict_set_string(preset, "PictureDeblockPreset", "custom");
+            hb_dict_set_string(preset, "PictureDeblockCustom", deblock);
+        }
+    }
+    if (deblock_disable)
+    {
+        hb_dict_set_string(preset, "PictureDeblockPreset", "off");
     }
     if (rotate != NULL)
     {

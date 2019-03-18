@@ -2965,34 +2965,80 @@ filter_output([
                             <property name="halign">start</property>
                             <property name="valign">start</property>
                             <child>
-                              <object class="GtkLabel" id="label41">
+                              <object class="GtkLabel" id="PictureDeblockPresetLabel">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="halign">start</property>
-                                <property name="label" translatable="yes">Deblock:</property>
+                                <property name="label" translatable="yes">Deblock Filter:</property>
                               </object>
                               <packing>
-                                <property name="top_attach">0</property>
+                                <property name="top_attach">1</property>
                                 <property name="left_attach">0</property>
                                 <property name="width">1</property>
                                 <property name="height">1</property>
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkScale" id="PictureDeblock">
-                                <property name="visible">True</property>
+                              <object class="GtkComboBox" id="PictureDeblockPreset">
+                                <property name="valign">GTK_ALIGN_CENTER</property>
                                 <property name="width_request">100</property>
-                                <property name="can_focus">True</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="tooltip_text" translatable="yes">The deblocking filter removes a common type of compression artifact.
 If your source exhibits 'blockiness', this filter may help clean it up.</property>
-                                <property name="adjustment">adjustment20</property>
-                                <property name="digits">0</property>
-                                <property name="value_pos">right</property>
-                                <signal name="format-value" handler="format_deblock_cb" swapped="no"/>
-                                <signal name="value-changed" handler="setting_widget_changed_cb" swapped="no"/>
+                                <signal name="changed" handler="denoise_filter_changed_cb" swapped="no"/>
                               </object>
                               <packing>
-                                <property name="top_attach">0</property>
+                                <property name="top_attach">1</property>
+                                <property name="left_attach">1</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="PictureDeblockTuneLabel">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">Deblock Tune:</property>
+                              </object>
+                              <packing>
+                                <property name="top_attach">2</property>
+                                <property name="left_attach">0</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBox" id="PictureDeblockTune">
+                                <property name="valign">GTK_ALIGN_CENTER</property>
+                                <property name="width_request">100</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                <property name="tooltip_text" translatable="yes">The deblocking filter removes a common type of compression artifact.
+If your source exhibits 'blockiness', this filter may help clean it up.</property>
+                                <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="top_attach">2</property>
+                                <property name="left_attach">1</property>
+                                <property name="width">1</property>
+                                <property name="height">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="PictureDeblockCustom">
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Custom deblock filter string format
+
+strength=weak|strong:thresh=0-100:blocksize=4-512</property>
+                                <property name="width-chars">8</property>
+                                <signal name="changed" handler="setting_widget_changed_cb" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="top_attach">3</property>
                                 <property name="left_attach">1</property>
                                 <property name="width">1</property>
                                 <property name="height">1</property>
