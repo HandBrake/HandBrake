@@ -1,4 +1,4 @@
-/* avfilter.c
+/* hbavfilter.c
 
    Copyright (c) 2003-2015 HandBrake Team
    This file is part of the HandBrake source code
