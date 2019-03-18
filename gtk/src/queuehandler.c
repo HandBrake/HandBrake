@@ -328,16 +328,19 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
 
     preset_modified = ghb_dict_get_bool(uiDict, "preset_modified");
     name = ghb_dict_get_string(uiDict, "PresetFullName");
+    escape = g_markup_escape_text(name, -1);
     markers = ghb_dict_get_bool(uiDict, "ChapterMarkers");
 
     if (preset_modified)
     {
-        XPRINT(_("<b>Modified Preset Based On:</b> <small>%s</small>\n"), name);
+        XPRINT(_("<b>Modified Preset Based On:</b> <small>%s</small>\n"),
+               escape);
     }
     else
     {
-        XPRINT(_("<b>Preset:</b> <small>%s</small>\n"), name);
+        XPRINT(_("<b>Preset:</b> <small>%s</small>\n"), escape);
     }
+    g_free(escape);
 
     // Next line in the display (Container type)
     // Format: XXX Container
@@ -439,12 +442,12 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
 
     // Next line in the display (Filter settings)
     // Filters: - Deinterlace
-    gint deblock, denoise, deint;
-    const gchar *deint_preset, *detel_preset, *denoise_preset;
-    const gchar *denoise_tune;
-    const gchar *deint_cust, *detel_cust, *denoise_cust;
+    gint denoise, deint;
+    const gchar *deint_preset, *detel_preset, *deblock_preset, *denoise_preset;
+    const gchar *deblock_tune, *denoise_tune;
+    const gchar *deint_cust, *detel_cust, *deblock_cust, *denoise_cust;
     gchar *deint_opt, *denoise_opt;
-    gboolean grayscale, detel, filters;
+    gboolean grayscale, deblock, detel, filters;
 
     deint = ghb_settings_combo_int(uiDict, "PictureDeinterlaceFilter");
     deint_opt = ghb_settings_combo_option(uiDict, "PictureDeinterlaceFilter");
@@ -459,7 +462,12 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
     detel = detel_preset != NULL && !!strcasecmp(detel_preset, "off");
     detel_cust = ghb_dict_get_string(uiDict, "PictureDetelecineCustom");
 
-    deblock = ghb_dict_get_int(uiDict, "PictureDeblock");
+    deblock_preset = ghb_lookup_filter_name(HB_FILTER_DEBLOCK,
+                    ghb_dict_get_string(uiDict, "PictureDeblockPreset"), 1);
+    deblock_tune = ghb_lookup_filter_name(HB_FILTER_DEBLOCK,
+                    ghb_dict_get_string(uiDict, "PictureDeblockTune"), 0);
+    deblock = deblock_preset != NULL && !!strcasecmp(deblock_preset, "off");
+    deblock_cust = ghb_dict_get_string(uiDict, "PictureDeblockCustom");
 
     denoise = ghb_settings_combo_int(uiDict, "PictureDenoiseFilter");
     denoise_opt = ghb_settings_combo_option(uiDict, "PictureDenoiseFilter");
@@ -474,10 +482,9 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
 
     grayscale = ghb_dict_get_bool(uiDict, "VideoGrayScale");
 
-    filters = detel || grayscale ||
+    filters = detel || grayscale || deblock ||
               deint   != HB_FILTER_INVALID ||
-              denoise != HB_FILTER_INVALID ||
-              (deblock >= 5);
+              denoise != HB_FILTER_INVALID;
     if (filters)
     {
         const char *prefix = " ";
@@ -528,9 +535,25 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict, GtkTreeIter *pite
             }
             prefix = " - ";
         }
-        if (deblock >= 5)
+        if (deblock)
         {
-            XPRINT(_("%sDeblock: %d"), prefix, deblock);
+            XPRINT(_("%sDeblock:"), prefix);
+            const char *preset;
+            preset = ghb_dict_get_string(uiDict, "PictureDeblockPreset");
+            if (preset && !strcasecmp(preset, "custom"))
+            {
+                XPRINT(" %s", deblock_cust);
+            }
+            else
+            {
+                XPRINT(" %s", deblock_preset);
+                const char *tune;
+                tune = ghb_dict_get_string(uiDict, "PictureDeblockTune");
+                if (deblock_tune != NULL && strcasecmp(tune, "none"))
+                {
+                    XPRINT(",%s", deblock_tune);
+                }
+            }
             prefix = " - ";
         }
         if (grayscale)

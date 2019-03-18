@@ -259,22 +259,11 @@ void hb_avfilter_combine( hb_list_t * list)
         switch (filter->id)
         {
             case HB_FILTER_AVFILTER:
-            {
-                settings = pv->avfilters;
-            } break;
-            case HB_FILTER_ROTATE:
-            {
-                settings = pv->avfilters;
-            } break;
             case HB_FILTER_DEINTERLACE:
-            {
-                settings = pv->avfilters;
-            } break;
-            case HB_FILTER_PAD:
-            {
-                settings = pv->avfilters;
-            } break;
+            case HB_FILTER_DEBLOCK:
             case HB_FILTER_CROP_SCALE:
+            case HB_FILTER_PAD:
+            case HB_FILTER_ROTATE:
             {
                 settings = pv->avfilters;
             } break;

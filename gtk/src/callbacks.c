@@ -2491,7 +2491,6 @@ ghb_update_summary_info(signal_user_data_t *ud)
     gboolean     detel, comb_detect, deint, decomb, deblock, nlmeans, denoise;
     gboolean     unsharp, lapsharp, rot, gray;
     const char * sval;
-    int          ival;
 
     sval        = ghb_dict_get_string(ud->settings, "PictureDetelecine");
     detel       = sval != NULL && !!strcasecmp(sval, "off");
@@ -2500,8 +2499,8 @@ ghb_update_summary_info(signal_user_data_t *ud)
     sval        = ghb_dict_get_string(ud->settings, "PictureDeinterlaceFilter");
     deint       = sval != NULL && !strcasecmp(sval, "deinterlace");
     decomb      = sval != NULL && !strcasecmp(sval, "decomb");
-    ival        = ghb_dict_get_int(ud->settings, "PictureDeblock");
-    deblock     = ival >= 5;
+    sval        = ghb_dict_get_string(ud->settings, "PictureDeblockPreset");
+    deblock     = sval != NULL && !!strcasecmp(sval, "off");
     sval        = ghb_dict_get_string(ud->settings, "PictureDenoiseFilter");
     nlmeans     = sval != NULL && !strcasecmp(sval, "nlmeans");
     denoise     = sval != NULL && !strcasecmp(sval, "hqdn3d");
