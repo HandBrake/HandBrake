@@ -10,6 +10,8 @@
 #ifndef HB_AVFILTER_H
 #define HB_AVFILTER_H
 
+#include "common.h"
+
 typedef struct hb_avfilter_graph_s hb_avfilter_graph_t;
 
 hb_avfilter_graph_t * hb_avfilter_graph_init(hb_value_t * settings,
@@ -21,8 +23,9 @@ int         hb_avfilter_get_frame(hb_avfilter_graph_t * graph, AVFrame * frame);
 int         hb_avfilter_add_buf(hb_avfilter_graph_t * graph, hb_buffer_t * in);
 hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph);
 
-void        hb_append_filter_dict(hb_value_array_t * filters,
+void        hb_avfilter_append_dict(hb_value_array_t * filters,
                                   const char * name, hb_dict_t * settings);
 
 void        hb_avfilter_combine(hb_list_t * list);
+
 #endif // HB_AVFILTER_H

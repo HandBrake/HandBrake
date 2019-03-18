@@ -1196,11 +1196,11 @@ int reinit_video_filters(hb_work_private_t * pv)
         hb_dict_set(settings, "w", hb_value_int(orig_width));
         hb_dict_set(settings, "h", hb_value_int(orig_height));
         hb_dict_set(settings, "flags", hb_value_string("lanczos+accurate_rnd"));
-        hb_append_filter_dict(filters, "scale", settings);
+        hb_avfilter_append_dict(filters, "scale", settings);
 
         settings = hb_dict_init();
         hb_dict_set(settings, "pix_fmts", hb_value_string("yuv420p"));
-        hb_append_filter_dict(filters, "format", settings);
+        hb_avfilter_append_dict(filters, "format", settings);
     }
     if (pv->title->rotation != HB_ROTATION_0)
     {
@@ -1209,16 +1209,16 @@ int reinit_video_filters(hb_work_private_t * pv)
             case HB_ROTATION_90:
                 settings = hb_dict_init();
                 hb_dict_set(settings, "dir", hb_value_string("cclock"));
-                hb_append_filter_dict(filters, "transpose", settings);
+                hb_avfilter_append_dict(filters, "transpose", settings);
                 break;
             case HB_ROTATION_180:
-                hb_append_filter_dict(filters, "hflip", hb_value_null());
-                hb_append_filter_dict(filters, "vflip", hb_value_null());
+                hb_avfilter_append_dict(filters, "hflip", hb_value_null());
+                hb_avfilter_append_dict(filters, "vflip", hb_value_null());
                 break;
             case HB_ROTATION_270:
                 settings = hb_dict_init();
                 hb_dict_set(settings, "dir", hb_value_string("clock"));
-                hb_append_filter_dict(filters, "transpose", settings);
+                hb_avfilter_append_dict(filters, "transpose", settings);
                 break;
             default:
                 hb_log("reinit_video_filters: Unknown rotation, failed");
