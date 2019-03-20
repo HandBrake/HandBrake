@@ -279,10 +279,103 @@ format_video_preset_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
     video_presets = hb_video_encoder_get_presets(encoder);
     if (video_presets != NULL)
     {
+        int ival = val;
+        int count;
+        for (count = 0; video_presets[count] != NULL; count++);
+        if (ival < 0 || ival >= count)
+        {
+            return g_strdup_printf(" %-12s", "ERROR");
+        }
         preset = video_presets[(int)val];
-        return g_strdup_printf("%-10s", preset);
+        // When the range of a slider changes, GTK used to sample all the
+        // possible values to determine the correct amount of screen space to
+        // allocate for the value strings. Some *genius* decided it would be
+        // more effecient to just sample the first and last value which means
+        // that if certain characters are wider than others and the middle
+        // values happen to use those characters, the space allocated is
+        // too small and the string wraps to the next line or is truncated.
+        //
+        // So, we have to randomly add some extra space to the first and
+        // last value string in order for the string to be displayed properly.
+        // WTF guys!
+        if (ival == 0 || ival == count - 1)
+            return g_strdup_printf("%-20s", preset);
+        else
+            return g_strdup_printf("%s", preset);
     }
     return g_strdup_printf(" %-12s", "ERROR");
+}
+
+#include <execinfo.h>
+
+G_MODULE_EXPORT gchar*
+format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
+{
+    gint vcodec;
+    const char *vqname;
+    char * result;
+    float vqmin, vqmax, step, page;
+    int inverted, digits;
+
+    ghb_vquality_range(ud, &vqmin, &vqmax, &step, &page, &digits, &inverted);
+    vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
+    vqname = hb_video_quality_get_name(vcodec);
+    switch (vcodec)
+    {
+        case HB_VCODEC_FFMPEG_MPEG4:
+        case HB_VCODEC_FFMPEG_MPEG2:
+        case HB_VCODEC_FFMPEG_VP8:
+        case HB_VCODEC_FFMPEG_VP9:
+        case HB_VCODEC_THEORA:
+        {
+            // When the range of a slider changes, GTK used to sample all the
+            // possible values to determine the correct amount of screen space to
+            // allocate for the value strings. Some *genius* decided it would be
+            // more effecient to just sample the first and last value which means
+            // that if certain characters are wider than others and the middle
+            // values happen to use those characters, the space allocated is
+            // too small and the string wraps to the next line or is truncated.
+            //
+            // So, we have to randomly add some extra space to the first and
+            // last value string in order for the string to be displayed properly.
+            // WTF guys!
+            if (val <= vqmin || val >= vqmax)
+                result = g_strdup_printf("%s: %d   ", vqname, (int)val);
+            else
+                result = g_strdup_printf("%s: %d", vqname, (int)val);
+        } break;
+
+        case HB_VCODEC_X264_8BIT:
+        {
+            if (val == 0.0)
+            {
+                result = g_strdup_printf(_("%s: %.4g (Warning: lossless)"),
+                                       vqname, val);
+                break;
+            }
+        } // Falls through to default
+        case HB_VCODEC_X264_10BIT:
+        default:
+        {
+            // When the range of a slider changes, GTK used to sample all the
+            // possible values to determine the correct amount of screen space to
+            // allocate for the value strings. Some *genius* decided it would be
+            // more effecient to just sample the first and last value which means
+            // that if certain characters are wider than others and the middle
+            // values happen to use those characters, the space allocated is
+            // too small and the string wraps to the next line or is truncated.
+            //
+            // So, we have to randomly add some extra space to the first and
+            // last value string in order for the string to be displayed properly.
+            // WTF guys!
+            if (val <= vqmin || val >= vqmax)
+                result = g_strdup_printf("%s: %.4g   ", vqname, val);
+            else
+                result = g_strdup_printf("%s: %.4g", vqname, val);
+        } break;
+    }
+
+    return result;
 }
 
 G_MODULE_EXPORT void

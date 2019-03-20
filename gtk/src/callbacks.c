@@ -5464,41 +5464,6 @@ format_deblock_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
     }
 }
 
-G_MODULE_EXPORT gchar*
-format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
-{
-    gint vcodec;
-    const char *vqname;
-
-    vcodec = ghb_settings_video_encoder_codec(ud->settings, "VideoEncoder");
-    vqname = hb_video_quality_get_name(vcodec);
-    switch (vcodec)
-    {
-        case HB_VCODEC_FFMPEG_MPEG4:
-        case HB_VCODEC_FFMPEG_MPEG2:
-        case HB_VCODEC_FFMPEG_VP8:
-        case HB_VCODEC_FFMPEG_VP9:
-        case HB_VCODEC_THEORA:
-        {
-            return g_strdup_printf("%s: %d", vqname, (int)val);
-        } break;
-
-        case HB_VCODEC_X264_8BIT:
-        {
-            if (val == 0.0)
-            {
-                return g_strdup_printf(_("%s: %.4g (Warning: lossless)"),
-                                       vqname, val);
-            }
-        } // Falls through to default
-        case HB_VCODEC_X264_10BIT:
-        default:
-        {
-            return g_strdup_printf("%s: %.4g", vqname, val);
-        } break;
-    }
-}
-
 static void
 process_appcast(signal_user_data_t *ud)
 {
