@@ -41,22 +41,23 @@ static hb_filter_param_t nlmeans_tunes[] =
 
 static hb_filter_param_t deblock_presets[] =
 {
-    { 0, "Off",         "off",        "disable=1"       },
-    { 1, "Custom",      "custom",     NULL                        },
-    { 2, "Ultralight",  "ultralight", "strength=weak:thresh=10"   },
-    { 3, "Light",       "light",      "strength=weak:thresh=50"   },
-    { 4, "Medium",      "medium",     "strength=strong:thresh=10" },
-    { 5, "Strong",      "strong",     "strength=strong:thresh=75" },
-    { 5, "Max",         "max",        "strength=strong:thresh=100" },
-    { 0, NULL,          NULL,         NULL                        }
+    { 0, "Off",         "off",        "disable=1"                  },
+    { 1, "Custom",      "custom",     NULL                         },
+    { 2, "Ultralight",  "ultralight", "strength=weak:thresh=20"    },
+    { 3, "Light",       "light",      "strength=weak:thresh=50"    },
+    { 4, "Medium",      "medium",     "strength=strong:thresh=20"  },
+    { 5, "Strong",      "strong",     "strength=strong:thresh=50"  },
+    { 5, "Stronger",    "stronger",   "strength=strong:thresh=75"  },
+    { 5, "Very Strong", "verystrong", "strength=strong:thresh=100" },
+    { 0, NULL,          NULL,         NULL                         }
 };
 
 static hb_filter_param_t deblock_tunes[] =
 {
-    { 1, "8x8",        "8x8",       NULL           },
-    { 2, "16x16",      "16x16",     "blocksize=16" },
-    { 3, "4x4",        "4x4",       "blocksize=4"  },
-    { 0, NULL,          NULL,       NULL           }
+    { 1, "Small (4x4)",   "small",  "blocksize=4"  },
+    { 2, "Medium (8x8)",  "medium", NULL           },
+    { 3, "Large (16x16)", "large",  "blocksize=16" },
+    { 0, NULL,            NULL,     NULL           }
 };
 
 static hb_filter_param_t hqdn3d_presets[] =

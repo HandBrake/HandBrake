@@ -2506,8 +2506,9 @@ static void import_deblock_34_0_0(hb_value_t *preset)
     {
         hb_dict_set_string(preset, "PictureDeblockPreset", "strong");
     }
+    hb_dict_set_string(preset, "PictureDeblockTune", "medium");
     hb_dict_set_string(preset, "PictureDeblockCustom",
-                       "strength=strong:thresh=50");
+                       "strength=strong:thresh=20");
     hb_dict_remove(preset, "PictureDeblock");
 }
 
