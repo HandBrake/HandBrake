@@ -1,0 +1,15 @@
+/* Class = "NSWindow"; title = "Rename Preset"; ObjectID = "C4G-OG-ksc"; */
+"C4G-OG-ksc.title" = "Renommer le préréglage";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "N2f-jz-YyX"; */
+"N2f-jz-YyX.title" = "Annuler";
+
+/* Class = "NSTextFieldCell"; title = "Untitled"; ObjectID = "NQn-fS-Rbd"; */
+"NQn-fS-Rbd.title" = "Sans titre";
+
+/* Class = "NSTextFieldCell"; title = "New preset name:"; ObjectID = "Pe0-gr-Yv4"; */
+"Pe0-gr-Yv4.title" = "Nouveau nom du préréglage :";
+
+/* Class = "NSButtonCell"; title = "Rename"; ObjectID = "Z9M-dc-5Ml"; */
+"Z9M-dc-5Ml.title" = "Renommer";
+

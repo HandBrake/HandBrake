@@ -217,6 +217,9 @@
 /* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Tk3-Ig-fFI"; */
 "Tk3-Ig-fFI.ibShadowedToolTip" = "Trascina le etichette nel campo Formato per comporre un formato del nome.";
 
+/* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "Uxv-oN-c1r"; */
+"Uxv-oN-c1r.title" = "Ripristina a \"Non far nulla\" all'avvio";
+
 /* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
 "wo5-iR-2mb.title" = "Rimuovi la punteggiatura comune";
 

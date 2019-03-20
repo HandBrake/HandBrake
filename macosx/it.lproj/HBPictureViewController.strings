@@ -143,7 +143,7 @@
 "S7K-vF-t1n.title" = "Radio";
 
 /* Class = "NSTextFieldCell"; title = "Display Size:"; ObjectID = "SPg-s0-Oh0"; */
-"SPg-s0-Oh0.title" = "Dimensioni visualizzazione:";
+"SPg-s0-Oh0.title" = "Dimensioni di visualizzazione:";
 
 /* Class = "NSMenuItem"; title = "Loose"; ObjectID = "Uiw-Nb-u5X"; */
 "Uiw-Nb-u5X.title" = "Sciolto";

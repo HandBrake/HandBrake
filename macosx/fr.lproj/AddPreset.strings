@@ -1,78 +1,78 @@
 /* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "5Xb-gz-QEa"; */
-"5Xb-gz-QEa.title" = "Annulla";
+"5Xb-gz-QEa.title" = "Annuler";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Enter a description for the new preset. The description will be shown when hovering the cursor over the preset in the presets list."; ObjectID = "8kl-Sh-Gh7"; */
-"8kl-Sh-Gh7.ibShadowedToolTip" = "Inserisci una descrizione per il nuovo preset. La descrizione sarà visibile portando il puntatore sopra il preset nell'elenco dei preset.";
+"8kl-Sh-Gh7.ibShadowedToolTip" = "Entrer une description pour le nouveau préréglage. Cette description s'affichera lorsque vous passez votre curseur au-dessus du préréglage dans la liste des préréglages.";
 
 /* Class = "NSTextFieldCell"; title = "Dimensions:"; ObjectID = "75B-xq-Qbe"; */
-"75B-xq-Qbe.title" = "Dimensioni:";
+"75B-xq-Qbe.title" = "Dimensions :";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "a0j-nw-n23"; */
-"a0j-nw-n23.title" = "Comportamento di selezione…";
+"a0j-nw-n23.title" = "Comportement de la sélection…";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Selection Behavior determines the track(s) and settings used when the preset is selected."; ObjectID = "aez-2b-JXx"; */
-"aez-2b-JXx.ibShadowedToolTip" = "\"Comportamento della selezione\" determina quali tracce e impostazioni sono usate quando il preset viene selezionato.";
+"aez-2b-JXx.ibShadowedToolTip" = "Comportement de la sélection détermine la ou les pistes et réglages utilisés lorsque le préréglage est sélectionné.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Enter a name for the new preset. This name will be displayed in the presets list."; ObjectID = "aKg-n4-OUS"; */
-"aKg-n4-OUS.ibShadowedToolTip" = "Inserisci un nome per il nuovo preset. Questo nome sarà visibile nell'elenco dei preset.";
+"aKg-n4-OUS.ibShadowedToolTip" = "Entrer un nom pour le nouveau préréglage. Ce nom s'affichera dans la liste des préréglages.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Picture Size controls how video dimensions are applied when selecting the preset.\n\nNone uses the currently set dimensions.\n\nCustom allows you to set a maximum width and/or height.\n\nSource maximum uses the full dimensions of each source."; ObjectID = "bma-pS-phM"; */
-"bma-pS-phM.ibShadowedToolTip" = "Dimensione immagine controlla come vengono applicate le dimensioni del video quando si seleziona il preset.\n\nNessuno usa le dimensioni attualmente impostate.\n\nPersonalizzato ti consente di impostare una larghezza e / o un'altezza massima. \n\nIl massimo della sorgente utilizza le dimensioni complete di ciascuna sorgente.";
+"bma-pS-phM.ibShadowedToolTip" = "Taille de l'image contrôle la manière dont les dimensions de la vidéo sont appliquées lorsque le préréglage est sélectionné.\n\nAucun utilise les dimensions actuellement sélectionnées.\n\nPersonnalisé vous permet de définir une largeur et/ou une hauteur maximum.\n\nMaximum de la source utilise les dimensions complètes de chacune des sources..";
 
 /* Class = "NSWindow"; title = "New Preset"; ObjectID = "dbZ-Wo-9nG"; */
-"dbZ-Wo-9nG.title" = "Nuovo preset";
+"dbZ-Wo-9nG.title" = "Nouveau préréglage";
 
 /* Class = "NSButtonCell"; title = "Add"; ObjectID = "Deg-rS-mRc"; */
-"Deg-rS-mRc.title" = "Aggiungi";
+"Deg-rS-mRc.title" = "Ajouter";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Width"; ObjectID = "gOg-oO-8ar"; */
-"gOg-oO-8ar.ibExternalAccessibilityDescription" = "Larghezza Immagine";
+"gOg-oO-8ar.ibExternalAccessibilityDescription" = "Largeur de l'image";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width."; ObjectID = "gOg-oO-8ar"; */
-"gOg-oO-8ar.ibShadowedToolTip" = "Larghezza massima di archiviazione video in pixel consentita dal preset. Impostare su 0 per altezza illimitata.";
+"gOg-oO-8ar.ibShadowedToolTip" = "Stockage maximal en largeur de la vidéo suivant le préréglage autorisé en pixels. Réglez sur 0 pour une largeur illimitée. ";
 
 /* Class = "NSBox"; title = "Box"; ObjectID = "H9n-64-GXz"; */
-"H9n-64-GXz.title" = "Box";
+"H9n-64-GXz.title" = "Boîte";
 
 /* Class = "NSTextFieldCell"; title = "Description:"; ObjectID = "hc8-1h-Jye"; */
-"hc8-1h-Jye.title" = "Descrizione:";
+"hc8-1h-Jye.title" = "Description :";
 
 /* Class = "NSTextFieldCell"; title = "Audio:"; ObjectID = "HKp-K9-MF4"; */
-"HKp-K9-MF4.title" = "Audio:";
+"HKp-K9-MF4.title" = "Audio :";
 
 /* Class = "NSTextFieldCell"; title = "Category:"; ObjectID = "IyE-Lz-32s"; */
-"IyE-Lz-32s.title" = "Categoria:";
+"IyE-Lz-32s.title" = "Catégorie :";
 
 /* Class = "NSTextFieldCell"; title = "Preset Name:"; ObjectID = "jhj-Et-ncF"; */
-"jhj-Et-ncF.title" = "Nome preset:";
+"jhj-Et-ncF.title" = "Nom du préréglage :";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "LPX-Rc-KLa"; */
-"LPX-Rc-KLa.title" = "Comportamento di selezione…";
+"LPX-Rc-KLa.title" = "Comportement de la sélection…";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "PictureHeight"; ObjectID = "Mga-dS-8BF"; */
-"Mga-dS-8BF.ibExternalAccessibilityDescription" = "Altezza immagine";
+"Mga-dS-8BF.ibExternalAccessibilityDescription" = "Hauteur de l'image ";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage height in pixels allowed by the preset. Set to 0 for unlimited height."; ObjectID = "Mga-dS-8BF"; */
-"Mga-dS-8BF.ibShadowedToolTip" = "Altezza massima di archiviazione video in pixel consentita dal preset. Impostare su 0 per altezza illimitata.";
+"Mga-dS-8BF.ibShadowedToolTip" = "Stockage maximal en hauteur de la vidéo suivant le préréglage autorisé en pixels. Réglez sur 0 pour une hauteur illimitée.";
 
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "Nfk-ix-xIv"; */
 "Nfk-ix-xIv.title" = "x";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Selection Behavior determines the track(s) and settings used when the preset is selected."; ObjectID = "nWJ-0b-fUA"; */
-"nWJ-0b-fUA.ibShadowedToolTip" = "\"Comportamento della selezione\" determina quali tracce e impostazioni sono usate quando il preset viene selezionato.";
+"nWJ-0b-fUA.ibShadowedToolTip" = "Comportement de la sélection détermine la ou les pistes et réglages utilisés lorsque le préréglage est sélectionné.";
 
 /* Class = "NSTextFieldCell"; title = "Subtitles:"; ObjectID = "OYE-GG-Vo3"; */
-"OYE-GG-Vo3.title" = "Sottotitoli:";
+"OYE-GG-Vo3.title" = "Sous-titres :";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "qsA-gt-zdK"; */
-"qsA-gt-zdK.title" = "OtherViews";
+"qsA-gt-zdK.title" = "AutresVues";
 
 /* Class = "NSMenuItem"; title = "New Category…"; ObjectID = "Sf8-HP-mhE"; */
-"Sf8-HP-mhE.title" = "Nuova categoria…";
+"Sf8-HP-mhE.title" = "Nouvelle catégorie…";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tQ1-PN-kvh"; */
-"tQ1-PN-kvh.title" = "OtherViews";
+"tQ1-PN-kvh.title" = "AutresVues";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Picture Size controls how video dimensions are applied when selecting the preset.\n\nNone uses the currently set dimensions.\n\nCustom allows you to set a maximum width and/or height.\n\nSource maximum uses the full dimensions of each source."; ObjectID = "z6B-ig-ouq"; */
-"z6B-ig-ouq.ibShadowedToolTip" = "Dimensione immagine controlla come vengono applicate le dimensioni del video quando si seleziona il preset.\n\nNessuno usa le dimensioni attualmente impostate.\n\nPersonalizzato ti consente di impostare una larghezza e / o un'altezza massima. \n\nIl massimo della sorgente utilizza le dimensioni complete di ciascuna sorgente.";
+"z6B-ig-ouq.ibShadowedToolTip" = "Taille de l'image contrôle la manière dont les dimensions de la vidéo sont appliquées lorsque le préréglage est sélectionné.\n\nAucun utilise les dimensions actuellement sélectionnées.\n\nPersonnalisé vous permet de définir une largeur et/ou une hauteur maximum.\n\nMaximum de la source utilise les dimensions complètes de chacune des sources..";
 

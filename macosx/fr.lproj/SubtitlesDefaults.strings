@@ -1,96 +1,96 @@
 /* Class = "NSButtonCell"; title = "Add Closed Captions when available"; ObjectID = "66v-2g-DHn"; */
-"66v-2g-DHn.title" = "Wenn verfügbar CC-Untertitel hinzufügen";
+"66v-2g-DHn.title" = "Ajouter les sous-titres CC si disponibles";
 
 /* Class = "NSButtonCell"; title = "DVD Subtitles"; ObjectID = "69Q-xB-Vyq"; */
-"69Q-xB-Vyq.title" = "DVD-Untertitel";
+"69Q-xB-Vyq.title" = "Sous-titres DVD";
 
 /* Class = "NSTextFieldCell"; title = "Burn-In Behavior:"; ObjectID = "640-NB-Uby"; */
-"640-NB-Uby.title" = "Einbrennverhalten:";
+"640-NB-Uby.title" = "Comportement de l'incrustation :";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Subtitles Track Languages"; ObjectID = "aTC-39-h6S"; */
-"aTC-39-h6S.ibExternalAccessibilityDescription" = "Untertitelsprachen";
+"aTC-39-h6S.ibExternalAccessibilityDescription" = "Langues de la piste de sous-titres";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Select the languages to use with the Track Selection Behavior setting."; ObjectID = "aTC-39-h6S"; */
-"aTC-39-h6S.ibShadowedToolTip" = "Die Sprache auswählen die mit der Spurauswahlfunktion verwendet werden soll.";
+"aTC-39-h6S.ibShadowedToolTip" = "Sélectionnez les langues à utiliser avec le paramètre Comportement de sélection de piste.";
 
 /* Class = "NSButtonCell"; title = "Blu-ray Subtitles"; ObjectID = "bfV-9D-6dh"; */
-"bfV-9D-6dh.title" = "Blu-ray-Untertitel";
+"bfV-9D-6dh.title" = "Sous-titres Blu-ray";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your playback software or device does not support DVD subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "ceZ-On-t5S"; */
-"ceZ-On-t5S.ibShadowedToolTip" = "Brenne den ersten ausgewählten Untertitel der DVD ein. Alle anderen Untertitel werden verworfen. Diese Option ist zu verwenden, wenn das Abspielgerät DVD-Untertitel nicht unterstützt.\n\nEs kann nur jeweils ein Untertitel eingebrannt werden.";
+"ceZ-On-t5S.ibShadowedToolTip" = "Incruste la première piste de sous-titre DVD sélectionnée. Toutes les autres pistes de sous-titres DVD seront rejetées. Utilisez cette option si votre logiciel ou appareil de lecture ne supporte pas les sous-titres DVD.\n\nIl n'est possible d'incruster qu'une seule piste de sous-titres.";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio, then First Selected Track"; ObjectID = "d79-2j-fhc"; */
-"d79-2j-fhc.title" = "Fremdsprache, dann erste ausgewählte Spur";
+"d79-2j-fhc.title" = "Audio étranger, puis première piste sélectionnée";
 
 /* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "ego-rt-a64"; */
-"ego-rt-a64.title" = "Abbrechen";
+"ego-rt-a64.title" = "Annuler";
 
 /* Class = "NSMenuItem"; title = "None"; ObjectID = "ej8-4k-1vd"; */
-"ej8-4k-1vd.title" = "Keine";
+"ej8-4k-1vd.title" = "Aucune";
 
 /* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
-"GbM-vm-RC2.title" = "Spurverhalten:";
+"GbM-vm-RC2.title" = "Suivre le comportement de la sélection : ";
 
 /* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
-"GZP-q7-SYy.title" = "Alle passenden ausgewählten Sprachen";
+"GZP-q7-SYy.title" = "Toutes les langues sélectionnées";
 
 /* Class = "NSButtonCell"; title = "OK"; ObjectID = "iLI-Nb-D7t"; */
 "iLI-Nb-D7t.title" = "OK";
 
 /* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
-"jDd-Ji-7Sm.title" = "Erste passende ausgewählte Sprache";
+"jDd-Ji-7Sm.title" = "Première langue sélectionnée correspondante";
 
 /* Class = "NSWindow"; title = "Window"; ObjectID = "kwM-lz-5lG"; */
-"kwM-lz-5lG.title" = "Fenster";
+"kwM-lz-5lG.title" = "Fenêtre";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
-"Kwy-lU-VuU.title" = "OtherViews";
+"Kwy-lU-VuU.title" = "AutresVues";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.\n\nOnly one subtitles track can be burned in."; ObjectID = "Lsa-kB-2BP"; */
-"Lsa-kB-2BP.ibShadowedToolTip" = "Einbrennverhalten. Zum Auswählen welche Untertitel permanent gemacht werden sollen indem sie mit dem Video überlagert werden.\n\nEs kann nur jeweils ein Untertitel eingebrannt werden.";
+"Lsa-kB-2BP.ibShadowedToolTip" = "Comportement de l'incrustation. Sélectionne le sous-titre qui sera affiché de façon permanente par superposition sur la piste vidéo. Il n'est possible d'incruster qu'une seule piste de sous-titres.";
 
 /* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
-"mAT-Jp-SG1.title" = "Sprache:";
+"mAT-Jp-SG1.title" = "Langues :";
 
 /* Class = "NSMenuItem"; title = "First Selected Track"; ObjectID = "mnl-P8-dtK"; */
-"mnl-P8-dtK.title" = "Erste ausgewählte Spur";
+"mnl-P8-dtK.title" = "Première piste sélectionnée";
 
 /* Class = "NSMenuItem"; title = "None"; ObjectID = "mvw-Hg-JFM"; */
-"mvw-Hg-JFM.title" = "Keine";
+"mvw-Hg-JFM.title" = "Aucune";
 
 /* Class = "NSTextFieldCell"; title = "Only one subtitles burn-in option will be applied, starting with the first (top)."; ObjectID = "N4s-K9-RwM"; */
-"N4s-K9-RwM.title" = "Nur eine Untertitel-Einbrenneinstellung wird angewendet, angefangen mit der ersten (obersten).";
+"N4s-K9-RwM.title" = "Une seule option de codage des sous-titres sera appliquée, en commençant par la première (en haut).";
 
 /* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "NJl-q3-zXL"; */
-"NJl-q3-zXL.title" = "Einstellungen:";
+"NJl-q3-zXL.title" = "Options :";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
-"oiD-QI-wly.ibShadowedToolTip" = "Verhalten der Spurauswahl.\n\nKeine: Wählt standardmäßig keinen Untertitel aus.\n\nErste passende ausgewählte Sprache: Fügt die erste Audiospur hinzu die zu den ausgewählten Sprachen passt.\n\nAlle passenden ausgewählten Sprachen: Fügt alle Audiospuren hinzu die zu den ausgewählten Sprachen passen.";
+"oiD-QI-wly.ibShadowedToolTip" = "Comportement de Sélection de Piste.\n\n\"Aucun\" ne sélectionnera aucune piste audio par défaut.\n\n\"Première langue sélectionnée correspondante\" ajoute la première piste audio correspondant à toutes les langues présentes dans la source.\n\n\"Toute langue correspondante\" ajoute les pistes audio correspondants à toutes les langues présentes dans la source.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default."; ObjectID = "OOC-GZ-OFA"; */
-"OOC-GZ-OFA.ibShadowedToolTip" = "Fremdsprachensuche durchsucht die Quelle nach kurzen Sequenzen an fremdsprachigem Audio die standardmäßig angezeigt werden.";
+"OOC-GZ-OFA.ibShadowedToolTip" = "\"Recherche langue étrangère\" scanne la source à la recherche d'éventuelles courtes séquences audio en langue étrangère ou inconnue, qui seront affichées par défaut.";
 
 /* Class = "NSButtonCell"; title = "Show All"; ObjectID = "PiQ-bA-7P1"; */
-"PiQ-bA-7P1.title" = "Alle anzeigen";
+"PiQ-bA-7P1.title" = "Tout afficher";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "Px8-G6-NVX"; */
-"Px8-G6-NVX.ibShadowedToolTip" = "Brenne den ersten ausgewählten Untertitel der Blu-Ray ein. Alle anderen Untertitel werden verworfen. Diese Option ist zu verwenden, wenn das Blu-Ray-Abspielgerät Untertitel nicht unterstützt.\n\nEs kann nur jeweils ein Untertitel eingebrannt werden.";
+"Px8-G6-NVX.ibShadowedToolTip" = "Incruste la première piste de sous-titre Blu-ray sélectionnée. Toutes les autres pistes de sous-titres Blu-ray seront rejetées. Utilisez cette option si votre logiciel ou appareil de lecture ne supporte pas les sous-titres Blu-ray.\n\nIl n'est possible d'incruster qu'une seule piste de sous-titres.";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Show all subtitles languages"; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibExternalAccessibilityDescription" = "Alle Untertitelsprachen anzeigen";
+"QAt-5X-NBT.ibExternalAccessibilityDescription" = "Afficher toutes les langues des sous-titres";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Show all subtitles languages in the Languages list."; ObjectID = "QAt-5X-NBT"; */
-"QAt-5X-NBT.ibShadowedToolTip" = "Zeige alle Untertitelsprachen in der Sprachenliste.";
+"QAt-5X-NBT.ibShadowedToolTip" = "Afficher tous les langages de sous-titres dans la liste \"Langues\".";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio Subtitles Track"; ObjectID = "QRd-XH-6TH"; */
-"QRd-XH-6TH.title" = "Fremdsprachenuntertitel";
+"QRd-XH-6TH.title" = "Piste de sous-titres audio étrangers";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
-"qVQ-fS-w1S.title" = "Table View Cell";
+"qVQ-fS-w1S.title" = "Vue des cellules du tableau ";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
-"uF5-6E-EIe.ibShadowedToolTip" = "Füge Closed Caption (CC)-Untertitel als Untertitelspur hinzu (nicht eingebrannt). CC-Untertitel werden direkt über eine Zeile des Videosignals übertragen.";
+"uF5-6E-EIe.ibShadowedToolTip" = "Ajoutez des sous-titres codés en tant que piste de sous-titres souples (non intégrés). ";
 
 /* Class = "NSButtonCell"; title = "Add Foreign Audio Search"; ObjectID = "vNY-OC-hTJ"; */
-"vNY-OC-hTJ.title" = "Fremdsprachensuche hinzufügen";
+"vNY-OC-hTJ.title" = "Ajouter une recherche audio étrangère";
 

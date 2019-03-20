@@ -1,44 +1,44 @@
 /* Class = "NSTextFieldCell"; title = "Format:"; ObjectID = "3dN-MN-DcP"; */
-"3dN-MN-DcP.title" = "Format:";
+"3dN-MN-DcP.title" = "Format :";
 
 /* Class = "NSWindow"; title = "Preferences"; ObjectID = "5"; */
-"5.title" = "Einstellungen";
+"5.title" = "Préférences";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "290"; */
-"290.title" = "OtherViews";
+"290.title" = "AutresVues";
 
 /* Class = "NSMenuItem"; title = "Auto"; ObjectID = "292"; */
 "292.title" = "Auto";
 
 /* Class = "NSButtonCell"; title = "Automatically name output files"; ObjectID = "302"; */
-"302.title" = "Ausgabedateien automatisch benennen";
+"302.title" = "Nommer automatiquement les fichiers en sortie";
 
 /* Class = "NSTextFieldCell"; title = "When Done:"; ObjectID = "304"; */
-"304.title" = "Wenn fertig:";
+"304.title" = "Quand terminé :";
 
 /* Class = "NSButtonCell"; title = "Automatically check for updates weekly"; ObjectID = "305"; */
-"305.title" = "Wöchentlich nach Updates suchen";
+"305.title" = "Vérifier automatiquement les mises à jour toutes les semaines";
 
 /* Class = "NSButtonCell"; title = "Send file to:"; ObjectID = "306"; */
-"306.title" = "Datei senden an:";
+"306.title" = "Envoyer le fichier à :";
 
 /* Class = "NSTextFieldCell"; title = "At Launch:"; ObjectID = "307"; */
-"307.title" = "Beim Start:";
+"307.title" = "Au démarrage :";
 
 /* Class = "NSTextFieldCell"; title = "Output Files:"; ObjectID = "308"; */
-"308.title" = "Ausgabedateien:";
+"308.title" = "Fichiers de sortie :";
 
 /* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
-"348.title" = "Aktivitätsprotokoll an selbem Ort wie das Video ablegen";
+"348.title" = "Enregistrer les journaux d'activité dans le même dossier que la vidéo";
 
 /* Class = "NSTextFieldCell"; title = "Activity Logs:"; ObjectID = "351"; */
-"351.title" = "Protokoll:";
+"351.title" = "Journaux d'activité :";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "352"; */
-"352.ibShadowedToolTip" = "Anzahl der zu überprüfenden Vorschaubilder. Höhere Werte verbessern die Genauigkeit der automatischen Bildbeschneidung auf Kosten einer längeren Scanzeit.";
+"352.ibShadowedToolTip" = "Nombre de prévisualisations d'images à numériser. Des valeurs plus élevées peuvent augmenter la précision du recadrage automatique aux dépens du temps de balayage du titre. ";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "354"; */
-"354.title" = "OtherViews";
+"354.title" = "AutresVues";
 
 /* Class = "NSMenuItem"; title = "10"; ObjectID = "355"; */
 "355.title" = "10";
@@ -50,10 +50,10 @@
 "357.title" = "20";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time."; ObjectID = "359"; */
-"359.ibShadowedToolTip" = "Anzahl der Bilder für die Vorschau. Höhere Werte verbessern die Genauigkeit der automatischen Bildbeschneidung auf Kosten einer längeren Scanzeit.";
+"359.ibShadowedToolTip" = "Nombre de prévisualisations d'images à numériser. Des valeurs plus élevées peuvent augmenter la précision du recadrage automatique aux dépens du temps de balayage du titre. ";
 
 /* Class = "NSTextFieldCell"; title = "Number of picture previews to scan:"; ObjectID = "360"; */
-"360.title" = "Anzahl der Bilder für die Vorschau:";
+"360.title" = "Nombre d'aperçu d'images à lire :";
 
 /* Class = "NSMenuItem"; title = "25"; ObjectID = "361"; */
 "361.title" = "25";
@@ -62,31 +62,31 @@
 "362.title" = "30";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "363"; */
-"363.ibShadowedToolTip" = "Verbosity-Level. Gibt an wieviele Details im Aktivitätsprotokoll aufgenommen werden sollen.";
+"363.ibShadowedToolTip" = "Niveau de verbosité. La verbosité étendue enregistre davantage d'informations techniques dans le journal d'activité. La verbosité minimale en enregistre moins.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "365"; */
-"365.title" = "OtherViews";
+"365.title" = "AutresVues";
 
 /* Class = "NSMenuItem"; title = "Extended"; ObjectID = "368"; */
-"368.title" = "Erweitert";
+"368.title" = "Étendu";
 
 /* Class = "NSMenuItem"; title = "Standard"; ObjectID = "369"; */
 "369.title" = "Standard";
 
 /* Class = "NSMenuItem"; title = "Minimised"; ObjectID = "370"; */
-"370.title" = "Minimiert";
+"370.title" = "Minimisé";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less."; ObjectID = "371"; */
-"371.ibShadowedToolTip" = "Verbosity-Level. Gibt an wieviele Details im Aktivitätsprotokoll aufgenommen werden sollen.";
+"371.ibShadowedToolTip" = "Niveaux de verbosité. La verbosité étendue enregistre davantage d'informations techniques dans le journal d'activité. La verbosité minimale en enregistre moins.";
 
 /* Class = "NSTextFieldCell"; title = "Verbosity Level:"; ObjectID = "372"; */
-"372.title" = "Aufzeichnungsumfang:";
+"372.title" = "Niveau de verbosité :";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "387"; */
-"387.ibShadowedToolTip" = "Legt die Granularität des x264-Qualitätsreglers fest. Kleinere Werte erlauben feinere Einstellungen.";
+"387.ibShadowedToolTip" = "Détermine la granularité du contrôle qualité constant de x264. Des valeurs plus petites permettent des incréments de qualité plus fins. ";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "389"; */
-"389.title" = "OtherViews";
+"389.title" = "AutresVues";
 
 /* Class = "NSMenuItem"; title = "0.20"; ObjectID = "390"; */
 "390.title" = "0.20";
@@ -101,37 +101,37 @@
 "394.title" = "1.0";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "395"; */
-"395.ibShadowedToolTip" = "Legt die Granularität des x264-Qualitätsreglers fest. Kleinere Werte erlauben feinere Einstellungen.";
+"395.ibShadowedToolTip" = "Détermine la granularité du contrôle qualité constant de x264. Des valeurs plus petites permettent des incréments de qualité plus fins. ";
 
 /* Class = "NSTextFieldCell"; title = "Constant Quality fractional granularity:"; ObjectID = "396"; */
-"396.title" = "Granularitätsaufteilung bei konstanter Qualität:";
+"396.title" = "Granularité fractionnelle constant de la qualité :";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare)."; ObjectID = "398"; */
-"398.ibShadowedToolTip" = "Verwende libdvdnav um DVDs einzulesen. Nur deaktivieren bei proplematischen DVDs, wenn libdvdread besser funktioniert (selten).";
+"398.ibShadowedToolTip" = "Utiliser libdvdnav pour lire les DVDs. À désactiver seulement pour des DVDs problématiques avec lesquels libdvdnav fonctionne mieux (rarement).";
 
 /* Class = "NSButtonCell"; title = "Use libdvdnav (instead of libdvdread)"; ObjectID = "399"; */
-"399.title" = "Libdvdnav verwenden (anstelle von libdvdread)";
+"399.title" = "Utiliser libdvdnav (au lieu de libdvdread)";
 
 /* Class = "NSTextFieldCell"; title = "DVD Reader:"; ObjectID = "443"; */
-"443.title" = "DVD-Leser:";
+"443.title" = "Lecteur DVD :";
 
 /* Class = "NSTextFieldCell"; title = "None"; ObjectID = "449"; */
-"449.title" = "Keine";
+"449.title" = "Aucune";
 
 /* Class = "NSButtonCell"; title = "Browse…"; ObjectID = "451"; */
-"451.title" = "Auswählen …";
+"451.title" = "Parcourir…";
 
 /* Class = "NSButtonCell"; title = "Play System Alert Sound"; ObjectID = "458"; */
-"458.title" = "Systemton abspielen";
+"458.title" = "Jouer un son d'alerte système";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped."; ObjectID = "463"; */
-"463.ibShadowedToolTip" = "Minimale Dauer des DVD- und Blu-ray-Titels in Sekunden. Kürzere Titel werden übersprungen.";
+"463.ibShadowedToolTip" = "Durée minimale du titre DVD ou Blu-ray en secondes. Les titres plus courts seront ignorés.";
 
 /* Class = "NSTextFieldCell"; title = "Ignore DVD and Blu-ray titles shorter than:"; ObjectID = "464"; */
-"464.title" = "DVD- und Blu-ray-Titel ignorieren, falls kürzer als:";
+"464.title" = "Ignorer les titres DVD et Blu-ray plus court que :";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum title duration in seconds. Shorter titles will be skipped."; ObjectID = "480"; */
-"480.ibShadowedToolTip" = "Minimale Dauer des Titels in Sekunden. Kürzere Titel werden übersprungen.";
+"480.ibShadowedToolTip" = "Durée minimale du titre en secondes. Les titres plus courts seront ignorés.";
 
 /* Class = "NSMenuItem"; title = ".m4v"; ObjectID = "484"; */
 "484.title" = ".m4v";
@@ -140,28 +140,28 @@
 "485.title" = ".mp4";
 
 /* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "487"; */
-"487.title" = "Standard MP4-Dateiendung:";
+"487.title" = "Extension MP4 par défaut :";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "493"; */
-"493.title" = "OtherViews";
+"493.title" = "AutresVues";
 
 /* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "494"; */
-"494.title" = "Nichts tun";
+"494.title" = "Ne rien faire";
 
 /* Class = "NSMenuItem"; title = "Alert"; ObjectID = "495"; */
-"495.title" = "Alarm";
+"495.title" = "Alerter";
 
 /* Class = "NSMenuItem"; title = "Alert And Notification"; ObjectID = "496"; */
-"496.title" = "Alarm und Benachrichtigung";
+"496.title" = "Alerte et notification";
 
 /* Class = "NSMenuItem"; title = "Put Computer To Sleep"; ObjectID = "497"; */
-"497.title" = "Computer in Ruhezustand versetzen";
+"497.title" = "Mettre l'ordinateur en veille";
 
 /* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "498"; */
-"498.title" = "Computer herunterfahren";
+"498.title" = "Éteindre l'ordinateur";
 
 /* Class = "NSMenuItem"; title = "Notification"; ObjectID = "499"; */
-"499.title" = "Benachrichtigung";
+"499.title" = "Notification";
 
 /* Class = "NSMenuItem"; title = "35"; ObjectID = "514"; */
 "514.title" = "35";
@@ -182,50 +182,50 @@
 "519.title" = "60";
 
 /* Class = "NSTextFieldCell"; title = "Title Scan:"; ObjectID = "c0L-TU-WML"; */
-"c0L-TU-WML.title" = "Titelüberprüfung:";
+"c0L-TU-WML.title" = "Scan du titre :";
 
 /* Class = "NSTextFieldCell"; title = "x264 Encoder:"; ObjectID = "cqp-xU-GOe"; */
-"cqp-xU-GOe.title" = "x264-Enkoder:";
+"cqp-xU-GOe.title" = "Encodeur x264 :";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
-"dQ6-Dh-9sD.title" = "Labels in das Formatfenster ziehen um das Benennungsschema festzulegen.";
+"dQ6-Dh-9sD.title" = "Glisser les labels vers Format pour composer un format de nommage.";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "f36-PN-c5F"; */
-"f36-PN-c5F.ibShadowedIsNilPlaceholder" = "Keine";
+"f36-PN-c5F.ibShadowedIsNilPlaceholder" = "Aucune";
 
 /* Class = "NSTextFieldCell"; title = "Queue:"; ObjectID = "FKi-zh-5gc"; */
-"FKi-zh-5gc.title" = "Warteschlange:";
+"FKi-zh-5gc.title" = "File d'attente :";
 
 /* Class = "NSTextFieldCell"; title = "GB"; ObjectID = "FZE-ZR-g93"; */
 "FZE-ZR-g93.title" = "GB";
 
 /* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "ggR-Zs-P8G"; */
-"ggR-Zs-P8G.title" = "Großbuchstaben korrigieren";
+"ggR-Zs-P8G.title" = "Changer la casse pour la casse de titre";
 
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
-"klQ-DW-Kc6.title" = "Sekunden";
+"klQ-DW-Kc6.title" = "secondes";
 
 /* Class = "NSButtonCell"; title = "Remove old logs from main Activity Logs folder after 30 days"; ObjectID = "lgn-RF-k0d"; */
-"lgn-RF-k0d.title" = "Alte Aktivitätsprotokolle nach 30 Tagen löschen";
+"lgn-RF-k0d.title" = "Nettoyer les anciens journaux du journal d'activité principal après 30 jours";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Minimum free space on destination disk."; ObjectID = "PaR-zw-opS"; */
-"PaR-zw-opS.ibShadowedToolTip" = "Minimaler freier Speicherplatz auf dem Zielvolume in GB.";
+"PaR-zw-opS.ibShadowedToolTip" = "Espace libre minimum sur le disque destinataire.";
 
 /* Class = "NSButtonCell"; title = "Replace underscores with spaces"; ObjectID = "pUi-lK-cHw"; */
-"pUi-lK-cHw.title" = "Unterstriche durch Leerzeichen ersetzen";
+"pUi-lK-cHw.title" = "Remplacer les tirets bas par des espaces";
 
 /* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Tk3-Ig-fFI"; */
-"Tk3-Ig-fFI.ibShadowedToolTip" = "Label in das Format schieben um einen Benennungssysntax zu erstellen.";
+"Tk3-Ig-fFI.ibShadowedToolTip" = "Faites glisser les étiquettes dans le champ Format pour composer un format de dénomination.";
 
 /* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "Uxv-oN-c1r"; */
-"Uxv-oN-c1r.title" = "Bei jedem Start auf \"Nichts tun\" zurücksetzen";
+"Uxv-oN-c1r.title" = "Rétablir à \"Ne rien faire\" au démarrage";
 
 /* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
-"wo5-iR-2mb.title" = "Punktationen entfernen";
+"wo5-iR-2mb.title" = "Retirer la ponctuation";
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
-"yG9-mz-tqQ.title" = "Warteschlange anhalten wenn der verfügbare Speicherplatz kleiner ist als (GB):";
+"yG9-mz-tqQ.title" = "Mettre en pause la file d'attente si l'espace disque est inférieur à :";
 
 /* Class = "NSButtonCell"; title = "Show Open Source panel"; ObjectID = "Zqz-Kn-xOS"; */
-"Zqz-Kn-xOS.title" = "Öffnen-Dialog anzeigen";
+"Zqz-Kn-xOS.title" = "Afficher le panneau d'ouverture de source";
 

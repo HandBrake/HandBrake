@@ -1,51 +1,51 @@
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "4tC-UE-40G"; */
-"4tC-UE-40G.title" = "Text Cell";
+"4tC-UE-40G.title" = "Cellule de texte";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Delete Preset"; ObjectID = "b3V-8w-euU"; */
-"b3V-8w-euU.ibExternalAccessibilityDescription" = "Voreinstellung löschen";
+"b3V-8w-euU.ibExternalAccessibilityDescription" = "Effacer le préréglage";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Delete the selected preset."; ObjectID = "b3V-8w-euU"; */
-"b3V-8w-euU.ibShadowedToolTip" = "Lösche die ausgewählte Voreinstellung.";
+"b3V-8w-euU.ibShadowedToolTip" = "Effacer le préréglage sélectionné.";
 
 /* Class = "NSMenuItem"; title = "Reset Official Presets"; ObjectID = "cm5-Kl-dB3"; */
-"cm5-Kl-dB3.title" = "Offizielle Voreinstellungen zurücksetzen";
+"cm5-Kl-dB3.title" = "Réinitialiser les préréglages officiels";
 
 /* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "D2t-YG-Frn"; */
-"D2t-YG-Frn.title" = "Zum Standard machen";
+"D2t-YG-Frn.title" = "Rendre par défaut";
 
 /* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
-"Io0-Vm-Qez.title" = "Neue Kategorie";
+"Io0-Vm-Qez.title" = "Nouvelle Catégorie";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "New Preset"; ObjectID = "kfi-wq-mgV"; */
-"kfi-wq-mgV.ibExternalAccessibilityDescription" = "Neue Voreinstellung";
+"kfi-wq-mgV.ibExternalAccessibilityDescription" = "Nouveau préréglage";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Create a new custom preset based on the currently selected settings."; ObjectID = "kfi-wq-mgV"; */
-"kfi-wq-mgV.ibShadowedToolTip" = "Erstellt neue benutzerdefinierte Voreinstellungen basierend auf den momentanen Einstellungen.";
+"kfi-wq-mgV.ibShadowedToolTip" = "Créer un nouveau préréglage personnalisé à partir des paramètres sélectionnés.";
 
 /* Class = "NSMenu"; title = "Presets Action Menu"; ObjectID = "LQk-kD-5sj"; */
-"LQk-kD-5sj.title" = "Voreinstellungsmenüoptionen";
+"LQk-kD-5sj.title" = "Menu préréglage des actions";
 
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
-"LUl-ag-Iu6.title" = "Importieren …";
+"LUl-ag-Iu6.title" = "Importer…";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "oBC-Nh-TwB"; */
-"oBC-Nh-TwB.title" = "Table View Cell";
+"oBC-Nh-TwB.title" = "Vue des cellules du tableau ";
 
 /* Class = "NSTextFieldCell"; title = "Presets"; ObjectID = "r4V-6L-SO8"; */
-"r4V-6L-SO8.title" = "Voreinstellungen";
+"r4V-6L-SO8.title" = "Préréglages";
 
 /* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Presets"; ObjectID = "uad-bt-uKD"; */
-"uad-bt-uKD.ibExternalAccessibilityDescription" = "Voreinstellungen";
+"uad-bt-uKD.ibExternalAccessibilityDescription" = "Préréglages";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.\n\nOverrides all encode settings. Settings may be further adjusted after selecting a preset."; ObjectID = "uad-bt-uKD"; */
-"uad-bt-uKD.ibShadowedToolTip" = "Voreinstellungen sind eine Gruppe von Enkodiereinstellungen, zugeschnitten auf ein bestimmtes Szenario. Es ist die Voreinstellung auszuwählen, die am besten zu den jeweiligen Bedürfnissen passt.\n\nÜberschreibt alle Enkodiereinstellungen. Die Einstellungen können noch feinjustiert werden nachdem eine Voreinstellung ausgewählt wurde.";
+"uad-bt-uKD.ibShadowedToolTip" = "Les préréglages sont un ensemble de réglages spécifiques à des scénarios bien précis. Sélectionnez celui qui s'approche le plus de votre objectif.\n\nRemplace tous les réglages d'encodage. Des réglages fins sont permis par la suite, après sélection d'un préréglage.";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
-"xEQ-Un-J0n.title" = "Exportieren …";
+"xEQ-Un-J0n.title" = "Exporter…";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Additional Options"; ObjectID = "Ybq-Zt-sta"; */
-"Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Zusätzliche Einstellungen";
+"Ybq-Zt-sta.ibExternalAccessibilityDescription" = "Options additionnelles";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Show additional options."; ObjectID = "Ybq-Zt-sta"; */
-"Ybq-Zt-sta.ibShadowedToolTip" = "Zeige zusätzliche Einstellungen.";
+"Ybq-Zt-sta.ibShadowedToolTip" = "Afficher les options additionnelles";
 

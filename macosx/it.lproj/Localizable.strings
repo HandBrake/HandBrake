@@ -1,5 +1,5 @@
 /* Preview -> size info label */
-" Scaled To Screen" = "Adattata allo schermo";
+" Scaled To Screen" = " Adattata allo schermo";
 
 /* No comment provided by engineer. */
 "- --:--" = "- --:--";
@@ -276,7 +276,7 @@
 
 /* Picture HUD -> scale button
    Touch bar */
-"Scale To Screen" = "Adatta allo schermo.";
+"Scale To Screen" = "Adatta allo schermo";
 
 /* Queue Alert -> cancel rip informative text */
 "Select Continue Encoding to dismiss this dialog without making changes." = "Seleziona \"Continua conversione\" per mandare via questo avviso senza fare modifiche.";

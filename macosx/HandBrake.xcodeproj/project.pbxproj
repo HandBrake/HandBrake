@@ -437,6 +437,36 @@
 		A900E6BC1D7B1B4800CB6C0A /* libopus.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libopus.a; path = external/contrib/lib/libopus.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A903C55E1CCE78060026B0ED /* NSWindow+HBAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSWindow+HBAdditions.h"; sourceTree = "<group>"; };
 		A903C55F1CCE78060026B0ED /* NSWindow+HBAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSWindow+HBAdditions.m"; sourceTree = "<group>"; };
+		A90713BC2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A90713BD2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A90713C12242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBEncodingProgressHUDController.strings; sourceTree = "<group>"; };
+		A90713C22242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBTitleSelection.strings; sourceTree = "<group>"; };
+		A90713C32242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Presets.strings; sourceTree = "<group>"; };
+		A90713C42242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/AddPreset.strings; sourceTree = "<group>"; };
+		A90713C52242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBPreviewViewController.strings; sourceTree = "<group>"; };
+		A90713C62242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/ExceptionAlert.strings; sourceTree = "<group>"; };
+		A90713C72242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MainMenu.strings; sourceTree = "<group>"; };
+		A90713C82242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Subtitles.strings; sourceTree = "<group>"; };
+		A90713C92242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Video.strings; sourceTree = "<group>"; };
+		A90713CA2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/PictureSettings.strings; sourceTree = "<group>"; };
+		A90713CB2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBFiltersViewController.strings; sourceTree = "<group>"; };
+		A90713CC2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MainWindow.strings; sourceTree = "<group>"; };
+		A90713CD2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Preferences.strings; sourceTree = "<group>"; };
+		A90713CE2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBPictureHUDController.strings; sourceTree = "<group>"; };
+		A90713CF2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Audio.strings; sourceTree = "<group>"; };
+		A90713D02242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBRenamePresetController.strings; sourceTree = "<group>"; };
+		A90713D12242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/OutputPanel.strings; sourceTree = "<group>"; };
+		A90713D22242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBAddCategoryController.strings; sourceTree = "<group>"; };
+		A90713D32242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBSummaryViewController.strings; sourceTree = "<group>"; };
+		A90713D42242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/PicturePreview.strings; sourceTree = "<group>"; };
+		A90713D52242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SubtitlesDefaults.strings; sourceTree = "<group>"; };
+		A90713D62242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Queue.strings; sourceTree = "<group>"; };
+		A90713D72242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/AudioDefaults.strings; sourceTree = "<group>"; };
+		A90713D82242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBPictureViewController.strings; sourceTree = "<group>"; };
+		A90713D92242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBPlayerHUDController.strings; sourceTree = "<group>"; };
+		A90713DA2242693B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/ChaptersTitles.strings; sourceTree = "<group>"; };
+		A90713DB2242697B00372AA0 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A90713DF22426AD100372AA0 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ExceptionAlert.strings; sourceTree = "<group>"; };
 		A90A0CAD1988D57200DA65CE /* HBAudioTrackPreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAudioTrackPreset.h; sourceTree = "<group>"; };
 		A90A0CAE1988D57200DA65CE /* HBAudioTrackPreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAudioTrackPreset.m; sourceTree = "<group>"; };
 		A91017B21A64440A00039BFB /* HBSubtitles.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitles.h; sourceTree = "<group>"; };
@@ -1590,6 +1620,7 @@
 				Base,
 				de,
 				it,
+				fr,
 			);
 			mainGroup = 273F1FDE14AD9DA40021BE6D;
 			productRefGroup = 273F200014ADAE950021BE6D /* Products */;
@@ -1856,6 +1887,7 @@
 				A9A96B8D20CAD2EE00A39AFB /* Base */,
 				A9637D9F20F7A252001EAE7C /* de */,
 				A9F5E3442215D85A0046FA4B /* it */,
+				A90713D02242693B00372AA0 /* fr */,
 			);
 			name = HBRenamePresetController.xib;
 			sourceTree = "<group>";
@@ -1874,6 +1906,7 @@
 				A953FF3820CAD29300325A51 /* Base */,
 				A9637DA220F7A252001EAE7C /* de */,
 				A9F5E3472215D85A0046FA4B /* it */,
+				A90713D32242693B00372AA0 /* fr */,
 			);
 			name = HBSummaryViewController.xib;
 			sourceTree = "<group>";
@@ -1884,6 +1917,7 @@
 				A9A96B8C20CAD2E700A39AFB /* Base */,
 				A9637DA120F7A252001EAE7C /* de */,
 				A9F5E3462215D85A0046FA4B /* it */,
+				A90713D22242693B00372AA0 /* fr */,
 			);
 			name = HBAddCategoryController.xib;
 			sourceTree = "<group>";
@@ -1894,6 +1928,7 @@
 				A9A96B8B20CAD2DB00A39AFB /* Base */,
 				A9637D9420F7A252001EAE7C /* de */,
 				A9F5E3382215D85A0046FA4B /* it */,
+				A90713C42242693B00372AA0 /* fr */,
 			);
 			name = AddPreset.xib;
 			sourceTree = "<group>";
@@ -1904,6 +1939,7 @@
 				A94DC2DD20CADA2C00EAC8FD /* Base */,
 				A9637D9B20F7A252001EAE7C /* de */,
 				A9F5E3412215D85A0046FA4B /* it */,
+				A90713CC2242693B00372AA0 /* fr */,
 			);
 			name = MainWindow.xib;
 			sourceTree = "<group>";
@@ -1913,6 +1949,7 @@
 			children = (
 				A975B02120F7AF29004675CC /* de */,
 				A958605B2216A5E5002092B1 /* it */,
+				A90713DB2242697B00372AA0 /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -1923,6 +1960,7 @@
 				A9A96B8320CAD2C200A39AFB /* Base */,
 				A9637D9D20F7A252001EAE7C /* de */,
 				A9F5E3422215D85A0046FA4B /* it */,
+				A90713CE2242693B00372AA0 /* fr */,
 			);
 			name = HBPictureHUDController.xib;
 			sourceTree = "<group>";
@@ -1933,6 +1971,7 @@
 				A9A96B8620CAD2CC00A39AFB /* Base */,
 				A9637D9120F7A252001EAE7C /* de */,
 				A9F5E3352215D85A0046FA4B /* it */,
+				A90713C12242693B00372AA0 /* fr */,
 			);
 			name = HBEncodingProgressHUDController.xib;
 			sourceTree = "<group>";
@@ -1943,6 +1982,7 @@
 				A9A96B8920CAD2D100A39AFB /* Base */,
 				A9637DA920F7A252001EAE7C /* de */,
 				A9F5E34D2215D85A0046FA4B /* it */,
+				A90713D92242693B00372AA0 /* fr */,
 			);
 			name = HBPlayerHUDController.xib;
 			sourceTree = "<group>";
@@ -1953,6 +1993,7 @@
 				A9A96BAC20CAD5A100A39AFB /* Base */,
 				A9637D9620F7A252001EAE7C /* de */,
 				A9F5E33B2215D85A0046FA4B /* it */,
+				A90713C72242693B00372AA0 /* fr */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -1963,6 +2004,7 @@
 				A9A96BAF20CAD5BD00A39AFB /* Base */,
 				A9637D9320F7A252001EAE7C /* de */,
 				A9F5E3372215D85A0046FA4B /* it */,
+				A90713C32242693B00372AA0 /* fr */,
 			);
 			name = Presets.xib;
 			sourceTree = "<group>";
@@ -1973,6 +2015,7 @@
 				A9A96BB520CAD5D600A39AFB /* Base */,
 				A9637D9220F7A252001EAE7C /* de */,
 				A9F5E3362215D85A0046FA4B /* it */,
+				A90713C22242693B00372AA0 /* fr */,
 			);
 			name = HBTitleSelection.xib;
 			sourceTree = "<group>";
@@ -1983,6 +2026,7 @@
 				A9A96BB820CAD5ED00A39AFB /* Base */,
 				A9637DA820F7A252001EAE7C /* de */,
 				A9F5E34C2215D85A0046FA4B /* it */,
+				A90713D82242693B00372AA0 /* fr */,
 			);
 			name = HBPictureViewController.xib;
 			sourceTree = "<group>";
@@ -1993,6 +2037,7 @@
 				A9A96BBB20CAD5F300A39AFB /* Base */,
 				A9637D9A20F7A252001EAE7C /* de */,
 				A9F5E33F2215D85A0046FA4B /* it */,
+				A90713CB2242693B00372AA0 /* fr */,
 			);
 			name = HBFiltersViewController.xib;
 			sourceTree = "<group>";
@@ -2003,6 +2048,7 @@
 				A9A96BBE20CAD5F700A39AFB /* Base */,
 				A9637D9820F7A252001EAE7C /* de */,
 				A9F5E33D2215D85A0046FA4B /* it */,
+				A90713C92242693B00372AA0 /* fr */,
 			);
 			name = Video.xib;
 			sourceTree = "<group>";
@@ -2013,6 +2059,7 @@
 				A9A96BC420CAD60900A39AFB /* Base */,
 				A9637D9E20F7A252001EAE7C /* de */,
 				A9F5E3432215D85A0046FA4B /* it */,
+				A90713CF2242693B00372AA0 /* fr */,
 			);
 			name = Audio.xib;
 			sourceTree = "<group>";
@@ -2023,6 +2070,7 @@
 				A9A96BC720CAD61000A39AFB /* Base */,
 				A9637DA620F7A252001EAE7C /* de */,
 				A9F5E34A2215D85A0046FA4B /* it */,
+				A90713D72242693B00372AA0 /* fr */,
 			);
 			name = AudioDefaults.xib;
 			sourceTree = "<group>";
@@ -2033,6 +2081,7 @@
 				A9A96BCA20CAD61800A39AFB /* Base */,
 				A9637D9720F7A252001EAE7C /* de */,
 				A9F5E33C2215D85A0046FA4B /* it */,
+				A90713C82242693B00372AA0 /* fr */,
 			);
 			name = Subtitles.xib;
 			sourceTree = "<group>";
@@ -2043,6 +2092,7 @@
 				A9A96BCD20CAD61F00A39AFB /* Base */,
 				A9637DA420F7A252001EAE7C /* de */,
 				A9F5E3492215D85A0046FA4B /* it */,
+				A90713D52242693B00372AA0 /* fr */,
 			);
 			name = SubtitlesDefaults.xib;
 			sourceTree = "<group>";
@@ -2053,6 +2103,7 @@
 				A9A96BD020CAD62500A39AFB /* Base */,
 				A9637DAA20F7A252001EAE7C /* de */,
 				A9F5E34E2215D85A0046FA4B /* it */,
+				A90713DA2242693B00372AA0 /* fr */,
 			);
 			name = ChaptersTitles.xib;
 			sourceTree = "<group>";
@@ -2063,6 +2114,7 @@
 				A9A96BD320CAD63000A39AFB /* Base */,
 				A9637DA720F7A252001EAE7C /* de */,
 				A9F5E34B2215D85A0046FA4B /* it */,
+				A90713D62242693B00372AA0 /* fr */,
 			);
 			name = Queue.xib;
 			sourceTree = "<group>";
@@ -2073,6 +2125,7 @@
 				A9A96BD620CAD64200A39AFB /* Base */,
 				A9637D9920F7A252001EAE7C /* de */,
 				A9F5E33E2215D85A0046FA4B /* it */,
+				A90713CA2242693B00372AA0 /* fr */,
 			);
 			name = PictureSettings.xib;
 			sourceTree = "<group>";
@@ -2083,6 +2136,7 @@
 				A9A96BD920CAD64B00A39AFB /* Base */,
 				A9637DA320F7A252001EAE7C /* de */,
 				A9F5E3482215D85A0046FA4B /* it */,
+				A90713D42242693B00372AA0 /* fr */,
 			);
 			name = PicturePreview.xib;
 			sourceTree = "<group>";
@@ -2093,6 +2147,7 @@
 				A9A96BDC20CAD66000A39AFB /* Base */,
 				A9637DA020F7A252001EAE7C /* de */,
 				A9F5E3452215D85A0046FA4B /* it */,
+				A90713D12242693B00372AA0 /* fr */,
 			);
 			name = OutputPanel.xib;
 			sourceTree = "<group>";
@@ -2103,6 +2158,7 @@
 				A9A96BDF20CAD66500A39AFB /* Base */,
 				A9637D9C20F7A252001EAE7C /* de */,
 				A9F5E3402215D85A0046FA4B /* it */,
+				A90713CD2242693B00372AA0 /* fr */,
 			);
 			name = Preferences.xib;
 			sourceTree = "<group>";
@@ -2113,6 +2169,7 @@
 				A9A96BE220CAD6CD00A39AFB /* Base */,
 				A9637D9520F7A252001EAE7C /* de */,
 				A9F5E3392215D85A0046FA4B /* it */,
+				A90713C52242693B00372AA0 /* fr */,
 			);
 			name = HBPreviewViewController.xib;
 			sourceTree = "<group>";
@@ -2123,6 +2180,7 @@
 				A9B6B9F0217B408E00B957AE /* de */,
 				A95CB2FB217B6D07001E9F51 /* en */,
 				A9F5E3302215D85A0046FA4B /* it */,
+				A90713BC2242693B00372AA0 /* fr */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -2132,6 +2190,7 @@
 			children = (
 				A9B6B9F3217B408E00B957AE /* de */,
 				A9F5E3342215D85A0046FA4B /* it */,
+				A90713BD2242693B00372AA0 /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2141,6 +2200,8 @@
 			children = (
 				A9E52CD7218DD52A00E17B86 /* Base */,
 				A9F5E33A2215D85A0046FA4B /* it */,
+				A90713C62242693B00372AA0 /* fr */,
+				A90713DF22426AD100372AA0 /* de */,
 			);
 			name = ExceptionAlert.xib;
 			sourceTree = "<group>";

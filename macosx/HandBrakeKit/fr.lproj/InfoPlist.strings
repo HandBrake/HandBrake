@@ -1,0 +1,3 @@
+/* Bundle name */
+"CFBundleName" = "$(NON_DU_PRODUIT)";
+

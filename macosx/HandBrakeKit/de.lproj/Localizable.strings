@@ -9,14 +9,10 @@
 " (ETA %02d:%02d:%02d)" = " (ETA %1$dh:%2$dmin:%3$dsec)";
 
 /* Title description */
-" (Title %d, %@, %@) ▸ %@
-" = " (Titel %1$d, %2$@, %3$@) ▸ %4$@
-";
+" (Title %d, %@, %@) ▸ %@\n" = " (Titel %1$d, %2$@, %3$@) ▸ %4$@\n";
 
 /* Title description */
-" (Title %d, %@) ▸ %@
-" = " (Titel %1$d, %2$@) ▸ %3$@
-";
+" (Title %d, %@) ▸ %@\n" = " (Titel %1$d, %2$@) ▸ %3$@\n";
 
 /* Dimensions description */
 " Keep Aspect Ratio" = " Bildformat erhalten";
@@ -145,11 +141,7 @@
 "Decomb" = "Decomb";
 
 /* HBJob -> invalid Decomb custom settings error recovery suggestion */
-"Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
-
-Decomb default: mode=7" = "Decomb-Syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
-
-Decomb-Standard: mode=7";
+"Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7" = "Decomb-Syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb-Standard: mode=7";
 
 /* Subtitles description */
 "Default" = "Standard";
@@ -211,11 +203,7 @@ Decomb-Standard: mode=7";
 "HQDN3D" = "HQDN3D";
 
 /* HBJob -> invalid name error recovery suggestion */
-"HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
-
-Default settings: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3" = "HQDN3D-Syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
-
-Standardeinstellungen: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
+"HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nDefault settings: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3" = "HQDN3D-Syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nStandardeinstellungen: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
 
 /* HBFilters -> invalid comb detect custom string description */
 "Invalid custom comb detect settings." = "Ungültige benutzerdefinierte Comb Detect-Einstellungen.";
@@ -248,11 +236,7 @@ Standardeinstellungen: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-tem
 "Lapsharp" = "Lapsharp";
 
 /* HBJob -> invalid lapsharp custom settings error recovery suggestion */
-"Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
-
-Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap" = "Lapsharp-Syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
-
-Lapsharp-Standard: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap";
+"Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap" = "Lapsharp-Syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp-Standard: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap";
 
 /* Video description */
 "Level: %@" = "Level: %@";
@@ -273,11 +257,7 @@ Lapsharp-Standard: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isol
 "NLMeans" = "NLMeans";
 
 /* HBJob -> invalid name error recovery suggestion */
-"NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
-
-Default settings: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0" = "NLMeans-Syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
-
-Standardeinstellungen: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0";
+"NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nDefault settings: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0" = "NLMeans-Syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nStandardeinstellungen: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0";
 
 /* HBAudio -> none track name
    HBJob -> filters short description
@@ -353,18 +333,10 @@ Standardeinstellungen: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-f
 "Subtitles:" = "Untertitel:";
 
 /* HBJob -> invalid comb detect custom settings error recovery suggestion */
-"Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
-
-Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16" = "Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
-
-Standardeinstellungen: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16";
+"Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16" = "Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nStandardeinstellungen: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16";
 
 /* HBJob -> invalid detelecine custom settings error recovery suggestion */
-"Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d
-
-Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0" = "Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d
-
-Standardeinstellungen: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0";
+"Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0" = "Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nStandardeinstellungen: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0";
 
 /* HBJob -> invalid name error recovery suggestion */
 "The file name can't contain the / character." = "Der Dateinamen darf kein Zeichen / enthalten.";
@@ -389,11 +361,7 @@ Standardeinstellungen: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0
 "Unsharp" = "Unscharf Maskieren";
 
 /* HBJob -> invalid unsharp custom settings error recovery suggestion */
-"Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
-
-Unsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7" = "Unscharf Maskieren-Syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
-
-Unscharf Maskieren-Standardeinstellungen: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7";
+"Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7" = "Unscharf Maskieren-Syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c\n\nUnscharf Maskieren-Standardeinstellungen: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7";
 
 /* HBJob -> video short description framerate */
 "VFR" = "VFR";
@@ -407,13 +375,6 @@ Unscharf Maskieren-Standardeinstellungen: y-strength=0.25:y-size=7:cb-strength=0
 /* HBJob -> Format display name */
 "WebM File" = "WebM-Datei";
 
-/* HBFilters -> filter display name */
-"Yadif" = "Yadif";
-
 /* HBJob -> invalid Yadif custom settings error recovery suggestion */
-"Yadif syntax: mode=m:parity=p
-
-Yadif default: mode=3" = "Yadif-Syntax: mode=m:parity=p
-
-Yadif-Standardeinstellungen: mode=3";
+"Yadif syntax: mode=m:parity=p\n\nYadif default: mode=3" = "Yadif-Syntax: mode=m:parity=p\n\nYadif-Standardeinstellungen: mode=3";
 

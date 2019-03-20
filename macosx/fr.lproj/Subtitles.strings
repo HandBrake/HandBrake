@@ -1,0 +1,171 @@
+/* Class = "NSTableView"; ibExternalAccessibilityDescription = "Subtitles tracks"; ObjectID = "0yM-wE-D2x"; */
+"0yM-wE-D2x.ibExternalAccessibilityDescription" = "Pistes de sous-titres";
+
+/* Class = "NSTableColumn"; headerCell.title = "Encoding"; ObjectID = "1Qg-We-ltR"; */
+"1Qg-We-ltR.headerCell.title" = "Encodage";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "4PX-In-DpF"; */
+"4PX-In-DpF.title" = "Ajouter toutes les pistes";
+
+/* Class = "NSTableColumn"; headerCell.title = "Language"; ObjectID = "9ka-9O-WDj"; */
+"9ka-9O-WDj.headerCell.title" = "Langue";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ABd-Ec-K2L"; */
+"ABd-Ec-K2L.title" = "AutresVues";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT/SSA Offset"; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibExternalAccessibilityDescription" = "Décalage SRT/SSA";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibShadowedToolTip" = "Décalage positif ou négatif, en millisecondes (ms), de la piste de sous-titres SRT/SSA sélectionnée. Non applicable aux autres formats.";
+
+/* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "cSW-OC-qKA"; */
+"cSW-OC-qKA.title" = "Fenêtre surgissante";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "dap-ee-kor"; */
+"dap-ee-kor.title" = "Choix 1";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "fAW-To-EeP"; */
+"fAW-To-EeP.title" = "Choix 3";
+
+/* Class = "NSTableColumn"; headerCell.title = "Offset"; ObjectID = "Fgh-pZ-6uu"; */
+"Fgh-pZ-6uu.headerCell.title" = "Décalage";
+
+/* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
+"fIe-Fg-ufj.headerCell.title" = "Incrustés";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Fr7-eG-NuL"; */
+"Fr7-eG-NuL.title" = "AutresVues";
+
+/* Class = "NSTableColumn"; headerCell.title = "Default"; ObjectID = "fvq-pE-sOC"; */
+"fvq-pE-sOC.headerCell.title" = "Défaut";
+
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "fXD-7h-jMl"; */
+"fXD-7h-jMl.title" = "Ajouter une piste de sous-titres externe…";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "g4b-FM-qX4"; */
+"g4b-FM-qX4.title" = "Choix 2";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "gHY-6m-ASb"; */
+"gHY-6m-ASb.title" = "Choix 2";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Forced subtitles only"; ObjectID = "HC5-ql-Vcr"; */
+"HC5-ql-Vcr.ibExternalAccessibilityDescription" = "Sous-titres forcés uniquement";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Forced Only. Use only subtitles marked as “forced” in the selected source track."; ObjectID = "HC5-ql-Vcr"; */
+"HC5-ql-Vcr.ibShadowedToolTip" = "Forcés uniquement. Utilise uniquement les sous-titres marqués comme \"forcé\" pour la piste sélectionnée.";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hhH-c3-gD0"; */
+"hhH-c3-gD0.title" = "0";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "HQq-Mp-4sI"; */
+"HQq-Mp-4sI.title" = "Choix 2";
+
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Add new SRT/SSA subtitle to the list."; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.ibShadowedToolTip" = "Ajouter des sous-titres SRT/SSA à la liste.";
+
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.title" = "Ajouter une piste de sous-titres externe…";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Language"; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibExternalAccessibilityDescription" = "Langue SRT/SSA";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Language of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibShadowedToolTip" = "Langue de la piste de sous-titres SRT/SSA sélectionnée. Non applicable sur d'autres formats.";
+
+/* Class = "NSMenuItem"; title = "Reload"; ObjectID = "jcM-HL-QJ6"; */
+"jcM-HL-QJ6.title" = "Recharger";
+
+/* Class = "NSButtonCell"; title = "Reload"; ObjectID = "jG8-uo-1tv"; */
+"jG8-uo-1tv.title" = "Recharger";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "JLr-Qi-X0X"; */
+"JLr-Qi-X0X.title" = "Vérifier";
+
+/* Class = "NSTableColumn"; headerCell.title = "Forced Only"; ObjectID = "klV-Gy-igk"; */
+"klV-Gy-igk.headerCell.title" = "Forcé uniquement";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Default"; ObjectID = "mdO-Qu-3Pb"; */
+"mdO-Qu-3Pb.ibExternalAccessibilityDescription" = "Défaut";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Default flag. Mark the selected subtitles track as the default to be displayed on playback."; ObjectID = "mdO-Qu-3Pb"; */
+"mdO-Qu-3Pb.ibShadowedToolTip" = "Drapeau par défaut. Marque la piste de sous-titres sélectionnée comme la piste par défaut à afficher lors de la lecture. ";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "mVi-zH-KUq"; */
+"mVi-zH-KUq.title" = "Supprimer toutes les pistes";
+
+/* Class = "NSTableColumn"; headerCell.title = "Track"; ObjectID = "N3S-st-yGv"; */
+"N3S-st-yGv.headerCell.title" = "Piste";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "ooy-Sh-Edm"; */
+"ooy-Sh-Edm.title" = "Vérifier";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
+"oxg-bs-1si.title" = "Comportement de la sélection…";
+
+/* Class = "NSMenuItem"; title = "Selection Behavior…"; ObjectID = "pwm-PV-1x4"; */
+"pwm-PV-1x4.title" = "Comportement de la sélection…";
+
+/* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
+"QRj-KI-a03.title" = "Texte";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Configure subtitle tracks Selection Behavior. These settings affect which tracks will be added to the subtitle tracks list, and the settings used for each track."; ObjectID = "QsM-28-Pya"; */
+"QsM-28-Pya.ibShadowedToolTip" = "Configure le Comportement de sélection des pistes de sous-titres. Ce réglage impacte les pistes qui seront ajoutées à la liste des pistes sous-titres, et le réglage utilisé pour chaque piste.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Character Encoding"; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibExternalAccessibilityDescription" = "Encodage du texte SRT/SSA";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Character encoding/codeset of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibShadowedToolTip" = "Encodage des caractères pour la piste SRT/SSA sélectionnée. Non applicable aux autres formats.";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "R8a-qg-ASg"; */
+"R8a-qg-ASg.title" = "Supprimer toutes les pistes";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "R9w-Bn-CCt"; */
+"R9w-Bn-CCt.title" = "Vérifier";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "Rj8-KI-k4L"; */
+"Rj8-KI-k4L.title" = "Choix 1";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "S2I-Jd-Lyg"; */
+"S2I-Jd-Lyg.title" = "Ajouter toutes les pistes";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Subtitle tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the subtitle Selection Behavior dialog."; ObjectID = "Syo-rH-vof"; */
+"Syo-rH-vof.ibShadowedToolTip" = "Liste des pistes de sous-titres. Le comportement de sélection des pistes et les réglages sont récupérés du préréglage sélectionné, et peuvent être configurés via la boite de dialogue \"Comportement de la sélection\" du sous-titre.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Selected track"; ObjectID = "Tf3-cP-TGw"; */
+"Tf3-cP-TGw.ibExternalAccessibilityDescription" = "Piste sélectionnée";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Subtitles language and type."; ObjectID = "Tf3-cP-TGw"; */
+"Tf3-cP-TGw.ibShadowedToolTip" = "Langue des sous-titres et type.";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "ThR-Cn-Vfr"; */
+"ThR-Cn-Vfr.title" = "Choix 3";
+
+/* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "TJO-RZ-jgb"; */
+"TJO-RZ-jgb.title" = "Pistes";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Umu-1b-U1Z"; */
+"Umu-1b-U1Z.title" = "AutresVues";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "UOP-xa-WpP"; */
+"UOP-xa-WpP.title" = "AutresVues";
+
+/* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "vHW-fn-RSG"; */
+"vHW-fn-RSG.title" = "Fenêtre surgissante";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Reload the subtitles tracks list using the configured Selection Behavior."; ObjectID = "Vxx-gk-9kY"; */
+"Vxx-gk-9kY.ibShadowedToolTip" = "Recharger les pistes de sous-titres en utilisant la sélection automatique configurée.";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "yDg-DK-z5D"; */
+"yDg-DK-z5D.title" = "Choix 1";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "yEC-jb-q8b"; */
+"yEC-jb-q8b.title" = "Choix 3";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Burned In"; ObjectID = "zpm-9Z-Hsq"; */
+"zpm-9Z-Hsq.ibExternalAccessibilityDescription" = "Incrustés";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burned In. Make the selected subtitles permanent by overlaying them onto the video track."; ObjectID = "zpm-9Z-Hsq"; */
+"zpm-9Z-Hsq.ibShadowedToolTip" = "Incrustés. Rendez les sous-titres sélectionnés permanents en les superposant à la piste vidéo. ";
+

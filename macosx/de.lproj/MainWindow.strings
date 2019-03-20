@@ -4,6 +4,9 @@
 /* Class = "NSButton"; ibShadowedToolTip = "Save New Preset…"; ObjectID = "2vD-zN-YMe"; */
 "2vD-zN-YMe.ibShadowedToolTip" = "Neue Voreinstellung speichern …";
 
+/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "3Gk-ma-r2w"; */
+"3Gk-ma-r2w.ibShadowedIsNilPlaceholder" = "9e9766bb4d6bb85574f2ef2fccf35391_tr";
+
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
 "3w9-Iu-3u2.ibShadowedToolTip" = "Titel zum überprüfen.";
 
@@ -47,9 +50,7 @@
 "1539.ibShadowedToolTip" = "Name der Quelle.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Title, or video clip, to encode. The longest title is selected by default.\n\nBlu-ray and DVD sources often have multiple titles, the longest of which is typically the main feature."; ObjectID = "1541"; */
-"1541.ibShadowedToolTip" = "Titel oder Videoclip zum Enkodieren. Standardmäßig wird der längste Titel ausgewählt.
-
-Blu-rays und DVDs haben meistens mehrere Titel, der längste ist für gewöhnlich der Hauptfilm.";
+"1541.ibShadowedToolTip" = "Titel oder Videoclip zum Enkodieren. Standardmäßig wird der längste Titel ausgewählt.\n\nBlu-rays und DVDs haben meistens mehrere Titel, der längste ist für gewöhnlich der Hauptfilm.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "1542"; */
 "1542.title" = "OtherViews";
@@ -263,9 +264,6 @@ Blu-rays und DVDs haben meistens mehrere Titel, der längste ist für gewöhnlic
 
 /* Class = "NSTextFieldCell"; title = "To:"; ObjectID = "rfK-nQ-Aq2"; */
 "rfK-nQ-Aq2.title" = "Zielort:";
-
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "sbX-LU-uOW"; */
-"sbX-LU-uOW.ibShadowedIsNilPlaceholder" = "bae99e1761724952e7893d509131ea79_tr";
 
 /* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "wTQ-KF-5KW"; */
 "wTQ-KF-5KW.label" = "Pause";
