@@ -458,7 +458,7 @@ static void eedi2_filter_thread( void *thread_args_v )
     pv = thread_args->pv;
     plane = thread_args->plane;
 
-    hb_log("eedi2 thread started for plane %d", plane);
+    hb_deep_log(3, "eedi2 thread started for plane %d", plane);
 
     while (1)
     {
@@ -698,7 +698,7 @@ static void yadif_decomb_filter_thread( void *thread_args_v )
     pv = thread_args->pv;
     segment = thread_args->segment;
 
-    hb_log("yadif thread started for segment %d", segment);
+    hb_deep_log(3, "yadif thread started for segment %d", segment);
 
     while (1)
     {
@@ -1094,7 +1094,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
                     init->geometry.height * stride * sizeof(int), 16);
 
             if( !pv->cx2 || !pv->cy2 || !pv->cxy || !pv->tmpc )
-                hb_log("EEDI2: failed to malloc derivative arrays");
+                hb_error("EEDI2: failed to malloc derivative arrays");
             else
                 hb_log("EEDI2: successfully mallloced derivative arrays");
         }

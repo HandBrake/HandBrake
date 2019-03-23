@@ -386,7 +386,7 @@ hb_buffer_t * hb_buffer_init_internal( int size )
      */
     if( !( b = calloc( sizeof( hb_buffer_t ), 1 ) ) )
     {
-        hb_log( "out of memory" );
+        hb_error( "out of memory" );
         return NULL;
     }
 
@@ -398,7 +398,7 @@ hb_buffer_t * hb_buffer_init_internal( int size )
         b->data = av_malloc(b->alloc);
         if( !b->data )
         {
-            hb_log( "out of memory" );
+            hb_error( "out of memory" );
             free( b );
             return NULL;
         }
