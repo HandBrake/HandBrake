@@ -1099,7 +1099,7 @@ static void nlmeans_filter_thread(void *thread_args_v)
     hb_filter_private_t *pv = thread_data->pv;
     int segment = thread_data->segment;
 
-    hb_log("NLMeans thread started for segment %d", segment);
+    hb_deep_log(3, "NLMeans thread started for segment %d", segment);
 
     while (1)
     {

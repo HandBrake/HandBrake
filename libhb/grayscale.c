@@ -73,7 +73,7 @@ void grayscale_filter_thread( void *thread_args_v )
     pv = thread_args->pv;
     segment = thread_args->segment;
 
-    hb_log("Grayscale thread started for segment %d", segment);
+    hb_deep_log(3, "Grayscale thread started for segment %d", segment);
 
     while( run )
     {

@@ -673,7 +673,7 @@ static void mask_dilate_thread( void *thread_args_v )
     pv = thread_args->pv;
     segment = thread_args->segment;
 
-    hb_log("mask dilate thread started for segment %d", segment);
+    hb_deep_log(3, "mask dilate thread started for segment %d", segment);
 
     while (1)
     {
@@ -775,7 +775,7 @@ static void mask_erode_thread( void *thread_args_v )
     pv = thread_args->pv;
     segment = thread_args->segment;
 
-    hb_log("mask erode thread started for segment %d", segment);
+    hb_deep_log(3, "mask erode thread started for segment %d", segment);
 
     while (1)
     {
@@ -877,7 +877,7 @@ static void mask_filter_thread( void *thread_args_v )
     pv = thread_args->pv;
     segment = thread_args->segment;
 
-    hb_log("mask filter thread started for segment %d", segment);
+    hb_deep_log(3, "mask filter thread started for segment %d", segment);
 
     while (1)
     {
@@ -980,7 +980,7 @@ static void decomb_check_thread( void *thread_args_v )
     pv = thread_args->pv;
     segment = thread_args->segment;
 
-    hb_log("decomb check thread started for segment %d", segment);
+    hb_deep_log(3, "decomb check thread started for segment %d", segment);
 
     while (1)
     {
@@ -1030,7 +1030,7 @@ static void decomb_filter_thread( void *thread_args_v )
     pv = thread_args->pv;
     segment = thread_args->segment;
 
-    hb_log("decomb filter thread started for segment %d", segment);
+    hb_deep_log(3, "decomb filter thread started for segment %d", segment);
 
     while (1)
     {
