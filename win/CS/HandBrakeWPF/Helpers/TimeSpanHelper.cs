@@ -12,6 +12,8 @@ namespace HandBrakeWPF.Helpers
     using System;
     using System.Globalization;
 
+    using HandBrakeWPF.Services.Encode.Model.Models;
+
     /// <summary>
     /// Helper functions for handling <see cref="TimeSpan"/> structures
     /// </summary>
@@ -28,10 +30,20 @@ namespace HandBrakeWPF.Helpers
         /// </returns>
         internal static TimeSpan ParseChapterTimeStart(string chapterStartRaw)
         {
+            if (string.IsNullOrEmpty(chapterStartRaw))
+            {
+                return TimeSpan.MinValue;
+            }
+
             // Format: 02:35:05 and 02:35:05.2957333
-            return TimeSpan.ParseExact(
-                chapterStartRaw,
-                new[] { @"hh\:mm\:ss", @"hh\:mm\:ss\.FFFFFFF" }, CultureInfo.InvariantCulture);  // Handle whole seconds then Handle fraction seconds
+            TimeSpan converted;
+            string fromTime = chapterStartRaw.Trim().TrimEnd('0');
+            if (TimeSpan.TryParseExact(fromTime, new[] { @"HH\:mm\:ss", @"hh\:mm\:ss\.FFFFFFF", }, CultureInfo.InvariantCulture, out converted))
+            {
+                return converted;
+            }
+
+            return TimeSpan.Zero;
         }
     }
 }
