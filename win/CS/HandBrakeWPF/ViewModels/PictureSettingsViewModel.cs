@@ -626,6 +626,26 @@ namespace HandBrakeWPF.ViewModels
                 preset.PictureSettingsMode = PresetPictureSettingsMode.Custom;
             }
 
+            // Cropping
+            if (preset.Task.HasCropping)
+            {
+                this.IsCustomCrop = true;
+                this.Task.Cropping.Left = preset.Task.Cropping.Left;
+                this.Task.Cropping.Right = preset.Task.Cropping.Right;
+                this.Task.Cropping.Top = preset.Task.Cropping.Top;
+                this.Task.Cropping.Bottom = preset.Task.Cropping.Bottom;
+
+                this.NotifyOfPropertyChange(() => this.CropLeft);
+                this.NotifyOfPropertyChange(() => this.CropRight);
+                this.NotifyOfPropertyChange(() => this.CropTop);
+                this.NotifyOfPropertyChange(() => this.CropBottom);
+            }
+            else
+            {
+                this.IsCustomCrop = false;
+            }
+
+
             // Setup the Picture Sizes
             switch (preset.PictureSettingsMode)
             {
@@ -699,20 +719,6 @@ namespace HandBrakeWPF.ViewModels
                 this.DisplayWidth = preset.Task.DisplayWidth != null ? int.Parse(preset.Task.DisplayWidth.ToString()) : 0;
                 this.ParWidth = preset.Task.PixelAspectX;
                 this.ParHeight = preset.Task.PixelAspectY;
-            }
-
-            // Cropping
-            if (preset.Task.HasCropping)
-            {
-                this.IsCustomCrop = true;
-                this.CropLeft = preset.Task.Cropping.Left;
-                this.CropRight = preset.Task.Cropping.Right;
-                this.CropTop = preset.Task.Cropping.Top;
-                this.CropBottom = preset.Task.Cropping.Bottom;
-            }
-            else
-            {
-                this.IsCustomCrop = false;
             }
 
             this.NotifyOfPropertyChange(() => this.Task);
