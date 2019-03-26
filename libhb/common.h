@@ -1318,6 +1318,7 @@ enum
     HB_FILTER_DEINTERLACE,
     HB_FILTER_VFR,
     // Filters that must operate on the original source image are next
+    HB_FILTER_DESKEETER,
     HB_FILTER_DEBLOCK,
     HB_FILTER_DENOISE,
     HB_FILTER_HQDN3D = HB_FILTER_DENOISE,

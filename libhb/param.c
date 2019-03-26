@@ -115,6 +115,24 @@ static hb_filter_param_t lapsharp_tunes[] =
     { 0, NULL,          NULL,         NULL              }
 };
 
+static hb_filter_param_t deskeeter_presets[] =
+{
+    { 1, "Custom",      "custom",     NULL              },
+    { 2, "Ultralight",  "ultralight", NULL              },
+    { 3, "Light",       "light",      NULL              },
+    { 4, "Medium",      "medium",     NULL              },
+    { 5, "Strong",      "strong",     NULL              },
+    { 6, "Stronger",    "stronger",   NULL              },
+    { 7, "Very Strong", "verystrong", NULL              },
+    { 0, NULL,          NULL,         NULL              }
+};
+
+static hb_filter_param_t deskeeter_tunes[] =
+{
+    { 0, "None",        "none",       NULL              },
+    { 0, NULL,          NULL,         NULL              }
+};
+
 static hb_filter_param_t detelecine_presets[] =
 {
     { 0, "Off",         "off",        "disable=1"       },
@@ -195,6 +213,10 @@ static filter_param_map_t param_map[] =
     { HB_FILTER_LAPSHARP,    lapsharp_presets,    lapsharp_tunes,
       sizeof(lapsharp_presets) / sizeof(hb_filter_param_t),
       sizeof(lapsharp_tunes)   / sizeof(hb_filter_param_t),       },
+
+    { HB_FILTER_DESKEETER,    deskeeter_presets,    deskeeter_tunes,
+      sizeof(deskeeter_presets) / sizeof(hb_filter_param_t),
+      sizeof(deskeeter_tunes)   / sizeof(hb_filter_param_t),       },
 
     { HB_FILTER_DETELECINE,  detelecine_presets,  NULL,
       sizeof(detelecine_presets) / sizeof(hb_filter_param_t),  0, },
@@ -834,6 +856,79 @@ static hb_dict_t * generate_lapsharp_settings(const char *preset,
     return settings;
 }
 
+static hb_dict_t * generate_deskeeter_settings(const char *preset,
+                                               const char *tune,
+                                               const char *custom)
+{
+    hb_dict_t * settings;
+
+    if (preset == NULL)
+        return NULL;
+
+    if (!strcasecmp(preset, "custom"))
+    {
+        return hb_parse_filter_settings(custom);
+    }
+    if (!strcasecmp(preset, "ultralight") ||
+        !strcasecmp(preset, "light") ||
+        !strcasecmp(preset, "medium") ||
+        !strcasecmp(preset, "strong") ||
+        !strcasecmp(preset, "stronger") ||
+        !strcasecmp(preset, "verystrong"))
+    {
+        double strength[2];
+        const char *kernel_string[2];
+
+        if (tune == NULL || !strcasecmp(tune, "none"))
+        {
+            strength[0]      = strength[1]      = 0.8;
+            kernel_string[0] = kernel_string[1] = "log";
+            if (!strcasecmp(preset, "ultralight"))
+            {
+                strength[0]  = strength[1] = 0.3;
+            }
+            else if (!strcasecmp(preset, "light"))
+            {
+                strength[0]  = strength[1] = 0.6;
+            }
+            else if (!strcasecmp(preset, "strong"))
+            {
+                strength[0]  = strength[1] = 1.0;
+            }
+            else if (!strcasecmp(preset, "stronger"))
+            {
+                strength[0]  = strength[1] = 1.2;
+            }
+            else if (!strcasecmp(preset, "verystrong"))
+            {
+                strength[0]  = strength[1] = 1.5;
+            }
+        }
+        else
+        {
+            fprintf(stderr, "Unrecognized deskeeter tune (%s).\n", tune);
+            return NULL;
+        }
+
+        settings = hb_dict_init();
+        hb_dict_set(settings, "y-strength", hb_value_double(strength[0]));
+        hb_dict_set(settings, "y-kernel",   hb_value_string(kernel_string[0]));
+
+        hb_dict_set(settings, "cb-strength", hb_value_double(strength[1]));
+        hb_dict_set(settings, "cb-kernel",   hb_value_string(kernel_string[1]));
+    }
+    else
+    {
+        settings = hb_parse_filter_settings(preset);
+        if (tune != NULL)
+        {
+            fprintf(stderr, "Custom deskeeter parameters specified; ignoring deskeeter tune (%s).\n", tune);
+        }
+    }
+
+    return settings;
+}
+
 int hb_validate_param_string(const char *regex_pattern, const char *param_string)
 {
     regex_t regex_temp;
@@ -1099,6 +1194,9 @@ hb_generate_filter_settings(int filter_id, const char *preset, const char *tune,
             break;
         case HB_FILTER_UNSHARP:
             settings = generate_unsharp_settings(preset, tune, custom);
+            break;
+        case HB_FILTER_DESKEETER:
+            settings = generate_deskeeter_settings(preset, tune, custom);
             break;
         case HB_FILTER_COMB_DETECT:
         case HB_FILTER_DECOMB:

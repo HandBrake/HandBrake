@@ -1344,6 +1344,52 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         }
     }
 
+    // Mosquito filter
+    const char *mosquito_filter, *mosquito_preset, *mosquito_tune, *mosquito_custom;
+    mosquito_filter = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureMosquitoFilter"));
+    mosquito_preset = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureMosquitoPreset"));
+    mosquito_tune   = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureMosquitoTune"));
+    mosquito_custom = hb_value_get_string(hb_dict_get(preset,
+                                                   "PictureMosquitoCustom"));
+    if (mosquito_filter != NULL && mosquito_preset != NULL &&
+        strcasecmp(mosquito_filter, "off"))
+    {
+        int filter_id;
+        if (!strcasecmp(mosquito_filter, "deskeeter"))
+        {
+            filter_id = HB_FILTER_DESKEETER;
+        }
+        else
+        {
+            hb_error("Invalid mosquito filter (%s)", mosquito_filter);
+            return -1;
+        }
+        filter_settings = hb_generate_filter_settings(filter_id,
+                            mosquito_preset, mosquito_tune, mosquito_custom);
+        if (filter_settings == NULL)
+        {
+            hb_error("Invalid mosquito filter settings (%s%s%s)",
+                     mosquito_preset,
+                     mosquito_tune ? "," : "",
+                     mosquito_tune ? mosquito_tune : "");
+            return -1;
+        }
+        else if (!hb_dict_get_bool(filter_settings, "disable"))
+        {
+            filter_dict = hb_dict_init();
+            hb_dict_set(filter_dict, "ID", hb_value_int(filter_id));
+            hb_dict_set(filter_dict, "Settings", filter_settings);
+            hb_add_filter2(filter_list, filter_dict);
+        }
+        else
+        {
+            hb_value_free(&filter_settings);
+        }
+    }
+
     // Denoise filter
     int denoise;
     hb_value_t *denoise_value = hb_dict_get(preset, "PictureDenoiseFilter");
