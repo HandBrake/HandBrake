@@ -74,20 +74,6 @@ hb_filter_object_t hb_filter_chroma_smooth =
     .settings_template = chroma_smooth_template,
 };
 
-static void luma_copy(const uint8_t *src,
-                      uint8_t *dst,
-                      const int width,
-                      const int height,
-                      const int stride,
-                      chroma_smooth_plane_context_t * ctx,
-                      chroma_smooth_thread_context_t * tctx)
-{
-    for (int y = 0; y < height; y++)
-    {
-        memcpy(dst + y * stride, src + y * stride, stride);
-    }
-}
-
 static void chroma_smooth(const uint8_t *src,
                           uint8_t *dst,
                           const int width,
@@ -153,11 +139,9 @@ static void chroma_smooth(const uint8_t *src,
                 const uint8_t * srx = src - steps * stride + x - steps;
                 uint8_t       * dsx = dst - steps * stride + x - steps;
 
-                //res = (int32_t)*srx + ((((int32_t)*srx -
-                //     (int32_t)((Tmp1 + halfscale) >> scalebits)) * amount) >> 16);
                 res = (int32_t)*srx - ((((int32_t)*srx -
-                     (int32_t)((Tmp1 + halfscale) >> scalebits)) * amount) >> 16);
-                *dsx = res > 255 ? 255 : res < 0 ? 0 : (uint8_t)res;
+                      (int32_t)((Tmp1 + halfscale) >> scalebits)) * amount) >> 16);
+                *dsx = res > 240 ? 240 : res < 16 ? 16 : (uint8_t)res;
             }
         }
 
@@ -232,10 +216,22 @@ static int chroma_smooth_init(hb_filter_object_t *filter,
         if (ctx->size < CHROMA_SMOOTH_SIZE_MIN) ctx->size = CHROMA_SMOOTH_SIZE_MIN;
         if (ctx->size > CHROMA_SMOOTH_SIZE_MAX) ctx->size = CHROMA_SMOOTH_SIZE_MAX;
 
-        ctx->amount    = ctx->strength * 65536.0;
-        ctx->steps     = ctx->size / 2;
-        ctx->scalebits = ctx->steps * 4;
-        ctx->halfscale = 1 << (ctx->scalebits - 1);
+        if (c)
+        {
+            // Chroma
+            ctx->amount    = ctx->strength * 65536.0;
+            ctx->steps     = ctx->size / 2;
+            ctx->scalebits = ctx->steps * 4;
+            ctx->halfscale = 1 << (ctx->scalebits - 1);
+        }
+        else
+        {
+            // Luma
+            ctx->amount    = 0;
+            ctx->steps     = 0;
+            ctx->scalebits = 0;
+            ctx->halfscale = 0;
+        }
     }
 
     if (chroma_smooth_init_thread(filter, 1) < 0)
@@ -256,10 +252,14 @@ static void chroma_smooth_thread_close(hb_filter_private_t *pv)
         for (int t = 0; t < pv->threads; t++)
         {
             chroma_smooth_thread_context_t * tctx = &pv->thread_ctx[t][c];
-            for (z = 0; z < 2 * ctx->steps; z++)
+
+            if (c)
             {
-                free(tctx->SC[z]);
-                tctx->SC[z] = NULL;
+                for (z = 0; z < 2 * ctx->steps; z++)
+                {
+                    free(tctx->SC[z]);
+                    tctx->SC[z] = NULL;
+                }
             }
         }
     }
@@ -281,16 +281,20 @@ static int chroma_smooth_init_thread(hb_filter_object_t *filter, int threads)
         for (int t = 0; t < threads; t++)
         {
             chroma_smooth_thread_context_t * tctx = &pv->thread_ctx[t][c];
-            int z;
-            for (z = 0; z < 2 * ctx->steps; z++)
+
+            if (c)
             {
-                tctx->SC[z] = malloc(sizeof(*(tctx->SC[z])) *
-                                     (w + 2 * ctx->steps));
-                if (tctx->SC[z] == NULL)
+                int z;
+                for (z = 0; z < 2 * ctx->steps; z++)
                 {
-                    hb_error("Chroma Smooth calloc failed");
-                    chroma_smooth_close(filter);
-                    return -1;
+                    tctx->SC[z] = malloc(sizeof(*(tctx->SC[z])) *
+                                         (w + 2 * ctx->steps));
+                    if (tctx->SC[z] == NULL)
+                    {
+                        hb_error("Chroma Smooth calloc failed");
+                        chroma_smooth_close(filter);
+                        return -1;
+                    }
                 }
             }
         }
@@ -334,26 +338,12 @@ static int chroma_smooth_work_thread(hb_filter_object_t *filter,
         chroma_smooth_plane_context_t  * ctx  = &pv->plane_ctx[c];
         chroma_smooth_thread_context_t * tctx = &pv->thread_ctx[thread][c];
 
-        if (c == 0)
-        {
-            // Luma
-            luma_copy(in->plane[c].data,
+        chroma_smooth(in->plane[c].data,
                       out->plane[c].data,
                       in->plane[c].width,
                       in->plane[c].height,
                       in->plane[c].stride,
                       ctx, tctx);
-        }
-        else
-        {
-            // Chroma
-            chroma_smooth(in->plane[c].data,
-                          out->plane[c].data,
-                          in->plane[c].width,
-                          in->plane[c].height,
-                          in->plane[c].stride,
-                          ctx, tctx);
-        }
     }
 
     out->s = in->s;
