@@ -130,7 +130,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 @property (nonatomic) BOOL visible;
 
 /// Queue progress info
-@property (nonatomic, copy) NSString *progressInfo;
+@property (nonatomic, copy) NSAttributedString *progressInfo;
 @property (nonatomic) double progress;
 
 @property (nonatomic, readwrite) NSColor *labelColor;
@@ -177,7 +177,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         _scanSpecificTitleIdx = 1;
 
         // Progress
-        _progressInfo = @"";
+        _progressInfo = [[NSAttributedString alloc] initWithString:@""];
 
         // Check to see if the last destination has been set, use if so, if not, use Movies
 #ifdef __SANDBOX_ENABLED__
@@ -1001,11 +1001,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (void)updateProgress
 {
-    fStatusField.stringValue = self.progressInfo;
+    fStatusField.attributedStringValue = self.progressInfo;
     fRipIndicator.doubleValue = self.progress;
 }
 
-- (void)setQueueInfo:(NSString *)info progress:(double)progress hidden:(BOOL)hidden
+- (void)setQueueInfo:(NSAttributedString *)info progress:(double)progress hidden:(BOOL)hidden
 {
     self.progressInfo = info;
     self.progress = progress;

@@ -40,7 +40,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 @property (nonatomic) BOOL visible;
 
 // Progress
-@property (nonatomic, strong) NSString *progressInfo;
+@property (nonatomic, strong) NSAttributedString *progressInfo;
+@property (nonatomic, strong) NSDictionary *monospacedAttr;
 
 @property (nonatomic, readonly) HBDockTile *dockTile;
 @property (nonatomic, readwrite) double dockIconProgress;
@@ -93,7 +94,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         _core.automaticallyPreventSleep = NO;
 
         // Progress
-        _progressInfo = @"";
+        _monospacedAttr = @{NSFontAttributeName: [NSFont monospacedDigitSystemFontOfSize:[NSFont smallSystemFontSize] weight:NSFontWeightRegular]};
+        _progressInfo = [[NSAttributedString alloc] initWithString:@""];
 
         // Load the queue from disk.
         _items = [[HBDistributedArray alloc] initWithURL:queueURL class:[HBQueueItem class]];
@@ -582,7 +584,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     if ([self.window occlusionState] & NSWindowOcclusionStateVisible)
     {
         self.visible = YES;
-        self.progressTextField.stringValue = self.progressInfo;
+        self.progressTextField.attributedStringValue = self.progressInfo;
     }
     else
     {
@@ -592,12 +594,12 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (void)updateProgress:(NSString *)info progress:(double)progress hidden:(BOOL)hidden
 {
-    self.progressInfo = info;
+    self.progressInfo = [[NSAttributedString alloc] initWithString:info attributes:_monospacedAttr];
     if (self.visible)
     {
-        self.progressTextField.stringValue = info;
+        self.progressTextField.attributedStringValue = _progressInfo;
     }
-    [self.controller setQueueInfo:info progress:progress hidden:hidden];
+    [self.controller setQueueInfo:_progressInfo progress:progress hidden:hidden];
 }
 
 /**

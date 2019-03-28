@@ -358,7 +358,7 @@ static NSDictionary *sharpenTypesDict = nil;
     {
         sharpenTypesDict = @{HBKitLocalizedString(@"Off", @"HBFilters -> filter display name"):      @"off",
                              HBKitLocalizedString(@"Unsharp", @"HBFilters -> filter display name"):  @"unsharp",
-                             HBKitLocalizedString(@"Lapsharp", @"HBFilters -> filter display name"): @"lapsharp"};;
+                             HBKitLocalizedString(@"Lapsharp", @"HBFilters -> filter display name"): @"lapsharp"};
     }
     return sharpenTypesDict;
 }

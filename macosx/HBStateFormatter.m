@@ -31,13 +31,14 @@
 
         case HB_STATE_SEARCHING:
         {
-            [string appendFormat:
-             HBKitLocalizedString(@"Searching for start point:  %.2f %%", @"HBStateFormatter -> search pass display name"),
+            NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@"Searching for start point:  %.2f %%", @"HBStateFormatter -> search pass display name"),
              100.0 * p.progress];
+            [string appendString:desc];
 
             if (p.seconds > -1)
             {
-                [string appendFormat:HBKitLocalizedString(@" (ETA %02d:%02d:%02d)", @"HBStateFormatter -> search time format"), p.hours, p.minutes, p.seconds];
+                NSString *eta = [NSString stringWithFormat:@"%02d:%02d:%02d", p.hours, p.minutes, p.seconds];
+                [string appendFormat:HBKitLocalizedString(@" (ETA %@)", @"HBStateFormatter -> search time format"), eta];
             }
 
             break;
@@ -58,33 +59,36 @@
             {
                 if (p.pass_id == HB_PASS_SUBTITLE)
                 {
-                    [string appendFormat:
-                     HBKitLocalizedString(@"Pass %d %@ of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
-                     p.pass,
-                     HBKitLocalizedString(@"(subtitle scan)", @"HBStateFormatter -> work pass type format"),
-                     p.pass_count, 100.0 * p.progress];
+                    NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@"Pass %d %@ of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
+                                      p.pass,
+                                      HBKitLocalizedString(@"(subtitle scan)", @"HBStateFormatter -> work pass type format"),
+                                      p.pass_count, 100.0 * p.progress];
+                    [string appendString:desc];
                 }
                 else
                 {
-                    [string appendFormat:
-                     HBKitLocalizedString(@"Pass %d of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
-                     p.pass, p.pass_count, 100.0 * p.progress];
+                    NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@"Pass %d of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
+                                      p.pass, p.pass_count, 100.0 * p.progress];
+                    [string appendString:desc];
                 }
             }
 
             if (p.seconds > -1)
             {
+                NSString *eta = [NSString stringWithFormat:@"%02d:%02d:%02d", p.hours, p.minutes, p.seconds];
+
                 if (p.rate_cur > 0.0)
                 {
-                    [string appendFormat:
-                     HBKitLocalizedString(@" (%.2f fps, avg %.2f fps, ETA %02d:%02d:%02d)", @"HBStateFormatter -> work time format"),
-                     p.rate_cur, p.rate_avg, p.hours, p.minutes, p.seconds];
+                     NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@" (%.2f fps, avg %.2f fps, ETA %@)", @"HBStateFormatter -> work time format"),
+                                       p.rate_cur, p.rate_avg, eta];
+                    [string appendString:desc];
+
                 }
                 else
                 {
-                    [string appendFormat:
-                     HBKitLocalizedString(@" (ETA %02d:%02d:%02d)", @"HBStateFormatter -> work time format"),
-                     p.hours, p.minutes, p.seconds];
+                    NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@" (ETA %@)", @"HBStateFormatter -> work time format"),
+                                      eta];
+                    [string appendString:desc];
                 }
             }
 
