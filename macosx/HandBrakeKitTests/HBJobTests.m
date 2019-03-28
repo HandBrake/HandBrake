@@ -40,7 +40,7 @@
 
     self.preset = self.manager.defaultPreset;
 
-    NSURL *sampleURL = [NSURL fileURLWithPath:@"/test.mp4"];
+    NSURL *sampleURL = [NSURL fileURLWithPath:@"/test.mp4" isDirectory:NO];
 
     self.queue = dispatch_queue_create("fr.handbrake.testQueue", DISPATCH_QUEUE_SERIAL);
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
@@ -57,7 +57,7 @@
     self.title = self.core.titles.firstObject;
 
     self.job = [[HBJob alloc] initWithTitle:self.title andPreset:self.preset];
-    self.job.outputURL = [NSURL fileURLWithPath:@"/"];
+    self.job.outputURL = [NSURL fileURLWithPath:@"/" isDirectory:YES];
     self.job.outputFileName = @"Dest.mp4";
 }
 
@@ -83,7 +83,7 @@
 
     XCTAssertNotNil(self.job);
 
-    self.job.outputURL = [NSURL fileURLWithPath:@"/"];
+    self.job.outputURL = [NSURL fileURLWithPath:@"/" isDirectory:YES];
     self.job.outputFileName = @"Dest.mp4";
     [job applyPreset:preset];
 }

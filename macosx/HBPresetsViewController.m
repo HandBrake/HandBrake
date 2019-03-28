@@ -159,7 +159,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     panel.title = NSLocalizedString(@"Export presets", @"Export presets save panel title");
 
     // We get the current file name and path from the destination field here
-    NSURL *defaultExportDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
+    NSURL *defaultExportDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop" isDirectory:YES];
     panel.directoryURL = defaultExportDirectory;
     panel.nameFieldStringValue = [NSString stringWithFormat:@"%@.json", selectedPreset.name];
 
@@ -190,7 +190,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     }
     else
     {
-        panel.directoryURL = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
+        panel.directoryURL = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop" isDirectory:YES];
     }
 
     [panel beginWithCompletionHandler:^(NSInteger result)

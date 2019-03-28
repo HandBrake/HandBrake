@@ -91,7 +91,7 @@
     }
     else
     {
-        sourceDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop"];
+        sourceDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop" isDirectory:YES];
     }
 
     panel.directoryURL = sourceDirectory;
