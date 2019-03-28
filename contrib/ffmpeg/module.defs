@@ -12,9 +12,9 @@ endif
 $(eval $(call import.MODULE.defs,FFMPEG,ffmpeg,$(__deps__)))
 $(eval $(call import.CONTRIB.defs,FFMPEG))
 
-FFMPEG.FETCH.url  = https://download.handbrake.fr/handbrake/contrib/ffmpeg-4.1.1.tar.bz2
-FFMPEG.FETCH.url += https://ffmpeg.org/releases/ffmpeg-4.1.1.tar.bz2
-FFMPEG.FETCH.sha256 = 0cb40e3b8acaccd0ecb38aa863f66f0c6e02406246556c2992f67bf650fab058
+FFMPEG.FETCH.url  = https://download.handbrake.fr/handbrake/contrib/ffmpeg-4.1.3.tar.bz2
+FFMPEG.FETCH.url += https://ffmpeg.org/releases/ffmpeg-4.1.3.tar.bz2
+FFMPEG.FETCH.sha256 = 29a679685bd7bc29158110f367edf67b31b451f2176f9d79d0f342b9e22d6a2a
 
 FFMPEG.CONFIGURE.deps  =
 FFMPEG.CONFIGURE.host  =
