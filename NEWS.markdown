@@ -1,5 +1,17 @@
 # HandBrake News
 
+## HandBrake 1.2.2
+
+### Mac
+
+- Fixed built-in application updater
+
+### Windows
+
+- Fixed crash on first launch for new installs, or older installs without settings.json
+- Fixed an issue where the summary tab wasn't always up-to-date
+
+
 ## HandBrake 1.2.1
 
 ### All platforms
