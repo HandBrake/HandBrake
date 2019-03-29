@@ -1427,6 +1427,8 @@ class Launcher:
         except Exception as x:
             cfg.errln( 'launch failure: %s', x )
         for line in pipe.stdout:
+            if not isinstance(line, str):
+                line = line.decode()
             self.echof( '%s', line )
         pipe.wait()
 
