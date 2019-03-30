@@ -121,7 +121,7 @@ function mingw-w64-build {  # mingw-w64-build [args] $TARGET_PARAM $TARGET_DIR
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="6.0.0"
+    VERSION="6.0.1"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -615,7 +615,7 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER
         echo '#!/bin/sh' > makeinfo
         echo 'echo "makeinfo (GNU texinfo) 5.2"' >> makeinfo
         chmod a+x makeinfo
-        "${SOURCE_DIR}/gdb/gdb-${GDB_VER}/configure" --build="${SYS_TYPE}" --host="${TARGET}" --prefix="${MINGW_W64_DIR}" --disable-shared --enable-static  MAKEINFO="${SOURCE_DIR}/mingw-w64/mingw-w64-v${MINGW_W64_VER}/mingw-w64-libraries/gdb/makeinfo" >> "${BUILD_DIR}/gdb.log" 2>&1 || return 1
+        "${SOURCE_DIR}/gdb/gdb-${GDB_VER}/configure" --build="${SYS_TYPE}" --host="${TARGET}" --prefix="${MINGW_W64_DIR}" --disable-shared --enable-static MAKEINFO="${BUILD_DIR}/gdb/makeinfo" >> "${BUILD_DIR}/gdb.log" 2>&1 || return 1
         make -j "${CPU_COUNT}" >> "${BUILD_DIR}/gdb.log" 2>&1 || return 1
         make install >> "${BUILD_DIR}/gdb.log" 2>&1 || return 1
     fi
