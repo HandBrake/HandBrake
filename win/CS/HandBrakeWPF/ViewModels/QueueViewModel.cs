@@ -383,6 +383,11 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void RemoveSelectedJobs()
         {
+            if (this.SelectedItems.Count == 0)
+            {
+                return;
+            }
+
             MessageBoxResult result =
                   this.errorService.ShowMessageBox(
                       Resources.QueueViewModel_DelSelectedJobConfirmation,
