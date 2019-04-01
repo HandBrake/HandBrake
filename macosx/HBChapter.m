@@ -39,7 +39,14 @@
     {
         [[self.undo prepareWithInvocationTarget:self] setTitle:_title];
     }
-    _title = title;
+    if (title == nil)
+    {
+        _title = @"";
+    }
+    else
+    {
+        _title = title;
+    }
 }
 
 #pragma mark - NSCopying
