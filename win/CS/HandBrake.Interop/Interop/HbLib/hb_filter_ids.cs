@@ -25,6 +25,7 @@ namespace HandBrake.Interop.Interop.HbLib
         HB_FILTER_DENOISE,
         HB_FILTER_HQDN3D = HB_FILTER_DENOISE,
         HB_FILTER_NLMEANS,
+        HB_FILTER_CHROMA_SMOOTH,
         HB_FILTER_RENDER_SUB,
         HB_FILTER_CROP_SCALE,
         HB_FILTER_LAPSHARP,
