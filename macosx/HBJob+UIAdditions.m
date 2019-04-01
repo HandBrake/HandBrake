@@ -373,7 +373,7 @@ static NSDictionary            *shortHeightAttr;
     {
         [attrString appendString:@"\t"          withAttributes:detailAttr];
         [attrString appendString:HBKitLocalizedString(@"Filters:", @"Filters description") withAttributes:detailBoldAttr];
-        [attrString appendString:@" \t"          withAttributes:detailAttr];
+        [attrString appendString:@" \t"         withAttributes:detailAttr];
         [attrString appendString:summary        withAttributes:detailAttr];
         [attrString appendString:@"\n"          withAttributes:detailAttr];
     }
@@ -425,7 +425,7 @@ static NSDictionary            *shortHeightAttr;
     else // CRF
     {
         [videoInfo appendFormat:@", "];
-        [videoInfo appendFormat:HBKitLocalizedString(@"Constant Quality: %.2f %s", @"Video description"), self.video.quality, hb_video_quality_get_name(self.video.encoder)];
+        [videoInfo appendString:[NSString localizedStringWithFormat:HBKitLocalizedString(@"Constant Quality: %.2f %s", @"Video description"), self.video.quality, hb_video_quality_get_name(self.video.encoder)]];
     }
 
     [attrString appendString:@"\t"       withAttributes:detailAttr];
@@ -528,13 +528,13 @@ static NSDictionary            *shortHeightAttr;
                 if (0.0 < audioTrack.drc)
                 {
                     [detailString appendString:@", "];
-                    [detailString appendFormat:HBKitLocalizedString(@"DRC: %.2f", @"Audio description"), audioTrack.drc];
+                    [detailString appendString:[NSString localizedStringWithFormat:HBKitLocalizedString(@"DRC: %.2f", @"Audio description"), audioTrack.drc]];
                 }
 
                 if (0.0 != audioTrack.gain)
                 {
                     [detailString appendString:@", "];
-                    [detailString appendFormat:HBKitLocalizedString(@"Gain: %.2f", @"Audio description"), audioTrack.gain];
+                    [detailString appendString:[NSString localizedStringWithFormat:HBKitLocalizedString(@"Gain: %.2f", @"Audio description"), audioTrack.gain]];
                 }
             }
 

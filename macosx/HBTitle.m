@@ -150,7 +150,8 @@ extern NSString *keySubTrackType;
 
     [format appendString:@", "];
 
-    [format appendFormat:HBKitLocalizedString(@"%.6g FPS", @"Title short description -> video format"), _hb_title->vrate.num / (double)_hb_title->vrate.den];
+    NSString *fps = [NSString localizedStringWithFormat:HBKitLocalizedString(@"%.6g FPS", @"Title short description -> video format"), _hb_title->vrate.num / (double)_hb_title->vrate.den];
+    [format appendString:fps];
 
     hb_list_t *audioList = _hb_title->list_audio;
     int audioCount = hb_list_count(audioList);
