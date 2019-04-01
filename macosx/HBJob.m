@@ -184,6 +184,25 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
             }
             return NO;
         }
+        if (value.length == 0)
+        {
+            if (outError)
+            {
+                *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid name", @"HBJob -> invalid name error description"),
+                                                                                  NSLocalizedRecoverySuggestionErrorKey: HBKitLocalizedString(@"The file name can't be empty.", @"HBJob -> invalid name error recovery suggestion")}];
+            }
+            return NO;
+        }
+    }
+
+    if (*ioValue == nil)
+    {
+        if (outError)
+        {
+            *outError = [NSError errorWithDomain:@"HBError" code:0 userInfo:@{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid name", @"HBJob -> invalid name error description"),
+                                                                              NSLocalizedRecoverySuggestionErrorKey: HBKitLocalizedString(@"The file name can't be empty.", @"HBJob -> invalid name error recovery suggestion")}];
+        }
+        return NO;
     }
 
     return retval;
