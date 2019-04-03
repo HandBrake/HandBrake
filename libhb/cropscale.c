@@ -139,6 +139,15 @@ static int crop_scale_init(hb_filter_object_t * filter, hb_filter_init_t * init)
     hb_dict_set(avfilter, "scale", avsettings);
     hb_value_array_append(avfilters, avfilter);
 
+    avfilter   = hb_dict_init();
+    avsettings = hb_dict_init();
+
+    // TODO: Support other pix formats
+    // Force output to YUV420P for until other formats are supported
+    hb_dict_set(avsettings, "pix_fmts", hb_value_string("yuv420p"));
+    hb_dict_set(avfilter, "format", avsettings);
+    hb_value_array_append(avfilters, avfilter);
+
     init->crop[0] = top;
     init->crop[1] = bottom;
     init->crop[2] = left;
