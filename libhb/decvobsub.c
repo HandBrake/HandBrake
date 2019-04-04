@@ -678,6 +678,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
         for( col = 0; col < pv->width; col += code >> 2 )
         {
             uint8_t * lum, * alpha,  * chromaU, * chromaV;
+            int       idx, len;
 
             code = 0;
             GET_NEXT_NIBBLE;
@@ -699,19 +700,22 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
                 }
             }
 
-            lum   = buf_raw;
-            alpha = lum + pv->width * pv->height;
+            lum     = buf_raw;
+            alpha   = lum + pv->width * pv->height;
             chromaU = alpha + pv->width * pv->height;
             chromaV = chromaU + pv->width * pv->height;
+            idx     = code & 3;
+            len     = code >> 2;
+            // Protect against malformed VOBSUB with invalid run length
+            if (len > pv->width - col)
+            {
+                len = pv->width - col;
+            }
 
-            memset( lum + line * pv->width + col,
-                    pv->lum[code & 3], code >> 2 );
-            memset( alpha + line * pv->width + col,
-                    pv->alpha[code & 3], code >> 2 );
-            memset( chromaU + line * pv->width + col,
-                    pv->chromaU[code & 3], code >> 2 );
-            memset( chromaV + line * pv->width + col,
-                    pv->chromaV[code & 3], code >> 2 );
+            memset( lum     + line * pv->width + col, pv->lum[idx],     len );
+            memset( alpha   + line * pv->width + col, pv->alpha[idx],   len );
+            memset( chromaU + line * pv->width + col, pv->chromaU[idx], len );
+            memset( chromaV + line * pv->width + col, pv->chromaV[idx], len );
         }
 
         /* Byte-align */
