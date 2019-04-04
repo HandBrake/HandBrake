@@ -88,6 +88,7 @@ before_install:
     else
       echo "Toolchain differs from one in cache (or malformed checksum file), recompiling..."
       ./scripts/mingw-w64-build --disable-gdb x86_64 ~/toolchains/
+      ./scripts/mingw-w64-build --disable-gdb x86_64.clean ~/toolchains/
       sha256sum ${TRAVIS_BUILD_DIR}/scripts/mingw-w64-build > ~/toolchains/sha256sum_win.txt
     fi
   fi
