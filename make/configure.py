@@ -1331,8 +1331,8 @@ def createCLI():
     grp.add_option( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
     grp.add_option( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
 
-    h = IfHost( 'Nvidia NVEnc video encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-nvenc', dest="enable_nvenc", default=not (host.match( '*-*-darwin*' ) or host.match( '*-*-freebsd*' )), action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    h = IfHost( 'Nvidia NVEnc video encoder', '*-*-linux', '*-*-mingw', none=optparse.SUPPRESS_HELP ).value
+    grp.add_option( '--enable-nvenc', dest="enable_nvenc", default=host.match( '*-*-mingw*' ), action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
     grp.add_option( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
 
 
@@ -1858,18 +1858,36 @@ int main()
 
     doc.addBlank()
     doc.add( 'FEATURE.asm',        'disabled' )
+
+    # Disable FFmpeg AAC where FDK AAC is enabled
+    options.enable_ffmpeg_aac = False if options.enable_fdk_aac else options.enable_ffmpeg_aac
+    doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
+    doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
+
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
     doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
-    doc.add( 'FEATURE.gtk.update.checks', int( not options.disable_gtk_update_checks ))
+
+    # Disable GTK mingw on unsupported platforms
+    options.enable_gtk_mingw = False if not host.match( '*-*-mingw*' ) else options.enable_gtk_mingw
     doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))
+
+    doc.add( 'FEATURE.gtk.update.checks', int( not options.disable_gtk_update_checks ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
-    doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
-    doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac or build.system == 'mingw' ))
+
+    # Disable NVENC on unsupported platforms
+    options.enable_nvenc = False if not (host.match( '*-*-linux*' ) or host.match( '*-*-mingw*' )) else options.enable_nvenc
+    doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
+
+    # Disable QSV on unsupported platforms
+    options.enable_qsv = False if not (host.match( '*-*-linux*' ) or host.match( '*-*-mingw*' )) else options.enable_qsv
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
+
+    # Disable VCE on unsupported platforms
+    options.enable_vce = False if not host.match( '*-*-mingw*' ) else options.enable_vce
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
+
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
-    doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
 
     if not Tools.xcodebuild.fail and not options.disable_xcode:
         doc.addBlank()
@@ -1978,7 +1996,9 @@ int main()
     encodeDistfileConfig()
 
     stdout.write( '%s\n' % ('-' * 79) )
-    stdout.write( 'Configured options:\n' )
+    stdout.write( 'Host system:       %s\n' % '-'.join(host).rstrip('-') )
+    stdout.write( 'Build system:      %s' % build.system )
+    stdout.write( ' (cross-compile)\n' ) if options.cross else stdout.write( '\n' )
     stdout.write( 'Enable FDK-AAC:    %s\n' % options.enable_fdk_aac )
     stdout.write( 'Enable FFmpeg AAC: %s\n' % options.enable_ffmpeg_aac )
 
