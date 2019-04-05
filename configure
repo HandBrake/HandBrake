@@ -14,15 +14,20 @@ inpath()
 }
 
 if ( inpath bash ); then
+    pp=""
     for p in python3 python2 python
     do
         if ( inpath $p ); then
-            exec $p `dirname $0`/make/configure.py "$@"
-            exit 0
-        else
-            echo "ERROR: no suitable version of python found."
+            pp="$p"
+            break
         fi
     done
+    if [ pp != "" ]; then
+        exec $pp `dirname $0`/make/configure.py "$@"
+        exit 0
+    else
+        echo "ERROR: no suitable version of python found."
+    fi
 else
     echo "ERROR: bash shell not found."
 fi
