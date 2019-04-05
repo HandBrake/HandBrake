@@ -9,6 +9,16 @@
     ],
     "modules": [
         {
+            "name": "numactl",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://github.com/numactl/numactl/releases/download/v2.0.12/numactl-2.0.12.tar.gz",
+                    "sha256": "55bbda363f5b32abd057b6fbb4551dd71323f5dbb66335ba758ba93de2ada729"
+                }
+            ]
+        },
+        {
             "name": "libass",
             "config-opts": ["--enable-asm", "--enable-harfbuzz",
                             "--enable-fontconfig"],
