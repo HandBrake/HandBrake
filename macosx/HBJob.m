@@ -447,7 +447,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         {
             _outputURL = [HBUtilities URLFromBookmark:_outputURLFolderBookmark];
         }
-        else
+
+        if (!_outputURL)
         {
             decodeObject(_outputURL, NSURL);
         }

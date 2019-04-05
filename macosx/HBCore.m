@@ -505,15 +505,18 @@ typedef void (^HBCoreCleanupHandler)(void);
 
 - (void)startProgressReporting:(NSURL *)fileURL
 {
-    NSDictionary *userInfo = @{NSProgressFileURLKey : fileURL};
+    if (fileURL)
+    {
+        NSDictionary *userInfo = @{NSProgressFileURLKey : fileURL};
 
-    self.progress = [[NSProgress alloc] initWithParent:nil userInfo:userInfo];
-    self.progress.totalUnitCount = 100;
-    self.progress.kind = NSProgressKindFile;
-    self.progress.pausable = NO;
-    self.progress.cancellable = NO;
+        self.progress = [[NSProgress alloc] initWithParent:nil userInfo:userInfo];
+        self.progress.totalUnitCount = 100;
+        self.progress.kind = NSProgressKindFile;
+        self.progress.pausable = NO;
+        self.progress.cancellable = NO;
 
-    [self.progress publish];
+        [self.progress publish];
+    }
 }
 
 - (void)stopProgressReporting
