@@ -75,13 +75,13 @@ class Tool(hb_distfile.Tool):
         self.parser.prog = self.name
         self.parser.usage = '%prog [OPTIONS] URL...'
         self.parser.description = 'Fetch and verify distfile data integrity.'
-        self.parser.add_option('--disable', default=False, action='store_true', help='do nothing and exit with error')
-        self.parser.add_option('--jobs', default=1, action='store', metavar='N', type='int', help='allow N download jobs at once')
-        self.parser.add_option('--sha256', default=None, action='store', metavar='HASH', help='verify sha256 HASH against data')
-        self.parser.add_option('--accept-url', default=[], action='append', metavar='SPEC', help='accept URL regex pattern')
-        self.parser.add_option('--deny-url', default=[], action='append', metavar='SPEC', help='deny URL regex pattern')
-        self.parser.add_option('--exhaust-url', default=None, action='store_true', help='try all active distfiles')
-        self.parser.add_option('--output', default=None, action='store', metavar='FILE', help='write to FILE')
+        self.parser.add_argument('--disable', default=False, action='store_true', help='do nothing and exit with error')
+        self.parser.add_argument('--jobs', default=1, action='store', metavar='N', help='allow N download jobs at once')
+        self.parser.add_argument('--sha256', default=None, action='store', metavar='HASH', help='verify sha256 HASH against data')
+        self.parser.add_argument('--accept-url', default=[], action='append', metavar='SPEC', help='accept URL regex pattern')
+        self.parser.add_argument('--deny-url', default=[], action='append', metavar='SPEC', help='deny URL regex pattern')
+        self.parser.add_argument('--exhaust-url', default=None, action='store_true', help='try all active distfiles')
+        self.parser.add_argument('--output', default=None, action='store', metavar='FILE', help='write to FILE')
         self._parse()
 
     def _load_config2(self, parser, data):

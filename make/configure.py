@@ -20,8 +20,7 @@ import sys
 import time
 from datetime import datetime, timedelta
 
-from optparse import OptionGroup
-from optparse import OptionParser
+import argparse
 from sys import stderr
 from sys import stdout
 
@@ -533,7 +532,6 @@ class IfHost( object ):
     def __str__( self ):
         return self.value
 
-
 ###############################################################################
 ##
 ## platform conditional value; loops through list of tuples comparing
@@ -656,14 +654,14 @@ class SelectMode( dict ):
             self.default = None
         self.mode = self.default
 
-    def cli_add_option( self, parser, option ):
-        parser.add_option( option, default=self.mode, metavar='MODE',
+    def cli_add_argument( self, parser, option ):
+        parser.add_argument( option, default=self.mode, metavar='MODE',
             help='select %s%s: %s' % (self.descr,self.what,self.toString()),
-            action='callback', callback=self.cli_callback, type='str' )
+            action='store_const', const=lambda:'self.cli_callback' )
 
     def cli_callback( self, option, opt_str, value, parser, *args, **kwargs ):
         if value not in self:
-            raise optparse.OptionValueError( 'invalid %s%s: %s (choose from: %s)'
+            raise ArgumentError( 'invalid %s%s: %s (choose from: %s)'
                 % (self.descr,self.what,value,self.toString( True )) )
         self.mode = value
 
@@ -928,10 +926,10 @@ class ToolProbe( Action ):
         elif self.minversion:
             self.version = VersionProbe( [self.pathname, '--version'], minversion=self.minversion )
 
-    def cli_add_option( self, parser ):
-        parser.add_option( '--'+self.name, metavar='PROG',
+    def cli_add_argument( self, parser ):
+        parser.add_argument( '--'+self.name, metavar='PROG',
             help='[%s]' % (self.pathname),
-            action='callback', callback=self.cli_callback, type='str' )
+            action='store_const', const=lambda:'self.cli_callback' )
 
     def cli_callback( self, option, opt_str, value, parser, *args, **kwargs ):
         self.__init__( self.var, value, **self.kwargs )
@@ -1050,10 +1048,10 @@ class SelectTool( Action ):
         if self.fail:
             self.msg_end = 'not found'
 
-    def cli_add_option( self, parser ):
-        parser.add_option( '--'+self.name, metavar='MODE',
+    def cli_add_argument( self, parser ):
+        parser.add_argument( '--'+self.name, metavar='MODE',
             help='select %s mode: %s' % (self.name,self.toString()),
-            action='callback', callback=self.cli_callback, type='str' )
+            action='store_const', const=lambda:'self.cli_callback' )
 
     def cli_callback( self, option, opt_str, value, parser, *args, **kwargs ):
         found = False
@@ -1064,7 +1062,7 @@ class SelectTool( Action ):
                 self.run()
                 break
         if not found:
-            raise optparse.OptionValueError( 'invalid %s mode: %s (choose from: %s)'
+            raise ArgumentError( 'invalid %s mode: %s (choose from: %s)'
                 % (self.name,value,self.toString( True )) )
 
     def doc_add( self, doc ):
@@ -1256,144 +1254,141 @@ class Option( optparse.Option ):
         self._conf_record( opt, value )
         return optparse.Option.take_action( self, action, dest, opt, value, values, parser )
 
-def createCLI():
-    cli = OptionParser( 'usage: %prog [OPTIONS...] [TARGETS...]' )
-    cli.option_class = Option
-
-    cli.description = ''
-    cli.description += 'Configure %s build system.' % (project.name)
+def createCLI( cross = None ):
+    cli = argparse.ArgumentParser( usage='%s [OPTIONS...] [TARGETS...]' % os.path.basename(__file__), description='Configure %s build system' % project.name )
 
     ## add hidden options
-    cli.add_option( '--xcode-driver', default='bootstrap', action='store', help=optparse.SUPPRESS_HELP )
+    cli.add_argument( '--xcode-driver', default='bootstrap', action='store', help=argparse.SUPPRESS )
 
     ## add general options
-    cli.add_option( '--force', default=False, action='store_true', help='overwrite existing build config' )
-    cli.add_option( '--verbose', default=False, action='store_true', help='increase verbosity' )
+    grp = cli.add_argument_group( 'General Options' )
+    grp.add_argument( '--force', default=False, action='store_true', help='overwrite existing build config' )
+    grp.add_argument( '--verbose', default=False, action='store_true', help='increase verbosity' )
 
     ## add distfile options
-    grp = OptionGroup( cli, 'Distfile Options' )
-    grp.add_option( '--disable-df-fetch', default=False, action='store_true', help='disable distfile downloads' )
-    grp.add_option( '--disable-df-verify', default=False, action='store_true', help='disable distfile data verification' )
-    grp.add_option( '--df-jobs', default=1, action='store', metavar='N', type='int', help='allow N distfile downloads at once' )
-    grp.add_option( '--df-verbose', default=1, action='count', dest='df_verbosity', help='increase distfile tools verbosity' )
-    grp.add_option( '--df-accept-url', default=[], action='append', metavar='SPEC', help='accept URLs matching regex pattern' )
-    grp.add_option( '--df-deny-url', default=[], action='append', metavar='SPEC', help='deny URLs matching regex pattern' )
-    cli.add_option_group( grp )
+    grp = cli.add_argument_group( 'Distfile Options' )
+    grp.add_argument( '--disable-df-fetch', default=False, action='store_true', help='disable distfile downloads' )
+    grp.add_argument( '--disable-df-verify', default=False, action='store_true', help='disable distfile data verification' )
+    grp.add_argument( '--df-jobs', action='store', metavar='N', type=int, help='allow N distfile downloads at once' )
+    grp.add_argument( '--df-verbose', action='count', dest='df_verbosity', help='increase distfile tools verbosity' )
+    grp.add_argument( '--df-accept-url', default=[], action='append', metavar='SPEC', help='accept URLs matching regex pattern' )
+    grp.add_argument( '--df-deny-url', default=[], action='append', metavar='SPEC', help='deny URLs matching regex pattern' )
+    cli.add_argument_group( grp )
 
     ## add install options
-    grp = OptionGroup( cli, 'Directory Locations' )
-    h = IfHost( 'specify sysroot of SDK for Xcode builds', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--sysroot', default=None, action='store', metavar='DIR',
+    grp = cli.add_argument_group( 'Directory Locations' )
+    h = 'specify sysroot of SDK for Xcode builds' if (host.match('*-*-darwin*') and cross is None) else argparse.SUPPRESS
+    grp.add_argument( '--sysroot', default=None, action='store', metavar='DIR',
         help=h )
-    grp.add_option( '--src', default=cfg.src_dir, action='store', metavar='DIR',
+    grp.add_argument( '--src', default=cfg.src_dir, action='store', metavar='DIR',
         help='specify top-level source dir [%s]' % (cfg.src_dir) )
-    grp.add_option( '--build', default=cfg.build_dir, action='store', metavar='DIR',
+    grp.add_argument( '--build', default=cfg.build_dir, action='store', metavar='DIR',
         help='specify build scratch/output dir [%s]' % (cfg.build_dir) )
-    grp.add_option( '--prefix', default=cfg.prefix_dir, action='store', metavar='DIR',
+    grp.add_argument( '--prefix', default=cfg.prefix_dir, action='store', metavar='DIR',
         help='specify install dir for products [%s]' % (cfg.prefix_dir) )
-    cli.add_option_group( grp )
+    cli.add_argument_group( grp )
 
     ## add feature options
-    grp = OptionGroup( cli, 'Feature Options' )
+    grp = cli.add_argument_group( 'Feature Options' )
 
-    h = IfHost( 'enable assembly code in non-contrib modules', 'NOMATCH*-*-darwin*', 'NOMATCH*-*-linux*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-asm', default=False, action='store_true', help=h )
+    h = IfHost( 'enable assembly code in non-contrib modules', 'NOMATCH*-*-darwin*', 'NOMATCH*-*-linux*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--enable-asm', default=False, action='store_true', help=h )
 
-    h = IfHost( 'disable GTK GUI', '*-*-linux*', '*-*-freebsd*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--disable-gtk', default=False, action='store_true', help=h )
+    h = IfHost( 'disable GTK GUI', '*-*-linux*', '*-*-freebsd*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--disable-gtk', default=False, action='store_true', help=h )
 
-    h = IfHost( 'disable GTK GUI update checks', '*-*-linux*', '*-*-freebsd*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--disable-gtk-update-checks', default=False, action='store_true', help=h )
+    h = IfHost( 'disable GTK GUI update checks', '*-*-linux*', '*-*-freebsd*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--disable-gtk-update-checks', default=False, action='store_true', help=h )
 
-    h = IfHost( 'enable GTK GUI (mingw)', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-gtk-mingw', default=False, action='store_true', help=h )
+    h = 'enable GTK GUI for Windows' if (cross is not None and 'mingw' in cross) else argparse.SUPPRESS
+    grp.add_argument( '--enable-gtk-mingw', default=False, action='store_true', help=h )
 
-    h = IfHost( 'disable GStreamer (live preview)', '*-*-linux*', '*-*-freebsd*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--disable-gst', default=False, action='store_true', help=h )
+    h = IfHost( 'disable GStreamer (live preview)', '*-*-linux*', '*-*-freebsd*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--disable-gst', default=False, action='store_true', help=h )
 
-    h = IfHost( 'Intel Quick Sync Video (QSV) hardware acceleration (Windows and Linux only)', '*-*-linux*', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-qsv', dest="enable_qsv", default=host.match( '*-*-mingw*' ), action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
-    grp.add_option( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    h = IfHost( 'x265 video encoder', '*-*-*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--enable-x265', dest="enable_x265", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-x265', dest="enable_x265", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'AMD VCE hardware acceleration (Windows only)', '*-*-mingw*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-vce', dest="enable_vce", default=host.match( '*-*-mingw*' ), action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
-    grp.add_option( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    h = IfHost( 'FDK AAC audio encoder', '*-*-*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--enable-fdk-aac', dest="enable_fdk_aac", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'x265 video encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-x265', dest="enable_x265", default=True, action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
-    grp.add_option( '--disable-x265', dest="enable_x265", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    h = IfHost( 'FFmpeg AAC audio encoder', '*-*-*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=(cross is not None and 'mingw' in cross) or not host.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'FDK AAC audio encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-fdk-aac', dest="enable_fdk_aac", default=False, action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
-    grp.add_option( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    h = 'Nvidia NVENC video encoder (Linux and Windows only)' if (host.match('*-*-linux') or (cross is not None and 'mingw' in cross)) else argparse.SUPPRESS
+    grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=True if (cross is not None and 'mingw' in cross) else False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'FFmpeg AAC audio encoder', '*-*-*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
-    grp.add_option( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    h = 'Intel Quick Sync Video (QSV) hardware acceleration (Linux and Windows only)' if (host.match('*-*-linux') or (cross is not None and 'mingw' in cross)) else argparse.SUPPRESS
+    grp.add_argument( '--enable-qsv', dest="enable_qsv", default=(cross is not None and 'mingw' in cross), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'Nvidia NVEnc video encoder', '*-*-linux', '*-*-mingw', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--enable-nvenc', dest="enable_nvenc", default=host.match( '*-*-mingw*' ), action='store_true', help=(( 'enable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
-    grp.add_option( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != optparse.SUPPRESS_HELP else h) )
+    h = 'AMD VCE hardware acceleration (Windows only)' if (cross is not None and 'mingw' in cross) else argparse.SUPPRESS
+    grp.add_argument( '--enable-vce', dest="enable_vce", default=(cross is not None and 'mingw' in cross), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
 
-    cli.add_option_group( grp )
+    cli.add_argument_group( grp )
 
     ## add launch options
-    grp = OptionGroup( cli, 'Launch Options' )
-    grp.add_option( '--launch', default=False, action='store_true',
+    grp = cli.add_argument_group( 'Launch Options' )
+    grp.add_argument( '--launch', default=False, action='store_true',
         help='launch build, capture log and wait for completion' )
-    grp.add_option( '--launch-jobs', default=1, action='store', metavar='N', type='int',
+    grp.add_argument( '--launch-jobs', default=1, action='store', metavar='N', type=int,
         help='allow N jobs at once; 0 to match CPU count [1]' )
-    grp.add_option( '--launch-args', default=None, action='store', metavar='ARGS',
+    grp.add_argument( '--launch-args', default=None, action='store', metavar='ARGS',
         help='specify additional ARGS for launch command' )
-    grp.add_option( '--launch-quiet', default=False, action='store_true',
+    grp.add_argument( '--launch-quiet', default=False, action='store_true',
         help='do not echo build output while waiting' )
-    cli.add_option_group( grp )
+    cli.add_argument_group( grp )
 
     ## add compile options
-    grp = OptionGroup( cli, 'Compiler Options' )
-    debugMode.cli_add_option( grp, '--debug' )
-    optimizeMode.cli_add_option( grp, '--optimize' )
-    arch.mode.cli_add_option( grp, '--arch' )
-    grp.add_option( '--cross', default=None, action='store', metavar='SPEC',
+    grp = cli.add_argument_group( 'Compiler Options' )
+    debugMode.cli_add_argument( grp, '--debug' )
+    optimizeMode.cli_add_argument( grp, '--optimize' )
+    arch.mode.cli_add_argument( grp, '--arch' )
+    grp.add_argument( '--cross', default=None, action='store', metavar='SPEC',
         help='specify GCC cross-compilation spec' )
-    h = IfHost( 'specify Mac OS X deployment target for Xcode builds', '*-*-darwin*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--minver', default=None, action='store', metavar='VER',
+    h = IfHost( 'specify Mac OS X deployment target for Xcode builds', '*-*-darwin*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--minver', default=None, action='store', metavar='VER',
         help=h )
-    cli.add_option_group( grp )
+    cli.add_argument_group( grp )
 
     ## add Xcode options
-    if host.match( '*-*-darwin*' ):
-        grp = OptionGroup( cli, 'Xcode Options' )
-        grp.add_option( '--disable-xcode', default=False, action='store_true',
+    if (host.match('*-*-darwin*') and cross is None):
+        grp = cli.add_argument_group( 'Xcode Options' )
+        grp.add_argument( '--disable-xcode', default=False, action='store_true',
             help='disable Xcode' )
-        grp.add_option( '--xcode-prefix', default=cfg.xcode_prefix_dir, action='store', metavar='DIR',
+        grp.add_argument( '--xcode-prefix', default=cfg.xcode_prefix_dir, action='store', metavar='DIR',
             help='specify install dir for Xcode products [%s]' % (cfg.xcode_prefix_dir) )
-        grp.add_option( '--xcode-symroot', default='xroot', action='store', metavar='DIR',
+        grp.add_argument( '--xcode-symroot', default='xroot', action='store', metavar='DIR',
             help='specify root of the directory hierarchy that contains product files and intermediate build files' )
-        xcconfigMode.cli_add_option( grp, '--xcode-config' )
-        cli.add_option_group( grp )
+        xcconfigMode.cli_add_argument( grp, '--xcode-config' )
+        cli.add_argument_group( grp )
 
     ## add tool locations
-    grp = OptionGroup( cli, 'Tool Basenames and Locations' )
+    grp = cli.add_argument_group( 'Tool Basenames and Locations' )
     for tool in ToolProbe.tools:
-        tool.cli_add_option( grp )
-    cli.add_option_group( grp )
+        tool.cli_add_argument( grp )
+    cli.add_argument_group( grp )
 
     ## add tool modes
-    grp = OptionGroup( cli, 'Tool Options' )
+    grp = cli.add_argument_group( 'Tool Options' )
     for select in SelectTool.selects:
-        select.cli_add_option( grp )
-    cli.add_option_group( grp )
+        select.cli_add_argument( grp )
+    cli.add_argument_group( grp )
 
     ## add build options
-    grp = OptionGroup( cli, 'Build Options' )
-    grp.add_option( '--snapshot', default=False, action='store_true',
+    grp = cli.add_argument_group( 'Build Options' )
+    grp.add_argument( '--snapshot', default=False, action='store_true',
                     help='Force a snapshot build' )
 
-    h = IfHost( 'Build extra contribs for flatpak packaging', '*-*-linux*', '*-*-freebsd*', none=optparse.SUPPRESS_HELP ).value
-    grp.add_option( '--flatpak', default=False, action='store_true', help=h )
-    cli.add_option_group( grp )
+    h = IfHost( 'Build extra contribs for flatpak packaging', '*-*-linux*', '*-*-freebsd*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--flatpak', default=False, action='store_true', help=h )
+    cli.add_argument_group( grp )
 
     return cli
 
@@ -1579,9 +1574,25 @@ try:
         xcconfigMode.default = 'native'
         xcconfigMode.mode = xcconfigMode.default
 
-    ## create CLI and parse
-    cli = createCLI()
-    (options,args) = cli.parse_args()
+    # options is created by parse_known_args(), which is called directly after
+    # createCLI(). we need cross info for createCLI() to set defaults, and
+    # cannot parse args twice, so extract the info we need here
+    cross = None
+    for i in range(len(sys.argv)):
+        cross_pattern = re.compile( '^--cross=(.*)$' )
+        m = cross_pattern.match( sys.argv[i] )
+        if m:
+            cross = sys.argv[i][8:]
+            continue
+        cross_pattern = re.compile( '^--cross(.*)$' )
+        m = cross_pattern.match( sys.argv[i] )
+        if m and (i + 1 < len(sys.argv)):
+            cross = sys.argv[i+1]
+            continue
+
+    # create CLI and parse
+    cli = createCLI( cross )
+    options, args = cli.parse_known_args()
 
     ## update cfg with cli directory locations
     cfg.update_cli( options )
@@ -1869,22 +1880,22 @@ int main()
     doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
 
     # Disable GTK mingw on unsupported platforms
-    options.enable_gtk_mingw = False if not host.match( '*-*-mingw*' ) else options.enable_gtk_mingw
+    options.enable_gtk_mingw = False if not build.system == 'mingw' else options.enable_gtk_mingw
     doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))
 
     doc.add( 'FEATURE.gtk.update.checks', int( not options.disable_gtk_update_checks ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
 
     # Disable NVENC on unsupported platforms
-    options.enable_nvenc = False if not (host.match( '*-*-linux*' ) or host.match( '*-*-mingw*' )) else options.enable_nvenc
+    options.enable_nvenc = False if not (build.system == 'linux' or build.system == 'mingw') else options.enable_nvenc
     doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
 
     # Disable QSV on unsupported platforms
-    options.enable_qsv = False if not (host.match( '*-*-linux*' ) or host.match( '*-*-mingw*' )) else options.enable_qsv
+    options.enable_qsv = False if not (build.system == 'linux' or build.system == 'mingw') else options.enable_qsv
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
 
     # Disable VCE on unsupported platforms
-    options.enable_vce = False if not host.match( '*-*-mingw*' ) else options.enable_vce
+    options.enable_vce = False if not build.system == 'mingw' else options.enable_vce
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
 
     doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
@@ -2003,11 +2014,16 @@ int main()
     stdout.write( 'Enable FDK-AAC:    %s\n' % options.enable_fdk_aac )
     stdout.write( 'Enable FFmpeg AAC: %s\n' % options.enable_ffmpeg_aac )
 
-    if IfHost( True, '*-*-linux*', '*-*-mingw*', none=False ).value is True:
-        stdout.write( 'Enable NVEnc:      %s\n' % options.enable_nvenc )
+    if build.system == 'linux' or build.system == 'mingw':
+        stdout.write( 'Enable NVENC:      %s\n' % options.enable_nvenc )
         stdout.write( 'Enable QSV:        %s\n' % options.enable_qsv )
-    if IfHost( True, '*-*-mingw*', none=False ).value is True:
+    else:
+        stdout.write( 'Enable NVENC:      Not supported on target platform\n' )
+        stdout.write( 'Enable QSV:        Not supported on target platform\n' )
+    if build.system == 'mingw':
         stdout.write( 'Enable VCE:        %s\n' % options.enable_vce )
+    else:
+        stdout.write( 'Enable VCE:        Not supported on target platform\n' )
 
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )

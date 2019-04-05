@@ -16,7 +16,7 @@ import string
 import sys
 import traceback
 
-from optparse import OptionParser
+import argparse
 
 ###############################################################################
 
@@ -28,12 +28,12 @@ class Tool(object):
 
     def __init__(self):
         self.name = os.path.splitext(os.path.basename(sys.argv[0]))[0]
-        self.parser = OptionParser()
-        self.parser.add_option('-v', '--verbose', default=Tool.LOG_INFO, action='count', dest='verbosity', help='increase verbosity')
-        self.parser.add_option('--config', default=None, action='callback', metavar='FILE', type='str', callback=self._load_config, help='specify configuration file')
+        self.parser = argparse.ArgumentParser()
+        self.parser.add_argument('-v', '--verbose', default=Tool.LOG_INFO, action='count', dest='verbosity', help='increase verbosity')
+        self.parser.add_argument('--config', default=None, action='store_const', metavar='FILE', const=lambda:'self._load_config', help='specify configuration file')
 
     def _parse(self):
-        (self.options,self.args) = self.parser.parse_args()
+        self.options, self.args = self.parser.parse_known_args()
 
     ## be sure not to use any methods referencing self.options as we are still parsing args
     def _load_config(self, option, opt, value, parser):

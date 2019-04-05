@@ -38,8 +38,8 @@ class Tool(hb_distfile.Tool):
         self.parser.prog = self.name
         self.parser.usage = '%prog [OPTIONS] FILE'
         self.parser.description = 'Verify distfile data integrity.'
-        self.parser.add_option('--disable', default=False, action='store_true', help='do nothing and exit without error')
-        self.parser.add_option('--sha256', default=None, action='store', metavar='HASH', help='verify sha256 HASH against data')
+        self.parser.add_argument('--disable', default=False, action='store_true', help='do nothing and exit without error')
+        self.parser.add_argument('--sha256', default=None, action='store', metavar='HASH', help='verify sha256 HASH against data')
         self._parse()
 
     def _load_config2(self, parser, data):
@@ -72,7 +72,7 @@ class Tool(hb_distfile.Tool):
         if self.options.disable:
             self.infof('%s failure; administratively disabled.\n' % self.name)
             sys.exit(0)
-        if len(self.args) != 1:
+        if len(self.args) < 1:
             raise error('no file specified')
         filename = self.args[0]
         if self.options.sha256:
