@@ -131,10 +131,10 @@
                         </StackPanel>
                     </Button>
 
-                    <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
+                    <!--<StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
                         <Button Content="^" Width="20" Margin="0" cal:Message.Attach="[Event Click] = [Action MoveUp]" />
                         <Button Content="v" Width="20" Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action MoveDown]" />
-                    </StackPanel>
+                    </StackPanel>-->
                 </Grid>
 
                 <ListBox Tag="{Binding}" x:Name="queueJobs" Grid.Row="1" Margin="10,0,5,0"
@@ -232,7 +232,7 @@
                                 </Image>
 
                                 <!--  Settings  -->
-                                <Grid Grid.Column="1" Margin="0,3,15,3">
+                                <Grid Grid.Column="1" Margin="0,3,5,3">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
@@ -265,6 +265,17 @@
                                     <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" Margin="0,2,5,0" Grid.Row="3" Grid.ColumnSpan="2"
                                              Value="{Binding DataContext.ProgressValue, ElementName=queueJobs}" IsIndeterminate="{Binding DataContext.IntermediateProgress, ElementName=queueJobs}"
                                              Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
+
+                                    <Image Source="Images\close64.png" Width="16" Height="16" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" 
+                                           VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" >
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                                <cal:ActionMessage MethodName="RemoveJob">
+                                                    <cal:Parameter Value="{Binding}" />
+                                                </cal:ActionMessage>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </Image>
                                 </Grid>
                             </Grid>
                         </DataTemplate>
