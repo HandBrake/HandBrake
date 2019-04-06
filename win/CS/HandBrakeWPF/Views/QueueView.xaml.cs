@@ -88,6 +88,10 @@ namespace HandBrakeWPF.Views
                 {
                     this.RetryMenuItem.IsEnabled = true;
                 }
+                else
+                {
+                    this.RetryMenuItem.IsEnabled = false;
+                }
             }
 
             this.DeleteMenuItem.Header = this.queueJobs.SelectedItems.Count > 1 ? Properties.Resources.QueueView_DeleteSelected : Properties.Resources.QueueView_Delete;
