@@ -181,6 +181,18 @@ GHB_CFLAGS="$HBINC $GHB_CFLAGS"
 
 HB_LIBS="-lhandbrake -lavformat -lavfilter -lavcodec -lavutil -lswresample -lpostproc -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lsamplerate -lx264 -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson -lopus -lspeex -llzma"
 
+if test "x$use_fdk_aac" = "xyes" ; then
+    HB_LIBS="$HB_LIBS -lfdk-aac"
+fi
+
+if test "x$use_x265" = "xyes" ; then
+    HB_LIBS="$HB_LIBS -lx265 -lnuma"
+fi
+
+if test "x$use_qsv" = "xyes" ; then
+    HB_LIBS="$HB_LIBS -lmfx -lva -lva-drm"
+fi
+
 case $host in
   *-*-mingw*)
     if test "x$use_libdl" = "xyes" ; then
@@ -197,23 +209,12 @@ case $host in
     HB_LIBS="$HB_LIBS -lpthread"
     ;;
   *)
-    HB_LIBS="$HB_LIBS -ldl -lpthread -lnuma"
+    HB_LIBS="$HB_LIBS -ldl -lpthread"
     ;;
 esac
 
 AM_CONDITIONAL([GHB_FLATPAK], [test "$use_flatpak" = "yes"])
 
-if test "x$use_fdk_aac" = "xyes" ; then
-    HB_LIBS="$HB_LIBS -lfdk-aac"
-fi
-
-if test "x$use_x265" = "xyes" ; then
-    HB_LIBS="$HB_LIBS -lx265"
-fi
-
-if test "x$use_qsv" = "xyes" ; then
-    HB_LIBS="$HB_LIBS -lmfx -lva -lva-drm"
-fi
 if test "x$PYTHON" != "x" ; then
     HB_PYTHON="$PYTHON"
 else
