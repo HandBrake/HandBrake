@@ -43,7 +43,8 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         private static bool globalInitialized;
 
-        private static bool failedWithHardware = false;
+        private static bool initSuccess = false;
+        private static bool initNoHardware = false;
 
         /// <summary>
         /// Fires when HandBrake has logged a message.
@@ -55,29 +56,37 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         public static event EventHandler<MessageLoggedEventArgs> ErrorLogged;
 
-
         /// <summary>
-        /// Initializes static members of the HandBrakeUtils class.
+        /// Ensures the HB global initialize method has been called.
         /// </summary>
-        static HandBrakeUtils()
+        public static void EnsureGlobalInit(bool initNoHardwareMode)
         {
             if (!globalInitialized)
             {
                 try
                 {
-                    bool passed = TryInit();
-                    if (!passed)
+                    if (initNoHardwareMode)
                     {
-                        failedWithHardware = true;
+                        initNoHardware = true;
+                        if (HBFunctions.hb_global_init_no_hardware() == -1)
+                        {
+                            throw new InvalidOperationException("HB global init failed.");
+                        }
+
+                        initSuccess = true;
+                    }
+                    else
+                    {
+                        initSuccess = TryInit();
                     }
                 }
                 catch (Exception e)
                 {
-                    failedWithHardware = true;
+                    initSuccess = false;
                 }
 
                 // Try without Hardware support. Bad drivers can sometimes cause issues.
-                if (failedWithHardware)
+                if (!initSuccess)
                 {
                     if (HBFunctions.hb_global_init_no_hardware() == -1)
                     {
@@ -87,36 +96,6 @@ namespace HandBrake.Interop.Interop
 
                 globalInitialized = true;
             }
-        }
-
-        //[HandleProcessCorruptedStateExceptions]
-        static bool TryInit()
-        {
-            try
-            {
-                if (HBFunctions.hb_global_init() == -1)
-                {
-                    throw new InvalidOperationException("HB global init failed.");
-                }
-            }
-            //catch (AccessViolationException e)
-            //{
-            //    return false;
-            //}
-            catch (Exception e)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Ensures the HB global initialize method has been called.
-        /// </summary>
-        public static void EnsureGlobalInit()
-        {
-            // Does nothing, but invokes static ctor.
         }
 
         /// <summary>
@@ -365,9 +344,32 @@ namespace HandBrake.Interop.Interop
             ErrorLogged?.Invoke(null, new MessageLoggedEventArgs(message));
         }
 
-        public static bool IsUsingNoHardwareFallback()
+        public static bool IsInitialised()
         {
-            return failedWithHardware;
+            return initSuccess;
+        }
+
+        public static bool IsInitNoHardware()
+        {
+            return initNoHardware;
+        }
+
+        [HandleProcessCorruptedStateExceptions]
+        private static bool TryInit()
+        {
+            try
+            {
+                if (HBFunctions.hb_global_init() == -1)
+                {
+                    throw new InvalidOperationException("HB global init failed.");
+                }
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

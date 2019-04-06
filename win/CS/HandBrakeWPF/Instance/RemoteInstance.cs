@@ -98,7 +98,7 @@ namespace HandBrakeWPF.Instance
             return state;
         }
 
-        public void Initialize(int verbosity)
+        public void Initialize(int verbosity, bool noHardware)
         {
             this.StartServer();
         }

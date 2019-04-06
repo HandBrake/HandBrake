@@ -20,7 +20,10 @@ namespace HandBrakeWPF
 
     using Caliburn.Micro;
 
+    using HandBrake.Interop.Interop;
+
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Instance;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Startup;
@@ -119,6 +122,28 @@ namespace HandBrakeWPF
                 }
             }
 
+
+            // NO-Hardware Mode
+            bool noHardware = e.Args.Any(f => f.Equals("--no-hardware"));
+
+            // Initialise the Engine
+            HandBrakeWPF.Helpers.LogManager.Init();
+
+            try
+            {
+                HandBrakeInstanceManager.Init(noHardware);
+            }
+            catch (Exception exception)
+            {
+                if (!noHardware)
+                {
+                    MessageBox.Show(HandBrakeWPF.Properties.Resources.Startup_InitFailed, HandBrakeWPF.Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
+                throw exception;
+            }
+
+            // Initialise the GUI
             base.OnStartup(e);
 
             // If we have a file dropped on the icon, try scanning it.
@@ -144,7 +169,7 @@ namespace HandBrakeWPF
             Caliburn.Micro.Execute.OnUIThreadAsync(() => {
                 if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
                 {
-                    GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.0", (Exception)e.ExceptionObject);
+                    GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.7.1", (Exception)e.ExceptionObject);
                     this.ShowError(exception);
                 }
                 else
@@ -168,7 +193,7 @@ namespace HandBrakeWPF
         {
             if (e.Exception.GetType() == typeof(FileNotFoundException))
             {
-                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.0", e.Exception);
+                GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.7.1", e.Exception);
                 this.ShowError(exception);
             }
             else if (e.Exception.GetType() == typeof(GeneralApplicationException))

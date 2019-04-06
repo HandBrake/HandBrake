@@ -3051,7 +3051,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hardware encoding support has been automatically disabled on your system due to an issue detected during hardware detection. Please make sure you are running up-to-date drivers for all graphics adaptors in this system.
+        ///   Looks up a localized string similar to Hardware encoding support is currently disabled. Please make sure you are running up-to-date drivers for all graphics adaptors in this system.
         ///
         ///This will not impact any of the software encoders..
         /// </summary>
@@ -4587,6 +4587,15 @@ namespace HandBrakeWPF.Properties {
         public static string SourceSelection_SourceSelection {
             get {
                 return ResourceManager.GetString("SourceSelection_SourceSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake&apos;s engine failed to initialise. This is often caused by out of date GPU drivers.\n  Please update the GPU drivers for any onboard and discrete graphics your system has..
+        /// </summary>
+        public static string Startup_InitFailed {
+            get {
+                return ResourceManager.GetString("Startup_InitFailed", resourceCulture);
             }
         }
         

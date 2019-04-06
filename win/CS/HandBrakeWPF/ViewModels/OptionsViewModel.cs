@@ -1150,7 +1150,7 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsHardwareFallbackMode => HandBrakeUtils.IsUsingNoHardwareFallback();
+        public bool IsHardwareFallbackMode => HandBrakeUtils.IsInitNoHardware();
 
         #endregion
 

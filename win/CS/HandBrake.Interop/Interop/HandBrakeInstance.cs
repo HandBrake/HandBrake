@@ -110,9 +110,12 @@ namespace HandBrake.Interop.Interop
         /// <param name="verbosity">
         /// The code for the logging verbosity to use.
         /// </param>
-        public void Initialize(int verbosity)
+        /// <param name="noHardware">
+        /// True disables hardware init.
+        /// </param>
+        public void Initialize(int verbosity, bool noHardware)
         {
-            HandBrakeUtils.EnsureGlobalInit();
+            HandBrakeUtils.EnsureGlobalInit(noHardware);
 
             HandBrakeUtils.RegisterLogger();
             this.Handle = HBFunctions.hb_init(verbosity, update_check: 0);

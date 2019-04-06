@@ -9,9 +9,14 @@
 
 namespace HandBrakeWPF.Instance
 {
+    using System;
+    using System.Runtime.CompilerServices;
+
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Model;
+
+    using HandBrakeWPF.Factories;
 
     /// <summary>
     /// The HandBrake Instance manager.
@@ -22,20 +27,16 @@ namespace HandBrakeWPF.Instance
         private static IEncodeInstance encodeInstance;
         private static HandBrakeInstance scanInstance;
         private static HandBrakeInstance previewInstance;
-
-        /// <summary>
-        /// Initializes static members of the <see cref="HandBrakeInstanceManager"/> class.
-        /// </summary>
-        static HandBrakeInstanceManager()
-        {
-        }
+        private static bool noHardware;
 
         /// <summary>
         /// The init.
         /// </summary>
-        public static void Init()
+        public static void Init(bool noHardwareMode)
         {
-            // Nothing to do. Triggers static constructor.
+            noHardware = noHardwareMode;
+            HandBrakeUtils.RegisterLogger();
+            HandBrakeUtils.EnsureGlobalInit(noHardwareMode);
         }
 
         /// <summary>
@@ -52,6 +53,11 @@ namespace HandBrakeWPF.Instance
         /// </returns>
         public static IEncodeInstance GetEncodeInstance(int verbosity, HBConfiguration configuration)
         {
+            if (!HandBrakeUtils.IsInitialised())
+            {
+                throw new Exception("Please call Init before Using!");
+            }
+
             if (encodeInstance != null)
             {
                 encodeInstance.Dispose();
@@ -68,8 +74,9 @@ namespace HandBrakeWPF.Instance
             {
                 newInstance = new HandBrakeInstance();
             }
-                
-            newInstance.Initialize(verbosity);
+
+            newInstance.Initialize(verbosity, noHardware);
+
             encodeInstance = newInstance;
 
             HandBrakeUtils.SetDvdNav(!configuration.IsDvdNavDisabled);
@@ -83,11 +90,19 @@ namespace HandBrakeWPF.Instance
         /// <param name="verbosity">
         /// The verbosity.
         /// </param>
+        /// <param name="configuration">
+        ///  HandBrakes config
+        /// </param>
         /// <returns>
         /// The <see cref="IHandBrakeInstance"/>.
         /// </returns>
-        public static IHandBrakeInstance GetScanInstance(int verbosity)
+        public static IHandBrakeInstance GetScanInstance(int verbosity, HBConfiguration configuration)
         {
+            if (!HandBrakeUtils.IsInitialised())
+            {
+                throw new Exception("Please call Init before Using!");
+            }
+
             if (scanInstance != null)
             {
                 scanInstance.Dispose();
@@ -95,7 +110,7 @@ namespace HandBrakeWPF.Instance
             }
 
             HandBrakeInstance newInstance = new HandBrakeInstance();
-            newInstance.Initialize(verbosity);
+            newInstance.Initialize(verbosity, noHardware);
             scanInstance = newInstance;
 
             return scanInstance;
@@ -115,6 +130,11 @@ namespace HandBrakeWPF.Instance
         /// </returns>
         public static IHandBrakeInstance GetPreviewInstance(int verbosity, HBConfiguration configuration)
         {
+            if (!HandBrakeUtils.IsInitialised())
+            {
+                throw new Exception("Please call Init before Using!");
+            }
+
             if (previewInstance != null)
             {
                 previewInstance.Dispose();
@@ -122,7 +142,7 @@ namespace HandBrakeWPF.Instance
             }
 
             HandBrakeInstance newInstance = new HandBrakeInstance();
-            newInstance.Initialize(verbosity);
+            newInstance.Initialize(verbosity, noHardware);
             previewInstance = newInstance;
 
             HandBrakeUtils.SetDvdNav(!configuration.IsDvdNavDisabled);

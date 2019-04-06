@@ -128,7 +128,7 @@ namespace HandBrakeWPF.Services.Scan
             this.postScanOperation = postAction;
 
             // Create a new HandBrake Instance.
-            this.instance = HandBrakeInstanceManager.GetScanInstance(configuraiton.Verbosity);
+            this.instance = HandBrakeInstanceManager.GetScanInstance(configuraiton.Verbosity, configuraiton);
             this.instance.ScanProgress += this.InstanceScanProgress;
             this.instance.ScanCompleted += this.InstanceScanCompleted;
 

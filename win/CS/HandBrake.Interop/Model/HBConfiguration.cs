@@ -73,5 +73,11 @@ namespace HandBrake.Interop.Model
         /// Gets or sets a value indicating what port the worker process is to use.
         /// </summary>
         public int RemoteServicePort { get; set; }
+
+        public bool EnableVceEncoder { get; set; }
+
+        public bool EnableNvencEncoder { get; set; }
+
+        public bool EnableQsvEncoder { get; set; }
     }
 }

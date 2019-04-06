@@ -36,8 +36,6 @@ namespace HandBrakeWPF.Factories
             HBConfiguration config = new HBConfiguration
                                          {
                                              IsDvdNavDisabled = UserSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav),
-                                             EnableQuickSyncDecoding = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding), 
-                                             UseQSVDecodeForNonQSVEnc = UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc),
                                              ScalingMode = UserSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode, typeof(int)), 
                                              PreviewScanCount = UserSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int)), 
                                              Verbosity = UserSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity, typeof(int)), 
@@ -46,8 +44,13 @@ namespace HandBrakeWPF.Factories
                                              SaveLogWithVideo = UserSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo), 
                                              SaveLogCopyDirectory = UserSettingService.GetUserSetting<string>(UserSettingConstants.SaveLogCopyDirectory), 
                                              RemoteServiceEnabled = UserSettingService.GetUserSetting<bool>(UserSettingConstants.RemoteServiceEnabled),
-                                             RemoteServicePort = UserSettingService.GetUserSetting<int>(UserSettingConstants.RemoteServicePort, typeof(int))
-            };
+                                             RemoteServicePort = UserSettingService.GetUserSetting<int>(UserSettingConstants.RemoteServicePort, typeof(int)),
+                                             EnableVceEncoder = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableVceEncoder),
+                                             EnableNvencEncoder = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableNvencEncoder),
+                                             EnableQsvEncoder = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding),
+                                             EnableQuickSyncDecoding = UserSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding),
+                                             UseQSVDecodeForNonQSVEnc = UserSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc)
+                                         };
 
             return config;
         }

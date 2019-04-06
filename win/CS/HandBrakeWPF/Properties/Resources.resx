@@ -1899,7 +1899,7 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Show 'Add Selection to Queue' on the toolbar</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Hardware encoding support has been automatically disabled on your system due to an issue detected during hardware detection. Please make sure you are running up-to-date drivers for all graphics adaptors in this system.
+    <value>Hardware encoding support is currently disabled. Please make sure you are running up-to-date drivers for all graphics adaptors in this system.
 
 This will not impact any of the software encoders.</value>
   </data>
@@ -1937,5 +1937,8 @@ Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss} {7}</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
     <value>Portable Mode: Unable to read portable.ini. There may be an error in this file. Please retry using portable.ini.template as a guide.</value>
+  </data>
+  <data name="Startup_InitFailed" xml:space="preserve">
+    <value>HandBrake's engine failed to initialise. This is often caused by out of date GPU drivers.\n  Please update the GPU drivers for any onboard and discrete graphics your system has.</value>
   </data>
 </root>

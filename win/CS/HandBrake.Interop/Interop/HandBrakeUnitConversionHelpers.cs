@@ -33,7 +33,10 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         static HandBrakeUnitConversionHelpers()
         {
-            HandBrakeUtils.EnsureGlobalInit();
+            if (!HandBrakeUtils.IsInitialised())
+            {
+                throw new Exception("Please Initialise with HandBrakeUtils.EnsureGlobalInit before using!");
+            }
 
             VideoRates = new Dictionary<double, int>();
             foreach (var framerate in HandBrakeEncoderHelpers.VideoFramerates)

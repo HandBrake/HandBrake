@@ -117,8 +117,6 @@ namespace HandBrakeWPF.ViewModels
             IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel, INotifyIconService notifyIconService)
             : base(userSettingService)
         {
-            HandBrakeUtils.RegisterLogger();
-
             this.scanService = scanService;
             this.presetService = presetService;
             this.errorService = errorService;
@@ -185,8 +183,6 @@ namespace HandBrakeWPF.ViewModels
             // Setup Commands
             this.QueueCommand = new QueueCommands(this.QueueViewModel);
 
-            LogManager.Init();
-            HandBrakeInstanceManager.Init();
         }
 
         #region View Model Properties

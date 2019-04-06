@@ -36,7 +36,10 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         static HandBrakeEncoderHelpers()
         {
-            HandBrakeUtils.EnsureGlobalInit();
+            if (!HandBrakeUtils.IsInitialised())
+            {
+                throw new Exception("Please Initialise with HandBrakeUtils.EnsureGlobalInit before using!");
+            }
         }
 
         /// <summary>

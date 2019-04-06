@@ -33,7 +33,7 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// <param name="verbosity">
         /// The code for the logging verbosity to use.
         /// </param>
-        void Initialize(int verbosity);
+        void Initialize(int verbosity, bool noHardware);
 
         /// <summary>
         /// Frees any resources associated with this object.

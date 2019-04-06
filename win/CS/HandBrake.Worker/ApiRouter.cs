@@ -32,7 +32,7 @@ namespace HandBrake.Worker
             }
 
             // TODO support verbosity
-            this.handbrakeInstance.Initialize(1);
+            this.handbrakeInstance.Initialize(1, true); // TODO enable user setting support for nohardware
 
             return null;
         }
