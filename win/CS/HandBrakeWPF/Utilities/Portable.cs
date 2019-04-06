@@ -177,6 +177,22 @@ namespace HandBrakeWPF.Utilities
             return true;
         }
 
+        public static bool IsHardwareEnabled()
+        {
+            if (keyPairs.ContainsKey("hardware.enabled"))
+            {
+                string hardwareEnabled = keyPairs["hardware.enabled"];
+                if (!string.IsNullOrEmpty(hardwareEnabled) && hardwareEnabled.Trim() == "true")
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            return true; // Default to On.
+        }
+
         /// <summary>
         /// The get temp directory.
         /// </summary>
