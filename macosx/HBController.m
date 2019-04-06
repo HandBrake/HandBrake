@@ -190,7 +190,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         _currentDestination = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectoryURL"];
 #endif
 
-        if (!_currentDestination)
+        if (!_currentDestination || [[NSFileManager defaultManager] fileExistsAtPath:_currentDestination.path isDirectory:nil] == NO)
         {
             _currentDestination = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES) firstObject]
                                              isDirectory:YES];
@@ -1054,7 +1054,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [alert setInformativeText:NSLocalizedString(@"This is not a valid destination directory!", @"Invalid destination alert -> informative text")];
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
-    else if ([job.fileURL isEqual:job.completeOutputURL])
+    else if ([job.fileURL isEqual:job.completeOutputURL]||
+             [job.fileURL.absoluteString.lowercaseString isEqualToString:job.completeOutputURL.absoluteString.lowercaseString])
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"Destination same as source alert -> message")];
