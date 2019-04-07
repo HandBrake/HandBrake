@@ -63,7 +63,7 @@ before_install:
   if [[ "$TRAVIS_OS_NAME" == "linux" ]]
   then
     # xenial does not have nasm version >=2.13 in apt
-    wget https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/linux/nasm-2.14.02-0.fc27.x86_64.rpm || echo "nasm.us is down! Unable to get RPM" && exit 1
+    wget https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/linux/nasm-2.14.02-0.fc27.x86_64.rpm || (echo "nasm.us is down! Unable to get RPM" && exit 1)
     sudo alien nasm-2.14.02-0.fc27.x86_64.rpm
     sudo dpkg -i nasm_2.14.02-1_amd64.deb
   fi
