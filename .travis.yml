@@ -133,7 +133,7 @@ script:
     cd build
     trap die_gracefully EXIT INT TERM
     echo "Building for macOS:"
-    make > /dev/null &
+    make -j 2 > /dev/null &
     PID=$!
     display_progress "${PID}"
     wait "${PID}" || CODE=$?
