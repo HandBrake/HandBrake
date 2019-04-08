@@ -169,6 +169,7 @@ namespace HandBrake.Interop.Interop
         [HandleProcessCorruptedStateExceptions]
         public void StopScan()
         {
+            this.scanPollTimer.Stop();
             HBFunctions.hb_scan_stop(this.Handle);
         }
 
