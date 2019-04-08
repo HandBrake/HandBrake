@@ -110,7 +110,7 @@
 
             <!-- Cancel Window -->
             <StackPanel Grid.Row="7" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
-                <Button cal:Message.Attach="[Event Click] = [Action CloseSourceSelection]" Content="Cancel" Padding="8,2" />
+                <Button cal:Message.Attach="[Event Click] = [Action CloseSourceSelection]" Content="Cancel" IsCancel="True"  Padding="8,2" />
             </StackPanel>
 
             <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,2,10">
