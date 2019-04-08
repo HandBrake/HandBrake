@@ -550,18 +550,18 @@ static hb_dict_t * generate_chroma_smooth_settings(const char *preset,
         }
 
         // Size
-        if (!strcasecmp(tune, "tiny"))
+        if (tune == NULL || tune[0] == 0 ||
+            !strcasecmp(tune, "none") || !strcasecmp(tune, "medium"))
+        {
+            size = 7;
+        }
+        else if (!strcasecmp(tune, "tiny"))
         {
             size = 3;
         }
         else if (!strcasecmp(tune, "small"))
         {
             size = 5;
-        }
-        else if ((tune == NULL || !strcasecmp(tune, "none")) ||
-                (!strcasecmp(tune, "medium")))
-        {
-            size = 7;
         }
         else if (!strcasecmp(tune, "wide"))
         {
