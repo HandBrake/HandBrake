@@ -25,7 +25,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" MaxHeight="220" MinHeight="220">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" MaxHeight="260" MinHeight="220">
                 <ctr:Loading HorizontalAlignment="Center" VerticalAlignment="Center" Height="45" Margin="18,10" />
 
                 <StackPanel VerticalAlignment="Center" Orientation="Vertical" >
@@ -47,7 +47,7 @@
                                 x:Name="SecondaryActionCtl" Click="PerformSecondaryAction" Padding="8,2" Visibility="{Binding IsActionButton2Visibile, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource boolTovisibility}}" />
 
                         <Button Content="{Binding ActionText, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" Margin="0,10,0,0"
-                                x:Name="StatusActionButton" Click="StatusActionButton_OnClick" Padding="8,2"
+                                x:Name="StatusActionButton" Click="StatusActionButton_OnClick" Padding="8,2" IsCancel="True"
                                 Visibility="{Binding IsActionButtonVisible, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource boolTovisibility}}" />
 
                     </StackPanel>
