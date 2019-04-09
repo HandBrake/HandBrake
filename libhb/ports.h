@@ -151,7 +151,7 @@ typedef struct hb_thread_s hb_thread_t;
 #  define HB_LOW_PRIORITY    5
 #  define HB_NORMAL_PRIORITY 10
 #elif defined( SYS_DARWIN )
-#  define HB_LOW_PRIORITY    0
+#  define HB_LOW_PRIORITY    31
 #  define HB_NORMAL_PRIORITY 31
 #elif defined( SYS_CYGWIN )
 #  define HB_LOW_PRIORITY    0
