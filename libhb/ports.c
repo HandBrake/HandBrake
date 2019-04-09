@@ -862,6 +862,10 @@ static void attribute_align_thread hb_thread_func( void * _t )
     pthread_setschedparam( pthread_self(), SCHED_OTHER, &param );
 #endif
 
+#if defined( SYS_DARWIN )
+    pthread_setname_np( t->name );
+#endif
+
 #if defined( SYS_BEOS )
     signal( SIGINT, SIG_IGN );
 #endif
