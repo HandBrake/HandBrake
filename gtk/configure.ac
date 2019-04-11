@@ -186,7 +186,9 @@ if test "x$use_fdk_aac" = "xyes" ; then
 fi
 
 if test "x$use_x265" = "xyes" ; then
-    HB_LIBS="$HB_LIBS -lx265 -lnuma"
+    HB_LIBS="$HB_LIBS -lx265"
+    AC_CHECK_LIB([numa], [numa_available], [HB_LIBS="$HB_LIBS -lnuma"], [])
+
 fi
 
 if test "x$use_qsv" = "xyes" ; then
