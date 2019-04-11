@@ -655,9 +655,9 @@ class SelectMode( dict ):
         self.mode = self.default
 
     def cli_add_argument( self, parser, option ):
-        parser.add_argument( option, default=self.mode, metavar='MODE',
+        parser.add_argument( option, nargs='?', default=self.mode, metavar='MODE',
             help='select %s%s: %s' % (self.descr,self.what,self.toString()),
-            action='store_const', const=lambda:'self.cli_callback' )
+            action='store', const=lambda:'self.cli_callback')
 
     def cli_callback( self, option, opt_str, value, parser, *args, **kwargs ):
         if value not in self:
