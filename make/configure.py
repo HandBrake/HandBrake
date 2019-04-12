@@ -1859,9 +1859,10 @@ int main()
     doc.addBlank()
     doc.add( 'FEATURE.asm',        'disabled' )
 
-    # Disable FFmpeg AAC where FDK AAC is enabled
-    options.enable_ffmpeg_aac = False if options.enable_fdk_aac else options.enable_ffmpeg_aac
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
+
+    # Require FFmpeg AAC on Linux and Windows
+    options.enable_ffmpeg_aac = True if build.system != 'darwin' else options.enable_ffmpeg_aac
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
 
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
