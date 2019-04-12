@@ -642,6 +642,18 @@ class CoreProbe( Action ):
 
 ###############################################################################
 
+class StoreCallbackAction(argparse.Action):
+    def __init__(self, option_strings, dest, nargs=None, **kwargs):
+        self.callback = kwargs.pop('callback', None)
+
+        super(StoreCallbackAction, self).__init__(
+            option_strings, dest, nargs, **kwargs)
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        setattr(namespace, self.dest, values)
+        if self.callback != None:
+            self.callback(self, values)
+
 class SelectMode( dict ):
     def __init__( self, descr, *modes, **kwargs ):
         super( SelectMode, self ).__init__( modes )
@@ -655,14 +667,16 @@ class SelectMode( dict ):
         self.mode = self.default
 
     def cli_add_argument( self, parser, option ):
-        parser.add_argument( option, nargs='?', default=self.mode, metavar='MODE',
+        parser.add_argument(option, nargs='?', metavar='MODE',
+            default=self.mode, const=self.mode,
             help='select %s%s: %s' % (self.descr,self.what,self.toString()),
-            action='store', const=lambda:'self.cli_callback')
+            action=StoreCallbackAction, callback=self.cli_callback)
 
-    def cli_callback( self, option, opt_str, value, parser, *args, **kwargs ):
+    def cli_callback( self, action, value ):
         if value not in self:
-            raise ArgumentError( 'invalid %s%s: %s (choose from: %s)'
-                % (self.descr,self.what,value,self.toString( True )) )
+            raise argparse.ArgumentError(action,
+                'invalid %s%s: %s (choose from: %s)'
+                % (self.descr, self.what, value, self.toString(True)))
         self.mode = value
 
     def toString( self, nodefault=False ):
@@ -927,12 +941,13 @@ class ToolProbe( Action ):
             self.version = VersionProbe( [self.pathname, '--version'], minversion=self.minversion )
 
     def cli_add_argument( self, parser ):
-        parser.add_argument( '--'+self.name, metavar='PROG',
+        parser.add_argument( '--'+self.name, nargs=1, metavar='PROG',
             help='[%s]' % (self.pathname),
-            action='store_const', const=lambda:'self.cli_callback' )
+            action=StoreCallbackAction, callback=self.cli_callback )
 
-    def cli_callback( self, option, opt_str, value, parser, *args, **kwargs ):
-        self.__init__( self.var, value, **self.kwargs )
+    def cli_callback( self, action, value ):
+        # set pool to include only the user specified tool
+        self.__init__( self.var, value[0] )
         self.run()
 
     def doc_add( self, doc ):
@@ -1021,7 +1036,8 @@ class VersionProbe( Action ):
         return False
 
 ###############################################################################
-
+# Select a tool from a pool of acceptable tool options
+###############################################################################
 class SelectTool( Action ):
     selects = []
 
@@ -1049,21 +1065,22 @@ class SelectTool( Action ):
             self.msg_end = 'not found'
 
     def cli_add_argument( self, parser ):
-        parser.add_argument( '--'+self.name, metavar='MODE',
+        parser.add_argument( '--'+self.name, nargs=1, metavar='MODE',
             help='select %s mode: %s' % (self.name,self.toString()),
-            action='store_const', const=lambda:'self.cli_callback' )
+            action=StoreCallbackAction, callback=self.cli_callback )
 
-    def cli_callback( self, option, opt_str, value, parser, *args, **kwargs ):
+    def cli_callback( self, action, value ):
         found = False
         for (name,tool) in self.pool:
-            if name == value:
+            if name == value[0]:
                 found = True
-                self.__init__( self.var, self.name, [name,tool], **kwargs )
-                self.run()
+                # set pool to include only the user specified tool
+                self.__init__( self.var, self.name, [name,tool] )
                 break
         if not found:
-            raise ArgumentError( 'invalid %s mode: %s (choose from: %s)'
-                % (self.name,value,self.toString( True )) )
+            raise argparse.ArgumentError(action,
+                'invalid %s mode: %s (choose from: %s)'
+                % (self.name, value[0], self.toString( True )))
 
     def doc_add( self, doc ):
         doc.add( self.var, self.selected )
