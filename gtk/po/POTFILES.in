@@ -13,4 +13,3 @@ src/preview.c
 src/queuehandler.c
 src/subtitlehandler.c
 src/videohandler.c
-src/x264handler.c
