@@ -1571,15 +1571,16 @@ try:
     # cannot parse args twice, so extract the info we need here
     cross = None
     for i in range(len(sys.argv)):
-        cross_pattern = re.compile( '^--cross=(.*)$' )
+        cross_pattern = re.compile( '^--cross=(.+)$' )
         m = cross_pattern.match( sys.argv[i] )
         if m:
             cross = sys.argv[i][8:]
             continue
-        cross_pattern = re.compile( '^--cross(.*)$' )
+        cross_pattern = re.compile( '^--cross$' )
         m = cross_pattern.match( sys.argv[i] )
-        if m and (i + 1 < len(sys.argv)):
+        if m and ((i + 1) < len(sys.argv)):
             cross = sys.argv[i+1]
+            cross = None if cross == '' else cross
             continue
 
     # create CLI and parse
