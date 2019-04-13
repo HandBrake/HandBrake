@@ -201,9 +201,9 @@ class Configure( object ):
         else:
                 self.sysroot_dir = ""
 
-        if options.minver != None:
+        try:
                 self.minver = options.minver
-        else:
+        except:
                 self.minver = ""
 
         ## special case if src == build: add build subdir
