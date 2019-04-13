@@ -9,7 +9,6 @@
 import fnmatch
 import glob
 import json
-import optparse
 import os
 import platform
 import random
