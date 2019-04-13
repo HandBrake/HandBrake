@@ -1344,9 +1344,6 @@ def createCLI( cross = None ):
     arch.mode.cli_add_argument( grp, '--arch' )
     grp.add_argument( '--cross', default=None, action='store', metavar='SPEC',
         help='specify GCC cross-compilation spec' )
-    h = IfHost( 'specify Mac OS X deployment target for Xcode builds', '*-*-darwin*', none=argparse.SUPPRESS ).value
-    grp.add_argument( '--minver', default=None, action='store', metavar='VER',
-        help=h )
     cli.add_argument_group( grp )
 
     ## add Xcode options
@@ -1359,6 +1356,8 @@ def createCLI( cross = None ):
         grp.add_argument( '--xcode-symroot', default='xroot', action='store', metavar='DIR',
             help='specify root of the directory hierarchy that contains product files and intermediate build files' )
         xcconfigMode.cli_add_argument( grp, '--xcode-config' )
+        grp.add_argument( '--minver', default=None, action='store', metavar='VER',
+            help='specify deployment target for Xcode builds' )
         cli.add_argument_group( grp )
 
     ## add tool locations
