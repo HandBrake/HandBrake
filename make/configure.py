@@ -1583,6 +1583,12 @@ try:
             cross = None if cross == '' else cross
             continue
 
+    ## re-run tools with cross-compilation needs
+    if cross:
+        for tool in ( Tools.ar, Tools.gcc, Tools.ranlib, Tools.strip ):
+            tool.__init__( tool.var, '%s-%s' % (cross,tool.name), **tool.kwargs )
+            tool.run()
+
     # create CLI and parse
     cli = createCLI( cross )
     options, args = cli.parse_known_args()
@@ -1600,12 +1606,6 @@ try:
             exports.append( m.groups() )
         else:
             targets.append( arg )
-
-    ## re-run tools with cross-compilation needs
-    if options.cross:
-        for tool in ( Tools.ar, Tools.gcc, Tools.ranlib, Tools.strip ):
-            tool.__init__( tool.var, '%s-%s' % (options.cross,tool.name), **tool.kwargs )
-            tool.run()
 
     ## run delayed actions
     for action in Action.actions:
