@@ -195,7 +195,7 @@ class Configure( object ):
         self.src_dir    = os.path.normpath( options.src )
         self.build_dir  = os.path.normpath( options.build )
         self.prefix_dir = os.path.normpath( options.prefix )
-        if host.match( '*-*-darwin*' ):
+        if host.match( '*-*-darwin*' ) and options.cross is None:
             self.xcode_prefix_dir = os.path.normpath( options.xcode_prefix )
         if options.sysroot != None:
                 self.sysroot_dir = os.path.normpath( options.sysroot )
@@ -1915,19 +1915,20 @@ int main()
     options.enable_vce = False if not build.system == 'mingw' else options.enable_vce
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
 
-    doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode or options.cross) ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
 
-    if not Tools.xcodebuild.fail and not options.disable_xcode:
-        doc.addBlank()
-        doc.add( 'XCODE.prefix',  cfg.xcode_prefix_final )
-        doc.add( 'XCODE.prefix/', cfg.xcode_prefix_final + os.sep )
-        doc.add( 'XCODE.driver', options.xcode_driver )
-        if os.path.isabs(options.xcode_symroot):
-            doc.add( 'XCODE.symroot', options.xcode_symroot )
-        else:
-            doc.add( 'XCODE.symroot', os.path.abspath(os.path.join(cfg.build_dir,options.xcode_symroot)) )
-        doc.add( 'XCODE.xcconfig', xcconfigMode[xcconfigMode.mode] )
+    if host.match( '*-*-darwin*' ) and options.cross is None:
+        doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
+        if not Tools.xcodebuild.fail and not options.disable_xcode:
+            doc.addBlank()
+            doc.add( 'XCODE.prefix',  cfg.xcode_prefix_final )
+            doc.add( 'XCODE.prefix/', cfg.xcode_prefix_final + os.sep )
+            doc.add( 'XCODE.driver', options.xcode_driver )
+            if os.path.isabs(options.xcode_symroot):
+                doc.add( 'XCODE.symroot', options.xcode_symroot )
+            else:
+                doc.add( 'XCODE.symroot', os.path.abspath(os.path.join(cfg.build_dir,options.xcode_symroot)) )
+            doc.add( 'XCODE.xcconfig', xcconfigMode[xcconfigMode.mode] )
 
     if build.system == 'mingw':
         doc.addBlank()
