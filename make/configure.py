@@ -1242,7 +1242,7 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-fdk-aac', dest="enable_fdk_aac", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'FFmpeg AAC audio encoder', '*-*-*', none=argparse.SUPPRESS ).value
+    h = 'FFmpeg AAC audio encoder' if (cross is None and host.match( '*-*-darwin*' )) else argparse.SUPPRESS
     grp.add_argument( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=(cross is not None and 'mingw' in cross) or not host.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
@@ -1931,7 +1931,11 @@ int main()
     stdout.write( 'Build system:      %s' % build.system )
     stdout.write( ' (cross-compile)\n' ) if options.cross else stdout.write( '\n' )
     stdout.write( 'Enable FDK-AAC:    %s\n' % options.enable_fdk_aac )
-    stdout.write( 'Enable FFmpeg AAC: %s\n' % options.enable_ffmpeg_aac )
+
+    if build.system == 'darwin':
+        stdout.write( 'Enable FFmpeg AAC: %s\n' % options.enable_ffmpeg_aac )
+    else:
+        stdout.write( 'Enable FFmpeg AAC: %s  (Required on target platform)\n' % options.enable_ffmpeg_aac )
 
     if build.system == 'linux' or build.system == 'mingw':
         stdout.write( 'Enable NVENC:      %s\n' % options.enable_nvenc )
