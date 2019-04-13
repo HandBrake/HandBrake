@@ -1926,27 +1926,22 @@ int main()
     doc.write( 'm4' )
     encodeDistfileConfig()
 
+    note_required    = 'required on target platform'
+    note_unsupported = 'not supported on target platform'
+
     stdout.write( '%s\n' % ('-' * 79) )
-    stdout.write( 'Build system:      %s\n' % '-'.join(host).rstrip('-') )
-    stdout.write( 'Target platform:   %s' % build.system )
+    stdout.write( 'Build system:       %s\n' % '-'.join(host).rstrip('-') )
+    stdout.write( 'Target platform:    %s' % build.system )
     stdout.write( ' (cross-compile)\n' ) if options.cross else stdout.write( '\n' )
-    stdout.write( 'Enable FDK-AAC:    %s\n' % options.enable_fdk_aac )
-
-    if build.system == 'darwin':
-        stdout.write( 'Enable FFmpeg AAC: %s\n' % options.enable_ffmpeg_aac )
-    else:
-        stdout.write( 'Enable FFmpeg AAC: %s  (required on target platform)\n' % options.enable_ffmpeg_aac )
-
-    if build.system == 'linux' or build.system == 'mingw':
-        stdout.write( 'Enable NVENC:      %s\n' % options.enable_nvenc )
-        stdout.write( 'Enable QSV:        %s\n' % options.enable_qsv )
-    else:
-        stdout.write( 'Enable NVENC:      Not supported on target platform\n' )
-        stdout.write( 'Enable QSV:        Not supported on target platform\n' )
-    if build.system == 'mingw':
-        stdout.write( 'Enable VCE:        %s\n' % options.enable_vce )
-    else:
-        stdout.write( 'Enable VCE:        Not supported on target platform\n' )
+    stdout.write( 'Enable FDK-AAC:     %s\n' % options.enable_fdk_aac )
+    stdout.write( 'Enable FFmpeg AAC:  %s' % options.enable_ffmpeg_aac )
+    stdout.write( '  (%s)\n' % note_required ) if build.system != 'darwin' else stdout.write( '\n' )
+    stdout.write( 'Enable NVENC:       %s' % options.enable_nvenc )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not (build.system == 'linux' or build.system == 'mingw') else stdout.write( '\n' )
+    stdout.write( 'Enable QSV:         %s' % options.enable_qsv )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not (build.system == 'linux' or build.system == 'mingw') else stdout.write( '\n' )
+    stdout.write( 'Enable VCE:         %s' % options.enable_vce )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not build.system == 'mingw' else stdout.write( '\n' )
 
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )
