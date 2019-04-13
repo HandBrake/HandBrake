@@ -1035,69 +1035,6 @@ class VersionProbe( Action ):
         return False
 
 ###############################################################################
-# Select a tool from a pool of acceptable tool options
-###############################################################################
-class SelectTool( Action ):
-    selects = []
-
-    def __init__( self, var, name, *pool, **kwargs ):
-        super( SelectTool, self ).__init__( 'select', abort=kwargs.get('abort',True) )
-        self.pretext = name
-        if not self in SelectTool.selects:
-            SelectTool.selects.append( self )
-        self.var      = var
-        self.name     = name
-        self.pool     = pool
-        self.kwargs   = kwargs
-
-    def _action( self ):
-        self.session = []
-        for i,(name,tool) in enumerate(self.pool):
-            self.session.append( 'tool[%d] = %s (%s)' % (i,name,tool.pathname) )
-        for (name,tool) in self.pool:
-            if not tool.fail:
-                self.selected = name
-                self.fail = False
-                self.msg_end = '%s (%s)' % (name,tool.pathname)
-                break
-        if self.fail:
-            self.msg_end = 'not found'
-
-    def cli_add_argument( self, parser ):
-        parser.add_argument( '--'+self.name, nargs=1, metavar='MODE',
-            help='select %s mode: %s' % (self.name,self.toString()),
-            action=StoreCallbackAction, callback=self.cli_callback )
-
-    def cli_callback( self, action, value ):
-        found = False
-        for (name,tool) in self.pool:
-            if name == value[0]:
-                found = True
-                # set pool to include only the user specified tool
-                self.__init__( self.var, self.name, [name,tool] )
-                break
-        if not found:
-            raise argparse.ArgumentError(action,
-                'invalid %s mode: %s (choose from: %s)'
-                % (self.name, value[0], self.toString( True )))
-
-    def doc_add( self, doc ):
-        doc.add( self.var, self.selected )
-
-    def toString( self, nodefault=False ):
-        if len(self.pool) == 1:
-            value = self.pool[0][0]
-        else:
-            s = ''
-            for key,value in self.pool:
-                s += ' ' + key
-            if nodefault:
-                value = s[1:]
-            else:
-                value = '%s [%s]' % (s[1:], self.selected )
-        return value
-
-###############################################################################
 ##
 ## config object used to output gnu-make or gnu-m4 output.
 ##
@@ -1365,12 +1302,6 @@ def createCLI( cross = None ):
         tool.cli_add_argument( grp )
     cli.add_argument_group( grp )
 
-    ## add tool modes
-    grp = cli.add_argument_group( 'Tool Options' )
-    for select in SelectTool.selects:
-        select.cli_add_argument( grp )
-    cli.add_argument_group( grp )
-
     ## add build options
     grp = cli.add_argument_group( 'Build Options' )
     grp.add_argument( '--snapshot', default=False, action='store_true',
@@ -1545,8 +1476,6 @@ try:
     ## run tool probes
     for tool in ToolProbe.tools:
         tool.run()
-    for select in SelectTool.selects:
-        select.run()
 
     debugMode = SelectMode( 'debug', ('none','none'), ('min','min'), ('std','std'), ('max','max') )
     optimizeMode = SelectMode( 'optimize', ('none','none'), ('speed','speed'), ('size','size'), default='speed' )
@@ -1944,10 +1873,6 @@ int main()
     doc.addBlank()
     for tool in ToolProbe.tools:
         tool.doc_add( doc )
-
-    doc.addBlank()
-    for select in SelectTool.selects:
-        select.doc_add( doc )
 
     doc.addBlank()
     doc.add( 'GCC.archs', arch.mode.mode )
