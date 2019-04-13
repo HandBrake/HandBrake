@@ -1246,31 +1246,6 @@ def encodeDistfileConfig():
 ##
 ## create cli parser
 ##
-
-## class to hook options and create CONF.args list
-class Option( optparse.Option ):
-    conf_args = []
-
-    def _conf_record( self, opt, value ):
-        ## filter out non-applicable options
-        if re.match( '^--(force|launch).*$', opt ):
-            return
-
-        ## remove duplicates (last duplicate wins)
-        for i,arg in enumerate( Option.conf_args ):
-            if opt == arg[0]:
-                del Option.conf_args[i]
-                break
-
-        if value:
-            Option.conf_args.append( [opt,'%s=%s' % (opt,value)] )
-        else:
-            Option.conf_args.append( [opt,'%s' % (opt)] )
-
-    def take_action( self, action, dest, opt, value, values, parser ):
-        self._conf_record( opt, value )
-        return optparse.Option.take_action( self, action, dest, opt, value, values, parser )
-
 def createCLI( cross = None ):
     cli = argparse.ArgumentParser( usage='%s [OPTIONS...] [TARGETS...]' % os.path.basename(__file__), description='Configure %s build system' % project.name )
 
@@ -1804,10 +1779,12 @@ int main()
 
     ## add configure line for reconfigure purposes
     doc.addBlank()
-    args = []
-    for arg in Option.conf_args:
-        args.append( arg[1] )
-    doc.add( 'CONF.args', ' '.join(args).replace('$','$$') )
+    conf_args = []
+    for arg in sys.argv[1:]:
+        if re.match( '^--(force|launch).*$', arg ):
+            continue
+        conf_args.append(arg)
+    doc.add( 'CONF.args', ' '.join(conf_args).replace('$','$$') )
 
     doc.addBlank()
     doc.add( 'HB.title',       project.title )
