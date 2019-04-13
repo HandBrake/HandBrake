@@ -1335,15 +1335,15 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=(cross is not None and 'mingw' in cross) or not host.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = 'Nvidia NVENC video encoder (Linux and Windows only)' if (host.match('*-*-linux') or (cross is not None and 'mingw' in cross)) else argparse.SUPPRESS
+    h = 'Nvidia NVENC video encoder' if (host.match('*-*-linux') or (cross is not None and 'mingw' in cross)) else argparse.SUPPRESS
     grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=True if (cross is not None and 'mingw' in cross) else False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = 'Intel Quick Sync Video (QSV) hardware acceleration (Linux and Windows only)' if (host.match('*-*-linux') or (cross is not None and 'mingw' in cross)) else argparse.SUPPRESS
+    h = 'Intel QSV video encoder/decoder' if (host.match('*-*-linux') or (cross is not None and 'mingw' in cross)) else argparse.SUPPRESS
     grp.add_argument( '--enable-qsv', dest="enable_qsv", default=(cross is not None and 'mingw' in cross), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = 'AMD VCE hardware acceleration (Windows only)' if (cross is not None and 'mingw' in cross) else argparse.SUPPRESS
+    h = 'AMD VCE video encoder' if (cross is not None and 'mingw' in cross) else argparse.SUPPRESS
     grp.add_argument( '--enable-vce', dest="enable_vce", default=(cross is not None and 'mingw' in cross), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
