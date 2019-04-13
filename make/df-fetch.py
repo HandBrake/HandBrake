@@ -108,7 +108,7 @@ class Tool(hb_distfile.Tool):
         ## create URL objects and keep active
         urls = []
         i = 0
-        for arg in self.args:
+        for arg in self.args[1:]:
             url = URL(arg, i)
             if url.active:
                 urls.append(url)
