@@ -1927,15 +1927,15 @@ int main()
     encodeDistfileConfig()
 
     stdout.write( '%s\n' % ('-' * 79) )
-    stdout.write( 'Host system:       %s\n' % '-'.join(host).rstrip('-') )
-    stdout.write( 'Build system:      %s' % build.system )
+    stdout.write( 'Build system:      %s\n' % '-'.join(host).rstrip('-') )
+    stdout.write( 'Target platform:   %s' % build.system )
     stdout.write( ' (cross-compile)\n' ) if options.cross else stdout.write( '\n' )
     stdout.write( 'Enable FDK-AAC:    %s\n' % options.enable_fdk_aac )
 
     if build.system == 'darwin':
         stdout.write( 'Enable FFmpeg AAC: %s\n' % options.enable_ffmpeg_aac )
     else:
-        stdout.write( 'Enable FFmpeg AAC: %s  (Required on target platform)\n' % options.enable_ffmpeg_aac )
+        stdout.write( 'Enable FFmpeg AAC: %s  (required on target platform)\n' % options.enable_ffmpeg_aac )
 
     if build.system == 'linux' or build.system == 'mingw':
         stdout.write( 'Enable NVENC:      %s\n' % options.enable_nvenc )
