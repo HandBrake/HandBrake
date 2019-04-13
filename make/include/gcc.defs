@@ -78,6 +78,12 @@ ifeq ($(BUILD.machine),$(filter $(BUILD.machine),i686 x86_64))
 else
     GCC.args.extra = $(CFLAGS) $(CPPFLAGS)
 endif
+# If hardening is enabled -D_FORTIFY_SOURCE=2 adds compile-time protection and run-time
+# checking against static sized buffer overflow flaws. -fstack-protector-strong enables
+# stack canaries to detect stack buffer overflows (stack overwrites).
+ifeq (1,$(BUILD.harden))
+    GCC.args.extra += $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS) -fstack-protector-strong -D_FORTIFY_SOURCE=2
+endif
 GCC.args.extra.h_o     =
 GCC.args.extra.c_o     =
 GCC.args.extra.dylib   = $(LDFLAGS)

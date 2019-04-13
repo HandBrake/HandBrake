@@ -1294,6 +1294,8 @@ def createCLI( cross = None ):
         xcconfigMode.cli_add_argument( grp, '--xcode-config' )
         grp.add_argument( '--minver', default=None, action='store', metavar='VER',
             help='specify deployment target for Xcode builds' )
+        grp.add_argument( '--enable-hardening', dest="enable_build_harden", default=None, action='store_true',
+            help='enable buffer overflow protection' )
         cli.add_argument_group( grp )
 
     ## add tool locations
@@ -1780,6 +1782,7 @@ int main()
 
     doc.add( 'BUILD.date',   time.strftime('%c', now) ),
     doc.add( 'BUILD.arch',   arch.mode.mode )
+    doc.add( 'BUILD.harden', int( options.enable_build_harden != None))
 
     doc.addBlank()
     doc.add( 'SRC',     cfg.src_final )
@@ -1942,6 +1945,7 @@ int main()
     stdout.write( ' (%s)\n' % note_unsupported ) if not (build.system == 'linux' or build.system == 'mingw') else stdout.write( '\n' )
     stdout.write( 'Enable VCE:         %s' % options.enable_vce )
     stdout.write( ' (%s)\n' % note_unsupported ) if not build.system == 'mingw' else stdout.write( '\n' )
+    stdout.write( 'Enable buffer overflow protection: %s\n' % options.enable_build_harden )
 
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )
