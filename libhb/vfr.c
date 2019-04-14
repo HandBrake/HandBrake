@@ -34,6 +34,7 @@ struct hb_filter_private_s
 
     // Duplicate frame detection members
     int             frame_analysis_depth;
+    int64_t         frame_analysis_duration;
     hb_list_t     * frame_rate_list;
     double        * frame_metric;
 
@@ -138,17 +139,53 @@ static void delete_metric(double * metrics, int pos, int size)
     memmove(dst, src, msize);
 }
 
-static int find_drop_frame(double *metrics, int count)
+static int find_drop_frame(hb_filter_private_t * pv, int count)
 {
-    int ii, min;
+    int           ii, min;
+    double      * metrics = pv->frame_metric;
+    hb_buffer_t * buf, * first;
+    double        cfr_stop;
 
-    min = 1;
-    for (ii = 2; ii < count - 1; ii++)
+    // compute where the second to last frame in the frame_rate_list would
+    // stop if the frame rate were constant.
+    //
+    // this is our target stopping time for CFR and earliest possible
+    // stopping time for PFR.
+    cfr_stop = pv->out_last_stop + pv->frame_duration * (count - 1);
+
+    // If the last frame's stop timestamp is before the calculated
+    // CFR stop time of the second to last frame, then we need to drop a frame.
+    buf   = hb_list_item(pv->frame_rate_list, count - 1);
+
+    // Shortcut exit when entire list is CFR OK
+    if (buf->s.stop >= (int64_t)cfr_stop)
     {
-        if (metrics[ii] < metrics[min])
+        return -1;
+    }
+
+    first = hb_list_item(pv->frame_rate_list, 0);
+    min = 0;
+    for (ii = 1; ii < count; ii++)
+    {
+        hb_buffer_t * buf = hb_list_item(pv->frame_rate_list, ii);
+        // Don't check buffers outside analysis window
+        if (buf->s.stop - first->s.start > pv->frame_analysis_duration)
+        {
+            break;
+        }
+        if (min < 0 || metrics[ii] < metrics[min])
         {
             min = ii;
         }
+    }
+
+    cfr_stop = pv->out_last_stop + pv->frame_duration * (ii - 1);
+    buf      = hb_list_item(pv->frame_rate_list, ii - 1);
+
+    // Don't drop buffers if frames fit in CRF time bounds
+    if (buf->s.stop >= (int64_t)cfr_stop)
+    {
+        return -1;
     }
 
     return min;
@@ -220,24 +257,15 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
     }
 
     hb_buffer_list_t   list;
-    hb_buffer_t      * out, * last;
+    hb_buffer_t      * out;
     double             cfr_stop;
+    int                drop_frame;
 
     hb_buffer_list_clear(&list);
 
-    // compute where the second to last frame in the frame_rate_list would
-    // stop if the frame rate were constant.
-    //
-    // this is our target stopping time for CFR and earliest possible
-    // stopping time for PFR.
-    cfr_stop = pv->out_last_stop + pv->frame_duration * (count - 1);
-
-    // If the last frame's stop timestamp is before the calculated
-    // CFR stop time of the second to last frame, then we need to drop a frame.
-    last = hb_list_item(pv->frame_rate_list, count - 1);
-    if (last->s.stop < cfr_stop)
+    drop_frame = find_drop_frame(pv, count);
+    if (drop_frame >= 0)
     {
-        int drop_frame;
 
         // We may have to drop multiple frames.  Pick frames to drop
         // that appear to have minimum motion.
@@ -246,7 +274,6 @@ static hb_buffer_t * adjust_frame_rate( hb_filter_private_t * pv,
         // "progressive telecine" where there is a repeating pattern
         // of a new frame followed by some number of repeated frames.
         // We want to keep the "new frames" and drop the repeates.
-        drop_frame = find_drop_frame(pv->frame_metric, count);
         out = hb_list_item(pv->frame_rate_list, drop_frame);
 
 #if defined(HB_DEBUG_CFR_DROPS)
@@ -383,6 +410,7 @@ static int hb_vfr_init(hb_filter_object_t *filter, hb_filter_init_t *init)
             pv->frame_analysis_depth = MAX_FRAME_ANALYSIS_DEPTH;
         }
     }
+    pv->frame_analysis_duration = pv->frame_analysis_depth * 90000 / in_vrate;
     pv->frame_metric = calloc(pv->frame_analysis_depth, sizeof(double));
     pv->frame_metric[0] = INT_MAX;
 
