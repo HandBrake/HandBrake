@@ -1280,6 +1280,8 @@ def createCLI( cross = None ):
     arch.mode.cli_add_argument( grp, '--arch' )
     grp.add_argument( '--cross', default=None, action='store', metavar='SPEC',
         help='specify GCC cross-compilation spec' )
+    grp.add_argument( '--enable-hardening', dest="enable_build_harden", default=None, action='store_true',
+        help='enable buffer overflow protection' )
     cli.add_argument_group( grp )
 
     ## add Xcode options
@@ -1294,8 +1296,6 @@ def createCLI( cross = None ):
         xcconfigMode.cli_add_argument( grp, '--xcode-config' )
         grp.add_argument( '--minver', default=None, action='store', metavar='VER',
             help='specify deployment target for Xcode builds' )
-        grp.add_argument( '--enable-hardening', dest="enable_build_harden", default=None, action='store_true',
-            help='enable buffer overflow protection' )
         cli.add_argument_group( grp )
 
     ## add tool locations
