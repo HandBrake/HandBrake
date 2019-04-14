@@ -1464,7 +1464,11 @@ static void do_job(hb_job_t *job)
         init.time_base.num = 1;
         init.time_base.den = 90000;
         init.job = job;
-        init.pix_fmt = title->pix_fmt;
+        // TODO: When more complete pix format support is complete this
+        // needs to be updated to reflect the pix_fmt output by
+        // decavcodec.c.  This may be different than title->pix_fmt
+        // since we will likely only support planar YUV color formats.
+        init.pix_fmt = AV_PIX_FMT_YUV420P;
         init.color_prim = title->color_prim;
         init.color_transfer = title->color_transfer;
         init.color_matrix = title->color_matrix;
