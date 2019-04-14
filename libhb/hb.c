@@ -415,6 +415,11 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
         hb_log(" - %s", cpu_type);
     }
     hb_log(" - logical processor count: %d", hb_get_cpu_count());
+    
+    /* Print hardening status in all scan and encode logs */
+#ifdef USE_HARDEN
+    hb_log(" - hardening is enabled");
+#endif
 
 #ifdef USE_QSV
     if (!is_hardware_disabled())
