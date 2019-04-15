@@ -546,10 +546,10 @@ class BuildTupleProbe( ShellProbe, list ):
 ###############################################################################
 
 class HostTupleAction( Action, list ):
-    def __init__( self ):
+    def __init__( self, cross=None ):
         super( HostTupleAction, self ).__init__( 'compute', 'host tuple', abort=True )
         # Initialize, but allow to be reset by options
-        self.setHost(None)
+        self.setHost(cross)
 
     def setHost( self, cross ):
         ## check if --cross spec was used; must maintain 5-tuple compatibility with regex
@@ -672,6 +672,8 @@ class ArchAction( Action ):
 
         ## some match on system should be made here; otherwise we signal a warning.
         if host_tuple.match( '*-*-cygwin*' ):
+            pass
+        elif host_tuple.match( '*-*-mingw*' ):
             pass
         elif host_tuple.match( '*-*-darwin11.*' ):
             self.mode['i386']   = 'i386-apple-darwin%s'      % (host_tuple.release)
@@ -1547,9 +1549,6 @@ try:
     if build_tuple.match( '*-*-darwin*' ):
         cfg.xcode_prefix_dir = '/Applications'
 
-    host_tuple = HostTupleAction()
-    arch       = ArchAction(); arch.run()
-
     ## create remaining main objects
     core    = CoreProbe()
     repo    = RepoProbe()
@@ -1562,8 +1561,8 @@ try:
         gcc_tools = ['GCC.gcc',
                      os.environ.get('CC', None),
                      'gcc',
-                     IfHost( 'clang', '*-*-freebsd*' ),
-                     IfHost( 'gcc-4', '*-*-cygwin*' )]
+                     IfBuild( 'clang', '*-*-freebsd*' ),
+                     IfBuild( 'gcc-4', '*-*-cygwin*' )]
         gcc   = ToolProbe(*filter(None, gcc_tools))
 
         if build_tuple.match( '*-*-darwin*' ):
@@ -1633,7 +1632,9 @@ try:
             tool.run()
 
     # create CLI and parse
-    host_tuple.setHost(cross)
+    host_tuple = HostTupleAction(cross)
+    arch       = ArchAction(); arch.run()
+
     cli = createCLI( cross )
     options, args = cli.parse_known_args()
 
