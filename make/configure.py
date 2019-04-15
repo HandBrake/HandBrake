@@ -364,6 +364,49 @@ class CCProbe( Action ):
 ## returns true if feature successfully compiles
 ##
 ##
+class PkgConfigProbe( Action ):
+    def __init__( self, pretext, args, lib ):
+        super( PkgConfigProbe, self ).__init__( 'probe', pretext )
+        self.args = args
+        self.lib = lib
+
+    def _action( self ):
+        if Tools.pkgconfig.fail:
+            self.fail = True
+            self.session = []
+            self.msg_end = 'No pkg-config'
+            return
+
+        ## pipe and redirect stderr to stdout; effects communicate result
+        pipe = subprocess.Popen( '%s %s %s' %
+                (Tools.pkgconfig.pathname, self.args, self.lib),
+                shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
+
+        ## read data into memory buffers, only first element (stdout)
+        ## data is used
+        data = pipe.communicate()
+        self.fail = pipe.returncode != 0
+
+        if data[0]:
+            self.session = data[0].splitlines()
+        else:
+            self.session = []
+
+        if pipe.returncode:
+            self.msg_end = 'code %d' % (pipe.returncode)
+
+    def _dumpSession( self, printf ):
+        printf( '  + %s %s\n', Tools.pkgconfig.pathname, self.args )
+        super( PkgConfigProbe, self )._dumpSession( printf )
+
+
+###############################################################################
+##
+## Compile test probe: determine if compile time feature is supported
+##
+## returns true if feature successfully compiles
+##
+##
 class LDProbe( Action ):
     def __init__( self, pretext, command, lib, test_file ):
         super( LDProbe, self ).__init__( 'probe', pretext )
@@ -405,6 +448,46 @@ class LDProbe( Action ):
         printf( '  + %s\n', self.command )
         super( LDProbe, self )._dumpSession( printf )
 
+
+###############################################################################
+##
+## Basic library existence check
+##
+## returns true if feature successfully compiles
+##
+##
+class ChkLib( Action ):
+    def __init__( self, pretext, command, lib, test_file ):
+        super( ChkLib, self ).__init__( 'probe', pretext )
+        self.command = command
+        self.test_file = test_file
+        self.lib = lib
+
+    def _action( self ):
+        ## First try pkg-config
+        if not Tools.pkgconfig.fail:
+            pkgconfig = PkgConfigProbe( 'pkgconfig %s' % self.pretext,
+                                        '--libs', self.lib )
+            pkgconfig.run()
+            if not pkgconfig.fail:
+                self.session = pkgconfig.session
+                self.fail = False
+                return
+
+        ld = LDProbe( 'link %s' % self.pretext, self.command,
+                      '-l%s' % self.lib, self.test_file )
+        ld.run()
+        self.session = ld.session
+        self.fail = ld.fail
+        if self.fail:
+            self.msg_end = ld.msg_end
+
+    def _actionEnd( self ):
+        pass
+
+    def _dumpSession( self, printf ):
+        printf( '  + %s\n', self.command )
+        super( ChkLib, self )._dumpSession( printf )
 
 ###############################################################################
 ##
@@ -1701,6 +1784,25 @@ int main()
 
     strerror_r = LDProbe( 'strerror_r', '%s' % Tools.gcc.pathname, '', strerror_r_test )
     strerror_r.run()
+
+    if build.system == 'linux':
+        if options.enable_numa:
+            numa_test = """
+#include <numa.h>
+
+int main()
+{
+struct bitmask *bm = numa_allocate_cpumask();
+return 0;
+}
+"""
+
+            numa = ChkLib( 'numa', '%s' % Tools.gcc.pathname,
+                            'numa', numa_test )
+            numa.run()
+
+            if numa.fail:
+                cfg.errln( 'Failed to find libnuma' )
 
     ## cfg hook before doc prep
     cfg.doc_ready()
