@@ -553,7 +553,7 @@ class HostTupleAction( Action, list ):
 
     def setHost( self, cross ):
         ## check if --cross spec was used; must maintain 5-tuple compatibility with regex
-        if cross:
+        if cross is not None:
             self.spec = os.path.basename( cross ).rstrip( '-' )
         else:
             self.spec = build_tuple.spec
@@ -583,7 +583,7 @@ class HostTupleAction( Action, list ):
             pass
 
         ## when cross we need switch for platforms
-        if cross:
+        if cross is not None:
             if self.match( '*mingw*' ):
                 self.systemf = 'MinGW'
             elif self.systemf:
