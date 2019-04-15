@@ -1657,17 +1657,23 @@ try:
         action.run()
 
     ## Sanitize options
+    # Require FFmpeg AAC on Linux and Windows
     options.enable_ffmpeg_aac = IfHost(options.enable_ffmpeg_aac, '*-*-darwin*',
                                        none=True).value
+    # Allow GTK mingw only on mingw
     options.enable_gtk_mingw  = IfHost(options.enable_gtk_mingw, '*-*-mingw*',
                                        none=False).value
+    # Disable NVENC on unsupported platforms
     options.enable_nvenc      = IfHost(options.enable_nvenc, '*-*-linux*',
                                        '*-*-mingw*', none=False).value
+    # NUMA is linux only and only needed with x265
     options.enable_numa       = (IfHost(options.enable_numa, '*-*-linux*',
                                         none=False).value
                                  and options.enable_x265)
+    # Disable QSV on unsupported platforms
     options.enable_qsv        = IfHost(options.enable_qsv, '*-*-linux*',
                                        '*-*-mingw*', none=False).value
+    # Disable VCE on unsupported platforms
     options.enable_vce        = IfHost(options.enable_vce, '*-*-mingw*',
                                        none=False).value
 
@@ -1943,30 +1949,16 @@ return 0;
 
     doc.addBlank()
     doc.add( 'FEATURE.asm',        'disabled' )
-
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
-
-    # Require FFmpeg AAC on Linux and Windows
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
-
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
     doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
-
-    # Disable GTK mingw on unsupported platforms
     doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))
-
     doc.add( 'FEATURE.gtk.update.checks', int( not options.disable_gtk_update_checks ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
-
-    # Disable NVENC on unsupported platforms
     doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
-
-    # Disable QSV on unsupported platforms
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
-
-    # Disable VCE on unsupported platforms
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
-
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
     doc.add( 'FEATURE.numa',       int( options.enable_numa ))
 
