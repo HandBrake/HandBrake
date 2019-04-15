@@ -38,6 +38,9 @@ endif
 
 ifeq (1,$(FEATURE.x265))
 	GTK.CONFIGURE.extra += --enable-x265
+ifeq (1,$(FEATURE.numa))
+	GTK.CONFIGURE.extra += --enable-numa
+endif
 endif
 
 ifeq (1,$(FEATURE.qsv))

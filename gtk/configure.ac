@@ -73,6 +73,10 @@ AC_ARG_ENABLE(x265,
 	AS_HELP_STRING([--enable-x265], [enable x265 encoder]),
 	use_x265=yes, use_x265=no)
 
+AC_ARG_ENABLE(numa,
+	AS_HELP_STRING([--enable-numa], [enable x265 NUMA support]),
+	use_numa=yes, use_numa=no)
+
 AC_ARG_ENABLE(qsv,
 	AS_HELP_STRING([--enable-qsv], [enable QSV encoder]),
 	use_qsv=yes, use_qsv=no)
@@ -186,7 +190,10 @@ if test "x$use_fdk_aac" = "xyes" ; then
 fi
 
 if test "x$use_x265" = "xyes" ; then
-    HB_LIBS="$HB_LIBS -lx265 -lnuma"
+    HB_LIBS="$HB_LIBS -lx265"
+if test "x$use_numa" = "xyes" ; then
+    HB_LIBS="$HB_LIBS -lnuma"
+fi
 fi
 
 if test "x$use_qsv" = "xyes" ; then
