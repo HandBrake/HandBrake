@@ -697,7 +697,7 @@ class ArchAction( Action ):
             pass
         elif host_tuple.match( '*-*-solaris*' ):
             pass
-        elif host_tuple.match( '*-*-freebsd.*' ):
+        elif host_tuple.match( '*-*-freebsd*' ):
             self.mode['i386']   = 'i386-portsbuild-freebsd%s' % (host_tuple.release)
             self.mode['amd64'] = 'amd64-portsbuild-freebsd%s' % (host_tuple.release)
         else:
