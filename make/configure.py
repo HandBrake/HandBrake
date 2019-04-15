@@ -549,16 +549,12 @@ class HostTupleAction( Action, list ):
     def __init__( self ):
         super( HostTupleAction, self ).__init__( 'compute', 'host tuple', abort=True )
         # Initialize, but allow to be reset by options
-        self.run()
-        self.run_done = False
+        self.setHost(None)
 
-    def _action( self ):
+    def setHost( self, cross ):
         ## check if --cross spec was used; must maintain 5-tuple compatibility with regex
-        try: options
-        except NameError: options = None
-
-        if options != None and options.cross:
-            self.spec = os.path.basename( options.cross ).rstrip( '-' )
+        if cross:
+            self.spec = os.path.basename( cross ).rstrip( '-' )
         else:
             self.spec = build_tuple.spec
 
@@ -587,7 +583,7 @@ class HostTupleAction( Action, list ):
             pass
 
         ## when cross we need switch for platforms
-        if options != None and options.cross:
+        if cross:
             if self.match( '*mingw*' ):
                 self.systemf = 'MinGW'
             elif self.systemf:
@@ -596,8 +592,14 @@ class HostTupleAction( Action, list ):
         self.title = '%s %s' % (self.systemf,self.machine)
         self.fail = False
 
-        self.spec = '%s-%s-%s-%s%s' % (self.machine, self.vendor, self.system,
-                                        self.release, self.extra)
+        self.spec = ('%s-%s-%s%s-%s' % (self.machine, self.vendor, self.system,
+                                        self.release, self.extra)).rstrip('-')
+
+    def _action( self ):
+        try:
+            self.setHost(options.cross)
+        except NameError:
+            self.setHost(None)
 
     ## glob-match against spec
     def match( self, *specs ):
@@ -1631,6 +1633,7 @@ try:
             tool.run()
 
     # create CLI and parse
+    host_tuple.setHost(cross)
     cli = createCLI( cross )
     options, args = cli.parse_known_args()
 
