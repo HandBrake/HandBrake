@@ -95,13 +95,13 @@ class Configure( object ):
         self.build_final  = os.curdir
         self.src_final    = self._final_dir( self.build_dir, self.src_dir )
         self.prefix_final = self._final_dir( self.build_dir, self.prefix_dir )
-        if host.match( '*-*-darwin*' ):
+        if build_tuple.match( '*-*-darwin*' ):
             self.xcode_prefix_final = self._final_dir( self.build_dir, self.xcode_prefix_dir )
 
         self.infof( 'compute: makevar SRC/    = %s\n', self.src_final )
         self.infof( 'compute: makevar BUILD/  = %s\n', self.build_final )
         self.infof( 'compute: makevar PREFIX/ = %s\n', self.prefix_final )
-        if host.match( '*-*-darwin*' ):
+        if build_tuple.match( '*-*-darwin*' ):
             self.infof( 'compute: makevar XCODE.prefix/ = %s\n', self.xcode_prefix_final )
 
     ## perform chdir and enable log recording
@@ -194,7 +194,7 @@ class Configure( object ):
         self.src_dir    = os.path.normpath( options.src )
         self.build_dir  = os.path.normpath( options.build )
         self.prefix_dir = os.path.normpath( options.prefix )
-        if host.match( '*-*-darwin*' ) and options.cross is None:
+        if build_tuple.match( '*-*-darwin*' ) and options.cross is None:
             self.xcode_prefix_dir = os.path.normpath( options.xcode_prefix )
         if options.sysroot != None:
                 self.sysroot_dir = os.path.normpath( options.sysroot )
@@ -491,7 +491,7 @@ class ChkLib( Action ):
 
 ###############################################################################
 ##
-## GNU host tuple probe: determine canonical platform type
+## GNU build tuple probe: determine canonical platform type
 ##
 ## example results from various platforms:
 ##
@@ -502,20 +502,20 @@ class ChkLib( Action ):
 ##   i686-pc-cygwin             (Cygwin, Microsoft Vista)
 ##   x86_64-unknown-linux-gnu   (Linux, Fedora 10 x86_64)
 ##
-class HostTupleProbe( ShellProbe, list ):
+class BuildTupleProbe( ShellProbe, list ):
     GNU_TUPLE_RE = '([^-]+)-?([^-]*)-([^0-9-]+)([^-]*)-?([^-]*)'
 
     def __init__( self ):
-        super( HostTupleProbe, self ).__init__( 'host tuple', '%s/config.guess' % (cfg.dir), abort=True, head=True )
+        super( BuildTupleProbe, self ).__init__( 'build tuple', '%s/config.guess' % (cfg.dir), abort=True, head=True )
 
     def _parseSession( self ):
         self.spec = self.session[0].decode('utf-8') if self.session else ''
 
-        ## grok GNU host tuples
-        m = re.match( HostTupleProbe.GNU_TUPLE_RE, self.spec )
+        ## grok GNU build tuples
+        m = re.match( BuildTupleProbe.GNU_TUPLE_RE, self.spec )
         if not m:
             self.fail = True
-            self.msg_end = 'invalid host tuple: %s' % (self.spec)
+            self.msg_end = 'invalid build tuple: %s' % (self.spec)
             return
 
         self.msg_end = self.spec
@@ -545,21 +545,27 @@ class HostTupleProbe( ShellProbe, list ):
 
 ###############################################################################
 
-class BuildAction( Action, list ):
+class HostTupleAction( Action, list ):
     def __init__( self ):
-        super( BuildAction, self ).__init__( 'compute', 'build tuple', abort=True )
+        super( HostTupleAction, self ).__init__( 'compute', 'host tuple', abort=True )
+        # Initialize, but allow to be reset by options
+        self.run()
+        self.run_done = False
 
     def _action( self ):
         ## check if --cross spec was used; must maintain 5-tuple compatibility with regex
-        if options.cross:
+        try: options
+        except NameError: options = None
+
+        if options != None and options.cross:
             self.spec = os.path.basename( options.cross ).rstrip( '-' )
         else:
-            self.spec = arch.mode[arch.mode.mode]
+            self.spec = build_tuple.spec
 
-        ## grok GNU host tuples
-        m = re.match( HostTupleProbe.GNU_TUPLE_RE, self.spec )
+        ## grok GNU build tuples
+        m = re.match( BuildTupleProbe.GNU_TUPLE_RE, self.spec )
         if not m:
-            self.msg_end = 'invalid host tuple: %s' % (self.spec)
+            self.msg_end = 'invalid build tuple: %s' % (self.spec)
             return
 
         self.msg_end = self.spec
@@ -573,18 +579,25 @@ class BuildAction( Action, list ):
         self.system  = self[2]
         self.release = self[3]
         self.extra   = self[4]
-        self.systemf = host.systemf
+        self.systemf = build_tuple.systemf
+
+        try:
+            self.machine = arch.mode.mode
+        except NameError:
+            pass
 
         ## when cross we need switch for platforms
-        if options.cross:
+        if options != None and options.cross:
             if self.match( '*mingw*' ):
                 self.systemf = 'MinGW'
             elif self.systemf:
                 self.systemf = self.systemf.capitalize()
-            self.title = '%s %s' % (build.systemf,self.machine)
-        else:
-            self.title = '%s %s' % (build.systemf,arch.mode.mode)
+
+        self.title = '%s %s' % (self.systemf,self.machine)
         self.fail = False
+
+        self.spec = '%s-%s-%s-%s%s' % (self.machine, self.vendor, self.system,
+                                        self.release, self.extra)
 
     ## glob-match against spec
     def match( self, *specs ):
@@ -604,7 +617,21 @@ class IfHost( object ):
     def __init__( self, value, *specs, **kwargs ):
         self.value = kwargs.get('none',None)
         for spec in specs:
-            if host.match( spec ):
+            if host_tuple.match( spec ):
+                self.value = value
+                break
+
+    def __nonzero__( self ):
+        return self.value != None
+
+    def __str__( self ):
+        return self.value
+
+class IfBuild( object ):
+    def __init__( self, value, *specs, **kwargs ):
+        self.value = kwargs.get('none',None)
+        for spec in specs:
+            if build_tuple.match( spec ):
                 self.value = value
                 break
 
@@ -624,7 +651,7 @@ class ForHost( object ):
     def __init__( self, default, *tuples ):
         self.value = default
         for tuple in tuples:
-            if host.match( tuple[1] ):
+            if host_tuple.match( tuple[1] ):
                 self.value = tuple[0]
                 break
 
@@ -636,22 +663,22 @@ class ForHost( object ):
 class ArchAction( Action ):
     def __init__( self ):
         super( ArchAction, self ).__init__( 'compute', 'available architectures', abort=True )
-        self.mode = SelectMode( 'architecture', (host.machine,host.spec) )
+        self.mode = SelectMode( 'architecture', (host_tuple.machine,host_tuple.spec) )
 
     def _action( self ):
         self.fail = False
 
         ## some match on system should be made here; otherwise we signal a warning.
-        if host.match( '*-*-cygwin*' ):
+        if host_tuple.match( '*-*-cygwin*' ):
             pass
-        elif host.match( '*-*-darwin11.*' ):
-            self.mode['i386']   = 'i386-apple-darwin%s'      % (host.release)
-            self.mode['x86_64'] = 'x86_64-apple-darwin%s'    % (host.release)
-        elif host.match( '*-*-darwin*' ):
-            self.mode['i386']   = 'i386-apple-darwin%s'      % (host.release)
-            self.mode['x86_64'] = 'x86_64-apple-darwin%s'    % (host.release)
-            self.mode['ppc']    = 'powerpc-apple-darwin%s'   % (host.release)
-            self.mode['ppc64']  = 'powerpc64-apple-darwin%s' % (host.release)
+        elif host_tuple.match( '*-*-darwin11.*' ):
+            self.mode['i386']   = 'i386-apple-darwin%s'      % (host_tuple.release)
+            self.mode['x86_64'] = 'x86_64-apple-darwin%s'    % (host_tuple.release)
+        elif host_tuple.match( '*-*-darwin*' ):
+            self.mode['i386']   = 'i386-apple-darwin%s'      % (host_tuple.release)
+            self.mode['x86_64'] = 'x86_64-apple-darwin%s'    % (host_tuple.release)
+            self.mode['ppc']    = 'powerpc-apple-darwin%s'   % (host_tuple.release)
+            self.mode['ppc64']  = 'powerpc64-apple-darwin%s' % (host_tuple.release)
 
             ## special cases in that powerpc does not match gcc -arch value
             ## which we like to use; so it has to be removed.
@@ -662,13 +689,13 @@ class ArchAction( Action ):
             elif 'powerpc64' in self.mode:
                 del self.mode['powerpc64']
                 self.mode.mode = 'ppc64'
-        elif host.match( '*-*-linux*' ):
+        elif host_tuple.match( '*-*-linux*' ):
             pass
-        elif host.match( '*-*-solaris*' ):
+        elif host_tuple.match( '*-*-solaris*' ):
             pass
-        elif host.match( '*-*-freebsd.*' ):
-            self.mode['i386']   = 'i386-portsbuild-freebsd%s' % (host.release)
-            self.mode['amd64'] = 'amd64-portsbuild-freebsd%s' % (host.release)
+        elif host_tuple.match( '*-*-freebsd.*' ):
+            self.mode['i386']   = 'i386-portsbuild-freebsd%s' % (host_tuple.release)
+            self.mode['amd64'] = 'amd64-portsbuild-freebsd%s' % (host_tuple.release)
         else:
             self.msg_pass = 'WARNING'
 
@@ -920,7 +947,7 @@ class Project( Action ):
 
     def _action( self ):
         ## add architecture to URL only for Mac
-        if fnmatch.fnmatch( build.spec, '*-*-darwin*' ):
+        if fnmatch.fnmatch( host_tuple.spec, '*-*-darwin*' ):
             url_arch = '.%s' % (arch.mode.mode)
         else:
             url_arch = ''
@@ -1288,7 +1315,7 @@ def createCLI( cross = None ):
 
     ## add install options
     grp = cli.add_argument_group( 'Directory Locations' )
-    h = 'specify sysroot of SDK for Xcode builds' if (host.match('*-*-darwin*') and cross is None) else argparse.SUPPRESS
+    h = 'specify sysroot of SDK for Xcode builds' if (build_tuple.match('*-*-darwin*') and cross is None) else argparse.SUPPRESS
     grp.add_argument( '--sysroot', default=None, action='store', metavar='DIR',
         help=h )
     grp.add_argument( '--src', default=cfg.src_dir, action='store', metavar='DIR',
@@ -1329,20 +1356,20 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-fdk-aac', dest="enable_fdk_aac", default=False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-fdk-aac', dest="enable_fdk_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = 'FFmpeg AAC audio encoder' if (cross is None and host.match( '*-*-darwin*' )) else argparse.SUPPRESS
-    grp.add_argument( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=(cross is not None and 'mingw' in cross) or not host.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    h = 'FFmpeg AAC audio encoder' if (host_tuple.match( '*-*-darwin*' )) else argparse.SUPPRESS
+    grp.add_argument( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host_tuple.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = 'Nvidia NVENC video encoder' if (host.match('*-*-linux') or (cross is not None and 'mingw' in cross)) else argparse.SUPPRESS
-    grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=True if (cross is not None and 'mingw' in cross) else False, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    h = IfHost( 'Nvidia NVENC video encoder', '*-*-linux', '*-*-mingw*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=IfHost( True, '*-*-linux', '*-*-mingw*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = 'Intel QSV video encoder/decoder' if (host.match('*-*-linux') or (cross is not None and 'mingw' in cross)) else argparse.SUPPRESS
-    grp.add_argument( '--enable-qsv', dest="enable_qsv", default=(cross is not None and 'mingw' in cross), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    h = IfHost( 'Intel QSV video encoder/decoder', '*-*-linux', '*-*-mingw*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--enable-qsv', dest="enable_qsv", default=IfHost(True, "*-*-mingw*", none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = 'AMD VCE video encoder' if (cross is not None and 'mingw' in cross) else argparse.SUPPRESS
-    grp.add_argument( '--enable-vce', dest="enable_vce", default=(cross is not None and 'mingw' in cross), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    h = IfHost( 'AMD VCE video encoder', '*-*-mingw*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--enable-vce', dest="enable_vce", default=IfHost(True, '*-*-mingw*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
 
@@ -1370,7 +1397,7 @@ def createCLI( cross = None ):
     cli.add_argument_group( grp )
 
     ## add Xcode options
-    if (host.match('*-*-darwin*') and cross is None):
+    if (build_tuple.match('*-*-darwin*') and cross is None):
         grp = cli.add_argument_group( 'Xcode Options' )
         grp.add_argument( '--disable-xcode', default=False, action='store_true',
             help='disable Xcode' )
@@ -1511,15 +1538,15 @@ try:
     ## if any actions must be run earlier (eg: for configure --help purposes)
     ## then run() must be invoked earlier. subequent run() invocations
     ## are ignored.
-    cfg   = Configure( verbose )
-    host  = HostTupleProbe(); host.run()
+    cfg         = Configure( verbose )
+    build_tuple = BuildTupleProbe(); build_tuple.run()
 
     cfg.prefix_dir = '/usr/local'
-    if host.match( '*-*-darwin*' ):
+    if build_tuple.match( '*-*-darwin*' ):
         cfg.xcode_prefix_dir = '/Applications'
 
-    build = BuildAction()
-    arch  = ArchAction(); arch.run()
+    host_tuple = HostTupleAction()
+    arch       = ArchAction(); arch.run()
 
     ## create remaining main objects
     core    = CoreProbe()
@@ -1537,7 +1564,7 @@ try:
                      IfHost( 'gcc-4', '*-*-cygwin*' )]
         gcc   = ToolProbe(*filter(None, gcc_tools))
 
-        if host.match( '*-*-darwin*' ):
+        if build_tuple.match( '*-*-darwin*' ):
             gmake = ToolProbe( 'GMAKE.exe', 'make', 'gmake', abort=True )
         else:
             gmake = ToolProbe( 'GMAKE.exe', 'gmake', 'make', abort=True )
@@ -1569,7 +1596,7 @@ try:
 
     ## find xcconfig values
     xcconfigMode = SelectMode( 'xcconfig', ('none',None), what='' )
-    if host.match( '*-*-darwin*' ):
+    if build_tuple.match( '*-*-darwin*' ):
         for xc in glob.glob( os.path.join(cfg.dir, '../macosx/xcconfig/*.xcconfig') ):
             bname = os.path.basename( xc )
             xname = os.path.splitext( bname )
@@ -1626,13 +1653,13 @@ try:
         action.run()
 
     ## fail on missing or old nasm where needed
-    if host.match( '*-*-darwin*' ) or options.cross:
+    if build_tuple.match( '*-*-darwin*' ) or options.cross:
         if Tools.nasm.fail:
             raise AbortError( 'error: nasm missing\n' )
         elif Tools.nasm.version.inadequate():
             raise AbortError( 'error: minimum required nasm version is %s and %s is %s\n' % ('.'.join([str(i) for i in Tools.nasm.version.minversion]),Tools.nasm.pathname,Tools.nasm.version.svers) )
 
-    if build.system == 'mingw':
+    if host_tuple.system == 'mingw':
         dlfcn_test = """
 #include <dlfcn.h>
 #include <stdio.h>
@@ -1785,7 +1812,7 @@ int main()
     strerror_r = LDProbe( 'strerror_r', '%s' % Tools.gcc.pathname, '', strerror_r_test )
     strerror_r.run()
 
-    if build.system == 'linux':
+    if host_tuple.system == 'linux':
         if options.enable_numa:
             numa_test = """
 #include <numa.h>
@@ -1856,25 +1883,25 @@ return 0;
     doc.add( 'HB.repo.date',      repo.date.strftime("%Y-%m-%d %H:%M:%S") )
 
     doc.addBlank()
-    doc.add( 'HOST.spec',    host.spec )
-    doc.add( 'HOST.machine', host.machine )
-    doc.add( 'HOST.vendor',  host.vendor )
-    doc.add( 'HOST.system',  host.system )
-    doc.add( 'HOST.systemf', host.systemf )
-    doc.add( 'HOST.release', host.release )
-    doc.add( 'HOST.extra',   host.extra )
-    doc.add( 'HOST.title',   '%s %s' % (host.systemf,arch.mode.default) )
+    doc.add( 'HOST.spec',    build_tuple.spec )
+    doc.add( 'HOST.machine', build_tuple.machine )
+    doc.add( 'HOST.vendor',  build_tuple.vendor )
+    doc.add( 'HOST.system',  build_tuple.system )
+    doc.add( 'HOST.systemf', build_tuple.systemf )
+    doc.add( 'HOST.release', build_tuple.release )
+    doc.add( 'HOST.extra',   build_tuple.extra )
+    doc.add( 'HOST.title',   '%s %s' % (build_tuple.systemf,arch.mode.default) )
     doc.add( 'HOST.ncpu',    core.count )
 
     doc.addBlank()
-    doc.add( 'BUILD.spec',    build.spec )
-    doc.add( 'BUILD.machine', build.machine )
-    doc.add( 'BUILD.vendor',  build.vendor )
-    doc.add( 'BUILD.system',  build.system )
-    doc.add( 'BUILD.systemf', build.systemf )
-    doc.add( 'BUILD.release', build.release )
-    doc.add( 'BUILD.extra',   build.extra )
-    doc.add( 'BUILD.title',   build.title )
+    doc.add( 'BUILD.spec',    host_tuple.spec )
+    doc.add( 'BUILD.machine', host_tuple.machine )
+    doc.add( 'BUILD.vendor',  host_tuple.vendor )
+    doc.add( 'BUILD.system',  host_tuple.system )
+    doc.add( 'BUILD.systemf', host_tuple.systemf )
+    doc.add( 'BUILD.release', host_tuple.release )
+    doc.add( 'BUILD.extra',   host_tuple.extra )
+    doc.add( 'BUILD.title',   host_tuple.title )
     doc.add( 'BUILD.ncpu',    core.count )
     doc.add( 'BUILD.jobs',    core.jobs )
 
@@ -1901,35 +1928,35 @@ return 0;
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
 
     # Require FFmpeg AAC on Linux and Windows
-    options.enable_ffmpeg_aac = True if build.system != 'darwin' else options.enable_ffmpeg_aac
+    options.enable_ffmpeg_aac = True if host_tuple.system != 'darwin' else options.enable_ffmpeg_aac
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
 
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
     doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
 
     # Disable GTK mingw on unsupported platforms
-    options.enable_gtk_mingw = False if not build.system == 'mingw' else options.enable_gtk_mingw
+    options.enable_gtk_mingw = False if not host_tuple.system == 'mingw' else options.enable_gtk_mingw
     doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))
 
     doc.add( 'FEATURE.gtk.update.checks', int( not options.disable_gtk_update_checks ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
 
     # Disable NVENC on unsupported platforms
-    options.enable_nvenc = False if not (build.system == 'linux' or build.system == 'mingw') else options.enable_nvenc
+    options.enable_nvenc = False if not (host_tuple.system == 'linux' or host_tuple.system == 'mingw') else options.enable_nvenc
     doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
 
     # Disable QSV on unsupported platforms
-    options.enable_qsv = False if not (build.system == 'linux' or build.system == 'mingw') else options.enable_qsv
+    options.enable_qsv = False if not (host_tuple.system == 'linux' or host_tuple.system == 'mingw') else options.enable_qsv
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
 
     # Disable VCE on unsupported platforms
-    options.enable_vce = False if not build.system == 'mingw' else options.enable_vce
+    options.enable_vce = False if not host_tuple.system == 'mingw' else options.enable_vce
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
 
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
     doc.add( 'FEATURE.numa',       int( options.enable_x265 and options.enable_numa ))
 
-    if host.match( '*-*-darwin*' ) and options.cross is None:
+    if build_tuple.match( '*-*-darwin*' ) and options.cross is None:
         doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
         if not Tools.xcodebuild.fail and not options.disable_xcode:
             doc.addBlank()
@@ -1942,7 +1969,7 @@ return 0;
                 doc.add( 'XCODE.symroot', os.path.abspath(os.path.join(cfg.build_dir,options.xcode_symroot)) )
             doc.add( 'XCODE.xcconfig', xcconfigMode[xcconfigMode.mode] )
 
-    if build.system == 'mingw':
+    if host_tuple.system == 'mingw':
         doc.addBlank()
         if not dlfcn.fail:
             doc.add( 'HAS.dlfcn', 1 )
@@ -1963,7 +1990,7 @@ return 0;
 
     else:
         doc.addBlank()
-        if build.system == 'freebsd':
+        if host_tuple.system == 'freebsd':
             doc.add( 'HAS.pthread', 1 )
         if not strerror_r.fail:
             doc.add( 'HAS.strerror_r', 1 )
@@ -1983,26 +2010,26 @@ return 0;
 
     doc.addBlank()
     doc.add( 'GCC.archs', arch.mode.mode )
-    if build.match( '*-*-darwin*' ):
+    if host_tuple.match( '*-*-darwin*' ):
         doc.add( 'GCC.sysroot', cfg.sysroot_dir )
         doc.add( 'GCC.minver', cfg.minver )
     else:
         doc.add( 'GCC.sysroot', '' )
         doc.add( 'GCC.minver', '' )
 
-    if build.match( 'i?86-*' ):
+    if host_tuple.match( 'i?86-*' ):
         doc.add( 'LIBHB.GCC.D', 'ARCH_X86_32', append=True )
-    elif build.match( 'x86_64-*' ):
+    elif host_tuple.match( 'x86_64-*' ):
         doc.add( 'LIBHB.GCC.D', 'ARCH_X86_64', append=True )
-    elif build.match( 'amd64-*' ):
+    elif host_tuple.match( 'amd64-*' ):
         doc.add( 'LIBHB.GCC.D', 'ARCH_X86_64', append=True )
 
     if options.enable_asm and ( not Tools.nasm.fail ):
         asm = ''
-        if build.match( 'i?86-*' ):
+        if host_tuple.match( 'i?86-*' ):
             asm = 'x86'
             doc.add( 'LIBHB.GCC.D', 'HAVE_MMX', append=True )
-        elif build.match( 'x86_64-*' ) or build.match( 'amd64-*' ):
+        elif host_tuple.match( 'x86_64-*' ) or host_tuple.match( 'amd64-*' ):
             asm = 'x86'
             doc.add( 'LIBHB.GCC.D', 'HAVE_MMX ARCH_X86_64', append=True )
         doc.update( 'FEATURE.asm', asm )
@@ -2037,18 +2064,19 @@ return 0;
     note_unsupported = 'not supported on target platform'
 
     stdout.write( '%s\n' % ('-' * 79) )
-    stdout.write( 'Build system:       %s\n' % '-'.join(host).rstrip('-') )
-    stdout.write( 'Target platform:    %s' % build.system )
+    stdout.write( 'Build system:       %s\n' % build_tuple.spec.rstrip('-') )
+    stdout.write( 'Host system:        %s\n' % host_tuple.spec.rstrip('-') )
+    stdout.write( 'Target platform:    %s' % host_tuple.system )
     stdout.write( ' (cross-compile)\n' ) if options.cross else stdout.write( '\n' )
     stdout.write( 'Enable FDK-AAC:     %s\n' % options.enable_fdk_aac )
     stdout.write( 'Enable FFmpeg AAC:  %s' % options.enable_ffmpeg_aac )
-    stdout.write( '  (%s)\n' % note_required ) if build.system != 'darwin' else stdout.write( '\n' )
+    stdout.write( '  (%s)\n' % note_required ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
     stdout.write( 'Enable NVENC:       %s' % options.enable_nvenc )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not (build.system == 'linux' or build.system == 'mingw') else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.system == 'mingw') else stdout.write( '\n' )
     stdout.write( 'Enable QSV:         %s' % options.enable_qsv )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not (build.system == 'linux' or build.system == 'mingw') else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.system == 'mingw') else stdout.write( '\n' )
     stdout.write( 'Enable VCE:         %s' % options.enable_vce )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not build.system == 'mingw' else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.system == 'mingw' else stdout.write( '\n' )
 
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )
