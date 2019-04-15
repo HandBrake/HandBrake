@@ -1352,7 +1352,7 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-x265', dest="enable_x265", default=True, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-x265', dest="enable_x265", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'x265 NUMA support', '*-*-linux', none=argparse.SUPPRESS ).value
+    h = IfHost( 'x265 NUMA support', '*-*-linux*', none=argparse.SUPPRESS ).value
     grp.add_argument( '--enable-numa', dest="enable_numa", default=IfHost(True, '*-*-linux*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-numa', dest="enable_numa", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
@@ -1364,11 +1364,11 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-ffmpeg-aac', dest="enable_ffmpeg_aac", default=not host_tuple.match( '*-*-darwin*' ), action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-ffmpeg-aac', dest="enable_ffmpeg_aac", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'Nvidia NVENC video encoder', '*-*-linux', '*-*-mingw*', none=argparse.SUPPRESS).value
-    grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=IfHost( True, '*-*-linux', '*-*-mingw*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
+    h = IfHost( 'Nvidia NVENC video encoder', '*-*-linux*', '*-*-mingw*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--enable-nvenc', dest="enable_nvenc", default=IfHost( True, '*-*-linux*', '*-*-mingw*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-nvenc', dest="enable_nvenc", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'Intel QSV video encoder/decoder', '*-*-linux', '*-*-mingw*', none=argparse.SUPPRESS).value
+    h = IfHost( 'Intel QSV video encoder/decoder', '*-*-linux*', '*-*-mingw*', none=argparse.SUPPRESS).value
     grp.add_argument( '--enable-qsv', dest="enable_qsv", default=IfHost(True, "*-*-mingw*", none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
@@ -1656,6 +1656,21 @@ try:
     for action in Action.actions:
         action.run()
 
+    ## Sanitize options
+    options.enable_ffmpeg_aac = IfHost(options.enable_ffmpeg_aac, '*-*-darwin*',
+                                       none=True).value
+    options.enable_gtk_mingw  = IfHost(options.enable_gtk_mingw, '*-*-mingw*',
+                                       none=False).value
+    options.enable_nvenc      = IfHost(options.enable_nvenc, '*-*-linux*',
+                                       '*-*-mingw*', none=False).value
+    options.enable_numa       = (IfHost(options.enable_numa, '*-*-linux*',
+                                        none=False).value
+                                 and options.enable_x265)
+    options.enable_qsv        = IfHost(options.enable_qsv, '*-*-linux*',
+                                       '*-*-mingw*', none=False).value
+    options.enable_vce        = IfHost(options.enable_vce, '*-*-mingw*',
+                                       none=False).value
+
     ## fail on missing or old nasm where needed
     if build_tuple.match( '*-*-darwin*' ) or options.cross:
         if Tools.nasm.fail:
@@ -1932,33 +1947,27 @@ return 0;
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
 
     # Require FFmpeg AAC on Linux and Windows
-    options.enable_ffmpeg_aac = True if host_tuple.system != 'darwin' else options.enable_ffmpeg_aac
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
 
     doc.add( 'FEATURE.flatpak',    int( options.flatpak ))
     doc.add( 'FEATURE.gtk',        int( not options.disable_gtk ))
 
     # Disable GTK mingw on unsupported platforms
-    options.enable_gtk_mingw = False if not host_tuple.system == 'mingw' else options.enable_gtk_mingw
     doc.add( 'FEATURE.gtk.mingw',  int( options.enable_gtk_mingw ))
 
     doc.add( 'FEATURE.gtk.update.checks', int( not options.disable_gtk_update_checks ))
     doc.add( 'FEATURE.gst',        int( not options.disable_gst ))
 
     # Disable NVENC on unsupported platforms
-    options.enable_nvenc = False if not (host_tuple.system == 'linux' or host_tuple.system == 'mingw') else options.enable_nvenc
     doc.add( 'FEATURE.nvenc',      int( options.enable_nvenc ))
 
     # Disable QSV on unsupported platforms
-    options.enable_qsv = False if not (host_tuple.system == 'linux' or host_tuple.system == 'mingw') else options.enable_qsv
     doc.add( 'FEATURE.qsv',        int( options.enable_qsv ))
 
     # Disable VCE on unsupported platforms
-    options.enable_vce = False if not host_tuple.system == 'mingw' else options.enable_vce
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
 
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
-    options.enable_numa = options.enable_x265 and IfHost(options.enable_numa, '*-*-linux*', none=False).value
     doc.add( 'FEATURE.numa',       int( options.enable_numa ))
 
     if build_tuple.match( '*-*-darwin*' ) and options.cross is None:
