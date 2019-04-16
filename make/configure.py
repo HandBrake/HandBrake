@@ -1677,13 +1677,19 @@ try:
     options.enable_vce        = IfHost(options.enable_vce, '*-*-mingw*',
                                        none=False).value
 
-    ## fail on missing or old nasm where needed
+    #########################################
+    ## OSX specific library and tool checks
+    #########################################
     if build_tuple.match( '*-*-darwin*' ) or options.cross:
+        ## fail on missing or old nasm where needed
         if Tools.nasm.fail:
             raise AbortError( 'error: nasm missing\n' )
         elif Tools.nasm.version.inadequate():
             raise AbortError( 'error: minimum required nasm version is %s and %s is %s\n' % ('.'.join([str(i) for i in Tools.nasm.version.minversion]),Tools.nasm.pathname,Tools.nasm.version.svers) )
 
+    #########################################
+    ## MinGW specific library and tool checks
+    #########################################
     if host_tuple.system == 'mingw':
         dlfcn_test = """
 #include <dlfcn.h>
@@ -1820,23 +1826,9 @@ int main ()
         strtok_r = LDProbe( 'static strtok_r', '%s -static' % Tools.gcc.pathname, '', strtok_r_test )
         strtok_r.run()
 
-    strerror_r_test = """
-#include <string.h>
-
-int main()
-{
-    /* some implementations fail if buf is less than 80 characters
-       so size it appropriately */
-    char errstr[128];
-    /* some implementations fail if err == 0 */
-    strerror_r(1, errstr, 127);
-    return 0;
-}
-"""
-
-    strerror_r = LDProbe( 'strerror_r', '%s' % Tools.gcc.pathname, '', strerror_r_test )
-    strerror_r.run()
-
+    #########################################
+    ## Linux specific library and tool checks
+    #########################################
     if host_tuple.system == 'linux':
         if options.enable_numa:
             numa_test = """
@@ -1853,6 +1845,25 @@ return 0;
                            'numa', numa_test, abort=True )
             numa.run()
 
+    #########################################
+    ## Common library and tool checks
+    #########################################
+    strerror_r_test = """
+#include <string.h>
+
+int main()
+{
+    /* some implementations fail if buf is less than 80 characters
+       so size it appropriately */
+    char errstr[128];
+    /* some implementations fail if err == 0 */
+    strerror_r(1, errstr, 127);
+    return 0;
+}
+"""
+
+    strerror_r = LDProbe( 'strerror_r', '%s' % Tools.gcc.pathname, '', strerror_r_test )
+    strerror_r.run()
 
     ## cfg hook before doc prep
     cfg.doc_ready()
