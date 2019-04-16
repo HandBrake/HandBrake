@@ -1886,6 +1886,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.selectedPreset.Update(new EncodeTask(this.CurrentTask), new AudioBehaviours(this.AudioViewModel.AudioBehaviours), new SubtitleBehaviours(this.SubtitleViewModel.SubtitleBehaviours));
                 this.presetService.Update(this.selectedPreset);
+                this.IsModifiedPreset = false;
 
                 this.errorService.ShowMessageBox(
                         Resources.Main_PresetUpdated, Resources.Updated, MessageBoxButton.OK, MessageBoxImage.Information);
