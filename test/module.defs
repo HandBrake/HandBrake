@@ -19,14 +19,14 @@ TEST.GCC.l = \
         samplerate swscale vpx theoraenc theoradec vorbis vorbisenc ogg x264 \
         bluray freetype xml2 bz2 z jansson harfbuzz opus speex lzma
 
-ifeq (,$(filter $(BUILD.system),darwin cygwin mingw))
+ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
     TEST.GCC.l += fontconfig
 endif
 
 ifeq (1,$(FEATURE.qsv))
     TEST.GCC.D += USE_QSV HAVE_THREADS=1
     TEST.GCC.l += mfx
-ifeq ($(BUILD.system),linux)
+ifeq ($(HOST.system),linux)
     TEST.GCC.l += va va-drm
 endif
 endif
@@ -74,26 +74,26 @@ endif
 
 TEST.GCC.I += $(LIBHB.GCC.I)
 
-ifeq ($(BUILD.system),darwin)
+ifeq ($(HOST.system),darwin)
     TEST.GCC.f += IOKit CoreServices CoreText CoreGraphics AudioToolbox VideoToolbox CoreMedia CoreVideo Foundation
     TEST.GCC.l += iconv
-else ifeq ($(BUILD.system),linux)
+else ifeq ($(HOST.system),linux)
     TEST.GCC.l += pthread dl m
 ifeq (1, $(FEATURE.numa))
     TEST.GCC.l += numa
 endif
-else ifeq ($(BUILD.system),kfreebsd)
+else ifeq ($(HOST.system),kfreebsd)
     TEST.GCC.l += pthread dl m
-else ifeq ($(BUILD.system),freebsd)
+else ifeq ($(HOST.system),freebsd)
     TEST.GCC.L += $(LOCALBASE)/lib
     TEST.GCC.l += pthread m
-else ifeq ($(BUILD.system),solaris)
+else ifeq ($(HOST.system),solaris)
     TEST.GCC.l += pthread nsl socket
-ifneq (,$(filter $(BUILD.release),2.10))
+ifneq (,$(filter $(HOST.release),2.10))
     TEST.GCC.l += iconv
 endif
     TEST.GCC.D += _POSIX_C_SOURCE=200112L __EXTENSIONS__
-else ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+else ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
 ifeq ($(HAS.dlfcn),1)
     TEST.GCC.l += dl
 endif
@@ -105,4 +105,4 @@ endif
     TEST.GCC.l += bcrypt iconv ws2_32 regex uuid ole32
     TEST.GCC.D += PTW32_STATIC_LIB
     TEST.GCC.args.extra.exe++ += -static
-endif #   (1-mingw,$(BUILD.cross)-$(BUILD.system))
+endif #   (1-mingw,$(HOST.cross)-$(HOST.system))

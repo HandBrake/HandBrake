@@ -25,7 +25,7 @@ endif
 
 ###############################################################################
 
-PKG.cli.tar = $(PKG.out.abs/)$(HB.name)-$(HB.version)-$(BUILD.machine)_CLI.tar.gz
+PKG.cli.tar = $(PKG.out.abs/)$(HB.name)-$(HB.version)-$(HOST.machine)_CLI.tar.gz
 
 STAGE.out.cli/ = $(STAGE.out.abs/)cli/
 
@@ -36,8 +36,8 @@ PKG.rpm.src.tar.bz2 = $(STAGE.out.src.abs/)rpm/$(PKG.rpm.basename).tar.bz2
 STAGE.out.rpm.src/ = $(STAGE.out.src.abs/)rpm/
 
 PKG.debian  = $(PKG.in.abs/)linux/debian
-PKG.cli.deb = $(PKG.out.abs/)$(HB.name)-$(HB.debversion)-Ubuntu_CLI_$(BUILD.machine).deb
-PKG.gui.deb = $(PKG.out.abs/)$(HB.name)-$(HB.debversion)-Ubuntu_GUI_$(BUILD.machine).deb
+PKG.cli.deb = $(PKG.out.abs/)$(HB.name)-$(HB.debversion)-Ubuntu_CLI_$(HOST.machine).deb
+PKG.gui.deb = $(PKG.out.abs/)$(HB.name)-$(HB.debversion)-Ubuntu_GUI_$(HOST.machine).deb
 PKG.deb.basename = $(HB.name.lower)-$(HB.debversion)
 PKG.src.deb.tar = $(HB.name.lower)_$(HB.debversion).tar.gz
 PKG.src.deb.stamp = $(STAGE.out.src.abs/).debsrc.stamp
@@ -89,22 +89,22 @@ PKG.gui.name.flatpak = fr.handbrake.ghb
 PKG.gui.manifest.flathub = $(PKG.out.flatpak/)$(PKG.gui.name.flatpak).json
 PKG.gui.template.flatpak = $(PKG.flatpak/)$(PKG.gui.name.flatpak).json
 PKG.gui.manifest.flatpak = $(STAGE.out.flatpak/)$(PKG.gui.name.flatpak).json
-PKG.gui.build.flatpak = $(STAGE.out.flatpak/)$(PKG.gui.name.flatpak)-$(HB.version)-$(BUILD.machine).build
-PKG.gui.flatpak = $(PKG.out.flatpak/)$(PKG.gui.name.flatpak)-$(HB.version)-$(BUILD.machine).flatpak
+PKG.gui.build.flatpak = $(STAGE.out.flatpak/)$(PKG.gui.name.flatpak)-$(HB.version)-$(HOST.machine).build
+PKG.gui.flatpak = $(PKG.out.flatpak/)$(PKG.gui.name.flatpak)-$(HB.version)-$(HOST.machine).flatpak
 
 PKG.cli.name.flatpak = fr.handbrake.HandBrakeCLI
 PKG.cli.manifest.flathub = $(PKG.out.flatpak/)$(PKG.cli.name.flatpak).json
 PKG.cli.template.flatpak = $(PKG.flatpak/)$(PKG.cli.name.flatpak).json
 PKG.cli.manifest.flatpak = $(STAGE.out.flatpak/)$(PKG.cli.name.flatpak).json
-PKG.cli.build.flatpak = $(STAGE.out.flatpak/)$(PKG.cli.name.flatpak)-$(HB.version)-$(BUILD.machine).build
-PKG.cli.flatpak = $(PKG.out.flatpak/)$(PKG.cli.name.flatpak)-$(HB.version)-$(BUILD.machine).flatpak
+PKG.cli.build.flatpak = $(STAGE.out.flatpak/)$(PKG.cli.name.flatpak)-$(HB.version)-$(HOST.machine).build
+PKG.cli.flatpak = $(PKG.out.flatpak/)$(PKG.cli.name.flatpak)-$(HB.version)-$(HOST.machine).flatpak
 
 PKG.mediasdk.name.flatpak = fr.handbrake.plugin.IntelMediaSDK
 PKG.mediasdk.manifest.flathub = $(PKG.out.flatpak/)$(PKG.mediasdk.name.flatpak).json
 PKG.mediasdk.template.flatpak = $(PKG.flatpak/)$(PKG.mediasdk.name.flatpak).json
 PKG.mediasdk.manifest.flatpak = $(STAGE.out.flatpak/)$(PKG.mediasdk.name.flatpak).json
-PKG.mediasdk.build.flatpak = $(STAGE.out.flatpak/)$(PKG.mediasdk.name.flatpak)-$(HB.version)-$(BUILD.machine).build
-PKG.mediasdk.flatpak = $(PKG.out.flatpak/)$(PKG.mediasdk.name.flatpak)-$(HB.version)-$(BUILD.machine).flatpak
+PKG.mediasdk.build.flatpak = $(STAGE.out.flatpak/)$(PKG.mediasdk.name.flatpak)-$(HB.version)-$(HOST.machine).build
+PKG.mediasdk.flatpak = $(PKG.out.flatpak/)$(PKG.mediasdk.name.flatpak)-$(HB.version)-$(HOST.machine).flatpak
 
 PKG.all.flatpak = $(PKG.gui.flatpak) $(PKG.cli.flatpak)
 ifeq (1,$(FEATURE.qsv))

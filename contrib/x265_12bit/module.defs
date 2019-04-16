@@ -29,8 +29,8 @@ else
     X265_12.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
 endif
 
-ifeq (1,$(BUILD.cross))
-    ifeq (mingw,$(BUILD.system))
+ifeq (1,$(HOST.cross))
+    ifeq (mingw,$(HOST.system))
         X265_12.CONFIGURE.extra += -DWIN32=ON
         X265_12.CONFIGURE.extra += -DCMAKE_SYSTEM_NAME=Windows
         X265_12.CONFIGURE.extra += -DCMAKE_C_COMPILER=$(X265_12.GCC.gcc)
@@ -39,7 +39,7 @@ ifeq (1,$(BUILD.cross))
         X265_12.CONFIGURE.extra += -DCMAKE_CXX_COMPILER=$(X265_12.GCC.gxx)
         X265_12.CONFIGURE.extra += -DCMAKE_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
         X265_12.CONFIGURE.extra += -DCMAKE_SHARED_LIBRARY_LINK_CXX_FLAGS="-static-libgcc -static-libstdc++ -static"
-        X265_12.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(BUILD.cross.prefix)windres
+        X265_12.CONFIGURE.extra += -DCMAKE_RC_COMPILER=$(HOST.cross.prefix)windres
     endif
     X265_12.CONFIGURE.args.host  = -DCMAKE_SYSTEM_NAME="$(X265_12.CONFIGURE.host)"
     X265_12.CONFIGURE.args.build = -DCMAKE_HOST_SYSTEM="$(X265_12.CONFIGURE.build)"

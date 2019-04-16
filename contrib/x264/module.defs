@@ -12,9 +12,9 @@ X264.CONFIGURE.shared =
 
 X264.CONFIGURE.extra += --disable-lavf --disable-ffms --disable-avs --disable-swscale --disable-gpac --disable-lsmash --disable-cli
 
-ifeq (1,$(BUILD.cross))
+ifeq (1,$(HOST.cross))
     X264.CONFIGURE.build  =
-    X264.CONFIGURE.extra += --cross-prefix=$(BUILD.spec)-
+    X264.CONFIGURE.extra += --cross-prefix=$(HOST.spec)-
     X264.CONFIGURE.env.CFLAGS = CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/)include) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver ?extra)"
     X264.CONFIGURE.env.LDFLAGS = LDFLAGS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib) $(call fn.ARGS,X264.GCC,*archs *sysroot *minver)"
 endif

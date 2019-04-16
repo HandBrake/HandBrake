@@ -14,8 +14,8 @@ BUILD.out += $(GTK.out)
 
 ###############################################################################
 
-ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
-GTK.CONFIGURE.extra += --host=$(BUILD.spec)
+ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
+GTK.CONFIGURE.extra += --host=$(HOST.spec)
 ifeq ($(HAS.dlfcn),1)
 	GTK.CONFIGURE.extra += --enable-dl
 endif

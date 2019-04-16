@@ -10,6 +10,6 @@ ifneq (none,$(FFMPEG.GCC.g))
 	LAME.CONFIGURE.extra += --enable-debug
 endif
 
-ifeq (1-msys,$(BUILD.cross)-$(HOST.system))
+ifeq (1-msys,$(HOST.cross)-$(BUILD.system))
     LAME.CONFIGURE.args.build = --build=$(BUILD.machine)-unknown-linux-gnu
 endif

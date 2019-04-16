@@ -30,13 +30,13 @@ dnl
 <<#>>define HB_PROJECT_REPO_OFFICIAL   __HB_repo_official
 <<#>>define HB_PROJECT_REPO_DATE       "__HB_repo_date"
 
-<<#>>define HB_PROJECT_BUILD_SPEC      "__BUILD_spec"
-<<#>>define HB_PROJECT_BUILD_MACHINE   "__BUILD_machine"
-<<#>>define HB_PROJECT_BUILD_VENDOR    "__BUILD_vendor"
-<<#>>define HB_PROJECT_BUILD_SYSTEM    "__BUILD_system"
-<<#>>define HB_PROJECT_BUILD_SYSTEMF   "__BUILD_systemf"
-<<#>>define HB_PROJECT_BUILD_RELEASE   "__BUILD_release"
-<<#>>define HB_PROJECT_BUILD_TITLE     "__BUILD_title"
-<<#>>define HB_PROJECT_BUILD_ARCH      "__BUILD_arch"
+<<#>>define HB_PROJECT_HOST_SPEC       "__HOST_spec"
+<<#>>define HB_PROJECT_HOST_MACHINE    "__HOST_machine"
+<<#>>define HB_PROJECT_HOST_VENDOR     "__HOST_vendor"
+<<#>>define HB_PROJECT_HOST_SYSTEM     "__HOST_system"
+<<#>>define HB_PROJECT_HOST_SYSTEMF    "__HOST_systemf"
+<<#>>define HB_PROJECT_HOST_RELEASE    "__HOST_release"
+<<#>>define HB_PROJECT_HOST_TITLE      "__HOST_title"
+<<#>>define HB_PROJECT_HOST_ARCH       "__HOST_arch"
 
 #endif /* HB_PROJECT_PROJECT_H */

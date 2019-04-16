@@ -17,29 +17,29 @@ LIBVPX.CONFIGURE.extra =  \
     --disable-docs        \
     --disable-unit-tests
 
-ifeq (1,$(BUILD.cross))
-    LIBVPX.CONFIGURE.env.CROSS  = CROSS="$(BUILD.spec)-"
+ifeq (1,$(HOST.cross))
+    LIBVPX.CONFIGURE.env.CROSS  = CROSS="$(HOST.spec)-"
     LIBVPX.CONFIGURE.args.build =
     LIBVPX.CONFIGURE.extra += --enable-static-msvcrt
-    ifeq (i686,$(BUILD.machine))
+    ifeq (i686,$(HOST.machine))
         LIBVPX.CONFIGURE.extra += --target=x86-win32-gcc
-    else ifeq (x86_64,$(BUILD.machine))
+    else ifeq (x86_64,$(HOST.machine))
         LIBVPX.CONFIGURE.extra += --target=x86_64-win64-gcc
     endif
 endif
 
-ifeq (linux,$(BUILD.system))
-    ifeq (x86_64,$(BUILD.machine))
+ifeq (linux,$(HOST.system))
+    ifeq (x86_64,$(HOST.machine))
         LIBVPX.CONFIGURE.extra += --enable-pic
     endif
 endif
 
-ifeq (0-darwin,$(BUILD.cross)-$(BUILD.system))
+ifeq (0-darwin,$(HOST.cross)-$(BUILD.system))
     ifeq (x86_64,$(BUILD.machine))
         LIBVPX.CONFIGURE.extra += --target=x86_64-darwin14-gcc
     endif
 endif
 
-ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
     LIBVPX.CONFIGURE.extra += --disable-avx512
 endif

@@ -15,11 +15,11 @@ HARFBUZZ.CONFIGURE.extra = \
 
 HARFBUZZ.CONFIGURE.extra += --with-fontconfig=no
 
-ifeq ($(BUILD.system),darwin)
+ifeq ($(HOST.system),darwin)
     HARFBUZZ.CONFIGURE.extra += --with-coretext=yes --with-glib=no
 endif
 
-ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
     HARFBUZZ.CONFIGURE.extra += --with-directwrite=no --with-glib=no \
         --with-gobject=no --with-cairo=no --with-icu=no --with-graphite2=no \
         --with-uniscribe=no

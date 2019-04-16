@@ -3,7 +3,7 @@ __deps__ := A52DEC BZIP2 LIBVPX FFMPEG FREETYPE LAME LIBASS LIBDCA \
     LIBXML2 X264 X265 ZLIB LIBBLURAY FDKAAC LIBMFX LIBGNURX JANSSON \
     HARFBUZZ LIBOPUS LIBSPEEX
 
-ifeq (,$(filter $(BUILD.system),darwin cygwin mingw))
+ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
     __deps__ += FONTCONFIG
 endif
 
@@ -48,32 +48,32 @@ endif
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 
-ifeq ($(BUILD.system),freebsd)
+ifeq ($(HOST.system),freebsd)
     LIBHB.GCC.I += $(LOCALBASE)/include
     LIBHB.GCC.I += $(LOCALBASE)/include/libxml2
-else ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
+else ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
     LIBHB.GCC.I += $(CONTRIB.build/)include/libxml2
 else
     LIBHB.GCC.I += /usr/include/libxml2
 endif
 
-ifeq ($(BUILD.system),cygwin)
+ifeq ($(HOST.system),cygwin)
     LIBHB.GCC.D += SYS_CYGWIN
-else ifeq ($(BUILD.system),darwin)
+else ifeq ($(HOST.system),darwin)
     LIBHB.GCC.D += SYS_DARWIN
     LIBHB.c += $(wildcard $(LIBHB.src/)platform/macosx/*.c)
     LIBHB.m += $(wildcard $(LIBHB.src/)platform/macosx/*.m)
-else ifeq ($(BUILD.system),linux)
+else ifeq ($(HOST.system),linux)
     LIBHB.GCC.D += SYS_LINUX _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
-else ifeq ($(BUILD.system),freebsd)
+else ifeq ($(HOST.system),freebsd)
     LIBHB.GCC.D += SYS_FREEBSD _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64
-else ifeq ($(BUILD.system),mingw)
+else ifeq ($(HOST.system),mingw)
     LIBHB.GCC.D += SYS_MINGW
 ifneq ($(HAS.pthread),1)
     LIBHB.GCC.D += PTW32_STATIC_LIB
 endif
 	LIBHB.GCC.args.extra.dylib++ += -Wl,--enable-auto-import -static
-else ifeq ($(BUILD.system),solaris)
+else ifeq ($(HOST.system),solaris)
     LIBHB.GCC.D += SYS_SunOS _LARGEFILE_SOURCE _FILE_OFFSET_BITS=64 _POSIX_C_SOURCE=200112L __EXTENSIONS__
 else
     LIBHB.platform.D = SYS_UNKNOWN
@@ -104,13 +104,13 @@ ifeq (1,$(HAS.strerror_r))
 endif
 
 ## required for <libdvdread/*.h>
-ifneq (,$(filter $(BUILD.arch),ppc ppc64))
+ifneq (,$(filter $(HOST.arch),ppc ppc64))
 	LIBHB.GCC.D += WORDS_BIGENDIAN
 endif
 
 ###############################################################################
 
-ifeq (1-mingw,$(BUILD.cross)-$(BUILD.system))
+ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
 
 LIBHB.dll = $(LIBHB.build/)hb.dll
 LIBHB.lib = $(LIBHB.build/)hb.lib

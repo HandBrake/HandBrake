@@ -7,13 +7,13 @@ include $(SRC/)make/include/tool.defs
 
 ###############################################################################
 
-ifneq (,$(filter $(BUILD.system),cygwin mingw))
+ifneq (,$(filter $(HOST.system),cygwin mingw))
 ifneq ($(HAS.bz2),1)
     MODULES += contrib/bzip2
 endif
 endif
 
-ifneq (,$(filter $(BUILD.system),darwin cygwin mingw))
+ifneq (,$(filter $(HOST.system),darwin cygwin mingw))
     MODULES += contrib/freetype
     MODULES += contrib/fribidi
     MODULES += contrib/harfbuzz
@@ -64,11 +64,11 @@ ifeq (1,$(FEATURE.nvenc))
     MODULES += contrib/nvenc
 endif
 
-ifneq (,$(filter $(BUILD.system),darwin))
+ifneq (,$(filter $(HOST.system),darwin))
     MODULES += contrib/xz
 endif
 
-ifneq (,$(filter $(BUILD.system),cygwin mingw))
+ifneq (,$(filter $(HOST.system),cygwin mingw))
 ifneq ($(HAS.iconv),1)
     MODULES += contrib/libiconv
 endif
@@ -83,7 +83,7 @@ ifneq ($(HAS.regex),1)
 endif
 endif
 
-ifneq (,$(filter $(BUILD.system),solaris))
+ifneq (,$(filter $(HOST.system),solaris))
     MODULES += contrib/libiconv
 endif
 
@@ -93,7 +93,7 @@ MODULES += libhb
 
 ###############################################################################
 
-ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
+ifeq (1-darwin,$(FEATURE.xcode)-$(HOST.system))
     ## use macosx module when xcode+darwin
     MODULES += macosx
 else
@@ -101,26 +101,26 @@ else
     MODULES += test
 endif
 
-ifeq (1-mingw,$(FEATURE.gtk.mingw)-$(BUILD.system))
+ifeq (1-mingw,$(FEATURE.gtk.mingw)-$(HOST.system))
     MODULES += gtk
 endif
 
-ifeq (1-linux,$(FEATURE.gtk)-$(BUILD.system))
+ifeq (1-linux,$(FEATURE.gtk)-$(HOST.system))
     ## build gtk when gtk+linux
     MODULES += gtk
 endif
 
-ifeq (1-freebsd,$(FEATURE.gtk)-$(BUILD.system))
+ifeq (1-freebsd,$(FEATURE.gtk)-$(HOST.system))
     ## build gtk when gtk+freebsd
     MODULES += gtk
 endif
 
-ifeq (1-kfreebsd,$(FEATURE.gtk)-$(BUILD.system))
+ifeq (1-kfreebsd,$(FEATURE.gtk)-$(HOST.system))
     ## build gtk when gtk+kfreebsd
     MODULES += gtk
 endif
 
-ifeq (1-gnu,$(FEATURE.gtk)-$(BUILD.system))
+ifeq (1-gnu,$(FEATURE.gtk)-$(HOST.system))
     ## build gtk when gtk+gnu
     MODULES += gtk
 endif
@@ -132,5 +132,5 @@ MODULES += pkg
 ###############################################################################
 
 include $(MODULES:%=$(SRC/)%/module.defs)
-include $(SRC/)make/variant/$(BUILD.system).defs
--include $(SRC/)make/variant/$(BUILD.system).$(BUILD.machine).defs
+include $(SRC/)make/variant/$(HOST.system).defs
+-include $(SRC/)make/variant/$(HOST.system).$(HOST.machine).defs

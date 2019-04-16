@@ -28,4 +28,4 @@ $(PKG.src-contrib.tar.bz2):
 ###############################################################################
 
 ## include optional platform packaging
--include $(SRC/)pkg/$(BUILD.system)/module.rules
+-include $(SRC/)pkg/$(HOST.system)/module.rules
