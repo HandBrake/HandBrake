@@ -8,6 +8,10 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#define NLMEANS_ALIGNMENT      32
+#define NLMEANS_ALIGN(x)       ((x + NLMEANS_ALIGNMENT-1) &~ (NLMEANS_ALIGNMENT-1))
+#define NLMEANS_ALIGN_HALF(x)  ((x + (NLMEANS_ALIGNMENT/2)-1) &~ ((NLMEANS_ALIGNMENT/2)-1))
+
 typedef struct
 {
     void (*build_integral)(uint32_t *integral,

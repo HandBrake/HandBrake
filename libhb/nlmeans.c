@@ -81,11 +81,11 @@
 #define NLMEANS_PREFILTER_MODE_EDGEBOOST  1024
 #define NLMEANS_PREFILTER_MODE_PASSTHRU   2048
 
-#define NLMEANS_SORT(a,b) { if (a > b) NLMEANS_SWAP(a, b); }
-#define NLMEANS_SWAP(a,b) { a = (a ^ b); b = (a ^ b); a = (b ^ a); }
-
 #define NLMEANS_FRAMES_MAX  32
 #define NLMEANS_EXPSIZE     128
+
+#define NLMEANS_SORT(a,b) { if (a > b) NLMEANS_SWAP(a, b); }
+#define NLMEANS_SWAP(a,b) { a = (a ^ b); b = (a ^ b); a = (b ^ a); }
 
 typedef struct
 {
@@ -187,21 +187,22 @@ static void nlmeans_border(uint8_t *src,
                            const int border)
 {
     const int bw = w + 2 * border;
-    uint8_t *image = src + border + bw * border;
+    const int bs = NLMEANS_ALIGN(bw);
+    uint8_t *image = src + border + bs * border;
 
     // Create faux borders using edge pixels
     for (int y = 0; y < h; y++)
     {
         for (int x = 0; x < border; x++)
         {
-            *(image + y*bw - x - 1) = *(image + y*bw + x);
-            *(image + y*bw + x + w) = *(image + y*bw - x + (w-1));
+            *(image + y*bs - x - 1) = *(image + y*bs + x);
+            *(image + y*bs + x + w) = *(image + y*bs - x + (w-1));
         }
     }
     for (int y = 0; y < border; y++)
     {
-        memcpy(image - border - (y+1)*bw, image - border +       y*bw, bw);
-        memcpy(image - border + (y+h)*bw, image - border + (h-y-1)*bw, bw);
+        memcpy(image - border - (y+1)*bs, image - border +       y*bs, bw);
+        memcpy(image - border + (y+h)*bs, image - border + (h-y-1)*bs, bw);
     }
 
 }
@@ -213,7 +214,8 @@ static void nlmeans_deborder(const BorderedPlane *src,
                              const int h)
 {
     const int bw = src->w + 2 * src->border;
-    uint8_t *image = src->mem + src->border + bw * src->border;
+    const int bs = NLMEANS_ALIGN(bw);
+    uint8_t *image = src->mem + src->border + bs * src->border;
 
     int width = w;
     if (src->w < width)
@@ -224,7 +226,7 @@ static void nlmeans_deborder(const BorderedPlane *src,
     // Copy main image
     for (int y = 0; y < h; y++)
     {
-        memcpy(dst + y * s, image + y * bw, width);
+        memcpy(dst + y * s, image + y * bs, width);
     }
 
 }
@@ -237,15 +239,16 @@ static void nlmeans_alloc(const uint8_t *src,
                           const int border)
 {
     const int bw = src_w + 2 * border;
+    const int bs = NLMEANS_ALIGN(bw);
     const int bh = src_h + 2 * border;
 
-    uint8_t *mem   = malloc(bw * bh * sizeof(uint8_t));
-    uint8_t *image = mem + border + bw * border;
+    uint8_t *mem   = av_malloc(bs * bh * sizeof(uint8_t));
+    uint8_t *image = mem + border + bs * border;
 
     // Copy main image
     for (int y = 0; y < src_h; y++)
     {
-        memcpy(image + y * bw, src + y * src_s, src_w);
+        memcpy(image + y * bs, src + y * src_s, src_w);
     }
 
     dst->mem       = mem;
@@ -271,6 +274,7 @@ static void nlmeans_filter_mean(const uint8_t *src,
 
     // Mean filter
     const int bw = w + 2 * border;
+    const int bs = NLMEANS_ALIGN(bw);
     const int offset_min = -((size - 1) /2);
     const int offset_max =   (size + 1) /2;
     const double pixel_weight = 1.0 / (size * size);
@@ -284,10 +288,10 @@ static void nlmeans_filter_mean(const uint8_t *src,
             {
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    pixel_sum = pixel_sum + *(src + bw*(y+j) + (x+k));
+                    pixel_sum = pixel_sum + *(src + bs*(y+j) + (x+k));
                 }
             }
-            *(dst + bw*y + x) = (uint8_t)(pixel_sum * pixel_weight);
+            *(dst + bs*y + x) = (uint8_t)(pixel_sum * pixel_weight);
         }
     }
 
@@ -367,6 +371,7 @@ static void nlmeans_filter_median(const uint8_t *src,
 {
     // Median filter
     const int bw = w + 2 * border;
+    const int bs = NLMEANS_ALIGN(bw);
     const int offset_min = -((size - 1) /2);
     const int offset_max =   (size + 1) /2;
     int index;
@@ -380,11 +385,11 @@ static void nlmeans_filter_median(const uint8_t *src,
             {
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    pixels[index] = *(src + bw*(y+j) + (x+k));
+                    pixels[index] = *(src + bs*(y+j) + (x+k));
                     index++;
                 }
             }
-            *(dst + bw*y + x) = nlmeans_filter_median_opt(pixels, size);
+            *(dst + bs*y + x) = nlmeans_filter_median_opt(pixels, size);
         }
     }
 
@@ -399,6 +404,7 @@ static void nlmeans_filter_csm(const uint8_t *src,
 {
     // CSM filter
     const int bw = w + 2 * border;
+    const int bs = NLMEANS_ALIGN(bw);
     const int offset_min = -((size - 1) /2);
     const int offset_max =   (size + 1) /2;
     uint8_t min,  max,
@@ -419,7 +425,7 @@ static void nlmeans_filter_csm(const uint8_t *src,
                         // Ignore origin
                         goto end;
                     }
-                    pixel = *(src + bw*(y+j) + (x+k));
+                    pixel = *(src + bs*(y+j) + (x+k));
                     if (k == offset_min && j == offset_min)
                     {
                         // Start calculating neighborhood thresholds
@@ -454,30 +460,30 @@ static void nlmeans_filter_csm(const uint8_t *src,
             max3 = (max2 + median) / 2;
 
             // Clamp to thresholds
-            pixel = *(src + bw*(y) + (x));
+            pixel = *(src + bs*(y) + (x));
             if (pixel < min)
             {
-                *(dst + bw*y + x) = min;
+                *(dst + bs*y + x) = min;
             }
             else if (pixel > max)
             {
-                *(dst + bw*y + x) = max;
+                *(dst + bs*y + x) = max;
             }
             else if (pixel < min2)
             {
-                *(dst + bw*y + x) = min2;
+                *(dst + bs*y + x) = min2;
             }
             else if (pixel > max2)
             {
-                *(dst + bw*y + x) = max2;
+                *(dst + bs*y + x) = max2;
             }
             else if (pixel < min3)
             {
-                *(dst + bw*y + x) = min3;
+                *(dst + bs*y + x) = min3;
             }
             else if (pixel > max3)
             {
-                *(dst + bw*y + x) = max3;
+                *(dst + bs*y + x) = max3;
             }
         }
     }
@@ -490,6 +496,7 @@ static void nlmeans_filter_edgeboost(const uint8_t *src,
                                      const int border)
 {
     const int bw = w + 2 * border;
+    const int bs = NLMEANS_ALIGN(bw);
     const int bh = h + 2 * border;
 
     // Custom kernel
@@ -504,8 +511,8 @@ static void nlmeans_filter_edgeboost(const uint8_t *src,
     const int offset_max =   (kernel_size + 1) /2;
     uint16_t pixel1;
     uint16_t pixel2;
-    uint8_t *mask_mem = calloc(bw * bh, sizeof(uint8_t));
-    uint8_t *mask = mask_mem + border + bw * border;
+    uint8_t *mask_mem = av_calloc(bs * bh, sizeof(uint8_t));
+    uint8_t *mask = mask_mem + border + bs * border;
     for (int y = 0; y < h; y++)
     {
         for (int x = 0; x < w; x++)
@@ -516,26 +523,26 @@ static void nlmeans_filter_edgeboost(const uint8_t *src,
             {
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    pixel1 += kernel[j+1][k+1] * *(src + bw*(y+j) + (x+k));
-                    pixel2 += kernel[k+1][j+1] * *(src + bw*(y+j) + (x+k));
+                    pixel1 += kernel[j+1][k+1] * *(src + bs*(y+j) + (x+k));
+                    pixel2 += kernel[k+1][j+1] * *(src + bs*(y+j) + (x+k));
                 }
             }
             pixel1 = pixel1 > 0 ? pixel1 : -pixel1;
             pixel2 = pixel2 > 0 ? pixel2 : -pixel2;
             pixel1 = (uint16_t)(((double)pixel1 * kernel_coef) + 128);
             pixel2 = (uint16_t)(((double)pixel2 * kernel_coef) + 128);
-            *(mask + bw*y + x) = (uint8_t)(pixel1 + pixel2);
-            if (*(mask + bw*y + x) > 160)
+            *(mask + bs*y + x) = (uint8_t)(pixel1 + pixel2);
+            if (*(mask + bs*y + x) > 160)
             {
-                *(mask + bw*y + x) = 235;
+                *(mask + bs*y + x) = 235;
             }
-            else if (*(mask + bw*y + x) > 16)
+            else if (*(mask + bs*y + x) > 16)
             {
-                *(mask + bw*y + x) = 128;
+                *(mask + bs*y + x) = 128;
             }
             else
             {
-                *(mask + bw*y + x) = 16;
+                *(mask + bs*y + x) = 16;
             }
         }
     }
@@ -546,7 +553,7 @@ static void nlmeans_filter_edgeboost(const uint8_t *src,
     {
         for (int x = 0; x < w; x++)
         {
-            if (*(mask + bw*y + x) > 16)
+            if (*(mask + bs*y + x) > 16)
             {
                 // Count nearby edge pixels
                 pixels = 0;
@@ -554,7 +561,7 @@ static void nlmeans_filter_edgeboost(const uint8_t *src,
                 {
                     for (int j = offset_min; j < offset_max; j++)
                     {
-                        if (*(mask + bw*(y+j) + (x+k)) > 16)
+                        if (*(mask + bs*(y+j) + (x+k)) > 16)
                         {
                             pixels++;
                         }
@@ -563,27 +570,27 @@ static void nlmeans_filter_edgeboost(const uint8_t *src,
                 // Remove false positive
                 if (pixels < 3)
                 {
-                    *(mask + bw*y + x) = 16;
+                    *(mask + bs*y + x) = 16;
                 }
                 // Filter output
-                if (*(mask + bw*y + x) > 16)
+                if (*(mask + bs*y + x) > 16)
                 {
-                    if (*(mask + bw*y + x) == 235)
+                    if (*(mask + bs*y + x) == 235)
                     {
-                        *(dst + bw*y + x) = (3 * *(src + bw*y + x) + 1 * *(dst + bw*y + x)) /4;
+                        *(dst + bs*y + x) = (3 * *(src + bs*y + x) + 1 * *(dst + bs*y + x)) /4;
                     }
                     else
                     {
-                        *(dst + bw*y + x) = (2 * *(src + bw*y + x) + 3 * *(dst + bw*y + x)) /5;
+                        *(dst + bs*y + x) = (2 * *(src + bs*y + x) + 3 * *(dst + bs*y + x)) /5;
                     }
-                    //*(dst + bw*y + x) = *(mask + bw*y + x); // Overlay mask
+                    //*(dst + bs*y + x) = *(mask + bs*y + x); // Overlay mask
                 }
             }
-            //*(dst + bw*y + x) = *(mask + bw*y + x); // Full mask
+            //*(dst + bs*y + x) = *(mask + bs*y + x); // Full mask
         }
     }
 
-    free(mask_mem);
+    av_free(mask_mem);
 }
 
 static void nlmeans_prefilter(BorderedPlane *src,
@@ -611,14 +618,15 @@ static void nlmeans_prefilter(BorderedPlane *src,
         const int w          = src->w;
         const int h          = src->h;
         const int bw         = w + 2 * border;
+        const int bs         = NLMEANS_ALIGN(bw);
         const int bh         = h + 2 * border;
 
         // Duplicate plane
-        uint8_t *mem_pre = malloc(bw * bh * sizeof(uint8_t));
-        uint8_t *image_pre = mem_pre + border + bw * border;
+        uint8_t *mem_pre = av_malloc(bs * bh * sizeof(uint8_t));
+        uint8_t *image_pre = mem_pre + border + bs * border;
         for (int y = 0; y < h; y++)
         {
-            memcpy(mem_pre + y * bw, mem + y * bw, bw);
+            memcpy(mem_pre + y * bs, mem + y * bs, bw);
         }
 
         // Filter plane; should already have at least 2px extra border on each side
@@ -682,9 +690,9 @@ static void nlmeans_prefilter(BorderedPlane *src,
         {
             for (int y = 0; y < bh; y++)
             {
-                for (int x = 0; x < bw; x++)
+                for (int x = 0; x < bs; x++)
                 {
-                    *(mem_pre + bw*y + x) = (uint8_t)((wet * *(mem_pre + bw*y + x) + dry * *(mem + bw*y + x)) / (wet + dry));
+                    *(mem_pre + bs*y + x) = (uint8_t)((wet * *(mem_pre + bs*y + x) + dry * *(mem + bs*y + x)) / (wet + dry));
                 }
             }
         }
@@ -720,10 +728,11 @@ static void build_integral_scalar(uint32_t *integral,
                                   int       dy)
 {
     const int bw = w + 2 * border;
+    const int bs = NLMEANS_ALIGN(bw);
     for (int y = 0; y < dst_h; y++)
     {
-        const uint8_t *p1 = src_pre + y*bw;
-        const uint8_t *p2 = compare_pre + (y+dy)*bw + dx;
+        const uint8_t *p1 = src_pre + y*bs;
+        const uint8_t *p2 = compare_pre + (y+dy)*bs + dx;
         uint32_t *out = integral + (y*integral_stride);
 
         for (int x = 0; x < dst_w; x++)
@@ -774,14 +783,15 @@ static void nlmeans_plane(NLMeansFunctions *functions,
     const int w      = frame[0].plane[plane].w;
     const int border = frame[0].plane[plane].border;
     const int bw     = w + 2 * border;
+    const int bs     = NLMEANS_ALIGN(bw);
 
     // Allocate temporary pixel sums
     struct PixelSum *tmp_data = calloc(dst_w * dst_h, sizeof(struct PixelSum));
 
     // Allocate integral image
-    const int integral_stride    = ((dst_w + 15) / 16 * 16) + 2 * 16;
-    uint32_t* const integral_mem = calloc(integral_stride * (dst_h+1), sizeof(uint32_t));
-    uint32_t* const integral     = integral_mem + integral_stride + 16;
+    const int integral_stride    = NLMEANS_ALIGN(dst_w) + 2 * NLMEANS_ALIGNMENT;
+    uint32_t* const integral_mem = av_calloc(integral_stride * (dst_h+1), sizeof(uint32_t));
+    uint32_t* const integral     = integral_mem + integral_stride + NLMEANS_ALIGNMENT;
 
     // Iterate through available frames
     for (int f = 0; f < nframes; f++)
@@ -806,7 +816,7 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                         for (int x = n_half; x < dst_w-n + n_half; x++)
                         {
                             tmp_data[y*dst_w + x].weight_sum += origin_tune;
-                            tmp_data[y*dst_w + x].pixel_sum  += origin_tune * src[y*bw + x];
+                            tmp_data[y*dst_w + x].pixel_sum  += origin_tune * src[y*bs + x];
                         }
                     }
                     continue;
@@ -849,7 +859,7 @@ static void nlmeans_plane(NLMeansFunctions *functions,
                             const float weight = exptable[diffidx];
 
                             tmp_data[yc*dst_w + xc].weight_sum += weight;
-                            tmp_data[yc*dst_w + xc].pixel_sum  += weight * compare[(yc+dy)*bw + xc + dx];
+                            tmp_data[yc*dst_w + xc].pixel_sum  += weight * compare[(yc+dy)*bs + xc + dx];
                         }
 
                         integral_ptr1++;
@@ -865,14 +875,14 @@ static void nlmeans_plane(NLMeansFunctions *functions,
     {
         for (int x = 0; x < n_half; x++)
         {
-            *(dst + y * dst_s + x)               = *(src + y * bw - x - 1);
-            *(dst + y * dst_s - x + (dst_w - 1)) = *(src + y * bw + x + dst_w);
+            *(dst + y * dst_s + x)               = *(src + y * bs - x - 1);
+            *(dst + y * dst_s - x + (dst_w - 1)) = *(src + y * bs + x + dst_w);
         }
     }
     for (int y = 0; y < n_half; y++)
     {
-        memcpy(dst +           y*dst_s, src -     (y+1)*bw, dst_w);
-        memcpy(dst + (dst_h-y-1)*dst_s, src + (y+dst_h)*bw, dst_w);
+        memcpy(dst +           y*dst_s, src -     (y+1)*bs, dst_w);
+        memcpy(dst + (dst_h-y-1)*dst_s, src + (y+dst_h)*bs, dst_w);
     }
 
     // Copy main image
@@ -882,12 +892,12 @@ static void nlmeans_plane(NLMeansFunctions *functions,
         for (int x = n_half; x < dst_w-n_half; x++)
         {
             result = (uint8_t)(tmp_data[y*dst_w + x].pixel_sum / tmp_data[y*dst_w + x].weight_sum);
-            *(dst + y*dst_s + x) = result ? result : *(src + y*bw + x);
+            *(dst + y*dst_s + x) = result ? result : *(src + y*bs + x);
         }
     }
 
     free(tmp_data);
-    free(integral_mem);
+    av_free(integral_mem);
 
 }
 
@@ -1012,7 +1022,7 @@ static int nlmeans_init(hb_filter_object_t *filter,
     }
     hb_log("NLMeans using %i threads", pv->threads);
 
-    pv->frame = calloc(pv->threads + pv->max_frames, sizeof(Frame));
+    pv->frame = av_calloc(pv->threads + pv->max_frames, sizeof(Frame));
     for (int ii = 0; ii < pv->threads + pv->max_frames; ii++)
     {
         for (int c = 0; c < 3; c++)
@@ -1074,12 +1084,12 @@ static void nlmeans_close(hb_filter_object_t *filter)
             if (pv->frame[f].plane[c].mem_pre != NULL &&
                 pv->frame[f].plane[c].mem_pre != pv->frame[f].plane[c].mem)
             {
-                free(pv->frame[f].plane[c].mem_pre);
+                av_free(pv->frame[f].plane[c].mem_pre);
                 pv->frame[f].plane[c].mem_pre = NULL;
             }
             if (pv->frame[f].plane[c].mem != NULL)
             {
-                free(pv->frame[f].plane[c].mem);
+                av_free(pv->frame[f].plane[c].mem);
                 pv->frame[f].plane[c].mem = NULL;
             }
         }
@@ -1093,7 +1103,7 @@ static void nlmeans_close(hb_filter_object_t *filter)
         }
     }
 
-    free(pv->frame);
+    av_free(pv->frame);
     free(pv->thread_data);
     free(pv);
     filter->private_data = NULL;
@@ -1179,7 +1189,7 @@ static void nlmeans_add_frame(hb_filter_private_t *pv, hb_buffer_t *buf)
     for (int c = 0; c < 3; c++)
     {
         // Extend copy of plane with extra border and place in buffer
-        const int border = ((pv->range[c] + 2) / 2 + 15) / 16 * 16;
+        const int border = NLMEANS_ALIGN_HALF((pv->range[c] + 2) / 2);
         nlmeans_alloc(buf->plane[c].data,
                       buf->plane[c].width,
                       buf->plane[c].stride,
@@ -1212,12 +1222,12 @@ static hb_buffer_t * nlmeans_filter(hb_filter_private_t *pv)
             if (pv->frame[t].plane[c].mem_pre != NULL &&
                 pv->frame[t].plane[c].mem_pre != pv->frame[t].plane[c].mem)
             {
-                free(pv->frame[t].plane[c].mem_pre);
+                av_free(pv->frame[t].plane[c].mem_pre);
                 pv->frame[t].plane[c].mem_pre = NULL;
             }
             if (pv->frame[t].plane[c].mem != NULL)
             {
-                free(pv->frame[t].plane[c].mem);
+                av_free(pv->frame[t].plane[c].mem);
                 pv->frame[t].plane[c].mem = NULL;
             }
         }
