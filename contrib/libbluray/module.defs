@@ -11,11 +11,11 @@ endif
 
 LIBBLURAY.CONFIGURE.extra += --disable-doxygen-doc --disable-examples --disable-bdjava-jar --without-freetype --without-fontconfig
 
-ifeq (mingw,$(BUILD.system))
+ifeq (mingw,$(HOST.system))
     LIBBLURAY.GCC.D += MINGW_HAS_SECURE_API=1
 endif
 
-ifeq (freebsd,$(BUILD.system))
+ifeq (freebsd,$(HOST.system))
     LIBBLURAY.GCC.D += _XOPEN_SOURCE=700
 endif
 

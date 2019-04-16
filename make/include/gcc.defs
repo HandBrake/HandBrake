@@ -47,7 +47,7 @@ GCC.args.dylib     = -dynamiclib
 GCC.args.ML        = -fmessage-length=0
 GCC.args.H         = -H
 GCC.args.W         = -W$(1)
-ifeq (darwin,$(BUILD.system))
+ifeq (darwin,$(HOST.system))
     GCC.args.archs = -arch $(1)
 endif
 GCC.args.sysroot   = --sysroot=$(1)
@@ -73,7 +73,7 @@ GCC.args.L         = -L$(1)
 GCC.args.l         = -l$(1)
 GCC.args.end       = -Wl,--end-group
 
-ifeq ($(BUILD.machine),$(filter $(BUILD.machine),i686 x86_64))
+ifeq ($(HOST.machine),$(filter $(HOST.machine),i686 x86_64))
     GCC.args.extra = $(CFLAGS) $(CPPFLAGS) -mfpmath=sse -msse2
 else
     GCC.args.extra = $(CFLAGS) $(CPPFLAGS)

@@ -1,6 +1,6 @@
 __deps__ := FREETYPE FRIBIDI HARFBUZZ
 
-ifeq (,$(filter $(BUILD.system),darwin cygwin mingw))
+ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
     __deps__ += FONTCONFIG
 endif
 
@@ -17,7 +17,7 @@ LIBASS.CONFIGURE.extra = \
     FREETYPE_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfreetype" \
     FREETYPE_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include/freetype2" \
 
-ifeq (,$(filter $(BUILD.system),darwin cygwin mingw))
+ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
     # Tell configure where to find our version of fontconfig
     LIBASS.CONFIGURE.extra += \
         --enable-fontconfig \
@@ -27,7 +27,7 @@ else
     LIBASS.CONFIGURE.extra += --disable-fontconfig
 endif
 
-ifneq ($(BUILD.system),linux)
+ifneq ($(HOST.system),linux)
     LIBASS.CONFIGURE.extra += \
         FRIBIDI_LIBS="-L$(call fn.ABSOLUTE,$(CONTRIB.build/))lib -lfribidi" \
         FRIBIDI_CFLAGS="-I$(call fn.ABSOLUTE,$(CONTRIB.build/))include"

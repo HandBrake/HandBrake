@@ -20,7 +20,7 @@ $(PKG.cli.dmg): | $(STAGE.out.cli/)
 
 $(PKG.gui.dmg): | $(dir $(PKG.gui.dmg))
 $(PKG.gui.dmg): | $(STAGE.out.gui/)
-ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
+ifeq (1-darwin,$(FEATURE.xcode)-$(HOST.system))
 	hdiutil create -srcfolder $(STAGE.out.gui/) -fs HFS+ -format UDRO -mode 755 \
 	    -volname $(basename $(notdir $@)) \
 	    -ov $(PKG.gui.tmp.dmg)
@@ -32,7 +32,7 @@ endif
 
 $(STAGE.out.cli/):
 	$(MKDIR.exe) -p $@
-ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
+ifeq (1-darwin,$(FEATURE.xcode)-$(HOST.system))
 	$(CP.exe) $(XCODE.symroot)/HandBrakeCLI $(STAGE.out.cli/)
 	$(call STAGE.doc,$(STAGE.out.cli/))
 else
@@ -42,7 +42,7 @@ endif
 
 $(STAGE.out.gui/):
 	$(MKDIR.exe) -p $@
-ifeq (1-darwin,$(FEATURE.xcode)-$(BUILD.system))
+ifeq (1-darwin,$(FEATURE.xcode)-$(HOST.system))
 	$(CP.exe) -R $(XCODE.symroot)/HandBrake.app $(STAGE.out.gui/)
 	$(call STAGE.doc,$(STAGE.out.gui/))
 endif

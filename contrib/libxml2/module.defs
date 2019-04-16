@@ -13,6 +13,6 @@ LIBXML2.CONFIGURE.extra = --without-lzma
 # in the MinGW environment.
 LIBXML2.CONFIGURE.extra += --without-python --without-threads
 
-ifeq (1-msys,$(BUILD.cross)-$(HOST.system))
+ifeq (1-msys,$(HOST.cross)-$(BUILD.system))
     LIBXML2.CONFIGURE.args.build = --build=$(BUILD.machine)-unknown-linux-gnu
 endif

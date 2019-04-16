@@ -1,7 +1,7 @@
 CONTRIB.build/    = $(BUILD/)contrib/
 CONTRIB.download/ = $(SRC/)download/
-CONTRIB.host      = $(if $(filter 1,$(BUILD.cross)),$(BUILD.spec))
-CONTRIB.spec      = $(if $(filter 1,$(BUILD.cross)),$(HOST.spec))
+CONTRIB.host      = $(if $(filter 1,$(HOST.cross)),$(HOST.spec))
+CONTRIB.spec      = $(if $(filter 1,$(HOST.cross)),$(BUILD.spec))
 
 ###############################################################################
 
@@ -69,7 +69,7 @@ define import.CONTRIB.defs
     ##
     $(1).PATCH.srcs = $$(sort $$(wildcard \
         $$($(1).src/)A??-*.patch \
-        $$($(1).src/)P??-$$(BUILD.system)*.patch ))
+        $$($(1).src/)P??-$$(HOST.system)*.patch ))
 
     # extra line feed is required
     define $(1).PATCH.item

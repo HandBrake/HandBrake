@@ -135,8 +135,8 @@ hb_dict_t * hb_version_dict()
         "VersionString", hb_value_string(HB_PROJECT_VERSION),
         "RepoHash",      hb_value_string(HB_PROJECT_REPO_HASH),
         "RepoDate",      hb_value_string(HB_PROJECT_REPO_DATE),
-        "System",        hb_value_string(HB_PROJECT_BUILD_SYSTEMF),
-        "Arch",          hb_value_string(HB_PROJECT_BUILD_ARCH));
+        "System",        hb_value_string(HB_PROJECT_HOST_SYSTEMF),
+        "Arch",          hb_value_string(HB_PROJECT_HOST_ARCH));
     if (dict == NULL)
     {
         hb_error("json pack failure: %s", error.text);

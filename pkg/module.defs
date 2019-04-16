@@ -30,4 +30,4 @@ BUILD.out += $(PKG.src.tar.bz2)
 ###############################################################################
 
 ## include optional platform packaging
--include $(SRC/)pkg/$(BUILD.system)/module.defs
+-include $(SRC/)pkg/$(HOST.system)/module.defs

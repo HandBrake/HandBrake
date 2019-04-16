@@ -509,7 +509,7 @@ int main( int argc, char ** argv )
     
     /* Show version */
     fprintf( stderr, "%s - %s - %s\n",
-             HB_PROJECT_TITLE, HB_PROJECT_BUILD_TITLE, HB_PROJECT_URL_WEBSITE );
+             HB_PROJECT_TITLE, HB_PROJECT_HOST_TITLE, HB_PROJECT_URL_WEBSITE );
 
     /* Geeky */
     fprintf( stderr, "%d CPU%s detected\n", hb_get_cpu_count(),

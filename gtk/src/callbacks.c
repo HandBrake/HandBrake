@@ -4609,7 +4609,7 @@ about_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
     GtkWidget *widget = GHB_WIDGET (ud->builder, "hb_about");
     gchar *ver;
 
-    ver = g_strdup_printf("%s (%s)", HB_PROJECT_VERSION, HB_PROJECT_BUILD_ARCH);
+    ver = g_strdup_printf("%s (%s)", HB_PROJECT_VERSION, HB_PROJECT_HOST_ARCH);
     gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(widget), ver);
     g_free(ver);
     gtk_about_dialog_set_website(GTK_ABOUT_DIALOG(widget),

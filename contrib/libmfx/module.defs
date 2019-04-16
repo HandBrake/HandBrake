@@ -6,7 +6,7 @@ LIBMFX.FETCH.sha256 = 9dc8bcb67f5df3dfac29a2777c1bdc9ac2bb6b0e68169af4059089f517
 
 LIBMFX.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache; autoreconf -fiv;
 
-ifeq (1,$(BUILD.cross))
+ifneq (linux,$(HOST.system))
 LIBMFX.CONFIGURE.extra = --without-libva_drm --without-libva_x11
 endif
 
