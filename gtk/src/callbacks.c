@@ -50,8 +50,6 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-#include <regex.h>
-
 #if !defined(_NO_UPDATE_CHECK)
 #if defined(_OLD_WEBKIT)
 #include <webkit.h>
@@ -1051,24 +1049,6 @@ check_name_template(signal_user_data_t *ud, const char *str)
     return FALSE;
 }
 
-static int
-match_by_pattern(const char *string, const char *pattern)
-{
-    int status;
-    regex_t re;
-    if (regcomp(&re, pattern, REG_EXTENDED|REG_NOSUB) != 0)
-    {
-        return 0;
-    }
-    status = regexec(&re, string, (size_t) 0, NULL, 0);
-    regfree(&re);
-    if (status != 0)
-    {
-        return 0;
-    }
-    return 1;
-}
-
 typedef struct {
     const char *pattern;
     const char *format;
@@ -1083,9 +1063,9 @@ parse_datestring(const char *src, struct tm *tm)
 
     for (int i = 0; i < sizeof(maps); i++)
     {
-        if (match_by_pattern(src, maps[i].pattern))
+        if (hb_validate_param_string(maps[i].pattern), src)
         {
-            strptime(src, maps[i].format, tm);
+            av_small_strptime(src, maps[i].format, tm);
             return 1;
         }
     }
