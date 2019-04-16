@@ -270,6 +270,7 @@ struct hb_geometry_settings_s
     hb_geometry_t geometry;
 };
 
+// Update win/CS/HandBrake.Interop/Interop/HbLib/hb_image_s.cs when changing this struct
 struct hb_image_s
 {
     int format;

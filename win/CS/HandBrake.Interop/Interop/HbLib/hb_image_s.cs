@@ -20,6 +20,7 @@ namespace HandBrake.Interop.Interop.HbLib
     internal struct hb_image_s
     {
         public int format;
+        public int max_plane;
         public int width;
         public int height;
         public IntPtr data;
