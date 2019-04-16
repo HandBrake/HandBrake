@@ -12,6 +12,10 @@
 #include "hb_dict.h"
 #include "plist.h"
 
+#if defined(USE_QSV)
+#include "qsv_common.h"
+#endif
+
 #if defined(SYS_LINUX)
 #define HB_PRESET_PLIST_FILE    "ghb/presets"
 #define HB_PRESET_JSON_FILE     "ghb/presets.json"
@@ -1601,8 +1605,16 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     filter_dict = hb_dict_init();
     hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_VFR));
     hb_dict_set(filter_dict, "Settings", filter_settings);
-    hb_add_filter2(filter_list, filter_dict);
-
+#if defined(USE_QSV)
+    if(hb_qsv_preset_is_zero_copy_enabled(job_dict))
+    {
+        hb_log("HB_FILTER_VFR filter is disabled");
+    }
+    else
+#endif
+    {
+        hb_add_filter2(filter_list, filter_dict);
+    }
     return 0;
 }
 
@@ -1972,8 +1984,16 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     filter_dict = hb_dict_init();
     hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_CROP_SCALE));
     hb_dict_set(filter_dict, "Settings", filter_settings);
-    hb_add_filter2(filter_list, filter_dict);
-
+#if defined(USE_QSV)
+    if(hb_qsv_preset_is_zero_copy_enabled(job_dict))
+    {
+        hb_log("HB_FILTER_CROP_SCALE filter is disabled");
+    }
+    else
+#endif
+    {
+        hb_add_filter2(filter_list, filter_dict);
+    }
     // Audio settings
     if (hb_preset_job_add_audio(h, title_index, preset, job_dict) != 0)
     {

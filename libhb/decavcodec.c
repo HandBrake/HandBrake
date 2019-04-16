@@ -44,11 +44,14 @@
 #include "libavfilter/avfilter.h"
 #include "libavfilter/buffersrc.h"
 #include "libavfilter/buffersink.h"
+#include "libavutil/hwcontext_qsv.h"
+#include "libavutil/hwcontext.h"
 #include "lang.h"
 #include "audio_resample.h"
 
 #if HB_PROJECT_FEATURE_QSV
 #include "qsv_common.h"
+#include "qsv_libav.h"
 #endif
 
 static void compute_frame_duration( hb_work_private_t *pv );
@@ -377,6 +380,7 @@ static void closePrivData( hb_work_private_t ** ppv )
              * form of communication between the two libmfx sessions).
              */
             //if (!(pv->qsv.decode && pv->job != NULL && (pv->job->vcodec & HB_VCODEC_QSV_MASK)))
+            hb_qsv_uninit_dec(pv->context);
 #endif
             {
                 hb_avcodec_free_context(&pv->context);
@@ -973,13 +977,9 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
 #if HB_PROJECT_FEATURE_QSV
     // no need to copy the frame data when decoding with QSV to opaque memory
     if (pv->qsv.decode &&
-        pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
+        pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
     {
-        out = hb_frame_buffer_init(pv->frame->format, pv->frame->width, pv->frame->height);
-        hb_avframe_set_video_buffer_flags(out, pv->frame, (AVRational){1,1});
-
-        out->qsv_details.qsv_atom = pv->frame->data[2];
-        out->qsv_details.ctx      = pv->job->qsv.ctx;
+        out = hb_qsv_copy_frame(pv->frame, pv->job->qsv.ctx);
     }
     else
 #endif
@@ -1125,7 +1125,7 @@ int reinit_video_filters(hb_work_private_t * pv)
 
 #if HB_PROJECT_FEATURE_QSV
     if (pv->qsv.decode &&
-        pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
+        pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
     {
         // Can't use software filters when decoding with QSV opaque memory
         return 0;
@@ -1349,17 +1349,6 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
         return 0;
     }
 
-#if HB_PROJECT_FEATURE_QSV
-    if (pv->qsv.decode &&
-        pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY &&
-        pv->job->qsv.ctx == NULL && pv->video_codec_opened > 0)
-    {
-        // this is quite late, but we can't be certain that the QSV context is
-        // available until after we call avcodec_send_packet() at least once
-        pv->job->qsv.ctx = pv->context->priv_data;
-    }
-#endif
-
     do
     {
         ret = avcodec_receive_frame(pv->context, pv->frame);
@@ -1407,12 +1396,12 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
     {
         pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
         pv->qsv.config.io_pattern = MFX_IOPATTERN_OUT_SYSTEM_MEMORY;
-#if 0 // TODO: re-implement QSV zerocopy path
+#if defined(_WIN32) || defined(__MINGW32__) // QSV zerocopy path
         hb_qsv_info_t *info = hb_qsv_info_get(job->vcodec);
         if (info != NULL)
         {
             // setup the QSV configuration
-            pv->qsv.config.io_pattern         = MFX_IOPATTERN_OUT_OPAQUE_MEMORY;
+            pv->qsv.config.io_pattern         = MFX_IOPATTERN_OUT_VIDEO_MEMORY;
             pv->qsv.config.impl_requested     = info->implementation;
             pv->qsv.config.async_depth        = job->qsv.async_depth;
             pv->qsv.config.sync_need          =  0;
@@ -1422,6 +1411,23 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             {
                 // more surfaces may be needed for the lookahead
                 pv->qsv.config.additional_buffers = 160;
+            }
+            if(!pv->job->qsv.ctx)
+            {
+                pv->job->qsv.ctx = av_mallocz(sizeof(hb_qsv_context));
+                if(!pv->job->qsv.ctx)
+                {
+                    hb_error( "decavcodecvInit: qsv ctx alloc failed" );
+                    return 1;
+                }
+                hb_qsv_add_context_usage(pv->job->qsv.ctx, 0);
+                pv->job->qsv.ctx->dec_space = av_mallocz(sizeof(hb_qsv_space));
+                if(!pv->job->qsv.ctx->dec_space)
+                {
+                    hb_error( "decavcodecvInit: dec_space alloc failed" );
+                    return 1;
+                }
+                pv->job->qsv.ctx->dec_space->is_init_done = 1;
             }
         }
 #endif // QSV zerocopy path
@@ -1463,14 +1469,16 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 
 #if HB_PROJECT_FEATURE_QSV
         if (pv->qsv.decode &&
-            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
+            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
         {
-            // set the QSV configuration before opening the decoder
-            pv->context->hwaccel_context = &pv->qsv.config;
+            // assign callbacks
+            pv->context->get_format = hb_qsv_get_format;
+            pv->context->get_buffer2 = hb_qsv_get_buffer;
+            pv->context->hwaccel_context = 0;
         }
 #endif
 
-        // Set encoder opts...
+        // Set encoder opts
         AVDictionary * av_opts = NULL;
         av_dict_set( &av_opts, "refcounted_frames", "1", 0 );
         if (pv->title->flags & HBTF_NO_IDR)
@@ -1596,7 +1604,7 @@ static int decodePacket( hb_work_object_t * w )
 
 #if HB_PROJECT_FEATURE_QSV
         if (pv->qsv.decode &&
-            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
+            pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_VIDEO_MEMORY)
         {
             // set the QSV configuration before opening the decoder
             pv->context->hwaccel_context = &pv->qsv.config;
