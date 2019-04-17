@@ -1018,11 +1018,12 @@ class Project( Action ):
 class ToolProbe( Action ):
     tools = []
 
-    def __init__( self, var, *names, **kwargs ):
+    def __init__( self, var, option, *names, **kwargs ):
         super( ToolProbe, self ).__init__( 'find', abort=kwargs.get('abort',True) )
         if not self in ToolProbe.tools:
             ToolProbe.tools.append( self )
         self.var    = var
+        self.option = option
         self.names  = []
         self.kwargs = kwargs
         for name in names:
@@ -1054,13 +1055,13 @@ class ToolProbe( Action ):
             self.version = VersionProbe( [self.pathname, '--version'], minversion=self.minversion )
 
     def cli_add_argument( self, parser ):
-        parser.add_argument( '--'+self.name, nargs=1, metavar='PROG',
+        parser.add_argument( '--'+self.option, nargs=1, metavar='PROG',
             help='[%s]' % (self.pathname),
             action=StoreCallbackAction, callback=self.cli_callback )
 
     def cli_callback( self, action, value ):
         # set pool to include only the user specified tool
-        self.__init__( self.var, value[0] )
+        self.__init__( self.var, self.option, value[0] )
         self.run()
 
     def doc_add( self, doc ):
@@ -1556,37 +1557,38 @@ try:
 
     ## create tools in a scope
     class Tools:
-        ar    = ToolProbe( 'AR.exe',    'ar', abort=True )
-        cp    = ToolProbe( 'CP.exe',    'cp', abort=True )
-        gcc_tools = ['GCC.gcc',
-                     os.environ.get('CC', None),
-                     'gcc',
-                     IfBuild( 'clang', '*-*-freebsd*' ),
-                     IfBuild( 'gcc-4', '*-*-cygwin*' )]
-        gcc   = ToolProbe(*filter(None, gcc_tools))
+        ar         = ToolProbe( 'AR.exe',         'ar',         'ar', abort=True )
+        cp         = ToolProbe( 'CP.exe',         'cp',         'cp', abort=True )
+        gcc_tools  = ['GCC.gcc',
+                      'cc',
+                      os.environ.get('CC', None),
+                      'gcc',
+                      IfBuild( 'clang', '*-*-freebsd*' ),
+                      IfBuild( 'gcc-4', '*-*-cygwin*' )]
+        gcc        = ToolProbe(*filter(None, gcc_tools))
 
         if build_tuple.match( '*-*-darwin*' ):
-            gmake = ToolProbe( 'GMAKE.exe', 'make', 'gmake', abort=True )
+            gmake  = ToolProbe( 'GMAKE.exe',      'make',       'make', 'gmake', abort=True )
         else:
-            gmake = ToolProbe( 'GMAKE.exe', 'gmake', 'make', abort=True )
+            gmake  = ToolProbe( 'GMAKE.exe',      'make',       'gmake', 'make', abort=True )
 
-        m4       = ToolProbe( 'M4.exe',       'gm4', 'm4', abort=True )
-        mkdir    = ToolProbe( 'MKDIR.exe',    'mkdir', abort=True )
-        patch    = ToolProbe( 'PATCH.exe',    'gpatch', 'patch', abort=True )
-        rm       = ToolProbe( 'RM.exe',       'rm', abort=True )
-        ranlib   = ToolProbe( 'RANLIB.exe',   'ranlib', abort=True )
-        strip    = ToolProbe( 'STRIP.exe',    'strip', abort=True )
-        tar      = ToolProbe( 'TAR.exe',      'gtar', 'tar', abort=True )
-        nasm     = ToolProbe( 'NASM.exe',     'nasm', abort=False, minversion=[2,13,0] )
-        autoconf = ToolProbe( 'AUTOCONF.exe', 'autoconf', abort=True )
-        automake = ToolProbe( 'AUTOMAKE.exe', 'automake', abort=True )
-        cmake    = ToolProbe( 'CMAKE.exe',    'cmake', abort=True )
-        libtool  = ToolProbe( 'LIBTOOL.exe',  'libtool', abort=True )
-        pkgconfig = ToolProbe( 'PKGCONFIG.exe', 'pkg-config', abort=True )
+        m4         = ToolProbe( 'M4.exe',         'm4',         'gm4', 'm4', abort=True )
+        mkdir      = ToolProbe( 'MKDIR.exe',      'mkdir',      'mkdir', abort=True )
+        patch      = ToolProbe( 'PATCH.exe',      'patch',      'gpatch', 'patch', abort=True )
+        rm         = ToolProbe( 'RM.exe',         'rm',         'rm', abort=True )
+        ranlib     = ToolProbe( 'RANLIB.exe',     'ranlib',     'ranlib', abort=True )
+        strip      = ToolProbe( 'STRIP.exe',      'strip',      'strip', abort=True )
+        tar        = ToolProbe( 'TAR.exe',        'tar',        'gtar', 'tar', abort=True )
+        nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=False, minversion=[2,13,0] )
+        autoconf   = ToolProbe( 'AUTOCONF.exe',   'autoconf',   'autoconf', abort=True )
+        automake   = ToolProbe( 'AUTOMAKE.exe',   'automake',   'automake', abort=True )
+        cmake      = ToolProbe( 'CMAKE.exe',      'cmake',      'cmake', abort=True )
+        libtool    = ToolProbe( 'LIBTOOL.exe',    'libtool',    'libtool', abort=True )
+        pkgconfig  = ToolProbe( 'PKGCONFIG.exe',  'pkgconfig',  'pkg-config', abort=True )
 
-        xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', abort=False )
-        lipo       = ToolProbe( 'LIPO.exe',       'lipo', abort=False )
-        python     = ToolProbe( 'PYTHON.exe', os.path.basename(sys.executable), abort=True )
+        xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', 'xcodebuild', abort=False )
+        lipo       = ToolProbe( 'LIPO.exe',       'lipo',       'lipo', abort=False )
+        python     = ToolProbe( 'PYTHON.exe',     'python',     os.path.basename(sys.executable), abort=True )
 
     ## run tool probes
     for tool in ToolProbe.tools:
@@ -1628,7 +1630,7 @@ try:
     ## re-run tools with cross-compilation needs
     if cross:
         for tool in ( Tools.ar, Tools.gcc, Tools.ranlib, Tools.strip ):
-            tool.__init__( tool.var, '%s-%s' % (cross,tool.name), **tool.kwargs )
+            tool.__init__( tool.var, tool.option, '%s-%s' % (cross,tool.name), **tool.kwargs )
             tool.run()
 
     # create CLI and parse
