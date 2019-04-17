@@ -46,6 +46,7 @@ char *strtok_r(char *s, const char *delim, char **save_ptr)
 #include <sys/types.h>
 #include <errno.h>
 #include <string.h>
+#include <stdio.h>
 
 #define ERRSTR_LEN 20
 
