@@ -33,11 +33,6 @@ MACOSX.map.g.max  = debug
 MACOSX.xcconfig = $(foreach x,$(XCODE.xcconfig),-xcconfig $(MACOSX.src/)xcconfig/$(x))
 MACOSX.sdk      = $(foreach sdk,$(GCC.sysroot),-sdk $(sdk))
 
-## some optional features use ifdef directives outside of libhb (e.g. CLI)
-ifeq (1,$(FEATURE.x265))
-    MACOSX.GCC.D += -DUSE_X265
-endif
-
 ## extra CFLAGS: macro definitions
 MACOSX.extra_cflags = OTHER_CFLAGS='$(MACOSX.GCC.D)'
 
