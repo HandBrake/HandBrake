@@ -31,7 +31,7 @@
 #include <windows.h>
 #endif
 
-#ifdef USE_NVENC
+#if HB_PROJECT_FEATURE_NVENC
 #include "nvenc_common.h"
 #endif
 
@@ -291,7 +291,7 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
                 return hb_vce_h265_available();
 #endif
 
-#ifdef USE_NVENC
+#if HB_PROJECT_FEATURE_NVENC
             case HB_VCODEC_FFMPEG_NVENC_H264:
                 return hb_nvenc_h264_available();
             case HB_VCODEC_FFMPEG_NVENC_H265:

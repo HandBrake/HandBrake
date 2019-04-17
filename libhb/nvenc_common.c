@@ -10,7 +10,7 @@
 #include "hbffmpeg.h"
 #include "hb.h"
 
-#ifdef USE_NVENC
+#if HB_PROJECT_FEATURE_NVENC
 #include <ffnvcodec/nvEncodeAPI.h>
 #include <ffnvcodec/dynlink_loader.h>
 #endif 
@@ -19,7 +19,7 @@ int hb_check_nvenc_available();
 
 int hb_nvenc_h264_available()
 {
-    #ifdef USE_NVENC
+    #if HB_PROJECT_FEATURE_NVENC
         return hb_check_nvenc_available();
     #else
         return 0;
@@ -28,7 +28,7 @@ int hb_nvenc_h264_available()
 
 int hb_nvenc_h265_available()
 {
-    #ifdef USE_NVENC
+    #if HB_PROJECT_FEATURE_NVENC
         return hb_check_nvenc_available();
     #else
         return 0;
@@ -42,7 +42,7 @@ int hb_check_nvenc_available()
         return 0;
     } 
     
-    #ifdef USE_NVENC
+    #if HB_PROJECT_FEATURE_NVENC
         uint32_t nvenc_ver;
         void *context = NULL;
         NvencFunctions *nvenc_dl = NULL;
