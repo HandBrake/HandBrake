@@ -590,7 +590,12 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PicturePARHeight = export.Task.PixelAspectY;
             preset.PicturePARWidth = export.Task.PixelAspectX;
             preset.PictureRightCrop = export.Task.Cropping.Right;
-            preset.PictureRotate = string.Format("{0}:{1}", export.Task.Rotation, export.Task.FlipVideo ? "1" : "0");
+
+            if (export.Task.Rotation != 0 || export.Task.FlipVideo)
+            {
+                preset.PictureRotate = string.Format("{0}:{1}", export.Task.Rotation, export.Task.FlipVideo ? "1" : "0");
+            }
+
             preset.PictureTopCrop = export.Task.Cropping.Top;
             preset.PictureWidth = preset.UsesPictureSettings >= 1 ? export.Task.MaxWidth : 0; // TODO
             preset.PictureDARWidth = export.Task.DisplayWidth.HasValue ? (int)export.Task.DisplayWidth.Value : 0;
