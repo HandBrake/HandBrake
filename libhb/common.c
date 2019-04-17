@@ -34,8 +34,7 @@
 #if HB_PROJECT_FEATURE_NVENC
 #include "nvenc_common.h"
 #endif
-
-#ifdef USE_VCE
+#if HB_PROJECT_FEATURE_VCE
 #include "vce_common.h"
 #endif
 
@@ -284,7 +283,7 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
 #endif
 
         switch (encoder){
-#ifdef USE_VCE
+#if HB_PROJECT_FEATURE_VCE
             case HB_VCODEC_FFMPEG_VCE_H264:
                return hb_vce_h264_available();
             case HB_VCODEC_FFMPEG_VCE_H265:
@@ -1537,7 +1536,7 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
         case HB_VCODEC_X265_16BIT:
             return hb_h265_profile_names_16bit;
 
-#ifdef USE_VCE
+#if HB_PROJECT_FEATURE_VCE
         case HB_VCODEC_FFMPEG_VCE_H264:
             return hb_vce_h264_profile_names;
         case HB_VCODEC_FFMPEG_VCE_H265:
@@ -1571,7 +1570,7 @@ const char* const* hb_video_encoder_get_levels(int encoder)
         case HB_VCODEC_FFMPEG_VT_H264:
             return hb_h264_level_names;
 
-#ifdef USE_VCE
+#if HB_PROJECT_FEATURE_VCE
      case HB_VCODEC_FFMPEG_VCE_H264:
             return hb_vce_h264_level_names; // Not quite the same as x264
 #endif

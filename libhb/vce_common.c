@@ -7,7 +7,9 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifdef USE_VCE
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_VCE
 #include "AMF/core/Factory.h"
 #include "AMF/components/VideoEncoderVCE.h"
 #include "AMF/components/VideoEncoderHEVC.h"
@@ -116,7 +118,7 @@ int hb_vce_h265_available()
     return (check_component_available(AMFVideoEncoder_HEVC) == AMF_OK) ? 1 : 0;
 }
 
-#else // !USE_VCE
+#else // !HB_PROJECT_FEATURE_VCE
 
 int hb_vce_h264_available()
 {
@@ -128,4 +130,4 @@ int hb_vce_h265_available()
     return 0;
 }
 
-#endif // USE_VCE
+#endif // HB_PROJECT_FEATURE_VCE
