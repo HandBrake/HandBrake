@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #include "qsv_common.h"
 #endif
 
@@ -416,7 +416,7 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     }
     hb_log(" - logical processor count: %d", hb_get_cpu_count());
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (!is_hardware_disabled())
     {
         /* Print QSV info here so that it's in all scan and encode logs */
@@ -1661,7 +1661,7 @@ int hb_global_init()
         return -1;
     }
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (!disable_hardware) 
     {
         result = hb_qsv_info_init();
@@ -1706,7 +1706,7 @@ int hb_global_init()
 #if HB_PROJECT_FEATURE_X265
     hb_register(&hb_encx265);
 #endif
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (!disable_hardware) 
     {
         hb_register(&hb_encqsv);

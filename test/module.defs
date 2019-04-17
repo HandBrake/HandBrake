@@ -24,7 +24,6 @@ ifeq (,$(filter $(HOST.system),darwin cygwin mingw))
 endif
 
 ifeq (1,$(FEATURE.qsv))
-    TEST.GCC.D += USE_QSV HAVE_THREADS=1
     TEST.GCC.l += mfx
 ifeq ($(HOST.system),linux)
     TEST.GCC.l += va va-drm

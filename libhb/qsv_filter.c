@@ -26,7 +26,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
-#ifdef USE_QSV
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_QSV
 
 #include "hb.h"
 #include "hbffmpeg.h"
@@ -671,5 +673,5 @@ static int hb_qsv_filter_work( hb_filter_object_t * filter,
     return HB_FILTER_OK;
 }
 
-#endif // USE_QSV
+#endif // HB_PROJECT_FEATURE_QSV
 

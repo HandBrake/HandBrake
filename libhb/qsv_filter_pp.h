@@ -29,6 +29,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef QSV_FILTER_PP_H
 #define QSV_FILTER_PP_H
 
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_QSV
+
 #include "mfx/mfxplugin.h"
 
 struct qsv_filter_task_s;
@@ -109,4 +113,5 @@ mfxStatus lock_frame(mfxFrameAllocator *,mfxFrameSurface1*);
 mfxStatus unlock_frame(mfxFrameAllocator *,mfxFrameSurface1*);
 
 
+#endif // HB_PROJECT_FEATURE_QSV
 #endif //QSV_FILTER_PP_H

@@ -26,7 +26,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
-#ifdef USE_QSV
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_QSV
 
 #include "hb.h"
 #include "nal_units.h"
@@ -2023,4 +2025,4 @@ fail:
     return HB_WORK_ERROR;
 }
 
-#endif // USE_QSV
+#endif // HB_PROJECT_FEATURE_QSV

@@ -26,7 +26,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
-#ifdef USE_QSV
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_QSV
 
 #include "hbffmpeg.h"
 #include "qsv_libav.h"
@@ -605,4 +607,4 @@ void hb_qsv_wait_on_sync(hb_qsv_context *qsv, hb_qsv_stage *stage)
         }
 }
 
-#endif // USE_QSV
+#endif // HB_PROJECT_FEATURE_QSV

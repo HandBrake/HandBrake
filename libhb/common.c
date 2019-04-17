@@ -19,7 +19,7 @@
 #include "h264_common.h"
 #include "h265_common.h"
 #include "encx264.h"
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #include "qsv_common.h"
 #endif
 
@@ -276,7 +276,7 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
     // Hardware Encoders
     if (!disable_hardware)
     {
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
         if (encoder & HB_VCODEC_QSV_MASK)
         {
             return hb_qsv_video_encoder_is_enabled(encoder);
@@ -1330,7 +1330,7 @@ const hb_rate_t* hb_audio_bitrate_get_next(const hb_rate_t *last)
 void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
                                  float *granularity, int *direction)
 {
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (codec & HB_VCODEC_QSV_MASK)
     {
         return hb_qsv_video_quality_get_limits(codec, low, high, granularity,
@@ -1413,7 +1413,7 @@ void hb_video_quality_get_limits(uint32_t codec, float *low, float *high,
 
 const char* hb_video_quality_get_name(uint32_t codec)
 {
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (codec & HB_VCODEC_QSV_MASK)
     {
         return hb_qsv_video_quality_get_name(codec);
@@ -1445,7 +1445,7 @@ int hb_video_encoder_get_depth(int encoder)
 {
     switch (encoder)
     {
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
         case HB_VCODEC_QSV_H265_10BIT:
 #endif
         case HB_VCODEC_X264_10BIT:
@@ -1462,7 +1462,7 @@ int hb_video_encoder_get_depth(int encoder)
 
 const char* const* hb_video_encoder_get_presets(int encoder)
 {
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (encoder & HB_VCODEC_QSV_MASK)
     {
         return hb_qsv_preset_get_names();
@@ -1514,7 +1514,7 @@ const char* const* hb_video_encoder_get_tunes(int encoder)
 
 const char* const* hb_video_encoder_get_profiles(int encoder)
 {
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (encoder & HB_VCODEC_QSV_MASK)
     {
         return hb_qsv_profile_get_names(encoder);
@@ -1556,7 +1556,7 @@ const char* const* hb_video_encoder_get_profiles(int encoder)
 
 const char* const* hb_video_encoder_get_levels(int encoder)
 {
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (encoder & HB_VCODEC_QSV_MASK)
     {
         return hb_qsv_level_get_names(encoder);
@@ -3804,7 +3804,7 @@ static void job_setup(hb_job_t * job, hb_title_t * title)
     job->list_attachment = hb_attachment_list_copy( title->list_attachment );
     job->metadata = hb_metadata_copy( title->metadata );
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     job->qsv.enc_info.is_init_done = 0;
     job->qsv.async_depth           = HB_QSV_ASYNC_DEPTH_DEFAULT;
     job->qsv.decode                = !!(title->video_decode_support &
@@ -4170,7 +4170,7 @@ hb_filter_object_t * hb_filter_get( int filter_id )
             filter = &hb_filter_grayscale;
             break;
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
         case HB_FILTER_QSV:
             filter = &hb_filter_qsv;
             break;

@@ -80,7 +80,7 @@ else
 endif
 
 ifeq (1,$(FEATURE.qsv))
-    LIBHB.GCC.D += USE_QSV HAVE_THREADS=1
+    LIBHB.GCC.D += HAVE_THREADS=1
 endif
 
 ifeq (1,$(FEATURE.vce))

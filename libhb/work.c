@@ -12,7 +12,7 @@
 #include "decomb.h"
 #include "hbavfilter.h"
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #include "qsv_common.h"
 #include "qsv_filter_pp.h"
 #endif
@@ -421,7 +421,7 @@ void hb_display_job_info(hb_job_t *job)
 
     hb_log(" * video track");
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (hb_qsv_decode_is_enabled(job))
     {
         hb_log("   + decoder: %s",
@@ -1204,7 +1204,7 @@ static int sanitize_audio(hb_job_t *job)
 
 static int sanitize_qsv( hb_job_t * job )
 {
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #if 0 // TODO: re-implement QSV VPP filtering and QSV zerocopy path
     int i;
 
@@ -1368,7 +1368,7 @@ static int sanitize_qsv( hb_job_t * job )
         }
     }
 #endif // QSV VPP filtering and QSV zerocopy path
-#endif // USE_QSV
+#endif // HB_PROJECT_FEATURE_QSV
 
     return 0;
 }
@@ -1550,7 +1550,7 @@ static void do_job(hb_job_t *job)
     hb_reduce(&job->vrate.num, &job->vrate.den,
                job->vrate.num,  job->vrate.den);
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #if 0 // TODO: re-implement QSV zerocopy path
     if (hb_qsv_decode_is_enabled(job) && (job->vcodec & HB_VCODEC_QSV_MASK))
     {
@@ -2043,13 +2043,13 @@ static void filter_loop( void * _f )
 
         buf_out = NULL;
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
         hb_buffer_t *last_buf_in = buf_in;
 #endif
 
         f->status = f->work( f, &buf_in, &buf_out );
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
         if (f->status == HB_FILTER_DELAY &&
             last_buf_in->qsv_details.filter_details != NULL && buf_out == NULL)
         {

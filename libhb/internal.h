@@ -7,9 +7,13 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#ifndef HB_INTERNAL_H
+#define HB_INTERNAL_H
+
+#include "project.h"
 #include "hbffmpeg.h"
 #include "extras/cl.h"
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #include "qsv_libav.h"
 #endif
 
@@ -142,7 +146,7 @@ struct hb_buffer_s
         int           size;
     } plane[4]; // 3 Color components + alpha
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     struct qsv
     {
         void           * qsv_atom;
@@ -470,7 +474,7 @@ extern hb_filter_object_t hb_filter_avfilter;
 extern hb_filter_object_t hb_filter_mt_frame;
 extern hb_filter_object_t hb_filter_colorspace;
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 extern hb_filter_object_t hb_filter_qsv;
 extern hb_filter_object_t hb_filter_qsv_pre;
 extern hb_filter_object_t hb_filter_qsv_post;
@@ -533,3 +537,4 @@ void                 hb_chapter_dequeue(hb_chapter_queue_t *q, hb_buffer_t *b);
 #define HB_FONT_SANS "sans-serif"
 #endif
 
+#endif // HB_INTERNAL_H

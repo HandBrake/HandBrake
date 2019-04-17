@@ -47,7 +47,7 @@
 #include "lang.h"
 #include "audio_resample.h"
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #include "qsv_common.h"
 #endif
 
@@ -139,7 +139,7 @@ struct hb_work_private_s
     hb_audio_resample_t  * resample;
     int                    drop_samples;
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     // QSV-specific settings
     struct
     {
@@ -361,7 +361,7 @@ static void closePrivData( hb_work_private_t ** ppv )
         }
         if ( pv->context && pv->context->codec )
         {
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
             /*
              * FIXME: knowingly leaked.
              *
@@ -967,7 +967,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
     reordered_data_t * reordered = NULL;
     hb_buffer_t      * out;
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     // no need to copy the frame data when decoding with QSV to opaque memory
     if (pv->qsv.decode &&
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
@@ -1120,7 +1120,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     hb_filter_init_t   filter_init;
     enum AVPixelFormat pix_fmt;
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (pv->qsv.decode &&
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
     {
@@ -1345,7 +1345,7 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
         return 0;
     }
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (pv->qsv.decode &&
         pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY &&
         pv->job->qsv.ctx == NULL && pv->video_codec_opened > 0)
@@ -1398,7 +1398,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->next_pts = 0;
     hb_buffer_list_clear(&pv->list);
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if ((pv->qsv.decode = hb_qsv_decode_is_enabled(job)))
     {
         pv->qsv.codec_name = hb_qsv_decode_get_codec_name(w->codec_param);
@@ -1429,7 +1429,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         pv->threads = HB_FFMPEG_THREADS_AUTO;
     }
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (pv->qsv.decode)
     {
         pv->codec = avcodec_find_decoder_by_name(pv->qsv.codec_name);
@@ -1457,7 +1457,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
         avcodec_parameters_to_context(pv->context,
                                   ic->streams[pv->title->video_id]->codecpar);
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
         if (pv->qsv.decode &&
             pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
         {
@@ -1474,7 +1474,7 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
             av_dict_set( &av_opts, "flags", "output_corrupt", 0 );
         }
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
         if (pv->qsv.decode && pv->context->codec_id == AV_CODEC_ID_HEVC)
         {
             av_dict_set( &av_opts, "load_plugin", "hevc_hw", 0 );
@@ -1590,7 +1590,7 @@ static int decodePacket( hb_work_object_t * w )
         pv->context->error_concealment = FF_EC_GUESS_MVS|FF_EC_DEBLOCK;
 
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
         if (pv->qsv.decode &&
             pv->qsv.config.io_pattern == MFX_IOPATTERN_OUT_OPAQUE_MEMORY)
         {
@@ -2080,7 +2080,7 @@ static int decavcodecvInfo( hb_work_object_t *w, hb_work_info_t *info )
 
     info->video_decode_support = HB_DECODE_SUPPORT_SW;
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (avcodec_find_decoder_by_name(hb_qsv_decode_get_codec_name(pv->context->codec_id)))
     {
         switch (pv->context->codec_id)

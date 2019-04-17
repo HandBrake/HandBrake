@@ -29,6 +29,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef QSV_FILTER_H
 #define QSV_FILTER_H
 
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_QSV
 void qsv_filter_close( hb_qsv_context* qsv, HB_QSV_STAGE_TYPE vpp_type );
+#endif
 
 #endif // QSV_FILTER_H

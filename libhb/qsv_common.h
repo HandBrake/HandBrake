@@ -12,7 +12,9 @@
 
 int            hb_qsv_available();
 
-#ifdef USE_QSV
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_QSV
 
 #include "mfx/mfxvideo.h"
 #include "mfx/mfxplugin.h"
@@ -193,5 +195,5 @@ const char* hb_qsv_impl_get_via_name(int impl);
 
 void hb_qsv_force_workarounds(); // for developers only
 
-#endif // USE_QSV
+#endif // HB_PROJECT_FEATURE_QSV
 #endif // HB_QSV_COMMON_H

@@ -116,7 +116,7 @@ int hb_vce_h265_available()
     return (check_component_available(AMFVideoEncoder_HEVC) == AMF_OK) ? 1 : 0;
 }
 
-#else
+#else // !USE_VCE
 
 int hb_vce_h264_available()
 {
@@ -128,4 +128,4 @@ int hb_vce_h265_available()
     return 0;
 }
 
-#endif // USE_QSV
+#endif // USE_VCE

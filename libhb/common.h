@@ -103,7 +103,7 @@ typedef enum
 #include "audio_remap.h"
 #include "libavutil/channel_layout.h"
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #include "qsv_libav.h"
 #endif
 
@@ -700,7 +700,7 @@ struct hb_job_s
     {
         int decode;
         int async_depth;
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
         hb_qsv_context *ctx;
 #endif
         // shared encoding parameters

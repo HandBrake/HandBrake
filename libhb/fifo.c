@@ -8,7 +8,7 @@
  */
 
 #include "hb.h"
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #include "qsv_libav.h"
 #endif
 
@@ -496,7 +496,7 @@ hb_buffer_t * hb_buffer_dup( const hb_buffer_t * src )
             hb_buffer_init_planes( buf );
     }
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     memcpy(&buf->qsv_details, &src->qsv_details, sizeof(src->qsv_details));
 #endif
 
@@ -719,7 +719,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
 
     while( b )
     {
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
         // Reclaim QSV resources before dropping the buffer.
         // when decoding without QSV, the QSV atom will be NULL.
         if (b->qsv_details.qsv_atom != NULL && b->qsv_details.ctx != NULL)

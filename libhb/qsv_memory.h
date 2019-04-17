@@ -29,6 +29,10 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef QSV_MEMORY_H
 #define QSV_MEMORY_H
 
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_QSV
+
 #include "mfx/mfxplugin.h"
 #include "qsv_libav.h"
 
@@ -52,4 +56,5 @@ typedef struct{
 int qsv_nv12_to_yuv420(struct SwsContext* sws_context,hb_buffer_t* dst, mfxFrameSurface1* src,mfxCoreInterface *core);
 int qsv_yuv420_to_nv12(struct SwsContext* sws_context,mfxFrameSurface1* dst, hb_buffer_t* src);
 
+#endif // HB_PROJECT_FEATURE_QSV
 #endif // QSV_MEMORY_H

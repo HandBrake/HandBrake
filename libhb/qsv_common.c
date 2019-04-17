@@ -7,7 +7,9 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifdef USE_QSV
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_QSV
 
 #include <stdio.h>
 #include <string.h>
@@ -2247,4 +2249,4 @@ int hb_qsv_available()
     return 0;
 }
 
-#endif // USE_QSV
+#endif // HB_PROJECT_FEATURE_QSV

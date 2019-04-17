@@ -34,7 +34,7 @@
 #include "lang.h"
 #include "parsecsv.h"
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #include "qsv_common.h"
 #endif
 
@@ -190,7 +190,7 @@ static int      start_at_frame = 0;
 static int64_t  stop_at_pts    = 0;
 static int      stop_at_frame = 0;
 static uint64_t min_title_duration = 10;
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 static int      qsv_async_depth    = -1;
 static int      qsv_decode         = -1;
 #endif
@@ -1901,7 +1901,7 @@ static void ShowHelp()
 "\n"
     );
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 if (hb_qsv_available())
 {
     fprintf( out,
@@ -2163,7 +2163,7 @@ static int ParseOptions( int argc, char ** argv )
             { "verbose",     optional_argument, NULL,    'v' },
             { "no-dvdnav",   no_argument,       NULL,    DVDNAV },
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
             { "qsv-baseline",         no_argument,       NULL,        QSV_BASELINE,       },
             { "qsv-async-depth",      required_argument, NULL,        QSV_ASYNC_DEPTH,    },
             { "qsv-implementation",   required_argument, NULL,        QSV_IMPLEMENTATION, },
@@ -3053,7 +3053,7 @@ static int ParseOptions( int argc, char ** argv )
             case MIN_DURATION:
                 min_title_duration = strtol( optarg, NULL, 0 );
                 break;
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
             case QSV_BASELINE:
                 hb_qsv_force_workarounds();
                 break;
@@ -4122,7 +4122,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         hb_dict_set(preset, "VideoColorMatrixCodeOverride",
                     hb_value_int(color_matrix_code));
     }
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     if (qsv_async_depth >= 0)
     {
         hb_dict_set(preset, "VideoQSVAsyncDepth",

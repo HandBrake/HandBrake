@@ -26,7 +26,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
-#ifdef USE_QSV
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_QSV
 
 #include "hb.h"
 #include "hbffmpeg.h"
@@ -121,4 +123,4 @@ int qsv_yuv420_to_nv12(struct SwsContext* sws_context,mfxFrameSurface1* dst, hb_
     return ret;
 }
 
-#endif // USE_QSV
+#endif // HB_PROJECT_FEATURE_QSV

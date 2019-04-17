@@ -7,6 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include "project.h"
+
 #ifdef SYS_MINGW
 #define _WIN32_WINNT 0x600
 #endif
@@ -70,7 +72,7 @@
 #include <linux/cdrom.h>
 #include <fcntl.h>
 #include <sys/ioctl.h>
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #include <libdrm/drm.h>
 #endif
 #elif defined( SYS_OPENBSD )
@@ -1513,7 +1515,7 @@ char * hb_strndup(const char * src, size_t len)
 #endif
 }
 
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
 #ifdef SYS_LINUX
 
 #define MAX_NODES             16
@@ -1686,7 +1688,7 @@ void hb_display_close(hb_display_t ** _d)
 }
 
 #endif // SYS_LINUX
-#else // !USE_QSV
+#else // !HB_PROJECT_FEATURE_QSV
 
 hb_display_t * hb_display_init(const char         *  driver_name,
                                const char * const * interface_names)
@@ -1699,4 +1701,4 @@ void hb_display_close(hb_display_t ** _d)
     (void)_d;
 }
 
-#endif // USE_QSV
+#endif // HB_PROJECT_FEATURE_QSV

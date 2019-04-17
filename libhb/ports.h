@@ -24,7 +24,9 @@
 #define IS_DIR_SEP(c) (c == '/')
 #endif
 
-#ifdef USE_QSV
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_QSV
 #include "mfx/mfxstructures.h"
 #ifdef SYS_LINUX
 #include <va/va_drm.h>
@@ -41,7 +43,7 @@ extern const char* DRM_INTEL_DRIVER_NAME;
 typedef struct
 {
     void          * handle;
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
     mfxHandleType   mfxType;
 
 #ifdef SYS_LINUX
