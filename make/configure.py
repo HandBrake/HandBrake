@@ -1926,6 +1926,7 @@ int main()
     doc.add( 'BUILD.extra',   build_tuple.extra )
     doc.add( 'BUILD.title',   '%s %s' % (build_tuple.systemf,arch.mode.default) )
     doc.add( 'BUILD.ncpu',    core.count )
+    doc.add( 'BUILD.jobs',    core.jobs )
     doc.add( 'BUILD.date',    time.strftime('%c', now) ),
 
     doc.addBlank()
@@ -1937,8 +1938,6 @@ int main()
     doc.add( 'HOST.release', host_tuple.release )
     doc.add( 'HOST.extra',   host_tuple.extra )
     doc.add( 'HOST.title',   host_tuple.title )
-    doc.add( 'HOST.ncpu',    core.count )
-    doc.add( 'HOST.jobs',    core.jobs )
 
     doc.add( 'HOST.cross', int(options.cross != None or arch.mode.mode != arch.mode.default) )
     if options.cross:
