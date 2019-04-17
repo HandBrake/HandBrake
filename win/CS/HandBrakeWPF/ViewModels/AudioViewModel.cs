@@ -530,7 +530,7 @@ namespace HandBrakeWPF.ViewModels
 
             foreach (Audio sourceTrack in this.GetSelectedLanguagesTracks())
             {
-                // Step 2: Check if the track list already contrains this track
+                // Step 2: Check if the track list already contains this track
                 bool found = this.Task.AudioTracks.Any(audioTrack => Equals(audioTrack.ScannedTrack, sourceTrack));
                 if (!found)
                 {
@@ -631,10 +631,14 @@ namespace HandBrakeWPF.ViewModels
                 ? LanguageUtilities.GetIsoCodes()
                 : LanguageUtilities.GetLanguageCodes(this.AudioBehaviours.SelectedLangauges.ToArray());
 
-            List<Audio> availableTracks =
-                this.SourceTracks.Where(audio => iso6392Codes.Contains(audio.LanguageCode.Trim())).ToList();
 
-            return availableTracks;
+            List<Audio> orderedTracks = new List<Audio>();
+            foreach (string code in iso6392Codes)
+            {
+                orderedTracks.AddRange(this.SourceTracks.Where(audio => audio.LanguageCode == code));
+            }
+
+            return orderedTracks;
         }
 
         #endregion

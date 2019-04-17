@@ -712,10 +712,14 @@ namespace HandBrakeWPF.ViewModels
                 : LanguageUtilities.GetLanguageCodes(
                     this.SubtitleBehaviours.SelectedLangauges.ToArray());
 
-            List<Subtitle> availableTracks =
-                this.SourceTracks.Where(subtitle => iso6392Codes.Contains(subtitle.LanguageCodeClean)).ToList();
 
-           return availableTracks;
+            List<Subtitle> orderedSubtitles = new List<Subtitle>();
+            foreach (string code in iso6392Codes)
+            {
+                orderedSubtitles.AddRange(this.SourceTracks.Where(subtitle => subtitle.LanguageCodeClean == code ));
+            }
+
+            return orderedSubtitles;
         }
 
         /// <summary>
