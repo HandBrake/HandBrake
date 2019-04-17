@@ -42,9 +42,6 @@ LIBHB.out += $(LIBHB.a)
 
 ###############################################################################
 
-ifeq (1,$(FEATURE.ffmpeg_aac))
-LIBHB.GCC.D += USE_FFMPEG_AAC
-endif
 LIBHB.GCC.D += __LIBHB__ USE_PTHREAD
 LIBHB.GCC.I += $(LIBHB.build/) $(CONTRIB.build/)include
 

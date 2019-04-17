@@ -398,7 +398,7 @@ static int hb_audio_encoder_is_enabled(int encoder)
             return 1;
 #endif
 
-#ifdef USE_FFMPEG_AAC
+#if HB_PROJECT_FEATURE_FFMPEG_AAC
         case HB_ACODEC_FFAAC:
             return avcodec_find_encoder_by_name("aac") != NULL;
 #endif
