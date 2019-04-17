@@ -1175,7 +1175,7 @@ ghb_low_disk_check(signal_user_data_t *ud)
     hb_window = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
     dialog    = gtk_message_dialog_new(hb_window, GTK_DIALOG_MODAL,
             GTK_MESSAGE_WARNING, GTK_BUTTONS_NONE,
-            _("%sThe destination filesystem is almost full: %"PRIu64"MB free.\n"
+            _("%sThe destination filesystem is almost full: %"PRId64" MB free.\n"
               "Destination: %s\n"
               "Encode may be incomplete if you proceed.\n"),
             paused_msg, free_size / (1024 * 1024), dest); 

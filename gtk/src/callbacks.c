@@ -86,6 +86,7 @@
 #include "hb-backend.h"
 #include "ghb-dvd.h"
 #include "ghbcellrenderertext.h"
+#include "libavutil/parseutils.h"
 
 static void update_queue_labels(signal_user_data_t *ud);
 static void load_all_titles(signal_user_data_t *ud, int titleindex);
@@ -1063,7 +1064,7 @@ parse_datestring(const char *src, struct tm *tm)
 
     for (int i = 0; i < sizeof(maps); i++)
     {
-        if (hb_validate_param_string(maps[i].pattern), src)
+        if (hb_validate_param_string(maps[i].pattern, src))
         {
             av_small_strptime(src, maps[i].format, tm);
             return 1;

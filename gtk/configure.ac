@@ -191,13 +191,10 @@ fi
 
 if test "x$use_x265" = "xyes" ; then
     HB_LIBS="$HB_LIBS -lx265"
-if test "x$use_numa" = "xyes" ; then
-    HB_LIBS="$HB_LIBS -lnuma"
-fi
 fi
 
 if test "x$use_qsv" = "xyes" ; then
-    HB_LIBS="$HB_LIBS -lmfx -lva -lva-drm"
+    HB_LIBS="$HB_LIBS -lmfx"
 fi
 
 case $host in
@@ -214,6 +211,16 @@ case $host in
     ;;
   *-*-freebsd*)
     HB_LIBS="$HB_LIBS -lpthread"
+    ;;
+  *-*-linux*)
+    if test "x$use_qsv" = "xyes" ; then
+        HB_LIBS="$HB_LIBS -lva -lva-drm"
+    fi
+    if test "x$use_x265" = "xyes" ; then
+    if test "x$use_numa" = "xyes" ; then
+        HB_LIBS="$HB_LIBS -lnuma"
+    fi
+    fi
     ;;
   *)
     HB_LIBS="$HB_LIBS -ldl -lpthread"

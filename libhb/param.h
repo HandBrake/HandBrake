@@ -26,6 +26,7 @@ hb_dict_t * hb_generate_filter_settings(int filter_id, const char *preset,
 char * hb_generate_filter_settings_json(int filter_id, const char *preset,
                                         const char *tune, const char *custom);
 
+int    hb_validate_param_string(const char *regex_pattern, const char *param_string);
 int    hb_validate_filter_preset(int filter_id, const char *preset,
                                  const char *tune, const char *custom);
 int    hb_validate_filter_settings(int filter_id, const hb_dict_t *settings);

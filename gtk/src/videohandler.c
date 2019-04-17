@@ -306,8 +306,6 @@ format_video_preset_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
     return g_strdup_printf(" %-12s", "ERROR");
 }
 
-#include <execinfo.h>
-
 G_MODULE_EXPORT gchar*
 format_vquality_cb(GtkScale *scale, gdouble val, signal_user_data_t *ud)
 {
