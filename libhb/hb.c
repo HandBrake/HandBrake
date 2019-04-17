@@ -1703,7 +1703,7 @@ int hb_global_init()
     hb_register(&hb_enctheora);
     hb_register(&hb_encvorbis);
     hb_register(&hb_encx264);
-#ifdef USE_X265
+#if HB_PROJECT_FEATURE_X265
     hb_register(&hb_encx265);
 #endif
 #ifdef USE_QSV

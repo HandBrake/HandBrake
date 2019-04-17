@@ -23,7 +23,7 @@
 #include "qsv_common.h"
 #endif
 
-#ifdef USE_X265
+#if HB_PROJECT_FEATURE_X265
 #include "x265.h"
 #endif
 
@@ -318,7 +318,7 @@ static int hb_video_encoder_is_enabled(int encoder, int disable_hardware)
         case HB_VCODEC_FFMPEG_VP9:
             return 1;
 
-#ifdef USE_X265
+#if HB_PROJECT_FEATURE_X265
         case HB_VCODEC_X265_8BIT:
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
@@ -1480,7 +1480,7 @@ const char* const* hb_video_encoder_get_presets(int encoder)
         case HB_VCODEC_X264_10BIT:
             return x264_preset_names;
 
-#ifdef USE_X265
+#if HB_PROJECT_FEATURE_X265
         case HB_VCODEC_X265_8BIT:
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:
@@ -1500,7 +1500,7 @@ const char* const* hb_video_encoder_get_tunes(int encoder)
         case HB_VCODEC_X264_10BIT:
             return x264_tune_names;
 
-#ifdef USE_X265
+#if HB_PROJECT_FEATURE_X265
         case HB_VCODEC_X265_8BIT:
         case HB_VCODEC_X265_10BIT:
         case HB_VCODEC_X265_12BIT:

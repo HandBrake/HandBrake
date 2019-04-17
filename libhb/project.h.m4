@@ -39,18 +39,18 @@ dnl
 <<#>>define HB_PROJECT_HOST_TITLE                "__HOST_title"
 <<#>>define HB_PROJECT_HOST_ARCH                 "__HOST_arch"
 
-<<#>>define HB_PROJECT_FEATURE_asm               __FEATURE_asm
-<<#>>define HB_PROJECT_FEATURE_fdk_aac           __FEATURE_fdk_aac
-<<#>>define HB_PROJECT_FEATURE_ffmpeg_aac        __FEATURE_ffmpeg_aac
-<<#>>define HB_PROJECT_FEATURE_flatpak           __FEATURE_flatpak
-<<#>>define HB_PROJECT_FEATURE_gtk               __FEATURE_gtk
-<<#>>define HB_PROJECT_FEATURE_gtk_mingw         __FEATURE_gtk_mingw
-<<#>>define HB_PROJECT_FEATURE_gtk_update_checks __FEATURE_gtk_update_checks
-<<#>>define HB_PROJECT_FEATURE_gst               __FEATURE_gst
-<<#>>define HB_PROJECT_FEATURE_nvenc             __FEATURE_nvenc
-<<#>>define HB_PROJECT_FEATURE_qsv               __FEATURE_qsv
-<<#>>define HB_PROJECT_FEATURE_vce               __FEATURE_vce
-<<#>>define HB_PROJECT_FEATURE_x265              __FEATURE_x265
-<<#>>define HB_PROJECT_FEATURE_numa              __FEATURE_numa
+<<#>>define HB_PROJECT_FEATURE_ASM               __FEATURE_asm
+<<#>>define HB_PROJECT_FEATURE_FDK_AAC           __FEATURE_fdk_aac
+<<#>>define HB_PROJECT_FEATURE_FFMPEG_AAC        __FEATURE_ffmpeg_aac
+<<#>>define HB_PROJECT_FEATURE_FLATPAK           __FEATURE_flatpak
+<<#>>define HB_PROJECT_FEATURE_GTK               __FEATURE_gtk
+<<#>>define HB_PROJECT_FEATURE_GTK_MINGW         __FEATURE_gtk_mingw
+<<#>>define HB_PROJECT_FEATURE_GTK_UPDATE_CHECKS __FEATURE_gtk_update_checks
+<<#>>define HB_PROJECT_FEATURE_GST               __FEATURE_gst
+<<#>>define HB_PROJECT_FEATURE_NVENC             __FEATURE_nvenc
+<<#>>define HB_PROJECT_FEATURE_QSV               __FEATURE_qsv
+<<#>>define HB_PROJECT_FEATURE_VCE               __FEATURE_vce
+<<#>>define HB_PROJECT_FEATURE_X265              __FEATURE_x265
+<<#>>define HB_PROJECT_FEATURE_NUMA              __FEATURE_numa
 
 #endif /* HB_PROJECT_PROJECT_H */

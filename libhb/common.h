@@ -10,6 +10,7 @@
 #ifndef HB_COMMON_H
 #define HB_COMMON_H
 
+#include "project.h"
 #include "hbtypes.h"
 #include "hb_dict.h"
 #include <math.h>
@@ -1432,7 +1433,7 @@ char * hb_x264_param_unparse(int bit_depth, const char *x264_preset,
 // x264 option name/synonym helper
 const char * hb_x264_encopt_name( const char * name );
 
-#ifdef USE_X265
+#if HB_PROJECT_FEATURE_X265
 // x265 option name/synonym helper
 const char * hb_x265_encopt_name( const char * name );
 #endif

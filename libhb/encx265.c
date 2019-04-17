@@ -6,7 +6,10 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
-#ifdef USE_X265
+
+#include "project.h"
+
+#if HB_PROJECT_FEATURE_X265
 
 #include "hb.h"
 #include "hb_dict.h"
