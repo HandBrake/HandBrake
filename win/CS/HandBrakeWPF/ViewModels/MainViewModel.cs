@@ -587,8 +587,7 @@ namespace HandBrakeWPF.ViewModels
 
                             if (value == this.ScannedSource.ScanPath)
                             {
-                                this.Destination = this.CurrentTask.Destination;
-                                this.errorService.ShowMessageBox(Resources.Main_SourceDestinationMatchError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                                this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                                 return;
                             }
                         }
@@ -1352,6 +1351,11 @@ namespace HandBrakeWPF.ViewModels
                 return new AddQueueError(Resources.Main_SetDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
+            if (this.Destination.ToLower() == this.ScannedSource.ScanPath.ToLower())
+            {
+                return new AddQueueError(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             if (File.Exists(this.CurrentTask.Destination))
             {
                 MessageBoxResult result = this.errorService.ShowMessageBox(string.Format(Resources.Main_QueueOverwritePrompt, Path.GetFileName(this.CurrentTask.Destination)), Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -1374,21 +1378,10 @@ namespace HandBrakeWPF.ViewModels
             }
 
             // Sanity check the filename
-            if (!string.IsNullOrEmpty(this.Destination) && FileHelper.FilePathHasInvalidChars(this.Destination))
+            if (FileHelper.FilePathHasInvalidChars(this.Destination))
             {
                 this.NotifyOfPropertyChange(() => this.Destination);
                 return new AddQueueError(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            if (this.Destination == this.ScannedSource.ScanPath)
-            {
-                this.Destination = null;
-                return new AddQueueError(Resources.Main_SourceDestinationMatchError, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
-            if (this.scannedSource != null && !string.IsNullOrEmpty(this.scannedSource.ScanPath) && this.Destination.ToLower() == this.scannedSource.ScanPath.ToLower())
-            {
-                return new AddQueueError(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
             // defer to subtitle's validation messages
@@ -1414,6 +1407,15 @@ namespace HandBrakeWPF.ViewModels
             }
 
             return null;
+        }
+
+        public void AddToQueueWithErrorHandling()
+        {
+            var addError = this.AddToQueue();
+            if (addError != null)
+            {
+                this.errorService.ShowMessageBox(addError.Message, addError.Header, addError.Buttons, addError.ErrorType);
+            }
         }
 
         /// <summary>

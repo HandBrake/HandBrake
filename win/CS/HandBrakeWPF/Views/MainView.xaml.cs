@@ -61,7 +61,7 @@ namespace HandBrakeWPF.Views
             }
 
             // Otherwise assume it's a main area click and add to queue.
-            ((IMainViewModel)this.DataContext).AddToQueue();
+            ((IMainViewModel)this.DataContext).AddToQueueWithErrorHandling();
         }
 
         private void TabControl_OnSelectionChanged(object sender, SelectionChangedEventArgs e)

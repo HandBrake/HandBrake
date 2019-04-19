@@ -362,10 +362,6 @@ Presets from older versions must be re-created in the current version.</value>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
     <value>Additional advanced arguments that can be passed to the video encoder.</value>
   </data>
-  <data name="Main_SourceDestinationMatchError" xml:space="preserve">
-    <value>You cannot overwrite the source file you want to convert.
-Please choose a different filename.</value>
-  </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
     <value>None - Only tracks where the container does not support the format will be burned in.
 Foreign Audio Track - The Foreign Audio track will be burned in if available. 
@@ -1941,5 +1937,12 @@ Time Remaining: {5},  Elapsed: {6:d\:hh\:mm\:ss} {7}</value>
   </data>
   <data name="Startup_InitFailed" xml:space="preserve">
     <value>HandBrake's engine failed to initialise. This is often caused by out of date GPU drivers.\n  Please update the GPU drivers for any onboard and discrete graphics your system has.</value>
+  </data>
+  <data name="OptionsView_FormatOptions" xml:space="preserve">
+    <value>Live Update Options: {source} {title} {chapters} 
+Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
+  </data>
+  <data name="OptionsView_PathOptions" xml:space="preserve">
+    <value>Available Options: {source_path} {source_folder_name}  (Not both at the same time!)</value>
   </data>
 </root>

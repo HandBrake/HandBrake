@@ -1512,16 +1512,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot overwrite the source file you want to convert.
-        ///Please choose a different filename..
-        /// </summary>
-        public static string Main_SourceDestinationMatchError {
-            get {
-                return ResourceManager.GetString("Main_SourceDestinationMatchError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Start Encode.
         /// </summary>
         public static string Main_Start {
@@ -3050,6 +3040,16 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Live Update Options: {source} {title} {chapters} 
+        ///Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters).
+        /// </summary>
+        public static string OptionsView_FormatOptions {
+            get {
+                return ResourceManager.GetString("OptionsView_FormatOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hardware encoding support is currently disabled. Please make sure you are running up-to-date drivers for all graphics adaptors in this system.
         ///
         ///This will not impact any of the software encoders..
@@ -3093,6 +3093,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_Notice {
             get {
                 return ResourceManager.GetString("OptionsView_Notice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available Options: {source_path} {source_folder_name}  (Not both at the same time!).
+        /// </summary>
+        public static string OptionsView_PathOptions {
+            get {
+                return ResourceManager.GetString("OptionsView_PathOptions", resourceCulture);
             }
         }
         

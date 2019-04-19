@@ -75,7 +75,7 @@ namespace HandBrakeWPF.Commands
                 // Add to Queue (Ctrl+A)
                 if (gesture.Modifiers == ModifierKeys.Control && gesture.Key == Key.A)
                 {
-                    mainViewModel.AddToQueue();
+                    mainViewModel.AddToQueueWithErrorHandling();
                 }
 
                 // Add all to Queue (Alt+A)

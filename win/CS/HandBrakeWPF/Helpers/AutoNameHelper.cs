@@ -192,11 +192,6 @@ namespace HandBrakeWPF.Helpers
                     string requestedPath = Path.Combine(directory, savedPath);
 
                     autoNamePath = Path.Combine(requestedPath, destinationFilename);
-                    if (autoNamePath == task.Source)
-                    {
-                        // Append out_ to files that already exist or is the source file
-                        autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), "output_" + destinationFilename);
-                    }
                 }
                 else if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source_folder_name}") && !string.IsNullOrEmpty(task.Source))
                 {
@@ -229,6 +224,19 @@ namespace HandBrakeWPF.Helpers
                     // Otherwise, use the path that is already there.
                     // Use the path and change the file extension to match the previous destination
                     autoNamePath = Path.Combine(Path.GetDirectoryName(task.Destination), destinationFilename);
+                }
+
+                // Append out_ to files that already exist or is the source file
+                if (autoNamePath?.ToLower() == task.Source?.ToLower())
+                {
+                    autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), "output_" + destinationFilename);
+
+                    int counter = 1;
+                    while (autoNamePath == task.Source)
+                    {
+                        autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), string.Format("output{0}_", counter) + destinationFilename);
+                        counter = counter + 1;
+                    }
                 }
             }
 
