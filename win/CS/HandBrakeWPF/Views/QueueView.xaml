@@ -138,7 +138,6 @@
                 </Grid>
 
                 <ListBox Tag="{Binding}" x:Name="queueJobs" Grid.Row="1" Margin="10,0,5,0"
-                             
                              dd:DragDrop.DropHandler="{Binding}"
                              dd:DragDrop.IsDragSource="True"
                              dd:DragDrop.IsDropTarget="True"
@@ -266,16 +265,14 @@
                                              Value="{Binding DataContext.ProgressValue, ElementName=queueJobs}" IsIndeterminate="{Binding DataContext.IntermediateProgress, ElementName=queueJobs}"
                                              Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
 
-                                    <Image Source="Images\close64.png" Width="16" Height="16" Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" 
-                                           VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" >
-                                        <i:Interaction.Triggers>
-                                            <i:EventTrigger EventName="MouseLeftButtonDown">
-                                                <cal:ActionMessage MethodName="RemoveJob">
-                                                    <cal:Parameter Value="{Binding}" />
-                                                </cal:ActionMessage>
-                                            </i:EventTrigger>
-                                        </i:Interaction.Triggers>
-                                    </Image>
+                                    <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
+                                            AutomationProperties.Name="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" >
+                                        <Button.Template>
+                                            <ControlTemplate>
+                                                <Image Width="16" Height="16" VerticalAlignment="Center" Source="Images/close64.png" />
+                                            </ControlTemplate>
+                                        </Button.Template>
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </DataTemplate>

@@ -168,6 +168,15 @@ namespace HandBrakeWPF.Views
         {
             ((QueueViewModel)this.DataContext).EditJob(this.mouseActiveQueueTask);
         }
-        
+
+        private void QueueDeleteJob_OnClick(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+            QueueTask task = button?.DataContext as QueueTask;
+            if (task != null)
+            {
+                ((QueueViewModel)this.DataContext).RemoveJob(task);
+            }
+        }
     }
 }
