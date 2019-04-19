@@ -272,7 +272,7 @@
                                Width="16"
                                Height="16"
                                Margin="5,0,10,0"
-                               Source="Images/delete.png">
+                               Source="Images/close64.png">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseDown">
                                     <cal:ActionMessage MethodName="Remove">

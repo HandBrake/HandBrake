@@ -235,7 +235,7 @@
 
                         <!--  Delete  -->
                         <StackPanel Grid.Column="2" Grid.Row="0" VerticalAlignment="Center">
-                            <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/delete.png">
+                            <Image Width="16" Height="16" Margin="10,0,10,0" Source="Images/close64.png">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="MouseDown">
                                         <cal:ActionMessage MethodName="Remove">

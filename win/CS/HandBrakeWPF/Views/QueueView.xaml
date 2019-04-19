@@ -379,7 +379,7 @@
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" 
-                                               Source="Images/delete.png">
+                                               Source="Images/close64_dark.png">
                                             </Image>
                                             <TextBlock Text="{x:Static Properties:Resources.QueueView_Delete}" />
                                         </StackPanel>

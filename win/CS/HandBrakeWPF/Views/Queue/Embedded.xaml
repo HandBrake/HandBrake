@@ -256,7 +256,7 @@
                                     <ControlTemplate>
                                         <Image Width="20" 
                                                Height="20" VerticalAlignment="Center" 
-                                               Source="../Images/delete.png"
+                                               Source="../Images/close64.png"
                                                ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}">
                                         </Image>
                                     </ControlTemplate>

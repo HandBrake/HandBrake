@@ -633,7 +633,6 @@
     <Resource Include="Views\Images\Complete.png" />
     <Resource Include="Views\Images\Working0.png" />
     <Resource Include="handbrakepineapple.ico" />
-    <Resource Include="Views\Images\delete.png" />
     <Resource Include="Views\Images\Close.png" />
     <Resource Include="Views\Images\Options24.png" />
   </ItemGroup>
@@ -709,6 +708,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Images\close64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\close64_dark.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
