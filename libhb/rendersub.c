@@ -104,6 +104,8 @@ hb_filter_object_t hb_filter_render_sub =
     .close         = hb_rendersub_close,
 };
 
+// blends src YUVA420P buffer into dst
+// dst is currently YUV420P, but in future will be other formats as well
 static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
 {
     int xx, yy;
@@ -186,7 +188,9 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
     }
 }
 
-// Assumes that the input buffer has the same dimensions
+// applies subtitle 'sub' YUVA420P buffer into destination 'buf'
+// 'buf' is currently YUV420P, but in future will be other formats as well
+// Assumes that the input destination buffer has the same dimensions
 // as the original title diminsions
 static void ApplySub( hb_filter_private_t * pv, hb_buffer_t * buf, hb_buffer_t * sub )
 {
@@ -227,13 +231,10 @@ static hb_buffer_t * ScaleSubtitle(hb_filter_private_t *pv,
 
         width       = sub->f.width  * xfactor;
         height      = sub->f.height * yfactor;
-        scaled      = hb_frame_buffer_init(pv->output.pix_fmt, width, height);
+        // Note that subtitle frame buffer is YUVA420P, not YUV420P, it has alpha
+        scaled      = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P, width, height);
         if (scaled == NULL)
             return NULL;
-        scaled->f.color_prim     = pv->output.color_prim;
-        scaled->f.color_transfer = pv->output.color_transfer;
-        scaled->f.color_matrix   = pv->output.color_matrix;
-        scaled->f.color_range    = pv->output.color_range ;
 
         scaled->f.x = sub->f.x * xfactor;
         scaled->f.y = sub->f.y * yfactor;
@@ -451,6 +452,7 @@ static uint8_t ssaAlpha( ASS_Image *frame, int x, int y )
     return (uint8_t)alpha;
 }
 
+// Returns a subtitle rendered to a YUVA420P frame 
 static hb_buffer_t * RenderSSAFrame( hb_filter_private_t * pv, ASS_Image * frame )
 {
     hb_buffer_t *sub;
@@ -466,13 +468,10 @@ static hb_buffer_t * RenderSSAFrame( hb_filter_private_t * pv, ASS_Image * frame
     unsigned frameV = (yuv >> 8 ) & 0xff;
     unsigned frameU = (yuv >> 0 ) & 0xff;
 
-    sub = hb_frame_buffer_init(pv->output.pix_fmt, frame->w, frame->h);
+    // Note that subtitle frame buffer is YUVA420P, not YUV420P, it has alpha
+    sub = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P, frame->w, frame->h);
     if (sub == NULL)
         return NULL;
-    sub->f.color_prim     = pv->output.color_prim;
-    sub->f.color_transfer = pv->output.color_transfer;
-    sub->f.color_matrix   = pv->output.color_matrix;
-    sub->f.color_range    = pv->output.color_range ;
 
     uint8_t *y_out, *u_out, *v_out, *a_out;
     y_out = sub->plane[0].data;
