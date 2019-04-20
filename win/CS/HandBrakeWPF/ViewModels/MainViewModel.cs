@@ -32,6 +32,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Model;
     using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Model.Subtitles;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.EventArgs;
@@ -1358,10 +1359,14 @@ namespace HandBrakeWPF.ViewModels
 
             if (File.Exists(this.CurrentTask.Destination))
             {
-                MessageBoxResult result = this.errorService.ShowMessageBox(string.Format(Resources.Main_QueueOverwritePrompt, Path.GetFileName(this.CurrentTask.Destination)), Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.No)
+                FileOverwriteBehaviour behaviour = (FileOverwriteBehaviour)this.userSettingService.GetUserSetting<int>(UserSettingConstants.FileOverwriteBehaviour, typeof(int));
+                if (behaviour == FileOverwriteBehaviour.Ask)
                 {
-                    return null; // Handled by the above action.
+                    MessageBoxResult result = this.errorService.ShowMessageBox(string.Format(Resources.Main_QueueOverwritePrompt, Path.GetFileName(this.CurrentTask.Destination)), Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    if (result == MessageBoxResult.No)
+                    {
+                        return null; // Handled by the above action.
+                    }
                 }
             }
 
@@ -1543,7 +1548,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 dialog.InitialDirectory = mruDir;
             }
-
+            
             bool? dialogResult = dialog.ShowDialog();
 
             if (dialogResult.HasValue && dialogResult.Value)
@@ -1756,9 +1761,13 @@ namespace HandBrakeWPF.ViewModels
                 Filter = "mp4|*.mp4;*.m4v|mkv|*.mkv|webm|*.webm", 
                 CheckPathExists = true, 
                 AddExtension = true, 
-                DefaultExt = ".mp4", 
-                OverwritePrompt = true, 
+                DefaultExt = ".mp4",
             };
+
+            saveFileDialog.OverwritePrompt =
+                (FileOverwriteBehaviour)this.userSettingService.GetUserSetting<int>(
+                    UserSettingConstants.FileOverwriteBehaviour,
+                    typeof(int)) == FileOverwriteBehaviour.Ask;
 
             string extension = Path.GetExtension(this.CurrentTask.Destination);
 

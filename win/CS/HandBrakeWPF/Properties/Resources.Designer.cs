@@ -800,6 +800,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ask to overwrite file.
+        /// </summary>
+        public static string FileOverwriteBehaviours_Ask {
+            get {
+                return ResourceManager.GetString("FileOverwriteBehaviours_Ask", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Try to automatically rename file.
+        /// </summary>
+        public static string FileOverwriteBehaviours_Autoname {
+            get {
+                return ResourceManager.GetString("FileOverwriteBehaviours_Autoname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overwrite the file.
+        /// </summary>
+        public static string FileOverwriteBehaviours_Overwrite {
+            get {
+                return ResourceManager.GetString("FileOverwriteBehaviours_Overwrite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom:.
         /// </summary>
         public static string FiltersView_Custom {
@@ -2608,24 +2635,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Experimental Features.
-        /// </summary>
-        public static string Options_Experimental {
-            get {
-                return ResourceManager.GetString("Options_Experimental", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Experimental features are ideas we are working on. These may or may not make it into a final release and may not work!.
-        /// </summary>
-        public static string Options_ExperimentalFeatures {
-            get {
-                return ResourceManager.GetString("Options_ExperimentalFeatures", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to File Format:.
         /// </summary>
         public static string Options_Format {
@@ -2860,7 +2869,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show Queue in line with the main UI..
+        ///   Looks up a localized string similar to Show Queue in line with the main UI. (Experimental Feature).
         /// </summary>
         public static string Options_ShowQueueInline {
             get {
@@ -2892,6 +2901,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_TitleCase {
             get {
                 return ResourceManager.GetString("Options_TitleCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User Interface Behaviour.
+        /// </summary>
+        public static string Options_UIBehaviour {
+            get {
+                return ResourceManager.GetString("Options_UIBehaviour", resourceCulture);
             }
         }
         
@@ -3036,6 +3054,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_EnableVceEncoding {
             get {
                 return ResourceManager.GetString("OptionsView_EnableVceEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File overwrite behaviour:.
+        /// </summary>
+        public static string OptionsView_FileOverwriteBehaviour {
+            get {
+                return ResourceManager.GetString("OptionsView_FileOverwriteBehaviour", resourceCulture);
             }
         }
         

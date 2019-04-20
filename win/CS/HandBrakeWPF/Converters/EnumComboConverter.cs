@@ -15,6 +15,8 @@ namespace HandBrakeWPF.Converters
     using System.Windows.Data;
     using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Model;
+
+    using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
     using OutputFormat = HandBrakeWPF.Services.Encode.Model.Models.OutputFormat;
@@ -87,6 +89,11 @@ namespace HandBrakeWPF.Converters
             {
                 return EnumHelper<Sharpen>.GetEnumDisplayValues(typeof(Sharpen));
             }
+            if (value is IEnumerable<FileOverwriteBehaviour>)
+            {
+                return EnumHelper<FileOverwriteBehaviour>.GetEnumDisplayValues(typeof(FileOverwriteBehaviour));
+            }
+
 
             // Single Items
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
@@ -131,6 +138,10 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(Sharpen) || value.GetType() == typeof(Sharpen))
             {
                 return EnumHelper<Sharpen>.GetDisplay((Sharpen)value);
+            }
+            if (targetType == typeof(FileOverwriteBehaviour) || value.GetType() == typeof(FileOverwriteBehaviour))
+            {
+                return EnumHelper<FileOverwriteBehaviour>.GetDisplay((FileOverwriteBehaviour)value);
             }
 
             return null;

@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\DisplayName.cs" />
+    <Compile Include="Attributes\DisplayNameLocalized.cs" />
     <Compile Include="Attributes\ShortName.cs" />
     <Compile Include="Interop\EventArgs\EncodeCompletedEventArgs.cs" />
     <Compile Include="Interop\EventArgs\EncodeProgressEventArgs.cs" />

@@ -12,12 +12,14 @@ namespace HandBrakeWPF.Helpers
     using System;
     using System.IO;
     using System.Linq;
+    using System.Runtime.CompilerServices;
 
     using Caliburn.Micro;
 
     using HandBrake.Interop.Interop.Model.Encoding;
 
     using HandBrakeWPF.Extensions;
+    using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
@@ -227,17 +229,21 @@ namespace HandBrakeWPF.Helpers
                 }
 
                 // Append out_ to files that already exist or is the source file
-                if (autoNamePath?.ToLower() == task.Source?.ToLower())
-                {
-                    autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), "output_" + destinationFilename);
-
-                    int counter = 1;
-                    while (autoNamePath == task.Source)
+                //FileOverwriteBehaviour behaviour = (FileOverwriteBehaviour)userSettingService.GetUserSetting<int>(UserSettingConstants.FileOverwriteBehaviour, typeof(int));
+                //if (behaviour == FileOverwriteBehaviour.Autoname)
+                //{
+                    if (autoNamePath?.ToLower() == task.Source?.ToLower())
                     {
-                        autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), string.Format("output{0}_", counter) + destinationFilename);
-                        counter = counter + 1;
+                        autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), "output_" + destinationFilename);
+
+                        int counter = 1;
+                        while (autoNamePath == task.Source)
+                        {
+                            autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), string.Format("output{0}_", counter) + destinationFilename);
+                            counter = counter + 1;
+                        }
                     }
-                }
+                //}
             }
 
             return autoNamePath;

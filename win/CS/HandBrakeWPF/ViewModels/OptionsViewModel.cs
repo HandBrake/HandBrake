@@ -24,6 +24,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model;
+    using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
@@ -101,12 +102,10 @@ namespace HandBrakeWPF.ViewModels
         private bool enableQuickSyncEncoding;
         private bool enableVceEncoder;    
         private bool enableNvencEncoder;
-
         private InterfaceLanguage selectedLanguage;
-
         private bool showAddSelectionToQueue;
-
         private bool showAddAllToQueue;
+        private int selectedOverwriteBehaviour;
 
         #endregion
 
@@ -646,6 +645,19 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.removePunctuation = value;
                 this.NotifyOfPropertyChange(() => RemovePunctuation);
+            }
+        }
+
+        public BindingList<FileOverwriteBehaviour> FileOverwriteBehaviourList { get; set; }
+
+        public int SelectedOverwriteBehaviour
+        {
+            get => this.selectedOverwriteBehaviour;
+            set
+            {
+                if (value == this.selectedOverwriteBehaviour) return;
+                this.selectedOverwriteBehaviour = value;
+                this.NotifyOfPropertyChange(() => this.SelectedOverwriteBehaviour);
             }
         }
 
@@ -1429,6 +1441,13 @@ namespace HandBrakeWPF.ViewModels
             this.ChangeToTitleCase = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameTitleCase);
             this.RemovePunctuation = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RemovePunctuation);
 
+            // File Overwrite
+            this.FileOverwriteBehaviourList = new BindingList<FileOverwriteBehaviour>();
+            this.FileOverwriteBehaviourList.Add(FileOverwriteBehaviour.Ask);
+            this.FileOverwriteBehaviourList.Add(FileOverwriteBehaviour.ForceOverwrite);
+           // this.FileOverwriteBehaviourList.Add(FileOverwriteBehaviour.Autoname);
+            this.SelectedOverwriteBehaviour = this.userSettingService.GetUserSetting<int>(UserSettingConstants.FileOverwriteBehaviour, typeof(int));
+
             // #############################
             // Picture Tab
             // #############################
@@ -1578,6 +1597,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameRemoveUnderscore, this.RemoveUnderscores);
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameTitleCase, this.ChangeToTitleCase);
             this.userSettingService.SetUserSetting(UserSettingConstants.RemovePunctuation, this.RemovePunctuation);
+            this.userSettingService.SetUserSetting(UserSettingConstants.FileOverwriteBehaviour, this.SelectedOverwriteBehaviour);
 
             /* Previews */
             this.userSettingService.SetUserSetting(UserSettingConstants.VLCPath, this.VLCPath);

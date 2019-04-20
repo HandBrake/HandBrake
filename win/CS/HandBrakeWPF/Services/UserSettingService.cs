@@ -176,7 +176,7 @@ namespace HandBrakeWPF.Services
                     using (StreamReader reader = new StreamReader(this.settingsFile))
                     {
                         string appSettings = reader.ReadToEnd();
-                        Dictionary<string, object> deserialisedSettings = JsonConvert.DeserializeObject< Dictionary<string, object>>(appSettings);
+                        Dictionary<string, object> deserialisedSettings = JsonConvert.DeserializeObject<Dictionary<string, object>>(appSettings);
 
                         this.userSettings = deserialisedSettings;
                     }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1218,12 +1218,6 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
   </data>
   <data name="Options_Encoding" xml:space="preserve">
     <value>编码中</value>
-  </data>
-  <data name="Options_Experimental" xml:space="preserve">
-    <value>实验功能</value>
-  </data>
-  <data name="Options_ExperimentalFeatures" xml:space="preserve">
-    <value>实验特性是我们正在研究的想法。这些可能或不可能使其成为最终版本，也可能不起作用！</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
     <value>文件格式：</value>

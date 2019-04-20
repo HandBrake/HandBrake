@@ -70,6 +70,7 @@ namespace HandBrakeWPF
         public const string UiLanguage = "UiLanguage";
         public const string ShowAddAllToQueue = "ShowAddAllToQueue";
         public const string ShowAddSelectionToQueue = "ShowAddSelectionToQueue";
+        public const string FileOverwriteBehaviour = "FileOverwriteBehaviour";
 
         #endregion
     }

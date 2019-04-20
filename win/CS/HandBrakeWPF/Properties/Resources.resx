@@ -1230,12 +1230,6 @@ Would you like to overwrite it?</value>
   <data name="Options_Encoding" xml:space="preserve">
     <value>Encoding</value>
   </data>
-  <data name="Options_Experimental" xml:space="preserve">
-    <value>Experimental Features</value>
-  </data>
-  <data name="Options_ExperimentalFeatures" xml:space="preserve">
-    <value>Experimental features are ideas we are working on. These may or may not make it into a final release and may not work!</value>
-  </data>
   <data name="Options_Format" xml:space="preserve">
     <value>File Format:</value>
   </data>
@@ -1315,7 +1309,7 @@ Would you like to overwrite it?</value>
     <value>Show the new experimental queue design.</value>
   </data>
   <data name="Options_ShowQueueInline" xml:space="preserve">
-    <value>Show Queue in line with the main UI.</value>
+    <value>Show Queue in line with the main UI. (Experimental Feature)</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
     <value>Change case to Title Case</value>
@@ -1944,5 +1938,20 @@ Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitra
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>Available Options: {source_path} {source_folder_name}  (Not both at the same time!)</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
+    <value>Ask to overwrite file</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
+    <value>Try to automatically rename file</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
+    <value>Overwrite the file</value>
+  </data>
+  <data name="Options_UIBehaviour" xml:space="preserve">
+    <value>User Interface Behaviour</value>
+  </data>
+  <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
+    <value>File overwrite behaviour:</value>
   </data>
 </root>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -1214,12 +1214,6 @@ Soll sie überschrieben werden?</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
     <value>Enkodieren</value>
-  </data>
-  <data name="Options_Experimental" xml:space="preserve">
-    <value>Experimentelle Funktionen</value>
-  </data>
-  <data name="Options_ExperimentalFeatures" xml:space="preserve">
-    <value>Experimentelle Funktionen sind Ideen an denen wir zur Zeit arbeiten. Dies kann es in eine finale Version schaffen, muss es aber nicht und es kann sein, dass es nicht korrekt funktioniert!</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
     <value>Dateiformat:</value>
