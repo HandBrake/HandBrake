@@ -2626,6 +2626,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Encoode Completed.
+        /// </summary>
+        public static string Options_EncodeCompleted {
+            get {
+                return ResourceManager.GetString("Options_EncodeCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Encoding.
         /// </summary>
         public static string Options_Encoding {
@@ -2716,6 +2725,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Notifications.
+        /// </summary>
+        public static string Options_Notifications {
+            get {
+                return ResourceManager.GetString("Options_Notifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to On Startup.
         /// </summary>
         public static string Options_OnStartup {
@@ -2802,6 +2820,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_QsvDecodeForNonFullPath {
             get {
                 return ResourceManager.GetString("Options_QsvDecodeForNonFullPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue Completed.
+        /// </summary>
+        public static string Options_QueueCompleted {
+            get {
+                return ResourceManager.GetString("Options_QueueCompleted", resourceCulture);
             }
         }
         
@@ -2973,6 +3000,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_WhenDone {
             get {
                 return ResourceManager.GetString("Options_WhenDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When Done:.
+        /// </summary>
+        public static string Options_WhenDoneColon {
+            get {
+                return ResourceManager.GetString("Options_WhenDoneColon", resourceCulture);
             }
         }
         

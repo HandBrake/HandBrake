@@ -40,7 +40,9 @@ namespace HandBrakeWPF.Converters.Options
                     case OptionsTab.OutputFiles:
                         if ((OptionsTab)parameter == OptionsTab.OutputFiles) return Visibility.Visible;
                         break;
-
+                    case OptionsTab.WhenDone:
+                        if ((OptionsTab)parameter == OptionsTab.WhenDone) return Visibility.Visible;
+                        break;
                     case OptionsTab.Advanced:
                         if ((OptionsTab)parameter == OptionsTab.Advanced) return Visibility.Visible;
                         break;

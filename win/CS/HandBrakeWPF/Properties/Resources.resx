@@ -1954,4 +1954,16 @@ Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitra
   <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
     <value>File overwrite behaviour:</value>
   </data>
+  <data name="Options_EncodeCompleted" xml:space="preserve">
+    <value>Encoode Completed</value>
+  </data>
+  <data name="Options_Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="Options_QueueCompleted" xml:space="preserve">
+    <value>Queue Completed</value>
+  </data>
+  <data name="Options_WhenDoneColon" xml:space="preserve">
+    <value>When Done:</value>
+  </data>
 </root>

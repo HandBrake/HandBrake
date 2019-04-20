@@ -22,6 +22,9 @@ namespace HandBrakeWPF.Model
         [DisplayName("Output Files")]
         OutputFiles,
 
+        [DisplayName("When Done")]
+        WhenDone,
+
         [DisplayName("Video")]
         Video,
 
