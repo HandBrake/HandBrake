@@ -1955,7 +1955,7 @@ Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitra
     <value>File overwrite behaviour:</value>
   </data>
   <data name="Options_EncodeCompleted" xml:space="preserve">
-    <value>Encoode Completed</value>
+    <value>Encode Completed</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
     <value>Notifications</value>

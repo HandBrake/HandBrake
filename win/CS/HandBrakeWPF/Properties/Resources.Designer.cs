@@ -2626,7 +2626,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Encoode Completed.
+        ///   Looks up a localized string similar to Encode Completed.
         /// </summary>
         public static string Options_EncodeCompleted {
             get {
