@@ -691,6 +691,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Append Number.
+        /// </summary>
+        public static string CollisionBehaviour_AppendNumber {
+            get {
+                return ResourceManager.GetString("CollisionBehaviour_AppendNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Postfix.
+        /// </summary>
+        public static string CollisionBehaviour_Post {
+            get {
+                return ResourceManager.GetString("CollisionBehaviour_Post", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefix.
+        /// </summary>
+        public static string CollisionBehaviour_Pre {
+            get {
+                return ResourceManager.GetString("CollisionBehaviour_Pre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm.
         /// </summary>
         public static string Confirm {
@@ -3090,6 +3117,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_EnableVceEncoding {
             get {
                 return ResourceManager.GetString("OptionsView_EnableVceEncoding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filename collision behaviour:.
+        /// </summary>
+        public static string OptionsView_FileCollisionBehaviour {
+            get {
+                return ResourceManager.GetString("OptionsView_FileCollisionBehaviour", resourceCulture);
             }
         }
         

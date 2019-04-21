@@ -10,9 +10,11 @@
 namespace HandBrakeWPF.Helpers
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
+    using System.Threading.Tasks;
 
     using Caliburn.Micro;
 
@@ -228,22 +230,9 @@ namespace HandBrakeWPF.Helpers
                     autoNamePath = Path.Combine(Path.GetDirectoryName(task.Destination), destinationFilename);
                 }
 
-                // Append out_ to files that already exist or is the source file
-                //FileOverwriteBehaviour behaviour = (FileOverwriteBehaviour)userSettingService.GetUserSetting<int>(UserSettingConstants.FileOverwriteBehaviour, typeof(int));
-                //if (behaviour == FileOverwriteBehaviour.Autoname)
-                //{
-                    if (autoNamePath?.ToLower() == task.Source?.ToLower())
-                    {
-                        autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), "output_" + destinationFilename);
+                autoNamePath = CheckAndHandleFilenameCollisions(autoNamePath, destinationFilename, task, userSettingService);
 
-                        int counter = 1;
-                        while (autoNamePath == task.Source)
-                        {
-                            autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), string.Format("output{0}_", counter) + destinationFilename);
-                            counter = counter + 1;
-                        }
-                    }
-                //}
+
             }
 
             return autoNamePath;
@@ -268,6 +257,52 @@ namespace HandBrakeWPF.Helpers
             return userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith(Constants.SourcePath) ||
                 (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains(Constants.SourceFolderName) ||
                  Directory.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim()));
-        }        
+        }
+
+        private static string CheckAndHandleFilenameCollisions(string autoNamePath, string destinationFilename, EncodeTask task, IUserSettingService userSettingService)
+        {
+            AutonameFileCollisionBehaviour behaviour = (AutonameFileCollisionBehaviour)userSettingService.GetUserSetting<int>(UserSettingConstants.AutonameFileCollisionBehaviour, typeof(int));
+            string prefix = string.Empty, postfix = string.Empty;
+            switch (behaviour)
+            {
+                case AutonameFileCollisionBehaviour.Postfix:
+                    postfix = userSettingService.GetUserSetting<string>(UserSettingConstants.AutonameFilePrePostString);
+                    break;
+                case AutonameFileCollisionBehaviour.Prefix:
+                    prefix = userSettingService.GetUserSetting<string>(UserSettingConstants.AutonameFilePrePostString);
+                    break;
+            }
+
+            string extension = Path.GetExtension(destinationFilename);
+            string filenameWithoutExt = Path.GetFileNameWithoutExtension(destinationFilename);
+
+            if (behaviour != AutonameFileCollisionBehaviour.AppendNumber)
+            {
+                if (autoNamePath?.ToLower() == task.Source?.ToLower())
+                {
+                    autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), prefix + filenameWithoutExt + postfix + extension);
+
+                    int counter = 0;
+                    while (File.Exists(autoNamePath))
+                    {
+                        counter = counter + 1;
+                        string appendedNumber = string.Format("({0})", counter);
+                        autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), prefix + filenameWithoutExt + postfix + appendedNumber + extension);
+                    }
+                }
+            }
+            else
+            {
+                int counter = 0;
+                while (File.Exists(autoNamePath))
+                {
+                    counter = counter + 1;
+                    string appendedNumber = string.Format("({0})", counter);
+                    autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source),  filenameWithoutExt + appendedNumber + extension);
+                }
+            }
+
+            return autoNamePath;
+        }
     }
 }

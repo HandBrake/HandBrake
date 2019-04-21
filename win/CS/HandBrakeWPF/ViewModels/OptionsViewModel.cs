@@ -106,6 +106,11 @@ namespace HandBrakeWPF.ViewModels
         private bool showAddSelectionToQueue;
         private bool showAddAllToQueue;
         private int selectedOverwriteBehaviour;
+        private int selectedCollisionBehaviour;
+
+        private string prePostFilenameText;
+
+        private bool showPrePostFilenameBox;
 
         #endregion
 
@@ -658,6 +663,49 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.selectedOverwriteBehaviour) return;
                 this.selectedOverwriteBehaviour = value;
                 this.NotifyOfPropertyChange(() => this.SelectedOverwriteBehaviour);
+            }
+        }
+
+        public BindingList<AutonameFileCollisionBehaviour> AutonameFileCollisionBehaviours { get; set; }
+
+        public int SelectedCollisionBehaviour
+        {
+            get => this.selectedCollisionBehaviour;
+            set
+            {
+                if (value == this.selectedCollisionBehaviour) return;
+                this.selectedCollisionBehaviour = value;
+
+                this.ShowPrePostFilenameBox = this.selectedCollisionBehaviour >= 1;
+
+                this.NotifyOfPropertyChange(() => this.SelectedCollisionBehaviour);
+            }
+        }
+
+        public string PrePostFilenameText
+        {
+            get => this.prePostFilenameText;
+            set
+            {
+                if (value == this.prePostFilenameText) return;
+
+                if (this.IsValidAutonameFormat(value, false))
+                {
+                    this.prePostFilenameText = value;
+                }
+
+                this.NotifyOfPropertyChange(() => this.PrePostFilenameText);
+            }
+        }
+
+        public bool ShowPrePostFilenameBox
+        {
+            get => this.showPrePostFilenameBox;
+            set
+            {
+                if (value == this.showPrePostFilenameBox) return;
+                this.showPrePostFilenameBox = value;
+                this.NotifyOfPropertyChange(() => this.ShowPrePostFilenameBox);
             }
         }
 
@@ -1445,8 +1493,12 @@ namespace HandBrakeWPF.ViewModels
             this.FileOverwriteBehaviourList = new BindingList<FileOverwriteBehaviour>();
             this.FileOverwriteBehaviourList.Add(FileOverwriteBehaviour.Ask);
             this.FileOverwriteBehaviourList.Add(FileOverwriteBehaviour.ForceOverwrite);
-           // this.FileOverwriteBehaviourList.Add(FileOverwriteBehaviour.Autoname);
             this.SelectedOverwriteBehaviour = this.userSettingService.GetUserSetting<int>(UserSettingConstants.FileOverwriteBehaviour, typeof(int));
+
+            // Collision behaviour
+            this.AutonameFileCollisionBehaviours = new BindingList<AutonameFileCollisionBehaviour>() { AutonameFileCollisionBehaviour.AppendNumber, AutonameFileCollisionBehaviour.Prefix, AutonameFileCollisionBehaviour.Postfix };
+            this.SelectedCollisionBehaviour = this.userSettingService.GetUserSetting<int>(UserSettingConstants.AutonameFileCollisionBehaviour, typeof(int));
+            this.PrePostFilenameText = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutonameFilePrePostString);
 
             // #############################
             // Picture Tab
@@ -1598,6 +1650,8 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNameTitleCase, this.ChangeToTitleCase);
             this.userSettingService.SetUserSetting(UserSettingConstants.RemovePunctuation, this.RemovePunctuation);
             this.userSettingService.SetUserSetting(UserSettingConstants.FileOverwriteBehaviour, this.SelectedOverwriteBehaviour);
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutonameFileCollisionBehaviour, this.SelectedCollisionBehaviour);
+            this.userSettingService.SetUserSetting(UserSettingConstants.AutonameFilePrePostString, this.PrePostFilenameText);
 
             /* Previews */
             this.userSettingService.SetUserSetting(UserSettingConstants.VLCPath, this.VLCPath);
@@ -1712,6 +1766,11 @@ namespace HandBrakeWPF.ViewModels
         /// <returns>True if valid</returns>
         private bool IsValidAutonameFormat(string input, bool isSilent)
         {
+            if (string.IsNullOrEmpty(input))
+            {
+                return true;
+            }
+
             char[] invalidchars = Path.GetInvalidFileNameChars();
             Array.Sort(invalidchars);
             foreach (var characterToTest in input)

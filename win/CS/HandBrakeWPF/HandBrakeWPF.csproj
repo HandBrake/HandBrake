@@ -165,6 +165,7 @@
     <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
     <Compile Include="Model\Audio\AudioBehaviours.cs" />
     <Compile Include="Model\DriveInformation.cs" />
+    <Compile Include="Model\Options\AutonameFileCollisionBehaviour.cs" />
     <Compile Include="Model\Options\FileOverwriteBehaviour.cs" />
     <Compile Include="Model\Filters\FilterTune.cs" />
     <Compile Include="Model\Filters\FilterPreset.cs" />

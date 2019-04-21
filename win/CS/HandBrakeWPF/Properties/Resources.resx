@@ -1966,4 +1966,16 @@ Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitra
   <data name="Options_WhenDoneColon" xml:space="preserve">
     <value>When Done:</value>
   </data>
+  <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
+    <value>Filename collision behaviour:</value>
+  </data>
+  <data name="CollisionBehaviour_Post" xml:space="preserve">
+    <value>Postfix</value>
+  </data>
+  <data name="CollisionBehaviour_Pre" xml:space="preserve">
+    <value>Prefix</value>
+  </data>
+  <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
+    <value>Append Number</value>
+  </data>
 </root>

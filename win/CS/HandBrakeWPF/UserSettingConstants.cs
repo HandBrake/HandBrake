@@ -14,8 +14,6 @@ namespace HandBrakeWPF
     /// </summary>
     public class UserSettingConstants
     {
-        #region Constants and Fields
-
         public const string AutoNameFormat = "autoNameFormat";
         public const string AutoNamePath = "autoNamePath";
         public const string AutoNameRemoveUnderscore = "AutoNameRemoveUnderscore";
@@ -71,7 +69,7 @@ namespace HandBrakeWPF
         public const string ShowAddAllToQueue = "ShowAddAllToQueue";
         public const string ShowAddSelectionToQueue = "ShowAddSelectionToQueue";
         public const string FileOverwriteBehaviour = "FileOverwriteBehaviour";
-
-        #endregion
+        public const string AutonameFileCollisionBehaviour = "AutonameFileCollisionBehaviour";
+        public const string AutonameFilePrePostString = "AutonameFilePrePostString";
     }
 }

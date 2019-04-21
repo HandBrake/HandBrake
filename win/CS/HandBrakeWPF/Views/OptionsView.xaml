@@ -189,6 +189,13 @@
                                 <TextBlock Text="{x:Static Properties:Resources.OptionsView_FormatOptions}" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" FontStyle="Italic"  FontSize="11" TextWrapping="Wrap" />
                             </Grid>
 
+                            <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                                <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.OptionsView_FileCollisionBehaviour}" />
+                                <ComboBox Width="120" ItemsSource="{Binding AutonameFileCollisionBehaviours, Converter={StaticResource enumComboConverter}}" SelectedIndex="{Binding SelectedCollisionBehaviour}" HorizontalAlignment="Left" />
+                                <TextBox Text="{Binding PrePostFilenameText, UpdateSourceTrigger=PropertyChanged}" Width="150"  VerticalAlignment="Center" Visibility="{Binding ShowPrePostFilenameBox, Converter={StaticResource boolToVisConverter}}" HorizontalAlignment="Left"  Margin="5,0,0,0" />
+                            </StackPanel>
+
+
                             <StackPanel Orientation="Vertical" Margin="0,15,0,0">
                                 <CheckBox Content="{x:Static Properties:Resources.Options_TitleCase}" IsChecked="{Binding ChangeToTitleCase}" />
                                 <CheckBox Content="{x:Static Properties:Resources.Options_ReplaceUnderscores}" IsChecked="{Binding RemoveUnderscores}"/>

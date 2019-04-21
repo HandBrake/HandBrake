@@ -529,5 +529,21 @@
       <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">0</anyType>
     </value>
   </item>
-  
+  <item>
+    <key>
+      <string>AutonameFileCollisionBehaviour</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">1</anyType>
+    </value>
+  </item>
+  <item>
+    <key>
+      <string>AutonameFilePrePostString</string>
+    </key>
+    <value>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">output_</anyType>
+    </value>
+  </item>
+
 </dictionary>
