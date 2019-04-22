@@ -86,6 +86,13 @@ GCC.args.extra.hpp_o   =
 GCC.args.extra.cpp_o   =
 GCC.args.extra.dylib++ = $(LDFLAGS)
 GCC.args.extra.exe++   = $(LDFLAGS)
+# If hardening is enabled -D_FORTIFY_SOURCE=2 adds compile-time protection and run-time
+# checking against static sized buffer overflow flaws. -fstack-protector-strong enables
+# stack canaries to detect stack buffer overflows (stack overwrites).
+ifeq (1,$(HOST.harden))
+    GCC.args.extra     += $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS) -fstack-protector-strong -D_FORTIFY_SOURCE=2
+    GCC.args.extra.exe += -fstack-protector-strong
+endif
 
 ###############################################################################
 

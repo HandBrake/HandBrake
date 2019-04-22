@@ -38,6 +38,7 @@ dnl
 <<#>>define HB_PROJECT_HOST_RELEASE              "__HOST_release"
 <<#>>define HB_PROJECT_HOST_TITLE                "__HOST_title"
 <<#>>define HB_PROJECT_HOST_ARCH                 "__HOST_arch"
+<<#>>define HB_PROJECT_HOST_HARDEN               __HOST_harden
 
 <<#>>define HB_PROJECT_FEATURE_ASM               __FEATURE_asm
 <<#>>define HB_PROJECT_FEATURE_FDK_AAC           __FEATURE_fdk_aac

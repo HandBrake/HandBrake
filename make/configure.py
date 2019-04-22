@@ -686,7 +686,7 @@ class ArchAction( Action ):
 
             ## special cases in that powerpc does not match gcc -arch value
             ## which we like to use; so it has to be removed.
-            ## note: we don't know if apple will release Ssnow Leopad/ppc64 yet; just a guess.
+            ## note: we don't know if apple will release Snow Leopard/ppc64 yet; just a guess.
             if 'powerpc' in self.mode:
                 del self.mode['powerpc']
                 self.mode.mode = 'ppc'
@@ -1399,6 +1399,8 @@ def createCLI( cross = None ):
     arch.mode.cli_add_argument( grp, '--arch' )
     grp.add_argument( '--cross', default=None, action='store', metavar='SPEC',
         help='specify GCC cross-compilation spec' )
+    grp.add_argument( '--enable-hardening', dest="enable_host_harden", default=None, action='store_true',
+        help='enable buffer overflow protection' )
     cli.add_argument_group( grp )
 
     ## add Xcode options
@@ -1948,6 +1950,7 @@ int main()
         doc.add( 'HOST.cross.prefix', '' )
 
     doc.add( 'HOST.arch',   arch.mode.mode )
+    doc.add( 'HOST.harden', int( options.enable_host_harden != None))
 
     doc.addBlank()
     doc.add( 'SRC',     cfg.src_final )

@@ -9,6 +9,7 @@
 #import "HBOutputRedirect.h"
 #import "HBOutputFileWriter.h"
 #import "HBUtilities.h"
+#import "project.h"
 
 /// Maximum amount of characters that can be shown in the view.
 #define TextStorageUpperSizeLimit 125000
@@ -77,6 +78,11 @@
         NSDictionary *infoDict = [[NSBundle mainBundle] infoDictionary];
         NSString *versionStringFull = [NSString stringWithFormat:@"Handbrake Version: %@  (%@)", infoDict[@"CFBundleShortVersionString"], infoDict[@"CFBundleVersion"]];
         [HBUtilities writeToActivityLog: "%s", versionStringFull.UTF8String];
+        
+        // Lets also report the hardening status to the activity log, if enabled
+#if HB_PROJECT_HOST_HARDEN == 1
+        [HBUtilities writeToActivityLog:"Compile-time hardening features are enabled"];
+#endif
     }
     return self;
 }
