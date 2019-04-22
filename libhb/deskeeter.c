@@ -208,7 +208,7 @@ static void hb_deskeeter(const uint8_t *src,
         {
             if ((y < offset_max) ||
                 (y > height - offset_max) ||
-                (x < stride_border + offset_max) ||
+                (x < offset_max - stride_border) ||
                 (x > width + stride_border - offset_max))
             {
                 pixel = *(src + stride*y + x) + 128;
@@ -242,7 +242,7 @@ static void hb_deskeeter(const uint8_t *src,
         {
             if ((y < offset_max) ||
                 (y > height - offset_max) ||
-                (x < stride_border + offset_max) ||
+                (x < offset_max - stride_border) ||
                 (x > width + stride_border - offset_max))
             {
                 *(tmp + stride*y + x) = *(src + stride*y + x);
@@ -277,7 +277,7 @@ static void hb_deskeeter(const uint8_t *src,
         {
             if ((y < offset_max) ||
                 (y > height - offset_max) ||
-                (x < stride_border + offset_max) ||
+                (x < offset_max - stride_border) ||
                 (x > width + stride_border - offset_max))// ||
                 //*(src + stride*y + x) < 48)  // Avoid contrast loss in dark edges
             {
