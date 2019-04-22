@@ -436,6 +436,7 @@ static int hb_deskeeter_work(hb_filter_object_t *filter,
                  in->plane[c].stride,
                  ctx);
     }
+    hb_buffer_close(&tmp);
 
     out->s = in->s;
     *buf_out = out;
