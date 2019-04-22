@@ -211,7 +211,10 @@ static void hb_deskeeter(const uint8_t *src,
                 (x < stride_border + offset_max) ||
                 (x > width + stride_border - offset_max))
             {
-                *(dst + stride*y + x) = *(src + stride*y + x);
+                pixel = *(src + stride*y + x) + 128;
+                pixel = pixel < 0 ? 0 : pixel;
+                pixel = pixel > 255 ? 255 : pixel;
+                *(dst + stride*y + x) = pixel;
                 continue;
             }
             pixel = 0;
