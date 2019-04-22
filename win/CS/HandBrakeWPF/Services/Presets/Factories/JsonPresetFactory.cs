@@ -389,8 +389,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
                 foreach (var audioTrack in importedPreset.AudioList)
                 {
                     AudioBehaviourTrack track = new AudioBehaviourTrack();
-                    track.Bitrate = audioTrack.AudioBitrate;
-
+                    
                     // track.CompressionLevel = audioTrack.AudioCompressionLevel;
                     // track.AudioDitherMethod = audioTrack.AudioDitherMethod;
                     if (audioTrack.AudioEncoder == "ca_aac")
@@ -400,6 +399,7 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
                     track.Encoder = EnumHelper<AudioEncoder>.GetValue(audioTrack.AudioEncoder);
                     track.MixDown = HandBrakeEncoderHelpers.GetMixdown(audioTrack.AudioMixdown);
+                    track.Bitrate = audioTrack.AudioBitrate;
 
                     // track.AudioNormalizeMixLevel = audioTrack.AudioNormalizeMixLevel;
 
