@@ -257,7 +257,7 @@ static void hb_deskeeter(const uint8_t *src,
                     index++;
                 }
             }
-            strength_scaled = *(src + stride*y + x) / 64 * ctx->strength;  // Avoid contrast loss in dark areas
+            strength_scaled = (float)*(src + stride*y + x) / 64 * ctx->strength;  // Avoid contrast loss in dark areas
             strength_scaled = strength_scaled < ctx->strength / 2 ? ctx->strength / 2: strength_scaled;
             strength_scaled = strength_scaled > ctx->strength ? ctx->strength : strength_scaled;
             pixel = (int16_t)(deskeeter_filter_median_opt(pixels, median_size));
