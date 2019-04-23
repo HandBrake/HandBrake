@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>Deblock réduit les artefacts causés par une compression vidéo de faible qualité.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Choisir les options de filtre decomb ou de désentrelacement.
+
+Le filtre decomb élimine sélectivement les images qui semblent entrelacées.
+Cela préservera la qualité des images non entrelacées.
+
+Le filtre de désentrelacement classique est appliqué à toutes les images.
+Les images qui ne sont pas entrelacés subiront une dégradation de leur qualité.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>Débruitage réduit ou supprime le bruit et le grain d'une vidéo. Cela peut améliorer l'efficacité de la compression et créer une vidéo de meilleure qualité pour des fichiers plus petits.
+Des paramètres de débruitage trop puissants peuvent nuire à la qualité de l’image en supprimant les détails.
+
+NLMeans est un filtre de débruitage de haute qualité impactant la rapidité de l'encodage. Utilisez-le  où la qualité est plus importante que la vitesse.
+
+HQDN3D est un filtre passe-bas adaptatif, plus rapide que NLMeans mais moins efficace pour préserver les détails les plus fins.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>Détélécinéma supprime les artefacts résultant du télécinéma, un processus de conversion des fréquences d'images du film en fréquences d'images de télévision.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>Niveaux de gris supprime la composante couleur de la vidéo. Communément appelé vidéo noir et blanc.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Chemin de destination, comprenant le répertoire et le nom de fichier.  C'est ici que votre nouvelle vidéo sera créée et comment elle sera nommée.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>Ajouter un marqueur MP4 spécial pour permettre la lecture sur des iPod de 5ème génération (2006). D'autres paramètres peuvent affecter la compatibilité.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>Format du conteneur. La vidéo, l'audio et les autres pistes sont combinés dans un seul fichier de ce type. Affecte la compatibilité.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>Optimiser le MP4 pour le téléchargement progressif. Après l'encodage, les données seront réorganisées et réécrites pour permettre une lecture immédiate sur un réseau, sans avoir à télécharger le fichier entier.</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Sélection de l'intervalle source. Par défaut, tous les chapitres sont sélectionnés et la source est encodée dans son intégralité.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Titre, ou clip vidéo, à encoder.
+Les sources Blu-ray et DVD ont souvent plusieurs titres, le plus long étant généralement l'élément principal</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorphique permet des dimensions de stockage arbitraires tout en préservant l'aspect d'origine pendant la lecture.
+
+Arrêt désactive l'anamorphose. Les dimensions de stockage vidéo et les dimensions d'affichage seront identiques. Utile uniquement pour la compatibilité avec certains appareils anciens.
+
+Auto maximise la résolution de stockage tout en préservant le format d'affichage original. Conseillé.
+
+Perte est similaire à Auto, mais tente de préserver le rapport de format de stockage. Cela peut entraîner une légère perte de résolution de stockage par rapport à Auto.
+
+Personnalisé permet de définir manuellement tous les paramètres. Utile pour corriger un aspect d'affichage source incorrect et pour les professionnels ayant besoin d'un contrôle avancé en post-production.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Recadrer automatiquement les bordures noires autour de la vidéo.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Recadrer la vidéo à partir du bas.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Recadrer la vidéo à partir de la gauche.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Recadrer la vidéo à partir de la droite.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Recadrer la vidéo à partir du haut.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Les dimensions de l'affichage réel seront différentes si le ratio d'affichage n'est pas 1:1.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>Recadrer manuellement la vidéo.</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Aligner les dimensions de stockage sur des multiples de cette valeur.
+
+Ce paramètre est uniquement nécessaire pour la compatibilité avec certains appareils.
+Vous devez utiliser 2 sauf si vous rencontrez des problèmes de compatibilité.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Format pixel définit la forme des pixels.
+Un rapport 1:1 définit un pixel carré. D'autres valeurs définissent des formes rectangulaires.
+Les lecteurs redimensionneront l'image afin d'obtenir l'aspect spécifié.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>C'est la largeur dans laquelle la vidéo sera enregistrée.
+Les dimensions réelles de l’affichage seront différentes si le format des pixels n’est pas 1:1.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>Supprimer le travail de la file.</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>Réinitialiser l'état du travail à En Attente.</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>Renvoyer le travail dans la fenêtre principale pour édition.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Définissez le débit moyen.
+
+Le débit instantané peut être beaucoup plus haut ou plus bas à tout moment.
+Mais la moyenne sur une longue durée sera la valeur définie ici. Si besoin,
+pour limiter le débit instantané, consultez les paramètres vbv-bufsize et vbv-maxrate de x264.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Active un framerate constant en sortie.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Encodeurs vidéo disponibles.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Réglez les paramètres pour optimiser les scénarios courants.
+
+Cela peut améliorer l'efficacité de certaines caractéristiques de la source
+ou des caractéristiques définies du fichier de sortie. Les modifications
+seront appliquées après le préréglage mais avant tous les autres paramètres.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>Paramètres supplémentaires pour l'encodeur
+
+Liste d'options de l'encodeur séparée par des virgules.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Réduire l'utilisation CPU du décodeur.
+
+Activez cette option si votre appareil a du mal à lire le fichier de sortie. (ex: pertes d'images)</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Framerate en sortie.
+
+'Identique à la source' est recommandé.Si votre vidéo source a un framerate variable, 'Identique à la source' le conservera.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Définit et assure la conformité avec le niveau spécifié.
+
+Remplace tous les autres paramètres.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Active un framerate variable en sortie avec un taux de pic déterminé par le paramétrage du framerate.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Ajuste les paramètres de l'encodeur pour privilégier la vitesse d'encodage à l'efficacité de la compression.
+
+Ceci définit vos paramètres d'encodeur par défaut.
+Réglages, profils, niveaux et option avancée seront appliqués à cette opération.
+Vous devez régler cette option sur la vitesse la plus lente que vous puissiez
+supporter, car des réglages plus lents entraîneront une meilleure qualité ou
+des fichiers plus petits.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Définit et assure la conformité avec le profil spécifié.
+
+Remplace tous les autres paramètres.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>Définissez le facteur de qualité souhaité.
+L'encodeur vise une certaine qualité.
+L'échelle utilisée par chaque encodeur vidéo est différente.
+
+L'échelle de x264 est logarithmique et les valeurs inférieures correspondent à
+une qualité supérieure. Une faible diminution de la valeur entraîne une
+augmentation progressive de la taille du fichier. Une valeur de 0 signifie sans
+perte et donnera une taille de fichier plus grande que la source d'origine, à
+moins que la source soit également sans perte. 
+Les valeurs suggérées sont: 18 à 20 pour les sources à définition standard
+et 20 à 23 pour les sources à haute définition.
+
+L'échelle de FFMpeg et de Theora est plus linéaire. 
+Ces encodeurs n'ont pas de mode sans perte.</value>
+  </data>
+  <data name="Video_TurboFirstPass" xml:space="preserve">
+    <value>Lors du 1er passage d'un encodage à 2 passes, utilisez des paramètres qui accélèrent les choses.</value>
+  </data>
+  <data name="Video_TwoPass" xml:space="preserve">
+    <value>Applique un encodage en 2 passes.
+
+L'option 'bitrate' est requise. Pendant la 1e passe, des statiques à propos
+de la vidéo son collectées. Lors de la seconde passe, ces statistiques sont utilisées
+dans les choix d'allocation du bitrate.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Active un framerate variable (VFR) en sortie.
+
+VFR n'est pas compatible avec certains lecteurs.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>Lorsque HandBrake a terminé la file d'attente ou l'encodage en cours, il effectuera cette action.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>Parcourir pour sélectionner un nouveau chemin de destination et un nouveau nom de fichier pour votre encodage.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Angle vidéo à encoder. Applicable uniquement aux DVD et Blu-ray multi-angles.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>Ajouter un nouveau préréglage.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>Options de préréglage supplémentaires.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Les préréglages sont des groupes de paramètres d'encodage conçus pour des scénarios spécifiques. Sélectionnez celui qui correspond le mieux à votre demande.
+
+Remplace tous les paramètres d'encodage. Les paramètres peuvent être ajustés après avoir sélectionné un préréglage.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>Retirer le préréglage sélectionné.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Scanner seulement le titre spécifié au lieu de tous les titres.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>Paramètres de débruitage personnalisés.
+ 
+NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>Préréglage du filtre de suppression du bruit. Définit la force du filtre.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Ajustement de l'antibruit. Ajustement supplémentaire de l'antibruit pour optimiser les paramètres sur des cas de figures spécifiques.
+
+"Aucun" utilise les paramètres prédéfinis par défaut.
+
+"Film" affine les paramètres pour une utilisation avec la plupart des contenus d'action.
+
+"Grain" traite uniquement les canaux de couleur. Utile pour préserver l'aspect cinématographique du bruit ou grain de luminance tout en réduisant ou en supprimant les bruits de chrominance.
+
+"Mouvement rapide" réduit l'étalement des couleurs dans les scènes rapides en évitant le traitement temporel des canaux de couleur. Utile pour les vidéos de sport et d'action.
+
+"Animation" est utile pour l'animation en celluloïd, comme les animes et les dessins animés.
+
+"Cassette" est utile pour les vidéos provenant de sources analogiques de faibles qualités telles que les VHS, où "Film" ne produit pas le résultat désiré.
+
+"Sprite" est utile pour les jeux bidimensionnels 2D en 1, 4, 8 ou 16 bits. Il n'est pas destiné à la haute définition.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>Le désentrelacement supprime les artefacts de l'image.
+
+Yadif est un désentrelaceur populaire et rapide.
+
+Decomb bascule entre plusieurs algorithmes d'interpolation pour optimiser la vitesse et la qualité.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>Paramètres de désentrelacement personnalisés.
+ 
+ Yadif syntax: mode=m:parity=p
+ 
+ Yadif default: mode=3
+ 
+ Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ 
+ Decomb default: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Préréglage du filtre de désentrelacement.
+
+Par défaut est bien équilibrée pour la vitesse et la qualité.
+
+Ignorer la vérification spatiale permet à Yadif d’ignorer la correction de certains artefacts pouvant être évités pour une légère augmentation de la vitesse.
+
+EEDI2 utilise un algorithme d'interpolation plus lent et de meilleure qualité pour Decomb. Utile pour les sources les plus difficiles.
+
+Bob tente de mieux préserver le mouvement pour une légère pénalité à la résolution perçue.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>Inverser l'image (en miroir) selon l'axe horizontal.</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>Détection d'entrelacement, lorsqu'elle est activée, cette option permet au filtre de désentrelacement de ne traiter que les images vidéo entrelacées.</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>Paramètres de détection d'entrelacement personnalisés.
+ 
+ Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+ 
+ Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>Tourner l'image dans le sens horaire par incrément de 90 degrés.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Durée de l'intervalle source sélectionné en Heures:Minutes:Secondes</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Conserver les proportions conserve la définition d'origine de la source. Si vous désactivez cette option, cela peut entrainer la création d'une image étirée ou comprimée.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>Paramètres de netteté personnalisés.
+
+Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Unsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>La netteté améliore l'apparence des détails, en particulier des bords. Des réglages de netteté excessivement forts peuvent endommager la qualité de l'image en créant des artefacts et en accentuant le bruit, ce qui peut réduire l'efficacité de la compression.
+
+Flou est un filtre de masquage flou à usage général. Il fonctionne en  brouillant, puis en calculant la différence entre l'image floutée et l'originale.
+
+Lapsharp utilise des noyaux de convolution se rapprochant des filtres de bord laplaciens, produisant parfois des résultats de meilleure qualité que le masquage flou.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>Préréglage du filtre d'accentuation. Définit la force du filtre.</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Ajustement de la netteté. Ajustement supplémentaire de la netteté pour optimiser les paramètres sur des cas de figures spécifiques.
+
+"Aucun" utilise les paramètres prédéfinis par défaut.
+
+"Flou" peut être réglé sur ultra-fin, fin, moyen, grossier ou très grossier. Sélectionnez-en un en fonction de la résolution de l'image de sortie souhaité et de la finesse des détails à améliorer.
+
+"Lapsharp Film" affine les réglages pour s'adapter à la plupart des scènes d'action.  Il utilise un noyau laplacien isotrope pour rendre uniformément plus net les contours, et les informations de luminance (luminosité) sont plus affinées que les informations de chrominance (couleur).
+
+"Lapsharp Grain" est similaire à Lapsharp Film, mais utilise un laplacien à noyau gaussien isotrope pour réduire les effets sur le bruit et le grain. Utile pour préserver le grain et comme alternative à Lapsharp Film.
+
+"Lapsharp Animation" est utile pour l'animation en celluloïd, comme les animes et les dessins animés. Il est identique à Lapsharp Film, mais la force du traitement est réduite pour éviter de créer des artefacts.
+
+"Lapsharp's Sprite" est utile pour les jeux 2D en 1, 4, 8 ou 16 bits.
+Il utilise un noyau laplacien à 4 voisins qui améliore davantage les contours verticaux et horizontaux que les contours diagonaux.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Aligne les informations temporelles initiales de tout les flux audio et vidéo en insérant des images vierges ou en en supprimant. Cela peut améliorer la synchronisation audio / vidéo pour les lecteurs cassés  qui ne respectent pas les listes d'édition MP4.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Options pour contrôler les préréglages.</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>Le point final de cet intervalle.</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>Le point de départ de cet intervalle.</value>
+  </data>
+</root>

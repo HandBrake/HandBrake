@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -375,10 +375,11 @@ Foreign Audio Preferred, else First - 如果存在外语轨道，则会将其烧
     <value>找不到有效的源或标题。</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake不能对选定的来源进行编码，因为它没有找到一个可以编码的有效来源。
+    <value>HandBrake 不能对选定的来源进行编码，因为它没有找到一个可以编码的有效来源。
 这可能是由于以下原因之一：
-- 源文件不是有效的视频文件或HandBrake不支持的格式。
-- 源文件可能受复制保护或包含DRM。请注意，HandBrake不支持除去复制保护。
+- 每个源标题的持续时间低于“首选项&gt;高级”中的“最小标题持续时间”阈值选项。
+- 源文件不是有效的视频文件，或者是HandBrake不支持的格式。
+- 源可以是受复制保护的或包括DRM。请注意，HandBrake不支持删除复制保护。
 
 活动日志可能包含更多信息。</value>
   </data>
@@ -1298,7 +1299,7 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
     <value>显示新的测试中的队列设计。</value>
   </data>
   <data name="Options_ShowQueueInline" xml:space="preserve">
-    <value>在主界面显示列队。</value>
+    <value>Show Queue in line with the main UI. (Experimental Feature)</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
     <value>更改大写格式为词首字母大写</value>
@@ -1438,7 +1439,7 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
     <value>删除</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>目标路径：</value>
+    <value>Dest: </value>
   </data>
   <data name="QueueView_DoNothing" xml:space="preserve">
     <value>无操作</value>
@@ -1507,7 +1508,7 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
     <value>关机</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>源：</value>
+    <value>Src: </value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
     <value>启动队列</value>
@@ -1879,8 +1880,7 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
     <value>在工具栏中显示“添加选中至队列”</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>由于在检测硬件时发现了问题，硬件编码支持已被自动禁用。请确认您系统中所有图形适配器都运行了最新的驱动程序。
-
+    <value>目前禁用硬件编码支持。 请确保您为此系统中的所有图形适配器运行最新的驱动程序。
 这不会对软件编码器产生任何影响。</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
@@ -1897,5 +1897,73 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
   </data>
   <data name="QueueView_Import" xml:space="preserve">
     <value>导入</value>
+  </data>
+  <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
+    <value>编码中：Pass {0}/{1},  {2:00.00}%, FPS: {3:000.0}, 平均FPS: {4:000.0},  剩余时间：{5},  已用时间：{6:d\:hh\:mm\:ss} {7}</value>
+  </data>
+  <data name="QueueView_DeleteSelected" xml:space="preserve">
+    <value>删除所选</value>
+  </data>
+  <data name="Portable_TmpNotWritable" xml:space="preserve">
+    <value>便携模式：无法创建TMP目录。请检查路径是否正确且可写。
+
+    {0}</value>
+  </data>
+  <data name="Portable_StorageNotWritable" xml:space="preserve">
+    <value>便携模式：无法创建存储目录。请检查路径是否正确且可写。
+
+    {0}</value>
+  </data>
+  <data name="Portable_IniFileError" xml:space="preserve">
+    <value>便携模式：无法读取 portable.ini。此文件可能存在错误。请使用 portable.ini.template 作为模版重试。</value>
+  </data>
+  <data name="Startup_InitFailed" xml:space="preserve">
+    <value>HandBrake 无法初始化引擎。这通常是由过时的GPU驱动程序引起的。\n 请更新显卡驱动程序。</value>
+  </data>
+  <data name="OptionsView_FormatOptions" xml:space="preserve">
+    <value>Live Update Options: {source} {title} {chapters} 
+Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
+  </data>
+  <data name="OptionsView_PathOptions" xml:space="preserve">
+    <value>Available Options: {source_path} {source_folder_name}  (Not both at the same time!)</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
+    <value>Ask to overwrite file</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
+    <value>Try to automatically rename file</value>
+  </data>
+  <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
+    <value>Overwrite the file</value>
+  </data>
+  <data name="Options_UIBehaviour" xml:space="preserve">
+    <value>User Interface Behaviour</value>
+  </data>
+  <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
+    <value>File overwrite behaviour:</value>
+  </data>
+  <data name="Options_EncodeCompleted" xml:space="preserve">
+    <value>Encode Completed</value>
+  </data>
+  <data name="Options_Notifications" xml:space="preserve">
+    <value>Notifications</value>
+  </data>
+  <data name="Options_QueueCompleted" xml:space="preserve">
+    <value>队列已完成</value>
+  </data>
+  <data name="Options_WhenDoneColon" xml:space="preserve">
+    <value>当完成时：</value>
+  </data>
+  <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
+    <value>Filename collision behaviour:</value>
+  </data>
+  <data name="CollisionBehaviour_Post" xml:space="preserve">
+    <value>Postfix</value>
+  </data>
+  <data name="CollisionBehaviour_Pre" xml:space="preserve">
+    <value>Prefix</value>
+  </data>
+  <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
+    <value>Append Number</value>
   </data>
 </root>

@@ -25,6 +25,7 @@ namespace HandBrakeWPF.Utilities
                        new InterfaceLanguage("en", "English"),
                        new InterfaceLanguage("de", "German"),
                        new InterfaceLanguage("zh", "Chinese"),
+                       new InterfaceLanguage("fr", "French"),
                    };
         }
 

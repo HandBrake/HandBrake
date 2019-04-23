@@ -362,7 +362,7 @@ HQDN3D 默认值: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal
   <data name="FilterView_Deinterlace" xml:space="preserve">
     <value>反交错从图像中删除梳状横纹。
 
-Yadif 是一种流行且快速的去交错扫描器。
+Yadif 是一种流行且快速的去交错算法。
 
 Decomb 在多种插值算法之间切换，以提高速度和质量。</value>
   </data>
@@ -408,7 +408,7 @@ Bob 运动物体边缘有锯齿，另外画面有闪烁、抖动感，文字、�
     <value>所选源范围的持续时间（小时：分钟：秒）</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>保持宽高比，保持源视频的显示比例。 禁用此功能可能会导致图片拉伸或挤压。</value>
+    <value>保持宽高比，保持源视频的显示比例。 禁用此功能可能会导致图片拉伸或压缩。</value>
   </data>
   <data name="FilterView_CustomSharpenParams" xml:space="preserve">
     <value>自定义锐化参数。
@@ -422,7 +422,7 @@ Lapsharp 语法: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c
 Lapsharp 默认值: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>锐化增强图像中某一部的位细节，尤其是轮廓。过强的锐化设置可能会产生拉丝和更多的噪点从而损害图像质量降低压缩效率。
+    <value>锐化增强图像中某一部的位细节，尤其是轮廓。过强的锐化设置可能会产生振铃效应和更多的噪点从而损害图像质量降低压缩效率。
 
 Unsharp 是一种通用的反锐化掩模滤镜。它通过将原图像进行模糊预处理，然后计算模糊图片和原始图像之间的差异来锐化。
 

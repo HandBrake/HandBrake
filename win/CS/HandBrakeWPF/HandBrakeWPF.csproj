@@ -463,8 +463,10 @@
     <EmbeddedResource Include="Properties\Resources.de.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.fr.resx" />
     <EmbeddedResource Include="Properties\Resources.zh.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.de.resx" />
+    <EmbeddedResource Include="Properties\ResourcesTooltips.fr.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ResourcesTooltips.Designer.cs</LastGenOutput>
