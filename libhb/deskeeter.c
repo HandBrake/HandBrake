@@ -310,7 +310,7 @@ static hb_buffer_t * edge_detect(const hb_buffer_t * in, int plane,
     memset(edge_weak->data,   0, edge_weak->size);
     for (int y = 1; y < height - 1; y++)
     {
-        for (int x = (y == 0); x < width; x++)
+        for (int x = (y == 1); x < width; x++)
         {
             int    gx, gy;
             double g;
@@ -600,10 +600,13 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
         kernel_string[c]          = NULL;
 
         pv->plane_ctx[c].edge_kernel        = -1;
-        pv->plane_ctx[c].edge_thresh_strong = EDGE_STRONG_DEFAULT;
-        pv->plane_ctx[c].edge_thresh_weak   = EDGE_WEAK_DEFAULT;
-        pv->plane_ctx[c].show_edge          = 0;
+        pv->plane_ctx[0].edge_thresh_strong = -1;
+        pv->plane_ctx[0].edge_thresh_weak   = -1;
     }
+
+    pv->plane_ctx[0].edge_thresh_strong = EDGE_STRONG_DEFAULT;
+    pv->plane_ctx[0].edge_thresh_weak   = EDGE_WEAK_DEFAULT;
+    pv->plane_ctx[0].show_edge          = 0;
 
     // Read user parameters
     if (filter->settings != NULL)
@@ -674,7 +677,7 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
         if (ctx->strength == -1)             ctx->strength = prev_ctx->strength;
         if (ctx->kernel   == -1)             ctx->kernel   = prev_ctx->kernel;
         if (ctx->edge_kernel   == -1)        ctx->edge_kernel   = prev_ctx->edge_kernel;
-        if (ctx->edge_thresh_strong   == -1) ctx->edge_thresh_strong   = prev_ctx->edge_thresh_strong;
+        if (ctx->edge_thresh_strong   == -1) ctx->edge_thresh_strong = prev_ctx->edge_thresh_strong;
         if (ctx->edge_thresh_weak   == -1)   ctx->edge_thresh_weak   = prev_ctx->edge_thresh_weak;
 
         ctx->show_edge = prev_ctx->show_edge;
