@@ -129,8 +129,11 @@ static hb_filter_param_t deskeeter_presets[] =
 
 static hb_filter_param_t deskeeter_tunes[] =
 {
-    { 0, "None",        "none",       NULL              },
-    { 0, NULL,          NULL,         NULL              }
+    { 0, "None",             "none",       NULL              },
+    { 0, "Skip Filter",      "skip",       NULL              },
+    { 0, "Show Edges",       "edges",      NULL              },
+    { 0, "Show Edges/Skip",  "edges-skip", NULL              },
+    { 0, NULL,               NULL,         NULL              }
 };
 
 static hb_filter_param_t detelecine_presets[] =
@@ -876,38 +879,53 @@ static hb_dict_t * generate_deskeeter_settings(const char *preset,
         !strcasecmp(preset, "stronger") ||
         !strcasecmp(preset, "verystrong"))
     {
-        double strength[2];
-        const char *kernel_string[2];
+        double       strength[2];
+        const char * kernel_string[2];
+        const char * edge_kernel = "gaussian";
+        int          show_edges = 0;
 
-        if (tune == NULL || !strcasecmp(tune, "none"))
+        strength[0]      = strength[1]      = 0.8;
+        kernel_string[0] = kernel_string[1] = "log";
+        if (!strcasecmp(preset, "ultralight"))
         {
-            strength[0]      = strength[1]      = 0.8;
-            kernel_string[0] = kernel_string[1] = "log";
-            if (!strcasecmp(preset, "ultralight"))
-            {
-                strength[0]  = strength[1] = 0.3;
-            }
-            else if (!strcasecmp(preset, "light"))
-            {
-                strength[0]  = strength[1] = 0.6;
-            }
-            else if (!strcasecmp(preset, "strong"))
-            {
-                strength[0]  = strength[1] = 1.0;
-            }
-            else if (!strcasecmp(preset, "stronger"))
-            {
-                strength[0]  = strength[1] = 1.2;
-            }
-            else if (!strcasecmp(preset, "verystrong"))
-            {
-                strength[0]  = strength[1] = 1.5;
-            }
+            strength[0]  = strength[1] = 0.3;
         }
-        else
+        else if (!strcasecmp(preset, "light"))
         {
-            fprintf(stderr, "Unrecognized deskeeter tune (%s).\n", tune);
-            return NULL;
+            strength[0]  = strength[1] = 0.6;
+        }
+        else if (!strcasecmp(preset, "strong"))
+        {
+            strength[0]  = strength[1] = 1.0;
+        }
+        else if (!strcasecmp(preset, "stronger"))
+        {
+            strength[0]  = strength[1] = 1.2;
+        }
+        else if (!strcasecmp(preset, "verystrong"))
+        {
+            strength[0]  = strength[1] = 1.5;
+        }
+        if (tune != NULL && strcasecmp(tune, "none"))
+        {
+            if (!strcasecmp(tune, "skip"))
+            {
+                edge_kernel = NULL;
+            }
+            else if (!strcasecmp(tune, "edges"))
+            {
+                show_edges = 1;
+            }
+            else if (!strcasecmp(tune, "edges-skip"))
+            {
+                show_edges = 1;
+                edge_kernel = NULL;
+            }
+            else
+            {
+                fprintf(stderr, "Unrecognized deskeeter tune (%s).\n", tune);
+                return NULL;
+            }
         }
 
         settings = hb_dict_init();
@@ -916,6 +934,11 @@ static hb_dict_t * generate_deskeeter_settings(const char *preset,
 
         hb_dict_set(settings, "cb-strength", hb_value_double(strength[1]));
         hb_dict_set(settings, "cb-kernel",   hb_value_string(kernel_string[1]));
+        if (edge_kernel != NULL)
+        {
+            hb_dict_set(settings, "edge-kernel",   hb_value_string(edge_kernel));
+        }
+        hb_dict_set(settings, "edge-show",   hb_value_bool(show_edges));
     }
     else
     {

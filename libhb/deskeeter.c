@@ -13,6 +13,7 @@
 #define DESKEETER_STRENGTH_CHROMA_DEFAULT 0.75
 
 #define DESKEETER_KERNELS 4
+#define DESKEETER_EDGE_KERNELS 1
 #define DESKEETER_KERNEL_LUMA_DEFAULT   3
 #define DESKEETER_KERNEL_CHROMA_DEFAULT 3
 
@@ -23,6 +24,10 @@ typedef struct
 {
     double strength;  // strength
     int    kernel;    // which kernel to use; kernels[kernel]
+    int    edge_kernel;
+    double edge_thresh_strong;
+    double edge_thresh_weak;
+    int    show_edge;
 } deskeeter_plane_context_t;
 
 typedef struct {
@@ -77,13 +82,38 @@ static const int kernel_isolog[] =
  0, -1, -1, -1,  0
 };
 
+static const int kernel_gauss[] =
+{
+  2,  4,  5,  4,  2,
+  4,  9, 12,  9,  4,
+  5, 12, 15, 12,  5,
+  4,  9, 12,  9,  4,
+  2,  4,  5,  4,  2,
+};
+
 static kernel_t kernels[] =
 {
-    { kernel_lap,    3, 1.0 /  5 },
-    { kernel_isolap, 3, 1.0 / 25 },
-    { kernel_log,    5, 1.0 / 25 },
-    { kernel_isolog, 5, 1.0 / 65 }
+    { kernel_lap,    3, 1.0 /  5  },
+    { kernel_isolap, 3, 1.0 / 25  },
+    { kernel_log,    5, 1.0 / 25  },
+    { kernel_isolog, 5, 1.0 / 65  },
+    { kernel_gauss,  5, 1.0 / 159 },
 };
+
+static kernel_t edge_kernels[] =
+{
+    { kernel_gauss,  5, 1.0 / 159 },
+};
+
+#define KERNEL_LAP      0
+#define KERNEL_ISOLAP   1
+#define KERNEL_LOG      2
+#define KERNEL_ISOLOG   3
+
+#define KERNEL_EDGE_GAUSS   0
+
+#define EDGE_STRONG_DEFAULT 20
+#define EDGE_WEAK_DEFAULT   16
 
 struct hb_filter_private_s
 {
@@ -102,7 +132,9 @@ static void hb_deskeeter_close(hb_filter_object_t *filter);
 static const char hb_deskeeter_template[] =
     "y-strength=^"HB_FLOAT_REG"$:y-kernel=^"HB_ALL_REG"$:"
     "cb-strength=^"HB_FLOAT_REG"$:cb-kernel=^"HB_ALL_REG"$:"
-    "cr-strength=^"HB_FLOAT_REG"$:cr-kernel=^"HB_ALL_REG"$";
+    "cr-strength=^"HB_FLOAT_REG"$:cr-kernel=^"HB_ALL_REG"$:"
+    "edge-kernel=^"HB_ALL_REG"$:edge-show=^"HB_BOOL_REG"$:"
+    "edge-thresh-strong=^"HB_FLOAT_REG"$:edge-thresh-weak=^"HB_FLOAT_REG"$";
 
 hb_filter_object_t hb_filter_deskeeter =
 {
@@ -119,7 +151,6 @@ hb_filter_object_t hb_filter_deskeeter =
 static uint8_t deskeeter_filter_median_opt(uint8_t  *pixels,
                                            const int size)
 {
-
     // Optimized sorting networks
     if (size == 3)
     {
@@ -181,55 +212,313 @@ static uint8_t deskeeter_filter_median_opt(uint8_t  *pixels,
 
 }
 
-static void hb_deskeeter(const uint8_t *src,
-                               uint8_t *tmp,
-                               uint8_t *dst,
-                         const int width,
-                         const int height,
-                         const int stride,
-                         deskeeter_plane_context_t * ctx)
+static uint16_t clamp(const uint16_t pixel)
 {
-    const kernel_t *kernel = &kernels[ctx->kernel];
+    return pixel < 0   ? 0   :
+           pixel > 255 ? 255 : pixel;
+}
 
-    int offset_min    = -((kernel->size - 1) / 2);
-    int offset_max    =   (kernel->size + 1) / 2;
-    int stride_border =   (stride - width) / 2;
-    int16_t pixel;
-    float   strength_scaled;
+static uint8_t chkbit(uint8_t * vec, int pos)
+{
+    int byte = pos / 8;
+    int bit = pos & 0x7;
+    return !!(vec[byte] & (1 << bit));
+}
 
-    int index;
-    int median_size = 5;
-    uint8_t pixels[median_size * median_size];
+static void setbit(uint8_t * vec, int pos)
+{
+    int byte = pos / 8;
+    int bit = pos & 0x7;
+    vec[byte] |= (1 << bit);
+}
 
-    // Extract high frequencies with high pass filter
+static void clearbit(uint8_t * vec, int pos)
+{
+    int byte = pos / 8;
+    int bit = pos & 0x7;
+    vec[byte] &= 0 ^ (1 << bit);
+}
+
+static void convolve(kernel_t * kernel, uint8_t * dst, uint8_t * src,
+                     int width, int height, int border)
+{
+    int        offset_min = -((kernel->size - 1) / 2);
+    int        offset_max =   (kernel->size + 1) / 2;
+    int        pos;
     for (int y = 0; y < height; y++)
     {
-        for (int x = 0; x < stride; x++)
+        pos = y * width;
+        for (int x = 0; x < width; x++, pos++)
         {
             if ((y < offset_max) ||
+                (y > height - offset_max) ||
+                (x < offset_max - border) ||
+                (x > width + border - offset_max))
+            {
+                *(dst + pos) = *(src + pos);
+                continue;
+            }
+            int pixel = 0;
+            int kpos = 0;
+            for (int k = offset_min; k < offset_max; k++)
+            {
+                int bpos  = width * (y + k) + (x + offset_min);
+                for (int j = offset_min; j < offset_max; j++)
+                {
+                    pixel += kernel->mem[kpos++] * *(src + bpos++);
+                }
+            }
+            *(dst + pos) = pixel * kernel->coef;
+        }
+    }
+}
+
+static hb_buffer_t * edge_detect(const hb_buffer_t * in, int plane,
+                                 deskeeter_plane_context_t * ctx)
+{
+    hb_buffer_t * smooth_buf = NULL, * edge_strong, * edge_weak;
+    int           width, height, stride, size;
+    uint8_t     * src, * weak, * strong;
+
+    width = in->plane[plane].width;
+    height = in->plane[plane].height;
+    stride = in->plane[plane].stride;
+    if (ctx->edge_kernel >= 0)
+    {
+        // Create noise filtered buffer that edge detection
+        // will be performed in.
+        smooth_buf  = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
+        int border  = (stride - width) / 2;
+        kernel_t * kernel = &edge_kernels[ctx->edge_kernel];
+        convolve(kernel, smooth_buf->plane[plane].data,
+                         in->plane[plane].data,
+                         stride, height, border);
+        src = smooth_buf->plane[plane].data;
+    }
+    else
+    {
+        // Edge detection will take place on unfiltered image
+        src = in->plane[plane].data;
+    }
+    edge_strong         = hb_buffer_init((height + 4) * stride / 8 + 4);
+    edge_weak           = hb_buffer_init((height + 4) * stride / 8 + 4);
+    edge_strong->offset = 2 * stride / 8;
+    size                = height * stride / 8;
+    strong              = edge_strong->data + edge_strong->offset;
+    weak                = edge_weak->data   + edge_strong->offset;
+    memset(edge_strong->data, 0, edge_strong->size);
+    memset(edge_weak->data,   0, edge_weak->size);
+    for (int y = 1; y < height - 1; y++)
+    {
+        for (int x = (y == 0); x < width; x++)
+        {
+            int    gx, gy;
+            double g;
+
+            gx = (int)*(src + stride * (y - 1) + (x - 1)) * -1 +
+                      *(src + stride *  y      + (x - 1)) * -2 +
+                      *(src + stride * (y + 1) + (x - 1)) * -1 +
+                      *(src + stride * (y - 1) + (x + 1)) *  1 +
+                      *(src + stride *  y      + (x + 1)) *  2 +
+                      *(src + stride * (y + 1) + (x + 1)) *  1;
+
+            gy = (int)*(src + stride * (y - 1) + (x - 1)) * -1 +
+                      *(src + stride * (y - 1) +  x     ) * -2 +
+                      *(src + stride * (y - 1) + (x + 1)) * -1 +
+                      *(src + stride * (y + 1) + (x - 1)) *  1 +
+                      *(src + stride * (y + 1) +  x     ) *  2 +
+                      *(src + stride * (y + 1) + (x + 1)) *  1;
+
+            g = sqrt(gx * gx + gy * gy);
+            if (g > ctx->edge_thresh_strong)
+            {
+                setbit(strong, y * stride + x);
+            }
+            else if (g > ctx->edge_thresh_weak)
+            {
+                setbit(weak, y * stride + x);
+            }
+        }
+    }
+    // Upgrade weak hits if near a strong hit
+    for (int i = 0; i < size; i++)
+    {
+        // Is there a weak hit anywhere in this byte
+        if (weak[i])
+        {
+            int hit = 0;
+            // quick check bytes surrounding this one for a strong hit
+            for (int j = -2; j < 3 && !hit; j++)
+            {
+                for (int k = -2; k < 3; k++)
+                {
+                    int pos = i + stride * j / 8 + k;
+                    if (strong[pos])
+                    {
+                        hit = 1;
+                        break;
+                    }
+                }
+            }
+            if (!hit)
+            {
+                // No strong hits in proximity to weak hits in this byte
+                weak[i] = 0;
+            }
+            else
+            {
+                // More detailed slower check of strong hits for all bits
+                // set in this byte
+                int b, m;
+                for (b = 0, m = 1; b < 8; b++, m <<= 1)
+                {
+                    if (weak[i] & m)
+                    {
+                        int y =  (i << 3) / stride;
+                        int x = ((i << 3) % stride) + b;
+                        hit   = 0;
+                        for (int j = -2; j < 3 && !hit; j++)
+                        {
+                            for (int k = -2; k < 3; k++)
+                            {
+                                if (chkbit(strong, stride * (y + j) + (x + k)))
+                                {
+                                    hit = 1;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!hit)
+                        {
+                            clearbit(weak, i * 8 + b);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    for (int i = 0; i < size; i++)
+    {
+        // Any bits that were not cleared are weak hits that are in
+        // proximity to a strong hit.
+        strong[i] |= weak[i];
+    }
+    hb_buffer_close(&edge_weak);
+    hb_buffer_close(&smooth_buf);
+    return edge_strong;
+}
+
+static void render_edge(hb_buffer_t * out, hb_buffer_t * edge_buf, int plane)
+{
+    uint8_t * edge   = edge_buf->data + edge_buf->offset;
+    int       stride = out->plane[plane].stride;
+    if (plane == 0)
+    {
+        memset(out->plane[0].data, 0, out->plane[0].size);
+        memset(out->plane[1].data, 128, out->plane[1].size);
+        memset(out->plane[2].data, 128, out->plane[2].size);
+    }
+    for (int i = 0; i < edge_buf->size - edge_buf->offset; i++)
+    {
+        if (edge[i])
+        {
+            int b, m;
+            for (b = 0, m = 1; b < 8; b++, m <<= 1)
+            {
+                if (edge[i] & m)
+                {
+                    int y =  (i << 3) / stride;
+                    int x = ((i << 3) % stride) + b;
+                    int luma_x, luma_y, chroma_x, chroma_y;
+                    if (plane)
+                    {
+                        luma_x = x << 1;
+                        luma_y = y << 1;
+                        chroma_x = x;
+                        chroma_y = y;
+                    }
+                    else
+                    {
+                        luma_x = x;
+                        luma_y = y;
+                        chroma_x = x >> 1;
+                        chroma_y = y >> 1;
+                    }
+                    *(out->plane[0].data + out->plane[0].stride * luma_y + luma_x) = 255;
+                    if (plane)
+                    {
+                        *(out->plane[plane].data + out->plane[plane].stride * chroma_y + chroma_x) = 255;
+                    }
+                }
+            }
+        }
+    }
+}
+
+static void hb_deskeeter(const hb_buffer_t * in,
+                               hb_buffer_t * tmp_buf,
+                               hb_buffer_t * out,
+                               int           plane,
+                               deskeeter_plane_context_t * ctx)
+{
+    uint8_t        * tmp           = tmp_buf->plane[plane].data;
+    uint8_t        * dst           = out->plane[plane].data;
+    uint8_t        * src           = in->plane[plane].data;
+    int              width         = in->plane[plane].width;
+    int              stride        = in->plane[plane].stride;
+    int              height        = in->plane[plane].height;
+    int              stride_border = (stride - width) / 2;
+    hb_buffer_t    * edge_buf = NULL;
+    uint8_t        * edge;
+
+    const kernel_t * kernel;
+
+    int              offset_min, offset_max, pos;
+    int16_t          pixel;
+    float            strength_scaled;
+
+    int              index;
+    int              median_size = 5;
+    uint8_t          pixels[median_size * median_size];
+
+    edge_buf = edge_detect(in, plane, ctx);
+    edge     = edge_buf->data + edge_buf->offset;
+    if (ctx->show_edge)
+    {
+        render_edge(out, edge_buf, plane);
+        hb_buffer_close(&edge_buf);
+        return;
+    }
+    
+    kernel     = &kernels[ctx->kernel];
+    offset_min = -((kernel->size - 1) / 2);
+    offset_max =   (kernel->size + 1) / 2;
+    for (int y = 0; y < height; y++)
+    {
+        pos = stride * y;
+        for (int x = 0; x < stride; x++, pos++)
+        {
+            if (!chkbit(edge, pos) ||
+                (y < offset_max) ||
                 (y > height - offset_max) ||
                 (x < offset_max - stride_border) ||
                 (x > width + stride_border - offset_max))
             {
-                pixel = *(src + stride*y + x) + 128;
-                pixel = pixel < 0 ? 0 : pixel;
-                pixel = pixel > 255 ? 255 : pixel;
-                *(dst + stride*y + x) = pixel;
+                *(dst + pos) = clamp(*(src + pos) + 128);
                 continue;
             }
             pixel = 0;
+            int kpos = 0;
             for (int k = offset_min; k < offset_max; k++)
             {
+                int bpos  = stride * (y + k) + (x + offset_min);
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    pixel += kernel->mem[((j - offset_min) * kernel->size) + k - offset_min] * *(src + stride*(y + j) + (x + k));
+                    pixel += kernel->mem[kpos++] * *(src + bpos++);
                 }
             }
-            pixel = (int16_t)*(src + stride*y + x) + ((pixel * kernel->coef) - *(src + stride*y + x));
-            pixel = *(src + stride*y + x) - pixel + 128;
-            pixel = pixel < 0 ? 0 : pixel;
-            pixel = pixel > 255 ? 255 : pixel;
-            *(dst + stride*y + x) = (uint8_t)(pixel);
+            pixel *= kernel->coef;
+            *(dst + pos) = clamp(*(src + pos) - pixel + 128);
         }
     }
 
@@ -238,33 +527,34 @@ static void hb_deskeeter(const uint8_t *src,
     offset_max =   (median_size + 1) / 2;
     for (int y = 0; y < height; y++)
     {
-        for (int x = 0; x < stride; x++)
+        pos = stride * y;
+        for (int x = 0; x < stride; x++, pos++)
         {
-            if ((y < offset_max) ||
+            if (!chkbit(edge, pos) ||
+                (y < offset_max) ||
                 (y > height - offset_max) ||
                 (x < offset_max - stride_border) ||
                 (x > width + stride_border - offset_max))
             {
-                *(tmp + stride*y + x) = *(src + stride*y + x);
+                *(tmp + pos) = clamp(*(src + pos) + 128);
                 continue;
             }
             index = 0;
             for (int k = offset_min; k < offset_max; k++)
             {
+                int bpos  = stride * (y + k) + (x + offset_min);
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    pixels[index] = *(dst + stride*(y+j) + (x+k));
-                    index++;
+                    pixels[index++] = *(dst + bpos++);
                 }
             }
-            strength_scaled = (float)*(src + stride*y + x) / 64 * ctx->strength;  // Avoid contrast loss in dark areas
+
+            strength_scaled = (float)*(src + pos) / 64 * ctx->strength;  // Avoid contrast loss in dark areas
             strength_scaled = strength_scaled < ctx->strength / 2 ? ctx->strength / 2: strength_scaled;
             strength_scaled = strength_scaled > ctx->strength ? ctx->strength : strength_scaled;
-            pixel = (int16_t)(deskeeter_filter_median_opt(pixels, median_size));
-            pixel = (int16_t)*(dst + stride*y + x) + ((pixel - *(dst + stride*y + x)) * strength_scaled);
-            pixel = pixel < 0 ? 0 : pixel;
-            pixel = pixel > 255 ? 255 : pixel;
-            *(tmp + stride*y + x) = (uint8_t)(pixel);
+            uint8_t median  = deskeeter_filter_median_opt(pixels, median_size);
+            pixel = *(dst + pos);
+            *(tmp + pos) = clamp(pixel + ((median - pixel) * strength_scaled));
         }
     }
 
@@ -273,23 +563,24 @@ static void hb_deskeeter(const uint8_t *src,
     offset_max =   (kernel->size + 1) / 2;
     for (int y = 0; y < height; y++)
     {
-        for (int x = 0; x < width; x++)
+        pos = stride * y;
+        for (int x = 0; x < width; x++, pos++)
         {
-            if ((y < offset_max) ||
+            if (!chkbit(edge, pos) ||
+                (y < offset_max) ||
                 (y > height - offset_max) ||
                 (x < offset_max - stride_border) ||
-                (x > width + stride_border - offset_max))// ||
+                (x > width + stride_border - offset_max))
                 //*(src + stride*y + x) < 48)  // Avoid contrast loss in dark edges
             {
-                *(dst + stride*y + x) = *(src + stride*y + x);
+                *(dst + pos) = *(src + pos);
                 continue;
             }
-            pixel = (int16_t)*(src + stride*y + x) + *(tmp + stride*y + x) - *(dst + stride*y + x);
-            pixel = pixel < 0 ? 0 : pixel;
-            pixel = pixel > 255 ? 255 : pixel;
-            *(dst + stride*y + x) = (uint8_t)(pixel);
+            pixel = *(dst + pos);
+            *(dst + pos) = clamp((int16_t)*(src + pos) + *(tmp + pos) - *(dst + pos));
         }
     }
+    hb_buffer_close(&edge_buf);
 }
 
 static int hb_deskeeter_init(hb_filter_object_t *filter,
@@ -299,6 +590,7 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
     hb_filter_private_t * pv = filter->private_data;
 
     char *kernel_string[3];
+    char *edge_kernel_string = NULL;
 
     // Mark parameters unset
     for (int c = 0; c < 3; c++)
@@ -306,6 +598,11 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
         pv->plane_ctx[c].strength = -1;
         pv->plane_ctx[c].kernel   = -1;
         kernel_string[c]          = NULL;
+
+        pv->plane_ctx[c].edge_kernel        = -1;
+        pv->plane_ctx[c].edge_thresh_strong = EDGE_STRONG_DEFAULT;
+        pv->plane_ctx[c].edge_thresh_weak   = EDGE_WEAK_DEFAULT;
+        pv->plane_ctx[c].show_edge          = 0;
     }
 
     // Read user parameters
@@ -320,14 +617,18 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
 
         hb_dict_extract_double(&pv->plane_ctx[2].strength, dict, "cr-strength");
         hb_dict_extract_string(&kernel_string[2],          dict, "cr-kernel");
+
+        hb_dict_extract_double(&pv->plane_ctx[0].edge_thresh_strong, dict, "edge-thresh-strong");
+        hb_dict_extract_double(&pv->plane_ctx[0].edge_thresh_weak,   dict, "edge-thresh-weak");
+        hb_dict_extract_string(&edge_kernel_string,                  dict, "edge-kernel");
+
+        hb_dict_extract_bool(&pv->plane_ctx[0].show_edge,            dict, "edge-show");
     }
 
     // Convert kernel user string to internal id
     for (int c = 0; c < 3; c++)
     {
         deskeeter_plane_context_t * ctx = &pv->plane_ctx[c];
-
-        ctx->kernel = -1;
 
         if (kernel_string[c] == NULL)
         {
@@ -336,22 +637,31 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
 
         if (!strcasecmp(kernel_string[c], "lap"))
         {
-            ctx->kernel = 0;
+            ctx->kernel = KERNEL_LAP;
         }
         else if (!strcasecmp(kernel_string[c], "isolap"))
         {
-            ctx->kernel = 1;
+            ctx->kernel = KERNEL_ISOLAP;
         }
         else if (!strcasecmp(kernel_string[c], "log"))
         {
-            ctx->kernel = 2;
+            ctx->kernel = KERNEL_LOG;
         }
         else if (!strcasecmp(kernel_string[c], "isolog"))
         {
-            ctx->kernel = 3;
+            ctx->kernel = KERNEL_ISOLOG;
         }
 
         free(kernel_string[c]);
+    }
+
+    if (edge_kernel_string != NULL)
+    {
+        if (!strcasecmp(edge_kernel_string, "gaussian"))
+        {
+            pv->plane_ctx[0].edge_kernel = KERNEL_EDGE_GAUSS;
+        }
+        free(edge_kernel_string);
     }
 
     // Cascade values
@@ -361,8 +671,13 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
         deskeeter_plane_context_t * prev_ctx = &pv->plane_ctx[c - 1];
         deskeeter_plane_context_t * ctx      = &pv->plane_ctx[c];
 
-        if (ctx->strength == -1) ctx->strength = prev_ctx->strength;
-        if (ctx->kernel   == -1) ctx->kernel   = prev_ctx->kernel;
+        if (ctx->strength == -1)             ctx->strength = prev_ctx->strength;
+        if (ctx->kernel   == -1)             ctx->kernel   = prev_ctx->kernel;
+        if (ctx->edge_kernel   == -1)        ctx->edge_kernel   = prev_ctx->edge_kernel;
+        if (ctx->edge_thresh_strong   == -1) ctx->edge_thresh_strong   = prev_ctx->edge_thresh_strong;
+        if (ctx->edge_thresh_weak   == -1)   ctx->edge_thresh_weak   = prev_ctx->edge_thresh_weak;
+
+        ctx->show_edge = prev_ctx->show_edge;
     }
 
     for (int c = 0; c < 3; c++)
@@ -421,20 +736,14 @@ static int hb_deskeeter_work(hb_filter_object_t *filter,
     }
 
     hb_frame_buffer_mirror_stride(in);
-    tmp = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
-    out = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
+    tmp  = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
+    out  = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
 
     int c;
     for (c = 0; c < 3; c++)
     {
         deskeeter_plane_context_t * ctx = &pv->plane_ctx[c];
-        hb_deskeeter(in->plane[c].data,
-                 tmp->plane[c].data,
-                 out->plane[c].data,
-                 in->plane[c].width,
-                 in->plane[c].height,
-                 in->plane[c].stride,
-                 ctx);
+        hb_deskeeter(in, tmp, out, c, ctx);
     }
     hb_buffer_close(&tmp);
 
