@@ -22,12 +22,8 @@
 
 typedef struct
 {
-    double strength;  // strength
-    int    kernel;    // which kernel to use; kernels[kernel]
-    int    edge_kernel;
-    double edge_thresh_strong;
-    double edge_thresh_weak;
-    int    show_edge;
+    double                strength;  // strength
+    int                   kernel;    // which kernel to use; kernels[kernel]
 } deskeeter_plane_context_t;
 
 typedef struct {
@@ -112,12 +108,31 @@ static kernel_t edge_kernels[] =
 
 #define KERNEL_EDGE_GAUSS   0
 
-#define EDGE_STRONG_DEFAULT 20
-#define EDGE_WEAK_DEFAULT   16
+#define EDGE_STRONG_DEFAULT 30
+// In deskeeter, we only want to filter around fairly hard edges
+// so the weak threshold is essentially ignored here.  Can
+// be changed with 'edge-thresh-weak' filter setting
+#define EDGE_WEAK_DEFAULT   30
+
+#define MASK_RADIUS_DEFAULT 11
+#define MASK_RADIUS_MAX     15
+
+typedef struct
+{
+    hb_filter_private_t * pv;
+    hb_buffer_t         * edge;
+    hb_buffer_t         * mask;
+} deskeeter_work_context_t;
 
 struct hb_filter_private_s
 {
-    deskeeter_plane_context_t plane_ctx[3];
+    deskeeter_plane_context_t    plane_ctx[3];
+
+    int           edge_kernel;
+    double        edge_thresh_strong;
+    double        edge_thresh_weak;
+    int           show_edge;
+    int           mask_radius;
 };
 
 static int hb_deskeeter_init(hb_filter_object_t *filter,
@@ -134,7 +149,8 @@ static const char hb_deskeeter_template[] =
     "cb-strength=^"HB_FLOAT_REG"$:cb-kernel=^"HB_ALL_REG"$:"
     "cr-strength=^"HB_FLOAT_REG"$:cr-kernel=^"HB_ALL_REG"$:"
     "edge-kernel=^"HB_ALL_REG"$:edge-show=^"HB_BOOL_REG"$:"
-    "edge-thresh-strong=^"HB_FLOAT_REG"$:edge-thresh-weak=^"HB_FLOAT_REG"$";
+    "edge-thresh-strong=^"HB_FLOAT_REG"$:edge-thresh-weak=^"HB_FLOAT_REG"$"
+    "mask-radius=^"HB_INT_REG"$";
 
 hb_filter_object_t hb_filter_deskeeter =
 {
@@ -273,23 +289,86 @@ static void convolve(kernel_t * kernel, uint8_t * dst, uint8_t * src,
     }
 }
 
-static hb_buffer_t * edge_detect(const hb_buffer_t * in, int plane,
-                                 deskeeter_plane_context_t * ctx)
+static void scale_edge(int plane, deskeeter_work_context_t * wctx)
 {
-    hb_buffer_t * smooth_buf = NULL, * edge_strong, * edge_weak;
-    int           width, height, stride, size;
+    uint8_t * src             = wctx->edge->plane[0].data;
+    uint8_t * dst             = wctx->edge->plane[plane].data;
+    int       src_stride_bits = wctx->edge->plane[0].stride * 8;
+    int       dst_stride_bits = wctx->edge->plane[plane].stride * 8;
+
+    for (int i = 0; i < wctx->edge->plane[0].size; i++)
+    {
+        if (src[i])
+        {
+            int b, m;
+            for (b = 0, m = 1; b < 8; b++, m <<= 1)
+            {
+                if (src[i] & m)
+                {
+                    int y =  ((i << 3) / src_stride_bits) / 2;
+                    int x = (((i << 3) % src_stride_bits) + b) / 2;
+                    setbit(dst, y * dst_stride_bits + x);
+                }
+            }
+        }
+    }
+}
+
+static hb_buffer_t * alloc_mask(int width, int height)
+{
+    hb_buffer_t * edge;
+
+    // Leave border around edge mask to allow processing outside
+    // image boundary
+    int  y_size                = (height + 4)     * (width / 8 + 2);
+    int  cr_size               = (height / 2 + 4) * (width / 16 + 2);
+    edge                  = hb_buffer_init(y_size + 2 * cr_size);
+    edge->f.width         = width;
+    edge->f.height        = height;
+    edge->plane[0].width  = width;
+    edge->plane[0].height = height;
+    edge->plane[0].stride = width / 8 + 2;
+    edge->plane[0].size   = edge->plane[0].height * edge->plane[0].stride;
+    edge->plane[1].width  = width / 2;
+    edge->plane[1].height = height / 2;
+    edge->plane[1].stride = width / 16 + 2;
+    edge->plane[1].size   = edge->plane[1].height * edge->plane[1].stride;
+    edge->plane[2].width  = width / 2;
+    edge->plane[2].height = height / 2;
+    edge->plane[2].stride = width / 16 + 2;
+    edge->plane[2].size   = edge->plane[2].height * edge->plane[2].stride;
+    edge->plane[0].data   = edge->data +
+                            2 * edge->plane[0].stride + 1;
+    edge->plane[1].data   = edge->data + y_size +
+                            2 * edge->plane[1].stride + 1;
+    edge->plane[2].data   = edge->data + y_size + cr_size +
+                            2 * edge->plane[2].stride + 1;
+    return edge;
+}
+
+static void edge_detect(const hb_buffer_t * in, int plane,
+                        deskeeter_work_context_t * wctx)
+{
+    hb_buffer_t * smooth_buf = NULL, * edge_weak;
+    int           width, height, stride, edge_stride_bits;
     uint8_t     * src, * weak, * strong;
 
-    width = in->plane[plane].width;
+    if (plane)
+    {
+        // construct CR/CB from Y mask
+        scale_edge(plane, wctx);
+        return;
+    }
+    width  = in->plane[plane].width;
     height = in->plane[plane].height;
     stride = in->plane[plane].stride;
-    if (ctx->edge_kernel >= 0)
+    if (wctx->pv->edge_kernel >= 0)
     {
         // Create noise filtered buffer that edge detection
         // will be performed in.
         smooth_buf  = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
         int border  = (stride - width) / 2;
-        kernel_t * kernel = &edge_kernels[ctx->edge_kernel];
+        kernel_t * kernel = &edge_kernels[wctx->pv->edge_kernel];
         convolve(kernel, smooth_buf->plane[plane].data,
                          in->plane[plane].data,
                          stride, height, border);
@@ -300,17 +379,20 @@ static hb_buffer_t * edge_detect(const hb_buffer_t * in, int plane,
         // Edge detection will take place on unfiltered image
         src = in->plane[plane].data;
     }
-    edge_strong         = hb_buffer_init((height + 4) * stride / 8 + 4);
-    edge_weak           = hb_buffer_init((height + 4) * stride / 8 + 4);
-    edge_strong->offset = 2 * stride / 8;
-    size                = height * stride / 8;
-    strong              = edge_strong->data + edge_strong->offset;
-    weak                = edge_weak->data   + edge_strong->offset;
-    memset(edge_strong->data, 0, edge_strong->size);
-    memset(edge_weak->data,   0, edge_weak->size);
+
+    hb_buffer_close(&wctx->edge);
+
+    wctx->edge       = alloc_mask(width, height);
+    edge_weak        = alloc_mask(width, height);
+    strong           = wctx->edge->plane[plane].data;
+    weak             = edge_weak->plane[plane].data;
+    edge_stride_bits = wctx->edge->plane[plane].stride * 8;
+    memset(wctx->edge->data, 0, wctx->edge->size);
+    memset(edge_weak->data,     0, edge_weak->size);
+
     for (int y = 1; y < height - 1; y++)
     {
-        for (int x = (y == 1); x < width; x++)
+        for (int x = 1; x < width - 1; x++)
         {
             int    gx, gy;
             double g;
@@ -330,18 +412,19 @@ static hb_buffer_t * edge_detect(const hb_buffer_t * in, int plane,
                       *(src + stride * (y + 1) + (x + 1)) *  1;
 
             g = sqrt(gx * gx + gy * gy);
-            if (g > ctx->edge_thresh_strong)
+            if (g > wctx->pv->edge_thresh_strong)
             {
-                setbit(strong, y * stride + x);
+                setbit(strong, y * edge_stride_bits + x);
             }
-            else if (g > ctx->edge_thresh_weak)
+            else if (g > wctx->pv->edge_thresh_weak)
             {
-                setbit(weak, y * stride + x);
+                setbit(weak, y * edge_stride_bits + x);
             }
         }
     }
+
     // Upgrade weak hits if near a strong hit
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < wctx->edge->plane[plane].size; i++)
     {
         // Is there a weak hit anywhere in this byte
         if (weak[i])
@@ -352,7 +435,7 @@ static hb_buffer_t * edge_detect(const hb_buffer_t * in, int plane,
             {
                 for (int k = -2; k < 3; k++)
                 {
-                    int pos = i + stride * j / 8 + k;
+                    int pos = i + edge_stride_bits * j / 8 + k;
                     if (strong[pos])
                     {
                         hit = 1;
@@ -374,14 +457,14 @@ static hb_buffer_t * edge_detect(const hb_buffer_t * in, int plane,
                 {
                     if (weak[i] & m)
                     {
-                        int y =  (i << 3) / stride;
-                        int x = ((i << 3) % stride) + b;
+                        int y =  (i << 3) / edge_stride_bits;
+                        int x = ((i << 3) % edge_stride_bits) + b;
                         hit   = 0;
                         for (int j = -2; j < 3 && !hit; j++)
                         {
                             for (int k = -2; k < 3; k++)
                             {
-                                if (chkbit(strong, stride * (y + j) + (x + k)))
+                                if (chkbit(strong, edge_stride_bits * (y + j) + (x + k)))
                                 {
                                     hit = 1;
                                     break;
@@ -397,7 +480,7 @@ static hb_buffer_t * edge_detect(const hb_buffer_t * in, int plane,
             }
         }
     }
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < wctx->edge->plane[plane].size; i++)
     {
         // Any bits that were not cleared are weak hits that are in
         // proximity to a strong hit.
@@ -405,20 +488,14 @@ static hb_buffer_t * edge_detect(const hb_buffer_t * in, int plane,
     }
     hb_buffer_close(&edge_weak);
     hb_buffer_close(&smooth_buf);
-    return edge_strong;
 }
 
-static void render_edge(hb_buffer_t * out, hb_buffer_t * edge_buf, int plane)
+static void render_mask(hb_buffer_t * out, hb_buffer_t * edge_buf, int plane)
 {
-    uint8_t * edge   = edge_buf->data + edge_buf->offset;
-    int       stride = out->plane[plane].stride;
-    if (plane == 0)
-    {
-        memset(out->plane[0].data, 0, out->plane[0].size);
-        memset(out->plane[1].data, 128, out->plane[1].size);
-        memset(out->plane[2].data, 128, out->plane[2].size);
-    }
-    for (int i = 0; i < edge_buf->size - edge_buf->offset; i++)
+    uint8_t * edge             = edge_buf->plane[plane].data;
+    int       edge_stride_bits = edge_buf->plane[plane].stride * 8;
+
+    for (int i = 0; i < edge_buf->plane[plane].size; i++)
     {
         if (edge[i])
         {
@@ -427,8 +504,8 @@ static void render_edge(hb_buffer_t * out, hb_buffer_t * edge_buf, int plane)
             {
                 if (edge[i] & m)
                 {
-                    int y =  (i << 3) / stride;
-                    int x = ((i << 3) % stride) + b;
+                    int y =  (i << 3) / edge_stride_bits;
+                    int x = ((i << 3) % edge_stride_bits) + b;
                     int luma_x, luma_y, chroma_x, chroma_y;
                     if (plane)
                     {
@@ -455,11 +532,86 @@ static void render_edge(hb_buffer_t * out, hb_buffer_t * edge_buf, int plane)
     }
 }
 
+static void create_mask(int plane, deskeeter_work_context_t * wctx)
+{
+    uint8_t * src             = wctx->edge->plane[plane].data;
+    int       src_stride      = wctx->edge->plane[plane].stride;
+    int       src_size        = wctx->edge->plane[plane].size;
+
+    if (plane == 0)
+    {
+        hb_buffer_close(&wctx->mask);
+        wctx->mask = alloc_mask(wctx->edge->f.width, wctx->edge->f.height);
+        memset(wctx->mask->data, 0, wctx->mask->size);
+    }
+    uint8_t * dst = wctx->mask->plane[plane].data;
+    int       radius;
+
+    if (plane)
+    {
+        radius = wctx->pv->mask_radius / 2;
+    }
+    else
+    {
+        radius = wctx->pv->mask_radius;
+    }
+    for (int i = 0; i < src_size; i++)
+    {
+        if (src[i])
+        {
+            int b, m;
+            for (b = 0, m = 1; b < 8; b++, m <<= 1)
+            {
+                if (!(src[i] & m))
+                {
+                    continue;
+                }
+
+                int      offset_min = -((radius - 1) / 2);
+                int      offset_max =   (radius + 1) / 2;
+                int      first = 8 + b + offset_min;
+                uint32_t bits  = ~(~0 << radius) << first;
+                for (int k = offset_min; k < offset_max; k++)
+                {
+                    int j;
+                    int pos = i + k * src_stride;
+                    if (pos < 0 || pos >= src_size) continue;
+
+                    uint32_t mask  = 0;
+                    j = pos % src_stride;
+
+                    if (j > 0)
+                    {
+                        mask |= src[pos-1];
+                    }
+                    mask |= src[pos] << 8;
+                    if (j < src_stride - 1)
+                    {
+                        mask |= src[pos+1] << 16;
+                    }
+                    mask ^= ~0;
+                    mask &= bits;
+                    if (j > 0)
+                    {
+                        dst[pos-1] |= mask & 0xff;
+                    }
+                    dst[pos] |= (mask >> 8) & 0xff;
+                    if (j < src_stride - 1)
+                    {
+                        dst[pos+1] |= (mask >> 16) & 0xff;
+                    }
+                }
+            }
+        }
+    }
+}
+
 static void hb_deskeeter(const hb_buffer_t * in,
                                hb_buffer_t * tmp_buf,
                                hb_buffer_t * out,
                                int           plane,
-                               deskeeter_plane_context_t * ctx)
+                               deskeeter_plane_context_t * ctx,
+                               deskeeter_work_context_t * wctx)
 {
     uint8_t        * tmp           = tmp_buf->plane[plane].data;
     uint8_t        * dst           = out->plane[plane].data;
@@ -468,8 +620,7 @@ static void hb_deskeeter(const hb_buffer_t * in,
     int              stride        = in->plane[plane].stride;
     int              height        = in->plane[plane].height;
     int              stride_border = (stride - width) / 2;
-    hb_buffer_t    * edge_buf = NULL;
-    uint8_t        * edge;
+    uint8_t        * mask;
 
     const kernel_t * kernel;
 
@@ -481,14 +632,21 @@ static void hb_deskeeter(const hb_buffer_t * in,
     int              median_size = 5;
     uint8_t          pixels[median_size * median_size];
 
-    edge_buf = edge_detect(in, plane, ctx);
-    edge     = edge_buf->data + edge_buf->offset;
-    if (ctx->show_edge)
+    edge_detect(in, plane, wctx);
+    if (wctx->pv->show_edge)
     {
-        render_edge(out, edge_buf, plane);
-        hb_buffer_close(&edge_buf);
+        if (plane == 0)
+        {
+            memset(out->plane[0].data, 0, out->plane[0].size);
+            memset(out->plane[1].data, 128, out->plane[1].size);
+            memset(out->plane[2].data, 128, out->plane[2].size);
+            render_mask(out, wctx->edge, plane);
+        }
         return;
     }
+    // We want to filter around the edges, create mask of region to filter
+    create_mask(plane, wctx);
+    mask = wctx->mask->plane[plane].data;
     
     kernel     = &kernels[ctx->kernel];
     offset_min = -((kernel->size - 1) / 2);
@@ -498,8 +656,7 @@ static void hb_deskeeter(const hb_buffer_t * in,
         pos = stride * y;
         for (int x = 0; x < stride; x++, pos++)
         {
-            if (!chkbit(edge, pos) ||
-                (y < offset_max) ||
+            if ((y < offset_max) ||
                 (y > height - offset_max) ||
                 (x < offset_max - stride_border) ||
                 (x > width + stride_border - offset_max))
@@ -507,14 +664,24 @@ static void hb_deskeeter(const hb_buffer_t * in,
                 *(dst + pos) = clamp(*(src + pos) + 128);
                 continue;
             }
+            uint8_t is_mask = chkbit(mask, pos);
+            int     kpos = 0;
             pixel = 0;
-            int kpos = 0;
             for (int k = offset_min; k < offset_max; k++)
             {
                 int bpos  = stride * (y + k) + (x + offset_min);
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    pixel += kernel->mem[kpos++] * *(src + bpos++);
+                    if (is_mask == chkbit(mask, bpos))
+                    {
+                        pixel += kernel->mem[kpos] * *(src + bpos);
+                    }
+                    else
+                    {
+                        pixel += kernel->mem[kpos] * *(src + pos);
+                    }
+                    kpos++;
+                    bpos++;
                 }
             }
             pixel *= kernel->coef;
@@ -530,22 +697,31 @@ static void hb_deskeeter(const hb_buffer_t * in,
         pos = stride * y;
         for (int x = 0; x < stride; x++, pos++)
         {
-            if (!chkbit(edge, pos) ||
-                (y < offset_max) ||
+            if ((y < offset_max) ||
                 (y > height - offset_max) ||
                 (x < offset_max - stride_border) ||
                 (x > width + stride_border - offset_max))
             {
-                *(tmp + pos) = clamp(*(src + pos) + 128);
+                *(tmp + pos) = *(dst + pos);
                 continue;
             }
+            uint8_t is_mask = chkbit(mask, pos);
             index = 0;
             for (int k = offset_min; k < offset_max; k++)
             {
                 int bpos  = stride * (y + k) + (x + offset_min);
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    pixels[index++] = *(dst + bpos++);
+                    if (is_mask == chkbit(mask, bpos))
+                    {
+                        pixels[index] = *(dst + bpos);
+                    }
+                    else
+                    {
+                        pixels[index] = *(dst + pos);
+                    }
+                    index++;
+                    bpos++;
                 }
             }
 
@@ -566,7 +742,7 @@ static void hb_deskeeter(const hb_buffer_t * in,
         pos = stride * y;
         for (int x = 0; x < width; x++, pos++)
         {
-            if (!chkbit(edge, pos) ||
+            if (!chkbit(mask, pos) ||
                 (y < offset_max) ||
                 (y > height - offset_max) ||
                 (x < offset_max - stride_border) ||
@@ -580,7 +756,6 @@ static void hb_deskeeter(const hb_buffer_t * in,
             *(dst + pos) = clamp((int16_t)*(src + pos) + *(tmp + pos) - *(dst + pos));
         }
     }
-    hb_buffer_close(&edge_buf);
 }
 
 static int hb_deskeeter_init(hb_filter_object_t *filter,
@@ -598,15 +773,13 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
         pv->plane_ctx[c].strength = -1;
         pv->plane_ctx[c].kernel   = -1;
         kernel_string[c]          = NULL;
-
-        pv->plane_ctx[c].edge_kernel        = -1;
-        pv->plane_ctx[0].edge_thresh_strong = -1;
-        pv->plane_ctx[0].edge_thresh_weak   = -1;
     }
 
-    pv->plane_ctx[0].edge_thresh_strong = EDGE_STRONG_DEFAULT;
-    pv->plane_ctx[0].edge_thresh_weak   = EDGE_WEAK_DEFAULT;
-    pv->plane_ctx[0].show_edge          = 0;
+    pv->edge_kernel        = -1;
+    pv->edge_thresh_strong = EDGE_STRONG_DEFAULT;
+    pv->edge_thresh_weak   = EDGE_WEAK_DEFAULT;
+    pv->show_edge          = 0;
+    pv->mask_radius         = MASK_RADIUS_DEFAULT;
 
     // Read user parameters
     if (filter->settings != NULL)
@@ -621,11 +794,11 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
         hb_dict_extract_double(&pv->plane_ctx[2].strength, dict, "cr-strength");
         hb_dict_extract_string(&kernel_string[2],          dict, "cr-kernel");
 
-        hb_dict_extract_double(&pv->plane_ctx[0].edge_thresh_strong, dict, "edge-thresh-strong");
-        hb_dict_extract_double(&pv->plane_ctx[0].edge_thresh_weak,   dict, "edge-thresh-weak");
-        hb_dict_extract_string(&edge_kernel_string,                  dict, "edge-kernel");
-
-        hb_dict_extract_bool(&pv->plane_ctx[0].show_edge,            dict, "edge-show");
+        hb_dict_extract_double(&pv->edge_thresh_strong, dict, "edge-thresh-strong");
+        hb_dict_extract_double(&pv->edge_thresh_weak,   dict, "edge-thresh-weak");
+        hb_dict_extract_string(&edge_kernel_string,     dict, "edge-kernel");
+        hb_dict_extract_bool(&pv->show_edge,            dict, "edge-show");
+        hb_dict_extract_int(&pv->mask_radius,           dict, "mask-radius");
     }
 
     // Convert kernel user string to internal id
@@ -662,7 +835,7 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
     {
         if (!strcasecmp(edge_kernel_string, "gaussian"))
         {
-            pv->plane_ctx[0].edge_kernel = KERNEL_EDGE_GAUSS;
+            pv->edge_kernel = KERNEL_EDGE_GAUSS;
         }
         free(edge_kernel_string);
     }
@@ -676,11 +849,6 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
 
         if (ctx->strength == -1)             ctx->strength = prev_ctx->strength;
         if (ctx->kernel   == -1)             ctx->kernel   = prev_ctx->kernel;
-        if (ctx->edge_kernel   == -1)        ctx->edge_kernel   = prev_ctx->edge_kernel;
-        if (ctx->edge_thresh_strong   == -1) ctx->edge_thresh_strong = prev_ctx->edge_thresh_strong;
-        if (ctx->edge_thresh_weak   == -1)   ctx->edge_thresh_weak   = prev_ctx->edge_thresh_weak;
-
-        ctx->show_edge = prev_ctx->show_edge;
     }
 
     for (int c = 0; c < 3; c++)
@@ -707,6 +875,13 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
             ctx->kernel = c ? DESKEETER_KERNEL_CHROMA_DEFAULT : DESKEETER_KERNEL_LUMA_DEFAULT;
         }
     }
+
+    if (pv->mask_radius > MASK_RADIUS_MAX)
+    {
+        pv->mask_radius = MASK_RADIUS_MAX;
+    }
+    // Radius should always be odd so it has a center
+    pv->mask_radius |= 1;
 
     return 0;
 }
@@ -742,12 +917,18 @@ static int hb_deskeeter_work(hb_filter_object_t *filter,
     tmp  = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
     out  = hb_frame_buffer_init(in->f.fmt, in->f.width, in->f.height);
 
+    deskeeter_work_context_t * wctx = calloc(sizeof(deskeeter_work_context_t), 1);
+
     int c;
     for (c = 0; c < 3; c++)
     {
-        deskeeter_plane_context_t * ctx = &pv->plane_ctx[c];
-        hb_deskeeter(in, tmp, out, c, ctx);
+        deskeeter_plane_context_t  * ctx  = &pv->plane_ctx[c];
+        wctx->pv = pv;
+        hb_deskeeter(in, tmp, out, c, ctx, wctx);
     }
+    hb_buffer_close(&wctx->edge);
+    hb_buffer_close(&wctx->mask);
+    free(wctx);
     hb_buffer_close(&tmp);
 
     out->s = in->s;
