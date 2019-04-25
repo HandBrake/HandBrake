@@ -34,6 +34,9 @@ namespace HandBrakeWPF.ViewModelItems.Filters
 
         public EncodeTask CurrentTask { get; private set; }
 
+
+        public DetelecineItem DetelecineFilter { get; set; }
+
         public Detelecine SelectedDetelecine
         {
             get
@@ -53,25 +56,10 @@ namespace HandBrakeWPF.ViewModelItems.Filters
             }
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether ShowDetelecineCustom.
-        /// </summary>
         public bool ShowDetelecineCustom => this.CurrentTask.Detelecine == Detelecine.Custom;
 
-        /// <summary>
-        /// Gets DetelecineOptions.
-        /// </summary>
-        public IEnumerable<Detelecine> DetelecineOptions
-        {
-            get
-            {
-                return EnumHelper<Detelecine>.GetEnumList();
-            }
-        }
+        public IEnumerable<Detelecine> DetelecineOptions => EnumHelper<Detelecine>.GetEnumList();
 
-        /// <summary>
-        /// Gets or sets CustomDetelecine.
-        /// </summary>
         public string CustomDetelecine
         {
             get
@@ -101,12 +89,6 @@ namespace HandBrakeWPF.ViewModelItems.Filters
             this.CustomDetelecine = preset.Task.CustomDetelecine;
         }
 
-        /// <summary>
-        /// Update all the UI controls based on the encode task passed in.
-        /// </summary>
-        /// <param name="task">
-        /// The task.
-        /// </param>
         public void UpdateTask(EncodeTask task)
         {
             this.CurrentTask = task;
