@@ -1034,6 +1034,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FiltersView_DeblockPreset.
+        /// </summary>
+        public static string FiltersViewAuto_DeblockPreset {
+            get {
+                return ResourceManager.GetString("FiltersViewAuto_DeblockPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deblock Tune.
+        /// </summary>
+        public static string FiltersViewAuto_DeblockTune {
+            get {
+                return ResourceManager.GetString("FiltersViewAuto_DeblockTune", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Generic_Add {

@@ -81,7 +81,9 @@ namespace HandBrakeWPF.Services.Encode.Model
             this.CustomDetelecine = task.CustomDetelecine;
             this.CustomCombDetect = task.CustomCombDetect;
             this.CombDetect = task.CombDetect;
-            this.Deblock = task.Deblock;
+            this.DeblockPreset = task.DeblockPreset;
+            this.DeblockTune = task.DeblockTune;
+            this.CustomDeblock = task.CustomDeblock;
             this.DeinterlacePreset = task.DeinterlacePreset;
             this.DeinterlaceFilter = task.DeinterlaceFilter;
             this.Denoise = task.Denoise;
@@ -327,11 +329,6 @@ namespace HandBrakeWPF.Services.Encode.Model
         public string CustomDenoise { get; set; }
 
         /// <summary>
-        /// Gets or sets Deblock.
-        /// </summary>
-        public int Deblock { get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether Grayscale.
         /// </summary>
         public bool Grayscale { get; set; }
@@ -350,6 +347,10 @@ namespace HandBrakeWPF.Services.Encode.Model
         public FilterPreset SharpenPreset { get; set; }
         public FilterTune SharpenTune { get; set; }
         public string SharpenCustom { get; set; }
+
+        public FilterPreset DeblockPreset { get; set; }
+        public FilterTune DeblockTune { get; set; }
+        public string CustomDeblock { get; set; }
         #endregion
 
         #region Video

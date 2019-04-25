@@ -31,6 +31,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
+    using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     public class SummaryViewModel : ViewModelBase, ISummaryViewModel
@@ -541,7 +542,7 @@ namespace HandBrakeWPF.ViewModels
                 filters.Add(this.Task.Sharpen.ToString());
             }
 
-            if (this.Task.Deblock > 4)
+            if (this.Task.DeblockPreset != null && this.Task.DeblockPreset.Key != DeblockFilter.Off)
             {
                 filters.Add(Resources.SummaryView_Deblock);
             }
