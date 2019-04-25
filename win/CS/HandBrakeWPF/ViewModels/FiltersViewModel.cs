@@ -39,8 +39,6 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class FiltersViewModel : ViewModelBase, IFiltersViewModel
     {
-        #region Constructors and Destructors
-
         public FiltersViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
             this.CurrentTask = new EncodeTask();
@@ -50,13 +48,10 @@ namespace HandBrakeWPF.ViewModels
             this.DetelecineFilter = new DetelecineItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
             this.DeinterlaceFilter = new DeinterlaceFilterItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
             this.DeblockFilter = new DeblockFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
+            this.RotateFlipFilter = new RotateFlipFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
         }
 
-        #endregion
-
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
-
-        #region Properties
 
         public EncodeTask CurrentTask { get; private set; }
 
@@ -85,42 +80,8 @@ namespace HandBrakeWPF.ViewModels
 
         public DeblockFilter DeblockFilter { get; set; }
 
-
-
-        public BindingList<int> RotationOptions => new BindingList<int> { 0, 90, 180, 270 };
-
-        public int SelectedRotation
-        {
-            get
-            {
-                return this.CurrentTask.Rotation;
-            }
-
-            set
-            {
-                this.CurrentTask.Rotation = value;
-                this.NotifyOfPropertyChange(() => this.SelectedRotation);
-                this.OnTabStatusChanged(null);
-            }
-        }
-
-        public bool FlipVideo
-        {
-            get
-            {
-                return this.CurrentTask.FlipVideo;
-            }
-
-            set
-            {
-                this.CurrentTask.FlipVideo = value;
-                this.NotifyOfPropertyChange(() => this.FlipVideo);
-                this.OnTabStatusChanged(null);
-            }
-        }
-
-        #endregion
-
+        public RotateFlipFilter RotateFlipFilter { get; set; }
+        
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.CurrentTask = task;
@@ -135,17 +96,12 @@ namespace HandBrakeWPF.ViewModels
                 this.DetelecineFilter.SetPreset(preset, task);
                 this.DeinterlaceFilter.SetPreset(preset, task);
                 this.DeblockFilter.SetPreset(preset, task);
-
-                this.SelectedRotation = preset.Task.Rotation;
-                this.FlipVideo = preset.Task.FlipVideo;
+                this.RotateFlipFilter.SetPreset(preset, task);
             }
             else
             {
                 // Default everything to off
                 this.Grayscale = false;
-
-                this.SelectedRotation = 0;
-                this.FlipVideo = false;
             }
         }
 
@@ -154,14 +110,12 @@ namespace HandBrakeWPF.ViewModels
             this.CurrentTask = task;
             this.NotifyOfPropertyChange(() => this.Grayscale);
 
-            this.NotifyOfPropertyChange(() => this.FlipVideo);
-            this.NotifyOfPropertyChange(() => this.SelectedRotation);
-
             this.SharpenFilter.UpdateTask(task);
             this.DenoiseFilter.UpdateTask(task);
             this.DetelecineFilter.UpdateTask(task);
             this.DeinterlaceFilter.UpdateTask(task);
             this.DeblockFilter.UpdateTask(task);
+            this.RotateFlipFilter.UpdateTask(task);
         }
 
         public bool MatchesPreset(Preset preset)
@@ -191,20 +145,16 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
+            if (!this.RotateFlipFilter.MatchesPreset(preset))
+            {
+                return false;
+            }
+
             if (preset.Task.Grayscale != this.Grayscale)
             {
                 return false;
             }
 
-            if (preset.Task.Rotation != this.SelectedRotation)
-            {
-                return false;
-            }
-
-            if (preset.Task.FlipVideo != this.FlipVideo)
-            {
-                return false;
-            }
 
             return true;
         }
@@ -217,6 +167,7 @@ namespace HandBrakeWPF.ViewModels
             this.DetelecineFilter.SetSource(source, title, preset, task);
             this.DeinterlaceFilter.SetSource(source, title, preset, task);
             this.DeblockFilter.SetSource(source, title, preset, task);
+            this.RotateFlipFilter.SetSource(source, title, preset, task);
         }
 
         protected virtual void OnTabStatusChanged(TabStatusEventArgs e)

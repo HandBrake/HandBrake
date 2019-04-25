@@ -182,12 +182,12 @@
 
                 <!-- Rotation -->
                 <TextBlock Text="{x:Static Properties:Resources.FiltersView_Rotate}" Grid.Row="7" Grid.Column="0" Margin="0,0,0,0"/>
-                <ComboBox Width="120" ItemsSource="{Binding RotationOptions}" Grid.Row="7" Grid.Column="1"
-                              SelectedItem="{Binding SelectedRotation}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Rotate}"
+                <ComboBox Width="120" ItemsSource="{Binding RotateFlipFilter.RotationOptions}" Grid.Row="7" Grid.Column="1"
+                              SelectedItem="{Binding RotateFlipFilter.SelectedRotation}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Rotate}"
                           AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Rotate}"
                               HorizontalAlignment="Left" VerticalAlignment="Center" />
 
-                <CheckBox Content="{x:Static Properties:Resources.FiltersView_FlipVideo}" Margin="5,0,0,0" VerticalAlignment="Center" Grid.Row="7" Grid.Column="2" IsChecked="{Binding FlipVideo, UpdateSourceTrigger=PropertyChanged}"
+                <CheckBox Content="{x:Static Properties:Resources.FiltersView_FlipVideo}" Margin="5,0,0,0" VerticalAlignment="Center" Grid.Row="7" Grid.Column="2" IsChecked="{Binding RotateFlipFilter.FlipVideo, UpdateSourceTrigger=PropertyChanged}"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Flip}"/>
             </Grid>
 
