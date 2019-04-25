@@ -93,35 +93,35 @@
 
                 <!-- Denoise -->
                 <TextBlock Text="{x:Static Properties:Resources.FiltersView_Denoise}" Grid.Row="3" Grid.Column="0" Margin="0,0,0,10"/>
-                <ComboBox Width="120" Grid.Row="3" ItemsSource="{Binding DenoiseOptions, Converter={StaticResource boolComboConverter}}" 
-                          SelectedItem="{Binding SelectedDenoise, Converter={StaticResource boolComboConverter}}" Grid.Column="1"
+                <ComboBox Width="120" Grid.Row="3" ItemsSource="{Binding DenoiseFilter.DenoiseOptions, Converter={StaticResource boolComboConverter}}" 
+                          SelectedItem="{Binding DenoiseFilter.SelectedDenoise, Converter={StaticResource boolComboConverter}}" Grid.Column="1"
                           HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Denoise}"
                           AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Denoise}"/>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="3" Grid.Column="2" Margin="0,0,0,10" 
-                            Visibility="{Binding ShowDenoiseOptions, Converter={StaticResource boolToVisConverter}}">
+                            Visibility="{Binding DenoiseFilter.ShowDenoiseOptions, Converter={StaticResource boolToVisConverter}}">
                     <TextBlock Text="{x:Static Properties:Resources.FiltersView_Preset}" Margin="0,0,5,0" />
-                    <ComboBox SelectedItem="{Binding SelectedDenoisePreset}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DenoisePreset}"
+                    <ComboBox SelectedItem="{Binding DenoiseFilter.SelectedDenoisePreset}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DenoisePreset}"
                               AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_DenoisePresetAuto}"
                               MinWidth="100"  HorizontalAlignment="Center" VerticalAlignment="Center">
                         <ComboBox.ItemsSource>
                             <MultiBinding Converter="{StaticResource DenoisePresetConverter}">
-                                <Binding Path="DenoisePresets" />
-                                <Binding Path="SelectedDenoise" />
+                                <Binding Path="DenoiseFilter.DenoisePresets" />
+                                <Binding Path="DenoiseFilter.SelectedDenoise" />
                             </MultiBinding>
                         </ComboBox.ItemsSource>
                     </ComboBox>
 
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding ShowDenoiseTune, Converter={StaticResource boolToVisConverter}}">
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding DenoiseFilter.ShowDenoiseTune, Converter={StaticResource boolToVisConverter}}">
                         <TextBlock Text="{x:Static Properties:Resources.FiltersView_Tune}" Margin="5,0,5,0" />
-                        <ComboBox ItemsSource="{Binding DenoiseTunes}" SelectedItem="{Binding SelectedDenoiseTune}" MinWidth="100" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DenoiseTune}"
+                        <ComboBox ItemsSource="{Binding DenoiseFilter.DenoiseTunes}" SelectedItem="{Binding DenoiseFilter.SelectedDenoiseTune}" MinWidth="100" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DenoiseTune}"
                                   AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_DenoiseTuneAuto}"
-                          Visibility="{Binding ShowDenoiseTune, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center" />
+                          Visibility="{Binding DenoiseFilter.ShowDenoiseTune, Converter={StaticResource boolToVisConverter}}" VerticalAlignment="Center" />
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding ShowDenoiseCustom, Converter={StaticResource boolToVisConverter}}">
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding DenoiseFilter.ShowDenoiseCustom, Converter={StaticResource boolToVisConverter}}">
                         <TextBlock Text="{x:Static Properties:Resources.FiltersView_Custom}" Margin="5,0,5,0" />
-                        <TextBox Width="120" Margin="0" Text="{Binding CustomDenoise, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22"
+                        <TextBox Width="120" Margin="0" Text="{Binding DenoiseFilter.CustomDenoise, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22"
                                  ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_CustomDenoiseParams}" />
                     </StackPanel>
 

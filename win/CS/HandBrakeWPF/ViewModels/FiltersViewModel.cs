@@ -59,6 +59,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedDeinterlaceFilter = DeinterlaceFilter.Off;
 
             this.SharpenFilter = new SharpenItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
+            this.DenoiseFilter = new DenoiseItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
         }
 
         #endregion
@@ -71,24 +72,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets CurrentTask.
         /// </summary>
         public EncodeTask CurrentTask { get; private set; }
-
-        /// <summary>
-        /// Gets or sets CustomDenoise.
-        /// </summary>
-        public string CustomDenoise
-        {
-            get
-            {
-                return this.CurrentTask.CustomDenoise;
-            }
-
-            set
-            {
-                this.CurrentTask.CustomDenoise = value;
-                this.NotifyOfPropertyChange(() => this.CustomDenoise);
-                this.OnTabStatusChanged(null);
-            }
-        }
 
         /// <summary>
         /// Gets or sets CustomDetelecine.
@@ -135,17 +118,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.DeblockValue);
                 this.NotifyOfPropertyChange(() => this.DeblockText);
                 this.OnTabStatusChanged(null);
-            }
-        }
-
-        /// <summary>
-        /// Gets DenoiseOptions.
-        /// </summary>
-        public IEnumerable<Denoise> DenoiseOptions
-        {
-            get
-            {
-                return EnumHelper<Denoise>.GetEnumList();
             }
         }
 
@@ -362,95 +334,9 @@ namespace HandBrakeWPF.ViewModels
         public bool ShowDetelecineCustom => this.CurrentTask.Detelecine == Detelecine.Custom;
 
 
-        #region Denoise
-
-        /// <summary>
-        /// Gets or sets SelectedDenoise.
-        /// </summary>
-        public Denoise SelectedDenoise
-        {
-            get
-            {
-                return this.CurrentTask.Denoise;
-            }
-
-            set
-            {
-                this.CurrentTask.Denoise = value;
-                this.NotifyOfPropertyChange(() => this.SelectedDenoise);
-
-                // Show / Hide the Custom Control
-                this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
-
-                this.SelectedDenoisePreset = this.CurrentTask.Denoise == Denoise.hqdn3d ? DenoisePreset.Weak : DenoisePreset.Ultralight; // Default so we don't have an invalid preset.
-
-                this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
-                this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);
-                this.OnTabStatusChanged(null);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the selected denoise tune.
-        /// </summary>
-        public DenoiseTune SelectedDenoiseTune
-        {
-            get
-            {
-                return this.CurrentTask.DenoiseTune;
-            }
-
-            set
-            {
-                this.CurrentTask.DenoiseTune = value;
-                this.NotifyOfPropertyChange(() => this.SelectedDenoiseTune);
-                this.OnTabStatusChanged(null);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets the selected denoise preset.
-        /// </summary>
-        public DenoisePreset SelectedDenoisePreset
-        {
-            get
-            {
-                return this.CurrentTask.DenoisePreset;
-            }
-
-            set
-            {
-                this.CurrentTask.DenoisePreset = value;
-                this.NotifyOfPropertyChange(() => this.SelectedDenoisePreset);
-
-                // Show / Hide the Custom Control
-                if (value != DenoisePreset.Custom) this.CustomDenoise = string.Empty;
-                this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
-                this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
-                this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);
-                this.OnTabStatusChanged(null);
-            }
-        }
-
-        /// <summary>
-        /// Gets the denoise presets.
-        /// </summary>
-        public IEnumerable<DenoisePreset> DenoisePresets => EnumHelper<DenoisePreset>.GetEnumList();
-
-        /// <summary>
-        /// Gets the denoise tunes.
-        /// </summary>
-        public IEnumerable<DenoiseTune> DenoiseTunes => EnumHelper<DenoiseTune>.GetEnumList();
-
-        public bool ShowDenoiseOptions => this.SelectedDenoise != Denoise.Off;
-
-        public bool ShowDenoiseTune => this.SelectedDenoise == Denoise.NLMeans && this.SelectedDenoisePreset != DenoisePreset.Custom;
-
-        public bool ShowDenoiseCustom => this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
+        public DenoiseItem DenoiseFilter { get; set; }
 
         public SharpenItem SharpenFilter { get; set; }
-
-        #endregion
 
         /// <summary>
         /// The rotation options.
@@ -529,7 +415,6 @@ namespace HandBrakeWPF.ViewModels
             if (preset != null)
             {
                 // Properties
-                this.SelectedDenoise = preset.Task.Denoise;
                 this.SelectedDetelecine = preset.Task.Detelecine;
 
                 this.SelectedDeinterlaceFilter = preset.Task.DeinterlaceFilter;
@@ -539,25 +424,21 @@ namespace HandBrakeWPF.ViewModels
 
                 this.Grayscale = preset.Task.Grayscale;
                 this.DeblockValue = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
-                this.SelectedDenoisePreset = preset.Task.DenoisePreset;
-                this.SelectedDenoiseTune = preset.Task.DenoiseTune;
-
-                // Sharpen
+                
                 this.SharpenFilter.SetPreset(preset, task);
+                this.DenoiseFilter.SetPreset(preset, task);
             
                 // Custom Values
                 this.CustomDeinterlaceSettings = preset.Task.CustomDeinterlaceSettings;
                 this.CustomCombDetect = preset.Task.CustomCombDetect;
                 this.CustomDetelecine = preset.Task.CustomDetelecine;
-                this.CustomDenoise = preset.Task.CustomDenoise;
-
+                
                 this.SelectedRotation = preset.Task.Rotation;
                 this.FlipVideo = preset.Task.FlipVideo;
             }
             else
             {
                 // Default everything to off
-                this.SelectedDenoise = Denoise.Off;
                 this.SelectedDeinterlaceFilter = DeinterlaceFilter.Off;
                 this.SelectedDetelecine = Detelecine.Off;
                 this.Grayscale = false;
@@ -577,32 +458,26 @@ namespace HandBrakeWPF.ViewModels
         public void UpdateTask(EncodeTask task)
         {
             this.CurrentTask = task;
-
-            this.NotifyOfPropertyChange(() => this.SelectedDenoise);
             this.NotifyOfPropertyChange(() => this.SelectedDeinterlaceFilter);
             this.NotifyOfPropertyChange(() => this.SelectedDeInterlacePreset);
             this.NotifyOfPropertyChange(() => this.SelectedDetelecine);
             this.NotifyOfPropertyChange(() => this.Grayscale);
             this.NotifyOfPropertyChange(() => this.DeblockValue);
             this.NotifyOfPropertyChange(() => this.SelectedCombDetectPreset);
-            this.NotifyOfPropertyChange(() => this.SelectedDenoisePreset);
-            this.NotifyOfPropertyChange(() => this.SelectedDenoiseTune);
+
             this.NotifyOfPropertyChange(() => this.FlipVideo);
             this.NotifyOfPropertyChange(() => this.SelectedRotation);
 
             this.NotifyOfPropertyChange(() => this.CustomDeinterlaceSettings);
             this.NotifyOfPropertyChange(() => this.CustomDetelecine);
-            this.NotifyOfPropertyChange(() => this.CustomDenoise);
             this.NotifyOfPropertyChange(() => this.CustomCombDetect);
 
-            this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
-            this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
-            this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);
             this.NotifyOfPropertyChange(() => this.ShowCustomDeinterlace);
             this.NotifyOfPropertyChange(() => this.ShowCombDetectCustom);
             this.NotifyOfPropertyChange(() => this.ShowDetelecineCustom);
 
             this.SharpenFilter.UpdateTask(task);
+            this.DenoiseFilter.UpdateTask(task);
         }
 
         public bool MatchesPreset(Preset preset)
@@ -642,17 +517,7 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            if (preset.Task.Denoise != this.SelectedDenoise)
-            {
-                return false;
-            }
-
-            if (this.SelectedDenoise != Denoise.Off && preset.Task.DenoisePreset != this.SelectedDenoisePreset)
-            {
-                return false;
-            }
-
-            if (this.SelectedDenoise != Denoise.Off && preset.Task.DenoiseTune != this.SelectedDenoiseTune)
+            if (!this.DenoiseFilter.MatchesPreset(preset))
             {
                 return false;
             }
@@ -706,6 +571,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.CurrentTask = task;
             this.SharpenFilter.SetSource(source, title, preset, task);
+            this.DenoiseFilter.SetSource(source, title, preset, task);
         }
 
         #endregion

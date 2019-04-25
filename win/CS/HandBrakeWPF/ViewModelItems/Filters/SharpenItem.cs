@@ -158,6 +158,13 @@ namespace HandBrakeWPF.ViewModelItems.Filters
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.CurrentTask = task;
+
+            if (preset == null)
+            {
+                this.SelectedSharpen = Sharpen.Off;
+                return;
+            }
+
             this.SelectedSharpen = preset.Task.Sharpen;
             this.SelectedSharpenPreset = preset.Task.SharpenPreset;
             this.SelectedSharpenTune = preset.Task.SharpenTune;
