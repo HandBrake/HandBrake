@@ -30,8 +30,6 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using DenoisePreset = HandBrakeWPF.Services.Encode.Model.Models.DenoisePreset;
-    using DenoiseTune = HandBrakeWPF.Services.Encode.Model.Models.DenoiseTune;
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
     /// <summary>
@@ -49,26 +47,12 @@ namespace HandBrakeWPF.ViewModels
             this.DeinterlaceFilter = new DeinterlaceFilterItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
             this.DeblockFilter = new DeblockFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
             this.RotateFlipFilter = new RotateFlipFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
+            this.GrayscaleFilter = new GrayscaleFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
         }
 
         public event EventHandler<TabStatusEventArgs> TabStatusChanged;
 
         public EncodeTask CurrentTask { get; private set; }
-
-        public bool Grayscale
-        {
-            get
-            {
-                return this.CurrentTask.Grayscale;
-            }
-
-            set
-            {
-                this.CurrentTask.Grayscale = value;
-                this.NotifyOfPropertyChange(() => this.Grayscale);
-                this.OnTabStatusChanged(null);
-            }
-        }
 
         public DenoiseItem DenoiseFilter { get; set; }
 
@@ -81,34 +65,24 @@ namespace HandBrakeWPF.ViewModels
         public DeblockFilter DeblockFilter { get; set; }
 
         public RotateFlipFilter RotateFlipFilter { get; set; }
+
+        public GrayscaleFilter GrayscaleFilter { get; set; }
         
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.CurrentTask = task;
 
-            if (preset != null)
-            {
-                // Properties
-                this.Grayscale = preset.Task.Grayscale;
-                            
-                this.SharpenFilter.SetPreset(preset, task);
-                this.DenoiseFilter.SetPreset(preset, task);
-                this.DetelecineFilter.SetPreset(preset, task);
-                this.DeinterlaceFilter.SetPreset(preset, task);
-                this.DeblockFilter.SetPreset(preset, task);
-                this.RotateFlipFilter.SetPreset(preset, task);
-            }
-            else
-            {
-                // Default everything to off
-                this.Grayscale = false;
-            }
+            this.SharpenFilter.SetPreset(preset, task);
+            this.DenoiseFilter.SetPreset(preset, task);
+            this.DetelecineFilter.SetPreset(preset, task);
+            this.DeinterlaceFilter.SetPreset(preset, task);
+            this.DeblockFilter.SetPreset(preset, task);
+            this.RotateFlipFilter.SetPreset(preset, task);
         }
 
         public void UpdateTask(EncodeTask task)
         {
             this.CurrentTask = task;
-            this.NotifyOfPropertyChange(() => this.Grayscale);
 
             this.SharpenFilter.UpdateTask(task);
             this.DenoiseFilter.UpdateTask(task);
@@ -116,6 +90,7 @@ namespace HandBrakeWPF.ViewModels
             this.DeinterlaceFilter.UpdateTask(task);
             this.DeblockFilter.UpdateTask(task);
             this.RotateFlipFilter.UpdateTask(task);
+            this.GrayscaleFilter.UpdateTask(task);
         }
 
         public bool MatchesPreset(Preset preset)
@@ -150,11 +125,10 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            if (preset.Task.Grayscale != this.Grayscale)
+            if (!this.GrayscaleFilter.MatchesPreset(preset))
             {
                 return false;
             }
-
 
             return true;
         }
@@ -168,6 +142,7 @@ namespace HandBrakeWPF.ViewModels
             this.DeinterlaceFilter.SetSource(source, title, preset, task);
             this.DeblockFilter.SetSource(source, title, preset, task);
             this.RotateFlipFilter.SetSource(source, title, preset, task);
+            this.GrayscaleFilter.SetSource(source, title, preset, task);
         }
 
         protected virtual void OnTabStatusChanged(TabStatusEventArgs e)

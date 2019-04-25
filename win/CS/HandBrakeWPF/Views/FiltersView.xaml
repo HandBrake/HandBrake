@@ -177,7 +177,7 @@
                         AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Deblock}" />
                 <TextBlock Text="{Binding DeblockFilter.DeblockText}" Grid.Row="5" Grid.Column="2" Margin="0,0,0,10"/>
 
-                <CheckBox Content="{x:Static Properties:Resources.FiltersView_Grayscale}" IsChecked="{Binding Grayscale}" Grid.Row="6" Grid.Column="1" Margin="0,0,0,10"
+                <CheckBox Content="{x:Static Properties:Resources.FiltersView_Grayscale}" IsChecked="{Binding GrayscaleFilter.Grayscale}" Grid.Row="6" Grid.Column="1" Margin="0,0,0,10"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Grayscale}" />
 
                 <!-- Rotation -->

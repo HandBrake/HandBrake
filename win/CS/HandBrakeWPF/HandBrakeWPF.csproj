@@ -276,6 +276,7 @@
     <Compile Include="ViewModelItems\Filters\DeinterlaceFilterItem.cs" />
     <Compile Include="ViewModelItems\Filters\DenoiseItem.cs" />
     <Compile Include="ViewModelItems\Filters\DetelecineItem.cs" />
+    <Compile Include="ViewModelItems\Filters\GrayscaleFilter.cs" />
     <Compile Include="ViewModelItems\Filters\RotateFlipFilter.cs" />
     <Compile Include="ViewModelItems\Filters\SharpenItem.cs" />
     <Compile Include="ViewModels\Interfaces\IManagePresetViewModel.cs" />
