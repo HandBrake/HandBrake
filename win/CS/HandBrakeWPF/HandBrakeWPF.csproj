@@ -272,6 +272,7 @@
     <Compile Include="Utilities\UwpDetect.cs" />
     <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Utilities\Win7.cs" />
+    <Compile Include="ViewModelItems\Filters\DeblockFilter.cs" />
     <Compile Include="ViewModelItems\Filters\DeinterlaceFilterItem.cs" />
     <Compile Include="ViewModelItems\Filters\DenoiseItem.cs" />
     <Compile Include="ViewModelItems\Filters\DetelecineItem.cs" />

@@ -41,24 +41,15 @@ namespace HandBrakeWPF.ViewModels
     {
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FiltersViewModel"/> class.
-        /// </summary>
-        /// <param name="windowManager">
-        /// The window manager.
-        /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
         public FiltersViewModel(IWindowManager windowManager, IUserSettingService userSettingService)
         {
             this.CurrentTask = new EncodeTask();
-            this.DeblockValue = 4; // OFF
    
             this.SharpenFilter = new SharpenItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
             this.DenoiseFilter = new DenoiseItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
             this.DetelecineFilter = new DetelecineItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
             this.DeinterlaceFilter = new DeinterlaceFilterItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
+            this.DeblockFilter = new DeblockFilter(this.CurrentTask, () => this.OnTabStatusChanged(null));
         }
 
         #endregion
@@ -67,44 +58,8 @@ namespace HandBrakeWPF.ViewModels
 
         #region Properties
 
-        /// <summary>
-        /// Gets CurrentTask.
-        /// </summary>
         public EncodeTask CurrentTask { get; private set; }
 
-        /// <summary>
-        /// Gets DeblockText.
-        /// </summary>
-        public string DeblockText
-        {
-            get
-            {
-                return this.DeblockValue == 4 ? "Off" : this.DeblockValue.ToString(CultureInfo.InvariantCulture);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets DeblockValue.
-        /// </summary>
-        public int DeblockValue
-        {
-            get
-            {
-                return this.CurrentTask.Deblock;
-            }
-
-            set
-            {
-                this.CurrentTask.Deblock = value;
-                this.NotifyOfPropertyChange(() => this.DeblockValue);
-                this.NotifyOfPropertyChange(() => this.DeblockText);
-                this.OnTabStatusChanged(null);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether Grayscale.
-        /// </summary>
         public bool Grayscale
         {
             get
@@ -120,7 +75,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-
         public DenoiseItem DenoiseFilter { get; set; }
 
         public SharpenItem SharpenFilter { get; set; }
@@ -129,14 +83,12 @@ namespace HandBrakeWPF.ViewModels
 
         public DeinterlaceFilterItem DeinterlaceFilter { get; set; }
 
-        /// <summary>
-        /// The rotation options.
-        /// </summary>
+        public DeblockFilter DeblockFilter { get; set; }
+
+
+
         public BindingList<int> RotationOptions => new BindingList<int> { 0, 90, 180, 270 };
 
-        /// <summary>
-        /// Selected Rotation.
-        /// </summary>
         public int SelectedRotation
         {
             get
@@ -152,9 +104,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Flip the Video
-        /// </summary>
         public bool FlipVideo
         {
             get
@@ -170,20 +119,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-
         #endregion
 
-        #region Implemented Interfaces
-
-        /// <summary>
-        /// Setup this tab for the specified preset.
-        /// </summary>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        /// <param name="task">
-        /// The task.
-        /// </param>
         public void SetPreset(Preset preset, EncodeTask task)
         {
             this.CurrentTask = task;
@@ -191,15 +128,13 @@ namespace HandBrakeWPF.ViewModels
             if (preset != null)
             {
                 // Properties
-               
-
                 this.Grayscale = preset.Task.Grayscale;
-                this.DeblockValue = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
-                
+                            
                 this.SharpenFilter.SetPreset(preset, task);
                 this.DenoiseFilter.SetPreset(preset, task);
                 this.DetelecineFilter.SetPreset(preset, task);
                 this.DeinterlaceFilter.SetPreset(preset, task);
+                this.DeblockFilter.SetPreset(preset, task);
 
                 this.SelectedRotation = preset.Task.Rotation;
                 this.FlipVideo = preset.Task.FlipVideo;
@@ -208,25 +143,16 @@ namespace HandBrakeWPF.ViewModels
             {
                 // Default everything to off
                 this.Grayscale = false;
-                this.DeblockValue = 0;
 
                 this.SelectedRotation = 0;
                 this.FlipVideo = false;
             }
         }
 
-        /// <summary>
-        /// Update all the UI controls based on the encode task passed in.
-        /// </summary>
-        /// <param name="task">
-        /// The task.
-        /// </param>
         public void UpdateTask(EncodeTask task)
         {
             this.CurrentTask = task;
             this.NotifyOfPropertyChange(() => this.Grayscale);
-            this.NotifyOfPropertyChange(() => this.DeblockValue);
-            
 
             this.NotifyOfPropertyChange(() => this.FlipVideo);
             this.NotifyOfPropertyChange(() => this.SelectedRotation);
@@ -235,6 +161,7 @@ namespace HandBrakeWPF.ViewModels
             this.DenoiseFilter.UpdateTask(task);
             this.DetelecineFilter.UpdateTask(task);
             this.DeinterlaceFilter.UpdateTask(task);
+            this.DeblockFilter.UpdateTask(task);
         }
 
         public bool MatchesPreset(Preset preset)
@@ -259,9 +186,7 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            int presetDeblock = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
-
-            if (presetDeblock != this.DeblockValue)
+            if (!this.DeblockFilter.MatchesPreset(preset))
             {
                 return false;
             }
@@ -284,21 +209,6 @@ namespace HandBrakeWPF.ViewModels
             return true;
         }
 
-        /// <summary>
-        /// Setup this window for a new source
-        /// </summary>
-        /// <param name="source">
-        /// The source.
-        /// </param>
-        /// <param name="title">
-        /// The title.
-        /// </param>
-        /// <param name="preset">
-        /// The preset.
-        /// </param>
-        /// <param name="task">
-        /// The task.
-        /// </param>
         public void SetSource(Source source, Title title, Preset preset, EncodeTask task)
         {
             this.CurrentTask = task;
@@ -306,15 +216,12 @@ namespace HandBrakeWPF.ViewModels
             this.DenoiseFilter.SetSource(source, title, preset, task);
             this.DetelecineFilter.SetSource(source, title, preset, task);
             this.DeinterlaceFilter.SetSource(source, title, preset, task);
+            this.DeblockFilter.SetSource(source, title, preset, task);
         }
 
-        #endregion
-
-        #region Private Methods
         protected virtual void OnTabStatusChanged(TabStatusEventArgs e)
         {
             this.TabStatusChanged?.Invoke(this, e);
         }
-        #endregion
     }
 }
