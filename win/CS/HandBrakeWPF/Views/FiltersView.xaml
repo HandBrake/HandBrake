@@ -61,33 +61,33 @@
                 <!-- Interlace Detection -->
                 <TextBlock Text="{x:Static Properties:Resources.FiltersView_InterlaceDetection}" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Row="1"  />
 
-                <ComboBox Width="120" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CombDetectPresets, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"
-                          SelectedItem="{Binding SelectedCombDetectPreset, Converter={StaticResource boolComboConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_InterlaceDetection}"
+                <ComboBox Width="120" Grid.Row="1" Grid.Column="1" ItemsSource="{Binding DeinterlaceFilter.CombDetectPresets, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left" VerticalAlignment="Center"
+                          SelectedItem="{Binding DeinterlaceFilter.SelectedCombDetectPreset, Converter={StaticResource boolComboConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_InterlaceDetection}"
                           VerticalContentAlignment="Center" AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_InterlaceDetection}"/>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
-                <TextBlock Text="Custom:" VerticalAlignment="Center" Margin="0,0,5,0" Visibility="{Binding ShowCombDetectCustom, Converter={StaticResource boolToVisConverter}}" />
-                <TextBox Width="120" Text="{Binding CustomCombDetect, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"
-                         Visibility="{Binding ShowCombDetectCustom, Converter={StaticResource boolToVisConverter}}" MinHeight="22" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_InterlaceDetectionCustom}"  />
+                    <TextBlock Text="Custom:" VerticalAlignment="Center" Margin="0,0,5,0" Visibility="{Binding DeinterlaceFilter.ShowCombDetectCustom, Converter={StaticResource boolToVisConverter}}" />
+                    <TextBox Width="120" Text="{Binding DeinterlaceFilter.CustomCombDetect, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"
+                         Visibility="{Binding DeinterlaceFilter.ShowCombDetectCustom, Converter={StaticResource boolToVisConverter}}" MinHeight="22" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_InterlaceDetectionCustom}"  />
                 </StackPanel>
 
                 <!-- Deinterlace -->
                 <TextBlock Text="{x:Static Properties:Resources.FiltersView_Deinterlace}" VerticalAlignment="Center" Grid.Row="2" Grid.Column="0" Margin="0,0,0,10" />
                 <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,0,10">
-                    <ComboBox Width="120" ItemsSource="{Binding DeinterlaceFilterOptions, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left"
-                              SelectedItem="{Binding SelectedDeinterlaceFilter, Converter={StaticResource boolComboConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deinterlace}"
+                    <ComboBox Width="120" ItemsSource="{Binding DeinterlaceFilter.DeinterlaceFilterOptions, Converter={StaticResource boolComboConverter}}" HorizontalAlignment="Left"
+                              SelectedItem="{Binding DeinterlaceFilter.SelectedDeinterlaceFilter, Converter={StaticResource boolComboConverter}}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deinterlace}"
                               AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Deinterlace}" />
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,10">
-                    <TextBlock Text="{x:Static Properties:Resources.FiltersView_DeinterlacePreset}" VerticalAlignment="Center" Margin="0,0,5,0" Visibility="{Binding IsDeinterlaceEnabled, Converter={StaticResource boolToVisConverter}}"  />
-                    <ComboBox Width="120" ItemsSource="{Binding DeinterlacePresets}" HorizontalAlignment="Left" VerticalAlignment="Center"
-                              SelectedItem="{Binding SelectedDeInterlacePreset}" DisplayMemberPath="Name" Visibility="{Binding IsDeinterlaceEnabled, Converter={StaticResource boolToVisConverter}}"
+                    <TextBlock Text="{x:Static Properties:Resources.FiltersView_DeinterlacePreset}" VerticalAlignment="Center" Margin="0,0,5,0" Visibility="{Binding DeinterlaceFilter.IsDeinterlaceEnabled, Converter={StaticResource boolToVisConverter}}"  />
+                    <ComboBox Width="120" ItemsSource="{Binding DeinterlaceFilter.DeinterlacePresets}" HorizontalAlignment="Left" VerticalAlignment="Center"
+                              SelectedItem="{Binding DeinterlaceFilter.SelectedDeInterlacePreset}" DisplayMemberPath="Name" Visibility="{Binding DeinterlaceFilter.IsDeinterlaceEnabled, Converter={StaticResource boolToVisConverter}}"
                               AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_DeinterlacePresetAuto}" />
 
-                    <TextBlock Text="Custom:" VerticalAlignment="Center" Margin="5,0,5,0"  Visibility="{Binding ShowCustomDeinterlace, Converter={StaticResource boolToVisConverter}}" />
-                    <TextBox Width="120" Text="{Binding CustomDeinterlaceSettings, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"
-                             Visibility="{Binding ShowCustomDeinterlace, Converter={StaticResource boolToVisConverter}}" MinHeight="22" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DeinterlaceCustom}" />
+                    <TextBlock Text="Custom:" VerticalAlignment="Center" Margin="5,0,5,0"  Visibility="{Binding DeinterlaceFilter.ShowCustomDeinterlace, Converter={StaticResource boolToVisConverter}}" />
+                    <TextBox Width="120" Text="{Binding DeinterlaceFilter.CustomDeinterlaceSettings, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" HorizontalAlignment="Left"
+                             Visibility="{Binding DeinterlaceFilter.ShowCustomDeinterlace, Converter={StaticResource boolToVisConverter}}" MinHeight="22" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_DeinterlaceCustom}" />
                 </StackPanel>
 
 

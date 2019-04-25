@@ -34,9 +34,6 @@ namespace HandBrakeWPF.ViewModelItems.Filters
 
         public EncodeTask CurrentTask { get; private set; }
 
-
-        public DetelecineItem DetelecineFilter { get; set; }
-
         public Detelecine SelectedDetelecine
         {
             get
