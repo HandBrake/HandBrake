@@ -108,13 +108,13 @@ static kernel_t edge_kernels[] =
 
 #define KERNEL_EDGE_GAUSS   0
 
-#define EDGE_STRONG_DEFAULT 30
+#define EDGE_STRONG_DEFAULT 35
 // In deskeeter, we only want to filter around fairly hard edges
 // so the weak threshold is essentially ignored here.  Can
 // be changed with 'edge-thresh-weak' filter setting
-#define EDGE_WEAK_DEFAULT   30
+#define EDGE_WEAK_DEFAULT   35
 
-#define MASK_RADIUS_DEFAULT 11
+#define MASK_RADIUS_DEFAULT 15
 #define MASK_RADIUS_MAX     15
 
 typedef struct
@@ -320,29 +320,26 @@ static hb_buffer_t * alloc_mask(int width, int height)
 
     // Leave border around edge mask to allow processing outside
     // image boundary
-    int  y_size                = (height + 4)     * (width / 8 + 2);
-    int  cr_size               = (height / 2 + 4) * (width / 16 + 2);
+    int  y_size           = height       * width / 8;
+    int  cr_size          = (height / 2) * (width / 16);
     edge                  = hb_buffer_init(y_size + 2 * cr_size);
     edge->f.width         = width;
     edge->f.height        = height;
     edge->plane[0].width  = width;
     edge->plane[0].height = height;
-    edge->plane[0].stride = width / 8 + 2;
+    edge->plane[0].stride = width / 8;
     edge->plane[0].size   = edge->plane[0].height * edge->plane[0].stride;
     edge->plane[1].width  = width / 2;
     edge->plane[1].height = height / 2;
-    edge->plane[1].stride = width / 16 + 2;
+    edge->plane[1].stride = width / 16;
     edge->plane[1].size   = edge->plane[1].height * edge->plane[1].stride;
     edge->plane[2].width  = width / 2;
     edge->plane[2].height = height / 2;
-    edge->plane[2].stride = width / 16 + 2;
+    edge->plane[2].stride = width / 16;
     edge->plane[2].size   = edge->plane[2].height * edge->plane[2].stride;
-    edge->plane[0].data   = edge->data +
-                            2 * edge->plane[0].stride + 1;
-    edge->plane[1].data   = edge->data + y_size +
-                            2 * edge->plane[1].stride + 1;
-    edge->plane[2].data   = edge->data + y_size + cr_size +
-                            2 * edge->plane[2].stride + 1;
+    edge->plane[0].data   = edge->data;
+    edge->plane[1].data   = edge->data + y_size;
+    edge->plane[2].data   = edge->data + y_size + cr_size;
     return edge;
 }
 
@@ -532,6 +529,61 @@ static void render_mask(hb_buffer_t * out, hb_buffer_t * edge_buf, int plane)
     }
 }
 
+static void fill_thin_features(int plane, hb_buffer_t * edge)
+{
+    uint8_t     * src             = edge->plane[plane].data;
+    int           src_height      = edge->plane[plane].height;
+    int           src_stride      = edge->plane[plane].stride;
+    int           src_size        = edge->plane[plane].size;
+    uint16_t      mask            = 0;
+    uint16_t      mask2           = 0;
+    hb_buffer_t * tmp_mask        = alloc_mask(edge->f.width, edge->f.height);
+    uint8_t     * tmp             = tmp_mask->plane[plane].data;
+
+    for (int y = 0; y < src_height; y++)
+    {
+        int pos = src_stride * y;
+        for (int i = 0; i < src_stride - 1; i++, pos++)
+        {
+            if (!src[pos])
+            {
+                tmp[pos] |= mask;
+                tmp[pos] |= mask2;
+                mask      = 0;
+                mask2     = 0;
+                continue;
+            }
+            // Fill 1-pixel horizontal gaps
+            mask     |= (((uint16_t)src[pos] >> 2 | ((uint16_t)src[pos + 1] << 6)) & src[pos]) << 1;
+            tmp[pos] |= mask;
+            // Fill 2-pixel horizontal gaps
+            mask2    |= (((uint16_t)src[pos] >> 3 | ((uint16_t)src[pos + 1] << 5)) & src[pos]) << 1;
+            mask2    |= mask2 << 1;
+            tmp[pos] |= mask2;
+            mask  >>= 8;
+            mask2 >>= 8;
+            if (y < 2)
+            {
+                continue;
+            }
+            // Fill 1-pixel vertical gaps
+            tmp[pos - 1 * src_stride] |= src[pos] & src[pos - 2 * src_stride];
+            if (y < 3)
+            {
+                continue;
+            }
+            // Fill 2-pixel vertical gaps
+            tmp[pos - 1 * src_stride] |= src[pos] & src[pos - 3 * src_stride];
+            tmp[pos - 2 * src_stride] |= src[pos] & src[pos - 3 * src_stride];
+        }
+    }
+    for (int i = 0; i < src_size; i++)
+    {
+        src[i] |= tmp[i];
+    }
+    hb_buffer_close(&tmp_mask);
+}
+
 static void create_mask(int plane, deskeeter_work_context_t * wctx)
 {
     uint8_t * src             = wctx->edge->plane[plane].data;
@@ -604,6 +656,11 @@ static void create_mask(int plane, deskeeter_work_context_t * wctx)
             }
         }
     }
+    // Blank out edges
+    for (int i = 0; i < src_size; i++)
+    {
+        dst[i] &= ~src[i];
+    }
 }
 
 static void hb_deskeeter(const hb_buffer_t * in,
@@ -620,11 +677,12 @@ static void hb_deskeeter(const hb_buffer_t * in,
     int              stride        = in->plane[plane].stride;
     int              height        = in->plane[plane].height;
     int              stride_border = (stride - width) / 2;
+    int              mask_stride_bits;
     uint8_t        * mask;
 
     const kernel_t * kernel;
 
-    int              offset_min, offset_max, pos;
+    int              offset_min, offset_max, pos, mask_pos;
     int16_t          pixel;
     float            strength_scaled;
 
@@ -633,6 +691,10 @@ static void hb_deskeeter(const hb_buffer_t * in,
     uint8_t          pixels[median_size * median_size];
 
     edge_detect(in, plane, wctx);
+    if (plane == 0)
+    {
+        fill_thin_features(plane, wctx->edge);
+    }
     if (wctx->pv->show_edge)
     {
         if (plane == 0)
@@ -644,19 +706,23 @@ static void hb_deskeeter(const hb_buffer_t * in,
         }
         return;
     }
+
     // We want to filter around the edges, create mask of region to filter
     create_mask(plane, wctx);
     mask = wctx->mask->plane[plane].data;
-    
+    mask_stride_bits = wctx->mask->plane[plane].stride * 8;
+
     kernel     = &kernels[ctx->kernel];
     offset_min = -((kernel->size - 1) / 2);
     offset_max =   (kernel->size + 1) / 2;
     for (int y = 0; y < height; y++)
     {
         pos = stride * y;
-        for (int x = 0; x < stride; x++, pos++)
+        mask_pos = mask_stride_bits * y;
+        for (int x = 0; x < stride; x++, pos++, mask_pos++)
         {
-            if ((y < offset_max) ||
+            if (!chkbit(mask, mask_pos) ||
+                (y < offset_max) ||
                 (y > height - offset_max) ||
                 (x < offset_max - stride_border) ||
                 (x > width + stride_border - offset_max))
@@ -664,7 +730,6 @@ static void hb_deskeeter(const hb_buffer_t * in,
                 *(dst + pos) = clamp(*(src + pos) + 128);
                 continue;
             }
-            uint8_t is_mask = chkbit(mask, pos);
             int     kpos = 0;
             pixel = 0;
             for (int k = offset_min; k < offset_max; k++)
@@ -672,16 +737,7 @@ static void hb_deskeeter(const hb_buffer_t * in,
                 int bpos  = stride * (y + k) + (x + offset_min);
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    if (is_mask == chkbit(mask, bpos))
-                    {
-                        pixel += kernel->mem[kpos] * *(src + bpos);
-                    }
-                    else
-                    {
-                        pixel += kernel->mem[kpos] * *(src + pos);
-                    }
-                    kpos++;
-                    bpos++;
+                    pixel += kernel->mem[kpos++] * *(src + bpos++);
                 }
             }
             pixel *= kernel->coef;
@@ -695,9 +751,11 @@ static void hb_deskeeter(const hb_buffer_t * in,
     for (int y = 0; y < height; y++)
     {
         pos = stride * y;
-        for (int x = 0; x < stride; x++, pos++)
+        mask_pos = mask_stride_bits * y;
+        for (int x = 0; x < stride; x++, pos++, mask_pos++)
         {
-            if ((y < offset_max) ||
+            if (!chkbit(mask, mask_pos) ||
+                (y < offset_max) ||
                 (y > height - offset_max) ||
                 (x < offset_max - stride_border) ||
                 (x > width + stride_border - offset_max))
@@ -705,23 +763,13 @@ static void hb_deskeeter(const hb_buffer_t * in,
                 *(tmp + pos) = *(dst + pos);
                 continue;
             }
-            uint8_t is_mask = chkbit(mask, pos);
             index = 0;
             for (int k = offset_min; k < offset_max; k++)
             {
                 int bpos  = stride * (y + k) + (x + offset_min);
                 for (int j = offset_min; j < offset_max; j++)
                 {
-                    if (is_mask == chkbit(mask, bpos))
-                    {
-                        pixels[index] = *(dst + bpos);
-                    }
-                    else
-                    {
-                        pixels[index] = *(dst + pos);
-                    }
-                    index++;
-                    bpos++;
+                    pixels[index++] = *(dst + bpos++);
                 }
             }
 
@@ -740,9 +788,10 @@ static void hb_deskeeter(const hb_buffer_t * in,
     for (int y = 0; y < height; y++)
     {
         pos = stride * y;
-        for (int x = 0; x < width; x++, pos++)
+        mask_pos = mask_stride_bits * y;
+        for (int x = 0; x < width; x++, pos++, mask_pos++)
         {
-            if (!chkbit(mask, pos) ||
+            if (!chkbit(mask, mask_pos) ||
                 (y < offset_max) ||
                 (y > height - offset_max) ||
                 (x < offset_max - stride_border) ||
