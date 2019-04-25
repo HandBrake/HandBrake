@@ -51,12 +51,12 @@
 
                 <!-- Detelecine -->
                 <TextBlock Text="{x:Static Properties:Resources.FiltersView_Detelecine}" Grid.Row="0" Grid.Column="0" Margin="0,0,0,10" />
-                <ComboBox Width="120" Grid.Row="0" ItemsSource="{Binding DetelecineOptions, Converter={StaticResource boolComboConverter}}" 
-                          SelectedItem="{Binding SelectedDetelecine, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"
+                <ComboBox Width="120" Grid.Row="0" ItemsSource="{Binding DetelecineFilter.DetelecineOptions, Converter={StaticResource boolComboConverter}}" 
+                          SelectedItem="{Binding DetelecineFilter.SelectedDetelecine, Converter={StaticResource boolComboConverter}}" Grid.Column="1" Margin="0,0,0,10"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Detelecine}"
                           HorizontalAlignment="Left" AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Detelecine}" />
-                <TextBox Width="120" Grid.Row="0" Grid.Column="2" Margin="0,0,0,10" Text="{Binding CustomDetelecine, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"
-                         Visibility="{Binding ShowDetelecineCustom, Converter={StaticResource boolToVisConverter}}"/>
+                <TextBox Width="120" Grid.Row="0" Grid.Column="2" Margin="0,0,0,10" Text="{Binding DetelecineFilter.CustomDetelecine, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left"
+                         Visibility="{Binding DetelecineFilter.ShowDetelecineCustom, Converter={StaticResource boolToVisConverter}}"/>
 
                 <!-- Interlace Detection -->
                 <TextBlock Text="{x:Static Properties:Resources.FiltersView_InterlaceDetection}" VerticalAlignment="Center" Margin="0,0,5,0" Grid.Row="1"  />

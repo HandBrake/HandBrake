@@ -60,6 +60,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.SharpenFilter = new SharpenItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
             this.DenoiseFilter = new DenoiseItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
+            this.DetelecineFilter = new DetelecineItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
         }
 
         #endregion
@@ -72,24 +73,6 @@ namespace HandBrakeWPF.ViewModels
         /// Gets CurrentTask.
         /// </summary>
         public EncodeTask CurrentTask { get; private set; }
-
-        /// <summary>
-        /// Gets or sets CustomDetelecine.
-        /// </summary>
-        public string CustomDetelecine
-        {
-            get
-            {
-                return this.CurrentTask.CustomDetelecine;
-            }
-
-            set
-            {
-                this.CurrentTask.CustomDetelecine = value;
-                this.NotifyOfPropertyChange(() => this.CustomDetelecine);
-                this.OnTabStatusChanged(null);
-            }
-        }
 
         /// <summary>
         /// Gets DeblockText.
@@ -118,17 +101,6 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.DeblockValue);
                 this.NotifyOfPropertyChange(() => this.DeblockText);
                 this.OnTabStatusChanged(null);
-            }
-        }
-
-        /// <summary>
-        /// Gets DetelecineOptions.
-        /// </summary>
-        public IEnumerable<Detelecine> DetelecineOptions
-        {
-            get
-            {
-                return EnumHelper<Detelecine>.GetEnumList();
             }
         }
 
@@ -306,33 +278,7 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
-        /// <summary>
-        /// Gets or sets SelectedDetelecine.
-        /// </summary>
-        public Detelecine SelectedDetelecine
-        {
-            get
-            {
-                return this.CurrentTask.Detelecine;
-            }
-
-            set
-            {
-                this.CurrentTask.Detelecine = value;
-                this.NotifyOfPropertyChange(() => this.SelectedDetelecine);
-
-                // Show / Hide the Custom Control
-                if (value != Detelecine.Custom) this.CustomDetelecine = string.Empty;
-                this.NotifyOfPropertyChange(() => this.ShowDetelecineCustom);
-                this.OnTabStatusChanged(null);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether ShowDetelecineCustom.
-        /// </summary>
-        public bool ShowDetelecineCustom => this.CurrentTask.Detelecine == Detelecine.Custom;
-
+        public DetelecineItem DetelecineFilter { get; set; }
 
         public DenoiseItem DenoiseFilter { get; set; }
 
@@ -415,8 +361,6 @@ namespace HandBrakeWPF.ViewModels
             if (preset != null)
             {
                 // Properties
-                this.SelectedDetelecine = preset.Task.Detelecine;
-
                 this.SelectedDeinterlaceFilter = preset.Task.DeinterlaceFilter;
                 this.SelectedDeInterlacePreset = preset.Task.DeinterlacePreset;
 
@@ -427,11 +371,11 @@ namespace HandBrakeWPF.ViewModels
                 
                 this.SharpenFilter.SetPreset(preset, task);
                 this.DenoiseFilter.SetPreset(preset, task);
+                this.DetelecineFilter.SetPreset(preset, task);
             
                 // Custom Values
                 this.CustomDeinterlaceSettings = preset.Task.CustomDeinterlaceSettings;
                 this.CustomCombDetect = preset.Task.CustomCombDetect;
-                this.CustomDetelecine = preset.Task.CustomDetelecine;
                 
                 this.SelectedRotation = preset.Task.Rotation;
                 this.FlipVideo = preset.Task.FlipVideo;
@@ -440,7 +384,6 @@ namespace HandBrakeWPF.ViewModels
             {
                 // Default everything to off
                 this.SelectedDeinterlaceFilter = DeinterlaceFilter.Off;
-                this.SelectedDetelecine = Detelecine.Off;
                 this.Grayscale = false;
                 this.DeblockValue = 0;
 
@@ -460,7 +403,6 @@ namespace HandBrakeWPF.ViewModels
             this.CurrentTask = task;
             this.NotifyOfPropertyChange(() => this.SelectedDeinterlaceFilter);
             this.NotifyOfPropertyChange(() => this.SelectedDeInterlacePreset);
-            this.NotifyOfPropertyChange(() => this.SelectedDetelecine);
             this.NotifyOfPropertyChange(() => this.Grayscale);
             this.NotifyOfPropertyChange(() => this.DeblockValue);
             this.NotifyOfPropertyChange(() => this.SelectedCombDetectPreset);
@@ -469,29 +411,19 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.SelectedRotation);
 
             this.NotifyOfPropertyChange(() => this.CustomDeinterlaceSettings);
-            this.NotifyOfPropertyChange(() => this.CustomDetelecine);
             this.NotifyOfPropertyChange(() => this.CustomCombDetect);
 
             this.NotifyOfPropertyChange(() => this.ShowCustomDeinterlace);
             this.NotifyOfPropertyChange(() => this.ShowCombDetectCustom);
-            this.NotifyOfPropertyChange(() => this.ShowDetelecineCustom);
 
             this.SharpenFilter.UpdateTask(task);
             this.DenoiseFilter.UpdateTask(task);
+            this.DetelecineFilter.UpdateTask(task);
         }
 
         public bool MatchesPreset(Preset preset)
         {
-            if (preset.Task.Detelecine != this.SelectedDetelecine)
-            {
-                return false;
-            }
-
-            if (preset.Task.CustomDetelecine != this.CustomDetelecine)
-            {
-                return false;
-            }
-            
+           
             if (preset.Task.DeinterlaceFilter != this.SelectedDeinterlaceFilter)
             {
                 return false;
@@ -526,7 +458,12 @@ namespace HandBrakeWPF.ViewModels
             {
                 return false;
             }
-            
+
+            if (!this.DetelecineFilter.MatchesPreset(preset))
+            {
+                return false;
+            }
+
             int presetDeblock = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
 
             if (presetDeblock != this.DeblockValue)
@@ -572,6 +509,7 @@ namespace HandBrakeWPF.ViewModels
             this.CurrentTask = task;
             this.SharpenFilter.SetSource(source, title, preset, task);
             this.DenoiseFilter.SetSource(source, title, preset, task);
+            this.DetelecineFilter.SetSource(source, title, preset, task);
         }
 
         #endregion
