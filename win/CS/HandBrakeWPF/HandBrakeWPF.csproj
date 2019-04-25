@@ -272,6 +272,7 @@
     <Compile Include="Utilities\UwpDetect.cs" />
     <Compile Include="Utilities\Win32.cs" />
     <Compile Include="Utilities\Win7.cs" />
+    <Compile Include="ViewModelItems\Filters\SharpenItem.cs" />
     <Compile Include="ViewModels\Interfaces\IManagePresetViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\ISummaryViewModel.cs" />
     <Compile Include="ViewModels\ManagePresetViewModel.cs" />
@@ -716,6 +717,7 @@
   <ItemGroup>
     <Resource Include="Views\Images\close64_dark.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <TargetFrameworkSDKToolsDirectory Condition=" '$(Platform)' == 'x64'">$(TargetFrameworkSDKToolsDirectory)$(Platform)\</TargetFrameworkSDKToolsDirectory>

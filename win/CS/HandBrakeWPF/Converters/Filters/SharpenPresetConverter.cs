@@ -34,6 +34,7 @@ namespace HandBrakeWPF.Converters.Filters
                     {
                         presets.Add(new FilterPreset(preset));
                     }
+
                     return presets;
                 }
                 else if (selectedSharpen == Sharpen.UnSharp)
@@ -43,6 +44,7 @@ namespace HandBrakeWPF.Converters.Filters
                     {
                         presets.Add(new FilterPreset(preset));
                     }
+
                     return presets;
                 }
             }

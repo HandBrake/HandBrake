@@ -129,42 +129,42 @@
                 
                 <!-- Sharpen -->
                 <TextBlock Text="{x:Static Properties:Resources.FiltersView_Sharpen}" Grid.Row="4" Grid.Column="0" Margin="0,0,0,10"/>
-                <ComboBox Width="120" Grid.Row="4" ItemsSource="{Binding SharpenOptions, Converter={StaticResource boolComboConverter}}" 
-                          SelectedItem="{Binding SelectedSharpen, Converter={StaticResource boolComboConverter}}" Grid.Column="1"
+                <ComboBox Width="120" Grid.Row="4" ItemsSource="{Binding SharpenFilter.SharpenOptions, Converter={StaticResource boolComboConverter}}" 
+                          SelectedItem="{Binding SharpenFilter.SelectedSharpen, Converter={StaticResource boolComboConverter}}" Grid.Column="1"
                           AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Sharpen}"
                           HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,10" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Sharpen}" />
                 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="4" Grid.Column="2" Margin="0,0,0,10" 
-                            Visibility="{Binding ShowSharpenOptions, Converter={StaticResource boolToVisConverter}}">
+                            Visibility="{Binding SharpenFilter.ShowSharpenOptions, Converter={StaticResource boolToVisConverter}}">
                     
                     <TextBlock Text="{x:Static Properties:Resources.FiltersView_Preset}" Margin="0,0,5,0" />
-                    <ComboBox SelectedItem="{Binding SelectedSharpenPreset}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_SharpenPreset}"
+                    <ComboBox SelectedItem="{Binding SharpenFilter.SelectedSharpenPreset}" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_SharpenPreset}"
                               MinWidth="100"  HorizontalAlignment="Center" VerticalAlignment="Center" DisplayMemberPath="DisplayName"
                               AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_SharpenPresetAuto}" >
                         <ComboBox.ItemsSource>
                             <MultiBinding Converter="{StaticResource SharpenPresetConverter}">
-                                <Binding Path="SharpenPresets" />
-                                <Binding Path="SelectedSharpen" />
+                                <Binding Path="SharpenFilter.SharpenPresets" />
+                                <Binding Path="SharpenFilter.SelectedSharpen" />
                             </MultiBinding>
                         </ComboBox.ItemsSource>
                     </ComboBox>
 
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding ShowSharpenTune, Converter={StaticResource boolToVisConverter}}">
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding SharpenFilter.ShowSharpenTune, Converter={StaticResource boolToVisConverter}}">
                         <TextBlock Text="{x:Static Properties:Resources.FiltersView_Tune}" Margin="5,0,5,0" />
-                        <ComboBox SelectedItem="{Binding SelectedSharpenTune}" MinWidth="100" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_SharpenTune}" VerticalAlignment="Center" DisplayMemberPath="DisplayName" 
+                        <ComboBox SelectedItem="{Binding SharpenFilter.SelectedSharpenTune}" MinWidth="100" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_SharpenTune}" VerticalAlignment="Center" DisplayMemberPath="DisplayName" 
                                   AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_SharpenTuneAuto}" >
                             <ComboBox.ItemsSource>
                                 <MultiBinding Converter="{StaticResource SharpenTuneConverter}">
-                                    <Binding Path="SharpenTunes" />
-                                    <Binding Path="SelectedSharpen" />
+                                    <Binding Path="SharpenFilter.SharpenTunes" />
+                                    <Binding Path="SharpenFilter.SelectedSharpen" />
                                 </MultiBinding>
                             </ComboBox.ItemsSource>
                         </ComboBox>
                     </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Visibility="{Binding ShowSharpenCustom, Converter={StaticResource boolToVisConverter}}">
+                    <StackPanel Orientation="Horizontal" Visibility="{Binding SharpenFilter.ShowSharpenCustom, Converter={StaticResource boolToVisConverter}}">
                         <TextBlock Text="{x:Static Properties:Resources.FiltersView_Custom}" Margin="5,0,5,0" />
-                        <TextBox Width="120" Margin="0" Text="{Binding CustomSharpen, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22"
+                        <TextBox Width="120" Margin="0" Text="{Binding SharpenFilter.CustomSharpen, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22"
                                  ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_CustomSharpenParams}" />
                     </StackPanel>
 

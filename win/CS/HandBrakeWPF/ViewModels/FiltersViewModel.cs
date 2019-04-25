@@ -27,6 +27,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
+    using HandBrakeWPF.ViewModelItems.Filters;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using DenoisePreset = HandBrakeWPF.Services.Encode.Model.Models.DenoisePreset;
@@ -56,6 +57,8 @@ namespace HandBrakeWPF.ViewModels
             this.CurrentTask = new EncodeTask();
             this.DeblockValue = 4; // OFF
             this.SelectedDeinterlaceFilter = DeinterlaceFilter.Off;
+
+            this.SharpenFilter = new SharpenItem(this.CurrentTask, () => this.OnTabStatusChanged(null));
         }
 
         #endregion
@@ -445,6 +448,8 @@ namespace HandBrakeWPF.ViewModels
 
         public bool ShowDenoiseCustom => this.CurrentTask.DenoisePreset == DenoisePreset.Custom;
 
+        public SharpenItem SharpenFilter { get; set; }
+
         #endregion
 
         /// <summary>
@@ -502,98 +507,6 @@ namespace HandBrakeWPF.ViewModels
 
         public object SharpenTunes { get; set; }
 
-        public Sharpen SelectedSharpen
-        {
-            get
-            {
-                return this.CurrentTask.Sharpen;
-            }
-
-            set
-            {
-                if (value == this.CurrentTask.Sharpen) return;
-                this.CurrentTask.Sharpen = value;
-                this.NotifyOfPropertyChange(() => this.SelectedSharpen);
-                this.NotifyOfPropertyChange(() => this.ShowSharpenOptions);
-                this.NotifyOfPropertyChange(() => this.ShowSharpenTune);
-                this.NotifyOfPropertyChange(() => this.ShowSharpenCustom);
-
-                // Default preset and tune.
-                switch (value)
-                {
-                    case Sharpen.LapSharp:
-                        if (this.SelectedSharpenPreset == null)
-                            this.SelectedSharpenPreset = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_LAPSHARP).FirstOrDefault(s => s.ShortName == "medium"));
-                        if (this.SelectedSharpenTune == null)
-                            this.SelectedSharpenTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_LAPSHARP).FirstOrDefault(s => s.ShortName == "none"));
-                        break;
-                    case Sharpen.UnSharp:
-                        if (this.SelectedSharpenPreset == null)
-                            this.SelectedSharpenPreset = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_UNSHARP).FirstOrDefault(s => s.ShortName == "medium"));
-                        if (this.SelectedSharpenTune == null)
-                            this.SelectedSharpenTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_UNSHARP).FirstOrDefault(s => s.ShortName == "none"));
-                        break;
-                }
-
-                this.NotifyOfPropertyChange(() => this.SelectedSharpenTune);
-                this.NotifyOfPropertyChange(() => this.SelectedSharpenPreset);
-                this.OnTabStatusChanged(null);
-            }
-        }
-
-        public FilterPreset SelectedSharpenPreset
-        {
-            get
-            {
-                return this.CurrentTask.SharpenPreset;
-            }
-            set
-            {
-                if (Equals(value, this.CurrentTask.SharpenPreset)) return;
-                this.CurrentTask.SharpenPreset = value;
-                this.NotifyOfPropertyChange(() => this.SelectedSharpenPreset);
-                this.NotifyOfPropertyChange(() => this.ShowSharpenTune);
-                this.NotifyOfPropertyChange(() => this.ShowSharpenCustom);
-                this.OnTabStatusChanged(null);
-            }
-        }
-
-        public FilterTune SelectedSharpenTune
-        {
-            get
-            {
-                return this.CurrentTask.SharpenTune;
-            }
-            set
-            {
-                if (value == this.CurrentTask.SharpenTune) return;
-                this.CurrentTask.SharpenTune = value;
-                this.NotifyOfPropertyChange(() => this.SelectedSharpenTune);
-                this.OnTabStatusChanged(null);
-            }
-        }
-
-        public string CustomSharpen
-        {
-            get
-            {
-                return this.CurrentTask.SharpenCustom;
-            }
-            set
-            {
-                if (value == this.CurrentTask.SharpenCustom) return;
-                this.CurrentTask.SharpenCustom = value;
-                this.NotifyOfPropertyChange(() => this.CustomSharpen);
-                this.OnTabStatusChanged(null);
-            }
-        }
-
-        public bool ShowSharpenTune => this.SelectedSharpenPreset != null && this.SelectedSharpenPreset.DisplayName != "Custom";
-
-        public bool ShowSharpenCustom => this.SelectedSharpenPreset != null && this.SelectedSharpenPreset.DisplayName == "Custom";
-
-        public bool ShowSharpenOptions => this.SelectedSharpen != Sharpen.Off;
-
         #endregion
 
         #endregion
@@ -630,11 +543,8 @@ namespace HandBrakeWPF.ViewModels
                 this.SelectedDenoiseTune = preset.Task.DenoiseTune;
 
                 // Sharpen
-                this.SelectedSharpen = preset.Task.Sharpen;
-                this.SelectedSharpenPreset = preset.Task.SharpenPreset;
-                this.SelectedSharpenTune = preset.Task.SharpenTune;
-                this.CustomSharpen = preset.Task.SharpenCustom;
-
+                this.SharpenFilter.SetPreset(preset, task);
+            
                 // Custom Values
                 this.CustomDeinterlaceSettings = preset.Task.CustomDeinterlaceSettings;
                 this.CustomCombDetect = preset.Task.CustomCombDetect;
@@ -674,9 +584,6 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.SelectedDetelecine);
             this.NotifyOfPropertyChange(() => this.Grayscale);
             this.NotifyOfPropertyChange(() => this.DeblockValue);
-            this.NotifyOfPropertyChange(() => this.SelectedSharpen);
-            this.NotifyOfPropertyChange(() => this.SelectedSharpenPreset);
-            this.NotifyOfPropertyChange(() => this.SelectedSharpenTune);
             this.NotifyOfPropertyChange(() => this.SelectedCombDetectPreset);
             this.NotifyOfPropertyChange(() => this.SelectedDenoisePreset);
             this.NotifyOfPropertyChange(() => this.SelectedDenoiseTune);
@@ -686,19 +593,16 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.CustomDeinterlaceSettings);
             this.NotifyOfPropertyChange(() => this.CustomDetelecine);
             this.NotifyOfPropertyChange(() => this.CustomDenoise);
-            this.NotifyOfPropertyChange(() => this.CustomSharpen);
             this.NotifyOfPropertyChange(() => this.CustomCombDetect);
-
 
             this.NotifyOfPropertyChange(() => this.ShowDenoiseOptions);
             this.NotifyOfPropertyChange(() => this.ShowDenoiseCustom);
             this.NotifyOfPropertyChange(() => this.ShowDenoiseTune);
             this.NotifyOfPropertyChange(() => this.ShowCustomDeinterlace);
             this.NotifyOfPropertyChange(() => this.ShowCombDetectCustom);
-            this.NotifyOfPropertyChange(() => this.ShowDetelecineCustom);       
-            this.NotifyOfPropertyChange(() => this.ShowSharpenCustom);
-            this.NotifyOfPropertyChange(() => this.ShowSharpenOptions);
-            this.NotifyOfPropertyChange(() => this.ShowSharpenTune);
+            this.NotifyOfPropertyChange(() => this.ShowDetelecineCustom);
+
+            this.SharpenFilter.UpdateTask(task);
         }
 
         public bool MatchesPreset(Preset preset)
@@ -753,21 +657,11 @@ namespace HandBrakeWPF.ViewModels
                 return false;
             }
 
-            if (preset.Task.Sharpen != this.SelectedSharpen)
+            if (!this.SharpenFilter.MatchesPreset(preset))
             {
                 return false;
             }
-
-            if (this.SelectedSharpen != Sharpen.Off && !Equals(preset.Task.SharpenPreset, this.SelectedSharpenPreset))
-            {
-                return false;
-            }
-
-            if (this.SelectedSharpen != Sharpen.Off && !Equals(preset.Task.SharpenTune, this.SelectedSharpenTune))
-            {
-                return false;
-            }
-
+            
             int presetDeblock = preset.Task.Deblock == 0 ? 4 : preset.Task.Deblock;
 
             if (presetDeblock != this.DeblockValue)
@@ -811,6 +705,7 @@ namespace HandBrakeWPF.ViewModels
         public void SetSource(Source source, Title title, Preset preset, EncodeTask task)
         {
             this.CurrentTask = task;
+            this.SharpenFilter.SetSource(source, title, preset, task);
         }
 
         #endregion
