@@ -231,8 +231,6 @@ namespace HandBrakeWPF.Helpers
                 }
 
                 autoNamePath = CheckAndHandleFilenameCollisions(autoNamePath, destinationFilename, task, userSettingService);
-
-
             }
 
             return autoNamePath;
@@ -280,14 +278,14 @@ namespace HandBrakeWPF.Helpers
             {
                 if (autoNamePath?.ToLower() == task.Source?.ToLower())
                 {
-                    autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), prefix + filenameWithoutExt + postfix + extension);
+                    autoNamePath = Path.Combine(Path.GetDirectoryName(autoNamePath), prefix + filenameWithoutExt + postfix + extension);
 
                     int counter = 0;
                     while (File.Exists(autoNamePath))
                     {
                         counter = counter + 1;
                         string appendedNumber = string.Format("({0})", counter);
-                        autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source), prefix + filenameWithoutExt + postfix + appendedNumber + extension);
+                        autoNamePath = Path.Combine(Path.GetDirectoryName(autoNamePath), prefix + filenameWithoutExt + postfix + appendedNumber + extension);
                     }
                 }
             }
@@ -298,7 +296,7 @@ namespace HandBrakeWPF.Helpers
                 {
                     counter = counter + 1;
                     string appendedNumber = string.Format("({0})", counter);
-                    autoNamePath = Path.Combine(Path.GetDirectoryName(task.Source),  filenameWithoutExt + appendedNumber + extension);
+                    autoNamePath = Path.Combine(Path.GetDirectoryName(autoNamePath),  filenameWithoutExt + appendedNumber + extension);
                 }
             }
 
