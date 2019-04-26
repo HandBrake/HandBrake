@@ -76,8 +76,8 @@
       <HintPath>..\packages\gong-wpf-dragdrop.1.1.0\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <HintPath>..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
@@ -712,18 +712,17 @@
     <Resource Include="Views\Images\Presets2.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj">
-      <Project>{087a2ba8-bac2-4577-a46f-07ff9d420016}</Project>
-      <Name>HandBrake.Interop</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Views\Images\close64.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Images\close64_dark.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj">
+      <Project>{21bd6180-2f40-44c7-803d-65aba245447e}</Project>
+      <Name>HandBrake.Interop</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <TargetFrameworkSDKToolsDirectory Condition=" '$(Platform)' == 'x64'">$(TargetFrameworkSDKToolsDirectory)$(Platform)\</TargetFrameworkSDKToolsDirectory>
