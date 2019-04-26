@@ -883,6 +883,9 @@ static hb_dict_t * generate_deskeeter_settings(const char *preset,
         const char * kernel_string[2];
         const char * edge_kernel = "gaussian";
         int          show_edges = 0;
+        double       edge_thresh_strong = 35;
+        double       edge_thresh_weak   = 35;
+        int          mask_radius        = 15;
 
         strength[0]      = strength[1]      = 0.8;
         kernel_string[0] = kernel_string[1] = "log";
@@ -938,7 +941,10 @@ static hb_dict_t * generate_deskeeter_settings(const char *preset,
         {
             hb_dict_set(settings, "edge-kernel",   hb_value_string(edge_kernel));
         }
-        hb_dict_set(settings, "edge-show",   hb_value_bool(show_edges));
+        hb_dict_set(settings, "edge-show",          hb_value_bool(show_edges));
+        hb_dict_set(settings, "edge-thresh-strong", hb_value_double(edge_thresh_strong));
+        hb_dict_set(settings, "edge-thresh-weak",   hb_value_double(edge_thresh_weak));
+        hb_dict_set(settings, "mask-radius",        hb_value_int(mask_radius));
     }
     else
     {
