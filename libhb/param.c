@@ -888,23 +888,23 @@ static hb_dict_t * generate_deskeeter_settings(const char *preset,
         kernel_string[0] = kernel_string[1] = "log";
         if (!strcasecmp(preset, "ultralight"))
         {
-            strength[0]  = strength[1] = 0.3;
+            strength[0] = strength[1] = 0.3;
         }
         else if (!strcasecmp(preset, "light"))
         {
-            strength[0]  = strength[1] = 0.6;
+            strength[0] = strength[1] = 0.6;
         }
         else if (!strcasecmp(preset, "strong"))
         {
-            strength[0]  = strength[1] = 1.0;
+            strength[0] = strength[1] = 1.0;
         }
         else if (!strcasecmp(preset, "stronger"))
         {
-            strength[0]  = strength[1] = 1.2;
+            strength[0] = strength[1] = 1.2;
         }
         else if (!strcasecmp(preset, "verystrong"))
         {
-            strength[0]  = strength[1] = 1.5;
+            strength[0] = strength[1] = 1.5;
         }
         if (tune != NULL && strcasecmp(tune, "none"))
         {

@@ -149,7 +149,7 @@ static const char hb_deskeeter_template[] =
     "cb-strength=^"HB_FLOAT_REG"$:cb-kernel=^"HB_ALL_REG"$:"
     "cr-strength=^"HB_FLOAT_REG"$:cr-kernel=^"HB_ALL_REG"$:"
     "edge-kernel=^"HB_ALL_REG"$:edge-show=^"HB_BOOL_REG"$:"
-    "edge-thresh-strong=^"HB_FLOAT_REG"$:edge-thresh-weak=^"HB_FLOAT_REG"$"
+    "edge-thresh-strong=^"HB_FLOAT_REG"$:edge-thresh-weak=^"HB_FLOAT_REG"$:"
     "mask-radius=^"HB_INT_REG"$";
 
 hb_filter_object_t hb_filter_deskeeter =
@@ -828,7 +828,7 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
     pv->edge_thresh_strong = EDGE_STRONG_DEFAULT;
     pv->edge_thresh_weak   = EDGE_WEAK_DEFAULT;
     pv->show_edge          = 0;
-    pv->mask_radius         = MASK_RADIUS_DEFAULT;
+    pv->mask_radius        = MASK_RADIUS_DEFAULT;
 
     // Read user parameters
     if (filter->settings != NULL)
@@ -843,10 +843,10 @@ static int hb_deskeeter_init(hb_filter_object_t *filter,
         hb_dict_extract_double(&pv->plane_ctx[2].strength, dict, "cr-strength");
         hb_dict_extract_string(&kernel_string[2],          dict, "cr-kernel");
 
-        hb_dict_extract_double(&pv->edge_thresh_strong, dict, "edge-thresh-strong");
-        hb_dict_extract_double(&pv->edge_thresh_weak,   dict, "edge-thresh-weak");
         hb_dict_extract_string(&edge_kernel_string,     dict, "edge-kernel");
         hb_dict_extract_bool(&pv->show_edge,            dict, "edge-show");
+        hb_dict_extract_double(&pv->edge_thresh_strong, dict, "edge-thresh-strong");
+        hb_dict_extract_double(&pv->edge_thresh_weak,   dict, "edge-thresh-weak");
         hb_dict_extract_int(&pv->mask_radius,           dict, "mask-radius");
     }
 
