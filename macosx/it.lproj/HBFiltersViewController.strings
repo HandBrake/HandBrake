@@ -29,7 +29,7 @@
 "akB-JW-MPe.title" = "OtherViews";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Preset"; ObjectID = "bac-vC-bD4"; */
-"bac-vC-bD4.ibExternalAccessibilityDescription" = "Prest Sharpen";
+"bac-vC-bD4.ibExternalAccessibilityDescription" = "Preset Sharpen";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpen filter preset. Sets the strength of the filter."; ObjectID = "bac-vC-bD4"; */
 "bac-vC-bD4.ibShadowedToolTip" = "Sharpen filtro Denoise. Imposta la forza del filtro.";

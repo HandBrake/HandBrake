@@ -2,11 +2,11 @@
 " - fastdecode" = " - decodifica veloce";
 
 /* HBStateFormatter -> work time format */
-" (%.2f fps, avg %.2f fps, ETA %02d:%02d:%02d)" = " (%1$.2f fps, media %2$.2f fps, ETA %3$d:%4$d:%5$d)";
+" (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f fps, media %2$.2f fps, ETA %3$@)";
 
 /* HBStateFormatter -> search time format
    HBStateFormatter -> work time format */
-" (ETA %02d:%02d:%02d)" = " (ETA %1$d:%2$d:%3$d)";
+" (ETA %@)" = " (ETA %@)";
 
 /* Title description */
 " (Title %d, %@, %@) ▸ %@\n" = " (Titolo %1$d, %2$@, %3$@) ▸ %4$@\n";
@@ -259,6 +259,9 @@
 /* HBJob -> invalid name error recovery suggestion */
 "NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nDefault settings: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0" = "NLMeans sintassi: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nDefault settings: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0";
 
+/* HBVideo -> tune */
+"none" = "nessuna";
+
 /* HBAudio -> none track name
    HBJob -> filters short description
    HBSubtitles -> none track name */
@@ -339,6 +342,9 @@
 "Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0" = "Sintassi: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0";
 
 /* HBJob -> invalid name error recovery suggestion */
+"The file name can't be empty." = "Il nome del documento non può essere vuoto.";
+
+/* HBJob -> invalid name error recovery suggestion */
 "The file name can't contain the / character." = "Il nome del file non può contenere il carattere \"/\". ";
 
 /* Preset -> import error description */
@@ -351,7 +357,7 @@
 "The selected preset was created with a newer version of HandBrake." = "Il preset selezionato è stato creato con una versione più recente di HandBrake.";
 
 /* Video description */
-"Tune: " = "Regolazione:";
+"Tune: " = "Regolazione: ";
 
 /* HBJob -> video short description encoder name
    Video description */
