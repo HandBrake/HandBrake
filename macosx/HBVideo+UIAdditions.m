@@ -424,6 +424,81 @@
 
 @end
 
+@implementation HBTuneTransformer
+
++ (Class)transformedValueClass
+{
+    return [NSString class];
+}
+
+- (id)transformedValue:(id)value
+{
+    if ([value isEqualToString:@"none"])
+    {
+        return HBKitLocalizedString(@"none", @"HBVideo -> tune");
+    }
+    else
+    {
+        return value;
+    }
+}
+
++ (BOOL)allowsReverseTransformation
+{
+    return YES;
+}
+
+- (id)reverseTransformedValue:(id)value
+{
+    if ([value isEqualTo:HBKitLocalizedString(@"none", @"HBVideo -> tune")])
+    {
+        return @"none";
+    }
+    else
+    {
+        return value;
+    }
+}
+
+@end
+
+@implementation HBTunesTransformer
+
++ (Class)transformedValueClass
+{
+    return [NSArray class];
+}
+
+- (id)transformedValue:(id)value
+{
+    if (value != nil)
+    {
+        NSMutableArray *localizedArray = [NSMutableArray array];
+
+        for (NSString *text in value)
+        {
+            if ([text isEqualToString:@"none"])
+            {
+                [localizedArray addObject:HBKitLocalizedString(@"none", @"HBVideo -> tune")];
+            }
+            else
+            {
+                [localizedArray addObject:text];
+            }
+        }
+        return localizedArray;
+    }
+
+    return value;
+}
+
++ (BOOL)allowsReverseTransformation
+{
+    return NO;
+}
+
+@end
+
 @implementation HBVideo (EncoderAdditions)
 
 - (BOOL)isUnparsedSupported:(int)encoder

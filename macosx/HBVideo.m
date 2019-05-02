@@ -39,7 +39,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         _job = job;
 
         _preset = @"medium";
-        _tune = @"";
+        _tune = @"none";
         _profile = @"auto";
         _level = @"auto";
 
@@ -223,13 +223,13 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         [[self.undo prepareWithInvocationTarget:self] setTune:_tune];
     }
 
-    if (![tune isEqualToString:@"none"])
+    if (tune == nil || [tune isEqualToString:@""])
     {
-        _tune = [tune copy];
+        _tune = @"none";
     }
     else
     {
-        _tune = @"";
+        _tune = [tune copy];
     }
 
     [self postChangedNotification];
@@ -379,9 +379,9 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     return [NSSet setWithObjects:@"encoder", nil];
 }
 
-- (NSArray *)tunes
+- (NSArray<NSString *> *)tunes
 {
-    NSMutableArray *temp = [NSMutableArray array];
+    NSMutableArray<NSString *> *temp = [NSMutableArray array];
 
     [temp addObject:@"none"];
 
@@ -404,9 +404,9 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     return [NSSet setWithObjects:@"encoder", nil];
 }
 
-- (NSArray *)profiles
+- (NSArray<NSString *> *)profiles
 {
-    NSMutableArray *temp = [NSMutableArray array];
+    NSMutableArray<NSString *> *temp = [NSMutableArray array];
 
     const char * const *profiles = hb_video_encoder_get_profiles(self.encoder);
     for (int i = 0; profiles != NULL && profiles[i] != NULL; i++)
@@ -426,9 +426,9 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     return [NSSet setWithObjects:@"encoder", nil];
 }
 
-- (NSArray *)levels
+- (NSArray<NSString *> *)levels
 {
-    NSMutableArray *temp = [NSMutableArray array];
+    NSMutableArray<NSString *> *temp = [NSMutableArray array];
 
     const char * const *levels = hb_video_encoder_get_levels(self.encoder);
     for (int i = 0; levels != NULL && levels[i] != NULL; i++)
@@ -572,7 +572,7 @@ fail:
 {
     NSMutableString *string = [[NSMutableString alloc] init];
 
-    if (self.tune)
+    if (self.tune && ![self.tune isEqualToString:@"none"])
     {
         [string appendString:self.tune];
     }

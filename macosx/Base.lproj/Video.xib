@@ -477,13 +477,17 @@ x264 is lossless at RF 0.</string>
                     </popUpButtonCell>
                     <connections>
                         <accessibilityConnection property="title" destination="gzq-SL-YVY" id="W8X-Zk-cQD"/>
-                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="jwX-If-Tz7"/>
-                        <binding destination="-2" name="selectedValue" keyPath="self.video.tune" previousBinding="ziN-5r-CNJ" id="gu5-Qw-6oi">
+                        <binding destination="-2" name="selectedValue" keyPath="self.video.tune" previousBinding="puD-Y8-zxp" id="yp7-SK-DVh">
                             <dictionary key="options">
-                                <string key="NSNullPlaceholder">none</string>
+                                <string key="NSValueTransformerName">HBTuneTransformer</string>
                             </dictionary>
                         </binding>
-                        <binding destination="-2" name="content" keyPath="self.video.tunes" id="ziN-5r-CNJ"/>
+                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="jwX-If-Tz7"/>
+                        <binding destination="-2" name="contentValues" keyPath="self.video.tunes" id="puD-Y8-zxp">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBTunesTransformer</string>
+                            </dictionary>
+                        </binding>
                     </connections>
                 </popUpButton>
                 <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CPP-lh-FbN">

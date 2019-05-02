@@ -44,6 +44,12 @@
 @interface HBFrameRateTransformer : NSValueTransformer
 @end
 
+@interface HBTuneTransformer : NSValueTransformer
+@end
+
+@interface HBTunesTransformer : NSValueTransformer
+@end
+
 @interface HBPresetsTransformer : NSValueTransformer
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithEncoder:(int)encoder NS_DESIGNATED_INITIALIZER;
