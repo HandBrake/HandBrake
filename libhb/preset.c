@@ -2490,7 +2490,7 @@ static hb_value_t * import_hierarchy_29_0_0(hb_value_t *presets)
     return hb_value_dup(presets);
 }
 
-static void import_deblock_34_0_0(hb_value_t *preset)
+static void import_deblock_35_0_0(hb_value_t *preset)
 {
     int deblock = hb_dict_get_int(preset, "PictureDeblock");
 
@@ -3129,16 +3129,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
-static void import_34_0_0(hb_value_t *preset)
+static void import_35_0_0(hb_value_t *preset)
 {
-    import_deblock_34_0_0(preset);
+    import_deblock_35_0_0(preset);
 }
 
 static void import_25_0_0(hb_value_t *preset)
 {
     import_video_scaler_25_0_0(preset);
 
-    import_34_0_0(preset);
+    import_35_0_0(preset);
 }
 
 static void import_20_0_0(hb_value_t *preset)
@@ -3246,9 +3246,9 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
             import_25_0_0(preset);
             result = 1;
         }
-        else if (cmpVersion(major, minor, micro, 34, 0, 0) <= 0)
+        else if (cmpVersion(major, minor, micro, 35, 0, 0) <= 0)
         {
-            import_34_0_0(preset);
+            import_35_0_0(preset);
             result = 1;
         }
         preset_clean(preset, hb_preset_template);
