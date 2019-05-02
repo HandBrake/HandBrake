@@ -231,28 +231,6 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
 @end
 
-@implementation HBCustomFilterTransformer
-
-+ (Class)transformedValueClass
-{
-    return [NSNumber class];
-}
-
-- (id)transformedValue:(id)value
-{
-    if ([value intValue] == 1)
-        return @NO;
-    else
-        return @YES;
-}
-
-+ (BOOL)allowsReverseTransformation
-{
-    return NO;
-}
-
-@end
-
 static NSDictionary *detelecinePresetsDict = nil;
 
 static NSDictionary *combDetectionPresetsDict = nil;

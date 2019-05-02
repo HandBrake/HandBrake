@@ -105,7 +105,3 @@
 
 @interface HBDeblockTransformer : HBGenericDictionaryTransformer
 @end
-
-@interface HBCustomFilterTransformer : NSValueTransformer
-@end
-
