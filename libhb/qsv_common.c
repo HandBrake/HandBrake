@@ -983,9 +983,18 @@ int hb_qsv_decode_is_enabled(hb_job_t *job)
             (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV));
 }
 
+static int hb_dxva2_device_check();
+
 int hb_qsv_full_path_is_enabled(hb_job_t *job)
 {
-    return (hb_qsv_decode_is_enabled(job) && hb_qsv_info_get(job->vcodec));
+    static int device_check_completed = 0;
+    static int device_check_succeded = 0;
+    if(!device_check_completed)
+    {
+       device_check_succeded = (hb_dxva2_device_check() == 0) ? 1 : 0;
+       device_check_completed = 1;
+    }
+    return (hb_qsv_decode_is_enabled(job) && hb_qsv_info_get(job->vcodec) && device_check_succeded);
 }
 
 int hb_qsv_copyframe_is_slow(int encoder)
@@ -2268,6 +2277,105 @@ mfxHDL device_manager_handle = NULL;
 #include <d3d9.h>
 #include <dxva2api.h>
 
+typedef IDirect3D9* WINAPI pDirect3DCreate9(UINT);
+typedef HRESULT WINAPI pDirect3DCreate9Ex(UINT, IDirect3D9Ex **);
+
+static int hb_dxva2_device_create9(HMODULE d3dlib, UINT adapter, IDirect3D9 **d3d9_out)
+{
+    pDirect3DCreate9 *createD3D = (pDirect3DCreate9 *)hb_dlsym(d3dlib, "Direct3DCreate9");
+    if (!createD3D) {
+        hb_error("Failed to locate Direct3DCreate9");
+        return -1;
+    }
+
+    IDirect3D9 *d3d9 = createD3D(D3D_SDK_VERSION);
+    if (!d3d9) {
+        hb_error("Failed to create IDirect3D object");
+        return -1;
+    }
+    *d3d9_out = d3d9;
+    return 0;
+}
+
+static int hb_dxva2_device_create9ex(HMODULE d3dlib, UINT adapter, IDirect3D9 **d3d9_out)
+{
+    IDirect3D9Ex *d3d9ex = NULL;
+    HRESULT hr;
+    pDirect3DCreate9Ex *createD3DEx = (pDirect3DCreate9Ex *)hb_dlsym(d3dlib, "Direct3DCreate9Ex");
+    if (!createD3DEx)
+    {
+        hb_error("Failed to locate Direct3DCreate9Ex");
+        return -1;
+    }
+
+    hr = createD3DEx(D3D_SDK_VERSION, &d3d9ex);
+    if (FAILED(hr))
+    {
+        hb_error("Failed to create IDirect3DEx object");
+        return -1;
+    }
+    *d3d9_out = (IDirect3D9 *)d3d9ex;
+    return 0;
+}
+
+static int hb_dxva2_device_check()
+{
+    HMODULE d3dlib = NULL;
+    IDirect3D9 *d3d9 = NULL;
+    D3DADAPTER_IDENTIFIER9 identifier;
+    D3DADAPTER_IDENTIFIER9 *d3dai = &identifier;
+    UINT adapter = D3DADAPTER_DEFAULT;
+    int err = 0;
+
+    d3dlib = hb_dlopen("d3d9.dll");
+    if (!d3dlib)
+    {
+        hb_error("Failed to load D3D9 library");
+        return -1;
+    }
+
+    if (hb_dxva2_device_create9ex(d3dlib, adapter, &d3d9) < 0)
+    {
+        // Retry with "classic" d3d9
+        err = hb_dxva2_device_create9(d3dlib, adapter, &d3d9);
+        if (err < 0)
+        {
+            err = -1;
+            goto clean_up;
+        }
+    }
+
+    UINT adapter_count = IDirect3D9_GetAdapterCount(d3d9);
+    hb_log("D3D9: %d adapters available", adapter_count);
+    if (FAILED(IDirect3D9_GetAdapterIdentifier(d3d9, D3DADAPTER_DEFAULT, 0, d3dai)))
+    {
+        hb_error("Failed to get Direct3D adapter identifier");
+        err = -1;
+        goto clean_up;
+    }
+
+    unsigned intel_id = 0x8086;
+    if(d3dai)
+    {
+        if(d3dai->VendorId != intel_id)
+        {
+            hb_log("D3D9: Intel adapter is required for zero-copy QSV path");
+            err = -1;
+            goto clean_up;
+        }
+    }
+    err = 0;
+
+clean_up:
+    if (d3d9)
+        IDirect3D9_Release(d3d9);
+
+    if (d3dlib)
+        hb_dlclose(d3dlib);
+
+    return err;
+}
+
 static HRESULT lock_device(
     IDirect3DDeviceManager9 *pDeviceManager,
     BOOL fBlock,
@@ -2683,6 +2791,11 @@ void hb_qsv_uninit_enc()
 int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict)
 {
     return 0;
+}
+
+static int hb_dxva2_device_check()
+{
+    return -1;
 }
 
 #endif
