@@ -1150,13 +1150,13 @@ Would you like to overwrite it?</value>
     <value>Meta Data</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Enable Nvidia NVENC Encoder</value>
+    <value>Allow use of the Nvidia NVENC Encoders</value>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Enable Intel QuickSync Encoder</value>
+    <value>Allow use of the Intel QuickSync Encoders</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Enable AMD VCE Encoder</value>
+    <value>Allow use of the AMD VCE Encoders</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
     <value>The file format entered contained invalid characters. These have been removed. </value>
@@ -1282,7 +1282,7 @@ Would you like to overwrite it?</value>
     <value>Priority Level:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Enable QuickSync Decoding</value>
+    <value>Prefer use of Intel QuickSync for decoding video when available. </value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
     <value>Also Use QSV Decoding when not using a QuickSync encoder. (i.e. x265) </value>
@@ -1983,5 +1983,8 @@ Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitra
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
     <value>Deblock Tune</value>
+  </data>
+  <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
+    <value>Choice of encoder will be made available on the 'Video' tab.</value>
   </data>
 </root>
