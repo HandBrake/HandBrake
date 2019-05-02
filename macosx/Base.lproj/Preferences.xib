@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.68" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.68"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -279,7 +279,7 @@
                                 <font key="font" metaFont="smallSystem"/>
                             </buttonCell>
                             <connections>
-                                <binding destination="410" name="value" keyPath="automaticallyChecksForUpdates" id="429"/>
+                                <binding destination="410" name="value" keyPath="updater.automaticallyChecksForUpdates" id="rsY-XJ-el2"/>
                             </connections>
                         </button>
                         <button translatesAutoresizingMaskIntoConstraints="NO" id="WwH-AE-z8q">
@@ -689,6 +689,6 @@
             </constraints>
             <point key="canvasLocation" x="452" y="-571"/>
         </customView>
-        <customObject id="410" userLabel="Updater" customClass="SUUpdater"/>
+        <customObject id="410" userLabel="Updater" customClass="SPUStandardUpdaterController"/>
     </objects>
 </document>

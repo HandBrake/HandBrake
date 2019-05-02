@@ -390,7 +390,7 @@ static NSTouchBarItemIdentifier HBTouchBarTimeSlider = @"fr.handbrake.timeSlider
     bar.defaultItemIdentifiers = @[HBTouchBarPlayPause, NSTouchBarItemIdentifierFixedSpaceSmall, HBTouchBarCurrentTime, NSTouchBarItemIdentifierFixedSpaceSmall, HBTouchBarTimeSlider, NSTouchBarItemIdentifierFixedSpaceSmall, HBTouchBarRemainingTime];
 
     bar.customizationIdentifier = HBTouchBar;
-    bar.customizationAllowedItemIdentifiers = @[HBTouchBarPlayPause, HBTouchBarCurrentTime, HBTouchBarTimeSlider, HBTouchBarRemainingTime, NSTouchBarItemIdentifierFixedSpaceSmall, NSTouchBarItemIdentifierFixedSpaceLarge, NSTouchBarItemIdentifierFlexibleSpace];
+    bar.customizationAllowedItemIdentifiers = @[HBTouchBarPlayPause, HBTouchBarCurrentTime, HBTouchBarTimeSlider, HBTouchBarRemainingTime, NSTouchBarItemIdentifierFlexibleSpace];
 
     return bar;
 }
