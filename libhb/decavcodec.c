@@ -81,6 +81,7 @@ typedef struct
     int                    frametype;
     int                    scr_sequence;
     int                    new_chap;
+    int                    discard;
 } packet_info_t;
 
 typedef struct reordered_data_s reordered_data_t;
@@ -505,6 +506,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->packet_info.scr_sequence = in->s.scr_sequence;
         pv->packet_info.new_chap     = in->s.new_chap;
         pv->packet_info.frametype    = in->s.frametype;
+        pv->packet_info.discard      = !!(in->s.flags & HB_FLAG_DISCARD);
     }
     for (pos = 0; pos < in->size; pos += len)
     {
@@ -538,6 +540,7 @@ static int decavcodecaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             // decodeAudio that is now finished.  The next packet is associated
             // with the input buffer, so set it's chapter and scr info.
             pv->packet_info.scr_sequence = in->s.scr_sequence;
+            pv->packet_info.discard      = !!(in->s.flags & HB_FLAG_DISCARD);
             pv->unfinished               = 0;
         }
         if (len > 0 && pout_len <= 0)
@@ -1415,6 +1418,7 @@ static int decodeFrame( hb_work_private_t * pv, packet_info_t * packet_info )
         {
             avp.flags |= AV_PKT_FLAG_KEY;
         }
+        avp.flags  |= packet_info->discard * AV_PKT_FLAG_DISCARD;
     }
     else
     {
@@ -1844,6 +1848,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         pv->packet_info.scr_sequence = in->s.scr_sequence;
         pv->packet_info.new_chap     = in->s.new_chap;
         pv->packet_info.frametype    = in->s.frametype;
+        pv->packet_info.discard      = !!(in->s.flags & HB_FLAG_DISCARD);
     }
     for (pos = 0; pos < in->size; pos += len)
     {
@@ -1898,6 +1903,7 @@ static int decavcodecvWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             pv->packet_info.scr_sequence = in->s.scr_sequence;
             pv->packet_info.new_chap     = in->s.new_chap;
             pv->packet_info.frametype    = in->s.frametype;
+            pv->packet_info.discard      = !!(in->s.flags & HB_FLAG_DISCARD);
             pv->unfinished               = 0;
         }
         if (len > 0 && pout_len <= 0)
@@ -2220,6 +2226,7 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
         avp.size = packet_info->size;
         avp.pts  = packet_info->pts;
         avp.dts  = AV_NOPTS_VALUE;
+        avp.flags |= packet_info->discard * AV_PKT_FLAG_DISCARD;
     }
     else
     {

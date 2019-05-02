@@ -98,6 +98,7 @@ struct hb_buffer_settings_s
 #define HB_BUF_FLAG_EOS             0x0800
 #define HB_FLAG_FRAMETYPE_KEY       0x1000
 #define HB_FLAG_FRAMETYPE_REF       0x2000
+#define HB_FLAG_DISCARD             0x4000
     uint16_t      flags;
 
 #define HB_COMB_NONE  0
