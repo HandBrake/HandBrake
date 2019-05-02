@@ -33,6 +33,12 @@ HandBrake uses many cool libraries from the GNU/Linux world. We thank them and t
 - [libxml2](http://xmlsoft.org/)
 - [libzlib](http://zlib.net/)
 
+Windows UI:
+- [Caliburn Micro](https://caliburnmicro.com/)
+- [Ookii Dialogs](http://www.ookii.org/software/dialogs/)
+- [Newtonsoft Json.NET](https://www.newtonsoft.com/json)
+- [GongSolutions.WPF.DragDrop](https://github.com/punker76/gong-wpf-dragdrop)
+
 
 ## Services and Software
 
