@@ -13,7 +13,7 @@ inpath()
     return 1
 }
 
-for p in python3 python2 python
+for p in python3 python2 python python3.7 python3.6 python2.7
 do
     if ( inpath $p ); then
         exec $p "$@"
