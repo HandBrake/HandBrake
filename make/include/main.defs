@@ -125,6 +125,11 @@ ifeq (1-gnu,$(FEATURE.gtk)-$(HOST.system))
     MODULES += gtk
 endif
 
+ifeq (1-netbsd,$(FEATURE.gtk)-$(BUILD.system))
+    ## build gtk when gtk+netbsd
+    MODULES += gtk
+endif
+
 ###############################################################################
 
 MODULES += pkg
