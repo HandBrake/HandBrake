@@ -1,0 +1,13 @@
+--- libbluray-1.0.2/configure.orig	2017-12-04 00:27:38.000000000 +0900
++++ libbluray-1.0.2/configure	2018-04-09 20:47:19.504645000 +0900
+@@ -14,6 +14,10 @@
+ ## M4sh Initialization. ##
+ ## -------------------- ##
+
++if test `uname` = 'NetBSD' ; then
++  ln -s linux/jni_md.h jni/jni_md.h
++fi
++
+ # Be more Bourne compatible
+ DUALCASE=1; export DUALCASE # for MKS sh
+ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then :
