@@ -2444,16 +2444,20 @@ video_tune_opts_set(signal_user_data_t *ud, const gchar *name,
 
     for (ii = 0; ii < count; ii++)
     {
-        if (strcmp(tunes[ii], "fastdecode") && strcmp(tunes[ii], "zerolatency"))
+        if (((encoder & HB_VCODEC_X264_MASK) &&
+             !strcmp(tunes[ii], "fastdecode")) ||
+            ((encoder & (HB_VCODEC_X264_MASK | HB_VCODEC_X265_MASK)) &&
+             !strcmp(tunes[ii], "zerolatency")))
         {
-            gtk_list_store_append(store, &iter);
-            gtk_list_store_set(store, &iter,
-                               0, tunes[ii],
-                               1, TRUE,
-                               2, tunes[ii],
-                               3, (gdouble)ii + 1,
-                               -1);
+            continue;
         }
+        gtk_list_store_append(store, &iter);
+        gtk_list_store_set(store, &iter,
+                           0, tunes[ii],
+                           1, TRUE,
+                           2, tunes[ii],
+                           3, (gdouble)ii + 1,
+                           -1);
     }
 }
 
