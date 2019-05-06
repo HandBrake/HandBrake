@@ -469,11 +469,17 @@
         hb_dict_free(&filter_dict);
     }
 
-    // Deblock (uses pp7 default)
-    if (self.filters.deblock)
+    // Deblock
+    if (![self.filters.deblock isEqualToString:@"off"])
     {
-        filter = hb_filter_init(HB_FILTER_DEBLOCK);
-        hb_add_filter(job, filter, [NSString stringWithFormat:@"qp=%d", self.filters.deblock].UTF8String);
+        int filter_id = HB_FILTER_DEBLOCK;
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
+                                                             self.filters.deblock.UTF8String,
+                                                             self.filters.deblockTune.UTF8String,
+                                                             self.filters.deblockCustomString.UTF8String);
+        filter = hb_filter_init(filter_id);
+        hb_add_filter_dict(job, filter, filter_dict);
+        hb_value_free(&filter_dict);
     }
 
     // Add Crop/Scale filter

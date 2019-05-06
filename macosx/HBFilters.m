@@ -42,6 +42,9 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         _sharpenCustomString = @"";
         _sharpenPreset = @"medium";
         _sharpenTune = @"none";
+        _deblock = @"off";
+        _deblockTune = @"none";
+        _deblockCustomString = @"";
 
         _notificationsEnabled = YES;
     }
@@ -58,7 +61,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     }
 }
 
-#pragma mark - Setters
+#pragma mark - Detelecine
 
 - (void)setDetelecine:(NSString *)detelecine
 {
@@ -126,6 +129,8 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     return retval;
 }
 
+#pragma mark - Comb Detect
+
 - (void)setCombDetection:(NSString *)combDetection
 {
     if (![combDetection isEqualToString:_combDetection])
@@ -190,6 +195,8 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 
     return retval;
 }
+
+#pragma mark - Deinterlace
 
 - (void)setDeinterlace:(NSString *)deinterlace
 {
@@ -308,6 +315,8 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     return retval;
 }
 
+#pragma mark - Denoise
+
 - (void)setDenoise:(NSString *)denoise
 {
     if (![denoise isEqualToString:_denoise])
@@ -424,6 +433,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     return retval;
 }
 
+#pragma mark - Sharpen
 
 - (void)setSharpen:(NSString *)sharpen
 {
@@ -574,15 +584,93 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     return retval;
 }
 
-- (void)setDeblock:(int)deblock
+#pragma mark - Deblock
+
+- (void)setDeblock:(NSString *)deblock
 {
-    if (deblock != _deblock)
+    if (![deblock isEqualToString:_deblock])
     {
         [[self.undo prepareWithInvocationTarget:self] setDeblock:_deblock];
     }
-    _deblock = deblock;
+    if (deblock)
+    {
+        _deblock = [deblock copy];
+    }
+    else
+    {
+        _deblock = @"off";
+    }
+
     [self postChangedNotification];
 }
+
+- (void)setDeblockTune:(NSString *)deblockTune
+{
+    if (![deblockTune isEqualToString:_deblockTune])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDeblockTune:_deblockTune];
+    }
+    if (deblockTune)
+    {
+        _deblockTune = [deblockTune copy];
+    }
+    else
+    {
+        _deblockTune = @"none";
+    }
+
+    [self postChangedNotification];
+}
+
+- (void)setDeblockCustomString:(NSString *)deblockCustomString
+{
+    if (![deblockCustomString isEqualToString:_deblockCustomString])
+    {
+        [[self.undo prepareWithInvocationTarget:self] setDeblock:_deblockCustomString];
+    }
+    if (deblockCustomString)
+    {
+        _deblockCustomString = [deblockCustomString copy];
+    }
+    else
+    {
+        _deblockCustomString = @"";
+    }
+
+    [self postChangedNotification];
+}
+
+- (BOOL)validateDeblockCustomString:(id *)ioValue error:(NSError * __autoreleasing *)outError
+{
+    BOOL retval = YES;
+
+    if (nil != *ioValue)
+    {
+        NSString *customValue = *ioValue;
+
+        int filter_id = HB_FILTER_DEBLOCK;
+        hb_dict_t *filter_dict = hb_generate_filter_settings(filter_id,
+                                                             "custom",
+                                                             NULL,
+                                                             customValue.UTF8String);
+
+        if (filter_dict == NULL)
+        {
+            retval = NO;
+            if (outError)
+            {
+                    NSDictionary *userInfo = @{NSLocalizedDescriptionKey: HBKitLocalizedString(@"Invalid deblock custom settings.",
+                                                                                               @"HBFilters -> invalid deblock custom string description"),
+                                               NSLocalizedRecoverySuggestionErrorKey: HBKitLocalizedString(@"Deblock syntax: strength=s:thresh=t:blocksize=b",                                                                                                            @"HBJob -> invalid deblock custom settings error recovery suggestion")};
+                    *outError = [NSError errorWithDomain:@"HBFilterError" code:0 userInfo:userInfo];
+            }
+        }
+    }
+
+    return retval;
+}
+
+#pragma mark - Grayscale
 
 - (void)setGrayscale:(BOOL)grayscale
 {
@@ -594,6 +682,8 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     [self postChangedNotification];
 }
 
+#pragma mark - Rotate
+
 - (void)setRotate:(int)rotate
 {
     if (rotate != _rotate)
@@ -603,6 +693,8 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     _rotate = rotate;
     [self postChangedNotification];
 }
+
+#pragma mark - Flip
 
 - (void)setFlip:(BOOL)flip
 {
@@ -614,13 +706,15 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     [self postChangedNotification];
 }
 
+#pragma mark - KVO
+
 + (NSSet *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
     NSSet *retval = nil;
 
     if ([key isEqualToString:@"summary"])
     {
-        retval = [NSSet setWithObjects:@"detelecine", @"detelecineCustomString", @"deinterlace", @"deinterlacePreset", @"deinterlaceCustomString", @"denoise", @"denoisePreset", @"denoiseTune", @"denoiseCustomString", @"deblock", @"grayscale", @"sharpen", @"sharpenPreset", @"sharpenTune", @"sharpenCustomString", nil];
+        retval = [NSSet setWithObjects:@"detelecine", @"detelecineCustomString", @"deinterlace", @"deinterlacePreset", @"deinterlaceCustomString", @"denoise", @"denoisePreset", @"denoiseTune", @"denoiseCustomString", @"deblock", @"deblockTune", @"deblockCustomString", @"grayscale", @"sharpen", @"sharpenPreset", @"sharpenTune", @"sharpenCustomString", nil];
     }
     else if ([key isEqualToString:@"customDetelecineSelected"])
     {
@@ -644,11 +738,16 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     {
         retval = [NSSet setWithObjects:@"sharpen", @"sharpenPreset", nil];
     }
-    else if ([key isEqualToString:@"sharpenEnabled"]  ||
+    else if ([key isEqualToString:@"sharpenEnabled"] ||
              [key isEqualToString:@"sharpenPresets"] ||
              [key isEqualToString:@"sharpenTunes"])
     {
         retval = [NSSet setWithObject:@"sharpen"];
+    }
+    else if ([key isEqualToString:@"deblockTunesAvailable"] ||
+             [key isEqualToString:@"customDeblockSelected"])
+    {
+        retval = [NSSet setWithObject:@"deblock"];
     }
     else if ([key isEqualToString:@"deinterlaceEnabled"])
     {
@@ -658,10 +757,6 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
              [key isEqualToString:@"deinterlacePresets"])
     {
         retval = [NSSet setWithObjects:@"deinterlace", @"deinterlacePreset", nil];
-    }
-    else if ([key isEqualToString:@"deblockSummary"])
-    {
-        retval = [NSSet setWithObject:@"deblock"];
     }
     else
     {
@@ -700,7 +795,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
         copy->_sharpenTune = [_sharpenTune copy];
         copy->_sharpenCustomString = [_sharpenCustomString copy];
 
-        copy->_deblock = _deblock;
+        copy->_deblock = [_deblock copy];
+        copy->_deblockTune = [_deblockTune copy];
+        copy->_deblockCustomString = [_deblockCustomString copy];
+
         copy->_grayscale = _grayscale;
         copy->_rotate = _rotate;
         copy->_flip = _flip;
@@ -740,7 +838,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     encodeObject(_sharpenTune);
     encodeObject(_sharpenCustomString);
 
-    encodeInt(_deblock);
+    encodeObject(_deblock);
+    encodeObject(_deblockTune);
+    encodeObject(_deblockCustomString);
+
     encodeBool(_grayscale);
     encodeInt(_rotate);
     encodeBool(_flip);
@@ -770,7 +871,10 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     decodeObjectOrFail(_sharpenTune, NSString);
     decodeObjectOrFail(_sharpenCustomString, NSString);
 
-    decodeInt(_deblock);
+    decodeObjectOrFail(_deblock, NSString);
+    decodeObjectOrFail(_deblockTune, NSString);
+    decodeObjectOrFail(_deblockCustomString, NSString);
+
     decodeBool(_grayscale);
     decodeInt(_rotate);
     decodeBool(_flip);
@@ -807,7 +911,10 @@ fail:
     preset[@"PictureSharpenTune"] = self.sharpenTune;
     preset[@"PictureSharpenCustom"] = self.sharpenCustomString;
 
-    preset[@"PictureDeblock"] = @(self.deblock);
+    preset[@"PictureDeblockPreset"] = self.deblock;
+    preset[@"PictureDeblockTune"] = self.deblockTune;
+    preset[@"PictureDeblockCustom"] = self.deblockCustomString;
+
     preset[@"VideoGrayScale"] = @(self.grayscale);
     preset[@"PictureRotate"] = [NSString stringWithFormat:@"angle=%d:hflip=%d", self.rotate, self.flip];
 }
@@ -836,7 +943,6 @@ fail:
         self.denoise = preset[@"PictureDenoiseFilter"];
         self.denoisePreset = preset[@"PictureDenoisePreset"];
         self.denoiseTune = preset[@"PictureDenoiseTune"];
-
         self.denoiseCustomString = preset[@"PictureDenoiseCustom"];
 
         // Sharpen
@@ -845,7 +951,11 @@ fail:
         self.sharpenTune = preset[@"PictureSharpenTune"];
         self.sharpenCustomString = preset[@"PictureSharpenCustom"];
 
-        self.deblock = [preset[@"PictureDeblock"] intValue];
+        // Deblock
+        self.deblock = preset[@"PictureDeblockPreset"];
+        self.deblockTune = preset[@"PictureDeblockTune"];
+        self.deblockCustomString = preset[@"PictureDeblockCustom"];
+
         self.grayscale = [preset[@"VideoGrayScale"] boolValue];
 
         // Rotate

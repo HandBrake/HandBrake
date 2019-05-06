@@ -304,9 +304,19 @@ static NSDictionary            *shortHeightAttr;
     }
 
     // Deblock
-    if (filters.deblock > 0)
+    if (![filters.deblock isEqualToString:@"off"])
     {
-        [summary appendFormat:@", %@ (%d)", HBKitLocalizedString(@"Deblock", @"Filters description"), filters.deblock];
+        [summary appendFormat:@", %@ (%@", HBKitLocalizedString(@"Deblock", @"Filters description"), [[[HBFilters deblockPresetDict] allKeysForObject:filters.deblock] firstObject]];
+        if (![filters.deblock isEqualToString:@"custom"])
+        {
+            [summary appendFormat:@", %@", [[[HBFilters deblockTunesDict] allKeysForObject:filters.deblockTune] firstObject]];
+        }
+        else
+        {
+            [summary appendFormat:@", %@", filters.deblockCustomString];
+        }
+
+        [summary appendString:@")"];
     }
 
     // Denoise
@@ -354,7 +364,6 @@ static NSDictionary            *shortHeightAttr;
         }
 
         [summary appendString:@")"];
-
     }
 
     // Grayscale
@@ -850,7 +859,7 @@ static NSDictionary            *shortHeightAttr;
     }
 
     // Deblock
-    if (filters.deblock > 0)
+    if (![filters.deblock isEqualToString:@"off"])
     {
         [summary appendString:HBKitLocalizedString(@"Deblock", @"HBJob -> filters short description")];
         [summary appendString:@", "];

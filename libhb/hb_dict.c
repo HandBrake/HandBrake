@@ -469,6 +469,11 @@ void hb_dict_set(hb_dict_t * dict, const char *key, hb_value_t *value)
     json_object_set_new(dict, key, value);
 }
 
+void hb_dict_merge(hb_dict_t * dict, hb_dict_t *value)
+{
+    json_object_update(dict, value);
+}
+
 void hb_dict_case_set(hb_dict_t * dict, const char *key, hb_value_t *value)
 {
     char * lower = makelower(key);

@@ -257,7 +257,7 @@ static NSTouchBarItemIdentifier HBTouchBarFitToScreen = @"fr.handbrake.fitToScre
     bar.defaultItemIdentifiers = @[HBTouchBarRip, NSTouchBarItemIdentifierFlexibleSpace, HBTouchBarScrubber, NSTouchBarItemIdentifierFlexibleSpace, HBTouchBarFitToScreen];
 
     bar.customizationIdentifier = HBTouchBarMain;
-    bar.customizationAllowedItemIdentifiers = @[HBTouchBarRip, HBTouchBarScrubber, HBTouchBarFitToScreen, NSTouchBarItemIdentifierFixedSpaceSmall, NSTouchBarItemIdentifierFixedSpaceLarge, NSTouchBarItemIdentifierFlexibleSpace];
+    bar.customizationAllowedItemIdentifiers = @[HBTouchBarRip, HBTouchBarScrubber, HBTouchBarFitToScreen, NSTouchBarItemIdentifierFlexibleSpace];
 
     return bar;
 }

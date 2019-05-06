@@ -271,7 +271,6 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 }
 
                 task.SubtitleTracks.Add(null);
-
             }
         }
 
@@ -318,7 +317,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
             if (deblockFilter != null)
             {
                 var filterSettings = deblockFilter.Settings;
-                task.Deblock = filterSettings.Value<string>("qp").ToInt(); 
+                task.DeblockPreset = null; // TODO Support Preset / Tune
             }
 
             // Sharpen

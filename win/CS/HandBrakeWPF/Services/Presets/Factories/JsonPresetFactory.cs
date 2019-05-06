@@ -102,7 +102,10 @@ namespace HandBrakeWPF.Services.Presets.Factories
 
             /* Filter Settings */
             preset.Task.Grayscale = importedPreset.VideoGrayScale;
-            preset.Task.Deblock = importedPreset.PictureDeblock;
+
+            preset.Task.DeblockPreset = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockPreset));
+            preset.Task.DeblockTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockTune));
+            preset.Task.CustomDeblock = importedPreset.PictureDeblockCustom;
 
             if (importedPreset.PictureSharpenFilter != null)
             {
@@ -603,7 +606,9 @@ namespace HandBrakeWPF.Services.Presets.Factories
             preset.PictureBottomCrop = export.Task.Cropping.Bottom;
 
             // Filters
-            preset.PictureDeblock = export.Task.Deblock;
+            preset.PictureDeblockPreset = export.Task.DeblockPreset?.Key;
+            preset.PictureDeblockTune = export.Task.DeblockTune?.Key;
+            preset.PictureDeblockCustom = export.Task.CustomDeblock;
 
             preset.PictureDeinterlaceFilter = export.Task.DeinterlaceFilter == DeinterlaceFilter.Decomb
                 ? "decomb"

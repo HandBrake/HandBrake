@@ -171,13 +171,28 @@
                 </StackPanel>
 
                 <!-- Deblock -->
-                <TextBlock Text="{x:Static Properties:Resources.FiltersView_Deblock}" Grid.Row="5" Grid.Column="0" Margin="0,0,0,10"/>
-                <Slider Width="120" Value="{Binding DeblockFilter.DeblockValue}" TickPlacement="BottomRight" Minimum="4" Maximum="15" Grid.Row="5" Grid.Column="1" Margin="0,0,0,10"
-                        HorizontalAlignment="Left" ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deblock}"
-                        AutomationProperties.Name="{x:Static Properties:Resources.FiltersView_Deblock}" />
-                <TextBlock Text="{Binding DeblockFilter.DeblockText}" Grid.Row="5" Grid.Column="2" Margin="0,0,0,10"/>
+                <TextBlock Text="{x:Static Properties:Resources.FiltersView_Deblock}" Grid.Row="5" Grid.Column="0"  VerticalAlignment="Center" />
+                <ComboBox Width="120" Grid.Row="5" Grid.Column="1"
+                          ItemsSource="{Binding DeblockFilter.Presets}" DisplayMemberPath="DisplayName"
+                          SelectedItem="{Binding DeblockFilter.SelectedPreset}" 
+                          AutomationProperties.Name="{x:Static Properties:Resources.FiltersViewAuto_DeblockPreset}"
+                          HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,0" 
+                          ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Deblock}" />
 
-                <CheckBox Content="{x:Static Properties:Resources.FiltersView_Grayscale}" IsChecked="{Binding GrayscaleFilter.Grayscale}" Grid.Row="6" Grid.Column="1" Margin="0,0,0,10"
+                <StackPanel Orientation="Horizontal" Visibility="{Binding DeblockFilter.ShowDeblockTune, Converter={StaticResource boolToVisConverter}}" Grid.Row="5"  Grid.Column="2" >
+                    <TextBlock Text="{x:Static Properties:Resources.FiltersView_Tune}" Margin="5,0,5,0" />
+                    <ComboBox ItemsSource="{Binding DeblockFilter.Tunes}" DisplayMemberPath="DisplayName" SelectedItem="{Binding DeblockFilter.SelectedTune}" 
+                              MinWidth="100" VerticalAlignment="Center"  
+                              AutomationProperties.Name="{x:Static Properties:Resources.FiltersViewAuto_DeblockTune}"  />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" Visibility="{Binding DeblockFilter.ShowDeblockCustom, Converter={StaticResource boolToVisConverter}}" Grid.Row="5"  Grid.Column="2" >
+                    <TextBlock Text="{x:Static Properties:Resources.FiltersView_Custom}" Margin="5,0,5,0" VerticalAlignment="Center" />
+                    <TextBox Width="240" Margin="0" Text="{Binding DeblockFilter.CustomDeblock, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" MinHeight="22" />
+                </StackPanel>
+
+                <!-- Grayscale -->
+                <CheckBox Content="{x:Static Properties:Resources.FiltersView_Grayscale}" IsChecked="{Binding GrayscaleFilter.Grayscale}" Grid.Row="6" Grid.Column="1" Margin="0,10,0,10"
                           ToolTip="{x:Static Properties:ResourcesTooltips.FilterView_Grayscale}" />
 
                 <!-- Rotation -->

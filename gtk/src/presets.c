@@ -1694,11 +1694,6 @@ ghb_settings_to_preset(GhbValue *settings)
         ghb_dict_set_string(preset, "VideoFramerateMode", "vfr");
     }
 
-    if (ghb_dict_get_int(preset, "PictureDeblock") < 5)
-    {
-        ghb_dict_set_int(preset, "PictureDeblock", 0);
-    }
-
     GhbValue *alist, *adict;
     gint count, ii;
 

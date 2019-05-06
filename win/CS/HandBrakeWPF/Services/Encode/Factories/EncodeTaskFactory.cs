@@ -503,9 +503,9 @@ namespace HandBrakeWPF.Services.Encode.Factories
             }
 
             // Deblock
-            if (job.Deblock >= 5)
+            if (job.DeblockPreset != null && job.DeblockPreset.Key != "off")
             {
-                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DEBLOCK, null, null, string.Format("qp={0}", job.Deblock));
+                IntPtr settingsPtr = HBFunctions.hb_generate_filter_settings_json((int)hb_filter_ids.HB_FILTER_DEBLOCK, job.DeblockPreset.Key, job.DeblockTune.Key, job.CustomDeblock);
                 string unparsedJson = Marshal.PtrToStringAnsi(settingsPtr);
                 if (!string.IsNullOrEmpty(unparsedJson))
                 {

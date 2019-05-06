@@ -1034,6 +1034,24 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FiltersView_DeblockPreset.
+        /// </summary>
+        public static string FiltersViewAuto_DeblockPreset {
+            get {
+                return ResourceManager.GetString("FiltersViewAuto_DeblockPreset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Deblock Tune.
+        /// </summary>
+        public static string FiltersViewAuto_DeblockTune {
+            get {
+                return ResourceManager.GetString("FiltersViewAuto_DeblockTune", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Generic_Add {
@@ -2833,7 +2851,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable QuickSync Decoding.
+        ///   Looks up a localized string similar to Prefer use of Intel QuickSync for decoding video when available. .
         /// </summary>
         public static string Options_QsvDecode {
             get {
@@ -3067,6 +3085,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choice of encoder will be made available on the &apos;Video&apos; tab..
+        /// </summary>
+        public static string OptionsView_ChoiceOfEncoderHint {
+            get {
+                return ResourceManager.GetString("OptionsView_ChoiceOfEncoderHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to clear the log file directory?.
         /// </summary>
         public static string OptionsView_ClearLogDirConfirm {
@@ -3094,7 +3121,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable Nvidia NVENC Encoder.
+        ///   Looks up a localized string similar to Allow use of the Nvidia NVENC Encoders.
         /// </summary>
         public static string OptionsView_EnableNvencEncoding {
             get {
@@ -3103,7 +3130,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable Intel QuickSync Encoder.
+        ///   Looks up a localized string similar to Allow use of the Intel QuickSync Encoders.
         /// </summary>
         public static string OptionsView_EnableQuicksyncEncoding {
             get {
@@ -3112,7 +3139,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enable AMD VCE Encoder.
+        ///   Looks up a localized string similar to Allow use of the AMD VCE Encoders.
         /// </summary>
         public static string OptionsView_EnableVceEncoding {
             get {

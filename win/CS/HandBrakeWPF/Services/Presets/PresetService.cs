@@ -806,7 +806,6 @@ namespace HandBrakeWPF.Services.Presets
                     this.Add(preset, true);
                 }
             }
-
         }
 
         /// <summary>

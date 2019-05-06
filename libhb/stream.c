@@ -5946,6 +5946,10 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
             memcpy( buf->palette->data, palette, size );
         }
     }
+    if (stream->ffmpeg_pkt.flags & AV_PKT_FLAG_DISCARD)
+    {
+        buf->s.flags |= HB_FLAG_DISCARD;
+    }
     buf->s.id = stream->ffmpeg_pkt.stream_index;
 
     // compute a conversion factor to go from the ffmpeg
@@ -5975,7 +5979,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
              */
             if (stream->ffmpeg_pkt.flags & AV_PKT_FLAG_KEY)
             {
-                buf->s.flags = HB_FLAG_FRAMETYPE_KEY;
+                buf->s.flags |= HB_FLAG_FRAMETYPE_KEY;
                 buf->s.frametype = HB_FRAME_I;
             }
             break;

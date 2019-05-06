@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14460.23.1" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.23.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -122,40 +122,6 @@ Default: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0</string>
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="IrA-1f-C6F"/>
                     </connections>
                 </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="peM-dW-Ef8">
-                    <rect key="frame" x="115" y="125" width="26" height="14"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="22" id="D7y-n3-PEk"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="center" title="Off" id="CIX-Cq-deK">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="value" keyPath="self.filters.deblockSummary" id="tG7-P3-mWx">
-                            <dictionary key="options">
-                                <string key="NSNullPlaceholder">Off</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </textField>
-                <slider toolTip="Deblock reduces blocky artifacts caused by low quality video compression." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="VHj-6u-NVp">
-                    <rect key="frame" x="142" y="123" width="104" height="18"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="104" id="nWI-ZT-gfx"/>
-                    </constraints>
-                    <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="15" doubleValue="3" tickMarkPosition="below" numberOfTickMarks="16" allowsTickMarkValuesOnly="YES" sliderType="linear" id="L61-gd-9Qf"/>
-                    <connections>
-                        <accessibilityConnection property="title" destination="N8y-at-fwU" id="s2N-Mt-w93"/>
-                        <binding destination="-2" name="enabled" keyPath="self.filters" id="viW-JK-JLj">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSIsNotNil</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="value" keyPath="self.filters.deblock" id="n8X-FW-Dvy"/>
-                    </connections>
-                </slider>
                 <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="xKf-yr-nCk">
                     <rect key="frame" x="8" y="237" width="108" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Deinterlace:" id="VsK-mC-9Pj">
@@ -815,6 +781,115 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                         <binding destination="-2" name="textColor" keyPath="self.labelColor" id="hko-9Q-TYZ"/>
                     </connections>
                 </textField>
+                <popUpButton toolTip="Deblock reduces blocky artifacts caused by low quality video compression." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bz8-FC-vYp">
+                    <rect key="frame" x="119" y="121" width="136" height="22"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="130" id="lTF-ns-c6C"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="U5y-F0-hVJ">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="rfp-ah-CVB"/>
+                    </popUpButtonCell>
+                    <accessibility description="Deblock Preset"/>
+                    <connections>
+                        <binding destination="-2" name="enabled" keyPath="self.filters" id="08f-g4-1l6">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.deblock" previousBinding="D7X-Ji-bKI" id="vWE-jl-DeJ">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBDeblockTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.deblockPresets" id="D7X-Ji-bKI"/>
+                        <outlet property="nextKeyView" destination="bRd-Km-Wa8" id="v6m-st-Act"/>
+                    </connections>
+                </popUpButton>
+                <popUpButton toolTip="Deblock tune. Further adjusts the Deblock preset to optimize settings for specific scenarios." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="bRd-Km-Wa8">
+                    <rect key="frame" x="329" y="121" width="114" height="22"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="108" id="Q7t-rC-L8C"/>
+                    </constraints>
+                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="26D-4d-qNS">
+                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="smallSystem"/>
+                        <menu key="menu" title="OtherViews" id="b6A-ax-2Ed"/>
+                    </popUpButtonCell>
+                    <accessibility description="Sharpen Tune"/>
+                    <connections>
+                        <binding destination="-2" name="selectedValue" keyPath="self.filters.deblockTune" previousBinding="cBI-OC-EBm" id="jxm-0Y-L1h">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">HBDeblockTuneTransformer</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="contentValues" keyPath="self.filters.deblockTunes" id="cBI-OC-EBm"/>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.deblockTunesAvailable" id="zp9-UY-07t">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </popUpButton>
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="dXf-9u-LSs">
+                    <rect key="frame" x="278" y="125" width="48" height="14"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Custom:" id="xqk-dM-L3o">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customDeblockSelected" id="jLt-N6-9FO">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="9fb-PH-9eu"/>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" preferredMaxLayoutWidth="150" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DI9-Ed-acp">
+                    <rect key="frame" x="332" y="122" width="180" height="19"/>
+                    <string key="toolTip">Custom Deblock parameters.
+
+strength=s:thresh=t:blocksize=b</string>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="180" id="aRy-Pl-0j9"/>
+                    </constraints>
+                    <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="l4W-St-uq7">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.customDeblockSelected" id="3of-Ci-BbX">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="value" keyPath="self.filters.deblockCustomString" id="ier-75-T1F">
+                            <dictionary key="options">
+                                <bool key="NSValidatesImmediately" value="YES"/>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </textField>
+                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="PIN-cz-nC7">
+                    <rect key="frame" x="278" y="125" width="48" height="14"/>
+                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="ydN-tP-vpt">
+                        <font key="font" metaFont="smallSystem"/>
+                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                    <connections>
+                        <binding destination="-2" name="hidden" keyPath="self.filters.deblockTunesAvailable" id="dw2-w0-Ybn">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                            </dictionary>
+                        </binding>
+                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="oXp-3N-eOD"/>
+                    </connections>
+                </textField>
             </subviews>
             <constraints>
                 <constraint firstItem="DER-tS-cLx" firstAttribute="firstBaseline" secondItem="Mwp-XS-2tc" secondAttribute="firstBaseline" id="08i-jh-iiz"/>
@@ -836,6 +911,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                 <constraint firstItem="N8y-at-fwU" firstAttribute="leading" secondItem="xGD-5W-CDB" secondAttribute="leading" id="8WH-Nn-XWx"/>
                 <constraint firstItem="JrA-qB-1JA" firstAttribute="leading" secondItem="bac-vC-bD4" secondAttribute="trailing" constant="28" id="A4F-M0-eAd"/>
                 <constraint firstItem="ZIa-hr-ytV" firstAttribute="firstBaseline" secondItem="pYa-Af-F47" secondAttribute="firstBaseline" id="AAF-Wa-WFA"/>
+                <constraint firstItem="PIN-cz-nC7" firstAttribute="leading" secondItem="bz8-FC-vYp" secondAttribute="trailing" constant="28" id="AEP-Mg-Q8f"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Hht-Rt-VA0" secondAttribute="trailing" constant="16" id="AN5-R3-Tm3"/>
                 <constraint firstItem="ns7-Ww-hmX" firstAttribute="leading" secondItem="xKf-yr-nCk" secondAttribute="leading" id="BAW-ew-z36"/>
                 <constraint firstItem="O3I-G6-dfv" firstAttribute="leading" secondItem="cTy-PO-BSd" secondAttribute="trailing" constant="28" id="Be0-r6-4tC"/>
@@ -847,7 +923,6 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                 <constraint firstItem="xGD-5W-CDB" firstAttribute="top" secondItem="ns7-Ww-hmX" secondAttribute="bottom" constant="9" id="FBZ-Gx-yrs"/>
                 <constraint firstItem="JrA-qB-1JA" firstAttribute="width" secondItem="8RO-OY-HTu" secondAttribute="width" id="FDo-AO-Miu"/>
                 <constraint firstItem="9hM-c1-7hB" firstAttribute="firstBaseline" secondItem="ins-7X-kbN" secondAttribute="firstBaseline" id="G4h-Af-D9U"/>
-                <constraint firstItem="VHj-6u-NVp" firstAttribute="centerY" secondItem="peM-dW-Ef8" secondAttribute="centerY" id="G8C-wf-3y3"/>
                 <constraint firstItem="xKf-yr-nCk" firstAttribute="leading" secondItem="Mg1-Yq-F9S" secondAttribute="leading" id="GGp-x0-Xh9"/>
                 <constraint firstItem="ZIa-hr-ytV" firstAttribute="width" secondItem="9hM-c1-7hB" secondAttribute="width" id="GcR-NY-3In"/>
                 <constraint firstItem="ins-7X-kbN" firstAttribute="leading" secondItem="9hM-c1-7hB" secondAttribute="trailing" constant="8" id="GpT-1T-5wU"/>
@@ -855,13 +930,14 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                 <constraint firstItem="k1h-3F-Xh0" firstAttribute="firstBaseline" secondItem="cTy-PO-BSd" secondAttribute="firstBaseline" id="I9w-GF-tGe"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="6he-FC-h6S" secondAttribute="trailing" constant="20" symbolic="YES" id="IUp-GG-Vnj"/>
                 <constraint firstItem="cJD-9a-3Xh" firstAttribute="firstBaseline" secondItem="bac-vC-bD4" secondAttribute="firstBaseline" id="KCf-Lr-sOS"/>
+                <constraint firstItem="DI9-Ed-acp" firstAttribute="leading" secondItem="dXf-9u-LSs" secondAttribute="trailing" constant="8" id="Mzi-vZ-iwp"/>
                 <constraint firstItem="DER-tS-cLx" firstAttribute="leading" secondItem="1a5-Yb-uwn" secondAttribute="trailing" constant="8" id="OEe-H1-h7h"/>
                 <constraint firstItem="6he-FC-h6S" firstAttribute="leading" secondItem="JrA-qB-1JA" secondAttribute="trailing" constant="8" id="ONR-hc-66k"/>
                 <constraint firstItem="RZE-gp-SB7" firstAttribute="firstBaseline" secondItem="rPg-F2-gtl" secondAttribute="firstBaseline" id="OiR-HB-gIM"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Psx-nN-XiT" secondAttribute="trailing" constant="20" symbolic="YES" id="PFE-0C-68s"/>
                 <constraint firstItem="xGD-5W-CDB" firstAttribute="width" secondItem="ns7-Ww-hmX" secondAttribute="width" id="PkL-mZ-nma"/>
                 <constraint firstItem="dsH-ZQ-dBs" firstAttribute="firstBaseline" secondItem="IWV-25-FSC" secondAttribute="firstBaseline" id="Pl6-VG-ISW"/>
-                <constraint firstItem="N8y-at-fwU" firstAttribute="firstBaseline" secondItem="peM-dW-Ef8" secondAttribute="firstBaseline" id="SNw-GS-UV6"/>
+                <constraint firstItem="dXf-9u-LSs" firstAttribute="firstBaseline" secondItem="DI9-Ed-acp" secondAttribute="firstBaseline" id="Rzb-Eo-Irg"/>
                 <constraint firstItem="pYa-Af-F47" firstAttribute="leading" secondItem="ZIa-hr-ytV" secondAttribute="trailing" constant="8" id="TEn-7K-rcJ"/>
                 <constraint firstItem="Mg1-Yq-F9S" firstAttribute="firstBaseline" secondItem="IQG-Nn-HTb" secondAttribute="firstBaseline" id="TUA-D9-0hP"/>
                 <constraint firstItem="9hM-c1-7hB" firstAttribute="top" secondItem="N8y-at-fwU" secondAttribute="bottom" constant="13" id="TUK-Ba-Aer"/>
@@ -869,9 +945,12 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                 <constraint firstItem="cTy-PO-BSd" firstAttribute="firstBaseline" secondItem="O3I-G6-dfv" secondAttribute="firstBaseline" id="TkU-Tx-eUQ"/>
                 <constraint firstItem="A6i-ft-02b" firstAttribute="firstBaseline" secondItem="1XQ-md-5cQ" secondAttribute="firstBaseline" id="Ttq-h5-KQ7"/>
                 <constraint firstItem="N8y-at-fwU" firstAttribute="top" secondItem="xGD-5W-CDB" secondAttribute="bottom" constant="31" id="UaX-5V-3FY"/>
+                <constraint firstItem="bz8-FC-vYp" firstAttribute="firstBaseline" secondItem="PIN-cz-nC7" secondAttribute="firstBaseline" id="UeH-cp-uAL"/>
                 <constraint firstItem="ipJ-z3-XnJ" firstAttribute="leading" secondItem="Mwp-XS-2tc" secondAttribute="trailing" constant="8" id="Uep-dq-b95"/>
+                <constraint firstItem="PIN-cz-nC7" firstAttribute="width" secondItem="Mwp-XS-2tc" secondAttribute="width" id="V0I-kx-Uyo"/>
                 <constraint firstItem="RZE-gp-SB7" firstAttribute="width" secondItem="9Uz-PL-igg" secondAttribute="width" id="VJ3-tq-b3d"/>
                 <constraint firstItem="Mg1-Yq-F9S" firstAttribute="top" secondItem="1a5-Yb-uwn" secondAttribute="bottom" constant="26" id="VNy-3S-NiX"/>
+                <constraint firstItem="PIN-cz-nC7" firstAttribute="firstBaseline" secondItem="bRd-Km-Wa8" secondAttribute="firstBaseline" id="VO4-nQ-nZT"/>
                 <constraint firstItem="xKf-yr-nCk" firstAttribute="width" secondItem="Mg1-Yq-F9S" secondAttribute="width" id="VSJ-pe-iZe"/>
                 <constraint firstItem="bac-vC-bD4" firstAttribute="leading" secondItem="cJD-9a-3Xh" secondAttribute="trailing" constant="8" id="Vom-f3-0FR"/>
                 <constraint firstItem="xct-UB-bKm" firstAttribute="firstBaseline" secondItem="9Uz-PL-igg" secondAttribute="firstBaseline" id="W1H-eO-Cb6"/>
@@ -879,8 +958,10 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                 <constraint firstItem="xKf-yr-nCk" firstAttribute="firstBaseline" secondItem="xct-UB-bKm" secondAttribute="firstBaseline" id="XEq-wm-fhi"/>
                 <constraint firstItem="IQG-Nn-HTb" firstAttribute="leading" secondItem="Mg1-Yq-F9S" secondAttribute="trailing" constant="8" id="XHx-q2-MUy"/>
                 <constraint firstItem="9hM-c1-7hB" firstAttribute="leading" secondItem="N8y-at-fwU" secondAttribute="leading" id="Yil-hv-p4i"/>
-                <constraint firstItem="peM-dW-Ef8" firstAttribute="leading" secondItem="N8y-at-fwU" secondAttribute="trailing" constant="3" id="ZD5-Ze-C8A"/>
+                <constraint firstItem="dXf-9u-LSs" firstAttribute="leading" secondItem="bz8-FC-vYp" secondAttribute="trailing" constant="28" id="a0a-wA-Fan"/>
                 <constraint firstItem="rPg-F2-gtl" firstAttribute="leading" secondItem="RZE-gp-SB7" secondAttribute="trailing" constant="8" id="aEN-SB-67H"/>
+                <constraint firstItem="bz8-FC-vYp" firstAttribute="firstBaseline" secondItem="N8y-at-fwU" secondAttribute="firstBaseline" id="aHL-a7-xlD"/>
+                <constraint firstItem="bz8-FC-vYp" firstAttribute="firstBaseline" secondItem="dXf-9u-LSs" secondAttribute="firstBaseline" id="atf-z8-B5P"/>
                 <constraint firstItem="k1h-3F-Xh0" firstAttribute="leading" secondItem="ins-7X-kbN" secondAttribute="trailing" constant="28" id="awt-JK-Bop"/>
                 <constraint firstItem="1a5-Yb-uwn" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="b0c-m2-fWB"/>
                 <constraint firstItem="Mwp-XS-2tc" firstAttribute="width" secondItem="RZE-gp-SB7" secondAttribute="width" id="bbp-0P-bnR"/>
@@ -904,7 +985,8 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                 <constraint firstItem="9Uz-PL-igg" firstAttribute="leading" secondItem="xct-UB-bKm" secondAttribute="trailing" constant="28" id="mHx-m0-xjq"/>
                 <constraint firstItem="1XQ-md-5cQ" firstAttribute="leading" secondItem="A6i-ft-02b" secondAttribute="trailing" constant="8" id="nGl-Aq-089"/>
                 <constraint firstItem="RZE-gp-SB7" firstAttribute="leading" secondItem="IQG-Nn-HTb" secondAttribute="trailing" constant="28" id="npG-fJ-eXc"/>
-                <constraint firstItem="VHj-6u-NVp" firstAttribute="leading" secondItem="peM-dW-Ef8" secondAttribute="trailing" constant="3" id="pC0-BL-YbD"/>
+                <constraint firstItem="dXf-9u-LSs" firstAttribute="width" secondItem="PIN-cz-nC7" secondAttribute="width" id="oSM-fN-AlD"/>
+                <constraint firstItem="bz8-FC-vYp" firstAttribute="leading" secondItem="N8y-at-fwU" secondAttribute="trailing" constant="8" id="px3-NP-9iI"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="r64-vI-ymx" secondAttribute="trailing" constant="16" id="qBi-eK-wC6"/>
                 <constraint firstItem="Mwp-XS-2tc" firstAttribute="leading" secondItem="DER-tS-cLx" secondAttribute="trailing" constant="28" id="qf0-yA-nvR"/>
                 <constraint firstItem="Mg1-Yq-F9S" firstAttribute="width" secondItem="1a5-Yb-uwn" secondAttribute="width" id="rW7-Mh-RBN"/>
@@ -916,6 +998,7 @@ Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isola
                 <constraint firstItem="pYa-Af-F47" firstAttribute="firstBaseline" secondItem="cJD-9a-3Xh" secondAttribute="firstBaseline" id="tPA-fg-FTO"/>
                 <constraint firstItem="xKf-yr-nCk" firstAttribute="top" secondItem="Mg1-Yq-F9S" secondAttribute="bottom" constant="12" id="u90-Po-dOZ"/>
                 <constraint firstItem="N8y-at-fwU" firstAttribute="width" secondItem="xGD-5W-CDB" secondAttribute="width" id="v3e-nl-NT1"/>
+                <constraint firstItem="bRd-Km-Wa8" firstAttribute="leading" secondItem="PIN-cz-nC7" secondAttribute="trailing" constant="8" id="wvq-ZA-Jq2"/>
                 <constraint firstItem="6nG-zk-FMo" firstAttribute="leading" secondItem="9Uz-PL-igg" secondAttribute="trailing" constant="8" id="yfU-Fj-aGf"/>
                 <constraint firstItem="9hM-c1-7hB" firstAttribute="width" secondItem="N8y-at-fwU" secondAttribute="width" id="z2o-1a-JSL"/>
             </constraints>

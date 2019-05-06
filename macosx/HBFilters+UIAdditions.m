@@ -25,9 +25,9 @@ static NSArray * filterParamsToNamesArray(hb_filter_param_t * (f)(int), int filt
         if ([name isEqualToString:@"Off"]) {
             name = NSLocalizedStringFromTableInBundle(@"Off", nil, [NSBundle bundleForClass:[HBFilters class]], "HBFilters -> off display name");
         }
-//        else if ([name isEqualToString:@"Custom"]) {
-//            name = NSLocalizedStringFromTableInBundle(@"Custom", nil, [NSBundle bundleForClass:[HBFilters class]], "HBFilters -> custom display name");
-//        }
+        else if ([name isEqualToString:@"Custom"]) {
+            name = NSLocalizedStringFromTableInBundle(@"Custom", nil, [NSBundle bundleForClass:[HBFilters class]], "HBFilters -> custom display name");
+        }
         [presets addObject:name];
     }
 
@@ -49,6 +49,9 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
         NSString *name = @(preset->name);
         if ([name isEqualToString:@"Off"]) {
             name = NSLocalizedStringFromTableInBundle(@"Off", nil, [NSBundle bundleForClass:[HBFilters class]], "HBFilters -> off display name");
+        }
+        else if ([name isEqualToString:@"Custom"]) {
+            name = NSLocalizedStringFromTableInBundle(@"Custom", nil, [NSBundle bundleForClass:[HBFilters class]], "HBFilters -> custom display name");
         }
         [presets setObject:@(preset->short_name) forKey:name];
     }
@@ -204,24 +207,26 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
 @end
 
-@implementation HBCustomFilterTransformer
+@implementation HBDeblockTuneTransformer
 
-+ (Class)transformedValueClass
+- (instancetype)init
 {
-    return [NSNumber class];
+    if (self = [super init])
+        self.dict = [HBFilters deblockTunesDict];
+
+    return self;
 }
 
-- (id)transformedValue:(id)value
-{
-    if ([value intValue] == 1)
-        return @NO;
-    else
-        return @YES;
-}
+@end
 
-+ (BOOL)allowsReverseTransformation
+@implementation HBDeblockTransformer
+
+- (instancetype)init
 {
-    return NO;
+    if (self = [super init])
+        self.dict = [HBFilters deblockPresetDict];
+
+    return self;
 }
 
 @end
@@ -241,6 +246,9 @@ static NSDictionary *denoiseTypesDict = nil;
 static NSDictionary *sharpenPresetDict = nil;
 static NSDictionary *sharpenTunesDict = nil;
 static NSDictionary *sharpenTypesDict = nil;
+
+static NSDictionary *deblockPresetDict = nil;
+static NSDictionary *deblockTunesDict = nil;
 
 @implementation HBFilters (UIAdditions)
 
@@ -363,6 +371,24 @@ static NSDictionary *sharpenTypesDict = nil;
     return sharpenTypesDict;
 }
 
++ (NSDictionary *)deblockPresetDict
+{
+    if (!deblockPresetDict)
+    {
+        deblockPresetDict = filterParamsToNamesDict(hb_filter_param_get_presets, HB_FILTER_DEBLOCK);
+    }
+    return deblockPresetDict;
+}
+
++ (NSDictionary *)deblockTunesDict
+{
+    if (!deblockTunesDict)
+    {
+        deblockTunesDict = filterParamsToNamesDict(hb_filter_param_get_tunes, HB_FILTER_DEBLOCK);
+    }
+    return deblockTunesDict;
+}
+
 - (NSArray *)detelecineSettings
 {
     return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_DETELECINE);
@@ -429,6 +455,16 @@ static NSDictionary *sharpenTypesDict = nil;
     }
 }
 
+- (NSArray *)deblockPresets
+{
+    return filterParamsToNamesArray(hb_filter_param_get_presets, HB_FILTER_DEBLOCK);
+}
+
+- (NSArray *)deblockTunes
+{
+    return filterParamsToNamesArray(hb_filter_param_get_tunes, HB_FILTER_DEBLOCK);
+}
+
 - (BOOL)customDetelecineSelected
 {
     return [self.detelecine isEqualToString:@"custom"] ? YES : NO;
@@ -479,16 +515,14 @@ static NSDictionary *sharpenTypesDict = nil;
     return ([self.sharpen isEqualToString:@"unsharp"] || [self.sharpen isEqualToString:@"lapsharp"]) && ![self.sharpenPreset isEqualToString:@"custom"];
 }
 
-- (NSString *)deblockSummary
+- (BOOL)deblockTunesAvailable
 {
-    if (self.deblock == 0)
-    {
-        return HBKitLocalizedString(@"Off", @"HBFilters -> filter summary");
-    }
-    else
-    {
-        return [NSString stringWithFormat: @"%.0ld", (long)self.deblock];
-    }
+    return ![self.deblock isEqualToString:@"off"] && ![self.deblock isEqualToString:@"custom"];
+}
+
+- (BOOL)customDeblockSelected
+{
+    return [self.deblock isEqualToString:@"custom"];
 }
 
 @end

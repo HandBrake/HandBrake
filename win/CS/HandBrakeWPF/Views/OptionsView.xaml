@@ -295,6 +295,8 @@
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableQuicksyncEncoding}" IsEnabled="{Binding IsQuickSyncAvailable}" IsChecked="{Binding EnableQuickSyncEncoding}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableVceEncoding}" IsEnabled="{Binding IsVceAvailable}" IsChecked="{Binding EnableVceEncoder}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_EnableNvencEncoding}" IsEnabled="{Binding IsNvencAvailable}" IsChecked="{Binding EnableNvencEncoder}" />
+
+                            <TextBlock Text="{x:Static Properties:Resources.OptionsView_ChoiceOfEncoderHint}" Margin="0,15,0,0" FontStyle="Italic" />
                         </StackPanel>
 
                         <TextBlock Text="{x:Static Properties:Resources.Options_Decoding}" FontSize="14" Margin="0,10,0,10" />

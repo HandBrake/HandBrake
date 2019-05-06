@@ -28,6 +28,9 @@
 + (NSDictionary *)sharpenTunesDict;
 + (NSDictionary *)sharpenTypesDict;
 
++ (NSDictionary *)deblockPresetDict;
++ (NSDictionary *)deblockTunesDict;
+
 - (BOOL)customDetelecineSelected;
 
 @property (nonatomic, readonly) BOOL customCombDetectionSelected;
@@ -39,7 +42,8 @@
 - (BOOL)customSharpenSelected;
 - (BOOL)sharpenTunesAvailable;
 
-- (NSString *)deblockSummary;
+- (BOOL)deblockTunesAvailable;
+- (BOOL)customDeblockSelected;
 
 @property (nonatomic, readonly) NSArray *detelecineSettings;
 
@@ -51,6 +55,9 @@
 @property (nonatomic, readonly) NSArray *sharpenTypes;
 @property (nonatomic, readonly) NSArray *sharpenPresets;
 @property (nonatomic, readonly) NSArray *sharpenTunes;
+
+@property (nonatomic, readonly) NSArray *deblockPresets;
+@property (nonatomic, readonly) NSArray *deblockTunes;
 
 @end
 
@@ -93,6 +100,8 @@
 @interface HBSharpenTransformer : HBGenericDictionaryTransformer
 @end
 
-@interface HBCustomFilterTransformer : NSValueTransformer
+@interface HBDeblockTuneTransformer : HBGenericDictionaryTransformer
 @end
 
+@interface HBDeblockTransformer : HBGenericDictionaryTransformer
+@end
