@@ -610,6 +610,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool DisplayFastDecode { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether display level control.
         /// </summary>
@@ -661,10 +663,6 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                if (value.Equals(this.fastDecode))
-                {
-                    return;
-                }
                 this.fastDecode = value;
 
                 // Update the encode task
@@ -1366,10 +1364,12 @@ namespace HandBrakeWPF.ViewModels
                     this.VideoTunes.Add(VideoTune.None);
                     foreach (var item in encoder.Tunes)
                     {
-                        if (item != VideoTune.FastDecode.ShortName)
+                        if (item == VideoTune.FastDecode.ShortName && (selectedEncoder == VideoEncoder.X264 || selectedEncoder == VideoEncoder.X264_10))
                         {
-                            this.VideoTunes.Add(new VideoTune(item, item));
+                            continue;
                         }
+
+                        this.VideoTunes.Add(new VideoTune(item, item));
                     }
                     this.FastDecode = false;
                     this.VideoTune = VideoTune.None;
@@ -1442,6 +1442,9 @@ namespace HandBrakeWPF.ViewModels
                                        this.SelectedVideoEncoder == VideoEncoder.QuickSync || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH265 || this.SelectedVideoEncoder == VideoEncoder.QuickSyncH26510b ||
                                        this.SelectedVideoEncoder == VideoEncoder.VceH264 || this.SelectedVideoEncoder == VideoEncoder.VceH265 ||
                                        this.SelectedVideoEncoder == VideoEncoder.NvencH264 || this.SelectedVideoEncoder == VideoEncoder.NvencH265;
+
+            this.DisplayFastDecode = this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10;
+            this.NotifyOfPropertyChange(() => this.DisplayFastDecode);
 
             this.DisplayProfileControl = this.SelectedVideoEncoder == VideoEncoder.X264
                                          || this.SelectedVideoEncoder == VideoEncoder.X264_10
