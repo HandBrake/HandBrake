@@ -261,8 +261,6 @@ const char* hb_get_cpu_platform_name()
 {
     switch (hb_cpu_info.platform)
     {
-        // Intel 64 and IA-32 Architectures Software Developer's Manual, Vol. 3C
-        // Table 35-1: CPUID Signature Values of DisplayFamily_DisplayModel
         case HB_CPU_PLATFORM_INTEL_BNL:
             return "Intel microarchitecture Bonnell";
         case HB_CPU_PLATFORM_INTEL_SNB:
@@ -281,6 +279,8 @@ const char* hb_get_cpu_platform_name()
             return "Intel microarchitecture Airmont";
         case HB_CPU_PLATFORM_INTEL_KBL:
             return "Intel microarchitecture Kaby Lake";
+        case HB_CPU_PLATFORM_INTEL_ICL:
+            return "Intel microarchitecture Ice Lake";
         default:
             return NULL;
     }
@@ -319,8 +319,8 @@ static void init_cpu_info()
         family = ((eax >> 8) & 0xf) + ((eax >> 20) & 0xff);
         model  = ((eax >> 4) & 0xf) + ((eax >> 12) & 0xf0);
 
-        // Intel 64 and IA-32 Architectures Software Developer's Manual, Vol. 3C
-        // Table 35-1: CPUID Signature Values of DisplayFamily_DisplayModel
+        // Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 4/January 2019
+        // Table 2-1. CPUID Signature Values of DisplayFamily_DisplayModel
         switch (family)
         {
             case 0x06:
@@ -371,6 +371,8 @@ static void init_cpu_info()
                     case 0x9E:
                         hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_KBL;
                         break;
+                    case 0x7E:
+                        hb_cpu_info.platform = HB_CPU_PLATFORM_INTEL_ICL;
                     default:
                         break;
                 }

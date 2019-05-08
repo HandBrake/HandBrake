@@ -1248,8 +1248,9 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     }
 
     // log code path and main output settings
-    hb_log("encqsvInit: using %s path",
-           pv->is_sys_mem ? "encode-only" : "full QSV");
+    hb_log("encqsvInit: using %s%s path",
+           pv->is_sys_mem ? "encode-only" : "full QSV",
+           videoParam.mfx.LowPower == MFX_CODINGOPTION_ON ? " (LowPower)" : "" );
     hb_log("encqsvInit: %s %s profile @ level %s",
            hb_qsv_codec_name  (videoParam.mfx.CodecId),
            hb_qsv_profile_name(videoParam.mfx.CodecId, videoParam.mfx.CodecProfile),

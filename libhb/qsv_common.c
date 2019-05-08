@@ -112,6 +112,7 @@ enum
     QSV_G4, // Broadwell or equivalent
     QSV_G5, // Skylake or equivalent
     QSV_G6, // Kaby Lake or equivalent
+    QSV_G7, // Ice Lake or equivalent
     QSV_FU, // always last (future processors)
 };
 static int qsv_hardware_generation(int cpu_platform)
@@ -134,6 +135,8 @@ static int qsv_hardware_generation(int cpu_platform)
             return QSV_G5;
         case HB_CPU_PLATFORM_INTEL_KBL:
             return QSV_G6;
+        case HB_CPU_PLATFORM_INTEL_ICL:
+            return QSV_G7;
         default:
             return QSV_FU;
     }
@@ -375,7 +378,12 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                 {
                     info->capabilities |= HB_QSV_CAP_B_REF_PYRAMID;
                 }
-            }
+                if (info->codec_id == MFX_CODEC_HEVC &&
+                    qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G7)
+                {
+                    info->capabilities |= HB_QSV_CAP_LOWPOWER_ENCODE;
+                }
+             }
             else
             {
                 if (HB_CHECK_MFX_VERSION(version, 1, 6))
@@ -1571,7 +1579,22 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
             return HB_QSV_PARAM_UNSUPPORTED;
         }
     }
-    else
+    else if (!strcasecmp(key, "lowpower"))
+    {
+        if (info->capabilities & HB_QSV_CAP_LOWPOWER_ENCODE)
+        {
+            ivalue = hb_qsv_atobool(value, &error);
+            if (!error)
+            {
+                param->videoParam->mfx.LowPower = ivalue ? MFX_CODINGOPTION_ON : MFX_CODINGOPTION_OFF;
+            }
+        }
+        else
+        {
+            return HB_QSV_PARAM_UNSUPPORTED;
+        }
+    }
+     else
     {
         /*
          * TODO:

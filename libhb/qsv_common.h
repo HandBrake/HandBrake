@@ -48,6 +48,7 @@ typedef struct hb_qsv_info_s
 #define HB_QSV_CAP_MSDK_API_1_6      (1LL <<  0)
     // H.264, H.265: B-frames can be used as references
 #define HB_QSV_CAP_B_REF_PYRAMID     (1LL <<  1)
+#define HB_QSV_CAP_LOWPOWER_ENCODE   (1LL <<  2)
     // mfxExtVideoSignalInfo
 #define HB_QSV_CAP_VUI_VSINFO        (1LL <<  3)
     // optional rate control methods
