@@ -12,7 +12,7 @@
 #include "hb_dict.h"
 #include "plist.h"
 
-#if defined(USE_QSV)
+#if HB_PROJECT_FEATURE_QSV
 #include "qsv_common.h"
 #endif
 
@@ -1605,7 +1605,7 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
     filter_dict = hb_dict_init();
     hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_VFR));
     hb_dict_set(filter_dict, "Settings", filter_settings);
-#if defined(USE_QSV)
+#if HB_PROJECT_FEATURE_QSV
     if(hb_qsv_preset_is_zero_copy_enabled(job_dict))
     {
         hb_log("HB_FILTER_VFR filter is disabled");
@@ -1984,7 +1984,7 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     filter_dict = hb_dict_init();
     hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_CROP_SCALE));
     hb_dict_set(filter_dict, "Settings", filter_settings);
-#if defined(USE_QSV)
+#if HB_PROJECT_FEATURE_QSV
     if(hb_qsv_preset_is_zero_copy_enabled(job_dict))
     {
         hb_log("HB_FILTER_CROP_SCALE filter is disabled");

@@ -2282,7 +2282,7 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     }
     else
     {
-#ifdef USE_QSV
+#if HB_PROJECT_FEATURE_QSV
         if(in->qsv_details.frame)
         {
             surface = ((mfxFrameSurface1*)in->qsv_details.frame->data[3]);
