@@ -240,7 +240,10 @@ hb_buffer_t * hb_avfilter_get_buf(hb_avfilter_graph_t * graph)
     result = av_buffersink_get_frame(graph->output, graph->frame);
     if (result >= 0)
     {
-        return hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
+        hb_buffer_t * buf;
+        buf = hb_avframe_to_video_buffer(graph->frame, graph->out_time_base);
+        av_frame_unref(graph->frame);
+        return buf;
     }
 
     return NULL;
