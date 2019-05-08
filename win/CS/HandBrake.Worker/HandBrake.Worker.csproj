@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj">
-      <Project>{087a2ba8-bac2-4577-a46f-07ff9d420016}</Project>
+      <Project>{21bd6180-2f40-44c7-803d-65aba245447e}</Project>
       <Name>HandBrake.Interop</Name>
     </ProjectReference>
   </ItemGroup>
