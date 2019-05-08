@@ -63,14 +63,5 @@ namespace HandBrake.Interop.Interop.Model
                 return this.EnglishName;
             }
         }
-
-        /// <summary>
-        /// Gets the string representation of the language.
-        /// </summary>
-        /// <returns>The string representation of the language.</returns>
-        public override string ToString()
-        {
-            return this.Display;
-        }
     }
 }

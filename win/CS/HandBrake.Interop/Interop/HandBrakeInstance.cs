@@ -95,6 +95,16 @@ namespace HandBrake.Interop.Interop
         public int FeatureTitle { get; private set; }
 
         /// <summary>
+        /// Gets the HandBrake version string.
+        /// </summary>
+        public string Version => Marshal.PtrToStringAnsi(HBFunctions.hb_get_version(this.Handle));
+
+        /// <summary>
+        /// Gets the HandBrake build number.
+        /// </summary>
+        public int Build => HBFunctions.hb_get_build(this.Handle);
+
+        /// <summary>
         /// Initializes this instance.
         /// </summary>
         /// <param name="verbosity">

@@ -46,6 +46,16 @@ namespace HandBrake.Interop.Interop.Interfaces
         /// </summary>
         JsonScanObject Titles { get; }
 
+        /// <summary>
+        /// Gets the HandBrake version string.
+        /// </summary>
+        string Version { get; }
+
+        /// <summary>
+        /// Gets the HandBrake build number.
+        /// </summary>
+        int Build { get; }
+
         #endregion
 
         #region Public Methods
