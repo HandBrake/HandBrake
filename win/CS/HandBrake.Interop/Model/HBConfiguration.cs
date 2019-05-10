@@ -9,11 +9,12 @@
 
 namespace HandBrake.Interop.Model
 {
-    /// <summary>
-    /// HandBrakes configuration options
-    /// </summary>
     public class HBConfiguration
     {
+        public HBConfiguration()
+        {
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether is dvd nav disabled.
         /// </summary>

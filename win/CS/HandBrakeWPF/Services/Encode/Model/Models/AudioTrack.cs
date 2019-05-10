@@ -27,9 +27,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
     using Newtonsoft.Json;
 
-    /// <summary>
-    /// Model of a HandBrake Audio Track and it's associated behaviours.
-    /// </summary>
+    [JsonObject(MemberSerialization.OptOut)]
     public class AudioTrack : PropertyChangedBase
     {
         private int bitrate;

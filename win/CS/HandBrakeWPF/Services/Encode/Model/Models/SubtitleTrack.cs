@@ -17,9 +17,9 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
     using HandBrakeWPF.Services.Scan.Model;
 
-    /// <summary>
-    /// Subtitle Information
-    /// </summary>
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptOut)]
     public class SubtitleTrack : PropertyChangedBase
     {
         #region Constants and Fields

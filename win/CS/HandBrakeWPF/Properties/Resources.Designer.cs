@@ -3814,6 +3814,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?.
+        /// </summary>
+        public static string Queue_RecoverQueueQuestionPlural {
+            get {
+                return ResourceManager.GetString("Queue_RecoverQueueQuestionPlural", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?.
+        /// </summary>
+        public static string Queue_RecoverQueueQuestionSingular {
+            get {
+                return ResourceManager.GetString("Queue_RecoverQueueQuestionSingular", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Queue Recovery Possible.
+        /// </summary>
+        public static string Queue_RecoveryPossible {
+            get {
+                return ResourceManager.GetString("Queue_RecoveryPossible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to reset job status as it is not in an Error or Completed state.
         /// </summary>
         public static string Queue_UnableToResetJob {

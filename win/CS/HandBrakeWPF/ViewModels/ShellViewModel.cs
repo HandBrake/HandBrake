@@ -18,7 +18,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.ViewModels.Interfaces;
 
-    using IQueueProcessor = HandBrakeWPF.Services.Queue.Interfaces.IQueueProcessor;
+    using IQueueService = HandBrakeWPF.Services.Queue.Interfaces.IQueueService;
 
     /// <summary>
     /// The Shell View Model
@@ -189,7 +189,7 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         public bool CanClose()
         {
-            IQueueProcessor processor = IoC.Get<IQueueProcessor>();
+            IQueueService processor = IoC.Get<IQueueService>();
             if (processor != null && processor.EncodeService.IsEncoding)
             {
                 MessageBoxResult result =

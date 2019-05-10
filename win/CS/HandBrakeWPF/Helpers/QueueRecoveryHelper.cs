@@ -16,7 +16,6 @@ namespace HandBrakeWPF.Helpers
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Windows;
-    using System.Xml.Serialization;
 
     using HandBrake.Interop.Utilities;
 
@@ -24,13 +23,14 @@ namespace HandBrakeWPF.Helpers
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
 
-    using IQueueProcessor = HandBrakeWPF.Services.Queue.Interfaces.IQueueProcessor;
+    using Newtonsoft.Json;
 
-    /// <summary>
-    /// Queue Recovery Helper
-    /// </summary>
+    using IQueueService = HandBrakeWPF.Services.Queue.Interfaces.IQueueService;
+
     public class QueueRecoveryHelper
     {
+        public static string QueueFileName = "hb_queue";
+
         /// <summary>
         /// Check if the queue recovery file contains records.
         /// If it does, it means the last queue did not complete before HandBrake closed.
@@ -48,7 +48,7 @@ namespace HandBrakeWPF.Helpers
             {
                 string tempPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
                 DirectoryInfo info = new DirectoryInfo(tempPath);
-                IEnumerable<FileInfo> foundFiles = info.GetFiles("*.xml").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+                IEnumerable<FileInfo> foundFiles = info.GetFiles("*.json").Where(f => f.Name.StartsWith(QueueFileName));
                 var queueFiles = GetFilesExcludingActiveProcesses(foundFiles, filterQueueFiles);
 
                 if (!queueFiles.Any())
@@ -59,14 +59,14 @@ namespace HandBrakeWPF.Helpers
                 List<string> removeFiles = new List<string>();
                 List<string> acceptedFiles = new List<string>();
 
-                XmlSerializer ser = new XmlSerializer(typeof(List<QueueTask>));
+
                 foreach (string file in queueFiles)
                 {
                     try
                     {
-                        using (FileStream strm = new FileStream(file, FileMode.Open, FileAccess.Read))
+                        using (StreamReader stream = new StreamReader(file))
                         {
-                            List<QueueTask> list = ser.Deserialize(strm) as List<QueueTask>;
+                            List<QueueTask> list = list = JsonConvert.DeserializeObject<List<QueueTask>>(stream.ReadToEnd());
                             if (list != null && list.Count == 0)
                             {
                                 removeFiles.Add(file);
@@ -115,10 +115,13 @@ namespace HandBrakeWPF.Helpers
         /// <param name="silentRecovery">
         /// The silent Recovery.
         /// </param>
+        /// <param name="queueFilter">
+        /// The queue Filter.
+        /// </param>
         /// <returns>
         /// The <see cref="bool"/>.
         /// </returns>
-        public static bool RecoverQueue(IQueueProcessor encodeQueue, IErrorService errorService, bool silentRecovery, List<string> queueFilter)
+        public static bool RecoverQueue(IQueueService encodeQueue, IErrorService errorService, bool silentRecovery, List<string> queueFilter)
         {
             string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
             List<string> queueFiles = CheckQueueRecovery(queueFilter);
@@ -129,8 +132,8 @@ namespace HandBrakeWPF.Helpers
                 {
                     result =
                         errorService.ShowMessageBox(
-                            "HandBrake has detected unfinished items on the queue from the last time the application was launched. Would you like to recover these?",
-                            "Queue Recovery Possible",
+                            Properties.Resources.Queue_RecoverQueueQuestionSingular,
+                            Properties.Resources.Queue_RecoveryPossible,
                             MessageBoxButton.YesNo,
                             MessageBoxImage.Question);
                 }
@@ -138,8 +141,8 @@ namespace HandBrakeWPF.Helpers
                 {
                     result =
                         errorService.ShowMessageBox(
-                            "HandBrake has detected multiple unfinished queue files. These will be from multiple instances of HandBrake running. Would you like to recover all unfinished jobs?",
-                            "Queue Recovery Possible",
+                            Properties.Resources.Queue_RecoverQueueQuestionPlural,
+                            Properties.Resources.Queue_RecoveryPossible,
                             MessageBoxButton.YesNo,
                             MessageBoxImage.Question);
                 }
@@ -173,7 +176,7 @@ namespace HandBrakeWPF.Helpers
         {
             string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
             DirectoryInfo info = new DirectoryInfo(appDataPath);
-            IEnumerable<FileInfo> foundFiles = info.GetFiles("*.archive").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+            IEnumerable<FileInfo> foundFiles = info.GetFiles("*.archive").Where(f => f.Name.StartsWith(QueueFileName));
 
             return foundFiles.Any();
         }
@@ -185,7 +188,7 @@ namespace HandBrakeWPF.Helpers
             // Remove any files where we have an active instnace.
             foreach (FileInfo file in foundFiles)
             {
-                string fileProcessId = file.Name.Replace("hb_queue_recovery", string.Empty).Replace(".xml", string.Empty);
+                string fileProcessId = file.Name.Replace(QueueFileName, string.Empty).Replace(".json", string.Empty);
                 int processId;
                 if (!string.IsNullOrEmpty(fileProcessId) && int.TryParse(fileProcessId, out processId))
                 {
@@ -216,7 +219,7 @@ namespace HandBrakeWPF.Helpers
             // Cleanup old/unused queue files for now.
             foreach (string file in removeFiles)
             {
-                Match m = Regex.Match(file, @"([0-9]+).xml");
+                Match m = Regex.Match(file, @"([0-9]+).json");
                 if (m.Success)
                 {
                     int processId = int.Parse(m.Groups[1].ToString());
@@ -249,13 +252,13 @@ namespace HandBrakeWPF.Helpers
         {
             string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
             DirectoryInfo info = new DirectoryInfo(appDataPath);
-            IEnumerable<FileInfo> foundFiles = info.GetFiles("*.archive").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+            IEnumerable<FileInfo> foundFiles = info.GetFiles("*.archive").Where(f => f.Name.StartsWith(QueueFileName));
 
-            DateTime LastWeek = DateTime.Now.AddDays(-7);
+            DateTime lastWeek = DateTime.Now.AddDays(-7);
 
             foreach (FileInfo file in foundFiles)
             {
-                if (file.CreationTime < LastWeek)
+                if (file.CreationTime < lastWeek)
                 {
                     string fullPath = Path.Combine(appDataPath, file.Name);
                     File.Delete(fullPath);
@@ -267,7 +270,7 @@ namespace HandBrakeWPF.Helpers
         {
             string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
             DirectoryInfo info = new DirectoryInfo(appDataPath);
-            IEnumerable<FileInfo> foundFiles = info.GetFiles("*.archive").Where(f => f.Name.StartsWith("hb_queue_recovery"));
+            IEnumerable<FileInfo> foundFiles = info.GetFiles("*.archive").Where(f => f.Name.StartsWith(QueueFileName));
             foreach (FileInfo file in foundFiles)
             {
                 string fullPath = Path.Combine(appDataPath, file.Name);

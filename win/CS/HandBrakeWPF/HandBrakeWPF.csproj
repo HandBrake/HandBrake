@@ -223,7 +223,7 @@
     <Compile Include="Services\Presets\Factories\JsonPresetFactory.cs" />
     <Compile Include="Services\Presets\Interfaces\IPresetObject.cs" />
     <Compile Include="Services\Presets\Model\PresetDisplayCategory.cs" />
-    <Compile Include="Services\Queue\Interfaces\IQueueProcessor.cs" />
+    <Compile Include="Services\Queue\Interfaces\IQueueService.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Services\Presets\Model\Preset.cs" />
     <Compile Include="Model\ScanMode.cs" />
@@ -233,7 +233,7 @@
     <Compile Include="Services\Presets\PresetService.cs" />
     <Compile Include="Services\Queue\Model\QueueStats.cs" />
     <Compile Include="Services\Queue\Model\QueueTaskContainer.cs" />
-    <Compile Include="Services\Queue\QueueProcessor.cs" />
+    <Compile Include="Services\Queue\QueueService.cs" />
     <Compile Include="Services\Queue\Model\QueueItemStatus.cs" />
     <Compile Include="Services\Queue\Model\QueueTask.cs" />
     <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />

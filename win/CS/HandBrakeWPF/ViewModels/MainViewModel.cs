@@ -70,7 +70,7 @@ namespace HandBrakeWPF.ViewModels
     {
         #region Private Variables and Services
 
-        private readonly IQueueProcessor queueProcessor;
+        private readonly IQueueService queueProcessor;
         private readonly IPresetService presetService;
         private readonly IErrorService errorService;
         private readonly IUpdateService updateService;
@@ -126,7 +126,7 @@ namespace HandBrakeWPF.ViewModels
             this.notifyIconService = notifyIconService;
             this.QueueViewModel = queueViewModel;
             this.userSettingService = userSettingService;
-            this.queueProcessor = IoC.Get<IQueueProcessor>();
+            this.queueProcessor = IoC.Get<IQueueService>();
 
             this.SummaryViewModel = summaryViewModel;
             this.PictureSettingsViewModel = pictureSettingsViewModel;

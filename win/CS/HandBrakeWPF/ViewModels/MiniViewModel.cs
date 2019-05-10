@@ -25,7 +25,7 @@ namespace HandBrakeWPF.ViewModels
     public class MiniViewModel : ViewModelBase, IMiniViewModel
     {
         private readonly IEncode encodeService;
-        private readonly IQueueProcessor queueProcessor;
+        private readonly IQueueService queueProcessor;
         private string queueStatus;
         private string progress;
         private string task;
@@ -40,7 +40,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="queueProcessor">
         /// The queue Processor.
         /// </param>
-        public MiniViewModel(IEncode encodeService, IQueueProcessor queueProcessor)
+        public MiniViewModel(IEncode encodeService, IQueueService queueProcessor)
         {
             this.encodeService = encodeService;
             this.queueProcessor = queueProcessor;

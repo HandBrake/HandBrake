@@ -44,7 +44,7 @@ namespace HandBrakeWPF.ViewModels
 
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
-        private readonly IQueueProcessor queueProcessor;
+        private readonly IQueueService queueProcessor;
         private string jobStatus;
         private string jobsPending;
         private string whenDoneAction;
@@ -70,7 +70,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="errorService">
         /// The Error Service 
         /// </param>
-        public QueueViewModel(IUserSettingService userSettingService, IQueueProcessor queueProcessor, IErrorService errorService)
+        public QueueViewModel(IUserSettingService userSettingService, IQueueService queueProcessor, IErrorService errorService)
         {
             this.userSettingService = userSettingService;
             this.queueProcessor = queueProcessor;

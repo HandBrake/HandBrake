@@ -18,6 +18,8 @@ namespace HandBrakeWPF.Services.Encode.Model
     using HandBrakeWPF.Model.Filters;
     using HandBrakeWPF.Services.Encode.Model.Models;
 
+    using Newtonsoft.Json;
+
     using AllowedPassthru = Models.AllowedPassthru;
     using AudioTrack = Models.AudioTrack;
     using ChapterMarker = Models.ChapterMarker;

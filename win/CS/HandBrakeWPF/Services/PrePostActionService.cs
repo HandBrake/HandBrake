@@ -36,7 +36,7 @@ namespace HandBrakeWPF.Services
     /// </summary>
     public class PrePostActionService : IPrePostActionService
     {
-        private readonly IQueueProcessor queueProcessor;
+        private readonly IQueueService queueProcessor;
         private readonly IUserSettingService userSettingService;
         private readonly IWindowManager windowManager;
         private readonly IScan scanService;
@@ -53,7 +53,7 @@ namespace HandBrakeWPF.Services
         /// <param name="windowManager">
         /// The window Manager.
         /// </param>
-        public PrePostActionService(IQueueProcessor queueProcessor, IUserSettingService userSettingService, IWindowManager windowManager, IScan scanService)
+        public PrePostActionService(IQueueService queueProcessor, IUserSettingService userSettingService, IWindowManager windowManager, IScan scanService)
         {
             this.queueProcessor = queueProcessor;
             this.userSettingService = userSettingService;

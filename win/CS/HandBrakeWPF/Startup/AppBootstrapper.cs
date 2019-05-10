@@ -60,7 +60,7 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<IPrePostActionService, PrePostActionService>();
             this.container.Singleton<IUserSettingService, UserSettingService>();
             this.container.Singleton<IPresetService, PresetService>();
-            this.container.Singleton<IQueueProcessor, QueueProcessor>();
+            this.container.Singleton<IQueueService, QueueService>();
 
             // Commands
 

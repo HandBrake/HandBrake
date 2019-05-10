@@ -13,6 +13,9 @@ namespace HandBrakeWPF.Services.Queue.Model
 
     using Caliburn.Micro;
 
+    using Newtonsoft.Json;
+
+    [JsonObject(MemberSerialization.OptOut)]
     public class QueueStats : PropertyChangedBase
     {
         private DateTime startTime;
