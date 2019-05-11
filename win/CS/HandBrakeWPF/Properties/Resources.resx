@@ -573,11 +573,6 @@ Please make sure VLC is installed and the directory specified in HandBrake's opt
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>Archived File:</value>
   </data>
-  <data name="PresetService_PresetsOutOfDate" xml:space="preserve">
-    <value>HandBrake has detected your presets file is from an older version.
-It will try and load the file anyway.
-If it fails, it will archive off the old file and create a new one.</value>
-  </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
     <value>Unable to load presets.</value>
   </data>

@@ -21,6 +21,7 @@ namespace HandBrakeWPF.Services.Presets
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Json.Presets;
+    using HandBrake.Interop.Interop.Model;
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
 
@@ -174,7 +175,7 @@ namespace HandBrakeWPF.Services.Presets
                 PresetTransportContainer container = null;
                 try
                 {
-                    container = HandBrakePresetService.GetPresetFromFile(filename);
+                    container = HandBrakePresetService.GetPresetsFromFile(filename);
                 }
                 catch (Exception exc)
                 {
@@ -681,16 +682,13 @@ namespace HandBrakeWPF.Services.Presets
 
                 // Otherwise, we already have a file, so lets try load it.
                 PresetTransportContainer container = null;
-                using (StreamReader reader = new StreamReader(this.presetFile))
+                try
                 {
-                    try
-                    {
-                        container = JsonConvert.DeserializeObject<PresetTransportContainer>(reader.ReadToEnd());
-                    }
-                    catch (Exception exc)
-                    {
-                        this.ServiceLogMessage("Corrupted Presets File Detected: " + Environment.NewLine + exc);
-                    }
+                    container = HandBrakePresetService.GetPresetsFromFile(this.presetFile);
+                }
+                catch (Exception exc)
+                {
+                    this.ServiceLogMessage("Corrupted Presets File Detected: " + Environment.NewLine + exc);
                 }
 
                 // Sanity Check. Did the container deserialise.
@@ -709,23 +707,6 @@ namespace HandBrakeWPF.Services.Presets
                     return; // Update built-in presets stores the presets locally, so just return.
                 }
 
-                // Version Check
-                // If we have old presets, or the container wasn't parseable, or we have a version mismatch, backup the user preset file 
-                // incase something goes wrong and reset built-in presets, then re-save.
-                bool ignoreBuildIn = false;
-                if (container.VersionMajor != Constants.PresetVersionMajor || container.VersionMinor != Constants.PresetVersionMinor || container.VersionMicro != Constants.PresetVersionMicro)
-                {
-                    string fileName = this.ArchivePresetFile(this.presetFile);
-                    this.errorService.ShowMessageBox(
-                        Resources.PresetService_PresetsOutOfDate
-                        + Environment.NewLine + Environment.NewLine + Resources.PresetService_ArchiveFile + fileName,
-                        Resources.PresetService_UnableToLoad,
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
-                    this.UpdateBuiltInPresets(); // Update built-in presets stores the presets locally, so just return.
-                    ignoreBuildIn = true;
-                }
-
                 // Force Upgrade of presets
                 if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.ForcePresetReset, typeof(int)) < ForcePresetReset)
                 {
@@ -742,7 +723,7 @@ namespace HandBrakeWPF.Services.Presets
                     return;
                 }
 
-                this.ProcessPresetList(container, ignoreBuildIn);
+                this.ProcessPresetList(container);
             }
             catch (Exception ex)
             {
@@ -752,7 +733,7 @@ namespace HandBrakeWPF.Services.Presets
             }
         }
 
-        private void ProcessPresetList(PresetTransportContainer container, bool ignoreOldBuiltIn)
+        private void ProcessPresetList(PresetTransportContainer container)
         {
             // The presets file loaded was OK, so process it.
             foreach (var item in container.PresetList)
@@ -766,11 +747,6 @@ namespace HandBrakeWPF.Services.Presets
                     foreach (HBPreset hbpreset in category.ChildrenArray)
                     {
                         Preset preset = JsonPresetFactory.ImportPreset(hbpreset);
-
-                        if (preset.IsBuildIn && ignoreOldBuiltIn)
-                        {
-                            continue;
-                        }
 
                         // Migration
                         preset.Category = category.PresetName == "User Presets" ? UserPresetCatgoryName : category.PresetName;
@@ -834,11 +810,9 @@ namespace HandBrakeWPF.Services.Presets
 
                 // Wrap the categories in a container. 
                 JsonSerializerSettings settings = new JsonSerializerSettings { MissingMemberHandling = MissingMemberHandling.Ignore };
-                PresetTransportContainer container = new PresetTransportContainer(
-                                                             Constants.PresetVersionMajor,
-                                                             Constants.PresetVersionMinor,
-                                                             Constants.PresetVersionMicro)
-                                                         { PresetList = new List<object>() };
+
+                PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
+                PresetTransportContainer container = new PresetTransportContainer(presetVersion.Major, presetVersion.Minor, presetVersion.Micro) { PresetList = new List<object>() };
                 container.PresetList.AddRange(presetCategories.Values);
                 container.PresetList.AddRange(uncategorisedPresets);
 

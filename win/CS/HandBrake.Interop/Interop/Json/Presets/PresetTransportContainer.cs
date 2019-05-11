@@ -37,7 +37,7 @@ namespace HandBrake.Interop.Interop.Json.Presets
         /// <param name="versionMicro">
         /// The version micro.
         /// </param>
-        public PresetTransportContainer(string versionMajor, string versionMinor, string versionMicro)
+        public PresetTransportContainer(int versionMajor, int versionMinor, int versionMicro)
         {
             this.VersionMajor = versionMajor;
             this.VersionMicro = versionMicro;
@@ -52,16 +52,16 @@ namespace HandBrake.Interop.Interop.Json.Presets
         /// <summary>
         /// Gets or sets the version major.
         /// </summary>
-        public string VersionMajor { get; set; }
+        public int VersionMajor { get; set; }
 
         /// <summary>
         /// Gets or sets the version micro.
         /// </summary>
-        public string VersionMicro { get; set; }
+        public int VersionMicro { get; set; }
 
         /// <summary>
         /// Gets or sets the version minor.
         /// </summary>
-        public string VersionMinor { get; set; }
+        public int VersionMinor { get; set; }
     }
 }

@@ -3738,17 +3738,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to HandBrake has detected your presets file is from an older version.
-        ///It will try and load the file anyway.
-        ///If it fails, it will archive off the old file and create a new one..
-        /// </summary>
-        public static string PresetService_PresetsOutOfDate {
-            get {
-                return ResourceManager.GetString("PresetService_PresetsOutOfDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Unable to load presets..
         /// </summary>
         public static string PresetService_UnableToLoad {

@@ -483,10 +483,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
         /// </returns>
         public static PresetTransportContainer ExportPreset(Preset export, HBConfiguration config)
         {
-            PresetTransportContainer container = new PresetTransportContainer();
-            container.VersionMajor = Constants.PresetVersionMajor;
-            container.VersionMinor = Constants.PresetVersionMinor;
-            container.VersionMicro = Constants.PresetVersionMicro;
+            PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
+            PresetTransportContainer container = new PresetTransportContainer(presetVersion.Major, presetVersion.Minor, presetVersion.Micro);
 
             container.PresetList = new List<object> { CreateHbPreset(export, config) };
 
@@ -501,10 +499,8 @@ namespace HandBrakeWPF.Services.Presets.Factories
         /// <returns>A list of JSON object presets.</returns>
         public static PresetTransportContainer ExportPresets(IEnumerable<Preset> exportList, HBConfiguration config)
         {
-            PresetTransportContainer container = new PresetTransportContainer();
-            container.VersionMajor = Constants.PresetVersionMajor;
-            container.VersionMinor = Constants.PresetVersionMinor;
-            container.VersionMicro = Constants.PresetVersionMicro;
+            PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
+            PresetTransportContainer container = new PresetTransportContainer(presetVersion.Major, presetVersion.Minor, presetVersion.Micro);
 
             List<HBPreset> presets = exportList.Select(item => CreateHbPreset(item, config)).ToList();
 

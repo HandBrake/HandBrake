@@ -17,6 +17,7 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.HbLib;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Json.Presets;
+    using HandBrake.Interop.Interop.Model;
 
     using Newtonsoft.Json;
 
@@ -50,7 +51,7 @@ namespace HandBrake.Interop.Interop
         /// <returns>
         /// The <see cref="PresetCategory"/>.
         /// </returns>
-        public static PresetTransportContainer GetPresetFromFile(string filename)
+        public static PresetTransportContainer GetPresetsFromFile(string filename)
         {
             IntPtr presetStringPointer = HBFunctions.hb_presets_read_file_json(InteropUtilities.ToUtf8PtrFromString(filename));
             string presetJson = Marshal.PtrToStringAnsi(presetStringPointer);
@@ -87,6 +88,25 @@ namespace HandBrake.Interop.Interop
             {
                 writer.Write(preset);
             }
+        }
+
+        public static PresetVersion GetCurrentPresetVersion()
+        {
+            IntPtr major = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(int)));
+            IntPtr minor = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(int)));
+            IntPtr micro = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(int)));
+
+            HBFunctions.hb_presets_current_version(major, minor, micro);
+
+            int majorVersion = Marshal.ReadInt32(major);
+            int minorVersion = Marshal.ReadInt32(minor);
+            int microVersion = Marshal.ReadInt32(micro);
+
+            Marshal.FreeHGlobal(major);
+            Marshal.FreeHGlobal(minor);
+            Marshal.FreeHGlobal(micro);
+
+            return new PresetVersion(majorVersion, minorVersion, microVersion);
         }
     }
 }

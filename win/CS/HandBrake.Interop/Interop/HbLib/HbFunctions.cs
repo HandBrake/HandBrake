@@ -469,5 +469,8 @@ namespace HandBrake.Interop.Interop.HbLib
         // 	char       * hb_presets_read_file_json(const char *filename);
         [DllImport("hb", EntryPoint = "hb_presets_read_file_json", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr hb_presets_read_file_json(IntPtr filename);
+
+        [DllImport("hb", EntryPoint = "hb_presets_current_version", CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr hb_presets_current_version(IntPtr major, IntPtr minor, IntPtr micro);
     }
 }

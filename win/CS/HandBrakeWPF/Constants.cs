@@ -37,11 +37,6 @@ namespace HandBrakeWPF
         public const string SourcePath = "{source_path}";
         public const string SourceFolderName = "{source_folder_name}";
 
-        /* Preset Versions */
-        public const string PresetVersionMajor = "35";
-        public const string PresetVersionMinor = "0";
-        public const string PresetVersionMicro = "0";
-
         public const string FileScanMru = "FileScanMru";
         public const string FileSaveMru = "FileSaveMru";
     }
