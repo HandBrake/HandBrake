@@ -46,6 +46,10 @@ namespace HandBrakeWPF.Helpers
         {
             try
             {
+                // Check for any Corrupted Backup Files and try recover them
+                RecoverFromBackupFailure();
+
+                // Now check for all available recovery files. (There may be more than 1 for multi-instance support)
                 string tempPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
                 DirectoryInfo info = new DirectoryInfo(tempPath);
                 IEnumerable<FileInfo> foundFiles = info.GetFiles("*.json").Where(f => f.Name.StartsWith(QueueFileName));
@@ -179,6 +183,24 @@ namespace HandBrakeWPF.Helpers
             IEnumerable<FileInfo> foundFiles = info.GetFiles("*.archive").Where(f => f.Name.StartsWith(QueueFileName));
 
             return foundFiles.Any();
+        }
+
+        private static void RecoverFromBackupFailure()
+        {
+            string appDataPath = DirectoryUtilities.GetUserStoragePath(VersionHelper.IsNightly());
+            DirectoryInfo info = new DirectoryInfo(appDataPath);
+            IEnumerable<FileInfo> foundFiles = info.GetFiles("*.last");
+
+            foreach (FileInfo file in foundFiles)
+            {
+                string corruptedFile = file.FullName.Replace(".last", string.Empty);
+                if (File.Exists(corruptedFile))
+                {
+                    File.Delete(corruptedFile);
+                }
+
+                File.Move(file.FullName, corruptedFile);
+            }
         }
 
         private static List<string> GetFilesExcludingActiveProcesses(IEnumerable<FileInfo> foundFiles, List<string> filterQueueFiles)

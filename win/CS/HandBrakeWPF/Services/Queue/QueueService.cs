@@ -42,9 +42,6 @@ namespace HandBrakeWPF.Services.Queue
     using QueueCompletedEventArgs = HandBrakeWPF.EventArgs.QueueCompletedEventArgs;
     using QueueProgressEventArgs = HandBrakeWPF.EventArgs.QueueProgressEventArgs;
 
-    /// <summary>
-    /// The HandBrake Queue
-    /// </summary>
     public class QueueService : Interfaces.IQueueService
     {
         #region Constants and Fields
@@ -218,11 +215,22 @@ namespace HandBrakeWPF.Services.Queue
                                   ? exportPath
                                   : Path.Combine(appDataPath, string.Format(this.queueFile, string.Empty));
 
+            // Make a copy of the file before we replace it. This way, if we crash we can recover.
+            if (File.Exists(tempPath))
+            {
+                File.Copy(tempPath, tempPath + ".last");
+            }
+
             using (StreamWriter writer = new StreamWriter(tempPath))
             {
                 List<QueueTask> tasks = this.queue.Where(item => item.Status != QueueItemStatus.Completed).ToList();
                 string queueJson = JsonConvert.SerializeObject(tasks, Formatting.Indented);
                 writer.Write(queueJson);
+            }
+
+            if (File.Exists(tempPath + ".last"))
+            {
+                File.Delete(tempPath + ".last");
             }
 
             watch.Stop();
@@ -679,6 +687,7 @@ namespace HandBrakeWPF.Services.Queue
                     this.BackupQueue(string.Empty);
                     return;
                 }
+
                 this.EncodeService.Start(job.Task, job.Configuration);
                 this.BackupQueue(string.Empty);
             }
