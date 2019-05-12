@@ -254,7 +254,7 @@ namespace HandBrakeWPF.ViewModels
         {
             OpenFileDialog dialog = new OpenFileDialog
             {
-                Filter = "Subtitle files (*.srt, *.ssa)|*.srt;*.ssa",
+                Filter = "Subtitle files (*.srt, *.ssa, *.ass)|*.srt;*.ssa;*.ass",
                 CheckFileExists = true,
                 Multiselect = true
             };
