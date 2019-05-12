@@ -1991,4 +1991,9 @@ Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitra
   <data name="Queue_RecoveryPossible" xml:space="preserve">
     <value>Queue Recovery Possible</value>
   </data>
+  <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
+    <value>Your presets file contained built-in presets. The import function does not support importing these. Please use 'Presets Menu -&gt; Reset Built In-Presets' to restore the standard presets.
+
+Where supported, any user presets will have been imported.</value>
+  </data>
 </root>

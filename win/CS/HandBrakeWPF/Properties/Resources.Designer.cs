@@ -3738,6 +3738,17 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your presets file contained built-in presets. The import function does not support importing these. Please use &apos;Presets Menu -&gt; Reset Built In-Presets&apos; to restore the standard presets.
+        ///
+        ///Where supported, any user presets will have been imported..
+        /// </summary>
+        public static string PresetService_ImportingBuiltInWarning {
+            get {
+                return ResourceManager.GetString("PresetService_ImportingBuiltInWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unable to load presets..
         /// </summary>
         public static string PresetService_UnableToLoad {

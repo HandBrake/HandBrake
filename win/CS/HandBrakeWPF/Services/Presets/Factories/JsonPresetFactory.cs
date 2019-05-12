@@ -103,8 +103,24 @@ namespace HandBrakeWPF.Services.Presets.Factories
             /* Filter Settings */
             preset.Task.Grayscale = importedPreset.VideoGrayScale;
 
-            preset.Task.DeblockPreset = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockPreset));
-            preset.Task.DeblockTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockTune));
+            if (!string.IsNullOrEmpty(importedPreset.PictureDeblockPreset))
+            {
+                preset.Task.DeblockPreset = new FilterPreset(HandBrakeFilterHelpers.GetFilterPresets((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockPreset));
+            }
+            else
+            {
+                preset.Task.DeblockPreset = new FilterPreset("Off", "off");
+            }
+
+            if (!string.IsNullOrEmpty(importedPreset.PictureDeblockTune))
+            {
+                preset.Task.DeblockTune = new FilterTune(HandBrakeFilterHelpers.GetFilterTunes((int)hb_filter_ids.HB_FILTER_DEBLOCK).FirstOrDefault(s => s.ShortName == importedPreset.PictureDeblockTune));
+            }
+            else
+            {
+                preset.Task.DeblockTune = new FilterTune("Off", "off");
+            }
+           
             preset.Task.CustomDeblock = importedPreset.PictureDeblockCustom;
 
             if (importedPreset.PictureSharpenFilter != null)

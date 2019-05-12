@@ -192,6 +192,7 @@ namespace HandBrakeWPF.Services.Presets
                 // HBPreset Handling
                 if (container.PresetList != null)
                 {
+                    bool containsBuildInPreset = false;
                     foreach (var objectPreset in container.PresetList)
                     {
                         PresetCategory category = JsonConvert.DeserializeObject<PresetCategory>(objectPreset.ToString());
@@ -200,9 +201,13 @@ namespace HandBrakeWPF.Services.Presets
                             foreach (HBPreset hbPreset in category.ChildrenArray)
                             {
                                 Preset preset = this.ConvertHbPreset(hbPreset);
-                                if (preset != null)
+                                if (preset != null && !preset.IsBuildIn)
                                 {
                                     this.AddOrUpdateImportedPreset(preset);
+                                }
+                                else
+                                {
+                                    containsBuildInPreset = true;
                                 }
                             }
                         }
@@ -212,12 +217,25 @@ namespace HandBrakeWPF.Services.Presets
                             if (hbPreset != null)
                             {
                                 Preset preset = this.ConvertHbPreset(hbPreset);
-                                if (preset != null)
+                                if (preset != null && !preset.IsBuildIn)
                                 {
                                     this.AddOrUpdateImportedPreset(preset);
                                 }
+                                else
+                                {
+                                    containsBuildInPreset = true;
+                                }
                             }
                         }
+                    }
+
+                    if (containsBuildInPreset)
+                    {
+                        this.errorService.ShowMessageBox(
+                            Properties.Resources.PresetService_ImportingBuiltInWarning,
+                            Properties.Resources.Warning,
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning);
                     }
                 }
             }

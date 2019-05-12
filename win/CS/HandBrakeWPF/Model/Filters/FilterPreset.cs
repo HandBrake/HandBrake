@@ -25,8 +25,8 @@ namespace HandBrakeWPF.Model.Filters
 
         public FilterPreset(HBPresetTune presetTune)
         {
-            this.DisplayName = presetTune.Name;
-            this.Key = presetTune.ShortName;
+            this.DisplayName = presetTune?.Name;
+            this.Key = presetTune?.ShortName;
         }
 
         public string DisplayName { get; set; }
