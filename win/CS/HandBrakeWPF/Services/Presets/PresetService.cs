@@ -619,62 +619,47 @@ namespace HandBrakeWPF.Services.Presets
         }
 
         /// <summary>
-        /// Recover from a corrupted preset file
-        /// Add .old to the current filename, and delete the current file.
+        /// Archive the presets file without deleting it.
         /// </summary>
         /// <param name="file">
-        /// The broken presets file.
+        /// The filename to archive
+        /// </param>
+        /// <param name="delete">
+        /// True will delete the current presets file.
         /// </param>
         /// <returns>
-        /// The <see cref="string"/>.
+        /// The archived filename
         /// </returns>
-        private string RecoverFromCorruptedPresetFile(string file)
+        private string ArchivePresetFile(string file, bool delete)
         {
             try
             {
                 // Recover from Error.
-                string disabledFile = string.Format("{0}.{1}", file, GeneralUtilities.ProcessId);
+                PresetVersion version = HandBrakePresetService.GetCurrentPresetVersion();
+                string archiveFile = string.Format("{0}.{1}_{2}_{3}.archive", file, version.Major, version.Minor, version.Micro);
                 if (File.Exists(file))
                 {
-                    File.Move(file, disabledFile);
-                    if (File.Exists(file))
+                    int counter = 0;
+                    while (File.Exists(archiveFile))
+                    {
+                        counter = counter + 1;
+                        string appendedNumber = string.Format("({0})", counter);
+                        archiveFile = string.Format("{0}.{1}_{2}_{3} {4}.archive", file, version.Major, version.Minor, version.Micro, appendedNumber);
+                    }
+
+                    File.Copy(file, archiveFile);
+
+                    if (delete)
                     {
                         File.Delete(file);
                     }
                 }
 
-                return disabledFile;
+                return archiveFile;
             }
             catch (IOException e)
             {
                 this.ServiceLogMessage(e.ToString());
-                // Give up
-            }
-
-            return "Sorry, the archiving failed.";
-        }
-
-        /// <summary>
-        /// Archive the presets file without deleting it.
-        /// </summary>
-        /// <param name="file">The filename to archive</param>
-        /// <returns>The archived filename</returns>
-        private string ArchivePresetFile(string file)
-        {
-            try
-            {
-                // Recover from Error.
-                string archiveFile = string.Format("{0}.{1}", file, GeneralUtilities.ProcessId);
-                if (File.Exists(file))
-                {
-                    File.Copy(file, archiveFile);
-                }
-
-                return archiveFile;
-            }
-            catch (IOException)
-            {
-                // Give up
             }
 
             return "Sorry, the archiving failed.";
@@ -713,7 +698,7 @@ namespace HandBrakeWPF.Services.Presets
                 if (container?.PresetList == null)
                 {
                     this.ServiceLogMessage("Attempting Preset Recovery ...");
-                    string filename = this.RecoverFromCorruptedPresetFile(this.presetFile);
+                    string filename = this.ArchivePresetFile(this.presetFile, true);
                     this.errorService.ShowMessageBox(
                         Resources.PresetService_UnableToLoadPresets + filename,
                         Resources.PresetService_UnableToLoad,
@@ -730,7 +715,7 @@ namespace HandBrakeWPF.Services.Presets
                 {
                     this.userSettingService.SetUserSetting(UserSettingConstants.ForcePresetReset, ForcePresetReset);
 
-                    string fileName = this.ArchivePresetFile(this.presetFile);
+                    string fileName = this.ArchivePresetFile(this.presetFile, true);
                     this.errorService.ShowMessageBox(
                         Resources.Presets_PresetForceReset
                         + Environment.NewLine + Environment.NewLine + Resources.PresetService_ArchiveFile + fileName,
@@ -746,7 +731,7 @@ namespace HandBrakeWPF.Services.Presets
             catch (Exception ex)
             {
                 this.ServiceLogMessage(ex.ToString());
-                this.RecoverFromCorruptedPresetFile(this.presetFile);
+                this.ArchivePresetFile(this.presetFile, true);
                 this.UpdateBuiltInPresets();
             }
         }
