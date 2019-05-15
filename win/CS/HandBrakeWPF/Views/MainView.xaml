@@ -22,6 +22,7 @@
         <Converters:PresetsMenuConverter x:Key="presetsMenuConverter"/>
         <Converters:LongToIntConverter x:Key="longToIntConverter" />
         <queue:InlineQueueConverter x:Key="InlineQueueConverter" />
+        <Converters:BooleanConverter x:Key="NotBooleanConverter" />
 
         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Padding" Value="8,2" />
@@ -75,6 +76,11 @@
                 <MenuItem Header="{x:Static Properties:Resources.MainView_FileMenu}">
                     <MenuItem Header="{x:Static Properties:Resources.MainView_SourceOpen}" cal:Message.Attach="[Event Click] = [Action SelectSourceWindow]" InputGestureText="Alt + O" />
                     <Separator />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_StartEncode}" cal:Message.Attach="[Event Click] = [Action StartEncode]" InputGestureText="Ctrl + E"
+                              IsEnabled="{Binding IsEncoding, Converter={StaticResource NotBooleanConverter}, ConverterParameter=true}" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_Stop}" cal:Message.Attach="[Event Click] = [Action StopEncode]" InputGestureText="Ctrl + K"
+                              IsEnabled="{Binding IsEncoding, Converter={StaticResource NotBooleanConverter}, ConverterParameter=false}" />
+                    <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_Exit}" cal:Message.Attach="[Event Click] = [Action ExitApplication]"  InputGestureText="Alt + F4" />
                 </MenuItem>
 
@@ -118,7 +124,7 @@
                     <MenuItem Header="{x:Static Properties:Resources.MainView_ShowQueue}" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]"  InputGestureText="Ctrl + Q" />
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_AddToQueue}" cal:Message.Attach="[Event Click] = [Action AddAllToQueue]"  InputGestureText="Ctrl + A" />
-                    <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" />
+                    <MenuItem Header="{x:Static Properties:Resources.MainView_AddSelection}" cal:Message.Attach="[Event Click] = [Action AddSelectionToQueue]" InputGestureText="Ctrl + Shift + A" />
                     <Separator Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearCompleted}" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
                     <MenuItem Command="{Binding QueueCommand}" CommandParameter="{x:Static menu:QueueCommandParams.ClearAll}" Header="{x:Static Properties:Resources.QueueView_ClearAll}" Visibility="{Binding IsQueueShowingInLine, Converter={StaticResource boolToVisConverter}, ConverterParameter=false}" />
