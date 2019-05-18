@@ -236,8 +236,9 @@ int hb_qsv_context_clean(hb_qsv_context * qsv)
             hb_qsv_pipe_list_clean(&qsv->pipes);
 
         if (qsv->mfx_session) {
-            sts = MFXClose(qsv->mfx_session);
-            HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
+            // Intentionally leave it because the decode session closed first and encoder session hangs
+            //sts = MFXClose(qsv->mfx_session);
+            //HB_QSV_CHECK_RESULT(sts, MFX_ERR_NONE, sts);
             qsv->mfx_session = 0;
         }
     }

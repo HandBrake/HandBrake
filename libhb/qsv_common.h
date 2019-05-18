@@ -19,6 +19,7 @@ int            hb_qsv_available();
 #include "mfx/mfxvideo.h"
 #include "mfx/mfxplugin.h"
 #include "libavcodec/avcodec.h"
+#include "hb_dict.h"
 
 /* Minimum Intel Media SDK version (currently 1.3, for Sandy Bridge support) */
 #define HB_QSV_MINVERSION_MAJOR HB_QSV_MSDK_VERSION_MAJOR
@@ -195,6 +196,55 @@ const char* hb_qsv_impl_get_name(int impl);
 const char* hb_qsv_impl_get_via_name(int impl);
 
 void hb_qsv_force_workarounds(); // for developers only
+
+typedef struct QSVMid {
+    AVBufferRef *hw_frames_ref;
+    mfxHDL handle;
+
+    AVFrame *locked_frame;
+    AVFrame *hw_frame;
+    mfxFrameSurface1 surf;
+} QSVMid;
+
+typedef struct QSVFrame {
+    AVFrame *frame;
+    mfxFrameSurface1 surface;
+    mfxEncodeCtrl enc_ctrl;
+    mfxExtDecodedFrameInfo dec_info;
+    mfxExtBuffer *ext_param;
+
+    int queued;
+    int used;
+
+    struct QSVFrame *next;
+} QSVFrame;
+
+#define HB_POOL_SURFACE_SIZE (200)
+
+typedef struct EncQSVFramesContext {
+    AVBufferRef *hw_frames_ctx;
+    //void *logctx;
+
+    /* The memory ids for the external frames.
+     * Refcounted, since we need one reference owned by the QSVFramesContext
+     * (i.e. by the encoder/decoder) and another one given to the MFX session
+     * from the frame allocator. */
+    AVBufferRef *mids_buf;
+    QSVMid *mids;
+    int  nb_mids;
+    int pool[HB_POOL_SURFACE_SIZE];
+} EncQSVFramesContext;
+
+/* Full QSV pipeline helpers */
+int hb_qsv_full_path_is_enabled(hb_job_t *job);
+AVBufferRef *hb_qsv_create_mids(AVBufferRef *hw_frames_ref);
+hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx);
+void hb_qsv_get_free_surface_from_pool(QSVMid **out_mid, mfxFrameSurface1 **out_surface, int pool_size);
+int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags);
+enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts);
+int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict);
+void hb_qsv_uninit_dec(AVCodecContext *s);
+void hb_qsv_uninit_enc();
 
 #endif // HB_PROJECT_FEATURE_QSV
 #endif // HB_QSV_COMMON_H
