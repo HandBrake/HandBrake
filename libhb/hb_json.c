@@ -1366,7 +1366,16 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             {
                 hb_filter_object_t *filter;
                 filter = hb_filter_init(filter_id);
-                hb_add_filter_dict(job, filter, filter_settings);
+#if HB_PROJECT_FEATURE_QSV
+                if(hb_qsv_full_path_is_enabled(job))
+                {
+                    hb_log("Filter with ID=%d is disabled", filter_id);
+                }
+                else
+#endif
+                {
+                    hb_add_filter_dict(job, filter, filter_settings);
+                }
             }
         }
     }
