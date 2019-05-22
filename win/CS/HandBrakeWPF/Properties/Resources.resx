@@ -1996,4 +1996,7 @@ Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitra
 
 Where supported, any user presets will have been imported.</value>
   </data>
+  <data name="Options_PromptBeforeAction" xml:space="preserve">
+    <value>Perform action immediately. (This will disable the 60 second confirmation dialog)</value>
+  </data>
 </root>

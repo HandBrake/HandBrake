@@ -71,5 +71,6 @@ namespace HandBrakeWPF
         public const string FileOverwriteBehaviour = "FileOverwriteBehaviour";
         public const string AutonameFileCollisionBehaviour = "AutonameFileCollisionBehaviour";
         public const string AutonameFilePrePostString = "AutonameFilePrePostString";
+        public const string WhenDonePerformActionImmediately = "WhenDonePerformActionImmediately";
     }
 }

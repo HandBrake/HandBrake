@@ -2851,6 +2851,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Perform action immediately. (This will disable the 60 second confirmation dialog).
+        /// </summary>
+        public static string Options_PromptBeforeAction {
+            get {
+                return ResourceManager.GetString("Options_PromptBeforeAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Prefer use of Intel QuickSync for decoding video when available. .
         /// </summary>
         public static string Options_QsvDecode {

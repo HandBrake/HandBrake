@@ -141,15 +141,20 @@ namespace HandBrakeWPF.Services
             }
 
             // Give the user the ability to cancel the shutdown. Default 60 second timer.
-            ICountdownAlertViewModel titleSpecificView = IoC.Get<ICountdownAlertViewModel>();
-            Execute.OnUIThread(
-                () =>
+            bool isCancelled = false;
+            if (!this.userSettingService.GetUserSetting<bool>(UserSettingConstants.WhenDonePerformActionImmediately))
+            {
+                ICountdownAlertViewModel titleSpecificView = IoC.Get<ICountdownAlertViewModel>();
+                Execute.OnUIThread(
+                    () =>
                     {
                         titleSpecificView.SetAction(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction));
                         this.windowManager.ShowDialog(titleSpecificView);
+                        isCancelled = titleSpecificView.IsCancelled;
                     });
+            }
 
-            if (!titleSpecificView.IsCancelled)
+            if (!isCancelled)
             {               
                 // Do something when the encode ends.
                 switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction))
