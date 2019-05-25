@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you believe you’ve found a security vulnerability in HandBrake or our website (https://handbrake.fr)please send details to us by emailing security /at/ handbrake /dot/ fr
+If you believe you’ve found a security vulnerability in HandBrake or our website (https://handbrake.fr) please send details to us by emailing security /at/ handbrake /dot/ fr
 
 Contributors to this project are also available in [#handbrake on Freenode IRC](https://webchat.freenode.net/?channels=handbrake) (irc://irc.freenode.net/#handbrake).
 Please note, #handbrake and #handbrake-dev are public so details should only be send to contributors via private message.
