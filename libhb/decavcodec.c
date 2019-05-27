@@ -44,12 +44,12 @@
 #include "libavfilter/avfilter.h"
 #include "libavfilter/buffersrc.h"
 #include "libavfilter/buffersink.h"
-#include "libavutil/hwcontext_qsv.h"
 #include "libavutil/hwcontext.h"
 #include "lang.h"
 #include "audio_resample.h"
 
 #if HB_PROJECT_FEATURE_QSV
+#include "libavutil/hwcontext_qsv.h"
 #include "qsv_common.h"
 #include "qsv_libav.h"
 #endif
