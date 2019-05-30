@@ -166,8 +166,12 @@ static int declpcmInit( hb_work_object_t * w, hb_job_t * job )
     pv->job = job;
 
     pv->next_pts = (int64_t)AV_NOPTS_VALUE;
+    // Currently, samplerate conversion is performed in sync.c
+    // So set output samplerate to input samplerate
+    // This should someday get reworked to be part of an audio filter pipleine.
     pv->resample =
         hb_audio_resample_init(AV_SAMPLE_FMT_FLT,
+                               w->audio->config.in.samplerate,
                                w->audio->config.out.mixdown,
                                w->audio->config.out.normalize_mix_level);
     if (pv->resample == NULL)
@@ -333,6 +337,8 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
 
     hb_audio_resample_set_channel_layout(pv->resample,
                                          hdr2layout[pv->nchannels - 1]);
+    hb_audio_resample_set_sample_rate(pv->resample,
+                                      pv->samplerate);
     if (hb_audio_resample_update(pv->resample))
     {
         hb_log("declpcm: hb_audio_resample_update() failed");

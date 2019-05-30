@@ -206,8 +206,13 @@ static int decavcodecaInit( hb_work_object_t * w, hb_job_t * job )
     /* Downmixing & sample_fmt conversion */
     if (!(w->audio->config.out.codec & HB_ACODEC_PASS_FLAG))
     {
+        // Currently, samplerate conversion is performed in sync.c
+        // So set output samplerate to input samplerate
+        // This should someday get reworked to be part of an audio
+        // filter pipleine.
         pv->resample =
             hb_audio_resample_init(AV_SAMPLE_FMT_FLT,
+                                   w->audio->config.in.samplerate,
                                    w->audio->config.out.mixdown,
                                    w->audio->config.out.normalize_mix_level);
         if (pv->resample == NULL)
@@ -2274,6 +2279,8 @@ static void decodeAudio(hb_work_private_t *pv, packet_info_t * packet_info)
             hb_audio_resample_set_channel_layout(pv->resample, channel_layout);
             hb_audio_resample_set_sample_fmt(pv->resample,
                                              pv->frame->format);
+            hb_audio_resample_set_sample_rate(pv->resample,
+                                             pv->frame->sample_rate);
             if (hb_audio_resample_update(pv->resample))
             {
                 hb_log("decavcodec: hb_audio_resample_update() failed");
