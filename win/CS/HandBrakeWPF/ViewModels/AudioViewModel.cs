@@ -457,7 +457,7 @@ namespace HandBrakeWPF.ViewModels
 
         private bool CanAddTrack(AudioBehaviourTrack track, Audio sourceTrack, AudioEncoder fallback)
         {
-            if (fallback == AudioEncoder.None)
+            if (fallback == AudioEncoder.None && track != null)
             {
                 HBAudioEncoder encoderInfo = HandBrakeEncoderHelpers.GetAudioEncoder(EnumHelper<AudioEncoder>.GetShortName(track.Encoder));
                 if (track.IsPassthru && (sourceTrack.Codec & encoderInfo.Id) == 0)
