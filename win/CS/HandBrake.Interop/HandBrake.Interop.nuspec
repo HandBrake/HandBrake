@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>$id$</id>
+    <version>$version$-Nightly</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/HandBrake/HandBrake/blob/master/LICENSE</licenseUrl>
+    <projectUrl>http://github.com/HandBrake/HandBrake</projectUrl>
+    <iconUrl>https://avatars1.githubusercontent.com/u/627269</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>Copyright © 2003-2019 HandBrake Team</copyright>
+    <tags>Open-Source Video Transcoder</tags>
+
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="11.0.2" />
+    </dependencies>
+  </metadata>
+
+  <files>
+    <file src="bin\Release\HandBrake.Interop.pdb" target="lib\net471" />
+  </files>
+</package>

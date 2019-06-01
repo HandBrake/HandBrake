@@ -1,154 +1,737 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>{DADE66CB-0E12-4959-ADE5-0ACD31D27C59}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net471</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Platforms>x64</Platforms>
-    <PackageProjectUrl>https://handbrake.fr</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/HandBrake/HandBrake.git</RepositoryUrl>
-    <RepositoryType>Git</RepositoryType>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HandBrakeWPF</RootNamespace>
     <AssemblyName>HandBrake</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutputPath>bin\Debug</OutputPath>
+  <PropertyGroup>
+    <ApplicationIcon>handbrakepineapple.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>bin\release</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisIgnoreBuiltInRuleSets>true</CodeAnalysisIgnoreBuiltInRuleSets>
+    <CodeAnalysisIgnoreBuiltInRules>true</CodeAnalysisIgnoreBuiltInRules>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\HandBrake.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Caliburn.Micro">
-      <Version>3.2.0</Version>
-    </PackageReference>
-    <PackageReference Include="Caliburn.Micro.Core">
-      <Version>3.2.0</Version>
-    </PackageReference>
-    <PackageReference Include="gong-wpf-dragdrop">
-      <Version>2.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="Ookii.Dialogs" Version="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <Reference Include="Caliburn.Micro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.Core.3.2.0\lib\net45\Caliburn.Micro.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.3.2.0\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform.Core, Version=3.2.0.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.3.2.0\lib\net45\Caliburn.Micro.Platform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GongSolutions.WPF.DragDrop, Version=2.0.0.0, Culture=neutral, PublicKeyToken=91f1945125b7a587, processorArchitecture=MSIL">
+      <HintPath>..\packages\gong-wpf-dragdrop.2.0.1\lib\net47\GongSolutions.WPF.DragDrop.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ookii.Dialogs.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ookii.Dialogs.1.0\lib\net35\Ookii.Dialogs.Wpf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="PresentationFramework.Aero" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.3.2.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
   </ItemGroup>
-
   <ItemGroup>
-    <None Remove="defaultsettings.xml" />
-    <None Remove="handbrakepineapple.ico" />
-    <None Remove="public.key" />
-    <None Remove="Views\Images\ActivityWindow.png" />
-    <None Remove="Views\Images\ActivityWindow_small.png" />
-    <None Remove="Views\Images\add.png" />
-    <None Remove="Views\Images\add40.png" />
-    <None Remove="Views\Images\AddToQueue.png" />
-    <None Remove="Views\Images\AddToQueue_small.png" />
-    <None Remove="Views\Images\Advanced.png" />
-    <None Remove="Views\Images\Close.png" />
-    <None Remove="Views\Images\close64.png" />
-    <None Remove="Views\Images\close64_dark.png" />
-    <None Remove="Views\Images\Complete.png" />
-    <None Remove="Views\Images\copy.png" />
-    <None Remove="Views\Images\Disc.png" />
-    <None Remove="Views\Images\disc_small.png" />
-    <None Remove="Views\Images\ErrorX.png" />
-    <None Remove="Views\Images\file.png" />
-    <None Remove="Views\Images\File32.png" />
-    <None Remove="Views\Images\folder.png" />
-    <None Remove="Views\Images\folder32.png" />
-    <None Remove="Views\Images\information.png" />
-    <None Remove="Views\Images\information64.png" />
-    <None Remove="Views\Images\logo128.png" />
-    <None Remove="Views\Images\logo64.png" />
-    <None Remove="Views\Images\Movies.png" />
-    <None Remove="Views\Images\Movies_small.png" />
-    <None Remove="Views\Images\Options24.png" />
-    <None Remove="Views\Images\Output_Small.png" />
-    <None Remove="Views\Images\Pause.png" />
-    <None Remove="Views\Images\picture.png" />
-    <None Remove="Views\Images\picture_small.png" />
-    <None Remove="Views\Images\Play.png" />
-    <None Remove="Views\Images\Play_small.png" />
-    <None Remove="Views\Images\Preferences.png" />
-    <None Remove="Views\Images\Pref_Small.png" />
-    <None Remove="Views\Images\Presets2.png" />
-    <None Remove="Views\Images\Queue.png" />
-    <None Remove="Views\Images\Queue_Small.png" />
-    <None Remove="Views\Images\Refresh.ico" />
-    <None Remove="Views\Images\remove.png" />
-    <None Remove="Views\Images\stop.png" />
-    <None Remove="Views\Images\warningsmall.png" />
-    <None Remove="Views\Images\Working0.png" />
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
+    <Compile Include="Collections\SerializableDictionary.cs" />
+    <Compile Include="Commands\InputBindingTrigger.cs" />
+    <Compile Include="Commands\Menu\QueueCommandParams.cs" />
+    <Compile Include="Commands\Menu\QueueCommands.cs" />
+    <Compile Include="Commands\OpenOptionsScreenCommand.cs" />
+    <Compile Include="Commands\PresetMenuSelectCommand.cs" />
+    <Compile Include="Commands\ProcessShortcutCommand.cs" />
+    <Compile Include="Commands\SourceMenuCommand.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controls\SplitButton\SplitMenuButton.cs" />
+    <Compile Include="Controls\AlertPanel.xaml.cs">
+      <DependentUpon>AlertPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\Audio\AudioMixdownListConverter.cs" />
+    <Compile Include="Converters\Audio\AudioMixdownConverter.cs" />
+    <Compile Include="Converters\Audio\AudioRateTypeConverter.cs" />
+    <Compile Include="Converters\Audio\AudioTrackDefaultBehaviourConverter.cs" />
+    <Compile Include="Converters\Audio\AudioBehaviourConverter.cs" />
+    <Compile Include="Converters\Filters\DenoisePresetConverter.cs" />
+    <Compile Include="Converters\Filters\SharpenTuneConverter.cs" />
+    <Compile Include="Converters\Filters\SharpenPresetConverter.cs" />
+    <Compile Include="Converters\LongToIntConverter.cs" />
+    <Compile Include="Converters\Options\FileSizeConverter.cs" />
+    <Compile Include="Converters\Options\LogLevelConverter.cs" />
+    <Compile Include="Converters\OptionTabConverter.cs" />
+    <Compile Include="Converters\PresetsMenuConverter.cs" />
+    <Compile Include="Converters\Queue\InlineQueueConverter.cs" />
+    <Compile Include="Converters\Queue\PictureSettingsDescConveter.cs" />
+    <Compile Include="Converters\Subtitles\CanBurnSubtitleConverter.cs" />
+    <Compile Include="Converters\Subtitles\SubtitleBurnInBehaviourConverter.cs" />
+    <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
+    <Compile Include="Converters\Video\VideoOptionsTooltipConverter.cs" />
+    <Compile Include="Converters\Video\ScalingConverter.cs" />
+    <Compile Include="EventArgs\OutputFormatChangedEventArgs.cs" />
+    <Compile Include="EventArgs\QueueCompletedEventArgs.cs" />
+    <Compile Include="EventArgs\QueueProgressEventArgs.cs" />
+    <Compile Include="EventArgs\SettingChangedEventArgs.cs" />
+    <Compile Include="EventArgs\TabStatusEventArgs.cs" />
+    <Compile Include="Exceptions\GeneralApplicationException.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Helpers\TreeViewHelper.cs" />
+    <Compile Include="Helpers\LogManager.cs" />
+    <Compile Include="Helpers\MP4Helper.cs" />
+    <Compile Include="Helpers\TimeSpanHelper.cs" />
+    <Compile Include="Helpers\Validate.cs" />
+    <Compile Include="Instance\HandBrakeInstanceManager.cs" />
+    <Compile Include="Instance\Model\ServerResponse.cs" />
+    <Compile Include="Instance\RemoteInstance.cs" />
+    <Compile Include="Model\AddQueueError.cs" />
+    <Compile Include="Model\Audio\AudioBehaviourTrack.cs" />
+    <Compile Include="Model\Audio\AudioTrackDefaultsMode.cs" />
+    <Compile Include="Model\Audio\AudioBehaviourModes.cs" />
+    <Compile Include="Model\Audio\AudioBehaviours.cs" />
+    <Compile Include="Model\DriveInformation.cs" />
+    <Compile Include="Model\Options\AutonameFileCollisionBehaviour.cs" />
+    <Compile Include="Model\Options\FileOverwriteBehaviour.cs" />
+    <Compile Include="Model\Filters\FilterTune.cs" />
+    <Compile Include="Model\Filters\FilterPreset.cs" />
+    <Compile Include="Model\InterfaceLanguage.cs" />
+    <Compile Include="Model\Picture\PresetPictureSettingsMode.cs" />
+    <Compile Include="Model\Subtitles\SubtitleBurnInBehaviourModes.cs" />
+    <Compile Include="Model\Subtitles\SubtitleBehaviourModes.cs" />
+    <Compile Include="Model\Subtitles\SubtitleBehaviours.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\ResourcesTooltips.Designer.cs">
+      <DependentUpon>ResourcesTooltips.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Services\Encode\EncodeBase.cs" />
+    <Compile Include="Services\Encode\EventArgs\EncodeCompletedEventArgs.cs" />
+    <Compile Include="Services\Encode\EventArgs\EncodeProgressEventArgs.cs" />
+    <Compile Include="Services\Encode\Factories\EncodeTaskImportFactory.cs" />
+    <Compile Include="Services\Encode\Factories\EncodeTaskFactory.cs" />
+    <Compile Include="Services\Encode\Factories\QueueFactory.cs" />
+    <Compile Include="Services\Encode\Factories\VideoLevelFactory.cs" />
+    <Compile Include="Services\Encode\Factories\VideoPresetFactory.cs" />
+    <Compile Include="Services\Encode\Factories\VideoProfileFactory.cs" />
+    <Compile Include="Services\Encode\Factories\VideoTuneFactory.cs" />
+    <Compile Include="Services\Encode\Interfaces\IEncode.cs" />
+    <Compile Include="Services\Encode\LibEncode.cs" />
+    <Compile Include="Services\Encode\Model\EncodeTask.cs" />
+    <Compile Include="Services\Encode\Model\Models\AllowedPassthru.cs" />
+    <Compile Include="Services\Encode\Model\Models\AudioEncoder.cs" />
+    <Compile Include="Services\Encode\Model\Models\AudioEncoderRateType.cs" />
+    <Compile Include="Services\Encode\Model\Models\AudioTrack.cs" />
+    <Compile Include="Services\Encode\Model\Models\ChapterMarker.cs" />
+    <Compile Include="Services\Encode\Model\Models\DenoisePreset.cs" />
+    <Compile Include="Services\Encode\Model\Models\DenoiseTune.cs" />
+    <Compile Include="Services\Encode\Model\Models\FramerateMode.cs" />
+    <Compile Include="Services\Encode\Model\Models\MetaData.cs" />
+    <Compile Include="Services\Encode\Model\Models\OutputFormat.cs" />
+    <Compile Include="Services\Encode\Model\Models\PointToPointMode.cs" />
+    <Compile Include="Services\Encode\Model\Models\SubtitleTrack.cs" />
+    <Compile Include="Services\Encode\Model\Models\SubtitleType.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoLevel.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoPreset.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoProfile.cs" />
+    <Compile Include="Services\Encode\Model\Models\Video\VideoTune.cs" />
+    <Compile Include="Services\Interfaces\INotifyIconService.cs" />
+    <Compile Include="Services\Logging\EventArgs\LogEventArgs.cs" />
+    <Compile Include="Services\Logging\Interfaces\ILog.cs" />
+    <Compile Include="Services\Logging\LogService.cs" />
+    <Compile Include="Services\Logging\Model\LogLevel.cs" />
+    <Compile Include="Services\Logging\Model\LogMessage.cs" />
+    <Compile Include="Services\Logging\Model\LogMessageType.cs" />
+    <Compile Include="Services\Presets\Factories\JsonPresetFactory.cs" />
+    <Compile Include="Services\Presets\Interfaces\IPresetObject.cs" />
+    <Compile Include="Services\Presets\Model\PresetDisplayCategory.cs" />
+    <Compile Include="Services\Queue\Interfaces\IQueueService.cs" />
+    <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Services\Presets\Model\Preset.cs" />
+    <Compile Include="Model\ScanMode.cs" />
+    <Compile Include="Factories\HBConfigurationFactory.cs" />
+    <Compile Include="Services\Presets\Interfaces\IPresetService.cs" />
+    <Compile Include="Services\Interfaces\IUserSettingService.cs" />
+    <Compile Include="Services\Presets\PresetService.cs" />
+    <Compile Include="Services\Queue\Model\QueueStats.cs" />
+    <Compile Include="Services\Queue\Model\QueueTaskContainer.cs" />
+    <Compile Include="Services\Queue\QueueService.cs" />
+    <Compile Include="Services\Queue\Model\QueueItemStatus.cs" />
+    <Compile Include="Services\Queue\Model\QueueTask.cs" />
+    <Compile Include="Services\Scan\EventArgs\ScanCompletedEventArgs.cs" />
+    <Compile Include="Services\Scan\EventArgs\ScanProgressEventArgs.cs" />
+    <Compile Include="Services\Scan\Factories\TitleFactory.cs" />
+    <Compile Include="Services\Scan\Interfaces\IScan.cs" />
+    <Compile Include="Services\Scan\LibScan.cs" />
+    <Compile Include="Services\Scan\Model\Audio.cs" />
+    <Compile Include="Services\Scan\Model\Chapter.cs" />
+    <Compile Include="Services\Scan\Model\Metadata.cs" />
+    <Compile Include="Services\Scan\Model\Source.cs" />
+    <Compile Include="Services\Scan\Model\Subtitle.cs" />
+    <Compile Include="Services\Scan\Model\Title.cs" />
+    <Compile Include="Services\NotifyIconService.cs" />
+    <Compile Include="Services\UserSettingService.cs" />
+    <Compile Include="Startup\StartupOptions.cs" />
+    <Compile Include="Utilities\AppcastReader.cs" />
+    <Compile Include="Utilities\BitmapUtilities.cs" />
+    <Compile Include="Utilities\DelayedActionProcessor.cs" />
+    <Compile Include="Utilities\DPIAwareness.cs" />
+    <Compile Include="Utilities\DriveUtilities.cs" />
+    <Compile Include="Utilities\EnumHelper.cs" />
+    <Compile Include="Utilities\ExtensionMethods.cs" />
+    <Compile Include="Utilities\GeneralUtilities.cs" />
+    <Compile Include="Utilities\HandBrakeApp.cs" />
+    <Compile Include="Utilities\Input\ChapterImporterCsv.cs" />
+    <Compile Include="Utilities\Input\ChapterImporterTxt.cs" />
+    <Compile Include="Utilities\Input\ChapterImporterXml.cs" />
+    <Compile Include="Utilities\InterfaceLanguageUtilities.cs" />
+    <Compile Include="Utilities\Interfaces\INotifyPropertyChangedEx.cs" />
+    <Compile Include="Utilities\Output\CsvHelper.cs" />
+    <Compile Include="Utilities\Portable.cs" />
+    <Compile Include="Utilities\DirectoryUtilities.cs" />
+    <Compile Include="Utilities\SystemInfo.cs" />
+    <Compile Include="Utilities\UwpDetect.cs" />
+    <Compile Include="Utilities\Win32.cs" />
+    <Compile Include="Utilities\Win7.cs" />
+    <Compile Include="ViewModelItems\Filters\DeblockFilter.cs" />
+    <Compile Include="ViewModelItems\Filters\DeinterlaceFilterItem.cs" />
+    <Compile Include="ViewModelItems\Filters\DenoiseItem.cs" />
+    <Compile Include="ViewModelItems\Filters\DetelecineItem.cs" />
+    <Compile Include="ViewModelItems\Filters\GrayscaleFilter.cs" />
+    <Compile Include="ViewModelItems\Filters\RotateFlipFilter.cs" />
+    <Compile Include="ViewModelItems\Filters\SharpenItem.cs" />
+    <Compile Include="ViewModels\Interfaces\IManagePresetViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ISummaryViewModel.cs" />
+    <Compile Include="ViewModels\ManagePresetViewModel.cs" />
+    <Compile Include="ViewModels\AudioDefaultsViewModel.cs" />
+    <Compile Include="ViewModels\CountdownAlertViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IAudioDefaultsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ICountdownAlertViewModel.cs" />
+    <Compile Include="Controls\SourceSelection.xaml.cs">
+      <DependentUpon>SourceSelection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Interfaces\IMetaDataViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IPopupWindowViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IStaticPreviewViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IMiniViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ISubtitlesDefaultsViewModel.cs" />
+    <Compile Include="ViewModels\MetaDataViewModel.cs" />
+    <Compile Include="ViewModels\MiniViewModel.cs" />
+    <Compile Include="ViewModels\PopupWindowViewModel.cs" />
+    <Compile Include="ViewModels\StaticPreviewViewModel.cs" />
+    <Compile Include="ViewModels\SubtitlesDefaultsViewModel.cs" />
+    <Compile Include="ViewModels\SummaryViewModel.cs" />
+    <Compile Include="Views\ManagePresetView.xaml.cs">
+      <DependentUpon>ManagePresetView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AudioDefaultsView.xaml.cs">
+      <DependentUpon>AudioDefaultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MetaDataView.xaml.cs">
+      <DependentUpon>MetaDataView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PopupWindowView.xaml.cs">
+      <DependentUpon>PopupWindowView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CountdownAlertView.xaml.cs">
+      <DependentUpon>CountdownAlertView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\DropButton\DropButton.cs" />
+    <Compile Include="Controls\TimeSpanBox.xaml.cs">
+      <DependentUpon>TimeSpanBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Loading.xaml.cs">
+      <DependentUpon>Loading.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\NumberBox.xaml.cs">
+      <DependentUpon>NumberBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\RefireControl.cs" />
+    <Compile Include="Controls\StatusPanel.xaml.cs">
+      <DependentUpon>StatusPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\Audio\AudioEncoderConverter.cs" />
+    <Compile Include="Converters\Audio\AudioQueueDisplayConverter.cs" />
+    <Compile Include="Converters\BooleanToHiddenVisibilityConverter.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
+    <Compile Include="Converters\Options\OptionsTabConverter.cs" />
+    <Compile Include="Converters\Options\OptionsTabNameConverter.cs" />
+    <Compile Include="Converters\Subtitles\SubtitlesQueueDisplayConverter.cs" />
+    <Compile Include="Converters\Video\VideoEncoderConverter.cs" />
+    <Compile Include="Converters\Video\EncoderOptionsTooltipConverter.cs" />
+    <Compile Include="Helpers\GrayscaleImage.cs" />
+    <Compile Include="Helpers\PictureSize.cs" />
+    <Compile Include="Model\OptionsTab.cs" />
+    <Compile Include="Model\SelectionTitle.cs" />
+    <Compile Include="Model\ShellWindow.cs" />
+    <Compile Include="Model\SourceMenuItem.cs" />
+    <Compile Include="Model\UpdateCheckInformation.cs" />
+    <Compile Include="Model\DownloadStatus.cs" />
+    <Compile Include="Services\Interfaces\IUpdateService.cs" />
+    <Compile Include="Services\Interfaces\IPrePostActionService.cs" />
+    <Compile Include="Services\UpdateService.cs" />
+    <Compile Include="Services\PrePostActionService.cs" />
+    <Compile Include="ViewModels\Interfaces\IQueueSelectionViewModel.cs" />
+    <Compile Include="ViewModels\QueueSelectionViewModel.cs" />
+    <Compile Include="Views\QueueSelectionView.xaml.cs">
+      <DependentUpon>QueueSelectionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MiniView.xaml.cs">
+      <DependentUpon>MiniView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Queue\Embedded.xaml.cs">
+      <DependentUpon>Embedded.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShellView.xaml.cs">
+      <DependentUpon>ShellView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\Interfaces\IShellViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ITitleSpecificViewModel.cs" />
+    <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="ViewModels\TitleSpecificViewModel.cs" />
+    <Compile Include="Views\StaticPreviewView.xaml.cs">
+      <DependentUpon>StaticPreviewView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\AdvancedVisibilityConverter.cs" />
+    <Compile Include="Converters\BooleanConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\QueueStatusToVisibilityConverter.cs" />
+    <Compile Include="Converters\EnumComboConverter.cs" />
+    <Compile Include="Converters\FullPathToFileNameConverter.cs" />
+    <Compile Include="Helpers\AutoNameHelper.cs" />
+    <Compile Include="Helpers\ListBoxHelper.cs" />
+    <Compile Include="Helpers\QueueRecoveryHelper.cs" />
+    <Compile Include="Services\ErrorService.cs" />
+    <Compile Include="Services\Interfaces\IErrorService.cs" />
+    <Compile Include="Startup\AppBootstrapper.cs" />
+    <Compile Include="UserSettingConstants.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\AddPresetViewModel.cs" />
+    <Compile Include="ViewModels\AudioViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ITabInterface.cs" />
+    <Compile Include="ViewModels\VideoViewModel.cs" />
+    <Compile Include="ViewModels\FiltersViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IFiltersViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IVideoViewModel.cs" />
+    <Compile Include="ViewModels\SubtitlesViewModel.cs" />
+    <Compile Include="ViewModels\ChaptersViewModel.cs" />
+    <Compile Include="ViewModels\PictureSettingsViewModel.cs" />
+    <Compile Include="ViewModels\ErrorViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ISubtitlesViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IChaptersViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IPictureSettingsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IAddPresetViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IAudioViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IQueueViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IErrorViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ILogViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IAboutViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IMainViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IOptionsViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IViewModelBase.cs" />
+    <Compile Include="ViewModels\LogViewModel.cs" />
+    <Compile Include="ViewModels\QueueViewModel.cs" />
+    <Compile Include="ViewModels\OptionsViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="Views\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="Views\SubtitlesDefaultsView.xaml.cs">
+      <DependentUpon>SubtitlesDefaultsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SummaryView.xaml.cs">
+      <DependentUpon>SummaryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AudioView.xaml.cs">
+      <DependentUpon>AudioView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AddPresetView.xaml.cs">
+      <DependentUpon>AddPresetView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChaptersView.xaml.cs">
+      <DependentUpon>ChaptersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FiltersView.xaml.cs">
+      <DependentUpon>FiltersView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SubtitlesView.xaml.cs">
+      <DependentUpon>SubtitlesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ErrorView.xaml.cs">
+      <DependentUpon>ErrorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LogView.xaml.cs">
+      <DependentUpon>LogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\QueueView.xaml.cs">
+      <DependentUpon>QueueView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PictureSettingsView.xaml.cs">
+      <DependentUpon>PictureSettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OptionsView.xaml.cs">
+      <DependentUpon>OptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VideoView.xaml.cs">
+      <DependentUpon>VideoView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
-
   <ItemGroup>
-    <EmbeddedResource Include="defaultsettings.xml" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.de.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.fr.resx" />
+    <EmbeddedResource Include="Properties\Resources.zh.resx" />
+    <EmbeddedResource Include="Properties\ResourcesTooltips.de.resx" />
+    <EmbeddedResource Include="Properties\ResourcesTooltips.fr.resx" />
+    <EmbeddedResource Include="Properties\ResourcesTooltips.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourcesTooltips.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="app.manifest" />
+    <None Include="Installer\Installer64.nsi" />
+    <None Include="Installer\MakeNightly64.nsi" />
+    <AppDesigner Include="Properties\" />
+    <EmbeddedResource Include="Properties\ResourcesTooltips.zh.resx" />
     <EmbeddedResource Include="public.key" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="handbrakepineapple.ico" />
-    <Resource Include="Views\Images\ActivityWindow.png" />
-    <Resource Include="Views\Images\ActivityWindow_small.png" />
-    <Resource Include="Views\Images\add.png" />
-    <Resource Include="Views\Images\add40.png" />
-    <Resource Include="Views\Images\AddToQueue.png" />
-    <Resource Include="Views\Images\AddToQueue_small.png" />
-    <Resource Include="Views\Images\Advanced.png" />
-    <Resource Include="Views\Images\Close.png" />
-    <Resource Include="Views\Images\close64.png" />
-    <Resource Include="Views\Images\close64_dark.png" />
-    <Resource Include="Views\Images\Complete.png" />
-    <Resource Include="Views\Images\copy.png" />
-    <Resource Include="Views\Images\Disc.png" />
-    <Resource Include="Views\Images\disc_small.png" />
-    <Resource Include="Views\Images\ErrorX.png" />
-    <Resource Include="Views\Images\file.png" />
-    <Resource Include="Views\Images\File32.png" />
-    <Resource Include="Views\Images\folder.png" />
-    <Resource Include="Views\Images\folder32.png" />
-    <Resource Include="Views\Images\information.png" />
-    <Resource Include="Views\Images\information64.png" />
-    <Resource Include="Views\Images\logo128.png" />
-    <Resource Include="Views\Images\logo64.png" />
-    <Resource Include="Views\Images\Movies.png" />
-    <Resource Include="Views\Images\Movies_small.png" />
-    <Resource Include="Views\Images\Options24.png" />
-    <Resource Include="Views\Images\Output_Small.png" />
-    <Resource Include="Views\Images\Pause.png" />
-    <Resource Include="Views\Images\picture.png" />
-    <Resource Include="Views\Images\picture_small.png" />
-    <Resource Include="Views\Images\Play.png" />
-    <Resource Include="Views\Images\Play_small.png" />
-    <Resource Include="Views\Images\Preferences.png" />
-    <Resource Include="Views\Images\Pref_Small.png" />
-    <Resource Include="Views\Images\Presets2.png" />
-    <Resource Include="Views\Images\Queue.png" />
-    <Resource Include="Views\Images\Queue_Small.png" />
-    <Resource Include="Views\Images\Refresh.ico" />
-    <Resource Include="Views\Images\remove.png" />
-    <Resource Include="Views\Images\stop.png" />
-    <Resource Include="Views\Images\warningsmall.png" />
-    <Resource Include="Views\Images\Working0.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="portable.ini.template">
+    <None Include="packages.config" />
+    <None Include="portable.ini.template">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Page Include="Controls\AlertPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SourceSelection.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ManagePresetView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AudioDefaultsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MetaDataView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PopupWindowView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\CountdownAlertView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TimeSpanBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\Loading.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NumberBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\StatusPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\QueueSelectionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MiniView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Queue\Embedded.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ShellView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\StaticPreviewView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubtitlesDefaultsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SummaryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Resource Include="Views\Styles\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Resource>
+    <Page Include="Views\AudioView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddPresetView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ChaptersView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\FiltersView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SubtitlesView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ErrorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LogView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\QueueView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PictureSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OptionsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VideoView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="defaultsettings.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Resource Include="Views\Images\add40.png" />
+    <Resource Include="Views\Images\add.png" />
+    <Resource Include="Views\Images\remove.png" />
+    <Resource Include="Views\Images\information.png" />
+    <Resource Include="Views\Images\picture_small.png" />
+    <Resource Include="Views\Images\warningsmall.png" />
+    <Resource Include="Views\Images\Refresh.ico" />
+    <Resource Include="Views\Images\Complete.png" />
+    <Resource Include="Views\Images\Working0.png" />
+    <Resource Include="handbrakepineapple.ico" />
+    <Resource Include="Views\Images\Close.png" />
+    <Resource Include="Views\Images\Options24.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\ActivityWindow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\ActivityWindow_small.png" />
+    <Resource Include="Views\Images\copy.png" />
+    <Resource Include="Views\Images\disc_small.png" />
+    <Resource Include="Views\Images\Output_Small.png" />
+    <Resource Include="Views\Images\Pref_Small.png" />
+    <Resource Include="Views\Images\Queue.png" />
+    <Resource Include="Views\Images\Queue_Small.png" />
+    <Resource Include="Views\Images\stop.png" />
+    <Resource Include="Views\Images\Play_small.png" />
+    <Resource Include="Views\Images\Play.png" />
+    <Resource Include="Views\Images\picture.png" />
+    <Resource Include="Views\Images\Pause.png" />
+    <Resource Include="Views\Images\Movies.png" />
+    <Resource Include="Views\Images\logo64.png" />
+    <Resource Include="Views\Images\logo128.png" />
+    <Resource Include="Views\Images\Preferences.png" />
+    <Resource Include="Views\Images\folder.png" />
+    <Resource Include="Views\Images\ErrorX.png" />
+    <Resource Include="Views\Images\AddToQueue_small.png" />
+    <Resource Include="Views\Images\AddToQueue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Advanced.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Disc.png" />
+    <Resource Include="Views\Images\file.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.7.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\folder32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\File32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\information64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Movies_small.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Presets2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj">
+      <Project>{087a2ba8-bac2-4577-a46f-07ff9d420016}</Project>
+      <Name>HandBrake.Interop</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\close64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\close64_dark.png" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <TargetFrameworkSDKToolsDirectory Condition=" '$(Platform)' == 'x64'">$(TargetFrameworkSDKToolsDirectory)$(Platform)\</TargetFrameworkSDKToolsDirectory>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

@@ -1,50 +1,204 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>{087A2BA8-BAC2-4577-A46F-07FF9D420016}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <TargetFramework>net471</TargetFramework>
-    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <ApplicationIcon />
-    <StartupObject />
-    <Platforms>x64</Platforms>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Authors>The HandBrake Team</Authors>
-    <PackageProjectUrl>https://handbrake.fr</PackageProjectUrl>
-    <PackageLicenseExpression></PackageLicenseExpression>
-    <PackageIconUrl>https://handbrake.fr/img/logo.png</PackageIconUrl>
-    <RepositoryUrl>https://github.com/HandBrake/HandBrake.git</RepositoryUrl>
-    <RepositoryType>Git</RepositoryType>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <PackageLicenseFile>License.txt</PackageLicenseFile>
-    <Version>1.3.0</Version>
-    <PackageReleaseNotes>Releasese notes for HandBrake are available on GitHub.</PackageReleaseNotes>
-    <Description>HandBrake is a GPL-licensed, multiplatform, multithreaded video transcoder.
-This package is a wrapper around hb.dll
-
-hb.dll is not provided and must be built separately.</Description>
-    <Copyright>Copyright © 2003-2019 HandBrake Team</Copyright>
-    <PackageTags>Video Transcoder</PackageTags>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HandBrake.Interop</RootNamespace>
+    <AssemblyName>HandBrake.Interop</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
-    <OutputPath>bin\Debug</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
+    <CodeAnalysisRuleSet>..\HandBrake.ruleset</CodeAnalysisRuleSet>
+    <NoWarn>0649</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>bin\Release</OutputPath>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>12.0.2</Version>
-    </PackageReference>
+    <Reference Include="GongSolutions.WPF.DragDrop, Version=2.0.0.0, Culture=neutral, PublicKeyToken=91f1945125b7a587, processorArchitecture=MSIL">
+      <HintPath>..\packages\gong-wpf-dragdrop.2.0.1\lib\net47\GongSolutions.WPF.DragDrop.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
-
   <ItemGroup>
-    <None Include="..\doc\License.txt">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
+    <Compile Include="Attributes\DisplayName.cs" />
+    <Compile Include="Attributes\DisplayNameLocalized.cs" />
+    <Compile Include="Attributes\ShortName.cs" />
+    <Compile Include="Interop\EventArgs\EncodeCompletedEventArgs.cs" />
+    <Compile Include="Interop\EventArgs\EncodeProgressEventArgs.cs" />
+    <Compile Include="Interop\EventArgs\MessageLoggedEventArgs.cs" />
+    <Compile Include="Interop\EventArgs\ScanProgressEventArgs.cs" />
+    <Compile Include="Interop\HandBrakeEncoderHelpers.cs" />
+    <Compile Include="Interop\HandBrakeFilterHelpers.cs" />
+    <Compile Include="Interop\HandBrakeInstance.cs" />
+    <Compile Include="Interop\HandBrakeLanguagesHelper.cs" />
+    <Compile Include="Interop\HandBrakePresetService.cs" />
+    <Compile Include="Interop\HandBrakeUnitConversionHelpers.cs" />
+    <Compile Include="Interop\HandBrakeUtils.cs" />
+    <Compile Include="Interop\HbLib\HBDelegates.cs" />
+    <Compile Include="Interop\HbLib\HbFunctions.cs" />
+    <Compile Include="Interop\HbLib\hb_anamorphic_mode_t.cs" />
+    <Compile Include="Interop\HbLib\hb_container_s.cs" />
+    <Compile Include="Interop\HbLib\hb_encoder_s.cs" />
+    <Compile Include="Interop\HbLib\hb_error_code.cs" />
+    <Compile Include="Interop\HbLib\hb_filter_ids.cs" />
+    <Compile Include="Interop\HbLib\hb_geometry.cs" />
+    <Compile Include="Interop\HbLib\hb_image_s.cs" />
+    <Compile Include="Interop\HbLib\hb_mixdown_s.cs" />
+    <Compile Include="Interop\HbLib\hb_rate_s.cs" />
+    <Compile Include="Interop\HbLib\hb_subtitle.cs" />
+    <Compile Include="Interop\HbLib\iso639_lang_t.cs" />
+    <Compile Include="Interop\HbLib\NativeConstants.cs" />
+    <Compile Include="Interop\Helpers\InteropUtilities.cs" />
+    <Compile Include="Interop\Helpers\NativeList.cs" />
+    <Compile Include="Interop\Helpers\Utilities.cs" />
+    <Compile Include="Interop\Interfaces\IEncodeInstance.cs" />
+    <Compile Include="Interop\Interfaces\IHandBrakeInstance.cs" />
+    <Compile Include="Interop\Json\Anamorphic\AnamorphicGeometry.cs" />
+    <Compile Include="Interop\Json\Anamorphic\DestSettings.cs" />
+    <Compile Include="Interop\Json\Encode\QSV.cs" />
+    <Compile Include="Interop\Json\Filters\PresetTune.cs" />
+    <Compile Include="Interop\Json\Presets\AudioList.cs" />
+    <Compile Include="Interop\Json\Presets\HBPreset.cs" />
+    <Compile Include="Interop\Json\Presets\PresetCategory.cs" />
+    <Compile Include="Interop\Json\Presets\PresetTransportContainer.cs" />
+    <Compile Include="Interop\Json\Queue\Task.cs" />
+    <Compile Include="Interop\Json\Scan\AudioAttributes.cs" />
+    <Compile Include="Interop\Json\Scan\SubtitleAttributes.cs" />
+    <Compile Include="Interop\Json\Shared\PAR.cs" />
+    <Compile Include="Interop\Json\Encode\Audio.cs" />
+    <Compile Include="Interop\Json\Encode\AudioTrack.cs" />
+    <Compile Include="Interop\Json\Encode\Chapter.cs" />
+    <Compile Include="Interop\Json\Encode\Destination.cs" />
+    <Compile Include="Interop\Json\Encode\Filters.cs" />
+    <Compile Include="Interop\Json\Encode\Filter.cs" />
+    <Compile Include="Interop\Json\Encode\JsonEncodeObject.cs" />
+    <Compile Include="Interop\Json\Encode\Metadata.cs" />
+    <Compile Include="Interop\Json\Encode\Mp4Options.cs" />
+    <Compile Include="Interop\Json\Encode\Range.cs" />
+    <Compile Include="Interop\Json\Encode\SubtitleSearch.cs" />
+    <Compile Include="Interop\Json\Encode\Source.cs" />
+    <Compile Include="Interop\Json\Encode\SubImport.cs" />
+    <Compile Include="Interop\Json\Encode\Subtitles.cs" />
+    <Compile Include="Interop\Json\Encode\SubtitleTrack.cs" />
+    <Compile Include="Interop\Json\Encode\Video.cs" />
+    <Compile Include="Interop\Factories\AnamorphicFactory.cs" />
+    <Compile Include="Interop\Json\State\TaskState.cs" />
+    <Compile Include="Interop\Model\Encoding\CombDetect.cs" />
+    <Compile Include="Interop\Model\Encoding\DeinterlaceFilter.cs" />
+    <Compile Include="Interop\Model\Encoding\Denoise.cs" />
+    <Compile Include="Interop\Model\Encoding\Detelecine.cs" />
+    <Compile Include="Interop\Model\Encoding\HBPresetTune.cs" />
+    <Compile Include="Interop\Model\Encoding\Sharpen.cs" />
+    <Compile Include="Interop\Model\PresetVersion.cs" />
+    <Compile Include="Interop\Model\Preview\RawPreviewData.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Interop\Json\Scan\SourceAudioTrack.cs" />
+    <Compile Include="Interop\Json\Scan\SourceChapter.cs" />
+    <Compile Include="Interop\Json\Scan\Color.cs" />
+    <Compile Include="Interop\Json\Scan\Duration.cs" />
+    <Compile Include="Interop\Json\Scan\FrameRate.cs" />
+    <Compile Include="Interop\Json\Shared\Geometry.cs" />
+    <Compile Include="Interop\Json\Scan\JsonScanObject.cs" />
+    <Compile Include="Interop\Json\Scan\SourceMetadata.cs" />
+    <Compile Include="Interop\Json\Scan\SourceSubtitleTrack.cs" />
+    <Compile Include="Interop\Json\Scan\SourceTitle.cs" />
+    <Compile Include="Interop\Json\State\JsonState.cs" />
+    <Compile Include="Interop\Json\State\Scanning.cs" />
+    <Compile Include="Interop\Json\State\WorkDone.cs" />
+    <Compile Include="Interop\Json\State\Working.cs" />
+    <Compile Include="Interop\Model\BitrateLimits.cs" />
+    <Compile Include="Interop\Model\Cropping.cs" />
+    <Compile Include="Interop\Model\Encoding\Anamorphic.cs" />
+    <Compile Include="Interop\Model\Encoding\Container.cs" />
+    <Compile Include="Interop\Model\Encoding\HBAudioEncoder.cs" />
+    <Compile Include="Interop\Model\Encoding\HBContainer.cs" />
+    <Compile Include="Interop\Model\Encoding\HBMixdown.cs" />
+    <Compile Include="Interop\Model\Encoding\HBRate.cs" />
+    <Compile Include="Interop\Model\Encoding\HBVideoEncoder.cs" />
+    <Compile Include="Interop\Model\Encoding\PictureRotation.cs" />
+    <Compile Include="Interop\Model\Encoding\ScaleMethod.cs" />
+    <Compile Include="Interop\Model\Encoding\VideoEncoder.cs" />
+    <Compile Include="Interop\Model\Encoding\VideoEncodeRateType.cs" />
+    <Compile Include="Interop\Model\Language.cs" />
+    <Compile Include="Interop\Model\Preview\PreviewSettings.cs" />
+    <Compile Include="Interop\Model\RangeLimits.cs" />
+    <Compile Include="Interop\Model\Size.cs" />
+    <Compile Include="Interop\Model\SourceVideoInfo.cs" />
+    <Compile Include="Interop\Model\VideoQualityLimits.cs" />
+    <Compile Include="Model\HBConfiguration.cs" />
+    <Compile Include="Model\VideoScaler.cs" />
+    <Compile Include="Utilities\SystemInfo.cs" />
+    <Compile Include="Utilities\VersionHelper.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Utilities\CharCodesUtilities.cs" />
+    <Compile Include="Utilities\LanguageUtilities.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="HandBrake.Interop.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <TargetFrameworkSDKToolsDirectory Condition=" '$(Platform)' == 'x64'">$(TargetFrameworkSDKToolsDirectory)$(Platform)\</TargetFrameworkSDKToolsDirectory>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
 </Project>
