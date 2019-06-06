@@ -23,19 +23,22 @@ namespace HandBrakeWPF.Services
     using HandBrakeWPF.Instance;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging;
+    using HandBrakeWPF.Services.Logging.Model;
     using HandBrakeWPF.Services.Queue.Interfaces;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
-    using Execute = Caliburn.Micro.Execute;
+    using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
 
     /// <summary>
     /// The when done service.
     /// </summary>
     public class PrePostActionService : IPrePostActionService
     {
+        private readonly ILog log = LogService.GetLogger();
         private readonly IQueueService queueProcessor;
         private readonly IUserSettingService userSettingService;
         private readonly IWindowManager windowManager;
@@ -155,7 +158,9 @@ namespace HandBrakeWPF.Services
             }
 
             if (!isCancelled)
-            {               
+            {
+                this.ServiceLogMessage(string.Format("Performing 'When Done' Action: {0}", this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction)));
+
                 // Do something when the encode ends.
                 switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction))
                 {
@@ -205,10 +210,13 @@ namespace HandBrakeWPF.Services
                     "{0} \"{1}\"", 
                     this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs), 
                     file);
-                var vlc =
+                var destination =
                     new ProcessStartInfo(
                         this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo), args);
-                Process.Start(vlc);
+
+                this.ServiceLogMessage(string.Format("Sending output file to: {0}, with arguments: {1} ", destination, args));
+
+                Process.Start(destination);
             }
         }
 
@@ -217,11 +225,21 @@ namespace HandBrakeWPF.Services
             string filePath = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenDoneAudioFile);
             if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
             {
+                this.ServiceLogMessage("Playing Sound: " + filePath);
                 var uri = new Uri(filePath, UriKind.RelativeOrAbsolute);
                 var player = new MediaPlayer();
                 player.Open(uri);
                 player.Play();
             }
+            else
+            {
+                this.ServiceLogMessage("Unable to play sound. Reason: File not found!");
+            }
+        }
+
+        protected void ServiceLogMessage(string message)
+        {
+            this.log.LogMessage(string.Format("# {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
         }
     }
 }
