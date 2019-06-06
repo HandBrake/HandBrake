@@ -455,6 +455,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        public static string Browse {
+            get {
+                return ResourceManager.GetString("Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chapter Markers.
         /// </summary>
         public static string ChaptersView_ChapterMarkers {
@@ -3232,6 +3241,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No audio file has been set. Please click &apos;Browse&apos; to select a wav or mp3 file for playback..
+        /// </summary>
+        public static string OptionsView_MediaFileNotSet {
+            get {
+                return ResourceManager.GetString("OptionsView_MediaFileNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notice.
         /// </summary>
         public static string OptionsView_Notice {
@@ -3246,6 +3264,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_PathOptions {
             get {
                 return ResourceManager.GetString("OptionsView_PathOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play.
+        /// </summary>
+        public static string OptionsView_Play {
+            get {
+                return ResourceManager.GetString("OptionsView_Play", resourceCulture);
             }
         }
         

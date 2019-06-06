@@ -16,6 +16,7 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Media;
 
     using Caliburn.Micro;
 
@@ -1409,6 +1410,31 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.WhenDoneAudioFile = Path.GetFileNameWithoutExtension(dialog.FileName);
                 this.WhenDoneAudioFileFullPath = dialog.FileName;
+            }
+            else
+            {
+                this.WhenDoneAudioFile = null;
+                this.WhenDoneAudioFileFullPath = null;
+            }
+        }
+
+        public void PlayWhenDoneFile()
+        {
+            if (!string.IsNullOrEmpty(this.WhenDoneAudioFileFullPath) && File.Exists(this.WhenDoneAudioFileFullPath))
+            {
+                var uri = new Uri(this.WhenDoneAudioFileFullPath, UriKind.RelativeOrAbsolute);
+                var player = new MediaPlayer();
+                player.Open(uri);
+                player.Play();
+                player.MediaFailed += (object sender, ExceptionEventArgs e) => { Debug.WriteLine(e); };
+            }
+            else
+            {
+                this.errorService.ShowMessageBox(
+                    Resources.OptionsView_MediaFileNotSet,
+                    Resources.Error,
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
 

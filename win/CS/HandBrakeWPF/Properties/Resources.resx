@@ -2002,4 +2002,13 @@ Where supported, any user presets will have been imported.</value>
   <data name="AudioDefaultViewModel_EncoderOptionsNotice" xml:space="preserve">
     <value>When a passthru encoder is selected, the encoder options will be used for the fallback encoder.</value>
   </data>
+  <data name="Browse" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
+    <value>No audio file has been set. Please click 'Browse' to select a wav or mp3 file for playback.</value>
+  </data>
+  <data name="OptionsView_Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
 </root>

@@ -228,6 +228,7 @@ namespace HandBrakeWPF.Services
                 this.ServiceLogMessage("Playing Sound: " + filePath);
                 var uri = new Uri(filePath, UriKind.RelativeOrAbsolute);
                 var player = new MediaPlayer();
+                player.MediaFailed += (object sender, ExceptionEventArgs e) => { this.ServiceLogMessage(e?.ToString()); };
                 player.Open(uri);
                 player.Play();
             }
@@ -237,7 +238,7 @@ namespace HandBrakeWPF.Services
             }
         }
 
-        protected void ServiceLogMessage(string message)
+        private void ServiceLogMessage(string message)
         {
             this.log.LogMessage(string.Format("# {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
         }
