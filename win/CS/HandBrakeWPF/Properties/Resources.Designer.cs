@@ -257,6 +257,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When a passthru encoder is selected, the encoder options will be used for the fallback encoder..
+        /// </summary>
+        public static string AudioDefaultViewModel_EncoderOptionsNotice {
+            get {
+                return ResourceManager.GetString("AudioDefaultViewModel_EncoderOptionsNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow passthru of:.
         /// </summary>
         public static string AudioView_AllowPassThruOf {

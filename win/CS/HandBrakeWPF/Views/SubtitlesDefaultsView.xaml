@@ -30,6 +30,7 @@
     <Grid VerticalAlignment="Top">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
@@ -118,6 +119,14 @@
                 </StackPanel>
             </Grid>
 
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Margin="10,0,0,0" Grid.Row="1" Grid.ColumnSpan="3">
+            <Button cal:Message.Attach="[Event Click] = [Action LaunchHelp]" Background="Transparent" BorderThickness="0">
+                <Button.Content>
+                    <Image Source="/Views/Images/question.png" Width="16" />
+                </Button.Content>
+            </Button>
         </StackPanel>
 
 

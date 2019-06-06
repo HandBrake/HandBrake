@@ -11,6 +11,7 @@ namespace HandBrakeWPF.ViewModels
 {
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.Linq;
 
     using HandBrake.Interop.Utilities;
@@ -183,6 +184,11 @@ namespace HandBrakeWPF.ViewModels
             this.AvailableLanguages = new BindingList<string>(this.AvailableLanguages.OrderBy(o => o).ToList());
 
             this.SubtitleBehaviours.SelectedLangauges.Clear();
+        }
+
+        public void LaunchHelp()
+        {
+            Process.Start("https://handbrake.fr/docs/en/1.2.0/advanced/audio-subtitle-defaults.html");
         }
 
         #endregion

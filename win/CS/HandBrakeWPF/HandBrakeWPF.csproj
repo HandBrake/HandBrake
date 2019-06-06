@@ -122,6 +122,7 @@
     <Compile Include="Controls\AlertPanel.xaml.cs">
       <DependentUpon>AlertPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\Audio\AudioControlVisibilityConverter.cs" />
     <Compile Include="Converters\Audio\AudioMixdownListConverter.cs" />
     <Compile Include="Converters\Audio\AudioMixdownConverter.cs" />
     <Compile Include="Converters\Audio\AudioRateTypeConverter.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Services\Logging\Model\LogLevel.cs" />
     <Compile Include="Services\Logging\Model\LogMessage.cs" />
     <Compile Include="Services\Logging\Model\LogMessageType.cs" />
+    <Compile Include="Services\PowerService.cs" />
     <Compile Include="Services\Presets\Factories\JsonPresetFactory.cs" />
     <Compile Include="Services\Presets\Interfaces\IPresetObject.cs" />
     <Compile Include="Services\Presets\Model\PresetDisplayCategory.cs" />
@@ -722,7 +724,9 @@
   <ItemGroup>
     <Resource Include="Views\Images\close64_dark.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Views\Images\question.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <TargetFrameworkSDKToolsDirectory Condition=" '$(Platform)' == 'x64'">$(TargetFrameworkSDKToolsDirectory)$(Platform)\</TargetFrameworkSDKToolsDirectory>

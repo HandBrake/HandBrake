@@ -103,7 +103,7 @@
                     </MenuItem>
                 </MenuItem>
 
-                <MenuItem Header="{x:Static Properties:Resources.MainView_PresetsMenu}" x:Name="presetMenu" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
+                <MenuItem Header="{x:Static Properties:Resources.MainView_PresetsMenu}" x:Name="presetMenu">
 
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PresetsMenu}" ItemsSource="{Binding PresetsCategories, Converter={StaticResource presetsMenuConverter}}" />
                     <Separator />

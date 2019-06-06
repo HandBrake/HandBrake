@@ -12,6 +12,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.Linq;
 
     using HandBrake.Interop.Interop;
@@ -506,6 +507,11 @@ namespace HandBrakeWPF.ViewModels
             {
                     this.AudioEncoderFallback = AudioEncoder.ffaac;
             }
+        }
+
+        public void LaunchHelp()
+        {
+            Process.Start("https://handbrake.fr/docs/en/1.2.0/advanced/audio-subtitle-defaults.html");
         }
 
         #endregion

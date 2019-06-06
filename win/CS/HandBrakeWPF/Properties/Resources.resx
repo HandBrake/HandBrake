@@ -1999,4 +1999,7 @@ Where supported, any user presets will have been imported.</value>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
     <value>Perform action immediately. (This will disable the 60 second confirmation dialog)</value>
   </data>
+  <data name="AudioDefaultViewModel_EncoderOptionsNotice" xml:space="preserve">
+    <value>When a passthru encoder is selected, the encoder options will be used for the fallback encoder.</value>
+  </data>
 </root>

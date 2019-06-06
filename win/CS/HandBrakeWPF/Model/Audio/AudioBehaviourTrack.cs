@@ -452,6 +452,14 @@ namespace HandBrakeWPF.Model.Audio
             }
         }
 
+        public bool IsAudioControlsVisibile
+        {
+            get
+            {
+                return true;
+            }
+        }
+
         /// <summary>
         /// Gets a value indicating whether IsLossless.
         /// </summary>
