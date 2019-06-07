@@ -198,11 +198,16 @@
     }
 }
 
+- (BOOL)isAutoPassthruEnabledWithNoFallback
+{
+    return (self.encoder == HB_ACODEC_AUTO_PASS && self.fallbackEncoder == HB_ACODEC_NONE);
+}
+
 - (BOOL)mixdownEnabled
 {
     BOOL retval = YES;
 
-    if (self.mixdown == HB_AMIXDOWN_NONE)
+    if (self.mixdown == HB_AMIXDOWN_NONE || self.isAutoPassthruEnabledWithNoFallback)
     {
         // "None" mixdown (passthru)
         retval = NO;
@@ -216,7 +221,7 @@
     BOOL retval = YES;
 
     int myCodecDefaultBitrate = hb_audio_bitrate_get_default(self.selectedEncoder, 0, 0);
-    if (myCodecDefaultBitrate < 0)
+    if (myCodecDefaultBitrate < 0 || self.isAutoPassthruEnabledWithNoFallback)
     {
         retval = NO;
     }
@@ -227,7 +232,7 @@
 {
     BOOL retval = YES;
 
-    if (self.selectedEncoder & HB_ACODEC_PASS_FLAG)
+    if (self.selectedEncoder & HB_ACODEC_PASS_FLAG || self.isAutoPassthruEnabledWithNoFallback)
     {
         retval = NO;
     }
