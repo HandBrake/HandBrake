@@ -955,9 +955,12 @@ static int validate_audio_codec_mux(int codec, int mux, int track)
     {
         if ((enc->codec == codec) && (enc->muxers & mux) == 0)
         {
-            hb_error("track %d: incompatible encoder '%s' for muxer '%s'",
-                     track + 1, enc->short_name,
-                     hb_container_get_short_name(mux));
+            if (codec != HB_ACODEC_NONE)
+            {
+                hb_error("track %d: incompatible encoder '%s' for muxer '%s'",
+                         track + 1, enc->short_name,
+                         hb_container_get_short_name(mux));
+            }
             return -1;
         }
     }
@@ -1537,16 +1540,20 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
     }
 
     // Audio sanity checks
-    int count = hb_list_count(job->list_audio);
     int ii;
-    for (ii = 0; ii < count; ii++)
+    for (ii = 0; ii < hb_list_count(job->list_audio); )
     {
         hb_audio_config_t *acfg;
         acfg = hb_list_audio_config_item(job->list_audio, ii);
         if (validate_audio_codec_mux(acfg->out.codec, job->mux, ii))
         {
-            goto fail;
+            // drop the track
+            hb_audio_t * audio = hb_list_item(job->list_audio, ii);
+            hb_list_rem(job->list_audio, audio);
+            hb_audio_close(&audio);
+            continue;
         }
+        ii++;
     }
 
     // process subtitle list
