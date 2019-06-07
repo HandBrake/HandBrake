@@ -492,7 +492,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
     encodeInt(_encoder);
 
-    encodeInt(_qualityType);
+    encodeInt((int)_qualityType);
     encodeInt(_avgBitrate);
     encodeDouble(_quality);
 
@@ -500,7 +500,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     encodeDouble(_qualityMaxValue);
 
     encodeInt(_frameRate);
-    encodeInt(_frameRateMode);
+    encodeInt((int)_frameRateMode);
 
     encodeBool(_twoPass);
     encodeBool(_turboTwoPass);

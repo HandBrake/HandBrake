@@ -77,7 +77,7 @@ static NSString *versionKey = @"HBQueueItemVersion";
 - (void)encodeWithCoder:(nonnull NSCoder *)coder
 {
     [coder encodeInt:1 forKey:versionKey];
-    encodeInt(_state);
+    encodeInt((int)_state);
     encodeObject(_job);
     encodeObject(_uuid);
 }

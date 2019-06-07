@@ -193,7 +193,7 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 {
     [coder encodeInt:1 forKey:@"HBRangeVersion"];
 
-    encodeInt(_type);
+    encodeInt((int)_type);
 
     encodeInt(_chapterStart);
     encodeInt(_chapterStop);

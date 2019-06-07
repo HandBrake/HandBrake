@@ -476,7 +476,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
         srcGeo.par.num = self.sourceParNum;
         srcGeo.par.den = self.sourceParDen;
 
-        uiGeo.mode = self.anamorphicMode;
+        uiGeo.mode = (int)self.anamorphicMode;
         uiGeo.keep = self.keep;
         uiGeo.itu_par = 0;
         uiGeo.modulus = self.modulus;
@@ -571,7 +571,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     encodeInt(_height);
 
     encodeBool(_keepDisplayAspect);
-    encodeInt(_anamorphicMode);
+    encodeInt((int)_anamorphicMode);
     encodeInt(_modulus);
 
     encodeInt(_displayWidth);
