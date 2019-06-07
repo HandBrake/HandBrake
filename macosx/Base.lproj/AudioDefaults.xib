@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="13770" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <development version="8000" identifier="xcode"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13770"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -17,11 +16,11 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="kwM-lz-5lG">
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" visibleAtLaunch="NO" animationBehavior="default" id="kwM-lz-5lG">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="175" y="825" width="794" height="474"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="2560" height="1417"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <view key="contentView" id="ZP2-Cp-K5w">
                 <rect key="frame" x="0.0" y="0.0" width="794" height="474"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -88,7 +87,7 @@ All Matching Selected Languages adds all audio tracks matching each of the selec
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="sC2-52-liU">
-                        <rect key="frame" x="717" y="14" width="62" height="28"/>
+                        <rect key="frame" x="717" y="14" width="62" height="27"/>
                         <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kDe-1L-VkD">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -190,10 +189,14 @@ DQ
                         </popUpButtonCell>
                         <connections>
                             <accessibilityConnection property="title" destination="Tth-IR-7cU" id="eOb-bG-eUP"/>
-                            <binding destination="-2" name="content" keyPath="self.settings.audioEncoderFallbacks" id="cP2-Bo-45S"/>
-                            <binding destination="-2" name="selectedValue" keyPath="self.settings.encoderFallback" previousBinding="cP2-Bo-45S" id="beq-vk-V2B">
+                            <binding destination="-2" name="content" keyPath="self.settings.audioEncoderFallbacks" id="71J-tI-ct9">
                                 <dictionary key="options">
-                                    <string key="NSValueTransformerName">HBEncoderTransformer</string>
+                                    <string key="NSValueTransformerName">HBFallbackEncodersTransformer</string>
+                                </dictionary>
+                            </binding>
+                            <binding destination="-2" name="selectedValue" keyPath="self.settings.encoderFallback" previousBinding="71J-tI-ct9" id="vA7-D4-O6Y">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">HBFallbackEncoderTransformer</string>
                                 </dictionary>
                             </binding>
                             <outlet property="nextKeyView" destination="uF5-6E-EIe" id="gaK-Cr-XA9"/>
@@ -260,7 +263,7 @@ DQ
                         </connections>
                     </button>
                     <button translatesAutoresizingMaskIntoConstraints="NO" id="BK7-c4-kkk">
-                        <rect key="frame" x="646" y="376" width="51" height="18"/>
+                        <rect key="frame" x="646" y="376" width="56" height="18"/>
                         <string key="toolTip">Enable this if your playback device supports E-AC3. This permits E-AC3 passthru to be selected when automatic passthru selecion is enabled.</string>
                         <buttonCell key="cell" type="check" title="E-AC3" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="u9h-dn-wcK">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -285,7 +288,7 @@ DQ
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                     <tableColumns>
-                                        <tableColumn identifier="" width="254" minWidth="143" maxWidth="1000" id="pR9-d4-SNf">
+                                        <tableColumn width="254" minWidth="143" maxWidth="1000" id="pR9-d4-SNf">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="Codec">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -328,7 +331,7 @@ DQ
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
-                                        <tableColumn identifier="" width="151" minWidth="128" maxWidth="3.4028234663852886e+38" id="0kT-0J-3k2">
+                                        <tableColumn width="151" minWidth="128" maxWidth="3.4028234663852886e+38" id="0kT-0J-3k2">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Mixdown">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -375,7 +378,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
-                                        <tableColumn identifier="" width="111" minWidth="74" maxWidth="3.4028234663852886e+38" id="LxC-Qx-psh">
+                                        <tableColumn width="111" minWidth="74" maxWidth="3.4028234663852886e+38" id="LxC-Qx-psh">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Samplerate">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -420,7 +423,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
-                                        <tableColumn identifier="" width="96" minWidth="74" maxWidth="3.4028234663852886e+38" id="vhn-7C-4aZ">
+                                        <tableColumn width="96" minWidth="74" maxWidth="3.4028234663852886e+38" id="vhn-7C-4aZ">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Bitrate">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -465,7 +468,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
-                                        <tableColumn identifier="" width="61" minWidth="61" maxWidth="3.4028234663852886e+38" id="N7h-CJ-quV">
+                                        <tableColumn width="61" minWidth="61" maxWidth="3.4028234663852886e+38" id="N7h-CJ-quV">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Gain">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -516,7 +519,7 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                 </tableCellView>
                                             </prototypeCellViews>
                                         </tableColumn>
-                                        <tableColumn identifier="" width="61" minWidth="61" maxWidth="3.4028234663852886e+38" id="zX9-T9-wKy">
+                                        <tableColumn width="61" minWidth="61" maxWidth="3.4028234663852886e+38" id="zX9-T9-wKy">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="DRC">
                                                 <font key="font" metaFont="smallSystem"/>
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -591,11 +594,11 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="140" id="4LW-Vv-px8"/>
                         </constraints>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="ToF-HP-PBf">
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="ToF-HP-PBf">
                             <rect key="frame" x="1" y="126" width="752" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="Dhw-4v-YLa">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Dhw-4v-YLa">
                             <rect key="frame" x="224" y="17" width="15" height="102"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
@@ -616,7 +619,7 @@ Values greater than 1 further increase the volume of quiet sounds. Values greate
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kJY-av-BYf">
-                        <rect key="frame" x="657" y="14" width="62" height="28"/>
+                        <rect key="frame" x="657" y="14" width="62" height="27"/>
                         <buttonCell key="cell" type="push" title="Cancel" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Jn4-1L-J1g">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
@@ -710,11 +713,11 @@ Gw
                         <constraints>
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="250" id="7Rp-Nn-e0h"/>
                         </constraints>
-                        <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
+                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="bXf-U5-ogz">
                             <rect key="frame" x="1" y="118" width="248" height="16"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
-                        <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" horizontal="NO" id="BWM-rq-VTg">
+                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="BWM-rq-VTg">
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                         <accessibility description="Audio Track Languages"/>
@@ -723,7 +726,7 @@ Gw
                         </connections>
                     </scrollView>
                     <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="M11-Ls-RrL">
-                        <rect key="frame" x="18" y="17" width="22" height="22"/>
+                        <rect key="frame" x="20" y="19" width="18" height="19"/>
                         <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="sOl-fj-Vc8">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="smallSystem"/>
