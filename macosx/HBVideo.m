@@ -332,6 +332,11 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     if (levels.count && ![levels containsObject:self.level]) {
         self.level = levels.firstObject;
     }
+
+    if (self.encoder != HB_VCODEC_X264)
+    {
+        self.fastDecode = NO;
+    }
 }
 
 - (void)validateVideoOptionExtra:(int)previousEncoder
@@ -390,7 +395,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     for (int i = 0; tunes != NULL && tunes[i] != NULL; i++)
     {
         // we filter out "fastdecode" as we have a dedicated checkbox for it
-        if (strcasecmp(tunes[i], "fastdecode") != 0)
+        if (self.encoder != HB_VCODEC_X264 || strcasecmp(tunes[i], "fastdecode") != 0)
         {
             [temp addObject:@(tunes[i])];
         }
