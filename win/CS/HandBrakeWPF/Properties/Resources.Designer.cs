@@ -4129,7 +4129,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import.
+        ///   Looks up a localized string similar to Import Queue.
         /// </summary>
         public static string QueueView_Import {
             get {
