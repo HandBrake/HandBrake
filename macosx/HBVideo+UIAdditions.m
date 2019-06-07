@@ -81,7 +81,7 @@
 
 - (BOOL)fastDecodeSupported
 {
-    if (self.encoder != HB_VCODEC_X264)
+    if (!(self.encoder & HB_VCODEC_X264_MASK))
     {
         return NO;
     }
