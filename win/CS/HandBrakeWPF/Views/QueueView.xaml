@@ -81,8 +81,10 @@
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:Resources.QueueView_ClearAll}" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ClearSelected}" />
                     <Separator />
-                    <!--<MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:Resources.QueueView_Import}" />-->
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:Resources.QueueView_Import}" />
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.QueueView_Export}" />
+                    <Separator />
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action ExportCli]" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
                 </MenuItem>
             </Menu>
 

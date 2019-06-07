@@ -102,13 +102,14 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         void BackupQueue(string exportPath);
 
         /// <summary>
-        /// Export the Queue the standardised JSON format.
+        /// Export the windows queue in JSON format.
+        /// Note: Note compatible with CLI.
         /// </summary>
         /// <param name="exportPath">
         /// The export path.
         /// </param>
         void ExportJson(string exportPath);
-        
+
         /// <summary>
         /// Restore a JSON queue file.
         /// </summary>
@@ -116,6 +117,14 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         /// Path to the file the user wishes to import.
         /// </param>
         void ImportJson(string path);
+
+        /// <summary>
+        /// Export the Queue the standardised JSON format for the CLI
+        /// </summary>
+        /// <param name="exportPath">
+        /// The export path.
+        /// </param>
+        void ExportCliJson(string exportPath);
 
         /// <summary>
         /// Checks the current queue for an existing instance of the specified destination.

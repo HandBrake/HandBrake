@@ -497,10 +497,7 @@ namespace HandBrakeWPF.ViewModels
             this.queueProcessor.Start(userSettingService.GetUserSetting<bool>(UserSettingConstants.ClearCompletedFromQueue));
         }
 
-        /// <summary>
-        /// Export the Queue to a file.
-        /// </summary>
-        public void Export()
+        public void ExportCli()
         {
             SaveFileDialog dialog = new SaveFileDialog
             {
@@ -512,13 +509,26 @@ namespace HandBrakeWPF.ViewModels
 
             if (dialog.ShowDialog() == true)
             {
+                this.queueProcessor.ExportCliJson(dialog.FileName);
+            }
+        }
+
+        public void Export()
+        {
+            SaveFileDialog dialog = new SaveFileDialog
+                                    {
+                                        Filter = "Json (*.json)|*.json",
+                                        OverwritePrompt = true,
+                                        DefaultExt = ".json",
+                                        AddExtension = true
+                                    };
+
+            if (dialog.ShowDialog() == true)
+            {
                 this.queueProcessor.ExportJson(dialog.FileName);
             }
         }
 
-        /// <summary>
-        /// Import a saved queue
-        /// </summary>
         public void Import()
         {
             OpenFileDialog dialog = new OpenFileDialog { Filter = "Json (*.json)|*.json", CheckFileExists = true };
@@ -558,7 +568,6 @@ namespace HandBrakeWPF.ViewModels
         public void OpenSourceDir()
         {
             this.OpenSourceDirectory(this.SelectedTask);
-
         }
 
         public void OpenDestDir()

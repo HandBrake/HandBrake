@@ -1459,7 +1459,7 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>End Time:</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
-    <value>Export Queue for CLI</value>
+    <value>Export Queue</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
     <value>Filesize: </value>
@@ -2010,5 +2010,8 @@ Where supported, any user presets will have been imported.</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
     <value>Play</value>
+  </data>
+  <data name="QueueView_ExportCLI" xml:space="preserve">
+    <value>Export Queue (CLI Only)</value>
   </data>
 </root>
