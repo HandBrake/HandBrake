@@ -497,7 +497,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
     encodeInt(_encoder);
 
-    encodeInt((int)_qualityType);
+    encodeInt(_qualityType);
     encodeInt(_avgBitrate);
     encodeDouble(_quality);
 
@@ -505,7 +505,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
     encodeDouble(_qualityMaxValue);
 
     encodeInt(_frameRate);
-    encodeInt((int)_frameRateMode);
+    encodeInt(_frameRateMode);
 
     encodeBool(_twoPass);
     encodeBool(_turboTwoPass);
@@ -526,16 +526,15 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
     decodeInt(_encoder);
 
-    decodeInt(_qualityType);
-    decodeInt(_avgBitrate);
+    decodeInt(_qualityType); if (_qualityType < HBVideoQualityTypeAvgBitrate || _qualityType > HBVideoQualityTypeConstantQuality) { goto fail; }
+    decodeInt(_avgBitrate); if (_avgBitrate < 0) { goto fail; }
     decodeDouble(_quality);
 
     decodeDouble(_qualityMinValue);
     decodeDouble(_qualityMaxValue);
 
-    decodeInt(_frameRate);
-    decodeInt(_frameRateMode);
-
+    decodeInt(_frameRate); if (_frameRate < 0) { goto fail; }
+    decodeInt(_frameRateMode); if (_frameRateMode < HBVideoFrameRateModeVFR_PFR || _frameRateMode > HBVideoFrameRateModeCFR) { goto fail; }
     decodeBool(_twoPass);
     decodeBool(_turboTwoPass);
 

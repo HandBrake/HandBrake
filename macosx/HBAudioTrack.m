@@ -557,18 +557,21 @@ NSString *keyAudioTrackLanguageIsoCode = @"keyAudioTrackLanguageIsoCode";
 {
     self = [super init];
 
-    decodeInteger(_sourceTrackIdx);
-    decodeInt(_container);
+    decodeInteger(_sourceTrackIdx); if (_sourceTrackIdx < 0) { goto fail; }
+    decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
 
-    decodeInt(_encoder);
-    decodeInt(_mixdown);
-    decodeInt(_sampleRate);
-    decodeInt(_bitRate);
+    decodeInt(_encoder); if (_encoder < 0) { goto fail; }
+    decodeInt(_mixdown); if (_mixdown < 0) { goto fail; }
+    decodeInt(_sampleRate); if (_sampleRate < 0) { goto fail; }
+    decodeInt(_bitRate); if (_bitRate < -1) { goto fail; }
 
     decodeDouble(_gain);
     decodeDouble(_drc);
 
     return self;
+
+fail:
+    return nil;
 }
 
 @end

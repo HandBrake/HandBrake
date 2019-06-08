@@ -193,7 +193,7 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 {
     [coder encodeInt:1 forKey:@"HBRangeVersion"];
 
-    encodeInt((int)_type);
+    encodeInt(_type);
 
     encodeInt(_chapterStart);
     encodeInt(_chapterStop);
@@ -209,10 +209,9 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 {
     self = [super init];
 
-    decodeInt(_type);
-
-    decodeInt(_chapterStart);
-    decodeInt(_chapterStop);
+    decodeInt(_type); if (_type < HBRangeTypeChapters || _type > HBRangePreviewIndex) { goto fail; }
+    decodeInt(_chapterStart);  if (_chapterStart < 0) { goto fail; }
+    decodeInt(_chapterStop);  if (_chapterStop < _chapterStart) { goto fail; }
 
     decodeInt(_secondsStart);
     decodeInt(_secondsStop);
@@ -221,6 +220,9 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
     decodeInt(_frameStop);
     
     return self;
+
+fail:
+    return nil;
 }
 
 @end

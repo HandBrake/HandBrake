@@ -440,20 +440,23 @@
 {
     self = [super init];
 
-    decodeInt(_encoder);
-    decodeInt(_fallbackEncoder);
-    decodeInt(_mixdown);
-    decodeInt(_sampleRate);
-    decodeInt(_bitRate);
+    decodeInt(_encoder); if (_encoder < 0) { goto fail; }
+    decodeInt(_fallbackEncoder); if (_fallbackEncoder < 0) { goto fail; }
+    decodeInt(_mixdown); if (_mixdown < 0) { goto fail; }
+    decodeInt(_sampleRate); if (_sampleRate < 0) { goto fail; }
+    decodeInt(_bitRate); if (_bitRate < 0) { goto fail; }
 
     decodeDouble(_gain);
     decodeDouble(_drc);
 
-    decodeInt(_container);
+    decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
 
     [self validateFallbackEncoder];
 
     return self;
+
+fail:
+    return nil;
 }
 
 @end

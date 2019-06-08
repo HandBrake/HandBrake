@@ -481,13 +481,16 @@ extern NSString *keySubTrackExternalFileURLBookmark;
 {
     self = [super init];
 
+#ifdef __SANDBOX_ENABLED__
+    NSMutableArray *sourceTracks = [NSMutableArray array];
+#endif
+
     _tokens = [NSMutableArray array];
 
-    decodeInt(_container);
+    decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
     decodeCollectionOfObjects3(_sourceTracks, NSArray, NSDictionary, NSURL, NSData);
 
 #ifdef __SANDBOX_ENABLED__
-    NSMutableArray *sourceTracks = [NSMutableArray array];
     for (NSDictionary *sourceTrack in _sourceTracks)
     {
         if (sourceTrack[keySubTrackExternalFileURLBookmark])

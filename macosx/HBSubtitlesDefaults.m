@@ -226,6 +226,10 @@
     self = [super init];
 
     decodeInteger(_trackSelectionBehavior);
+    if (_trackSelectionBehavior < HBSubtitleTrackSelectionBehaviorNone || _trackSelectionBehavior > HBSubtitleTrackSelectionBehaviorAll)
+    {
+        goto fail;
+    }
     decodeObjectOrFail(_trackSelectionLanguages, NSMutableArray);
 
     decodeBool(_addForeignAudioSearch);
@@ -233,6 +237,10 @@
     decodeBool(_addCC);
 
     decodeInteger(_burnInBehavior);
+    if (_burnInBehavior < HBSubtitleTrackBurnInBehaviorNone || _burnInBehavior > HBSubtitleTrackBurnInBehaviorForeignAudioThenFirst)
+    {
+        goto fail;
+    }
     decodeBool(_burnInDVDSubtitles);
     decodeBool(_burnInBluraySubtitles);
 

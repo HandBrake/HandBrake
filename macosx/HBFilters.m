@@ -876,7 +876,7 @@ NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
     decodeObjectOrFail(_deblockCustomString, NSString);
 
     decodeBool(_grayscale);
-    decodeInt(_rotate);
+    decodeInt(_rotate); if (_rotate != 0 && _rotate != 90 && _rotate != 180 && _rotate != 270) { goto fail; }
     decodeBool(_flip);
 
     _notificationsEnabled = YES;

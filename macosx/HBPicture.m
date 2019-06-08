@@ -571,7 +571,7 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
     encodeInt(_height);
 
     encodeBool(_keepDisplayAspect);
-    encodeInt((int)_anamorphicMode);
+    encodeInt(_anamorphicMode);
     encodeInt(_modulus);
 
     encodeInt(_displayWidth);
@@ -599,36 +599,44 @@ NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 {
     self = [super init];
 
-    decodeInt(_width);
-    decodeInt(_height);
+    decodeInt(_width); if (_width < 0) { goto fail; }
+    decodeInt(_height); if (_height < 0) { goto fail; }
 
     decodeBool(_keepDisplayAspect);
     decodeInt(_anamorphicMode);
-    decodeInt(_modulus);
+    if (_anamorphicMode < HBPictureAnarmophicModeNone || _anamorphicMode > HBPictureAnarmophicModeAuto)
+    {
+        goto fail;
+    }
 
-    decodeInt(_displayWidth);
-    decodeInt(_parWidth);
-    decodeInt(_parHeight);
+    decodeInt(_modulus); if (_modulus < 2 || _modulus > 16) { goto fail; }
+
+    decodeInt(_displayWidth); if (_displayWidth < 0) { goto fail; }
+    decodeInt(_parWidth); if (_parWidth < 0) { goto fail; }
+    decodeInt(_parHeight); if (_parHeight < 0) { goto fail; }
 
     decodeBool(_autocrop);
-    decodeInt(_cropTop);
-    decodeInt(_cropBottom);
-    decodeInt(_cropLeft);
-    decodeInt(_cropRight);
+    decodeInt(_cropTop); if (_cropTop < 0) { goto fail; }
+    decodeInt(_cropBottom); if (_cropBottom < 0) { goto fail; }
+    decodeInt(_cropLeft); if (_cropLeft < 0) { goto fail; }
+    decodeInt(_cropRight); if (_cropRight < 0) { goto fail; }
 
-    decodeInt(_autoCropTop);
-    decodeInt(_autoCropBottom);
-    decodeInt(_autoCropLeft);
-    decodeInt(_autoCropRight);
+    decodeInt(_autoCropTop); if (_autoCropTop < 0) { goto fail; }
+    decodeInt(_autoCropBottom); if (_autoCropBottom < 0) { goto fail; }
+    decodeInt(_autoCropLeft); if (_autoCropLeft < 0) { goto fail; }
+    decodeInt(_autoCropRight); if (_autoCropRight < 0) { goto fail; }
 
-    decodeInt(_sourceWidth);
-    decodeInt(_sourceHeight);
-    decodeInt(_sourceParNum);
-    decodeInt(_sourceParDen);
+    decodeInt(_sourceWidth); if (_sourceWidth < 0) { goto fail; }
+    decodeInt(_sourceHeight); if (_sourceHeight < 0) { goto fail; }
+    decodeInt(_sourceParNum); if (_sourceParNum < 0) { goto fail; }
+    decodeInt(_sourceParDen); if (_sourceParDen < 0) { goto fail; }
 
     _notificationsEnabled = YES;
-    
+
     return self;
+
+fail:
+    return nil;
 }
 
 #pragma mark - Presets

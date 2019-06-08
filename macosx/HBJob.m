@@ -426,7 +426,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
     {
         decodeObjectOrFail(_name, NSString);
         decodeObjectOrFail(_presetName, NSString);
-        decodeInt(_titleIdx);
+        decodeInt(_titleIdx); if (_titleIdx < 0) { goto fail; }
 
 #ifdef __SANDBOX_ENABLED__
         _fileURLBookmark = [decoder decodeObjectOfClass:[NSData class] forKey:@"_fileURLBookmark"];
@@ -459,8 +459,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         decodeObject(_outputFileName, NSString);
 
-        decodeInt(_container);
-        decodeInt(_angle);
+        decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
+        decodeInt(_angle); if (_angle < 0) { goto fail; }
         decodeBool(_mp4HttpOptimize);
         decodeBool(_mp4iPodCompatible);
         decodeBool(_alignAVStart);

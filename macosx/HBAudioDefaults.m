@@ -469,6 +469,11 @@
     self = [super init];
 
     decodeInteger(_trackSelectionBehavior);
+    if (_trackSelectionBehavior < HBAudioTrackSelectionBehaviorNone || _trackSelectionBehavior > HBAudioTrackSelectionBehaviorAll)
+    {
+        goto fail;
+    }
+
     decodeObjectOrFail(_trackSelectionLanguages, NSMutableArray);
 
     decodeCollectionOfObjects(_tracksArray, NSMutableArray, HBAudioTrackPreset);
@@ -482,8 +487,8 @@
     decodeBool(_allowTrueHDPassthru);
     decodeBool(_allowFLACPassthru);
 
-    decodeInt(_encoderFallback);
-    decodeInt(_container);
+    decodeInt(_encoderFallback); if (_encoderFallback < 0) { goto fail; }
+    decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
     decodeBool(_secondaryEncoderMode);
 
     return self;

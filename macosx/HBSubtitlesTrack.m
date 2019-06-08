@@ -370,9 +370,9 @@ NSString *keySubTrackExternalFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
 {
     self = [super init];
 
-    decodeInteger(_sourceTrackIdx);
-    decodeInt(_type);
-    decodeInt(_container);
+    decodeInteger(_sourceTrackIdx); if (_sourceTrackIdx < 0) { goto fail; }
+    decodeInt(_type); if (_type < VOBSUB || _type > SRTSUB) { goto fail; }
+    decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
 
     decodeBool(_forcedOnly);
     decodeBool(_burnedIn);
@@ -384,6 +384,9 @@ NSString *keySubTrackExternalFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
     decodeInt(_offset);
 
     return self;
+
+fail:
+    return nil;
 }
 
 @end

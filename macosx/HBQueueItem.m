@@ -77,7 +77,7 @@ static NSString *versionKey = @"HBQueueItemVersion";
 - (void)encodeWithCoder:(nonnull NSCoder *)coder
 {
     [coder encodeInt:1 forKey:versionKey];
-    encodeInt((int)_state);
+    encodeInt(_state);
     encodeObject(_job);
     encodeObject(_uuid);
 }
@@ -88,11 +88,7 @@ static NSString *versionKey = @"HBQueueItemVersion";
 
     if (version == 1 && (self = [super init]))
     {
-        decodeInt(_state);
-        if (_state < HBQueueItemStateReady || _state > HBQueueItemStateFailed)
-        {
-            goto fail;
-        }
+        decodeInt(_state); if (_state < HBQueueItemStateReady || _state > HBQueueItemStateFailed) { goto fail; }
         decodeObjectOrFail(_job, HBJob);
         decodeObjectOrFail(_uuid, NSString);
         return self;

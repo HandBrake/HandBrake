@@ -167,7 +167,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 {
     // Save changes to disk
     // and unlock
-    [self synchronize];
+    [self synchronizeIfNeeded];
     [self unlock];
 }
 
@@ -241,6 +241,17 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 
     // Update the time, so we can avoid reloaded the file from disk later.
     self.modifiedTime = [NSDate timeIntervalSinceReferenceDate];
+}
+
+/**
+ *  Writes the changes to disk only if we aren't exiting a recursive lock
+ */
+- (void)synchronizeIfNeeded
+{
+    if (self.mutexCount == 1)
+    {
+        [self synchronize];
+    }
 }
 
 /**
