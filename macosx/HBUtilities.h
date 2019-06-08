@@ -70,6 +70,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSString *)iso6392CodeFor:(NSString *)language;
 + (NSString *)languageCodeForIso6392Code:(NSString *)language;
 
+typedef NS_ENUM(NSUInteger, HBPrivacyConsentState) {
+    HBPrivacyConsentStateUnknown,
+    HBPrivacyConsentStateDenied,
+    HBPrivacyConsentStateGranted,
+};
+
++ (HBPrivacyConsentState)determinePermissionToAutomateTarget:(NSString *)bundleIdentifier promptIfNeeded:(BOOL)promptIfNeeded;
+
 @end
 
 NS_ASSUME_NONNULL_END

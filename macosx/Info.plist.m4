@@ -72,5 +72,9 @@ GPLv2 license.</string>
 	<false/>
 	<key>NSUserNotificationAlertStyle</key>
 	<string>alert</string>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>HandBrake needs access to shut down or put the computer to sleep</string>
+	<key>NSAppleScriptEnabled</key>
+	<true/>
 </dict>
 </plist>

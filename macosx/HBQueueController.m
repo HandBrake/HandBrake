@@ -1073,7 +1073,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         // Sleep
         NSDictionary *errorDict;
         NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:
-                                       @"tell application \"Finder\" to sleep"];
+                                       @"tell application \"System Events\" to sleep"];
         [scriptObject executeAndReturnError: &errorDict];
     }
     // If Shutdown has been selected
@@ -1081,7 +1081,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     {
         // Shut Down
         NSDictionary *errorDict;
-        NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:@"tell application \"Finder\" to shut down"];
+        NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:@"tell application \"System Events\" to shut down"];
         [scriptObject executeAndReturnError: &errorDict];
     }
 }
@@ -1219,6 +1219,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         {
             [self.delegate showPreferencesWindow:nil];
         }
+
+        [self promptForAppleEventAuthorization];
     }
     else if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionShutDown)
     {
@@ -1237,6 +1239,17 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         {
             [self.delegate showPreferencesWindow:nil];
         }
+
+        [self promptForAppleEventAuthorization];
+    }
+}
+
+- (void)promptForAppleEventAuthorization
+{
+    HBPrivacyConsentState result = [HBUtilities determinePermissionToAutomateTarget:@"com.apple.systemevents" promptIfNeeded:YES];
+    if (result != HBPrivacyConsentStateGranted)
+    {
+        [HBUtilities writeToActivityLog:"Failed to get permission to automate system events"];
     }
 }
 

@@ -383,4 +383,52 @@ static NSDateFormatter *_releaseDateFormatter = nil;
     return @"Unknown";
 }
 
+#if __MAC_OS_X_VERSION_MIN_REQUIRED <= __MAC_10_14
+enum {
+    errAEEventWouldRequireUserConsent = -1744,
+};
+#endif
+
++ (HBPrivacyConsentState)determinePermissionToAutomateTarget:(NSString *)bundleIdentifier promptIfNeeded:(BOOL)promptIfNeeded
+{
+    if (@available(macOS 10.14, *))
+    {
+        const char *identifierCString = bundleIdentifier.UTF8String;
+        AEAddressDesc addressDesc;
+        OSErr descResult = AECreateDesc(typeApplicationBundleID, identifierCString, strlen(identifierCString), &addressDesc);
+
+        if (descResult == noErr)
+        {
+            OSStatus permission = AEDeterminePermissionToAutomateTarget(&addressDesc, typeWildCard, typeWildCard, promptIfNeeded);
+            AEDisposeDesc(&addressDesc);
+
+            HBPrivacyConsentState result;
+
+            switch (permission)
+            {
+                case errAEEventWouldRequireUserConsent:
+                    [HBUtilities writeToActivityLog:"Request user consent for %s.", bundleIdentifier.UTF8String];
+                    result = HBPrivacyConsentStateUnknown;
+                    break;
+                case noErr:
+                    [HBUtilities writeToActivityLog:"Permission granted for %s.", bundleIdentifier.UTF8String];
+                    result = HBPrivacyConsentStateGranted;
+                    break;
+                case errAEEventNotPermitted:
+                    [HBUtilities writeToActivityLog:"Permission not granted for %s.", bundleIdentifier.UTF8String];
+                    result = HBPrivacyConsentStateDenied;
+                    break;
+                case procNotFound:
+                default:
+                    [HBUtilities writeToActivityLog:"Permission unknown."];
+                    result = HBPrivacyConsentStateUnknown;
+                    break;
+            }
+            return result;
+        }
+    }
+
+    return HBPrivacyConsentStateGranted;
+}
+
 @end
