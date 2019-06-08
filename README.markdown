@@ -1,4 +1,4 @@
-# HandBrake [![Build Status](https://travis-ci.com/HandBrake/HandBrake.svg?branch=master)](https://travis-ci.com/HandBrake/HandBrake)
+# HandBrake 
 
 HandBrake is an open-source video transcoder available for Linux, Mac, and Windows, licensed under the [GNU General Public License (GPL) Version 2](LICENSE).
 
