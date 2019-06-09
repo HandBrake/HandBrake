@@ -395,6 +395,17 @@ enum {
     {
         const char *identifierCString = bundleIdentifier.UTF8String;
         AEAddressDesc addressDesc;
+
+        if ([bundleIdentifier isEqualToString:@"com.apple.systemevents"])
+        {
+            // Mare sure system events is running, if not the consent alert will not be shown.
+            BOOL result = [NSWorkspace.sharedWorkspace launchAppWithBundleIdentifier:bundleIdentifier options:0 additionalEventParamDescriptor:nil launchIdentifier:NULL];
+            if (result == NO)
+            {
+                [HBUtilities writeToActivityLog:"Automation: couldn't launch %s.", bundleIdentifier.UTF8String];
+            }
+        }
+
         OSErr descResult = AECreateDesc(typeApplicationBundleID, identifierCString, strlen(identifierCString), &addressDesc);
 
         if (descResult == noErr)
@@ -407,20 +418,20 @@ enum {
             switch (permission)
             {
                 case errAEEventWouldRequireUserConsent:
-                    [HBUtilities writeToActivityLog:"Request user consent for %s.", bundleIdentifier.UTF8String];
+                    [HBUtilities writeToActivityLog:"Automation: request user consent for %s.", bundleIdentifier.UTF8String];
                     result = HBPrivacyConsentStateUnknown;
                     break;
                 case noErr:
-                    [HBUtilities writeToActivityLog:"Permission granted for %s.", bundleIdentifier.UTF8String];
+                    [HBUtilities writeToActivityLog:"Automation: permission granted for %s.", bundleIdentifier.UTF8String];
                     result = HBPrivacyConsentStateGranted;
                     break;
                 case errAEEventNotPermitted:
-                    [HBUtilities writeToActivityLog:"Permission not granted for %s.", bundleIdentifier.UTF8String];
+                    [HBUtilities writeToActivityLog:"Automation: permission not granted for %s.", bundleIdentifier.UTF8String];
                     result = HBPrivacyConsentStateDenied;
                     break;
                 case procNotFound:
                 default:
-                    [HBUtilities writeToActivityLog:"Permission unknown."];
+                    [HBUtilities writeToActivityLog:"Automation: permission unknown."];
                     result = HBPrivacyConsentStateUnknown;
                     break;
             }
