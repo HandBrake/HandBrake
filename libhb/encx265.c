@@ -81,6 +81,29 @@ static int param_parse(hb_work_private_t *pv, x265_param *param,
     return ret;
 }
 
+int apply_h265_level(hb_work_private_t *pv,  x265_param *param,
+                     const char *h265_level)
+{
+    if (h265_level == NULL ||
+        !strcasecmp(h265_level, hb_h265_level_names[0]))
+    {
+        return 0;
+    }
+    // Verify that level is valid
+    int i;
+    for (i = 1; hb_h265_level_values[i]; i++)
+    {
+        if (!strcmp(hb_h265_level_names[i], h265_level))
+        {
+            return param_parse(pv, param, "level-idc", h265_level);
+        }
+    }
+
+    // error (invalid or unsupported level), abort
+    hb_error("apply_h265_level: invalid level %s", h265_level);
+    return X265_PARAM_BAD_VALUE;
+}
+
 /***********************************************************************
  * hb_work_encx265_init
  ***********************************************************************
@@ -270,6 +293,10 @@ int encx265Init(hb_work_object_t *w, hb_job_t *job)
     if (job->encoder_profile                                      != NULL &&
         strcasecmp(job->encoder_profile, profile_names[0])        != 0    &&
         pv->api->param_apply_profile(param, job->encoder_profile) < 0)
+    {
+        goto fail;
+    }
+    if (apply_h265_level(pv, param, job->encoder_level) < 0)
     {
         goto fail;
     }
