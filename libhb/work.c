@@ -546,6 +546,9 @@ void hb_display_job_info(hb_job_t *job)
             {
                 case HB_VCODEC_X264_8BIT:
                 case HB_VCODEC_X264_10BIT:
+                case HB_VCODEC_X265_8BIT:
+                case HB_VCODEC_X265_10BIT:
+                case HB_VCODEC_X265_12BIT:
                 case HB_VCODEC_QSV_H264:
                 case HB_VCODEC_QSV_H265:
                 case HB_VCODEC_QSV_H265_10BIT:
