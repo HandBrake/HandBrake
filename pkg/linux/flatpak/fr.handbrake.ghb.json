@@ -72,7 +72,6 @@
             "no-autogen": true,
             "config-opts": [
                 "--flatpak",
-                "--enable-qsv",
                 "--disable-gtk-update-checks"
             ],
             "builddir": true,
