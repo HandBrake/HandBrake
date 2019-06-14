@@ -1401,7 +1401,7 @@ def createCLI( cross = None ):
     grp.add_argument( '--enable-qsv', dest="enable_qsv", default=IfHost(True, "*-*-mingw*", none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-qsv', dest="enable_qsv", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
-    h = IfHost( 'AMD VCE video encoder', '*-*-mingw*', none=argparse.SUPPRESS).value
+    h = IfHost( 'AMD VCE video encoder', '*-*-linux*', '*-*-mingw*', none=argparse.SUPPRESS).value
     grp.add_argument( '--enable-vce', dest="enable_vce", default=IfHost(True, '*-*-mingw*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
 
@@ -1668,7 +1668,7 @@ try:
     options.enable_qsv        = IfHost(options.enable_qsv, '*-*-linux*',
                                        '*-*-mingw*', none=False).value
     # Disable VCE on unsupported platforms
-    options.enable_vce        = IfHost(options.enable_vce, '*-*-mingw*',
+    options.enable_vce        = IfHost(options.enable_vce, '*-*-linux*', '*-*-mingw*',
                                        none=False).value
 
 
