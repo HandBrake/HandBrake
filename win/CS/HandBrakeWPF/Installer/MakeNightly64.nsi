@@ -126,18 +126,18 @@ Section "HandBrake" SEC01
   Call CheckFramework
      StrCmp $0 "1" +3
         StrCpy $InstallDotNET "Yes"
-      MessageBox MB_OK|MB_ICONINFORMATION "${PRODUCT_NAME} requires that the Microsoft .NET Framework 4.7.1 is installed. The latest .NET Framework will be downloaded and installed automatically during installation of ${PRODUCT_NAME}." /SD IDOK
+      MessageBox MB_OK|MB_ICONINFORMATION "${PRODUCT_NAME} requires that the Microsoft .NET Framework 4.8 is installed. The latest .NET Framework will be downloaded and installed automatically during installation of ${PRODUCT_NAME}." /SD IDOK
      Pop $0
 
   ; Get .NET if required
   ${If} $InstallDotNET == "Yes"
      SetDetailsView hide
-     inetc::get /caption "Downloading Microsoft .NET Framework 4.7.1" /canceltext "Cancel" "https://www.microsoft.com/en-us/download/confirmation.aspx?id=56116" "$INSTDIR\dotnetfx.exe" /end
+     inetc::get /caption "Downloading Microsoft .NET Framework 4.8" /canceltext "Cancel" "https://go.microsoft.com/fwlink/?linkid=2088631" "$INSTDIR\dotnetfx.exe" /end
      Pop $1
 
      ${If} $1 != "OK"
            Delete "$INSTDIR\dotnetfx.exe"
-           Abort "Installation cancelled, ${PRODUCT_NAME} requires the Microsoft .NET 4.7.1 Framework"
+           Abort "Installation cancelled, ${PRODUCT_NAME} requires the Microsoft .NET 4.8 Framework"
      ${EndIf}
 
      ExecWait "$INSTDIR\dotnetfx.exe"
