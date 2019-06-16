@@ -2014,4 +2014,7 @@ Where supported, any user presets will have been imported.</value>
   <data name="QueueView_ExportCLI" xml:space="preserve">
     <value>Export Queue (CLI Only)</value>
   </data>
+  <data name="Options_DarkTheme" xml:space="preserve">
+    <value>Use the Dark Theme. (Requires Restart)  (THIS IS AN EARLY PREVIEW. IT IS NOT YET COMPLETE!)</value>
+  </data>
 </root>

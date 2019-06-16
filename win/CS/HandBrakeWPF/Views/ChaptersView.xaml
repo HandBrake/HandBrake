@@ -32,10 +32,13 @@
                   VerticalAlignment="Stretch"  AutoGenerateColumns="False"
                   CanUserSortColumns="False" CanUserReorderColumns="False" CanUserResizeColumns="False" CanUserResizeRows="False"
                   CanUserAddRows="False" CanUserDeleteRows="False" HeadersVisibility="Column"
-                  HorizontalGridLinesBrush="#FFABADB3" VerticalGridLinesBrush="#FFABADB3">
+                  HorizontalGridLinesBrush="#FFABADB3" VerticalGridLinesBrush="#FFABADB3"
+                  Background="Transparent" SelectionMode="Single">
             <DataGrid.CellStyle>
                 <Style TargetType="DataGridCell" BasedOn="{StaticResource {x:Type DataGridCell}}">
                     <Setter Property="MinHeight" Value="22" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="VerticalContentAlignment" Value="Center" />
                 </Style>
             </DataGrid.CellStyle>
             <DataGrid.ContextMenu>

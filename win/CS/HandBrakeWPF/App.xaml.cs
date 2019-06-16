@@ -108,8 +108,7 @@ namespace HandBrakeWPF
             }
 
             // Setup the UI Language
-            
-            IUserSettingService userSettingService =  IoC.Get<IUserSettingService>();
+            IUserSettingService userSettingService = IoC.Get<IUserSettingService>();
             string culture = userSettingService.GetUserSetting<string>(UserSettingConstants.UiLanguage);
             if (!string.IsNullOrEmpty(culture))
             {
@@ -120,6 +119,14 @@ namespace HandBrakeWPF
                     Thread.CurrentThread.CurrentCulture = ci;
                     Thread.CurrentThread.CurrentUICulture = ci;
                 }
+            }
+
+            bool useDarkTheme = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseDarkTheme);
+            if (useDarkTheme)
+            {
+                ResourceDictionary darkTheme = new ResourceDictionary();
+                darkTheme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
+                Application.Current.Resources.MergedDictionaries.Add(darkTheme);
             }
 
 

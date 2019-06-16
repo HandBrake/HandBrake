@@ -72,5 +72,6 @@ namespace HandBrakeWPF
         public const string AutonameFileCollisionBehaviour = "AutonameFileCollisionBehaviour";
         public const string AutonameFilePrePostString = "AutonameFilePrePostString";
         public const string WhenDonePerformActionImmediately = "WhenDonePerformActionImmediately";
+        public const string UseDarkTheme = "UseDarkTheme";
     }
 }
