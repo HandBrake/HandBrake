@@ -4196,6 +4196,7 @@ filter_output([
                                             <child internal-child="selection">
                                               <object class="GtkTreeSelection" id="treeview-selection1"/>
                                             </child>
+                                            <signal name="row-activated" handler="audio_row_activated_cb" swapped="no"/>
                                           </object>
                                         </child>
                                       </object>
@@ -5008,6 +5009,7 @@ filter_output([
                                             <child internal-child="selection">
                                               <object class="GtkTreeSelection" id="treeview-selection2"/>
                                             </child>
+                                            <signal name="row-activated" handler="subtitle_row_activated_cb" swapped="no"/>
                                           </object>
                                         </child>
                                       </object>

@@ -1428,19 +1428,15 @@ audio_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     ghb_update_summary_info(ud);
 }
 
-G_MODULE_EXPORT void
-audio_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
+static void
+audio_edit(GtkTreeView *tv, GtkTreePath *tp, signal_user_data_t *ud)
 {
-    GtkTreeView *tv;
-    GtkTreePath *tp;
     GtkTreeModel *tm;
     GtkTreeSelection *ts;
     GtkTreeIter ti;
 
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
     ts = gtk_tree_view_get_selection(tv);
     tm = gtk_tree_view_get_model(tv);
-    tp = gtk_tree_path_new_from_string (path);
     if (gtk_tree_path_get_depth(tp) > 1) return;
     if (gtk_tree_model_get_iter(tm, &ti, tp))
     {
@@ -1472,6 +1468,24 @@ audio_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
             ghb_value_free(&backup);
         }
     }
+}
+
+G_MODULE_EXPORT void
+audio_edit_clicked_cb(GtkWidget *widget, gchar *path, signal_user_data_t *ud)
+{
+    GtkTreeView *tv;
+    GtkTreePath *tp;
+
+    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "audio_list_view"));
+    tp = gtk_tree_path_new_from_string (path);
+    audio_edit(tv, tp, ud);
+}
+
+G_MODULE_EXPORT void
+audio_row_activated_cb(GtkTreeView *tv, GtkTreePath *tp,
+                       GtkTreeViewColumn *col, signal_user_data_t *ud)
+{
+    audio_edit(tv, tp, ud);
 }
 
 G_MODULE_EXPORT void
