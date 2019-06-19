@@ -38,44 +38,13 @@ G_BEGIN_DECLS
 #define GHB_IS_CELL_RENDERER_TEXT_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GHB_TYPE_CELL_RENDERER_TEXT))
 #define GHB_CELL_RENDERER_TEXT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GHB_TYPE_CELL_RENDERER_TEXT, GhbCellRendererTextClass))
 
-typedef struct _GhbCellRendererText      GhbCellRendererText;
-typedef struct _GhbCellRendererTextClass GhbCellRendererTextClass;
+typedef struct _GhbCellRendererText         GhbCellRendererText;
+typedef struct _GhbCellRendererTextPrivate  GhbCellRendererTextPrivate;
+typedef struct _GhbCellRendererTextClass    GhbCellRendererTextClass;
 
 struct _GhbCellRendererText
 {
   GtkCellRenderer parent;
-
-  /*< private >*/
-  gchar *text;
-  PangoFontDescription *font;
-  gdouble font_scale;
-  GdkRGBA foreground;
-  GdkRGBA background;
-
-  PangoAttrList *extra_attrs;
-
-  PangoUnderline underline_style;
-
-  gint rise;
-  gint fixed_height_rows;
-
-  guint strikethrough : 1;
-
-  guint editable  : 1;
-
-  guint scale_set : 1;
-
-  guint foreground_set : 1;
-  guint background_set : 1;
-
-  guint underline_set : 1;
-
-  guint rise_set : 1;
-
-  guint strikethrough_set : 1;
-
-  guint editable_set : 1;
-  guint calc_fixed_height : 1;
 };
 
 struct _GhbCellRendererTextClass
