@@ -1,0 +1,33 @@
+From 4361293fcf59edb56879c36edcd25f0a91e0edf8 Mon Sep 17 00:00:00 2001
+From: Mark Harris <mark.hsj@gmail.com>
+Date: Sat, 24 Nov 2018 13:02:02 -0800
+Subject: [PATCH] avutil/mem: Fix invalid use of av_alloc_size
+
+The alloc_size attribute is valid only on functions that return a
+pointer.  GCC 9 (not yet released) warns about invalid usage:
+
+./libavutil/mem.h:342:1: warning: 'alloc_size' attribute ignored on a function returning int' [-Wattributes]
+  342 | av_alloc_size(2, 3) int av_reallocp_array(void *ptr, size_t nmemb, size_t size);
+      | ^~~~~~~~~~~~~
+
+Signed-off-by: Michael Niedermayer <michael@niedermayer.cc>
+---
+ libavutil/mem.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libavutil/mem.h b/libavutil/mem.h
+index 55ae573ac9..5fb1a02dd9 100644
+--- a/libavutil/mem.h
++++ b/libavutil/mem.h
+@@ -339,7 +339,7 @@ av_alloc_size(2, 3) void *av_realloc_array(void *ptr, size_t nmemb, size_t size)
+  * @warning Unlike av_malloc(), the allocated memory is not guaranteed to be
+  *          correctly aligned.
+  */
+-av_alloc_size(2, 3) int av_reallocp_array(void *ptr, size_t nmemb, size_t size);
++int av_reallocp_array(void *ptr, size_t nmemb, size_t size);
+ 
+ /**
+  * Reallocate the given buffer if it is not large enough, otherwise do nothing.
+-- 
+2.21.0
+
