@@ -418,7 +418,7 @@ static void audioParserFlush(hb_work_object_t * w)
     hb_work_private_t * pv = w->private_data;
     uint8_t * pout = NULL;
     int       pout_len = 0;
-    int64_t   parser_pts;
+    int64_t   parser_pts = AV_NOPTS_VALUE;
 
     do
     {
@@ -1647,7 +1647,8 @@ static void videoParserFlush(hb_work_object_t * w)
     int       result;
     uint8_t * pout = NULL;
     int       pout_len = 0;
-    int64_t   parser_pts, parser_dts;
+    int64_t   parser_pts = AV_NOPTS_VALUE;
+    int64_t   parser_dts = AV_NOPTS_VALUE;
 
     do
     {

@@ -175,7 +175,7 @@ static int hb_dvdread_title_count( hb_dvd_t * e )
 
 static void add_subtitle( hb_list_t * list_subtitle, int position,
                           iso639_lang_t * lang, int lang_extension,
-                          uint32_t * palette, int style )
+                          uint8_t * palette, int style )
 {
     hb_subtitle_t * subtitle;
     int ii, count;
@@ -616,8 +616,8 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
             // Add Wide Screen subtitle.
             pos = (spu_control >> 16) & 0x1F;
             add_subtitle(title->list_subtitle, pos, lang, lang_ext,
-                       vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
-                       HB_VOBSUB_STYLE_WIDE);
+                (uint8_t*)vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
+                HB_VOBSUB_STYLE_WIDE);
 
             // permitted_df
             // 1 - Letterbox not permitted
@@ -628,24 +628,24 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
                 // Letterbox permitted.  Add Letterbox subtitle.
                 pos = (spu_control >> 8) & 0x1F;
                 add_subtitle(title->list_subtitle, pos, lang, lang_ext,
-                           vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
-                           HB_VOBSUB_STYLE_LETTERBOX);
+                    (uint8_t*)vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
+                    HB_VOBSUB_STYLE_LETTERBOX);
             }
             if (!(vts->vtsi_mat->vts_video_attr.permitted_df & 2))
             {
                 // Pan&Scan permitted.  Add Pan&Scan subtitle.
                 pos = spu_control & 0x1F;
                 add_subtitle(title->list_subtitle, pos, lang, lang_ext,
-                           vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
-                           HB_VOBSUB_STYLE_PANSCAN);
+                    (uint8_t*)vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
+                    HB_VOBSUB_STYLE_PANSCAN);
             }
         }
         else
         {
             pos = (spu_control >> 24) & 0x1F;
             add_subtitle(title->list_subtitle, pos, lang, lang_ext,
-                       vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
-                       HB_VOBSUB_STYLE_4_3);
+                (uint8_t*)vts->vts_pgcit->pgci_srp[pgc_id-1].pgc->palette,
+                HB_VOBSUB_STYLE_4_3);
         }
     }
 

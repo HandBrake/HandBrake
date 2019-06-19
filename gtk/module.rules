@@ -19,7 +19,7 @@ $(GTK.CONFIGURE.stamp): $(GTK.src/)configure.ac $(GTK.src/)src/Makefile.am
 		PKG_CONFIG_PATH=$(BUILD/)contrib/lib/pkgconfig:$(PKG_CONFIG_PATH) \
 		CC="$(GCC.gcc)" \
 		CXX="$(GCC.gxx)" \
-		CFLAGS="$(call fn.ARGS,GTK.GCC,.g .O *D ?extra)" \
+		CFLAGS="$(call fn.ARGS,GTK.GCC,.g .O *D *W ?extra)" \
 		LDFLAGS="$(call fn.ARGS,GTK.GCC,?strip .g .O ?extra.exe)" \
 		PYTHON="$(PYTHON.exe)" \
 		--prefix=$(PREFIX) \
