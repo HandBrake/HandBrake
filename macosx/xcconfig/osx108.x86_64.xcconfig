@@ -1,3 +1,0 @@
-#include "base/os.osx108.xcconfig"
-#include "base/arch.x86_64.xcconfig"
-EXTERNAL_XCCONFIG = osx108.x86_64
