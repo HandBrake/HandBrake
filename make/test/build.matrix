@@ -112,15 +112,6 @@ end
 ## create work queue
 queue = Queue.new
 
-## create xcconfig list
-xclist = []
-case
-when RUBY_PLATFORM =~ /darwin11/
-  xclist += 'native osx106.i386 osx106.x86_64 osx107.i386 osx107.x86_64'.split
-when RUBY_PLATFORM =~ /darwin10/
-  xclist += 'native osx106.i386 osx106.x86_64'.split
-end
-
 ## fill queue
 [['release',''],['debug','--debug=max --optimize=none']].each do |debug|
   [BuildTerminal, BuildLaunch].each do |kind|

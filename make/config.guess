@@ -1268,17 +1268,11 @@ EOF
     SX-ACE:SUPER-UX:*:*)
 	echo sxace-nec-superux${UNAME_RELEASE}
 	exit ;;
-    Power*:Rhapsody:*:*)
-	echo powerpc-apple-rhapsody${UNAME_RELEASE}
-	exit ;;
-    *:Rhapsody:*:*)
-	echo ${UNAME_MACHINE}-apple-rhapsody${UNAME_RELEASE}
-	exit ;;
     *:Darwin:*:*)
 	UNAME_PROCESSOR=`uname -p` || UNAME_PROCESSOR=unknown
 	eval $set_cc_for_build
 	if test "$UNAME_PROCESSOR" = unknown ; then
-	    UNAME_PROCESSOR=powerpc
+	    UNAME_PROCESSOR=x86_64
 	fi
 	if test `echo "$UNAME_RELEASE" | sed -e 's/\..*//'` -le 10 ; then
 	    if [ "$CC_FOR_BUILD" != no_compiler_found ]; then
@@ -1288,15 +1282,7 @@ EOF
 		then
 		    case $UNAME_PROCESSOR in
 			i386) UNAME_PROCESSOR=x86_64 ;;
-			powerpc) UNAME_PROCESSOR=powerpc64 ;;
 		    esac
-		fi
-		# On 10.4-10.6 one might compile for PowerPC via gcc -arch ppc
-		if (echo '#ifdef __POWERPC__'; echo IS_PPC; echo '#endif') | \
-		       (CCOPTS="" $CC_FOR_BUILD -E - 2>/dev/null) | \
-		       grep IS_PPC >/dev/null
-		then
-		    UNAME_PROCESSOR=powerpc
 		fi
 	    fi
 	elif test "$UNAME_PROCESSOR" = i386 ; then
@@ -1304,8 +1290,7 @@ EOF
 	    # that puts up a graphical alert prompting to install
 	    # developer tools.  Any system running Mac OS X 10.7 or
 	    # later (Darwin 11 and later) is required to have a 64-bit
-	    # processor. This is not true of the ARM version of Darwin
-	    # that Apple uses in portable devices.
+	    # processor.
 	    UNAME_PROCESSOR=x86_64
 	fi
 	echo ${UNAME_PROCESSOR}-apple-darwin${UNAME_RELEASE}

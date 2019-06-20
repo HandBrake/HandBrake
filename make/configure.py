@@ -495,10 +495,8 @@ class ChkLib( Action ):
 ##
 ## example results from various platforms:
 ##
-##   powerpc-apple-darwin9.6.0  (Mac OS X 10.5.6 PPC)
-##   i386-apple-darwin9.6.0     (Mac OS X 10.5.6 Intel)
-##   x86_64-apple-darwin10.8.0  (Mac OS X 10.6.8 Intel)
-##   x86_64-apple-darwin11.2.0  (Mac OS X 10.7.2 Intel)
+##   x86_64-apple-darwin15.6.0  (Mac OS X 10.11.6 Intel)
+##   x86_64-apple-darwin16.6.0  (macOS 10.12.6 Intel)
 ##   i686-pc-cygwin             (Cygwin, Microsoft Vista)
 ##   x86_64-unknown-linux-gnu   (Linux, Fedora 10 x86_64)
 ##
@@ -675,24 +673,8 @@ class ArchAction( Action ):
             pass
         elif host_tuple.match( '*-*-mingw*' ):
             pass
-        elif host_tuple.match( '*-*-darwin11.*' ):
-            self.mode['i386']   = 'i386-apple-darwin%s'      % (host_tuple.release)
-            self.mode['x86_64'] = 'x86_64-apple-darwin%s'    % (host_tuple.release)
         elif host_tuple.match( '*-*-darwin*' ):
-            self.mode['i386']   = 'i386-apple-darwin%s'      % (host_tuple.release)
             self.mode['x86_64'] = 'x86_64-apple-darwin%s'    % (host_tuple.release)
-            self.mode['ppc']    = 'powerpc-apple-darwin%s'   % (host_tuple.release)
-            self.mode['ppc64']  = 'powerpc64-apple-darwin%s' % (host_tuple.release)
-
-            ## special cases in that powerpc does not match gcc -arch value
-            ## which we like to use; so it has to be removed.
-            ## note: we don't know if apple will release Snow Leopard/ppc64 yet; just a guess.
-            if 'powerpc' in self.mode:
-                del self.mode['powerpc']
-                self.mode.mode = 'ppc'
-            elif 'powerpc64' in self.mode:
-                del self.mode['powerpc64']
-                self.mode.mode = 'ppc64'
         elif host_tuple.match( '*-*-linux*' ):
             pass
         elif host_tuple.match( '*-*-solaris*' ):
