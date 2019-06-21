@@ -1246,6 +1246,13 @@ set_destination_settings(signal_user_data_t *ud, GhbValue *settings)
                 p += strlen("{creation-time}");
                 g_free(val);
             }
+            else if (!strncasecmp(p, "{encoder}", strlen("{encoder}")))
+            {
+                const gchar *encoder;
+                encoder = ghb_dict_get_string(settings, "VideoEncoder");
+                g_string_append_printf(str, "%s", encoder);
+                p += strlen("{encoder}");
+            }
             else if (!strncasecmp(p, "{quality}", strlen("{quality}")))
             {
                 if (ghb_dict_get_bool(settings, "vquality_type_constant"))
