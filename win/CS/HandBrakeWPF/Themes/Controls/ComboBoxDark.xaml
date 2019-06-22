@@ -144,6 +144,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+
     <ControlTemplate x:Key="ComboBoxTemplate" TargetType="{x:Type ComboBox}">
         <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
             <Grid.ColumnDefinitions>
@@ -240,7 +241,9 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
     <SolidColorBrush x:Key="TextBox.Static.Background" Color="#FFFFFFFF" />
+
     <ControlTemplate x:Key="ComboBoxEditableTemplate" TargetType="{x:Type ComboBox}">
         <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
             <Grid.ColumnDefinitions>
@@ -343,6 +346,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
     <Style x:Key="ComboBoxBaseStyle" TargetType="ComboBox">
         <Setter Property="Background" Value="{StaticResource ComboBox.Static.Background}" />
         <Setter Property="BorderBrush" Value="{StaticResource ComboBox.Static.Border}" />
@@ -363,10 +367,6 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style BasedOn="{StaticResource ComboBoxBaseStyle}" TargetType="{x:Type ComboBox}" />
-    <Style
-		x:Key="ButtonStyle1"
-		BasedOn="{StaticResource ButtonBaseStyle}"
-		TargetType="{x:Type Button}" />
+
 
 </ResourceDictionary>

@@ -20,9 +20,8 @@
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="White" />
     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="WhiteSmoke" />
 
-
     <!-- Button -->
-    <Style TargetType="Button">
+    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
         <Setter Property="Background" Value="{DynamicResource Ui.Light}" />
         <Setter Property="Foreground" Value="White" />
     </Style>
@@ -50,6 +49,24 @@
         <Setter Property="Foreground" Value="White" />
     </Style>
 
+    <Style TargetType="{x:Type ContextMenu}">
+        <Setter Property="Background" Value="{DynamicResource Ui.Mid}"/>
+        <Setter Property="Foreground" Value="WhiteSmoke"/>
+    </Style>
+
+    <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="{x:Type Separator}">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Separator}">
+                    <Grid Margin="3,2,3,2" SnapsToDevicePixels="true" UseLayoutRounding="False">
+                        <Rectangle Fill="WhiteSmoke" Height="1"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- StatusBar -->
     <Style TargetType="StatusBar">
         <Setter Property="Background" Value="{DynamicResource Ui.Mid}" />
@@ -57,7 +74,7 @@
     </Style>
 
     <!-- Text Entry Controls -->
-    <Style TargetType="TextBox">
+    <Style TargetType="TextBox"  BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="Background" Value="{DynamicResource Ui.Light}" />
     </Style>
 
@@ -93,7 +110,21 @@
         </Setter>
     </Style>
 
-    <!-- ComboBox -->
+    <!-- DataGrid -->
+    <Style TargetType="{x:Type DataGridColumnHeader}"  BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
+        <Setter Property="Background" Value="{DynamicResource Ui.Dark}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Ui.Ultralight}"/>
+        <Setter Property="Height" Value="28" />
+        <Setter Property="BorderThickness" Value="0,1,0,1"/>
+    </Style>
+
+    <!-- ComboBox-->
+    <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBoxBaseStyle}">
+        <Setter Property="MinHeight" Value="22"/>
+        <Setter Property="Margin" Value="0,2,0,2" />
+        <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+    </Style>
+
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Controls/ComboBoxDark.xaml" />
     </ResourceDictionary.MergedDictionaries>

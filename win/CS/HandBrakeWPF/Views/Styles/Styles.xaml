@@ -1,13 +1,18 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
+    <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement" >
         <Setter Property="ToolTipService.ShowDuration" Value="20000" />
     </Style>
 
     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
         <Setter Property="MinHeight" Value="22"/>
         <Setter Property="Margin" Value="0,2,0,2" />
+        <Setter Property="ToolTipService.ShowDuration" Value="20000" />
+    </Style>
+
+    <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource {x:Type Slider}}">
+        <Setter Property="ToolTipService.ShowDuration" Value="20000" />
     </Style>
 
     <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
