@@ -29,7 +29,8 @@
         <video:EncoderOptionsTooltipConverter x:Key="encoderOptionsTooltipConverter" />
         <video:VideoOptionsTooltipConverter x:Key="videoOptionsTooltipConverter" />
         <queue:PictureSettingsDescConveter x:Key="pictureSettingsDescConverter" />
-        
+        <Converters:ThemeImageConverter x:Key="themeConverter" />
+
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
             <Setter Property="ToolTipService.ShowDuration" Value="10000" />
         </Style>
@@ -152,7 +153,7 @@
                                 <Style TargetType="{x:Type Image}">
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
-                                            <Setter Property="Source" Value="..\Images\Movies.png" />
+                                            <Setter Property="Source" Value="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Source.png'}" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="In Progress">
                                             <Setter Property="Source" Value="..\Images\Working0.png" />
