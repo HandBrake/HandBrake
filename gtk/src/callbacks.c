@@ -2175,16 +2175,6 @@ get_aspect_string(gint aspect_n, gint aspect_d)
     return aspect;
 }
 
-static gchar*
-get_rate_string(gint rate_num, gint rate_den)
-{
-    gdouble rate_f = (gdouble)rate_num / rate_den;
-    gchar *rate_s;
-
-    rate_s = g_strdup_printf("%.6g", rate_f);
-    return rate_s;
-}
-
 static void
 update_aspect_info(signal_user_data_t *ud)
 {
@@ -2245,7 +2235,8 @@ ghb_update_title_info(signal_user_data_t *ud)
     hb_reduce(&aspect_n, &aspect_d, geo->width * geo->par.num,
               geo->height * geo->par.den);
     aspect = get_aspect_string(aspect_n, aspect_d);
-    rate   = get_rate_string(title->vrate.num, title->vrate.den);
+    rate   = g_strdup_printf("%.6g", (gdouble)title->vrate.num /
+                                              title->vrate.den);
     audio_count = hb_list_count(title->list_audio);
     subtitle_count = hb_list_count(title->list_subtitle);
 
@@ -2323,7 +2314,7 @@ ghb_update_summary_info(signal_user_data_t *ud)
         vrate.num = 27000000;
         vrate.den = fps->rate;
     }
-    rate_str = get_rate_string(vrate.num, vrate.den);
+    rate_str = g_strdup_printf("%.6g", (gdouble)vrate.num / vrate.den);
     g_string_append_printf(str, "%s, %s FPS", video_encoder->name, rate_str);
     g_free(rate_str);
     if (ghb_dict_get_bool(ud->settings, "VideoFramerateCFR"))
@@ -3707,6 +3698,12 @@ start_new_log(signal_user_data_t *ud, GhbValue *uiDict)
     gchar *log_path, *pos, *basename, *dest_dir;
     const gchar *destname;
 
+    // queue_activity_buffer is about to be reused, make sure
+    // queue is showing the correct buffer
+    ghb_queue_select_log(ud);
+    // Erase current contents of queue activity
+    gtk_text_buffer_set_text(ud->queue_activity_buffer, "", 0);
+
     _now = time(NULL);
     now = localtime(&_now);
     destname = ghb_dict_get_string(uiDict, "destination");
@@ -3743,6 +3740,7 @@ start_new_log(signal_user_data_t *ud, GhbValue *uiDict)
         g_io_channel_write_chars (ud->job_activity_log, ver_str,
                                     -1, NULL, NULL);
         g_free(ver_str);
+        ghb_dict_set_string(uiDict, "ActivityFilename", log_path);
     }
     g_free(log_path);
 }
@@ -3771,23 +3769,9 @@ submit_job(signal_user_data_t *ud, GhbValue *queueDict)
     ghb_dict_set_int(uiDict, "job_unique_id", unique_id);
     ghb_start_queue();
 
-    // Start queue activity spinner
+    // Show queue progress bar
     int index = ghb_find_queue_job(ud->queue, unique_id, NULL);
-    if (index >= 0)
-    {
-        GtkTreeView *treeview;
-        GtkTreeModel *store;
-        GtkTreeIter iter;
-
-        treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
-        store = gtk_tree_view_get_model(treeview);
-        gchar *path = g_strdup_printf ("%d", index);
-        if (gtk_tree_model_get_iter_from_string(store, &iter, path))
-        {
-            gtk_tree_store_set(GTK_TREE_STORE(store), &iter, 0, TRUE, -1);
-        }
-        g_free(path);
-    }
+    ghb_queue_progress_set_visible(ud, index, 1);
 }
 
 static void
@@ -3862,9 +3846,18 @@ ghb_update_pending(signal_user_data_t *ud)
     gint pending;
     gchar *str;
 
-    label = GTK_LABEL(GHB_WIDGET(ud->builder, "pending_status"));
     pending = queue_pending_count(ud->queue);
-    str = g_strdup_printf(_("%d encode(s) pending"), pending);
+    if (pending == 1)
+    {
+        str = g_strdup_printf(_("%d encode pending"), pending);
+    }
+    else
+    {
+        str = g_strdup_printf(_("%d encodes pending"), pending);
+    }
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "pending_status"));
+    gtk_label_set_text(label, str);
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_status_label"));
     gtk_label_set_text(label, str);
     g_free(str);
 
@@ -3895,21 +3888,6 @@ ghb_start_next_job(signal_user_data_t *ud)
             ghb_inhibit_suspend(ud);
             submit_job(ud, queueDict);
             ghb_update_pending(ud);
-
-            // Start queue activity spinner
-            GtkTreeView *treeview;
-            GtkTreeModel *store;
-            GtkTreeIter iter;
-
-            treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
-            store = gtk_tree_view_get_model(treeview);
-            gchar *path = g_strdup_printf ("%d", ii);
-            if (gtk_tree_model_get_iter_from_string(store, &iter, path))
-            {
-                gtk_tree_store_set(GTK_TREE_STORE(store), &iter, 0, TRUE, -1);
-            }
-            g_free(path);
-
             return;
         }
     }
@@ -4031,18 +4009,15 @@ searching_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
 static void
 ghb_backend_events(signal_user_data_t *ud)
 {
-    ghb_status_t status;
-    gchar *status_str;
-    GtkProgressBar *progress;
-    GtkLabel       *work_status;
-    GhbValue *queueDict;
-    gint index;
-    GtkTreeView *treeview;
-    GtkTreeModel *store;
-    GtkTreeIter iter;
-    static gint prev_scan_state = -1;
-    static gint prev_queue_state = -1;
-    static gint event_sequence = 0;
+    ghb_status_t     status;
+    gchar          * status_str;
+    GtkProgressBar * progress;
+    GtkLabel       * work_status;
+    GhbValue       * queueDict = NULL;
+    gint             index = -1;
+    static gint      prev_scan_state = -1;
+    static gint      prev_queue_state = -1;
+    static gint      event_sequence = 0;
 
     event_sequence++;
     ghb_track_status();
@@ -4097,7 +4072,7 @@ ghb_backend_events(signal_user_data_t *ud)
         g_free(status_str);
         if (status.scan.title_count > 0)
         {
-            gtk_progress_bar_set_fraction (scan_prog, status.scan.progress);
+            gtk_progress_bar_set_fraction(scan_prog, status.scan.progress);
         }
     }
     else if (status.scan.state & GHB_STATE_SCANDONE)
@@ -4153,36 +4128,12 @@ ghb_backend_events(signal_user_data_t *ud)
 
     if (status.queue.unique_id != 0)
     {
-        index = ghb_find_queue_job(ud->queue, status.queue.unique_id, NULL);
-        if (index >= 0)
+        index = ghb_find_queue_job(ud->queue, status.queue.unique_id,
+                                   &queueDict);
+        if ((status.queue.state & GHB_STATE_WORKING) &&
+            (event_sequence % 50 == 0)) // check every 10 seconds
         {
-            treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
-            store = gtk_tree_view_get_model(treeview);
-            gchar *path = g_strdup_printf ("%d", index);
-            if (gtk_tree_model_get_iter_from_string(store, &iter, path))
-            {
-                if (((status.queue.state & GHB_STATE_WORKING) ||
-                     (status.queue.state & GHB_STATE_SCANNING)) &&
-                    !(status.queue.state & GHB_STATE_PAUSED))
-                {
-                    gint pulse;
-                    gtk_tree_model_get(store, &iter, 4, &pulse, -1);
-                    gtk_tree_store_set(GTK_TREE_STORE(store), &iter,
-                                       4, pulse+1, -1);
-                }
-                else if ((status.queue.state & GHB_STATE_WORKDONE) ||
-                         (status.queue.state & GHB_STATE_SCANDONE))
-                {
-                    gtk_tree_store_set(GTK_TREE_STORE(store), &iter,
-                                       0, FALSE, -1);
-                }
-            }
-            g_free(path);
-            if ((status.queue.state & GHB_STATE_WORKING) &&
-                (event_sequence % 50 == 0)) // check every 10 seconds
-            {
-                ghb_low_disk_check(ud);
-            }
+            ghb_low_disk_check(ud);
         }
     }
 
@@ -4191,7 +4142,8 @@ ghb_backend_events(signal_user_data_t *ud)
         // This needs to be in scanning and working since scanning
         // happens fast enough that it can be missed
         gtk_label_set_text(work_status, _("Scanning ..."));
-        gtk_progress_bar_set_fraction (progress, 0);
+        gtk_progress_bar_set_fraction(progress, 0);
+        ghb_queue_progress_set_fraction(ud, index, 0);
     }
     else if (status.queue.state & GHB_STATE_SCANDONE)
     {
@@ -4207,7 +4159,8 @@ ghb_backend_events(signal_user_data_t *ud)
 
         status_str = searching_status_string(ud, &status.queue);
         gtk_label_set_text (work_status, status_str);
-        gtk_progress_bar_set_fraction (progress, status.queue.progress);
+        gtk_progress_bar_set_fraction(progress, status.queue.progress);
+        ghb_queue_progress_set_fraction(ud, index, status.queue.progress);
         g_free(status_str);
     }
     else if (status.queue.state & GHB_STATE_WORKING)
@@ -4217,54 +4170,41 @@ ghb_backend_events(signal_user_data_t *ud)
         status_str = working_status_string(ud, &status.queue);
         gtk_label_set_text (work_status, status_str);
         gtk_progress_bar_set_fraction (progress, status.queue.progress);
+        ghb_queue_progress_set_fraction(ud, index, status.queue.progress);
         g_free(status_str);
     }
     else if (status.queue.state & GHB_STATE_WORKDONE)
     {
         gint qstatus;
-        const gchar *status_icon;
 
-        index = ghb_find_queue_job(ud->queue, status.queue.unique_id, &queueDict);
-        treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
-        store = gtk_tree_view_get_model(treeview);
-        switch( status.queue.error )
+        switch (status.queue.error)
         {
             case GHB_ERROR_NONE:
-                gtk_label_set_text (work_status, _("Encode Done!"));
+                gtk_label_set_text(work_status, _("Encode Done!"));
                 qstatus = GHB_QUEUE_DONE;
-                status_icon = "hb-complete";
                 break;
             case GHB_ERROR_CANCELED:
-                gtk_label_set_text (work_status, _("Encode Canceled."));
+                gtk_label_set_text(work_status, _("Encode Canceled."));
                 qstatus = GHB_QUEUE_CANCELED;
-                status_icon = "hb-stop";
                 break;
             case GHB_ERROR_FAIL:
             default:
-                gtk_label_set_text (work_status, _("Encode Failed."));
+                gtk_label_set_text(work_status, _("Encode Failed."));
                 qstatus = GHB_QUEUE_FAIL;
-                status_icon = "hb-stop";
         }
-        if (queueDict != NULL)
-        {
-            gchar *path = g_strdup_printf ("%d", index);
-            if (gtk_tree_model_get_iter_from_string(store, &iter, path))
-            {
-                gtk_tree_store_set(GTK_TREE_STORE(store), &iter,
-                                   1, status_icon, -1);
-            }
-            g_free(path);
-        }
-        gtk_progress_bar_set_fraction (progress, 1.0);
-        ghb_clear_queue_state(GHB_STATE_WORKDONE);
-        if (ud->job_activity_log)
-            g_io_channel_unref(ud->job_activity_log);
-        ud->job_activity_log = NULL;
         if (queueDict != NULL)
         {
             GhbValue *uiDict = ghb_dict_get(queueDict, "uiSettings");
             ghb_dict_set_int(uiDict, "job_status", qstatus);
         }
+        ghb_queue_update_status_icon(ud, index);
+        gtk_progress_bar_set_fraction(progress, 1.0);
+        ghb_queue_progress_set_fraction(ud, index, 1.0);
+
+        ghb_clear_queue_state(GHB_STATE_WORKDONE);
+        if (ud->job_activity_log)
+            g_io_channel_unref(ud->job_activity_log);
+        ud->job_activity_log = NULL;
         if (ghb_dict_get_bool(ud->prefs, "RemoveFinishedJobs") &&
             status.queue.error == GHB_ERROR_NONE)
         {
@@ -4363,33 +4303,17 @@ ghb_timer_cb(gpointer data)
     return TRUE;
 }
 
-gboolean scroll_at_bottom(signal_user_data_t *ud, const char *scroll)
+static void
+append_activity(GtkTextBuffer * tb, const char * text, gsize length)
 {
-    GtkScrolledWindow *window;
-    GtkAdjustment *adj;
-    double val, upper, ps;
+    if (text == NULL || length <= 0)
+    {
+        return;
+    }
+    GtkTextIter     iter;
 
-    window = GTK_SCROLLED_WINDOW(GHB_WIDGET(ud->builder, scroll));
-    adj = gtk_scrolled_window_get_vadjustment(window);
-    val = gtk_adjustment_get_value(adj);
-    upper = gtk_adjustment_get_upper(adj);
-    ps = gtk_adjustment_get_page_size(adj);
-    return val >= upper - ps;
-}
-
-G_MODULE_EXPORT gboolean
-activity_scroll_to_bottom(signal_user_data_t *ud)
-{
-    GtkScrolledWindow *window;
-    GtkAdjustment *adj;
-    double upper, ps;
-
-    window = GTK_SCROLLED_WINDOW(GHB_WIDGET(ud->builder, "activity_scroll"));
-    adj = gtk_scrolled_window_get_vadjustment(window);
-    upper = gtk_adjustment_get_upper(adj);
-    ps = gtk_adjustment_get_page_size(adj);
-    gtk_adjustment_set_value(adj, upper - ps);
-    return FALSE;
+    gtk_text_buffer_get_end_iter(tb, &iter);
+    gtk_text_buffer_insert(tb, &iter, text, -1);
 }
 
 G_MODULE_EXPORT gboolean
@@ -4397,9 +4321,6 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
 {
     gchar *text = NULL;
     gsize length, outlength;
-    GtkTextView *textview;
-    GtkTextBuffer *buffer;
-    GtkTextIter iter;
     GError *gerror = NULL;
     GIOStatus status;
 
@@ -4412,31 +4333,17 @@ ghb_log_cb(GIOChannel *source, GIOCondition cond, gpointer data)
         length--;
     if (text != NULL && length > 0)
     {
-        gboolean bottom = FALSE;
         gchar *utf8_text;
 
-        bottom = scroll_at_bottom(ud, "activity_scroll");
-        textview = GTK_TEXT_VIEW(GHB_WIDGET (ud->builder, "activity_view"));
-        buffer = gtk_text_view_get_buffer (textview);
-        gtk_text_buffer_get_end_iter(buffer, &iter);
         // Assume logging is in current locale
         utf8_text = g_locale_to_utf8(text, -1, NULL, &length, NULL);
         if (utf8_text != NULL)
         {
-            gtk_text_buffer_insert(buffer, &iter, utf8_text, -1);
-            if (bottom)
-            {
-                static guint scroll_tok = 0;
-                GSource *source = NULL;
-                if (scroll_tok > 0)
-                    source = g_main_context_find_source_by_id(NULL, scroll_tok);
-                if (source != NULL)
-                {
-                    g_source_remove(scroll_tok);
-                }
-                scroll_tok = g_idle_add((GSourceFunc)activity_scroll_to_bottom,
-                                        ud);
-            }
+            // Write to activity windows
+            append_activity(ud->activity_buffer, utf8_text, length);
+            append_activity(ud->queue_activity_buffer, utf8_text, length);
+
+            // Write log files
 #if defined(_WIN32)
             gsize one = 1;
             utf8_text[length-1] = '\r';
@@ -4544,21 +4451,21 @@ ghb_log(gchar *log, ...)
     va_end(args);
 }
 
-static void
-browse_url(signal_user_data_t *ud, const gchar *url)
+void
+ghb_browse_uri(signal_user_data_t *ud, const gchar *uri)
 {
 #if defined(_WIN32)
-    ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
+    ShellExecute(NULL, "open", uri, NULL, NULL, SW_SHOWNORMAL);
 #else
     GtkWindow * parent;
     gboolean    result;
 
     parent = GTK_WINDOW(GHB_WIDGET(ud->builder, "hb_window"));
-    result = gtk_show_uri_on_window(parent, url, GDK_CURRENT_TIME, NULL);
+    result = gtk_show_uri_on_window(parent, uri, GDK_CURRENT_TIME, NULL);
     if (result) return;
     char *argv[] =
         {"xdg-open",NULL,NULL,NULL};
-    argv[1] = (gchar*)url;
+    argv[1] = (gchar*)uri;
     result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
                 NULL, NULL, NULL);
     if (result) return;
@@ -4570,13 +4477,13 @@ browse_url(signal_user_data_t *ud, const gchar *url)
 
     argv[0] = "kfmclient";
     argv[1] = "exec";
-    argv[2] = (gchar*)url;
+    argv[2] = (gchar*)uri;
     result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
                 NULL, NULL, NULL);
     if (result) return;
 
     argv[0] = "firefox";
-    argv[1] = (gchar*)url;
+    argv[1] = (gchar*)uri;
     argv[2] = NULL;
     result = g_spawn_async(NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL,
                 NULL, NULL, NULL);
@@ -4604,7 +4511,7 @@ about_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 G_MODULE_EXPORT void
 guide_action_cb(GSimpleAction *action, GVariant *param, signal_user_data_t *ud)
 {
-    browse_url(ud, HB_DOCS);
+    ghb_browse_uri(ud, HB_DOCS);
 }
 
 G_MODULE_EXPORT void
@@ -4635,31 +4542,6 @@ update_queue_labels(signal_user_data_t *ud)
     }
     gtk_tool_button_set_label(button, str);
     g_free(str);
-}
-
-static void
-show_queue(signal_user_data_t *ud, gboolean show)
-{
-    GtkWidget        *tab;
-    GtkStack         *stack;
-
-    stack = GTK_STACK(GHB_WIDGET(ud->builder, "QueueStack"));
-    if (show)
-        tab = GHB_WIDGET(ud->builder, "queue_tab");
-    else
-        tab = GHB_WIDGET(ud->builder, "settings_tab");
-    gtk_stack_set_visible_child(stack, tab);
-    update_queue_labels(ud);
-}
-
-G_MODULE_EXPORT void
-show_queue_action_cb(GSimpleAction *action, GVariant *value,
-                     signal_user_data_t *ud)
-{
-    gboolean state = g_variant_get_boolean(value);
-
-    g_simple_action_set_state(action, value);
-    show_queue(ud, state);
 }
 
 static void
@@ -4983,6 +4865,27 @@ activity_font_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     pango_font_description_free(font_desc);
     g_free(font);
 #endif
+}
+
+G_MODULE_EXPORT void
+when_complete_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GhbValue * value = ghb_widget_value(widget);
+    ghb_ui_update(ud, "QueueWhenComplete", value);
+
+    ghb_widget_to_setting (ud->prefs, widget);
+
+    ghb_check_dependency(ud, widget, NULL);
+    const gchar *name = ghb_get_setting_key(widget);
+    ghb_pref_set(ud->prefs, name);
+    ghb_prefs_store();
+}
+
+G_MODULE_EXPORT void
+queue_when_complete_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    GhbValue * value = ghb_widget_value(widget);
+    ghb_ui_update(ud, "WhenComplete", value);
 }
 
 G_MODULE_EXPORT void

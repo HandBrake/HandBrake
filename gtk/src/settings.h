@@ -70,6 +70,11 @@ typedef struct
     GhbValue            * queue;
     GIOChannel          * activity_log;
     GIOChannel          * job_activity_log;
+    GtkTextBuffer       * activity_buffer;
+    GtkTextBuffer       * queue_activity_buffer;
+    GtkTextBuffer       * extra_activity_buffer;
+    char                * extra_activity_path;
+    gboolean              append_queue_activity;
     preview_t           * preview;
     gchar               * appcast;
     gint                  appcast_len;

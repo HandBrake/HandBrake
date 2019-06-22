@@ -242,71 +242,6 @@ bind_chapter_tree_model(signal_user_data_t *ud)
     g_debug("Done\n");
 }
 
-
-extern G_MODULE_EXPORT void queue_list_selection_changed_cb(void);
-extern G_MODULE_EXPORT void queue_remove_clicked_cb(void);
-extern G_MODULE_EXPORT void queue_list_size_allocate_cb(void);
-extern G_MODULE_EXPORT void queue_drag_cb(void);
-extern G_MODULE_EXPORT void queue_drag_motion_cb(void);
-
-// Create and bind the tree model to the tree view for the queue list
-// Also, connect up the signal that lets us know the selection has changed
-static void
-bind_queue_tree_model(signal_user_data_t *ud)
-{
-    GtkCellRenderer *cell, *textcell;
-    GtkTreeViewColumn *column;
-    GtkTreeStore *treestore;
-    GtkTreeView  *treeview;
-    GtkTreeSelection *selection;
-    GtkTargetEntry SrcEntry;
-    SrcEntry.target = "DATA";
-    SrcEntry.flags = GTK_TARGET_SAME_WIDGET;
-
-    g_debug("bind_queue_tree_model()\n");
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "queue_list"));
-    selection = gtk_tree_view_get_selection(treeview);
-    treestore = gtk_tree_store_new(5, G_TYPE_BOOLEAN, G_TYPE_STRING,
-                                      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT);
-    gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
-
-    column = gtk_tree_view_column_new();
-    gtk_tree_view_column_set_title(column, _("Job Information"));
-    cell = gtk_cell_renderer_spinner_new();
-    gtk_tree_view_column_pack_start(column, cell, FALSE);
-    gtk_tree_view_column_add_attribute(column, cell, "active", 0);
-    gtk_tree_view_column_add_attribute(column, cell, "pulse", 4);
-    cell = gtk_cell_renderer_pixbuf_new();
-    gtk_tree_view_column_pack_start(column, cell, FALSE);
-    gtk_tree_view_column_add_attribute(column, cell, "icon-name", 1);
-    textcell = gtk_cell_renderer_text_new();
-    g_object_set(textcell, "wrap-mode", PANGO_WRAP_CHAR, NULL);
-    g_object_set(textcell, "wrap-width", 500, NULL);
-    gtk_tree_view_column_pack_start(column, textcell, TRUE);
-    gtk_tree_view_column_add_attribute(column, textcell, "markup", 2);
-    gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-    gtk_tree_view_column_set_expand(column, TRUE);
-    gtk_tree_view_column_set_max_width(column, 550);
-    g_signal_connect(treeview, "size-allocate", queue_list_size_allocate_cb,
-                        textcell);
-
-    cell = custom_cell_renderer_button_new();
-    column = gtk_tree_view_column_new_with_attributes(
-                                    _(""), cell, "icon-name", 3, NULL);
-    gtk_tree_view_column_set_min_width(column, 24);
-    gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-
-    gtk_tree_view_enable_model_drag_dest(treeview, &SrcEntry, 1,
-                                            GDK_ACTION_MOVE);
-    gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK,
-                                            &SrcEntry, 1, GDK_ACTION_MOVE);
-
-    g_signal_connect(selection, "changed", queue_list_selection_changed_cb, ud);
-    g_signal_connect(cell, "clicked", queue_remove_clicked_cb, ud);
-    g_signal_connect(treeview, "drag_data_received", queue_drag_cb, ud);
-    g_signal_connect(treeview, "drag_motion", queue_drag_motion_cb, ud);
-}
-
 extern G_MODULE_EXPORT void audio_list_selection_changed_cb(void);
 extern G_MODULE_EXPORT void audio_edit_clicked_cb(void);
 extern G_MODULE_EXPORT void audio_remove_clicked_cb(void);
@@ -852,9 +787,31 @@ queue_start_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
 queue_pause_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
-queue_save_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+queue_export_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
-queue_open_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+queue_import_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+queue_open_source_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+queue_open_dest_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+queue_delete_all_action_cb(GSimpleAction *action, GVariant *param,
+                           gpointer ud);
+G_MODULE_EXPORT void
+queue_delete_complete_action_cb(GSimpleAction *action, GVariant *param,
+                                gpointer ud);
+G_MODULE_EXPORT void
+queue_reset_fail_action_cb(GSimpleAction *action, GVariant *param,
+                           gpointer ud);
+G_MODULE_EXPORT void
+queue_reset_all_action_cb(GSimpleAction *action, GVariant *param,
+                          gpointer ud);
+G_MODULE_EXPORT void
+queue_reset_action_cb(GSimpleAction *action, GVariant *param,
+                      gpointer ud);
+G_MODULE_EXPORT void
+queue_edit_action_cb(GSimpleAction *action, GVariant *param,
+                     gpointer ud);
 G_MODULE_EXPORT void
 show_presets_action_cb(GSimpleAction *action, GVariant *value, gpointer ud);
 G_MODULE_EXPORT void
@@ -894,39 +851,47 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
 {
     const GActionEntry entries[] =
     {
-        { "source",         source_action_cb                },
-        { "single",         single_title_action_cb          },
-        { "destination",    destination_action_cb           },
-        { "preferences",    preferences_action_cb           },
-        { "quit",           quit_action_cb                  },
-        { "queue-add",      queue_add_action_cb             },
-        { "queue-add-all",  queue_add_all_action_cb         },
-        { "queue-start",    queue_start_action_cb           },
-        { "queue-pause",    queue_pause_action_cb           },
-        { "queue-save",     queue_save_action_cb            },
-        { "queue-open",     queue_open_action_cb            },
-        { "hbfd",           NULL,
-          NULL, "false",    hbfd_action_cb                  },
-        { "show-presets",   NULL,
-          NULL, "false",    show_presets_action_cb          },
-        { "show-queue",     NULL,
-          NULL, "false",    show_queue_action_cb            },
-        { "show-preview",   NULL,
-          NULL, "false",    show_preview_action_cb          },
-        { "show-activity",  NULL,
-          NULL, "false",    show_activity_action_cb         },
-        { "preset-save",    preset_save_action_cb           },
-        { "preset-save-as", preset_save_as_action_cb        },
-        { "preset-rename",  preset_rename_action_cb         },
-        { "preset-remove",  preset_remove_action_cb         },
-        { "preset-default", preset_default_action_cb        },
-        { "preset-export",  preset_export_action_cb         },
-        { "preset-import",  preset_import_action_cb         },
-        { "presets-reload", presets_reload_action_cb        },
-        { "about",          about_action_cb                 },
-        { "guide",          guide_action_cb                 },
-        { "preset-select",  preset_select_action_cb, "s"    },
-        { "preset-reload",  preset_reload_action_cb,        },
+        { "source",                source_action_cb                },
+        { "single",                single_title_action_cb          },
+        { "destination",           destination_action_cb           },
+        { "preferences",           preferences_action_cb           },
+        { "quit",                  quit_action_cb                  },
+        { "queue-add",             queue_add_action_cb             },
+        { "queue-add-all",         queue_add_all_action_cb         },
+        { "queue-start",           queue_start_action_cb           },
+        { "queue-pause",           queue_pause_action_cb           },
+        { "queue-open-source",     queue_open_source_action_cb     },
+        { "queue-open-dest",       queue_open_dest_action_cb       },
+        { "queue-reset-fail",      queue_reset_fail_action_cb      },
+        { "queue-reset-all",       queue_reset_all_action_cb       },
+        { "queue-reset",           queue_reset_action_cb           },
+        { "queue-delete-complete", queue_delete_complete_action_cb },
+        { "queue-delete-all",      queue_delete_all_action_cb      },
+        { "queue-export",          queue_export_action_cb          },
+        { "queue-import",          queue_import_action_cb          },
+        { "queue-edit",            queue_edit_action_cb            },
+        { "hbfd",                  NULL,
+          NULL, "false",           hbfd_action_cb                  },
+        { "show-presets",          NULL,
+          NULL, "false",           show_presets_action_cb          },
+        { "show-queue",            NULL,
+          NULL, "false",           show_queue_action_cb            },
+        { "show-preview",          NULL,
+          NULL, "false",           show_preview_action_cb          },
+        { "show-activity",         NULL,
+          NULL, "false",           show_activity_action_cb         },
+        { "preset-save",           preset_save_action_cb           },
+        { "preset-save-as",        preset_save_as_action_cb        },
+        { "preset-rename",         preset_rename_action_cb         },
+        { "preset-remove",         preset_remove_action_cb         },
+        { "preset-default",        preset_default_action_cb        },
+        { "preset-export",         preset_export_action_cb         },
+        { "preset-import",         preset_import_action_cb         },
+        { "presets-reload",        presets_reload_action_cb        },
+        { "about",                 about_action_cb                 },
+        { "guide",                 guide_action_cb                 },
+        { "preset-select",         preset_select_action_cb, "s"    },
+        { "preset-reload",         preset_reload_action_cb,        },
     };
     g_action_map_add_action_entries(G_ACTION_MAP(app), entries,
                                     G_N_ELEMENTS(entries), ud);
@@ -1018,6 +983,15 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     gtk_widget_hide(widget);
 #endif
 
+    // Get GtkTextBuffers for activity logs
+    widget = GHB_WIDGET(ud->builder, "activity_view");
+    ud->activity_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
+    g_object_ref(ud->activity_buffer);
+    widget = GHB_WIDGET(ud->builder, "queue_activity_view");
+    ud->queue_activity_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
+    g_object_ref(ud->queue_activity_buffer);
+    ud->extra_activity_buffer = gtk_text_buffer_new(NULL);
+
     // Must set the names of the widgets that I want to modify
     // style for.
     gtk_widget_set_name(GHB_WIDGET(ud->builder, "preview_hud"), "preview_hud");
@@ -1059,7 +1033,6 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     bind_audio_tree_model(ud);
     bind_subtitle_tree_model(ud);
     bind_presets_tree_model(ud);
-    bind_queue_tree_model(ud);
     bind_chapter_tree_model(ud);
     // Connect up the signals to their callbacks
     // I wrote my own connector so that I could pass user data
@@ -1260,6 +1233,8 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(ghb_window));
     GtkWidget * window = GHB_WIDGET(ud->builder, "presets_window");
     gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
+    window = GHB_WIDGET(ud->builder, "queue_window");
+    gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
 
     gtk_widget_show(ghb_window);
 }
@@ -1352,6 +1327,11 @@ main(int argc, char *argv[])
 
     if (ud->builder != NULL)
         g_object_unref(ud->builder);
+
+    g_object_unref(ud->extra_activity_buffer);
+    g_object_unref(ud->queue_activity_buffer);
+    g_object_unref(ud->activity_buffer);
+    g_free(ud->extra_activity_path);
 
     g_free(ud->current_dvd_device);
     g_free(ud);

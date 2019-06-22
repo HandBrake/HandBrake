@@ -517,6 +517,12 @@ combo_name_map_t combo_name_map[] =
         generic_opt_get
     },
     {
+        "QueueWhenComplete",
+        &when_complete_opts,
+        small_opts_set,
+        generic_opt_get
+    },
+    {
         "PicturePAR",
         &par_opts,
         small_opts_set,
