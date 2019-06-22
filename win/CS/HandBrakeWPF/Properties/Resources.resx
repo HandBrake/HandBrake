@@ -1504,10 +1504,10 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Retry Failed</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>Retry Selected Jobs</value>
+    <value>Reset Selected Jobs</value>
   </data>
-  <data name="QueueView_Retry" xml:space="preserve">
-    <value>Retry</value>
+  <data name="QueueView_Reset" xml:space="preserve">
+    <value>Reset</value>
   </data>
   <data name="QueueView_Shutdown" xml:space="preserve">
     <value>Shutdown</value>

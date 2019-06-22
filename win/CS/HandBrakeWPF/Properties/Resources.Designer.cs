@@ -4246,6 +4246,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string QueueView_Reset {
+            get {
+                return ResourceManager.GetString("QueueView_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Retry All Jobs.
         /// </summary>
         public static string QueueView_ResetAllJobs {
@@ -4264,20 +4273,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Retry Selected Jobs.
+        ///   Looks up a localized string similar to Reset Selected Jobs.
         /// </summary>
         public static string QueueView_ResetSelectedJobs {
             get {
                 return ResourceManager.GetString("QueueView_ResetSelectedJobs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Retry.
-        /// </summary>
-        public static string QueueView_Retry {
-            get {
-                return ResourceManager.GetString("QueueView_Retry", resourceCulture);
             }
         }
         

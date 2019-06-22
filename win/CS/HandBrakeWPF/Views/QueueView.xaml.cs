@@ -67,16 +67,16 @@ namespace HandBrakeWPF.Views
             }
 
             // Handle menu state
-            this.RetryMenuItem.Header = this.queueJobs.SelectedItems.Count > 1 ? Properties.Resources.QueueView_ResetSelectedJobs : Properties.Resources.QueueView_Retry;
+            this.ResetMenuItem.Header = this.queueJobs.SelectedItems.Count > 1 ? Properties.Resources.QueueView_ResetSelectedJobs : Properties.Resources.QueueView_Reset;
             if (this.queueJobs.SelectedItems.Count > 1)
             {
-                this.RetryMenuItem.IsEnabled = false;
+                this.ResetMenuItem.IsEnabled = false;
 
                 foreach (QueueTask task in this.queueJobs.SelectedItems)
                 {
                     if (task.Status == QueueItemStatus.Error || task.Status == QueueItemStatus.Completed)
                     {
-                        this.RetryMenuItem.IsEnabled = true;
+                        this.ResetMenuItem.IsEnabled = true;
                         break;
                     }
                 }
@@ -86,11 +86,11 @@ namespace HandBrakeWPF.Views
                 var activeQueueTask = this.mouseActiveQueueTask;
                 if (activeQueueTask != null && (activeQueueTask.Status == QueueItemStatus.Error || activeQueueTask.Status == QueueItemStatus.Completed))
                 {
-                    this.RetryMenuItem.IsEnabled = true;
+                    this.ResetMenuItem.IsEnabled = true;
                 }
                 else
                 {
-                    this.RetryMenuItem.IsEnabled = false;
+                    this.ResetMenuItem.IsEnabled = false;
                 }
             }
 

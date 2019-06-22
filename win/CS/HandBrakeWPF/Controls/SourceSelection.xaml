@@ -10,6 +10,7 @@
 
     <UserControl.Resources>
         <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:ThemeImageConverter x:Key="themeConverter" />
     </UserControl.Resources>
 
     <Grid Height="{Binding ElementName=sourcePanel, Path=ActualHeight}">
@@ -65,7 +66,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Image Source="../Views/Images/folder32.png" Width="32" Grid.Column="0" />
+                    <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Folder.png'}" Width="32" Grid.Column="0" />
                     <StackPanel Orientation="Vertical" Grid.Column="1">
                         <TextBlock Text="{x:Static Properties:Resources.SourceSelection_FolderBatchScan}" VerticalAlignment="Center" Margin="5,0,0,0" />
                         <TextBlock Text="{x:Static Properties:Resources.SourceSelection_OpenFolderWIth}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="5,0,0,0" />
@@ -81,7 +82,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Image Source="../Views/Images/File32.png" Width="32" Grid.Column="0" />
+                    <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/File.png'}" Width="32" Height="32" Grid.Column="0" />
                     <StackPanel Orientation="Vertical" Grid.Column="1">
                         <TextBlock Text="{x:Static Properties:Resources.SourceSelection_File}" VerticalAlignment="Center" Margin="5,0,0,0" />
                         <TextBlock Text="{x:Static Properties:Resources.SourceSelection_SingleVideoFile}" TextWrapping="Wrap" VerticalAlignment="Center" Margin="5,0,0,0" />
@@ -97,7 +98,7 @@
                                 Margin="0,0,0,10" Padding="8" HorizontalAlignment="Left" 
                                 Tag="{Binding}" AutomationProperties.Name="{x:Static Properties:Resources.SourceSelection_ChooseDisc}">
                             <StackPanel Orientation="Horizontal" MinWidth="100">
-                                <Image Source="../Views/Images/Disc.png" Width="32" />
+                                <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Disc.png'}" Width="32" />
                                 <StackPanel Orientation="Vertical">
                                     <TextBlock Text="{Binding Text}" VerticalAlignment="Center" Margin="5,0,0,0" />
                                     <TextBlock Text="{x:Static Properties:Resources.SourceSelection_OpenDVDBluray}" VerticalAlignment="Center" Margin="5,0,0,0" />

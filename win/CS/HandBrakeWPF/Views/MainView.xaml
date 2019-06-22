@@ -23,6 +23,7 @@
         <Converters:LongToIntConverter x:Key="longToIntConverter" />
         <queue:InlineQueueConverter x:Key="InlineQueueConverter" />
         <Converters:BooleanConverter x:Key="NotBooleanConverter" />
+        <Converters:ThemeImageConverter x:Key="themeConverter" />
 
         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Padding" Value="8,2" />
@@ -87,18 +88,18 @@
                 <MenuItem Header="{x:Static Properties:Resources.MainView_ToolsMenu}">
                     <MenuItem Header="{x:Static Properties:Resources.MainView_ShowQueueMenu}" cal:Message.Attach="[Event Click] = [Action OpenQueueWindow]" InputGestureText="Ctrl + Q">
                         <MenuItem.Icon>
-                            <Image Width="16" Source="Images/Queue_Small.png" />
+                            <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Queue.png'}" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="{x:Static Properties:Resources.MainView_ActivityLogMenu}" cal:Message.Attach="[Event Click] = [Action OpenLogWindow]"  InputGestureText="Ctrl + L">
                         <MenuItem.Icon>
-                            <Image Width="16" Source="Images/Output_Small.png" />
+                            <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Activity.png'}" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator />
                     <MenuItem Header="{x:Static Properties:Resources.MainView_PreferencesMenu}" cal:Message.Attach="[Event Click] = [Action OpenOptionsWindow]">
                         <MenuItem.Icon>
-                            <Image Width="16" Source="Images/Pref_Small.png" />
+                            <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Settings.png'}" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -170,7 +171,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/Movies_small.png"/>
+                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Source.png'}"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_SourceOpen}"/>
@@ -182,7 +183,7 @@
                 <Button PreviewMouseLeftButtonDown="AddToQueue_PreviewMouseDown" ContextMenuService.IsEnabled="False" AutomationProperties.Name="{x:Static Properties:Resources.MainView_AddToQueue}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Orientation="Horizontal">
-                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="Images/AddToQueue_small.png" />
+                            <Image Width="32" Height="32" SnapsToDevicePixels="True" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='AddToQueue.png'}" />
                             <Label Margin="8,0,0,0" VerticalAlignment="Center" Content="{x:Static Properties:Resources.MainView_AddToQueue}" />
                         </StackPanel>
 
@@ -209,7 +210,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/AddToQueue_small.png"/>
+                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='AddToQueue.png'}"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_AddSelection}"/>
@@ -223,7 +224,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/AddToQueue_small.png"/>
+                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='AddToQueue.png'}"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_AddAll}"/>
@@ -284,7 +285,7 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/Queue_small.png"/>
+                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Queue.png'}"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="{Binding QueueLabel, FallbackValue='{x:Static Properties:Resources.MainView_ShowQueue}'}"/>
@@ -296,7 +297,7 @@
                         <Image Width="32"
                                Height="32"
                                SnapsToDevicePixels="True"
-                               Source="Images/picture_small.png"/>
+                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Queue.png'}"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="{x:Static Properties:Resources.MainView_ShowPreview}"/>
@@ -307,7 +308,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/ActivityWindow_small.png"/>
+                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Activity2.png'}"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="Activity Log"/>
@@ -319,7 +320,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Image Width="32"
                                Height="32"
-                               Source="Images/Presets2.png"/>
+                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Presets2.png'}"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
                                Content="Presets"/>
@@ -721,7 +722,7 @@
                                     <StackPanel Orientation="Horizontal">
                                         <Image Width="20"
                                                Height="20"
-                                               Source="Images/add.png"
+                                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Add.png'}"
                                         />
                                         <TextBlock Margin="2,0,0,0"
                                                    VerticalAlignment="Center"
@@ -737,7 +738,7 @@
                                     <StackPanel Orientation="Horizontal">
                                         <Image Width="20"
                                                Height="20"
-                                               Source="Images/remove.png"
+                                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Remove.png'}"
                                                SnapsToDevicePixels="True"
                                         />
                                         <TextBlock Margin="2,0,0,0"
@@ -755,7 +756,7 @@
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="20"
                                                    Height="20"
-                                                   Source="Images/Advanced.png"
+                                                   Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}"
                                                    RenderOptions.BitmapScalingMode="HighQuality"
                                             />
                                             <TextBlock Margin="2,0,0,0"

@@ -34,6 +34,7 @@
         <video:EncoderOptionsTooltipConverter x:Key="encoderOptionsTooltipConverter" />
         <video:VideoOptionsTooltipConverter x:Key="videoOptionsTooltipConverter" />
         <queue:PictureSettingsDescConveter x:Key="pictureSettingsDescConverter" />
+        <Converters:ThemeImageConverter x:Key="themeConverter" />
 
         <Style x:Key="LongToolTipHolder" TargetType="FrameworkElement">
             <Setter Property="ToolTipService.ShowDuration" Value="10000" />
@@ -64,7 +65,7 @@
                 <MenuItem>
                     <MenuItem.Header>
                         <StackPanel Height="32" Orientation="Horizontal">
-                            <Image Source="Images/Advanced.png" Width="20" Height="20" VerticalAlignment="Center" />
+                            <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}" Width="20" Height="20" VerticalAlignment="Center" />
                             <TextBlock VerticalAlignment="Center"
                                        Text="{x:Static Properties:Resources.QueueView_Options}" Margin="5,0,0,0" />
                             <Path Height="5"
@@ -163,7 +164,7 @@
                         <ContextMenu cal:Action.TargetWithoutContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" Opened="ContextMenu_OnOpened">
                             <MenuItem Header="{x:Static Properties:Resources.QueueView_PlayMediaFile}" cal:Message.Attach="[Event Click] = [Action PlayFile]" />
                             <Separator />
-                            <MenuItem x:Name="RetryMenuItem" Header="{x:Static Properties:Resources.QueueView_Retry}" Click="QueueItem_Retry" />
+                            <MenuItem x:Name="ResetMenuItem" Header="{x:Static Properties:Resources.QueueView_Reset}" Click="QueueItem_Retry" />
                             <MenuItem x:Name="DeleteMenuItem" Header="{x:Static Properties:Resources.QueueView_Delete}" Click="QueueItem_Delete" />
                             <Separator />
                             <MenuItem x:Name="EditMenuItem" Header="{x:Static Properties:Resources.QueueView_Edit}" Click="QueueItem_Edit" />
@@ -202,7 +203,7 @@
                                         <Style TargetType="{x:Type Image}">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="Waiting">
-                                                    <Setter Property="Source" Value="Images/Movies.png" />
+                                                    <Setter Property="Source" Value="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Source.png'}" />
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding Status, Converter={StaticResource enumComboConverter}}" Value="In Progress">
                                                     <Setter Property="Source" Value="Images/Working0.png" />
@@ -340,13 +341,13 @@
                                     </Style>
                                 </StackPanel.Resources>
 
-                                <Button AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Retry}"  ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}">
+                                <Button AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Reset}"  ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_ResetJobStatus}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0"
-                                               Source="Images/Refresh.ico">
+                                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Refresh.png'}">
                                             </Image>
-                                            <TextBlock Text="{x:Static Properties:Resources.QueueView_Retry}" />
+                                            <TextBlock Text="{x:Static Properties:Resources.QueueView_Reset}" />
                                         </StackPanel>
 
                                     </Button.Content>
@@ -363,7 +364,7 @@
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="20" Margin="0,0,5,0" Height="20" VerticalAlignment="Center"
-                                               Source="Images/options24.png">
+                                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='New.png'}">
                                             </Image>
                                             <TextBlock Text="{x:Static Properties:Resources.QueueView_Edit}" />
                                         </StackPanel>
@@ -377,30 +378,12 @@
                                     </i:Interaction.Triggers>
                                 </Button>
 
-                                <Button Margin="10,0,0,0" AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Delete}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" 
-                                               Source="Images/close64_dark.png">
-                                            </Image>
-                                            <TextBlock Text="{x:Static Properties:Resources.QueueView_Delete}" />
-                                        </StackPanel>
-                                    </Button.Content>
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="Click">
-                                            <cal:ActionMessage MethodName="RemoveJob">
-                                                <cal:Parameter Value="{Binding SelectedTask}" />
-                                            </cal:ActionMessage>
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </Button>
-
                                 <Button x:Name="queueOptionsDropButton" Margin="10,0,0,0" Click="QueueOptionsDropButton_OnClick"
                                         AutomationProperties.Name="{x:Static Properties:Resources.QueueView_Actions}" IsEnabled="{Binding CanPerformActionOnSource}">
                                     <Button.Content>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0" 
-                                                   Source="Images/Advanced.png">
+                                                   Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}">
                                             </Image>
 
                                             <TextBlock Margin="0,0,5,0" Padding="0"

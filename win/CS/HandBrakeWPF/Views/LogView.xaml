@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+        xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
         Title="{Binding Title}"
         Width="525"
         Height="600"
@@ -10,6 +11,11 @@
         MinHeight="600"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display">
+
+    <Window.Resources>
+        <converters:ThemeImageConverter x:Key="themeConverter" />
+    </Window.Resources>
+
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -27,14 +33,14 @@
                 <Button cal:Message.Attach="[Event Click] = [Action CopyLog]" Margin="10,0,0,0" 
                         AutomationProperties.Name="{x:Static Properties:Resources.LogView_CopyClipboard}" >
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Source="Images/copy.png" />
+                        <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Copy.png'}" />
                         <TextBlock Margin="2,0,0,0" Text="{x:Static Properties:Resources.LogView_CopyClipboard}" />
                     </StackPanel>
                 </Button>
                 <Button Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]"
                         AutomationProperties.Name="{x:Static Properties:Resources.LogView_OpenLogDir}" >
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Source="Images/folder.png" />
+                        <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Folder.png'}" />
                         <TextBlock Margin="2,0,0,0" Text="{x:Static Properties:Resources.LogView_OpenLogDir}" />
                     </StackPanel>
                 </Button>

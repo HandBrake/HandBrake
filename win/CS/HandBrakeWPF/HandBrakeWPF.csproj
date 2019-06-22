@@ -141,6 +141,7 @@
     <Compile Include="Converters\Subtitles\CanBurnSubtitleConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBurnInBehaviourConverter.cs" />
     <Compile Include="Converters\Subtitles\SubtitleBehaviourConverter.cs" />
+    <Compile Include="Converters\ThemeImageConverter.cs" />
     <Compile Include="Converters\Video\VideoOptionsTooltipConverter.cs" />
     <Compile Include="Converters\Video\ScalingConverter.cs" />
     <Compile Include="EventArgs\OutputFormatChangedEventArgs.cs" />
@@ -643,50 +644,24 @@
     <EmbeddedResource Include="defaultsettings.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Resource Include="Views\Images\add40.png" />
-    <Resource Include="Views\Images\add.png" />
-    <Resource Include="Views\Images\remove.png" />
     <Resource Include="Views\Images\information.png" />
-    <Resource Include="Views\Images\picture_small.png" />
     <Resource Include="Views\Images\warningsmall.png" />
-    <Resource Include="Views\Images\Refresh.ico" />
     <Resource Include="Views\Images\Complete.png" />
     <Resource Include="Views\Images\Working0.png" />
     <Resource Include="handbrakepineapple.ico" />
-    <Resource Include="Views\Images\Close.png" />
-    <Resource Include="Views\Images\Options24.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Views\Images\ActivityWindow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Images\ActivityWindow_small.png" />
-    <Resource Include="Views\Images\copy.png" />
     <Resource Include="Views\Images\disc_small.png" />
-    <Resource Include="Views\Images\Output_Small.png" />
-    <Resource Include="Views\Images\Pref_Small.png" />
-    <Resource Include="Views\Images\Queue.png" />
-    <Resource Include="Views\Images\Queue_Small.png" />
     <Resource Include="Views\Images\stop.png" />
     <Resource Include="Views\Images\Play_small.png" />
     <Resource Include="Views\Images\Play.png" />
-    <Resource Include="Views\Images\picture.png" />
     <Resource Include="Views\Images\Pause.png" />
-    <Resource Include="Views\Images\Movies.png" />
     <Resource Include="Views\Images\logo64.png" />
     <Resource Include="Views\Images\logo128.png" />
-    <Resource Include="Views\Images\Preferences.png" />
-    <Resource Include="Views\Images\folder.png" />
     <Resource Include="Views\Images\ErrorX.png" />
-    <Resource Include="Views\Images\AddToQueue_small.png" />
-    <Resource Include="Views\Images\AddToQueue.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Images\Advanced.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Images\Disc.png" />
-    <Resource Include="Views\Images\file.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.1">
@@ -706,19 +681,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Views\Images\folder32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Images\File32.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Views\Images\information64.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Images\Movies_small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Views\Images\Presets2.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj">
@@ -734,6 +697,94 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Images\question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Dark\Activity2.png" />
+    <Resource Include="Views\Images\Dark\AddToQueue.png" />
+    <Resource Include="Views\Images\Dark\Presets2.png" />
+    <Resource Include="Views\Images\Dark\Preview.png" />
+    <Resource Include="Views\Images\Dark\Queue.png" />
+    <Resource Include="Views\Images\Dark\Source.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Source.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\AddToQueue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Queue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Preview.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Activity2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Presets2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Dark\File.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Dark\Add.png" />
+    <Resource Include="Views\Images\Dark\Advanced.png" />
+    <Resource Include="Views\Images\Dark\Remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Add.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Advanced.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Activity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Dark\Activity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Dark\Settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Dark\Copy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Dark\New.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\New.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Dark\Refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Dark\Folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\File.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Light\Disc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\Dark\Disc.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
