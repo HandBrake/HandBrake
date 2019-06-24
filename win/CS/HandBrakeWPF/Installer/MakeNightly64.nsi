@@ -16,7 +16,7 @@
 
 ;Required .NET framework
 !define MIN_FRA_MAJOR "4"
-!define MIN_FRA_MINOR "7"
+!define MIN_FRA_MINOR "8"
 !define MIN_FRA_BUILD "*"
 
 SetCompressor lzma
