@@ -23,6 +23,7 @@ namespace HandBrakeWPF.ViewModels
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Extensions;
+    using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Queue.Interfaces;
@@ -47,7 +48,7 @@ namespace HandBrakeWPF.ViewModels
         private readonly IQueueService queueProcessor;
         private string jobStatus;
         private string jobsPending;
-        private string whenDoneAction;
+        private WhenDone whenDoneAction;
         private QueueTask selectedTask;
         private bool isQueueRunning;
         private double progressValue;
@@ -82,7 +83,7 @@ namespace HandBrakeWPF.ViewModels
             this.DisplayName = "Queue";
             this.IsQueueRunning = false;
 
-            this.WhenDoneAction = this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction);
+            this.WhenDoneAction = (WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction);
         }
 
         #endregion
@@ -147,7 +148,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets WhenDoneAction.
         /// </summary>
-        public string WhenDoneAction
+        public WhenDone WhenDoneAction
         {
             get
             {
@@ -273,7 +274,7 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="action">
         /// The action.
         /// </param>
-        public void WhenDone(string action)
+        public void WhenDone(int action)
         {
             this.WhenDone(action, true);
         }
@@ -287,9 +288,9 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="saveChange">
         /// Save the change to the setting. Use false when updating UI.
         /// </param>
-        public void WhenDone(string action, bool saveChange)
+        public void WhenDone(int action, bool saveChange)
         {
-            this.WhenDoneAction = action;
+            this.WhenDoneAction = (WhenDone)action;
 
             if (saveChange)
             {

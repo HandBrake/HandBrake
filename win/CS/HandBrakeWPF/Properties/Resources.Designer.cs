@@ -4066,15 +4066,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do nothing.
-        /// </summary>
-        public static string QueueView_DoNothing {
-            get {
-                return ResourceManager.GetString("QueueView_DoNothing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Encode Time:.
         /// </summary>
         public static string QueueView_Duration {
@@ -4129,15 +4120,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hibernate.
-        /// </summary>
-        public static string QueueView_Hibernate {
-            get {
-                return ResourceManager.GetString("QueueView_Hibernate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Import Queue.
         /// </summary>
         public static string QueueView_Import {
@@ -4147,29 +4129,11 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Lock System.
-        /// </summary>
-        public static string QueueView_LockSystem {
-            get {
-                return ResourceManager.GetString("QueueView_LockSystem", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The log will be available after the encode completes..
         /// </summary>
         public static string QueueView_LogNotAvailableYet {
             get {
                 return ResourceManager.GetString("QueueView_LogNotAvailableYet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Log off.
-        /// </summary>
-        public static string QueueView_Logoff {
-            get {
-                return ResourceManager.GetString("QueueView_Logoff", resourceCulture);
             }
         }
         
@@ -4237,15 +4201,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Quit HandBrake.
-        /// </summary>
-        public static string QueueView_QuitHandBrake {
-            get {
-                return ResourceManager.GetString("QueueView_QuitHandBrake", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Reset.
         /// </summary>
         public static string QueueView_Reset {
@@ -4278,15 +4233,6 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_ResetSelectedJobs {
             get {
                 return ResourceManager.GetString("QueueView_ResetSelectedJobs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Shutdown.
-        /// </summary>
-        public static string QueueView_Shutdown {
-            get {
-                return ResourceManager.GetString("QueueView_Shutdown", resourceCulture);
             }
         }
         
@@ -4350,15 +4296,6 @@ namespace HandBrakeWPF.Properties {
         public static string QueueView_Summary {
             get {
                 return ResourceManager.GetString("QueueView_Summary", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Suspend.
-        /// </summary>
-        public static string QueueView_Suspend {
-            get {
-                return ResourceManager.GetString("QueueView_Suspend", resourceCulture);
             }
         }
         
@@ -5566,6 +5503,69 @@ namespace HandBrakeWPF.Properties {
         public static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do nothing.
+        /// </summary>
+        public static string WhenDone_DoNothing {
+            get {
+                return ResourceManager.GetString("WhenDone_DoNothing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hibernate.
+        /// </summary>
+        public static string WhenDone_Hibernate {
+            get {
+                return ResourceManager.GetString("WhenDone_Hibernate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lock System.
+        /// </summary>
+        public static string WhenDone_LockSystem {
+            get {
+                return ResourceManager.GetString("WhenDone_LockSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log off.
+        /// </summary>
+        public static string WhenDone_Logoff {
+            get {
+                return ResourceManager.GetString("WhenDone_Logoff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quit HandBrake.
+        /// </summary>
+        public static string WhenDone_QuitHandBrake {
+            get {
+                return ResourceManager.GetString("WhenDone_QuitHandBrake", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shutdown.
+        /// </summary>
+        public static string WhenDone_Shutdown {
+            get {
+                return ResourceManager.GetString("WhenDone_Shutdown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sleep.
+        /// </summary>
+        public static string WhenDone_Suspend {
+            get {
+                return ResourceManager.GetString("WhenDone_Suspend", resourceCulture);
             }
         }
         

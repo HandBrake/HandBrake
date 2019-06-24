@@ -9,6 +9,8 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using HandBrakeWPF.Model.Options;
+
     /// <summary>
     /// The Queue View Model Interface
     /// </summary>
@@ -25,7 +27,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="saveChange">
         /// Save the change to the setting. Use false when updating UI.
         /// </param>
-        void WhenDone(string action, bool saveChange);
+        void WhenDone(int action, bool saveChange);
 
         /// <summary>
         /// The import.

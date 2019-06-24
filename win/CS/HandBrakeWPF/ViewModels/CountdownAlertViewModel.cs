@@ -12,7 +12,9 @@ namespace HandBrakeWPF.ViewModels
     using System;
     using System.Windows.Threading;
 
+    using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -115,12 +117,12 @@ namespace HandBrakeWPF.ViewModels
         /// <param name="actionMsg">
         /// The action.
         /// </param>
-        public void SetAction(string actionMsg)
+        public void SetAction(WhenDone actionMsg)
         {
             this.IsCancelled = false;
             this.Ticks = 0;
             timer.Start();
-            this.action = actionMsg;    
+            this.action = EnumHelper<WhenDone>.GetDisplay(actionMsg);    
         }
 
         #endregion

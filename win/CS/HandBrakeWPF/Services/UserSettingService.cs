@@ -88,11 +88,11 @@ namespace HandBrakeWPF.Services
         /// <returns>
         /// The user setting
         /// </returns>
-        public T GetUserSetting<T>(string name, Type conversionType = null)
+        public T GetUserSetting<T>(string name)
         {
             if (this.userSettings.ContainsKey(name))
             {
-                if (conversionType != null && typeof(int) == conversionType)
+                if (typeof(T) == typeof(int))
                 {
                     object storedValue = this.userSettings[name];
                     object converted = storedValue?.ToString().ToInt();

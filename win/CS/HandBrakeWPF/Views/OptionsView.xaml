@@ -242,7 +242,7 @@
                             </Grid.RowDefinitions>
 
                             <TextBlock Text="{x:Static Properties:Resources.Options_WhenDoneColon}" Grid.Row="0" Grid.Column="0" />
-                            <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions}" SelectedItem="{Binding WhenDone}" Width="120"  HorizontalAlignment="Left"  Grid.Row="0" Grid.Column="1"  />
+                            <ComboBox Name="whenDone" ItemsSource="{Binding WhenDoneOptions, Converter={StaticResource enumComboConverter}}" SelectedItem="{Binding WhenDone, Converter={StaticResource enumComboConverter}}" Width="120"  HorizontalAlignment="Left"  Grid.Row="0" Grid.Column="1"  />
                             <CheckBox Content="{x:Static Properties:Resources.Options_ResetDoNothing}" VerticalAlignment="Center" Margin="0,5,0,0"  Grid.Row="1" Grid.Column="1" 
                                       IsChecked="{Binding ResetWhenDoneAction}" />
                             <CheckBox Content="{x:Static Properties:Resources.Options_PromptBeforeAction}" VerticalAlignment="Center" Margin="0,5,0,0" Grid.Row="2" Grid.Column="1" 

@@ -9,6 +9,8 @@
 
 namespace HandBrakeWPF.ViewModels.Interfaces
 {
+    using HandBrakeWPF.Model.Options;
+
     /// <summary>
     /// The Countdown Alert View Model Interface
     /// </summary>
@@ -25,6 +27,6 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// <param name="action">
         /// The action.
         /// </param>
-        void SetAction(string action);
+        void SetAction(WhenDone action);
     }
 }

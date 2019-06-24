@@ -80,8 +80,8 @@ namespace HandBrakeWPF.ViewModels
         private string sendFileTo;
         private string sendFileToPath;
         private string vlcPath;
-        private string whenDone;
-        private BindingList<string> whenDoneOptions = new BindingList<string>();
+        private WhenDone whenDone;
+        private BindingList<WhenDone> whenDoneOptions = new BindingList<WhenDone>();
         private bool clearQueueOnEncodeCompleted;
         private OptionsTab selectedTab;
         private string updateMessage;
@@ -351,7 +351,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets WhenDone.
         /// </summary>
-        public string WhenDone
+        public WhenDone WhenDone
         {
             get
             {
@@ -366,19 +366,13 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets WhenDoneOptions.
+        /// Gets WhenDoneOptions.
         /// </summary>
-        public BindingList<string> WhenDoneOptions
+        public BindingList<WhenDone> WhenDoneOptions
         {
             get
             {
-                return this.whenDoneOptions;
-            }
-
-            set
-            {
-                this.whenDoneOptions = value;
-                this.NotifyOfPropertyChange("WhenDoneOptions");
+                return new BindingList<WhenDone>(EnumHelper<WhenDone>.GetEnumList().ToList());
             }
         }
 
@@ -1470,7 +1464,7 @@ namespace HandBrakeWPF.ViewModels
             this.checkForUpdatesFrequencies.Add("Weekly");
             this.checkForUpdatesFrequencies.Add("Monthly");
 
-            this.CheckForUpdatesFrequency = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck, typeof(int));
+            this.CheckForUpdatesFrequency = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck);
             if (this.CheckForUpdatesFrequency > 1)
             {
                 this.CheckForUpdatesFrequency = 1;
@@ -1489,18 +1483,18 @@ namespace HandBrakeWPF.ViewModels
 
             // On Encode Completion Action
             this.whenDoneOptions.Clear();
-            this.whenDoneOptions.Add("Do nothing");
-            this.whenDoneOptions.Add("Shutdown");
-            this.whenDoneOptions.Add("Suspend");
-            this.whenDoneOptions.Add("Hibernate");
-            this.whenDoneOptions.Add("Lock System");
-            this.whenDoneOptions.Add("Log off");
-            this.whenDoneOptions.Add("Quit HandBrake");
+            this.whenDoneOptions.Add(WhenDone.DoNothing);
+            this.whenDoneOptions.Add(WhenDone.Shutdown);
+            this.whenDoneOptions.Add(WhenDone.Sleep);
+            this.whenDoneOptions.Add(WhenDone.Hibernate);
+            this.whenDoneOptions.Add(WhenDone.LockSystem);
+            this.whenDoneOptions.Add(WhenDone.LogOff);
+            this.whenDoneOptions.Add(WhenDone.QuickHandBrake);
 
-            this.WhenDone = userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction);
+            this.WhenDone = (WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction);
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
             {
-                this.WhenDone = "Do nothing";
+                this.WhenDone = WhenDone.DoNothing;
             }
 
             this.SendFileAfterEncode = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile);
@@ -1535,7 +1529,7 @@ namespace HandBrakeWPF.ViewModels
             this.mp4ExtensionOptions.Add("Automatic");
             this.mp4ExtensionOptions.Add("Always use MP4");
             this.mp4ExtensionOptions.Add("Always use M4V");
-            this.SelectedMp4Extension = this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v, typeof(int));
+            this.SelectedMp4Extension = this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v);
 
             // Remove Underscores
             this.RemoveUnderscores = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore);
@@ -1548,11 +1542,11 @@ namespace HandBrakeWPF.ViewModels
             this.FileOverwriteBehaviourList = new BindingList<FileOverwriteBehaviour>();
             this.FileOverwriteBehaviourList.Add(FileOverwriteBehaviour.Ask);
             this.FileOverwriteBehaviourList.Add(FileOverwriteBehaviour.ForceOverwrite);
-            this.SelectedOverwriteBehaviour = this.userSettingService.GetUserSetting<int>(UserSettingConstants.FileOverwriteBehaviour, typeof(int));
+            this.SelectedOverwriteBehaviour = this.userSettingService.GetUserSetting<int>(UserSettingConstants.FileOverwriteBehaviour);
 
             // Collision behaviour
             this.AutonameFileCollisionBehaviours = new BindingList<AutonameFileCollisionBehaviour>() { AutonameFileCollisionBehaviour.AppendNumber, AutonameFileCollisionBehaviour.Prefix, AutonameFileCollisionBehaviour.Postfix };
-            this.SelectedCollisionBehaviour = this.userSettingService.GetUserSetting<int>(UserSettingConstants.AutonameFileCollisionBehaviour, typeof(int));
+            this.SelectedCollisionBehaviour = this.userSettingService.GetUserSetting<int>(UserSettingConstants.AutonameFileCollisionBehaviour);
             this.PrePostFilenameText = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutonameFilePrePostString);
 
             // #############################
@@ -1566,7 +1560,7 @@ namespace HandBrakeWPF.ViewModels
             // Video
             // #############################
             this.EnableQuickSyncDecoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncDecoding);
-            this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode, typeof(int));
+            this.SelectedScalingMode = this.userSettingService.GetUserSetting<VideoScaler>(UserSettingConstants.ScalingMode);
             this.UseQSVDecodeForNonQSVEnc = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UseQSVDecodeForNonQSVEnc);
 
             this.EnableQuickSyncEncoding = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.EnableQuickSyncEncoding);
@@ -1595,7 +1589,7 @@ namespace HandBrakeWPF.ViewModels
             this.logVerbosityOptions.Add(0);
             this.logVerbosityOptions.Add(1);
             this.logVerbosityOptions.Add(2);
-            this.SelectedVerbosity = userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity, typeof(int));
+            this.SelectedVerbosity = userSettingService.GetUserSetting<int>(UserSettingConstants.Verbosity);
 
             // Logs
             this.CopyLogToEncodeDirectory = userSettingService.GetUserSetting<bool>(UserSettingConstants.SaveLogWithVideo);
@@ -1627,7 +1621,7 @@ namespace HandBrakeWPF.ViewModels
             this.PreviewPicturesToScan.Add(50);
             this.PreviewPicturesToScan.Add(55);
             this.PreviewPicturesToScan.Add(60);
-            this.SelectedPreviewCount = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount, typeof(int));
+            this.SelectedPreviewCount = this.userSettingService.GetUserSetting<int>(UserSettingConstants.PreviewScanCount);
 
             // x264 step
             this.ConstantQualityGranularity.Clear();
@@ -1637,7 +1631,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedGranulairty = userSettingService.GetUserSetting<double>(UserSettingConstants.X264Step).ToString("0.00", CultureInfo.InvariantCulture);
 
             // Min Title Length
-            this.MinLength = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration, typeof(int));
+            this.MinLength = this.userSettingService.GetUserSetting<int>(UserSettingConstants.MinScanDuration);
 
             // Use dvdnav
             this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
@@ -1648,7 +1642,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void UpdateSettings()
         {
-            this.WhenDone = userSettingService.GetUserSetting<string>("WhenCompleteAction");
+            this.WhenDone = (WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction);
         }
 
         /// <summary>
@@ -1693,7 +1687,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);
 
             /* When Done */
-            this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, this.WhenDone);
+            this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, (int)this.WhenDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.ResetWhenDoneAction, this.ResetWhenDoneAction);
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenDonePerformActionImmediately, this.WhenDonePerformActionImmediately);
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenDone, this.PlaySoundWhenDone);

@@ -171,6 +171,7 @@
     <Compile Include="Model\Filters\FilterTune.cs" />
     <Compile Include="Model\Filters\FilterPreset.cs" />
     <Compile Include="Model\InterfaceLanguage.cs" />
+    <Compile Include="Model\Options\WhenDone.cs" />
     <Compile Include="Model\Picture\PresetPictureSettingsMode.cs" />
     <Compile Include="Model\Subtitles\SubtitleBurnInBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviourModes.cs" />

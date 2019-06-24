@@ -1446,7 +1446,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="QueueView_Destination" xml:space="preserve">
     <value>Dest: </value>
   </data>
-  <data name="QueueView_DoNothing" xml:space="preserve">
+  <data name="WhenDone_DoNothing" xml:space="preserve">
     <value>Do nothing</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
@@ -1464,16 +1464,16 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="QueueView_FileSize" xml:space="preserve">
     <value>Filesize: </value>
   </data>
-  <data name="QueueView_Hibernate" xml:space="preserve">
+  <data name="WhenDone_Hibernate" xml:space="preserve">
     <value>Hibernate</value>
   </data>
-  <data name="QueueView_LockSystem" xml:space="preserve">
+  <data name="WhenDone_LockSystem" xml:space="preserve">
     <value>Lock System</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
     <value>The log will be available after the encode completes.</value>
   </data>
-  <data name="QueueView_Logoff" xml:space="preserve">
+  <data name="WhenDone_Logoff" xml:space="preserve">
     <value>Log off</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
@@ -1494,7 +1494,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="QueueView_PictureSettings" xml:space="preserve">
     <value>Picture Settings:</value>
   </data>
-  <data name="QueueView_QuitHandBrake" xml:space="preserve">
+  <data name="WhenDone_QuitHandBrake" xml:space="preserve">
     <value>Quit HandBrake</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
@@ -1509,7 +1509,7 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="QueueView_Reset" xml:space="preserve">
     <value>Reset</value>
   </data>
-  <data name="QueueView_Shutdown" xml:space="preserve">
+  <data name="WhenDone_Shutdown" xml:space="preserve">
     <value>Shutdown</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
@@ -1533,8 +1533,8 @@ This will not affect your current settings in the Subtitle tab.</value>
   <data name="QueueView_Summary" xml:space="preserve">
     <value>Summary</value>
   </data>
-  <data name="QueueView_Suspend" xml:space="preserve">
-    <value>Suspend</value>
+  <data name="WhenDone_Suspend" xml:space="preserve">
+    <value>Sleep</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
     <value>Video:</value>

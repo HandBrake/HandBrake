@@ -21,6 +21,7 @@ namespace HandBrakeWPF.Services
 
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Instance;
+    using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging;
@@ -138,7 +139,7 @@ namespace HandBrakeWPF.Services
                 this.PlayWhenDoneSound();
             }
 
-            if (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction) == "Do nothing")
+            if (this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction) == (int)WhenDone.DoNothing)
             {
                 return;
             }
@@ -151,7 +152,7 @@ namespace HandBrakeWPF.Services
                 Execute.OnUIThread(
                     () =>
                     {
-                        titleSpecificView.SetAction(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction));
+                        titleSpecificView.SetAction((WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction));
                         this.windowManager.ShowDialog(titleSpecificView);
                         isCancelled = titleSpecificView.IsCancelled;
                     });
@@ -159,36 +160,31 @@ namespace HandBrakeWPF.Services
 
             if (!isCancelled)
             {
-                this.ServiceLogMessage(string.Format("Performing 'When Done' Action: {0}", this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction)));
+                this.ServiceLogMessage(string.Format("Performing 'When Done' Action: {0}", this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction)));
 
                 // Do something when the encode ends.
-                switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction))
+                switch ((WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction))
                 {
-                    case "Shutdown":
-                    case "Herunterfahren":
+                    case WhenDone.Shutdown:
                         ProcessStartInfo shutdown = new ProcessStartInfo("Shutdown", "-s -t 60");
                         shutdown.UseShellExecute = false;
                         Process.Start(shutdown);
                         Execute.OnUIThread(() => System.Windows.Application.Current.Shutdown());
                         break;
-                    case "Log off":
-                    case "Ausloggen":
+                    case WhenDone.LogOff:
                         this.scanService.Dispose();
                         Win32.ExitWindowsEx(0, 0);
                         break;
-                    case "Suspend":
+                    case WhenDone.Sleep:
                         Application.SetSuspendState(PowerState.Suspend, true, true);
                         break;
-                    case "Hibernate":
-                    case "Ruhezustand":
+                    case WhenDone.Hibernate:
                         Application.SetSuspendState(PowerState.Hibernate, true, true);
                         break;
-                    case "Lock System":
-                    case "System sperren":
+                    case WhenDone.LockSystem:
                         Win32.LockWorkStation();
                         break;
-                    case "Quit HandBrake":
-                    case "HandBrake beenden":
+                    case WhenDone.QuickHandBrake:
                         Execute.OnUIThread(() => System.Windows.Application.Current.Shutdown());
                         break;
                 }

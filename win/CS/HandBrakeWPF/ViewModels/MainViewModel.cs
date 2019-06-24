@@ -1141,7 +1141,7 @@ namespace HandBrakeWPF.ViewModels
             // Reset WhenDone if necessary.
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
             {
-                this.WhenDone("Do nothing");
+                this.WhenDone(0);
             }
 
             // Log Cleaning
@@ -1359,7 +1359,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (File.Exists(this.CurrentTask.Destination))
             {
-                FileOverwriteBehaviour behaviour = (FileOverwriteBehaviour)this.userSettingService.GetUserSetting<int>(UserSettingConstants.FileOverwriteBehaviour, typeof(int));
+                FileOverwriteBehaviour behaviour = (FileOverwriteBehaviour)this.userSettingService.GetUserSetting<int>(UserSettingConstants.FileOverwriteBehaviour);
                 if (behaviour == FileOverwriteBehaviour.Ask)
                 {
                     MessageBoxResult result = this.errorService.ShowMessageBox(string.Format(Resources.Main_QueueOverwritePrompt, Path.GetFileName(this.CurrentTask.Destination)), Resources.Question, MessageBoxButton.YesNo, MessageBoxImage.Question);
@@ -1694,7 +1694,7 @@ namespace HandBrakeWPF.ViewModels
         /// Pass on the "When Done" Action to the queue view model. 
         /// </summary>
         /// <param name="action">action</param>
-        public void WhenDone(string action)
+        public void WhenDone(int action)
         {
             this.QueueViewModel?.WhenDone(action, true);
         }
@@ -1766,9 +1766,7 @@ namespace HandBrakeWPF.ViewModels
             };
 
             saveFileDialog.OverwritePrompt =
-                (FileOverwriteBehaviour)this.userSettingService.GetUserSetting<int>(
-                    UserSettingConstants.FileOverwriteBehaviour,
-                    typeof(int)) == FileOverwriteBehaviour.Ask;
+                (FileOverwriteBehaviour)this.userSettingService.GetUserSetting<int>(UserSettingConstants.FileOverwriteBehaviour) == FileOverwriteBehaviour.Ask;
 
             string extension = Path.GetExtension(this.CurrentTask.Destination);
 
@@ -2659,7 +2657,7 @@ namespace HandBrakeWPF.ViewModels
             switch (e.Key)
             {
                 case UserSettingConstants.WhenCompleteAction:
-                    this.QueueViewModel.WhenDone(this.userSettingService.GetUserSetting<string>(UserSettingConstants.WhenCompleteAction), false);
+                    this.QueueViewModel.WhenDone(this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction), false);
                     break;
 
                 case UserSettingConstants.ShowAddAllToQueue:

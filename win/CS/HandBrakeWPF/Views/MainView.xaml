@@ -24,6 +24,7 @@
         <queue:InlineQueueConverter x:Key="InlineQueueConverter" />
         <Converters:BooleanConverter x:Key="NotBooleanConverter" />
         <Converters:ThemeImageConverter x:Key="themeConverter" />
+        <Converters:EnumComboConverter x:Key="enumComboConverter" />
 
         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
             <Setter Property="Padding" Value="8,2" />
@@ -833,7 +834,7 @@
                         <MenuItem.Header>
                             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" MinHeight="26">
                                 <TextBlock VerticalAlignment="Center" FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_WhenDone}" />
-                                <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Text="{Binding QueueViewModel.WhenDoneAction}" />
+                                <TextBlock Margin="8,0,0,0" VerticalAlignment="Center" Text="{Binding QueueViewModel.WhenDoneAction, Converter={StaticResource enumComboConverter}}" />
                                 <Path Height="5"
                                       Margin="2,2,2,0"
                                       Data="M 0 0 L 4 4 L 8 0 Z"
@@ -842,26 +843,26 @@
                         </MenuItem.Header>
 
                         <MenuItem x:Name="doNothing"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(doNothing.Header)]"
-                                  Header="{x:Static Properties:Resources.QueueView_DoNothing}" />
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(0)]"
+                                  Header="{x:Static Properties:Resources.WhenDone_DoNothing}" />
                         <MenuItem x:Name="shutdownSystem"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(shutdownSystem.Header)]"
-                                  Header="{x:Static Properties:Resources.QueueView_Shutdown}" />
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(1)]"
+                                  Header="{x:Static Properties:Resources.WhenDone_Shutdown}" />
                         <MenuItem x:Name="suspend"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(suspend.Header)]"
-                                  Header="{x:Static Properties:Resources.QueueView_Suspend}"/>
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(2)]"
+                                  Header="{x:Static Properties:Resources.WhenDone_Suspend}"/>
                         <MenuItem x:Name="hibernate"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(hibernate.Header)]"
-                                  Header="{x:Static Properties:Resources.QueueView_Hibernate}" />
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(3)]"
+                                  Header="{x:Static Properties:Resources.WhenDone_Hibernate}" />
                         <MenuItem x:Name="lock"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(lock.Header)]"
-                                  Header="{x:Static Properties:Resources.QueueView_LockSystem}" />
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(4)]"
+                                  Header="{x:Static Properties:Resources.WhenDone_LockSystem}" />
                         <MenuItem x:Name="logoff"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(logoff.Header)]"
-                                  Header="{x:Static Properties:Resources.QueueView_Logoff}"/>
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(5)]"
+                                  Header="{x:Static Properties:Resources.WhenDone_Logoff}"/>
                         <MenuItem x:Name="quit"
-                                  cal:Message.Attach="[Event Click] = [Action WhenDone(quit.Header)]"
-                                  Header="{x:Static Properties:Resources.QueueView_QuitHandBrake}" />
+                                  cal:Message.Attach="[Event Click] = [Action WhenDone(6)]"
+                                  Header="{x:Static Properties:Resources.WhenDone_QuitHandBrake}" />
                     </MenuItem>
                 </Menu>
             </StatusBarItem>

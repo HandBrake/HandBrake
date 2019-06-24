@@ -179,7 +179,7 @@ namespace HandBrakeWPF.Helpers
              */
             if (task.OutputFormat == OutputFormat.Mp4)
             {
-                switch (userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v, typeof(int)))
+                switch (userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
                 {
                     case 0: // Automatic
                         destinationFilename += task.IncludeChapterMarkers || MP4Helper.RequiresM4v(task) ? ".m4v" : ".mp4";
@@ -258,7 +258,7 @@ namespace HandBrakeWPF.Helpers
 
         private static string CheckAndHandleFilenameCollisions(string autoNamePath, string destinationFilename, EncodeTask task, IUserSettingService userSettingService)
         {
-            AutonameFileCollisionBehaviour behaviour = (AutonameFileCollisionBehaviour)userSettingService.GetUserSetting<int>(UserSettingConstants.AutonameFileCollisionBehaviour, typeof(int));
+            AutonameFileCollisionBehaviour behaviour = (AutonameFileCollisionBehaviour)userSettingService.GetUserSetting<int>(UserSettingConstants.AutonameFileCollisionBehaviour);
             string prefix = string.Empty, postfix = string.Empty;
             switch (behaviour)
             {

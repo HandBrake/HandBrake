@@ -30,7 +30,7 @@ namespace HandBrakeWPF
         public const string InstanceId = "InstanceId";
         public const string X264Step = "X264Step";
         public const string LastPreviewDuration = "LastPreviewDuration";
-        public const string WhenCompleteAction = "WhenCompleteAction";
+        public const string WhenCompleteAction = "WhenCompletePerformAction";
         public const string SendFile = "SendFile";
         public const string SendFileTo = "SendFileTo";
         public const string SendFileToArgs = "SendFileToArgs";

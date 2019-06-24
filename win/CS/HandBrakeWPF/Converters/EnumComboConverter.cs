@@ -90,6 +90,11 @@ namespace HandBrakeWPF.Converters
                 return EnumHelper<AutonameFileCollisionBehaviour>.GetEnumDisplayValues(typeof(AutonameFileCollisionBehaviour));
             }
 
+            if (value is IEnumerable<WhenDone>)
+            {
+                return EnumHelper<WhenDone>.GetEnumDisplayValues(typeof(WhenDone));
+            }
+
             // Single Items
             if (targetType == typeof(VideoEncoder) || value.GetType() == typeof(VideoEncoder))
             {
@@ -151,6 +156,11 @@ namespace HandBrakeWPF.Converters
                 return EnumHelper<AutonameFileCollisionBehaviour>.GetDisplay((AutonameFileCollisionBehaviour)value);
             }
 
+            if (targetType == typeof(WhenDone) || value.GetType() == typeof(WhenDone))
+            {
+                return EnumHelper<WhenDone>.GetDisplay((WhenDone)value);
+            }
+
             return null;
         }
 
@@ -204,6 +214,11 @@ namespace HandBrakeWPF.Converters
             if (targetType == typeof(Sharpen) || value.GetType() == typeof(Sharpen))
             {
                 return EnumHelper<Sharpen>.GetValue(value.ToString());
+            }
+
+            if (targetType == typeof(WhenDone) || value.GetType() == typeof(WhenDone))
+            {
+                return EnumHelper<WhenDone>.GetValue(value.ToString());
             }
 
             return null;
