@@ -77,7 +77,8 @@ hb_dict_t* hb_state_to_dict( hb_state_t * state)
     case HB_STATE_PAUSED:
     case HB_STATE_SEARCHING:
         dict = json_pack_ex(&error, 0,
-            "{s:o, s{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}}",
+            "{s:o, s{s:o, s:o, s:o, s:o, s:o, s:o,"
+                   " s:o, s:o, s:o, s:o, s:o, s:o}}",
             "State", hb_value_string(state_s),
             "Working",
                 "Progress",     hb_value_double(state->param.working.progress),
@@ -86,8 +87,10 @@ hb_dict_t* hb_state_to_dict( hb_state_t * state)
                 "PassCount",    hb_value_int(state->param.working.pass_count),
                 "Rate",         hb_value_double(state->param.working.rate_cur),
                 "RateAvg",      hb_value_double(state->param.working.rate_avg),
+                "ETASeconds",   hb_value_int(state->param.working.eta_seconds),
                 "Hours",        hb_value_int(state->param.working.hours),
                 "Minutes",      hb_value_int(state->param.working.minutes),
+                "Paused",       hb_value_int(state->param.working.paused),
                 "Seconds",      hb_value_int(state->param.working.seconds),
                 "SequenceID",   hb_value_int(state->sequence_id));
         break;
