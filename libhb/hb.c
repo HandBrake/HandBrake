@@ -54,6 +54,8 @@ struct hb_handle_s
 
     int            paused;
     hb_lock_t    * pause_lock;
+    int64_t        pause_date;
+    int64_t        pause_duration;
 
     volatile int   scan_die;
 
@@ -211,6 +213,7 @@ hb_handle_t * hb_init( int verbose )
     h->state.state = HB_STATE_IDLE;
 
     h->pause_lock = hb_lock_init();
+    h->pause_date = -1;
 
     h->interjob = calloc( sizeof( hb_interjob_t ), 1 );
 
@@ -1506,25 +1509,28 @@ void hb_rem( hb_handle_t * h, hb_job_t * job )
 void hb_start( hb_handle_t * h )
 {
     hb_lock( h->state_lock );
-    h->state.state = HB_STATE_WORKING;
+    h->state.state       = HB_STATE_WORKING;
+    h->state.sequence_id = 0;
 #define p h->state.param.working
-    p.pass       = -1;
-    p.pass_count = -1;
-    p.progress  = 0.0;
-    p.rate_cur  = 0.0;
-    p.rate_avg  = 0.0;
-    p.hours     = -1;
-    p.minutes   = -1;
-    p.seconds   = -1;
-    p.sequence_id = 0;
+    p.pass         = -1;
+    p.pass_count   = -1;
+    p.progress     = 0.0;
+    p.rate_cur     = 0.0;
+    p.rate_avg     = 0.0;
+    p.eta_seconds  = 0;
+    p.hours        = -1;
+    p.minutes      = -1;
+    p.seconds      = -1;
+    p.paused       = 0;
 #undef p
     hb_unlock( h->state_lock );
 
-    h->paused = 0;
-
-    h->work_die    = 0;
-    h->work_error  = HB_ERROR_NONE;
-    h->work_thread = hb_work_init( h->jobs, &h->work_die, &h->work_error, &h->current_job );
+    h->paused         = 0;
+    h->pause_date     = -1;
+    h->pause_duration = 0;
+    h->work_die       = 0;
+    h->work_error     = HB_ERROR_NONE;
+    h->work_thread    = hb_work_init( h->jobs, &h->work_die, &h->work_error, &h->current_job );
 }
 
 /**
@@ -1538,7 +1544,7 @@ void hb_pause( hb_handle_t * h )
         hb_lock( h->pause_lock );
         h->paused = 1;
 
-        hb_current_job( h )->st_pause_date = hb_get_date();
+        h->pause_date = hb_get_date();
 
         hb_lock( h->state_lock );
         h->state.state = HB_STATE_PAUSED;
@@ -1554,12 +1560,17 @@ void hb_resume( hb_handle_t * h )
 {
     if( h->paused )
     {
-#define job hb_current_job( h )
-        if( job->st_pause_date != -1 )
+        if (h->pause_date != -1)
         {
-           job->st_paused += hb_get_date() - job->st_pause_date;
+            // Calculate paused time for current job sequence
+            h->pause_duration    += hb_get_date() - h->pause_date;
+
+            // Calculate paused time for current job pass
+            // Required to calculate accurate ETA for pass
+            h->current_job->st_paused += hb_get_date() - h->pause_date;
+            h->pause_date              = -1;
+            h->state.param.working.paused = h->pause_duration;
         }
-#undef job
 
         hb_unlock( h->pause_lock );
         h->paused = 0;
@@ -1830,6 +1841,11 @@ static void thread_func( void * _h )
             hb_unlock( h->state_lock );
         }
 
+        if (h->paused)
+        {
+            h->state.param.working.paused = h->pause_duration +
+                                            hb_get_date() - h->pause_date;
+        }
         hb_snooze( 50 );
     }
 
@@ -1905,9 +1921,7 @@ void hb_set_state( hb_handle_t * h, hb_state_t * s )
     {
         // Set which job is being worked on
         if (h->current_job)
-            h->state.param.working.sequence_id = h->current_job->sequence_id;
-        else
-            h->state.param.working.sequence_id = 0;
+            h->state.sequence_id = h->current_job->sequence_id;
     }
     hb_unlock( h->state_lock );
     hb_unlock( h->pause_lock );

@@ -722,7 +722,6 @@ struct hb_job_s
     volatile int  * die;
     volatile int    done;
 
-    uint64_t        st_pause_date;
     uint64_t        st_paused;
 
     hb_fifo_t     * fifo_mpeg2;   /* MPEG-2 video ES */
@@ -1127,9 +1126,10 @@ struct hb_state_s
 #define HB_STATE_WORKDONE 32
 #define HB_STATE_MUXING   64
 #define HB_STATE_SEARCHING 128
-    int state;
+    int         state;
+    int         sequence_id;
 
-    union
+    struct
     {
         struct
         {
@@ -1148,16 +1148,17 @@ struct hb_state_s
 #define HB_PASS_ENCODE      0
 #define HB_PASS_ENCODE_1ST  1   // Some code depends on these values being
 #define HB_PASS_ENCODE_2ND  2   // 1 and 2.  Do not change.
-            int   pass_id;
-            int   pass;
-            int   pass_count;
-            float progress;
-            float rate_cur;
-            float rate_avg;
-            int   hours;
-            int   minutes;
-            int   seconds;
-            int   sequence_id;
+            int           pass_id;
+            int           pass;
+            int           pass_count;
+            float         progress;
+            float         rate_cur;
+            float         rate_avg;
+            int64_t       eta_seconds;
+            int           hours;
+            int           minutes;
+            int           seconds;
+            uint64_t      paused;
             hb_error_code error;
         } working;
 

@@ -57,43 +57,40 @@ hb_thread_t * hb_work_init( hb_list_t * jobs, volatile int * die, hb_error_code 
     return hb_thread_init( "work", work_func, work, HB_LOW_PRIORITY );
 }
 
-static void InitWorkState(hb_handle_t *h, int pass_id, int pass, int pass_count)
+static void InitWorkState(hb_job_t * job, int pass, int pass_count)
 {
     hb_state_t state;
 
-    state.state  = HB_STATE_WORKING;
+    memset(&state, 0, sizeof(state));
+    state.state       = HB_STATE_WORKING;
+    state.sequence_id = job->sequence_id;
 #define p state.param.working
-    p.pass_id    = pass_id;
-    p.pass       = pass;
-    p.pass_count = pass_count;
-    p.progress   = 0.0;
-    p.rate_cur   = 0.0;
-    p.rate_avg   = 0.0;
-    p.hours      = -1;
-    p.minutes    = -1;
-    p.seconds    = -1;
+    p.pass_id         = job->pass_id;
+    p.pass            = pass;
+    p.pass_count      = pass_count;
+    p.progress        = 0.0;
+    p.rate_cur        = 0.0;
+    p.rate_avg        = 0.0;
+    p.eta_seconds     = 0;
+    p.hours           = -1;
+    p.minutes         = -1;
+    p.seconds         = -1;
 #undef p
 
-    hb_set_state( h, &state );
-
+    hb_set_state( job->h, &state );
 }
 
 static void SetWorkStateInfo(hb_job_t *job)
 {
     hb_state_t state;
 
-
     if (job == NULL)
     {
         return;
     }
     hb_get_state2(job->h, &state);
-
-    state.param.working.error       = *job->done_error;
-    state.param.working.sequence_id = job->sequence_id;
-
+    state.param.working.error        = *job->done_error;
     hb_set_state( job->h, &state );
-
 }
 
 /**
@@ -122,6 +119,8 @@ static void work_func( void * _work )
         {
             hb_deep_log(1, "json job:\n%s", job->json);
 
+            // Initialize state sequence_id
+            InitWorkState(job, 0, 0);
             // Perform title scan for json job
             hb_json_job_scan(job->h, job->json);
 
@@ -151,7 +150,7 @@ static void work_func( void * _work )
             job->die = work->die;
             job->done_error = work->error;
             *(work->current_job) = job;
-            InitWorkState(job->h, job->pass_id, pass + 1, pass_count);
+            InitWorkState(job, pass + 1, pass_count);
             do_job( job );
         }
         SetWorkStateInfo(job);

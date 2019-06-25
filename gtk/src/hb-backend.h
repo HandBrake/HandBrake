@@ -47,17 +47,19 @@ typedef struct
     gint preview_cur;
 
     // WORKING
-    gint unique_id;
-    gint pass_id;
-    gint pass;
-    gint pass_count;
+    gint    unique_id;
+    gint    pass_id;
+    gint    pass;
+    gint    pass_count;
     gdouble progress;
     gdouble rate_cur;
     gdouble rate_avg;
-    gint hours;
-    gint minutes;
-    gint seconds;
-    gint error;
+    gint64  eta_seconds;
+    gint    hours;
+    gint    minutes;
+    gint    seconds;
+    gint64  paused;
+    gint    error;
 } ghb_instance_status_t;
 
 typedef struct

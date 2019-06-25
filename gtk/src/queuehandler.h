@@ -27,6 +27,7 @@
 
 #include <gtk/gtk.h>
 #include "settings.h"
+#include "hb-backend.h"
 
 void     ghb_queue_buttons_grey(signal_user_data_t *ud);
 gboolean ghb_reload_queue(signal_user_data_t *ud);
@@ -41,5 +42,7 @@ void     ghb_queue_progress_set_fraction(signal_user_data_t *ud, int index,
 void     ghb_queue_update_status(signal_user_data_t *ud, int index, int status);
 void     ghb_queue_update_status_icon(signal_user_data_t *ud, int index);
 void     ghb_queue_select_log(signal_user_data_t * ud);
+void     ghb_queue_update_live_stats(signal_user_data_t * ud, int index,
+                                     ghb_instance_status_t * status);
 
 #endif // _QUEUEHANDLER_H_

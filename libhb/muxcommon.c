@@ -505,9 +505,10 @@ static void muxClose( hb_work_object_t * muxer )
     {
         /* Update the UI */
         hb_state_t state;
+        hb_get_state2(job->h, &state);
         state.state = HB_STATE_MUXING;
         state.param.muxing.progress = 0;
-        hb_set_state( job->h, &state );
+        hb_set_state(job->h, &state);
     }
 
     if( mux->m )

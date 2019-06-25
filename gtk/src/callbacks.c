@@ -1382,7 +1382,7 @@ source_dialog_extra_widgets(
     gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
 }
 
-static void break_duration(gint64 duration, gint *hh, gint *mm, gint *ss)
+void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss)
 {
     *hh = duration / (60*60);
     *mm = (duration / 60) % 60;
@@ -1415,7 +1415,7 @@ update_title_duration(signal_user_data_t *ud)
         start = ghb_dict_get_int(ud->settings, "start_point");
         end = ghb_dict_get_int(ud->settings, "end_point");
         duration = end - start;
-        break_duration(duration, &hh, &mm, &ss);
+        ghb_break_duration(duration, &hh, &mm, &ss);
     }
     else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
     {
@@ -1428,7 +1428,7 @@ update_title_duration(signal_user_data_t *ud)
             end = ghb_dict_get_int(ud->settings, "end_point");
             frames = end - start + 1;
             duration = frames * title->vrate.den / title->vrate.num;
-            break_duration(duration, &hh, &mm, &ss);
+            ghb_break_duration(duration, &hh, &mm, &ss);
         }
         else
         {
@@ -3767,6 +3767,8 @@ submit_job(signal_user_data_t *ud, GhbValue *queueDict)
     GhbValue *job_dict = ghb_dict_get(queueDict, "Job");
     int unique_id = ghb_add_job(ghb_queue_handle(), job_dict);
     ghb_dict_set_int(uiDict, "job_unique_id", unique_id);
+    time_t now = time(NULL);
+    ghb_dict_set_int(uiDict, "job_start_time", now);
     ghb_start_queue();
 
     // Show queue progress bar
@@ -3899,7 +3901,7 @@ ghb_start_next_job(signal_user_data_t *ud)
     ghb_dict_set_bool(ud->globals, "SkipDiskFreeCheck", FALSE);
 }
 
-gchar*
+static gchar*
 working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
 {
     gchar *task_str, *job_str, *status_str;
@@ -3967,7 +3969,7 @@ working_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
     return status_str;
 }
 
-gchar*
+static gchar*
 searching_status_string(signal_user_data_t *ud, ghb_instance_status_t *status)
 {
     gchar *task_str, *job_str, *status_str;
@@ -4142,8 +4144,8 @@ ghb_backend_events(signal_user_data_t *ud)
         // This needs to be in scanning and working since scanning
         // happens fast enough that it can be missed
         gtk_label_set_text(work_status, _("Scanning ..."));
-        gtk_progress_bar_set_fraction(progress, 0);
-        ghb_queue_progress_set_fraction(ud, index, 0);
+        gtk_progress_bar_set_fraction(progress, status.queue.progress);
+        ghb_queue_progress_set_fraction(ud, index, status.queue.progress);
     }
     else if (status.queue.state & GHB_STATE_SCANDONE)
     {
@@ -4152,6 +4154,7 @@ ghb_backend_events(signal_user_data_t *ud)
     else if (status.queue.state & GHB_STATE_PAUSED)
     {
         gtk_label_set_text (work_status, _("Paused"));
+        ghb_queue_update_live_stats(ud, index, &status.queue);
     }
     else if (status.queue.state & GHB_STATE_SEARCHING)
     {
@@ -4170,6 +4173,7 @@ ghb_backend_events(signal_user_data_t *ud)
         status_str = working_status_string(ud, &status.queue);
         gtk_label_set_text (work_status, status_str);
         gtk_progress_bar_set_fraction (progress, status.queue.progress);
+        ghb_queue_update_live_stats(ud, index, &status.queue);
         ghb_queue_progress_set_fraction(ud, index, status.queue.progress);
         g_free(status_str);
     }
@@ -4196,8 +4200,12 @@ ghb_backend_events(signal_user_data_t *ud)
         {
             GhbValue *uiDict = ghb_dict_get(queueDict, "uiSettings");
             ghb_dict_set_int(uiDict, "job_status", qstatus);
+            time_t now = time(NULL);
+            ghb_dict_set_int(uiDict, "job_finish_time", now);
+            ghb_dict_set_int(uiDict, "job_pause_time_ms", status.queue.paused);
         }
         ghb_queue_update_status_icon(ud, index);
+        ghb_queue_update_live_stats(ud, index, &status.queue);
         gtk_progress_bar_set_fraction(progress, 1.0);
         ghb_queue_progress_set_fraction(ud, index, 1.0);
 
@@ -4607,10 +4615,10 @@ chapter_refresh_list_row_ui(
     g_debug("Updating chapter row ui");
     chapter = ghb_dict_get_string(ghb_array_get(chapter_list, index), "Name");
     duration = ghb_get_chapter_duration(title, index) / 90000;
-    break_duration(duration, &hh, &mm, &ss);
+    ghb_break_duration(duration, &hh, &mm, &ss);
     s_duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
     start = ghb_get_chapter_start(title, index) / 90000;
-    break_duration(start, &hh, &mm, &ss);
+    ghb_break_duration(start, &hh, &mm, &ss);
     s_start = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
     gtk_list_store_set(GTK_LIST_STORE(tm), ti,
         0, index+1,

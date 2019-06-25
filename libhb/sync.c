@@ -3233,8 +3233,6 @@ static void UpdateState( sync_common_t * common, int frame_count )
     if (frame_count == 0)
     {
         common->st_first = hb_get_date();
-        job->st_pause_date = -1;
-        job->st_paused = 0;
     }
 
     if (hb_get_date() > common->st_dates[3] + 1000)
@@ -3264,9 +3262,10 @@ static void UpdateState( sync_common_t * common, int frame_count )
         p.rate_avg = 1000.0 * common->st_counts[3] /
                      (common->st_dates[3] - common->st_first - job->st_paused);
         eta = (common->est_frame_count - common->st_counts[3]) / p.rate_avg;
-        p.hours   = eta / 3600;
-        p.minutes = (eta % 3600) / 60;
-        p.seconds = eta % 60;
+        p.eta_seconds = eta;
+        p.hours       = eta / 3600;
+        p.minutes     = (eta % 3600) / 60;
+        p.seconds     = eta % 60;
     }
     else
     {
@@ -3300,8 +3299,6 @@ static void UpdateSearchState( sync_common_t * common, int64_t start,
     if (frame_count == 0)
     {
         common->st_first = now;
-        job->st_pause_date = -1;
-        job->st_paused = 0;
     }
 
     hb_get_state2(job->h, &state);
@@ -3332,9 +3329,10 @@ static void UpdateSearchState( sync_common_t * common, int64_t start,
             avg = 1000.0 * start / (now - common->st_first);
             eta = (common->pts_to_start - start) / avg;
         }
-        p.hours   = eta / 3600;
-        p.minutes = (eta % 3600) / 60;
-        p.seconds = eta % 60;
+        p.eta_seconds = eta;
+        p.hours       = eta / 3600;
+        p.minutes     = (eta % 3600) / 60;
+        p.seconds     = eta % 60;
     }
     else
     {

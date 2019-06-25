@@ -115,20 +115,20 @@ conjunction with the "Forced" option.</property>
         <attribute name="action">app.queue-reset-all</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Delete Completed Jobs</attribute>
+        <attribute name="label" translatable="yes">Clear Completed Jobs</attribute>
         <attribute name="action">app.queue-delete-complete</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Delete All Jobs</attribute>
+        <attribute name="label" translatable="yes">Clear All Jobs</attribute>
         <attribute name="action">app.queue-delete-all</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Export Queue</attribute>
-        <attribute name="action">app.queue-export</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Import Queue</attribute>
         <attribute name="action">app.queue-import</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Export Queue</attribute>
+        <attribute name="action">app.queue-export</attribute>
       </item>
     </section>
   </menu>
@@ -345,6 +345,7 @@ conjunction with the "Forced" option.</property>
                 <property name="hexpand">False</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
+                <property name="valign">baseline</property>
                 <property name="use_markup">True</property>
                 <property name="margin-start">12</property>
                 <property name="label" translatable="yes">&lt;span size="x-large"&gt;Queue&lt;/span&gt;</property>
@@ -359,6 +360,7 @@ conjunction with the "Forced" option.</property>
                 <property name="hexpand">False</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
+                <property name="valign">baseline</property>
                 <property name="use_markup">True</property>
                 <property name="margin-start">12</property>
                 <property name="label" translatable="yes">0 jobs pending</property>
@@ -514,6 +516,8 @@ conjunction with the "Forced" option.</property>
                         <property name="activate_on_single_click">False</property>
                         <signal name="row-selected" handler="queue_list_selection_changed_cb" swapped="no"/>
                         <signal name="key-press-event" handler="queue_key_press_cb" swapped="no"/>
+                        <signal name="drag-motion" handler="queue_drag_motion_cb" swapped="no"/>
+                        <signal name="drag-data-received" handler="queue_drop_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -570,6 +574,7 @@ conjunction with the "Forced" option.</property>
                 <property name="orientation">vertical</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin-top">4</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                 <child>
                   <object class="GtkStackSwitcher" id="QueueStackSwitcher">
@@ -1007,6 +1012,291 @@ Resets the queue job to pending and ready to run again.</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="spacing">3</property>
+                        <child>
+                          <object class="GtkScrolledWindow" id="queue_stats_scroll">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                            <property name="shadow-type">GTK_SHADOW_NONE</property>
+                            <property name="vexpand">True</property>
+                            <property name="hscrollbar-policy">GTK_POLICY_NEVER</property>
+                            <property name="valign">GTK_ALIGN_FILL</property>
+                            <property name="margin-bottom">12</property>
+                            <child>
+                              <object class="GtkGrid" id="queue_stats_grid">
+                                <property name="visible">True</property>
+                                <property name="vexpand">True</property>
+                                <property name="hexpand">False</property>
+                                <property name="can_focus">False</property>
+                                <property name="column-spacing">12</property>
+                                <property name="row-spacing">12</property>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_pass_label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="halign">start</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="label" translatable="yes">Pass:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">0</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_pass">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="hexpand">False</property>
+                                    <property name="label" translatable="yes"></property>
+                                    <property name="width-chars">50</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">0</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_start_time_label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="halign">start</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="label" translatable="yes">Start Time:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">1</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_start_time">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="hexpand">False</property>
+                                    <property name="label" translatable="yes"></property>
+                                    <property name="width-chars">50</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">1</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_finish_time_label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="halign">start</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="label" translatable="yes">End Time:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">2</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_finish_time">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="hexpand">False</property>
+                                    <property name="label" translatable="yes"></property>
+                                    <property name="width-chars">50</property>
+                                    <property name="lines">2</property>
+                                    <property name="wrap_mode">word-char</property>
+                                    <property name="ellipsize">middle</property>
+                                    <property name="selectable">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">2</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_paused_label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="halign">start</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="label" translatable="yes">Paused Duration:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">3</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_paused">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="hexpand">False</property>
+                                    <property name="label" translatable="yes"></property>
+                                    <property name="width-chars">50</property>
+                                    <property name="lines">2</property>
+                                    <property name="wrap_mode">word-char</property>
+                                    <property name="ellipsize">middle</property>
+                                    <property name="selectable">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">3</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_encode_label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="halign">start</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="label" translatable="yes">Encode Time:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">4</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_encode">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="hexpand">False</property>
+                                    <property name="label" translatable="yes"></property>
+                                    <property name="width-chars">50</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">4</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_file_size_label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="halign">start</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="label" translatable="yes">File Size:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">5</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_file_size">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="hexpand">False</property>
+                                    <property name="label" translatable="yes"></property>
+                                    <property name="width-chars">50</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">5</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_result_label">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="halign">start</property>
+                                    <property name="use_markup">True</property>
+                                    <property name="label" translatable="yes">Status:</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">6</property>
+                                    <property name="left_attach">0</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel" id="queue_stats_result">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">False</property>
+                                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                                    <property name="halign">start</property>
+                                    <property name="xalign">0</property>
+                                    <property name="yalign">0</property>
+                                    <property name="hexpand">False</property>
+                                    <property name="label" translatable="yes"></property>
+                                    <property name="width-chars">50</property>
+                                  </object>
+                                  <packing>
+                                    <property name="top_attach">6</property>
+                                    <property name="left_attach">1</property>
+                                    <property name="width">1</property>
+                                    <property name="height">1</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="position">1</property>

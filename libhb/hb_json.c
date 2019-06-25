@@ -63,9 +63,10 @@ hb_dict_t* hb_state_to_dict( hb_state_t * state)
     case HB_STATE_SCANNING:
     case HB_STATE_SCANDONE:
         dict = json_pack_ex(&error, 0,
-            "{s:o, s{s:o, s:o, s:o, s:o, s:o}}",
+            "{s:o, s{s:o, s:o, s:o, s:o, s:o, s:o}}",
             "State", hb_value_string(state_s),
             "Scanning",
+                "SequenceID",   hb_value_int(state->sequence_id),
                 "Progress",     hb_value_double(state->param.scanning.progress),
                 "Preview",      hb_value_int(state->param.scanning.preview_cur),
                 "PreviewCount", hb_value_int(state->param.scanning.preview_count),
@@ -88,14 +89,14 @@ hb_dict_t* hb_state_to_dict( hb_state_t * state)
                 "Hours",        hb_value_int(state->param.working.hours),
                 "Minutes",      hb_value_int(state->param.working.minutes),
                 "Seconds",      hb_value_int(state->param.working.seconds),
-                "SequenceID",   hb_value_int(state->param.working.sequence_id));
+                "SequenceID",   hb_value_int(state->sequence_id));
         break;
     case HB_STATE_WORKDONE:
         dict = json_pack_ex(&error, 0,
             "{s:o, s{s:o, s:o}}",
             "State", hb_value_string(state_s),
             "WorkDone",
-                "SequenceID",   hb_value_int(state->param.working.sequence_id),
+                "SequenceID",   hb_value_int(state->sequence_id),
                 "Error",        hb_value_int(state->param.working.error));
         break;
     case HB_STATE_MUXING:

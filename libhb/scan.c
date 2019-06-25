@@ -75,6 +75,7 @@ hb_thread_t * hb_scan_init( hb_handle_t * handle, volatile int * die,
 
     // Initialize scan state
     hb_state_t state;
+    hb_get_state2(handle, &state);
 #define p state.param.scanning
     state.state   = HB_STATE_SCANNING;
     p.title_cur   = 1;
@@ -1434,6 +1435,7 @@ static void UpdateState1(hb_scan_t *scan, int title)
 {
     hb_state_t state;
 
+    hb_get_state2(scan->h, &state);
 #define p state.param.scanning
     /* Update the UI */
     state.state   = HB_STATE_SCANNING;
@@ -1454,6 +1456,7 @@ static void UpdateState2(hb_scan_t *scan, int title)
 {
     hb_state_t state;
 
+    hb_get_state2(scan->h, &state);
 #define p state.param.scanning
     /* Update the UI */
     state.state   = HB_STATE_SCANNING;

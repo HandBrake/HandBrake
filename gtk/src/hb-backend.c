@@ -3453,6 +3453,8 @@ ghb_get_status(ghb_status_t *status)
 static void
 update_status(hb_state_t *state, ghb_instance_status_t *status)
 {
+    status->unique_id   = state->sequence_id;
+
 #define p state->param.scanning
     if (state->state & HB_STATE_SCANNING)
     {
@@ -3465,6 +3467,7 @@ update_status(hb_state_t *state, ghb_instance_status_t *status)
     }
     else
     {
+        // If last state seen was scanning, signal that scan id complete
         if (status->state & GHB_STATE_SCANNING)
         {
             status->state |= GHB_STATE_SCANDONE;
@@ -3473,83 +3476,72 @@ update_status(hb_state_t *state, ghb_instance_status_t *status)
     }
 #undef p
 #define p state->param.working
-    if (state->state & HB_STATE_WORKING)
+    if (state->state & (HB_STATE_WORKING | HB_STATE_WORKDONE |
+                        HB_STATE_SEARCHING))
     {
-        if (status->state & GHB_STATE_SCANNING)
+        status->pass        = p.pass;
+        status->pass_count  = p.pass_count;
+        status->pass_id     = p.pass_id;
+        status->progress    = p.progress;
+        status->rate_cur    = p.rate_cur;
+        status->rate_avg    = p.rate_avg;
+        status->eta_seconds = p.eta_seconds;
+        status->hours       = p.hours;
+        status->minutes     = p.minutes;
+        status->seconds     = p.seconds;
+        status->paused      = p.paused;
+
+        if (state->state & HB_STATE_WORKING)
         {
-            status->state &= ~GHB_STATE_SCANNING;
-            status->state |= GHB_STATE_SCANDONE;
+            status->state |= GHB_STATE_WORKING;
+            status->state &= ~GHB_STATE_PAUSED;
+            status->state &= ~GHB_STATE_SEARCHING;
         }
-        status->state |= GHB_STATE_WORKING;
-        status->state &= ~GHB_STATE_PAUSED;
-        status->state &= ~GHB_STATE_SEARCHING;
-        status->pass = p.pass;
-        status->pass_count = p.pass_count;
-        status->pass_id = p.pass_id;
-        status->progress = p.progress;
-        status->rate_cur = p.rate_cur;
-        status->rate_avg = p.rate_avg;
-        status->hours = p.hours;
-        status->minutes = p.minutes;
-        status->seconds = p.seconds;
-        status->unique_id = p.sequence_id;
-    }
-    else
-    {
-        status->state &= ~GHB_STATE_WORKING;
-    }
-    if (state->state & HB_STATE_SEARCHING)
-    {
-        status->state |= GHB_STATE_SEARCHING;
-        status->state &= ~GHB_STATE_WORKING;
-        status->state &= ~GHB_STATE_PAUSED;
-        status->pass = p.pass;
-        status->pass_count = p.pass_count;
-        status->pass_id = p.pass_id;
-        status->progress = p.progress;
-        status->rate_cur = p.rate_cur;
-        status->rate_avg = p.rate_avg;
-        status->hours = p.hours;
-        status->minutes = p.minutes;
-        status->seconds = p.seconds;
-        status->unique_id = p.sequence_id;
-    }
-    else
-    {
-        status->state &= ~GHB_STATE_SEARCHING;
-    }
-#undef p
-#define p state->param.working
-    if (state->state & HB_STATE_WORKDONE)
-    {
-        status->state |= GHB_STATE_WORKDONE;
-        status->state &= ~GHB_STATE_MUXING;
-        status->state &= ~GHB_STATE_PAUSED;
-        status->state &= ~GHB_STATE_WORKING;
-        status->state &= ~GHB_STATE_SEARCHING;
-        status->unique_id = p.sequence_id;
-        switch (p.error)
+        else
         {
-        case HB_ERROR_NONE:
-            status->error = GHB_ERROR_NONE;
-            break;
-        case HB_ERROR_CANCELED:
-            status->error = GHB_ERROR_CANCELED;
-            break;
-        default:
-            status->error = GHB_ERROR_FAIL;
-            break;
+            status->state &= ~GHB_STATE_WORKING;
+        }
+        if (state->state & HB_STATE_SEARCHING)
+        {
+            status->state |= GHB_STATE_SEARCHING;
+            status->state &= ~GHB_STATE_WORKING;
+            status->state &= ~GHB_STATE_PAUSED;
+        }
+        else
+        {
+            status->state &= ~GHB_STATE_SEARCHING;
+        }
+        if (state->state & HB_STATE_WORKDONE)
+        {
+            status->state |= GHB_STATE_WORKDONE;
+            status->state &= ~GHB_STATE_MUXING;
+            status->state &= ~GHB_STATE_PAUSED;
+            status->state &= ~GHB_STATE_WORKING;
+            status->state &= ~GHB_STATE_SEARCHING;
+            switch (p.error)
+            {
+            case HB_ERROR_NONE:
+                status->error = GHB_ERROR_NONE;
+                break;
+            case HB_ERROR_CANCELED:
+                status->error = GHB_ERROR_CANCELED;
+                break;
+            default:
+                status->error = GHB_ERROR_FAIL;
+                break;
+            }
         }
     }
-#undef p
     if (state->state & HB_STATE_PAUSED)
     {
+        status->paused      = p.paused;
         status->state |= GHB_STATE_PAUSED;
     }
     else
     {
         status->state &= ~GHB_STATE_PAUSED;
     }
+#undef p
     if (state->state & HB_STATE_MUXING)
     {
         status->state |= GHB_STATE_MUXING;

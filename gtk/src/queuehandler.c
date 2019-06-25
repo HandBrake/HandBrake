@@ -36,6 +36,7 @@
 #include "subtitlehandler.h"
 #include "ghb-dvd.h"
 #include "plist.h"
+#include "queuehandler.h"
 
 void ghb_queue_buttons_grey(signal_user_data_t *ud);
 G_MODULE_EXPORT void
@@ -68,6 +69,12 @@ static GtkWidget *find_widget(GtkWidget *widget, gchar *name)
         g_list_free(list);
     }
     return result;
+}
+
+void
+ghb_queue_drag_n_drop_init(signal_user_data_t * ud)
+{
+
 }
 
 static void
@@ -116,7 +123,7 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     str = g_string_new("");
     if (preset_modified)
     {
-        g_string_append_printf(str, _("Modified, %s"), name);
+        g_string_append_printf(str, _("%s (Modified)"), name);
     }
     else
     {
@@ -156,22 +163,22 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     sep = "\n";
     if (markers)
     {
-        g_string_append_printf(str, "%s%s", sep, "Chapter Markers");
+        g_string_append_printf(str, "%s%s", sep, _("Chapter Markers"));
         sep = ", ";
     }
     if (av_align)
     {
-        g_string_append_printf(str, "%s%s", sep, "Align A/V");
+        g_string_append_printf(str, "%s%s", sep, _("Align A/V"));
         sep = ", ";
     }
     if (http)
     {
-        g_string_append_printf(str, "%s%s", sep, "Web Optimized");
+        g_string_append_printf(str, "%s%s", sep, _("Web Optimized"));
         sep = ", ";
     }
     if (ipod)
     {
-        g_string_append_printf(str, "%s%s", sep, "iPod 5G");
+        g_string_append_printf(str, "%s%s", sep, _("iPod 5G"));
         sep = ", ";
     }
 
@@ -203,10 +210,10 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
                                                    display_height);
 
     display_width  = ghb_dict_get_int(uiDict, "PictureDisplayWidth");
-    text = g_strdup_printf("%d:%d:%d:%d Crop\n"
-                           "%dx%d storage, %dx%d display\n"
-                           "%d:%d Pixel Aspect Ratio\n"
-                            "%s Display Aspect Ratio",
+    text = g_strdup_printf(_("%d:%d:%d:%d Crop\n"
+                             "%dx%d storage, %dx%d display\n"
+                             "%d:%d Pixel Aspect Ratio\n"
+                             "%s Display Aspect Ratio"),
                            crop[0], crop[1], crop[2], crop[3], 
                            width, height, (int)display_width, display_height,
                            par_width, par_height, display_aspect);
@@ -234,19 +241,19 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         int br = ghb_dict_get_int(uiDict, "VideoAvgBitrate");
         if (!two_pass)
         {
-            g_string_append_printf(str, "%s, Bitrate %dkbps",
+            g_string_append_printf(str, _("%s, Bitrate %dkbps"),
                                    video_encoder->name, br);
         }
         else
         {
-            g_string_append_printf(str, "%s, Bitrate %dkbps (2 Pass)",
+            g_string_append_printf(str, _("%s, Bitrate %dkbps (2 Pass)"),
                                    video_encoder->name, br);
         }
     }
     else
     {
         gdouble quality = ghb_dict_get_double(uiDict, "VideoQualitySlider");
-        g_string_append_printf(str, "%s, Constant Quality %.4g(%s)",
+        g_string_append_printf(str, _("%s, Constant Quality %.4g(%s)"),
                                video_encoder->name, quality,
                                hb_video_quality_get_name(video_encoder->codec));
     }
@@ -279,22 +286,22 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     sep = "\n";
     if (enc_preset != NULL)
     {
-        g_string_append_printf(str, "%sPreset %s", sep, enc_preset);
+        g_string_append_printf(str, _("%sPreset %s"), sep, enc_preset);
         sep = ", ";
     }
     if (enc_tune != NULL)
     {
-        g_string_append_printf(str, "%sTune %s", sep, enc_tune);
+        g_string_append_printf(str, _("%sTune %s"), sep, enc_tune);
         sep = ", ";
     }
     if (enc_profile != NULL)
     {
-        g_string_append_printf(str, "%sProfile %s", sep, enc_profile);
+        g_string_append_printf(str, _("%sProfile %s"), sep, enc_profile);
         sep = ", ";
     }
     if (enc_level != NULL)
     {
-        g_string_append_printf(str, "%sLevel %s", sep, enc_level);
+        g_string_append_printf(str, _("%sLevel %s"), sep, enc_level);
         sep = ", ";
     }
 
@@ -311,16 +318,16 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     rate_str = g_strdup_printf("%.6g", (gdouble)vrate.num / vrate.den);
     if (ghb_dict_get_bool(uiDict, "VideoFramerateCFR"))
     {
-        g_string_append_printf(str, "\nConstant Framerate %s fps", rate_str);
+        g_string_append_printf(str, _("\nConstant Framerate %s fps"), rate_str);
     }
     else if (ghb_dict_get_bool(uiDict, "VideoFrameratePFR"))
     {
-        g_string_append_printf(str, "\nPeak Framerate %s fps (may be lower)",
+        g_string_append_printf(str, _("\nPeak Framerate %s fps (may be lower)"),
                                rate_str);
     }
     else if (ghb_dict_get_bool(uiDict, "VideoFramerateVFR"))
     {
-        g_string_append_printf(str, "\nVariable Framerate %s fps", rate_str);
+        g_string_append_printf(str, _("\nVariable Framerate %s fps"), rate_str);
     }
     g_free(rate_str);
 
@@ -483,18 +490,18 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         burn  = ghb_dict_get_bool(searchDict, "Burn");
         def   = ghb_dict_get_bool(searchDict, "Default");
 
-        g_string_append_printf(str, "Foreign Audio Scan");
+        g_string_append_printf(str, _("Foreign Audio Scan"));
         if (force)
         {
-            g_string_append_printf(str, ", Forced Only");
+            g_string_append_printf(str, _(", Forced Only"));
         }
         if (burn)
         {
-            g_string_append_printf(str, ", Burned");
+            g_string_append_printf(str, _(", Burned"));
         }
         else if (def)
         {
-            g_string_append_printf(str, ", Default");
+            g_string_append_printf(str, _(", Default"));
         }
         sep = "\n";
     }
@@ -516,15 +523,15 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         g_string_append_printf(str, "%s%s", sep, desc);
         if (force)
         {
-            g_string_append_printf(str, ", Forced Only");
+            g_string_append_printf(str, _(", Forced Only"));
         }
         if (burn)
         {
-            g_string_append_printf(str, ", Burned");
+            g_string_append_printf(str, _(", Burned"));
         }
         else if (def)
         {
-            g_string_append_printf(str, ", Default");
+            g_string_append_printf(str, _(", Default"));
         }
         sep = "\n";
     }
@@ -533,6 +540,160 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
     widget = GHB_WIDGET(ud->builder, "queue_summary_subtitle");
     gtk_label_set_text(GTK_LABEL(widget), text);
     g_free(text);
+}
+
+void
+queue_update_stats(GhbValue * queueDict, signal_user_data_t *ud)
+{
+    GhbValue * uiDict;
+
+    uiDict = ghb_dict_get(queueDict, "uiSettings");
+    if (uiDict == NULL) // should never happen
+    {
+        return;
+    }
+
+    const char * result = "";
+    int status = ghb_dict_get_int(uiDict, "job_status");
+
+    switch (status)
+    {
+        case GHB_QUEUE_RUNNING:
+            // This job is running.
+            // ghb_queue_update_live_stats() will update stats
+            return;
+
+        case GHB_QUEUE_DONE:
+            result = _("Completed");
+            break;
+
+        case GHB_QUEUE_CANCELED:
+            result = _("Canceled");
+            break;
+
+        case GHB_QUEUE_FAIL:
+            result = _("Failed");
+            break;
+
+        case GHB_QUEUE_PENDING:
+        default:
+            // Should never happen
+            result = _("Unknown");
+            break;
+    }
+
+    GtkLabel   * label;
+    struct tm  * tm;
+    char         date[40] = "";
+    char       * str;
+    time_t       start, finish, paused, duration;
+
+    start  = ghb_dict_get_int(uiDict, "job_start_time");
+    finish = ghb_dict_get_int(uiDict, "job_finish_time");
+    paused = ghb_dict_get_int(uiDict, "job_pause_time_ms") / 1000;
+
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass_label"));
+    gtk_widget_set_visible(GTK_WIDGET(label), FALSE);
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass"));
+    gtk_widget_set_visible(GTK_WIDGET(label), FALSE);
+
+    tm     = localtime( &start );
+    strftime(date, 40, "%c", tm);
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_start_time"));
+    gtk_label_set_text(label, date);
+
+    tm  = localtime( &finish );
+    strftime(date, 40, "%c", tm);
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_finish_time"));
+    gtk_label_set_text(label, date);
+
+    int dd = 0, hh, mm, ss;
+    ghb_break_duration(paused, &hh, &mm, &ss);
+    if (hh >= 24)
+    {
+        dd = hh / 24;
+        hh = hh - dd * 24;
+    }
+    switch (dd)
+    {
+        case 0:
+            str = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+            break;
+        case 1:
+            str = g_strdup_printf(_("%d Day %02d:%02d:%02d"), dd, hh, mm, ss);
+            break;
+        default:
+            str = g_strdup_printf(_("%d Days %02d:%02d:%02d"), dd, hh, mm, ss);
+            break;
+    }
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_paused"));
+    gtk_label_set_text(label, str);
+    g_free(str);
+
+    duration = finish - start;
+    if (duration < 0)
+    {
+        duration = 0;
+    }
+    dd = 0;
+    ghb_break_duration(duration, &hh, &mm, &ss);
+    if (hh >= 24)
+    {
+        dd = hh / 24;
+        hh = hh - dd * 24;
+    }
+    switch (dd)
+    {
+        case 0:
+            str = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+            break;
+        case 1:
+            str = g_strdup_printf(_("%d Day %02d:%02d:%02d"), dd, hh, mm, ss);
+            break;
+        default:
+            str = g_strdup_printf(_("%d Days %02d:%02d:%02d"), dd, hh, mm, ss);
+            break;
+    }
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_encode"));
+    gtk_label_set_text(label, str);
+    g_free(str);
+
+    const char  * path;
+    struct stat   stbuf;
+
+    path = ghb_dict_get_string(uiDict, "destination");
+    if (g_stat(path, &stbuf) == 0)
+    {
+        const char * units = _("B");
+        double size = stbuf.st_size;
+        if (size > 1024)
+        {
+            units = _("KB");
+            size /= 1024.0;
+        }
+        if (size > 1024)
+        {
+            units = _("MB");
+            size /= 1024.0;
+        }
+        if (size > 1024)
+        {
+            units = _("GB");
+            size /= 1024.0;
+        }
+        str = g_strdup_printf("%.2f %s", size, units);
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_file_size"));
+        gtk_label_set_text(label, str);
+        g_free(str);
+    }
+    else
+    {
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_file_size"));
+        gtk_label_set_text(label, _("Error"));
+    }
+
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_result"));
+    gtk_label_set_text(label, result);
 }
 
 #define ACTIVITY_MAX_READ_SZ (1024*1024)
@@ -592,11 +753,12 @@ void ghb_queue_select_log(signal_user_data_t * ud)
     GtkTextBuffer * current;
     gint            index;
     GhbValue      * queueDict, *uiDict;
-    GtkWidget     * queue_log_tab;
+    GtkWidget     * queue_log_tab, * queue_stats_tab;
 
-    queue_log_tab = GHB_WIDGET(ud->builder, "queue_log_tab");
-    lb            = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
-    row           = gtk_list_box_get_selected_row(lb);
+    queue_log_tab   = GHB_WIDGET(ud->builder, "queue_log_tab");
+    queue_stats_tab = GHB_WIDGET(ud->builder, "queue_stats_tab");
+    lb              = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
+    row             = gtk_list_box_get_selected_row(lb);
     if (row != NULL)
     {
         // There is a queue list row selected
@@ -619,6 +781,7 @@ void ghb_queue_select_log(signal_user_data_t * ud)
             // Selected encode is running, enable display of log and
             // show the live buffer
             gtk_widget_set_visible(queue_log_tab, TRUE);
+            gtk_widget_set_visible(queue_stats_tab, TRUE);
             if (ud->queue_activity_buffer != current)
             {
                 gtk_text_view_set_buffer(tv, ud->queue_activity_buffer);
@@ -639,6 +802,7 @@ void ghb_queue_select_log(signal_user_data_t * ud)
             {
                 // enable display of log and read log into display buffer
                 gtk_widget_set_visible(queue_log_tab, TRUE);
+                gtk_widget_set_visible(queue_stats_tab, TRUE);
                 ghb_ui_update(ud, "queue_activity_location",
                               ghb_string_value(log_path));
                 read_log(ud, log_path);
@@ -648,6 +812,7 @@ void ghb_queue_select_log(signal_user_data_t * ud)
                 // No log file, encode is pending
                 // disable display of log
                 gtk_widget_set_visible(queue_log_tab, FALSE);
+                gtk_widget_set_visible(queue_stats_tab, FALSE);
             }
         }
     }
@@ -655,6 +820,7 @@ void ghb_queue_select_log(signal_user_data_t * ud)
     {
         // No row selected, disable display of log
         gtk_widget_set_visible(queue_log_tab, FALSE);
+        gtk_widget_set_visible(queue_stats_tab, FALSE);
     }
 }
 
@@ -692,6 +858,7 @@ queue_list_selection_changed_cb(GtkListBox *box, GtkListBoxRow *row,
         queueDict = ghb_array_get(ud->queue, index);
     }
     queue_update_summary(queueDict, ud);
+    queue_update_stats(queueDict, ud);
     ghb_queue_select_log(ud);
     ghb_queue_buttons_grey(ud);
 }
@@ -864,6 +1031,224 @@ ghb_queue_progress_set_fraction(signal_user_data_t *ud, int index, gdouble frac)
     progress = GTK_PROGRESS_BAR(find_widget(GTK_WIDGET(row),
                                             "queue_item_progress"));
     gtk_progress_bar_set_fraction(progress, frac);
+}
+
+void
+ghb_queue_update_live_stats(signal_user_data_t * ud, int index, ghb_instance_status_t * status)
+{
+    int count = ghb_array_len(ud->queue);
+    if (index < 0 || index >= count)
+    {
+        // invalid index
+        return;
+    }
+
+    GtkListBox    * lb;
+    GtkListBoxRow * row;
+
+    lb = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
+    row = gtk_list_box_get_selected_row(lb);
+    if (row == NULL || index != gtk_list_box_row_get_index(row))
+    {
+        return;
+    }
+
+    GhbValue * queueDict, * uiDict;
+    queueDict = ghb_array_get(ud->queue, index);
+    if (queueDict == NULL) // should never happen
+    {
+        return;
+    }
+    uiDict    = ghb_dict_get(queueDict, "uiSettings");
+    if (uiDict == NULL) // should never happen
+    {
+        return;
+    }
+
+    GtkLabel   * label;
+    struct tm  * tm;
+    char         date[40] = "";
+    char       * str;
+    const char * pass = "";
+    const char * result = "";
+    time_t       start, finish, paused, duration;
+
+    start  = ghb_dict_get_int(uiDict, "job_start_time");
+    finish = time(NULL);
+    if (status->state & GHB_STATE_WORKING)
+    {
+        finish += status->eta_seconds;
+    }
+    paused = status->paused / 1000;
+    if ((status->state & GHB_STATE_WORKING) && status->pass_count > 1)
+    {
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass_label"));
+        gtk_widget_set_visible(GTK_WIDGET(label), TRUE);
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass"));
+        gtk_widget_set_visible(GTK_WIDGET(label), TRUE);
+        switch (status->pass_id)
+        {
+            case HB_PASS_SUBTITLE:
+                pass = _("Foreign Audio Search");
+                break;
+
+            case HB_PASS_ENCODE_1ST:
+                pass = _("Encode First");
+                break;
+
+            case HB_PASS_ENCODE_2ND:
+                pass = _("Encode Second");
+                break;
+
+            default:
+                // Should never happen
+                pass = _("Error");
+                break;
+        }
+    }
+    else
+    {
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass_label"));
+        gtk_widget_set_visible(GTK_WIDGET(label), FALSE);
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass"));
+        gtk_widget_set_visible(GTK_WIDGET(label), FALSE);
+    }
+
+    if (status->state & GHB_STATE_SCANNING)
+    {
+        result = _("Scanning Title");
+    }
+    else if (status->state & GHB_STATE_SCANNING)
+    {
+        result = _("Encoding Paused");
+    }
+    else if (status->state & GHB_STATE_WORKING)
+    {
+        result = _("Encoding In Progress");
+    }
+    else if (status->state & GHB_STATE_WORKDONE)
+    {
+        switch (status->error)
+        {
+            case GHB_ERROR_NONE:
+                result = _("Completed");
+                break;
+
+            case GHB_ERROR_CANCELED:
+                result = _("Canceled");
+                break;
+
+            case GHB_ERROR_FAIL:
+                result = _("Failed");
+                break;
+
+            default:
+                // Should never happen
+                result = _("Unknown");
+                break;
+        }
+    }
+
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass"));
+    gtk_label_set_text(label, pass);
+
+    tm     = localtime( &start );
+    strftime(date, 40, "%c", tm);
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_start_time"));
+    gtk_label_set_text(label, date);
+
+    tm  = localtime( &finish );
+    strftime(date, 40, "%c", tm);
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_finish_time"));
+    gtk_label_set_text(label, date);
+
+    int dd = 0, hh, mm, ss;
+    ghb_break_duration(paused, &hh, &mm, &ss);
+    if (hh >= 24)
+    {
+        dd = hh / 24;
+        hh = hh - dd * 24;
+    }
+    switch (dd)
+    {
+        case 0:
+            str = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+            break;
+        case 1:
+            str = g_strdup_printf(_("%d Day %02d:%02d:%02d"), dd, hh, mm, ss);
+            break;
+        default:
+            str = g_strdup_printf(_("%d Days %02d:%02d:%02d"), dd, hh, mm, ss);
+            break;
+    }
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_paused"));
+    gtk_label_set_text(label, str);
+    g_free(str);
+
+    duration = finish - start;
+    if (duration < 0)
+    {
+        duration = 0;
+    }
+    dd = 0;
+    ghb_break_duration(duration, &hh, &mm, &ss);
+    if (hh >= 24)
+    {
+        dd = hh / 24;
+        hh = hh - dd * 24;
+    }
+    switch (dd)
+    {
+        case 0:
+            str = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
+            break;
+        case 1:
+            str = g_strdup_printf(_("%d Day %02d:%02d:%02d"), dd, hh, mm, ss);
+            break;
+        default:
+            str = g_strdup_printf(_("%d Days %02d:%02d:%02d"), dd, hh, mm, ss);
+            break;
+    }
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_encode"));
+    gtk_label_set_text(label, str);
+    g_free(str);
+
+    const char  * path;
+    struct stat   stbuf;
+
+    path = ghb_dict_get_string(uiDict, "destination");
+    if (g_stat(path, &stbuf) == 0)
+    {
+        const char * units = _("B");
+        double size = stbuf.st_size;
+        if (size > 1024)
+        {
+            units = _("KB");
+            size /= 1024.0;
+        }
+        if (size > 1024)
+        {
+            units = _("MB");
+            size /= 1024.0;
+        }
+        if (size > 1024)
+        {
+            units = _("GB");
+            size /= 1024.0;
+        }
+        str = g_strdup_printf("%.2f %s", size, units);
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_file_size"));
+        gtk_label_set_text(label, str);
+        g_free(str);
+    }
+    else
+    {
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_file_size"));
+        gtk_label_set_text(label, _("Error"));
+    }
+
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_result"));
+    gtk_label_set_text(label, result);
 }
 
 void
@@ -2376,7 +2761,7 @@ queue_drag_motion_cb(
 }
 
 G_MODULE_EXPORT void
-queue_drag_cb(
+queue_drop_cb(
     GtkListBox         * lb,
     GdkDragContext     * ctx,
     gint                 x,
