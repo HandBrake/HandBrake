@@ -512,6 +512,7 @@ conjunction with the "Forced" option.</property>
                         <property name="can_focus">True</property>
                         <property name="vexpand">True</property>
                         <property name="hexpand">True</property>
+                        <property name="width_request">500</property>
                         <property name="selection_mode">single</property>
                         <property name="activate_on_single_click">False</property>
                         <signal name="row-selected" handler="queue_list_selection_changed_cb" swapped="no"/>
