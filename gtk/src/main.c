@@ -656,109 +656,142 @@ G_MODULE_EXPORT void preview_hud_size_alloc_cb(GtkWidget *widget, signal_user_da
 // Important: any widgets named in CSS must have their widget names set
 // below before setting CSS properties on them.
 const gchar *MyCSS =
-"                                   \n\
-@define-color black  #000000;       \n\
-@define-color gray18 #2e2e2e;       \n\
-@define-color gray22 #383838;       \n\
-@define-color gray26 #424242;       \n\
-@define-color gray32 #525252;       \n\
-@define-color gray40 #666666;       \n\
-@define-color gray46 #757575;       \n\
-@define-color white  #ffffff;       \n\
-                                    \n\
-#preview_hud                        \n\
-{                                   \n\
-    border-radius: 20px;            \n\
-    background-color: alpha(@gray18, 0.8); \n\
-    color: @white;                  \n\
-}                                   \n\
-                                    \n\
-#live_preview_play,                 \n\
-#live_duration,                     \n\
-#preview_reset                      \n\
-{                                   \n\
-    background: @black;             \n\
-    background-color: @gray18;      \n\
-    color: @white;                  \n\
-}                                   \n\
-                                    \n\
-#preview_show_crop                  \n\
-{                                   \n\
-    background-color: @gray22;      \n\
-    border-color: @white;           \n\
-    color: @white;                  \n\
-}                                   \n\
-                                    \n\
-#live_encode_progress,              \n\
-#live_preview_progress,             \n\
-#preview_frame                      \n\
-{                                   \n\
-    background: @black;             \n\
-    background-color: alpha(@gray18, 0.0); \n\
-    color: @white;                  \n\
-}                                   \n\
-                                    \n\
-"
+"@define-color black  #000000;"
+"@define-color gray18 #2e2e2e;"
+"@define-color gray22 #383838;"
+"@define-color gray26 #424242;"
+"@define-color gray32 #525252;"
+"@define-color gray40 #666666;"
+"@define-color gray46 #757575;"
+"@define-color white  #ffffff;"
+
+"#preview_hud"
+"{"
+"    border-radius: 20px;"
+"    background-color: alpha(@gray18, 0.8);"
+"    color: @white;"
+"}"
+
+"#live_preview_play,"
+"#live_duration,"
+"#preview_reset"
+"{"
+"    background: @black;"
+"    background-color: @gray18;"
+"    color: @white;"
+"}"
+
+"#preview_show_crop"
+"{"
+"    background-color: @gray22;"
+"    border-color: @white;"
+"    color: @white;"
+"}"
+
+"#live_encode_progress,"
+"#live_preview_progress,"
+"#preview_frame"
+"{"
+"    background: @black;"
+"    background-color: alpha(@gray18, 0.0);"
+"    color: @white;"
+"}"
+
 #if GTK_CHECK_VERSION(3, 20, 0)
-"\
-#preview_reset:hover                \n\
-"
+"#preview_reset:hover"
 #else
-"\
-#preview_reset:prelight             \n\
-"
+"#preview_reset:prelight"
 #endif
-"\
-{                                   \n\
-    background: @black;             \n\
-    background-color: @gray32;      \n\
-    color: @white;                  \n\
-}                                   \n\
-                                    \n\
-#preview_reset:active               \n\
-{                                   \n\
-    background: @black;             \n\
-    background-color: @gray32;      \n\
-    color: @white;                  \n\
-}                                   \n\
-                                    \n\
-#preview_reset:active               \n\
-{                                   \n\
-    background: @black;             \n\
-    background-color: @gray32;      \n\
-    color: @white;                  \n\
-}                                   \n\
-                                    \n\
-textview                            \n\
-{                                   \n\
-    padding: 5px 5px 5px 5px;       \n\
-}                                   \n\
-                                    \n\
-.entry                              \n\
-{                                   \n\
-    margin: 0px 5px 0px 5px;        \n\
-    padding: 0px 0px 0px 0px;       \n\
-}                                   \n\
-"
+"{"
+"    background: @black;"
+"    background-color: @gray32;"
+"    color: @white;"
+"}"
+
+"#preview_reset:active"
+"{"
+"    background: @black;"
+"    background-color: @gray32;"
+"    color: @white;"
+"}"
+
+"#preview_reset:active"
+"{"
+"    background: @black;"
+"    background-color: @gray32;"
+"    color: @white;"
+"}"
+
+"textview"
+"{"
+"    padding: 5px 5px 5px 5px;"
+"}"
+
+".entry"
+"{"
+"    margin: 0px 5px 0px 5px;"
+"    padding: 0px 0px 0px 0px;"
+"}"
+
 #if GTK_CHECK_VERSION(3, 20, 0)
-"                                   \n\
-stackswitcher button.text-button    \n\
-{                                   \n\
-    min-width: 50px;                \n\
-}                                   \n\
-"
+"stackswitcher button.text-button"
+"{"
+"    min-width: 50px;"
+"}"
 #endif
+
 #if GTK_CHECK_VERSION(3, 16, 0)
-"                                   \n\
-                                    \n\
-#activity_view                      \n\
-{                                   \n\
-    font-family: monospace;         \n\
-    font-size: 8pt;                 \n\
-    font-weight: lighter;           \n\
-}                                   \n\
-"
+"#activity_view"
+"{"
+"    font-family: monospace;"
+"    font-size: 8pt;"
+"    font-weight: lighter;"
+"}"
 #endif
+
+".row:not(:first-child)"
+"{"
+"    border-top: 1px solid transparent; "
+"    border-bottom: 1px solid transparent; "
+"}"
+".row:first-child"
+"{"
+"    border-top: 1px solid transparent; "
+"    border-bottom: 1px solid transparent; "
+"}"
+".row:last-child"
+"{"
+"    border-top: 1px solid transparent; "
+"    border-bottom: 1px solid transparent; "
+"}"
+".row.drag-icon"
+"{"
+"    background: white; "
+"    border: 1px solid black; "
+"}"
+".row.drag-row"
+"{"
+"    color: gray; "
+"    background: alpha(gray,0.2); "
+"}"
+".row.drag-row.drag-hover"
+"{"
+"    border-top: 1px solid #4e9a06; "
+"    border-bottom: 1px solid #4e9a06; "
+"}"
+".row.drag-hover image, "
+".row.drag-hover label"
+"{"
+"    color: #4e9a06; "
+"}"
+".row.drag-hover-top"
+"{"
+"    border-top: 1px solid #4e9a06; "
+"}"
+".row.drag-hover-bottom"
+"{"
+"    border-bottom: 1px solid #4e9a06; "
+"}"
 ;
 
 extern G_MODULE_EXPORT void status_icon_query_tooltip_cb(void);
@@ -973,6 +1006,9 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     ghb_array_append(ud->settings_array, ud->settings);
 
     ud->builder = create_builder_or_die(BUILDER_NAME);
+
+    // Enable drag & drop in queue list
+    ghb_queue_drag_n_drop_init(ud);
 
     // Enable events that alert us to media change events
     watch_volumes(ud);

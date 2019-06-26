@@ -44,5 +44,6 @@ void     ghb_queue_update_status_icon(signal_user_data_t *ud, int index);
 void     ghb_queue_select_log(signal_user_data_t * ud);
 void     ghb_queue_update_live_stats(signal_user_data_t * ud, int index,
                                      ghb_instance_status_t * status);
+void     ghb_queue_drag_n_drop_init(signal_user_data_t * ud);
 
 #endif // _QUEUEHANDLER_H_
