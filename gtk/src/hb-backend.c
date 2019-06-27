@@ -31,6 +31,7 @@
 #include <glib/gi18n.h>
 #include "hb-backend.h"
 #include "settings.h"
+#include "jobdict.h"
 #include "callbacks.h"
 #include "subtitlehandler.h"
 #include "audiohandler.h"

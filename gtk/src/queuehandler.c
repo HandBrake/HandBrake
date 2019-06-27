@@ -28,6 +28,7 @@
 #include <gio/gio.h>
 #include "hb.h"
 #include "settings.h"
+#include "jobdict.h"
 #include "hb-backend.h"
 #include "values.h"
 #include "callbacks.h"

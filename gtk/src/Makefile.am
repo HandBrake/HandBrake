@@ -76,6 +76,10 @@ ghb_SOURCES = \
 	subtitlehandler.c \
 	subtitlehandler.h \
 	main.c \
+	jobdict.c \
+	jobdict.h \
+	titledict.c \
+	titledict.h \
 	settings.c \
 	settings.h \
 	resources.c \

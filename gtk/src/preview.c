@@ -36,6 +36,7 @@
 #endif
 
 #include "settings.h"
+#include "jobdict.h"
 #include "presets.h"
 #include "callbacks.h"
 #include "hb-backend.h"

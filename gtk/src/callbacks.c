@@ -78,6 +78,7 @@
 #include "subtitlehandler.h"
 #include "resources.h"
 #include "settings.h"
+#include "jobdict.h"
 #include "presets.h"
 #include "preview.h"
 #include "values.h"
