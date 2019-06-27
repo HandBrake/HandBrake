@@ -1005,6 +1005,7 @@ ghb_queue_update_live_stats(signal_user_data_t * ud, int index, ghb_instance_sta
         return;
     }
 
+    GString    * gstr = NULL;
     GtkLabel   * label;
     struct tm  * tm;
     char         date[40] = "";
@@ -1032,12 +1033,16 @@ ghb_queue_update_live_stats(signal_user_data_t * ud, int index, ghb_instance_sta
                 pass = _("Foreign Audio Search");
                 break;
 
+            case HB_PASS_ENCODE:
+                pass = _("Encode");
+                break;
+
             case HB_PASS_ENCODE_1ST:
-                pass = _("Encode First");
+                pass = _("Encode First Pass (Analysis)");
                 break;
 
             case HB_PASS_ENCODE_2ND:
-                pass = _("Encode Second");
+                pass = _("Encode Second Pass (Final)");
                 break;
 
             default:
@@ -1045,6 +1050,8 @@ ghb_queue_update_live_stats(signal_user_data_t * ud, int index, ghb_instance_sta
                 pass = _("Error");
                 break;
         }
+        gstr = g_string_new(NULL);
+        g_string_append_printf(gstr, _("pass %d of %d\n%s"), status->pass, status->pass_count, pass);
     }
     else
     {
@@ -1089,8 +1096,12 @@ ghb_queue_update_live_stats(signal_user_data_t * ud, int index, ghb_instance_sta
         }
     }
 
-    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass"));
-    gtk_label_set_text(label, pass);
+    if (gstr != NULL)
+    {
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass"));
+        gtk_label_set_text(label, gstr->str);
+        g_string_free(gstr, TRUE);
+    }
 
     tm     = localtime( &start );
     strftime(date, 40, "%c", tm);
