@@ -828,6 +828,10 @@ queue_open_source_action_cb(GSimpleAction *action, GVariant *param, gpointer ud)
 G_MODULE_EXPORT void
 queue_open_dest_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
 G_MODULE_EXPORT void
+queue_open_log_dir_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
+queue_open_log_action_cb(GSimpleAction *action, GVariant *param, gpointer ud);
+G_MODULE_EXPORT void
 queue_delete_all_action_cb(GSimpleAction *action, GVariant *param,
                            gpointer ud);
 G_MODULE_EXPORT void
@@ -895,6 +899,8 @@ static void map_actions(GApplication * app, signal_user_data_t * ud)
         { "queue-pause",           queue_pause_action_cb           },
         { "queue-open-source",     queue_open_source_action_cb     },
         { "queue-open-dest",       queue_open_dest_action_cb       },
+        { "queue-open-log-dir",    queue_open_log_dir_action_cb    },
+        { "queue-open-log",        queue_open_log_action_cb        },
         { "queue-reset-fail",      queue_reset_fail_action_cb      },
         { "queue-reset-all",       queue_reset_all_action_cb       },
         { "queue-reset",           queue_reset_action_cb           },

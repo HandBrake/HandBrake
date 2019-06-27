@@ -101,6 +101,14 @@ conjunction with the "Forced" option.</property>
         <attribute name="label" translatable="yes">Open Destination Directory</attribute>
         <attribute name="action">app.queue-open-dest</attribute>
       </item>
+      <item>
+        <attribute name="label" translatable="yes">Open Encode Log Directory</attribute>
+        <attribute name="action">app.queue-open-log-dir</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open Encode Log</attribute>
+        <attribute name="action">app.queue-open-log</attribute>
+      </item>
     </section>
   </menu>
 

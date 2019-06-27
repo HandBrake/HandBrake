@@ -2179,9 +2179,23 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     gboolean           allow_start, show_stop, allow_add, paused;
     GtkListBox       * lb;
     GtkListBoxRow    * row;
+    gint               index, status = GHB_QUEUE_PENDING;
 
     lb = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
     row = gtk_list_box_get_selected_row(lb);
+
+    if (row != NULL)
+    {
+        index = gtk_list_box_row_get_index(row);
+        if (index >= 0 && index < ghb_array_len(ud->queue))
+        {
+            GhbValue * queueDict, *uiDict;
+
+            queueDict = ghb_array_get(ud->queue, index);
+            uiDict    = ghb_dict_get(queueDict, "uiSettings");
+            status    = ghb_dict_get_int(uiDict, "job_status");
+        }
+    }
 
     queue_count = ghb_array_len(ud->queue);
     title_id = ghb_dict_get_int(ud->settings, "title");
@@ -2231,6 +2245,14 @@ ghb_queue_buttons_grey(signal_user_data_t *ud)
     action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
                                                         "queue-open-dest"));
     g_simple_action_set_enabled(action, row != NULL);
+
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
+                                                        "queue-open-log-dir"));
+    g_simple_action_set_enabled(action, status != GHB_QUEUE_PENDING);
+
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(G_ACTION_MAP(ud->app),
+                                                        "queue-open-log"));
+    g_simple_action_set_enabled(action, status != GHB_QUEUE_PENDING);
 
     widget = GHB_WIDGET (ud->builder, "queue_start");
     if (show_stop)
@@ -2557,6 +2579,80 @@ queue_open_dest_action_cb(GSimpleAction *action, GVariant *param,
 }
 
 G_MODULE_EXPORT void
+queue_open_log_action_cb(GSimpleAction *action, GVariant *param,
+                         signal_user_data_t *ud)
+{
+    GtkListBox    * lb;
+    GtkListBoxRow * row;
+    gint            index;
+    GhbValue      * queueDict, * uiDict;
+    GString       * str;
+    const char    * path;
+    char          * uri;
+
+    lb  = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
+    row = gtk_list_box_get_selected_row(lb);
+    if (row != NULL)
+    {
+        index = gtk_list_box_row_get_index(row);
+        if (index < 0 || index >= ghb_array_len(ud->queue))
+        {
+            return;
+        }
+        queueDict = ghb_array_get(ud->queue, index);
+        uiDict    = ghb_dict_get(queueDict, "uiSettings");
+        path      = ghb_dict_get_string(uiDict, "ActivityFilename");
+        if (path == NULL)
+        {
+            return;
+        }
+        str       = g_string_new(NULL);
+        g_string_printf(str, "file://%s", path);
+        uri       = g_string_free(str, FALSE);
+        ghb_browse_uri(ud, uri);
+        g_free(uri);
+    }
+}
+
+G_MODULE_EXPORT void
+queue_open_log_dir_action_cb(GSimpleAction *action, GVariant *param,
+                             signal_user_data_t *ud)
+{
+    GtkListBox    * lb;
+    GtkListBoxRow * row;
+    gint            index;
+    GhbValue      * queueDict, * uiDict;
+    GString       * str;
+    const char    * path;
+    char          * dir, * uri;
+
+    lb  = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
+    row = gtk_list_box_get_selected_row(lb);
+    if (row != NULL)
+    {
+        index = gtk_list_box_row_get_index(row);
+        if (index < 0 || index >= ghb_array_len(ud->queue))
+        {
+            return;
+        }
+        queueDict = ghb_array_get(ud->queue, index);
+        uiDict    = ghb_dict_get(queueDict, "uiSettings");
+        path      = ghb_dict_get_string(uiDict, "ActivityFilename");
+        if (path == NULL)
+        {
+            return;
+        }
+        dir       = g_path_get_dirname(path);
+        str       = g_string_new(NULL);
+        g_string_printf(str, "file://%s", dir);
+        uri       = g_string_free(str, FALSE);
+        ghb_browse_uri(ud, uri);
+        g_free(uri);
+        g_free(dir);
+    }
+}
+
+G_MODULE_EXPORT void
 queue_list_selection_changed_cb(GtkListBox *box, GtkListBoxRow *row,
                                 signal_user_data_t *ud)
 {
@@ -2745,6 +2841,7 @@ queue_reset_all_action_cb(GSimpleAction *action, GVariant *param,
     queue_update_current_stats(ud);
     ghb_queue_select_log(ud);
     ghb_update_pending(ud);
+    ghb_queue_buttons_grey(ud);
 }
 
 G_MODULE_EXPORT void
@@ -2790,6 +2887,7 @@ queue_reset_action_cb(GSimpleAction *action, GVariant *param,
         queue_update_current_stats(ud);
         ghb_queue_select_log(ud);
         ghb_update_pending(ud);
+        ghb_queue_buttons_grey(ud);
     }
 }
 
