@@ -715,7 +715,7 @@ queue_update_stats(GhbValue * queueDict, signal_user_data_t *ud)
     else
     {
         label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_file_size"));
-        gtk_label_set_text(label, _("Error"));
+        gtk_label_set_text(label, _("Not Available"));
     }
 
     label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_result"));
@@ -1184,7 +1184,7 @@ ghb_queue_update_live_stats(signal_user_data_t * ud, int index, ghb_instance_sta
     else
     {
         label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_file_size"));
-        gtk_label_set_text(label, _("Error"));
+        gtk_label_set_text(label, _("Not Available"));
     }
 
     label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_result"));
