@@ -1024,9 +1024,9 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     ud->activity_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
     g_object_ref(ud->activity_buffer);
     widget = GHB_WIDGET(ud->builder, "queue_activity_view");
-    ud->queue_activity_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
-    g_object_ref(ud->queue_activity_buffer);
-    ud->extra_activity_buffer = gtk_text_buffer_new(NULL);
+    ud->extra_activity_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(widget));
+    g_object_ref(ud->extra_activity_buffer);
+    ud->queue_activity_buffer = gtk_text_buffer_new(NULL);
 
     // Must set the names of the widgets that I want to modify
     // style for.

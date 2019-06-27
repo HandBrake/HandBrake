@@ -1037,7 +1037,7 @@ Resets the queue job to pending and ready to run again.</property>
                                 <property name="row-spacing">12</property>
                                 <child>
                                   <object class="GtkLabel" id="queue_stats_pass_label">
-                                    <property name="visible">True</property>
+                                    <property name="visible">False</property>
                                     <property name="can_focus">False</property>
                                     <property name="xalign">0</property>
                                     <property name="yalign">0</property>
@@ -1054,7 +1054,7 @@ Resets the queue job to pending and ready to run again.</property>
                                 </child>
                                 <child>
                                   <object class="GtkLabel" id="queue_stats_pass">
-                                    <property name="visible">True</property>
+                                    <property name="visible">False</property>
                                     <property name="can_focus">False</property>
                                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                     <property name="halign">start</property>
@@ -1312,7 +1312,7 @@ Resets the queue job to pending and ready to run again.</property>
                     <child>
                       <object class="GtkBox" id="queue_log_tab">
                         <property name="orientation">vertical</property>
-                        <property name="visible">False</property>
+                        <property name="visible">True</property>
                         <property name="expand">True</property>
                         <property name="margin-top">12</property>
                         <property name="can_focus">False</property>
@@ -1346,6 +1346,7 @@ Resets the queue job to pending and ready to run again.</property>
                                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                                 <property name="shadow_type">in</property>
                                 <property name="vexpand">True</property>
+                                <property name="margin-bottom">6</property>
                                 <property name="valign">GTK_ALIGN_FILL</property>
                                 <child>
                                   <object class="GtkTextView" id="queue_activity_view">

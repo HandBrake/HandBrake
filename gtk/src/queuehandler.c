@@ -572,6 +572,7 @@ void
 queue_update_stats(GhbValue * queueDict, signal_user_data_t *ud)
 {
     GhbValue * uiDict;
+    GtkLabel * label;
 
     uiDict = ghb_dict_get(queueDict, "uiSettings");
     if (uiDict == NULL) // should never happen
@@ -579,8 +580,30 @@ queue_update_stats(GhbValue * queueDict, signal_user_data_t *ud)
         return;
     }
 
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass_label"));
+    gtk_widget_set_visible(GTK_WIDGET(label), FALSE);
+    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass"));
+    gtk_widget_set_visible(GTK_WIDGET(label), FALSE);
+
     const char * result = "";
     int status = ghb_dict_get_int(uiDict, "job_status");
+
+    if (status == GHB_QUEUE_PENDING)
+    {
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_start_time"));
+        gtk_label_set_text(label, "");
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_finish_time"));
+        gtk_label_set_text(label, "");
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_paused"));
+        gtk_label_set_text(label, "");
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_encode"));
+        gtk_label_set_text(label, "");
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_file_size"));
+        gtk_label_set_text(label, "");
+        label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_result"));
+        gtk_label_set_text(label, "Pending");
+        return;
+    }
 
     switch (status)
     {
@@ -603,12 +626,10 @@ queue_update_stats(GhbValue * queueDict, signal_user_data_t *ud)
 
         case GHB_QUEUE_PENDING:
         default:
-            // Should never happen
-            result = _("Unknown");
+            result = _("Pending");
             break;
     }
 
-    GtkLabel   * label;
     struct tm  * tm;
     char         date[40] = "";
     char       * str;
@@ -617,11 +638,6 @@ queue_update_stats(GhbValue * queueDict, signal_user_data_t *ud)
     start  = ghb_dict_get_int(uiDict, "job_start_time");
     finish = ghb_dict_get_int(uiDict, "job_finish_time");
     paused = ghb_dict_get_int(uiDict, "job_pause_time_ms") / 1000;
-
-    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass_label"));
-    gtk_widget_set_visible(GTK_WIDGET(label), FALSE);
-    label = GTK_LABEL(GHB_WIDGET(ud->builder, "queue_stats_pass"));
-    gtk_widget_set_visible(GTK_WIDGET(label), FALSE);
 
     tm     = localtime( &start );
     strftime(date, 40, "%c", tm);
@@ -722,6 +738,28 @@ queue_update_stats(GhbValue * queueDict, signal_user_data_t *ud)
     gtk_label_set_text(label, result);
 }
 
+void queue_update_current_stats(signal_user_data_t * ud)
+{
+    GtkListBox    * lb;
+    GtkListBoxRow * row;
+    gint            index;
+    GhbValue      * queueDict;
+
+    lb  = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
+    row = gtk_list_box_get_selected_row(lb);
+    if (row != NULL)
+    {
+        // There is a queue list row selected
+        index = gtk_list_box_row_get_index(row);
+        if (index < 0 || index >= ghb_array_len(ud->queue))
+        { // Should never happen
+            return;
+        }
+        queueDict = ghb_array_get(ud->queue, index);
+        queue_update_stats(queueDict, ud);
+    }
+}
+
 #define ACTIVITY_MAX_READ_SZ (1024*1024)
 static void read_log(signal_user_data_t * ud, const char * log_path)
 {
@@ -779,10 +817,7 @@ void ghb_queue_select_log(signal_user_data_t * ud)
     GtkTextBuffer * current;
     gint            index;
     GhbValue      * queueDict, *uiDict;
-    GtkWidget     * queue_log_tab, * queue_stats_tab;
 
-    queue_log_tab   = GHB_WIDGET(ud->builder, "queue_log_tab");
-    queue_stats_tab = GHB_WIDGET(ud->builder, "queue_stats_tab");
     lb              = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
     row             = gtk_list_box_get_selected_row(lb);
     if (row != NULL)
@@ -790,6 +825,7 @@ void ghb_queue_select_log(signal_user_data_t * ud)
         // There is a queue list row selected
         GtkTextView * tv;
         int           status;
+        const char  * log_path;
 
         index = gtk_list_box_row_get_index(row);
         if (index < 0 || index >= ghb_array_len(ud->queue))
@@ -801,13 +837,22 @@ void ghb_queue_select_log(signal_user_data_t * ud)
         // Get the current buffer that is displayed in the queue log
         tv = GTK_TEXT_VIEW(GHB_WIDGET(ud->builder, "queue_activity_view"));
         current = gtk_text_view_get_buffer(tv);
+
         status = ghb_dict_get_int(uiDict, "job_status");
+        log_path = ghb_dict_get_string(uiDict, "ActivityFilename");
+        if (status != GHB_QUEUE_PENDING && log_path != NULL)
+        {
+            ghb_ui_update(ud, "queue_activity_location",
+                          ghb_string_value(log_path));
+        }
+        else
+        {
+            ghb_ui_update(ud, "queue_activity_location", ghb_string_value(""));
+        }
         if (status == GHB_QUEUE_RUNNING)
         {
             // Selected encode is running, enable display of log and
             // show the live buffer
-            gtk_widget_set_visible(queue_log_tab, TRUE);
-            gtk_widget_set_visible(queue_stats_tab, TRUE);
             if (ud->queue_activity_buffer != current)
             {
                 gtk_text_view_set_buffer(tv, ud->queue_activity_buffer);
@@ -815,8 +860,6 @@ void ghb_queue_select_log(signal_user_data_t * ud)
         }
         else
         {
-            const char * log_path;
-
             // Selected encode is pending/finished/canceled/failed
             // use non-live buffer (aka extra) to display log
             if (ud->extra_activity_buffer != current)
@@ -827,26 +870,17 @@ void ghb_queue_select_log(signal_user_data_t * ud)
             if (status != GHB_QUEUE_PENDING && log_path != NULL)
             {
                 // enable display of log and read log into display buffer
-                gtk_widget_set_visible(queue_log_tab, TRUE);
-                gtk_widget_set_visible(queue_stats_tab, TRUE);
-                ghb_ui_update(ud, "queue_activity_location",
-                              ghb_string_value(log_path));
                 read_log(ud, log_path);
             }
             else
             {
                 // No log file, encode is pending
                 // disable display of log
-                gtk_widget_set_visible(queue_log_tab, FALSE);
-                gtk_widget_set_visible(queue_stats_tab, FALSE);
+                g_free(ud->extra_activity_path);
+                ud->extra_activity_path = NULL;
+                gtk_text_buffer_set_text(ud->extra_activity_buffer, "", 0);
             }
         }
-    }
-    else
-    {
-        // No row selected, disable display of log
-        gtk_widget_set_visible(queue_log_tab, FALSE);
-        gtk_widget_set_visible(queue_stats_tab, FALSE);
     }
 }
 
@@ -2708,6 +2742,7 @@ queue_reset_all_action_cb(GSimpleAction *action, GVariant *param,
 {
     ghb_update_all_status(ud, GHB_QUEUE_PENDING);
     ghb_save_queue(ud->queue);
+    queue_update_current_stats(ud);
     ghb_queue_select_log(ud);
     ghb_update_pending(ud);
 }
@@ -2731,6 +2766,7 @@ queue_reset_fail_action_cb(GSimpleAction *action, GVariant *param,
         }
     }
     ghb_save_queue(ud->queue);
+    queue_update_current_stats(ud);
     ghb_queue_select_log(ud);
     ghb_update_pending(ud);
     ghb_queue_buttons_grey(ud);
@@ -2751,6 +2787,7 @@ queue_reset_action_cb(GSimpleAction *action, GVariant *param,
         index = gtk_list_box_row_get_index(row);
         ghb_queue_update_status(ud, index, GHB_QUEUE_PENDING);
         ghb_save_queue(ud->queue);
+        queue_update_current_stats(ud);
         ghb_queue_select_log(ud);
         ghb_update_pending(ud);
     }
