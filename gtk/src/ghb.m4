@@ -134,6 +134,7 @@ conjunction with the "Forced" option.</property>
   </menu>
 
   <object class="GtkWindow" id="presets_window">
+    <property name="title" translatable="yes">HandBrake Presets</property>
     <property name="visible">False</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -316,6 +317,7 @@ conjunction with the "Forced" option.</property>
   </object>
 
   <object class="GtkWindow" id="queue_window">
+    <property name="title" translatable="yes">HandBrake Queue</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="resizable">True</property>
@@ -324,6 +326,7 @@ conjunction with the "Forced" option.</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="transient_for">hb_window</property>
+    <property name="default_width">1024</property>
     <signal name="delete-event" handler="queue_window_delete_cb" swapped="no"/>
     <child>
       <object class="GtkBox" id="queue_tab">
@@ -378,6 +381,7 @@ conjunction with the "Forced" option.</property>
           <object class="GtkPaned" id="queue_box1">
             <property name="orientation">horizontal</property>
             <property name="visible">True</property>
+            <property name="position">500</property>
             <property name="can_focus">False</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
             <child>
@@ -512,7 +516,6 @@ conjunction with the "Forced" option.</property>
                         <property name="can_focus">True</property>
                         <property name="vexpand">True</property>
                         <property name="hexpand">True</property>
-                        <property name="width_request">500</property>
                         <property name="selection_mode">single</property>
                         <property name="activate_on_single_click">False</property>
                         <signal name="row-selected" handler="queue_list_selection_changed_cb" swapped="no"/>
@@ -1390,6 +1393,7 @@ Resets the queue job to pending and ready to run again.</property>
   </object>
 
   <object class="GtkWindow" id="activity_window">
+    <property name="title" translatable="yes">HandBrake Activity Log</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
     <property name="default_width">800</property>
@@ -8711,9 +8715,9 @@ Setting this to 0 means there is no maximum height.</property>
     <property name="page_increment">10</property>
   </object>
   <object class="GtkWindow" id="preview_window">
+    <property name="title" translatable="yes">HandBrake Preview</property>
     <property name="can_focus">False</property>
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_STRUCTURE_MASK</property>
-    <property name="title" translatable="yes">Preview</property>
     <property name="resizable">True</property>
     <property name="window_position">center</property>
     <property name="type_hint">normal</property>
