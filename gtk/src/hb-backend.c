@@ -3139,26 +3139,23 @@ init_ui_combo_boxes(GtkBuilder *builder)
     }
 }
 
-void
-ghb_part_duration(const hb_title_t *title, gint sc, gint ec, gint *hh, gint *mm, gint *ss)
+gint64
+ghb_chapter_range_get_duration(const hb_title_t *title, gint sc, gint ec)
 {
     hb_chapter_t * chapter;
     gint count, c;
     gint64 duration;
 
-    *hh = *mm = *ss = 0;
-    if (title == NULL) return;
+    if (title == NULL) return 0;
 
-    *hh = title->hours;
-    *mm = title->minutes;
-    *ss = title->seconds;
+    duration = title->duration;
 
     count = hb_list_count(title->list_chapter);
     if (sc > count) sc = count;
     if (ec > count) ec = count;
 
     if (sc == 1 && ec == count)
-        return;
+        return duration;
 
     duration = 0;
     for (c = sc; c <= ec; c++)
@@ -3166,10 +3163,7 @@ ghb_part_duration(const hb_title_t *title, gint sc, gint ec, gint *hh, gint *mm,
         chapter = hb_list_item(title->list_chapter, c-1);
         duration += chapter->duration;
     }
-
-    *hh =   duration / 90000 / 3600;
-    *mm = ((duration / 90000) % 3600) / 60;
-    *ss =  (duration / 90000) % 60;
+    return duration;
 }
 
 gint64

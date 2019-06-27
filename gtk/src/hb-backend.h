@@ -131,8 +131,8 @@ void ghb_set_scale_settings(GhbValue *settings, gint mode);
 void ghb_picture_settings_deps(signal_user_data_t *ud);
 gint64 ghb_get_chapter_duration(const hb_title_t *title, gint chap);
 gint64 ghb_get_chapter_start(const hb_title_t *title, gint chap);
-void ghb_part_duration(
-    const hb_title_t *title, gint sc, gint ec, gint *hh, gint *mm, gint *ss);
+gint64 ghb_chapter_range_get_duration(const hb_title_t *title,
+                                      gint sc, gint ec);
 gint ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix);
 gboolean ghb_audio_is_passthru(gint acodec);
 gboolean ghb_audio_can_passthru(gint acodec);

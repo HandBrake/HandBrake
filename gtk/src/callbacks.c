@@ -1389,10 +1389,47 @@ void ghb_break_duration(gint64 duration, gint *hh, gint *mm, gint *ss)
     *ss = duration % 60;
 }
 
+gint64
+ghb_title_range_get_duration(GhbValue * settings, const hb_title_t * title)
+{
+    gint64 start, end;
+
+    if (ghb_settings_combo_int(settings, "PtoPType") == 0)
+    {
+        start = ghb_dict_get_int(settings, "start_point");
+        end = ghb_dict_get_int(settings, "end_point");
+        return ghb_chapter_range_get_duration(title, start, end) / 90000;
+    }
+    else if (ghb_settings_combo_int(settings, "PtoPType") == 1)
+    {
+        start = ghb_dict_get_int(settings, "start_point");
+        end = ghb_dict_get_int(settings, "end_point");
+        return end - start;
+    }
+    else if (ghb_settings_combo_int(settings, "PtoPType") == 2)
+    {
+        if (title != NULL)
+        {
+            gint64 frames;
+
+            start = ghb_dict_get_int(settings, "start_point");
+            end = ghb_dict_get_int(settings, "end_point");
+            frames = end - start + 1;
+            return frames * title->vrate.den / title->vrate.num;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    return 0;
+}
+
 static void
 update_title_duration(signal_user_data_t *ud)
 {
-    gint hh, mm, ss, start, end;
+    gint hh, mm, ss;
+    gint64 duration;
     gchar *text;
     GtkWidget *widget;
     int title_id, titleindex;
@@ -1402,39 +1439,9 @@ update_title_duration(signal_user_data_t *ud)
     title = ghb_lookup_title(title_id, &titleindex);
     widget = GHB_WIDGET (ud->builder, "title_duration");
 
-    if (ghb_settings_combo_int(ud->settings, "PtoPType") == 0)
-    {
-        start = ghb_dict_get_int(ud->settings, "start_point");
-        end = ghb_dict_get_int(ud->settings, "end_point");
-        ghb_part_duration(title, start, end, &hh, &mm, &ss);
-    }
-    else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 1)
-    {
-        gint duration;
+    duration = ghb_title_range_get_duration(ud->settings, title);
+    ghb_break_duration(duration, &hh, &mm, &ss);
 
-        start = ghb_dict_get_int(ud->settings, "start_point");
-        end = ghb_dict_get_int(ud->settings, "end_point");
-        duration = end - start;
-        ghb_break_duration(duration, &hh, &mm, &ss);
-    }
-    else if (ghb_settings_combo_int(ud->settings, "PtoPType") == 2)
-    {
-        if (title != NULL)
-        {
-            gint64 frames;
-            gint duration;
-
-            start = ghb_dict_get_int(ud->settings, "start_point");
-            end = ghb_dict_get_int(ud->settings, "end_point");
-            frames = end - start + 1;
-            duration = frames * title->vrate.den / title->vrate.num;
-            ghb_break_duration(duration, &hh, &mm, &ss);
-        }
-        else
-        {
-            hh = mm = ss = 0;
-        }
-    }
     text = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
     gtk_label_set_text(GTK_LABEL(widget), text);
     g_free(text);
