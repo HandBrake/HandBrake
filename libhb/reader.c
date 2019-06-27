@@ -636,6 +636,7 @@ static void UpdateState( hb_work_private_t  * r )
         {
             eta = 0;
         }
+        p.eta_seconds = eta;
         p.hours   = eta / 3600;
         p.minutes = ( eta % 3600 ) / 60;
         p.seconds = eta % 60;
