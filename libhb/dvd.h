@@ -19,6 +19,16 @@
 #define HB_VOBSUB_STYLE_LETTERBOX  2
 #define HB_VOBSUB_STYLE_PANSCAN    3
 
+struct hb_dvd_chapter_s
+{
+    int     index;
+    int64_t duration;
+    int     pgn;
+    int     pgcn;
+    int     block_start;
+    int     block_end;
+};
+
 struct hb_dvdread_s
 {
     char         * path;
@@ -62,11 +72,18 @@ struct hb_dvdnav_s
     int            title_block_count;
     int            chapter;
     int            cell;
-    hb_list_t    * list_chapter;
     int            stopped;
     hb_handle_t  * h;
+
+    ifo_handle_t * ifo;
+    int            vts;
+    int            pgcn;
+    int            pgn;
+    int64_t        duration;
+    hb_list_t    * list_dvd_chapter;
 };
 
+typedef struct hb_dvd_chapter_s hb_dvd_chapter_t;
 typedef struct hb_dvdnav_s hb_dvdnav_t;
 typedef struct hb_dvdread_s hb_dvdread_t;
 

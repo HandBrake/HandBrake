@@ -893,13 +893,6 @@ struct hb_audio_s
 struct hb_chapter_s
 {
     int      index;
-    int      pgcn;
-    int      pgn;
-    int      cell_start;
-    int      cell_end;
-    uint64_t block_start;
-    uint64_t block_end;
-    uint64_t block_count;
 
     /* Visual-friendly duration */
     int      hours;
@@ -1052,13 +1045,6 @@ struct hb_title_s
     char            name[1024];
     int             index;
     int             playlist;
-    int             vts;
-    int             ttn;
-    int             cell_start;
-    int             cell_end;
-    uint64_t        block_start;
-    uint64_t        block_end;
-    uint64_t        block_count;
     int             angle_count;
     void          * opaque_priv;
 

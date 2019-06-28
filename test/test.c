@@ -659,9 +659,7 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
     }
     else if ( title->type == HB_DVD_TYPE )
     {
-        fprintf( stderr, "  + vts %d, ttn %d, cells %d->%d (%"PRIu64" blocks)\n",
-                title->vts, title->ttn, title->cell_start, title->cell_end,
-                title->block_count );
+        fprintf( stderr, "  + index %d\n", title->index);
     }
     else if( title->type == HB_BD_TYPE )
     {
@@ -684,10 +682,8 @@ static void PrintTitleInfo( hb_title_t * title, int feature )
     {
         hb_chapter_t  * chapter;
         chapter = hb_list_item( title->list_chapter, i );
-        fprintf( stderr, "    + %d: cells %d->%d, %"PRIu64" blocks, duration "
-                 "%02d:%02d:%02d\n", chapter->index,
-                 chapter->cell_start, chapter->cell_end,
-                 chapter->block_count, chapter->hours, chapter->minutes,
+        fprintf( stderr, "    + %d: duration %02d:%02d:%02d\n",
+                 chapter->index, chapter->hours, chapter->minutes,
                  chapter->seconds );
     }
     fprintf( stderr, "  + audio tracks:\n" );

@@ -306,9 +306,6 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
             *dot_term = '\0';
     }
 
-    title->vts = 0;
-    title->ttn = 0;
-
     if (tt <= d->title_count)
     {
         ti = d->title_info[tt - 1];
@@ -337,9 +334,6 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
     {
         pkt_count += ti->clips[ii].pkt_count;
     }
-    title->block_start = 0;
-    title->block_end = pkt_count;
-    title->block_count = pkt_count;
 
     title->angle_count = ti->angle_count;
 
@@ -572,7 +566,6 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         hb_chapter_set_title( chapter, chapter_title );
 
         chapter->duration = ti->chapters[ii].duration;
-        chapter->block_start = ti->chapters[ii].offset;
 
         // Sanity check chapter duration and start times
         // Have seen some invalid durations in the wild
@@ -610,9 +603,8 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         chapter->minutes = ( seconds % 3600 ) / 60;
         chapter->seconds = ( seconds % 60 );
 
-        hb_log( "bd: chap %d packet=%"PRIu64", %"PRIu64" ms",
+        hb_log( "bd: chap %d, %"PRIu64" ms",
                 chapter->index,
-                chapter->block_start,
                 chapter->duration / 90 );
 
         hb_list_add( title->list_chapter, chapter );
