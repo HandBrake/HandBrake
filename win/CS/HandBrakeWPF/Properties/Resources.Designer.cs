@@ -4057,7 +4057,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dest: .
+        ///   Looks up a localized string similar to Destination:.
         /// </summary>
         public static string QueueView_Destination {
             get {
@@ -4237,7 +4237,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Src: .
+        ///   Looks up a localized string similar to Source:.
         /// </summary>
         public static string QueueView_Source {
             get {

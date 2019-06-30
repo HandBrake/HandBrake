@@ -176,7 +176,7 @@ namespace HandBrakeWPF
             Caliburn.Micro.Execute.OnUIThreadAsync(() => {
                 if (e.ExceptionObject.GetType() == typeof(FileNotFoundException))
                 {
-                    GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.7.1", (Exception)e.ExceptionObject);
+                    GeneralApplicationException exception = new GeneralApplicationException("A file appears to be missing.", "Try re-installing Microsoft .NET Framework 4.8", (Exception)e.ExceptionObject);
                     this.ShowError(exception);
                 }
                 else

@@ -1444,7 +1444,7 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Delete</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>Dest: </value>
+    <value>Destination:</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
     <value>Do nothing</value>
@@ -1513,7 +1513,7 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Shutdown</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>Src: </value>
+    <value>Source:</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
     <value>Start Queue</value>

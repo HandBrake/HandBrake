@@ -21,7 +21,8 @@
         MinHeight="300"
         WindowStartupLocation="CenterScreen"
         TextOptions.TextFormattingMode="Display"
-        mc:Ignorable="d">
+        mc:Ignorable="d"
+        x:Name="queueView">
 
     <Window.Resources>
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
@@ -60,35 +61,6 @@
 
             <TextBlock Text="{x:Static Properties:Resources.MainView_ShowQueue}" FontSize="28" VerticalAlignment="Center" FontFamily="Segoe UI Light" Margin="10,0,0,0" />
             <TextBlock Text="{Binding JobsPending}"  Grid.Column="1" Margin="15,0,0,5 " VerticalAlignment="Bottom" TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" />
-
-            <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Bottom" Grid.Column="3" Margin="0,0,10,0" >
-                <MenuItem>
-                    <MenuItem.Header>
-                        <StackPanel Height="32" Orientation="Horizontal">
-                            <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}" Width="20" Height="20" VerticalAlignment="Center" />
-                            <TextBlock VerticalAlignment="Center"
-                                       Text="{x:Static Properties:Resources.QueueView_Options}" Margin="5,0,0,0" />
-                            <Path Height="5"
-                                  Margin="2,2,0,0"
-                                  Data="M 0 0 L 4 4 L 8 0 Z"
-                                  Fill="{DynamicResource GlyphBrush}" />
-                        </StackPanel>
-                    </MenuItem.Header>
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action ResetFailed]" Header="{x:Static Properties:Resources.QueueView_ResetFailed}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action ResetSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ResetSelectedJobs}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action ResetAllJobs]" Header="{x:Static Properties:Resources.QueueView_ResetAllJobs}" />
-                    <Separator />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:Resources.QueueView_ClearAll}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ClearSelected}" />
-                    <Separator />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:Resources.QueueView_Import}" />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.QueueView_Export}" />
-                    <Separator />
-                    <MenuItem cal:Message.Attach="[Event Click] = [Action ExportCli]" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
-                </MenuItem>
-            </Menu>
-
         </Grid>
 
         <Grid Grid.Row="2" Margin="0,15,0,0">
@@ -134,10 +106,33 @@
                         </StackPanel>
                     </Button>
 
-                    <!--<StackPanel Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
-                        <Button Content="^" Width="20" Margin="0" cal:Message.Attach="[Event Click] = [Action MoveUp]" />
-                        <Button Content="v" Width="20" Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action MoveDown]" />
-                    </StackPanel>-->
+                    <Menu HorizontalAlignment="Right" Background="Transparent" VerticalAlignment="Bottom" Grid.Column="3" Margin="0,0,0,0" >
+                        <MenuItem>
+                            <MenuItem.Header>
+                                <StackPanel Height="27" Orientation="Horizontal">
+                                    <Image Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}" Width="20" Height="20" VerticalAlignment="Center" />
+                                    <TextBlock VerticalAlignment="Center"
+                                       Text="{x:Static Properties:Resources.QueueView_Options}" Margin="5,0,0,0" />
+                                    <Path Height="5"
+                                  Margin="2,2,0,0"
+                                  Data="M 0 0 L 4 4 L 8 0 Z"
+                                  Fill="{DynamicResource GlyphBrush}" />
+                                </StackPanel>
+                            </MenuItem.Header>
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action ResetFailed]" Header="{x:Static Properties:Resources.QueueView_ResetFailed}" />
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action ResetSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ResetSelectedJobs}" />
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action ResetAllJobs]" Header="{x:Static Properties:Resources.QueueView_ResetAllJobs}" />
+                            <Separator />
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action ClearCompleted]" Header="{x:Static Properties:Resources.QueueView_ClearCompleted}" />
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action Clear]" Header="{x:Static Properties:Resources.QueueView_ClearAll}" />
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action RemoveSelectedJobs]" Header="{x:Static Properties:Resources.QueueView_ClearSelected}" />
+                            <Separator />
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action Import]" Header="{x:Static Properties:Resources.QueueView_Import}" />
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action Export]" Header="{x:Static Properties:Resources.QueueView_Export}" />
+                            <Separator />
+                            <MenuItem cal:Message.Attach="[Event Click] = [Action ExportCli]" Header="{x:Static Properties:Resources.QueueView_ExportCLI}" />
+                        </MenuItem>
+                    </Menu>
                 </Grid>
 
                 <ListBox Tag="{Binding}" x:Name="queueJobs" Grid.Row="1" Margin="10,0,5,0"
@@ -234,41 +229,27 @@
                                 </Image>
 
                                 <!--  Settings  -->
-                                <Grid Grid.Column="1" Margin="0,3,5,3">
+                                <Grid Grid.Column="1" Margin="0,3,5,3" Height="30" VerticalAlignment="Center">
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
 
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
 
-                                    <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2">
-                                        <TextBlock FontWeight="Bold" Text="Title: " />
-                                        <TextBlock Text="{Binding Task.Title}" />
+                                    <StackPanel Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" Grid.Row="0" Grid.Column="0"
+                                                   TextTrimming="CharacterEllipsis" VerticalAlignment="Center"   />
 
-                                        <TextBlock Text="{Binding Task.PointToPointMode}" Margin="10,0,0,0" FontWeight="Bold" />
-                                        <TextBlock Text=": " />
-                                        <TextBlock Text="{Binding Task.StartPoint}" />
-                                        <TextBlock Margin="5,0,5,0" Text="to" />
-                                        <TextBlock Text="{Binding Task.EndPoint}" />
+                                        <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
+                                                     Value="{Binding DataContext.ProgressValue, ElementName=queueJobs}" IsIndeterminate="{Binding DataContext.IntermediateProgress, ElementName=queueJobs}"
+                                                     Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
                                     </StackPanel>
+                           
 
-
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Source}" Grid.Row="1" />
-                                    <TextBlock Text="{Binding Task.Source, Converter={StaticResource filePathToFilenameConverter}}"  Margin="2,0,0,0" Grid.Row="1" Grid.Column="1"/>
-                                    <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Destination}" Grid.Row="2" />
-                                    <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" Margin="2,0,0,0" TextTrimming="CharacterEllipsis" Grid.Row="2" Grid.Column="1" />
-
-                                    <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" Margin="0,2,5,0" Grid.Row="3" Grid.ColumnSpan="2"
-                                             Value="{Binding DataContext.ProgressValue, ElementName=queueJobs}" IsIndeterminate="{Binding DataContext.IntermediateProgress, ElementName=queueJobs}"
-                                             Visibility="{Binding ShowEncodeProgress, Converter={StaticResource boolToVisConverter}}" />
-
-                                    <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
+                                    <Button Grid.Row="0" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,0,0" Click="QueueDeleteJob_OnClick"
                                             AutomationProperties.Name="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" ToolTip="{x:Static Properties:ResourcesTooltips.QueueView_DeleteJob}" >
                                         <Button.Template>
                                             <ControlTemplate>
@@ -536,4 +517,4 @@
         </Grid>
     </Grid>
 </Window>
-
+    
