@@ -109,6 +109,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
+    <Compile Include="AttachedProperties\WindowHelper.cs" />
     <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Commands\InputBindingTrigger.cs" />
     <Compile Include="Commands\Menu\QueueCommandParams.cs" />
