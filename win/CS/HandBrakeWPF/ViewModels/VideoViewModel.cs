@@ -1446,6 +1446,11 @@ namespace HandBrakeWPF.ViewModels
             this.DisplayFastDecode = this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10;
             this.NotifyOfPropertyChange(() => this.DisplayFastDecode);
 
+            if (!this.DisplayFastDecode)
+            {
+                this.FastDecode = false;
+            }
+
             this.DisplayProfileControl = this.SelectedVideoEncoder == VideoEncoder.X264
                                          || this.SelectedVideoEncoder == VideoEncoder.X264_10
                                          || this.SelectedVideoEncoder == VideoEncoder.X265
