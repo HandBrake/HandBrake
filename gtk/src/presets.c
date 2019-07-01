@@ -2271,7 +2271,7 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
         category = ghb_dict_get_string(ud->settings, "PresetCategory");
         if (!strcmp(category, "new"))
         {
-            entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetCategoryEntry"));
+            entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetCategoryName"));
             category = gtk_entry_get_text(entry);
         }
         if (category == NULL || category[0] == 0)
