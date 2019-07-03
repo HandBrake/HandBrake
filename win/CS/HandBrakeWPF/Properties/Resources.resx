@@ -2017,4 +2017,7 @@ Where supported, any user presets will have been imported.</value>
   <data name="Options_DarkTheme" xml:space="preserve">
     <value>Use the Dark Theme. (Requires Restart)  (THIS IS AN EARLY PREVIEW. IT IS NOT YET COMPLETE!)</value>
   </data>
+  <data name="QueueView_NotAvailable" xml:space="preserve">
+    <value>Not Available</value>
+  </data>
 </root>

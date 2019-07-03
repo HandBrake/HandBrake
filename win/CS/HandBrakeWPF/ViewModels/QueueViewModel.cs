@@ -467,6 +467,7 @@ namespace HandBrakeWPF.ViewModels
             }
 
             task.Status = QueueItemStatus.Waiting;
+            task.Statistics.Reset();
             this.queueProcessor.BackupQueue(null);
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.NotifyOfPropertyChange(() => this.CanRetryJob);

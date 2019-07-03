@@ -4138,6 +4138,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not Available.
+        /// </summary>
+        public static string QueueView_NotAvailable {
+            get {
+                return ResourceManager.GetString("QueueView_NotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Destination Directory.
         /// </summary>
         public static string QueueView_OpenDestDir {

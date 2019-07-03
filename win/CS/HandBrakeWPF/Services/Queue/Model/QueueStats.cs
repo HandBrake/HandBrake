@@ -13,6 +13,8 @@ namespace HandBrakeWPF.Services.Queue.Model
 
     using Caliburn.Micro;
 
+    using HandBrakeWPF.Properties;
+
     using Newtonsoft.Json;
 
     [JsonObject(MemberSerialization.OptOut)]
@@ -35,12 +37,27 @@ namespace HandBrakeWPF.Services.Queue.Model
             {
                 return this.startTime;
             }
+
             set
             {
                 if (value.Equals(this.startTime)) return;
                 this.startTime = value;
                 this.NotifyOfPropertyChange(() => this.StartTime);
                 this.NotifyOfPropertyChange(() => this.Duration);
+                this.NotifyOfPropertyChange(() => this.StartTimeDisplay);
+            }
+        }
+
+        public string StartTimeDisplay
+        {
+            get
+            {
+                if (this.startTime == DateTime.MinValue)
+                {
+                    return Resources.QueueView_NotAvailable;
+                }
+
+                return this.startTime.ToString();
             }
         }
 
@@ -50,12 +67,27 @@ namespace HandBrakeWPF.Services.Queue.Model
             {
                 return this.endTime;
             }
+
             set
             {
                 if (value.Equals(this.endTime)) return;
                 this.endTime = value;
                 this.NotifyOfPropertyChange(() => this.EndTime);
                 this.NotifyOfPropertyChange(() => this.Duration);
+                this.NotifyOfPropertyChange(() => this.EndTimeDisplay);
+            }
+        }
+
+        public string EndTimeDisplay
+        {
+            get
+            {
+                if (this.endTime == DateTime.MinValue)
+                {
+                    return Resources.QueueView_NotAvailable;
+                }
+
+                return this.endTime.ToString();
             }
         }
 
@@ -73,7 +105,7 @@ namespace HandBrakeWPF.Services.Queue.Model
             {
                 if (this.endTime == DateTime.MinValue)
                 {
-                    return TimeSpan.MinValue;
+                    return TimeSpan.Zero;
                 }
 
                 return this.EndTime - this.StartTime - this.PausedDuration;
@@ -89,6 +121,7 @@ namespace HandBrakeWPF.Services.Queue.Model
             {
                 return this.finalFileSize;
             }
+
             set
             {
                 if (value == this.finalFileSize) return;
@@ -124,6 +157,20 @@ namespace HandBrakeWPF.Services.Queue.Model
                 TimeSpan pausedDuration = DateTime.Now - this.pausedStartPoint;
                 this.pausedTimespan = this.PausedDuration.Add(pausedDuration);
             }
+        }
+
+        public void Reset()
+        {
+            this.StartTime = DateTime.MinValue;
+            this.EndTime = DateTime.MinValue;
+            this.FinalFileSize = 0;
+            this.pausedTimespan = TimeSpan.Zero;
+            this.pausedStartPoint = DateTime.MinValue;
+            this.CompletedActivityLogPath = null;
+
+            this.NotifyOfPropertyChange(() => this.FinalFileSizeInMegaBytes);
+            this.NotifyOfPropertyChange(() => this.PausedDuration);
+            this.NotifyOfPropertyChange(() => this.Duration);
         }
     }
 }
