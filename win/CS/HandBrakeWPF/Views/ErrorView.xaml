@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
+        xmlns:converters="clr-namespace:HandBrakeWPF.Converters"
         Title="{Binding Title}"
         Width="680"
         Height="380"
@@ -11,6 +12,11 @@
         FontSize="11"
         TextOptions.TextFormattingMode="Display"
         WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+        <converters:ThemeImageConverter x:Key="themeConverter" />
+    </Window.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -82,7 +88,7 @@
                            Width="16"
                            Height="16"
                            Margin="0,0,5,0"
-                           Source="Images/copy.png" />
+                           Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Copy.png'}" />
                     <TextBlock Grid.Column="1" Text="{x:Static Properties:Resources.Generic_CopyToClipboard}" />
                 </Grid>
             </Button>

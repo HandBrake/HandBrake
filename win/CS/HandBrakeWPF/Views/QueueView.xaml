@@ -328,7 +328,7 @@
                                             <Image Width="20" Height="20" VerticalAlignment="Center" Margin="0,0,5,0"
                                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Refresh.png'}">
                                             </Image>
-                                            <TextBlock Text="{x:Static Properties:Resources.QueueView_Reset}" />
+                                            <TextBlock Text="{x:Static Properties:Resources.QueueView_Reset}" VerticalAlignment="Center" />
                                         </StackPanel>
 
                                     </Button.Content>
@@ -347,7 +347,7 @@
                                             <Image Width="20" Margin="0,0,5,0" Height="20" VerticalAlignment="Center"
                                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='New.png'}">
                                             </Image>
-                                            <TextBlock Text="{x:Static Properties:Resources.QueueView_Edit}" />
+                                            <TextBlock Text="{x:Static Properties:Resources.QueueView_Edit}" VerticalAlignment="Center" />
                                         </StackPanel>
                                     </Button.Content>
                                     <i:Interaction.Triggers>
@@ -471,10 +471,10 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_StartTime}" VerticalAlignment="Top" Grid.Row="0" Grid.Column="0" />
-                                <TextBlock Text="{Binding SelectedTask.Statistics.StartTime}" TextWrapping="Wrap" Grid.Row="0" Grid.Column="1" />
+                                <TextBlock Text="{Binding SelectedTask.Statistics.StartTimeDisplay}" TextWrapping="Wrap" Grid.Row="0" Grid.Column="1" />
 
                                 <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_EndTime}" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" />
-                                <TextBlock Text="{Binding SelectedTask.Statistics.EndTime}" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" />
+                                <TextBlock Text="{Binding SelectedTask.Statistics.EndTimeDisplay}" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" />
 
                                 <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_PausedDuration}" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
                                 <TextBlock Text="{Binding SelectedTask.Statistics.PausedDuration,StringFormat=hh\\:mm\\:ss}" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" />
@@ -500,12 +500,12 @@
                             <ContextMenu>
                                 <MenuItem Header="{x:Static Properties:Resources.LogView_CopyClipboard}" cal:Message.Attach="[Event Click] = [Action CopyLog]" >
                                     <MenuItem.Icon>
-                                        <Image Width="16" Source="Images/copy.png" />
+                                        <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Copy.png'}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                                 <MenuItem Header="{x:Static Properties:Resources.LogView_OpenLogDir}" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]">
                                     <MenuItem.Icon>
-                                        <Image Width="16" Source="Images/folder.png" />
+                                        <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Folder.png'}" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </ContextMenu>

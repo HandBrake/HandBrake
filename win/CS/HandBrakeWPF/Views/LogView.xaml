@@ -53,12 +53,12 @@
                     <ContextMenu>
                         <MenuItem Header="{x:Static Properties:Resources.LogView_CopyClipboard}" cal:Message.Attach="[Event Click] = [Action CopyLog]" >
                             <MenuItem.Icon>
-                                <Image Width="16" Source="Images/copy.png" />
+                                <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Copy.png'}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="{x:Static Properties:Resources.LogView_OpenLogDir}" cal:Message.Attach="[Event Click] = [Action OpenLogDirectory]">
                             <MenuItem.Icon>
-                                <Image Width="16" Source="Images/folder.png" />
+                                <Image Width="16" Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='../Views/Images/Folder.png'}" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator />
