@@ -169,6 +169,17 @@ namespace HandBrakeWPF.Services.Encode
             }
         }
 
+        public EncodeTask GetActiveJob()
+        {
+            if (this.currentTask != null)
+            {
+                EncodeTask task = new EncodeTask(this.currentTask); // Decouple our current copy.
+                return task;
+            }
+
+            return null;
+        }
+
         #region HandBrakeInstance Event Handlers.
 
         /// <summary>

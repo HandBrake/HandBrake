@@ -218,6 +218,7 @@
     <Compile Include="Services\Encode\Model\Models\Video\VideoProfile.cs" />
     <Compile Include="Services\Encode\Model\Models\Video\VideoTune.cs" />
     <Compile Include="Services\Interfaces\INotifyIconService.cs" />
+    <Compile Include="Services\Interfaces\ISystemService.cs" />
     <Compile Include="Services\Logging\EventArgs\LogEventArgs.cs" />
     <Compile Include="Services\Logging\Interfaces\ILog.cs" />
     <Compile Include="Services\Logging\LogService.cs" />
@@ -253,6 +254,7 @@
     <Compile Include="Services\Scan\Model\Subtitle.cs" />
     <Compile Include="Services\Scan\Model\Title.cs" />
     <Compile Include="Services\NotifyIconService.cs" />
+    <Compile Include="Services\SystemService.cs" />
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="Startup\StartupOptions.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />

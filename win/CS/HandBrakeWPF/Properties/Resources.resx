@@ -2020,4 +2020,16 @@ Where supported, any user presets will have been imported.</value>
   <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
     <value>GB</value>
   </data>
+  <data name="SystemService_ACMains" xml:space="preserve">
+    <value>AC Mains power detected. Resuming encode... ({0} %)</value>
+  </data>
+  <data name="SystemService_CriticalBattery" xml:space="preserve">
+    <value>System Battery Critical! ({0} %)</value>
+  </data>
+  <data name="SystemService_LowBatteryLog" xml:space="preserve">
+    <value>System Battery Low! ({0} %). Your encode has been paused to protect the system. System sleep is set to allowed!</value>
+  </data>
+  <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
+    <value>Remaining drive storage has dropped below {0} GB on the destination drive. Pausing encode...</value>
+  </data>
 </root>

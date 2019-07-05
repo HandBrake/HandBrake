@@ -94,5 +94,11 @@ namespace HandBrakeWPF.Services.Encode.Interfaces
         /// Kill the process
         /// </summary>
         void Stop();
+
+
+        /// <summary>
+        /// Get a copy of the Active job
+        /// </summary>
+        EncodeTask GetActiveJob();
     }
 }

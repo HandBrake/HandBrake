@@ -79,7 +79,8 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<ICountdownAlertViewModel, CountdownAlertViewModel>();
             this.container.Singleton<IMiniViewModel, MiniViewModel>();
             this.container.Singleton<IStaticPreviewViewModel, StaticPreviewViewModel>();
-
+            this.container.Singleton<ISystemService, SystemService>();
+            
             // Tab Components
             this.container.Singleton<IAudioViewModel, AudioViewModel>();
             this.container.Singleton<IPictureSettingsViewModel, PictureSettingsViewModel>();

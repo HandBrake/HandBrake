@@ -5192,6 +5192,42 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AC Mains power detected. Resuming encode... ({0} %).
+        /// </summary>
+        public static string SystemService_ACMains {
+            get {
+                return ResourceManager.GetString("SystemService_ACMains", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System Battery Critical! ({0} %).
+        /// </summary>
+        public static string SystemService_CriticalBattery {
+            get {
+                return ResourceManager.GetString("SystemService_CriticalBattery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System Battery Low! ({0} %). Your encode has been paused to protect the system. System sleep is set to allowed!.
+        /// </summary>
+        public static string SystemService_LowBatteryLog {
+            get {
+                return ResourceManager.GetString("SystemService_LowBatteryLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remaining drive storage has dropped below {0} GB on the destination drive. Pausing encode....
+        /// </summary>
+        public static string SystemService_LowDiskSpaceLog {
+            get {
+                return ResourceManager.GetString("SystemService_LowDiskSpaceLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {1}%, Pass {2} of {3}
         ///Remaining Time: {4}.
         /// </summary>

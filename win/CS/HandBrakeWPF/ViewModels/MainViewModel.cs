@@ -110,12 +110,26 @@ namespace HandBrakeWPF.ViewModels
         /// The viewmodel for HandBrakes main window.
         /// </summary>
         /// <remarks>whenDoneService must be a serivce here!</remarks>
-        public MainViewModel(IUserSettingService userSettingService, IScan scanService, IPresetService presetService, 
-            IErrorService errorService, IUpdateService updateService, 
-            IPrePostActionService whenDoneService, IWindowManager windowManager, IPictureSettingsViewModel pictureSettingsViewModel, IVideoViewModel videoViewModel, ISummaryViewModel summaryViewModel,
-            IFiltersViewModel filtersViewModel, IAudioViewModel audioViewModel, ISubtitlesViewModel subtitlesViewModel,
-            IChaptersViewModel chaptersViewModel, IStaticPreviewViewModel staticPreviewViewModel,
-            IQueueViewModel queueViewModel, IMetaDataViewModel metaDataViewModel, INotifyIconService notifyIconService)
+        public MainViewModel(
+            IUserSettingService userSettingService,
+            IScan scanService,
+            IPresetService presetService,
+            IErrorService errorService,
+            IUpdateService updateService,
+            IPrePostActionService whenDoneService,
+            IWindowManager windowManager,
+            IPictureSettingsViewModel pictureSettingsViewModel,
+            IVideoViewModel videoViewModel,
+            ISummaryViewModel summaryViewModel,
+            IFiltersViewModel filtersViewModel,
+            IAudioViewModel audioViewModel,
+            ISubtitlesViewModel subtitlesViewModel,
+            IChaptersViewModel chaptersViewModel,
+            IStaticPreviewViewModel staticPreviewViewModel,
+            IQueueViewModel queueViewModel,
+            IMetaDataViewModel metaDataViewModel,
+            INotifyIconService notifyIconService,
+            ISystemService systemService)
             : base(userSettingService)
         {
             this.scanService = scanService;
@@ -184,6 +198,8 @@ namespace HandBrakeWPF.ViewModels
             // Setup Commands
             this.QueueCommand = new QueueCommands(this.QueueViewModel);
 
+            // Monitor the system.
+            systemService.Start();
         }
 
         #region View Model Properties
@@ -1377,7 +1393,7 @@ namespace HandBrakeWPF.ViewModels
 
             if (!DriveUtilities.HasMinimumDiskSpace(
                 this.Destination,
-                this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel)))
+                this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseQueueOnLowDiskspaceLevel)))
             {
                 return new AddQueueError(Resources.Main_LowDiskspace, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
             }

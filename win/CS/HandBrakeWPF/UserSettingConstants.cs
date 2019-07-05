@@ -36,7 +36,8 @@ namespace HandBrakeWPF
         public const string SendFileToArgs = "SendFileToArgs";
         public const string PreventSleep = "PreventSleep";
         public const string PauseOnLowDiskspace = "PauseOnLowDiskspace";
-        public const string PauseOnLowDiskspaceLevel = "LowDiskSpaceWarningLevelInBytes";
+        public const string PauseQueueOnLowDiskspaceLevel = "LowDiskSpaceWarningLevelInBytes";
+        public const string PauseEncodeOnLowDiskspaceLevel = "LowDiskSpaceEncodePauseLevelInBytes";
         public const string RemovePunctuation = "RemovePunctuation";
         public const string ShowPresetPanel = "ShowPresetPanelOption";
         public const string ResetWhenDoneAction = "ResetWhenDoneAction";

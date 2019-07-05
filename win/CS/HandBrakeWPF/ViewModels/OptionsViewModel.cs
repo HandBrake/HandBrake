@@ -1582,7 +1582,7 @@ namespace HandBrakeWPF.ViewModels
 
             this.PreventSleep = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
             this.PauseOnLowDiskspace = userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace);
-            this.PauseOnLowDiskspaceLevel = this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseOnLowDiskspaceLevel);
+            this.PauseOnLowDiskspaceLevel = this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseQueueOnLowDiskspaceLevel);
 
             // Log Verbosity Level
             this.logVerbosityOptions.Clear();
@@ -1723,7 +1723,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, this.SelectedPriority);
             this.userSettingService.SetUserSetting(UserSettingConstants.PreventSleep, this.PreventSleep);
             this.userSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspace, this.PauseOnLowDiskspace);
-            this.userSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspaceLevel, this.PauseOnLowDiskspaceLevel);
+            this.userSettingService.SetUserSetting(UserSettingConstants.PauseQueueOnLowDiskspaceLevel, this.PauseOnLowDiskspaceLevel);
             this.userSettingService.SetUserSetting(UserSettingConstants.Verbosity, this.SelectedVerbosity);
             this.userSettingService.SetUserSetting(UserSettingConstants.SaveLogWithVideo, this.CopyLogToEncodeDirectory);
             this.userSettingService.SetUserSetting(UserSettingConstants.SaveLogToCopyDirectory, this.CopyLogToSepcficedLocation);
