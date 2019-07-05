@@ -2761,11 +2761,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Low diskspace warning level (GB):.
+        ///   Looks up a localized string similar to Pause queue if disk space is lower than:.
         /// </summary>
         public static string Options_LowDiskspaceSize {
             get {
                 return ResourceManager.GetString("Options_LowDiskspaceSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GB.
+        /// </summary>
+        public static string Options_LowDiskspaceSizeGB {
+            get {
+                return ResourceManager.GetString("Options_LowDiskspaceSizeGB", resourceCulture);
             }
         }
         
@@ -2838,15 +2847,6 @@ namespace HandBrakeWPF.Properties {
         public static string Options_PathToVLC {
             get {
                 return ResourceManager.GetString("Options_PathToVLC", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Pause queue if disk space is low before starting a job..
-        /// </summary>
-        public static string Options_PauseQueueOnLowDiskSpace {
-            get {
-                return ResourceManager.GetString("Options_PauseQueueOnLowDiskSpace", resourceCulture);
             }
         }
         

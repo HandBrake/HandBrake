@@ -343,7 +343,6 @@
                 <StackPanel  Name="Advanced" Orientation="Vertical" Margin="10,5,0,0"
                             Visibility="{Binding SelectedTab, Converter={StaticResource tabConverter}, ConverterParameter={x:Static local:OptionsTab.Advanced}}">
 
-
                     <TextBlock Text="{x:Static Properties:Resources.Options_Advanced}" FontSize="20" FontFamily="Segoe UI Light"  />
 
                     <StackPanel Orientation="Vertical" Margin="0,10,0,10">
@@ -352,12 +351,11 @@
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:Resources.Options_PreventSleep}" IsChecked="{Binding PreventSleep}" />
-                            <CheckBox Content="{x:Static Properties:Resources.Options_PauseQueueOnLowDiskSpace}" 
-                                      IsChecked="{Binding PauseOnLowDiskspace}" />
                             <CheckBox Content="{x:Static Properties:Resources.Options_DvdRead}" IsChecked="{Binding DisableLibdvdNav}" />
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                <TextBlock Text="{x:Static Properties:Resources.Options_LowDiskspaceSize}" VerticalAlignment="Center"  Width="250" />
-                                <TextBox x:Name="PauseOnLowDiskspaceLEvel" Text="{Binding PauseOnLowDiskspaceLevel, Converter={StaticResource fileSizeConverter}, UpdateSourceTrigger=PropertyChanged}"  Width="120"/>
+                                <CheckBox Content="{x:Static Properties:Resources.Options_LowDiskspaceSize}" IsChecked="{Binding PauseOnLowDiskspace}" Width="255" />
+                                <TextBox x:Name="PauseOnLowDiskspaceLevel" Text="{Binding PauseOnLowDiskspaceLevel, Converter={StaticResource fileSizeConverter}, UpdateSourceTrigger=PropertyChanged}"  Width="120"/>
+                                <TextBlock Text="{x:Static Properties:Resources.Options_LowDiskspaceSizeGB}" VerticalAlignment="Center" Margin="5,0,0,0" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="{x:Static Properties:Resources.Options_PreviewScanCount}" VerticalAlignment="Center" Width="250" />

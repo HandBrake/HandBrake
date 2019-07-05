@@ -1241,7 +1241,7 @@ Would you like to overwrite it?</value>
     <value>Log Path:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Low diskspace warning level (GB):</value>
+    <value>Pause queue if disk space is lower than:</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
     <value>Minimize to system tray (Requires Restart)</value>
@@ -1263,9 +1263,6 @@ Would you like to overwrite it?</value>
   </data>
   <data name="Options_PathToVLC" xml:space="preserve">
     <value>Path to VLC Player</value>
-  </data>
-  <data name="Options_PauseQueueOnLowDiskSpace" xml:space="preserve">
-    <value>Pause queue if disk space is low before starting a job.</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
     <value>Prevent the system from sleeping while encoding</value>
@@ -2019,5 +2016,8 @@ Where supported, any user presets will have been imported.</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>Not Available</value>
+  </data>
+  <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
+    <value>GB</value>
   </data>
 </root>
