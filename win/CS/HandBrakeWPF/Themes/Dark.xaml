@@ -10,21 +10,19 @@
 
     <SolidColorBrush x:Key="Ui.Dark" Color="#252525" />
     <SolidColorBrush x:Key="Ui.Mid" Color="#363636" />
-
     <SolidColorBrush x:Key="Ui.Light" Color="#464646" />
     <SolidColorBrush x:Key="Ui.Ultralight" Color="#606060" />
+    <SolidColorBrush x:Key="Ui.ContrastLight" Color="#C0C0C0" />
+    <SolidColorBrush x:Key="Ui.WhiteSmoke" Color="WhiteSmoke" />
 
     <!-- General -->
     <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#252525" />
     <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="White" />
     <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="White" />
     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="WhiteSmoke" />
-
-    <!-- Button -->
-    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-        <Setter Property="Background" Value="{DynamicResource Ui.Light}" />
-        <Setter Property="Foreground" Value="White" />
-    </Style>
+    <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}" Color="WhiteSmoke" />
+    <SolidColorBrush x:Key="{x:Static SystemColors.ControlDarkBrushKey}" Color="WhiteSmoke" />
+    
 
     <!-- Listbox -->
     <Style TargetType="ListBox">
@@ -36,35 +34,6 @@
     <Style TargetType="ToolBar">
         <Setter Property="Background" Value="Black" />
         <Setter Property="Foreground" Value="White" />
-    </Style>
-
-    <!-- Menu -->
-    <Style TargetType="Menu">
-        <Setter Property="Background" Value="{DynamicResource Ui.Mid}" />
-        <Setter Property="Foreground" Value="White" />
-    </Style>
-
-    <Style TargetType="MenuItem">
-        <Setter Property="Background" Value="{DynamicResource Ui.Mid}" />
-        <Setter Property="Foreground" Value="White" />
-    </Style>
-
-    <Style TargetType="{x:Type ContextMenu}">
-        <Setter Property="Background" Value="{DynamicResource Ui.Mid}"/>
-        <Setter Property="Foreground" Value="WhiteSmoke"/>
-    </Style>
-
-    <Style x:Key="{x:Static MenuItem.SeparatorStyleKey}" TargetType="{x:Type Separator}">
-        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Separator}">
-                    <Grid Margin="3,2,3,2" SnapsToDevicePixels="true" UseLayoutRounding="False">
-                        <Rectangle Fill="WhiteSmoke" Height="1"/>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
     </Style>
 
     <!-- StatusBar -->
@@ -127,6 +96,8 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Controls/ComboBoxDark.xaml" />
+        <ResourceDictionary Source="Controls/ButtonDark.xaml" />
+        <ResourceDictionary Source="Controls/ContextMenuDark.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>
