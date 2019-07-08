@@ -38,7 +38,7 @@
 "uad-bt-uKD.ibExternalAccessibilityDescription" = "Voreinstellungen";
 
 /* Class = "NSScrollView"; ibShadowedToolTip = "Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.\n\nOverrides all encode settings. Settings may be further adjusted after selecting a preset."; ObjectID = "uad-bt-uKD"; */
-"uad-bt-uKD.ibShadowedToolTip" = "Voreinstellungen sind eine Gruppe von Enkodiereinstellungen, zugeschnitten auf ein bestimmtes Szenario. Es ist die Voreinstellung auszuwählen, die am besten zu den jeweiligen Bedürfnissen passt.\n\nÜberschreibt alle Enkodiereinstellungen. Die Einstellungen können noch feinjustiert werden nachdem eine Voreinstellung ausgewählt wurde.";
+"uad-bt-uKD.ibShadowedToolTip" = "Voreinstellungen sind eine Gruppe von Encodereinstellungen, zugeschnitten auf ein bestimmtes Szenario. Es ist die Voreinstellung auszuwählen, die am besten zu den jeweiligen Bedürfnissen passt.\n\nÜberschreibt alle Encodereinstellungen. Die Einstellungen können noch feinjustiert werden nachdem eine Voreinstellung ausgewählt wurde.";
 
 /* Class = "NSMenuItem"; title = "Export…"; ObjectID = "xEQ-Un-J0n"; */
 "xEQ-Un-J0n.title" = "Exportieren …";

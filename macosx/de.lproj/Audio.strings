@@ -68,7 +68,7 @@
 "LLW-KN-65P.ibExternalAccessibilityDescription" = "Abmischung";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.\n\nDolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility."; ObjectID = "LLW-KN-65P"; */
-"LLW-KN-65P.ibShadowedToolTip" = "Abmischungstyp. Kontrolliert wie Mehrkanalaudio in weniger Kanäle gemischt wird oder ob die originalen Kanäle behalten werden.\n\nDolby Surround und Dolby Pro Logic II konvertiert Mehrkanalaudio in Stereo und enkodiert zusätzliche Kanäle für Surroundreproduktion auf kompatiblen Geräten, die Stereokompatibilität wird beibehalten.";
+"LLW-KN-65P.ibShadowedToolTip" = "Abmischungstyp. Kontrolliert wie Mehrkanalaudio in weniger Kanäle gemischt wird oder ob die originalen Kanäle behalten werden.\n\nDolby Surround und Dolby Pro Logic II konvertiert Mehrkanalaudio in Stereo und encodiert zusätzliche Kanäle für Surroundreproduktion auf kompatiblen Geräten, die Stereokompatibilität wird beibehalten.";
 
 /* Class = "NSTableColumn"; headerCell.title = "Codec"; ObjectID = "lnO-sZ-6xv"; */
 "lnO-sZ-6xv.headerCell.title" = "Codec";
@@ -119,7 +119,7 @@
 "tYY-w7-ZIq.ibExternalAccessibilityDescription" = "Codec";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "tYY-w7-ZIq"; */
-"tYY-w7-ZIq.ibShadowedToolTip" = "Audioenkoder.";
+"tYY-w7-ZIq.ibShadowedToolTip" = "Audioencoder.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Configure audio tracks Selection Behavior. These settings affect which tracks will be added to the audio tracks list, and the settings used for each track."; ObjectID = "vFP-nq-IQg"; */
 "vFP-nq-IQg.ibShadowedToolTip" = "Konfiguriert das Auswahlverhalten der Tonspur. Diese Einstellungen bestimmen welche Spuren zur Tonspurliste hinzugefügt werden und die Einstellungen welche für jede Spur benutzt werden.";

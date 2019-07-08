@@ -1,5 +1,5 @@
 /* Class = "NSButtonCell"; title = "Fast Decode"; ObjectID = "5De-nU-l3h"; */
-"5De-nU-l3h.title" = "Schnelle Dekodierung";
+"5De-nU-l3h.title" = "Schnelle Decodierung";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "6Cs-jo-8Q6"; */
 "6Cs-jo-8Q6.title" = "OtherViews";
@@ -8,7 +8,7 @@
 "6Dd-IP-Pwt.title" = "Konstante Bildfrequenz";
 
 /* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "7bP-tR-sAX"; */
-"7bP-tR-sAX.title" = "Enkodereinstellungen:";
+"7bP-tR-sAX.title" = "Encodereinstellungen:";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "7CG-ga-88H"; */
 "7CG-ga-88H.title" = "OtherViews";
@@ -23,13 +23,13 @@
 "A4U-3F-pYq.title" = "x264-Voreinstellungen";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios."; ObjectID = "A7d-wM-Xmp"; */
-"A7d-wM-Xmp.ibShadowedToolTip" = "Videoenkoderabstimmung. Zur weiteren Einstellung des Enkoders um die Einstellung an bestimmte Szenarien anzupassen.";
+"A7d-wM-Xmp.ibShadowedToolTip" = "Videoencoderabstimmung. Zur weiteren Einstellung des Encoders um die Einstellung an bestimmte Szenarien anzupassen.";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices."; ObjectID = "Biw-5K-pPD"; */
-"Biw-5K-pPD.ibShadowedToolTip" = "Videoenkodervoreinstellungen. Stellt die Enkodiereinstellungen so ein, dass Kompressionseffizienz und Geschwindigkeit im Gleichgewicht sind. Voreinstellungen mit langsamer Geschwindigkeit sind evtl. nicht kompatibel mit manchen Geräten.";
+"Biw-5K-pPD.ibShadowedToolTip" = "Videoencodervoreinstellungen. Stellt die Encodiereinstellungen so ein, dass Kompressionseffizienz und Geschwindigkeit im Gleichgewicht sind. Voreinstellungen mit langsamer Geschwindigkeit sind evtl. nicht kompatibel mit manchen Geräten.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "2-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
-"bnV-aE-FVh.ibShadowedToolTip" = "Die Enkodierung in zwei Durchgängen analysiert das Video vor dem Enkodieren. Die daraus gewonnenen Informationen ermöglichen es dem Enkoder bessere Entscheidungen bezüglich Qualität und Datenrate im Modus mit durchschnittlicher Bitrate zu treffen.";
+"bnV-aE-FVh.ibShadowedToolTip" = "Die Encodierung in zwei Durchgängen analysiert das Video vor dem Encodieren. Die daraus gewonnenen Informationen ermöglichen es dem Encoder bessere Entscheidungen bezüglich Qualität und Datenrate im Modus mit durchschnittlicher Bitrate zu treffen.";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
@@ -44,7 +44,7 @@
 "c27-4i-SiJ.ibShadowedNotApplicablePlaceholder" = "0";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings."; ObjectID = "CPP-lh-FbN"; */
-"CPP-lh-FbN.ibShadowedToolTip" = "Videoenkoderprofil. Garantiert die Erfüllung bestimmter Videostandardprofile. Überschreibt alle anderen Einstellungen.";
+"CPP-lh-FbN.ibShadowedToolTip" = "Videoencoderprofil. Garantiert die Erfüllung bestimmter Videostandardprofile. Überschreibt alle anderen Einstellungen.";
 
 /* Class = "NSTextFieldCell"; title = "Quality:"; ObjectID = "F3s-qR-qeE"; */
 "F3s-qR-qeE.title" = "Qualität:";
@@ -54,9 +54,6 @@
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
 "GPu-Ht-bKg.ibShadowedToolTip" = "Konstante Qualität variiert die Bitrate um eine gleichbleibende visuelle Qualität über das ganze Video zu garantieren.\n\nWird der Qualitätsregler nach rechts bewegt erhöht sich die Qualität, nach links erniedrigt sie sich.\n\nEmpfohlene Werte für x264 und x265 sind zwischen RF 18-28. Höhere Qualitätseinstellungen produzieren evtl. sehr große Dateien.\n\nx264 ist verlustfrei bei RF 0.";
-
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "none"; ObjectID = "gu5-Qw-6oi"; */
-"gu5-Qw-6oi.ibShadowedIsNilPlaceholder" = "Keine";
 
 /* Class = "NSTextFieldCell"; title = "Profile:"; ObjectID = "hib-wi-BDx"; */
 "hib-wi-BDx.title" = "Profil:";
@@ -71,22 +68,22 @@
 "Jj0-Qw-HF8.title" = "OtherViews";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar"; ObjectID = "mL3-yC-hUj"; */
-"mL3-yC-hUj.ibShadowedToolTip" = "Zusätzliche Videoenkodiereinstellungen. Für erfahrene Anwender.\n\nSyntax: option-1=foo:opt2=bar";
+"mL3-yC-hUj.ibShadowedToolTip" = "Zusätzliche Videoencodiereinstellungen. Für erfahrene Anwender.\n\nSyntax: option-1=foo:opt2=bar";
 
 /* Class = "NSTextFieldCell"; title = "Video Encoder:"; ObjectID = "Mrb-6Q-0YM"; */
-"Mrb-6Q-0YM.title" = "Videoenkoder:";
+"Mrb-6Q-0YM.title" = "Videoencoder:";
 
 /* Class = "NSButtonCell"; title = "2-pass encoding"; ObjectID = "nPA-nO-Eik"; */
-"nPA-nO-Eik.title" = "Enkodierung in 2 Durchgängen";
+"nPA-nO-Eik.title" = "Encodierung in 2 Durchgängen";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Additional video encoder options. For advanced use only.\n\nSyntax: option-1=foo:opt2=bar,baz"; ObjectID = "oJk-ur-wgc"; */
-"oJk-ur-wgc.ibShadowedToolTip" = "Zusätzliche Videoenkodiereinstellungen. Für erfahrene Anwender.\n\nSyntax: option-1=foo:opt2=bar,baz";
+"oJk-ur-wgc.ibShadowedToolTip" = "Zusätzliche Videoencodiereinstellungen. Für erfahrene Anwender.\n\nSyntax: option-1=foo:opt2=bar,baz";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the first pass of a 2-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
-"olm-zg-k9Y.ibShadowedToolTip" = "Der beschleunigte erste Durchgang beschleunigt die Enkodierung in zwei Durchgängen, ist aber mit einer etwas schlechteren Analyseleistung behaftet.";
+"olm-zg-k9Y.ibShadowedToolTip" = "Der beschleunigte erste Durchgang beschleunigt die Encodierung in zwei Durchgängen, ist aber mit einer etwas schlechteren Analyseleistung behaftet.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder level. Sets and ensures compliance with the specified video compression standard level. Overrides all other settings."; ObjectID = "P7c-Zk-G99"; */
-"P7c-Zk-G99.ibShadowedToolTip" = "Videoenkoderstufe. Garantiert die Erfüllung bestimmter Videostandardprofile. Überschreibt alle anderen Einstellungen.";
+"P7c-Zk-G99.ibShadowedToolTip" = "Videoencoderstufe. Garantiert die Erfüllung bestimmter Videostandardprofile. Überschreibt alle anderen Einstellungen.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "pPu-oR-2R8"; */
 "pPu-oR-2R8.title" = "OtherViews";
@@ -110,16 +107,16 @@
 "vSc-VB-NEv.title" = "Ersten Durchgang beschleunigen";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Displays all internal video encoder options."; ObjectID = "wk1-2U-z4i"; */
-"wk1-2U-z4i.ibShadowedToolTip" = "Zeigt alle internen Videoenkodiereinstellungen.";
+"wk1-2U-z4i.ibShadowedToolTip" = "Zeigt alle internen Videoencodiereinstellungen.";
 
 /* Class = "NSTextFieldCell"; title = "Encoder Options:"; ObjectID = "XIe-8Z-tIF"; */
-"XIe-8Z-tIF.title" = "Enkodereinstellungen:";
+"XIe-8Z-tIF.title" = "Encodereinstellungen:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Video encoder. Determines video type and settings used during encoding."; ObjectID = "xwK-Yu-a1e"; */
-"xwK-Yu-a1e.ibShadowedToolTip" = "Videoenkoder. Legt den Videotyp und die Einstellungen während des Enkodierens fest.";
+"xwK-Yu-a1e.ibShadowedToolTip" = "Videoencoder. Legt den Videotyp und die Einstellungen während des Encodierens fest.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering."; ObjectID = "z7F-H2-Vfr"; */
-"z7F-H2-Vfr.ibShadowedToolTip" = "Die Schnelle Dekodierung benutzt Einstellungen um die Prozessorauslastung beim Abspielen des enkodierten Videos zu reduzieren. Nützlich bei leistungsschwachen Abspielgeräten, bei denen das Video sonst nicht ruckelfrei läuft.";
+"z7F-H2-Vfr.ibShadowedToolTip" = "Die schnelle Decodierung benutzt Einstellungen um die Prozessorauslastung beim Abspielen des encodierten Videos zu reduzieren. Nützlich bei leistungsschwachen Abspielgeräten, bei denen das Video sonst nicht ruckelfrei läuft.";
 
 /* Class = "NSButtonCell"; title = "Constant Quality"; ObjectID = "ZjL-cY-O5f"; */
 "ZjL-cY-O5f.title" = "Konstante Qualität";

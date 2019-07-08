@@ -14,10 +14,10 @@
 "6lx-af-rBL.ibExternalAccessibilityDescription" = "Codec";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "6lx-af-rBL"; */
-"6lx-af-rBL.ibShadowedToolTip" = "Audioenkoder.";
+"6lx-af-rBL.ibShadowedToolTip" = "Audioencoder.";
 
 /* Class = "NSTextFieldCell"; title = "Audio encoder settings for each selected track:"; ObjectID = "007-WM-RmC"; */
-"007-WM-RmC.title" = "Audioenkodereinstellungen für jede ausgewählte Spur:";
+"007-WM-RmC.title" = "Audioencodereinstellungen für jede ausgewählte Spur:";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "7sl-o7-pUh"; */
 "7sl-o7-pUh.title" = "Text Cell";
@@ -26,7 +26,7 @@
 "8mC-Wx-myL.title" = "DTS";
 
 /* Class = "NSButtonCell"; title = "Use only first encoder for secondary audio"; ObjectID = "66v-2g-DHn"; */
-"66v-2g-DHn.title" = "Nur ersten Kodierer für sekundäres Audio verwenden";
+"66v-2g-DHn.title" = "Nur ersten Encoder für sekundäres Audio verwenden";
 
 /* Class = "NSTextFieldCell"; title = "Passthru Fallback:"; ObjectID = "AQe-Sg-Qgh"; */
 "AQe-Sg-Qgh.title" = "Passthru-Fallback:";
@@ -95,7 +95,7 @@
 "igm-hS-rrD.ibExternalAccessibilityDescription" = "Abmischung";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Mixdown type. Controls how multi-channel audio is mixed into fewer channels, or whether the original channels are preserved.\n\nDolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and matrix encode additional channels for surround reproduction on compatible equipment, while maintaining stereo compatibility."; ObjectID = "igm-hS-rrD"; */
-"igm-hS-rrD.ibShadowedToolTip" = "Abmischungstyp. Kontrolliert wie Mehrkanalaudio in weniger Kanäle gemischt wird oder ob die originalen Kanäle behalten werden.\n\nDolby Dolby Surround und Dolby Pro Logic II konvertiert Mehrkanalaudio in Stereo und enkodiert zusätzliche Kanäle für Surroundreproduktion auf kompatiblen Geräten, die Stereokompatibilität wird beibehalten.";
+"igm-hS-rrD.ibShadowedToolTip" = "Abmischungstyp. Kontrolliert wie Mehrkanalaudio in weniger Kanäle gemischt wird oder ob die originalen Kanäle behalten werden.\n\nDolby Dolby Surround und Dolby Pro Logic II konvertiert Mehrkanalaudio in Stereo und encodiert zusätzliche Kanäle für Surroundreproduktion auf kompatiblen Geräten, die Stereokompatibilität wird beibehalten.";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Enable this if your playback device supports DTS-HD. This permits DTS-HD passthru to be selected when automatic passthru selecion is enabled."; ObjectID = "IxI-o9-jMs"; */
 "IxI-o9-jMs.ibShadowedToolTip" = "Dies aktivieren, wenn das Abspielgerät DTS-HD unterstützt. Dies erlaubt das Durchschleifen von DTS-HD, wenn das automatische Durchschleifen aktiviert ist.";
@@ -116,7 +116,7 @@
 "Kwy-lU-VuU.title" = "OtherViews";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder to use when a track suitable for passthru is unavailable."; ObjectID = "LdN-Cx-ZJY"; */
-"LdN-Cx-ZJY.ibShadowedToolTip" = "Audioenkoder der verwendet werden soll, wenn eine Spur für das Durchschleifen (Passthru) nicht verfügbar ist.";
+"LdN-Cx-ZJY.ibShadowedToolTip" = "Audioencoder der verwendet werden soll, wenn eine Spur für das Durchschleifen (Passthru) nicht verfügbar ist.";
 
 /* Class = "NSButtonCell"; title = "DTS-HD"; ObjectID = "LX6-kc-5vq"; */
 "LX6-kc-5vq.title" = "DTS-HD";
@@ -185,7 +185,7 @@
 "u9h-dn-wcK.title" = "E-AC3";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Only the primary audio track will be encoded with the full encoder list. All additional audio tracks will be encoded with first encoder only."; ObjectID = "uF5-6E-EIe"; */
-"uF5-6E-EIe.ibShadowedToolTip" = "Nur die primäre Tonspur wird mit der kompletten Audioliste enkodiert. Alle zusätzlichen Tonspuren werden nur mit dem ersten Enkoder enkodiert.";
+"uF5-6E-EIe.ibShadowedToolTip" = "Nur die primäre Tonspur wird mit der kompletten Audioliste encodiert. Alle zusätzlichen Tonspuren werden nur mit dem ersten Encoder encodiert.";
 
 /* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "uFK-z7-8Yj"; */
 "uFK-z7-8Yj.title" = "Text Cell";

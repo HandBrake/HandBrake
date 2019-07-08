@@ -17,7 +17,7 @@
 "Jaw-pH-rhf.ibExternalAccessibilityDescription" = "Größenübersicht";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Optimize MP4 for progressive download. After encoding, data is reorganized and rewritten to allow immediate playback over a network, without needing to download the entire file."; ObjectID = "lUi-Oc-208"; */
-"lUi-Oc-208.ibShadowedToolTip" = "Optimiert MP4 für den schrittweißen Download. Nach der Enkodierung werden die Daten so umgeschrieben, dass ein direktes Abspielen übers Internet ermöglicht wird ohne den gesamten Film herunterladen zu müssen.";
+"lUi-Oc-208.ibShadowedToolTip" = "Optimiert MP4 für den schrittweißen Download. Nach der Encodierung werden die Daten so umgeschrieben, dass ein direktes Abspielen übers Internet ermöglicht wird ohne den gesamten Film herunterladen zu müssen.";
 
 /* Class = "NSView"; ibExternalAccessibilityDescription = "Preview"; ObjectID = "m5a-0z-QQ4"; */
 "m5a-0z-QQ4.ibExternalAccessibilityDescription" = "Vorschau";
