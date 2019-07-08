@@ -407,7 +407,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     {
         _ripToolbarItem.image = [NSImage imageNamed: @"encode"];
         _ripToolbarItem.label = _queue.pendingItemsCount > 0 ? NSLocalizedString(@"Start Queue", @"Toolbar Start/Stop Item") :  NSLocalizedString(@"Start", @"Toolbar Start/Stop Item");
-        _pauseToolbarItem.toolTip = NSLocalizedString(@"Start Encoding", @"Toolbar Start/Stop Item");
+        _ripToolbarItem.toolTip = NSLocalizedString(@"Start Encoding", @"Toolbar Start/Stop Item");
     }
 }
 
