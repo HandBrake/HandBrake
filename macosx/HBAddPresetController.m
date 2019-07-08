@@ -274,7 +274,7 @@ static NSTouchBarItemIdentifier HBTouchBarCancel = @"fr.handbrake.addToQueue";
     NSTouchBar *bar = [[NSTouchBar alloc] init];
     bar.delegate = self;
 
-    bar.defaultItemIdentifiers = @[HBTouchBarGroup, NSTouchBarItemIdentifierOtherItemsProxy];
+    bar.defaultItemIdentifiers = @[NSTouchBarItemIdentifierOtherItemsProxy, HBTouchBarGroup];
     bar.principalItemIdentifier = HBTouchBarGroup;
 
     return bar;
