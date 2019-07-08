@@ -2,10 +2,10 @@
 "12K-c3-Z7A.ibShadowedToolTip" = "Vorschau an den Bildschirm anpassen";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Encode and play a preview video using current settings."; ObjectID = "16b-R9-bBU"; */
-"16b-R9-bBU.ibShadowedToolTip" = "Enkodiert und zeigt eine Vorschau mit den momentanen Einstellungen.";
+"16b-R9-bBU.ibShadowedToolTip" = "Encodiert und zeigt eine Vorschau mit den momentanen Einstellungen.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Duration to encode in seconds."; ObjectID = "ASA-X8-16P"; */
-"ASA-X8-16P.ibShadowedToolTip" = "Dauer des Enkodierens in Sekunden";
+"ASA-X8-16P.ibShadowedToolTip" = "Dauer des Encodierens in Sekunden";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "KrC-nR-rYk"; */
 "KrC-nR-rYk.title" = "OtherViews";

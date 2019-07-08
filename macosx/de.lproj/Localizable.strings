@@ -20,10 +20,10 @@
 "(Modified)" = "(Modifiziert)";
 
 /* Queue status */
-"%d encode pending" = "%d Enkodierung anstehend";
+"%d encode pending" = "%d Encodierung anstehend";
 
 /* Queue status */
-"%d encodes pending" = "%d Enkodierungen anstehend";
+"%d encodes pending" = "%d Encodierungen anstehend";
 
 /* Destination same as source alert -> message
    File already exists alert -> message */
@@ -87,7 +87,7 @@
 "Choose" = "Auswählen";
 
 /* Queue Alert -> cancel rip first button */
-"Continue Encoding" = "Enkodierung fortsetzen";
+"Continue Encoding" = "Encodierung fortsetzen";
 
 /* Copy Protection Alert -> message */
 "Copy-Protected sources are not supported." = "Kopiergeschützte Quellen werden nicht unterstützt.";
@@ -121,16 +121,16 @@
 "Done" = "Fertig";
 
 /* Queue status */
-"Encode Canceled." = "Enkodierung abgebrochen.";
+"Encode Canceled." = "Encodierung abgebrochen.";
 
 /* Queue done notification failed message */
-"Encode failed" = "Enkodierung fehlgeschlagen";
+"Encode failed" = "Encodierung fehlgeschlagen";
 
 /* Queue status */
-"Encode Failed." = "Enkodierung fehlgeschlagen.";
+"Encode Failed." = "Encodierung fehlgeschlagen.";
 
 /* Queue status */
-"Encode Finished." = "Enkodierung beendet.";
+"Encode Finished." = "Encodierung beendet.";
 
 /* Export presets save panel title */
 "Export presets" = "Voreinstellungen exportieren";
@@ -151,7 +151,7 @@
 "HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake kann die Kombination aus Audio/Video/Kontainer-Format nicht wiedergeben. Soll es extern geöffnet werden?";
 
 /* Quit Alert -> informative text */
-"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Wenn Sie HandBrake nun beenden werden Ihre momentanen Enkodierungen beim nächsten Start wieder in die Warteschlange geladen. Wollen Sie trotzdem beenden?";
+"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Wenn Sie HandBrake nun beenden werden Ihre momentanen Encodierungen beim nächsten Start wieder in die Warteschlange geladen. Wollen Sie trotzdem beenden?";
 
 /* Import preset open panel title */
 "Import presets" = "Voreinstellungen importieren";
@@ -164,7 +164,7 @@
 
 /* Queue Edit Alert -> stop and edit first button
    Queue Stop Alert -> stop and remove first button */
-"Keep Encoding" = "Enkodierung beibehalten";
+"Keep Encoding" = "Encodierung beibehalten";
 
 /* Touch bar */
 "Live Preview" = "Live-Vorschau";
@@ -176,7 +176,7 @@
 "Move Jobs in Queue" = "Aufgaben zu Warteschlange hinzufügen";
 
 /* Queue status */
-"No encode pending" = "Keine Enkodierungen anstehend";
+"No encode pending" = "Keine Encodierungen anstehend";
 
 /* Preview -> accessibility label */
 "No image" = "Kein Bild";
@@ -211,10 +211,10 @@
 /* Queue -> pause/resume menu
    Toolbar Pause Item
    Touch bar */
-"Pause Encoding" = "Enkodierung anhalten";
+"Pause Encoding" = "Encodierung anhalten";
 
 /* Touch bar */
-"Pause/Resume Encoding" = "Enkodierung Pausieren/Fortsetzen";
+"Pause/Resume Encoding" = "Encodierung Pausieren/Fortsetzen";
 
 /* Video -> Framerate */
 "Peak Framerate (VFR)" = "Maximale Bildfrequenz (VFR)";
@@ -272,14 +272,14 @@
 
 /* Queue -> pause/resume men
    Toolbar Pause Item */
-"Resume Encoding" = "Enkodierung fortsetzen";
+"Resume Encoding" = "Encodierung fortsetzen";
 
 /* Picture HUD -> scale button
    Touch bar */
 "Scale To Screen" = "An Bildschirm anpassen";
 
 /* Queue Alert -> cancel rip informative text */
-"Select Continue Encoding to dismiss this dialog without making changes." = "Enkodierung fortsetzen wählen um diesen Dialog ohne weitere Änderungen zu schließen.";
+"Select Continue Encoding to dismiss this dialog without making changes." = "Encodierung fortsetzen wählen um diesen Dialog ohne weitere Änderungen zu schließen.";
 
 /* Preferences -> send to app destination open panel */
 "Select the desired external application" = "Die gewünschte externe Anwendung auswählen";
@@ -314,13 +314,13 @@
 /* Menu Start/Stop Item
    Queue -> start/stop menu
    Toolbar Start/Stop Item */
-"Start Encoding" = "Enkodierung starten";
+"Start Encoding" = "Encodierung starten";
 
 /* Toolbar Start/Stop Item */
 "Start Queue" = "Warteschlange starten";
 
 /* Touch bar */
-"Start/Stop Encoding" = "Enkodierung Starten/Abbrechen";
+"Start/Stop Encoding" = "Encodierung Starten/Abbrechen";
 
 /* Toolbar Start/Stop Item */
 "Stop" = "Stop";
@@ -333,28 +333,28 @@
 
 /* Queue -> start/stop menu
    Toolbar Start/Stop Item */
-"Stop Encoding" = "Enkodierung stoppen";
+"Stop Encoding" = "Encodierung stoppen";
 
 /* Queue Stop Alert -> stop and remove second button */
-"Stop Encoding and Delete" = "Enkodierung stoppen und löschen";
+"Stop Encoding and Delete" = "Encodierung stoppen und löschen";
 
 /* Queue Edit Alert -> stop and edit second button */
-"Stop Encoding and Edit" = "Enkodierung stoppen und ändern";
+"Stop Encoding and Edit" = "Encodierung stoppen und ändern";
 
 /* Queue Edit Alert -> stop and edit message */
-"Stop This Encode and Edit It?" = "Die Enkodierung stoppen und ändern?";
+"Stop This Encode and Edit It?" = "Die Encodierung stoppen und ändern?";
 
 /* Queue Stop Alert -> stop and remove message */
-"Stop This Encode and Remove It?" = "Die Enkodierung stoppen und entfernen?";
+"Stop This Encode and Remove It?" = "Die Encodierung stoppen und entfernen?";
 
 /* Player HUD -> subtitles menu */
 "Subtitles" = "Untertitel";
 
 /* Queue Done Alert -> shut down message */
-"The computer will shut down after encoding is done." = "Der Computer wird nach Beendigung der Enkodierung heruntergefahren.";
+"The computer will shut down after encoding is done." = "Der Computer wird nach Beendigung der Encodierung heruntergefahren.";
 
 /* Queue Done Alert -> sleep message */
-"The computer will sleep after encoding is done." = "Der Computer wird nach Beendigung der Enkodierung in den Ruhezustand versetzt.";
+"The computer will sleep after encoding is done." = "Der Computer wird nach Beendigung der Encodierung in den Ruhezustand versetzt.";
 
 /* Chapters import -> invalid CSV recovery suggestion */
 "The CSV file is not a valid chapters CSV file." = "Die CSV-Datei ist keine gültige Kapitel-Datei.";
@@ -394,16 +394,16 @@
 "Warning!" = "Warnung!";
 
 /* Queue Alert -> cancel rip message */
-"You are currently encoding. What would you like to do?" = "Sie sind momentan am enkodieren. Was wollen Sie tun?";
+"You are currently encoding. What would you like to do?" = "Sie sind momentan am encodieren. Was wollen Sie tun?";
 
 /* Delete preset alert -> informative text */
 "You can't undo this action." = "Diese Aktion kann nicht rückgängig gemacht werden.";
 
 /* Queue Done Alert -> shut down informative text */
-"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences." = "Sie haben ausgewählt den Computer nach der Enkodierung herunterzufahren. Um das Herunterfahren abzustellen gehen Sie in die HandBrake-Einstellungen.";
+"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences." = "Sie haben ausgewählt den Computer nach der Encodierung herunterzufahren. Um das Herunterfahren abzustellen gehen Sie in die HandBrake-Einstellungen.";
 
 /* Queue Done Alert -> sleep informative text */
-"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences." = "Sie haben ausgewählt den Computer nach der Enkodierung in den Ruhezustand zu setzen. Um den Ruhezustand abzustellen gehen Sie in die HandBrake-Einstellungen.";
+"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences." = "Sie haben ausgewählt den Computer nach der Encodierung in den Ruhezustand zu setzen. Um den Ruhezustand abzustellen gehen Sie in die HandBrake-Einstellungen.";
 
 /* Queue -> disk almost full alert informative text */
 "You need to make more space available on your destination disk." = "Der Speicherplatz auf dem Zielmedium ist nicht ausreichend.";
@@ -412,15 +412,15 @@
 "Your destination disk is almost full." = "Ihr Ziel-Speichermedium ist fast voll.";
 
 /* Queue done notification message */
-"Your encode %@ couldn't be completed." = "Die Enkodierung %@ konnte nicht ausgeführt werden.";
+"Your encode %@ couldn't be completed." = "Die Encodierung %@ konnte nicht ausgeführt werden.";
 
 /* Queue done notification message */
-"Your encode %@ is done!" = "Die Enkodierung %@ ist fertig!";
+"Your encode %@ is done!" = "Die Encodierung %@ ist fertig!";
 
 /* Queue done alert informative text */
-"Your HandBrake queue is done!" = "Alle Aufgaben in Ihrer HandBrake-Warteschlange wurde erfolgreich ausgeführt!";
+"Your HandBrake queue is done!" = "Alle Aufgaben in Ihrer HandBrake-Warteschlange wurden erfolgreich ausgeführt!";
 
 /* Queue Edit Alert -> stop and edit informative text
    Queue Stop Alert -> stop and remove informative text */
-"Your movie will be lost if you don't continue encoding." = "Ihr Film wird verloren gehen, wenn Sie die Enkodierung nicht fortsetzen.";
+"Your movie will be lost if you don't continue encoding." = "Ihr Film wird verloren gehen, wenn Sie die Encodierung nicht fortsetzen.";
 

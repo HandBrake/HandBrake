@@ -8,7 +8,7 @@
 "6rE-SM-AGi.title" = "Filter";
 
 /* Class = "NSMenuItem"; title = "Summary"; ObjectID = "9ie-b7-RaS"; */
-"9ie-b7-RaS.title" = "Zusammenfassung";
+"9ie-b7-RaS.title" = "Übersicht";
 
 /* Class = "NSMenu"; title = "MainMenu"; ObjectID = "29"; */
 "29.title" = "Hauptmenü";
@@ -146,7 +146,7 @@
 "1822.title" = "Einsetzen und Stil anpassen";
 
 /* Class = "NSMenuItem"; title = "Presets View"; ObjectID = "1884"; */
-"1884.title" = "Voreinstellungsansicht";
+"1884.title" = "Voreinstellungen";
 
 /* Class = "NSMenuItem"; title = "Presets"; ObjectID = "1948"; */
 "1948.title" = "Voreinstellungen";
@@ -176,13 +176,13 @@
 "2443.title" = "Zur Warteschlange hinzufügen";
 
 /* Class = "NSMenuItem"; title = "Start Encoding"; ObjectID = "2444"; */
-"2444.title" = "Enkodierung stoppen";
+"2444.title" = "Encodierung stoppen";
 
 /* Class = "NSMenuItem"; title = "Queue"; ObjectID = "2445"; */
 "2445.title" = "Warteschlange";
 
 /* Class = "NSMenuItem"; title = "Pause Encoding"; ObjectID = "2494"; */
-"2494.title" = "Enkodierung pausieren";
+"2494.title" = "Encodierung pausieren";
 
 /* Class = "NSMenuItem"; title = "Close Window"; ObjectID = "2508"; */
 "2508.title" = "Schließen";

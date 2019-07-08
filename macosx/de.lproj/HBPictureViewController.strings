@@ -26,7 +26,7 @@
 "9hH-As-JSa.ibExternalAccessibilityDescription" = "Speicherbreite";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video storage width. This is the number of pixels wide to be encoded. Storage width may differ from display width depending on anamorphic settings."; ObjectID = "9hH-As-JSa"; */
-"9hH-As-JSa.ibShadowedToolTip" = "Videospeicherbreite. Ist die Breite in Pixel in die das Video enkodiert werden soll. Diese Anzeigegröße kann von der Originalgröße abweichen, abhängig von den anamorphischen Einstellungen.";
+"9hH-As-JSa.ibShadowedToolTip" = "Videospeicherbreite. Ist die Breite in Pixel in die das Video encodiert werden soll. Diese Anzeigegröße kann von der Originalgröße abweichen, abhängig von den anamorphischen Einstellungen.";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Crop top"; ObjectID = "41c-48-2XJ"; */
 "41c-48-2XJ.ibExternalAccessibilityDescription" = "Oben beschneiden";
@@ -62,7 +62,7 @@
 "Hkl-7Z-J2e.ibExternalAccessibilityDescription" = "Speicherhöhe";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Video storage height. This is the number of pixels tall to be encoded. Storage height may differ from display height depending on anamorphic settings."; ObjectID = "Hkl-7Z-J2e"; */
-"Hkl-7Z-J2e.ibShadowedToolTip" = "Videospeicherhöhe. Die Anzahl der Pixel der Höhe in der das Video enkodiert wird. Diese Anzeigegröße kann von der Originalgröße abweichen, abhängig von den anamorphischen Einstellungen.";
+"Hkl-7Z-J2e.ibShadowedToolTip" = "Videospeicherhöhe. Die Anzahl der Pixel der Höhe in der das Video encodiert wird. Diese Anzeigegröße kann von der Originalgröße abweichen, abhängig von den anamorphischen Einstellungen.";
 
 /* Class = "NSTextFieldCell"; title = "x"; ObjectID = "hN1-S9-zl8"; */
 "hN1-S9-zl8.title" = "x";

@@ -1,12 +1,12 @@
 /* Video description */
-" - fastdecode" = "- Schnelldekodierung";
+" - fastdecode" = "- Schnelldecodierung";
 
 /* HBStateFormatter -> work time format */
-" (%.2f fps, avg %.2f fps, ETA %02d:%02d:%02d)" = " (%1$.2f BpS, im Mittel %2$.2f BpS, ETA %3$dh:%4$dmin:%5$dsec)";
+" (%.2f fps, avg %.2f fps, ETA %@)" = "(%1$.2f BpS, im Mittel %2$.2f BpS, ETA %3$@)";
 
 /* HBStateFormatter -> search time format
    HBStateFormatter -> work time format */
-" (ETA %02d:%02d:%02d)" = " (ETA %1$dh:%2$dmin:%3$dsec)";
+" (ETA %@)" = " (ETA %@)";
 
 /* Title description */
 " (Title %d, %@, %@) ▸ %@\n" = " (Titel %1$d, %2$@, %3$@) ▸ %4$@\n";
@@ -57,7 +57,7 @@
 "%.6g FPS" = "%.6g BpS";
 
 /* Audio description */
-"%@ ▸ Encoder: %@" = "%1$@ ▸ Enkodierer: %2$@";
+"%@ ▸ Encoder: %@" = "%1$@ ▸ Encoder: %2$@";
 
 /* HBPicture -> short info */
 "%@Output: %dx%d" = "%1$@Anzeige: %2$dx%3$d";
@@ -166,10 +166,10 @@
 "DRC: %.2f" = "DRC: %.2f";
 
 /* Video description */
-"Encoder: %@, " = "Enkodierer: %@,";
+"Encoder: %@, " = "Encoder: %@,";
 
 /* HBStateFormatter -> work pass display name */
-"Encoding %@ " = "Enkodiere %@";
+"Encoding %@ " = "Encodiere %@";
 
 /* Filters description */
 "Filters:" = "Filter:";
@@ -238,6 +238,12 @@
 /* HBJob -> invalid lapsharp custom settings error recovery suggestion */
 "Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap" = "Lapsharp-Syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp-Standard: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap";
 
+/* HBFilters -> invalid deblock custom string description */
+"Invalid deblock custom settings." = "Ungültige benutzerdefinierte Deblock-Einstellungen.";
+
+/* HBFilters -> invalid deblock custom string description */
+"Deblock syntax: strength=s:thresh=t:blocksize=b" = "Deblock-Syntax: strength=s:thresh=t:blocksize=b";
+
 /* Video description */
 "Level: %@" = "Level: %@";
 
@@ -259,13 +265,15 @@
 /* HBJob -> invalid name error recovery suggestion */
 "NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nDefault settings: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0" = "NLMeans-Syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nStandardeinstellungen: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0";
 
+/* HBVideo -> tune */
+"none" = "Keine";
+
 /* HBAudio -> none track name
    HBJob -> filters short description
    HBSubtitles -> none track name */
 "None" = "Ohne";
 
 /* HBFilters -> filter display name
-   HBFilters -> filter summary
    HBFilters -> off display name */
 "Off" = "Aus";
 
@@ -339,7 +347,10 @@
 "Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0" = "Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nStandardeinstellungen: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0";
 
 /* HBJob -> invalid name error recovery suggestion */
-"The file name can't contain the / character." = "Der Dateinamen darf kein Zeichen / enthalten.";
+"The file name can't be empty." = "Der Dateiname darf nicht leer sein.";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't contain the / character." = "Der Dateiname darf kein /-Zeichen enthalten.";
 
 /* Preset -> import error description */
 "The preset \"%@\" could not be imported." = "Die Voreinstellung \"%@\" konnte nicht importiert werden.";
@@ -374,6 +385,9 @@
 
 /* HBJob -> Format display name */
 "WebM File" = "WebM-Datei";
+
+/* HBFilters -> filter display name */
+"Yadif" = "Yadif";
 
 /* HBJob -> invalid Yadif custom settings error recovery suggestion */
 "Yadif syntax: mode=m:parity=p\n\nYadif default: mode=3" = "Yadif-Syntax: mode=m:parity=p\n\nYadif-Standardeinstellungen: mode=3";

@@ -5,7 +5,7 @@
 "2637.title" = "Anstehende Aufgaben";
 
 /* Class = "NSTextFieldCell"; title = "There are no jobs currently encoding"; ObjectID = "2647"; */
-"2647.title" = "Momentan stehen keine Enkodierungsaufgaben an";
+"2647.title" = "Momentan stehen keine Encodierungsaufgaben an";
 
 /* Class = "NSMenuItem"; title = "Edit Job Settings"; ObjectID = "2650"; */
 "2650.title" = "Aufgabeneinstellungen bearbeiten";
@@ -23,7 +23,7 @@
 "a3c-kV-98E.paletteLabel" = "Wenn fertig";
 
 /* Class = "NSToolbarItem"; toolTip = "Action to perform when encoding is complete."; ObjectID = "a3c-kV-98E"; */
-"a3c-kV-98E.toolTip" = "Aktion die ausgeführt werden soll, sobald die Enkodierung abgeschlossen ist.";
+"a3c-kV-98E.toolTip" = "Aktion die ausgeführt werden soll, sobald die Encodierung abgeschlossen ist.";
 
 /* Class = "NSMenuItem"; title = "Alert and Notification"; ObjectID = "aat-1N-Odn"; */
 "aat-1N-Odn.title" = "Hinweis mit Nachricht und Alarm";
@@ -59,7 +59,7 @@
 "s7o-pK-heI.paletteLabel" = "Pause/Fortfahren";
 
 /* Class = "NSToolbarItem"; toolTip = "Pause Encoding"; ObjectID = "s7o-pK-heI"; */
-"s7o-pK-heI.toolTip" = "Enkodierung anhalten";
+"s7o-pK-heI.toolTip" = "Encodierung anhalten";
 
 /* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "sm5-26-sAg"; */
 "sm5-26-sAg.title" = "Nichts machen";
@@ -71,7 +71,7 @@
 "SX6-mq-Hck.paletteLabel" = "Start/Abbrechen";
 
 /* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "SX6-mq-Hck"; */
-"SX6-mq-Hck.toolTip" = "Enkodierung starten";
+"SX6-mq-Hck.toolTip" = "Encodierung starten";
 
 /* Class = "NSMenuItem"; title = "Clear Selected Job"; ObjectID = "Wfz-Kj-Vtx"; */
 "Wfz-Kj-Vtx.title" = "Ausgewählte Aufgabe löschen";

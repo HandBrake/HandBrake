@@ -89,16 +89,16 @@
 "389.title" = "OtherViews";
 
 /* Class = "NSMenuItem"; title = "0.20"; ObjectID = "390"; */
-"390.title" = "0.20";
+"390.title" = "0,20";
 
 /* Class = "NSMenuItem"; title = "0.25"; ObjectID = "391"; */
-"391.title" = "0.25";
+"391.title" = "0,25";
 
 /* Class = "NSMenuItem"; title = "0.50"; ObjectID = "393"; */
-"393.title" = "0.50";
+"393.title" = "0,50";
 
 /* Class = "NSMenuItem"; title = "1.0"; ObjectID = "394"; */
-"394.title" = "1.0";
+"394.title" = "1,0";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments."; ObjectID = "395"; */
 "395.ibShadowedToolTip" = "Legt die Granularität des x264-Qualitätsreglers fest. Kleinere Werte erlauben feinere Einstellungen.";
@@ -185,7 +185,7 @@
 "c0L-TU-WML.title" = "Titelüberprüfung:";
 
 /* Class = "NSTextFieldCell"; title = "x264 Encoder:"; ObjectID = "cqp-xU-GOe"; */
-"cqp-xU-GOe.title" = "x264-Enkoder:";
+"cqp-xU-GOe.title" = "x264-Encoder:";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
 "dQ6-Dh-9sD.title" = "Labels in das Formatfenster ziehen um das Benennungsschema festzulegen.";
