@@ -224,13 +224,13 @@
 "Hzp-jb-hme.title" = "Darstellung";
 
 /* Class = "NSMenuItem"; title = "Show Toolbar"; ObjectID = "IsV-5A-bqx"; */
-"IsV-5A-bqx.title" = "Werkzeugleiste zeigen";
+"IsV-5A-bqx.title" = "Symbolleiste einblenden";
 
 /* Class = "NSMenuItem"; title = "Video"; ObjectID = "Jef-U4-eQT"; */
 "Jef-U4-eQT.title" = "Video";
 
 /* Class = "NSMenuItem"; title = "Customize Toolbar…"; ObjectID = "KKV-n0-Fmr"; */
-"KKV-n0-Fmr.title" = "Werkzeugleiste anpassen …";
+"KKV-n0-Fmr.title" = "Symbolleiste anpassen …";
 
 /* Class = "NSMenuItem"; title = "Chapters"; ObjectID = "lCU-PH-gal"; */
 "lCU-PH-gal.title" = "Kapitel";
