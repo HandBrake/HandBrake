@@ -620,6 +620,18 @@ void hb_display_job_info(hb_job_t *job)
                        subtitle->config.default_track ? ", Default" : "",
                        subtitle->config.offset, subtitle->config.src_codeset);
             }
+            else if (subtitle->source == IMPORTSSA)
+            {
+                /* For SSA, print offset */
+                hb_log(" * subtitle track %d, %s (track %d, id 0x%x, Text) -> "
+                       "%s%s, offset: %"PRId64,
+                       subtitle->out_track, subtitle->lang, subtitle->track,
+                       subtitle->id,
+                       subtitle->config.dest == RENDERSUB ? "Render/Burn-in"
+                                                          : "Passthrough",
+                       subtitle->config.default_track ? ", Default" : "",
+                       subtitle->config.offset);
+            }
             else
             {
                 hb_log(" * subtitle track %d, %s (track %d, id 0x%x, %s) -> "
