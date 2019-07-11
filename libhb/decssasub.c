@@ -40,6 +40,10 @@ struct hb_work_private_s
     // SSA Import
     FILE          * file;
     int             readOrder;
+
+    // Time of first desired subtitle adjusted by reader_pts_offset
+    uint64_t start_time;
+    uint64_t stop_time;
 };
 
 #define SSA_VERBOSE_PACKETS 0
@@ -110,6 +114,7 @@ static int extradataInit( hb_work_private_t * pv )
 static int decssaInit( hb_work_object_t * w, hb_job_t * job )
 {
     hb_work_private_t * pv;
+    int                 ii;
 
     pv              = calloc( 1, sizeof( hb_work_private_t ) );
     w->private_data = pv;
@@ -131,6 +136,42 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
         {
             goto fail;
         }
+    }
+
+    /*
+     * Figure out the start and stop times from the chapters being
+     * encoded - drop subtitle not in this range.
+     */
+    pv->start_time = 0;
+    for (ii = 1; ii < job->chapter_start; ++ii)
+    {
+        hb_chapter_t * chapter = hb_list_item(job->list_chapter, ii - 1);
+        if (chapter)
+        {
+            pv->start_time += chapter->duration;
+        } else {
+            hb_error("Could not locate chapter %d for SSA start time", ii);
+        }
+    }
+    pv->stop_time = pv->start_time;
+    for (ii = job->chapter_start; ii <= job->chapter_end; ++ii)
+    {
+        hb_chapter_t * chapter = hb_list_item(job->list_chapter, ii - 1);
+        if (chapter)
+        {
+            pv->stop_time += chapter->duration;
+        } else {
+            hb_error("Could not locate chapter %d for SSA start time", ii);
+        }
+    }
+
+    hb_deep_log(3, "SSA Start time %"PRId64", stop time %"PRId64,
+                pv->start_time, pv->stop_time);
+
+    if (job->pts_to_start != 0)
+    {
+        // Compute start_time after reader sets reader_pts_offset
+        pv->start_time = AV_NOPTS_VALUE;
     }
 
     return 0;
@@ -215,6 +256,12 @@ decode_line_to_mkv_ssa( hb_work_private_t * pv, char * line, int size )
 {
     hb_buffer_t * out;
 
+    // Trim trailing CR/LF
+    while (size > 0 && (line[size - 1] == '\n' || line[size - 1] == '\r'))
+    {
+        line[--size] = 0;
+    }
+
     int64_t start, stop;
     if (parse_timing(line, &start, &stop))
     {
@@ -267,10 +314,33 @@ decode_line_to_mkv_ssa( hb_work_private_t * pv, char * line, int size )
     out->s.duration     = stop - start;
     out->s.stop         = stop + pv->subtitle->config.offset * 90;
 
-    if( out->size == 0 )
+    if (out->size == 0)
     {
         hb_buffer_close(&out);
     }
+    else if (out->s.stop  <= pv->start_time ||
+             out->s.start >= pv->stop_time)
+    {
+        // Drop subtitles that end before the start time
+        // or start after the stop time
+        hb_deep_log(3, "Discarding SSA at time start %"PRId64", stop %"PRId64,
+                    out->s.start, out->s.stop);
+        hb_buffer_close(&out);
+    }
+    else
+    {
+        if (out->s.start < pv->start_time)
+        {
+            out->s.start = pv->start_time;
+        }
+        if (out->s.stop > pv->stop_time)
+        {
+            out->s.stop = pv->stop_time;
+        }
+        out->s.start -= pv->start_time;
+        out->s.stop  -= pv->start_time;
+    }
+
 
     free( layerField );
 
@@ -288,6 +358,20 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
 {
     hb_buffer_t * out;
 
+    if (pv->job->reader_pts_offset == AV_NOPTS_VALUE)
+    {
+        // We need to wait for reader to initialize it's pts offset so that
+        // we know where to start reading SSA.
+        return NULL;
+    }
+    if (pv->start_time == AV_NOPTS_VALUE)
+    {
+        pv->start_time = pv->job->reader_pts_offset;
+        if (pv->job->pts_to_stop > 0)
+        {
+            pv->stop_time = pv->job->pts_to_start + pv->job->pts_to_stop;
+        }
+    }
     while (!feof(pv->file))
     {
         char    * line = NULL;
@@ -323,10 +407,15 @@ static int decssaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     hb_work_private_t * pv =  w->private_data;
     hb_buffer_t       * in = *buf_in;
 
-    *buf_in = NULL;
+    *buf_in  = NULL;
+    *buf_out = NULL;
     if (in == NULL && pv->file != NULL)
     {
         in = ssa_read(pv);
+        if (in == NULL)
+        {
+            return HB_WORK_OK;
+        }
     }
     *buf_out = in;
     if (in->s.flags & HB_BUF_FLAG_EOF)
