@@ -1605,7 +1605,14 @@ static void OutputBuffer( sync_common_t * common )
                                       out_stream->frame_count);
                     out_stream->frame_count++;
                 }
-                if (buf->s.start < common->start_pts)
+                if (out_stream->type == SYNC_TYPE_SUBTITLE &&
+                    buf->s.stop > common->start_pts)
+                {
+                    // Subtitle ends after start time, keep sub and
+                    // adjust it's start time
+                    buf->s.start = common->start_pts;
+                }
+                else if (buf->s.start < common->start_pts)
                 {
                     out_stream->next_pts = buf->s.start + buf->s.duration;
                     hb_list_rem(out_stream->in_queue, buf);
@@ -2133,6 +2140,7 @@ static void QueueBuffer( sync_stream_t * stream, hb_buffer_t * buf )
         hb_job_t * job = stream->common->job;
         if (job->pts_to_start > 0)
         {
+            stream->common->start_pts    =
             stream->common->pts_to_start =
                 MAX(0, job->pts_to_start - job->reader_pts_offset);
         }

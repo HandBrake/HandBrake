@@ -493,13 +493,24 @@ static hb_buffer_t *srt_read( hb_work_private_t *pv )
                 uint64_t stop_time = ( pv->current_entry.stop +
                                        pv->subtitle->config.offset ) * 90;
 
-                if( !( start_time >= pv->start_time && stop_time < pv->stop_time ) )
+                // Drop subtitles that end before the start time
+                // or start after the stop time
+                if (stop_time  <= pv->start_time ||
+                    start_time >= pv->stop_time)
                 {
                     hb_deep_log( 3, "Discarding SRT at time start %"PRId64", stop %"PRId64, start_time, stop_time);
                     memset( &pv->current_entry, 0, sizeof( srt_entry_t ) );
                     ++(pv->number_of_entries);
                     pv->current_state = k_state_timecode;
                     continue;
+                }
+                if (start_time < pv->start_time)
+                {
+                    start_time = pv->start_time;
+                }
+                if (stop_time > pv->stop_time)
+                {
+                    stop_time = pv->stop_time;
                 }
 
                 for (q = p = pv->current_entry.text; *p != '\0'; p++)
