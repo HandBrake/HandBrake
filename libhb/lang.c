@@ -11,6 +11,10 @@
 #include <string.h>
 #include <ctype.h>
 
+// Fake iso639 entry to deal with selection of "any" language
+static iso639_lang_t lang_any =
+  { "Any", "", "", "any" };
+
 static const iso639_lang_t languages[] =
 { { "Unknown", "", "", "und" },
   { "Afar", "Qafar", "aa", "aar" },
@@ -207,21 +211,26 @@ const int lang_lookup_index( const char * str )
     int             ii = 0;
     const iso639_lang_t * lang;
 
-    // We use "Any" as a synonym for undefined
-    if (!strcasecmp("any", str))
+    // We use fake lang_any iso639 to designate a match for "Any" language
+    if ((lang_any.iso639_1    && !strcasecmp(lang_any.iso639_1,    str)) ||
+        (lang_any.iso639      && !strcasecmp(lang_any.iso639,      str)) ||
+        (lang_any.iso639_2    && !strcasecmp(lang_any.iso639_2,    str)) ||
+        (lang_any.iso639_2b   && !strcasecmp(lang_any.iso639_2b,   str)) ||
+        (lang_any.eng_name    && !strcasecmp(lang_any.eng_name,    str)) ||
+        (lang_any.native_name && !strcasecmp(lang_any.native_name, str)))
     {
-        return 0;
+        return -1;
     }
 
     for (ii = 0; languages[ii].eng_name; ii++)
     {
         lang = &languages[ii];
-        if ((lang->iso639_1    != NULL && !strcasecmp(lang->iso639_1,  str)) ||
-            (lang->iso639      != NULL && !strcasecmp(lang->iso639,    str)) ||
-            (lang->iso639_2    != NULL && !strcasecmp(lang->iso639_2,  str)) ||
-            (lang->iso639_2b   != NULL && !strcasecmp(lang->iso639_2b, str)) ||
-            (lang->eng_name    != NULL && !strcasecmp(lang->eng_name,  str)) ||
-            (lang->native_name != NULL && !strcasecmp(lang->native_name, str)))
+        if ((lang->iso639_1    && !strcasecmp(lang->iso639_1,    str)) ||
+            (lang->iso639      && !strcasecmp(lang->iso639,      str)) ||
+            (lang->iso639_2    && !strcasecmp(lang->iso639_2,    str)) ||
+            (lang->iso639_2b   && !strcasecmp(lang->iso639_2b,   str)) ||
+            (lang->eng_name    && !strcasecmp(lang->eng_name,    str)) ||
+            (lang->native_name && !strcasecmp(lang->native_name, str)))
         {
             return ii;
         }
@@ -237,6 +246,9 @@ const iso639_lang_t * lang_lookup( const char * str )
 
 const iso639_lang_t * lang_for_index( int index )
 {
+    if (index == -1)
+        return &lang_any;
+
     if (index < 0 || index >= lang_count)
         return NULL;
 
@@ -251,15 +263,21 @@ iso639_lang_t * lang_for_code( int code )
     code_string[0] = tolower( ( code >> 8 ) & 0xFF );
     code_string[1] = tolower( code & 0xFF );
 
-    for( lang = (iso639_lang_t*) languages; lang->eng_name; lang++ )
+    if ((lang_any.iso639_1 && !strncmp(lang_any.iso639_1, code_string, 2)) ||
+        (lang_any.iso639   && !strncmp(lang_any.iso639,   code_string, 2)))
     {
-        if( !strncmp( lang->iso639_1, code_string, 2 ) ||
-        	(lang->iso639 != NULL && !strncmp(lang->iso639, code_string, 2)) )
+        return &lang_any;
+    }
+    for (lang = (iso639_lang_t*) languages; lang->eng_name; lang++)
+    {
+        if ((lang->iso639_1 && !strncmp( lang->iso639_1, code_string, 2)) ||
+            (lang->iso639   && !strncmp(lang->iso639,    code_string, 2)))
         {
             return lang;
         }
     }
 
+    // Not found, return "Unknown"
     return (iso639_lang_t*) languages;
 }
 
@@ -273,18 +291,22 @@ iso639_lang_t * lang_for_code2( const char *code )
     code_string[2] = tolower( code[2] );
     code_string[3] = 0;
 
+    if ((lang_any.iso639_2  && !strcmp(lang_any.iso639_2,  code_string)) ||
+        (lang_any.iso639_2b && !strcmp(lang_any.iso639_2b, code_string)))
+    {
+        return &lang_any;
+    }
+
     for( lang = (iso639_lang_t*) languages; lang->eng_name; lang++ )
     {
-        if( !strcmp( lang->iso639_2, code_string ) )
-        {
-            return lang;
-        }
-        if( lang->iso639_2b && !strcmp( lang->iso639_2b, code_string ) )
+        if ((lang->iso639_2  && !strcmp(lang->iso639_2,  code_string)) ||
+            (lang->iso639_2b && !strcmp(lang->iso639_2b, code_string)))
         {
             return lang;
         }
     }
 
+    // Not found, return "Unknown"
     return (iso639_lang_t*) languages;
 }
 
@@ -302,20 +324,30 @@ iso639_lang_t * lang_for_english( const char * english )
 {
     iso639_lang_t * lang;
 
-    for( lang = (iso639_lang_t*) languages; lang->eng_name; lang++ )
+    if (!strcmp(lang_any.eng_name, english))
     {
-        if( !strcmp( lang->eng_name, english ) )
+        return &lang_any;
+    }
+    for (lang = (iso639_lang_t*) languages; lang->eng_name; lang++)
+    {
+        if (!strcmp(lang->eng_name, english))
         {
             return lang;
         }
     }
 
+    // Not found, return "Unknown"
     return (iso639_lang_t*) languages;
+}
+
+const iso639_lang_t* lang_get_any(void)
+{
+    return &lang_any;
 }
 
 const iso639_lang_t* lang_get_next(const iso639_lang_t *last)
 {
-    if (last == NULL)
+    if (last == NULL || last == &lang_any)
     {
         return (const iso639_lang_t*)languages;
     }
@@ -326,5 +358,4 @@ const iso639_lang_t* lang_get_next(const iso639_lang_t *last)
     }
     return ++last;
 }
-
 

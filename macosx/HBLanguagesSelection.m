@@ -68,8 +68,8 @@
         NSMutableArray<HBLang *> *internal = [[NSMutableArray alloc] init];
         NSMutableArray<HBLang *> *selected = [[NSMutableArray alloc] init];
 
-        const iso639_lang_t *lang = lang_get_next(NULL);
-        for (lang = lang_get_next(lang); lang != NULL; lang = lang_get_next(lang))
+        const iso639_lang_t *lang;
+        for (lang = lang_get_any(); lang != NULL; lang = lang_get_next(lang))
         {
             NSString *nativeLanguage = strlen(lang->native_name) ? @(lang->native_name) : @(lang->eng_name);
 
@@ -86,15 +86,6 @@
             }
             
         }
-
-        // Add the (Any) item.
-        HBLang *item = [[HBLang alloc] initWithLanguage:NSLocalizedString(@"(Any)", @"Language selection")
-                                            iso639_2code:@"und"];
-        if ([languages containsObject:item.iso639_2])
-        {
-            item.isSelected = YES;
-        }
-        [internal insertObject:item atIndex:0];
 
         // Insert the selected items
         // in the original order.
