@@ -263,8 +263,7 @@
                     sub_config.offset = subTrack.offset;
 
                     // we need to strncpy file name and codeset
-                    strncpy(sub_config.src_filename, subTrack.fileURL.fileSystemRepresentation, 255);
-                    sub_config.src_filename[255] = 0;
+                    sub_config.src_filename = subTrack.fileURL.fileSystemRepresentation;
                     strncpy(sub_config.src_codeset, subTrack.charCode.UTF8String, 39);
                     sub_config.src_codeset[39] = 0;
 
