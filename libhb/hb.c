@@ -365,7 +365,7 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
     hb_title_t * title;
 
     // Check if scanning is necessary.
-    if (!strcmp(h->title_set.path, path))
+    if (h->title_set.path != NULL && !strcmp(h->title_set.path, path))
     {
         // Current title_set path matches requested path.
         // Check if the requested title has already been scanned.
@@ -408,6 +408,8 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
         hb_list_rem( h->title_set.list_title, title );
         hb_title_close( &title );
     }
+    free((char*)h->title_set.path);
+    h->title_set.path = NULL;
 
     /* Print CPU info here so that it's in all scan and encode logs */
     const char *cpu_name = hb_get_cpu_name();
@@ -435,7 +437,8 @@ void hb_scan( hb_handle_t * h, const char * path, int title_index,
 
 void hb_force_rescan( hb_handle_t * h )
 {
-    h->title_set.path[0] = 0;
+    free((char*)h->title_set.path);
+    h->title_set.path = NULL;
 }
 
 /**
@@ -1642,6 +1645,8 @@ void hb_close( hb_handle_t ** _h )
         hb_title_close( &title );
     }
     hb_list_close( &h->title_set.list_title );
+    free((char*)h->title_set.path);
+    h->title_set.path = NULL;
 
     hb_list_close( &h->jobs );
     hb_lock_close( &h->state_lock );

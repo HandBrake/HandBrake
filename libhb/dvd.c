@@ -15,7 +15,7 @@
 #include "dvdread/ifo_print.h"
 #include "dvdread/nav_read.h"
 
-static hb_dvd_t    * hb_dvdread_init( hb_handle_t * h, char * path );
+static hb_dvd_t    * hb_dvdread_init( hb_handle_t * h, const char * path );
 static void          hb_dvdread_close( hb_dvd_t ** _d );
 static char        * hb_dvdread_name( char * path );
 static int           hb_dvdread_title_count( hb_dvd_t * d );
@@ -106,7 +106,7 @@ static char * hb_dvdread_name( char * path )
  ***********************************************************************
  *
  **********************************************************************/
-hb_dvd_t * hb_dvdread_init( hb_handle_t * h, char * path )
+hb_dvd_t * hb_dvdread_init( hb_handle_t * h, const char * path )
 {
     hb_dvd_t * e;
     hb_dvdread_t * d;
@@ -297,6 +297,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
     ifo_handle_t * vts = NULL;
     int            pgc_id, pgn, i;
     hb_chapter_t * chapter;
+    char           name[1024];
     unsigned char  unused[1024];
     const char   * codec_name;
 
@@ -305,8 +306,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
     title = hb_title_init( d->path, t );
     title->type = HB_DVD_TYPE;
 
-    if( DVDUDFVolumeInfo( d->reader, title->name, sizeof( title->name ),
-                          unused, sizeof( unused ) ) )
+    if( DVDUDFVolumeInfo(d->reader, name, sizeof(name), unused, sizeof(unused)))
     {
         char * p_cur, * p_last = d->path;
         for( p_cur = d->path; *p_cur; p_cur++ )
@@ -316,10 +316,14 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
                 p_last = &p_cur[1];
             }
         }
-        snprintf( title->name, sizeof( title->name ), "%s", p_last );
+        title->name = strdup(p_last);
         char *dot_term = strrchr(title->name, '.');
         if (dot_term)
             *dot_term = '\0';
+    }
+    else
+    {
+        title->name = strdup(name);
     }
 
     /* VTS which our title is in */
@@ -1275,6 +1279,7 @@ static void hb_dvdread_close( hb_dvd_t ** _d )
         DVDClose( d->reader );
     }
 
+    free( d->path );
     free( d );
     *_d = NULL;
 }
@@ -1357,7 +1362,7 @@ char * hb_dvd_name( char * path )
     return dvd_methods->name(path);
 }
 
-hb_dvd_t * hb_dvd_init( hb_handle_t * h, char * path )
+hb_dvd_t * hb_dvd_init( hb_handle_t * h, const char * path )
 {
     return dvd_methods->init(h, path);
 }

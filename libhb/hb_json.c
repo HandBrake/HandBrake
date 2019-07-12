@@ -903,11 +903,13 @@ char* hb_job_to_json( const hb_job_t * job )
 
 // These functions exist only to perform type checking when using
 // json_unpack_ex().
+typedef const char * const_str_t;
+
 static double*      unpack_f(double *f)     { return f; }
 static int*         unpack_i(int *i)        { return i; }
 static json_int_t*  unpack_I(json_int_t *i) { return i; }
 static int *        unpack_b(int *b)        { return b; }
-static const char** unpack_s(const char **s){ return s; }
+static const_str_t* unpack_s(const_str_t *s){ return s; }
 static json_t**     unpack_o(json_t** o)    { return o; }
 
 void hb_json_job_scan( hb_handle_t * h, const char * json_job )
@@ -1613,8 +1615,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             }
             else if (importfile != NULL)
             {
-                strncpy(sub_config.src_filename, importfile, 255);
-                sub_config.src_filename[255] = 0;
+                sub_config.src_filename = importfile;
 
                 const char * lang = "und";
                 const char * srtcodeset = "UTF-8";

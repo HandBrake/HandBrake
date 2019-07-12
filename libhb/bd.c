@@ -38,7 +38,7 @@ static int title_info_compare_mpls(const void *, const void *);
  ***********************************************************************
  *
  **********************************************************************/
-hb_bd_t * hb_bd_init( hb_handle_t *h, char * path )
+hb_bd_t * hb_bd_init( hb_handle_t *h, const char * path )
 {
     hb_bd_t * d;
     int ii;
@@ -281,14 +281,12 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
 
     if (d->disc_info->disc_name != NULL && d->disc_info->disc_name[0] != 0)
     {
-        strncpy(title->name, d->disc_info->disc_name, sizeof(title->name));
-        title->name[sizeof(title->name) - 1] = 0;
+        title->name = strdup(d->disc_info->disc_name);
     }
     else if (d->disc_info->udf_volume_id != NULL &&
              d->disc_info->udf_volume_id[0] != 0)
     {
-        strncpy(title->name, d->disc_info->udf_volume_id, sizeof(title->name));
-        title->name[sizeof(title->name) - 1] = 0;
+        title->name = strdup(d->disc_info->udf_volume_id);
     }
     else
     {
@@ -300,7 +298,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
                 p_last = &p_cur[1];
             }
         }
-        snprintf(title->name, sizeof( title->name ), "%s", p_last);
+        title->name = strdup(p_last);
         char *dot_term = strrchr(title->name, '.');
         if (dot_term)
             *dot_term = '\0';

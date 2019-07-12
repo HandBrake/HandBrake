@@ -96,7 +96,7 @@ union hb_dvd_s
 
 struct hb_dvd_func_s
 {
-    hb_dvd_t *    (* init)        ( hb_handle_t *, char * );
+    hb_dvd_t *    (* init)        ( hb_handle_t *, const char * );
     void          (* close)       ( hb_dvd_t ** );
     char        * (* name)        ( char * );
     int           (* title_count) ( hb_dvd_t * );

@@ -3681,7 +3681,7 @@ hb_title_t * hb_title_init( char * path, int index )
     t->list_subtitle      = hb_list_init();
     t->list_attachment    = hb_list_init();
     t->metadata           = hb_metadata_init();
-    strncat(t->path, path, sizeof(t->path) - 1);
+    t->path               = strdup(path);
     // default to decoding mpeg2
     t->video_id           = 0xE0;
     t->video_codec        = WORK_DECAVCODECV;
@@ -3738,7 +3738,9 @@ void hb_title_close( hb_title_t ** _t )
 
     hb_metadata_close( &t->metadata );
 
-    free( t->video_codec_name );
+    free((char*)t->name);
+    free((char*)t->path);
+    free(t->video_codec_name);
     free(t->container_name);
 
     free( t );
@@ -4804,6 +4806,10 @@ hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src)
             subtitle->extradata = malloc( src->extradata_size );
             memcpy( subtitle->extradata, src->extradata, src->extradata_size );
         }
+        if (src->config.src_filename)
+        {
+            subtitle->config.src_filename = strdup(src->config.src_filename);
+        }
     }
     return subtitle;
 }
@@ -4837,13 +4843,15 @@ hb_list_t *hb_subtitle_list_copy(const hb_list_t *src)
  **********************************************************************
  *
  *********************************************************************/
-void hb_subtitle_close( hb_subtitle_t **sub )
+void hb_subtitle_close( hb_subtitle_t **_sub )
 {
-    if ( sub && *sub )
+    hb_subtitle_t * sub = *_sub;
+    if ( _sub && sub )
     {
-        free ((*sub)->extradata);
-        free(*sub);
-        *sub = NULL;
+        free((char*)sub->config.src_filename);
+        free(sub->extradata);
+        free(sub);
+        *_sub = NULL;
     }
 }
 
@@ -4900,6 +4908,7 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
     // "track" in job->list_audio is an index into title->list_audio
     subtitle->track = track;
     subtitle->config = *subtitlecfg;
+    subtitle->config.src_filename = NULL;
     subtitle->out_track = hb_list_count(job->list_subtitle) + 1;
     hb_list_add(job->list_subtitle, subtitle);
     return 1;
@@ -4939,6 +4948,7 @@ int hb_import_subtitle_add( const hb_job_t * job,
     strcpy(subtitle->iso639_2, lang->iso639_2);
 
     subtitle->config = *subtitlecfg;
+    subtitle->config.src_filename = strdup(subtitlecfg->src_filename);
     hb_list_add(job->list_subtitle, subtitle);
 
     return 1;

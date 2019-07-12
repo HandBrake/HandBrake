@@ -813,7 +813,7 @@ static void prune_streams(hb_stream_t *d)
  *
  **********************************************************************/
 hb_stream_t *
-hb_stream_open(hb_handle_t *h, char *path, hb_title_t *title, int scan)
+hb_stream_open(hb_handle_t *h, const char *path, hb_title_t *title, int scan)
 {
     if (title == NULL)
     {
@@ -1052,9 +1052,11 @@ hb_title_t * hb_stream_title_scan(hb_stream_t *stream, hb_title_t * title)
     title->type = HB_STREAM_TYPE;
 
     // Copy part of the stream path to the title name
-    char *sep = hb_strr_dir_sep(stream->path);
+    char * name = stream->path;
+    char * sep  = hb_strr_dir_sep(stream->path);
     if (sep)
-        strcpy(title->name, sep+1);
+        name = sep + 1;
+    title->name = strdup(name);
     char *dot_term = strrchr(title->name, '.');
     if (dot_term)
         *dot_term = '\0';
@@ -5632,9 +5634,11 @@ static hb_title_t *ffmpeg_title_scan( hb_stream_t *stream, hb_title_t *title )
     title->type = HB_FF_STREAM_TYPE;
 
     // Copy part of the stream path to the title name
-    char *sep = hb_strr_dir_sep(stream->path);
+    char * name = stream->path;
+    char * sep = hb_strr_dir_sep(stream->path);
     if (sep)
-        strcpy(title->name, sep+1);
+        name = sep + 1;
+    title->name = strdup(name);
     char *dot_term = strrchr(title->name, '.');
     if (dot_term)
         *dot_term = '\0';
