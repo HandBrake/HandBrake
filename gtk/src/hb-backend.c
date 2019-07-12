@@ -2000,16 +2000,16 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
     (void)data; // Silence "unused variable" warning
     GtkTreeIter iter;
     GtkListStore *store;
-    gint ii;
 
     GtkComboBox *combo = GTK_COMBO_BOX(GHB_WIDGET(ud->builder, name));
     store = GTK_LIST_STORE(gtk_combo_box_get_model (combo));
     gtk_list_store_clear(store);
     const iso639_lang_t *iso639;
-    for (iso639 = lang_get_next(NULL), ii = 0; iso639 != NULL;
-         iso639 = lang_get_next(iso639), ii++)
+    for (iso639 = lang_get_next(NULL); iso639 != NULL;
+         iso639 = lang_get_next(iso639))
     {
-        gchar *lang;
+        int     index = lang_lookup_index(iso639->iso639_1);
+        gchar * lang;
 
         if (iso639->native_name[0] != 0)
             lang = g_strdup_printf("%s", iso639->native_name);
@@ -2021,7 +2021,7 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
                            0, lang,
                            1, TRUE,
                            2, iso639->iso639_2,
-                           3, (gdouble)ii,
+                           3, (gdouble)index,
                            -1);
         g_free(lang);
     }
@@ -3050,22 +3050,17 @@ void ghb_init_lang_list(GtkTreeView *tv, signal_user_data_t *ud)
 {
     GtkTreeIter    iter;
     GtkTreeStore * ts;
-    int            ii;
 
     ghb_init_lang_list_model(tv);
     ts = GTK_TREE_STORE(gtk_tree_view_get_model(tv));
 
     const iso639_lang_t *iso639;
-    for (iso639 = lang_get_next(NULL), ii = 0; iso639 != NULL;
-         iso639 = lang_get_next(iso639), ii++)
+    for (iso639 = lang_get_any(); iso639 != NULL;
+         iso639 = lang_get_next(iso639))
     {
+        int          index = lang_lookup_index(iso639->iso639_2);
         const char * lang;
-        if (ii == 0)
-        {
-            lang = _("Any");
-        }
-        else if (iso639->native_name != NULL &&
-                 iso639->native_name[0] != 0)
+        if (iso639->native_name != NULL && iso639->native_name[0] != 0)
         {
             lang = iso639->native_name;
         }
@@ -3074,7 +3069,7 @@ void ghb_init_lang_list(GtkTreeView *tv, signal_user_data_t *ud)
             lang = iso639->eng_name;
         }
         gtk_tree_store_append(ts, &iter, NULL);
-        gtk_tree_store_set(ts, &iter, 0, lang, 1, ii, -1);
+        gtk_tree_store_set(ts, &iter, 0, lang, 1, index, -1);
     }
 }
 

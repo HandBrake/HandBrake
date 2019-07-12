@@ -11,6 +11,7 @@
 #include "hb.h"
 #include "hb_dict.h"
 #include "plist.h"
+#include "lang.h"
 
 #if HB_PROJECT_FEATURE_QSV
 #include "qsv_common.h"
@@ -401,8 +402,9 @@ static hb_dict_t * source_audio_track_used(hb_dict_t *track_dict, int track)
 static int find_audio_track(const hb_title_t *title,
                             const char *lang, int start, int behavior)
 {
-    hb_audio_config_t * audio;
-    int ii, count;
+    hb_audio_config_t   * audio;
+    int                   ii, count;
+    const iso639_lang_t * lang_any = lang_get_any();
 
     count = hb_list_count(title->list_audio);
     for (ii = start; ii < count; ii++)
@@ -416,7 +418,8 @@ static int find_audio_track(const hb_title_t *title,
         if ((behavior == 2 ||
              audio->lang.attributes == HB_AUDIO_ATTR_NONE ||
              (audio->lang.attributes & HB_AUDIO_ATTR_REGULAR_MASK)) &&
-            (!strcmp(lang, audio->lang.iso639_2) || !strcmp(lang, "und")))
+            (!strcmp(lang, audio->lang.iso639_2) ||
+             !strcmp(lang, lang_any->iso639_2)))
         {
             return ii;
         }
@@ -861,11 +864,13 @@ int hb_preset_job_add_audio(hb_handle_t *h, int title_index,
         add_audio_for_lang(list, preset, title, mux, copy_mask, fallback,
                            lang, behavior, mode, track_dict);
     }
-    // If no audios found, try "und" language option
+    // If no audios found, try "any" language option
+    // This can happen if AudioLanguageList is empty or if no audio
+    // matches the users preferred languages in AudioLanguageList
     if (hb_value_array_len(list) <= 0)
     {
         add_audio_for_lang(list, preset, title, mux, copy_mask, fallback,
-                           "und", behavior, mode, track_dict);
+                           "any", behavior, mode, track_dict);
     }
     hb_dict_free(&track_dict);
     return 0;
@@ -875,14 +880,16 @@ int hb_preset_job_add_audio(hb_handle_t *h, int title_index,
 static int find_subtitle_track(const hb_title_t *title,
                                const char *lang, int start)
 {
-    hb_subtitle_t * subtitle;
-    int ii, count;
+    hb_subtitle_t       * subtitle;
+    int                   ii, count;
+    const iso639_lang_t * lang_any = lang_get_any();
 
     count = hb_list_count(title->list_subtitle);
     for (ii = start; ii < count; ii++)
     {
         subtitle = hb_list_item(title->list_subtitle, ii);
-        if (!strcmp(lang, subtitle->iso639_2) || !strcmp(lang, "und"))
+        if (!strcmp(lang, subtitle->iso639_2) ||
+            !strcmp(lang, lang_any->iso639_2))
         {
             return ii;
         }
@@ -1091,14 +1098,16 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
 
 
     // Add tracks for all languages in the language list
-    hb_value_array_t *lang_list = hb_dict_get(preset, "SubtitleLanguageList");
+    hb_value_array_t * lang_list = hb_dict_get(preset, "SubtitleLanguageList");
+    const iso639_lang_t * lang_any  = lang_get_any();
+    const char          * pref_lang = lang_any->iso639_2;
+
     count = hb_value_array_len(lang_list);
-    const char *pref_lang = "und";
     if (count > 0)
     {
         pref_lang = hb_value_get_string(hb_value_array_get(lang_list, 0));
     }
-    if (!strcmp(pref_lang, "und"))
+    if (!strcmp(pref_lang, lang_any->iso639_2))
     {
         if (first_audio_lang != NULL)
         {
@@ -1163,6 +1172,7 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
         }
         if (count <= 0)
         {
+            // No matching language.  Try "Unknown" language
             add_subtitle_for_lang(list, title, mux, "und", &behavior);
         }
     }
