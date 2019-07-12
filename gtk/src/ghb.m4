@@ -8560,7 +8560,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                     <property name="can_focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Custom Picture Dimensions&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Dimensions&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
                   </object>
                   <packing>
