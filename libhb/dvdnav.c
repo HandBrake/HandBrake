@@ -19,7 +19,7 @@
 #define DVD_READ_CACHE 1
 
 static char        * hb_dvdnav_name( char * path );
-static hb_dvd_t    * hb_dvdnav_init( hb_handle_t * h, char * path );
+static hb_dvd_t    * hb_dvdnav_init( hb_handle_t * h, const char * path );
 static int           hb_dvdnav_title_count( hb_dvd_t * d );
 static hb_title_t  * hb_dvdnav_title_scan( hb_dvd_t * d, int t, uint64_t min_duration );
 static int           hb_dvdnav_start( hb_dvd_t * d, hb_title_t *title, int chapter );
@@ -150,7 +150,7 @@ fail:
  ***********************************************************************
  *
  **********************************************************************/
-static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, char * path )
+static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, const char * path )
 {
     hb_dvd_t * e;
     hb_dvdnav_t * d;
@@ -458,7 +458,8 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
     hb_chapter_t     * chapter;
     hb_dvd_chapter_t * dvd_chapter;
     int                count;
-    const char       * name;
+    const char       * title_string;
+    char               name[1024];
     unsigned char      unused[1024];
     const char       * codec_name;
 
@@ -466,30 +467,33 @@ static hb_title_t * hb_dvdnav_title_scan( hb_dvd_t * e, int t, uint64_t min_dura
 
     title = hb_title_init( d->path, t );
     title->type = HB_DVD_TYPE;
-    if (dvdnav_get_title_string(d->dvdnav, &name) == DVDNAV_STATUS_OK)
+    if (dvdnav_get_title_string(d->dvdnav, &title_string) == DVDNAV_STATUS_OK)
     {
-        strncpy(title->name, name, sizeof(title->name) - 1);
-        title->name[sizeof(title->name) - 1] = 0;
+        title->name = strdup(title_string);
     }
 
-    if (strlen(title->name) == 0)
+    if (title->name == NULL || title->name[0] == 0)
     {
-        if( DVDUDFVolumeInfo( d->reader, title->name, sizeof( title->name ),
-                             unused, sizeof( unused ) ) )
+        free((char*)title->name);
+        if (DVDUDFVolumeInfo(d->reader, name, sizeof(name),
+                             unused, sizeof(unused)))
         {
-
-        char * p_cur, * p_last = d->path;
-        for( p_cur = d->path; *p_cur; p_cur++ )
-        {
-            if( IS_DIR_SEP(p_cur[0]) && p_cur[1] )
+            char * p_cur, * p_last = d->path;
+            for( p_cur = d->path; *p_cur; p_cur++ )
             {
-                p_last = &p_cur[1];
+                if( IS_DIR_SEP(p_cur[0]) && p_cur[1] )
+                {
+                    p_last = &p_cur[1];
+                }
             }
+            title->name = strdup(p_last);
+            char *dot_term = strrchr(title->name, '.');
+            if (dot_term)
+                *dot_term = '\0';
         }
-        snprintf( title->name, sizeof( title->name ), "%s", p_last );
-        char *dot_term = strrchr(title->name, '.');
-        if (dot_term)
-            *dot_term = '\0';
+        else
+        {
+            title->name = strdup(name);
         }
     }
 

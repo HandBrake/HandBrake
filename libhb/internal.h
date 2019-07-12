@@ -323,7 +323,7 @@ typedef struct hb_bd_s hb_bd_t;
 typedef union  hb_dvd_s hb_dvd_t;
 typedef struct hb_stream_s hb_stream_t;
 
-hb_dvd_t *   hb_dvd_init( hb_handle_t * h, char * path );
+hb_dvd_t *   hb_dvd_init( hb_handle_t * h, const char * path );
 int          hb_dvd_title_count( hb_dvd_t * );
 hb_title_t * hb_dvd_title_scan( hb_dvd_t *, int title, uint64_t min_duration );
 int          hb_dvd_start( hb_dvd_t *, hb_title_t *title, int chapter );
@@ -337,7 +337,7 @@ int          hb_dvd_angle_count( hb_dvd_t * d );
 void         hb_dvd_set_angle( hb_dvd_t * d, int angle );
 int          hb_dvd_main_feature( hb_dvd_t * d, hb_list_t * list_title );
 
-hb_bd_t     * hb_bd_init( hb_handle_t *h, char * path );
+hb_bd_t     * hb_bd_init( hb_handle_t *h, const char * path );
 int           hb_bd_title_count( hb_bd_t * d );
 hb_title_t  * hb_bd_title_scan( hb_bd_t * d, int t, uint64_t min_duration );
 int           hb_bd_start( hb_bd_t * d, hb_title_t *title );
@@ -353,7 +353,7 @@ int           hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title );
 
 hb_stream_t * hb_bd_stream_open( hb_handle_t *h, hb_title_t *title );
 void hb_ts_stream_reset(hb_stream_t *stream);
-hb_stream_t * hb_stream_open(hb_handle_t *h, char * path,
+hb_stream_t * hb_stream_open(hb_handle_t *h, const char * path,
                              hb_title_t *title, int scan);
 void		 hb_stream_close( hb_stream_t ** );
 hb_title_t * hb_stream_title_scan( hb_stream_t *, hb_title_t *);

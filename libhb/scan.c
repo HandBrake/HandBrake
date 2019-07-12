@@ -295,12 +295,12 @@ static void ScanFunc( void * _data )
     }
     if (hb_list_count(data->title_set->list_title) > 0)
     {
-        strncpy(data->title_set->path, data->path, 1024);
-        data->title_set->path[1023] = 0;
+        data->title_set->path = strdup(data->path);
     }
     else
     {
-        data->title_set->path[0] = 0;
+        free((char*)data->title_set->path);
+        data->title_set->path = NULL;
     }
 
 finish:

@@ -302,9 +302,9 @@ struct hb_subtitle_config_s
     const char * name;
 
     /* SRT subtitle tracks only */
-    char      src_filename[256];
-    char      src_codeset[40];
-    int64_t   offset;
+    const char * src_filename;
+    char         src_codeset[40];
+    int64_t      offset;
 };
 
 /*******************************************************************************
@@ -457,7 +457,7 @@ struct hb_title_set_s
 {
     hb_list_t   * list_title;
     int           feature;    // Detected DVD feature title
-    char          path[1024];
+    const char  * path;
 };
 
 typedef enum
@@ -1047,8 +1047,8 @@ struct hb_title_s
 {
     enum { HB_DVD_TYPE, HB_BD_TYPE, HB_STREAM_TYPE, HB_FF_STREAM_TYPE } type;
     uint32_t        reg_desc;
-    char            path[1024];
-    char            name[1024];
+    const char    * path;
+    const char    * name;
     int             index;
     int             playlist;
     int             angle_count;
