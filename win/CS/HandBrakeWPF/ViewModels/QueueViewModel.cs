@@ -248,8 +248,6 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        public bool IsInline { get; set; }
-
         public bool StatsVisible
         {
             get

@@ -16,8 +16,6 @@ namespace HandBrakeWPF.ViewModels.Interfaces
     /// </summary>
     public interface IQueueViewModel
     {
-        bool IsInline { set; }
-
         /// <summary>
         /// The when done action after a queue completes.
         /// </summary>

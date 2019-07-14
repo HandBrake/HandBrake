@@ -121,7 +121,6 @@
                             <CheckBox Content="{x:Static Properties:Resources.Options_ClearCompleted}" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_ShowStatusInTitleBar}" IsChecked="{Binding ShowStatusInTitleBar}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_ShowPreviewOnSummaryTab}" IsChecked="{Binding ShowPreviewOnSummaryTab}" />
-                            <CheckBox Content="{x:Static Properties:Resources.Options_ShowQueueInline}" IsChecked="{Binding ShowQueueInline}" />
                         </StackPanel>
 
 

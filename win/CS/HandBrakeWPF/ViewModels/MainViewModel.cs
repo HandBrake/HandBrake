@@ -1265,41 +1265,22 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void OpenQueueWindow()
         {
-            bool showQueueInline = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline) && VersionHelper.IsNightly();
-            this.QueueViewModel.IsInline = showQueueInline;
+            this.IsQueueShowingInLine = false;
+            this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
 
-            if (showQueueInline)
+            Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
+            if (window != null)
             {
-                this.IsQueueShowingInLine = !this.IsQueueShowingInLine;
-                if (this.IsQueueShowingInLine)
+                if (window.WindowState == WindowState.Minimized)
                 {
-                    this.QueueViewModel.Activate();
+                    window.WindowState = WindowState.Normal;
                 }
-                else
-                {
-                    this.QueueViewModel.Deactivate();
-                }
-                this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
+
+                window.Activate();
             }
             else
             {
-                this.IsQueueShowingInLine = false;
-                this.NotifyOfPropertyChange(() => this.IsQueueShowingInLine);
-
-                Window window = Application.Current.Windows.Cast<Window>().FirstOrDefault(x => x.GetType() == typeof(QueueView));
-                if (window != null)
-                {
-                    if (window.WindowState == WindowState.Minimized)
-                    {
-                        window.WindowState = WindowState.Normal;
-                    }
-
-                    window.Activate();
-                }
-                else
-                {
-                    this.windowManager.ShowWindow(IoC.Get<IQueueViewModel>());
-                }
+                this.windowManager.ShowWindow(IoC.Get<IQueueViewModel>());
             }
         }
 

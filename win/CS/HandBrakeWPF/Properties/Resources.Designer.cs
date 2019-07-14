@@ -2977,15 +2977,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show Queue in line with the main UI. (Experimental Feature).
-        /// </summary>
-        public static string Options_ShowQueueInline {
-            get {
-                return ResourceManager.GetString("Options_ShowQueueInline", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Show &apos;Add All to Queue&apos; on the toolbar.
         /// </summary>
         public static string Options_ShowToolbarAddAll {

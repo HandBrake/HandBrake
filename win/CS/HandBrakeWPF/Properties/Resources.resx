@@ -1300,9 +1300,6 @@ Would you like to overwrite it?</value>
   <data name="Options_ShowExperimentalQueueDesign" xml:space="preserve">
     <value>Show the new experimental queue design.</value>
   </data>
-  <data name="Options_ShowQueueInline" xml:space="preserve">
-    <value>Show Queue in line with the main UI. (Experimental Feature)</value>
-  </data>
   <data name="Options_TitleCase" xml:space="preserve">
     <value>Change case to Title Case</value>
   </data>

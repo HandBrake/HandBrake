@@ -53,7 +53,6 @@ namespace HandBrakeWPF
         public const string SaveLogWithVideo = "SaveLogWithVideo";
         public const string SaveLogCopyDirectory = "SaveLogCopyDirectory";
         public const string ClearCompletedFromQueue = "ClearCompletedFromQueue";
-        public const string ShowQueueInline = "ShowQueueInline";
         public const string ForcePresetReset = "ForcePresetReset";
         public const string PresetExpandedStateList = "PresetExpandedStateList";
         public const string ShowStatusInTitleBar = "ShowStatusInTitleBar";

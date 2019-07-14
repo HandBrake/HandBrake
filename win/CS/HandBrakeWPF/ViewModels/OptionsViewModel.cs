@@ -91,7 +91,6 @@ namespace HandBrakeWPF.ViewModels
         private bool removePunctuation;
         private bool resetWhenDoneAction;
         private bool enableQuickSyncDecoding;
-        private bool showQueueInline;
         private bool pauseOnLowDiskspace;
         private long pauseOnLowDiskspaceLevel;
         private bool useQsvDecodeForNonQsvEnc;
@@ -384,26 +383,6 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.whenDonePerformActionImmediately) return;
                 this.whenDonePerformActionImmediately = value;
                 this.NotifyOfPropertyChange(() => this.WhenDonePerformActionImmediately);
-            }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether show queue inline.
-        /// </summary>
-        public bool ShowQueueInline
-        {
-            get
-            {
-                return this.showQueueInline;
-            }
-            set
-            {
-                if (value == this.showQueueInline)
-                {
-                    return;
-                }
-                this.showQueueInline = value;
-                this.NotifyOfPropertyChange(() => this.ShowQueueInline);
             }
         }
 
@@ -1470,7 +1449,6 @@ namespace HandBrakeWPF.ViewModels
                 this.CheckForUpdatesFrequency = 1;
             }
 
-            this.ShowQueueInline = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowQueueInline);
             this.ShowStatusInTitleBar = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowStatusInTitleBar);
             this.ShowPreviewOnSummaryTab = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPreviewOnSummaryTab);
             this.ShowAddAllToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
@@ -1682,9 +1660,6 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.UiLanguage, this.SelectedLanguage?.Culture);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddAllToQueue, this.ShowAddAllToQueue);
             this.userSettingService.SetUserSetting(UserSettingConstants.ShowAddSelectionToQueue, this.ShowAddSelectionToQueue);
-
-            /* Experiments */
-            this.userSettingService.SetUserSetting(UserSettingConstants.ShowQueueInline, this.ShowQueueInline);
 
             /* When Done */
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenCompleteAction, (int)this.WhenDone);
