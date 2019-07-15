@@ -72,7 +72,7 @@
     "Preferences": {
         "ActivityFontSize": 8,
         "DiskFreeCheck": true,
-        "DiskFreeLimit": 10000,
+        "DiskFreeLimit": 2000,
         "RemoveFinishedJobs": false,
         "SyncTitleSettings": true,
         "AutoScan": false,
