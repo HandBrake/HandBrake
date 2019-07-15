@@ -860,11 +860,13 @@ int hb_preset_job_add_audio(hb_handle_t *h, int title_index,
         add_audio_for_lang(list, preset, title, mux, copy_mask, fallback,
                            lang, behavior, mode, track_dict);
     }
-    // If no audios found, try "und" language option
+    // If no audios found, try "any" language option
+    // This can happen if AudioLanguageList is empty or if no audio
+    // matches the users preferred languages in AudioLanguageList
     if (hb_value_array_len(list) <= 0)
     {
         add_audio_for_lang(list, preset, title, mux, copy_mask, fallback,
-                           "und", behavior, mode, track_dict);
+                           "any", behavior, mode, track_dict);
     }
     hb_dict_free(&track_dict);
     return 0;
@@ -1161,6 +1163,7 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
         }
         if (count <= 0)
         {
+            // No matching language.  Try "Unknown" language
             add_subtitle_for_lang(list, title, mux, "und", &behavior);
         }
     }
