@@ -950,6 +950,9 @@ struct hb_chapter_s
 #define HB_SUBTITLE_ATTR_PANSCAN    0x0200
 #define HB_SUBTITLE_ATTR_DEFAULT    0x0400
 
+#define HB_SUBTITLE_IMPORT_TAG      0xFF000000
+#define HB_SUBTITLE_EMBEDDED_CC_TAG 0xFE000000
+
 struct hb_subtitle_s
 {
     int  id;

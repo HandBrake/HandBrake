@@ -1069,7 +1069,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
 
                 subtitle        = calloc(sizeof( hb_subtitle_t ), 1);
                 subtitle->track = hb_list_count(pv->title->list_subtitle);
-                subtitle->id          = 0;
+                subtitle->id          = HB_SUBTITLE_EMBEDDED_CC_TAG;
                 subtitle->format      = TEXTSUB;
                 subtitle->source      = CC608SUB;
                 subtitle->config.dest = PASSTHRUSUB;
@@ -1529,7 +1529,8 @@ static int decavcodecvInit( hb_work_object_t * w, hb_job_t * job )
 
         while ((subtitle = hb_list_item(job->list_subtitle, i++)) != NULL)
         {
-            if (subtitle->source == CC608SUB)
+            if (subtitle->source == CC608SUB &&
+                subtitle->id == HB_SUBTITLE_EMBEDDED_CC_TAG)
             {
                 if (pv->list_subtitle == NULL)
                 {

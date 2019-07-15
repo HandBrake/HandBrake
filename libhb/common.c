@@ -4919,7 +4919,8 @@ int hb_import_subtitle_add( const hb_job_t * job,
         return 0;
     }
 
-    subtitle->id = (hb_list_count(job->list_subtitle) << 8) | 0xFF;
+    subtitle->id = (hb_list_count(job->list_subtitle) << 8) |
+                   HB_SUBTITLE_IMPORT_TAG;
     subtitle->format = TEXTSUB;
     subtitle->source = source;
     subtitle->codec = source == IMPORTSRT ? WORK_DECSRTSUB : WORK_DECSSASUB;

@@ -968,8 +968,8 @@ hb_stream_t * hb_bd_stream_open( hb_handle_t *h, hb_title_t *title )
     {
         // If the subtitle track is CC embedded in the video stream, then
         // it does not have an independent pid.  In this case, we assigned
-        // the subtitle->id to 0.
-        if (subtitle->id != 0)
+        // the subtitle->id to HB_SUBTITLE_EMBEDDED_CC_TAG.
+        if (subtitle->id != HB_SUBTITLE_EMBEDDED_CC_TAG)
         {
             pid = subtitle->id & 0xFFFF;
             stream_type = subtitle->stream_type;
