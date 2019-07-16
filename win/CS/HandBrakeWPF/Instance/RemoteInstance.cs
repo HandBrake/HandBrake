@@ -187,7 +187,7 @@ namespace HandBrakeWPF.Instance
                         fractionComplete: state.Working.Progress,
                         currentFrameRate: state.Working.Rate,
                         averageFrameRate: state.Working.RateAvg,
-                        estimatedTimeLeft: new TimeSpan(state.Working.Hours, state.Working.Minutes, state.Working.Seconds),
+                        estimatedTimeLeft: TimeSpan.FromSeconds(state.Working.ETASeconds),
                         passId: state.Working.PassID,
                         pass: state.Working.Pass,
                         passCount: state.Working.PassCount,

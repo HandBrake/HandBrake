@@ -2494,15 +2494,19 @@ namespace HandBrakeWPF.ViewModels
                 {
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
+                        string totalHrsLeft = string.Format("{0}:{1}:{2}", (int)e.EstimatedTimeLeft.TotalHours, e.EstimatedTimeLeft.Minutes, e.EstimatedTimeLeft.Seconds);
+                        string elapsedTimeHrs = string.Format("{0}:{1}:{2}", (int)e.ElapsedTime.TotalHours, e.ElapsedTime.Minutes, e.ElapsedTime.Seconds);
                         string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
+
                         if (e.IsSubtitleScan)
                         {
-                            this.ProgramStatusLabel = string.Format(Resources.MainViewModel_EncodeStatusChanged_SubScan_StatusLabel,
+                            this.ProgramStatusLabel = string.Format(
+                                Resources.MainViewModel_EncodeStatusChanged_SubScan_StatusLabel,
                                 e.Task,
                                 e.TaskCount,
                                 e.PercentComplete,
-                                e.EstimatedTimeLeft,
-                                e.ElapsedTime,
+                                totalHrsLeft,
+                                elapsedTimeHrs,
                                 jobsPending);
                         }
                         else if (e.IsMuxing)
@@ -2511,30 +2515,30 @@ namespace HandBrakeWPF.ViewModels
                         }
                         else if (e.IsSearching)
                         {
-                            this.ProgramStatusLabel = string.Format(Resources.MainView_ProgressStatusWithTask, Resources.MainView_Searching, e.PercentComplete, e.EstimatedTimeLeft, jobsPending);
+                            this.ProgramStatusLabel = string.Format(Resources.MainView_ProgressStatusWithTask, Resources.MainView_Searching, e.PercentComplete, totalHrsLeft, jobsPending);
                         }
                         else
                         {
-                            this.ProgramStatusLabel =
-                            string.Format(Resources.MainViewModel_EncodeStatusChanged_StatusLabel,
+                            this.ProgramStatusLabel = string.Format(
+                                Resources.MainViewModel_EncodeStatusChanged_StatusLabel,
                                 e.Task,
                                 e.TaskCount,
                                 e.PercentComplete,
                                 e.CurrentFrameRate,
                                 e.AverageFrameRate,
-                                e.EstimatedTimeLeft,
-                                e.ElapsedTime,
+                                totalHrsLeft,
+                                elapsedTimeHrs,
                                 jobsPending);
                         }
 
-                        if (lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
+                        if (this.lastEncodePercentage != percent && this.windowsSeven.IsWindowsSeven)
                         {
                             this.windowsSeven.SetTaskBarProgress(percent);
                         }
 
-                        lastEncodePercentage = percent;
+                        this.lastEncodePercentage = percent;
                         this.ProgressPercentage = percent;
-                        this.NotifyOfPropertyChange(() => ProgressPercentage);
+                        this.NotifyOfPropertyChange(() => this.ProgressPercentage);
 
                         if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowStatusInTitleBar))
                         {
