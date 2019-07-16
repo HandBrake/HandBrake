@@ -69,5 +69,10 @@ namespace HandBrake.Interop.Interop.Json.State
         /// Gets or sets the sequence id.
         /// </summary>
         public int SequenceID { get; set; }
+
+        /// <summary>
+        /// Gets total time remaining in seconds.
+        /// </summary>
+        public int ETASeconds { get; set; }
     }
 }
