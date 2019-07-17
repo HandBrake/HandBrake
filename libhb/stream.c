@@ -5455,6 +5455,13 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             subtitle->config.dest = RENDERSUB;
             subtitle->codec = WORK_DECPGSSUB;
             break;
+        case AV_CODEC_ID_EIA_608:
+            subtitle->format = TEXTSUB;
+            subtitle->source = CC608SUB;
+            subtitle->config.dest = PASSTHRUSUB;
+            subtitle->codec = WORK_DECCC608;
+            subtitle->attributes  = HB_SUBTITLE_ATTR_CC;
+            break;
         default:
             hb_log( "add_ffmpeg_subtitle: unknown subtitle stream type: 0x%x",
                     (int) codecpar->codec_id );
