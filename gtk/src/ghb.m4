@@ -7593,6 +7593,23 @@ filter_output([
                         <property name="position">4</property>
                       </packing>
                     </child>
+                    <child>
+                      <object class="GtkCheckButton" id="RemoveFinishedJobs">
+                        <property name="label" translatable="yes">Clear completed queue items after and encode completes</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="tooltip_text" translatable="yes">By default, completed jobs remain in the queue and are marked as complete.
+Check this if you want the queue to clean itself up by deleting completed jobs.</property>
+                        <property name="halign">start</property>
+                        <property name="margin-start">12</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
                   </object>
                 </child>
                 <child type="tab">
@@ -7919,25 +7936,6 @@ filter_output([
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkCheckButton" id="RemoveFinishedJobs">
-                            <property name="label" translatable="yes">Delete completed jobs from queue</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip_text" translatable="yes">By default, completed jobs remain in the queue and are marked as complete.
-Check this if you want the queue to clean itself up by deleting completed jobs.</property>
-                            <property name="halign">start</property>
-                            <property name="draw_indicator">True</property>
-                            <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="top_attach">7</property>
-                            <property name="left_attach">0</property>
-                            <property name="width">1</property>
-                            <property name="height">1</property>
-                          </packing>
-                        </child>
-                        <child>
                           <object class="GtkCheckButton" id="SyncTitleSettings">
                             <property name="label" translatable="yes">Use the same settings for all titles in a batch</property>
                             <property name="visible">True</property>
@@ -7952,7 +7950,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                             <signal name="toggled" handler="pref_changed_cb" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="top_attach">8</property>
+                            <property name="top_attach">7</property>
                             <property name="left_attach">0</property>
                             <property name="width">1</property>
                             <property name="height">1</property>
