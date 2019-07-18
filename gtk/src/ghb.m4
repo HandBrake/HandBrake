@@ -2824,6 +2824,7 @@ Modifications will be discarded.</property>
                 <property name="hexpand">True</property>
                 <property name="halign">GTK_ALIGN_FILL</property>
                 <property name="valign">GTK_ALIGN_START</property>
+                <property name="margin-top">12</property>
                 <property name="margin-start">12</property>
                 <property name="margin-end">12</property>
               </object>
