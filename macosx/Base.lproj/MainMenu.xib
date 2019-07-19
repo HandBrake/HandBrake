@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.68" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.68"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication">
@@ -123,12 +123,12 @@
                             </menuItem>
                             <menuItem title="Start Encoding" keyEquivalent="s" id="2444">
                                 <connections>
-                                    <action selector="rip:" target="-1" id="gca-l6-qac"/>
+                                    <action selector="toggleStartCancel:" target="-1" id="l0f-rM-50p"/>
                                 </connections>
                             </menuItem>
                             <menuItem title="Pause Encoding" keyEquivalent="p" id="2494">
                                 <connections>
-                                    <action selector="pause:" target="-1" id="tq4-oz-OV9"/>
+                                    <action selector="togglePauseResume:" target="-1" id="Di1-je-YJZ"/>
                                 </connections>
                             </menuItem>
                         </items>

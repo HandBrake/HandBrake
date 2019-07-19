@@ -6,6 +6,8 @@
 
 #import "HBAppDelegate.h"
 
+#import "HBQueue.h"
+
 #import "HBUtilities.h"
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
@@ -28,6 +30,8 @@
 @property (unsafe_unretained) IBOutlet NSMenu *presetsMenu;
 
 @property (nonatomic, strong) HBPreferencesController *preferencesController;
+
+@property (nonatomic, strong) HBQueue *queue;
 @property (nonatomic, strong) HBQueueController *queueController;
 
 @property (nonatomic, strong) HBOutputPanelController *outputPanel;
@@ -59,9 +63,10 @@
         _presetsManager = [[HBPresetsManager alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:PRESET_FILE]];
 
         // Queue
-        _queueController = [[HBQueueController alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:QUEUE_FILE]];
+        _queue = [[HBQueue alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:QUEUE_FILE]];
+        _queueController = [[HBQueueController alloc] initWithQueue:_queue];
         _queueController.delegate = self;
-        _mainController = [[HBController alloc] initWithQueue:_queueController presetsManager:_presetsManager];
+        _mainController = [[HBController alloc] initWithDelegate:self queue:_queue presetsManager:_presetsManager];
     }
     return self;
 }
@@ -116,13 +121,13 @@
     }
     else
     {
-        [self.queueController setEncodingJobsAsPending];
-        [self.queueController removeCompletedJobs];
+        [self.queue setEncodingJobsAsPending];
+        [self.queue removeCompletedAndCancelledItems];
     }
 
     // Now we re-check the queue array to see if there are
     // any remaining encodes to be done
-    if (self.queueController.count)
+    if (self.queue.items.count)
     {
         [self showMainWindow:self];
         [self showQueueWindow:self];
@@ -158,7 +163,7 @@
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)app
 {
-    if (self.queueController.core.state != HBStateIdle)
+    if (self.queue.isEncoding)
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"Are you sure you want to quit HandBrake?", @"Quit Alert -> message")];
@@ -192,6 +197,7 @@
 
     _mainController = nil;
     _queueController = nil;
+    _queue = nil;
 
     [HBCore closeGlobal];
 }
@@ -206,7 +212,7 @@
 {
     SEL action = menuItem.action;
 
-    if (action == @selector(rip:) || action == @selector(pause:))
+    if (action == @selector(toggleStartCancel:) || action == @selector(togglePauseResume:))
     {
         // Delegate the validation to the queue controller
         return [self.queueController validateMenuItem:menuItem];
@@ -281,21 +287,28 @@
     }
 }
 
-#pragma mark - Menu actions
+#pragma mark - Rescan job
 
-- (IBAction)rip:(id)sender
+- (void)openJob:(HBJob *)job completionHandler:(void (^)(BOOL result))handler
 {
-    [self.queueController rip:self];
+    [self.mainController openJob:job completionHandler:handler];
 }
 
-- (IBAction)pause:(id)sender
+#pragma mark - Menu actions
+
+- (IBAction)toggleStartCancel:(id)sender
 {
-    [self.queueController togglePauseResume:self];
+    [self.queueController toggleStartCancel:sender];
+}
+
+- (IBAction)togglePauseResume:(id)sender
+{
+    [self.queueController togglePauseResume:sender];
 }
 
 - (IBAction)browseSources:(id)sender
 {
-    [self.mainController browseSources:self];
+    [self.mainController browseSources:sender];
 }
 
 #pragma mark - Presets Menu actions
@@ -310,7 +323,7 @@
 
 - (IBAction)reloadPreset:(id)sender
 {
-    [self.mainController reloadPreset:self];
+    [self.mainController reloadPreset:sender];
 }
 
 #pragma mark - Show Window Menu Items
@@ -325,7 +338,7 @@
         _preferencesController = [[HBPreferencesController alloc] init];
     }
 
-    [self.preferencesController showWindow:self];
+    [self.preferencesController showWindow:sender];
 }
 
 /**
@@ -346,7 +359,7 @@
 
 - (IBAction)showPreviewWindow:(id)sender
 {
-    [self.mainController showPreviewWindow:self];
+    [self.mainController showPreviewWindow:sender];
 }
 
 /**

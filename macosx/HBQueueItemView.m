@@ -29,22 +29,11 @@
     [self HB_updateRightButton];
 
     self.removeButton.target = self;
-    self.expandButton.target = self;
-    self.expandButton.action = @selector(toggleHeight:);
 }
 
 - (void)HB_updateLabel
 {
-    if (_item.expanded)
-    {
-        self.textField.attributedStringValue = _item.attributedDescription;
-        self.expandButton.state = NSOnState;
-    }
-    else
-    {
-        self.textField.attributedStringValue = _item.attributedTitleDescription;
-        self.expandButton.state = NSOffState;
-    }
+    self.textField.stringValue = _item.outputFileName;
 }
 
 - (void)HB_updateState
@@ -112,18 +101,6 @@
 {
     [super setBackgroundStyle:backgroundStyle];
     [self HB_updateRightButton];
-}
-
-- (void)expand
-{
-    self.expandButton.state = NSOnState;
-    self.textField.attributedStringValue = _item.attributedDescription;
-}
-
-- (void)collapse
-{
-    self.expandButton.state = NSOffState;
-    self.textField.attributedStringValue = _item.attributedTitleDescription;
 }
 
 - (BOOL)isFlipped

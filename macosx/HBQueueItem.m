@@ -11,8 +11,8 @@
 @implementation HBQueueItem
 
 @synthesize job = _job;
-@synthesize attributedDescription = _attributedDescription;
 @synthesize attributedTitleDescription = _attributedTitleDescription;
+@synthesize attributedDescription = _attributedDescription;
 
 @synthesize uuid = _uuid;
 
@@ -49,20 +49,20 @@
     return _job.completeOutputURL;
 }
 
-- (NSAttributedString *)attributedDescription
-{
-    if (_attributedDescription == nil) {
-        _attributedDescription = _job.attributedDescription;
-    }
-    return _attributedDescription;
-}
-
 - (NSAttributedString *)attributedTitleDescription
 {
     if (_attributedTitleDescription == nil) {
         _attributedTitleDescription = _job.attributedTitleDescription;
     }
     return _attributedTitleDescription;
+}
+
+- (NSAttributedString *)attributedDescription
+{
+    if (_attributedDescription == nil) {
+        _attributedDescription = _job.attributedDescription;
+    }
+    return _attributedDescription;
 }
 
 #pragma mark - NSSecureCoding

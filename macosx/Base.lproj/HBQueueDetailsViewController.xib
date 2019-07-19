@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="HBQueueDetailsViewController">
+            <connections>
+                <outlet property="detailsLabel" destination="tBk-3B-YhZ" id="UvN-Op-Nf2"/>
+                <outlet property="scrollView" destination="jKW-nH-vE3" id="DWg-bJ-i8M"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="480" height="98"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Z14-gh-hWn">
+                    <rect key="frame" x="402" y="13" width="64" height="32"/>
+                    <buttonCell key="cell" type="push" title="Edit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="erY-5X-50l">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="editItem:" target="-2" id="ozj-G7-6d5"/>
+                        <binding destination="-2" name="enabled" keyPath="self.item" id="Nss-YT-PPX">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </button>
+                <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" horizontalScrollElasticity="none" translatesAutoresizingMaskIntoConstraints="NO" id="jKW-nH-vE3">
+                    <rect key="frame" x="20" y="61" width="440" height="17"/>
+                    <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="Nz1-nG-orF">
+                        <rect key="frame" x="0.0" y="0.0" width="440" height="17"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tBk-3B-YhZ">
+                                <rect key="frame" x="0.0" y="0.0" width="440" height="17"/>
+                                <textFieldCell key="cell" selectable="YES" allowsUndo="NO" title="Multiline Label" allowsEditingTextAttributes="YES" id="cFx-4D-4X9">
+                                    <font key="font" usesAppearanceFont="YES"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="tBk-3B-YhZ" secondAttribute="trailing" constant="2" id="Jct-L0-ooa"/>
+                            <constraint firstItem="tBk-3B-YhZ" firstAttribute="leading" secondItem="Nz1-nG-orF" secondAttribute="leading" constant="2" id="a3e-oE-U6F"/>
+                            <constraint firstItem="tBk-3B-YhZ" firstAttribute="top" secondItem="Nz1-nG-orF" secondAttribute="top" id="gKz-v4-CFb"/>
+                        </constraints>
+                    </clipView>
+                    <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="Lon-kY-Grs">
+                        <rect key="frame" x="-100" y="-100" width="444" height="16"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                    <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="NO" id="vPy-U2-zcL">
+                        <rect key="frame" x="429" y="1" width="16" height="17"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </scroller>
+                </scrollView>
+                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oq4-g0-srt">
+                    <rect key="frame" x="330" y="13" width="75" height="32"/>
+                    <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hgl-N3-x4S">
+                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                        <font key="font" metaFont="system"/>
+                    </buttonCell>
+                    <connections>
+                        <action selector="resetItem:" target="-2" id="42R-t4-FxO"/>
+                        <binding destination="-2" name="enabled" keyPath="self.item" id="L2a-Rh-3D1">
+                            <dictionary key="options">
+                                <string key="NSValueTransformerName">NSIsNotNil</string>
+                            </dictionary>
+                        </binding>
+                    </connections>
+                </button>
+            </subviews>
+            <constraints>
+                <constraint firstItem="Z14-gh-hWn" firstAttribute="leading" secondItem="oq4-g0-srt" secondAttribute="trailing" constant="9" id="3oM-tb-KiT"/>
+                <constraint firstItem="oq4-g0-srt" firstAttribute="firstBaseline" secondItem="Z14-gh-hWn" secondAttribute="firstBaseline" id="95H-sb-RO5"/>
+                <constraint firstAttribute="trailing" secondItem="jKW-nH-vE3" secondAttribute="trailing" constant="20" id="Cdo-eU-VL6"/>
+                <constraint firstAttribute="bottom" secondItem="Z14-gh-hWn" secondAttribute="bottom" constant="20" id="CwL-gc-KKJ"/>
+                <constraint firstItem="Z14-gh-hWn" firstAttribute="top" secondItem="jKW-nH-vE3" secondAttribute="bottom" constant="20" id="TC5-6s-DmD"/>
+                <constraint firstItem="jKW-nH-vE3" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="20" id="TWB-aM-yau"/>
+                <constraint firstAttribute="trailing" secondItem="Z14-gh-hWn" secondAttribute="trailing" constant="20" id="tSm-Qq-U0q"/>
+                <constraint firstItem="jKW-nH-vE3" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" id="zXd-jW-bKU"/>
+            </constraints>
+            <point key="canvasLocation" x="140" y="306.5"/>
+        </customView>
+    </objects>
+</document>

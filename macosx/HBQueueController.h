@@ -10,36 +10,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class HBAppDelegate;
 @class HBController;
-@class HBOutputPanelController;
-@class HBCore;
-@class HBJob;
+@class HBQueue;
 
 @interface HBQueueController : NSWindowController <NSToolbarDelegate, NSWindowDelegate>
 
-- (instancetype)initWithURL:(NSURL *)queueURL;
+- (instancetype)initWithQueue:(HBQueue *)queue;
 
-/// The HBCore used for encoding.
-@property (nonatomic, readonly) HBCore *core;
+@property (nonatomic, readonly) HBQueue *queue;
 
-@property (nonatomic, assign, nullable) HBController *controller;
 @property (nonatomic, weak, nullable) HBAppDelegate *delegate;
 
-@property (nonatomic, readonly) NSUInteger count;
-@property (nonatomic, readonly) NSUInteger pendingItemsCount;
-
-- (void)addJob:(HBJob *)item;
-- (void)addJobsFromArray:(NSArray<HBJob *> *)items;
-
-- (BOOL)jobExistAtURL:(NSURL *)url;
-
-- (void)removeAllJobs;
-- (void)removeCompletedJobs;
-
-- (void)setEncodingJobsAsPending;
-
-- (IBAction)rip:(id)sender;
-- (IBAction)cancelRip:(id)sender;
-
+- (IBAction)toggleStartCancel:(id)sender;
 - (IBAction)togglePauseResume:(id)sender;
 
 @end

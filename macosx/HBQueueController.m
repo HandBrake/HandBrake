@@ -6,110 +6,63 @@
 
 #import "HBQueueController.h"
 
-#import "HBQueueItem.h"
-
-#import "HBController.h"
 #import "HBAppDelegate.h"
 
-#import "HBTableView.h"
-#import "HBQueueItemView.h"
-
-#import "NSArray+HBAdditions.h"
-#import "HBUtilities.h"
+#import "HBQueue.h"
+#import "HBQueueTableViewController.h"
+#import "HBQueueDetailsViewController.h"
 
 #import "HBDockTile.h"
-
-#import "HBOutputRedirect.h"
-#import "HBJobOutputFileWriter.h"
 #import "HBPreferencesController.h"
+#import "NSArray+HBAdditions.h"
 
 @import HandBrakeKit;
 
-// Pasteboard type for or drag operations
-#define DragDropSimplePboardType    @"HBQueueCustomTableViewPboardType"
-
-// DockTile update frequency in total percent increment
-#define dockTileUpdateFrequency     0.1f
-
 static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
-@interface HBQueueController () <NSTableViewDataSource, HBTableViewDelegate, HBQueueItemViewDelegate, NSUserNotificationCenterDelegate>
+@interface HBQueueController () <NSUserNotificationCenterDelegate, HBQueueTableViewControllerDelegate, HBQueueDetailsViewControllerDelegate>
+
+@property (weak) IBOutlet NSSplitView *splitView;
+@property (nonatomic) NSSplitViewController *splitViewController;
+@property (nonatomic) HBQueueTableViewController *tableViewController;
+@property (nonatomic) HBQueueDetailsViewController *detailsViewController;
 
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly
 @property (nonatomic) BOOL visible;
 
-// Progress
-@property (nonatomic, strong) NSAttributedString *progressInfo;
-@property (nonatomic, strong) NSDictionary *monospacedAttr;
-
 @property (nonatomic, readonly) HBDockTile *dockTile;
-@property (nonatomic, readwrite) double dockIconProgress;
-
-@property (unsafe_unretained) IBOutlet NSTextField *progressTextField;
-@property (unsafe_unretained) IBOutlet NSTextField *countTextField;
-@property (unsafe_unretained) IBOutlet HBTableView *tableView;
+@property (nonatomic) double dockIconProgress;
 
 @property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
 
-@property (nonatomic) NSTableCellView *dummyCell;
-@property (nonatomic) NSLayoutConstraint *dummyCellWidth;
-
-@property (nonatomic, readonly) HBDistributedArray<HBQueueItem *> *items;
-
-@property (nonatomic) HBQueueItem *currentItem;
-@property (nonatomic) HBJobOutputFileWriter *currentLog;
-
-@property (nonatomic, readwrite) BOOL stop;
-
-@property (nonatomic, readwrite) NSUInteger pendingItemsCount;
-@property (nonatomic, readwrite) NSUInteger completedItemsCount;
-
-@property (nonatomic) NSArray<HBQueueItem *> *dragNodesArray;
-
 @end
 
 @interface HBQueueController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
-- (void)_touchBar_updateButtonsStateForQueueCore:(HBState)state;
+- (void)_touchBar_updateButtonsState;
 - (void)_touchBar_validateUserInterfaceItems;
 @end
 
 @implementation HBQueueController
 
-- (instancetype)initWithURL:(NSURL *)queueURL;
+- (instancetype)initWithQueue:(HBQueue *)queue
 {
-    NSParameterAssert(queueURL);
+    NSParameterAssert(queue);
 
     if (self = [super initWithWindowNibName:@"Queue"])
     {
         // Load the dockTile and instiante initial text fields
-        _dockTile = [[HBDockTile alloc] initWithDockTile:[[NSApplication sharedApplication] dockTile]
-                                                  image:[[NSApplication sharedApplication] applicationIconImage]];
+        _dockTile = [[HBDockTile alloc] initWithDockTile:NSApplication.sharedApplication.dockTile
+                                                  image:NSApplication.sharedApplication.applicationIconImage];
 
-        NSInteger loggingLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"LoggingLevel"];
+        // Init state
+        _queue = queue;
 
-        // Init a separate instance of libhb for the queue
-        _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
-        _core.automaticallyPreventSleep = NO;
-
-        // Progress
-        _monospacedAttr = @{NSFontAttributeName: [NSFont monospacedDigitSystemFontOfSize:[NSFont smallSystemFontSize] weight:NSFontWeightRegular]};
-        _progressInfo = [[NSAttributedString alloc] initWithString:@""];
-
-        // Load the queue from disk.
-        _items = [[HBDistributedArray alloc] initWithURL:queueURL class:[HBQueueItem class]];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadQueue) name:HBDistributedArrayChanged object:_items];
-
-        [NSUserNotificationCenter defaultUserNotificationCenter].delegate = self;
+        NSUserNotificationCenter.defaultUserNotificationCenter.delegate = self;
     }
 
     return self;
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)windowDidLoad
@@ -119,33 +72,116 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         self.window.tabbingMode = NSWindowTabbingModeDisallowed;
     }
 
-    // lets setup our queue list table view for drag and drop here
-    [self.tableView registerForDraggedTypes:@[DragDropSimplePboardType]];
-    [self.tableView setDraggingSourceOperationMask:NSDragOperationEvery forLocal:YES];
-    [self.tableView setVerticalMotionCanBeginDrag:YES];
+    _queue.undoManager = self.window.undoManager;
 
-    [self updateQueueStats];
+    // Set up the child view controllers
+    _splitViewController = [[NSSplitViewController alloc] init];
+    _splitViewController.splitView = _splitView;
+    _splitViewController.view.wantsLayer = YES;
+    _splitViewController.splitView.vertical = YES;
+    _splitViewController.splitView.autosaveName = @"HBQueueSplitViewAutosave";
+    _splitViewController.splitView.identifier = @"HBQueueSplitViewIdentifier";
 
-    [self.core addObserver:self forKeyPath:@"state"
+    _tableViewController = [[HBQueueTableViewController alloc] initWithQueue:self.queue delegate:self];
+    _detailsViewController = [[HBQueueDetailsViewController alloc] initWithDelegate:self];
+
+    NSSplitViewItem *tableItem = [NSSplitViewItem splitViewItemWithViewController:_tableViewController];
+    tableItem.minimumThickness = 160;
+
+    [_splitViewController addSplitViewItem:tableItem];
+
+    NSSplitViewItem *detailsItem = [NSSplitViewItem splitViewItemWithViewController:_detailsViewController];
+    detailsItem.canCollapse = YES;
+    detailsItem.minimumThickness = 240;
+
+    [_splitViewController addSplitViewItem:detailsItem];
+
+    self.window.contentViewController = _splitViewController;
+
+    self.window.frameAutosaveName = @"HBQueueWindowFrameAutosave";
+    [self.window setFrameFromString: @"HBQueueWindowFrameAutosave"];
+
+    // Set up observers
+    [self.queue.core addObserver:self forKeyPath:@"state"
                          options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                          context:HBControllerQueueCoreContext];
-    [self addObserver:self forKeyPath:@"pendingItemsCount"
+    [self.queue addObserver:self forKeyPath:@"pendingItemsCount"
                    options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                    context:HBControllerQueueCoreContext];
+
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueLowSpaceAlertNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        [self queueLowDiskSpaceAlert];
+    }];
+
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        // Since there are no more items to encode, go to queueCompletedAlerts
+        // for user specified alerts after queue completed
+        [self queueCompletedAlerts];
+    }];
+
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueProgressNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        // Update dock icon
+        double progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
+        double hours = 1;
+        double minutes = 1;
+        double seconds = 1;
+
+#define dockTileUpdateFrequency 0.1f
+
+        if (self.dockIconProgress < 100.0 * progress)
+        {
+            [self.dockTile updateDockIcon:progress hours:hours minutes:minutes seconds:seconds];
+            self.dockIconProgress += dockTileUpdateFrequency;
+        }
+    }];
+
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        // Restore dock icon
+        [self.dockTile updateDockIcon:-1.0 withETA:@""];
+        self.dockIconProgress = 0;
+
+        // Run the per item notification and actions
+        HBQueueItem *item = note.userInfo[HBQueueDidCompleteItemNotificationItemKey];
+        if (item.state == HBQueueItemStateCompleted)
+        {
+            [self sendToExternalApp:item];
+        }
+
+        if (item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateFailed)
+        {
+            [self itemCompletedAlerts:item];
+        }
+    }];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (context == HBControllerQueueCoreContext)
     {
-        HBState state = self.core.state;
-        [self updateToolbarButtonsStateForQueueCore:state];
+        [self updateToolbarButtonsState];
         [self.window.toolbar validateVisibleItems];
+
         if (@available(macOS 10.12.2, *))
         {
-            [self _touchBar_updateButtonsStateForQueueCore:state];
+            [self _touchBar_updateButtonsState];
             [self _touchBar_validateUserInterfaceItems];
         }
+
+        NSString *string;
+        if (self.queue.pendingItemsCount == 0)
+        {
+            string = NSLocalizedString(@"No encode pending", @"Queue status");
+        }
+        else if (self.queue.pendingItemsCount == 1)
+        {
+            string = [NSString stringWithFormat: NSLocalizedString(@"%d encode pending", @"Queue status"), self.queue.pendingItemsCount];
+        }
+        else
+        {
+            string = [NSString stringWithFormat: NSLocalizedString(@"%d encodes pending", @"Queue status"), self.queue.pendingItemsCount];
+        }
+
+        self.window.title = [NSString stringWithFormat: NSLocalizedString(@"Queue (%@)", @"Queue window title"), string];
     }
     else
     {
@@ -155,9 +191,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 #pragma mark Toolbar
 
-- (void)updateToolbarButtonsStateForQueueCore:(HBState)state
+- (void)updateToolbarButtonsState
 {
-    if (state == HBStatePaused)
+    if (self.queue.canResume)
     {
         _pauseToolbarItem.image = [NSImage imageNamed: @"encode"];
         _pauseToolbarItem.label = NSLocalizedString(@"Resume", @"Toolbar Pause Item");
@@ -170,7 +206,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         _pauseToolbarItem.toolTip = NSLocalizedString(@"Pause Encoding", @"Toolbar Pause Item");
 
     }
-    if (state == HBStateScanning || state == HBStateWorking || state == HBStateSearching || state == HBStateMuxing || state == HBStatePaused)
+    if (self.queue.isEncoding)
     {
         _ripToolbarItem.image = [NSImage imageNamed:@"stopencode"];
         _ripToolbarItem.label = NSLocalizedString(@"Stop", @"Toolbar Start/Stop Item");
@@ -188,25 +224,23 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 {
     SEL action = menuItem.action;
 
-    if (action == @selector(rip:))
+    if (action == @selector(toggleStartCancel:))
     {
-        if (self.core.state == HBStateIdle)
-        {
-            menuItem.title = NSLocalizedString(@"Start Encoding", @"Queue -> start/stop menu");
-
-            return (self.pendingItemsCount > 0);
-        }
-        else if (self.core.state != HBStateIdle)
+        if (self.queue.isEncoding)
         {
             menuItem.title = NSLocalizedString(@"Stop Encoding", @"Queue -> start/stop menu");
-
             return YES;
+        }
+        else
+        {
+            menuItem.title = NSLocalizedString(@"Start Encoding", @"Queue -> start/stop menu");
+            return self.queue.canEncode;
         }
     }
 
-    if (action == @selector(pause:))
+    if (action == @selector(togglePauseResume:))
     {
-        if (self.core.state != HBStatePaused)
+        if (self.queue.canPause)
         {
             menuItem.title = NSLocalizedString(@"Pause Encoding", @"Queue -> pause/resume menu");
         }
@@ -215,30 +249,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
             menuItem.title = NSLocalizedString(@"Resume Encoding", @"Queue -> pause/resume men");
         }
 
-        return (self.core.state == HBStateWorking || self.core.state == HBStatePaused);
-    }
-
-    if (action == @selector(editSelectedQueueItem:) ||
-        action == @selector(removeSelectedQueueItem:) ||
-        action == @selector(revealSelectedQueueItems:) ||
-        action == @selector(revealSelectedQueueItemsSources:))
-    {
-        return (self.tableView.selectedRow != -1 || self.tableView.clickedRow != -1);
-    }
-
-    if (action == @selector(resetJobState:))
-    {
-        return self.tableView.targetedRowIndexes.count > 0;
-    }
-
-    if (action == @selector(clearAll:))
-    {
-        return self.items.count > 0;
-    }
-
-    if (action == @selector(clearCompleted:))
-    {
-        return self.completedItemsCount > 0;
+        return self.queue.canPause || self.queue.canResume;
     }
 
     return YES;
@@ -246,30 +257,14 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (BOOL)validateUserIterfaceItemForAction:(SEL)action
 {
-    HBState s = self.core.state;
-
     if (action == @selector(toggleStartCancel:))
     {
-        if ((s == HBStateScanning) || (s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing))
-        {
-            return YES;
-        }
-        else
-        {
-            return (self.pendingItemsCount > 0);
-        }
+        return self.queue.isEncoding || self.queue.canEncode;
     }
 
     if (action == @selector(togglePauseResume:))
     {
-        if (s == HBStatePaused)
-        {
-            return YES;
-        }
-        else
-        {
-            return (s == HBStateWorking || s == HBStateMuxing);
-        }
+        return self.queue.canPause || self.queue.canResume;
     }
 
     return NO;
@@ -281,668 +276,160 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     return [self validateUserIterfaceItemForAction:action];
 }
 
-#pragma mark - Public methods
 
-- (void)addJob:(HBJob *)item
+- (void)windowDidChangeOcclusionState:(NSNotification *)notification
 {
-    NSParameterAssert(item);
-    [self addJobsFromArray:@[item]];
-}
-
-- (void)addJobsFromArray:(NSArray<HBJob *> *)jobs;
-{
-    NSParameterAssert(jobs);
-    NSMutableArray *itemsToAdd = [NSMutableArray array];
-    for (HBJob *job in jobs)
-    {
-        HBQueueItem *item = [[HBQueueItem alloc] initWithJob:job];
-        [itemsToAdd addObject:item];
-    }
-    if (itemsToAdd.count)
-    {
-        [self addQueueItems:itemsToAdd];
-    }
-}
-
-- (BOOL)jobExistAtURL:(NSURL *)url
-{
-    NSParameterAssert(url);
-
-    for (HBQueueItem *item in self.items)
-    {
-        if ((item.state == HBQueueItemStateReady || item.state == HBQueueItemStateWorking)
-            && [item.completeOutputURL isEqualTo:url])
-        {
-            return YES;
-        }
-    }
-    return NO;
-}
-
-- (NSUInteger)count
-{
-    return self.items.count;
-}
-
-/**
- * This method will clear the queue of any encodes that are not still pending
- * this includes both successfully completed encodes as well as canceled encodes
- */
-- (void)removeCompletedJobs
-{
-    [self.items beginTransaction];
-    NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
-        return (item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateCanceled);
-    }];
-    [self removeQueueItemsAtIndexes:indexes];
-    [self.items commit];
-}
-
-/**
- * This method will clear the queue of all encodes. effectively creating an empty queue
- */
-- (void)removeAllJobs
-{
-    [self.items beginTransaction];
-    [self removeQueueItemsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.items.count)]];
-    [self.items commit];
-}
-
-/**
- * This method will set any item marked as encoding back to pending
- * currently used right after a queue reload
- */
-- (void)setEncodingJobsAsPending
-{
-    [self.items beginTransaction];
-
-    NSMutableIndexSet *indexes = [NSMutableIndexSet indexSet];
-    NSUInteger idx = 0;
-    for (HBQueueItem *item in self.items)
-    {
-        // We want to keep any queue item that is pending or was previously being encoded
-        if (item.state == HBQueueItemStateWorking)
-        {
-            item.state = HBQueueItemStateReady;
-            [indexes addIndex:idx];
-        }
-        idx++;
-    }
-    [self reloadQueueItemsAtIndexes:indexes];
-    [self.items commit];
+    self.visible = self.window.occlusionState & NSWindowOcclusionStateVisible ? YES : NO;
 }
 
 #pragma mark - Private queue editing methods
 
 /**
- *  Reloads the queue, this is called
- *  when another HandBrake instances modifies the queue
+ * Delete encodes from the queue window and accompanying array
+ * Also handling first cancelling the encode if in fact its currently encoding.
  */
-- (void)reloadQueue
-{
-    [self updateQueueStats];
-    [self.tableView reloadData];
-    [self.window.undoManager removeAllActions];
-}
-
-- (void)reloadQueueItemAtIndex:(NSUInteger)idx
-{
-    [self reloadQueueItemsAtIndexes:[NSIndexSet indexSetWithIndex:idx]];
-}
-
-- (void)reloadQueueItemsAtIndexes:(NSIndexSet *)indexes
-{
-    NSIndexSet *columnIndexes = [NSIndexSet indexSetWithIndex:0];
-    [self.tableView reloadDataForRowIndexes:indexes columnIndexes:columnIndexes];
-    [self updateQueueStats];
-}
-
-- (void)addQueueItems:(NSArray<HBQueueItem *> *)items
-{
-    NSParameterAssert(items);
-    NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.items.count, items.count)];
-    [self addQueueItems:items atIndexes:indexes];
-}
-
-- (void)addQueueItems:(NSArray *)items atIndexes:(NSIndexSet *)indexes
-{
-    NSParameterAssert(items);
-    NSParameterAssert(indexes);
-    [self.items beginTransaction];
-    [self.tableView beginUpdates];
-
-    // Forward
-    NSUInteger currentIndex = indexes.firstIndex;
-    NSUInteger currentObjectIndex = 0;
-    while (currentIndex != NSNotFound)
-    {
-        [self.items insertObject:items[currentObjectIndex] atIndex:currentIndex];
-        currentIndex = [indexes indexGreaterThanIndex:currentIndex];
-        currentObjectIndex++;
-    }
-
-    [self.tableView insertRowsAtIndexes:indexes
-                             withAnimation:NSTableViewAnimationSlideDown];
-
-    NSUndoManager *undo = self.window.undoManager;
-    [[undo prepareWithInvocationTarget:self] removeQueueItemsAtIndexes:indexes];
-
-    if (!undo.isUndoing)
-    {
-        if (items.count == 1)
-        {
-            [undo setActionName:NSLocalizedString(@"Add Job To Queue", @"Queue undo action name")];
-        }
-        else
-        {
-            [undo setActionName:NSLocalizedString(@"Add Jobs To Queue", @"Queue undo action name")];
-        }
-    }
-
-    [self.tableView endUpdates];
-    [self updateQueueStats];
-    [self.items commit];
-}
-
-- (void)removeQueueItemAtIndex:(NSUInteger)index
-{
-    [self removeQueueItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
-}
-
 - (void)removeQueueItemsAtIndexes:(NSIndexSet *)indexes
 {
-    NSParameterAssert(indexes);
-
-    if (indexes.count == 0)
+    if ([self.queue.items beginTransaction] == HBDistributedArrayContentReload)
     {
+        // Do not execture the action if the array changed.
+        [self.queue.items commit];
         return;
     }
 
-    [self.items beginTransaction];
-    [self.tableView beginUpdates];
-
-    NSArray<HBQueueItem *> *removeItems = [self.items objectsAtIndexes:indexes];
-
-    if (self.items.count > indexes.lastIndex)
+    if (indexes.count)
     {
-        [self.items removeObjectsAtIndexes:indexes];
-    }
+        NSMutableIndexSet *mutableIndexes = [indexes mutableCopy];
+        // if this is a currently encoding job, we need to be sure to alert the user,
+        // to let them decide to cancel it first, then if they do, we can come back and
+        // remove it
+        NSIndexSet *workingIndexes = [self.queue.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
+            return item.state == HBQueueItemStateWorking;
+        }];
 
-    [self.tableView removeRowsAtIndexes:indexes withAnimation:NSTableViewAnimationSlideUp];
-    [self.tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:indexes.firstIndex] byExtendingSelection:NO];
-
-    NSUndoManager *undo = self.window.undoManager;
-    [[undo prepareWithInvocationTarget:self] addQueueItems:removeItems atIndexes:indexes];
-
-    if (!undo.isUndoing)
-    {
-        if (indexes.count == 1)
+        if ([mutableIndexes containsIndexes:workingIndexes])
         {
-            [undo setActionName:NSLocalizedString(@"Remove Job From Queue", @"Queue undo action name")];
-        }
-        else
-        {
-            [undo setActionName:NSLocalizedString(@"Remove Jobs From Queue", @"Queue undo action name")];
-        }
-    }
+            [mutableIndexes removeIndexes:workingIndexes];
+            NSArray<HBQueueItem *> *workingItems = [self.queue.items filteredArrayUsingBlock:^BOOL(HBQueueItem *item) {
+                return item.state == HBQueueItemStateWorking;
+            }];
 
-    [self.tableView endUpdates];
-    [self updateQueueStats];
-    [self.items commit];
-}
-
-- (void)moveQueueItems:(NSArray *)items toIndex:(NSUInteger)index
-{
-    [self.items beginTransaction];
-    [self.tableView beginUpdates];
-
-    NSMutableArray *source = [NSMutableArray array];
-    NSMutableArray *dest = [NSMutableArray array];
-
-    for (id object in items.reverseObjectEnumerator)
-    {
-        NSUInteger sourceIndex = [self.items indexOfObject:object];
-        [self.items removeObjectAtIndex:sourceIndex];
-
-
-        if (sourceIndex < index)
-        {
-            index--;
-        }
-
-        [self.items insertObject:object atIndex:index];
-
-        [source addObject:@(index)];
-        [dest addObject:@(sourceIndex)];
-
-        [self.tableView moveRowAtIndex:sourceIndex toIndex:index];
-    }
-
-    NSUndoManager *undo = self.window.undoManager;
-    [[undo prepareWithInvocationTarget:self] moveQueueItemsAtIndexes:source toIndexes:dest];
-
-    if (!undo.isUndoing)
-    {
-        if (items.count == 1)
-        {
-            [undo setActionName:NSLocalizedString(@"Move Job in Queue", @"Queue undo action name")];
-        }
-        else
-        {
-            [undo setActionName:NSLocalizedString(@"Move Jobs in Queue", @"Queue undo action name")];
-        }
-    }
-
-    [self.tableView endUpdates];
-    [self.items commit];
-}
-
-- (void)moveQueueItemsAtIndexes:(NSArray *)source toIndexes:(NSArray *)dest
-{
-    [self.items beginTransaction];
-    [self.tableView beginUpdates];
-
-    NSMutableArray *newSource = [NSMutableArray array];
-    NSMutableArray *newDest = [NSMutableArray array];
-
-    for (NSInteger idx = source.count - 1; idx >= 0; idx--)
-    {
-        NSUInteger sourceIndex = [source[idx] integerValue];
-        NSUInteger destIndex = [dest[idx] integerValue];
-
-        [newSource addObject:@(destIndex)];
-        [newDest addObject:@(sourceIndex)];
-
-        id obj = [self.items objectAtIndex:sourceIndex];
-        [self.items removeObjectAtIndex:sourceIndex];
-        [self.items insertObject:obj atIndex:destIndex];
-
-        [self.tableView moveRowAtIndex:sourceIndex toIndex:destIndex];
-    }
-
-    NSUndoManager *undo = self.window.undoManager;
-    [[undo prepareWithInvocationTarget:self] moveQueueItemsAtIndexes:newSource toIndexes:newDest];
-
-    if (!undo.isUndoing)
-    {
-        if (source.count == 1)
-        {
-            [undo setActionName:NSLocalizedString(@"Move Job in Queue", @"Queue undo action name")];
-        }
-        else
-        {
-            [undo setActionName:NSLocalizedString(@"Move Jobs in Queue", @"Queue undo action name")];
-        }
-    }
-
-    [self.tableView endUpdates];
-    [self.items commit];
-}
-
-- (void)windowDidChangeOcclusionState:(NSNotification *)notification
-{
-    if ([self.window occlusionState] & NSWindowOcclusionStateVisible)
-    {
-        self.visible = YES;
-        self.progressTextField.attributedStringValue = self.progressInfo;
-    }
-    else
-    {
-        self.visible = NO;
-    }
-}
-
-- (void)updateProgress:(NSString *)info progress:(double)progress hidden:(BOOL)hidden
-{
-    self.progressInfo = [[NSAttributedString alloc] initWithString:info attributes:_monospacedAttr];
-    if (self.visible)
-    {
-        self.progressTextField.attributedStringValue = _progressInfo;
-    }
-    [self.controller setQueueInfo:_progressInfo progress:progress hidden:hidden];
-}
-
-/**
- *  Updates the queue status label.
- */
-- (void)updateQueueStats
-{
-    // lets get the stats on the status of the queue array
-    NSUInteger pendingCount = 0;
-    NSUInteger completedCount = 0;
-
-    for (HBQueueItem *item in self.items)
-    {
-        if (item.state == HBQueueItemStateReady)
-        {
-            pendingCount++;
-        }
-        if (item.state == HBQueueItemStateCompleted)
-        {
-            completedCount++;
-        }
-    }
-
-    NSString *string;
-    if (pendingCount == 0)
-    {
-        string = NSLocalizedString(@"No encode pending", @"Queue status");
-    }
-    else if (pendingCount == 1)
-    {
-        string = [NSString stringWithFormat: NSLocalizedString(@"%d encode pending", @"Queue status"), pendingCount];
-    }
-    else
-    {
-        string = [NSString stringWithFormat: NSLocalizedString(@"%d encodes pending", @"Queue status"), pendingCount];
-    }
-
-    self.countTextField.stringValue = string;
-
-    self.pendingItemsCount = pendingCount;
-    self.completedItemsCount = completedCount;
-}
-
-#pragma mark - Queue Job Processing
-
-- (BOOL)_isDiskSpaceLowAtURL:(NSURL *)url
-{
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBQueuePauseIfLowSpace"])
-    {
-        NSURL *volumeURL = nil;
-        NSDictionary<NSURLResourceKey, id> *attrs = [url resourceValuesForKeys:@[NSURLIsVolumeKey, NSURLVolumeURLKey] error:NULL];
-        long long minCapacity = [[[NSUserDefaults standardUserDefaults] stringForKey:@"HBQueueMinFreeSpace"] longLongValue] * 1000000000;
-
-        volumeURL = [attrs[NSURLIsVolumeKey] boolValue] ? url : attrs[NSURLVolumeURLKey];
-
-        if (volumeURL)
-        {
-            [volumeURL removeCachedResourceValueForKey:NSURLVolumeAvailableCapacityKey];
-            attrs = [volumeURL resourceValuesForKeys:@[NSURLVolumeAvailableCapacityKey] error:NULL];
-
-            if (attrs[NSURLVolumeAvailableCapacityKey])
+            if ([workingItems containsObject:self.queue.currentItem])
             {
-                if ([attrs[NSURLVolumeAvailableCapacityKey] longLongValue] < minCapacity)
-                {
-                    return YES;
-                }
+                NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", @"Queue Stop Alert -> stop and remove message")];
+
+                // Which window to attach the sheet to?
+                NSWindow *targetWindow = self.window;
+
+                NSAlert *alert = [[NSAlert alloc] init];
+                [alert setMessageText:alertTitle];
+                [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Stop Alert -> stop and remove informative text")];
+                [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Stop Alert -> stop and remove first button")];
+                [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", @"Queue Stop Alert -> stop and remove second button")];
+                [alert setAlertStyle:NSAlertStyleCritical];
+
+                [alert beginSheetModalForWindow:targetWindow completionHandler:^(NSModalResponse returnCode) {
+                    if (returnCode == NSAlertSecondButtonReturn)
+                    {
+                        [self.queue.items beginTransaction];
+
+                        NSInteger index = [self.queue.items indexOfObject:self.queue.currentItem];
+                        [self.queue cancelCurrentItemAndContinue];
+
+                        [self.queue removeQueueItemAtIndex:index];
+                        [self.queue.items commit];
+                    }
+                }];
             }
         }
-    }
 
-    return NO;
+        // remove the non working items immediately
+        [self.queue removeQueueItemsAtIndexes:mutableIndexes];
+    }
+    [self.queue.items commit];
 }
 
-/**
- * Used to get the next pending queue item and return it if found
- */
-- (HBQueueItem *)getNextPendingQueueItem
+- (void)doEditQueueItem:(HBQueueItem *)item
 {
-    for (HBQueueItem *item in self.items)
+    NSParameterAssert(item);
+    [self.queue.items beginTransaction];
+
+    if (item != self.queue.currentItem)
     {
-        if (item.state == HBQueueItemStateReady)
-        {
-            return item;
-        }
-    }
-    return nil;
-}
+        item.state = HBQueueItemStateWorking;
 
-/**
- *  Starts the queue
- */
-- (void)encodeNextQueueItem
-{
-    [self.items beginTransaction];
-    self.currentItem = nil;
+        //        NSUInteger row = [self.queue.items indexOfObject:item];
+        //FIXME
+        //[self reloadQueueItemAtIndex:row];
 
-    // since we have completed an encode, we go to the next
-    if (self.stop)
-    {
-        [HBUtilities writeToActivityLog:"Queue manually stopped"];
-
-        self.stop = NO;
-        [self.core allowSleep];
+        [self.delegate openJob:[item.job copy] completionHandler:^(BOOL result) {
+            [self.queue.items beginTransaction];
+            if (result)
+            {
+                // Now that source is loaded and settings applied, delete the queue item from the queue
+                NSInteger index = [self.queue.items indexOfObject:item];
+                item.state = HBQueueItemStateReady;
+                [self.queue removeQueueItemAtIndex:index];
+            }
+            else
+            {
+                item.state = HBQueueItemStateFailed;
+                NSBeep();
+            }
+            [self.queue.items commit];
+        }];
     }
     else
     {
-        // Check to see if there are any more pending items in the queue
-        HBQueueItem *nextItem = [self getNextPendingQueueItem];
+        NSBeep();
+    }
 
-        if (nextItem && [self _isDiskSpaceLowAtURL:nextItem.outputURL])
-        {
-            // Disk space is low, show an alert
-            [HBUtilities writeToActivityLog:"Queue Stopped, low space on destination disk"];
+    [self.queue.items commit];
+}
 
-            [self queueLowDiskSpaceAlert];
-        }
-        // If we still have more pending items in our queue, lets go to the next one
-        else if (nextItem)
-        {
-            // now we mark the queue item as working so another instance can not come along and try to scan it while we are scanning
-            nextItem.state = HBQueueItemStateWorking;
+/**
+ * Send the selected queue item back to the main window for rescan and possible edit.
+ */
+- (void)editQueueItem:(HBQueueItem *)item
+{
+    if ([self.queue.items beginTransaction] == HBDistributedArrayContentReload)
+    {
+        // Do not execture the action if the array changed.
+        [self.queue.items commit];
+        return;
+    }
 
-            // Tell HB to output a new activity log file for this encode
-            self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:nextItem.job];
-            if (self.currentLog)
+    // if this is a currently encoding item, we need to be sure to alert the user,
+    // to let them decide to cancel it first, then if they do, we can come back and
+    // remove it
+    if (item == self.queue.currentItem)
+    {
+        NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Edit It?", @"Queue Edit Alert -> stop and edit message")];
+
+        // Which window to attach the sheet to?
+        NSWindow *docWindow = self.window;
+
+        NSAlert *alert = [[NSAlert alloc] init];
+        [alert setMessageText:alertTitle];
+        [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Edit Alert -> stop and edit informative text")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Edit Alert -> stop and edit first button")];
+        [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Edit", @"Queue Edit Alert -> stop and edit second button")];
+        [alert setAlertStyle:NSAlertStyleCritical];
+
+        [alert beginSheetModalForWindow:docWindow completionHandler:^(NSModalResponse returnCode) {
+            if (returnCode == NSAlertSecondButtonReturn)
             {
-                [[HBOutputRedirect stderrRedirect] addListener:self.currentLog];
-                [[HBOutputRedirect stdoutRedirect] addListener:self.currentLog];
+                [self doEditQueueItem:item];
             }
-
-            self.currentItem = nextItem;
-            [self reloadQueueItemAtIndex:[self.items indexOfObject:nextItem]];
-
-            // now we can go ahead and scan the new pending queue item
-            [self encodeItem:nextItem];
-
-            // erase undo manager history
-            [self.window.undoManager removeAllActions];
-        }
-        else
-        {
-            [HBUtilities writeToActivityLog:"Queue Done, there are no more pending encodes"];
-
-            // Since there are no more items to encode, go to queueCompletedAlerts
-            // for user specified alerts after queue completed
-            [self queueCompletedAlerts];
-
-            [self.core allowSleep];
-        }
+        }];
     }
-    [self.items commit];
-}
-
-- (void)completedItem:(HBQueueItem *)item result:(HBCoreResult)result;
-{
-    NSParameterAssert(item);
-    [self.items beginTransaction];
-
-    // Since we are done with this encode, tell output to stop writing to the
-    // individual encode log.
-    [[HBOutputRedirect stderrRedirect] removeListener:self.currentLog];
-    [[HBOutputRedirect stdoutRedirect] removeListener:self.currentLog];
-
-    self.currentLog = nil;
-
-    // Check to see if the encode state has not been canceled
-    // to determine if we should send it to external app.
-    if (result != HBCoreResultCanceled)
+    else if (item.state != HBQueueItemStateWorking)
     {
-        // Send to tagger
-        [self sendToExternalApp:item];
+        [self doEditQueueItem:item];
     }
 
-    // Mark the encode just finished
-    switch (result) {
-        case HBCoreResultDone:
-            item.state = HBQueueItemStateCompleted;
-            break;
-        case HBCoreResultCanceled:
-            item.state = HBQueueItemStateCanceled;
-            break;
-        default:
-            item.state = HBQueueItemStateFailed;
-            break;
-    }
 
-    if ([self.items containsObject:item])
-    {
-        [self reloadQueueItemAtIndex:[self.items indexOfObject:item]];
-    }
-    [self.window.toolbar validateVisibleItems];
-    [self.items commit];
-
-    // Update UI
-    NSString *info = nil;
-    switch (result) {
-        case HBCoreResultDone:
-            info = NSLocalizedString(@"Encode Finished.", @"Queue status");
-            [self itemCompletedAlerts:item result:result];
-            break;
-        case HBCoreResultCanceled:
-            info = NSLocalizedString(@"Encode Canceled.", @"Queue status");
-            break;
-        default:
-            info = NSLocalizedString(@"Encode Failed.", @"Queue status");
-            [self itemCompletedAlerts:item result:result];
-            break;
-    }
-    [self updateProgress:info progress:1.0 hidden:YES];
-
-    // Restore dock icon
-    [self.dockTile updateDockIcon:-1.0 withETA:@""];
-    self.dockIconProgress = 0;
-}
-
-/**
- * Here we actually tell hb_scan to perform the source scan, using the path to source and title number
- */
-- (void)encodeItem:(HBQueueItem *)item
-{
-    NSParameterAssert(item);
-
-    // Progress handler
-    void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
-    {
-        [self updateProgress:info progress:0 hidden:NO];
-    };
-
-    // Completion handler
-    void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
-    {
-        if (result == HBCoreResultDone)
-        {
-            [self realEncodeItem:item];
-        }
-        else
-        {
-            [self completedItem:item result:result];
-            [self encodeNextQueueItem];
-        }
-    };
-
-    // Only scan 10 previews before an encode - additional previews are
-    // only useful for autocrop and static previews, which are already taken care of at this point
-    [self.core scanURL:item.fileURL
-            titleIndex:item.job.titleIdx
-              previews:10
-           minDuration:0
-       progressHandler:progressHandler
-     completionHandler:completionHandler];
-}
-
-/**
- * This assumes that we have re-scanned and loaded up a new queue item to send to libhb
- */
-- (void)realEncodeItem:(HBQueueItem *)item
-{
-    NSParameterAssert(item);
-
-    HBJob *job = item.job;
-
-    // Reset the title in the job.
-    job.title = self.core.titles.firstObject;
-
-    NSParameterAssert(job);
-
-    HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
-    formatter.title = job.outputFileName;
-    self.core.stateFormatter = formatter;
-
-    // Progress handler
-    void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
-    {
-        if (state == HBStateWorking)
-        {
-            // Update dock icon
-            if (self.dockIconProgress < 100.0 * progress.percent)
-            {
-                [self.dockTile updateDockIcon:progress.percent hours:progress.hours minutes:progress.minutes seconds:progress.seconds];
-                self.dockIconProgress += dockTileUpdateFrequency;
-            }
-        }
-        else if (state == HBStateMuxing)
-        {
-            [self.dockTile updateDockIcon:1.0 withETA:@""];
-        }
-
-        // Update UI
-        [self updateProgress:info progress:progress.percent hidden:NO];
-    };
-
-    // Completion handler
-    void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
-    {
-        [self completedItem:item result:result];
-        [self encodeNextQueueItem];
-    };
-
-    // We should be all setup so let 'er rip
-    [self.core encodeJob:job progressHandler:progressHandler completionHandler:completionHandler];
-
-    // We are done using the title, remove it from the job
-    job.title = nil;
-}
-
-/**
- * Cancels the current job
- */
-- (void)doCancelCurrentItem
-{
-    if (self.core.state == HBStateScanning)
-    {
-        [self.core cancelScan];
-    }
-    else
-    {
-        [self.core cancelEncode];
-    }
-}
-
-/**
- * Cancels the current job and starts processing the next in queue.
- */
-- (void)cancelCurrentItemAndContinue
-{
-    [self doCancelCurrentItem];
-}
-
-/**
- * Cancels the current job and stops libhb from processing the remaining encodes.
- */
-- (void)cancelCurrentItemAndStop
-{
-    self.stop = YES;
-    [self doCancelCurrentItem];
-}
-
-/**
- * Finishes the current job and stops libhb from processing the remaining encodes.
- */
-- (void)finishCurrentAndStop
-{
-    self.stop = YES;
+    [self.queue.items commit];
 }
 
 #pragma mark - Encode Done Actions
@@ -967,6 +454,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     notification.hasActionButton = YES;
     notification.actionButtonTitle = NSLocalizedString(@"Show", @"Notification -> Show in Finder");
     notification.userInfo = @{ @"Path": fileURL.path };
+
     [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }
 
@@ -1012,18 +500,20 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 /**
  *  Runs the alert for a single job
  */
-- (void)itemCompletedAlerts:(HBQueueItem *)item result:(HBCoreResult)result
+- (void)itemCompletedAlerts:(HBQueueItem *)item
 {
+    NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
+
     // Both the Notification and Sending to tagger can be done as encodes roll off the queue
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionNotification ||
-        [[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionAlertAndNotification)
+    if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionNotification ||
+        [ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionAlertAndNotification)
     {
         // If Play System Alert has been selected in Preferences
-        bool playSound = [[NSUserDefaults standardUserDefaults] boolForKey:@"HBAlertWhenDoneSound"];
+        bool playSound = [ud boolForKey:@"HBAlertWhenDoneSound"];
 
         NSString *title;
         NSString *description;
-        if (result == HBCoreResultDone)
+        if (item.state == HBQueueItemStateCompleted)
         {
             title = NSLocalizedString(@"Put down that cocktail…", @"Queue notification alert message");
             description = [NSString stringWithFormat:NSLocalizedString(@"Your encode %@ is done!", @"Queue done notification message"),
@@ -1049,15 +539,16 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
  */
 - (void)queueCompletedAlerts
 {
+    NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
     // If Play System Alert has been selected in Preferences
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBAlertWhenDoneSound"] == YES)
+    if ([ud boolForKey:@"HBAlertWhenDoneSound"] == YES)
     {
         NSBeep();
     }
 
     // If Alert Window or Window and Notification has been selected
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionAlert ||
-        [[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionAlertAndNotification)
+    if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionAlert ||
+        [ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionAlertAndNotification)
     {
         // On Screen Notification
         NSAlert *alert = [[NSAlert alloc] init];
@@ -1068,7 +559,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
 
     // If sleep has been selected
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionSleep)
+    if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionSleep)
     {
         // Sleep
         NSDictionary *errorDict;
@@ -1077,7 +568,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [scriptObject executeAndReturnError: &errorDict];
     }
     // If Shutdown has been selected
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionShutDown)
+    if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionShutDown)
     {
         // Shut Down
         NSDictionary *errorDict;
@@ -1095,114 +586,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [alert runModal];
 }
 
-#pragma mark - Queue Item Controls
-
-/**
- * Delete encodes from the queue window and accompanying array
- * Also handling first cancelling the encode if in fact its currently encoding.
- */
-- (IBAction)removeSelectedQueueItem:(id)sender
-{
-    if ([self.items beginTransaction] == HBDistributedArrayContentReload)
-    {
-        // Do not execture the action if the array changed.
-        [self.items commit];
-        return;
-    }
-
-    NSMutableIndexSet *targetedRows = [[self.tableView targetedRowIndexes] mutableCopy];
-
-    if (targetedRows.count)
-    {
-        // if this is a currently encoding job, we need to be sure to alert the user,
-        // to let them decide to cancel it first, then if they do, we can come back and
-        // remove it
-        NSIndexSet *workingIndexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
-            return item.state == HBQueueItemStateWorking;
-        }];
-
-        if ([targetedRows containsIndexes:workingIndexes])
-        {
-            [targetedRows removeIndexes:workingIndexes];
-            NSArray<HBQueueItem *> *workingItems = [self.items filteredArrayUsingBlock:^BOOL(HBQueueItem *item) {
-                return item.state == HBQueueItemStateWorking;
-            }];
-
-            if ([workingItems containsObject:self.currentItem])
-            {
-                NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", @"Queue Stop Alert -> stop and remove message")];
-
-                // Which window to attach the sheet to?
-                NSWindow *targetWindow = self.window;
-                if ([sender respondsToSelector: @selector(window)])
-                {
-                    targetWindow = [sender window];
-                }
-
-                NSAlert *alert = [[NSAlert alloc] init];
-                [alert setMessageText:alertTitle];
-                [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Stop Alert -> stop and remove informative text")];
-                [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Stop Alert -> stop and remove first button")];
-                [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Delete", @"Queue Stop Alert -> stop and remove second button")];
-                [alert setAlertStyle:NSAlertStyleCritical];
-
-                [alert beginSheetModalForWindow:targetWindow completionHandler:^(NSModalResponse returnCode) {
-                    if (returnCode == NSAlertSecondButtonReturn)
-                    {
-                        [self.items beginTransaction];
-
-                        NSInteger index = [self.items indexOfObject:self.currentItem];
-                        [self cancelCurrentItemAndContinue];
-
-                        [self removeQueueItemAtIndex:index];
-                        [self.items commit];
-                    }
-                }];
-            }
-        }
-
-        // remove the non working items immediately
-        [self removeQueueItemsAtIndexes:targetedRows];
-    }
-    [self.items commit];
-}
-
-/**
- * Show the finished encode in the finder
- */
-- (IBAction)revealSelectedQueueItems:(id)sender
-{
-    NSIndexSet *targetedRows = [self.tableView targetedRowIndexes];
-    NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
-
-    NSUInteger currentIndex = [targetedRows firstIndex];
-    while (currentIndex != NSNotFound) {
-        NSURL *url = [[self.items objectAtIndex:currentIndex] completeOutputURL];
-        [urls addObject:url];
-        currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
-    }
-
-    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:urls];
-}
-
-- (IBAction)revealSelectedQueueItemsSources:(id)sender
-{
-    NSIndexSet *targetedRows = [self.tableView targetedRowIndexes];
-    NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
-
-    NSUInteger currentIndex = [targetedRows firstIndex];
-    while (currentIndex != NSNotFound) {
-        NSURL *url = [[self.items objectAtIndex:currentIndex] fileURL];
-        [urls addObject:url];
-        currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
-    }
-
-    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:urls];
-}
-
 - (void)remindUserOfSleepOrShutdown
 {
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionSleep)
+    NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
+
+    if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionSleep)
     {
         // Warn that computer will sleep after encoding
         NSBeep();
@@ -1222,7 +610,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
         [self promptForAppleEventAuthorization];
     }
-    else if ([[NSUserDefaults standardUserDefaults] integerForKey:@"HBAlertWhenDone"] == HBDoneActionShutDown)
+    else if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionShutDown)
     {
         // Warn that computer will shut down after encoding
         NSBeep();
@@ -1253,32 +641,31 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
 }
 
+#pragma mark - UI Actions
+
 /**
  * Rip: puts up an alert before ultimately calling doRip
  */
-- (IBAction)rip:(id)sender
+- (IBAction)toggleStartCancel:(id)sender
 {
     // Rip or Cancel ?
-    if (self.core.state == HBStateWorking || self.core.state == HBStatePaused || self.core.state == HBStateSearching)
+    if (self.queue.isEncoding)
     {
         [self cancelRip:sender];
     }
     // If there are pending items in the queue, then this is a rip the queue
-    else if (self.pendingItemsCount > 0)
+    else if (self.queue.canEncode)
     {
         // We check to see if we need to warn the user that the computer will go to sleep
         // or shut down when encoding is finished
         [self remindUserOfSleepOrShutdown];
-
-        [self.core preventSleep];
-        [self encodeNextQueueItem];
+        [self.queue start];
     }
 }
 
 /**
+* Starts or cancels the processing of items depending on the current state
  * Displays an alert asking user if the want to cancel encoding of current item.
- * Cancel: returns immediately after posting the alert. Later, when the user
- * acknowledges the alert, doCancelCurrentItem is called.
  */
 - (IBAction)cancelRip:(id)sender
 {
@@ -1301,33 +688,17 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [alert beginSheetModalForWindow:window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSAlertSecondButtonReturn)
         {
-            [self cancelCurrentItemAndContinue];
+            [self.queue cancelCurrentItemAndContinue];
         }
         else if (returnCode == NSAlertThirdButtonReturn)
         {
-            [self finishCurrentAndStop];
+            [self.queue finishCurrentAndStop];
         }
         else if (returnCode == NSAlertThirdButtonReturn + 1)
         {
-            [self cancelCurrentItemAndStop];
+            [self.queue cancelCurrentItemAndStop];
         }
     }];
-}
-
-/**
- * Starts or cancels the processing of items depending on the current state
- */
-- (IBAction)toggleStartCancel:(id)sender
-{
-    HBState s = self.core.state;
-    if ((s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing))
-    {
-        [self cancelRip:self];
-    }
-    else if (self.pendingItemsCount > 0)
-    {
-        [self rip:self];
-    }
 }
 
 /**
@@ -1335,324 +706,64 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
  */
 - (IBAction)togglePauseResume:(id)sender
 {
-    HBState s = self.core.state;
-    if (s == HBStatePaused)
+    if (self.queue.canResume)
     {
-        [self.core resume];
-        [self.core preventSleep];
+        [self.queue resume];
     }
-    else if (s == HBStateWorking || s == HBStateMuxing)
+    else if (self.queue.canPause)
     {
-        [self.core pause];
-        [self.core allowSleep];
+        [self.queue pause];
     }
 }
 
-/**
- *  Resets the item state to ready.
- */
-- (IBAction)resetJobState:(id)sender
+- (IBAction)toggleDetails:(id)sender
 {
-    if ([self.items beginTransaction] == HBDistributedArrayContentReload)
-    {
-        // Do not execture the action if the array changed.
-        [self.items commit];
-        return;
-    }
-
-    NSIndexSet *targetedRows = [self.tableView targetedRowIndexes];
-    NSMutableIndexSet *updatedIndexes = [NSMutableIndexSet indexSet];
-
-    NSUInteger currentIndex = [targetedRows firstIndex];
-    while (currentIndex != NSNotFound) {
-        HBQueueItem *item = self.items[currentIndex];
-
-        if (item.state == HBQueueItemStateCanceled || item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateFailed)
-        {
-            item.state = HBQueueItemStateReady;
-            [updatedIndexes addIndex:currentIndex];
-        }
-        currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
-    }
-
-    [self reloadQueueItemsAtIndexes:updatedIndexes];
-    [self.items commit];
+    NSSplitViewItem *detailsItem = self.splitViewController.splitViewItems[1];
+    detailsItem.animator.collapsed = !detailsItem.isCollapsed;
 }
 
-- (void)editQueueItem:(HBQueueItem *)item
+#pragma mark - table view controller delegate
+
+- (void)tableViewDidSelectItem:(HBQueueItem *)item
 {
-    NSParameterAssert(item);
-    [self.items beginTransaction];
-
-    if (item != self.currentItem)
-    {
-        item.state = HBQueueItemStateWorking;
-
-        NSUInteger row = [self.items indexOfObject:item];
-        [self reloadQueueItemAtIndex:row];
-
-        [self.controller openJob:[item.job copy] completionHandler:^(BOOL result) {
-            [self.items beginTransaction];
-            if (result)
-            {
-                // Now that source is loaded and settings applied, delete the queue item from the queue
-                NSInteger index = [self.items indexOfObject:item];
-                item.state = HBQueueItemStateReady;
-                [self removeQueueItemAtIndex:index];
-            }
-            else
-            {
-                item.state = HBQueueItemStateFailed;
-                NSBeep();
-            }
-            [self.items commit];
-        }];
-    }
-    else
-    {
-        NSBeep();
-    }
-
-    [self.items commit];
+    self.detailsViewController.item = item;
 }
 
-/**
- * Send the selected queue item back to the main window for rescan and possible edit.
- */
-- (IBAction)editSelectedQueueItem:(id)sender
+- (void)tableViewEditItem:(HBQueueItem *)item
 {
-    if ([self.items beginTransaction] == HBDistributedArrayContentReload)
-    {
-        // Do not execture the action if the array changed.
-        [self.items commit];
-        return;
-    }
-
-    NSInteger row = self.tableView.clickedRow;
-    if (row != NSNotFound)
-    {
-        // if this is a currently encoding item, we need to be sure to alert the user,
-        // to let them decide to cancel it first, then if they do, we can come back and
-        // remove it
-        HBQueueItem *item = self.items[row];
-        if (item == self.currentItem)
-        {
-            NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Edit It?", @"Queue Edit Alert -> stop and edit message")];
-
-            // Which window to attach the sheet to?
-            NSWindow *docWindow = self.window;
-            if ([sender respondsToSelector: @selector(window)])
-            {
-                docWindow = [sender window];
-            }
-
-            NSAlert *alert = [[NSAlert alloc] init];
-            [alert setMessageText:alertTitle];
-            [alert setInformativeText:NSLocalizedString(@"Your movie will be lost if you don't continue encoding.", @"Queue Edit Alert -> stop and edit informative text")];
-            [alert addButtonWithTitle:NSLocalizedString(@"Keep Encoding", @"Queue Edit Alert -> stop and edit first button")];
-            [alert addButtonWithTitle:NSLocalizedString(@"Stop Encoding and Edit", @"Queue Edit Alert -> stop and edit second button")];
-            [alert setAlertStyle:NSAlertStyleCritical];
-
-            [alert beginSheetModalForWindow:docWindow completionHandler:^(NSModalResponse returnCode) {
-                if (returnCode == NSAlertSecondButtonReturn)
-                {
-                    [self editQueueItem:item];
-                }
-            }];
-        }
-        else if (item.state != HBQueueItemStateWorking)
-        {
-            [self editQueueItem:item];
-        }
-    }
-
-    [self.items commit];
+    [self editQueueItem:item];
 }
 
-- (IBAction)clearAll:(id)sender
-{
-    [self.items beginTransaction];
-    NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
-        return (item.state != HBQueueItemStateWorking);
-    }];
+- (void)tableViewRemoveItemsAtIndexes:(nonnull NSIndexSet *)indexes {
     [self removeQueueItemsAtIndexes:indexes];
-    [self.items commit];
 }
 
-- (IBAction)clearCompleted:(id)sender
+- (void)detailsViewEditItem:(nonnull HBQueueItem *)item {
+    [self editQueueItem:item];
+}
+
+- (void)detailsViewResetItem:(nonnull HBQueueItem *)item {
+    [self editQueueItem:item];
+}
+
+- (IBAction)resetAll:(id)sender
 {
-    [self.items beginTransaction];
-    NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
-        return (item.state == HBQueueItemStateCompleted);
-    }];
-    [self removeQueueItemsAtIndexes:indexes];
-    [self.items commit];
+    [self.queue resetAllItems];
 }
 
-#pragma mark - NSTableView data source
-
-- (NSView *)tableView:(NSTableView *)tableView
-   viewForTableColumn:(NSTableColumn *)tableColumn
-                  row:(NSInteger)row {
-
-    HBQueueItemView *view = [tableView makeViewWithIdentifier:@"MainCell" owner:self];
-    HBQueueItem *item = self.items[row];
-
-    view.delegate = self;
-    view.item = item;
-
-    return view;
-}
-
-- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
+- (IBAction)resetFailed:(id)sender
 {
-    return self.items.count;
+    [self.queue resetFailedItems];
 }
 
-- (NSTableCellView *)dummyCell
+- (IBAction)removeAll:(id)sender
 {
-    if (!_dummyCell) {
-        _dummyCell = [self.tableView makeViewWithIdentifier:@"MainCellForSizing" owner: self];
-        _dummyCellWidth = [NSLayoutConstraint constraintWithItem:_dummyCell
-                                                       attribute:NSLayoutAttributeWidth
-                                                       relatedBy:NSLayoutRelationEqual
-                                                          toItem:nil
-                                                       attribute:NSLayoutAttributeNotAnAttribute
-                                                      multiplier:1.0f
-                                                        constant:500];
-        [_dummyCell addConstraint:_dummyCellWidth];
-    }
-    return _dummyCell;
+    [self.queue removeNotWorkingItems];
 }
 
-- (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
+- (IBAction)removeCompleted:(id)sender
 {
-    HBQueueItem *item = self.items[row];
-
-    if (item.expanded)
-    {
-        CGFloat width = tableView.frame.size.width;
-        self.dummyCellWidth.constant = width;
-        self.dummyCell.textField.preferredMaxLayoutWidth = width - 60;
-        self.dummyCell.textField.attributedStringValue = item.attributedDescription;
-
-        CGFloat height = self.dummyCell.fittingSize.height;
-        return height;
-    }
-    else
-    {
-        return 20;
-    }
-}
-
-- (void)toggleRowsAtIndexes:(NSIndexSet *)rowIndexes expand:(BOOL)expand
-{
-    NSMutableIndexSet *rowsToExpand = [NSMutableIndexSet indexSet];
-    [rowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
-        HBQueueItem *item = self.items[index];
-        BOOL expanded = item.expanded;
-        if (expanded != expand)
-        {
-            item.expanded = !expanded;
-            [rowsToExpand addIndex:index];
-        }
-
-        HBQueueItemView *itemView = (HBQueueItemView *)[self.tableView viewAtColumn:0 row:index makeIfNecessary:NO];
-        if (expand)
-        {
-            [itemView expand];
-        }
-        else
-        {
-            [itemView collapse];
-        }
-    }];
-    [self.tableView noteHeightOfRowsWithIndexesChanged:rowsToExpand];
-}
-
-#pragma mark NSQueueItemView delegate
-
-- (void)removeQueueItem:(nonnull HBQueueItem *)item
-{
-    NSUInteger index = [self.items indexOfObject:item];
-    [self removeQueueItemAtIndex:index];
-}
-
-- (void)revealQueueItem:(nonnull HBQueueItem *)item
-{
-    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[item.completeOutputURL]];
-}
-
-- (void)toggleQueueItemHeight:(nonnull HBQueueItem *)item
-{
-    NSInteger row = [self.items indexOfObject:item];
-    [self toggleRowsAtIndexes:[NSIndexSet indexSetWithIndex:row] expand:!item.expanded];
-}
-
-#pragma mark NSTableView delegate
-
-- (void)HB_deleteSelectionFromTableView:(NSTableView *)tableView
-{
-    [self removeSelectedQueueItem:tableView];
-}
-
-- (void)HB_expandSelectionFromTableView:(NSTableView *)tableView
-{
-    NSIndexSet *rowIndexes = [self.tableView selectedRowIndexes];
-    [self toggleRowsAtIndexes:rowIndexes expand:YES];
-}
-
-- (void)HB_collapseSelectionFromTableView:(NSTableView *)tableView;
-{
-    NSIndexSet *rowIndexes = [self.tableView selectedRowIndexes];
-    [self toggleRowsAtIndexes:rowIndexes expand:NO];
-}
-
-- (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard;
-{
-    NSArray<HBQueueItem *> *items = [self.items objectsAtIndexes:rowIndexes];
-    // Dragging is only allowed of the pending items.
-    if (items[0].state != HBQueueItemStateReady)
-    {
-        return NO;
-    }
-
-    self.dragNodesArray = items;
-
-    // Provide data for our custom type, and simple NSStrings.
-    [pboard declareTypes:@[DragDropSimplePboardType] owner:self];
-
-    // the actual data doesn't matter since DragDropSimplePboardType drags aren't recognized by anyone but us!.
-    [pboard setData:[NSData data] forType:DragDropSimplePboardType];
-
-    return YES;
-}
-
-- (NSDragOperation)tableView:(NSTableView *)tableView validateDrop:(id<NSDraggingInfo>)info proposedRow:(NSInteger)row proposedDropOperation:(NSTableViewDropOperation)dropOperation
-{
-    // Don't allow dropping ONTO an item since they can't really contain any children.
-    BOOL isOnDropTypeProposal = dropOperation == NSTableViewDropOn;
-    if (isOnDropTypeProposal)
-    {
-        return NSDragOperationNone;
-    }
-
-    // We do not let the user drop a pending item before or *above*
-    // already finished or currently encoding items.
-    NSInteger encodingRow = [self.items indexOfObject:self.currentItem];
-    if (encodingRow != NSNotFound && row <= encodingRow)
-    {
-        return NSDragOperationNone;
-        row = MAX(row, encodingRow);
-	}
-
-    return NSDragOperationMove;
-}
-
-- (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation
-{
-    [self moveQueueItems:self.dragNodesArray toIndex:row];
-    return YES;
+    [self.queue removeCompletedItems];
 }
 
 @end
@@ -1705,24 +816,26 @@ static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
     return nil;
 }
 
-- (void)_touchBar_updateButtonsStateForQueueCore:(HBState)state;
+- (void)_touchBar_updateButtonsState;
 {
     NSButton *ripButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarRip] view];
     NSButton *pauseButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarPause] view];
 
-    if (state == HBStateScanning || state == HBStateWorking || state == HBStateSearching || state == HBStateMuxing)
+    if (self.queue.isEncoding)
     {
         ripButton.image = [NSImage imageNamed:NSImageNameTouchBarRecordStopTemplate];
-        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPauseTemplate];
     }
-    else if (state == HBStatePaused)
-    {
-        ripButton.image = [NSImage imageNamed:NSImageNameTouchBarRecordStopTemplate];
-        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPlayTemplate];
-    }
-    else if (state == HBStateIdle)
+    else
     {
         ripButton.image = [NSImage imageNamed:NSImageNameTouchBarPlayTemplate];
+    }
+
+    if (self.queue.canResume)
+    {
+        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPlayTemplate];
+    }
+    else
+    {
         pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPauseTemplate];
     }
 }

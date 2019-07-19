@@ -33,6 +33,7 @@
 #import "HBRenamePresetController.h"
 
 #import "HBAutoNamer.h"
+#import "HBQueue.h"
 
 @import HandBrakeKit;
 
@@ -122,8 +123,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 /// The HBCore used for scanning.
 @property (nonatomic, strong) HBCore *core;
 
-/// The queue controller.
-@property (nonatomic, strong) HBQueueController *queue;
+/// The app delegate.
+@property (nonatomic, strong) HBAppDelegate *delegate;
+
+/// The queue.
+@property (nonatomic, strong) HBQueue *queue;
 
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly
@@ -146,7 +150,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 @interface HBController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
 - (void)_touchBar_updateButtonsStateForScanCore:(HBState)state;
-- (void)_touchBar_updateButtonsStateForQueueCore:(HBState)state;
+- (void)_touchBar_updateQueueButtonsState;
 - (void)_touchBar_validateUserInterfaceItems;
 @end
 
@@ -155,7 +159,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 @implementation HBController
 
-- (instancetype)initWithQueue:(HBQueueController *)queueController presetsManager:(HBPresetsManager *)manager;
+- (instancetype)initWithDelegate:(HBAppDelegate *)delegate queue:(HBQueue *)queue presetsManager:(HBPresetsManager *)manager;
 {
     self = [super initWithWindowNibName:@"MainWindow"];
     if (self)
@@ -168,8 +172,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         fPreviewController = [[HBPreviewController alloc] init];
         fPreviewController.documentController = self;
 
-        _queue = queueController;
-        _queue.controller = self;
+        _delegate = delegate;
+        _queue = queue;
 
         presetManager = manager;
         _currentPreset = manager.defaultPreset;
@@ -271,6 +275,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     fFiltersViewController = [[HBFiltersViewController alloc] init];
     [fFiltersTab setView:[fFiltersViewController view]];
 
+    // Add the observeers
+
     [self.core addObserver:self forKeyPath:@"state"
                    options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                    context:HBControllerScanCoreContext];
@@ -282,6 +288,28 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [self.queue addObserver:self forKeyPath:@"pendingItemsCount"
               options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
               context:HBControllerQueueCoreContext];
+
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidStartNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        self.bottomConstrain.animator.constant = 0;
+        self->fRipIndicatorShown = YES;
+        self->fRipIndicator.hidden = NO;
+    }];
+
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET;
+        self->fRipIndicator.hidden = YES;
+        self->fRipIndicatorShown = NO;
+    }];
+
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueProgressNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        self.progressInfo = note.userInfo[HBQueueProgressNotificationInfoKey];
+        self.progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
+
+        if (self->_visible)
+        {
+            [self updateProgress];
+        }
+    }];
 
     self.presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsPopup.menu
                                                                   action:@selector(selectPresetFromMenu:)
@@ -349,12 +377,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
     else if (context == HBControllerQueueCoreContext)
     {
-        HBState state = self.queue.core.state;
-        [self updateToolbarButtonsStateForQueueCore:state];
+        [self updateToolbarButtonsState];
         [self.window.toolbar validateVisibleItems];
         if (@available(macOS 10.12.2, *))
         {
-            [self _touchBar_updateButtonsStateForQueueCore:state];
+            [self _touchBar_updateQueueButtonsState];
             [self _touchBar_validateUserInterfaceItems];
         }
         NSUInteger count = self.queue.pendingItemsCount;
@@ -382,9 +409,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
 }
 
-- (void)updateToolbarButtonsStateForQueueCore:(HBState)state
+- (void)updateToolbarButtonsState
 {
-    if (state == HBStatePaused)
+    if (self.queue.canResume)
     {
         _pauseToolbarItem.image = [NSImage imageNamed: @"encode"];
         _pauseToolbarItem.label = NSLocalizedString(@"Resume", @"Toolbar Pause Item");
@@ -397,7 +424,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         _pauseToolbarItem.toolTip = NSLocalizedString(@"Pause Encoding", @"Toolbar Pause Item");
 
     }
-    if (state == HBStateScanning || state == HBStateWorking || state == HBStateSearching || state == HBStateMuxing || state == HBStatePaused)
+    if (self.queue.isEncoding)
     {
         _ripToolbarItem.image = [NSImage imageNamed:@"stopencode"];
         _ripToolbarItem.label = NSLocalizedString(@"Stop", @"Toolbar Start/Stop Item");
@@ -443,7 +470,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         {
             return YES;
         }
-        if (action == @selector(rip:) || action == @selector(addToQueue:))
+        if (action == @selector(toggleStartCancel:) || action == @selector(addToQueue:))
         {
             return NO;
         }
@@ -453,30 +480,20 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         return YES;
     }
 
-    HBState queueState = _queue.core.state;
-
-    if (action == @selector(rip:))
+    if (action == @selector(toggleStartCancel:))
     {
-        if (queueState == HBStateScanning || queueState == HBStateWorking || queueState == HBStateSearching ||
-            queueState == HBStateMuxing || queueState == HBStatePaused)
+        if (self.queue.isEncoding)
         {
             return YES;
         }
         else
         {
-            return (self.job != nil || _queue.pendingItemsCount > 0);
+            return (self.job != nil || self.queue.canEncode);
         }
     }
 
-    if (action == @selector(pause:)) {
-        if (queueState == HBStatePaused)
-        {
-            return YES;
-        }
-        else
-        {
-            return (queueState == HBStateWorking || queueState == HBStateMuxing);
-        }
+    if (action == @selector(togglePauseResume:)) {
+        return self.queue.canPause || self.queue.canResume;
     }
 
     if (action == @selector(addToQueue:))
@@ -505,11 +522,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     {
         return self.window.attachedSheet == nil;
     }
-    if (action == @selector(pause:))
+    if (action == @selector(togglePauseResume:))
     {
         return [_queue validateMenuItem:menuItem];
     }
-    if (action == @selector(rip:))
+    if (action == @selector(toggleStartCancel:))
     {
         BOOL result = [_queue validateMenuItem:menuItem];
 
@@ -1005,38 +1022,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     fRipIndicator.doubleValue = self.progress;
 }
 
-- (void)setQueueInfo:(NSAttributedString *)info progress:(double)progress hidden:(BOOL)hidden
-{
-    self.progressInfo = info;
-    self.progress = progress;
-
-    if (_visible)
-    {
-        [self updateProgress];
-    }
-
-    if (hidden)
-    {
-        if (fRipIndicatorShown)
-        {
-            self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET;
-            fRipIndicator.hidden = YES;
-            fRipIndicatorShown = NO;
-        }
-    }
-    else
-    {
-        // If progress bar hasn't been revealed at the bottom of the window, do
-        // that now.
-        if (!fRipIndicatorShown)
-        {
-            self.bottomConstrain.animator.constant = 0;
-            fRipIndicatorShown = YES;
-            fRipIndicator.hidden = NO;
-        }
-    }
-}
-
 #pragma mark - Job Handling
 
 /**
@@ -1073,7 +1058,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
-    else if ([_queue jobExistAtURL:job.completeOutputURL])
+    else if ([_queue itemExistAtURL:job.completeOutputURL])
     {
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"There is already a queue item for this destination.", @"File already exists in queue alert -> message")];
@@ -1123,24 +1108,19 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [self doAddToQueue];
     }
 
-    [_queue rip:self];
+    [_delegate toggleStartCancel:self];
 }
 
 /**
  * Puts up an alert before ultimately calling doRip
  */
-- (IBAction)rip:(id)sender
+- (IBAction)toggleStartCancel:(id)sender
 {
     // Rip or Cancel ?
-    if (_queue.core.state == HBStateWorking || _queue.core.state == HBStatePaused || _queue.core.state == HBStateSearching)
+    if (_queue.isEncoding || _queue.canEncode)
 	{
         // Displays an alert asking user if the want to cancel encoding of current job.
-        [_queue cancelRip:self];
-    }
-    // If there are pending jobs in the queue, then this is a rip the queue
-    else if (_queue.pendingItemsCount > 0)
-    {
-        [_queue rip:self];
+        [_delegate toggleStartCancel:self];
     }
     else
     {
@@ -1156,9 +1136,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
 }
 
-- (IBAction)pause:(id)sender
+- (IBAction)togglePauseResume:(id)sender
 {
-    [_queue togglePauseResume:sender];
+    [_delegate togglePauseResume:sender];
 }
 
 #pragma mark -
@@ -1213,7 +1193,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
             [destinations addObject:job.completeOutputURL];
         }
 
-        if ([[NSFileManager defaultManager] fileExistsAtPath:job.completeOutputURL.path] || [_queue jobExistAtURL:job.completeOutputURL])
+        if ([[NSFileManager defaultManager] fileExistsAtPath:job.completeOutputURL.path] || [_queue itemExistAtURL:job.completeOutputURL])
         {
             fileExists = YES;
             break;
@@ -1248,13 +1228,13 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         [alert beginSheetModalForWindow:self.window completionHandler:^(NSModalResponse returnCode) {
             if (returnCode == NSAlertSecondButtonReturn)
             {
-                [self->_queue addJobsFromArray:jobs];
+                [self->_queue addJobs:jobs];
             }
         }];
     }
     else
     {
-        [_queue addJobsFromArray:jobs];
+        [_queue addJobs:jobs];
     }
 }
 
@@ -1537,7 +1517,7 @@ static NSTouchBarItemIdentifier HBTouchBarActivity = @"fr.handbrake.activity";
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
         item.customizationLabel = NSLocalizedString(@"Start/Stop Encoding", @"Touch bar");
 
-        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPlayTemplate] target:self action:@selector(rip:)];
+        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPlayTemplate] target:self action:@selector(toggleStartCancel:)];
 
         item.view = button;
         return item;
@@ -1547,7 +1527,7 @@ static NSTouchBarItemIdentifier HBTouchBarActivity = @"fr.handbrake.activity";
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
         item.customizationLabel = NSLocalizedString(@"Pause Encoding", @"Touch bar");
 
-        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPauseTemplate] target:self action:@selector(pause:)];
+        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPauseTemplate] target:self action:@selector(togglePauseResume:)];
 
         item.view = button;
         return item;
@@ -1592,24 +1572,26 @@ static NSTouchBarItemIdentifier HBTouchBarActivity = @"fr.handbrake.activity";
     }
 }
 
-- (void)_touchBar_updateButtonsStateForQueueCore:(HBState)state;
+- (void)_touchBar_updateQueueButtonsState
 {
     NSButton *ripButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarRip] view];
     NSButton *pauseButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarPause] view];
 
-    if (state == HBStateScanning || state == HBStateWorking || state == HBStateSearching || state == HBStateMuxing)
+    if (self.queue.isEncoding)
     {
         ripButton.image = [NSImage imageNamed:NSImageNameTouchBarRecordStopTemplate];
-        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPauseTemplate];
     }
-    else if (state == HBStatePaused)
-    {
-        ripButton.image = [NSImage imageNamed:NSImageNameTouchBarRecordStopTemplate];
-        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPlayTemplate];
-    }
-    else if (state == HBStateIdle)
+    else
     {
         ripButton.image = [NSImage imageNamed:NSImageNameTouchBarPlayTemplate];
+    }
+
+    if (self.queue.canResume)
+    {
+        pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPlayTemplate];
+    }
+    else
+    {
         pauseButton.image = [NSImage imageNamed:NSImageNameTouchBarPauseTemplate];
     }
 }

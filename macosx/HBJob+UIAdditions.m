@@ -119,13 +119,8 @@ static NSDictionary            *shortHeightAttr;
     }
 }
 
-- (NSAttributedString *)titleAttributedDescription
+- (NSString *)rangeDescription
 {
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
-
-    // Job name
-    [attrString appendString:self.description withAttributes:titleAttr];
-
     // Range type
     NSString *startStopString = @"";
     if (self.range.type == HBRangeTypeChapters)
@@ -163,16 +158,37 @@ static NSDictionary            *shortHeightAttr;
 
     if (passesString.length)
     {
-        [attrString appendString:[NSString stringWithFormat:HBKitLocalizedString(@" (Title %d, %@, %@) ▸ %@\n", @"Title description"),
-                                  self.titleIdx, startStopString, passesString, self.outputFileName]
-                  withAttributes:detailAttr];
+        return [NSString stringWithFormat:HBKitLocalizedString(@"Title %d, %@, %@", @"Title description"),
+                self.titleIdx, startStopString, passesString];
     }
     else
     {
-        [attrString appendString:[NSString stringWithFormat:HBKitLocalizedString(@" (Title %d, %@) ▸ %@\n", @"Title description"),
-                                  self.titleIdx, startStopString, self.outputFileName]
-                  withAttributes:detailAttr];
+        return [NSString stringWithFormat:HBKitLocalizedString(@"Title %d, %@", @"Title description"),
+                self.titleIdx, startStopString];
     }
+}
+
+- (NSAttributedString *)rangeAttributedDescription
+{
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
+
+    [attrString appendString:@"\t" withAttributes:detailAttr];
+    [attrString appendString:HBKitLocalizedString(@"Range:", @"Range description") withAttributes:detailBoldAttr];
+    [attrString appendString:@" \t" withAttributes:detailAttr];
+    [attrString appendString:self.rangeDescription withAttributes:detailAttr];
+    [attrString appendString:@"\n" withAttributes:detailAttr];
+
+    return attrString;
+}
+- (NSAttributedString *)titleAttributedDescription
+{
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
+
+    // Job name
+    [attrString appendString:self.description withAttributes:titleAttr];
+
+    [attrString appendString:[NSString stringWithFormat:@" (%@) ▸ %@\n", [self rangeDescription], self.outputFileName]
+                  withAttributes:detailAttr];
 
     return attrString;
 }
@@ -227,6 +243,19 @@ static NSDictionary            *shortHeightAttr;
     [attrString appendString:@" \t"     withAttributes:detailAttr];
     [attrString appendString:options    withAttributes:detailAttr];
     [attrString appendString:@"\n"      withAttributes:detailAttr];
+
+    return attrString;
+}
+
+- (NSAttributedString *)sourceAttributedDescription
+{
+    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
+
+    [attrString appendString:@"\t"                          withAttributes:detailAttr];
+    [attrString appendString:HBKitLocalizedString(@"Source:", @"Source description") withAttributes:detailBoldAttr];
+    [attrString appendString:@" \t"                         withAttributes:detailAttr];
+    [attrString appendString:self.fileURL.path              withAttributes:detailAttr];
+    [attrString appendString:@"\n"                          withAttributes:detailAttr];
 
     return attrString;
 }
@@ -629,27 +658,38 @@ static NSDictionary            *shortHeightAttr;
 
     @autoreleasepool
     {
-        [attrString appendAttributedString:[self titleAttributedDescription]];
         [attrString appendAttributedString:[self presetAttributedDescription]];
+        [attrString appendString:@"\n" withAttributes: detailAttr];
+        [attrString appendAttributedString:[self sourceAttributedDescription]];
+        [attrString appendString:@"\n" withAttributes: detailAttr];
+        [attrString appendAttributedString:[self destinationAttributedDescription]];
+        [attrString appendString:@"\n" withAttributes: detailAttr];
         [attrString appendAttributedString:[self formatAttributedDescription]];
+        [attrString appendString:@"\n" withAttributes: detailAttr];
+        [attrString appendAttributedString:[self rangeAttributedDescription]];
+        [attrString appendString:@"\n" withAttributes: detailAttr];
         [attrString appendAttributedString:[self dimensionsAttributedDescription]];
+        [attrString appendString:@"\n" withAttributes: detailAttr];
         [attrString appendAttributedString:[self filtersAttributedDescription]];
+        [attrString appendString:@"\n" withAttributes: detailAttr];
         [attrString appendAttributedString:[self videoAttributedDescription]];
+        [attrString appendString:@"\n" withAttributes: detailAttr];
         if (self.audio.countOfTracks > 1)
         {
             [attrString appendAttributedString:[self audioAttributedDescription]];
+            [attrString appendString:@"\n" withAttributes: detailAttr];
         }
         if (self.subtitles.countOfTracks > 1)
         {
             [attrString appendAttributedString:[self subtitlesAttributedDescription]];
         }
-        [attrString appendAttributedString:[self destinationAttributedDescription]];
     }
 
     [attrString deleteCharactersInRange:NSMakeRange(attrString.length - 1, 1)];
 
     return attrString;
 }
+
 
 #pragma mark - Short descriptions
 

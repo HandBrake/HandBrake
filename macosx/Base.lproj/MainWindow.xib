@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.68" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.68"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -40,7 +40,7 @@
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="41" y="572" width="885" height="600"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
             <view key="contentView" id="2" customClass="HBFocusRingView">
                 <rect key="frame" x="0.0" y="0.0" width="885" height="600"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -53,7 +53,7 @@
                         <tabViewItems>
                             <tabViewItem label="Summary" identifier="" id="BA0-eg-2Ka">
                                 <view key="view" id="BjX-E2-6tb">
-                                    <rect key="frame" x="10" y="25" width="839" height="344"/>
+                                    <rect key="frame" x="10" y="29" width="839" height="340"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
                             </tabViewItem>
@@ -428,16 +428,16 @@
                         </popUpButtonCell>
                         <connections>
                             <accessibilityConnection property="title" destination="5180" id="1bt-ea-b2b"/>
+                            <binding destination="-2" name="enabled" keyPath="self.job" id="pA6-GK-w84">
+                                <dictionary key="options">
+                                    <string key="NSValueTransformerName">NSIsNotNil</string>
+                                </dictionary>
+                            </binding>
                             <binding destination="-2" name="selectedValue" keyPath="self.job.angle" previousBinding="If4-Fp-R0g" id="3Gk-ma-r2w">
                                 <dictionary key="options">
                                     <string key="NSNullPlaceholder" base64-UTF8="YES">
 IA
 </string>
-                                </dictionary>
-                            </binding>
-                            <binding destination="-2" name="enabled" keyPath="self.job" id="pA6-GK-w84">
-                                <dictionary key="options">
-                                    <string key="NSValueTransformerName">NSIsNotNil</string>
                                 </dictionary>
                             </binding>
                             <binding destination="-2" name="content" keyPath="self.job.angles" id="If4-Fp-R0g"/>
@@ -730,12 +730,12 @@ Blu-ray and DVD sources often have multiple titles, the longest of which is typi
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="10063EA1-C821-4363-8F59-7840853EB568" label="Start" paletteLabel="Start Encoding" toolTip="Start Encoding" tag="-1" image="encode" id="byg-kj-sEM">
                         <connections>
-                            <action selector="rip:" target="-2" id="f6w-0B-Qvn"/>
+                            <action selector="toggleStartCancel:" target="-2" id="6gH-Cz-Nuo"/>
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="B4A5CE50-6CD5-4CD0-B639-E1516E1C85C1" label="Pause" paletteLabel="Pause Encoding" toolTip="Pause Encoding" tag="-1" image="pauseencode" id="wTQ-KF-5KW">
                         <connections>
-                            <action selector="pause:" target="-2" id="AN1-8V-lc1"/>
+                            <action selector="togglePauseResume:" target="-2" id="AN1-8V-lc1"/>
                         </connections>
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="3B6A53EE-F973-41A7-A0DF-AEBD73DAC28E" label="Add To Queue" paletteLabel="Add To Queue" toolTip="Add To Queue" tag="-1" image="addqueue" id="DZZ-Fe-wjw">

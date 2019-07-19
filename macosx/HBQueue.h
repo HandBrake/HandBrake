@@ -1,0 +1,93 @@
+/*  HBQueue.h $
+
+ This file is part of the HandBrake source code.
+ Homepage: <http://handbrake.fr/>.
+ It may be used under the terms of the GNU General Public License. */
+
+#import <Foundation/Foundation.h>
+
+#import "HBCore.h"
+#import "HBDistributedArray.h"
+#import "HBQueueItem.h"
+#import "HBJobOutputFileWriter.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+extern NSString * const HBQueueDidAddItemNotification;
+extern NSString * const HBQueueDidRemoveItemNotification;
+extern NSString * const HBQueueDidChangeItemNotification;
+extern NSString * const HBQueueItemNotificationIndexesKey;           // NSIndexSet
+
+extern NSString * const HBQueueDidMoveItemNotification;
+extern NSString * const HBQueueItemNotificationSourceIndexesKey;     // NSArray<NSNumber *>
+extern NSString * const HBQueueItemNotificationTargetIndexesKey;     // NSArray<NSNumber *>
+
+extern NSString * const HBQueueReloadItemsNotification;
+
+extern NSString * const HBQueueLowSpaceAlertNotification;
+
+extern NSString * const HBQueueProgressNotification;
+extern NSString * const HBQueueProgressNotificationPercentKey;       // NSNumber - double
+extern NSString * const HBQueueProgressNotificationInfoKey;          // NSString
+
+extern NSString * const HBQueueDidStartNotification;
+extern NSString * const HBQueueDidCompleteNotification;
+
+extern NSString * const HBQueueDidCompleteItemNotification;
+extern NSString * const HBQueueDidCompleteItemNotificationItemKey;   // HBQueueItem
+
+@interface HBQueue : NSObject
+
+- (instancetype)initWithURL:(NSURL *)queueURL;
+
+@property (nonatomic, readonly) NSURL *queueURL;
+
+@property (nonatomic, readonly) HBCore *core;
+@property (nonatomic, readonly) HBDistributedArray<HBQueueItem *> *items;
+
+@property (nonatomic, nullable) HBQueueItem *currentItem;
+@property (nonatomic, nullable) HBJobOutputFileWriter *currentLog;
+
+@property (nonatomic) NSUInteger pendingItemsCount;
+@property (nonatomic) NSUInteger completedItemsCount;
+
+@property (nonatomic) NSUndoManager *undoManager;
+
+- (void)addJob:(HBJob *)job;
+- (void)addJobs:(NSArray<HBJob *> *)jobs;
+
+- (void)addQueueItems:(NSArray<HBQueueItem *> *)items atIndexes:(NSIndexSet *)indexes;
+- (void)removeQueueItemAtIndex:(NSUInteger)index;
+- (void)removeQueueItemsAtIndexes:(NSIndexSet *)indexes;
+- (void)moveQueueItems:(NSArray<HBQueueItem *> *)items toIndex:(NSUInteger)index;
+
+- (BOOL)itemExistAtURL:(NSURL *)url;
+
+- (void)removeAllItems;
+- (void)removeCompletedAndCancelledItems;
+- (void)removeNotWorkingItems;
+- (void)removeCompletedItems;
+
+- (void)resetItemsStateAtIndexes:(NSIndexSet *)indexes;
+- (void)resetAllItems;
+- (void)resetFailedItems;
+
+- (void)setEncodingJobsAsPending;
+
+@property (nonatomic, readonly) BOOL canEncode;
+@property (nonatomic, readonly) BOOL isEncoding;
+
+- (void)start;
+- (void)cancelCurrentItemAndContinue;
+- (void)finishCurrentAndStop;
+- (void)cancelCurrentItemAndStop;
+
+@property (nonatomic, readonly) BOOL canPause;
+- (void)pause;
+
+@property (nonatomic, readonly) BOOL canResume;
+- (void)resume;
+
+@end
+
+NS_ASSUME_NONNULL_END

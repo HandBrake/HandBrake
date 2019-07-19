@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.59" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.59"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBQueueController">
             <connections>
-                <outlet property="countTextField" destination="2511" id="7vs-Ty-tNx"/>
                 <outlet property="pauseToolbarItem" destination="s7o-pK-heI" id="SP7-Fq-gw9"/>
-                <outlet property="progressTextField" destination="2646" id="E60-Gv-b2q"/>
                 <outlet property="ripToolbarItem" destination="SX6-mq-Hck" id="va2-0n-3T0"/>
-                <outlet property="tableView" destination="Zhj-ec-Xhl" id="4Ki-XG-eF7"/>
                 <outlet property="window" destination="2576" id="2645"/>
             </connections>
         </customObject>
@@ -23,205 +20,11 @@
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="157" y="863" width="583" height="423"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
             <value key="minSize" type="size" width="525" height="340"/>
             <view key="contentView" id="2577">
                 <rect key="frame" x="0.0" y="0.0" width="583" height="423"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                <subviews>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="6000" translatesAutoresizingMaskIntoConstraints="NO" id="2511">
-                        <rect key="frame" x="18" y="399" width="547" height="14"/>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" title="Pending Jobs" id="2637">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="6000" translatesAutoresizingMaskIntoConstraints="NO" id="2646">
-                        <rect key="frame" x="18" y="365" width="547" height="30"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="30" id="IvQ-56-oOt"/>
-                        </constraints>
-                        <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="There are no jobs currently encoding" id="2647">
-                            <font key="font" metaFont="smallSystem"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <scrollView autohidesScrollers="YES" horizontalLineScroll="22" horizontalPageScroll="10" verticalLineScroll="22" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V8p-UJ-HY0">
-                        <rect key="frame" x="20" y="20" width="543" height="337"/>
-                        <clipView key="contentView" drawsBackground="NO" id="U2w-5W-t6z">
-                            <rect key="frame" x="1" y="1" width="541" height="335"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnSelection="YES" autosaveColumns="NO" rowHeight="20" rowSizeStyle="automatic" viewBased="YES" id="Zhj-ec-Xhl" customClass="HBTableView">
-                                    <rect key="frame" x="0.0" y="0.0" width="541" height="335"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <size key="intercellSpacing" width="3" height="2"/>
-                                    <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
-                                    <tableColumns>
-                                        <tableColumn width="538" minWidth="40" maxWidth="3000" id="bXr-Oy-mqu">
-                                            <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                <font key="font" metaFont="smallSystem"/>
-                                                <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
-                                            </tableHeaderCell>
-                                            <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="MWq-ie-HjX">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                            <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
-                                            <prototypeCellViews>
-                                                <tableCellView identifier="MainCellForSizing" id="fwz-hO-Ryv" customClass="HBQueueItemView">
-                                                    <rect key="frame" x="1" y="1" width="538" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <subviews>
-                                                        <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zFo-Hu-qOb">
-                                                            <rect key="frame" x="3" y="4" width="13" height="13"/>
-                                                            <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="above" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vwa-tA-Eef">
-                                                                <behavior key="behavior" pushIn="YES" changeBackground="YES" changeGray="YES" lightByContents="YES"/>
-                                                                <font key="font" metaFont="system"/>
-                                                            </buttonCell>
-                                                        </button>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ytl-nJ-QF2">
-                                                            <rect key="frame" x="36" y="2" width="482" height="17"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="KX1-hQ-cAs"/>
-                                                            </constraints>
-                                                            <textFieldCell key="cell" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Table View Cell" id="anR-ZS-eOK">
-                                                                <font key="font" metaFont="system"/>
-                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            </textFieldCell>
-                                                        </textField>
-                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iLH-IM-e3U">
-                                                            <rect key="frame" x="20" y="4" width="14" height="14"/>
-                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="Fd0-UE-Y9E"/>
-                                                        </imageView>
-                                                        <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="3iF-mi-Ofb">
-                                                            <rect key="frame" x="519" y="3" width="16" height="16"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="16" id="YU8-rD-aOs"/>
-                                                                <constraint firstAttribute="height" constant="16" id="zUz-oi-p3D"/>
-                                                            </constraints>
-                                                            <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Delete" imagePosition="only" alignment="center" alternateImage="DeleteHighlightPressed" id="6ta-Ak-dc3">
-                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="system"/>
-                                                            </buttonCell>
-                                                        </button>
-                                                    </subviews>
-                                                    <constraints>
-                                                        <constraint firstItem="3iF-mi-Ofb" firstAttribute="leading" secondItem="ytl-nJ-QF2" secondAttribute="trailing" constant="3" id="B8U-H8-LVU"/>
-                                                        <constraint firstItem="3iF-mi-Ofb" firstAttribute="top" secondItem="fwz-hO-Ryv" secondAttribute="top" constant="1" id="Fc7-bU-swQ"/>
-                                                        <constraint firstAttribute="bottom" secondItem="ytl-nJ-QF2" secondAttribute="bottom" constant="2" id="PoD-SD-75N"/>
-                                                        <constraint firstItem="zFo-Hu-qOb" firstAttribute="leading" secondItem="fwz-hO-Ryv" secondAttribute="leading" constant="3" id="Tlt-5u-MdO"/>
-                                                        <constraint firstItem="iLH-IM-e3U" firstAttribute="centerY" secondItem="zFo-Hu-qOb" secondAttribute="centerY" id="XMi-MB-91O"/>
-                                                        <constraint firstItem="zFo-Hu-qOb" firstAttribute="top" secondItem="fwz-hO-Ryv" secondAttribute="top" constant="3" id="ita-PD-WDw"/>
-                                                        <constraint firstAttribute="trailing" secondItem="3iF-mi-Ofb" secondAttribute="trailing" constant="3" id="pYB-wp-Ngx"/>
-                                                        <constraint firstItem="ytl-nJ-QF2" firstAttribute="leading" secondItem="iLH-IM-e3U" secondAttribute="trailing" constant="4" id="uLz-ZO-W6Z"/>
-                                                        <constraint firstItem="iLH-IM-e3U" firstAttribute="leading" secondItem="zFo-Hu-qOb" secondAttribute="trailing" constant="4" id="utq-Rq-M1K"/>
-                                                        <constraint firstItem="ytl-nJ-QF2" firstAttribute="top" secondItem="fwz-hO-Ryv" secondAttribute="top" constant="1" id="wzO-Uy-p6R"/>
-                                                    </constraints>
-                                                    <connections>
-                                                        <outlet property="expandButton" destination="zFo-Hu-qOb" id="DCW-dQ-Jt2"/>
-                                                        <outlet property="imageView" destination="iLH-IM-e3U" id="pnj-VU-8lk"/>
-                                                        <outlet property="removeButton" destination="3iF-mi-Ofb" id="okE-58-pJ0"/>
-                                                        <outlet property="textField" destination="ytl-nJ-QF2" id="ujr-58-CSG"/>
-                                                    </connections>
-                                                </tableCellView>
-                                                <tableCellView identifier="MainCell" id="WdL-72-BXn" customClass="HBQueueItemView">
-                                                    <rect key="frame" x="1" y="23" width="538" height="20"/>
-                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                    <subviews>
-                                                        <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hDo-Zl-9lr">
-                                                            <rect key="frame" x="3" y="4" width="13" height="13"/>
-                                                            <buttonCell key="cell" type="disclosureTriangle" bezelStyle="disclosure" imagePosition="above" alignment="left" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gix-c5-O2h">
-                                                                <behavior key="behavior" pushIn="YES" changeBackground="YES" changeGray="YES" lightByContents="YES"/>
-                                                                <font key="font" metaFont="system"/>
-                                                            </buttonCell>
-                                                        </button>
-                                                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="93s-90-w6h">
-                                                            <rect key="frame" x="36" y="2" width="482" height="17"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="fPa-ff-vgB"/>
-                                                            </constraints>
-                                                            <textFieldCell key="cell" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Table View Cell" id="F1i-sW-mz6">
-                                                                <font key="font" metaFont="system"/>
-                                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            </textFieldCell>
-                                                        </textField>
-                                                        <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fGK-O0-x2n">
-                                                            <rect key="frame" x="20" y="4" width="14" height="14"/>
-                                                            <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="sjq-oR-z7j"/>
-                                                        </imageView>
-                                                        <button horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="J7T-PN-aVk">
-                                                            <rect key="frame" x="519" y="3" width="16" height="16"/>
-                                                            <constraints>
-                                                                <constraint firstAttribute="width" constant="16" id="V0F-7D-TYq"/>
-                                                                <constraint firstAttribute="height" constant="16" id="fVl-JE-S8p"/>
-                                                            </constraints>
-                                                            <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="Delete" imagePosition="only" alignment="center" alternateImage="DeleteHighlightPressed" id="DHN-sj-IkJ">
-                                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                                <font key="font" metaFont="system"/>
-                                                            </buttonCell>
-                                                        </button>
-                                                    </subviews>
-                                                    <constraints>
-                                                        <constraint firstItem="hDo-Zl-9lr" firstAttribute="leading" secondItem="WdL-72-BXn" secondAttribute="leading" constant="3" id="46G-ka-wQC"/>
-                                                        <constraint firstItem="J7T-PN-aVk" firstAttribute="top" secondItem="WdL-72-BXn" secondAttribute="top" constant="1" id="Cnn-dM-JY0"/>
-                                                        <constraint firstAttribute="bottom" secondItem="93s-90-w6h" secondAttribute="bottom" constant="2" id="FUz-Ej-rNL"/>
-                                                        <constraint firstItem="93s-90-w6h" firstAttribute="leading" secondItem="fGK-O0-x2n" secondAttribute="trailing" constant="4" id="TXB-Wp-bvX"/>
-                                                        <constraint firstItem="fGK-O0-x2n" firstAttribute="leading" secondItem="hDo-Zl-9lr" secondAttribute="trailing" constant="4" id="agy-M6-bFJ"/>
-                                                        <constraint firstItem="93s-90-w6h" firstAttribute="top" secondItem="WdL-72-BXn" secondAttribute="top" constant="1" id="mkK-5a-3hE"/>
-                                                        <constraint firstAttribute="trailing" secondItem="J7T-PN-aVk" secondAttribute="trailing" constant="3" id="n4J-ih-N0C"/>
-                                                        <constraint firstItem="fGK-O0-x2n" firstAttribute="centerY" secondItem="hDo-Zl-9lr" secondAttribute="centerY" id="uBZ-4T-gyj"/>
-                                                        <constraint firstItem="J7T-PN-aVk" firstAttribute="leading" secondItem="93s-90-w6h" secondAttribute="trailing" constant="3" id="uCp-vf-aad"/>
-                                                        <constraint firstItem="hDo-Zl-9lr" firstAttribute="top" secondItem="WdL-72-BXn" secondAttribute="top" constant="3" id="ypH-kh-t70"/>
-                                                    </constraints>
-                                                    <connections>
-                                                        <outlet property="expandButton" destination="hDo-Zl-9lr" id="kd5-U2-oiI"/>
-                                                        <outlet property="imageView" destination="fGK-O0-x2n" id="6pO-2g-qSk"/>
-                                                        <outlet property="removeButton" destination="J7T-PN-aVk" id="17N-VN-hCz"/>
-                                                        <outlet property="textField" destination="93s-90-w6h" id="Bxj-ru-lZr"/>
-                                                    </connections>
-                                                </tableCellView>
-                                            </prototypeCellViews>
-                                        </tableColumn>
-                                    </tableColumns>
-                                    <connections>
-                                        <outlet property="dataSource" destination="-2" id="TEa-pj-uBd"/>
-                                        <outlet property="delegate" destination="-2" id="DkB-HG-P9X"/>
-                                        <outlet property="menu" destination="2649" id="3do-4Q-kGX"/>
-                                    </connections>
-                                </tableView>
-                            </subviews>
-                            <nil key="backgroundColor"/>
-                        </clipView>
-                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="1UD-VE-aty">
-                            <rect key="frame" x="1" y="320" width="541" height="16"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Ory-ZM-JQ8">
-                            <rect key="frame" x="224" y="17" width="15" height="102"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                    </scrollView>
-                </subviews>
-                <constraints>
-                    <constraint firstItem="2511" firstAttribute="leading" secondItem="2577" secondAttribute="leading" constant="20" id="8Xc-AN-fPc"/>
-                    <constraint firstAttribute="trailing" secondItem="2511" secondAttribute="trailing" constant="20" id="Eu0-GV-JYK"/>
-                    <constraint firstAttribute="trailing" secondItem="V8p-UJ-HY0" secondAttribute="trailing" constant="20" id="JIB-NW-QyO"/>
-                    <constraint firstAttribute="trailing" secondItem="2646" secondAttribute="trailing" constant="20" id="QhH-jG-52I"/>
-                    <constraint firstItem="2646" firstAttribute="top" secondItem="2511" secondAttribute="bottom" constant="4" id="agE-FW-5eL"/>
-                    <constraint firstAttribute="bottom" secondItem="V8p-UJ-HY0" secondAttribute="bottom" constant="20" id="nkP-qP-x6z"/>
-                    <constraint firstItem="V8p-UJ-HY0" firstAttribute="top" secondItem="2646" secondAttribute="bottom" constant="8" id="pLi-au-o2H"/>
-                    <constraint firstItem="2511" firstAttribute="top" secondItem="2577" secondAttribute="top" constant="10" id="q87-Mh-5mE"/>
-                    <constraint firstItem="2646" firstAttribute="leading" secondItem="2577" secondAttribute="leading" constant="20" id="r9l-aI-qMG"/>
-                    <constraint firstItem="V8p-UJ-HY0" firstAttribute="leading" secondItem="2577" secondAttribute="leading" constant="20" id="uaI-oz-plH"/>
-                </constraints>
             </view>
             <toolbar key="toolbar" implicitIdentifier="0FE76B40-49B7-48AE-B44E-D1B8034BC88A" explicitIdentifier="HBQueueToolbar" displayMode="iconAndLabel" sizeMode="regular" id="ZVb-ld-0UP">
                 <allowedToolbarItems>
@@ -237,9 +40,50 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="rHN-a0-oZQ"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="QuV-M8-cet"/>
+                    <toolbarItem implicitItemIdentifier="E914B732-9FA4-42E0-AFA6-353A8ACC406B" label="Actions" paletteLabel="Actions" image="NSActionTemplate" sizingBehavior="auto" id="DCB-WP-NRs">
+                        <nil key="toolTip"/>
+                        <popUpButton key="view" verticalHuggingPriority="750" id="Wfu-Hw-JBC">
+                            <rect key="frame" x="4" y="14" width="40" height="24"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="Zxj-rr-UnA">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="menu"/>
+                                <menu key="menu" id="BBi-6p-GyW">
+                                    <items>
+                                        <menuItem image="NSActionTemplate" hidden="YES" id="l0x-1G-MEr"/>
+                                        <menuItem title="Reset All Jobs" id="kPX-am-UX1">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="resetAll:" target="-2" id="AYP-Za-Zyi"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Reset Failed Jobs" id="0zn-7P-JbR">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="resetFailed:" target="-2" id="gJP-lg-vxx"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="9Kv-XR-d3o"/>
+                                        <menuItem title="Remove All Jobs" id="Tvo-xt-sag">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="removeAll:" target="-2" id="RYc-Bg-ORR"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Remove Completed Jobs" id="9tg-YJ-DuI">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="removeCompleted:" target="-2" id="J6v-wU-JAD"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </popUpButtonCell>
+                        </popUpButton>
+                    </toolbarItem>
                     <toolbarItem implicitItemIdentifier="938D3EC6-1547-4AAB-86AF-B3FD3C7AF8BD" label="When Done" paletteLabel="When Done" toolTip="Action to perform when encoding is complete." id="a3c-kV-98E">
                         <size key="minSize" width="100" height="25"/>
-                        <size key="maxSize" width="210" height="25"/>
+                        <size key="maxSize" width="200" height="25"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="rfS-M1-CnB">
                             <rect key="frame" x="0.0" y="14" width="200" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -262,74 +106,41 @@
                             </connections>
                         </popUpButton>
                     </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="963C2AD9-6708-4781-9411-3111E9713E3B" label="Details" paletteLabel="Details" image="NSGoLeftTemplate" sizingBehavior="auto" id="DfN-Iw-bzy">
+                        <nil key="toolTip"/>
+                        <button key="view" verticalHuggingPriority="750" id="KyK-r0-0eJ">
+                            <rect key="frame" x="6" y="14" width="32" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSGoLeftTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BjZ-aR-Hpe">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <connections>
+                            <action selector="toggleDetails:" target="-2" id="EcM-0b-BRV"/>
+                        </connections>
+                    </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
                     <toolbarItem reference="SX6-mq-Hck"/>
                     <toolbarItem reference="s7o-pK-heI"/>
-                    <toolbarItem reference="QuV-M8-cet"/>
+                    <toolbarItem reference="rHN-a0-oZQ"/>
+                    <toolbarItem reference="DCB-WP-NRs"/>
                     <toolbarItem reference="a3c-kV-98E"/>
+                    <toolbarItem reference="QuV-M8-cet"/>
+                    <toolbarItem reference="DfN-Iw-bzy"/>
                 </defaultToolbarItems>
             </toolbar>
             <connections>
                 <outlet property="delegate" destination="-2" id="2579"/>
             </connections>
-            <point key="canvasLocation" x="-773" y="15"/>
+            <point key="canvasLocation" x="-948" y="-24"/>
         </window>
-        <menu id="2649" userLabel="ContextMenu">
-            <items>
-                <menuItem title="Show Source in Finder" id="gbW-g1-lEc">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="revealSelectedQueueItemsSources:" target="-2" id="NY5-Sp-e08"/>
-                    </connections>
-                </menuItem>
-                <menuItem title="Show Destination in Finder" id="2655">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="revealSelectedQueueItems:" target="-2" id="qtj-uq-KvZ"/>
-                    </connections>
-                </menuItem>
-                <menuItem isSeparatorItem="YES" id="Au5-j1-AAd"/>
-                <menuItem title="Edit Job Settings" id="2650">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="editSelectedQueueItem:" target="-2" id="2654"/>
-                    </connections>
-                </menuItem>
-                <menuItem title="Reset Stopped Job" id="zy6-ab-ush">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="resetJobState:" target="-1" id="fxd-BP-VY6"/>
-                    </connections>
-                </menuItem>
-                <menuItem isSeparatorItem="YES" id="1ZZ-71-d6P"/>
-                <menuItem title="Clear All Jobs" id="2652">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="clearAll:" target="-2" id="Q3d-9G-k0i"/>
-                    </connections>
-                </menuItem>
-                <menuItem title="Clear Completed Jobs" id="XdJ-Sl-pwu">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="clearCompleted:" target="-2" id="LMt-sj-JIh"/>
-                    </connections>
-                </menuItem>
-                <menuItem title="Clear Selected Job" id="Wfz-Kj-Vtx">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="removeSelectedQueueItem:" target="-2" id="i8t-gS-Bi3"/>
-                    </connections>
-                </menuItem>
-            </items>
-            <point key="canvasLocation" x="233" y="753.5"/>
-        </menu>
         <userDefaultsController representsSharedInstance="YES" id="z2J-h1-IDv"/>
     </objects>
     <resources>
-        <image name="Delete" width="16" height="16"/>
-        <image name="DeleteHighlightPressed" width="16" height="16"/>
         <image name="NSActionTemplate" width="14" height="14"/>
+        <image name="NSGoLeftTemplate" width="9" height="12"/>
         <image name="encode" width="32" height="32"/>
         <image name="pauseencode" width="32" height="32"/>
     </resources>
