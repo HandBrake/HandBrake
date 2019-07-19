@@ -1381,7 +1381,7 @@ def createCLI( cross = None ):
     arch.mode.cli_add_argument( grp, '--arch' )
     grp.add_argument( '--cross', default=None, action='store', metavar='SPEC',
         help='specify GCC cross-compilation spec' )
-    grp.add_argument( '--enable-hardening', dest="enable_host_harden", default=None, action='store_true',
+    grp.add_argument( '--enable-hardening', dest="enable_host_harden", default=False, action='store_true',
         help='enable buffer overflow protection' )
     cli.add_argument_group( grp )
 
@@ -1932,7 +1932,7 @@ int main()
         doc.add( 'HOST.cross.prefix', '' )
 
     doc.add( 'HOST.arch',   arch.mode.mode )
-    doc.add( 'HOST.harden', int( options.enable_host_harden != None))
+    doc.add( 'HOST.harden', int( options.enable_host_harden) )
 
     doc.addBlank()
     doc.add( 'SRC',     cfg.src_final )
