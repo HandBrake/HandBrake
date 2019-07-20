@@ -535,11 +535,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
     if (action == @selector(togglePauseResume:))
     {
-        return [_queue validateMenuItem:menuItem];
+        return [self.delegate validateMenuItem:menuItem];
     }
     if (action == @selector(toggleStartCancel:))
     {
-        BOOL result = [_queue validateMenuItem:menuItem];
+        BOOL result = [self.delegate validateMenuItem:menuItem];
 
         if ([menuItem.title isEqualToString:NSLocalizedString(@"Start Encoding", @"Menu Start/Stop Item")])
         {
