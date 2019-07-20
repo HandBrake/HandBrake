@@ -84,14 +84,19 @@
         [self.tableView reloadDataForRowIndexes:indexes columnIndexes:columnIndexes];
     }];
 
-    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+    typedef void (^HBUpdateHeight)(NSNotification *note);
+    HBUpdateHeight updateHeight = ^void(NSNotification *note) {
         NSIndexSet *indexes = note.userInfo[HBQueueItemNotificationIndexesKey];
         NSIndexSet *columnIndexes = [NSIndexSet indexSetWithIndex:0];
         if (indexes.count)
         {
             [self.tableView reloadDataForRowIndexes:indexes columnIndexes:columnIndexes];
+            [self.tableView noteHeightOfRowsWithIndexesChanged:indexes];
         }
-    }];
+    };
+
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidStartItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:updateHeight];
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:updateHeight];
 }
 
 #pragma mark - UI Actions
@@ -212,8 +217,9 @@
    viewForTableColumn:(NSTableColumn *)tableColumn
                   row:(NSInteger)row {
 
-    HBQueueItemView *view = [tableView makeViewWithIdentifier:@"MainSimpleCell" owner:self];
     HBQueueItem *item = self.queue.items[row];
+
+    HBQueueItemView *view = item.state == HBQueueItemStateWorking ? [tableView makeViewWithIdentifier:@"MainWorkingCell" owner:self] : [tableView makeViewWithIdentifier:@"MainCell" owner:self];
 
     view.delegate = self;
     view.item = item;
@@ -228,32 +234,8 @@
 
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
-    return 22;
-}
-
-- (void)toggleRowsAtIndexes:(NSIndexSet *)rowIndexes expand:(BOOL)expand
-{
-    NSMutableIndexSet *rowsToExpand = [NSMutableIndexSet indexSet];
-    [rowIndexes enumerateIndexesUsingBlock:^(NSUInteger index, BOOL *stop) {
-        HBQueueItem *item = self.queue.items[index];
-        BOOL expanded = item.expanded;
-        if (expanded != expand)
-        {
-            item.expanded = !expanded;
-            [rowsToExpand addIndex:index];
-        }
-
-        //HBQueueItemView *itemView = (HBQueueItemView *)[self.tableView viewAtColumn:0 row:index makeIfNecessary:NO];
-        //if (expand)
-        //{
-            //[itemView expand];
-        //}
-        //else
-        //{
-            //[itemView collapse];
-        //}
-    }];
-    [self.tableView noteHeightOfRowsWithIndexesChanged:rowsToExpand];
+    HBQueueItem *item = self.queue.items[row];
+    return item.state == HBQueueItemStateWorking ? 56 : 22;
 }
 
 #pragma mark NSQueueItemView delegate
@@ -267,12 +249,6 @@
 - (void)revealQueueItem:(nonnull HBQueueItem *)item
 {
     [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:@[item.completeOutputURL]];
-}
-
-- (void)toggleQueueItemHeight:(nonnull HBQueueItem *)item
-{
-    NSInteger row = [self.queue.items indexOfObject:item];
-    [self toggleRowsAtIndexes:[NSIndexSet indexSetWithIndex:row] expand:!item.expanded];
 }
 
 #pragma mark NSTableView delegate

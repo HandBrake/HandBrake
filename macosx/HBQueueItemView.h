@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)revealQueueItem:(HBQueueItem *)job;
 - (void)removeQueueItem:(HBQueueItem *)job;
-- (void)toggleQueueItemHeight:(HBQueueItem *)job;
 
 @end
 

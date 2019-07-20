@@ -33,8 +33,9 @@ extern NSString * const HBQueueProgressNotificationInfoKey;          // NSString
 extern NSString * const HBQueueDidStartNotification;
 extern NSString * const HBQueueDidCompleteNotification;
 
+extern NSString * const HBQueueDidStartItemNotification;
 extern NSString * const HBQueueDidCompleteItemNotification;
-extern NSString * const HBQueueDidCompleteItemNotificationItemKey;   // HBQueueItem
+extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueItem
 
 @interface HBQueue : NSObject
 

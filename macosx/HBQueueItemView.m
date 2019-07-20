@@ -10,7 +10,6 @@
 @interface HBQueueItemView ()
 
 @property (nonatomic, weak) IBOutlet NSButton *removeButton;
-@property (nonatomic, weak) IBOutlet NSButton *expandButton;
 
 @end
 
@@ -121,11 +120,6 @@
 - (IBAction)removeQueueItem:(id)sender
 {
     [self.delegate removeQueueItem:_item];
-}
-
-- (IBAction)toggleHeight:(id)sender
-{
-    [self.delegate toggleQueueItemHeight:_item];
 }
 
 @end

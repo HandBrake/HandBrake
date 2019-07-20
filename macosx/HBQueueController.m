@@ -79,8 +79,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     _splitViewController.splitView = _splitView;
     _splitViewController.view.wantsLayer = YES;
     _splitViewController.splitView.vertical = YES;
-    _splitViewController.splitView.autosaveName = @"HBQueueSplitViewAutosave";
-    _splitViewController.splitView.identifier = @"HBQueueSplitViewIdentifier";
 
     _tableViewController = [[HBQueueTableViewController alloc] initWithQueue:self.queue delegate:self];
     _detailsViewController = [[HBQueueDetailsViewController alloc] initWithDelegate:self];
@@ -95,6 +93,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     detailsItem.minimumThickness = 240;
 
     [_splitViewController addSplitViewItem:detailsItem];
+
+    _splitViewController.splitView.autosaveName = @"HBQueueSplitViewAutosave";
+    _splitViewController.splitView.identifier = @"HBQueueSplitViewIdentifier";
 
     self.window.contentViewController = _splitViewController;
 
@@ -141,7 +142,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         self.dockIconProgress = 0;
 
         // Run the per item notification and actions
-        HBQueueItem *item = note.userInfo[HBQueueDidCompleteItemNotificationItemKey];
+        HBQueueItem *item = note.userInfo[HBQueueItemNotificationItemKey];
         if (item.state == HBQueueItemStateCompleted)
         {
             [self sendToExternalApp:item];

@@ -81,7 +81,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     // Bottom
     IBOutlet NSTextField         * fStatusField;
     IBOutlet NSProgressIndicator * fRipIndicator;
-    BOOL                           fRipIndicatorShown;
 
     // User Preset
     HBPresetsManager             * presetManager;
@@ -291,18 +290,28 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidStartNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
         self.bottomConstrain.animator.constant = 0;
-        self->fRipIndicatorShown = YES;
         self->fRipIndicator.hidden = NO;
     }];
 
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
         self.bottomConstrain.animator.constant = -WINDOW_HEIGHT_OFFSET;
         self->fRipIndicator.hidden = YES;
-        self->fRipIndicatorShown = NO;
     }];
 
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueProgressNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-        self.progressInfo = note.userInfo[HBQueueProgressNotificationInfoKey];
+        HBQueueItem *item = self.queue.currentItem;
+        NSString *info;
+        if (item)
+        {
+            info = [NSString stringWithFormat:NSLocalizedString(@"Encoding %@\n%@", @""),
+                          self.queue.currentItem.outputFileName,
+                          note.userInfo[HBQueueProgressNotificationInfoKey]];
+        }
+        else
+        {
+            info = note.userInfo[HBQueueProgressNotificationInfoKey];
+        }
+        self.progressInfo = [[NSAttributedString alloc] initWithString:info];
         self.progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
 
         if (self->_visible)

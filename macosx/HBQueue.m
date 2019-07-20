@@ -28,8 +28,9 @@ NSString * const HBQueueProgressNotificationInfoKey = @"HBQueueProgressNotificat
 NSString * const HBQueueDidStartNotification = @"HBQueueDidStartNotification";
 NSString * const HBQueueDidCompleteNotification = @"HBQueueDidCompleteNotification";
 
+NSString * const HBQueueDidStartItemNotification = @"HBQueueDidStartItemNotification";
 NSString * const HBQueueDidCompleteItemNotification = @"HBQueueDidCompleteItemNotification";
-NSString * const HBQueueDidCompleteItemNotificationItemKey = @"HBQueueDidCompleteItemNotificationItemKey";
+NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemKey";
 
 @interface HBQueue ()
 
@@ -520,7 +521,6 @@ NSString * const HBQueueDidCompleteItemNotificationItemKey = @"HBQueueDidComplet
 - (void)encodeNextQueueItem
 {
     [self.items beginTransaction];
-    self.currentItem = nil;
 
     // since we have completed an encode, we go to the next
     if (self.stop)
@@ -562,7 +562,9 @@ NSString * const HBQueueDidCompleteItemNotificationItemKey = @"HBQueueDidComplet
 
             self.currentItem = nextItem;
             NSIndexSet *indexes = [NSIndexSet indexSetWithIndex:[self.items indexOfObject:nextItem]];
-            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeItemNotification object:self userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
+
+            [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidStartItemNotification object:self userInfo:@{HBQueueItemNotificationItemKey: nextItem,
+                                                                                                                            HBQueueItemNotificationIndexesKey: indexes}];
 
             [self updateStats];
 
@@ -622,12 +624,14 @@ NSString * const HBQueueDidCompleteItemNotificationItemKey = @"HBQueueDidComplet
             break;
     }
 
+    self.currentItem = nil;
+
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueProgressNotification object:self userInfo:@{HBQueueProgressNotificationPercentKey: @1.0,
                                                                                                                 HBQueueProgressNotificationInfoKey: info}];
 
     NSInteger index = [self.items indexOfObject:item];
     NSIndexSet *indexes = index > -1 ? [NSIndexSet indexSetWithIndex:index] : [NSIndexSet indexSet];
-    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteItemNotification object:self userInfo:@{HBQueueDidCompleteItemNotificationItemKey: item,
+    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteItemNotification object:self userInfo:@{HBQueueItemNotificationItemKey: item,
                                                                                                                        HBQueueItemNotificationIndexesKey: indexes}];
 
     [self.items commit];
@@ -686,7 +690,7 @@ NSString * const HBQueueDidCompleteItemNotificationItemKey = @"HBQueueDidComplet
     NSParameterAssert(job);
 
     HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
-    formatter.title = job.outputFileName;
+    formatter.twoLines = NO;
     self.core.stateFormatter = formatter;
 
     // Progress handler
