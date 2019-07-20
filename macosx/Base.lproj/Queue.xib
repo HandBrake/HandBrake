@@ -19,11 +19,11 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="157" y="863" width="583" height="423"/>
+            <rect key="contentRect" x="157" y="863" width="584" height="424"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
-            <value key="minSize" type="size" width="525" height="340"/>
+            <value key="minSize" type="size" width="320" height="240"/>
             <view key="contentView" id="2577">
-                <rect key="frame" x="0.0" y="0.0" width="583" height="423"/>
+                <rect key="frame" x="0.0" y="0.0" width="584" height="424"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             </view>
             <toolbar key="toolbar" implicitIdentifier="0FE76B40-49B7-48AE-B44E-D1B8034BC88A" explicitIdentifier="HBQueueToolbar" displayMode="iconAndLabel" sizeMode="regular" id="ZVb-ld-0UP">

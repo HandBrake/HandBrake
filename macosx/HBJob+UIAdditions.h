@@ -16,9 +16,7 @@
 @property (nonatomic, readonly) NSArray<NSString *> *containers;
 
 @property (nonatomic, readonly) NSAttributedString *attributedTitleDescription;
-
 @property (nonatomic, readonly) NSAttributedString *attributedDescription;
-@property (nonatomic, readonly) NSAttributedString *attributedExpandedDescription;
 
 @property (nonatomic, readonly) NSString *shortDescription;
 @property (nonatomic, readonly) NSString *filtersShortDescription;

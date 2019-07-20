@@ -28,6 +28,9 @@ extern NSString * const HBQueueLowSpaceAlertNotification;
 
 extern NSString * const HBQueueProgressNotification;
 extern NSString * const HBQueueProgressNotificationPercentKey;       // NSNumber - double
+extern NSString * const HBQueueProgressNotificationHoursKey;         // NSNumber - double
+extern NSString * const HBQueueProgressNotificationMinutesKey;       // NSNumber - double
+extern NSString * const HBQueueProgressNotificationSecondsKey;       // NSNumber - double
 extern NSString * const HBQueueProgressNotificationInfoKey;          // NSString
 
 extern NSString * const HBQueueDidStartNotification;
@@ -41,8 +44,6 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 
 - (instancetype)initWithURL:(NSURL *)queueURL;
 
-@property (nonatomic, readonly) NSURL *queueURL;
-
 @property (nonatomic, readonly) HBCore *core;
 @property (nonatomic, readonly) HBDistributedArray<HBQueueItem *> *items;
 
@@ -50,6 +51,7 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 @property (nonatomic, nullable) HBJobOutputFileWriter *currentLog;
 
 @property (nonatomic) NSUInteger pendingItemsCount;
+@property (nonatomic) NSUInteger failedItemsCount;
 @property (nonatomic) NSUInteger completedItemsCount;
 
 @property (nonatomic) NSUndoManager *undoManager;
@@ -57,10 +59,10 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 - (void)addJob:(HBJob *)job;
 - (void)addJobs:(NSArray<HBJob *> *)jobs;
 
-- (void)addQueueItems:(NSArray<HBQueueItem *> *)items atIndexes:(NSIndexSet *)indexes;
-- (void)removeQueueItemAtIndex:(NSUInteger)index;
-- (void)removeQueueItemsAtIndexes:(NSIndexSet *)indexes;
-- (void)moveQueueItems:(NSArray<HBQueueItem *> *)items toIndex:(NSUInteger)index;
+- (void)addItems:(NSArray<HBQueueItem *> *)items atIndexes:(NSIndexSet *)indexes;
+- (void)removeItemAtIndex:(NSUInteger)index;
+- (void)removeItemsAtIndexes:(NSIndexSet *)indexes;
+- (void)moveItems:(NSArray<HBQueueItem *> *)items toIndex:(NSUInteger)index;
 
 - (BOOL)itemExistAtURL:(NSURL *)url;
 

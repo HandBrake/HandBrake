@@ -235,7 +235,7 @@
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
     HBQueueItem *item = self.queue.items[row];
-    return item.state == HBQueueItemStateWorking ? 56 : 22;
+    return item.state == HBQueueItemStateWorking ? 58 : 22;
 }
 
 #pragma mark NSQueueItemView delegate
@@ -243,7 +243,7 @@
 - (void)removeQueueItem:(nonnull HBQueueItem *)item
 {
     NSUInteger index = [self.queue.items indexOfObject:item];
-    [self.queue removeQueueItemAtIndex:index];
+    [self.queue removeItemAtIndex:index];
 }
 
 - (void)revealQueueItem:(nonnull HBQueueItem *)item
@@ -308,7 +308,7 @@
 
 - (BOOL)tableView:(NSTableView *)tableView acceptDrop:(id<NSDraggingInfo>)info row:(NSInteger)row dropOperation:(NSTableViewDropOperation)dropOperation
 {
-    [self.queue moveQueueItems:self.dragNodesArray toIndex:row];
+    [self.queue moveItems:self.dragNodesArray toIndex:row];
     return YES;
 }
 

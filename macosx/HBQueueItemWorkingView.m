@@ -9,6 +9,8 @@
 #import "HBQueueItem.h"
 #import "HBQueue.h"
 
+#import "HBAttributedStringAdditions.h"
+
 @interface HBQueueItemWorkingView ()
 
 @property (nonatomic, weak) IBOutlet NSProgressIndicator *progressBar;
@@ -36,7 +38,7 @@
             NSString *progressInfo = note.userInfo[HBQueueProgressNotificationInfoKey];
             double progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
 
-            self.progressField.stringValue = progressInfo;
+            self.progressField.attributedStringValue = progressInfo.HB_smallMonospacedString;
             self.progressBar.doubleValue = progress;
         }];
 

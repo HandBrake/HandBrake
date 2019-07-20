@@ -23,6 +23,9 @@ NSString * const HBQueueLowSpaceAlertNotification = @"HBQueueLowSpaceAlertNotifi
 
 NSString * const HBQueueProgressNotification = @"HBQueueProgressNotification";
 NSString * const HBQueueProgressNotificationPercentKey = @"HBQueueProgressNotificationPercentKey";
+NSString * const HBQueueProgressNotificationHoursKey = @"HBQueueProgressNotificationHoursKey";
+NSString * const HBQueueProgressNotificationMinutesKey = @"HBQueueProgressNotificationMinutesKey";
+NSString * const HBQueueProgressNotificationSecondsKey = @"HBQueueProgressNotificationSecondsKey";
 NSString * const HBQueueProgressNotificationInfoKey = @"HBQueueProgressNotificationInfoKey";
 
 NSString * const HBQueueDidStartNotification = @"HBQueueDidStartNotification";
@@ -82,7 +85,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     if (itemsToAdd.count)
     {
         NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(self.items.count, itemsToAdd.count)];
-        [self addQueueItems:itemsToAdd atIndexes:indexes];
+        [self addItems:itemsToAdd atIndexes:indexes];
     }
 }
 
@@ -101,12 +104,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     return NO;
 }
 
-- (NSUInteger)count
-{
-    return self.items.count;
-}
-
-- (void)addQueueItems:(NSArray<HBQueueItem *> *)items atIndexes:(NSIndexSet *)indexes
+- (void)addItems:(NSArray<HBQueueItem *> *)items atIndexes:(NSIndexSet *)indexes
 {
     NSParameterAssert(items);
     NSParameterAssert(indexes);
@@ -125,7 +123,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidAddItemNotification object:self userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
 
     NSUndoManager *undo = self.undoManager;
-    [[undo prepareWithInvocationTarget:self] removeQueueItemsAtIndexes:indexes];
+    [[undo prepareWithInvocationTarget:self] removeItemsAtIndexes:indexes];
 
     if (!undo.isUndoing)
     {
@@ -143,12 +141,12 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     [self.items commit];
 }
 
-- (void)removeQueueItemAtIndex:(NSUInteger)index
+- (void)removeItemAtIndex:(NSUInteger)index
 {
-    [self removeQueueItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
+    [self removeItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
 }
 
-- (void)removeQueueItemsAtIndexes:(NSIndexSet *)indexes
+- (void)removeItemsAtIndexes:(NSIndexSet *)indexes
 {
     NSParameterAssert(indexes);
 
@@ -169,7 +167,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidRemoveItemNotification object:self userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
 
     NSUndoManager *undo = self.undoManager;
-    [[undo prepareWithInvocationTarget:self] addQueueItems:removeItems atIndexes:indexes];
+    [[undo prepareWithInvocationTarget:self] addItems:removeItems atIndexes:indexes];
 
     if (!undo.isUndoing)
     {
@@ -187,7 +185,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     [self.items commit];
 }
 
-- (void)moveQueueItems:(NSArray<HBQueueItem *> *)items toIndex:(NSUInteger)index
+- (void)moveItems:(NSArray<HBQueueItem *> *)items toIndex:(NSUInteger)index
 {
     [self.items beginTransaction];
 
@@ -296,8 +294,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 - (void)removeAllItems
 {
     [self.items beginTransaction];
-
-    [self removeQueueItemsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.items.count)]];
+    [self removeItemsAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.items.count)]];
     [self.items commit];
 }
 
@@ -307,7 +304,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
         return (item.state != HBQueueItemStateWorking);
     }];
-    [self removeQueueItemsAtIndexes:indexes];
+    [self removeItemsAtIndexes:indexes];
     [self.items commit];
 }
 
@@ -317,7 +314,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
         return (item.state == HBQueueItemStateCompleted);
     }];
-    [self removeQueueItemsAtIndexes:indexes];
+    [self removeItemsAtIndexes:indexes];
     [self.items commit];
 }
 
@@ -432,7 +429,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 /**
  *  Reloads the queue, this is called
- *  when another HandBrake instances modifies the queue
+ *  when another HandBrake instance modifies the queue
  */
 - (void)reloadQueue
 {
@@ -442,9 +439,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (void)updateStats
 {
-    // lets get the stats on the status of the queue array
-    NSUInteger pendingCount = 0;
-    NSUInteger completedCount = 0;
+    NSUInteger pendingCount = 0, failedCount = 0, completedCount = 0;
 
     for (HBQueueItem *item in self.items)
     {
@@ -452,17 +447,22 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         {
             pendingCount++;
         }
-        if (item.state == HBQueueItemStateCompleted)
+        else if (item.state == HBQueueItemStateCompleted)
         {
             completedCount++;
+        }
+        else if (item.state == HBQueueItemStateFailed)
+        {
+            failedCount++;
         }
     }
 
     self.pendingItemsCount = pendingCount;
+    self.failedItemsCount = failedCount;
     self.completedItemsCount = completedCount;
 }
 
-- (BOOL)_isDiskSpaceLowAtURL:(NSURL *)url
+- (BOOL)isDiskSpaceLowAtURL:(NSURL *)url
 {
     if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBQueuePauseIfLowSpace"])
     {
@@ -537,7 +537,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         // Check to see if there are any more pending items in the queue
         HBQueueItem *nextItem = [self getNextPendingQueueItem];
 
-        if (nextItem && [self _isDiskSpaceLowAtURL:nextItem.outputURL])
+        if (nextItem && [self isDiskSpaceLowAtURL:nextItem.outputURL])
         {
             // Disk space is low, show an alert
             [HBUtilities writeToActivityLog:"Queue Stopped, low space on destination disk"];
@@ -708,6 +708,9 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
             [NSNotificationCenter.defaultCenter postNotificationName:HBQueueProgressNotification
                                                               object:self
                                                             userInfo:@{HBQueueProgressNotificationPercentKey: @(progress.percent),
+                                                                       HBQueueProgressNotificationHoursKey: @(progress.hours),
+                                                                       HBQueueProgressNotificationMinutesKey: @(progress.minutes),
+                                                                       HBQueueProgressNotificationSecondsKey: @(progress.seconds),
                                                                        HBQueueProgressNotificationInfoKey: info}];
         }
     };

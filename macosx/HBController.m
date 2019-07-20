@@ -12,6 +12,8 @@
 #import "HBTitleSelectionController.h"
 #import "NSWindow+HBAdditions.h"
 
+#import "HBQueue.h"
+
 #import "HBPresetsManager.h"
 #import "HBPreset.h"
 #import "HBMutablePreset.h"
@@ -33,7 +35,7 @@
 #import "HBRenamePresetController.h"
 
 #import "HBAutoNamer.h"
-#import "HBQueue.h"
+#import "HBAttributedStringAdditions.h"
 
 @import HandBrakeKit;
 
@@ -311,7 +313,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         {
             info = note.userInfo[HBQueueProgressNotificationInfoKey];
         }
-        self.progressInfo = [[NSAttributedString alloc] initWithString:info];
+        self.progressInfo = info.HB_smallMonospacedString;
         self.progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
 
         if (self->_visible)

@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBPlayerHUDController.h"
+#import "HBAttributedStringAdditions.h"
 
 @interface HBPlayerHUDController ()
 
@@ -17,9 +18,6 @@
 @property (weak) IBOutlet NSTextField *remaingTimeLabel;
 
 @property (weak) IBOutlet NSPopUpButton *tracksSelection;
-
-@property (nonatomic, readonly) NSDictionary *monospacedAttr;
-@property (nonatomic, readonly) NSDictionary *normalMonospacedAttr;
 
 @property (nonatomic, readwrite) id rateObserver;
 @property (nonatomic, readwrite) id periodicObserver;
@@ -37,14 +35,6 @@
 - (NSString *)nibName
 {
     return @"HBPlayerHUDController";
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    _normalMonospacedAttr = @{NSFontAttributeName: [NSFont monospacedDigitSystemFontOfSize:15 weight:NSFontWeightRegular]};
-    _monospacedAttr = @{NSFontAttributeName: [NSFont monospacedDigitSystemFontOfSize:[NSFont smallSystemFontSize] weight:NSFontWeightRegular]};
 }
 
 - (BOOL)canBeHidden
@@ -203,11 +193,6 @@
     return [NSString stringWithFormat:@"%02d:%02d.%03d", minutes, seconds, milliseconds];
 }
 
-- (NSAttributedString *)_smallMonospacedString:(NSString *)string
-{
-    return [[NSAttributedString alloc] initWithString:string attributes:self.monospacedAttr];
-}
-
 - (void)_refreshUI
 {
     if (self.player)
@@ -216,8 +201,8 @@
         NSTimeInterval duration = self.player.duration;
 
         self.slider.doubleValue = currentTime;
-        self.currentTimeLabel.attributedStringValue = [self _smallMonospacedString:[self _timeToTimecode:currentTime]];
-        self.remaingTimeLabel.attributedStringValue = [self _smallMonospacedString:[self _timeToTimecode:duration - currentTime]];
+        self.currentTimeLabel.attributedStringValue = [self _timeToTimecode:currentTime].HB_smallMonospacedString;
+        self.remaingTimeLabel.attributedStringValue = [self _timeToTimecode:duration - currentTime].HB_smallMonospacedString;
 
         if (@available(macOS 10.12.2, *))
         {
@@ -496,11 +481,6 @@ static NSTouchBarItemIdentifier HBTouchBarTimeSlider = @"fr.handbrake.timeSlider
     }
 }
 
-- (NSAttributedString *)_monospacedString:(NSString *)string
-{
-    return [[NSAttributedString alloc] initWithString:string attributes:self.normalMonospacedAttr];
-}
-
 - (void)_touchBar_updateTime:(NSTimeInterval)currentTime duration:(NSTimeInterval)duration
 {
     NSSlider *slider = (NSSlider *)[[self.touchBar itemForIdentifier:HBTouchBarTimeSlider] slider];
@@ -508,8 +488,8 @@ static NSTouchBarItemIdentifier HBTouchBarTimeSlider = @"fr.handbrake.timeSlider
     NSTextField *remainingTimeLabel = (NSTextField *)[[self.touchBar itemForIdentifier:HBTouchBarRemainingTime] view];
 
     slider.doubleValue = currentTime;
-    currentTimeLabel.attributedStringValue = [self _monospacedString:[self _timeToString:currentTime negative:NO]];
-    remainingTimeLabel.attributedStringValue = [self _monospacedString:[self _timeToString:duration - currentTime negative:YES]];
+    currentTimeLabel.attributedStringValue = [self _timeToString:currentTime negative:NO].HB_monospacedString;
+    remainingTimeLabel.attributedStringValue = [self _timeToString:duration - currentTime negative:YES].HB_monospacedString;
 }
 
 @end

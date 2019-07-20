@@ -123,14 +123,15 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueProgressNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
         // Update dock icon
         double progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
-        double hours = 1;
-        double minutes = 1;
-        double seconds = 1;
 
 #define dockTileUpdateFrequency 0.1f
 
         if (self.dockIconProgress < 100.0 * progress)
         {
+            double hours = [note.userInfo[HBQueueProgressNotificationHoursKey] doubleValue];
+            double minutes = [note.userInfo[HBQueueProgressNotificationMinutesKey] doubleValue];
+            double seconds = [note.userInfo[HBQueueProgressNotificationSecondsKey] doubleValue];
+
             [self.dockTile updateDockIcon:progress hours:hours minutes:minutes seconds:seconds];
             self.dockIconProgress += dockTileUpdateFrequency;
         }
@@ -253,6 +254,21 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         return self.queue.canPause || self.queue.canResume;
     }
 
+    if (action == @selector(removeAll:) || action == @selector(resetAll:))
+    {
+        return self.queue.items.count > 0;
+    }
+
+    if (action == @selector(resetFailed:))
+    {
+        return self.queue.failedItemsCount > 0;
+    }
+
+    if (action == @selector(removeCompleted:))
+    {
+        return self.queue.completedItemsCount > 0;
+    }
+
     return YES;
 }
 
@@ -276,7 +292,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     SEL action = theItem.action;
     return [self validateUserIterfaceItemForAction:action];
 }
-
 
 - (void)windowDidChangeOcclusionState:(NSNotification *)notification
 {
@@ -337,7 +352,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
                         NSInteger index = [self.queue.items indexOfObject:self.queue.currentItem];
                         [self.queue cancelCurrentItemAndContinue];
 
-                        [self.queue removeQueueItemAtIndex:index];
+                        [self.queue removeItemAtIndex:index];
                         [self.queue.items commit];
                     }
                 }];
@@ -345,7 +360,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         }
 
         // remove the non working items immediately
-        [self.queue removeQueueItemsAtIndexes:mutableIndexes];
+        [self.queue removeItemsAtIndexes:mutableIndexes];
     }
     [self.queue.items commit];
 }
@@ -370,7 +385,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
                 // Now that source is loaded and settings applied, delete the queue item from the queue
                 NSInteger index = [self.queue.items indexOfObject:item];
                 item.state = HBQueueItemStateReady;
-                [self.queue removeQueueItemAtIndex:index];
+                [self.queue removeItemAtIndex:index];
             }
             else
             {
