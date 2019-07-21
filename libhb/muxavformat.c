@@ -1203,7 +1203,7 @@ static int avformatMux(hb_mux_object_t *m, hb_mux_data_t *track, hb_buffer_t *bu
         // if it sees a negative dts, it applies an offset to both pts
         // and dts to make it positive.  This offset breaks chapter
         // start times and A/V sync.  libav also requires that dts is
-        // "monotically increasing", which means it last_dts <= next_dts.
+        // "monotonically increasing", which means it last_dts <= next_dts.
         // It also uses dts to determine track interleaving, so we need
         // to provide some reasonable dts value.
         // So when renderOffset < 0, set to 0 for mkv.

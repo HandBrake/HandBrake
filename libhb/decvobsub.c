@@ -630,7 +630,7 @@ static hb_buffer_t * Decode( hb_work_object_t * w )
     if ( ParseControls( w ) )
     {
         /*
-         * Coudln't parse the info
+         * Couldn't parse the info
          */
         hb_deep_log( 2, "decvobsub: Could not parse info!" );
 

@@ -1887,7 +1887,7 @@ static void ProcessSCRDelayQueue( sync_common_t * common )
             int           hash = buf->s.scr_sequence & SCR_HASH_MASK;
             if (buf->s.scr_sequence < 0)
             {
-                // Unset scr_sequence inidicates an external stream
+                // Unset scr_sequence indicates an external stream
                 // (e.g. SRT subtitle) that is not on the same timebase
                 // as the source tracks. Do not adjust timestamps for
                 // scr_offset in this case.
@@ -3424,7 +3424,7 @@ static int syncSubtitleWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
 hb_work_object_t hb_sync_subtitle =
 {
     WORK_SYNC_SUBTITLE,
-    "Subitle Synchronization",
+    "Subtitle Synchronization",
     syncSubtitleInit,
     syncSubtitleWork,
     syncSubtitleClose

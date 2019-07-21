@@ -1126,7 +1126,7 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
     if (first_audio_lang != NULL &&
         foreign_audio_search && !strncmp(first_audio_lang, pref_lang, 4))
     {
-        // First audio lang matches the preferred subittle lang.
+        // First audio lang matches the preferred subtitle lang.
         // Preset says to add search for foreign audio subtitles.
         int burn = burn_foreign || behavior.burn_first;
         // If not burning, make this the default track.
@@ -3323,7 +3323,7 @@ hb_value_t * hb_presets_update_version(hb_value_t *presets)
                 hb_value_incref(presets);
                 return presets;
             }
-            // Unrecoginzable preset file format
+            // Unrecognizable preset file format
             return NULL;
         }
     }
@@ -3698,13 +3698,13 @@ static int hb_presets_add_internal(hb_value_t *preset)
     int index = hb_value_array_len(hb_presets);
     if (hb_value_type(preset) == HB_VALUE_TYPE_DICT)
     {
-        // A standalone preset or folder of presets.  Add to preset array.
+        // A standalone preset or folder of presets. Add to preset array.
         hb_value_array_append(hb_presets, hb_value_dup(preset));
         added++;
     }
     else if (hb_value_type(preset) == HB_VALUE_TYPE_ARRAY)
     {
-        // An array of presets.  Add each element.
+        // An array of presets. Add each element.
         int count = hb_value_array_len(preset);
         int ii;
         for (ii = 0; ii < count; ii++)

@@ -7,7 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-/* This is a psuedo-filter that wraps other filters to provide frame
+/* This is a pseudo-filter that wraps other filters to provide frame
  * based multi-threading of the wrapped filter. The sub-filter must
  * operate on each frame independently with no context carried over
  * from one frame to the next. */

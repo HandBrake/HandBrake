@@ -1281,7 +1281,7 @@ static int comb_detect_init( hb_filter_object_t * filter,
         if (taskset_init( &pv->mask_filter_taskset, pv->cpu_count,
                           sizeof( decomb_thread_arg_t ) ) == 0)
         {
-            hb_error( "maske filter could not initialize taskset" );
+            hb_error( "mask filter could not initialize taskset" );
         }
 
         decomb_prev_thread_args = NULL;

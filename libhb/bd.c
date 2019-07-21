@@ -771,7 +771,7 @@ hb_buffer_t * hb_bd_read( hb_bd_t * d )
 
                 case BD_EVENT_PLAYITEM:
                     discontinuity = 1;
-                    hb_deep_log(2, "bd: Playitem %u", event.param);
+                    hb_deep_log(2, "bd: Play item %u", event.param);
                     break;
 
                 case BD_EVENT_STILL:

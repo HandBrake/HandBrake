@@ -297,7 +297,7 @@ static int get_char_in_utf8(unsigned char *buffer, unsigned char c)
             *buffer = 0xc3;
             *(buffer+1) = 0x9a;
             return 2;
-        case 0x94: // capital letter U with diaresis
+        case 0x94: // capital letter U with diaeresis
             *buffer = 0xc3;
             *(buffer+1) = 0x9c;
             return 2;
@@ -333,10 +333,10 @@ static int get_char_in_utf8(unsigned char *buffer, unsigned char c)
         case 0x9d: // Full stop (.)
             *buffer = 0x2e;
             return 1;
-        case 0x9e: // Quoatation mark
+        case 0x9e: // Quotation mark
             *buffer = 0x22;
             return 1;
-        case 0x9f: // Quoatation mark
+        case 0x9f: // Quotation mark
             *buffer = 0x22;
             return 1;
         case 0xa0: // uppercase A, grave accent
@@ -359,11 +359,11 @@ static int get_char_in_utf8(unsigned char *buffer, unsigned char c)
             *buffer = 0xc3;
             *(buffer+1) = 0x8a;
             return 2;
-        case 0xa5: // capital letter E with diaresis
+        case 0xa5: // capital letter E with diaeresis
             *buffer = 0xc3;
             *(buffer+1) = 0x8b;
             return 2;
-        case 0xa6: // lowercase letter e with diaresis
+        case 0xa6: // lowercase letter e with diaeresis
             *buffer = 0xc3;
             *(buffer+1) = 0xab;
             return 2;
@@ -371,11 +371,11 @@ static int get_char_in_utf8(unsigned char *buffer, unsigned char c)
             *buffer = 0xc3;
             *(buffer+1) = 0x8e;
             return 2;
-        case 0xa8: // uppercase I, with diaresis
+        case 0xa8: // uppercase I, with diaeresis
             *buffer = 0xc3;
             *(buffer+1) = 0x8f;
             return 2;
-        case 0xa9: // lowercase i, with diaresis
+        case 0xa9: // lowercase i, with diaeresis
             *buffer = 0xc3;
             *(buffer+1) = 0xaf;
             return 2;

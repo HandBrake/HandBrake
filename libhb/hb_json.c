@@ -969,7 +969,7 @@ static int validate_audio_codec_mux(int codec, int mux, int track)
 
 /**
  * Convert a json string representation of a job to an hb_job_t
- * @param h        - Pointer to the hb_hanle_t hb instance which contains the
+ * @param h        - Pointer to the hb_handle_t hb instance which contains the
  *                   title that the job refers to.
  * @param json_job - Pointer to json string representation of a job
  */
