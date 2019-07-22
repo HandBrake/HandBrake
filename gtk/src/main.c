@@ -1019,8 +1019,9 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     // Enable events that alert us to media change events
     watch_volumes(ud);
 
-#if defined(_NO_UPDATE_CHECK)
     GtkWidget *widget;
+
+#if defined(_NO_UPDATE_CHECK)
     widget = GHB_WIDGET(ud->builder, "check_updates_box");
     gtk_widget_hide(widget);
 #endif
