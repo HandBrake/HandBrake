@@ -1,13 +1,3 @@
-changequote(`[', `]')dnl
-define([filter_output],
-        [ifelse(eval(gtk_version >= 400), 1,
-            [patsubst([patsubst([$1], [\"image\"], [\"icon-name\"])],
-                      [^.*<property name\=\"events\">.*$], [])],
-         [ifelse(eval(gtk_version <= 312), 1,
-            [patsubst([patsubst([$1], [margin-start], [margin-left])],
-                      [margin-end], [margin-right])], [$1])]
-       )])dnl
-filter_output([
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
@@ -153,7 +143,7 @@ conjunction with the "Forced" option.</property>
     <property name="default_width">300</property>
     <property name="default_height">600</property>
     <signal name="delete-event" handler="presets_window_delete_cb" swapped="no"/>
-    <signal name="configure-event" handler="presets_window_configure_cb" swapped="no"/>
+    <signal name="size-allocate" handler="presets_sz_alloc_cb" swapped="no"/>
     <child>
       <object class="GtkBox" id="presets_window_box">
         <property name="orientation">vertical</property>
@@ -1848,7 +1838,6 @@ libx264 authors:
     <property name="logo_icon_name">hb-icon</property>
     <property name="wrap_license">True</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
-    <signal name="response" handler="hb_about_response_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox4">
         <property name="visible">True</property>
@@ -1880,7 +1869,7 @@ libx264 authors:
     <property name="default_height">400</property>
     <property name="icon_name">hb-icon</property>
     <signal name="map-event" handler="window_map_cb" swapped="no"/>
-    <signal name="configure-event" handler="window_configure_cb" swapped="no"/>
+    <signal name="size-allocate" handler="hb_win_sz_alloc_cb" swapped="no"/>
     <signal name="delete-event" handler="window_delete_event_cb" swapped="no"/>
     <signal name="destroy-event" handler="window_destroy_event_cb" swapped="no"/>
     <child>
@@ -3817,15 +3806,9 @@ Players will scale the image in order to achieve the specified aspect.</property
                   </packing>
                 </child>
                 <child>
-])dnl
-ifelse(eval(gtk_version < 312), 1, filter_output([
-                  <object class="GtkGrid" id="filter_tab">
-]), filter_output([
                   <object class="GtkFlowBox" id="filter_tab">
                     <property name="orientation">horizontal</property>
                     <property name="selection-mode">none</property>
-]))dnl
-filter_output([
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="column-spacing">4</property>
@@ -3892,16 +3875,6 @@ JunkLeft:JunkRight:JunkTop:JunkBottom:StrictBreaks:MetricPlane:Parity</property>
                           </packing>
                         </child>
                       </object>
-])dnl
-ifelse(eval(gtk_version < 312), 1, filter_output([
-                      <packing>
-                        <property name="top_attach">0</property>
-                        <property name="left_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-]))dnl
-filter_output([
                     </child>
                     <child>
                       <object class="GtkGrid" id="comb_detect_grid">
@@ -3963,16 +3936,6 @@ Block Thresh: Block Width: Block Height</property>
                           </packing>
                         </child>
                       </object>
-])dnl
-ifelse(eval(gtk_version < 312), 1, filter_output([
-                      <packing>
-                        <property name="top_attach">0</property>
-                        <property name="left_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-]))dnl
-filter_output([
                     </child>
                     <child>
                       <object class="GtkGrid" id="table14">
@@ -4067,16 +4030,6 @@ The deinterlace filter is a classic YADIF deinterlacer.
                           </packing>
                         </child>
                       </object>
-])dnl
-ifelse(eval(gtk_version < 312), 1, filter_output([
-                      <packing>
-                        <property name="top_attach">0</property>
-                        <property name="left_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-]))dnl
-filter_output([
                     </child>
                     <child>
                       <object class="GtkGrid" id="table90">
@@ -4167,16 +4120,6 @@ strength=weak|strong:thresh=0-100:blocksize=4-512</property>
                           </packing>
                         </child>
                       </object>
-])dnl
-ifelse(eval(gtk_version < 312), 1, filter_output([
-                      <packing>
-                        <property name="top_attach">0</property>
-                        <property name="left_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-]))dnl
-filter_output([
                     </child>
                     <child>
                       <object class="GtkGrid" id="table1">
@@ -4302,16 +4245,6 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                           </packing>
                         </child>
                       </object>
-])dnl
-ifelse(eval(gtk_version < 312), 1, filter_output([
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="left_attach">0</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-]))dnl
-filter_output([
                     </child>
                     <child>
                       <object class="GtkGrid" id="SharpenTable">
@@ -4434,16 +4367,6 @@ SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma</property>
                           </packing>
                         </child>
                       </object>
-])dnl
-ifelse(eval(gtk_version < 312), 1, filter_output([
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="left_attach">1</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-]))dnl
-filter_output([
                     </child>
                     <child>
                       <object class="GtkGrid" id="table16">
@@ -4485,16 +4408,6 @@ filter_output([
                           </packing>
                         </child>
                       </object>
-])dnl
-ifelse(eval(gtk_version < 312), 1, filter_output([
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="left_attach">2</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-]))dnl
-filter_output([
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="VideoGrayScale">
@@ -4509,16 +4422,6 @@ filter_output([
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="setting_widget_changed_cb" swapped="no"/>
                       </object>
-])dnl
-ifelse(eval(gtk_version < 312), 1, filter_output([
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="left_attach">3</property>
-                        <property name="width">1</property>
-                        <property name="height">1</property>
-                      </packing>
-]))dnl
-filter_output([
                     </child>
                   </object>
                   <packing>
@@ -5143,73 +5046,6 @@ Colon separated list of encoder options.</property>
                     <property name="margin_bottom">0</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-])dnl
-ifelse(eval(gtk_version < 316), 1, filter_output([
-                    <child>
-                      <object class="GtkBox" id="audio_toggle_hbox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="hexpand">False</property>
-                        <property name="vexpand">True</property>
-                        <child>
-                          <object class="GtkBox" id="audio_toggle_vbox">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
-                            <property name="hexpand">False</property>
-                            <property name="vexpand">True</property>
-                            <child>
-                              <object class="GtkToggleButton" id="audio_list_toggle">
-                                <property name="label" translatable="yes">Track List</property>
-                                <property name="active">True</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Show Output Audio Track List</property>
-                                <property name="receives_default">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="halign">fill</property>
-                                <signal name="toggled" handler="audio_list_toggled_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkToggleButton" id="audio_selection_toggle">
-                                <property name="label" translatable="yes">Track Selection</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Show Source Track Selection Options</property>
-                                <property name="receives_default">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="halign">fill</property>
-                                <signal name="toggled" handler="audio_selection_toggled_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSeparator" id="audio_separator">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-]), filter_output([
                     <child>
                       <object class="GtkStackSidebar" id="AudioStackSidebar">
                         <property name="visible">True</property>
@@ -5225,8 +5061,6 @@ ifelse(eval(gtk_version < 316), 1, filter_output([
                         <property name="position">0</property>
                       </packing>
                     </child>
-]))dnl
-filter_output([
                     <child>
                       <object class="GtkStack" id="AudioStack">
                         <property name="homogeneous">True</property>
@@ -5942,73 +5776,6 @@ This permits FLAC passthru to be selected when automatic passthru selection is e
                     <property name="margin_bottom">0</property>
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
-])dnl
-ifelse(eval(gtk_version < 316), 1, filter_output([
-                    <child>
-                      <object class="GtkBox" id="subtitle_toggle_hbox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="hexpand">False</property>
-                        <property name="vexpand">True</property>
-                        <child>
-                          <object class="GtkBox" id="subtitle_toggle_vbox">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
-                            <property name="hexpand">False</property>
-                            <property name="vexpand">True</property>
-                            <child>
-                              <object class="GtkToggleButton" id="subtitle_list_toggle">
-                                <property name="label" translatable="yes">Track List</property>
-                                <property name="active">True</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Show Output Subtitle Track List</property>
-                                <property name="receives_default">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="halign">fill</property>
-                                <signal name="toggled" handler="subtitle_list_toggled_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkToggleButton" id="subtitle_selection_toggle">
-                                <property name="label" translatable="yes">Track Selection</property>
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip_text" translatable="yes">Show Source Track Selection Options</property>
-                                <property name="receives_default">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="halign">fill</property>
-                                <signal name="toggled" handler="subtitle_selection_toggled_cb" swapped="no"/>
-                              </object>
-                              <packing>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSeparator" id="subtitle_separator">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                          </object>
-                          <packing>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-]), filter_output([
                     <child>
                       <object class="GtkStackSidebar" id="SubtitleStackSidebar">
                         <property name="visible">True</property>
@@ -6024,8 +5791,6 @@ ifelse(eval(gtk_version < 316), 1, filter_output([
                         <property name="position">0</property>
                       </packing>
                     </child>
-]))dnl
-filter_output([
                     <child>
                       <object class="GtkStack" id="SubtitleStack">
                         <property name="homogeneous">True</property>
@@ -6904,7 +6669,6 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                             <property name="can_focus">True</property>
                             <property name="wrap_mode">char</property>
                             <property name="accepts_tab">False</property>
-                            <signal name="focus-out-event" handler="meta_focus_out_cb" swapped="no"/>
                           </object>
                         </child>
                       </object>
@@ -7087,34 +6851,75 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
     <property name="transient_for">hb_window</property>
     <property name="can_focus">False</property>
     <property name="type_hint">dialog</property>
+    <property name="deletable">False</property>
+    <property name="use-header-bar">1</property>
+    <child type="action">
+      <object class="GtkButton" id="title_add_multiple_cancel">
+        <property name="label" translatable="yes">Cancel</property>
+        <property name="image">gtk-cancel</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="title_add_multiple_ok">
+        <property name="label" translatable="yes">OK</property>
+        <property name="image">gtk-ok</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="cancel">title_add_multiple_cancel</action-widget>
+      <action-widget response="ok">title_add_multiple_ok</action-widget>
+    </action-widgets>
     <child internal-child="vbox">
-      <object class="GtkBox" id="dialog_title_add_multiple_vbox1">
-        <property name="can_focus">False</property>
+      <object class="GtkBox" id="title_add_multiple_vbox1">
         <property name="orientation">vertical</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin_top">12</property>
+        <property name="margin_bottom">12</property>
         <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog_title_add_multiple_action_area1">
+        <child>
+          <object class="GtkBox" id="title_add_multiple_hbox1">
+            <property name="orientation">horizontal</property>
+            <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkButton" id="title_add_multiple_cancel">
-                <property name="label" translatable="yes">Cancel</property>
-                <property name="image">gtk-cancel</property>
+              <object class="GtkCheckButton" id="title_add_multiple_select_all">
+                <property name="label" translatable="yes">Select All</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="tooltip_text" translatable="yes">Mark all titles for adding to the queue</property>
+                <property name="halign">start</property>
+                <property name="vexpand">False</property>
+                <property name="halign">start</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="title_add_multiple_select_all_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="title_add_multiple_ok">
-                <property name="label" translatable="yes">OK</property>
-                <property name="image">gtk-ok</property>
+              <object class="GtkCheckButton" id="title_add_multiple_clear_all">
+                <property name="label" translatable="yes">Clear All</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="receives_default">False</property>
+                <property name="tooltip_text" translatable="yes">Unmark all titles</property>
+                <property name="halign">start</property>
+                <property name="vexpand">False</property>
+                <property name="halign">start</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="title_add_multiple_clear_all_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="position">1</property>
@@ -7122,177 +6927,60 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
             </child>
           </object>
           <packing>
-            <property name="pack_type">end</property>
             <property name="position">0</property>
           </packing>
         </child>
         <child>
-          <object class="GtkGrid" id="title_add_multiple_grid1">
+          <object class="GtkScrolledWindow" id="title_add_multiple_scrolledwindow">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="margin-start">12</property>
-            <property name="margin-end">12</property>
-            <property name="margin_top">12</property>
-            <property name="column_spacing">6</property>
-            <property name="row-spacing">2</property>
+            <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="min_content_height">400</property>
             <child>
-              <object class="GtkScrolledWindow" id="title_add_multiple_scrolledwindow">
+              <object class="GtkListBox" id="title_add_multiple_list">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="min_content_height">400</property>
-                <child>
-                  <object class="GtkListBox" id="title_add_multiple_list">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="vexpand">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="selection_mode">none</property>
-                    <property name="activate_on_single_click">False</property>
-                  </object>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="vexpand">True</property>
+                <property name="hexpand">True</property>
+                <property name="selection_mode">none</property>
+                <property name="activate_on_single_click">False</property>
               </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-                <property name="width">3</property>
-                <property name="height">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="title_add_multiple_hbox1">
-                <property name="orientation">horizontal</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkCheckButton" id="title_add_multiple_select_all">
-                    <property name="label" translatable="yes">Select All</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Mark all titles for adding to the queue</property>
-                    <property name="halign">start</property>
-                    <property name="vexpand">False</property>
-                    <property name="halign">start</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="title_add_multiple_select_all_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="title_add_multiple_clear_all">
-                    <property name="label" translatable="yes">Clear All</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Unmark all titles</property>
-                    <property name="halign">start</property>
-                    <property name="vexpand">False</property>
-                    <property name="halign">start</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="title_add_multiple_clear_all_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-                <property name="width">2</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkInfoBar" id="title_add_multiple_infobar">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="message_type">info</property>
-                <child internal-child="action_area">
-                  <object class="GtkButtonBox" id="title_add_multiple_infobar-action_area1">
-                    <property name="can_focus">False</property>
-                    <property name="spacing">6</property>
-                    <property name="layout_style">end</property>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child internal-child="content_area">
-                  <object class="GtkBox" id="title_add_multiple_infobar_content_area">
-                    <property name="can_focus">False</property>
-                    <property name="spacing">16</property>
-                    <child>
-                      <object class="GtkLabel" id="title_add_multiple_label1">
-                        <property name="visible">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="label" translatable="yes">Destination files OK.  No duplicates detected.</property>
-                      </object>
-                      <packing>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-                <property name="width">3</property>
-                <property name="height">1</property>
-              </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
             <property name="position">1</property>
           </packing>
         </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">title_add_multiple_cancel</action-widget>
-      <action-widget response="-5">title_add_multiple_ok</action-widget>
-    </action-widgets>
-  </object>
-  <object class="GtkDialog" id="prefs_dialog">
-    <property name="transient_for">hb_window</property>
-    <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Preferences</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">dialog</property>
-    <property name="skip_taskbar_hint">True</property>
-    <property name="skip_pager_hint">True</property>
-    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox6">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area5">
+        <child>
+          <object class="GtkInfoBar" id="title_add_multiple_infobar">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="pref_ok">
-                <property name="label" translatable="yes">OK</property>
-                <property name="image">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="halign">GTK_ALIGN_CENTER</property>
+            <property name="message_type">info</property>
+            <child internal-child="action_area">
+              <object class="GtkButtonBox" id="title_add_multiple_infobar-action_area1">
+                <property name="can_focus">False</property>
+                <property name="spacing">6</property>
+                <property name="layout_style">end</property>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child internal-child="content_area">
+              <object class="GtkBox" id="title_add_multiple_infobar_content_area">
+                <property name="can_focus">False</property>
+                <property name="spacing">16</property>
+                <child>
+                  <object class="GtkLabel" id="title_add_multiple_label1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">Destination files OK.  No duplicates detected.</property>
+                  </object>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="position">0</property>
@@ -7300,10 +6988,46 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
             </child>
           </object>
           <packing>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
+            <property name="position">2</property>
           </packing>
         </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkDialog" id="prefs_dialog">
+    <property name="transient_for">hb_window</property>
+    <property name="can_focus">False</property>
+    <property name="title" translatable="yes">Preferences</property>
+    <property name="modal">True</property>
+    <property name="window_position">center-on-parent</property>
+    <property name="deletable">False</property>
+    <property name="use-header-bar">1</property>
+    <property name="type_hint">dialog</property>
+    <property name="skip_taskbar_hint">True</property>
+    <property name="skip_pager_hint">True</property>
+    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <child type="action">
+      <object class="GtkButton" id="pref_ok">
+        <property name="label" translatable="yes">OK</property>
+        <property name="image">gtk-ok</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="halign">GTK_ALIGN_CENTER</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="ok">pref_ok</action-widget>
+    </action-widgets>
+    <child internal-child="vbox">
+      <object class="GtkBox" id="dialog-vbox6">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="spacing">2</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin_top">12</property>
+        <property name="margin_bottom">12</property>
         <child>
           <object class="GtkBox" id="hbox59">
             <property name="orientation">horizontal</property>
@@ -7316,14 +7040,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                 <property name="can_focus">False</property>
                 <property name="hexpand">True</property>
                 <child>
-])dnl
-ifelse(eval(gtk_version >= 400), 1, filter_output([
-                  <object class="GtkBox" id="eventbox1">
-                    <property name="orientation">horizontal</property>
-]), filter_output([
                   <object class="GtkEventBox" id="eventbox1">
-]))dnl
-filter_output([
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
@@ -8033,160 +7750,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-5">pref_ok</action-widget>
-    </action-widgets>
-  </object>
-  <object class="GtkDialog" id="preset_new_folder_dialog">
-    <property name="transient_for">hb_window</property>
-    <property name="can_focus">False</property>
-    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-    <property name="modal">True</property>
-    <property name="window_position">center-on-parent</property>
-    <property name="type_hint">dialog</property>
-    <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox2">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="preset_folder_cancel">
-                <property name="label" translatable="yes">Cancel</property>
-                <property name="image">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="halign">GTK_ALIGN_CENTER</property>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="preset_folder_ok">
-                <property name="label" translatable="yes">OK</property>
-                <property name="image">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="halign">GTK_ALIGN_CENTER</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="vbox26">
-            <property name="orientation">vertical</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="vexpand">True</property>
-            <child>
-              <object class="GtkBox" id="hbox31">
-                <property name="orientation">horizontal</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="margin-top">10</property>
-                <property name="margin-bottom">10</property>
-                <child>
-                  <object class="GtkLabel" id="label30">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="halign">start</property>
-                    <property name="label" translatable="yes">Folder Name:</property>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="FolderName">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="max_length">40</property>
-                    <property name="activates_default">True</property>
-                    <property name="width-chars">30</property>
-                    <property name="truncate_multiline">True</property>
-                    <property name="hexpand">True</property>
-                  </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkFrame" id="frame17">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">etched-out</property>
-                <property name="vexpand">True</property>
-                <property name="margin-top">10</property>
-                <property name="margin-bottom">10</property>
-                <child>
-                  <object class="GtkTextView" id="FolderDescription">
-                    <property name="margin-top">6</property>
-                    <property name="margin-bottom">4</property>
-                    <property name="margin-start">12</property>
-                    <property name="margin-end">4</property>
-                    <property name="height_request">60</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="wrap_mode">word</property>
-                    <property name="accepts_tab">False</property>
-                  </object>
-                </child>
-                <child type="label">
-                  <object class="GtkLabel" id="label21">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Description&lt;/b&gt;</property>
-                    <property name="use_markup">True</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-    </child>
-    <action-widgets>
-      <action-widget response="0">preset_folder_cancel</action-widget>
-      <action-widget response="-5">preset_folder_ok</action-widget>
-    </action-widgets>
   </object>
   <object class="GtkDialog" id="preset_rename_dialog">
     <property name="transient_for">hb_window</property>
@@ -8195,7 +7758,31 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
+    <property name="deletable">False</property>
+    <property name="use-header-bar">1</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <child type="action">
+      <object class="GtkButton" id="preset_rename_cancel">
+        <property name="label" translatable="yes">Cancel</property>
+        <property name="image">gtk-cancel</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="preset_rename_ok">
+        <property name="label" translatable="yes">OK</property>
+        <property name="image">gtk-ok</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="cancel">preset_rename_cancel</action-widget>
+      <action-widget response="ok">preset_rename_ok</action-widget>
+    </action-widgets>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-preset-rename-box">
         <property name="visible">True</property>
@@ -8203,46 +7790,10 @@ Uncheck this if you want to allow changing each title's settings independently.<
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <property name="spacing">2</property>
         <property name="hexpand">False</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_preset_rename_area">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="preset_rename_cancel">
-                <property name="label" translatable="yes">Cancel</property>
-                <property name="image">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="hexpand">False</property>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="preset_rename_ok">
-                <property name="label" translatable="yes">OK</property>
-                <property name="image">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="hexpand">False</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin_top">12</property>
+        <property name="margin_bottom">12</property>
         <child>
           <object class="GtkBox" id="preset_rename_vbox">
             <property name="orientation">vertical</property>
@@ -8351,10 +7902,6 @@ Uncheck this if you want to allow changing each title's settings independently.<
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="0">preset_rename_cancel</action-widget>
-      <action-widget response="-5">preset_rename_ok</action-widget>
-    </action-widgets>
   </object>
   <object class="GtkDialog" id="preset_save_dialog">
     <property name="transient_for">hb_window</property>
@@ -8363,51 +7910,41 @@ Uncheck this if you want to allow changing each title's settings independently.<
     <property name="modal">True</property>
     <property name="window_position">center-on-parent</property>
     <property name="type_hint">dialog</property>
+    <property name="deletable">False</property>
+    <property name="use-header-bar">1</property>
     <signal name="delete-event" handler="gtk_widget_hide_on_delete" swapped="no"/>
+    <child type="action">
+      <object class="GtkButton" id="preset_cancel">
+        <property name="label" translatable="yes">Cancel</property>
+        <property name="image">gtk-cancel</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="preset_ok">
+        <property name="label" translatable="yes">OK</property>
+        <property name="image">gtk-ok</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="cancel">preset_cancel</action-widget>
+      <action-widget response="ok">preset_ok</action-widget>
+    </action-widgets>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
         <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="preset_cancel">
-                <property name="label" translatable="yes">Cancel</property>
-                <property name="image">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="preset_ok">
-                <property name="label" translatable="yes">OK</property>
-                <property name="image">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin_top">12</property>
+        <property name="margin_bottom">12</property>
         <child>
           <object class="GtkBox" id="vbox28">
             <property name="orientation">vertical</property>
@@ -8549,7 +8086,7 @@ Uncheck this if you want to allow changing each title's settings independently.<
                 <property name="row-spacing">2</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="vexpand">True</property>
+                <property name="vexpand">False</property>
                 <child>
                   <placeholder/>
                 </child>
@@ -8712,10 +8249,6 @@ Setting this to 0 means there is no maximum height.</property>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="0">preset_cancel</action-widget>
-      <action-widget response="-5">preset_ok</action-widget>
-    </action-widgets>
   </object>
   <object class="GtkAdjustment" id="preview_progress_adj">
     <property name="upper">100</property>
@@ -8734,38 +8267,31 @@ Setting this to 0 means there is no maximum height.</property>
     <signal name="configure-event" handler="preview_configure_cb" swapped="no"/>
     <signal name="delete-event" handler="preview_window_delete_cb" swapped="no"/>
     <child>
-])dnl
-ifelse(eval(gtk_version >= 400), 1, filter_output([
-      <object class="GtkBox" id="preview_image">
-        <property name="orientation">horizontal</property>
-]), filter_output([
-      <object class="GtkEventBox" id="preview_image">
-]))dnl
-filter_output([
-        <property name="width_request">854</property>
-        <property name="height_request">480</property>
+      <object class="GtkOverlay" id="preview_overlay">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="hexpand-set">True</property>
-        <property name="vexpand-set">True</property>
         <property name="hexpand">True</property>
         <property name="vexpand">True</property>
         <property name="halign">fill</property>
         <property name="valign">fill</property>
-        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK</property>
-        <signal name="leave-notify-event" handler="preview_leave_cb" swapped="no"/>
-        <signal name="motion-notify-event" handler="preview_motion_cb" swapped="no"/>
-        <signal name="size-allocate" handler="preview_resize_cb" swapped="no"/>
-        <signal name="draw" handler="preview_draw_cb" swapped="no"/>
         <child>
-])dnl
-ifelse(eval(gtk_version >= 400), 1, filter_output([
-          <object class="GtkBox" id="preview_hud">
-            <property name="orientation">horizontal</property>
-]), filter_output([
+          <object class="GtkDrawingArea" id="preview_image">
+            <property name="width_request">854</property>
+            <property name="height_request">480</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="halign">fill</property>
+            <property name="valign">fill</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK</property>
+            <signal name="leave-notify-event" handler="preview_leave_cb" swapped="no"/>
+            <signal name="motion-notify-event" handler="preview_motion_cb" swapped="no"/>
+            <signal name="size-allocate" handler="preview_resize_cb" swapped="no"/>
+            <signal name="draw" handler="preview_draw_cb" swapped="no"/>
+          </object>
+        </child>
+        <child type="overlay">
           <object class="GtkEventBox" id="preview_hud">
-]))dnl
-filter_output([
             <property name="visible">False</property>
             <property name="can_focus">False</property>
             <property name="halign">center</property>
@@ -8958,8 +8484,6 @@ filter_output([
     <property name="create_folders">False</property>
     <property name="local_only">False</property>
     <property name="transient_for">hb_window</property>
-])dnl
-ifelse(eval(gtk_version >= 314), 1, filter_output([
     <signal name="selection-changed" handler="chooser_file_selected_cb" swapped="no"/>
     <child type="action">
       <object class="GtkButton" id="source_cancel">
@@ -8990,59 +8514,10 @@ ifelse(eval(gtk_version >= 314), 1, filter_output([
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">2</property>
-]), eval(gtk_version >= 312), 1, filter_output([
-    <property name="use-header-bar">0</property>
-]))dnl
-ifelse(eval(gtk_version <= 312), 1, filter_output([
-    <signal name="selection-changed" handler="chooser_file_selected_cb" swapped="no"/>
-    <child internal-child="vbox">
-      <object class="GtkBox" id="dialog-vbox9">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area6">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="source_cancel">
-                <property name="label" translatable="yes">_Cancel</property>
-                <property name="use-underline">True</property>
-                <property name="image">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="source_ok">
-                <property name="label" translatable="yes">_Open</property>
-                <property name="use-underline">True</property>
-                <property name="image">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="can_default">True</property>
-                <property name="has_default">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-]))dnl
-filter_output([
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin_top">12</property>
+        <property name="margin_bottom">12</property>
         <child>
           <object class="GtkBox" id="source_extra">
             <property name="orientation">vertical</property>
@@ -9162,46 +8637,39 @@ filter_output([
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
+    <property name="deletable">False</property>
+    <property name="use-header-bar">1</property>
+    <child type="action">
+      <object class="GtkButton" id="subtitle_cancel">
+        <property name="label" translatable="yes">Cancel</property>
+        <property name="image">gtk-cancel</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="subtitle_ok">
+        <property name="label" translatable="yes">OK</property>
+        <property name="image">gtk-ok</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="cancel">subtitle_cancel</action-widget>
+      <action-widget response="ok">subtitle_ok</action-widget>
+    </action-widgets>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-subtitle-vbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">6</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-subtitle-action_area">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="subtitle_cancel">
-                <property name="label" translatable="yes">Cancel</property>
-                <property name="image">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="subtitle_ok">
-                <property name="label" translatable="yes">OK</property>
-                <property name="image">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin_top">12</property>
+        <property name="margin_bottom">12</property>
         <child>
           <object class="GtkBox" id="subtitle_import_switch_box">
             <property name="orientation">horizontal</property>
@@ -9529,10 +8997,6 @@ in your output.</property>
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="0">subtitle_cancel</action-widget>
-      <action-widget response="-5">subtitle_ok</action-widget>
-    </action-widgets>
   </object>
   <object class="GtkDialog" id="audio_dialog">
     <property name="transient_for">hb_window</property>
@@ -9543,46 +9007,39 @@ in your output.</property>
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
+    <property name="deletable">False</property>
+    <property name="use-header-bar">1</property>
+    <child type="action">
+      <object class="GtkButton" id="audio_cancel">
+        <property name="label" translatable="yes">Cancel</property>
+        <property name="image">gtk-cancel</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="audio_ok">
+        <property name="label" translatable="yes">OK</property>
+        <property name="image">gtk-ok</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="cancel">audio_cancel</action-widget>
+      <action-widget response="ok">audio_ok</action-widget>
+    </action-widgets>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-audio-vbox">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">6</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-audio-action_area">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="audio_cancel">
-                <property name="label" translatable="yes">Cancel</property>
-                <property name="image">gtk-cancel</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="audio_ok">
-                <property name="label" translatable="yes">OK</property>
-                <property name="image">gtk-ok</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin_top">12</property>
+        <property name="margin_bottom">12</property>
         <child>
           <object class="GtkGrid" id="audio_dialog_grid1">
             <property name="row-spacing">2</property>
@@ -10026,10 +9483,6 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="0">audio_cancel</action-widget>
-      <action-widget response="-5">audio_ok</action-widget>
-    </action-widgets>
   </object>
   <object class="GtkDialog" id="update_dialog">
     <property name="transient_for">hb_window</property>
@@ -10039,44 +9492,33 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
     <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
+    <property name="deletable">False</property>
+    <property name="use-header-bar">1</property>
+    <child type="action">
+      <object class="GtkButton" id="update_skip">
+        <property name="label" translatable="yes">Skip This Version</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <child type="action">
+      <object class="GtkButton" id="update_remind">
+        <property name="label" translatable="yes">Remind Me Later</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="ok">update_skip</action-widget>
+      <action-widget response="cancel">update_remind</action-widget>
+    </action-widgets>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox8">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">2</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox" id="dialog-action_area8">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="layout_style">end</property>
-            <child>
-              <object class="GtkButton" id="update_skip">
-                <property name="label" translatable="yes">Skip This Version</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="update_remind">
-                <property name="label" translatable="yes">Remind Me Later</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
         <child>
           <object class="GtkBox" id="hbox24">
             <property name="orientation">horizontal</property>
@@ -10089,15 +9531,8 @@ DRC allows you to 'compress' the range by making loud sounds softer and soft sou
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
-])dnl
-ifelse(eval(gtk_version >= 400), 1, filter_output([
-                  <object class="GtkBox" id="eventbox2">
-                    <property name="orientation">horizontal</property>
-]), filter_output([
                   <object class="GtkEventBox" id="eventbox2">
                     <property name="visible_window">False</property>
-]))dnl
-filter_output([
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="events">GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_STRUCTURE_MASK</property>
@@ -10203,10 +9638,6 @@ filter_output([
         </child>
       </object>
     </child>
-    <action-widgets>
-      <action-widget response="-5">update_skip</action-widget>
-      <action-widget response="0">update_remind</action-widget>
-    </action-widgets>
   </object>
   <object class="GtkAdjustment" id="VideoPresetRange">
     <property name="upper">1</property>
@@ -10214,4 +9645,3 @@ filter_output([
     <property name="page_increment">1</property>
   </object>
 </interface>
-])dnl

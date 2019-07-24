@@ -4858,14 +4858,9 @@ ghb_get_preview_image(
     if (ghb_dict_get_bool(ud->prefs, "reduce_hd_preview"))
     {
         gint factor = 80;
-
-        GdkWindow *window;
         gint s_w, s_h;
 
-        window = gtk_widget_get_window(
-                    GHB_WIDGET(ud->builder, "hb_window"));
-        ghb_monitor_get_size(window, &s_w, &s_h);
-
+        ghb_monitor_get_size(GHB_WIDGET(ud->builder, "hb_window"), &s_w, &s_h);
         if (s_w > 0 && s_h > 0 &&
             (previewWidth  > s_w * factor / 100 ||
              previewHeight > s_h * factor / 100))

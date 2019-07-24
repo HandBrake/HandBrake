@@ -102,7 +102,7 @@ ghb_widget_value(GtkWidget *widget)
     name = ghb_get_setting_key(widget);
     if (type == GTK_TYPE_ENTRY)
     {
-        const gchar *str = gtk_entry_get_text(GTK_ENTRY(widget));
+        const gchar *str = ghb_entry_get_text(GTK_ENTRY(widget));
         value = ghb_string_value_new(str);
     }
     else if (type == GTK_TYPE_RADIO_BUTTON)
@@ -161,7 +161,7 @@ ghb_widget_value(GtkWidget *widget)
         else if (gtk_combo_box_get_has_entry(GTK_COMBO_BOX(widget)))
         {
             const gchar *str;
-            str = gtk_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(widget))));
+            str = ghb_entry_get_text(GTK_ENTRY(gtk_bin_get_child(GTK_BIN(widget))));
             if (str == NULL) str = "";
             value = ghb_string_value_new(str);
         }
@@ -343,7 +343,7 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
 
     if (type == GTK_TYPE_ENTRY)
     {
-        gtk_entry_set_text((GtkEntry*)widget, str);
+        ghb_entry_set_text((GtkEntry*)widget, str);
     }
     else if (type == GTK_TYPE_RADIO_BUTTON)
     {
@@ -412,7 +412,7 @@ ghb_update_widget(GtkWidget *widget, const GhbValue *value)
                 GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(widget)));
                 if (entry)
                 {
-                    gtk_entry_set_text (entry, str);
+                    ghb_entry_set_text (entry, str);
                 }
                 else
                 {

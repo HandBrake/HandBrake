@@ -1687,8 +1687,7 @@ static void ghb_cell_renderer_text_snapshot(
                                   &GRAPHENE_RECT_INIT(
                                         background_area->x, background_area->y,
                                         background_area->width,
-                                        background_area->height),
-                                  "CellTextBackground");
+                                        background_area->height));
     }
 
 
@@ -1706,8 +1705,7 @@ static void ghb_cell_renderer_text_snapshot(
     gtk_snapshot_push_clip(snapshot,
                            &GRAPHENE_RECT_INIT(
                                 cell_area->x, cell_area->y,
-                                cell_area->width, cell_area->height),
-                           "CellTextClip");
+                                cell_area->width, cell_area->height));
 
     gtk_snapshot_render_layout(snapshot, context,
                                cell_area->x + x_offset + xpad,
@@ -1847,7 +1845,7 @@ ghb_cell_renderer_text_editing_done (GtkCellEditable *entry,
     return;
 
   path = g_object_get_data (G_OBJECT (entry), GHB_CELL_RENDERER_TEXT_PATH);
-  new_text = gtk_entry_get_text (GTK_ENTRY (entry));
+  new_text = ghb_entry_get_text (GTK_ENTRY (entry));
 
   g_signal_emit (data, text_cell_renderer_signals[EDITED], 0, path, new_text);
 }
@@ -1880,8 +1878,7 @@ ghb_cell_renderer_text_popup_unmap (GtkMenu *menu,
   if (priv->entry_menu_popdown_timeout)
     return;
 
-  priv->entry_menu_popdown_timeout = gdk_threads_add_timeout (500, popdown_timeout,
-                                                    data);
+  priv->entry_menu_popdown_timeout = g_timeout_add(500, popdown_timeout, data);
 }
 
 static void
@@ -1952,7 +1949,7 @@ ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
                   NULL);
 
     if (priv->text)
-        gtk_entry_set_text (GTK_ENTRY (priv->entry), priv->text);
+        ghb_entry_set_text (GTK_ENTRY (priv->entry), priv->text);
 
     g_object_set_data_full (G_OBJECT (priv->entry),
             I_(GHB_CELL_RENDERER_TEXT_PATH), g_strdup (path), g_free);

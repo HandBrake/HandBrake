@@ -65,6 +65,8 @@ bin_PROGRAMS = ghb
 nodist_EXTRA_ghb_SOURCES = dummy.cpp
 
 ghb_SOURCES = \
+	ghbcompat.c \
+	ghbcompat.h \
 	callbacks.c \
 	callbacks.h \
 	queuehandler.c \
@@ -143,27 +145,32 @@ data_res.h : data_res.gresource.xml $(srcdir)/internal_defaults.json widget.deps
 
 if GHB_GTK_4_00
 UI=400
+UI_FILE=ghb4.ui
 else
 if GHB_GTK_3_16
 UI=316
+UI_FILE=ghb3.ui
 else
 if GHB_GTK_3_14
 UI=314
+UI_FILE=ghb3.ui
 else
 if GHB_GTK_3_12
 UI=312
+UI_FILE=ghb3.ui
 else
 UI=300
+UI_FILE=ghb3.ui
 endif
 endif
 endif
 endif
 
-ui_res.c : ui_res.gresource.xml ui_res.h $(srcdir)/ghb.m4
+ui_res.c : ui_res.gresource.xml ui_res.h $(srcdir)/$(UI_FILE)
 	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
 
-ui_res.h : ui_res.gresource.xml $(srcdir)/ghb.m4
-	m4 -Dgtk_version=$(UI) $(srcdir)/ghb.m4 > ghb.ui
+ui_res.h : ui_res.gresource.xml $(srcdir)/$(UI_FILE)
+	cp $(srcdir)/$(UI_FILE) ghb.ui
 	glib-compile-resources --generate --target=$@ --c-name ghb_ui --manual-register $<
 
 ui_res.o: ui_res.h ui_res.c

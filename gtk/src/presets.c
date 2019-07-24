@@ -1144,6 +1144,53 @@ get_selected_path(signal_user_data_t *ud)
     return NULL;
 }
 
+G_MODULE_EXPORT gboolean
+presets_window_delete_cb(
+    GtkWidget *xwidget,
+#if !GTK_CHECK_VERSION(3, 90, 0)
+    GdkEvent *event,
+#endif
+    signal_user_data_t *ud)
+{
+    GSimpleAction * action;
+    GVariant      * state = g_variant_new_boolean(FALSE);
+
+    action = G_SIMPLE_ACTION(g_action_map_lookup_action(
+                             G_ACTION_MAP(ud->app), "show-presets"));
+    g_action_change_state(G_ACTION(action), state);
+    return TRUE;
+}
+
+G_MODULE_EXPORT void
+presets_sz_alloc_cb(
+    GtkWidget *widget,
+#if GTK_CHECK_VERSION(3, 90, 0)
+    int width,
+    int height,
+    int baseline,
+#else
+    GdkRectangle *rect,
+#endif
+    signal_user_data_t *ud)
+{
+    if (gtk_widget_get_visible(widget))
+    {
+        gint w, h, ww, wh;
+        w = ghb_dict_get_int(ud->prefs, "presets_window_width");
+        h = ghb_dict_get_int(ud->prefs, "presets_window_height");
+
+        gtk_window_get_size(GTK_WINDOW(widget), &ww, &wh);
+        if ( w != ww || h != wh )
+        {
+            ghb_dict_set_int(ud->prefs, "presets_window_width", ww);
+            ghb_dict_set_int(ud->prefs, "presets_window_height", wh);
+            ghb_pref_set(ud->prefs, "presets_window_width");
+            ghb_pref_set(ud->prefs, "presets_window_height");
+            ghb_prefs_store();
+        }
+    }
+}
+
 G_MODULE_EXPORT void
 preset_select_action_cb(GSimpleAction *action, GVariant *param,
                         signal_user_data_t *ud)
@@ -2132,7 +2179,7 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
 
     dialog   = GHB_WIDGET(ud->builder, "preset_rename_dialog");
     entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetReName"));
-    gtk_entry_set_text(entry, name);
+    ghb_entry_set_text(entry, name);
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
@@ -2143,7 +2190,7 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
         char          * desc;
 
         // save the new name
-        name = gtk_entry_get_text(entry);
+        name = ghb_entry_get_text(entry);
         dict = hb_preset_get(path);
         if (dict != NULL)
         {
@@ -2248,7 +2295,7 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
 
     dialog   = GHB_WIDGET(ud->builder, "preset_save_dialog");
     entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
-    gtk_entry_set_text(entry, name);
+    ghb_entry_set_text(entry, name);
 
     widget = GHB_WIDGET(ud->builder, "PresetName");
     gtk_widget_set_sensitive(widget, as);
@@ -2267,12 +2314,12 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
         gboolean        def;
 
         // save the preset
-        name = gtk_entry_get_text(entry);
+        name = ghb_entry_get_text(entry);
         category = ghb_dict_get_string(ud->settings, "PresetCategory");
         if (!strcmp(category, "new"))
         {
             entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetCategoryName"));
-            category = gtk_entry_get_text(entry);
+            category = ghb_entry_get_text(entry);
         }
         if (category == NULL || category[0] == 0)
         {
@@ -2316,9 +2363,9 @@ preset_save_set_ok_sensitive(signal_user_data_t *ud)
 
     category = ghb_dict_get_string(ud->settings, "PresetCategory");
     entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
-    name = gtk_entry_get_text(entry);
+    name = ghb_entry_get_text(entry);
     entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetCategoryName"));
-    category_name = gtk_entry_get_text(entry);
+    category_name = ghb_entry_get_text(entry);
 
     sensitive = name[0] && (strcmp(category, "new") || category_name[0]);
     gtk_widget_set_sensitive(ok_button, sensitive);
@@ -2435,6 +2482,14 @@ preset_remove_action_cb(GSimpleAction *action, GVariant *param,
 
 // controls where valid drop locations are
 G_MODULE_EXPORT gboolean
+#if GTK_CHECK_VERSION(3, 90, 0)
+presets_drag_motion_cb(
+    GtkTreeView        *tv,
+    GdkDrop            *ctx,
+    gint                x,
+    gint                y,
+    signal_user_data_t *ud)
+#else
 presets_drag_motion_cb(
     GtkTreeView        *tv,
     GdkDragContext     *ctx,
@@ -2442,6 +2497,7 @@ presets_drag_motion_cb(
     gint                y,
     guint               time,
     signal_user_data_t *ud)
+#endif
 {
     GtkTreeViewDropPosition  drop_pos;
     GtkTreeIter              iter;
@@ -2454,13 +2510,29 @@ presets_drag_motion_cb(
     gboolean                 src_folder, dst_folder;
     GhbValue                *src_preset, *dst_preset;
     GtkWidget               *widget;
+#if GTK_CHECK_VERSION(3, 90, 0)
+    // Dummy time for backwards compatibility
+    guint                    time = 0;
+#endif
 
+    treepath = g_object_get_data(G_OBJECT(tv), "dst-tree-path");
+    if (treepath != NULL)
+    {
+        gtk_tree_path_free(treepath);
+    }
+    g_object_set_data(G_OBJECT(tv), "dst-tree-path", NULL);
+
+#if GTK_CHECK_VERSION(3, 90, 0)
+    GdkDrag *drag_ctx = gdk_drop_get_drag(ctx);
+    widget = gtk_drag_get_source_widget(drag_ctx);
+#else
     widget = gtk_drag_get_source_widget(ctx);
+#endif
     if (widget == NULL || widget != GTK_WIDGET(tv))
         return TRUE;
 
     // Get the type of the object being dragged
-    srctv  = GTK_TREE_VIEW(gtk_drag_get_source_widget(ctx));
+    srctv  = GTK_TREE_VIEW(widget);
     select = gtk_tree_view_get_selection(srctv);
     gtk_tree_selection_get_selected(select, &model, &iter);
     path   = ghb_tree_get_index(model, &iter);
@@ -2469,7 +2541,7 @@ presets_drag_motion_cb(
     free(path);
     if (src_preset == NULL)
     {
-        gdk_drag_status(ctx, 0, time);
+        ghb_drag_status(ctx, 0, time);
         return TRUE;
     }
 
@@ -2481,14 +2553,14 @@ presets_drag_motion_cb(
     gtk_tree_view_get_dest_row_at_pos(tv, x, y, &treepath, &drop_pos);
     if (treepath == NULL)
     {
-        gdk_drag_status(ctx, 0, time);
+        ghb_drag_status(ctx, 0, time);
         return TRUE;
     }
     // Don't allow repositioning of builtin presets
     if (src_ptype != HB_PRESET_TYPE_CUSTOM)
     {
         gtk_tree_view_set_drag_dest_row(tv, NULL, drop_pos);
-        gdk_drag_status(ctx, 0, time);
+        ghb_drag_status(ctx, 0, time);
         gtk_tree_path_free(treepath);
         return TRUE;
     }
@@ -2498,7 +2570,7 @@ presets_drag_motion_cb(
     free(path);
     if (dst_preset == NULL)
     {
-        gdk_drag_status(ctx, 0, time);
+        ghb_drag_status(ctx, 0, time);
         gtk_tree_path_free(treepath);
         return TRUE;
     }
@@ -2510,7 +2582,7 @@ presets_drag_motion_cb(
     if (dst_ptype != HB_PRESET_TYPE_CUSTOM)
     {
         gtk_tree_view_set_drag_dest_row(tv, NULL, drop_pos);
-        gdk_drag_status(ctx, 0, time);
+        ghb_drag_status(ctx, 0, time);
         gtk_tree_path_free(treepath);
         return TRUE;
     }
@@ -2524,7 +2596,7 @@ presets_drag_motion_cb(
         free(path);
         if (dst_preset == NULL)
         {
-            gdk_drag_status(ctx, 0, time);
+            ghb_drag_status(ctx, 0, time);
             gtk_tree_path_free(treepath);
             return TRUE;
         }
@@ -2550,7 +2622,7 @@ presets_drag_motion_cb(
     if (!src_folder && dst_folder && drop_pos == GTK_TREE_VIEW_DROP_BEFORE)
     {
         gtk_tree_view_set_drag_dest_row(tv, NULL, drop_pos);
-        gdk_drag_status(ctx, 0, time);
+        ghb_drag_status(ctx, 0, time);
         gtk_tree_path_free(treepath);
         return TRUE;
     }
@@ -2561,14 +2633,24 @@ presets_drag_motion_cb(
     }
 
     gtk_tree_view_set_drag_dest_row(tv, treepath, drop_pos);
-    gtk_tree_path_free(treepath);
-    gdk_drag_status(ctx, GDK_ACTION_MOVE, time);
+    ghb_drag_status(ctx, GDK_ACTION_MOVE, time);
+
+    g_object_set_data(G_OBJECT(tv), "dst-tree-path", treepath);
+    g_object_set_data(G_OBJECT(tv), "dst-drop-pos", (gpointer)drop_pos);
+
     return TRUE;
 }
 
 G_MODULE_EXPORT void
-presets_drag_cb(
-    GtkTreeView        *dst_widget,
+#if GTK_CHECK_VERSION(3, 90, 0)
+presets_drag_data_received_cb(
+    GtkTreeView        *tv,
+    GdkDrop            *dc,
+    GtkSelectionData   *selection_data,
+    signal_user_data_t *ud)
+#else
+presets_drag_data_received_cb(
+    GtkTreeView        *tv,
     GdkDragContext     *dc,
     gint                x,
     gint                y,
@@ -2576,37 +2658,20 @@ presets_drag_cb(
     guint               info,
     guint               t,
     signal_user_data_t *ud)
+#endif
 {
+    GtkTreeModel            *dst_model;
     GtkTreePath             *dst_treepath = NULL;
     GtkTreeViewDropPosition  drop_pos;
     GtkTreeIter              dst_iter, src_iter;
     gint                     src_ptype;
     gboolean                 src_folder, dst_folder;
 
-    GtkTreeModel *dst_model = gtk_tree_view_get_model(dst_widget);
-
-    // This doesn't work here for some reason...
-    // gtk_tree_view_get_drag_dest_row(dstwidget, &path, &drop_pos);
-    gtk_tree_view_get_dest_row_at_pos(dst_widget, x, y,
-                                      &dst_treepath, &drop_pos);
-    // This little hack is needed because attempting to drop after
-    // the last item gives us no dst_treepath or drop_pos.
-    if (dst_treepath == NULL)
-    {
-        gint n_children;
-
-        n_children = gtk_tree_model_iter_n_children(dst_model, NULL);
-        if (n_children)
-        {
-            drop_pos = GTK_TREE_VIEW_DROP_AFTER;
-            dst_treepath = gtk_tree_path_new_from_indices(n_children-1, -1);
-        }
-        else
-        {
-            drop_pos = GTK_TREE_VIEW_DROP_BEFORE;
-            dst_treepath = gtk_tree_path_new_from_indices(0, -1);
-        }
-    }
+    dst_model    = gtk_tree_view_get_model(tv);
+    dst_treepath = g_object_get_data(G_OBJECT(tv), "dst-tree-path");
+    drop_pos     = (GtkTreeViewDropPosition)g_object_get_data(G_OBJECT(tv),
+                                                              "dst-drop-pos");
+    g_object_set_data(G_OBJECT(tv), "dst-tree-path", NULL);
     if (dst_treepath == NULL)
     {
         return;
@@ -2617,7 +2682,12 @@ presets_drag_cb(
     GtkTreeSelection  *select;
     hb_preset_index_t *dst_path, *src_path;
 
+#if GTK_CHECK_VERSION(3, 90, 0)
+    GdkDrag *drag_ctx = gdk_drop_get_drag(dc);
+    src_widget = GTK_TREE_VIEW(gtk_drag_get_source_widget(drag_ctx));
+#else
     src_widget = GTK_TREE_VIEW(gtk_drag_get_source_widget(dc));
+#endif
     select     = gtk_tree_view_get_selection (src_widget);
     gtk_tree_selection_get_selected(select, &src_model, &src_iter);
 

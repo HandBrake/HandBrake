@@ -44,6 +44,19 @@ void ghb_queue_buttons_grey(signal_user_data_t *ud);
 // Callbacks
 G_MODULE_EXPORT void
 queue_remove_clicked_cb(GtkWidget *widget, signal_user_data_t *ud);
+
+#if GTK_CHECK_VERSION(3, 90, 0)
+G_MODULE_EXPORT void
+queue_drag_begin_cb(GtkWidget * widget, GdkDrag * context,
+                    signal_user_data_t * ud);
+G_MODULE_EXPORT void
+queue_drag_end_cb(GtkWidget * widget, GdkDrag * context,
+                  signal_user_data_t * ud);
+G_MODULE_EXPORT void
+queue_drag_data_get_cb(GtkWidget * widget, GdkDrag * context,
+                       GtkSelectionData * selection_data,
+                       signal_user_data_t * ud);
+#else
 G_MODULE_EXPORT void
 queue_drag_begin_cb(GtkWidget * widget, GdkDragContext * context,
                     signal_user_data_t * ud);
@@ -54,6 +67,7 @@ G_MODULE_EXPORT void
 queue_drag_data_get_cb(GtkWidget * widget, GdkDragContext * context,
                        GtkSelectionData * selection_data,
                        guint info, guint time, signal_user_data_t * ud);
+#endif
 G_MODULE_EXPORT void
 title_selected_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void
@@ -61,6 +75,25 @@ title_dest_file_cb(GtkWidget *widget, signal_user_data_t *ud);
 G_MODULE_EXPORT void
 title_dest_dir_cb(GtkWidget *widget, signal_user_data_t *ud);
 
+#if GTK_CHECK_VERSION(3, 90, 0)
+static const char * queue_drag_entries[] = {
+    "application/queue-list-row-drop"
+};
+
+void
+ghb_queue_drag_n_drop_init(signal_user_data_t * ud)
+{
+    GtkWidget * widget;
+    GdkContentFormats * targets;
+
+    widget = GHB_WIDGET(ud->builder, "queue_list");
+    targets = gdk_content_formats_new(queue_drag_entries,
+                                      G_N_ELEMENTS(queue_drag_entries));
+    gtk_drag_dest_set(widget, GTK_DEST_DEFAULT_MOTION|GTK_DEST_DEFAULT_DROP, 
+                      targets, GDK_ACTION_MOVE);
+    gdk_content_formats_unref(targets);
+}
+#else
 static GtkTargetEntry queue_drag_entries[] = {
    { "GTK_LIST_BOX_ROW", GTK_TARGET_SAME_APP, 0 }
 };
@@ -74,6 +107,7 @@ ghb_queue_drag_n_drop_init(signal_user_data_t * ud)
     gtk_drag_dest_set(widget, GTK_DEST_DEFAULT_MOTION|GTK_DEST_DEFAULT_DROP, 
                       queue_drag_entries, 1, GDK_ACTION_MOVE);
 }
+#endif
 
 static GtkWidget *find_widget(GtkWidget *widget, gchar *name)
 {
@@ -1297,8 +1331,8 @@ ghb_queue_update_status_icon(signal_user_data_t *ud, int index)
     {
         return;
     }
-    gtk_image_set_from_icon_name(status_icon, icon_name,
-                                 GTK_ICON_SIZE_BUTTON);
+    ghb_image_set_from_icon_name(status_icon, icon_name,
+                                 GHB_ICON_SIZE_BUTTON);
 }
 
 void
@@ -1415,10 +1449,14 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict)
     gtk_widget_set_margin_start(GTK_WIDGET(vbox), 12);
     hbox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
     dbox = GTK_BOX(gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 6));
+#if GTK_CHECK_VERSION(3, 90, 0)
+    ebox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+#else
     ebox = gtk_event_box_new();
+#endif
 
-    status_icon = gtk_image_new_from_icon_name("hb-source",
-                                               GTK_ICON_SIZE_BUTTON);
+    status_icon = ghb_image_new_from_icon_name("hb-source",
+                                               GHB_ICON_SIZE_BUTTON);
 
     gtk_widget_set_name(status_icon, "queue_item_status");
     gtk_image_set_pixel_size(GTK_IMAGE(status_icon), 16);
@@ -1436,8 +1474,7 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict)
     gtk_label_set_width_chars(GTK_LABEL(dest_label), 50);
     gtk_label_set_ellipsize(GTK_LABEL(dest_label), PANGO_ELLIPSIZE_END);
 
-    delete_button = gtk_button_new_from_icon_name("hb-remove",
-                                               GTK_ICON_SIZE_BUTTON);
+    delete_button = ghb_button_new_from_icon_name("hb-remove");
     gtk_button_set_relief(GTK_BUTTON(delete_button), GTK_RELIEF_NONE);
     g_signal_connect(delete_button, "clicked",
                      (GCallback)queue_remove_clicked_cb, ud);
@@ -1446,15 +1483,16 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict)
     progress = gtk_progress_bar_new();
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progress), 0.0);
     gtk_widget_set_name(progress, "queue_item_progress");
+    gtk_widget_set_visible(progress, FALSE);
 
-    ghb_box_pack_start(dbox, GTK_WIDGET(status_icon));
-    ghb_box_pack_start(dbox, GTK_WIDGET(dest_label));
+    ghb_box_append_child(dbox, GTK_WIDGET(status_icon));
+    ghb_box_append_child(dbox, GTK_WIDGET(dest_label));
     gtk_container_add(GTK_CONTAINER(ebox), GTK_WIDGET(dbox));
-    ghb_box_pack_start(hbox, GTK_WIDGET(ebox));
-    ghb_box_pack_start(hbox, GTK_WIDGET(delete_button));
+    ghb_box_append_child(hbox, GTK_WIDGET(ebox));
+    ghb_box_append_child(hbox, GTK_WIDGET(delete_button));
 
-    ghb_box_pack_start(vbox, GTK_WIDGET(hbox));
-    ghb_box_pack_start(vbox, GTK_WIDGET(progress));
+    ghb_box_append_child(vbox, GTK_WIDGET(hbox));
+    ghb_box_append_child(vbox, GTK_WIDGET(progress));
     gtk_container_add(GTK_CONTAINER(row), GTK_WIDGET(vbox));
 
     gtk_widget_show(GTK_WIDGET(row));
@@ -1470,8 +1508,17 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict)
     // style class for CSS settings
     gtk_style_context_add_class(gtk_widget_get_style_context(row), "row");
     // set row as a source for drag & drop
+#if GTK_CHECK_VERSION(3, 90, 0)
+    GdkContentFormats * targets;
+
+    targets = gdk_content_formats_new(queue_drag_entries,
+                                      G_N_ELEMENTS(queue_drag_entries));
+    gtk_drag_source_set(ebox, GDK_BUTTON1_MASK, targets, GDK_ACTION_MOVE);
+    gdk_content_formats_unref(targets);
+#else
     gtk_drag_source_set(ebox, GDK_BUTTON1_MASK, queue_drag_entries, 1,
                         GDK_ACTION_MOVE);
+#endif
     g_signal_connect(ebox, "drag-begin", G_CALLBACK(queue_drag_begin_cb), NULL);
     g_signal_connect(ebox, "drag-end", G_CALLBACK(queue_drag_end_cb), NULL);
     g_signal_connect(ebox, "drag-data-get",
@@ -2082,7 +2129,7 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     gtk_widget_set_name(GTK_WIDGET(selected), "title_selected");
     gtk_widget_show(GTK_WIDGET(selected));
     g_signal_connect(selected, "toggled", (GCallback)title_selected_cb, ud);
-    ghb_box_pack_start(hbox, GTK_WIDGET(selected));
+    ghb_box_append_child(hbox, GTK_WIDGET(selected));
 
     // Title label
     title = GTK_LABEL(gtk_label_new(_("No Title")));
@@ -2091,7 +2138,7 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     gtk_widget_set_valign(GTK_WIDGET(title), GTK_ALIGN_CENTER);
     gtk_widget_set_name(GTK_WIDGET(title), "title_label");
     gtk_widget_show(GTK_WIDGET(title));
-    ghb_box_pack_start(hbox, GTK_WIDGET(title));
+    ghb_box_append_child(hbox, GTK_WIDGET(title));
 
     default_title_attrs = gtk_label_get_attributes(title);
     gtk_widget_set_tooltip_text(GTK_WIDGET(title),
@@ -2106,12 +2153,12 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     gtk_widget_set_halign(GTK_WIDGET(vbox_dest), GTK_ALIGN_FILL);
     //gtk_widget_set_hexpand(GTK_WIDGET(vbox_dest), TRUE);
     dest_file = GTK_ENTRY(gtk_entry_new());
-    gtk_entry_set_width_chars(dest_file, 40);
+    ghb_entry_set_width_chars(dest_file, 40);
     gtk_widget_set_name(GTK_WIDGET(dest_file), "title_file");
     //gtk_widget_set_hexpand(GTK_WIDGET(dest_file), TRUE);
     gtk_widget_show(GTK_WIDGET(dest_file));
     g_signal_connect(dest_file, "changed", (GCallback)title_dest_file_cb, ud);
-    ghb_box_pack_start(vbox_dest, GTK_WIDGET(dest_file));
+    ghb_box_append_child(vbox_dest, GTK_WIDGET(dest_file));
     dest_dir = GTK_FILE_CHOOSER_BUTTON(
             gtk_file_chooser_button_new(_("Destination Directory"),
                                         GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER));
@@ -2120,9 +2167,9 @@ GtkWidget * title_create_row(signal_user_data_t *ud)
     gtk_widget_set_name(GTK_WIDGET(dest_dir), "title_dir");
     gtk_widget_set_hexpand(GTK_WIDGET(dest_dir), TRUE);
     gtk_widget_show(GTK_WIDGET(dest_dir));
-    ghb_box_pack_start(vbox_dest, GTK_WIDGET(dest_dir));
+    ghb_box_append_child(vbox_dest, GTK_WIDGET(dest_dir));
     gtk_widget_show(GTK_WIDGET(vbox_dest));
-    ghb_box_pack_start(hbox, GTK_WIDGET(vbox_dest));
+    ghb_box_append_child(hbox, GTK_WIDGET(vbox_dest));
 
     return GTK_WIDGET(hbox);
 }
@@ -2441,7 +2488,12 @@ show_queue_action_cb(GSimpleAction *action, GVariant *value,
 }
 
 G_MODULE_EXPORT gboolean
-queue_window_delete_cb(GtkWidget *xwidget, GdkEvent *event, signal_user_data_t *ud)
+queue_window_delete_cb(
+    GtkWidget *xwidget,
+#if !GTK_CHECK_VERSION(3, 90, 0)
+    GdkEvent *event,
+#endif
+    signal_user_data_t *ud)
 {
     gtk_widget_set_visible(xwidget, FALSE);
     GtkWidget *widget = GHB_WIDGET (ud->builder, "show_queue");
@@ -2740,7 +2792,7 @@ queue_add_all_action_cb(GSimpleAction *action, GVariant *param,
             dest_dir = ghb_dict_get_string(settings, "dest_dir");
 
             gtk_label_set_markup(label, title_label);
-            gtk_entry_set_text(entry, dest_file);
+            ghb_entry_set_text(entry, dest_file);
             gtk_file_chooser_set_filename(chooser, dest_dir);
 
             g_free(title_label);
@@ -3161,20 +3213,33 @@ title_dest_dir_cb(GtkWidget *widget, signal_user_data_t *ud)
 
 // Set up view of row to be dragged
 G_MODULE_EXPORT void
+#if GTK_CHECK_VERSION(3, 90, 0)
+queue_drag_begin_cb(GtkWidget          * widget,
+                    GdkDrag            * context,
+                    signal_user_data_t * ud)
+#else
 queue_drag_begin_cb(GtkWidget          * widget,
                     GdkDragContext     * context,
                     signal_user_data_t * ud)
+#endif
 {
     GtkListBox      * lb;
     GtkWidget       * row;
+
+    row = gtk_widget_get_ancestor(widget, GTK_TYPE_LIST_BOX_ROW);
+    lb  = GTK_LIST_BOX(gtk_widget_get_parent(row));
+    gtk_list_box_select_row(lb, GTK_LIST_BOX_ROW(row));
+
+#if GTK_CHECK_VERSION(3, 90, 0)
+    GdkPaintable * paintable = gtk_widget_paintable_new(row);
+    gtk_drag_set_icon_paintable(context, paintable, 0, 0);
+    g_object_unref(paintable);
+#else
     GtkAllocation     alloc;
     cairo_surface_t * surface;
     cairo_t         * cr;
     int               x, y;
 
-    row = gtk_widget_get_ancestor(widget, GTK_TYPE_LIST_BOX_ROW);
-    lb  = GTK_LIST_BOX(gtk_widget_get_parent(row));
-    gtk_list_box_select_row(lb, GTK_LIST_BOX_ROW(row));
     gtk_widget_get_allocation(row, &alloc);
     surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
                                          alloc.width, alloc.height);
@@ -3191,15 +3256,22 @@ queue_drag_begin_cb(GtkWidget          * widget,
 
     cairo_destroy(cr);
     cairo_surface_destroy(surface);
+#endif
 
     g_object_set_data(G_OBJECT(gtk_widget_get_parent(row)), "drag-row", row);
     gtk_style_context_add_class(gtk_widget_get_style_context(row), "drag-row");
 }
 
 G_MODULE_EXPORT void
+#if GTK_CHECK_VERSION(3, 90, 0)
+queue_drag_end_cb(GtkWidget          * widget,
+                  GdkDrag            * context,
+                  signal_user_data_t * ud)
+#else
 queue_drag_end_cb(GtkWidget          * widget,
                   GdkDragContext     * context,
                   signal_user_data_t * ud)
+#endif
 {
     GtkWidget * row;
 
@@ -3213,27 +3285,41 @@ queue_drag_end_cb(GtkWidget          * widget,
 
 // Set selection to the row being dragged
 G_MODULE_EXPORT void
+#if GTK_CHECK_VERSION(3, 90, 0)
+queue_drag_data_get_cb(GtkWidget          * widget,
+                       GdkDrag            * context,
+                       GtkSelectionData   * selection_data,
+                       signal_user_data_t * ud)
+#else
 queue_drag_data_get_cb(GtkWidget          * widget,
                        GdkDragContext     * context,
                        GtkSelectionData   * selection_data,
                        guint                info,
                        guint                time,
                        signal_user_data_t * ud)
+#endif
 {
     GtkWidget * row;
 
     row = gtk_widget_get_ancestor(widget, GTK_TYPE_LIST_BOX_ROW);
     gtk_selection_data_set(selection_data,
-                       gdk_atom_intern_static_string("GTK_LIST_BOX_ROW"), 32,
+                       ghb_atom_string("GTK_LIST_BOX_ROW"), 32,
                        (const guchar *)&row, sizeof (gpointer));
 }
 
 G_MODULE_EXPORT void
+#if GTK_CHECK_VERSION(3, 90, 0)
+queue_drag_leave_cb(
+    GtkListBox         * lb,
+    GdkDrop            * ctx,
+    signal_user_data_t * ud)
+#else
 queue_drag_leave_cb(
     GtkListBox         * lb,
     GdkDragContext     * ctx,
     guint                time,
     signal_user_data_t * ud)
+#endif
 {
     GtkWidget * drag_row;
     GtkWidget * row_before;
@@ -3290,6 +3376,14 @@ get_row_after (GtkListBox    * list, GtkListBoxRow * row)
 }
 
 G_MODULE_EXPORT gboolean
+#if GTK_CHECK_VERSION(3, 90, 0)
+queue_drag_motion_cb(
+    GtkListBox         * lb,
+    GdkDrop            * ctx,
+    gint                 x,
+    gint                 y,
+    signal_user_data_t * ud)
+#else
 queue_drag_motion_cb(
     GtkListBox         * lb,
     GdkDragContext     * ctx,
@@ -3297,6 +3391,7 @@ queue_drag_motion_cb(
     gint                 y,
     guint                time,
     signal_user_data_t * ud)
+#endif
 {
     GtkAllocation   alloc;
     GtkWidget     * row;
@@ -3372,6 +3467,12 @@ queue_drag_motion_cb(
 }
 
 G_MODULE_EXPORT void
+#if GTK_CHECK_VERSION(3, 90, 0)
+queue_drag_data_received_cb(GtkListBox         * lb,
+                            GdkDrop            * context,
+                            GtkSelectionData   * selection_data,
+                            signal_user_data_t * ud)
+#else
 queue_drag_data_received_cb(GtkListBox         * lb,
                             GdkDragContext     * context,
                             gint                 x,
@@ -3380,6 +3481,7 @@ queue_drag_data_received_cb(GtkListBox         * lb,
                             guint                info,
                             guint32              time,
                             signal_user_data_t * ud)
+#endif
 {
     GtkWidget * row_before;
     GtkWidget * row_after;

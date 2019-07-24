@@ -369,10 +369,20 @@ bind_subtitle_tree_model(signal_user_data_t *ud)
 }
 
 extern G_MODULE_EXPORT void presets_list_selection_changed_cb(void);
-extern G_MODULE_EXPORT void presets_drag_cb(void);
+extern G_MODULE_EXPORT void presets_drag_data_received_cb(void);
 extern G_MODULE_EXPORT void presets_drag_motion_cb(void);
 extern G_MODULE_EXPORT void preset_edited_cb(void);
 extern void presets_row_expanded_cb(void);
+
+#if GTK_CHECK_VERSION(3, 90, 0)
+static const char * presets_drag_entries[] = {
+    "widget/presets-list-row-drop"
+};
+#else
+static GtkTargetEntry presets_drag_entries[] = {
+   { "PRESETS_ROW", GTK_TARGET_SAME_WIDGET, 0 }
+};
+#endif
 
 // Create and bind the tree model to the tree view for the preset list
 // Also, connect up the signal that lets us know the selection has changed
@@ -385,9 +395,6 @@ bind_presets_tree_model(signal_user_data_t *ud)
     GtkTreeView  *treeview;
     GtkTreeSelection *selection;
     GtkWidget *widget;
-    GtkTargetEntry SrcEntry;
-    SrcEntry.target = "DATA";
-    SrcEntry.flags = GTK_TARGET_SAME_WIDGET;
 
     g_debug("bind_presets_tree_model()\n");
     treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "presets_list"));
@@ -407,12 +414,24 @@ bind_presets_tree_model(signal_user_data_t *ud)
     gtk_tree_view_column_set_expand(column, TRUE);
     gtk_tree_view_set_tooltip_column(treeview, 4);
 
-    gtk_tree_view_enable_model_drag_dest(treeview, &SrcEntry, 1,
+#if GTK_CHECK_VERSION(3, 90, 0)
+    GdkContentFormats * targets;
+
+    targets = gdk_content_formats_new(presets_drag_entries,
+                                      G_N_ELEMENTS(presets_drag_entries));
+    gtk_tree_view_enable_model_drag_dest(treeview, targets, GDK_ACTION_MOVE);
+    gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK,
+                                           targets, GDK_ACTION_MOVE);
+    gdk_content_formats_unref(targets);
+#else
+    gtk_tree_view_enable_model_drag_dest(treeview, presets_drag_entries, 1,
                                             GDK_ACTION_MOVE);
     gtk_tree_view_enable_model_drag_source(treeview, GDK_BUTTON1_MASK,
-                                            &SrcEntry, 1, GDK_ACTION_MOVE);
+                                           presets_drag_entries, 1,
+                                           GDK_ACTION_MOVE);
+#endif
 
-    g_signal_connect(treeview, "drag_data_received", presets_drag_cb, ud);
+    g_signal_connect(treeview, "drag_data_received", presets_drag_data_received_cb, ud);
     g_signal_connect(treeview, "drag_motion", presets_drag_motion_cb, ud);
     g_signal_connect(treeview, "row_expanded", presets_row_expanded_cb, ud);
     g_signal_connect(treeview, "row_collapsed", presets_row_expanded_cb, ud);
@@ -972,16 +991,35 @@ ghb_idle_ui_init(signal_user_data_t *ud)
     return FALSE;
 }
 
+#if GTK_CHECK_VERSION(3, 90, 0)
+extern G_MODULE_EXPORT void easter_egg_multi_cb(void);
+extern G_MODULE_EXPORT void preview_leave_cb(void);
+extern G_MODULE_EXPORT void preview_motion_cb(void);
+extern G_MODULE_EXPORT void preview_draw_cb(GtkDrawingArea*, cairo_t*, int, int,
+                                            gpointer);
+extern G_MODULE_EXPORT void hud_enter_cb(void);
+extern G_MODULE_EXPORT void hud_leave_cb(void);
+#endif
+
 extern G_MODULE_EXPORT void
 ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
 {
     GtkCssProvider     * provider = gtk_css_provider_new();
 
     ghb_css_provider_load_from_data(provider, MyCSS, -1);
+
+#if GTK_CHECK_VERSION(3, 90, 0)
+    GdkDisplay *dd = gdk_display_get_default();
+    gtk_style_context_add_provider_for_display(dd,
+                                GTK_STYLE_PROVIDER(provider),
+                                GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+#else
     GdkScreen *ss = gdk_screen_get_default();
     gtk_style_context_add_provider_for_screen(ss,
                                 GTK_STYLE_PROVIDER(provider),
                                 GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+#endif
+
     g_object_unref(provider);
 
     ghb_resource_init();
@@ -1278,6 +1316,34 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
     window = GHB_WIDGET(ud->builder, "queue_window");
     gtk_application_add_window(GTK_APPLICATION(app), GTK_WINDOW(window));
+
+#if GTK_CHECK_VERSION(3, 90, 0)
+    // GTK4 Event handling.
+    GtkGesture         * gest;
+    GtkEventController * econ;
+
+    // Easter egg multi-click
+    gest = gtk_gesture_multi_press_new();
+    widget = GHB_WIDGET(ud->builder, "easter_box");
+    gtk_widget_add_controller(widget, GTK_EVENT_CONTROLLER(gest));
+    g_signal_connect(gest, "pressed", easter_egg_multi_cb, ud);
+
+    // Preview HUD popup management via mouse motion
+    econ = gtk_event_controller_motion_new();
+    widget = GHB_WIDGET(ud->builder, "preview_image");
+    gtk_widget_add_controller(widget, econ);
+    g_signal_connect(econ, "leave", preview_leave_cb, ud);
+    g_signal_connect(econ, "motion", preview_motion_cb, ud);
+
+    gtk_drawing_area_set_draw_func(GTK_DRAWING_AREA(widget), preview_draw_cb,
+                                   ud, NULL);
+
+    econ = gtk_event_controller_motion_new();
+    widget = GHB_WIDGET(ud->builder, "preview_hud");
+    gtk_widget_add_controller(widget, econ);
+    g_signal_connect(econ, "enter", hud_enter_cb, ud);
+    g_signal_connect(econ, "leave", hud_leave_cb, ud);
+#endif
 
     gtk_widget_show(ghb_window);
 }
