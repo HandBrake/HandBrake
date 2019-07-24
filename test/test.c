@@ -3718,7 +3718,7 @@ static hb_dict_t * PreparePreset(const char *preset_name)
         // No explicit audio tracks, but track settings modified.
         // Modify the presets audio settings.
         //
-        // Note that --all-audio is explicitely asking for all tracks
+        // Note that --all-audio is explicitly asking for all tracks
         hb_value_array_t *list;
         list = hb_dict_get(preset, "AudioList");
         if (list == NULL)

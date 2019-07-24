@@ -608,7 +608,7 @@ class HostTupleAction( Action, list ):
 
 ###############################################################################
 ##
-## value wrapper; value is accepted only if one of host specs matcheds
+## value wrapper; value is accepted only if one of host specs matches
 ## otherwise it is None (or a keyword-supplied val)
 ##
 ## result is attribute 'value'
@@ -1525,7 +1525,7 @@ try:
 
     ## create main objects; actions/probes run() is delayed.
     ## if any actions must be run earlier (eg: for configure --help purposes)
-    ## then run() must be invoked earlier. subequent run() invocations
+    ## then run() must be invoked earlier. subsequent run() invocations
     ## are ignored.
     cfg         = Configure( verbose )
     build_tuple = BuildTupleProbe(); build_tuple.run()
