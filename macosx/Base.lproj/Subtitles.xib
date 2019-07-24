@@ -301,7 +301,7 @@
                                                             <binding destination="4bh-my-GeM" name="enabled" keyPath="objectValue.isExternal" id="cQ5-cT-bqm"/>
                                                             <binding destination="4bh-my-GeM" name="selectedValue" keyPath="objectValue.isoLanguage" previousBinding="OIo-fF-3vU" id="Ubv-kn-nf5">
                                                                 <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">HBIsoLanguageTrasformer</string>
+                                                                    <string key="NSValueTransformerName">HBIsoLanguageTransformer</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="4bh-my-GeM" name="content" keyPath="objectValue.languages" id="OIo-fF-3vU"/>

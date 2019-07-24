@@ -35,7 +35,7 @@
 @end
 
 /**
- *  A series of value trasformers to bridge the libhb enums
+ *  A series of value transformers to bridge the libhb enums
  *  to the textual rapresentations used in the interface.
  */
 @interface HBVideoEncoderTransformer : NSValueTransformer
