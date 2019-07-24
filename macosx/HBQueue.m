@@ -325,7 +325,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 {
     if ([self.items beginTransaction] == HBDistributedArrayContentReload)
     {
-        // Do not execture the action if the array changed.
+        // Do not execute the action if the array changed.
         [self.items commit];
         return;
     }

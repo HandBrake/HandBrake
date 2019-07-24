@@ -417,7 +417,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 {
     if ([self.queue.items beginTransaction] == HBDistributedArrayContentReload)
     {
-        // Do not execture the action if the array changed.
+        // Do not execute the action if the array changed.
         [self.queue.items commit];
         return;
     }
