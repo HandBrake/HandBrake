@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  A flag to indicate the item's state
  */
-typedef NS_ENUM(NSUInteger, HBQueueItemState){
+typedef NS_ENUM(NSUInteger, HBQueueItemState) {
     HBQueueItemStateReady,
     HBQueueItemStateWorking,
     HBQueueItemStateCompleted,
@@ -45,7 +45,14 @@ typedef NS_ENUM(NSUInteger, HBQueueItemState){
 @property (nonatomic, readonly) NSAttributedString *attributedTitleDescription;
 @property (nonatomic, readonly) NSAttributedString *attributedDescription;
 
-@property (nonatomic, readwrite) BOOL expanded;
+@property (nonatomic) NSTimeInterval encodeDuration;
+@property (nonatomic) NSTimeInterval pauseDuration;
+
+@property (nonatomic, nullable) NSDate *startedDate;
+@property (nonatomic, nullable) NSDate *endedDate;
+
+- (void)pausedAtDate:(NSDate *)date;
+- (void)resumedAtDate:(NSDate *)date;
 
 @property (nonatomic, readonly) HBJob *job;
 

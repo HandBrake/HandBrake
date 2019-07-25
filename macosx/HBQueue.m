@@ -410,6 +410,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (void)pause
 {
+    [self.currentItem pausedAtDate:[NSDate date]];
     [self.core pause];
     [self.core allowSleep];
 }
@@ -421,6 +422,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (void)resume
 {
+    [self.currentItem resumedAtDate:[NSDate date]];
     [self.core resume];
     [self.core preventSleep];
 }
@@ -551,6 +553,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         {
             // now we mark the queue item as working so another instance can not come along and try to scan it while we are scanning
             nextItem.state = HBQueueItemStateWorking;
+            nextItem.startedDate = [NSDate date];
 
             // Tell HB to output a new activity log file for this encode
             self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:nextItem.job];
@@ -589,6 +592,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 {
     NSParameterAssert(item);
     [self.items beginTransaction];
+
+    item.endedDate = [NSDate date];
 
     // Since we are done with this encode, tell output to stop writing to the
     // individual encode log.

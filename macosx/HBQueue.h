@@ -42,6 +42,7 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 
 @interface HBQueue : NSObject
 
+- (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithURL:(NSURL *)queueURL;
 
 @property (nonatomic, readonly) HBCore *core;
