@@ -52,17 +52,66 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     if (self = [super initWithWindowNibName:@"Queue"])
     {
-        // Load the dockTile and instiante initial text fields
+        // Load the dockTile and instantiate initial text fields
         _dockTile = [[HBDockTile alloc] initWithDockTile:NSApplication.sharedApplication.dockTile
                                                   image:NSApplication.sharedApplication.applicationIconImage];
 
         // Init state
         _queue = queue;
+        _queue.undoManager = [[NSUndoManager alloc] init];
+
+        [NSNotificationCenter.defaultCenter addObserverForName:HBQueueLowSpaceAlertNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+            [self queueLowDiskSpaceAlert];
+        }];
+
+        [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+            [self queueCompletedAlerts];
+        }];
+
+        [NSNotificationCenter.defaultCenter addObserverForName:HBQueueProgressNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+            // Update dock icon
+            double progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
+
+#define dockTileUpdateFrequency 0.1f
+
+            if (self.dockIconProgress < 100.0 * progress)
+            {
+                double hours = [note.userInfo[HBQueueProgressNotificationHoursKey] doubleValue];
+                double minutes = [note.userInfo[HBQueueProgressNotificationMinutesKey] doubleValue];
+                double seconds = [note.userInfo[HBQueueProgressNotificationSecondsKey] doubleValue];
+
+                [self.dockTile updateDockIcon:progress hours:hours minutes:minutes seconds:seconds];
+                self.dockIconProgress += dockTileUpdateFrequency;
+            }
+        }];
+
+        [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+            // Restore dock icon
+            [self.dockTile updateDockIcon:-1.0 withETA:@""];
+            self.dockIconProgress = 0;
+
+            // Run the per item notification and actions
+            HBQueueItem *item = note.userInfo[HBQueueItemNotificationItemKey];
+            if (item.state == HBQueueItemStateCompleted)
+            {
+                [self sendToExternalApp:item];
+            }
+
+            if (item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateFailed)
+            {
+                [self itemCompletedAlerts:item];
+            }
+        }];
 
         NSUserNotificationCenter.defaultUserNotificationCenter.delegate = self;
     }
 
     return self;
+}
+
+- (NSUndoManager *)windowWillReturnUndoManager:(NSWindow *)window
+{
+    return _queue.undoManager;
 }
 
 - (void)windowDidLoad
@@ -71,8 +120,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     {
         self.window.tabbingMode = NSWindowTabbingModeDisallowed;
     }
-
-    _queue.undoManager = self.window.undoManager;
 
     // Set up the child view controllers
     _splitViewController = [[NSSplitViewController alloc] init];
@@ -98,9 +145,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     _splitViewController.splitView.identifier = @"HBQueueSplitViewIdentifier";
 
     self.window.contentViewController = _splitViewController;
-
     self.window.frameAutosaveName = @"HBQueueWindowFrameAutosave";
-    [self.window setFrameFromString: @"HBQueueWindowFrameAutosave"];
+    [self.window setFrameFromString:@"HBQueueWindowFrameAutosave"];
 
     // Set up observers
     [self.queue.core addObserver:self forKeyPath:@"state"
@@ -109,51 +155,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [self.queue addObserver:self forKeyPath:@"pendingItemsCount"
                    options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                    context:HBControllerQueueCoreContext];
-
-    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueLowSpaceAlertNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-        [self queueLowDiskSpaceAlert];
-    }];
-
-    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-        // Since there are no more items to encode, go to queueCompletedAlerts
-        // for user specified alerts after queue completed
-        [self queueCompletedAlerts];
-    }];
-
-    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueProgressNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-        // Update dock icon
-        double progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
-
-#define dockTileUpdateFrequency 0.1f
-
-        if (self.dockIconProgress < 100.0 * progress)
-        {
-            double hours = [note.userInfo[HBQueueProgressNotificationHoursKey] doubleValue];
-            double minutes = [note.userInfo[HBQueueProgressNotificationMinutesKey] doubleValue];
-            double seconds = [note.userInfo[HBQueueProgressNotificationSecondsKey] doubleValue];
-
-            [self.dockTile updateDockIcon:progress hours:hours minutes:minutes seconds:seconds];
-            self.dockIconProgress += dockTileUpdateFrequency;
-        }
-    }];
-
-    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-        // Restore dock icon
-        [self.dockTile updateDockIcon:-1.0 withETA:@""];
-        self.dockIconProgress = 0;
-
-        // Run the per item notification and actions
-        HBQueueItem *item = note.userInfo[HBQueueItemNotificationItemKey];
-        if (item.state == HBQueueItemStateCompleted)
-        {
-            [self sendToExternalApp:item];
-        }
-
-        if (item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateFailed)
-        {
-            [self itemCompletedAlerts:item];
-        }
-    }];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -450,10 +451,12 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 #pragma mark - Encode Done Actions
 
+NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathKey";
+
 - (void)userNotificationCenter:(NSUserNotificationCenter *)center didActivateNotification:(NSUserNotification *)notification
 {
     // Show the file in Finder when a done notification was clicked.
-    NSString *path = notification.userInfo[@"Path"];
+    NSString *path = notification.userInfo[HBQueueItemNotificationPathKey];
     if ([path isKindOfClass:[NSString class]] && path.length)
     {
         NSURL *fileURL = [NSURL fileURLWithPath:path];
@@ -469,7 +472,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     notification.soundName = playSound ? NSUserNotificationDefaultSoundName : nil;
     notification.hasActionButton = YES;
     notification.actionButtonTitle = NSLocalizedString(@"Show", @"Notification -> Show in Finder");
-    notification.userInfo = @{ @"Path": fileURL.path };
+    notification.userInfo = @{ HBQueueItemNotificationPathKey: fileURL.path };
 
     [[NSUserNotificationCenter defaultUserNotificationCenter] deliverNotification:notification];
 }

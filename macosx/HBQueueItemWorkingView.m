@@ -23,35 +23,59 @@
 
 @implementation HBQueueItemWorkingView
 
+- (void)setUpObservers
+{
+    NSNotificationCenter * __weak center = NSNotificationCenter.defaultCenter;
+
+    self.progressToken = [center addObserverForName:HBQueueProgressNotification
+                                             object:nil
+                                              queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
+                          {
+                              NSString *progressInfo = note.userInfo[HBQueueProgressNotificationInfoKey];
+                              double progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
+
+                              self.progressField.attributedStringValue = progressInfo.HB_smallMonospacedString;
+                              self.progressBar.doubleValue = progress;
+                          }];
+
+    self.completedToken = [center addObserverForName:HBQueueDidCompleteItemNotification
+                                              object:nil
+                                               queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
+                           {
+                               HBQueueItem *completedItem = note.userInfo[HBQueueItemNotificationItemKey];
+                               if (completedItem == self.item) {
+                                   [self removeObservers];
+                               }
+                           }];
+}
+
+- (void)removeObservers
+{
+    if (self.progressToken)
+    {
+        [NSNotificationCenter.defaultCenter removeObserver:self.progressToken];
+        self.progressToken = nil;
+    }
+    if (self.completedToken)
+    {
+        [NSNotificationCenter.defaultCenter removeObserver:self.completedToken];
+        self.completedToken = nil;
+    }
+}
+
+- (void)dealloc
+{
+    [self removeObservers];
+}
+
 - (void)setItem:(HBQueueItem *)item
 {
     [super setItem:item];
 
     if (item.state == HBQueueItemStateWorking)
     {
-        NSNotificationCenter * __weak center = NSNotificationCenter.defaultCenter;
-
-        self.progressToken = [center addObserverForName:HBQueueProgressNotification
-                                                 object:nil
-                                                  queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
-        {
-            NSString *progressInfo = note.userInfo[HBQueueProgressNotificationInfoKey];
-            double progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
-
-            self.progressField.attributedStringValue = progressInfo.HB_smallMonospacedString;
-            self.progressBar.doubleValue = progress;
-        }];
-
-        self.completedToken = [center addObserverForName:HBQueueDidCompleteItemNotification
-                                                  object:nil
-                                                   queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
-        {
-            HBQueueItem *completedItem = note.userInfo[HBQueueItemNotificationItemKey];
-            if (completedItem == self.item) {
-                [center removeObserver:self.progressToken];
-                [center removeObserver:self.completedToken];
-            }
-        }];
+        [self removeObservers];
+        [self setUpObservers];
     }
 }
 
