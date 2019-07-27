@@ -2494,8 +2494,8 @@ namespace HandBrakeWPF.ViewModels
                 {
                     if (this.queueProcessor.EncodeService.IsEncoding)
                     {
-                        string totalHrsLeft = string.Format("{0}:{1}:{2}", (int)e.EstimatedTimeLeft.TotalHours, e.EstimatedTimeLeft.Minutes, e.EstimatedTimeLeft.Seconds);
-                        string elapsedTimeHrs = string.Format("{0}:{1}:{2}", (int)e.ElapsedTime.TotalHours, e.ElapsedTime.Minutes, e.ElapsedTime.Seconds);
+                        string totalHrsLeft = string.Format(@"{0:hh\:mm\:ss}", e.EstimatedTimeLeft);
+                        string elapsedTimeHrs = string.Format(@"{0:hh\:mm\:ss} ", e.ElapsedTime);
                         string jobsPending = string.Format(Resources.Main_JobsPending_addon, this.queueProcessor.Count);
 
                         if (e.IsSubtitleScan)
