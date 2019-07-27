@@ -318,7 +318,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     [self.items commit];
 }
 
-- (void)resetItemsStateAtIndexes:(NSIndexSet *)indexes
+- (void)resetItemsAtIndexes:(NSIndexSet *)indexes
 {
     if ([self.items beginTransaction] == HBDistributedArrayContentReload)
     {
@@ -352,7 +352,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
         return (item.state != HBQueueItemStateWorking);
     }];
-    [self resetItemsStateAtIndexes:indexes];
+    [self resetItemsAtIndexes:indexes];
     [self.items commit];
 }
 
@@ -362,7 +362,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
         return (item.state == HBQueueItemStateFailed);
     }];
-    [self resetItemsStateAtIndexes:indexes];
+    [self resetItemsAtIndexes:indexes];
     [self.items commit];
 }
 
@@ -634,8 +634,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueProgressNotification object:self userInfo:@{HBQueueProgressNotificationPercentKey: @1.0,
                                                                                                                 HBQueueProgressNotificationInfoKey: info}];
 
-    NSInteger index = [self.items indexOfObject:item];
-    NSIndexSet *indexes = index > -1 ? [NSIndexSet indexSetWithIndex:index] : [NSIndexSet indexSet];
+    NSUInteger index = [self.items indexOfObject:item];
+    NSIndexSet *indexes = index != NSNotFound ? [NSIndexSet indexSetWithIndex:index] : [NSIndexSet indexSet];
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteItemNotification object:self userInfo:@{HBQueueItemNotificationItemKey: item,
                                                                                                                        HBQueueItemNotificationIndexesKey: indexes}];
 

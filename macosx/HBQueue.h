@@ -72,7 +72,7 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 - (void)removeNotWorkingItems;
 - (void)removeCompletedItems;
 
-- (void)resetItemsStateAtIndexes:(NSIndexSet *)indexes;
+- (void)resetItemsAtIndexes:(NSIndexSet *)indexes;
 - (void)resetAllItems;
 - (void)resetFailedItems;
 

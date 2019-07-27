@@ -660,20 +660,32 @@ static NSDictionary            *shortHeightAttr;
     {
         [attrString appendAttributedString:[self presetAttributedDescription]];
         [attrString appendString:@"\n" withAttributes: detailAttr];
+
         [attrString appendAttributedString:[self sourceAttributedDescription]];
         [attrString appendString:@"\n" withAttributes: detailAttr];
+
         [attrString appendAttributedString:[self destinationAttributedDescription]];
         [attrString appendString:@"\n" withAttributes: detailAttr];
+
         [attrString appendAttributedString:[self formatAttributedDescription]];
         [attrString appendString:@"\n" withAttributes: detailAttr];
+
         [attrString appendAttributedString:[self rangeAttributedDescription]];
         [attrString appendString:@"\n" withAttributes: detailAttr];
+
         [attrString appendAttributedString:[self dimensionsAttributedDescription]];
         [attrString appendString:@"\n" withAttributes: detailAttr];
-        [attrString appendAttributedString:[self filtersAttributedDescription]];
-        [attrString appendString:@"\n" withAttributes: detailAttr];
+
+        NSAttributedString *filters = [self filtersAttributedDescription];
+        if (filters.length)
+        {
+            [attrString appendAttributedString:[self filtersAttributedDescription]];
+            [attrString appendString:@"\n" withAttributes: detailAttr];
+        }
+
         [attrString appendAttributedString:[self videoAttributedDescription]];
         [attrString appendString:@"\n" withAttributes: detailAttr];
+
         if (self.audio.countOfTracks > 1)
         {
             [attrString appendAttributedString:[self audioAttributedDescription]];
@@ -689,7 +701,6 @@ static NSDictionary            *shortHeightAttr;
 
     return attrString;
 }
-
 
 #pragma mark - Short descriptions
 

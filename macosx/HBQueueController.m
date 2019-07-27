@@ -11,6 +11,8 @@
 #import "HBQueue.h"
 #import "HBQueueTableViewController.h"
 #import "HBQueueDetailsViewController.h"
+#import "HBQueueInfoViewController.h"
+#import "HBQueueMultiSelectionViewController.h"
 
 #import "HBDockTile.h"
 #import "HBPreferencesController.h"
@@ -25,7 +27,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 @property (weak) IBOutlet NSSplitView *splitView;
 @property (nonatomic) NSSplitViewController *splitViewController;
 @property (nonatomic) HBQueueTableViewController *tableViewController;
-@property (nonatomic) HBQueueDetailsViewController *detailsViewController;
+@property (nonatomic) NSViewController *containerViewController;
+@property (nonatomic) HBQueueInfoViewController *infoViewController;
+@property (nonatomic) HBQueueMultiSelectionViewController *multiSelectionViewController;
 
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly
@@ -128,14 +132,16 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     _splitViewController.splitView.vertical = YES;
 
     _tableViewController = [[HBQueueTableViewController alloc] initWithQueue:self.queue delegate:self];
-    _detailsViewController = [[HBQueueDetailsViewController alloc] initWithDelegate:self];
+    _containerViewController = [[HBQueueDetailsViewController alloc] init];
+    _infoViewController = [[HBQueueInfoViewController alloc] initWithDelegate:self];
+    _multiSelectionViewController = [[HBQueueMultiSelectionViewController alloc] init];
 
     NSSplitViewItem *tableItem = [NSSplitViewItem splitViewItemWithViewController:_tableViewController];
     tableItem.minimumThickness = 160;
 
     [_splitViewController addSplitViewItem:tableItem];
 
-    NSSplitViewItem *detailsItem = [NSSplitViewItem splitViewItemWithViewController:_detailsViewController];
+    NSSplitViewItem *detailsItem = [NSSplitViewItem splitViewItemWithViewController:_containerViewController];
     detailsItem.canCollapse = YES;
     detailsItem.minimumThickness = 240;
 
@@ -155,6 +161,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [self.queue addObserver:self forKeyPath:@"pendingItemsCount"
                    options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                    context:HBControllerQueueCoreContext];
+
+    [self tableViewDidSelectItemsAtIndexes:[NSIndexSet indexSet]];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -173,18 +181,21 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
         NSString *string;
         if (self.queue.pendingItemsCount == 0)
         {
-            string = NSLocalizedString(@"No encode pending", @"Queue status");
-        }
-        else if (self.queue.pendingItemsCount == 1)
-        {
-            string = [NSString stringWithFormat: NSLocalizedString(@"%d encode pending", @"Queue status"), self.queue.pendingItemsCount];
+            self.window.title = NSLocalizedString(@"Queue", @"Queue window title");
         }
         else
         {
-            string = [NSString stringWithFormat: NSLocalizedString(@"%d encodes pending", @"Queue status"), self.queue.pendingItemsCount];
-        }
+            if (self.queue.pendingItemsCount == 1)
+            {
+                string = [NSString stringWithFormat: NSLocalizedString(@"%d encode pending", @"Queue status"), self.queue.pendingItemsCount];
+            }
+            else
+            {
+                string = [NSString stringWithFormat: NSLocalizedString(@"%d encodes pending", @"Queue status"), self.queue.pendingItemsCount];
+            }
 
-        self.window.title = [NSString stringWithFormat: NSLocalizedString(@"Queue (%@)", @"Queue window title"), string];
+            self.window.title = [NSString stringWithFormat: NSLocalizedString(@"Queue (%@)", @"Queue window title"), string];
+        }
     }
     else
     {
@@ -447,6 +458,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 
     [self.queue.items commit];
+}
+
+- (void)resetQueueItemsAtIndexes:(NSIndexSet *)indexes
+{
+    [self.queue resetItemsAtIndexes:indexes];
 }
 
 #pragma mark - Encode Done Actions
@@ -743,9 +759,40 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 
 #pragma mark - table view controller delegate
 
-- (void)tableViewDidSelectItem:(HBQueueItem *)item
+- (void)tableViewDidSelectItemsAtIndexes:(NSIndexSet *)indexes
 {
-    self.detailsViewController.item = item;
+    NSUInteger count = indexes.count;
+
+    if (count != 1)
+    {
+        self.multiSelectionViewController.count = count;
+        [self switchToViewController:self.multiSelectionViewController];
+    }
+    else
+    {
+        NSArray<HBQueueItem *> *items = [self.queue.items objectsAtIndexes:indexes];
+        self.infoViewController.item = items.firstObject;
+        [self switchToViewController:self.infoViewController];
+    }
+}
+
+- (void)switchToViewController:(NSViewController *)viewController
+{
+    NSViewController *firstChild = self.containerViewController.childViewControllers.firstObject;
+
+    if (firstChild != viewController)
+    {
+        if (firstChild)
+        {
+            [firstChild.view removeFromSuperviewWithoutNeedingDisplay];
+            [firstChild removeFromParentViewController];
+        }
+        
+        [self.containerViewController addChildViewController:viewController];
+        viewController.view.frame = self.containerViewController.view.bounds;
+        viewController.view.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;
+        [self.containerViewController.view addSubview:viewController.view];
+    }
 }
 
 - (void)tableViewEditItem:(HBQueueItem *)item
@@ -753,16 +800,24 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     [self editQueueItem:item];
 }
 
-- (void)tableViewRemoveItemsAtIndexes:(nonnull NSIndexSet *)indexes {
+- (void)tableViewRemoveItemsAtIndexes:(nonnull NSIndexSet *)indexes
+{
     [self removeQueueItemsAtIndexes:indexes];
 }
 
-- (void)detailsViewEditItem:(nonnull HBQueueItem *)item {
+- (void)tableViewResetItemsAtIndexes:(nonnull NSIndexSet *)indexes {
+    [self resetQueueItemsAtIndexes:indexes];
+}
+
+- (void)detailsViewEditItem:(nonnull HBQueueItem *)item
+{
     [self editQueueItem:item];
 }
 
-- (void)detailsViewResetItem:(nonnull HBQueueItem *)item {
-    [self editQueueItem:item];
+- (void)detailsViewResetItem:(nonnull HBQueueItem *)item
+{
+    NSUInteger index = [self.queue.items indexOfObject:item];
+    [self resetQueueItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
 }
 
 - (IBAction)resetAll:(id)sender

@@ -1,5 +1,5 @@
 //
-//  HBDetailsViewController.h
+//  HBQueueEmptyViewController.h
 //  HandBrake
 //
 //  Created by Damiano Galassi on 27/07/2019.
@@ -9,7 +9,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface HBQueueDetailsViewController : NSViewController
+@interface HBQueueMultiSelectionViewController : NSViewController
+
+@property (nonatomic) NSUInteger count;
 
 @end
 

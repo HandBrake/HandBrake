@@ -14,8 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol HBQueueTableViewControllerDelegate
 
-- (void)tableViewDidSelectItem:(nullable HBQueueItem *)item;
+- (void)tableViewDidSelectItemsAtIndexes:(NSIndexSet *)indexes;
 - (void)tableViewEditItem:(HBQueueItem *)item;
+- (void)tableViewResetItemsAtIndexes:(NSIndexSet *)indexes;
 - (void)tableViewRemoveItemsAtIndexes:(NSIndexSet *)indexes;
 
 @end

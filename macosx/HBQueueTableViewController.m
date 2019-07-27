@@ -152,7 +152,7 @@
     NSIndexSet *targetedRows = [self.tableView targetedRowIndexes];
     if (targetedRows.count)
     {
-        [self.queue resetItemsStateAtIndexes:targetedRows];
+        [self.delegate tableViewResetItemsAtIndexes:targetedRows];
     }
 }
 
@@ -243,7 +243,7 @@
 - (void)removeQueueItem:(nonnull HBQueueItem *)item
 {
     NSUInteger index = [self.queue.items indexOfObject:item];
-    [self.queue removeItemAtIndex:index];
+    [self.delegate tableViewRemoveItemsAtIndexes:[NSIndexSet indexSetWithIndex:index]];
 }
 
 - (void)revealQueueItem:(nonnull HBQueueItem *)item
@@ -255,9 +255,8 @@
 
 - (void)tableViewSelectionDidChange:(NSNotification *)notification
 {
-    NSInteger selectedRow = self.tableView.selectedRow;
-    HBQueueItem *selectedItem = selectedRow > -1 ? self.queue.items[selectedRow] : nil;
-    [self.delegate tableViewDidSelectItem:selectedItem];
+    NSIndexSet *indexes = self.tableView.selectedRowIndexes;
+    [self.delegate tableViewDidSelectItemsAtIndexes:indexes];
 }
 
 - (void)HB_deleteSelectionFromTableView:(NSTableView *)tableView

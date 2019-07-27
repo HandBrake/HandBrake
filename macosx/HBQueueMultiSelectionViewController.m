@@ -1,0 +1,43 @@
+//
+//  HBQueueEmptyViewController.m
+//  HandBrake
+//
+//  Created by Damiano Galassi on 27/07/2019.
+//
+
+#import "HBQueueMultiSelectionViewController.h"
+
+@interface HBQueueMultiSelectionViewController ()
+
+@property (weak) IBOutlet NSTextField *label;
+
+@end
+
+@implementation HBQueueMultiSelectionViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    [self updateLabels];
+}
+
+- (void)updateLabels
+{
+    if (self.count == 0)
+    {
+        self.label.stringValue = NSLocalizedString(@"No job selected", @"");
+    }
+    else
+    {
+        self.label.stringValue = [NSString stringWithFormat:NSLocalizedString(@"%llu jobs selected", @""), self.count];
+    }
+
+}
+
+- (void)setCount:(NSUInteger)count
+{
+    _count = count;
+    [self updateLabels];
+}
+
+@end
