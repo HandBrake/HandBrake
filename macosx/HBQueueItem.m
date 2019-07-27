@@ -7,20 +7,51 @@
 #import "HBQueueItem.h"
 
 #import "HBCodingUtilities.h"
+#import "HBAttributedStringAdditions.h"
+
+static NSDateFormatter *_dateFormatter = nil;
+
+static NSDictionary     *detailAttr;
+static NSDictionary     *detailBoldAttr;
+static NSDictionary     *shortHeightAttr;
 
 @interface HBQueueItem ()
 
 @property (nonatomic, nullable) NSDate *pausedDate;
 @property (nonatomic, nullable) NSDate *resumedDate;
 
+@property (nonatomic, readwrite, nullable) NSAttributedString *attributedStatistics;
+
 @end
 
 @implementation HBQueueItem
 
-@synthesize job = _job;
-@synthesize attributedTitleDescription = _attributedTitleDescription;
-@synthesize attributedDescription = _attributedDescription;
++ (void)initialize
+{
+    if (self == [HBQueueItem class]) {
+        _dateFormatter = [[NSDateFormatter alloc] init];
+        [_dateFormatter setDateStyle:NSDateFormatterLongStyle];
+        [_dateFormatter setTimeStyle:NSDateFormatterLongStyle];
 
+        // Attributes
+        NSMutableParagraphStyle *ps = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
+        ps.headIndent = 88.0;
+        ps.paragraphSpacing = 1.0;
+        ps.tabStops = @[[[NSTextTab alloc] initWithType:NSRightTabStopType location:88],
+                        [[NSTextTab alloc] initWithType:NSLeftTabStopType location:90]];
+
+        detailAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize],
+                       NSParagraphStyleAttributeName: ps};
+
+        detailBoldAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize],
+                           NSParagraphStyleAttributeName: ps};
+
+        shortHeightAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:2.0]};
+    }
+}
+
+@synthesize job = _job;
+@synthesize attributedDescription = _attributedDescription;
 
 @synthesize uuid = _uuid;
 
@@ -66,20 +97,51 @@
     return _job.completeOutputURL;
 }
 
-- (NSAttributedString *)attributedTitleDescription
-{
-    if (_attributedTitleDescription == nil) {
-        _attributedTitleDescription = _job.attributedTitleDescription;
-    }
-    return _attributedTitleDescription;
-}
-
 - (NSAttributedString *)attributedDescription
 {
     if (_attributedDescription == nil) {
         _attributedDescription = _job.attributedDescription;
     }
     return _attributedDescription;
+}
+
+- (NSAttributedString *)attributedStatistics
+{
+    if (self.endedDate == nil)
+    {
+        return nil;
+    }
+
+    if (_attributedStatistics == nil)
+    {
+        NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
+
+        [attrString appendString:@"\t" withAttributes:detailAttr];
+        [attrString appendString:NSLocalizedString(@"Started at:", @"Job statistics") withAttributes:detailBoldAttr];
+        [attrString appendString:@" \t" withAttributes:detailAttr];
+        [attrString appendString:[_dateFormatter stringFromDate:self.startedDate] withAttributes:detailAttr];
+        [attrString appendString:@"\n\t" withAttributes:detailAttr];
+        [attrString appendString:NSLocalizedString(@"Ended at:", @"Job statistics") withAttributes:detailBoldAttr];
+        [attrString appendString:@" \t" withAttributes:detailAttr];
+        [attrString appendString:[_dateFormatter stringFromDate:self.endedDate] withAttributes:detailAttr];
+        [attrString appendString:@"\n\n" withAttributes:shortHeightAttr];
+        [attrString appendString:@"\t" withAttributes:detailAttr];
+
+        [attrString appendString:NSLocalizedString(@"Run time:", @"Job statistics") withAttributes:detailBoldAttr];
+        [attrString appendString:@" \t" withAttributes:detailAttr];
+        uint64_t encodeDuration = (uint64_t)self.encodeDuration;
+        [attrString appendString:[NSString stringWithFormat:@"%02lld:%02lld:%02lld", encodeDuration / 3600, (encodeDuration/ 60) % 60, encodeDuration % 60]  withAttributes:detailAttr];
+        [attrString appendString:@"\n\t"  withAttributes:detailAttr];
+        [attrString appendString:NSLocalizedString(@"Paused time:", @"Job statistics") withAttributes:detailBoldAttr];
+        [attrString appendString:@" \t" withAttributes:detailAttr];
+        uint64_t pauseDuration = (uint64_t)self.pauseDuration;
+        [attrString appendString:[NSString stringWithFormat:@"%02lld:%02lld:%02lld", pauseDuration / 3600, (pauseDuration/ 60) % 60, pauseDuration % 60]  withAttributes:detailAttr];
+        [attrString appendString:@"\n" withAttributes:detailAttr];
+
+        _attributedStatistics = attrString;
+    }
+
+    return _attributedStatistics;
 }
 
 #pragma mark - Statistics
@@ -92,6 +154,7 @@
     self.endedDate = nil;
     self.encodeDuration = 0;
     self.pauseDuration = 0;
+    self.attributedStatistics = nil;
 }
 
 - (void)pausedAtDate:(NSDate *)date
@@ -103,12 +166,17 @@
 {
     self.resumedDate = date;
     self.pauseDuration += [self.resumedDate timeIntervalSinceDate:self.pausedDate];
+    self.pausedDate = nil;
 }
 
 - (void)setEndedDate:(NSDate *)endedDate
 {
     _endedDate = endedDate;
-    self.encodeDuration = [self.startedDate timeIntervalSinceDate:self.endedDate];
+    if (endedDate && self.pausedDate)
+    {
+        [self resumedAtDate:endedDate];
+    }
+    self.encodeDuration = [self.endedDate timeIntervalSinceDate:self.startedDate];
     self.encodeDuration -= self.pauseDuration;
 }
 

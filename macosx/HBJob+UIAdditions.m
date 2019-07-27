@@ -25,7 +25,6 @@
 // Text Styles
 static NSDictionary            *detailAttr;
 static NSDictionary            *detailBoldAttr;
-static NSDictionary            *titleAttr;
 static NSDictionary            *shortHeightAttr;
 
 @implementation HBJob (UIAdditions)
@@ -98,24 +97,19 @@ static NSDictionary            *shortHeightAttr;
     if (!detailAttr)
     {
         // Attributes
-        NSMutableParagraphStyle *ps = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        NSMutableParagraphStyle *ps = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
         ps.headIndent = 88.0;
         ps.paragraphSpacing = 1.0;
-        ps.tabStops = @[[[NSTextTab alloc] initWithType:
-                          NSRightTabStopType location: 88],
-                         [[NSTextTab alloc] initWithType:
-                          NSLeftTabStopType location: 90]];
+        ps.tabStops = @[[[NSTextTab alloc] initWithType:NSRightTabStopType location:88],
+                        [[NSTextTab alloc] initWithType:NSLeftTabStopType location:90]];
 
-        detailAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:[NSFont smallSystemFontSize]],
-                        NSParagraphStyleAttributeName: ps};
-
-        detailBoldAttr = @{NSFontAttributeName: [NSFont boldSystemFontOfSize:[NSFont smallSystemFontSize]],
-                            NSParagraphStyleAttributeName: ps};
-
-        titleAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:[NSFont systemFontSize]],
+        detailAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize],
                        NSParagraphStyleAttributeName: ps};
 
-        shortHeightAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:2.0]};
+        detailBoldAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize],
+                           NSParagraphStyleAttributeName: ps};
+
+        shortHeightAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:8.0]};
     }
 }
 
@@ -177,18 +171,6 @@ static NSDictionary            *shortHeightAttr;
     [attrString appendString:@" \t" withAttributes:detailAttr];
     [attrString appendString:self.rangeDescription withAttributes:detailAttr];
     [attrString appendString:@"\n" withAttributes:detailAttr];
-
-    return attrString;
-}
-- (NSAttributedString *)titleAttributedDescription
-{
-    NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
-
-    // Job name
-    [attrString appendString:self.description withAttributes:titleAttr];
-
-    [attrString appendString:[NSString stringWithFormat:@" (%@) ▸ %@\n", [self rangeDescription], self.outputFileName]
-                  withAttributes:detailAttr];
 
     return attrString;
 }
@@ -645,12 +627,6 @@ static NSDictionary            *shortHeightAttr;
     return attrString;
 }
 
-- (NSAttributedString *)attributedTitleDescription
-{
-    [self initStyles];
-    return [self titleAttributedDescription];
-}
-
 - (NSAttributedString *)attributedDescription
 {
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
@@ -659,37 +635,37 @@ static NSDictionary            *shortHeightAttr;
     @autoreleasepool
     {
         [attrString appendAttributedString:[self presetAttributedDescription]];
-        [attrString appendString:@"\n" withAttributes: detailAttr];
+        [attrString appendString:@"\n" withAttributes: shortHeightAttr];
 
         [attrString appendAttributedString:[self sourceAttributedDescription]];
-        [attrString appendString:@"\n" withAttributes: detailAttr];
+        [attrString appendString:@"\n" withAttributes: shortHeightAttr];
 
         [attrString appendAttributedString:[self destinationAttributedDescription]];
-        [attrString appendString:@"\n" withAttributes: detailAttr];
+        [attrString appendString:@"\n" withAttributes: shortHeightAttr];
 
         [attrString appendAttributedString:[self formatAttributedDescription]];
-        [attrString appendString:@"\n" withAttributes: detailAttr];
+        [attrString appendString:@"\n" withAttributes: shortHeightAttr];
 
         [attrString appendAttributedString:[self rangeAttributedDescription]];
-        [attrString appendString:@"\n" withAttributes: detailAttr];
+        [attrString appendString:@"\n" withAttributes: shortHeightAttr];
 
         [attrString appendAttributedString:[self dimensionsAttributedDescription]];
-        [attrString appendString:@"\n" withAttributes: detailAttr];
+        [attrString appendString:@"\n" withAttributes: shortHeightAttr];
 
         NSAttributedString *filters = [self filtersAttributedDescription];
         if (filters.length)
         {
             [attrString appendAttributedString:[self filtersAttributedDescription]];
-            [attrString appendString:@"\n" withAttributes: detailAttr];
+            [attrString appendString:@"\n" withAttributes: shortHeightAttr];
         }
 
         [attrString appendAttributedString:[self videoAttributedDescription]];
-        [attrString appendString:@"\n" withAttributes: detailAttr];
+        [attrString appendString:@"\n" withAttributes: shortHeightAttr];
 
         if (self.audio.countOfTracks > 1)
         {
             [attrString appendAttributedString:[self audioAttributedDescription]];
-            [attrString appendString:@"\n" withAttributes: detailAttr];
+            [attrString appendString:@"\n" withAttributes: shortHeightAttr];
         }
         if (self.subtitles.countOfTracks > 1)
         {

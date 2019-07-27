@@ -5,11 +5,13 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBQueueInfoViewController.h"
+#import "HBQueue.h"
 
 @interface HBQueueInfoViewController ()
 
-@property (weak) IBOutlet NSTextField *summaryLabel;
+@property (weak) IBOutlet NSView *statisticsHeader;
 @property (weak) IBOutlet NSTextField *statisticsLabel;
+@property (weak) IBOutlet NSTextField *summaryLabel;
 @property (weak) IBOutlet NSScrollView *scrollView;
 
 @property (weak) id<HBQueueDetailsViewControllerDelegate> delegate;
@@ -31,6 +33,37 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self updateLabels];
+    [self setUpObservers];
+}
+
+- (void)setUpObservers
+{
+    NSNotificationCenter * __weak center = NSNotificationCenter.defaultCenter;
+
+    [center addObserverForName:HBQueueDidCompleteItemNotification
+                                              object:nil
+                                               queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
+                           {
+                               HBQueueItem *completedItem = note.userInfo[HBQueueItemNotificationItemKey];
+
+                               if (completedItem == self.item)
+                               {
+                                   [self updateLabels];
+                               }
+                           }];
+
+    [center addObserverForName:HBQueueDidCompleteItemNotification
+                        object:nil
+                         queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
+     {
+         HBQueueItem *completedItem = note.userInfo[HBQueueItemNotificationItemKey];
+
+         if (completedItem == self.item)
+         {
+             [self updateLabels];
+         }
+     }];
+
 }
 
 - (void)updateLabels
@@ -38,6 +71,7 @@
     if (self.item)
     {
         self.statisticsLabel.hidden = self.item.endedDate == nil;
+        self.statisticsHeader.hidden = self.item.endedDate == nil;
         self.summaryLabel.hidden = NO;
 
         self.statisticsLabel.attributedStringValue = self.item.attributedStatistics;
@@ -47,6 +81,7 @@
     }
     else
     {
+        self.statisticsHeader.hidden = YES;
         self.statisticsLabel.hidden = YES;
         self.summaryLabel.hidden = YES;
     }

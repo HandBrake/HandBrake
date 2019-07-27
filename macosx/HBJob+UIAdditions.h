@@ -15,7 +15,6 @@
 @property (nonatomic, readonly) NSArray<NSString *> *angles;
 @property (nonatomic, readonly) NSArray<NSString *> *containers;
 
-@property (nonatomic, readonly) NSAttributedString *attributedTitleDescription;
 @property (nonatomic, readonly) NSAttributedString *attributedDescription;
 
 @property (nonatomic, readonly) NSString *shortDescription;
