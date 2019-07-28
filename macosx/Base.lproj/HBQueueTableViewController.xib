@@ -49,7 +49,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ar9-Uk-6sM">
-                                                        <rect key="frame" x="21" y="35" width="494" height="17"/>
+                                                        <rect key="frame" x="23" y="35" width="492" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="lzC-jf-dZI"/>
                                                         </constraints>
@@ -71,14 +71,18 @@
                                                         </buttonCell>
                                                     </button>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="7OO-Ut-UrC">
-                                                        <rect key="frame" x="3" y="37" width="14" height="14"/>
+                                                        <rect key="frame" x="3" y="35" width="16" height="16"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="height" constant="16" id="V3u-Yw-S0G"/>
+                                                            <constraint firstAttribute="width" constant="16" id="dDq-xC-fYL"/>
+                                                        </constraints>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="bqz-sk-X31"/>
                                                     </imageView>
                                                     <progressIndicator wantsLayer="YES" maxValue="1" style="bar" translatesAutoresizingMaskIntoConstraints="NO" id="xAK-4F-cCr">
-                                                        <rect key="frame" x="23" y="13" width="490" height="23"/>
+                                                        <rect key="frame" x="25" y="13" width="488" height="23"/>
                                                     </progressIndicator>
                                                     <textField verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fxw-eD-SmJ">
-                                                        <rect key="frame" x="21" y="3" width="494" height="14"/>
+                                                        <rect key="frame" x="23" y="3" width="492" height="14"/>
                                                         <textFieldCell key="cell" lineBreakMode="truncatingTail" enabled="NO" allowsUndo="NO" sendsActionOnEndEditing="YES" title="Encoding status" usesSingleLineMode="YES" id="eEU-Dr-Qh8">
                                                             <font key="font" metaFont="smallSystem"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -115,7 +119,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ns0-GA-WCh">
-                                                        <rect key="frame" x="21" y="3" width="494" height="17"/>
+                                                        <rect key="frame" x="23" y="3" width="492" height="17"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="17" id="5Tc-Oy-HWg"/>
                                                         </constraints>
@@ -137,7 +141,11 @@
                                                         </buttonCell>
                                                     </button>
                                                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kNw-fy-iYB">
-                                                        <rect key="frame" x="3" y="5" width="14" height="14"/>
+                                                        <rect key="frame" x="3" y="3" width="16" height="16"/>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="16" id="Sg7-eg-u2l"/>
+                                                            <constraint firstAttribute="height" constant="16" id="udI-Cr-8CG"/>
+                                                        </constraints>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSActionTemplate" id="ofG-k5-PfV"/>
                                                     </imageView>
                                                 </subviews>

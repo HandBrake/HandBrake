@@ -53,6 +53,8 @@ typedef NS_ENUM(NSUInteger, HBQueueItemState) {
 - (void)pausedAtDate:(NSDate *)date;
 - (void)resumedAtDate:(NSDate *)date;
 
+@property (nonatomic, readonly) NSUInteger fileSize;
+
 @property (nonatomic, readonly) NSAttributedString *attributedDescription;
 
 @property (nonatomic, readonly, nullable) NSAttributedString *attributedStatistics;

@@ -18,11 +18,11 @@
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customView id="Hz6-mo-xeY">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="335"/>
+            <rect key="frame" x="0.0" y="0.0" width="488" height="335"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Z14-gh-hWn">
-                    <rect key="frame" x="402" y="13" width="64" height="32"/>
+                    <rect key="frame" x="410" y="13" width="64" height="32"/>
                     <buttonCell key="cell" type="push" title="Edit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="erY-5X-50l">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -32,7 +32,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oq4-g0-srt">
-                    <rect key="frame" x="330" y="13" width="75" height="32"/>
+                    <rect key="frame" x="338" y="13" width="75" height="32"/>
                     <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hgl-N3-x4S">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -42,16 +42,16 @@
                     </connections>
                 </button>
                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MXt-Cb-20x">
-                    <rect key="frame" x="0.0" y="49" width="480" height="286"/>
+                    <rect key="frame" x="0.0" y="49" width="488" height="286"/>
                     <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="kkx-XF-sYr" customClass="HBFlippedClipView">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="286"/>
+                        <rect key="frame" x="0.0" y="0.0" width="488" height="286"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view translatesAutoresizingMaskIntoConstraints="NO" id="Akt-r1-6fP">
-                                <rect key="frame" x="0.0" y="188" width="480" height="98"/>
+                                <rect key="frame" x="0.0" y="188" width="488" height="98"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="250" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VVC-g8-nGU">
-                                        <rect key="frame" x="8" y="8" width="464" height="82"/>
+                                        <rect key="frame" x="12" y="8" width="464" height="82"/>
                                         <subviews>
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="m2h-yw-mRX" userLabel="Header">
                                                 <rect key="frame" x="0.0" y="64" width="464" height="18"/>
@@ -59,7 +59,7 @@
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OOz-qb-LU4">
                                                         <rect key="frame" x="-2" y="4" width="58" height="14"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Statistics" id="aCP-yp-iZy">
-                                                            <font key="font" metaFont="systemBold" size="11"/>
+                                                            <font key="font" metaFont="smallSystemBold"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -92,7 +92,7 @@
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8hj-1a-dlb">
                                                         <rect key="frame" x="-2" y="4" width="58" height="14"/>
                                                         <textFieldCell key="cell" lineBreakMode="clipping" title="Summary" id="cx1-rC-AMC">
-                                                            <font key="font" metaFont="systemBold" size="11"/>
+                                                            <font key="font" metaFont="smallSystemBold"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -137,8 +137,8 @@
                                 <constraints>
                                     <constraint firstItem="VVC-g8-nGU" firstAttribute="top" secondItem="Akt-r1-6fP" secondAttribute="top" constant="8" id="37f-us-42T"/>
                                     <constraint firstAttribute="bottom" secondItem="VVC-g8-nGU" secondAttribute="bottom" constant="8" id="7lz-sW-xUb"/>
-                                    <constraint firstItem="VVC-g8-nGU" firstAttribute="leading" secondItem="Akt-r1-6fP" secondAttribute="leading" constant="8" id="Ggq-bx-Bfy"/>
-                                    <constraint firstAttribute="trailing" secondItem="VVC-g8-nGU" secondAttribute="trailing" constant="8" id="xlB-d0-saX"/>
+                                    <constraint firstItem="VVC-g8-nGU" firstAttribute="leading" secondItem="Akt-r1-6fP" secondAttribute="leading" constant="12" id="Ggq-bx-Bfy"/>
+                                    <constraint firstAttribute="trailing" secondItem="VVC-g8-nGU" secondAttribute="trailing" constant="12" id="xlB-d0-saX"/>
                                 </constraints>
                             </view>
                         </subviews>

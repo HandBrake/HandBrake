@@ -104,12 +104,14 @@ static NSDictionary            *shortHeightAttr;
                         [[NSTextTab alloc] initWithType:NSLeftTabStopType location:90]];
 
         detailAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize],
-                       NSParagraphStyleAttributeName: ps};
+                       NSParagraphStyleAttributeName: ps,
+                       NSForegroundColorAttributeName: NSColor.labelColor};
 
         detailBoldAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize],
-                           NSParagraphStyleAttributeName: ps};
+                           NSParagraphStyleAttributeName: ps,
+                           NSForegroundColorAttributeName: NSColor.labelColor};
 
-        shortHeightAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:8.0]};
+        shortHeightAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:6.0]};
     }
 }
 

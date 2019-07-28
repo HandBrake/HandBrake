@@ -10,6 +10,7 @@
 #import "HBAttributedStringAdditions.h"
 
 static NSDateFormatter *_dateFormatter = nil;
+static NSByteCountFormatter *_byteFormatter = nil;
 
 static NSDictionary     *detailAttr;
 static NSDictionary     *detailBoldAttr;
@@ -19,6 +20,8 @@ static NSDictionary     *shortHeightAttr;
 
 @property (nonatomic, nullable) NSDate *pausedDate;
 @property (nonatomic, nullable) NSDate *resumedDate;
+
+@property (nonatomic) NSUInteger fileSize;
 
 @property (nonatomic, readwrite, nullable) NSAttributedString *attributedStatistics;
 
@@ -33,6 +36,8 @@ static NSDictionary     *shortHeightAttr;
         [_dateFormatter setDateStyle:NSDateFormatterLongStyle];
         [_dateFormatter setTimeStyle:NSDateFormatterLongStyle];
 
+        _byteFormatter = [[NSByteCountFormatter alloc] init];
+
         // Attributes
         NSMutableParagraphStyle *ps = [NSParagraphStyle.defaultParagraphStyle mutableCopy];
         ps.headIndent = 88.0;
@@ -41,12 +46,14 @@ static NSDictionary     *shortHeightAttr;
                         [[NSTextTab alloc] initWithType:NSLeftTabStopType location:90]];
 
         detailAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize],
-                       NSParagraphStyleAttributeName: ps};
+                       NSParagraphStyleAttributeName: ps,
+                       NSForegroundColorAttributeName: NSColor.labelColor};
 
         detailBoldAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:NSFont.smallSystemFontSize],
-                           NSParagraphStyleAttributeName: ps};
+                           NSParagraphStyleAttributeName: ps,
+                           NSForegroundColorAttributeName: NSColor.labelColor};
 
-        shortHeightAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:2.0]};
+        shortHeightAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:6.0]};
     }
 }
 
@@ -136,7 +143,13 @@ static NSDictionary     *shortHeightAttr;
         [attrString appendString:@" \t" withAttributes:detailAttr];
         uint64_t pauseDuration = (uint64_t)self.pauseDuration;
         [attrString appendString:[NSString stringWithFormat:@"%02lld:%02lld:%02lld", pauseDuration / 3600, (pauseDuration/ 60) % 60, pauseDuration % 60]  withAttributes:detailAttr];
-        [attrString appendString:@"\n" withAttributes:detailAttr];
+
+        [attrString appendString:@"\n\n" withAttributes:shortHeightAttr];
+        [attrString appendString:@"\t" withAttributes:detailAttr];
+
+        [attrString appendString:NSLocalizedString(@"Size:", @"Job statistics") withAttributes:detailBoldAttr];
+        [attrString appendString:@" \t" withAttributes:detailAttr];
+        [attrString appendString:[_byteFormatter stringFromByteCount:self.fileSize] withAttributes:detailAttr];
 
         _attributedStatistics = attrString;
     }
@@ -154,6 +167,7 @@ static NSDictionary     *shortHeightAttr;
     self.endedDate = nil;
     self.encodeDuration = 0;
     self.pauseDuration = 0;
+    self.fileSize = 0;
     self.attributedStatistics = nil;
 }
 
@@ -178,6 +192,11 @@ static NSDictionary     *shortHeightAttr;
     }
     self.encodeDuration = [self.endedDate timeIntervalSinceDate:self.startedDate];
     self.encodeDuration -= self.pauseDuration;
+
+    [self.completeOutputURL removeCachedResourceValueForKey:NSURLFileSizeKey];
+    NSDictionary<NSURLResourceKey, id> *values = [self.completeOutputURL resourceValuesForKeys:@[NSURLFileSizeKey] error:NULL];
+
+    self.fileSize = [values[NSURLFileSizeKey] integerValue];
 }
 
 #pragma mark - NSSecureCoding
@@ -201,6 +220,8 @@ static NSString *versionKey = @"HBQueueItemVersion";
 
     encodeObject(_startedDate);
     encodeObject(_endedDate);
+
+    encodeInteger(_fileSize);
 }
 
 - (nullable instancetype)initWithCoder:(nonnull NSCoder *)decoder
@@ -218,6 +239,8 @@ static NSString *versionKey = @"HBQueueItemVersion";
 
         decodeObject(_startedDate, NSDate);
         decodeObject(_endedDate, NSDate);
+
+        decodeInteger(_fileSize);
 
         return self;
     }
