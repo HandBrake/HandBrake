@@ -769,7 +769,7 @@ namespace HandBrakeWPF.ViewModels
                     this.Task.VideoTunes.Add(value);
                 }
 
-                if (hasFastDecode)
+                if ((this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10) && hasFastDecode)
                 {
                     this.Task.VideoTunes.Add(VideoTune.FastDecode);
                 }
@@ -954,6 +954,7 @@ namespace HandBrakeWPF.ViewModels
 
                     if (preset.Task.VideoEncoder == VideoEncoder.X265 || preset.Task.VideoEncoder == VideoEncoder.X265_10 || preset.Task.VideoEncoder == VideoEncoder.X265_12)
                     {
+                        this.FastDecode = false;
                         this.VideoTune = (preset.Task.VideoTunes != null && preset.Task.VideoTunes.Any() ? preset.Task.VideoTunes.FirstOrDefault() : this.VideoTunes.FirstOrDefault()) ?? VideoTune.None;
                     }
                     else
