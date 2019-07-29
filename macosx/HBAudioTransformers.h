@@ -7,8 +7,8 @@
 #import <Foundation/Foundation.h>
 
 /**
- *  A series of value transformers to bridge the libhb enums
- *  to the textual representations used in the interface.
+ *  A series of value trasformers to bridge the libhb enums
+ *  to the textual rapresentations used in the interface.
  */
 @interface HBFallbackEncodersTransformer : NSValueTransformer
 @end

@@ -484,7 +484,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 	else
 	{
 		// drop at the top root level
-		if (index == -1)	// drop area might be ambiguous (not at a particular location)
+		if (index == -1)	// drop area might be ambibuous (not at a particular location)
 			indexPath = [NSIndexPath indexPathWithIndex:self.presets.root.children.count]; // drop at the end of the top level
 		else
 			indexPath = [NSIndexPath indexPathWithIndex:index]; // drop at a particular place at the top level

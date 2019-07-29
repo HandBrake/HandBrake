@@ -100,7 +100,7 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
 {
     [self removeTracksAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tracks.count)]];
 
-    // Add the remaining tracks
+    // Add the remainings tracks
     for (NSUInteger idx = 1; idx < self.sourceTracksArray.count; idx++) {
         [self addTrack:[self trackFromSourceTrackIndex:idx]];
     }

@@ -45,7 +45,7 @@
     {
         /* NSWindowController likes to lazily load its window nib. Since this
          * controller tries to touch the outlets before accessing the window, we
-         * need to force it to load immediately by invoking its accessor.
+         * need to force it to load immadiately by invoking its accessor.
          *
          * If/when we switch to using bindings, this can probably go away.
          */

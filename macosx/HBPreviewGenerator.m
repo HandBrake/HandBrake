@@ -136,7 +136,7 @@
     // they are needed.
     [self purgeImageCache];
 
-    // Enqueue the reload call on the main runloop
+    // Enquee the reload call on the main runloop
     // to avoid reloading the same image multiple times.
     if (self.reloadInQueue == NO)
     {

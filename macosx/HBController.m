@@ -272,7 +272,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     fFiltersViewController = [[HBFiltersViewController alloc] init];
     [fFiltersTab setView:[fFiltersViewController view]];
 
-    // Add the observers
+    // Add the observeers
 
     [self.core addObserver:self forKeyPath:@"state"
                    options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
@@ -636,7 +636,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     // Check if we can scan the source and if there is any warning.
     BOOL canScan = [self.core canScan:mediaURL error:&outError];
 
-    // Notify the user that we don't support removal of copy protection.
+    // Notify the user that we don't support removal of copy proteciton.
     if (canScan && [outError code] == 101 && !self.suppressCopyProtectionWarning)
     {
         self.suppressCopyProtectionWarning = YES;

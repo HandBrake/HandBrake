@@ -59,7 +59,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     {
         _queue = queue;
         
-        // Load the dockTile and initiate initial text fields
+        // Load the dockTile and instantiate initial text fields
         _dockTile = [[HBDockTile alloc] initWithDockTile:NSApplication.sharedApplication.dockTile
                                                   image:NSApplication.sharedApplication.applicationIconImage];
 
@@ -417,7 +417,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 {
     if ([self.queue.items beginTransaction] == HBDistributedArrayContentReload)
     {
-        // Do not execute the action if the array changed.
+        // Do not execture the action if the array changed.
         [self.queue.items commit];
         return;
     }
