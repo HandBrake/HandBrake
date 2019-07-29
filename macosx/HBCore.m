@@ -453,7 +453,7 @@ typedef void (^HBCoreCleanupHandler)(void);
 {
     [self stopProgressReporting];
 
-    // HB_STATE_WORKDONE happpens as a result of libhb finishing all its jobs
+    // HB_STATE_WORKDONE happens as a result of libhb finishing all its jobs
     // or someone calling hb_stop. In the latter case, hb_stop does not clear
     // out the remaining passes/jobs in the queue. We'll do that here.
     hb_job_t *job;

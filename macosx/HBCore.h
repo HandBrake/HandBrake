@@ -139,7 +139,7 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
 @property (nonatomic, copy) NSString *name;
 
 /**
- *  Determines whether the scan operation can scan a particural URL or whether an additional decryption lib is needed.
+ *  Determines whether the scan operation can scan a particular URL or whether an additional decryption lib is needed.
  *
  *  @param url   the URL of the input file.
  *  @param error an error containing additional info.

@@ -245,7 +245,7 @@ NSString *kHBLanguagesDragRowsType = @"kHBLanguagesDragRowsType";
 
         NSUInteger i = [indexSet countOfIndexesInRange:NSMakeRange(0, row)];
 
-        // Rearrage the objects.
+        // Rearrange the objects.
         [self moveObjectsInArrangedObjectsFromIndexes:indexSet toIndex:row];
 
         // Update the selection.
