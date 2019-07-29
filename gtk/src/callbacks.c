@@ -4695,7 +4695,7 @@ static guint chapter_edit_key = 0;
 
 G_MODULE_EXPORT gboolean
 chapter_keypress_cb(
-    GhbCellRendererText *cell,
+    GtkCellRendererText *cell,
     GdkEvent *event,
     signal_user_data_t *ud)
 {
@@ -4705,7 +4705,7 @@ chapter_keypress_cb(
 
 G_MODULE_EXPORT void
 chapter_edited_cb(
-    GhbCellRendererText *cell,
+    GtkCellRendererText *cell,
     gchar *path,
     gchar *text,
     signal_user_data_t *ud)

@@ -217,7 +217,11 @@ bind_chapter_tree_model(signal_user_data_t *ud)
     treestore = gtk_list_store_new(5, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
     gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
 
+#if GTK_CHECK_VERSION(3, 90, 0)
+    cell = gtk_cell_renderer_text_new();
+#else
     cell = ghb_cell_renderer_text_new();
+#endif
     column = gtk_tree_view_column_new_with_attributes(
                                     _("Index"), cell, "text", 0, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
@@ -237,7 +241,10 @@ bind_chapter_tree_model(signal_user_data_t *ud)
                     _("Title"), cell, "text", 3, "editable", 4, NULL);
     gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
 
+#if GTK_CHECK_VERSION(3, 90, 0)
+#else
     g_signal_connect(cell, "key-press-event", chapter_keypress_cb, ud);
+#endif
     g_signal_connect(cell, "edited", chapter_edited_cb, ud);
     g_debug("Done\n");
 }
