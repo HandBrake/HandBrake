@@ -56,6 +56,11 @@ G_MODULE_EXPORT void
 queue_drag_data_get_cb(GtkWidget * widget, GdkDrag * context,
                        GtkSelectionData * selection_data,
                        signal_user_data_t * ud);
+
+G_MODULE_EXPORT gboolean
+queue_row_key_cb(GtkEventControllerKey * keycon, guint keyval,
+                 guint keycode, GdkModifierType state,
+                 signal_user_data_t * ud);
 #else
 G_MODULE_EXPORT void
 queue_drag_begin_cb(GtkWidget * widget, GdkDragContext * context,
@@ -1523,6 +1528,13 @@ add_to_queue_list(signal_user_data_t *ud, GhbValue *queueDict)
     g_signal_connect(ebox, "drag-end", G_CALLBACK(queue_drag_end_cb), NULL);
     g_signal_connect(ebox, "drag-data-get",
                     G_CALLBACK(queue_drag_data_get_cb), NULL);
+
+#if GTK_CHECK_VERSION(3, 90, 0)
+    // connect key event controller to capture "delete" key press on row
+    GtkEventController * econ = gtk_event_controller_key_new();
+    gtk_widget_add_controller(row, econ);
+    g_signal_connect(econ, "key-pressed", G_CALLBACK(queue_row_key_cb), ud);
+#endif
 }
 
 static void
@@ -2465,6 +2477,32 @@ queue_key_press_cb(
 
     lb  = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
     row = gtk_list_box_get_selected_row(lb);
+    if (row != NULL)
+    {
+        index = gtk_list_box_row_get_index(row);
+        ghb_queue_remove_row_internal(ud, index);
+        ghb_save_queue(ud->queue);
+        return TRUE;
+    }
+    return FALSE;
+}
+
+G_MODULE_EXPORT gboolean
+queue_row_key_cb(
+    GtkEventControllerKey * keycon,
+    guint                   keyval,
+    guint                   keycode,
+    GdkModifierType         state,
+    signal_user_data_t    * ud)
+{
+    GtkListBoxRow * row;
+    gint            index;
+
+    if (keyval != GDK_KEY_Delete)
+        return FALSE;
+
+    row = GTK_LIST_BOX_ROW(gtk_event_controller_get_widget(
+                                        GTK_EVENT_CONTROLLER(keycon)));
     if (row != NULL)
     {
         index = gtk_list_box_row_get_index(row);
