@@ -2674,26 +2674,30 @@ sync for broken players that do not honor MP4 edit lists.</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkBox" id="vbox9">
-                            <property name="orientation">vertical</property>
+                          <object class="GtkImage" id="summary_image">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="margin-bottom">4</property>
+                            <property name="margin-start">4</property>
+                            <property name="margin-end">4</property>
+                            <property name="vexpand">True</property>
+                            <property name="valign">fill</property>
                             <property name="expand">True</property>
-                            <property name="margin-top">12</property>
-                            <property name="margin-end">0</property>
-                            <child>
-                              <object class="GtkImage" id="preview_button_image">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="margin-bottom">4</property>
-                                <property name="margin-start">4</property>
-                                <property name="margin-end">4</property>
-                                <property name="expand">True</property>
-                                <property name="pixel_size">128</property>
-                                <property name="icon_name">hb-icon</property>
-                                <signal name="size-allocate" handler="preview_button_size_allocate_cb" swapped="no"/>
-                              </object>
-                            </child>
+                            <property name="pixel_size">128</property>
+                            <property name="icon_name">hb-icon</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkPicture" id="preview_button_image">
+                            <property name="visible">False</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin-bottom">4</property>
+                            <property name="margin-start">4</property>
+                            <property name="margin-end">4</property>
+                            <property name="vexpand">True</property>
+                            <property name="valign">fill</property>
+                            <property name="expand">True</property>
+                            <signal name="size-allocate" handler="preview_button_size_allocate_cb" swapped="no"/>
                           </object>
                         </child>
                       </object>

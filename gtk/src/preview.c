@@ -861,7 +861,11 @@ static void set_mini_preview_image(signal_user_data_t *ud, GdkPixbuf * pix)
             GtkWidget * widget;
 
             widget = GHB_WIDGET (ud->builder, "preview_button_image");
+#if GTK_CHECK_VERSION(3, 90, 0)
+            gtk_picture_set_pixbuf(GTK_PICTURE(widget), scaled_preview);
+#else
             gtk_image_set_from_pixbuf(GTK_IMAGE(widget), scaled_preview);
+#endif
             g_object_unref(scaled_preview);
         }
     }
@@ -932,7 +936,6 @@ init_preview_image(signal_user_data_t *ud)
     GtkWidget *widget;
     gint width, height;
 
-    g_debug("set_preview_button_image ()");
     gint title_id, titleindex;
     const hb_title_t *title;
 
@@ -1094,8 +1097,6 @@ preview_button_size_allocate_cb(
         g_debug("nothing to do");
         return;
     }
-    g_debug("prev allocate %d x %d", ud->preview->button_width,
-            ud->preview->button_height);
     ud->preview->button_width  = width;
     ud->preview->button_height = height;
     set_mini_preview_image(ud, ud->preview->pix);

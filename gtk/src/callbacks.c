@@ -2314,10 +2314,17 @@ ghb_update_summary_info(signal_user_data_t *ud)
         gtk_label_set_text(GTK_LABEL(widget), "");
         widget = GHB_WIDGET(ud->builder, "dimensions_summary");
         gtk_label_set_text(GTK_LABEL(widget), "--");
+        widget = GHB_WIDGET(ud->builder, "summary_image");
+        gtk_widget_show(widget);
         widget = GHB_WIDGET(ud->builder, "preview_button_image");
-        ghb_image_set_from_icon_name(GTK_IMAGE(widget), "hb-icon", 128);
+        gtk_widget_hide(widget);
         return;
     }
+
+    widget = GHB_WIDGET(ud->builder, "summary_image");
+    gtk_widget_hide(widget);
+    widget = GHB_WIDGET(ud->builder, "preview_button_image");
+    gtk_widget_show(widget);
 
     // Video Track
     const hb_encoder_t * video_encoder;
