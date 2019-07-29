@@ -59,7 +59,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     {
         _queue = queue;
         
-        // Load the dockTile and instantiate initial text fields
+        // Load the dockTile and initiate initial text fields
         _dockTile = [[HBDockTile alloc] initWithDockTile:NSApplication.sharedApplication.dockTile
                                                   image:NSApplication.sharedApplication.applicationIconImage];
 
