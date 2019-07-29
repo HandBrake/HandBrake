@@ -2179,7 +2179,7 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
 
     dialog   = GHB_WIDGET(ud->builder, "preset_rename_dialog");
     entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetReName"));
-    ghb_entry_set_text(entry, name);
+    ghb_editable_set_text(entry, name);
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_hide(dialog);
@@ -2190,7 +2190,7 @@ preset_rename_action_cb(GSimpleAction *action, GVariant *param,
         char          * desc;
 
         // save the new name
-        name = ghb_entry_get_text(entry);
+        name = ghb_editable_get_text(entry);
         dict = hb_preset_get(path);
         if (dict != NULL)
         {
@@ -2295,7 +2295,7 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
 
     dialog   = GHB_WIDGET(ud->builder, "preset_save_dialog");
     entry    = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
-    ghb_entry_set_text(entry, name);
+    ghb_editable_set_text(entry, name);
 
     widget = GHB_WIDGET(ud->builder, "PresetName");
     gtk_widget_set_sensitive(widget, as);
@@ -2314,12 +2314,12 @@ static void preset_save_action(signal_user_data_t *ud, gboolean as)
         gboolean        def;
 
         // save the preset
-        name = ghb_entry_get_text(entry);
+        name = ghb_editable_get_text(entry);
         category = ghb_dict_get_string(ud->settings, "PresetCategory");
         if (!strcmp(category, "new"))
         {
             entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetCategoryName"));
-            category = ghb_entry_get_text(entry);
+            category = ghb_editable_get_text(entry);
         }
         if (category == NULL || category[0] == 0)
         {
@@ -2363,9 +2363,9 @@ preset_save_set_ok_sensitive(signal_user_data_t *ud)
 
     category = ghb_dict_get_string(ud->settings, "PresetCategory");
     entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetName"));
-    name = ghb_entry_get_text(entry);
+    name = ghb_editable_get_text(entry);
     entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "PresetCategoryName"));
-    category_name = ghb_entry_get_text(entry);
+    category_name = ghb_editable_get_text(entry);
 
     sensitive = name[0] && (strcmp(category, "new") || category_name[0]);
     gtk_widget_set_sensitive(ok_button, sensitive);

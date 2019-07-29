@@ -1945,7 +1945,7 @@ ghb_update_destination_extension(signal_user_data_t *ud)
     busy = TRUE;
     extension = get_extension(ud, ud->settings);
     entry = GTK_ENTRY(GHB_WIDGET(ud->builder, "dest_file"));
-    filename = g_strdup(ghb_entry_get_text(entry));
+    filename = g_strdup(ghb_editable_get_text(entry));
     for (ii = 0; containers[ii] != NULL; ii++)
     {
         if (g_str_has_suffix(filename, containers[ii]))
@@ -1981,7 +1981,7 @@ destination_select_title(GtkEntry *entry)
     const gchar *dest;
     gint start, end;
 
-    dest = ghb_entry_get_text(entry);
+    dest = ghb_editable_get_text(entry);
     for (end = strlen(dest)-1; end > 0; end--)
     {
         if (dest[end] == '.')
@@ -2097,7 +2097,7 @@ destination_action_cb(GSimpleAction *action, GVariant *param,
         basename = g_path_get_basename(filename);
         dirname = g_path_get_dirname(filename);
         entry = (GtkEntry*)GHB_WIDGET(ud->builder, "dest_file");
-        ghb_entry_set_text(entry, basename);
+        ghb_editable_set_text(entry, basename);
         dest_chooser = GTK_FILE_CHOOSER(GHB_WIDGET(ud->builder, "dest_dir"));
         gtk_file_chooser_set_filename(dest_chooser, dirname);
         g_free (dirname);
@@ -3183,7 +3183,7 @@ ptop_input_cb(GtkWidget *widget, gdouble *val, signal_user_data_t *ud)
     double ss = 0;
     int hh = 0, mm = 0;
 
-    text = ghb_entry_get_text(GTK_ENTRY(widget));
+    text = ghb_editable_get_text(widget);
     result = sscanf(text, "%2d:%2d:%lf", &hh, &mm, &ss);
     if (result <= 0)
         return FALSE;
@@ -3215,7 +3215,7 @@ ptop_output_cb(GtkWidget *widget, signal_user_data_t *ud)
     value = value - mm * 60;
     ss = value;
     text = g_strdup_printf ("%02d:%02d:%05.2f", hh, mm, ss);
-    ghb_entry_set_text(GTK_ENTRY(widget), text);
+    ghb_editable_set_text(widget, text);
     g_free (text);
 
     return TRUE;

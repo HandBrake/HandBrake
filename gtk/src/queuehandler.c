@@ -2830,7 +2830,7 @@ queue_add_all_action_cb(GSimpleAction *action, GVariant *param,
             dest_dir = ghb_dict_get_string(settings, "dest_dir");
 
             gtk_label_set_markup(label, title_label);
-            ghb_entry_set_text(entry, dest_file);
+            ghb_editable_set_text(entry, dest_file);
             gtk_file_chooser_set_filename(chooser, dest_dir);
 
             g_free(title_label);

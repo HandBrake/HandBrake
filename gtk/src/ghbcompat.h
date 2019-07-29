@@ -307,39 +307,15 @@ static inline gboolean ghb_strv_contains(const char ** strv, const char * str)
 }
 
 #if GTK_CHECK_VERSION(3, 90, 0)
-static inline const gchar * ghb_entry_get_text(GtkEntry * entry)
-{
-    GtkEntryBuffer * buf = gtk_entry_get_buffer(entry);
-    if (buf != NULL)
-    {
-        return gtk_entry_buffer_get_text(buf);
-    }
-    return NULL;
-}
 
-static inline void ghb_entry_set_text(GtkEntry * entry, const gchar * text)
-{
-    GtkEntryBuffer * buf = gtk_entry_get_buffer(entry);
-    if (buf == NULL)
-    {
-        buf = gtk_entry_buffer_new(text, -1);
-        gtk_entry_set_buffer(entry, buf);
-    }
-    else
-    {
-        return gtk_entry_buffer_set_text(buf, text, -1);
-    }
-}
+#define ghb_editable_get_text(e) gtk_editable_get_text(GTK_EDITABLE(e))
+#define ghb_editable_set_text(e,t) gtk_editable_set_text(GTK_EDITABLE(e), (t))
+
 #else
-static inline const gchar * ghb_entry_get_text(GtkEntry * entry)
-{
-    return gtk_entry_get_text(entry);
-}
 
-static inline void ghb_entry_set_text(GtkEntry * entry, const gchar * text)
-{
-    return gtk_entry_set_text(entry, text);
-}
+#define ghb_editable_get_text(e) gtk_entry_get_text(GTK_ENTRY(e))
+#define ghb_editable_set_text(e,t) gtk_entry_set_text(GTK_ENTRY(e), (t))
+
 #endif
 
 #if GTK_CHECK_VERSION(3, 90, 0)

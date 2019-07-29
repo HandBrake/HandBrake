@@ -1845,7 +1845,7 @@ ghb_cell_renderer_text_editing_done (GtkCellEditable *entry,
     return;
 
   path = g_object_get_data (G_OBJECT (entry), GHB_CELL_RENDERER_TEXT_PATH);
-  new_text = ghb_entry_get_text (GTK_ENTRY (entry));
+  new_text = ghb_editable_get_text(entry);
 
   g_signal_emit (data, text_cell_renderer_signals[EDITED], 0, path, new_text);
 }
@@ -1949,7 +1949,7 @@ ghb_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
                   NULL);
 
     if (priv->text)
-        ghb_entry_set_text (GTK_ENTRY (priv->entry), priv->text);
+        ghb_editable_set_text (priv->entry, priv->text);
 
     g_object_set_data_full (G_OBJECT (priv->entry),
             I_(GHB_CELL_RENDERER_TEXT_PATH), g_strdup (path), g_free);
