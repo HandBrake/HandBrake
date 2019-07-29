@@ -35,9 +35,10 @@
 #import "HBRenamePresetController.h"
 
 #import "HBAutoNamer.h"
+#import "HBJob+HBAdditions.h"
 #import "HBAttributedStringAdditions.h"
 
-@import HandBrakeKit;
+#import "HBPreferencesKeys.h"
 
 static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
 static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
@@ -166,7 +167,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     if (self)
     {
         // Init libhb
-        NSInteger loggingLevel = [[NSUserDefaults standardUserDefaults] integerForKey:@"LoggingLevel"];
+        NSInteger loggingLevel = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
         _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"ScanCore"];
 
         // Inits the controllers
@@ -186,13 +187,13 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
         // Check to see if the last destination has been set, use if so, if not, use Movies
 #ifdef __SANDBOX_ENABLED__
-        NSData *bookmark = [[NSUserDefaults standardUserDefaults] objectForKey:@"HBLastDestinationDirectoryBookmark"];
+        NSData *bookmark = [NSUserDefaults.standardUserDefaults objectForKey:HBLastDestinationDirectoryBookmark];
         if (bookmark)
         {
             _currentDestination = [HBUtilities URLFromBookmark:bookmark];
         }
 #else
-        _currentDestination = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectoryURL"];
+        _currentDestination = [NSUserDefaults.standardUserDefaults URLForKey:HBLastDestinationDirectoryURL];
 #endif
 
         if (!_currentDestination || [[NSFileManager defaultManager] fileExistsAtPath:_currentDestination.path isDirectory:nil] == NO)
@@ -207,11 +208,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     }
 
     return self;
-}
-
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)windowDidLoad
@@ -597,7 +593,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 {
     if (self.core.state != HBStateScanning && !self.job)
     {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBShowOpenPanelAtLaunch"])
+        if ([NSUserDefaults.standardUserDefaults boolForKey:HBShowOpenPanelAtLaunch])
         {
             [self browseSources:nil];
         }
@@ -659,8 +655,8 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     if (canScan)
     {
-        NSUInteger hb_num_previews = [[NSUserDefaults standardUserDefaults] integerForKey:@"PreviewsNumber"];
-        NSUInteger min_title_duration_seconds = [[NSUserDefaults standardUserDefaults] integerForKey:@"MinTitleScanSeconds"];
+        NSUInteger hb_num_previews = [NSUserDefaults.standardUserDefaults integerForKey:HBPreviewsNumber];
+        NSUInteger min_title_duration_seconds = [NSUserDefaults.standardUserDefaults integerForKey:HBMinTitleScanSeconds];
 
         [self.core scanURL:mediaURL
                 titleIndex:index
@@ -695,13 +691,13 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
              }
 
              // Set the last searched source directory in the prefs here
-             if ([[NSWorkspace sharedWorkspace] isFilePackageAtPath:mediaURL.URLByDeletingLastPathComponent.path])
+             if ([NSWorkspace.sharedWorkspace isFilePackageAtPath:mediaURL.URLByDeletingLastPathComponent.path])
              {
-                 [[NSUserDefaults standardUserDefaults] setURL:mediaURL.URLByDeletingLastPathComponent.URLByDeletingLastPathComponent forKey:@"HBLastSourceDirectoryURL"];
+                 [NSUserDefaults.standardUserDefaults setURL:mediaURL.URLByDeletingLastPathComponent.URLByDeletingLastPathComponent forKey:HBLastSourceDirectoryURL];
              }
              else
              {
-                 [[NSUserDefaults standardUserDefaults] setURL:mediaURL.URLByDeletingLastPathComponent forKey:@"HBLastSourceDirectoryURL"];
+                 [NSUserDefaults.standardUserDefaults setURL:mediaURL.URLByDeletingLastPathComponent forKey:HBLastSourceDirectoryURL];
              }
 
              completionHandler(self.core.titles);
@@ -806,9 +802,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     // If the source is not a stream, and autonaming is disabled,
     // keep the existing file name.
-    if (self.job.outputFileName.length == 0 || title.isStream || [[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"])
+    if (self.job.outputFileName.length == 0 || title.isStream || [NSUserDefaults.standardUserDefaults boolForKey:HBDefaultAutoNaming])
     {
-        job.outputFileName = [HBUtilities defaultNameForJob:job];
+        job.outputFileName = job.defaultName;
     }
     else
     {
@@ -822,10 +818,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 {
     if (self.job)
     {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBContainerChangedNotification object:_job];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBPictureChangedNotification object:_job.picture];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBFiltersChangedNotification object:_job.filters];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:HBVideoChangedNotification object:_job.video];
+        NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+        [center removeObserver:self name:HBContainerChangedNotification object:_job];
+        [center removeObserver:self name:HBPictureChangedNotification object:_job.picture];
+        [center removeObserver:self name:HBFiltersChangedNotification object:_job.filters];
+        [center removeObserver:self name:HBVideoChangedNotification object:_job.video];
         self.autoNamer = nil;
     }
 }
@@ -839,10 +836,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 {
     if (self.job)
     {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(formatChanged:) name:HBContainerChangedNotification object:_job];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBPictureChangedNotification object:_job.picture];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBFiltersChangedNotification object:_job.filters];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:_job.video];
+        NSNotificationCenter *center = NSNotificationCenter.defaultCenter;
+        [center addObserver:self selector:@selector(formatChanged:) name:HBContainerChangedNotification object:_job];
+        [center addObserver:self selector:@selector(customSettingUsed) name:HBPictureChangedNotification object:_job.picture];
+        [center addObserver:self selector:@selector(customSettingUsed) name:HBFiltersChangedNotification object:_job.filters];
+        [center addObserver:self selector:@selector(customSettingUsed) name:HBVideoChangedNotification object:_job.video];
         self.autoNamer = [[HBAutoNamer alloc] initWithJob:self.job];
     }
 }
@@ -921,9 +919,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [panel setCanChooseDirectories:YES];
 
     NSURL *sourceDirectory;
-	if ([[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastSourceDirectoryURL"])
+	if ([NSUserDefaults.standardUserDefaults URLForKey:HBLastSourceDirectoryURL])
 	{
-		sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastSourceDirectoryURL"];
+		sourceDirectory = [NSUserDefaults.standardUserDefaults URLForKey:HBLastSourceDirectoryURL];
 	}
 	else
 	{
@@ -969,10 +967,10 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
              self.currentDestination = panel.URL;
 
              // Save this path to the prefs so that on next browse destination window it opens there
-             [[NSUserDefaults standardUserDefaults] setObject:[HBUtilities bookmarkFromURL:panel.URL]
-                                                       forKey:@"HBLastDestinationDirectoryBookmark"];
-             [[NSUserDefaults standardUserDefaults] setURL:panel.URL
-                                                    forKey:@"HBLastDestinationDirectoryURL"];
+             [NSUserDefaults.standardUserDefaults setObject:[HBUtilities bookmarkFromURL:panel.URL]
+                                                       forKey:HBLastDestinationDirectoryBookmark];
+             [NSUserDefaults.standardUserDefaults setURL:panel.URL
+                                                  forKey:HBLastDestinationDirectoryURL];
 
          }
      }];
@@ -1186,7 +1184,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     {
         HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:preset];
         job.outputURL = self.currentDestination;
-        job.outputFileName = [HBUtilities defaultNameForJob:job];
+        job.outputFileName = job.defaultName;
         job.title = nil;
         [jobs addObject:job];
     }

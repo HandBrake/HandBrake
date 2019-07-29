@@ -114,7 +114,7 @@ static NSDictionary     *shortHeightAttr;
 
 - (NSAttributedString *)attributedStatistics
 {
-    if (self.endedDate == nil)
+    if (self.endedDate == nil && self.startedDate == nil)
     {
         return nil;
     }
@@ -123,33 +123,40 @@ static NSDictionary     *shortHeightAttr;
     {
         NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
 
-        [attrString appendString:@"\t" withAttributes:detailAttr];
-        [attrString appendString:NSLocalizedString(@"Started at:", @"Job statistics") withAttributes:detailBoldAttr];
-        [attrString appendString:@" \t" withAttributes:detailAttr];
-        [attrString appendString:[_dateFormatter stringFromDate:self.startedDate] withAttributes:detailAttr];
-        [attrString appendString:@"\n\t" withAttributes:detailAttr];
-        [attrString appendString:NSLocalizedString(@"Ended at:", @"Job statistics") withAttributes:detailBoldAttr];
-        [attrString appendString:@" \t" withAttributes:detailAttr];
-        [attrString appendString:[_dateFormatter stringFromDate:self.endedDate] withAttributes:detailAttr];
-        [attrString appendString:@"\n\n" withAttributes:shortHeightAttr];
-        [attrString appendString:@"\t" withAttributes:detailAttr];
+        if (self.startedDate)
+        {
+            [attrString appendString:@"\t" withAttributes:detailAttr];
+            [attrString appendString:NSLocalizedString(@"Started at:", @"Job statistics") withAttributes:detailBoldAttr];
+            [attrString appendString:@" \t" withAttributes:detailAttr];
+            [attrString appendString:[_dateFormatter stringFromDate:self.startedDate] withAttributes:detailAttr];
+        }
 
-        [attrString appendString:NSLocalizedString(@"Run time:", @"Job statistics") withAttributes:detailBoldAttr];
-        [attrString appendString:@" \t" withAttributes:detailAttr];
-        uint64_t encodeDuration = (uint64_t)self.encodeDuration;
-        [attrString appendString:[NSString stringWithFormat:@"%02lld:%02lld:%02lld", encodeDuration / 3600, (encodeDuration/ 60) % 60, encodeDuration % 60]  withAttributes:detailAttr];
-        [attrString appendString:@"\n\t"  withAttributes:detailAttr];
-        [attrString appendString:NSLocalizedString(@"Paused time:", @"Job statistics") withAttributes:detailBoldAttr];
-        [attrString appendString:@" \t" withAttributes:detailAttr];
-        uint64_t pauseDuration = (uint64_t)self.pauseDuration;
-        [attrString appendString:[NSString stringWithFormat:@"%02lld:%02lld:%02lld", pauseDuration / 3600, (pauseDuration/ 60) % 60, pauseDuration % 60]  withAttributes:detailAttr];
+        if (self.startedDate && self.endedDate)
+        {
+            [attrString appendString:@"\n\t" withAttributes:detailAttr];
+            [attrString appendString:NSLocalizedString(@"Ended at:", @"Job statistics") withAttributes:detailBoldAttr];
+            [attrString appendString:@" \t" withAttributes:detailAttr];
+            [attrString appendString:[_dateFormatter stringFromDate:self.endedDate] withAttributes:detailAttr];
+            [attrString appendString:@"\n\n" withAttributes:shortHeightAttr];
+            [attrString appendString:@"\t" withAttributes:detailAttr];
 
-        [attrString appendString:@"\n\n" withAttributes:shortHeightAttr];
-        [attrString appendString:@"\t" withAttributes:detailAttr];
+            [attrString appendString:NSLocalizedString(@"Run time:", @"Job statistics") withAttributes:detailBoldAttr];
+            [attrString appendString:@" \t" withAttributes:detailAttr];
+            uint64_t encodeDuration = (uint64_t)self.encodeDuration;
+            [attrString appendString:[NSString stringWithFormat:@"%02lld:%02lld:%02lld", encodeDuration / 3600, (encodeDuration/ 60) % 60, encodeDuration % 60]  withAttributes:detailAttr];
+            [attrString appendString:@"\n\t"  withAttributes:detailAttr];
+            [attrString appendString:NSLocalizedString(@"Paused time:", @"Job statistics") withAttributes:detailBoldAttr];
+            [attrString appendString:@" \t" withAttributes:detailAttr];
+            uint64_t pauseDuration = (uint64_t)self.pauseDuration;
+            [attrString appendString:[NSString stringWithFormat:@"%02lld:%02lld:%02lld", pauseDuration / 3600, (pauseDuration/ 60) % 60, pauseDuration % 60]  withAttributes:detailAttr];
 
-        [attrString appendString:NSLocalizedString(@"Size:", @"Job statistics") withAttributes:detailBoldAttr];
-        [attrString appendString:@" \t" withAttributes:detailAttr];
-        [attrString appendString:[_byteFormatter stringFromByteCount:self.fileSize] withAttributes:detailAttr];
+            [attrString appendString:@"\n\n" withAttributes:shortHeightAttr];
+            [attrString appendString:@"\t" withAttributes:detailAttr];
+
+            [attrString appendString:NSLocalizedString(@"Size:", @"Job statistics") withAttributes:detailBoldAttr];
+            [attrString appendString:@" \t" withAttributes:detailAttr];
+            [attrString appendString:[_byteFormatter stringFromByteCount:self.fileSize] withAttributes:detailAttr];
+        }
 
         _attributedStatistics = attrString;
     }
@@ -183,6 +190,12 @@ static NSDictionary     *shortHeightAttr;
     self.pausedDate = nil;
 }
 
+- (void)setStartedDate:(NSDate *)startedDate
+{
+    _startedDate = startedDate;
+    self.attributedStatistics = nil;
+}
+
 - (void)setEndedDate:(NSDate *)endedDate
 {
     _endedDate = endedDate;
@@ -197,6 +210,8 @@ static NSDictionary     *shortHeightAttr;
     NSDictionary<NSURLResourceKey, id> *values = [self.completeOutputURL resourceValuesForKeys:@[NSURLFileSizeKey] error:NULL];
 
     self.fileSize = [values[NSURLFileSizeKey] integerValue];
+
+    self.attributedStatistics = nil;
 }
 
 #pragma mark - NSSecureCoding

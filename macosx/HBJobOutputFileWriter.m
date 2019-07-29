@@ -7,6 +7,7 @@
 #import "HBJobOutputFileWriter.h"
 #import "HBJob.h"
 #import "HBUtilities.h"
+#import "HBPreferencesKeys.h"
 
 @interface HBJobOutputFileWriter ()
 
@@ -36,7 +37,7 @@
 
     NSURL *outputURL = nil;
 
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"EncodeLogLocation"])
+    if ([NSUserDefaults.standardUserDefaults boolForKey:HBEncodeLogLocation])
     {
         // if we are putting it in the same directory with the movie
         outputURL = [job.outputURL URLByAppendingPathComponent:outputDateFileName];

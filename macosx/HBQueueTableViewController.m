@@ -219,7 +219,9 @@
 
     HBQueueItem *item = self.queue.items[row];
 
-    HBQueueItemView *view = item.state == HBQueueItemStateWorking ? [tableView makeViewWithIdentifier:@"MainWorkingCell" owner:self] : [tableView makeViewWithIdentifier:@"MainCell" owner:self];
+    HBQueueItemView *view = item.state == HBQueueItemStateWorking && item == self.queue.currentItem ?
+                            [tableView makeViewWithIdentifier:@"MainWorkingCell" owner:self] :
+                            [tableView makeViewWithIdentifier:@"MainCell" owner:self];
 
     view.delegate = self;
     view.item = item;
@@ -235,7 +237,7 @@
 - (CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
 {
     HBQueueItem *item = self.queue.items[row];
-    return item.state == HBQueueItemStateWorking ? 58 : 22;
+    return item.state == HBQueueItemStateWorking && item == self.queue.currentItem ? 58 : 22;
 }
 
 #pragma mark NSQueueItemView delegate

@@ -15,7 +15,7 @@
 #import "HBQueueMultiSelectionViewController.h"
 
 #import "HBDockTile.h"
-#import "HBPreferencesController.h"
+#import "HBPreferencesKeys.h"
 #import "NSArray+HBAdditions.h"
 
 @import HandBrakeKit;
@@ -46,6 +46,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 @interface HBQueueController (TouchBar) <NSTouchBarProvider, NSTouchBarDelegate>
 - (void)_touchBar_updateButtonsState;
 - (void)_touchBar_validateUserInterfaceItems;
+- (IBAction)_touchBar_toggleStartCancel:(id)sender;
 @end
 
 @implementation HBQueueController
@@ -56,13 +57,11 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
     if (self = [super initWithWindowNibName:@"Queue"])
     {
+        _queue = queue;
+
         // Load the dockTile and instantiate initial text fields
         _dockTile = [[HBDockTile alloc] initWithDockTile:NSApplication.sharedApplication.dockTile
                                                   image:NSApplication.sharedApplication.applicationIconImage];
-
-        // Init state
-        _queue = queue;
-        _queue.undoManager = [[NSUndoManager alloc] init];
 
         [NSNotificationCenter.defaultCenter addObserverForName:HBQueueLowSpaceAlertNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
             [self queueLowDiskSpaceAlert];
@@ -286,7 +285,7 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 - (BOOL)validateUserIterfaceItemForAction:(SEL)action
 {
-    if (action == @selector(toggleStartCancel:))
+    if (action == @selector(toggleStartCancel:) || action == @selector(_touchBar_toggleStartCancel:))
     {
         return self.queue.isEncoding || self.queue.canEncode;
     }
@@ -382,35 +381,31 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     NSParameterAssert(item);
     [self.queue.items beginTransaction];
 
-    if (item != self.queue.currentItem)
+    if (item == self.queue.currentItem)
     {
-        item.state = HBQueueItemStateWorking;
-
-        //        NSUInteger row = [self.queue.items indexOfObject:item];
-        //FIXME
-        //[self reloadQueueItemAtIndex:row];
-
-        [self.delegate openJob:[item.job copy] completionHandler:^(BOOL result) {
-            [self.queue.items beginTransaction];
-            if (result)
-            {
-                // Now that source is loaded and settings applied, delete the queue item from the queue
-                NSInteger index = [self.queue.items indexOfObject:item];
-                item.state = HBQueueItemStateReady;
-                [self.queue removeItemAtIndex:index];
-            }
-            else
-            {
-                item.state = HBQueueItemStateFailed;
-                NSBeep();
-            }
-            [self.queue.items commit];
-        }];
+        [self.queue cancelCurrentItemAndContinue];
     }
     else
     {
-        NSBeep();
+        item.state = HBQueueItemStateWorking;
     }
+
+    [self.delegate openJob:[item.job copy] completionHandler:^(BOOL result) {
+        [self.queue.items beginTransaction];
+        if (result)
+        {
+            // Now that source is loaded and settings applied, delete the queue item from the queue
+            NSInteger index = [self.queue.items indexOfObject:item];
+            item.state = HBQueueItemStateReady;
+            [self.queue removeItemAtIndex:index];
+        }
+        else
+        {
+            item.state = HBQueueItemStateFailed;
+            NSBeep();
+        }
+        [self.queue.items commit];
+    }];
 
     [self.queue.items commit];
 }
@@ -455,7 +450,6 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     {
         [self doEditQueueItem:item];
     }
-
 
     [self.queue.items commit];
 }
@@ -502,14 +496,14 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 - (void)sendToExternalApp:(HBQueueItem *)item
 {
     // This end of encode action is called as each encode rolls off of the queue
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBSendToAppEnabled"] == YES)
+    if ([NSUserDefaults.standardUserDefaults boolForKey:HBSendToAppEnabled] == YES)
     {
 #ifdef __SANDBOX_ENABLED__
         BOOL accessingSecurityScopedResource = [item.outputURL startAccessingSecurityScopedResource];
 #endif
 
-        NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-        NSString *app = [workspace fullPathForApplication:[[NSUserDefaults standardUserDefaults] objectForKey:@"HBSendToApp"]];
+        NSWorkspace *workspace = NSWorkspace.sharedWorkspace;
+        NSString *app = [workspace fullPathForApplication:[NSUserDefaults.standardUserDefaults objectForKey:HBSendToApp]];
 
         if (app)
         {
@@ -540,11 +534,11 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
 
     // Both the Notification and Sending to tagger can be done as encodes roll off the queue
-    if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionNotification ||
-        [ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionAlertAndNotification)
+    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionNotification ||
+        [ud integerForKey:HBAlertWhenDone] == HBDoneActionAlertAndNotification)
     {
         // If Play System Alert has been selected in Preferences
-        bool playSound = [ud boolForKey:@"HBAlertWhenDoneSound"];
+        bool playSound = [ud boolForKey:HBAlertWhenDoneSound];
 
         NSString *title;
         NSString *description;
@@ -565,7 +559,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
         [self showNotificationWithTitle:title
                             description:description
                                     url:item.completeOutputURL
-                                playSound:playSound];
+                              playSound:playSound];
     }
 }
 
@@ -576,14 +570,14 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 {
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
     // If Play System Alert has been selected in Preferences
-    if ([ud boolForKey:@"HBAlertWhenDoneSound"] == YES)
+    if ([ud boolForKey:HBAlertWhenDoneSound] == YES)
     {
         NSBeep();
     }
 
     // If Alert Window or Window and Notification has been selected
-    if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionAlert ||
-        [ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionAlertAndNotification)
+    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionAlert ||
+        [ud integerForKey:HBAlertWhenDone] == HBDoneActionAlertAndNotification)
     {
         // On Screen Notification
         NSAlert *alert = [[NSAlert alloc] init];
@@ -594,21 +588,20 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
     }
 
     // If sleep has been selected
-    if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionSleep)
+    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionSleep)
     {
         // Sleep
-        NSDictionary *errorDict;
         NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:
                                        @"tell application \"System Events\" to sleep"];
-        [scriptObject executeAndReturnError: &errorDict];
+        [scriptObject executeAndReturnError:NULL];
     }
+
     // If Shutdown has been selected
-    if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionShutDown)
+    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionShutDown)
     {
         // Shut Down
-        NSDictionary *errorDict;
         NSAppleScript *scriptObject = [[NSAppleScript alloc] initWithSource:@"tell application \"System Events\" to shut down"];
-        [scriptObject executeAndReturnError: &errorDict];
+        [scriptObject executeAndReturnError:NULL];
     }
 }
 
@@ -625,7 +618,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 {
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
 
-    if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionSleep)
+    if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionSleep)
     {
         // Warn that computer will sleep after encoding
         NSBeep();
@@ -645,7 +638,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
 
         [self promptForAppleEventAuthorization];
     }
-    else if ([ud integerForKey:@"HBAlertWhenDone"] == HBDoneActionShutDown)
+    else if ([ud integerForKey:HBAlertWhenDone] == HBDoneActionShutDown)
     {
         // Warn that computer will shut down after encoding
         NSBeep();
@@ -864,6 +857,11 @@ static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
     return bar;
 }
 
+- (IBAction)_touchBar_toggleStartCancel:(id)sender
+{
+    [self toggleStartCancel:self];
+}
+
 - (NSTouchBarItem *)touchBar:(NSTouchBar *)touchBar makeItemForIdentifier:(NSTouchBarItemIdentifier)identifier
 {
     if ([identifier isEqualTo:HBTouchBarRip])
@@ -871,7 +869,7 @@ static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
         NSCustomTouchBarItem *item = [[NSCustomTouchBarItem alloc] initWithIdentifier:identifier];
         item.customizationLabel = NSLocalizedString(@"Start/Stop Encoding", @"Touch bar");
 
-        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPlayTemplate] target:self action:@selector(toggleStartCancel:)];
+        NSButton *button = [NSButton buttonWithImage:[NSImage imageNamed:NSImageNameTouchBarPlayTemplate] target:self action:@selector(_touchBar_toggleStartCancel:)];
 
         item.view = button;
         return item;

@@ -6,6 +6,8 @@
 //
 
 #import "HBPreviewGenerator.h"
+#import "HBPreferencesKeys.h"
+#import "HBJob+HBAdditions.h"
 
 @import HandBrakeKit;
 
@@ -245,7 +247,7 @@
     }
 
     // Generate the file url and directories.
-    NSString *extension = [HBUtilities automaticExtForJob:self.job];
+    NSString *extension = self.job.automaticExt;
     NSURL *destURL = [HBPreviewGenerator generateFileURLForType:extension];
 
     // return if we couldn't get the fileURL.
@@ -272,7 +274,7 @@
     job.video.twoPass = NO;
 
     // Init the libhb core
-    NSInteger level = [[NSUserDefaults standardUserDefaults] integerForKey:@"LoggingLevel"];
+    NSInteger level = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
     self.core = [[HBCore alloc] initWithLogLevel:level name:@"PreviewCore"];
 
     HBStateFormatter *formatter = [[HBStateFormatter alloc] init];

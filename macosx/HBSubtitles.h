@@ -27,10 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
-@end
-
-@interface HBSubtitles (KVC)
-
 @property (nonatomic, readonly) NSUInteger countOfTracks;
 - (HBSubtitlesTrack *)objectInTracksAtIndex:(NSUInteger)index;
 - (void)insertObject:(HBSubtitlesTrack *)audioObject inTracksAtIndex:(NSUInteger)index;

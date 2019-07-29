@@ -6,6 +6,7 @@
 
 #import "HBQueue.h"
 #import "NSArray+HBAdditions.h"
+#import "HBPreferencesKeys.h"
 
 NSString * const HBQueueDidAddItemNotification = @"HBQueueDidAddItemNotification";
 NSString * const HBQueueDidRemoveItemNotification = @"HBQueueDidRemoveItemNotification";
@@ -48,13 +49,14 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     self = [super init];
     if (self)
     {
-        NSInteger loggingLevel = [NSUserDefaults.standardUserDefaults integerForKey:@"LoggingLevel"];
+        NSInteger loggingLevel = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
 
         // Init a separate instance of libhb for the queue
         _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
         _core.automaticallyPreventSleep = NO;
 
         _items = [[HBDistributedArray alloc] initWithURL:queueURL class:[HBQueueItem class]];
+        _undoManager = [[NSUndoManager alloc] init];
 
         // Set up the observers
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadQueue) name:HBDistributedArrayChanged object:_items];
@@ -284,6 +286,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     NSIndexSet *indexes = [self.items indexesOfObjectsUsingBlock:^BOOL(HBQueueItem *item) {
         return (item.state == HBQueueItemStateCompleted || item.state == HBQueueItemStateCanceled);
     }];
+    [self removeItemsAtIndexes:indexes];
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidRemoveItemNotification object:self userInfo:@{@"indexes": indexes}];
     [self.items commit];
 }
@@ -387,6 +390,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         idx++;
     }
 
+    [self updateStats];
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeItemNotification object:self userInfo:@{HBQueueItemNotificationIndexesKey: indexes}];
     [self.items commit];
 }
@@ -466,11 +470,11 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (BOOL)isDiskSpaceLowAtURL:(NSURL *)url
 {
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"HBQueuePauseIfLowSpace"])
+    if ([NSUserDefaults.standardUserDefaults boolForKey:HBQueuePauseIfLowSpace])
     {
         NSURL *volumeURL = nil;
         NSDictionary<NSURLResourceKey, id> *attrs = [url resourceValuesForKeys:@[NSURLIsVolumeKey, NSURLVolumeURLKey] error:NULL];
-        long long minCapacity = [[[NSUserDefaults standardUserDefaults] stringForKey:@"HBQueueMinFreeSpace"] longLongValue] * 1000000000;
+        long long minCapacity = [[NSUserDefaults.standardUserDefaults stringForKey:HBQueueMinFreeSpace] longLongValue] * 1000000000;
 
         volumeURL = [attrs[NSURLIsVolumeKey] boolValue] ? url : attrs[NSURLVolumeURLKey];
 
@@ -552,8 +556,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         else if (nextItem)
         {
             // now we mark the queue item as working so another instance can not come along and try to scan it while we are scanning
-            nextItem.state = HBQueueItemStateWorking;
             nextItem.startedDate = [NSDate date];
+            nextItem.state = HBQueueItemStateWorking;
 
             // Tell HB to output a new activity log file for this encode
             self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:nextItem.job];

@@ -39,6 +39,7 @@
                     </buttonCell>
                     <connections>
                         <action selector="resetItem:" target="-2" id="42R-t4-FxO"/>
+                        <binding destination="-2" name="enabled" keyPath="self.canReset" id="Rte-cy-Bzo"/>
                     </connections>
                 </button>
                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MXt-Cb-20x">

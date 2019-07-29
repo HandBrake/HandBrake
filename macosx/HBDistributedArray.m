@@ -194,7 +194,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
  */
 - (void)reload
 {
-    NSMutableArray *jobsArray = nil;
+    NSMutableArray<HBUniqueObject> *jobsArray = nil;
     @try
     {
         NSData *queue = [NSData dataWithContentsOfURL:self.fileURL];
@@ -211,14 +211,14 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
     // Swap the proxy objects representation with the new
     // one read from disk
     NSMutableArray *proxyArray = [NSMutableArray array];
-    for (id anObject in jobsArray)
+    for (id<HBUniqueObject> anObject in jobsArray)
     {
-        NSString *uuid = [anObject uuid];
+        NSString *uuid = anObject.uuid;
 
         HBProxyArrayObject *proxy = nil;
         for (HBProxyArrayObject *temp in self.array)
         {
-            if ([[temp uuid] isEqualToString:uuid])
+            if ([temp.uuid isEqualToString:uuid])
             {
                 temp.representedObject = anObject;
                 proxy = temp;

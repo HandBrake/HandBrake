@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBVideoController.h"
+#import "HBPreferencesKeys.h"
 
 @import HandBrakeKit;
 
@@ -151,8 +152,8 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     {
          // Encoders that allow fractional CQ values often have a low granularity
          // which makes the slider hard to use, so use a value from preferences.
-        granularity = 1.0f / [[NSUserDefaults standardUserDefaults]
-                       integerForKey:@"HBx264CqSliderFractional"];
+        granularity = 1.0f / [NSUserDefaults.standardUserDefaults
+                       integerForKey:HBCqSliderFractional];
     }
     fVidQualitySlider.minValue = minValue;
     fVidQualitySlider.maxValue = maxValue;

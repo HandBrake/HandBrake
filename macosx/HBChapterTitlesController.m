@@ -5,7 +5,7 @@
    It may be used under the terms of the GNU General Public License. */
    
 #import "HBChapterTitlesController.h"
-
+#import "HBPreferencesKeys.h"
 @import HandBrakeKit;
 
 @interface NSArray (HBCSVAdditions)
@@ -280,7 +280,7 @@
 - (IBAction)browseForChapterFile:(id)sender
 {
     // We get the current file name and path from the destination field here
-    NSURL *sourceDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectory"];
+    NSURL *sourceDirectory = [NSUserDefaults.standardUserDefaults URLForKey:HBLastDestinationDirectoryURL];
 
 	// Open a panel to let the user choose the file
 	NSOpenPanel *panel = [NSOpenPanel openPanel];
@@ -302,7 +302,7 @@
 
 - (IBAction)browseForChapterFileSave:(id)sender
 {
-    NSURL *destinationDirectory = [[NSUserDefaults standardUserDefaults] URLForKey:@"HBLastDestinationDirectory"];
+    NSURL *destinationDirectory = [NSUserDefaults.standardUserDefaults URLForKey:HBLastDestinationDirectoryURL];
 
     NSSavePanel *panel = [NSSavePanel savePanel];
     panel.allowedFileTypes = @[@"csv"];

@@ -6,10 +6,9 @@
 
 #import "HBAutoNamer.h"
 
-#import <AppKit/AppKit.h>
-
 #import "HBJob.h"
-#import "HBUtilities.h"
+#import "HBJob+HBAdditions.h"
+#import "HBPreferencesKeys.h"
 
 static void *HBAutoNamerPrefsContext = &HBAutoNamerPrefsContext;
 static void *HBAutoNamerContext = &HBAutoNamerContext;
@@ -29,7 +28,7 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
     if (self)
     {
         _job = job;
-        _format = [[NSUserDefaults standardUserDefaults] objectForKey:@"HBAutoNamingFormat"];
+        _format = [NSUserDefaults.standardUserDefaults objectForKey:HBAutoNamingFormat];
         [self addFormatObservers];
         [self addJobObservers];
         [self addPrefsObservers];
@@ -55,7 +54,7 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
     else if (context == HBAutoNamerPrefsContext)
     {
         [self removeJobObservers];
-        self.format = [[NSUserDefaults standardUserDefaults] objectForKey:@"HBAutoNamingFormat"];
+        self.format = [NSUserDefaults.standardUserDefaults objectForKey:HBAutoNamingFormat];
         [self addJobObservers];
         [self updateFileName];
         [self updateFileExtension];
@@ -107,7 +106,7 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
 
     if (self.job && !(undo.isUndoing || undo.isRedoing))
     {
-        NSString *extension = [HBUtilities automaticExtForJob:self.job];
+        NSString *extension = self.job.automaticExt;
         if (![extension isEqualTo:self.job.outputFileName.pathExtension])
         {
             self.job.outputFileName = [[self.job.outputFileName stringByDeletingPathExtension] stringByAppendingPathExtension:extension];
@@ -162,10 +161,10 @@ static void *HBAutoNamerContext = &HBAutoNamerContext;
 {
     NSUndoManager *undo = self.job.undo;
 
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"DefaultAutoNaming"] && self.job && !(undo.isUndoing || undo.isRedoing))
+    if ([NSUserDefaults.standardUserDefaults boolForKey:HBDefaultAutoNaming] && self.job && !(undo.isUndoing || undo.isRedoing))
     {
         // Generate a new file name
-        NSString *fileName = [HBUtilities automaticNameForJob:self.job];
+        NSString *fileName = self.job.automaticName;
 
         // Swap the old one with the new one
         self.job.outputFileName = [NSString stringWithFormat:@"%@.%@", fileName, self.job.outputFileName.pathExtension];

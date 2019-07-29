@@ -16,6 +16,8 @@
 
 @property (weak) id<HBQueueDetailsViewControllerDelegate> delegate;
 
+@property (nonatomic) BOOL canReset;
+
 @end
 
 @implementation HBQueueInfoViewController
@@ -40,15 +42,16 @@
 {
     NSNotificationCenter * __weak center = NSNotificationCenter.defaultCenter;
 
-    [center addObserverForName:HBQueueDidCompleteItemNotification
+    [center addObserverForName:HBQueueDidStartItemNotification
                                               object:nil
                                                queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
                            {
-                               HBQueueItem *completedItem = note.userInfo[HBQueueItemNotificationItemKey];
+                               HBQueueItem *startedItem = note.userInfo[HBQueueItemNotificationItemKey];
 
-                               if (completedItem == self.item)
+                               if (startedItem == self.item)
                                {
                                    [self updateLabels];
+                                   [self updateReset];
                                }
                            }];
 
@@ -61,17 +64,22 @@
          if (completedItem == self.item)
          {
              [self updateLabels];
+             [self updateReset];
          }
      }];
+}
 
+- (void)updateReset
+{
+    self.canReset = self.item && (self.item.state != HBQueueItemStateWorking && self.item.state != HBQueueItemStateReady);
 }
 
 - (void)updateLabels
 {
     if (self.item)
     {
-        self.statisticsLabel.hidden = self.item.endedDate == nil;
-        self.statisticsHeader.hidden = self.item.endedDate == nil;
+        self.statisticsLabel.hidden = self.item.startedDate == nil;
+        self.statisticsHeader.hidden = self.item.startedDate == nil;
         self.summaryLabel.hidden = NO;
 
         self.statisticsLabel.attributedStringValue = self.item.attributedStatistics;
@@ -91,6 +99,7 @@
 {
     _item = item;
     [self updateLabels];
+    [self updateReset];
 }
 
 - (IBAction)editItem:(id)sender
@@ -102,6 +111,5 @@
 {
     [self.delegate detailsViewResetItem:self.item];
 }
-
 
 @end

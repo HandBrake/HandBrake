@@ -71,10 +71,10 @@
 - (void)setItem:(HBQueueItem *)item
 {
     [super setItem:item];
+    [self removeObservers];
 
     if (item.state == HBQueueItemStateWorking)
     {
-        [self removeObservers];
         [self setUpObservers];
     }
 }

@@ -54,7 +54,7 @@
         [HBCore registerErrorHandler:^(NSString *error) {
             fprintf(stderr, "error: %s\n", error.UTF8String);
         }];
-        [HBCore setDVDNav:[[NSUserDefaults standardUserDefaults] boolForKey:@"UseDvdNav"]];
+        [HBCore setDVDNav:[NSUserDefaults.standardUserDefaults boolForKey:HBUseDvdNav]];
 
         _outputPanel = [[HBOutputPanelController alloc] init];
 
@@ -87,9 +87,9 @@
     NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
 
     // Reset "When done" action
-    if ([ud boolForKey:@"HBResetWhenDoneOnLaunch"])
+    if ([ud boolForKey:HBResetWhenDoneOnLaunch])
     {
-        [ud setInteger:HBDoneActionDoNothing forKey:@"HBAlertWhenDone"];
+        [ud setInteger:HBDoneActionDoNothing forKey:HBAlertWhenDone];
     }
 
     if (@available (macOS 10.12.2, *))
@@ -144,7 +144,7 @@
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         // Remove encodes logs older than a month
-        if ([ud boolForKey:@"HBClearOldLogs"])
+        if ([ud boolForKey:HBClearOldLogs])
         {
             [self cleanEncodeLogs];
         }

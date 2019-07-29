@@ -5,6 +5,37 @@
 
 #import "HBPreferencesController.h"
 
+NSString * const HBShowOpenPanelAtLaunch              = @"HBShowOpenPanelAtLaunch";
+NSString * const HBLastDestinationDirectoryURL        = @"HBLastDestinationDirectoryURL";
+NSString * const HBLastDestinationDirectoryBookmark   = @"HBLastDestinationDirectoryBookmark";
+NSString * const HBLastSourceDirectoryURL             = @"HBLastSourceDirectoryURL";
+
+NSString * const HBDefaultMpegExtension          = @"DefaultMpegExtension";
+
+NSString * const HBAlertWhenDone                 = @"HBAlertWhenDone";
+NSString * const HBResetWhenDoneOnLaunch         = @"HBResetWhenDoneOnLaunch";
+NSString * const HBAlertWhenDoneSound            = @"HBAlertWhenDoneSound";
+NSString * const HBSendToAppEnabled              = @"HBSendToAppEnabled";
+NSString * const HBSendToApp                     = @"HBSendToApp";
+
+NSString * const HBDefaultAutoNaming             = @"DefaultAutoNaming";
+NSString * const HBAutoNamingFormat              = @"HBAutoNamingFormat";
+NSString * const HBAutoNamingRemoveUnderscore    = @"HBAutoNamingRemoveUnderscore";
+NSString * const HBAutoNamingRemovePunctuation   = @"HBAutoNamingRemovePunctuation";
+NSString * const HBAutoNamingTitleCase           = @"HBAutoNamingTitleCase";
+
+NSString * const HBCqSliderFractional            = @"HBx264CqSliderFractional";
+NSString * const HBUseDvdNav                     = @"UseDvdNav";
+NSString * const HBMinTitleScanSeconds           = @"MinTitleScanSeconds";
+NSString * const HBPreviewsNumber                = @"PreviewsNumber";
+
+NSString * const HBLoggingLevel                  = @"LoggingLevel";
+NSString * const HBEncodeLogLocation             = @"HBEncodeLogLocation";
+NSString * const HBClearOldLogs                  = @"HBClearOldLogs";
+
+NSString * const HBQueuePauseIfLowSpace          = @"HBQueuePauseIfLowSpace";
+NSString * const HBQueueMinFreeSpace             = @"HBQueueMinFreeSpace";
+
 #define TOOLBAR_GENERAL     @"TOOLBAR_GENERAL"
 #define TOOLBAR_ADVANCED    @"TOOLBAR_ADVANCED"
 
@@ -19,19 +50,11 @@
  * preference settings are added that cannot be handled with Cocoa bindings).
  */
 
-@interface HBPreferencesController () <NSTokenFieldDelegate>
+@interface HBPreferencesController () <NSTokenFieldDelegate, NSToolbarDelegate>
 {
     IBOutlet NSView         * fGeneralView, * fAdvancedView;
     IBOutlet NSTextField    * fSendEncodeToAppField;
 }
-
-/* Manage the send encode to xxx.app windows and field */
-- (IBAction) browseSendToApp: (id) sender;
-
-- (void) setPrefView: (id) sender;
-- (NSToolbarItem *)toolbarItemWithIdentifier: (NSString *)identifier
-                                       label: (NSString *)label
-                                       image: (NSImage *)image;
 
 @property (unsafe_unretained) IBOutlet NSTokenField *formatTokenField;
 @property (unsafe_unretained) IBOutlet NSTokenField *builtInTokenField;
@@ -54,26 +77,24 @@
     NSURL *desktopURL = [NSURL fileURLWithPath:desktopDirectory isDirectory:YES];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
-        @"HBShowOpenPanelAtLaunch":         @YES,
-        @"DefaultMpegExtension":            @"Auto",
-        @"UseDvdNav":                       @"YES",
-        // Archive the URL because they aren't supported in plist.
-        @"HBLastDestinationDirectory":      [NSKeyedArchiver archivedDataWithRootObject:desktopURL],
-        @"HBLastSourceDirectory":           [NSKeyedArchiver archivedDataWithRootObject:desktopURL],
-        @"DefaultAutoNaming":               @NO,
-        @"HBAlertWhenDone":                 @(HBDoneActionNotification),
-        @"HBResetWhenDoneOnLaunch":         @NO,
-        @"HBAlertWhenDoneSound":            @YES,
-        @"LoggingLevel":                    @"1",
-        @"HBClearOldLogs":                  @YES,
-        @"EncodeLogLocation":               @"NO",
-        @"MinTitleScanSeconds":             @"10",
-        @"PreviewsNumber":                  @"10",
-        @"HBx264CqSliderFractional":        @2,
-        @"HBShowAdvancedTab":               @NO,
-        @"HBAutoNamingFormat":              @[@"{Source}", @" ", @"{Title}"],
-        @"HBQueuePauseIfLowSpace":          @YES,
-        @"HBQueueMinFreeSpace":             @"2"
+        HBShowOpenPanelAtLaunch:            @YES,
+        HBDefaultMpegExtension:             @"Auto",
+        HBUseDvdNav:                        @YES,
+        HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:desktopURL],
+        HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:desktopURL],
+        HBDefaultAutoNaming:                @NO,
+        HBAutoNamingFormat:                 @[@"{Source}", @" ", @"{Title}"],
+        HBAlertWhenDone:                    @(HBDoneActionNotification),
+        HBResetWhenDoneOnLaunch:            @NO,
+        HBAlertWhenDoneSound:               @YES,
+        HBLoggingLevel:                     @1,
+        HBClearOldLogs:                     @YES,
+        HBEncodeLogLocation:                @NO,
+        HBMinTitleScanSeconds:              @10,
+        HBPreviewsNumber:                   @10,
+        HBCqSliderFractional:               @2,
+        HBQueuePauseIfLowSpace:             @YES,
+        HBQueueMinFreeSpace:                @"2"
         }];
 
     // Overwrite the update check interval because previous versions
@@ -170,36 +191,38 @@
 /*Opens the app browse window*/
 - (IBAction) browseSendToApp: (id) sender
 {
+    NSUserDefaults *ud = NSUserDefaults.standardUserDefaults;
     NSOpenPanel *panel = [NSOpenPanel openPanel];
+
     [panel setAllowsMultipleSelection:NO];
     [panel setCanChooseFiles:YES];
     [panel setCanChooseDirectories:NO];
     [panel setAllowedFileTypes:@[@"app"]];
     [panel setMessage:NSLocalizedString(@"Select the desired external application", @"Preferences -> send to app destination open panel")];
 
-    NSString *sendToAppDirectory;
-	if ([[NSUserDefaults standardUserDefaults] stringForKey:@"LastSendToAppDirectory"])
+    NSURL *sendToAppDirectory;
+	if ([ud stringForKey:@"HBLastSendToAppDirectory"])
 	{
-		sendToAppDirectory = [[NSUserDefaults standardUserDefaults] stringForKey:@"LastSendToAppDirectory"];
+		sendToAppDirectory = [ud URLForKey:@"HBLastSendToAppDirectory"];
 	}
 	else
 	{
-		sendToAppDirectory = @"/Applications";
+		sendToAppDirectory = [NSURL fileURLWithPath:@"/Applications" isDirectory:YES];
 	}
-    [panel setDirectoryURL:[NSURL fileURLWithPath:sendToAppDirectory]];
+    [panel setDirectoryURL:sendToAppDirectory];
 
     [panel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result) {
         if (result == NSModalResponseOK)
         {
             NSURL *sendToAppURL = [panel URL];
             NSURL *sendToAppDirectoryURL = [sendToAppURL URLByDeletingLastPathComponent];
-            [[NSUserDefaults standardUserDefaults] setObject:[sendToAppDirectoryURL path] forKey:@"LastSendToAppDirectory"];
+            [ud setURL:sendToAppDirectoryURL forKey:@"HBLastSendToAppDirectory"];
 
             // We set the name of the app to send to in the display field
-            NSString *sendToAppName = [[sendToAppURL lastPathComponent] stringByDeletingPathExtension];
+            NSString *sendToAppName = sendToAppURL.lastPathComponent.stringByDeletingPathExtension;
             [self->fSendEncodeToAppField setStringValue:sendToAppName];
 
-            [[NSUserDefaults standardUserDefaults] setObject:self->fSendEncodeToAppField.stringValue forKey:@"HBSendToApp"];
+            [ud setObject:self->fSendEncodeToAppField.stringValue forKey:HBSendToApp];
         }
     }];
 }
@@ -303,7 +326,6 @@
 
     return YES;
 }
-
 
 #pragma mark - Private methods
 

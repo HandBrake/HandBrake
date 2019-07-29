@@ -5,16 +5,9 @@
 
 #import <Cocoa/Cocoa.h>
 
-typedef NS_ENUM(NSUInteger, HBDoneAction) {
-    HBDoneActionDoNothing = 0,
-    HBDoneActionAlert = 1,
-    HBDoneActionNotification = 2,
-    HBDoneActionAlertAndNotification = 3,
-    HBDoneActionSleep = 4,
-    HBDoneActionShutDown = 5,
-};
+#import "HBPreferencesKeys.h"
 
-@interface HBPreferencesController : NSWindowController <NSToolbarDelegate>
+@interface HBPreferencesController : NSWindowController
 
 + (void)registerUserDefaults;
 

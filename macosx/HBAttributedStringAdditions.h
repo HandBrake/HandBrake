@@ -6,6 +6,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSString (HBAttributedStringAdditions)
 
 - (NSAttributedString *)HB_monospacedString;
@@ -19,3 +21,4 @@
 
 @end
 
+NS_ASSUME_NONNULL_END

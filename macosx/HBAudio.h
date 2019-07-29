@@ -29,10 +29,6 @@ extern NSString *HBAudioEncoderChangedNotification;
 
 @property (nonatomic, readwrite, weak, nullable) NSUndoManager *undo;
 
-@end
-
-@interface HBAudio (KVC)
-
 @property (nonatomic, readonly) NSUInteger countOfTracks;
 - (HBAudioTrack *)objectInTracksAtIndex:(NSUInteger)index;
 - (void)insertObject:(HBAudioTrack *)track inTracksAtIndex:(NSUInteger)index;
