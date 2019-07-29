@@ -353,7 +353,7 @@ conjunction with the "Forced" option.</property>
             <property name="position">500</property>
             <property name="can_focus">False</property>
             <property name="shrink-child1">False</property>
-            <property name="shrink-child2">False</property>
+            <property name="shrink-child2">True</property>
             <child>
               <object class="GtkBox" id="queue_box2">
                 <property name="orientation">vertical</property>
@@ -388,18 +388,6 @@ conjunction with the "Forced" option.</property>
                         <property name="icon_name">hb-pause</property>
                         <property name="action-name">app.queue-pause</property>
                         <property name="homogeneous">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkSeparatorToolItem" id="queue_list_tool_sep1">
-                        <property name="visible">True</property>
-                        <property name="draw">False</property>
-                        <property name="hexpand">True</property>
-                        <property name="halign">GTK_ALIGN_FILL</property>
-                        <property name="vexpand">False</property>
-                        <property name="valign">GTK_ALIGN_FILL</property>
-                        <property name="hexpand">True</property>
-                        <property name="homogeneous">False</property>
                       </object>
                     </child>
                     <child>
@@ -1987,7 +1975,11 @@ libx264 authors:
                 <child>
                   <object class="GtkSeparatorToolItem" id="main_tool_sep2">
                     <property name="visible">True</property>
+<!--
                     <property name="width-request">60</property>
+-->
+                    <property name="hexpand">True</property>
+                    <property name="halign">center</property>
                     <property name="draw">False</property>
                     <property name="homogeneous">False</property>
                   </object>
@@ -2033,7 +2025,7 @@ libx264 authors:
                     <property name="visible">True</property>
                     <property name="draw">False</property>
                     <property name="expand">True</property>
-                    <property name="halign">GTK_ALIGN_FILL</property>
+                    <property name="halign">center</property>
                     <property name="homogeneous">False</property>
                   </object>
                 </child>
