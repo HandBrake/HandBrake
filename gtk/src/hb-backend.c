@@ -2014,9 +2014,9 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
         gchar *lang;
 
         if (iso639->native_name[0] != 0)
-            lang = g_strdup_printf("<small>%s</small>", iso639->native_name);
+            lang = g_strdup_printf("%s", iso639->native_name);
         else
-            lang = g_strdup_printf("<small>%s</small>", iso639->eng_name);
+            lang = g_strdup_printf("%s", iso639->eng_name);
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
@@ -2027,7 +2027,11 @@ language_opts_set(signal_user_data_t *ud, const gchar *name,
                            -1);
         g_free(lang);
     }
+#if !GTK_CHECK_VERSION(3, 90, 0)
+    // This is handled by GtkEventControllerKey in gtk4
+    // Initialized in ghb_combo_init()
     g_signal_connect(combo, "key-press-event", combo_search_key_press_cb, ud);
+#endif
 }
 
 static void
@@ -3338,6 +3342,19 @@ ghb_combo_init(signal_user_data_t *ud)
     init_ui_combo_boxes(ud->builder);
     // Populate all the combos
     ghb_update_ui_combo_box(ud, NULL, NULL, TRUE);
+
+#if GTK_CHECK_VERSION(3, 90, 0)
+    GtkWidget          * combo;
+    GtkEventController * econ;
+
+    // Set key-press handler for subtitle import language combo.
+    // Pressing a key warps to the next language that starts with that key.
+    combo = GHB_WIDGET(ud->builder, "ImportLanguage");
+    econ  = gtk_event_controller_key_new();
+    gtk_widget_add_controller(combo, econ);
+    g_signal_connect(econ, "key-pressed",
+                     G_CALLBACK(combo_search_key_press_cb), ud);
+#endif
 }
 
 void

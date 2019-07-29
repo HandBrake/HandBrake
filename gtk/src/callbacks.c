@@ -5685,22 +5685,23 @@ void ghb_container_empty(GtkContainer *c)
     gtk_container_foreach(c, container_empty_cb, NULL);
 }
 
-G_MODULE_EXPORT gboolean
-combo_search_key_press_cb(
-    GtkWidget *widget,
-    GdkEvent *event,
+static void
+lang_combo_search(
+    GtkComboBox * combo,
+    guint         keyval,
     signal_user_data_t *ud)
 {
-    GtkComboBox  * combo = GTK_COMBO_BOX(widget);
+    if (combo == NULL)
+    {
+        return;
+    }
     GtkTreeModel * model = GTK_TREE_MODEL(gtk_combo_box_get_model(combo));
     GtkTreeIter    iter, prev_iter;
     gchar        * lang;
-    guint          keyval;
     gunichar       key_char;
     gunichar       first_char;
     int            pos = 0, count = 2048;
 
-    ghb_event_get_keyval(event, &keyval);
     key_char = g_unichar_toupper(gdk_keyval_to_unicode(keyval));
     if (gtk_combo_box_get_active_iter(combo, &iter))
     {
@@ -5727,5 +5728,35 @@ combo_search_key_press_cb(
             }
         }
     }
+}
+
+#if GTK_CHECK_VERSION(3, 90, 0)
+G_MODULE_EXPORT gboolean
+combo_search_key_press_cb(
+    GtkEventControllerKey * keycon,
+    guint                   keyval,
+    guint                   keycode,
+    GdkModifierType         state,
+    signal_user_data_t    * ud)
+{
+    GtkComboBox  * combo;
+
+    combo = GTK_COMBO_BOX(gtk_event_controller_get_widget(
+                            GTK_EVENT_CONTROLLER(keycon)));
+    lang_combo_search(combo, keyval, ud);
     return FALSE;
 }
+#else
+G_MODULE_EXPORT gboolean
+combo_search_key_press_cb(
+    GtkWidget *widget,
+    GdkEvent *event,
+    signal_user_data_t *ud)
+{
+    guint          keyval;
+
+    ghb_event_get_keyval(event, &keyval);
+    lang_combo_search(GTK_COMBO_BOX(widget), keyval, ud);
+    return FALSE;
+}
+#endif
