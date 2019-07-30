@@ -5474,6 +5474,7 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                               <object class="GtkListBox" id="chapters_list">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="selection-mode">none</property>
                               </object>
                             </child>
                           </object>
