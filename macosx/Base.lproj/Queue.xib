@@ -20,7 +20,7 @@
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="157" y="863" width="584" height="424"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
             <value key="minSize" type="size" width="320" height="240"/>
             <view key="contentView" id="2577">
                 <rect key="frame" x="0.0" y="0.0" width="584" height="424"/>
@@ -106,12 +106,12 @@
                             </connections>
                         </popUpButton>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="963C2AD9-6708-4781-9411-3111E9713E3B" label="Details" paletteLabel="Details" image="NSGoLeftTemplate" sizingBehavior="auto" id="DfN-Iw-bzy">
+                    <toolbarItem implicitItemIdentifier="963C2AD9-6708-4781-9411-3111E9713E3B" label="Details" paletteLabel="Details" image="details" sizingBehavior="auto" id="DfN-Iw-bzy">
                         <nil key="toolTip"/>
                         <button key="view" verticalHuggingPriority="750" id="KyK-r0-0eJ">
                             <rect key="frame" x="6" y="14" width="32" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="NSGoLeftTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BjZ-aR-Hpe">
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="details" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="BjZ-aR-Hpe">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                             </buttonCell>
@@ -140,7 +140,7 @@
     </objects>
     <resources>
         <image name="NSActionTemplate" width="14" height="14"/>
-        <image name="NSGoLeftTemplate" width="9" height="12"/>
+        <image name="details" width="15" height="12"/>
         <image name="encode" width="32" height="32"/>
         <image name="pauseencode" width="32" height="32"/>
     </resources>
