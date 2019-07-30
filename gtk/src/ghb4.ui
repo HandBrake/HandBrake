@@ -2426,7 +2426,7 @@ Modifications will be discarded.</property>
             <child>
               <object class="GtkStack" id="SettingsStack">
                 <property name="homogeneous">True</property>
-                <property name="transition-type">GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT</property>
+                <property name="transition-type">GTK_STACK_TRANSITION_TYPE_ROTATE_LEFT_RIGHT</property>
                 <property name="transition-duration">400</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
