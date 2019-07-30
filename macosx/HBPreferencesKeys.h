@@ -47,5 +47,6 @@ extern NSString * const HBClearOldLogs;
 
 extern NSString * const HBQueuePauseIfLowSpace;
 extern NSString * const HBQueueMinFreeSpace;
+extern NSString * const HBQueueAutoClearCompletedItems;
 
 #endif /* HBPreferencesKeys_h */

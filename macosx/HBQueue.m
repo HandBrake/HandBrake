@@ -728,6 +728,12 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
     {
         [self completedItem:item result:result];
+
+        if ([NSUserDefaults.standardUserDefaults boolForKey:HBQueueAutoClearCompletedItems])
+        {
+            [self removeCompletedItems];
+        }
+
         [self encodeNextQueueItem];
     };
 

@@ -35,6 +35,7 @@ NSString * const HBClearOldLogs                  = @"HBClearOldLogs";
 
 NSString * const HBQueuePauseIfLowSpace          = @"HBQueuePauseIfLowSpace";
 NSString * const HBQueueMinFreeSpace             = @"HBQueueMinFreeSpace";
+NSString * const HBQueueAutoClearCompletedItems  = @"HBQueueAutoClearCompletedItems";
 
 #define TOOLBAR_GENERAL     @"TOOLBAR_GENERAL"
 #define TOOLBAR_ADVANCED    @"TOOLBAR_ADVANCED"
@@ -94,7 +95,8 @@ NSString * const HBQueueMinFreeSpace             = @"HBQueueMinFreeSpace";
         HBPreviewsNumber:                   @10,
         HBCqSliderFractional:               @2,
         HBQueuePauseIfLowSpace:             @YES,
-        HBQueueMinFreeSpace:                @"2"
+        HBQueueMinFreeSpace:                @"2",
+        HBQueueAutoClearCompletedItems:     @NO
         }];
 
     // Overwrite the update check interval because previous versions
