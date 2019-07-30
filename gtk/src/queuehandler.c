@@ -2460,23 +2460,14 @@ done:
     return FALSE;
 }
 
-G_MODULE_EXPORT gboolean
-queue_key_press_cb(
-    GtkWidget          * widget,
-    GdkEvent           * event,
-    signal_user_data_t * ud)
+static gboolean
+queue_row_key(GtkListBoxRow * row, guint keyval, signal_user_data_t * ud)
 {
-    GtkListBox    * lb;
-    GtkListBoxRow * row;
     gint            index;
-    guint           keyval;
 
-    ghb_event_get_keyval(event, &keyval);
     if (keyval != GDK_KEY_Delete)
         return FALSE;
 
-    lb  = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "queue_list"));
-    row = gtk_list_box_get_selected_row(lb);
     if (row != NULL)
     {
         index = gtk_list_box_row_get_index(row);
@@ -2487,6 +2478,7 @@ queue_key_press_cb(
     return FALSE;
 }
 
+#if GTK_CHECK_VERSION(3, 90, 0)
 G_MODULE_EXPORT gboolean
 queue_row_key_cb(
     GtkEventControllerKey * keycon,
@@ -2496,22 +2488,27 @@ queue_row_key_cb(
     signal_user_data_t    * ud)
 {
     GtkListBoxRow * row;
-    gint            index;
-
-    if (keyval != GDK_KEY_Delete)
-        return FALSE;
 
     row = GTK_LIST_BOX_ROW(gtk_event_controller_get_widget(
                                         GTK_EVENT_CONTROLLER(keycon)));
-    if (row != NULL)
-    {
-        index = gtk_list_box_row_get_index(row);
-        ghb_queue_remove_row_internal(ud, index);
-        ghb_save_queue(ud->queue);
-        return TRUE;
-    }
-    return FALSE;
+    return queue_row_key(row, keyval, ud);
 }
+
+#else
+G_MODULE_EXPORT gboolean
+queue_key_press_cb(
+    GtkWidget          * widget,
+    GdkEvent           * event,
+    signal_user_data_t * ud)
+{
+    GtkListBoxRow * row;
+    guint           keyval;
+
+    row = gtk_list_box_get_selected_row(GTK_LIST_BOX(widget));
+    ghb_event_get_keyval(event, &keyval);
+    return queue_row_key(row, keyval, ud);
+}
+#endif
 
 G_MODULE_EXPORT void
 show_queue_action_cb(GSimpleAction *action, GVariant *value,
