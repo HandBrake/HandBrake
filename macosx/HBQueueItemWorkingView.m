@@ -34,7 +34,7 @@
                               NSString *progressInfo = note.userInfo[HBQueueProgressNotificationInfoKey];
                               double progress = [note.userInfo[HBQueueProgressNotificationPercentKey] doubleValue];
 
-                              self.progressField.attributedStringValue = progressInfo.HB_smallMonospacedString;
+                              self.progressField.stringValue = progressInfo;
                               self.progressBar.doubleValue = progress;
                           }];
 
@@ -47,6 +47,8 @@
                                    [self removeObservers];
                                }
                            }];
+
+    self.progressField.font = [NSFont monospacedDigitSystemFontOfSize:NSFont.smallSystemFontSize weight:NSFontWeightRegular];
 }
 
 - (void)removeObservers

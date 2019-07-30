@@ -40,6 +40,8 @@
 
 - (void)setUpObservers
 {
+    // It would be easier to just KVO the item state property,
+    // But we can't because the item is a NSProxy.
     NSNotificationCenter * __weak center = NSNotificationCenter.defaultCenter;
 
     [center addObserverForName:HBQueueDidStartItemNotification
@@ -67,6 +69,15 @@
              [self updateReset];
          }
      }];
+
+    [center addObserverForName:HBQueueDidChangeItemNotification
+                        object:nil
+                         queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note)
+     {
+         [self updateLabels];
+         [self updateReset];
+     }];
+
 }
 
 - (void)updateReset
