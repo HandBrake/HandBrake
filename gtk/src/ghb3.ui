@@ -6358,25 +6358,90 @@ Only one subtitle track can be burned! Since conflicts can occur, the first chos
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkSeparator" id="chapter_sep1">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="chapter_list_header">
+                        <property name="orientation">horizontal</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="chapter_list_index_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="width-chars">5</property>
+                            <property name="label" translatable="yes">Index</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="chapter_list_start_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="width-chars">10</property>
+                            <property name="label" translatable="yes">Start</property>
+                            <property name="xalign">1</property>
+                          </object>
+                          <packing>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="chapter_list_duration_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="width-chars">10</property>
+                            <property name="label" translatable="yes">Duration</property>
+                            <property name="xalign">1</property>
+                          </object>
+                          <packing>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="chapter_list_title_label">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Title</property>
+                            <property name="margin-start">12</property>
+                            <property name="hexpand">True</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkScrolledWindow" id="scrolledwindow3">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                         <property name="vexpand">True</property>
                         <child>
-                          <object class="GtkTreeView" id="chapters_list">
+                          <object class="GtkListBox" id="chapters_list">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                            <property name="enable_search">False</property>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection3"/>
-                            </child>
                           </object>
                         </child>
                       </object>
                       <packing>
-                        <property name="position">1</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                   </object>

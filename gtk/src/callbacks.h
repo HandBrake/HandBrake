@@ -78,7 +78,6 @@ void ghb_update_pending(signal_user_data_t *ud);
 gboolean ghb_idle_scan(signal_user_data_t *ud);
 void ghb_add_all_titles(signal_user_data_t *ud);
 void ghb_update_title_info(signal_user_data_t *ud);
-void ghb_chapter_list_refresh_all(signal_user_data_t *ud);
 void ghb_load_settings(signal_user_data_t * ud);
 void ghb_load_post_settings(signal_user_data_t * ud);
 void ghb_set_current_title_settings(signal_user_data_t *ud);

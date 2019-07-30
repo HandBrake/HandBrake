@@ -765,13 +765,20 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
     for (ii = 0; ii < hb_list_count(job->list_chapter); ii++)
     {
         hb_dict_t *chapter_dict;
-        char *title = "";
+        char *name = "";
         hb_chapter_t *chapter = hb_list_item(job->list_chapter, ii);
         if (chapter->title != NULL)
-            title = chapter->title;
+            name = chapter->title;
 
-        chapter_dict = json_pack_ex(&error, 0, "{s:o}",
-                                "Name", hb_value_string(title));
+        chapter_dict = json_pack_ex(&error, 0,
+            "{s:o, s:{s:o, s:o, s:o, s:o}}",
+            "Name",         hb_value_string(name),
+            "Duration",
+                "Ticks",    hb_value_int(chapter->duration),
+                "Hours",    hb_value_int(chapter->hours),
+                "Minutes",  hb_value_int(chapter->minutes),
+                "Seconds",  hb_value_int(chapter->seconds)
+        );
         hb_value_array_append(chapter_list, chapter_dict);
     }
 

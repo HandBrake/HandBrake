@@ -76,6 +76,7 @@
 
 #include "hb.h"
 #include "callbacks.h"
+#include "chapters.h"
 #include "queuehandler.h"
 #include "audiohandler.h"
 #include "subtitlehandler.h"
@@ -89,7 +90,6 @@
 #include "appcast.h"
 #include "hb-backend.h"
 #include "ghb-dvd.h"
-#include "ghbcellrenderertext.h"
 #include "libavutil/parseutils.h"
 
 static void update_queue_labels(signal_user_data_t *ud);
@@ -4611,182 +4611,6 @@ show_presets_action_cb(GSimpleAction *action, GVariant *value,
 
     g_simple_action_set_state(action, value);
     presets_window_set_visible(ud, state);
-}
-
-static void
-chapter_refresh_list_row_ui(
-    GtkTreeModel *tm,
-    GtkTreeIter *ti,
-    GhbValue *chapter_list,
-    const hb_title_t *title,
-    int index)
-{
-    const gchar *chapter;
-    gchar *s_duration, *s_start;
-    gint hh, mm, ss;
-    gint64 duration, start;
-
-    // Update row with settings data
-    g_debug("Updating chapter row ui");
-    chapter = ghb_dict_get_string(ghb_array_get(chapter_list, index), "Name");
-    duration = ghb_get_chapter_duration(title, index) / 90000;
-    ghb_break_duration(duration, &hh, &mm, &ss);
-    s_duration = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
-    start = ghb_get_chapter_start(title, index) / 90000;
-    ghb_break_duration(start, &hh, &mm, &ss);
-    s_start = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
-    gtk_list_store_set(GTK_LIST_STORE(tm), ti,
-        0, index+1,
-        1, s_start,
-        2, s_duration,
-        3, chapter,
-        4, TRUE,
-        -1);
-    g_free(s_duration);
-    g_free(s_start);
-}
-
-static void
-ghb_clear_chapter_list_ui(GtkBuilder *builder)
-{
-    GtkTreeView *tv;
-    GtkListStore *ts;
-
-    tv = GTK_TREE_VIEW(GHB_WIDGET(builder, "chapters_list"));
-    ts = GTK_LIST_STORE(gtk_tree_view_get_model(tv));
-    gtk_list_store_clear(ts);
-}
-
-static void
-chapter_refresh_list_ui(signal_user_data_t *ud)
-{
-    GhbValue *chapter_list;
-    gint ii, count, tm_count;
-    GtkTreeView  *tv;
-    GtkTreeModel *tm;
-    GtkTreeIter   ti;
-    int title_id, titleindex;
-    const hb_title_t *title;
-
-    tv = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "chapters_list"));
-    tm = gtk_tree_view_get_model(tv);
-
-    tm_count = gtk_tree_model_iter_n_children(tm, NULL);
-
-    title_id = ghb_dict_get_int(ud->settings, "title");
-    title = ghb_lookup_title(title_id, &titleindex);
-    chapter_list = ghb_get_job_chapter_list(ud->settings);
-    count = ghb_array_len(chapter_list);
-    if (count != tm_count)
-    {
-        ghb_clear_chapter_list_ui(ud->builder);
-        for (ii = 0; ii < count; ii++)
-        {
-            gtk_list_store_append(GTK_LIST_STORE(tm), &ti);
-        }
-    }
-    for (ii = 0; ii < count; ii++)
-    {
-        gtk_tree_model_iter_nth_child(tm, &ti, NULL, ii);
-        chapter_refresh_list_row_ui(tm, &ti, chapter_list, title, ii);
-    }
-}
-
-void
-ghb_chapter_list_refresh_all(signal_user_data_t *ud)
-{
-    chapter_refresh_list_ui(ud);
-}
-
-static guint chapter_edit_key = 0;
-
-G_MODULE_EXPORT gboolean
-chapter_keypress_cb(
-    GtkCellRendererText *cell,
-    GdkEvent *event,
-    signal_user_data_t *ud)
-{
-    ghb_event_get_keyval(event, &chapter_edit_key);
-    return FALSE;
-}
-
-G_MODULE_EXPORT void
-chapter_edited_cb(
-    GtkCellRendererText *cell,
-    gchar *path,
-    gchar *text,
-    signal_user_data_t *ud)
-{
-    GtkTreePath *treepath;
-    GtkListStore *store;
-    GtkTreeView *treeview;
-    GtkTreeIter iter;
-    gint index;
-    gint *pi;
-    gint row;
-
-    g_debug("chapter_edited_cb ()");
-    g_debug("path (%s)", path);
-    g_debug("text (%s)", text);
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "chapters_list"));
-    store = GTK_LIST_STORE(gtk_tree_view_get_model(treeview));
-    treepath = gtk_tree_path_new_from_string (path);
-    pi = gtk_tree_path_get_indices(treepath);
-    row = pi[0];
-    gtk_tree_model_get_iter(GTK_TREE_MODEL(store), &iter, treepath);
-    gtk_list_store_set(store, &iter,
-        3, text,
-        4, TRUE,
-        -1);
-    gtk_tree_model_get(GTK_TREE_MODEL(store), &iter, 0, &index, -1);
-
-    const GhbValue *chapters;
-    GhbValue *chapter;
-
-    chapters = ghb_get_job_chapter_list(ud->settings);
-    chapter = ghb_array_get(chapters, index-1);
-    ghb_dict_set_string(chapter, "Name", text);
-    if ((chapter_edit_key == GDK_KEY_Return || chapter_edit_key == GDK_KEY_Down) &&
-        gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter))
-    {
-        GtkTreeViewColumn *column;
-
-        gtk_tree_path_next(treepath);
-        // When a cell has been edited, I want to advance to the
-        // next cell and start editing it automatically.
-        // Unfortunately, we may not be in a state here where
-        // editing is allowed.  This happens when the user selects
-        // a new cell with the mouse instead of just hitting enter.
-        // Some kind of Gtk quirk.  widget_editable==NULL assertion.
-        // Editing is enabled again once the selection event has been
-        // processed.  So I'm queueing up a callback to be called
-        // when things go idle.  There, I will advance to the next
-        // cell and initiate editing.
-        //
-        // Now, you might be asking why I don't catch the keypress
-        // event and determine what action to take based on that.
-        // The Gtk developers in their infinite wisdom have made the
-        // actual GtkEdit widget being used a private member of
-        // GtkCellRendererText, so it can not be accessed to hang a
-        // signal handler off of.  And they also do not propagate the
-        // keypress signals in any other way.  So that information is lost.
-        //g_idle_add((GSourceFunc)next_cell, ud);
-        //
-        // Keeping the above comment for posterity.
-        // I got industrious and made my own CellTextRendererText that
-        // passes on the key-press-event. So now I have much better
-        // control of this.
-        column = gtk_tree_view_get_column(treeview, 3);
-        gtk_tree_view_set_cursor(treeview, treepath, column, TRUE);
-    }
-    else if (chapter_edit_key == GDK_KEY_Up && row > 0)
-    {
-        GtkTreeViewColumn *column;
-        gtk_tree_path_prev(treepath);
-        column = gtk_tree_view_get_column(treeview, 3);
-        gtk_tree_view_set_cursor(treeview, treepath, column, TRUE);
-    }
-    gtk_tree_path_free (treepath);
 }
 
 void

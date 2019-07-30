@@ -51,7 +51,6 @@
 #include "renderer_button.h"
 #include "hb-backend.h"
 #include "ghb-dvd.h"
-#include "ghbcellrenderertext.h"
 #include "values.h"
 #include "icons.h"
 #include "callbacks.h"
@@ -198,56 +197,6 @@ change_font(GtkWidget *widget, gpointer data)
 }
     //gtk_container_foreach((GtkContainer*)window, change_font, "sans 20");
 #endif
-
-extern G_MODULE_EXPORT void chapter_edited_cb(void);
-extern G_MODULE_EXPORT void chapter_keypress_cb(void);
-
-// Create and bind the tree model to the tree view for the chapter list
-// Also, connect up the signal that lets us know the selection has changed
-static void
-bind_chapter_tree_model(signal_user_data_t *ud)
-{
-    GtkCellRenderer *cell;
-    GtkTreeViewColumn *column;
-    GtkListStore *treestore;
-    GtkTreeView  *treeview;
-
-    g_debug("bind_chapter_tree_model()\n");
-    treeview = GTK_TREE_VIEW(GHB_WIDGET(ud->builder, "chapters_list"));
-    treestore = gtk_list_store_new(5, G_TYPE_INT, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN);
-    gtk_tree_view_set_model(treeview, GTK_TREE_MODEL(treestore));
-
-#if GTK_CHECK_VERSION(3, 90, 0)
-    cell = gtk_cell_renderer_text_new();
-#else
-    cell = ghb_cell_renderer_text_new();
-#endif
-    column = gtk_tree_view_column_new_with_attributes(
-                                    _("Index"), cell, "text", 0, NULL);
-    gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-
-    cell = ghb_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(
-                                    _("Start"), cell, "text", 1, NULL);
-    gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-
-    cell = ghb_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(
-                                    _("Duration"), cell, "text", 2, NULL);
-    gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-
-    cell = ghb_cell_renderer_text_new();
-    column = gtk_tree_view_column_new_with_attributes(
-                    _("Title"), cell, "text", 3, "editable", 4, NULL);
-    gtk_tree_view_append_column(treeview, GTK_TREE_VIEW_COLUMN(column));
-
-#if GTK_CHECK_VERSION(3, 90, 0)
-#else
-    g_signal_connect(cell, "key-press-event", chapter_keypress_cb, ud);
-#endif
-    g_signal_connect(cell, "edited", chapter_edited_cb, ud);
-    g_debug("Done\n");
-}
 
 extern G_MODULE_EXPORT void audio_list_selection_changed_cb(void);
 extern G_MODULE_EXPORT void audio_edit_clicked_cb(void);
@@ -1121,7 +1070,7 @@ ghb_activate_cb(GApplication * app, signal_user_data_t * ud)
     bind_audio_tree_model(ud);
     bind_subtitle_tree_model(ud);
     bind_presets_tree_model(ud);
-    bind_chapter_tree_model(ud);
+
     // Connect up the signals to their callbacks
     // I wrote my own connector so that I could pass user data
     // to the callbacks.  Builder's standard autoconnect doesn't all this.

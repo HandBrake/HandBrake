@@ -69,6 +69,8 @@ ghb_SOURCES = \
 	ghbcompat.h \
 	callbacks.c \
 	callbacks.h \
+	chapters.c \
+	chapters.h \
 	queuehandler.c \
 	queuehandler.h \
 	videohandler.c \
@@ -107,8 +109,6 @@ ghb_SOURCES = \
 	hb-backend.h \
 	renderer_button.h \
 	renderer_button.c \
-	ghbcellrenderertext.c \
-	ghbcellrenderertext.h \
 	ghb-dvd.c \
 	ghb-dvd.h \
 	marshalers.c \
@@ -185,8 +185,6 @@ widget.deps: makedeps.py
 
 fr.handbrake.ghb.appdata.xml.in: fr.handbrake.ghb.appdata.xml.template
 	sed -e 's^RELEASE_TAG^<release version="$(HB.version)" date="$(word 1,$(HB.repo.date))" />^' $< > $@
-
-ghbcellrenderertext.$(OBJEXT): marshalers.h
 
 $(srcdir)/marshalers.h: marshalers.list
 	glib-genmarshal --prefix=ghb_marshal $(srcdir)/marshalers.list --header > $(srcdir)/marshalers.h
