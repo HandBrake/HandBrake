@@ -618,7 +618,8 @@ typedef void (^HBCoreCleanupHandler)(void);
 
         self.progressHandler(self.state, progress, info);
 
-        if (self.progress.completedUnitCount < progress.percent * 100)
+        if (state.state != HB_STATE_SEARCHING &&
+            self.progress.completedUnitCount < progress.percent * 100)
         {
             self.progress.completedUnitCount = progress.percent * 100;
         }
