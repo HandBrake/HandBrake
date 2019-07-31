@@ -29,6 +29,7 @@
 #include "hb.h"
 #include "settings.h"
 #include "jobdict.h"
+#include "titledict.h"
 #include "hb-backend.h"
 #include "values.h"
 #include "callbacks.h"
@@ -1915,16 +1916,17 @@ queue_add(signal_user_data_t *ud, GhbValue *settings, gint batch)
 
     ghb_finalize_job(settings);
 
+    GhbValue *titleDict  = ghb_get_title_settings(settings);
     GhbValue *jobDict    = ghb_get_job_settings(settings);
-    GhbValue *sourceDict = ghb_get_job_source_settings(settings);
-    GhbValue *queueDict  = ghb_dict_new();
     GhbValue *uiDict     = ghb_value_dup(settings);
+
     ghb_dict_remove(uiDict, "Job");
-    int       title_id   = ghb_dict_get_int(sourceDict, "Title");
-    GhbValue *titleDict  = ghb_get_title_dict(title_id);
+    ghb_dict_remove(uiDict, "Title");
+
+    GhbValue *queueDict  = ghb_dict_new();
     ghb_dict_set(queueDict, "uiSettings", uiDict);
     ghb_dict_set(queueDict, "Job", ghb_value_dup(jobDict));
-    ghb_dict_set(queueDict, "Title", titleDict);
+    ghb_dict_set(queueDict, "Title", ghb_value_dup(titleDict));
 
     // Copy current prefs into settings
     // The job should run with the preferences that existed
@@ -2560,6 +2562,8 @@ queue_edit_action_cb(GSimpleAction *action, GVariant *param,
         ghb_queue_edit_settings = ghb_value_dup(uiDict);
         ghb_dict_set(ghb_queue_edit_settings,
                      "Job", ghb_value_dup(ghb_dict_get(queueDict, "Job")));
+        ghb_dict_set(ghb_queue_edit_settings,
+                     "Title", ghb_value_dup(ghb_dict_get(queueDict, "Title")));
         status = ghb_dict_get_int(uiDict, "job_status");
         if (status == GHB_QUEUE_PENDING)
         {

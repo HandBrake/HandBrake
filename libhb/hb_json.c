@@ -397,6 +397,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
             "LanguageCode",      hb_value_string(audio->config.lang.iso639_2),
             "Attributes",        attributes,
             "Codec",             hb_value_int(audio->config.in.codec),
+            "CodecParam",        hb_value_int(audio->config.in.codec_param),
             "CodecName",         hb_value_string(codec_name),
             "SampleRate",        hb_value_int(audio->config.in.samplerate),
             "BitRate",           hb_value_int(audio->config.in.bitrate),
@@ -408,6 +409,10 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
         {
             hb_error("json pack failure: %s", error.text);
             return NULL;
+        }
+        if (audio->config.in.name != NULL)
+        {
+            hb_dict_set_string(audio_dict, "Name", audio->config.in.name);
         }
         hb_value_array_append(audio_list, audio_dict);
     }
@@ -840,8 +845,7 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
             "CompressionLevel",     hb_value_double(audio->config.out.compression_level));
         if (audio->config.out.name != NULL)
         {
-            hb_dict_set(audio_dict, "Name",
-                        hb_value_string(audio->config.out.name));
+            hb_dict_set_string(audio_dict, "Name", audio->config.out.name);
         }
 
         hb_value_array_append(audio_list, audio_dict);
@@ -1690,6 +1694,19 @@ char* hb_job_init_json(hb_handle_t *h, int title_index)
     hb_job_t *job = hb_job_init_by_index(h, title_index);
     char *json_job = hb_job_to_json(job);
     hb_job_close(&job);
+    return json_job;
+}
+
+char* hb_preset_job_init_json(hb_handle_t *h, int title_index,
+                              const char *json_preset)
+{
+    hb_dict_t * preset   = hb_value_json(json_preset);
+    hb_dict_t * job      = hb_preset_job_init(h, title_index, preset);
+    char      * json_job = hb_value_get_json(job);
+
+    hb_value_free(&preset);
+    hb_value_free(&job);
+
     return json_job;
 }
 

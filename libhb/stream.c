@@ -5192,7 +5192,8 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 {
     AVStream *st                = stream->ffmpeg_ic->streams[id];
     AVCodecParameters *codecpar = st->codecpar;
-    AVDictionaryEntry *tag      = av_dict_get(st->metadata, "language", NULL, 0);
+    AVDictionaryEntry *tag_lang = av_dict_get(st->metadata, "language", NULL, 0);
+    AVDictionaryEntry *tag_name = av_dict_get(st->metadata, "title", NULL, 0);
 
     hb_audio_t *audio              = calloc(1, sizeof(*audio));
     audio->id                      = id;
@@ -5274,7 +5275,11 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
     }
 
     set_audio_description(audio,
-                          lang_for_code2(tag != NULL ? tag->value : "und"));
+                          lang_for_code2(tag_lang != NULL ? tag_lang->value : "und"));
+    if (tag_name != NULL)
+    {
+        audio->config.in.name = strdup(tag_name->value);
+    }
     hb_list_add(title->list_audio, audio);
 }
 

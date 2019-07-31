@@ -857,6 +857,7 @@ struct hb_audio_config_s
                                     * These samples should be dropped
                                     * when decoding */
         PRIVATE hb_rational_t timebase;
+        PRIVATE char * name;
     } in;
 
     struct

@@ -1268,19 +1268,17 @@ ghb_grey_combo_options(signal_user_data_t *ud)
     acodec = ghb_settings_audio_encoder_codec(ud->settings, "AudioEncoder");
 
     gint64 layout = aconfig != NULL ? aconfig->in.channel_layout : ~0;
+    guint32 in_codec = aconfig != NULL ? aconfig->in.codec : 0;
     fallback = ghb_select_fallback(ud->settings, acodec);
     gint copy_mask = ghb_get_copy_mask(ud->settings);
-    acodec = ghb_select_audio_codec(mux->format, aconfig, acodec,
+    acodec = ghb_select_audio_codec(mux->format, in_codec, acodec,
                                     fallback, copy_mask);
     grey_mix_opts(ud, acodec, layout);
 }
 
 gint
-ghb_get_best_mix(hb_audio_config_t *aconfig, gint acodec, gint mix)
+ghb_get_best_mix(uint64_t layout, gint acodec, gint mix)
 {
-    gint layout;
-    layout = aconfig ? aconfig->in.channel_layout : AV_CH_LAYOUT_5POINT1;
-
     if (mix == HB_AMIXDOWN_NONE)
         mix = HB_INVALID_AMIXDOWN;
 

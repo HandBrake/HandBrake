@@ -4644,6 +4644,10 @@ hb_audio_t *hb_audio_copy(const hb_audio_t *src)
         {
             audio->config.out.name = strdup(src->config.out.name);
         }
+        if ( src->config.in.name )
+        {
+            audio->config.in.name = strdup(src->config.in.name);
+        }
     }
     return audio;
 }
@@ -4681,6 +4685,7 @@ void hb_audio_close( hb_audio_t **audio )
 {
     if ( audio && *audio )
     {
+        free((*audio)->config.in.name);
         free((*audio)->config.out.name);
         free(*audio);
         *audio = NULL;
