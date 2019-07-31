@@ -1939,7 +1939,7 @@ static inline void copy_chapter( hb_buffer_t * dst, hb_buffer_t * src )
  * Performs the work object's specific work function.
  * Loops calling work function for associated work object. Sleeps when fifo is full.
  * Monitors work done indicator.
- * Exits loop when work indiactor is set.
+ * Exits loop when work indicator is set.
  * @param _w Handle to work object.
  */
 void hb_work_loop( void * _w )

@@ -191,7 +191,7 @@ static void blend( hb_buffer_t *dst, hb_buffer_t *src, int left, int top )
 // applies subtitle 'sub' YUVA420P buffer into destination 'buf'
 // 'buf' is currently YUV420P, but in future will be other formats as well
 // Assumes that the input destination buffer has the same dimensions
-// as the original title diminsions
+// as the original title dimensions
 static void ApplySub( hb_filter_private_t * pv, hb_buffer_t * buf, hb_buffer_t * sub )
 {
     blend( buf, sub, sub->f.x, sub->f.y );
@@ -339,7 +339,7 @@ static hb_buffer_t * ScaleSubtitle(hb_filter_private_t *pv,
 }
 
 // Assumes that the input buffer has the same dimensions
-// as the original title diminsions
+// as the original title dimensions
 static void ApplyVOBSubs( hb_filter_private_t * pv, hb_buffer_t * buf )
 {
     int ii;

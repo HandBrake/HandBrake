@@ -215,7 +215,7 @@
 @end
 
 
-#pragma mark - Value Trasformers
+#pragma mark - Value Transformers
 
 @implementation HBVideoEncoderTransformer
 

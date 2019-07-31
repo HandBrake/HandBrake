@@ -424,7 +424,7 @@ static int decssaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
     }
 
     // Not much to do here.  ffmpeg already supplies SSA subtitles in the
-    // requried matroska packet format.
+    // required matroska packet format.
     //
     // We require string termination of the buffer
     hb_buffer_realloc(in, ++in->size);

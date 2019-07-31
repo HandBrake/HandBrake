@@ -1143,7 +1143,7 @@ void hb_set_anamorphic_size2(hb_geometry_t *src_geo,
     hb_limit_rational64(&dst_par_num, &dst_par_den,
                         dst_par_num, dst_par_den, 65535);
 
-    // If the user is directling updating PAR, don't override his values.
+    // If the user is directing updating PAR, don't override his values.
     // I.e. don't even reduce the values.
     hb_reduce(&out_par.num, &out_par.den, dst_par_num, dst_par_den);
     if (geo->mode == HB_ANAMORPHIC_CUSTOM && !keep_display_aspect &&

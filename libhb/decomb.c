@@ -1100,7 +1100,7 @@ static int hb_decomb_init( hb_filter_object_t * filter,
             if( !pv->cx2 || !pv->cy2 || !pv->cxy || !pv->tmpc )
                 hb_error("EEDI2: failed to malloc derivative arrays");
             else
-                hb_log("EEDI2: successfully mallloced derivative arrays");
+                hb_log("EEDI2: successfully malloced derivative arrays");
         }
 
         for( ii = 0; ii < 3; ii++ )

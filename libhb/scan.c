@@ -735,7 +735,7 @@ static int DecodePreviews( hb_scan_t * data, hb_title_t * title, int flush )
                     // There are 2 conditions we decode additional
                     // video frames for during scan.
                     // 1. We did not detect IDR frames, so the initial video
-                    //    frames may be corrupt.  We docode extra frames to
+                    //    frames may be corrupt.  We decode extra frames to
                     //    increase the probability of a complete preview frame
                     // 2. Some frames do not contain CC data, even though
                     //    CCs are present in the stream.  So we need to decode

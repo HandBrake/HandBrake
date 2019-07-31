@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithCore:(HBCore *)core job:(HBJob *)job NS_DESIGNATED_INITIALIZER;
 
 /**
- * Wait until all the asyncronous operations are done.
+ * Wait until all the asynchronous operations are done.
  */
 - (void)invalidate;
 

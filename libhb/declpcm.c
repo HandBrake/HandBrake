@@ -23,7 +23,7 @@ struct hb_work_private_s
     int         scr_sequence;
 
     /* the following is frame info for the frame we're currently accumulating */
-    uint64_t    duration;   /* frame duratin (in 90KHz ticks) */
+    uint64_t    duration;   /* frame duration (in 90KHz ticks) */
     uint32_t    offset;     /* where in buf frame starts */
     uint32_t    samplerate; /* sample rate in bits/sec */
     uint8_t     nchannels;

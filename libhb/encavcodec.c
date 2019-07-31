@@ -749,7 +749,7 @@ static void compute_dts_offset( hb_work_private_t * pv, hb_buffer_t * buf )
 //
 // Where pts0 - ptsN are in decoded monotonically increasing presentation
 // order and delay == pts1 (1 being the number of frames the decoder must
-// delay before it has suffecient information to decode). The number of
+// delay before it has sufficient information to decode). The number of
 // frames to delay is set by job->areBframes, so it is configurable.
 // This guarantees that DTS <= PTS for any frame.
 //

@@ -7,10 +7,10 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
  
-// Used to order a sequeunce of metrics for median filtering
+// Used to order a sequence of metrics for median filtering
 void eedi2_sort_metrics( int *order, const int length );
 
-// Aping some Windows API funcctions AviSynth seems to like
+// Aping some Windows API functions AviSynth seems to like
 // Taken from here: http://www.gidforums.com/t-8543.html
 void *eedi2_aligned_malloc(size_t size, size_t align_size);
 void eedi2_aligned_free(void *ptr);

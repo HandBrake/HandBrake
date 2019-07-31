@@ -70,7 +70,7 @@ taskset_init( taskset_t *ts, int thread_count, size_t arg_size )
     memset(ts->task_threads_args, 0, ts->arg_size * ts->thread_count );
 
     /*
-     * Inialize bitmaps to all bits set.  This means that any unused bits
+     * Initialize bitmaps to all bits set.  This means that any unused bits
      * in the bitmap are already in the "condition satisfied" state allowing
      * us to test the bitmap 32bits at a time without having to mask off
      * the end.

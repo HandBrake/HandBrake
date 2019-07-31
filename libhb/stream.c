@@ -1537,7 +1537,7 @@ struct pts_pos {
 
 #define NDURSAMPLES 128
 
-// get one (position, timestamp) sampple from a transport or program
+// get one (position, timestamp) sample from a transport or program
 // stream.
 static struct pts_pos hb_sample_pts(hb_stream_t *stream, uint64_t fpos)
 {
@@ -1990,7 +1990,7 @@ static void pes_add_subtitle_to_title(
             break;
         default:
             // Unrecognized, don't add to list
-            hb_log("unregonized subtitle!");
+            hb_log("unrecognized subtitle!");
             free( subtitle );
             return;
     }
@@ -3843,7 +3843,7 @@ static void hb_ps_stream_find_streams(hb_stream_t *stream)
             else if ( pes_info.stream_id == 0xbd )
             {
                 int ssid = pes_info.bd_substream_id;
-                // Add a potentail audio stream
+                // Add a potential audio stream
                 // Check dvd substream id
                 if ( ssid >= 0x20 && ssid <= 0x37 )
                 {

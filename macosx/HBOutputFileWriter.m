@@ -26,7 +26,7 @@
                                                                  error:&error];
         if (!result)
         {
-            [HBUtilities writeToActivityLog:"Error: coudln't open activity log file, %@", error];
+            [HBUtilities writeToActivityLog:"Error: couldn't open activity log file, %@", error];
             return nil;
         }
 

@@ -1931,7 +1931,7 @@ int hb_mixdown_has_remix_support(int mixdown, uint64_t layout)
                     (layout & AV_CH_LAYOUT_SURROUND) == AV_CH_LAYOUT_SURROUND);
 
         // stereo + either of side or back left/right, back center
-        // also, allow Dolby Surrounbd output if the input is already Dolby
+        // also, allow Dolby Surround output if the input is already Dolby
         case HB_AMIXDOWN_DOLBY:
         case HB_AMIXDOWN_DOLBYPLII:
             return ((layout & AV_CH_LAYOUT_2_1) == AV_CH_LAYOUT_2_1 ||

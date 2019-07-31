@@ -409,7 +409,7 @@ static int muxWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
             if ( mf_full( track ) )
             {
                 // If the track's fifo is still full, advance
-                // the currint interleave point and try again.
+                // the current interleave point and try again.
                 hb_bitvec_cpy(mux->rdy, mux->allRdy);
                 break;
             }

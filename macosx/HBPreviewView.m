@@ -172,7 +172,7 @@
             backingScaleFactor = self.window.backingScaleFactor;
         }
         // HiDPI mode usually display everything
-        // with douple pixel count, but we don't
+        // with double pixel count, but we don't
         // want to double the size of the video
         NSSize imageScaledSize = NSMakeSize(imageSize.width / backingScaleFactor, imageSize.height / backingScaleFactor);
         NSSize frameSize = self.frame.size;
@@ -241,7 +241,7 @@
     if (self.window.backingScaleFactor != 1.0)
     {
         // HiDPI mode usually display everything
-        // with douple pixel count, but we don't
+        // with double pixel count, but we don't
         // want to double the size of the video
         imageSize.height /= self.window.backingScaleFactor;
         imageSize.width /= self.window.backingScaleFactor;

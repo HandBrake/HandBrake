@@ -19,7 +19,7 @@ struct hb_work_private_s
     // all the packets we see until libav returns a subtitle with
     // the information we need.
     hb_buffer_list_t list_pass;
-    // It is possible for multiple subtitles to be enncapsulated in
+    // It is possible for multiple subtitles to be encapsulated in
     // one packet.  This won't happen for PGS subs, but may for other
     // types of subtitles.  Since I plan to generalize this code to handle
     // other than PGS, we will need to keep a list of all subtitles seen

@@ -100,7 +100,7 @@ NSString * const HBQueueAutoClearCompletedItems  = @"HBQueueAutoClearCompletedIt
         }];
 
     // Overwrite the update check interval because previous versions
-    // could be set to a dayly check.
+    // could be set to a daily check.
     NSUInteger week = 60 * 60 * 24 * 7;
     [[NSUserDefaults standardUserDefaults] setObject:@(week) forKey:@"SUScheduledCheckInterval"];
 }

@@ -77,10 +77,10 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 /**
- * HBIsoLanguageTrasformer is a trasformer to transform
+ * HBIsoLanguageTransformer is a transformer to transform
  * a ISO 639/2 code to a human readable language name.
  */
-@interface HBIsoLanguageTrasformer : NSValueTransformer
+@interface HBIsoLanguageTransformer : NSValueTransformer
 @end
 
 NS_ASSUME_NONNULL_END

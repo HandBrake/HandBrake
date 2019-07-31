@@ -391,9 +391,9 @@ fail:
 
 @end
 
-#pragma mark - Value Trasformers
+#pragma mark - Value Transformers
 
-@implementation HBIsoLanguageTrasformer
+@implementation HBIsoLanguageTransformer
 
 + (Class)transformedValueClass
 {
