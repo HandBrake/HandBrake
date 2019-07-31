@@ -2153,7 +2153,7 @@ static void hb_init_subtitle_list(hb_stream_t *stream, hb_title_t *title)
             break;
     }
 
-    int count = hb_list_count( title->list_audio );
+    int count = hb_list_count( title->list_subtitle );
     // Now add the reset.  Sort them by stream id.
     for ( ii = 0; ii < stream->pes.count; ii++ )
     {
