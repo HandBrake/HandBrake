@@ -9,19 +9,25 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System.Windows;
     using System.Windows.Controls;
 
     /// <summary>
     /// Interaction logic for SubtitlesDefaultsView.xaml
     /// </summary>
-    public partial class SubtitlesDefaultsView : UserControl
+    public partial class SubtitlesDefaultsView : Window
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SubtitlesDefaultsView"/> class.
         /// </summary>
         public SubtitlesDefaultsView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+        }
+
+        private void Apply_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

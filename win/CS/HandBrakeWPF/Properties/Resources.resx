@@ -770,7 +770,7 @@ Would you like to overwrite it?</value>
     <value>Dimensions:</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>Choose Behaviors:</value>
+    <value>Source Track Selection</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
     <value>Allow passthru of:</value>
@@ -1381,13 +1381,6 @@ Would you like to overwrite it?</value>
   <data name="PictureSettingsView_Width" xml:space="preserve">
     <value>Width:</value>
   </data>
-  <data name="Preset_AudioDefaults_SubText" xml:space="preserve">
-    <value>Change the behaviour of the audio track selection for this preset.  
-This will not affect your current settings in the Audio tab.</value>
-  </data>
-  <data name="Preset_AudioDefaults_Title" xml:space="preserve">
-    <value>Audio Defaults</value>
-  </data>
   <data name="Preset_Custom" xml:space="preserve">
     <value>Custom</value>
   </data>
@@ -1399,13 +1392,6 @@ This will not affect your current settings in the Audio tab.</value>
   </data>
   <data name="Preset_Official" xml:space="preserve">
     <value>Official</value>
-  </data>
-  <data name="Preset_SubtitleDefaults_SubText" xml:space="preserve">
-    <value>Change the behaviour of the subtitle track selection for this preset.  
-This will not affect your current settings in the Subtitle tab.</value>
-  </data>
-  <data name="Preset_SubtitleDefaults_Title" xml:space="preserve">
-    <value>Subtitle Defaults</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
     <value>Choose titles:</value>
@@ -1555,7 +1541,7 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Choose Languages:</value>
   </data>
   <data name="Shared_ChosenLangages" xml:space="preserve">
-    <value>Chosen Languages:</value>
+    <value>Selected Languages:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
     <value>Configure Default Behaviours</value>
@@ -1762,7 +1748,7 @@ This will not affect your current settings in the Subtitle tab.</value>
     <value>Add Track</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>Automatically add Tracks</value>
+    <value>Audio encoder settings for each chosen track:</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
     <value>Clear</value>
@@ -1993,9 +1979,6 @@ Where supported, any user presets will have been imported.</value>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
     <value>Perform action immediately. (This will disable the 60 second confirmation dialog)</value>
   </data>
-  <data name="AudioDefaultViewModel_EncoderOptionsNotice" xml:space="preserve">
-    <value>When a passthru encoder is selected, the encoder options will be used for the fallback encoder.</value>
-  </data>
   <data name="Browse" xml:space="preserve">
     <value>Browse</value>
   </data>
@@ -2028,5 +2011,11 @@ Where supported, any user presets will have been imported.</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
     <value>Remaining drive storage has dropped below {0} GB on the destination drive. Pausing encode...</value>
+  </data>
+  <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Configure Automatic Audio Selections</value>
+  </data>
+  <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
+    <value>Configure Automatic Subtitle Selections</value>
   </data>
 </root>

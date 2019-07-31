@@ -755,9 +755,6 @@ Soll sie überschrieben werden?</value>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
     <value>Bildgröße:</value>
   </data>
-  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>Verhalten wählen:</value>
-  </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
     <value>Passthru erlauben von:</value>
   </data>
@@ -1752,9 +1749,6 @@ Dies beeinflusst nicht die momentanen Einstellungen im Untertitel-Tab. </value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
     <value>Spur hinzufügen</value>
-  </data>
-  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>Spuren automatisch hinzufügen</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
     <value>Löschen</value>

@@ -769,9 +769,6 @@ Souhaitez-vous l'écraser ?</value>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
     <value>Dimensions:</value>
   </data>
-  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>Choisir des comportements:</value>
-  </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
     <value>Autoriser le passthru de:</value>
   </data>
@@ -1766,9 +1763,6 @@ Cela n’affectera pas vos paramètres actuels dans l’onglet Sous-titres.</val
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
     <value>Ajouter une piste</value>
-  </data>
-  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>Ajouter automatiquement des pistes</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
     <value>Nettoyer</value>

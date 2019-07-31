@@ -759,9 +759,6 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
     <value>尺寸：</value>
   </data>
-  <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>选择行为：</value>
-  </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
     <value>允许 Passthru：</value>
   </data>
@@ -1756,9 +1753,6 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
     <value>添加轨道</value>
-  </data>
-  <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>自动添加轨道</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
     <value>明白</value>

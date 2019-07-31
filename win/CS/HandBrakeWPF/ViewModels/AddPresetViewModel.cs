@@ -27,6 +27,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
     using PresetPictureSettingsMode = HandBrakeWPF.Model.Picture.PresetPictureSettingsMode;
@@ -306,14 +307,12 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void EditAudioDefaults()
         {
-            IPopupWindowViewModel popup = new PopupWindowViewModel(this.audioDefaultsViewModel, Resources.Preset_AudioDefaults_Title, Resources.Preset_AudioDefaults_SubText, null);
-            if (this.windowManager.ShowDialog(popup) == true)
+            AudioDefaultsView view = new AudioDefaultsView();
+            view.DataContext = this.audioDefaultsViewModel;
+
+            if (view.ShowDialog() == true)
             {
                 this.Preset.AudioTrackBehaviours = this.audioDefaultsViewModel.AudioBehaviours.Clone();
-            }
-            else
-            {
-                // Handle other case(s)
             }
         }
 
@@ -322,16 +321,13 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void EditSubtitleDefaults()
         {
-            IPopupWindowViewModel popup = new PopupWindowViewModel(this.subtitlesDefaultsViewModel, Resources.Preset_SubtitleDefaults_Title, Resources.Preset_SubtitleDefaults_SubText, null);
-            
-            if (this.windowManager.ShowDialog(popup) == true)
+            SubtitlesDefaultsView view = new SubtitlesDefaultsView();
+            view.DataContext = this.subtitlesDefaultsViewModel;
+
+            if (view.ShowDialog() == true)
             {
                 this.Preset.SubtitleTrackBehaviours = this.subtitlesDefaultsViewModel.SubtitleBehaviours.Clone();
             }
-            else
-            {
-                // Handle other case(s)
-            }     
         }
 
         /// <summary>

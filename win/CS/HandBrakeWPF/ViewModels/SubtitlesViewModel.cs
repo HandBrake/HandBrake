@@ -27,6 +27,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     using Microsoft.Win32;
 
@@ -453,8 +454,10 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ShowSubtitleDefaultsPanel()
         {
-            IPopupWindowViewModel popup = new PopupWindowViewModel(this.SubtitleDefaultsViewModel, Resources.Preset_SubtitleDefaults_Title, Resources.SubtitleView_SubtitleDefaultsDescription, Resources.Generic_Apply);
-            if (this.windowManager.ShowDialog(popup) == true)
+            SubtitlesDefaultsView view = new SubtitlesDefaultsView();
+            view.DataContext = this.SubtitleDefaultsViewModel;
+
+            if (view.ShowDialog() == true)
             {
                 this.OnTabStatusChanged(null);
             }

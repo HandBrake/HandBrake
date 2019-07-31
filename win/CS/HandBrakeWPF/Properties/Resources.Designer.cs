@@ -230,7 +230,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Automatically add Tracks.
+        ///   Looks up a localized string similar to Audio encoder settings for each chosen track:.
         /// </summary>
         public static string AudioDefaultsView_AutoAddTracks {
             get {
@@ -248,20 +248,20 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose Behaviors:.
+        ///   Looks up a localized string similar to Configure Automatic Audio Selections.
         /// </summary>
-        public static string AudioDefaultView_Behaviours {
+        public static string AudioDefaultsView_PaneTitle {
             get {
-                return ResourceManager.GetString("AudioDefaultView_Behaviours", resourceCulture);
+                return ResourceManager.GetString("AudioDefaultsView_PaneTitle", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When a passthru encoder is selected, the encoder options will be used for the fallback encoder..
+        ///   Looks up a localized string similar to Source Track Selection.
         /// </summary>
-        public static string AudioDefaultViewModel_EncoderOptionsNotice {
+        public static string AudioDefaultView_Behaviours {
             get {
-                return ResourceManager.GetString("AudioDefaultViewModel_EncoderOptionsNotice", resourceCulture);
+                return ResourceManager.GetString("AudioDefaultView_Behaviours", resourceCulture);
             }
         }
         
@@ -3633,25 +3633,6 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change the behaviour of the audio track selection for this preset.  
-        ///This will not affect your current settings in the Audio tab..
-        /// </summary>
-        public static string Preset_AudioDefaults_SubText {
-            get {
-                return ResourceManager.GetString("Preset_AudioDefaults_SubText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Audio Defaults.
-        /// </summary>
-        public static string Preset_AudioDefaults_Title {
-            get {
-                return ResourceManager.GetString("Preset_AudioDefaults_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Custom.
         /// </summary>
         public static string Preset_Custom {
@@ -3705,25 +3686,6 @@ namespace HandBrakeWPF.Properties {
         public static string Preset_OldVersion_Message {
             get {
                 return ResourceManager.GetString("Preset_OldVersion_Message", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Change the behaviour of the subtitle track selection for this preset.  
-        ///This will not affect your current settings in the Subtitle tab..
-        /// </summary>
-        public static string Preset_SubtitleDefaults_SubText {
-            get {
-                return ResourceManager.GetString("Preset_SubtitleDefaults_SubText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Subtitle Defaults.
-        /// </summary>
-        public static string Preset_SubtitleDefaults_Title {
-            get {
-                return ResourceManager.GetString("Preset_SubtitleDefaults_Title", resourceCulture);
             }
         }
         
@@ -4562,7 +4524,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Chosen Languages:.
+        ///   Looks up a localized string similar to Selected Languages:.
         /// </summary>
         public static string Shared_ChosenLangages {
             get {
@@ -4900,6 +4862,15 @@ namespace HandBrakeWPF.Properties {
         public static string Subtitles_WebmSubtitleIncompatibilityHeader {
             get {
                 return ResourceManager.GetString("Subtitles_WebmSubtitleIncompatibilityHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure Automatic Subtitle Selections.
+        /// </summary>
+        public static string SubtitlesDefaultsView_PaneTitle {
+            get {
+                return ResourceManager.GetString("SubtitlesDefaultsView_PaneTitle", resourceCulture);
             }
         }
         

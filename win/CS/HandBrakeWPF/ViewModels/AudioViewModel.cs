@@ -29,6 +29,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Scan.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
+    using HandBrakeWPF.Views;
 
     using AudioEncoder = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoder;
     using AudioTrack = HandBrakeWPF.Services.Encode.Model.Models.AudioTrack;
@@ -225,8 +226,10 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ShowAudioDefaults()
         {
-            IPopupWindowViewModel popup = new PopupWindowViewModel(this.AudioDefaultsViewModel, Resources.Preset_AudioDefaults_Title, Resources.AudioView_AudioDefaultsDescription, Resources.Generic_Apply);
-            if (this.windowManager.ShowDialog(popup) == true)
+            AudioDefaultsView view = new AudioDefaultsView();
+            view.DataContext = this.AudioDefaultsViewModel;
+
+            if (view.ShowDialog() == true)
             {
                 this.OnTabStatusChanged(null);
             }

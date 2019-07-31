@@ -9,19 +9,25 @@
 
 namespace HandBrakeWPF.Views
 {
+    using System.Windows;
     using System.Windows.Controls;
 
     /// <summary>
     /// Interaction logic for AudioDefaultsView.xaml
     /// </summary>
-    public partial class AudioDefaultsView : UserControl
+    public partial class AudioDefaultsView : Window
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AudioDefaultsView"/> class.
         /// </summary>
         public AudioDefaultsView()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+        }
+
+        private void Apply_OnClick(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

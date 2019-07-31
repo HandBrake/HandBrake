@@ -17,6 +17,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model.Subtitles;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Presets.Model;
     using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
@@ -47,6 +48,8 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedLangaugesToMove = new BindingList<string>();
             this.availableLanguages = new BindingList<string>();
             this.SetupLanguages((Preset)null);
+
+            this.Title = Resources.SubtitlesViewModel_SubDefaults;
         }
 
         #endregion
@@ -78,6 +81,7 @@ namespace HandBrakeWPF.ViewModels
                 {
                     return;
                 }
+
                 this.subtitleBehaviours = value;
                 this.NotifyOfPropertyChange(() => this.SubtitleBehaviours);
             }

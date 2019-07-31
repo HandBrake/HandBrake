@@ -14,12 +14,14 @@ namespace HandBrakeWPF.ViewModels
     using System.ComponentModel;
     using System.Diagnostics;
     using System.Linq;
+    using System.Windows.Navigation;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Utilities;
 
     using HandBrakeWPF.Model.Audio;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Services.Presets.Model;
@@ -63,6 +65,8 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.Setup((Preset)null, task);
+
+            this.Title = Resources.AudioViewModel_AudioDefaults;
         }
 
         #endregion
@@ -513,7 +517,7 @@ namespace HandBrakeWPF.ViewModels
         {
             Process.Start("https://handbrake.fr/docs/en/1.2.0/advanced/audio-subtitle-defaults.html");
         }
-
+        
         #endregion
     }
 }
