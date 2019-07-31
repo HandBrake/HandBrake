@@ -2628,11 +2628,13 @@ ghb_set_title_settings(signal_user_data_t *ud, GhbValue *settings)
     ghb_subtitle_set_pref_lang(settings);
     if (title != NULL)
     {
-        GhbValue *job_dict;
+        GhbValue * job_dict, * title_dict;
         char     * label;
 
         job_dict = hb_preset_job_init(ghb_scan_handle(), title_id, settings);
         ghb_dict_set(settings, "Job", job_dict);
+        title_dict = hb_title_to_dict(ghb_scan_handle(), title_id);
+        ghb_dict_set(settings, "Title", title_dict);
 
         gint num_chapters = hb_list_count(title->list_chapter);
 
@@ -2762,6 +2764,9 @@ load_all_titles(signal_user_data_t *ud, int titleindex)
         count = 1;
 
     settings_array = ghb_array_new();
+
+    // Start with a clean job
+    ghb_dict_remove(ud->settings, "Job");
 
     preset = ghb_get_current_preset(ud);
     if (preset != NULL)

@@ -27,6 +27,7 @@
 #include "hb.h"
 #include "settings.h"
 #include "jobdict.h"
+#include "titledict.h"
 #include "hb-backend.h"
 #include "values.h"
 #include "callbacks.h"
@@ -61,6 +62,7 @@ ghb_sanitize_audio_settings(GhbValue *settings, GhbValue *asettings)
     // Sanitize codec
     const char        * mux_name;
     int                 title_id, mux, acodec, fallback, copy_mask, track;
+    uint32_t            in_codec = 0;
     hb_audio_config_t * aconfig;
     const hb_title_t  * title;
 
@@ -75,7 +77,11 @@ ghb_sanitize_audio_settings(GhbValue *settings, GhbValue *asettings)
     copy_mask = ghb_get_copy_mask(settings);
     track     = ghb_dict_get_int(asettings, "Track");
     aconfig   = ghb_get_audio_info(title, track);
-    acodec    = ghb_select_audio_codec(mux, aconfig, acodec,
+    if (aconfig != NULL)
+    {
+        in_codec = aconfig->in.codec;
+    }
+    acodec    = ghb_select_audio_codec(mux, in_codec, acodec,
                                        fallback, copy_mask);
     ghb_dict_set_string(asettings, "Encoder",
                         hb_audio_encoder_get_short_name(acodec));
@@ -115,25 +121,24 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud, GhbValue *asettings)
     {
         ghb_sanitize_audio_settings(ud->settings, asettings);
 
-        int track, title_id, mix, acodec;
-        const hb_title_t *title;
-        hb_audio_config_t *aconfig;
+        int track, mix, acodec;
+        GhbValue * atrack;
+        uint64_t layout;
 
-        title_id = ghb_dict_get_int(ud->settings, "title");
-        title = ghb_lookup_title(title_id, NULL);
         track = ghb_dict_get_int(asettings, "Track");
-        aconfig = ghb_get_audio_info(title, track);
 
         acodec = ghb_settings_audio_encoder_codec(asettings, "Encoder");
         mix = ghb_settings_mixdown_mix(asettings, "Mixdown");
 
         int low, high, sr;
         sr = ghb_dict_get_int(asettings, "Samplerate");
-        if (sr == 0 && aconfig != NULL)
+        atrack = ghb_get_title_audio_track(ud->settings, track);
+        if (sr == 0)
         {
-            sr = aconfig->in.samplerate;
+            sr = ghb_dict_get_int(atrack, "SampleRate");
         }
-        mix = ghb_get_best_mix(aconfig, acodec, mix);
+        layout = ghb_dict_get_int(atrack, "ChannelLayout");
+        mix = ghb_get_best_mix(layout, acodec, mix);
         hb_audio_bitrate_get_limits(acodec, sr, mix, &low, &high);
 
         GtkWidget *w = GHB_WIDGET(ud->builder, "AudioBitrate");
@@ -260,10 +265,8 @@ audio_deps(signal_user_data_t *ud, GhbValue *asettings, GtkWidget *widget)
 }
 
 gint
-ghb_select_audio_codec(gint mux, hb_audio_config_t *aconfig, gint acodec, gint fallback, gint copy_mask)
+ghb_select_audio_codec(gint mux, guint32 in_codec, gint acodec, gint fallback, gint copy_mask)
 {
-    guint32 in_codec = aconfig != NULL ? aconfig->in.codec : 0;
-
     if (acodec == HB_ACODEC_AUTO_PASS)
     {
         return hb_autopassthru_get_encoder(in_codec, copy_mask, fallback, mux);
@@ -509,7 +512,6 @@ ghb_get_user_audio_lang(GhbValue *settings, const hb_title_t *title, gint track)
 static GhbValue*
 audio_add_track(
     GhbValue *settings,
-    const hb_title_t *title,
     int track,
     int encoder,
     gdouble quality,
@@ -520,9 +522,8 @@ audio_add_track(
     gdouble gain)
 {
     GhbValue *asettings;
-    hb_audio_config_t *aconfig = NULL;
+    GhbValue *atrack;
 
-    aconfig = ghb_get_audio_info(title, track);
     asettings = ghb_dict_new();
 
     ghb_dict_set_int(asettings, "Track", track);
@@ -532,9 +533,16 @@ audio_add_track(
     ghb_dict_set_int(asettings, "Bitrate", bitrate);
     ghb_dict_set_int(asettings, "Samplerate", samplerate);
 
-    if (aconfig != NULL)
+    atrack = ghb_get_title_audio_track(settings, track);
+    if (atrack != NULL)
     {
-        mix = ghb_get_best_mix(aconfig, encoder, mix);
+        int layout = ghb_dict_get_int(atrack, "ChannelLayout");
+        const char * name = ghb_dict_get_string(atrack, "Name");
+        mix = ghb_get_best_mix(layout, encoder, mix);
+        if (name != NULL)
+        {
+            ghb_dict_set_string(asettings, "Name", name);
+        }
     }
     ghb_dict_set_string(asettings, "Mixdown", hb_mixdown_get_short_name(mix));
     ghb_dict_set_double(asettings, "DRC", drc);
@@ -602,9 +610,9 @@ audio_select_and_add_track(
         hb_audio_config_t *aconfig;
         aconfig = hb_list_audio_config_item(title->list_audio, track);
         select_acodec = ghb_select_audio_codec(
-                            mux->format, aconfig, acodec, fallback, copy_mask);
+                            mux->format, aconfig->in.codec, acodec, fallback, copy_mask);
 
-        asettings = audio_add_track(settings, title, track, select_acodec,
+        asettings = audio_add_track(settings, track, select_acodec,
                                     quality, bitrate,
                                     samplerate, mix, drc, gain);
     }
@@ -978,14 +986,10 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     {
         // Transition from passthru to not, put some audio settings back to
         // pref settings
-        int title_id;
-        const hb_title_t *title;
-        gint titleindex;
         gint track;
         gint br, sr, mix;
-
-        title_id = ghb_dict_get_int(ud->settings, "title");
-        title = ghb_lookup_title(title_id, &titleindex);
+        uint64_t layout;
+        GhbValue * atrack;
 
         if (asettings != NULL)
         {
@@ -1008,13 +1012,13 @@ audio_codec_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
         ghb_ui_update(ud, "AudioSamplerate",
             ghb_string_value(ghb_audio_samplerate_get_short_name(sr)));
 
-        hb_audio_config_t *aconfig;
-        aconfig = ghb_get_audio_info(title, track);
+        atrack = ghb_get_title_audio_track(ud->settings, track);
         if (sr == 0)
         {
-            sr = aconfig ? aconfig->in.samplerate : 48000;
+            sr = ghb_dict_get_int(atrack, "SampleRate");
         }
-        mix = ghb_get_best_mix( aconfig, acodec, mix);
+        layout = ghb_dict_get_int(atrack, "ChannelLayout");
+        mix = ghb_get_best_mix(layout, acodec, mix);
         br = hb_audio_bitrate_get_best(acodec, br, sr, mix);
         ghb_ui_update(ud, "AudioBitrate",
             ghb_string_value(ghb_audio_bitrate_get_short_name(br)));

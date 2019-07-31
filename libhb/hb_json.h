@@ -24,6 +24,8 @@ hb_dict_t  * hb_title_set_to_dict( const hb_title_set_t * title_set );
 char       * hb_get_title_set_json(hb_handle_t * h);
 char       * hb_title_to_json( hb_handle_t *h, int title_index );
 char       * hb_job_init_json(hb_handle_t *h, int title_index);
+char       * hb_preset_job_init_json(hb_handle_t *h, int title_index,
+                                     const char *json_preset);
 hb_job_t   * hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict );
 char       * hb_job_to_json(const hb_job_t * job);
 hb_job_t   * hb_json_to_job(hb_handle_t * h, const char * json_job);

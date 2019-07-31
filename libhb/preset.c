@@ -687,6 +687,10 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
                 hb_dict_set(audio_dict, "Name", hb_value_dup(
                     hb_dict_get(encoder_dict, "AudioTrackName")));
             }
+            else if (aconfig->in.name != NULL)
+            {
+                hb_dict_set_string(audio_dict, "Name", aconfig->in.name);
+            }
             if (!(out_codec & HB_ACODEC_PASS_FLAG))
             {
                 if (hb_dict_get(encoder_dict, "AudioTrackGainSlider") != NULL)
