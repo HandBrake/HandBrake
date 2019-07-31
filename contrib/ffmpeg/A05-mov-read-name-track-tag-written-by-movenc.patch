@@ -1,0 +1,65 @@
+From b6ce7b6a4ec0429069f05e63edce907c0f80aaea Mon Sep 17 00:00:00 2001
+From: John Stebbins <jstebbins@jetheaddev.com>
+Date: Wed, 31 Jul 2019 15:27:40 -0700
+Subject: [PATCH] mov: read 'name' track tag written by movenc
+
+---
+ libavformat/mov.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
+
+diff --git a/libavformat/mov.c b/libavformat/mov.c
+index 24de5429d1..fce69129d9 100644
+--- a/libavformat/mov.c
++++ b/libavformat/mov.c
+@@ -306,6 +306,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     int (*parse)(MOVContext*, AVIOContext*, unsigned, const char*) = NULL;
+     int raw = 0;
+     int num = 0;
++    AVDictionary *metadata;
+ 
+     switch (atom.type) {
+     case MKTAG( '@','P','R','M'): key = "premiere_version"; raw = 1; break;
+@@ -384,6 +385,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     case MKTAG(0xa9,'m','a','k'): key = "make";      break;
+     case MKTAG(0xa9,'m','o','d'): key = "model";     break;
+     case MKTAG(0xa9,'n','a','m'): key = "title";     break;
++    case MKTAG( 'n','a','m','e'): key = "title";     break;
+     case MKTAG(0xa9,'o','p','e'): key = "original_artist"; break;
+     case MKTAG(0xa9,'p','r','d'): key = "producer";  break;
+     case MKTAG(0xa9,'p','r','f'): key = "performers"; break;
+@@ -514,17 +516,23 @@ retry:
+             }
+             str[str_size] = 0;
+         }
+-        c->fc->event_flags |= AVFMT_EVENT_FLAG_METADATA_UPDATED;
+-        av_dict_set(&c->fc->metadata, key, str, 0);
++        if (c->trak_index < 0) {
++            metadata = c->fc->metadata;
++            c->fc->event_flags |= AVFMT_EVENT_FLAG_METADATA_UPDATED;
++            if (!strcmp(key, "encoder")) {
++                int major, minor, micro;
++                if (sscanf(str, "HandBrake %d.%d.%d", &major, &minor, &micro) == 3) {
++                    c->handbrake_version = 1000000*major + 1000*minor + micro;
++                }
++            }
++        }
++        else {
++            metadata = c->fc->streams[c->trak_index]->metadata;
++        }
++        av_dict_set(&metadata, key, str, 0);
+         if (*language && strcmp(language, "und")) {
+             snprintf(key2, sizeof(key2), "%s-%s", key, language);
+-            av_dict_set(&c->fc->metadata, key2, str, 0);
+-        }
+-        if (!strcmp(key, "encoder")) {
+-            int major, minor, micro;
+-            if (sscanf(str, "HandBrake %d.%d.%d", &major, &minor, &micro) == 3) {
+-                c->handbrake_version = 1000000*major + 1000*minor + micro;
+-            }
++            av_dict_set(&metadata, key2, str, 0);
+         }
+     }
+ 
+-- 
+2.21.0
+
