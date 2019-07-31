@@ -151,18 +151,8 @@ if GHB_GTK_3_16
 UI=316
 UI_FILE=ghb3.ui
 else
-if GHB_GTK_3_14
-UI=314
-UI_FILE=ghb3.ui
-else
-if GHB_GTK_3_12
-UI=312
-UI_FILE=ghb3.ui
-else
 UI=300
 UI_FILE=ghb3.ui
-endif
-endif
 endif
 endif
 

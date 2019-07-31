@@ -89,6 +89,10 @@ AC_ARG_ENABLE(update-checks,
 	AS_HELP_STRING([--disable-update-checks], [disable update checks]),
 	update_checks=no, update_checks=yes)
 
+AC_ARG_ENABLE(gtk4,
+	AS_HELP_STRING([--enable-gtk4], [enable building with gtk4]),
+	use_gtk4=yes, use_gtk4=no)
+
 # overwrite global variable (used for Makefile generation)
 AC_SUBST(GLOBALCXXFLAGS, $CXXFLAGS )
 AC_SUBST(GLOBALLDFLAGS, $LDFLAGS )
@@ -125,12 +129,18 @@ esac
 
 PKG_PROG_PKG_CONFIG
 
-PKG_CHECK_MODULES([GHB_GTK_4_0], [gtk4 >= 3.92], [HAVE_GTK_400=1], [HAVE_GTK_400=0])
-# GTK4 disabled until stable release
 HAVE_GTK_400=0
-PKG_CHECK_MODULES([GHB_GTK_3_16], [gtk+-3.0 >= 3.16], [HAVE_GTK_316=1], [HAVE_GTK_316=0])
-PKG_CHECK_MODULES([GHB_GTK_3_14], [gtk+-3.0 >= 3.14], [HAVE_GTK_314=1], [HAVE_GTK_314=0])
-PKG_CHECK_MODULES([GHB_GTK_3_12], [gtk+-3.0 >= 3.12], [HAVE_GTK_312=1], [HAVE_GTK_312=0])
+HAVE_GTK_316=0
+if test "x$use_gtk4" = "xyes" ; then
+    PKG_CHECK_MODULES([GHB_GTK_4_0], [gtk4 >= 3.92], [HAVE_GTK_400=1], [HAVE_GTK_400=0])
+else
+    PKG_CHECK_MODULES([GHB_GTK_3_16], [gtk+-3.0 >= 3.16], [HAVE_GTK_316=1], [HAVE_GTK_316=0])
+fi
+
+if test "$HAVE_GTK_316" -eq 0 -a "$HAVE_GTK_400" -eq 0 ; then
+    AC_MSG_ERROR("GTK 3.16 or above is required)
+fi
+
 if test "$HAVE_GTK_400" -eq 1 ; then
     GHB_PACKAGES="gtk4 $GHB_PACKAGES"
 else
@@ -175,8 +185,6 @@ fi
 
 AM_CONDITIONAL([GHB_GTK_4_00], [test "$HAVE_GTK_400" -eq 1])
 AM_CONDITIONAL([GHB_GTK_3_16], [test "$HAVE_GTK_316" -eq 1])
-AM_CONDITIONAL([GHB_GTK_3_14], [test "$HAVE_GTK_314" -eq 1])
-AM_CONDITIONAL([GHB_GTK_3_12], [test "$HAVE_GTK_312" -eq 1])
 
 AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])
 
