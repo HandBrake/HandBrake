@@ -1369,7 +1369,7 @@ ghb_queue_update_status(signal_user_data_t *ud, int index, int status)
 
     if (status == GHB_QUEUE_PENDING)
     {
-        ghb_queue_progress_set_visible(ud, index, 0);
+        ghb_queue_progress_set_visible(ud, index, FALSE);
     }
     ghb_dict_set_int(uiDict, "job_status", status);
     ghb_queue_update_status_icon(ud, index);

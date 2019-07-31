@@ -4230,6 +4230,7 @@ ghb_backend_events(signal_user_data_t *ud)
         ghb_queue_update_status_icon(ud, index);
         ghb_queue_update_live_stats(ud, index, &status.queue);
         gtk_progress_bar_set_fraction(progress, 1.0);
+        ghb_queue_progress_set_visible(ud, index, FALSE);
         ghb_queue_progress_set_fraction(ud, index, 1.0);
 
         ghb_clear_queue_state(GHB_STATE_WORKDONE);
