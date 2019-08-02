@@ -831,7 +831,7 @@ struct hb_audio_config_s
         double   gain; /* Gain (in dB), negative is quieter */
         int      normalize_mix_level; /* mix level normalization (boolean) */
         int      dither_method; /* dither algorithm */
-        char *   name; /* Output track name */
+        const char * name; /* Output track name */
     } out;
 
     /* Input */
@@ -857,7 +857,7 @@ struct hb_audio_config_s
                                     * These samples should be dropped
                                     * when decoding */
         PRIVATE hb_rational_t timebase;
-        PRIVATE char * name;
+        PRIVATE const char * name;
     } in;
 
     struct

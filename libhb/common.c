@@ -4685,8 +4685,8 @@ void hb_audio_close( hb_audio_t **audio )
 {
     if ( audio && *audio )
     {
-        free((*audio)->config.in.name);
-        free((*audio)->config.out.name);
+        free((char*)(*audio)->config.in.name);
+        free((char*)(*audio)->config.out.name);
         free(*audio);
         *audio = NULL;
     }
