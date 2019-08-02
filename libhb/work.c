@@ -647,6 +647,10 @@ void hb_display_job_info(hb_job_t *job)
                        subtitle->config.force ? ", Forced Only" : "",
                        subtitle->config.default_track ? ", Default" : "" );
             }
+            if (subtitle->config.name )
+            {
+                hb_log("   + name: %s", subtitle->config.name);
+            }
         }
     }
 
