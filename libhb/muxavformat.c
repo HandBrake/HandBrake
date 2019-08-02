@@ -965,6 +965,12 @@ static int avformatInit( hb_mux_object_t * m )
             // Set subtitle track title
             av_dict_set(&track->st->metadata, "title",
                         subtitle->config.name, 0);
+            if (job->mux == HB_MUX_AV_MP4)
+            {
+                // Some software (MPC, mediainfo) use hdlr description
+                // for track title
+                av_dict_set(&track->st->metadata, "handler_name", name, 0);
+            }
         }
     }
 
