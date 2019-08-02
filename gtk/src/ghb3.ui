@@ -8732,6 +8732,7 @@ Setting this to 0 means there is no maximum height.</property>
     </action-widgets>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-subtitle-vbox">
+        <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="spacing">6</property>
@@ -8797,263 +8798,297 @@ Setting this to 0 means there is no maximum height.</property>
             </child>
           </object>
           <packing>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid" id="subtitle_track_grid">
+            <property name="row-spacing">2</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="column_spacing">5</property>
+            <property name="halign">center</property>
+            <child>
+              <object class="GtkLabel" id="subtitle_track_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="label" translatable="yes">Source Track</property>
+              </object>
+              <packing>
+                <property name="top_attach">0</property>
+                <property name="left_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="SubtitleTrack">
+                <property name="valign">GTK_ALIGN_CENTER</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text" translatable="yes">List of subtitle tracks available from your source.</property>
+                <signal name="changed" handler="subtitle_track_changed_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="left_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="subtitle_name_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">Track Name:</property>
+                <property name="use_markup">True</property>
+                <property name="halign">center</property>
+              </object>
+              <packing>
+                <property name="top_attach">0</property>
+                <property name="left_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="SubtitleTrackName">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text" translatable="yes">Set the subtitle track name.
+
+Players may use this in the subtitle selection list.</property>
+                <property name="max_length">80</property>
+                <property name="width-chars">40</property>
+                <property name="activates_default">True</property>
+                <property name="truncate_multiline">True</property>
+                <signal name="changed" handler="subtitle_name_changed_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="left_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="subtitle_settings_box">
-            <property name="orientation">horizontal</property>
+          <object class="GtkGrid" id="subtitle_import_grid">
             <property name="visible">True</property>
+            <property name="row-spacing">2</property>
             <property name="can_focus">False</property>
-            <property name="spacing">6</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="column_spacing">4</property>
             <child>
-              <object class="GtkGrid" id="subtitle_import_grid">
+              <object class="GtkLabel" id="import_lang_label">
                 <property name="visible">True</property>
-                <property name="row-spacing">2</property>
                 <property name="can_focus">False</property>
                 <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="column_spacing">4</property>
-                <child>
-                  <object class="GtkLabel" id="import_lang_label">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">Language</property>
-                  </object>
-                  <packing>
-                    <property name="top_attach">0</property>
-                    <property name="left_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="srt_code_label">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">Character Code</property>
-                  </object>
-                  <packing>
-                    <property name="top_attach">0</property>
-                    <property name="left_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="import_file_label">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">File:</property>
-                    <property name="halign">end</property>
-                  </object>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="left_attach">0</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="import_offset_label">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">Offset (ms)</property>
-                  </object>
-                  <packing>
-                    <property name="top_attach">0</property>
-                    <property name="left_attach">4</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="ImportLanguage">
-                    <property name="valign">GTK_ALIGN_CENTER</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">Set the language of this subtitle.
+                <property name="label" translatable="yes">Language</property>
+              </object>
+              <packing>
+                <property name="top_attach">0</property>
+                <property name="left_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="srt_code_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="label" translatable="yes">Character Code</property>
+              </object>
+              <packing>
+                <property name="top_attach">0</property>
+                <property name="left_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="import_file_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="label" translatable="yes">File:</property>
+                <property name="halign">end</property>
+              </object>
+              <packing>
+                <property name="top_attach">2</property>
+                <property name="left_attach">0</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="import_offset_label">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="label" translatable="yes">Offset (ms)</property>
+              </object>
+              <packing>
+                <property name="top_attach">0</property>
+                <property name="left_attach">4</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="ImportLanguage">
+                <property name="valign">GTK_ALIGN_CENTER</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text" translatable="yes">Set the language of this subtitle.
 This value will be used by players in subtitle menus.</property>
-                    <signal name="changed" handler="import_lang_changed_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="left_attach">1</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="SrtCodeset">
-                    <property name="valign">GTK_ALIGN_FILL</property>
-                    <property name="width_request">150</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">Set the character code used by the SRT file you are importing.
+                <signal name="changed" handler="import_lang_changed_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="left_attach">1</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="SrtCodeset">
+                <property name="valign">GTK_ALIGN_FILL</property>
+                <property name="width_request">150</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text" translatable="yes">Set the character code used by the SRT file you are importing.
 
 SRTs come in all flavours of character sets.
 We translate the character set to UTF-8.
 The source's character code is needed in order to perform this translation.</property>
-                    <signal name="changed" handler="srt_codeset_changed_cb" swapped="no"/>
-                    <property name="has_entry">True</property>
-                    <child internal-child="entry">
-                      <object class="GtkEntry" id="combobox-entry1">
-                        <property name="can_focus">True</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="left_attach">2</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkFileChooserButton" id="ImportFile">
-                    <property name="visible">True</property>
+                <signal name="changed" handler="srt_codeset_changed_cb" swapped="no"/>
+                <property name="has_entry">True</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="combobox-entry1">
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Select the SRT file to import.</property>
-                    <property name="local_only">False</property>
-                    <property name="hexpand">True</property>
-                    <property name="title" translatable="yes">Import File</property>
-                    <signal name="selection-changed" handler="import_file_changed_cb" swapped="no"/>
                   </object>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="left_attach">1</property>
-                    <property name="width">2</property>
-                    <property name="height">1</property>
-                  </packing>
                 </child>
-                <child>
-                  <object class="GtkSpinButton" id="ImportOffset">
-                    <property name="valign">GTK_ALIGN_FILL</property>
-                    <property name="vexpand">False</property>
-                    <property name="width-chars">8</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">Adjust the offset in milliseconds between video and SRT timestamps</property>
-                    <property name="adjustment">adjustment31</property>
-                    <signal name="value-changed" handler="import_offset_changed_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="top_attach">1</property>
-                    <property name="left_attach">4</property>
-                    <property name="width">1</property>
-                    <property name="height">1</property>
-                  </packing>
-                </child>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="left_attach">2</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFileChooserButton" id="ImportFile">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="tooltip_text" translatable="yes">Select the SRT file to import.</property>
+                <property name="local_only">False</property>
+                <property name="hexpand">True</property>
+                <property name="title" translatable="yes">Import File</property>
+                <signal name="selection-changed" handler="import_file_changed_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="top_attach">2</property>
+                <property name="left_attach">1</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="ImportOffset">
+                <property name="valign">GTK_ALIGN_FILL</property>
+                <property name="vexpand">False</property>
+                <property name="width-chars">8</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text" translatable="yes">Adjust the offset in milliseconds between video and SRT timestamps</property>
+                <property name="adjustment">adjustment31</property>
+                <signal name="value-changed" handler="import_offset_changed_cb" swapped="no"/>
+              </object>
+              <packing>
+                <property name="top_attach">1</property>
+                <property name="left_attach">4</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="subtitle_options_box">
+            <property name="orientation">vertical</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_top">12</property>
+            <child>
+              <object class="GtkCheckButton" id="SubtitleForced">
+                <property name="label" translatable="yes">Forced Subtitles Only</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text" translatable="yes">Use only subtitles that have been flagged
+as forced in the source subtitle track
+
+"Forced" subtitles are usually used to show
+subtitles during scenes where someone is speaking
+a foreign language.</property>
+                <property name="halign">start</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="subtitle_forced_toggled_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="position">0</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="subtitle_track_box">
-                <property name="orientation">vertical</property>
+              <object class="GtkCheckButton" id="SubtitleBurned">
+                <property name="label" translatable="yes">Burn into video</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkLabel" id="subtitle_track_label">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">Track</property>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkComboBox" id="SubtitleTrack">
-                    <property name="valign">GTK_ALIGN_CENTER</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">List of subtitle tracks available from your source.</property>
-                    <signal name="changed" handler="subtitle_track_changed_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text" translatable="yes">Render the subtitle over the video.
+The subtitle will be part of the video and can not be disabled.</property>
+                <property name="halign">start</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="subtitle_burned_toggled_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="subtitle_options_box">
-                <property name="orientation">vertical</property>
+              <object class="GtkCheckButton" id="SubtitleDefaultTrack">
+                <property name="label" translatable="yes">Set Default Track</property>
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <child>
-                  <object class="GtkCheckButton" id="SubtitleForced">
-                    <property name="label" translatable="yes">Forced Subtitles Only</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">Use only subtitles that have been flagged
-as forced in the source subtitle track
-
-"Forced" subtitles are usually used to show
-subtitles during scenes where someone is speaking
-a foreign language.</property>
-                    <property name="halign">start</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="subtitle_forced_toggled_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="SubtitleBurned">
-                    <property name="label" translatable="yes">Burn into video</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">Render the subtitle over the video.
-The subtitle will be part of the video and can not be disabled.</property>
-                    <property name="halign">start</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="subtitle_burned_toggled_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="SubtitleDefaultTrack">
-                    <property name="label" translatable="yes">Set Default Track</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="tooltip_text" translatable="yes">Set the default output subtitle track.
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                <property name="tooltip_text" translatable="yes">Set the default output subtitle track.
 
 Most players will automatically display this
 subtitle track whenever the video is played.
 
 This is useful for creating a "forced" track
 in your output.</property>
-                    <property name="halign">start</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="subtitle_default_toggled_cb" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
+                <property name="halign">start</property>
+                <property name="draw_indicator">True</property>
+                <signal name="toggled" handler="subtitle_default_toggled_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="position">2</property>
@@ -9061,7 +9096,7 @@ in your output.</property>
             </child>
           </object>
           <packing>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
@@ -9170,7 +9205,8 @@ in your output.</property>
                 <property name="tooltip_text" translatable="yes">Set the audio track name.
 
 Players may use this in the audio selection list.</property>
-                <property name="max_length">40</property>
+                <property name="max_length">80</property>
+                <property name="width-chars">40</property>
                 <property name="hexpand">True</property>
                 <property name="activates_default">True</property>
                 <property name="truncate_multiline">True</property>

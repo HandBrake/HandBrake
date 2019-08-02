@@ -960,6 +960,12 @@ static int avformatInit( hb_mux_object_t * m )
         {
             av_dict_set(&track->st->metadata, "language", lang, 0);
         }
+        if (subtitle->config.name != NULL && subtitle->config.name[0] != 0)
+        {
+            // Set subtitle track title
+            av_dict_set(&track->st->metadata, "title",
+                        subtitle->config.name, 0);
+        }
     }
 
     if (need_fonts)

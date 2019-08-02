@@ -297,13 +297,14 @@ void hb_image_close(hb_image_t **_image);
 struct hb_subtitle_config_s
 {
     enum subdest { RENDERSUB, PASSTHRUSUB } dest;
-    int  force;
-    int  default_track; 
-    
+    int          force;
+    int          default_track;
+    const char * name;
+
     /* SRT subtitle tracks only */
-    char src_filename[256];
-    char src_codeset[40];
-    int64_t offset;
+    char      src_filename[256];
+    char      src_codeset[40];
+    int64_t   offset;
 };
 
 /*******************************************************************************
@@ -966,9 +967,10 @@ struct hb_subtitle_s
     enum subsource { VOBSUB, CC608SUB, /*unused*/CC708SUB,
                      UTF8SUB, TX3GSUB, SSASUB, PGSSUB,
                      IMPORTSRT, IMPORTSSA, SRTSUB = IMPORTSRT } source;
-    char lang[1024];
-    char iso639_2[4];
-    uint32_t attributes; /* Closed Caption, Childrens, Directors etc */
+    const char * name;
+    char         lang[1024];
+    char         iso639_2[4];
+    uint32_t     attributes; /* Closed Caption, Childrens, Directors etc */
     
     // Color lookup table for VOB subtitle tracks. Each entry is in YCbCr format.
     // Must be filled out by the demuxer for VOB subtitle tracks.
