@@ -27,6 +27,7 @@
 #include "hb.h"
 #include "settings.h"
 #include "jobdict.h"
+#include "titledict.h"
 #include "hb-backend.h"
 #include "values.h"
 #include "callbacks.h"
@@ -428,7 +429,6 @@ subtitle_get_track_description(GhbValue *settings, GhbValue *subsettings)
 static GhbValue*  subtitle_add_track(
     signal_user_data_t *ud,
     GhbValue *settings,
-    const hb_title_t *title,
     int track,
     int mux,
     gboolean default_track,
@@ -437,10 +437,14 @@ static GhbValue*  subtitle_add_track(
     gboolean burn,
     gboolean *burned)
 {
+    const char * name = NULL;
     if (track >= 0 && !import)
     {
-        hb_subtitle_t *subtitle = hb_list_item(title->list_subtitle, track);
-        source = subtitle->source;
+        GhbValue * strack;
+
+        strack = ghb_get_title_subtitle_track(settings, track);
+        source = ghb_dict_get_int(strack, "Source");
+        name   = ghb_dict_get_string(strack, "Name");
     }
 
     burn |= !hb_subtitle_can_pass(source, mux);
@@ -474,6 +478,10 @@ static GhbValue*  subtitle_add_track(
         g_free(filename);
     }
 
+    if (name != NULL && name[0] != 0)
+    {
+        ghb_dict_set_string(subsettings, "Name", name);
+    }
     ghb_dict_set_int(subsettings, "Track", track);
     ghb_dict_set_int(subsettings, "Offset", 0);
     ghb_dict_set_bool(subsettings, "Forced", track == -1);
@@ -640,14 +648,26 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
 
         import = ghb_dict_get(subsettings, "Import");
         source = get_sub_source(ud->settings, subsettings);
-        val    = ghb_dict_get(subsettings, "Track");
 
+        val = ghb_dict_get_value(subsettings, "Name");
+        if (val != NULL)
+        {
+            ghb_ui_update(ud, "SubtitleTrackName", val);
+        }
+        else
+        {
+            ghb_ui_update(ud, "SubtitleTrackName", ghb_string_value(""));
+        }
+
+        val    = ghb_dict_get(subsettings, "Track");
         if (val != NULL)
         {
             ghb_ui_update(ud, "SubtitleTrack", val);
 
             // Hide regular subtitle widgets
-            widget = GHB_WIDGET(ud->builder, "subtitle_track_box");
+            widget = GHB_WIDGET(ud->builder, "subtitle_track_label");
+            gtk_widget_set_visible(widget, import == NULL);
+            widget = GHB_WIDGET(ud->builder, "SubtitleTrack");
             gtk_widget_set_visible(widget, import == NULL);
 
             // Show import subitle widgets
@@ -665,7 +685,9 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
         else
         {
             // Hide widgets not needed for "Foreign audio search"
-            widget = GHB_WIDGET(ud->builder, "subtitle_track_box");
+            widget = GHB_WIDGET(ud->builder, "subtitle_track_label");
+            gtk_widget_set_visible(widget, FALSE);
+            widget = GHB_WIDGET(ud->builder, "SubtitleTrack");
             gtk_widget_set_visible(widget, FALSE);
 
             widget = GHB_WIDGET(ud->builder, "subtitle_import_grid");
@@ -742,7 +764,9 @@ subtitle_update_dialog_widgets(signal_user_data_t *ud, GhbValue *subsettings)
         gtk_widget_set_visible(widget, FALSE);
 
         // Show regular subtitle widgets
-        widget = GHB_WIDGET(ud->builder, "subtitle_track_box");
+        widget = GHB_WIDGET(ud->builder, "subtitle_track_label");
+        gtk_widget_set_visible(widget, TRUE);
+        widget = GHB_WIDGET(ud->builder, "SubtitleTrack");
         gtk_widget_set_visible(widget, TRUE);
     }
 }
@@ -780,6 +804,21 @@ subtitle_track_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
     if (subsettings != NULL)
     {
         subtitle_update_dialog_widgets(ud, subsettings);
+    }
+}
+
+G_MODULE_EXPORT void
+subtitle_name_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
+{
+    ghb_widget_to_setting(ud->settings, widget);
+    const char *s = ghb_dict_get_string(ud->settings, "SubtitleTrackName");
+    if (s != NULL && s[0] != 0)
+    {
+        subtitle_update_setting(ghb_widget_value(widget), "Name", ud);
+    }
+    else
+    {
+        subtitle_update_setting(NULL, "Name", ud);
     }
 }
 
@@ -1129,13 +1168,13 @@ subtitle_add_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     for (subsettings = NULL, track = 0;
          subsettings == NULL && track < count; track++)
     {
-        subsettings = subtitle_add_track(ud, ud->settings, title, track,
+        subsettings = subtitle_add_track(ud, ud->settings, track,
                                 mux->format, FALSE, FALSE, VOBSUB,
                                 FALSE, &one_burned);
     }
     if (subsettings == NULL)
     {
-        subsettings = subtitle_add_track(ud, ud->settings, title, 0,
+        subsettings = subtitle_add_track(ud, ud->settings, 0,
                                 mux->format, FALSE, TRUE, IMPORTSRT,
                                 FALSE, &one_burned);
     }
@@ -1247,7 +1286,7 @@ subtitle_add_all_clicked_cb(GtkWidget *xwidget, signal_user_data_t *ud)
     int count = hb_list_count(title->list_subtitle);
     for (track = 0; track < count; track++)
     {
-        subtitle_add_track(ud, ud->settings, title, track, mux->format,
+        subtitle_add_track(ud, ud->settings, track, mux->format,
                            FALSE, FALSE, VOBSUB, FALSE, &one_burned);
     }
     subtitle_refresh_list_ui(ud);

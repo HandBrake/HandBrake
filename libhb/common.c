@@ -4809,6 +4809,14 @@ hb_subtitle_t *hb_subtitle_copy(const hb_subtitle_t *src)
             subtitle->extradata = malloc( src->extradata_size );
             memcpy( subtitle->extradata, src->extradata, src->extradata_size );
         }
+        if (src->name != NULL)
+        {
+            subtitle->name = strdup(src->name);
+        }
+        if (src->config.name != NULL)
+        {
+            subtitle->config.name = strdup(src->config.name);
+        }
     }
     return subtitle;
 }
@@ -4846,6 +4854,8 @@ void hb_subtitle_close( hb_subtitle_t **sub )
 {
     if ( sub && *sub )
     {
+        free ((char*)(*sub)->name);
+        free ((char*)(*sub)->config.name);
         free ((*sub)->extradata);
         free(*sub);
         *sub = NULL;
@@ -4905,6 +4915,10 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
     // "track" in job->list_audio is an index into title->list_audio
     subtitle->track = track;
     subtitle->config = *subtitlecfg;
+    if (subtitlecfg->name != NULL && subtitlecfg->name[0] != 0)
+    {
+        subtitle->config.name = strdup(subtitlecfg->name);
+    }
     subtitle->out_track = hb_list_count(job->list_subtitle) + 1;
     hb_list_add(job->list_subtitle, subtitle);
     return 1;
@@ -4944,6 +4958,10 @@ int hb_import_subtitle_add( const hb_job_t * job,
     strcpy(subtitle->iso639_2, lang->iso639_2);
 
     subtitle->config = *subtitlecfg;
+    if (subtitlecfg->name != NULL && subtitlecfg->name[0] != 0)
+    {
+        subtitle->config.name = strdup(subtitlecfg->name);
+    }
     hb_list_add(job->list_subtitle, subtitle);
 
     return 1;

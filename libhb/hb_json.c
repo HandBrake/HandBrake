@@ -441,6 +441,10 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
             hb_error("json pack failure: %s", error.text);
             return NULL;
         }
+        if (subtitle->name != NULL)
+        {
+            hb_dict_set_string(subtitle_dict, "Name", subtitle->name);
+        }
         hb_value_array_append(subtitle_list, subtitle_dict);
     }
     hb_dict_set(dict, "SubtitleList", subtitle_list);
@@ -888,6 +892,10 @@ hb_dict_t* hb_job_to_dict( const hb_job_t * job )
                 "Forced",   hb_value_bool(subtitle->config.force),
                 "Burn",     hb_value_bool(subtitle->config.dest == RENDERSUB),
                 "Offset",   hb_value_int(subtitle->config.offset));
+        }
+        if (subtitle->config.name != NULL)
+        {
+            hb_dict_set_string(subtitle_dict, "Name", subtitle->config.name);
         }
         hb_value_array_append(subtitle_list, subtitle_dict);
     }
@@ -1579,10 +1587,12 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             int burn = 0;
             const char *importfile = NULL;
             json_int_t offset = 0;
+            const char *name = NULL;
 
             result = json_unpack_ex(subtitle_dict, &error, 0,
-                                    "{s?i, s?{s:s}, s?{s:s}}",
+                                    "{s?i, s?s, s?{s:s}, s?{s:s}}",
                                     "Track", unpack_i(&track),
+                                    "Name",  unpack_s(&name),
                                     // Support legacy "SRT" import
                                     "SRT",
                                         "Filename", unpack_s(&importfile),
@@ -1594,6 +1604,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 hb_job_close(&job);
                 return NULL;
             }
+
             // Embedded subtitle track
             if (track >= 0 && importfile == NULL)
             {
@@ -1602,6 +1613,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 if (subtitle != NULL)
                 {
                     sub_config = subtitle->config;
+                    sub_config.name = name;
                     result = json_unpack_ex(subtitle_dict, &error, 0,
                         "{s?b, s?b, s?b, s?I}",
                         "Default",  unpack_b(&sub_config.default_track),
@@ -1650,6 +1662,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                     hb_job_close(&job);
                     return NULL;
                 }
+                sub_config.name = name;
                 sub_config.offset = offset;
                 sub_config.dest = burn ? RENDERSUB : PASSTHRUSUB;
                 strncpy(sub_config.src_codeset, srtcodeset, 39);

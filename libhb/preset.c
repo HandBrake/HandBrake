@@ -891,13 +891,15 @@ static int find_subtitle_track(const hb_title_t *title,
 }
 
 static void add_subtitle(hb_value_array_t *list, int track,
-                         int make_default, int force, int burn)
+                         int make_default, int force, int burn,
+                         const char * name)
 {
     hb_dict_t *subtitle_dict = hb_dict_init();
-    hb_dict_set(subtitle_dict, "Track", hb_value_int(track));
-    hb_dict_set(subtitle_dict, "Default", hb_value_bool(make_default));
-    hb_dict_set(subtitle_dict, "Forced", hb_value_bool(force));
-    hb_dict_set(subtitle_dict, "Burn", hb_value_bool(burn));
+    hb_dict_set_int(subtitle_dict, "Track", track);
+    hb_dict_set_bool(subtitle_dict, "Default", make_default);
+    hb_dict_set_bool(subtitle_dict, "Forced", force);
+    hb_dict_set_bool(subtitle_dict, "Burn", burn);
+    hb_dict_set_string(subtitle_dict, "Name", name);
     hb_value_array_append(list, subtitle_dict);
 }
 
@@ -962,7 +964,7 @@ static void add_subtitle_for_lang(hb_value_array_t *list, hb_title_t *title,
         behavior->burn_first &= !burn;
         behavior->one_burned |= burn;
         behavior->used[t] = 1;
-        add_subtitle(list, t, make_default, 0 /*!force*/, burn);
+        add_subtitle(list, t, make_default, 0 /*!force*/, burn, subtitle->name);
     }
 }
 
@@ -1180,7 +1182,8 @@ int hb_preset_job_add_subtitles(hb_handle_t *h, int title_index,
                         behavior.burn_first);
                 behavior.used[track] = 1;
                 behavior.one_burned |= burn;
-                add_subtitle(list, track, 0 /*default*/, 0 /*!force*/, burn);
+                add_subtitle(list, track, 0 /*default*/, 0 /*!force*/, burn,
+                             subtitle->name);
                 break;
             }
         }

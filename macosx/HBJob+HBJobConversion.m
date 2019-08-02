@@ -260,6 +260,7 @@
                     hb_subtitle_config_t sub_config;
                     int type = subTrack.type;
 
+                    sub_config.name = NULL;
                     sub_config.offset = subTrack.offset;
 
                     // we need to strncpy file name and codeset

@@ -5414,6 +5414,8 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
 {
     AVStream          * st       = stream->ffmpeg_ic->streams[id];
     AVCodecParameters * codecpar = st->codecpar;
+    AVDictionaryEntry * tag_lang = av_dict_get(st->metadata, "language", NULL, 0 );
+    AVDictionaryEntry * tag_name = av_dict_get(st->metadata, "title", NULL, 0);
 
     hb_subtitle_t *subtitle = calloc( 1, sizeof(*subtitle) );
 
@@ -5474,16 +5476,18 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             return;
     }
 
-    AVDictionaryEntry *tag;
     iso639_lang_t *lang;
 
-    tag = av_dict_get( st->metadata, "language", NULL, 0 );
-    lang = lang_for_code2( tag ? tag->value : "und" );
+    lang = lang_for_code2(tag_lang ? tag_lang->value : "und");
     snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s [%s]",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name,
              hb_subsource_name(subtitle->source));
     strncpy(subtitle->iso639_2, lang->iso639_2, 3);
     subtitle->iso639_2[3] = 0;
+    if (tag_name != NULL)
+    {
+        subtitle->name = strdup(tag_name->value);
+    }
 
     // Copy the extradata for the subtitle track
     if (codecpar->extradata != NULL)
