@@ -1538,10 +1538,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                     audio.out.dither_method = hb_value_get_int(dither);
                 }
             }
-            if (name != NULL && name[0] != 0)
-            {
-                audio.out.name = strdup(name);
-            }
+            audio.out.name = name;
             if (audio.in.track >= 0)
             {
                 audio.out.track = ii;

@@ -673,7 +673,7 @@ static int avformatInit( hb_mux_object_t * m )
             track->st->codecpar->channel_layout = hb_ff_mixdown_xlat(audio->config.out.mixdown, NULL);
         }
 
-        char *name;
+        const char *name;
         if (audio->config.out.name == NULL)
         {
             switch (track->st->codecpar->channels)
