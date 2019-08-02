@@ -132,6 +132,7 @@ static char ** anames                    = NULL;
 static char ** subtitle_lang_list        = NULL;
 static char ** subtracks                 = NULL;
 static char ** subforce                  = NULL;
+static char ** subnames                  = NULL;
 static int     subtitle_all              = -1;
 static int     subburn                   = -1;
 static int     subburn_native            = -1;
@@ -2323,6 +2324,7 @@ static int ParseOptions( int argc, char ** argv )
             { "queue-import-file",  required_argument, NULL, QUEUE_IMPORT },
 
             { "aname",       required_argument, NULL,    'A' },
+            { "subname",     required_argument, NULL,    'S' },
             { "color-matrix",required_argument, NULL,    'M' },
             { "previews",    required_argument, NULL,    PREVIEWS },
             { "start-at-preview", required_argument, NULL, START_AT_PREVIEW },
@@ -2343,7 +2345,7 @@ static int ParseOptions( int argc, char ** argv )
 
         cur_optind = optind;
         c = getopt_long( argc, argv,
-                         ":hv::C:f:i:Io:Pt:c:m::M:a:A:6:s:F::N:e:E:Q:C:"
+                         ":hv::C:f:i:Io:Pt:c:m::M:a:A:6:s:S:F::N:e:E:Q:C:"
                          "2d::D:7::8::9::5::gOw:l:n:b:q:B:r:R:x:TY:X:Z:z",
                          long_options, &option_index );
         if( c < 0 )
@@ -2980,6 +2982,12 @@ static int ParseOptions( int argc, char ** argv )
                 if( optarg != NULL )
                 {
                     anames = hb_str_vsplit( optarg, ',' );
+                }
+                break;
+            case 'S':
+                if( optarg != NULL )
+                {
+                    subnames = hb_str_vsplit( optarg, ',' );
                 }
                 break;
             case PREVIEWS:
@@ -4691,6 +4699,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
     hb_dict_t        * subtitle_search;
     subtitle_array  = hb_dict_get(subtitles_dict, "SubtitleList");
     subtitle_search = hb_dict_get(subtitles_dict, "Search");
+    hb_dict_t *subtitle_dict;
 
     hb_dict_t *audios_dict = hb_dict_get(job_dict, "Audio");
     hb_value_array_t * audio_array = hb_dict_get(audios_dict, "AudioList");
@@ -5072,7 +5081,7 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
     int one_burned = 0;
     if (subtracks != NULL)
     {
-        int ii, out_track = 0;
+        int ii, track_count, out_track = 0;
         for (ii = 0; subtracks[ii] != NULL; ii++)
         {
             if (strcasecmp(subtracks[ii], "none" ) == 0)
@@ -5118,6 +5127,26 @@ PrepareJob(hb_handle_t *h, hb_title_t *title, hb_dict_t *preset_dict)
             else
             {
                 fprintf(stderr, "ERROR: unable to parse subtitle input \"%s\", skipping\n", subtracks[ii]);
+            }
+        }
+        track_count = hb_value_array_len(subtitle_array);
+
+        /* Subtitle Track Names */
+        ii = 0;
+        if (subnames != NULL)
+        {
+            for (; subnames[ii] != NULL && ii < track_count; ii++)
+            {
+                if (*subnames[ii])
+                {
+                    subtitle_dict = hb_value_array_get(subtitle_array, ii);
+                    hb_dict_set(subtitle_dict, "Name",
+                                hb_value_string(subnames[ii]));
+                }
+            }
+            if (subnames[ii] != NULL)
+            {
+                fprintf(stderr, "Dropping excess subtitle track names\n");
             }
         }
     }
