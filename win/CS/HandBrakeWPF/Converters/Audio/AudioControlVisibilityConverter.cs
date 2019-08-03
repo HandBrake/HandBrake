@@ -20,11 +20,31 @@ namespace HandBrakeWPF.Converters.Audio
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length == 1)
+            if (values.Length == 3)
             {
                 bool isVisibile = (bool)values[0];
+                bool isPassthru = (bool)values[1];
+                AudioEncoder fallbackEncoder = (AudioEncoder)values[2];
 
                 if (!isVisibile)
+                {
+                    return Visibility.Collapsed;
+                }
+
+                // When the Fallback Encoder is "None" and we have a passthru encoder selected on the track, we don't have any encoder options to override so don't show them.
+                if (isPassthru && fallbackEncoder == AudioEncoder.None)
+                {
+                    return Visibility.Collapsed;
+                }
+            }
+
+            if (values.Length == 2)
+            {
+                bool isPassthru = (bool)values[0];
+                AudioEncoder fallbackEncoder = (AudioEncoder)values[1];
+
+                // When the Fallback Encoder is "None" and we have a passthru encoder selected on the track, we don't have any encoder options to override so don't show them.
+                if (isPassthru && fallbackEncoder == AudioEncoder.None)
                 {
                     return Visibility.Collapsed;
                 }

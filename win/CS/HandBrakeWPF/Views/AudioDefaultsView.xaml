@@ -277,6 +277,8 @@
                                     <ComboBox.Visibility>
                                         <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
                                             <Binding Path="IsRateTypeVisible" />
+                                            <Binding Path="IsPassthru" />
+                                            <Binding Path="DataContext.AudioEncoderFallback" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
                                         </MultiBinding>
                                     </ComboBox.Visibility>
                                 </ComboBox>
@@ -286,6 +288,8 @@
                                     <ComboBox.Visibility>
                                         <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
                                             <Binding Path="IsQualityVisible" />
+                                            <Binding Path="IsPassthru" />
+                                            <Binding Path="DataContext.AudioEncoderFallback" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
                                         </MultiBinding>
                                     </ComboBox.Visibility>
                                 </ComboBox>
@@ -295,26 +299,56 @@
                                     <ComboBox.Visibility>
                                         <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
                                             <Binding Path="IsBitrateVisible" />
+                                            <Binding Path="IsPassthru" />
+                                            <Binding Path="DataContext.AudioEncoderFallback" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
                                         </MultiBinding>
                                     </ComboBox.Visibility>
                                 </ComboBox>
 
                                 <ComboBox Grid.Row="0" Grid.Column="7" Height="22" Width="120" Margin="5,0,5,0" HorizontalAlignment="Stretch"
                                       ItemsSource="{Binding Mixdowns}" SelectedItem="{Binding MixDown}"
-                                      DisplayMemberPath="DisplayName" />
+                                      DisplayMemberPath="DisplayName" >
+                                    <ComboBox.Visibility>
+                                        <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
+                                            <Binding Path="IsPassthru" />
+                                            <Binding Path="DataContext.AudioEncoderFallback" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                        </MultiBinding>
+                                    </ComboBox.Visibility>
+                                </ComboBox>
 
 
                                 <ComboBox Width="70" Height="22" Margin="5,0,5,0" Grid.Column="9" 
                                       ItemsSource="{Binding DataContext.SampleRates, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
-                                      SelectedItem="{Binding SampleRateDisplayValue}" />
+                                      SelectedItem="{Binding SampleRateDisplayValue}" >
+                                    <ComboBox.Visibility>
+                                        <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
+                                            <Binding Path="IsPassthru" />
+                                            <Binding Path="DataContext.AudioEncoderFallback" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                        </MultiBinding>
+                                    </ComboBox.Visibility>
+                                </ComboBox>
 
                                 <controls:NumberBox Name="drcNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="11" VerticalAlignment="Center" Height="22"
                                                 Minimum="0" Modulus="0.1" Maximum="4" Number="{Binding DRC, Mode=TwoWay}" UpdateBindingOnTextChange="True" 
-                                                ShowIncrementButtons="True" AllowEmpty="False" />
+                                                ShowIncrementButtons="True" AllowEmpty="False">
+                                    <controls:NumberBox.Visibility>
+                                        <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
+                                            <Binding Path="IsPassthru" />
+                                            <Binding Path="DataContext.AudioEncoderFallback" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                        </MultiBinding>
+                                    </controls:NumberBox.Visibility>
+                                </controls:NumberBox>
 
                                 <controls:NumberBox Name="gainNumericCtl" Width="45" Margin="5,0,5,0" HorizontalAlignment="Left" Grid.Column="13" VerticalAlignment="Center"  Height="22"
                                                 Minimum="-20" Modulus="1" Maximum="20" Number="{Binding Gain, Mode=TwoWay}" UpdateBindingOnTextChange="True" 
-                                                ShowIncrementButtons="True" AllowEmpty="False" />
+                                                ShowIncrementButtons="True" AllowEmpty="False" >
+                                    <controls:NumberBox.Visibility>
+                                        <MultiBinding Converter="{StaticResource audioControlVisibilityConverter}">
+                                            <Binding Path="IsPassthru" />
+                                            <Binding Path="DataContext.AudioEncoderFallback" RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type Window}}" />
+                                        </MultiBinding>
+                                    </controls:NumberBox.Visibility>
+                                </controls:NumberBox>
                             </Grid>
 
                             <!--  Delete  -->
