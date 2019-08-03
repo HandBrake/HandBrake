@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SourceSubtitleTrack.cs" company="HandBrake Project (http://handbrake.fr)">
+// <copyright file="SourceSubtitleTrack.cs" company="HandBrake Project (https://handbrake.fr)">
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
@@ -35,6 +35,8 @@ namespace HandBrake.Interop.Interop.Json.Scan
         public int Source { get; set; }
 
         public string SourceName { get; set; }
+
+        public string Name { get; set; }
 
         /// <summary>
         /// Gets or sets subtitle attribute information.

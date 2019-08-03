@@ -51,6 +51,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
 
         private string srtLang;
 
+        private string name;
+
         #endregion
 
         #region Constructors and Destructors
@@ -82,6 +84,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.SrtPath = subtitle.SrtPath;
             this.SubtitleType = subtitle.SubtitleType;
             this.SourceTrack = subtitle.SourceTrack;
+            this.Name = subtitle.Name;
         }
 
         #endregion
@@ -187,6 +190,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 {
                     this.Forced = false;
                 }
+
+                this.Name = !string.IsNullOrEmpty(this.sourceTrack.Name) ? this.sourceTrack.Name : string.Empty;
             }
         }
 
@@ -254,6 +259,17 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// </summary>
         [Obsolete("Use SourceTrack Instead")]
         public string Track { get; set; }
+
+        public string Name
+        {
+            get => this.name;
+            set
+            {
+                if (value == this.name) return;
+                this.name = value;
+                this.NotifyOfPropertyChange(() => this.Name);
+            }
+        }
 
         #endregion
 

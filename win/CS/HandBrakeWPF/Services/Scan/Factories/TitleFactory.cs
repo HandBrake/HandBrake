@@ -56,7 +56,7 @@ namespace HandBrakeWPF.Services.Scan.Factories
             int currentAudioTrack = 1;
             foreach (SourceAudioTrack track in title.AudioList)
             {
-                converted.AudioTracks.Add(new Audio(currentAudioTrack, track.Language, track.LanguageCode, track.Description, track.Codec, track.SampleRate, track.BitRate, track.ChannelLayout));
+                converted.AudioTracks.Add(new Audio(currentAudioTrack, track.Language, track.LanguageCode, track.Description, track.Codec, track.SampleRate, track.BitRate, track.ChannelLayout, track.Name));
                 currentAudioTrack++;
             }
 
@@ -96,7 +96,7 @@ namespace HandBrakeWPF.Services.Scan.Factories
                 bool canBurn = HBFunctions.hb_subtitle_can_burn(track.Source) > 0;
                 bool canSetForcedOnly = HBFunctions.hb_subtitle_can_force(track.Source) > 0;
 
-                converted.Subtitles.Add(new Subtitle(track.Source, currentSubtitleTrack, track.Language, track.LanguageCode, convertedType, canBurn, canSetForcedOnly));
+                converted.Subtitles.Add(new Subtitle(track.Source, currentSubtitleTrack, track.Language, track.LanguageCode, convertedType, canBurn, canSetForcedOnly, track.Name));
                 currentSubtitleTrack++;
             }
 

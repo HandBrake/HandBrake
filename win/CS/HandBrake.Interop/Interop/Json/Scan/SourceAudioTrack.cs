@@ -58,5 +58,7 @@ namespace HandBrake.Interop.Interop.Json.Scan
         public int ChannelCount { get; set; }
 
         public AudioAttributes Attributes { get; set; }
+
+        public string Name { get; set; }
     }
 }

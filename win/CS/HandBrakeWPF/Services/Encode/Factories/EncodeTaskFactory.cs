@@ -220,7 +220,8 @@ namespace HandBrakeWPF.Services.Encode.Factories
                             Default = item.Default,
                             Forced = item.Forced,
                             ID = item.SourceTrack.TrackNumber,
-                            Track = (item.SourceTrack.TrackNumber - 1)
+                            Track = (item.SourceTrack.TrackNumber - 1),
+                            Name = item.Name
                         };
 
                         subtitle.SubtitleList.Add(track);
@@ -234,6 +235,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                         Default = item.Default,
                         Offset = item.SrtOffset,
                         Burn = item.Burned,
+                        Name = item.Name,
                         Import =
                             new SubImport
                             {

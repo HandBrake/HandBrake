@@ -155,6 +155,7 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.RowDefinitions>
@@ -194,13 +195,19 @@
                                         </cal:ActionMessage>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </CheckBox>        
+                            </CheckBox>
+
+                            <StackPanel Orientation="Horizontal" Grid.Column="6" Margin="5,0,0,0">
+                                <TextBlock Text="Name: " FontWeight="Bold" Margin="0,0,5,0" VerticalAlignment="Center" />
+                                <TextBox x:Name="TrackName" Text="{Binding Name}" Grid.Column="10" Width="120" />
+                            </StackPanel>
                         </Grid>
 
                         <!--  SRT Subtitle Settings  -->
                         <Grid Grid.Column="1" HorizontalAlignment="Stretch" Margin="0,8,0,8"
                               Visibility="{Binding IsSrtSubtitle, Converter={StaticResource booleanToVisConverter}, ConverterParameter=false}" >
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
@@ -258,6 +265,11 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </CheckBox>
+
+                            <StackPanel Orientation="Horizontal" Grid.Column="10" Margin="5,0,0,0">
+                                <TextBlock Text="Name: " FontWeight="Bold" Margin="0,0,5,0" />
+                                <TextBox x:Name="TrackNameSrt" Text="{Binding Name}" Grid.Column="10" Width="120" />
+                            </StackPanel>
 
                         </Grid>
 

@@ -44,6 +44,8 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// </summary>
         public int Track { get; set; }
 
+        public string Name { get; set; }
+
         /// <summary>
         /// Gets or sets the srt.
         /// </summary>

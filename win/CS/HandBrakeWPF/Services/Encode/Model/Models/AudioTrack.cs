@@ -59,6 +59,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.ScannedTrack = new Audio();
             this.TrackName = string.Empty;
 
+            if (!string.IsNullOrEmpty(this.scannedTrack?.Name))
+            {
+                this.TrackName = this.scannedTrack.Name;
+            }
+
             // Setup Backing Properties
             this.EncoderRateType = HandBrakeWPF.Services.Encode.Model.Models.AudioEncoderRateType.Bitrate;
             this.SetupLimits();
@@ -86,8 +91,14 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             {
                 this.scannedTrack = track.ScannedTrack ?? new Audio();
             }
+
             this.TrackName = track.TrackName;
             this.Quality = track.Quality;
+
+            if (!string.IsNullOrEmpty(this.scannedTrack?.Name))
+            {
+                this.TrackName = this.scannedTrack.Name;
+            }
 
             // Setup Backing Properties
             this.encoderRateType = track.EncoderRateType;
@@ -137,6 +148,11 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
             this.encoderRateType = track.EncoderRateType;
             this.quality = track.Quality;
             this.bitrate = track.Bitrate;
+            
+            if (!string.IsNullOrEmpty(this.scannedTrack?.Name))
+            {
+                this.TrackName = this.scannedTrack.Name;
+            }
 
             this.SetupLimits();
         }
@@ -412,6 +428,8 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.scannedTrack = value;
                 this.NotifyOfPropertyChange(() => this.ScannedTrack);
                 this.NotifyOfPropertyChange(() => this.TrackReference);
+
+                this.TrackName = !string.IsNullOrEmpty(this.scannedTrack?.Name) ? this.scannedTrack.Name : null;
 
                 this.GetDefaultMixdownIfNull();
             }
