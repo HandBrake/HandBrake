@@ -969,7 +969,8 @@ static int avformatInit( hb_mux_object_t * m )
             {
                 // Some software (MPC, mediainfo) use hdlr description
                 // for track title
-                av_dict_set(&track->st->metadata, "handler_name", name, 0);
+                av_dict_set(&track->st->metadata, "handler_name",
+                            subtitle->config.name, 0);
             }
         }
     }
