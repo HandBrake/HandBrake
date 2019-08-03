@@ -122,7 +122,7 @@ namespace HandBrakeWPF
             }
 
             bool useDarkTheme = userSettingService.GetUserSetting<bool>(UserSettingConstants.UseDarkTheme);
-            if (useDarkTheme)
+            if (useDarkTheme && SystemInfo.IsWindows10())
             {
                 ResourceDictionary darkTheme = new ResourceDictionary();
                 darkTheme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);

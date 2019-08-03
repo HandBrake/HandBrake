@@ -2633,7 +2633,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the Dark Theme. (Requires Restart)  (THIS IS AN EARLY PREVIEW. IT IS NOT YET COMPLETE!).
+        ///   Looks up a localized string similar to Use the Dark Theme. (Requires Restart, Windows 10 only).
         /// </summary>
         public static string Options_DarkTheme {
             get {

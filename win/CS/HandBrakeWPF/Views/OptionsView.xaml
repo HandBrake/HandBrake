@@ -116,7 +116,7 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Vertical" Margin="20,5,0,0">
-                            <CheckBox Content="{x:Static Properties:Resources.Options_DarkTheme}" IsChecked="{Binding UseDarkTheme}" />
+                            <CheckBox Content="{x:Static Properties:Resources.Options_DarkTheme}" IsEnabled="{Binding IsWindows10}" IsChecked="{Binding UseDarkTheme}" />
                             <CheckBox Content="{x:Static Properties:Resources.Options_MinimiseTray}" IsChecked="{Binding MinimiseToTray}" />
                             <CheckBox Content="{x:Static Properties:Resources.Options_ClearCompleted}" IsChecked="{Binding ClearQueueOnEncodeCompleted}" />
                             <CheckBox Content="{x:Static Properties:Resources.OptionsView_ShowStatusInTitleBar}" IsChecked="{Binding ShowStatusInTitleBar}" />

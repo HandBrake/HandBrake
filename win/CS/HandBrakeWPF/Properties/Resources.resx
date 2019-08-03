@@ -1992,7 +1992,7 @@ Where supported, any user presets will have been imported.</value>
     <value>Export Queue (CLI Only)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Use the Dark Theme. (Requires Restart)  (THIS IS AN EARLY PREVIEW. IT IS NOT YET COMPLETE!)</value>
+    <value>Use the Dark Theme. (Requires Restart, Windows 10 only)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>Not Available</value>

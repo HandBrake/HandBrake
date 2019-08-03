@@ -190,6 +190,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool IsWindows10 => HandBrakeWPF.Utilities.SystemInfo.IsWindows10();
+
         #region General
 
         public BindingList<InterfaceLanguage> InterfaceLanguages
