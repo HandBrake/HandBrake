@@ -1,0 +1,160 @@
+From 1b02b0afe201cd14a97d83dc08716bf9cc188cb0 Mon Sep 17 00:00:00 2001
+From: John Stebbins <jstebbins@jetheaddev.com>
+Date: Sun, 4 Aug 2019 10:59:38 -0700
+Subject: [PATCH 3/3] mov: read 3gpp udta tags
+
+---
+ libavformat/mov.c | 110 ++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 107 insertions(+), 3 deletions(-)
+
+diff --git a/libavformat/mov.c b/libavformat/mov.c
+index 1f933cccfd..0c365cde3e 100644
+--- a/libavformat/mov.c
++++ b/libavformat/mov.c
+@@ -50,6 +50,7 @@
+ #include "libavcodec/flac.h"
+ #include "libavcodec/mpegaudiodecheader.h"
+ #include "avformat.h"
++#include "avlanguage.h"
+ #include "internal.h"
+ #include "avio_internal.h"
+ #include "riff.h"
+@@ -295,6 +296,82 @@ static int mov_metadata_hmmt(MOVContext *c, AVIOContext *pb, unsigned len)
+     return 0;
+ }
+ 
++static int mov_read_3gp_udta_tag(MOVContext *c, AVIOContext *pb, MOVAtom atom)
++{
++    const char *key;
++    AVDictionary *metadata;
++    uint16_t langcode = 0;
++    char key2[32], language[4] = {0};
++    uint32_t str_size, version;
++    char *str;
++
++    if (atom.size < 6)
++        return AVERROR_INVALIDDATA;
++
++    switch (atom.type) {
++    case MKTAG( 'a','l','b','m'): key = "album"; break;
++    case MKTAG( 'a','u','t','h'): key = "author"; break;
++    case MKTAG( 'c','p','r','t'): key = "copyright"; break;
++    case MKTAG( 'd','s','c','p'): key = "comment"; break;
++    case MKTAG( 'g','n','r','e'): key = "genre"; break;
++    case MKTAG( 'p','e','r','f'): key = "artist"; break;
++    case MKTAG( 't','i','t','l'): key = "title"; break;
++    case MKTAG( 'y','r','r','c'): key = "date"; break;
++    default: return 0;
++    }
++
++    version = avio_rb32(pb); // version + flags
++    if (version != 0)
++        return AVERROR_INVALIDDATA;
++
++    if (MKTAG( 'y','r','r','c') == atom.type) {
++        int year;
++        year = avio_rb16(pb);
++        str = av_asprintf("%d", year);
++        if (!str)
++            return AVERROR(ENOMEM);
++    } else {
++        int ret;
++        const char *tmp;
++        langcode = avio_rb16(pb);
++        ff_mov_lang_to_iso639(langcode, language);
++        tmp = ff_convert_lang_to(language, AV_LANG_ISO639_2_BIBL);
++        if (!tmp)
++            return AVERROR_INVALIDDATA;
++
++        str_size = atom.size - 6;
++        if (str_size <= 0 || str_size >= INT_MAX/2)
++            return AVERROR_INVALIDDATA;
++
++        str = av_mallocz(str_size + 1);
++        if (!str)
++            return AVERROR(ENOMEM);
++
++        ret = ffio_read_size(pb, str, str_size);
++        if (ret < 0) {
++            av_free(str);
++            return ret;
++        }
++        str[str_size] = 0;
++    }
++
++    if (c->trak_index < 0) {
++        metadata = c->fc->metadata;
++        c->fc->event_flags |= AVFMT_EVENT_FLAG_METADATA_UPDATED;
++    }
++    else {
++        metadata = c->fc->streams[c->trak_index]->metadata;
++    }
++    av_dict_set(&metadata, key, str, 0);
++    if (*language && strcmp(language, "und")) {
++        snprintf(key2, sizeof(key2), "%s-%s", key, language);
++        av_dict_set(&metadata, key2, str, 0);
++    }
++
++    av_freep(&str);
++    return 0;
++}
++
+ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+ {
+     char tmp_key[5];
+@@ -320,15 +397,33 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     case MKTAG( 'c','a','t','g'): key = "category"; break;
+     case MKTAG( 'c','p','i','l'): key = "compilation";
+         parse = mov_metadata_int8_no_padding; break;
+-    case MKTAG( 'c','p','r','t'): key = "copyright"; break;
++    case MKTAG( 'c','p','r','t'):
++        key = "copyright";
++        if (!c->itunes_metadata) {
++            int64_t pos = avio_tell(pb);
++            int ret = mov_read_3gp_udta_tag(c, pb, atom);
++            if (ret != AVERROR_INVALIDDATA)
++                return ret;
++            avio_seek(pb, pos, SEEK_SET);
++        }
++        break;
+     case MKTAG( 'd','e','s','c'): key = "description"; break;
+     case MKTAG( 'd','i','s','k'): key = "disc";
+         parse = mov_metadata_track_or_disc_number; break;
+     case MKTAG( 'e','g','i','d'): key = "episode_uid";
+         parse = mov_metadata_int8_no_padding; break;
+     case MKTAG( 'F','I','R','M'): key = "firmware"; raw = 1; break;
+-    case MKTAG( 'g','n','r','e'): key = "genre";
+-        parse = mov_metadata_gnre; break;
++    case MKTAG( 'g','n','r','e'):
++        key = "genre";
++        parse = mov_metadata_gnre;
++        if (!c->itunes_metadata) {
++            int64_t pos = avio_tell(pb);
++            int ret = mov_read_3gp_udta_tag(c, pb, atom);
++            if (ret != AVERROR_INVALIDDATA)
++                return ret;
++            avio_seek(pb, pos, SEEK_SET);
++        }
++        break;
+     case MKTAG( 'h','d','v','d'): key = "hd_video";
+         parse = mov_metadata_int8_no_padding; break;
+     case MKTAG( 'H','M','M','T'):
+@@ -399,6 +494,15 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+     case MKTAG(0xa9,'w','r','n'): key = "warning";   break;
+     case MKTAG(0xa9,'w','r','t'): key = "composer";  break;
+     case MKTAG(0xa9,'x','y','z'): key = "location";  break;
++    case MKTAG( 'a','l','b','m'):
++    case MKTAG( 'a','u','t','h'):
++    case MKTAG( 'd','s','c','p'):
++    case MKTAG( 'p','e','r','f'):
++    case MKTAG( 't','i','t','l'):
++    case MKTAG( 'y','r','r','c'):
++        if (!c->itunes_metadata) {
++            return mov_read_3gp_udta_tag(c, pb, atom);
++        }
+     }
+ retry:
+     if (c->itunes_metadata && atom.size > 8) {
+-- 
+2.21.0
+
