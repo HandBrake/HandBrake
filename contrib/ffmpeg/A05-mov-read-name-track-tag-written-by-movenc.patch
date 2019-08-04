@@ -1,14 +1,14 @@
-From b6ce7b6a4ec0429069f05e63edce907c0f80aaea Mon Sep 17 00:00:00 2001
+From 375d09561cb88a7002a833614dbd399446479cd1 Mon Sep 17 00:00:00 2001
 From: John Stebbins <jstebbins@jetheaddev.com>
 Date: Wed, 31 Jul 2019 15:27:40 -0700
-Subject: [PATCH] mov: read 'name' track tag written by movenc
+Subject: [PATCH 1/3] mov: read 'name' track tag written by movenc
 
 ---
  libavformat/mov.c | 26 +++++++++++++++++---------
  1 file changed, 17 insertions(+), 9 deletions(-)
 
 diff --git a/libavformat/mov.c b/libavformat/mov.c
-index 24de5429d1..fce69129d9 100644
+index 24de5429d1..1f933cccfd 100644
 --- a/libavformat/mov.c
 +++ b/libavformat/mov.c
 @@ -306,6 +306,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
@@ -19,14 +19,14 @@ index 24de5429d1..fce69129d9 100644
  
      switch (atom.type) {
      case MKTAG( '@','P','R','M'): key = "premiere_version"; raw = 1; break;
-@@ -384,6 +385,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
-     case MKTAG(0xa9,'m','a','k'): key = "make";      break;
-     case MKTAG(0xa9,'m','o','d'): key = "model";     break;
-     case MKTAG(0xa9,'n','a','m'): key = "title";     break;
-+    case MKTAG( 'n','a','m','e'): key = "title";     break;
-     case MKTAG(0xa9,'o','p','e'): key = "original_artist"; break;
-     case MKTAG(0xa9,'p','r','d'): key = "producer";  break;
-     case MKTAG(0xa9,'p','r','f'): key = "performers"; break;
+@@ -338,6 +339,7 @@ static int mov_read_udta_string(MOVContext *c, AVIOContext *pb, MOVAtom atom)
+         return mov_metadata_loci(c, pb, atom.size);
+     case MKTAG( 'm','a','n','u'): key = "make"; break;
+     case MKTAG( 'm','o','d','l'): key = "model"; break;
++    case MKTAG( 'n','a','m','e'): key = "title"; raw = 1; break;
+     case MKTAG( 'p','c','s','t'): key = "podcast";
+         parse = mov_metadata_int8_no_padding; break;
+     case MKTAG( 'p','g','a','p'): key = "gapless_playback";
 @@ -514,17 +516,23 @@ retry:
              }
              str[str_size] = 0;
