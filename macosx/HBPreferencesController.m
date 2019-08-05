@@ -30,7 +30,7 @@ NSString * const HBMinTitleScanSeconds           = @"MinTitleScanSeconds";
 NSString * const HBPreviewsNumber                = @"PreviewsNumber";
 
 NSString * const HBLoggingLevel                  = @"LoggingLevel";
-NSString * const HBEncodeLogLocation             = @"HBEncodeLogLocation";
+NSString * const HBEncodeLogLocation             = @"EncodeLogLocation";
 NSString * const HBClearOldLogs                  = @"HBClearOldLogs";
 
 NSString * const HBQueuePauseIfLowSpace          = @"HBQueuePauseIfLowSpace";
