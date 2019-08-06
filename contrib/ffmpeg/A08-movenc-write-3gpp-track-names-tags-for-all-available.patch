@@ -1,0 +1,77 @@
+From defbe24539ad6e2564db84641a84543256f8609f Mon Sep 17 00:00:00 2001
+From: John Stebbins <jstebbins@jetheaddev.com>
+Date: Tue, 6 Aug 2019 11:45:11 -0600
+Subject: [PATCH] movenc: write 3gpp track names tags for all available
+ languages
+
+Metadata keys can have a language suffix.  Iterate through all language
+variations of the metadata key.
+---
+ libavformat/movenc.c | 28 ++++++++++++++++++++++++++--
+ 1 file changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/libavformat/movenc.c b/libavformat/movenc.c
+index b1b6ef0e4e..3d9800d386 100644
+--- a/libavformat/movenc.c
++++ b/libavformat/movenc.c
+@@ -26,6 +26,7 @@
+ 
+ #include "movenc.h"
+ #include "avformat.h"
++#include "avlanguage.h"
+ #include "avio_internal.h"
+ #include "riff.h"
+ #include "avio.h"
+@@ -3089,15 +3090,25 @@ static int mov_write_3gp_udta_tag(AVIOContext *pb, AVDictionary *metadata,
+ {
+     int64_t pos = avio_tell(pb);
+     AVDictionaryEntry *t = av_dict_get(metadata, str, NULL, 0);
++
+     if (!t || !utf8len(t->value))
+         return 0;
++
+     avio_wb32(pb, 0);   /* size */
+     ffio_wfourcc(pb, tag); /* type */
+     avio_wb32(pb, 0);   /* version + flags */
+     if (!strcmp(tag, "yrrc"))
+         avio_wb16(pb, atoi(t->value));
+     else {
+-        avio_wb16(pb, language_code("eng")); /* language */
++        int lang = 0, len;
++        len = strlen(t->key);
++        if (t->key[len - 4] == '-') {
++            lang = ff_mov_iso639_to_lang(&t->key[len - 3], 1);
++        }
++        if (!lang)
++            lang = ff_mov_iso639_to_lang("und", 1);
++
++        avio_wb16(pb, lang); /* language */
+         avio_write(pb, t->value, strlen(t->value) + 1); /* UTF8 string value */
+         if (!strcmp(tag, "albm") &&
+             (t = av_dict_get(metadata, "track", NULL, 0)))
+@@ -3135,8 +3146,21 @@ static int mov_write_track_udta_tag(AVIOContext *pb, MOVMuxContext *mov,
+         return ret;
+ 
+     if (mov->mode & (MODE_MP4|MODE_MOV)) {
++        AVDictionaryEntry *t = NULL;
++        int und = 0;
++
+         mov_write_track_metadata(pb_buf, st, "name", "title");
+-        mov_write_3gp_udta_tag(pb_buf, st->metadata, "titl", "title");
++        while ((t = av_dict_get(st->metadata, "title-", t, AV_DICT_IGNORE_SUFFIX))) {
++            int len = strlen(t->key);
++            if (len == 10 &&
++                ff_convert_lang_to(&t->key[len - 3], AV_LANG_ISO639_2_BIBL)) {
++                mov_write_3gp_udta_tag(pb_buf, st->metadata, "titl", t->key);
++                if (!strcmp("und", &t->key[len - 3]))
++                    und = 1;
++            }
++        }
++        if (!und)
++            mov_write_3gp_udta_tag(pb_buf, st->metadata, "titl", "title");
+     }
+ 
+     if ((size = avio_close_dyn_buf(pb_buf, &buf)) > 0) {
+-- 
+2.21.0
+
