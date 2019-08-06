@@ -20,7 +20,7 @@
             <windowCollectionBehavior key="collectionBehavior" fullScreenPrimary="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="157" y="863" width="584" height="424"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
             <value key="minSize" type="size" width="320" height="240"/>
             <view key="contentView" id="2577">
                 <rect key="frame" x="0.0" y="0.0" width="584" height="424"/>
@@ -40,10 +40,10 @@
                     </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="rHN-a0-oZQ"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="QuV-M8-cet"/>
-                    <toolbarItem implicitItemIdentifier="E914B732-9FA4-42E0-AFA6-353A8ACC406B" label="Actions" paletteLabel="Actions" image="NSActionTemplate" sizingBehavior="auto" id="DCB-WP-NRs">
+                    <toolbarItem implicitItemIdentifier="E914B732-9FA4-42E0-AFA6-353A8ACC406B" label="Action" paletteLabel="Action" image="NSActionTemplate" sizingBehavior="auto" id="DCB-WP-NRs">
                         <nil key="toolTip"/>
                         <popUpButton key="view" verticalHuggingPriority="750" id="Wfu-Hw-JBC">
-                            <rect key="frame" x="4" y="14" width="40" height="24"/>
+                            <rect key="frame" x="1" y="14" width="40" height="24"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <popUpButtonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="Zxj-rr-UnA">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
