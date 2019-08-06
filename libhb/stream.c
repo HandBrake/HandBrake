@@ -5188,12 +5188,58 @@ static void ffmpeg_close( hb_stream_t *d )
     av_packet_unref(&d->ffmpeg_pkt);
 }
 
+// Track names can be in multiple metadata entries, one per
+// language that the track name is translated to.
+//
+// HandBrake only supports one track name which we write with the lang "und"
+//
+// Search for best candidate track name from the available options.
+static const char * ffmpeg_track_name(AVStream * st, const char * lang)
+{
+    AVDictionaryEntry * t;
+    char              * key;
+
+    // Use key with no language extension
+    // ffmpeg sets this for "und" entries or when source format
+    // doesn't have a language field
+    t = av_dict_get(st->metadata, "title", NULL, 0);
+    if (t != NULL && t->value[0] != 0)
+    {
+        return t->value;
+    }
+    // Try explicit "und" extension
+    t = av_dict_get(st->metadata, "title-und", NULL, 0);
+    if (t != NULL && t->value[0] != 0)
+    {
+        return t->value;
+    }
+    // Try source track language
+    key = hb_strdup_printf("title-%s", lang);
+    t = av_dict_get(st->metadata, key, NULL, 0);
+    free(key);
+    if (t != NULL && t->value[0] != 0)
+    {
+        return t->value;
+    }
+    while ((t = av_dict_get(st->metadata, "title-", t, AV_DICT_IGNORE_SUFFIX)))
+    {
+        // Use first available
+        if (t != NULL && t->value[0] != 0)
+        {
+            return t->value;
+        }
+    }
+    return NULL;
+}
+
 static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
 {
     AVStream *st                = stream->ffmpeg_ic->streams[id];
-    AVCodecParameters *codecpar = st->codecpar;
-    AVDictionaryEntry *tag_lang = av_dict_get(st->metadata, "language", NULL, 0);
-    AVDictionaryEntry *tag_name = av_dict_get(st->metadata, "title", NULL, 0);
+    AVCodecParameters * codecpar = st->codecpar;
+    AVDictionaryEntry * tag_lang = av_dict_get(st->metadata, "language", NULL, 0);
+    iso639_lang_t     * lang = lang_for_code2(tag_lang != NULL ?
+                                              tag_lang->value : "und");
+    const char        * name = ffmpeg_track_name(st, lang->iso639_2);
 
     hb_audio_t *audio              = calloc(1, sizeof(*audio));
     audio->id                      = id;
@@ -5274,11 +5320,10 @@ static void add_ffmpeg_audio(hb_title_t *title, hb_stream_t *stream, int id)
         audio->config.lang.attributes |= HB_AUDIO_ATTR_DEFAULT;
     }
 
-    set_audio_description(audio,
-                          lang_for_code2(tag_lang != NULL ? tag_lang->value : "und"));
-    if (tag_name != NULL)
+    set_audio_description(audio, lang);
+    if (name != NULL)
     {
-        audio->config.in.name = strdup(tag_name->value);
+        audio->config.in.name = strdup(name);
     }
     hb_list_add(title->list_audio, audio);
 }
@@ -5415,7 +5460,9 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     AVStream          * st       = stream->ffmpeg_ic->streams[id];
     AVCodecParameters * codecpar = st->codecpar;
     AVDictionaryEntry * tag_lang = av_dict_get(st->metadata, "language", NULL, 0 );
-    AVDictionaryEntry * tag_name = av_dict_get(st->metadata, "title", NULL, 0);
+    iso639_lang_t     * lang = lang_for_code2(tag_lang != NULL ?
+                                              tag_lang->value : "und");
+    const char        * name = ffmpeg_track_name(st, lang->iso639_2);
 
     hb_subtitle_t *subtitle = calloc( 1, sizeof(*subtitle) );
 
@@ -5476,17 +5523,14 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             return;
     }
 
-    iso639_lang_t *lang;
-
-    lang = lang_for_code2(tag_lang ? tag_lang->value : "und");
     snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s [%s]",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name,
              hb_subsource_name(subtitle->source));
     strncpy(subtitle->iso639_2, lang->iso639_2, 3);
     subtitle->iso639_2[3] = 0;
-    if (tag_name != NULL)
+    if (name != NULL)
     {
-        subtitle->name = strdup(tag_name->value);
+        subtitle->name = strdup(name);
     }
 
     // Copy the extradata for the subtitle track
