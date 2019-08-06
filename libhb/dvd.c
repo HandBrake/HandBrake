@@ -210,6 +210,7 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
     memcpy(subtitle->palette, palette, 16 * sizeof(uint32_t));
     subtitle->palette_set = 1;
 
+    const char * name = NULL;
     switch (lang_extension)
     {
         case 1:
@@ -218,23 +219,28 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
         case 2:
             subtitle->attributes = HB_SUBTITLE_ATTR_LARGE;
             strcat(subtitle->lang, " Large Type");
+            name = "Large Type";
             break;
         case 3:
             subtitle->attributes = HB_SUBTITLE_ATTR_CHILDREN;
             strcat(subtitle->lang, " Children");
+            name = "Children";
             break;
         case 5:
             subtitle->attributes = HB_SUBTITLE_ATTR_CC;
             strcat(subtitle->lang, " Closed Caption");
+            name = "Closed Caption";
             break;
         case 6:
             subtitle->attributes = HB_SUBTITLE_ATTR_CC | HB_SUBTITLE_ATTR_LARGE;
             strcat(subtitle->lang, " Closed Caption, Large Type");
+            name = "Closed Caption, Large Type";
             break;
         case 7:
             subtitle->attributes = HB_SUBTITLE_ATTR_CC |
                                    HB_SUBTITLE_ATTR_CHILDREN;
             strcat(subtitle->lang, " Closed Caption, Children");
+            name = "Closed Caption, Children";
             break;
         case 9:
             subtitle->attributes = HB_SUBTITLE_ATTR_FORCED;
@@ -243,19 +249,26 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
         case 13:
             subtitle->attributes = HB_SUBTITLE_ATTR_COMMENTARY;
             strcat(subtitle->lang, " Director's Commentary");
+            name = "Commentary";
             break;
         case 14:
             subtitle->attributes = HB_SUBTITLE_ATTR_COMMENTARY |
                                    HB_SUBTITLE_ATTR_LARGE;
             strcat(subtitle->lang, " Director's Commentary, Large Type");
+            name = "Commentary, Large Type";
             break;
         case 15:
             subtitle->attributes = HB_SUBTITLE_ATTR_COMMENTARY |
                                    HB_SUBTITLE_ATTR_CHILDREN;
             strcat(subtitle->lang, " Director's Commentary, Children");
+            name = "Commentary, Children";
         default:
             subtitle->attributes = HB_SUBTITLE_ATTR_UNKNOWN;
             break;
+    }
+    if (name != NULL)
+    {
+        subtitle->name = strdup(name);
     }
     switch (style)
     {
@@ -520,6 +533,7 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
 
         lang = lang_for_code( lang_code );
 
+        const char * name = NULL;
         switch ( lang_extension )
         {
             case 1:
@@ -527,16 +541,23 @@ static hb_title_t * hb_dvdread_title_scan( hb_dvd_t * e, int t, uint64_t min_dur
                 break;
             case 2:
                 audio->config.lang.attributes = HB_AUDIO_ATTR_VISUALLY_IMPAIRED;
+                name = "Visually Impaired";
                 break;
             case 3:
                 audio->config.lang.attributes = HB_AUDIO_ATTR_COMMENTARY;
+                name = "Commentary";
                 break;
             case 4:
                 audio->config.lang.attributes = HB_AUDIO_ATTR_ALT_COMMENTARY;
+                name = "Commentary";
                 break;
             default:
                 audio->config.lang.attributes = HB_AUDIO_ATTR_NONE;
                 break;
+        }
+        if (name != NULL)
+        {
+            audio->config.in.name = strdup(name);
         }
 
         snprintf( audio->config.lang.simple,
