@@ -17,7 +17,7 @@
 "9tc-EO-QMd.ibShadowedToolTip" = "Frequenza fotogrammi (Fotogrammi al secondo). Numero delle immagini mostrate durante ogni secondo di video.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
-"A3o-Zx-OfM.ibShadowedToolTip" = "Frequenza Dati Media varia la qualità per garantire che la velocità de dati rimanga relativamente costante in tutto il video";
+"A3o-Zx-OfM.ibShadowedToolTip" = "Frequenza Dati Media varia la qualità per garantire che la velocità dei dati rimanga relativamente costante in tutto il video.";
 
 /* Class = "NSBox"; title = "x264 Presets"; ObjectID = "A4U-3F-pYq"; */
 "A4U-3F-pYq.title" = "Preset x264";

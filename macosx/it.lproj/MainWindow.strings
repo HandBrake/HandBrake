@@ -5,7 +5,7 @@
 "2vD-zN-YMe.ibShadowedToolTip" = "Salva nuovo preset…";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "3Gk-ma-r2w"; */
-"3Gk-ma-r2w.ibShadowedIsNilPlaceholder" = "9e9766bb4d6bb85574f2ef2fccf35391_tr";
+"3Gk-ma-r2w.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
 "3w9-Iu-3u2.ibShadowedToolTip" = "Titolo da analizzare";

@@ -8,12 +8,6 @@
    HBStateFormatter -> work time format */
 " (ETA %@)" = " (ETA %@)";
 
-/* Title description */
-" (Title %d, %@, %@) ▸ %@\n" = " (Titolo %1$d, %2$@, %3$@) ▸ %4$@\n";
-
-/* Title description */
-" (Title %d, %@) ▸ %@\n" = " (Titolo %1$d, %2$@) ▸ %3$@\n";
-
 /* Dimensions description */
 " Keep Aspect Ratio" = " Mantieni rapporto dimensioni";
 
@@ -137,6 +131,9 @@
    HBJob -> filters short description */
 "Deblock" = "Deblock";
 
+/* HBJob -> invalid deblock custom settings error recovery suggestion */
+"Deblock syntax: strength=s:thresh=t:blocksize=b" = ": strength=s:thresh=t:blocksize=b";
+
 /* HBFilters -> filter display name */
 "Decomb" = "Decomb";
 
@@ -161,9 +158,6 @@
 
 /* Dimensions description */
 "Dimensions:" = "Dimensioni:";
-
-/* Audio description */
-"DRC: %.2f" = "DRC: %.2f";
 
 /* Video description */
 "Encoder: %@, " = "Codificatore: %@, ";
@@ -217,6 +211,9 @@
 /* HBFilters -> invalid denoise custom string description */
 "Invalid custom NLMeans settings" = "Impostazioni personalizzate NLMeans non valide.";
 
+/* HBFilters -> invalid deblock custom string description */
+"Invalid deblock custom settings." = "Impostazioni personalizzate deblock non valide.";
+
 /* HBFilters -> invalid Decomb custom string description */
 "Invalid Decomb custom settings." = "Impostazioni personalizzate Decomb non valide.";
 
@@ -268,7 +265,6 @@
 "None" = "Nessuno";
 
 /* HBFilters -> filter display name
-   HBFilters -> filter summary
    HBFilters -> off display name */
 "Off" = "Spento";
 
@@ -298,6 +294,9 @@
 
 /* Video description */
 "Profile: %@" = "Profilo: %@";
+
+/* Range description */
+"Range:" = "Intervallo:";
 
 /* HBJob -> filters short description */
 "Rotation" = "Rotazione";
@@ -329,6 +328,9 @@
 /* Filters description */
 "Sharpen" = "Sharpen";
 
+/* Source description */
+"Source:" = "Sorgente:";
+
 /* HBPicture -> short info */
 "Source: %dx%d, " = "Sorgente: %1$dx%2$d, ";
 
@@ -355,6 +357,12 @@
 
 /* Preset -> import error reason */
 "The selected preset was created with a newer version of HandBrake." = "Il preset selezionato è stato creato con una versione più recente di HandBrake.";
+
+/* Title description */
+"Title %d, %@" = "Titolo %1$d, %2$@";
+
+/* Title description */
+"Title %d, %@, %@" = "Titolo %1$d, %2$@, %3$@";
 
 /* Video description */
 "Tune: " = "Regolazione: ";
