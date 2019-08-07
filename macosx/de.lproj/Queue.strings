@@ -1,20 +1,11 @@
+/* Class = "NSMenuItem"; title = "Reset Failed Jobs"; ObjectID = "0zn-7P-JbR"; */
+"0zn-7P-JbR.title" = "Fehlgeschlagene Aufgaben zurücksetzen";
+
+/* Class = "NSMenuItem"; title = "Remove Completed Jobs"; ObjectID = "9tg-YJ-DuI"; */
+"9tg-YJ-DuI.title" = "Abgeschlossene Aufgaben entfernen";
+
 /* Class = "NSWindow"; title = "Queue"; ObjectID = "2576"; */
 "2576.title" = "Warteschlange";
-
-/* Class = "NSTextFieldCell"; title = "Pending Jobs"; ObjectID = "2637"; */
-"2637.title" = "Anstehende Aufgaben";
-
-/* Class = "NSTextFieldCell"; title = "There are no jobs currently encoding"; ObjectID = "2647"; */
-"2647.title" = "Momentan stehen keine Encodierungsaufgaben an";
-
-/* Class = "NSMenuItem"; title = "Edit Job Settings"; ObjectID = "2650"; */
-"2650.title" = "Aufgabeneinstellungen bearbeiten";
-
-/* Class = "NSMenuItem"; title = "Clear All Jobs"; ObjectID = "2652"; */
-"2652.title" = "Alle Aufgaben löschen";
-
-/* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "2655"; */
-"2655.title" = "Ziel im Finder zeigen";
 
 /* Class = "NSToolbarItem"; label = "When Done"; ObjectID = "a3c-kV-98E"; */
 "a3c-kV-98E.label" = "Wenn fertig";
@@ -28,17 +19,20 @@
 /* Class = "NSMenuItem"; title = "Alert and Notification"; ObjectID = "aat-1N-Odn"; */
 "aat-1N-Odn.title" = "Hinweis mit Nachricht und Alarm";
 
-/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "anR-ZS-eOK"; */
-"anR-ZS-eOK.title" = "Table View Cell";
+/* Class = "NSToolbarItem"; label = "Action"; ObjectID = "DCB-WP-NRs"; */
+"DCB-WP-NRs.label" = "Dienste";
 
-/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "F1i-sW-mz6"; */
-"F1i-sW-mz6.title" = "Table View Cell";
+/* Class = "NSToolbarItem"; paletteLabel = "Action"; ObjectID = "DCB-WP-NRs"; */
+"DCB-WP-NRs.paletteLabel" = "Dienste";
+
+/* Class = "NSToolbarItem"; label = "Details"; ObjectID = "DfN-Iw-bzy"; */
+"DfN-Iw-bzy.label" = "Details";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Details"; ObjectID = "DfN-Iw-bzy"; */
+"DfN-Iw-bzy.paletteLabel" = "Details";
 
 /* Class = "NSMenuItem"; title = "Alert"; ObjectID = "fAD-ky-zo6"; */
 "fAD-ky-zo6.title" = "Hinweis mit Alarm";
-
-/* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "gbW-g1-lEc"; */
-"gbW-g1-lEc.title" = "Zeige Quelle im Finder";
 
 /* Class = "NSMenuItem"; title = "Put Computer to Sleep"; ObjectID = "GUQ-xb-HVS"; */
 "GUQ-xb-HVS.title" = "Computer in den Ruhezustand setzen";
@@ -46,17 +40,17 @@
 /* Class = "NSMenuItem"; title = "Notification"; ObjectID = "jDL-sB-8e3"; */
 "jDL-sB-8e3.title" = "Hinweis mit Nachricht";
 
-/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "MWq-ie-HjX"; */
-"MWq-ie-HjX.title" = "Text Cell";
+/* Class = "NSMenuItem"; title = "Reset All Jobs"; ObjectID = "kPX-am-UX1"; */
+"kPX-am-UX1.title" = "Alle Aufgaben zurücksetzen";
 
 /* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "QmP-SQ-XKK"; */
 "QmP-SQ-XKK.title" = "Computer herunterfahren";
 
 /* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "s7o-pK-heI"; */
-"s7o-pK-heI.label" = "Pause";
+"s7o-pK-heI.label" = "Anhalten";
 
 /* Class = "NSToolbarItem"; paletteLabel = "Pause/Resume"; ObjectID = "s7o-pK-heI"; */
-"s7o-pK-heI.paletteLabel" = "Pause/Fortfahren";
+"s7o-pK-heI.paletteLabel" = "Anhalten/Fortfahren";
 
 /* Class = "NSToolbarItem"; toolTip = "Pause Encoding"; ObjectID = "s7o-pK-heI"; */
 "s7o-pK-heI.toolTip" = "Encodierung anhalten";
@@ -73,12 +67,6 @@
 /* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "SX6-mq-Hck"; */
 "SX6-mq-Hck.toolTip" = "Encodierung starten";
 
-/* Class = "NSMenuItem"; title = "Clear Selected Job"; ObjectID = "Wfz-Kj-Vtx"; */
-"Wfz-Kj-Vtx.title" = "Ausgewählte Aufgabe löschen";
-
-/* Class = "NSMenuItem"; title = "Clear Completed Jobs"; ObjectID = "XdJ-Sl-pwu"; */
-"XdJ-Sl-pwu.title" = "Alle erledigten Aufgaben löschen";
-
-/* Class = "NSMenuItem"; title = "Reset Stopped Job"; ObjectID = "zy6-ab-ush"; */
-"zy6-ab-ush.title" = "Angehaltene Aufgaben zurücksetzen";
+/* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "Tvo-xt-sag"; */
+"Tvo-xt-sag.title" = "Alle Aufgaben entfernen";
 

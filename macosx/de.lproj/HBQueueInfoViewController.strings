@@ -1,0 +1,18 @@
+/* Class = "NSTextFieldCell"; title = "Statistics"; ObjectID = "aCP-yp-iZy"; */
+"aCP-yp-iZy.title" = "Statistik";
+
+/* Class = "NSTextFieldCell"; title = "Summary"; ObjectID = "cx1-rC-AMC"; */
+"cx1-rC-AMC.title" = "Übersicht";
+
+/* Class = "NSButtonCell"; title = "Edit"; ObjectID = "erY-5X-50l"; */
+"erY-5X-50l.title" = "Bearbeiten";
+
+/* Class = "NSTextFieldCell"; title = "Summary"; ObjectID = "GaR-qk-UW7"; */
+"GaR-qk-UW7.title" = "Übersicht";
+
+/* Class = "NSButtonCell"; title = "Reset"; ObjectID = "hgl-N3-x4S"; */
+"hgl-N3-x4S.title" = "Zurücksetzen";
+
+/* Class = "NSTextFieldCell"; title = "Statistics"; ObjectID = "S15-bh-qKU"; */
+"S15-bh-qKU.title" = "Statistik";
+

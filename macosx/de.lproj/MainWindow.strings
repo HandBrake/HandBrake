@@ -5,7 +5,7 @@
 "2vD-zN-YMe.ibShadowedToolTip" = "Neue Voreinstellung speichern …";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = " "; ObjectID = "3Gk-ma-r2w"; */
-"3Gk-ma-r2w.ibShadowedIsNilPlaceholder" = "9e9766bb4d6bb85574f2ef2fccf35391_tr";
+"3Gk-ma-r2w.ibShadowedIsNilPlaceholder" = "";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Title to scan."; ObjectID = "3w9-Iu-3u2"; */
 "3w9-Iu-3u2.ibShadowedToolTip" = "Titel zum überprüfen.";
@@ -266,11 +266,11 @@
 "rfK-nQ-Aq2.title" = "Zielort:";
 
 /* Class = "NSToolbarItem"; label = "Pause"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.label" = "Pause";
+"wTQ-KF-5KW.label" = "Anhalten";
 
 /* Class = "NSToolbarItem"; paletteLabel = "Pause Encoding"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.paletteLabel" = "Encodierung pausieren";
+"wTQ-KF-5KW.paletteLabel" = "Encodierung anhalten";
 
 /* Class = "NSToolbarItem"; toolTip = "Pause Encoding"; ObjectID = "wTQ-KF-5KW"; */
-"wTQ-KF-5KW.toolTip" = "Encodierung pausieren";
+"wTQ-KF-5KW.toolTip" = "Encodierung anhalten";
 

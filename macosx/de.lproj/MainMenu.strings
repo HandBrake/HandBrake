@@ -137,7 +137,7 @@
 "1819.title" = "Sprachausgabe stoppen";
 
 /* Class = "NSMenuItem"; title = "Start Speaking"; ObjectID = "1820"; */
-"1820.title" = "Sprachausgabe starten";
+"1820.title" = "Sprachausgabe beginnen";
 
 /* Class = "NSMenuItem"; title = "Paste"; ObjectID = "1821"; */
 "1821.title" = "Einsetzen";
@@ -182,7 +182,7 @@
 "2445.title" = "Warteschlange";
 
 /* Class = "NSMenuItem"; title = "Pause Encoding"; ObjectID = "2494"; */
-"2494.title" = "Encodierung pausieren";
+"2494.title" = "Encodierung anhalten";
 
 /* Class = "NSMenuItem"; title = "Close Window"; ObjectID = "2508"; */
 "2508.title" = "Schließen";

@@ -1,0 +1,33 @@
+/* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "5AR-we-iHC"; */
+"5AR-we-iHC.title" = "Alle Aufgaben entfernen";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "5Rl-P0-bhc"; */
+"5Rl-P0-bhc.title" = "Table View Cell";
+
+/* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
+"c1Z-ZC-b8b.title" = "Ziel im Finder zeigen";
+
+/* Class = "NSMenuItem"; title = "Edit Job Settings"; ObjectID = "DTF-om-j0l"; */
+"DTF-om-j0l.title" = "Aufgabeneinstellungen bearbeiten";
+
+/* Class = "NSTextFieldCell"; title = "Encoding status"; ObjectID = "eEU-Dr-Qh8"; */
+"eEU-Dr-Qh8.title" = "Encodierungsstatus";
+
+/* Class = "NSMenuItem"; title = "Remove Selected Job"; ObjectID = "egD-8R-PTJ"; */
+"egD-8R-PTJ.title" = "Ausgewählte Aufgabe entfernen";
+
+/* Class = "NSMenuItem"; title = "Remove Completed Jobs"; ObjectID = "gNj-D1-wa7"; */
+"gNj-D1-wa7.title" = "Abgeschlossene Aufgaben entfernen";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "K6c-HW-um8"; */
+"K6c-HW-um8.title" = "Text Cell";
+
+/* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "Pps-jm-zcd"; */
+"Pps-jm-zcd.title" = "Zeige Quelle im Finder";
+
+/* Class = "NSMenuItem"; title = "Reset Stopped Job"; ObjectID = "xMs-43-lL0"; */
+"xMs-43-lL0.title" = "Gestoppte Aufgaben zurücksetzen";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "xSd-Hl-5Qk"; */
+"xSd-Hl-5Qk.title" = "Table View Cell";
+
