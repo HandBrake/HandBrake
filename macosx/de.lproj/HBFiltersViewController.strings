@@ -14,7 +14,7 @@
 "6he-FC-h6S.ibExternalAccessibilityDescription" = "Schärfen-Abstimmung";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.\n\nNone uses the default preset settings.\n\nUnsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.\n\nLapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.\n\nLapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.\n\nLapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.\n\nLapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges."; ObjectID = "6he-FC-h6S"; */
-"6he-FC-h6S.ibShadowedToolTip" = "Schärfen-Abstimmung. Erweiterte Einstellung der Schärfen-Option für bestimmte Szenarien.\n\nOhne: Verwendet die Standardeinstellungen.\n\nUnscharf Maskieren kann abgestimmt werden auf Ultrafein, Fein, Medium, Grob, oder Sehr Grob. Die Auswahl sollte anhand der Auflösung des Ausgangsmaterials und der Feinheit der zu Erhöhenden Details getroffen werden.\n\nLapsharp's Abstimmung Film: Ist für die meisten Live-Action-Filme. Film benutzt einen isotropen Laplace-Algorithmus um alle Kanten identisch zu schärfen. Luminanz-Informationen (Helligkeit) werden mehr geschärft als die Farbinformationen.\n\nLapsharp's Abstimmung Grain: Ist ähnlich zu Film, aber verwendet einen benutzt einen isotropen Laplace-Gauss-Algorithmus um die Effekte von Rauschen und Körnung zu reduzieren. Nützlich um Körnungen zu erhalten bzw. als Alternative zur Film-Abstimmung.\n\nLapsharp's Abstimmung Animation: Ist nützlich für animierte Filme, wie Anime und Cartoons. Animation ist identisch zu Film, aber mit reduzierter Stärke um ungewünschte Artefakte zu vermeiden.\n\nLapsharp's Abstimmung Sprite: Ist nützlich für 1-/4-/8-/16-bit 2D-Spiele. Sprite benutzt einen (4-neighbor) Laplace-Algorithmus, der vertikale und horizontale Kanten mehr erhöht als diagonale.";
+"6he-FC-h6S.ibShadowedToolTip" = "Schärfen-Abstimmung. Erweiterte Einstellung der Schärfen-Option für bestimmte Szenarien.\n\nOhne: Verwendet die Standardeinstellungen.\n\nUnscharf Maskieren kann abgestimmt werden auf Ultrafein, Fein, Medium, Grob, oder Sehr Grob. Die Auswahl sollte anhand der Auflösung des Ausgangsmaterials und der Feinheit der zu erhöhenden Details getroffen werden.\n\nLapsharp's Abstimmung Film: Ist für die meisten Live-Action-Filme. Film benutzt einen isotropen Laplace-Algorithmus um alle Kanten identisch zu schärfen. Luminanz-Informationen (Helligkeit) werden mehr geschärft als die Farbinformationen.\n\nLapsharp's Abstimmung Grain: Ist ähnlich zu Film, aber verwendet einen benutzt einen isotropen Laplace-Gauss-Algorithmus um die Effekte von Rauschen und Körnung zu reduzieren. Nützlich um Körnungen zu erhalten bzw. als Alternative zur Film-Abstimmung.\n\nLapsharp's Abstimmung Animation: Ist nützlich für animierte Filme, wie Anime und Cartoons. Animation ist identisch zu Film, aber mit reduzierter Stärke um ungewünschte Artefakte zu vermeiden.\n\nLapsharp's Abstimmung Sprite: Ist nützlich für 1-/4-/8-/16-bit 2D-Spiele. Sprite benutzt einen (4-neighbor) Laplace-Algorithmus, der vertikale und horizontale Kanten mehr erhöht als diagonale.";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Deinterlace filter preset.\n\nDefault is well balanced for speed and quality.\n\nSkip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.\n\nEEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.\n\nBob attempts to better preserve motion for a slight penalty to perceived resolution."; ObjectID = "6nG-zk-FMo"; */
 "6nG-zk-FMo.ibShadowedToolTip" = "Deinterlace-Voreinstellungen.\n\nStandard ist eine gute Balance zwischen Qualität und Geschwindigkeit.\n\nKeine räumliche Prüfung: Yadif überspringt einige Korrekturen mit geringem Geschwindigkeitsgewinn.\n\nEEDI2 benutzt einen langsameren, Algorithmus hoher Qualität für das Decomb. Für die meisten schwierigen Quellen geeignet.\n\nBob versucht besser Bewegungen zu erhalten, mit kleinen Einbußen in der Auflösung.";
@@ -28,11 +28,23 @@
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "akB-JW-MPe"; */
 "akB-JW-MPe.title" = "OtherViews";
 
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "b6A-ax-2Ed"; */
+"b6A-ax-2Ed.title" = "OtherViews";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Preset"; ObjectID = "bac-vC-bD4"; */
 "bac-vC-bD4.ibExternalAccessibilityDescription" = "Voreinstellungen des Schärfefilters";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Sharpen filter preset. Sets the strength of the filter."; ObjectID = "bac-vC-bD4"; */
 "bac-vC-bD4.ibShadowedToolTip" = "Voreinstellungen des Schärfefilters. Stellt die Stärke des Filters ein.";
+
+/* Class = "NSMenuItem"; title = "180°"; ObjectID = "bEe-EV-Q73"; */
+"bEe-EV-Q73.title" = "180°";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Tune"; ObjectID = "bRd-Km-Wa8"; */
+"bRd-Km-Wa8.ibExternalAccessibilityDescription" = "Schärfen-Abstimmung";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deblock tune. Further adjusts the Deblock preset to optimize settings for specific scenarios."; ObjectID = "bRd-Km-Wa8"; */
+"bRd-Km-Wa8.ibShadowedToolTip" = "Abstimmung des Deblock-Filters. Zusätzliche Anpassung der Deblock-Parameter (Makroblock-Typ), um die Einstellungen für bestimmte Szenarien zu optimieren.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Deblock Preset"; ObjectID = "bz8-FC-vYp"; */
 "bz8-FC-vYp.ibExternalAccessibilityDescription" = "Deblock-Voreinstellung";
@@ -40,23 +52,20 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Deblock reduces blocky artifacts caused by low quality video compression."; ObjectID = "bz8-FC-vYp"; */
 "bz8-FC-vYp.ibShadowedToolTip" = "Deblock reduziert Blockartefakte, die durch Videokompression niedriger Qualität entstehen.";
 
-/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "b6A-ax-2Ed"; */
-"b6A-ax-2Ed.title" = "OtherViews";
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Denoise Preset"; ObjectID = "cTy-PO-BSd"; */
+"cTy-PO-BSd.ibExternalAccessibilityDescription" = "Voreinstellung des Entrauschfilters";
 
-/* Class = "NSMenuItem"; title = "180°"; ObjectID = "bEe-EV-Q73"; */
-"bEe-EV-Q73.title" = "180°";
-
-/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Tune"; ObjectID = "bRd-Km-Wa8"; */
-"bRd-Km-Wa8.ibExternalAccessibilityDescription" = "Voreinstellung des Entrauschfilters";
-
-/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deblock tune. Further adjusts the Deblock preset to optimize settings for specific scenarios."; ObjectID = "bRd-Km-Wa8"; */
-"bRd-Km-Wa8.ibShadowedToolTip" = "Voreinstellung des Entrauschfilters. Beeinflusst die Stärke des Filters.";
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Denoise filter preset. Sets the strength of the filter."; ObjectID = "cTy-PO-BSd"; */
+"cTy-PO-BSd.ibShadowedToolTip" = "Voreinstellung des Entrauschfilters. Beeinflusst die Stärke des Filters.";
 
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "Da7-pY-5vu"; */
 "Da7-pY-5vu.title" = "Eigene:";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates."; ObjectID = "DER-tS-cLx"; */
 "DER-tS-cLx.ibShadowedToolTip" = "Detelecine entfernt Kammartefakte, ein Resultat der optischen Abtastung (Telecine), ein Prozess um Bildraten optischer Filme in Fernsehbildraten umzuwandeln.";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deblock parameters.\n\nstrength=s:thresh=t:blocksize=b"; ObjectID = "DI9-Ed-acp"; */
+"DI9-Ed-acp.ibShadowedToolTip" = "Eigene Deblock-Parameter.\n\nstrength=s:thresh=t:blocksize=b";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "dsH-ZQ-dBs"; */
 "dsH-ZQ-dBs.ibShadowedToolTip" = "Dreht das Bild im Uhrzeigersinn in 90°-Schritten.";
@@ -106,17 +115,11 @@
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "N6B-kA-kMA"; */
 "N6B-kA-kMA.title" = "Abstimmung:";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deblock parameters.\n\nstrength=s:thresh=t:blocksize=b"; ObjectID = "DI9-Ed-acp"; */
-"DI9-Ed-acp.ibShadowedToolTip" = "Eigene Deblock-Parameter. \n\nstrength=s:thresh=t:blocksize=b:";
-
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "n6U-tH-vo0"; */
 "n6U-tH-vo0.title" = "Eigene:";
 
 /* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "oqh-kd-lEw"; */
 "oqh-kd-lEw.title" = "Eigene:";
-
-/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "xqk-dM-L3o"; */
-"xqk-dM-L3o.title" = "Eigene:";
 
 /* Class = "NSMenuItem"; title = "90°"; ObjectID = "OyA-fK-x19"; */
 "OyA-fK-x19.title" = "90°";
@@ -145,11 +148,11 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Deinterlace parameters.\n\nYadif syntax: mode=m:parity=p\n\nYadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7"; ObjectID = "r64-vI-ymx"; */
 "r64-vI-ymx.ibShadowedToolTip" = "Eigene Deinterlaceparameter.\n\nYadif-Syntax: mode=m:parity=p\n\nYadif-Standard: mode=3\n\nDecomb-Syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb-Standard: mode=7";
 
-/* Class = "NSTextField"; ibShadowedToolTip = "Custom Interlace Detection parameters.\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16"; ObjectID = "rPg-F2-gtl"; */
-"rPg-F2-gtl.ibShadowedToolTip" = "Eigene Parameter der Interlace-Erkennung.\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nStandard: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16";
-
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "rfp-ah-CVB"; */
 "rfp-ah-CVB.title" = "OtherViews";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Interlace Detection parameters.\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16"; ObjectID = "rPg-F2-gtl"; */
+"rPg-F2-gtl.ibShadowedToolTip" = "Eigene Parameter der Interlace-Erkennung.\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nStandard: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16";
 
 /* Class = "NSTextFieldCell"; title = "Denoise:"; ObjectID = "Rxe-Xm-vXj"; */
 "Rxe-Xm-vXj.title" = "Entrauschen:";
@@ -159,9 +162,6 @@
 
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "tje-4P-jKt"; */
 "tje-4P-jKt.title" = "Abstimmung:";
-
-/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "ydN-tP-vpt"; */
-"ydN-tP-vpt.title" = "Abstimmung:";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tlc-kS-W8X"; */
 "tlc-kS-W8X.title" = "OtherViews";
@@ -183,6 +183,12 @@
 
 /* Class = "NSTextFieldCell"; title = "Interlace Detection:"; ObjectID = "xHD-vC-ePQ"; */
 "xHD-vC-ePQ.title" = "Interlace-Erkennung:";
+
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "xqk-dM-L3o"; */
+"xqk-dM-L3o.title" = "Eigene:";
+
+/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "ydN-tP-vpt"; */
+"ydN-tP-vpt.title" = "Abstimmung:";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Denoise parameters.\n\nNLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nHQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3"; ObjectID = "ZR9-YG-pfn"; */
 "ZR9-YG-pfn.ibShadowedToolTip" = "Eigene Entrauschparameter.\n\nNLMeans-Syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans-Standard: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nHQDN3D-Syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D-Standard: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";

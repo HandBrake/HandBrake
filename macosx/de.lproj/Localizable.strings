@@ -25,6 +25,9 @@
 /* Queue status */
 "%d encodes pending" = "%d Encodierungen anstehend";
 
+/* No comment provided by engineer. */
+"%llu jobs selected" = "%llu Aufgaben ausgewählt";
+
 /* Destination same as source alert -> message
    File already exists alert -> message */
 "A file already exists at the selected destination." = "Am ausgewählten Ziel existiert schon eine Datei.";
@@ -132,6 +135,12 @@
 /* Queue status */
 "Encode Finished." = "Encodierung beendet.";
 
+/* No comment provided by engineer. */
+"Encoding %@\n%@" = "Encodiere %1$@\n%2$@";
+
+/* Job statistics */
+"Ended at:" = "Beendet um:";
+
 /* Export presets save panel title */
 "Export presets" = "Voreinstellungen exportieren";
 
@@ -175,11 +184,11 @@
 /* Queue undo action name */
 "Move Jobs in Queue" = "Aufgaben zu Warteschlange hinzufügen";
 
-/* Queue status */
-"No encode pending" = "Keine Encodierungen anstehend";
-
 /* Preview -> accessibility label */
 "No image" = "Kein Bild";
+
+/* No comment provided by engineer. */
+"No job selected" = "Keine Aufgabe ausgewählt";
 
 /* Main Window -> Info text */
 "No Valid Source Found" = "Keine gültige Quelle gefunden";
@@ -214,13 +223,16 @@
 "Pause Encoding" = "Encodierung anhalten";
 
 /* Touch bar */
-"Pause/Resume Encoding" = "Encodierung Pausieren/Fortsetzen";
+"Pause/Resume Encoding" = "Encodierung Anhalten/Fortsetzen";
+
+/* Job statistics */
+"Paused time:" = "Angehalten:";
 
 /* Video -> Framerate */
 "Peak Framerate (VFR)" = "Maximale Bildfrequenz (VFR)";
 
 /* Touch bar */
-"Play/Pause" = "Abspielen/Pause";
+"Play/Pause" = "Abspielen/Anhalten";
 
 /* Add preset window -> name alert informative text
    Rename preset window -> name alert informative text */
@@ -255,6 +267,12 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualität/Bitrate";
 
+/* Queue window title */
+"Queue" = "Warteschlange";
+
+/* Queue window title */
+"Queue (%@)" = "Warteschlange (%@)";
+
 /* Quit Alert -> first button */
 "Quit" = "Beenden";
 
@@ -273,6 +291,9 @@
 /* Queue -> pause/resume men
    Toolbar Pause Item */
 "Resume Encoding" = "Encodierung fortsetzen";
+
+/* Job statistics */
+"Run time:" = "Bearbeitung:";
 
 /* Picture HUD -> scale button
    Touch bar */
@@ -295,6 +316,9 @@
 
 /* Touch bar */
 "Show Preview Window" = "Vorschau zeigen";
+
+/* Job statistics */
+"Size:" = "Größe:";
 
 /* Queue Alert -> cancel rip second button */
 "Skip Current Job" = "Momentane Aufgabe überspringen";
@@ -320,16 +344,19 @@
 "Start Queue" = "Warteschlange starten";
 
 /* Touch bar */
-"Start/Stop Encoding" = "Encodierung Starten/Abbrechen";
+"Start/Stop Encoding" = "Encodierung Starten/Stoppen";
+
+/* Job statistics */
+"Started at:" = "Gestartet um:";
 
 /* Toolbar Start/Stop Item */
 "Stop" = "Stop";
 
 /* Queue Alert -> cancel rip third button */
-"Stop After Current Job" = "Nach momentaner Aufgabe abbrechen";
+"Stop After Current Job" = "Nach momentaner Aufgabe stoppen";
 
 /* Queue Alert -> cancel rip fourth button */
-"Stop All" = "Alles abbrechen";
+"Stop All" = "Alles stoppen";
 
 /* Queue -> start/stop menu
    Toolbar Start/Stop Item */

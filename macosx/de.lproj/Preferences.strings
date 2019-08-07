@@ -181,11 +181,14 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
+/* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
+"BPU-E2-N8l.title" = "Nach erfolgter Encodierung Einträge abgeschlossener Aufgaben immer entfernen";
+
 /* Class = "NSTextFieldCell"; title = "Title Scan:"; ObjectID = "c0L-TU-WML"; */
 "c0L-TU-WML.title" = "Titelüberprüfung:";
 
-/* Class = "NSTextFieldCell"; title = "x264 Encoder:"; ObjectID = "cqp-xU-GOe"; */
-"cqp-xU-GOe.title" = "x264-Encoder:";
+/* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
+"cqp-xU-GOe.title" = "Encoder:";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
 "dQ6-Dh-9sD.title" = "Labels in das Formatfenster ziehen um das Benennungsschema festzulegen.";

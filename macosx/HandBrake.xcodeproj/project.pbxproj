@@ -770,6 +770,8 @@
 		A9F5E34E2215D85A0046FA4B /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/ChaptersTitles.strings; sourceTree = "<group>"; };
 		A9F7102419A475EC00F61301 /* HBDockTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBDockTile.h; sourceTree = "<group>"; };
 		A9F7102519A475EC00F61301 /* HBDockTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBDockTile.m; sourceTree = "<group>"; };
+		D062DF6422FAE05700A65A9E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
+		D062DF6522FAE06000A65A9E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
 		D86C9DD41C6D372500F06F1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -2017,6 +2019,7 @@
 			children = (
 				A958EAC322E24D6400D83AF4 /* Base */,
 				A9C313B322F98F0D0001C438 /* it */,
+				D062DF6422FAE05700A65A9E /* de */,
 			);
 			name = HBQueueTableViewController.xib;
 			sourceTree = "<group>";
@@ -2026,6 +2029,7 @@
 			children = (
 				A958EAC622E24D6800D83AF4 /* Base */,
 				A9C313B222F98F0D0001C438 /* it */,
+				D062DF6522FAE06000A65A9E /* de */,
 			);
 			name = HBQueueInfoViewController.xib;
 			sourceTree = "<group>";

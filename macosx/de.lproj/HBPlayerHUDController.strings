@@ -44,10 +44,10 @@
 "lBp-JT-ehn.ibShadowedToolTip" = "Bewegen um die Position auf der Zeitleiste zu ändern.";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Play/Pause"; ObjectID = "mLA-ei-4sK"; */
-"mLA-ei-4sK.ibExternalAccessibilityDescription" = "Abspielen/Pause";
+"mLA-ei-4sK.ibExternalAccessibilityDescription" = "Abspielen/Anhalten";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Toggle Play/Pause"; ObjectID = "mLA-ei-4sK"; */
-"mLA-ei-4sK.ibShadowedToolTip" = "Umschalten zwischen Abspielen/Pause";
+"mLA-ei-4sK.ibShadowedToolTip" = "Umschalten zwischen Abspielen/Anhalten";
 
 /* Class = "NSTextField"; ibExternalAccessibilityDescription = "Time Remaining"; ObjectID = "PVD-pq-1ZG"; */
 "PVD-pq-1ZG.ibExternalAccessibilityDescription" = "Verbleibende Zeit";
