@@ -251,7 +251,7 @@ Activez cette option si votre appareil a du mal à lire le fichier de sortie. (e
   <data name="Video_Framerate" xml:space="preserve">
     <value>Framerate en sortie.
 
-'Identique à la source' est recommandé.Si votre vidéo source a un framerate variable, 'Identique à la source' le conservera.</value>
+'Identique à la source' est recommandé. Si votre vidéo source a un framerate variable, "Identique à la source" le conservera.</value>
   </data>
   <data name="Video_Level" xml:space="preserve">
     <value>Définit et assure la conformité avec le niveau spécifié.
@@ -295,11 +295,11 @@ Ces encodeurs n'ont pas de mode sans perte.</value>
     <value>Lors du 1er passage d'un encodage à 2 passes, utilisez des paramètres qui accélèrent les choses.</value>
   </data>
   <data name="Video_TwoPass" xml:space="preserve">
-    <value>Applique un encodage en 2 passes.
+    <value>Effectue un encodage en 2 passes.
 
-L'option 'bitrate' est requise. Pendant la 1e passe, des statiques à propos
-de la vidéo son collectées. Lors de la seconde passe, ces statistiques sont utilisées
-dans les choix d'allocation du bitrate.</value>
+L'option 'bitrate' est prérequise. Pendant la 1ère passe, des statiques sur la
+vidéo sont collectées. Lors de la seconde passe, ces statistiques seront
+utilisées dans les choix d'allocation de bitrate.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
     <value>Active un framerate variable (VFR) en sortie.
@@ -344,10 +344,10 @@ HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:
 HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
-    <value>Préréglage du filtre de suppression du bruit. Définit la force du filtre.</value>
+    <value>Préréglage du filtre de débruitage. Définit la force du filtre.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Ajustement de l'antibruit. Ajustement supplémentaire de l'antibruit pour optimiser les paramètres sur des cas de figures spécifiques.
+    <value>Ajustement du débruitage. Ajustement supplémentaire du débruitage pour optimiser les paramètres sur des cas de figures spécifiques.
 
 "Aucun" utilise les paramètres prédéfinis par défaut.
 

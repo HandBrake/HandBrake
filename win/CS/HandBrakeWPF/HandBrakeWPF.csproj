@@ -468,9 +468,12 @@
     <EmbeddedResource Include="Properties\Resources.de.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.es.resx" />
     <EmbeddedResource Include="Properties\Resources.fr.resx" />
+    <EmbeddedResource Include="Properties\Resources.ru.resx" />
     <EmbeddedResource Include="Properties\Resources.zh.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.de.resx" />
+    <EmbeddedResource Include="Properties\ResourcesTooltips.es.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.fr.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -487,6 +490,7 @@
     <None Include="Installer\Installer64.nsi" />
     <None Include="Installer\MakeNightly64.nsi" />
     <AppDesigner Include="Properties\" />
+    <EmbeddedResource Include="Properties\ResourcesTooltips.ru.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.zh.resx" />
     <EmbeddedResource Include="public.key" />
     <None Include="packages.config" />

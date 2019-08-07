@@ -152,13 +152,13 @@ HQDN3D ist ein adaptiver Tiefpassfilter, schneller als NLMeans, aber weniger eff
     <value>Kontainerformat. Video, Audio und andere Spuren werden zu einer einzigen Datei dieses Typs kombiniert. Beeinflusst die Kompatibilität.</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
-    <value>Optimiert MP4 für den schrittweisen Download. Nach der Enkodierung werden die Daten so umgeschrieben, dass ein direktes Abspielen übers Internet ermöglicht wird ohne den gesamten Film herunterladen zu müssen.</value>
+    <value>Optimiert MP4 für den schrittweisen Download. Nach der Encodierung werden die Daten so umgeschrieben, dass ein direktes Abspielen übers Internet ermöglicht wird ohne den gesamten Film herunterladen zu müssen.</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>Bereichsauswahl der Quelle. Standardmäßig werden alle Kapitel ausgewählt und die gesamte Quelle enkodiert.</value>
+    <value>Bereichsauswahl der Quelle. Standardmäßig werden alle Kapitel ausgewählt und die gesamte Quelle encodiert.</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>Titel oder Videoclip zum Enkodieren. 
+    <value>Titel oder Videoclip zum Encodieren. 
 Blu-rays und DVDs haben meistens mehrere Titel, der längste ist für gewöhnlich der Hauptfilm.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
@@ -229,7 +229,7 @@ die momentane Bitrate begrenzt werden soll, sollten die Einstellungen von x264 f
     <value>Aktiviert konstante Bildfrequenz.</value>
   </data>
   <data name="Video_Encoders" xml:space="preserve">
-    <value>Verfügbare Videoenkoder.</value>
+    <value>Verfügbare Videoencoder.</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
     <value>Passt die Einstellungen an, um sie für gängige Szenarien zu optimieren.
@@ -239,12 +239,12 @@ Merkmale der Ausgabedatei festlegen. Änderungen werden nach der
 Voreinstellung, aber vor allen anderen Parametern übernommen.</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
-    <value>Zusätzliche Enkodereinstellungen.
+    <value>Zusätzliche Encodereinstellungen.
 
-Durch Doppelpunkte getrennte Liste der Enkoderoptionen.</value>
+Durch Doppelpunkte getrennte Liste der Encoderoptionen.</value>
   </data>
   <data name="Video_FastDecode" xml:space="preserve">
-    <value>Reduzierung der CPU-Auslastung des Dekoders.
+    <value>Reduzierung der CPU-Auslastung des Decoders.
 
 Dies einstellen, wenn das Gerät Schwierigkeiten hat, die Ausgabe wiederzugeben (ausgelassene Einzelbilder).</value>
   </data>
@@ -262,9 +262,9 @@ Dies einstellen, wenn das Gerät Schwierigkeiten hat, die Ausgabe wiederzugeben 
     <value>Ermöglicht die Ausgabe mit variabler Bildfrequenz mit einer maximalen Bildfrequenz, die durch die Einstellung der Bildfrequenz bestimmt wird.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Stellt die Enkodereinstellungen so ein, dass die Kompressionseffizienz gegen die Kodiergeschwindigkeit abgewogen wird. 
+    <value>Stellt die Encodereinstellungen so ein, dass die Kompressionseffizienz gegen die Kodiergeschwindigkeit abgewogen wird. 
 
-Dadurch werden die Standardenkodereinstellungen festgelegt.
+Dadurch werden die Standardencodereinstellungen festgelegt.
 Abstimmungen, Profile, Level und erweiterte Parameter werden darauf angewendet. 
 Diese Auswahl sollte generell auf die langsamste eingestellt werden, die man tolerieren kann, da langsamere
 Einstellungen zu einer besseren Qualität oder kleineren Dateien führen.</value>
@@ -276,8 +276,8 @@ Einstellungen zu einer besseren Qualität oder kleineren Dateien führen.</value
   </data>
   <data name="Video_Quality" xml:space="preserve">
     <value>Stellt den gewünschten Qualitätsfaktor ein.
-Der Enkoder zielt auf eine bestimmte Qualität ab.
-Die von jedem Videoenkoder verwendete Skalierung ist unterschiedlich.
+Der Encoder zielt auf eine bestimmte Qualität ab.
+Die von jedem Videoencoder verwendete Skalierung ist unterschiedlich.
 
 Die Skalierung von x264 ist logarithmisch und niedrigere Werte entsprechen einer höheren Qualität.
 Daher führen kleine Veringerungen der Werte zu einer fortschreitenden Vergrößerung 
@@ -286,13 +286,13 @@ einer Dateigröße, die größer ist als die ursprüngliche Quelle, es sei denn,
 Die empfohlenen Werte sind: 18 bis 20 für Quellen mit Standardauflösung und 20 bis 23 für Quellen mit hoher Auflösung.
 
 Die Skalierung von FFmpeg und Theora ist linearer.
-Diese Enkoder haben keinen verlustfreien Modus.</value>
+Diese Encoder haben keinen verlustfreien Modus.</value>
   </data>
   <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>Verwendet  während des ersten Durchlaufs einer Enkodierung in zwei Durchgängen Einstellungen, die den Vorgang beschleunigen.</value>
+    <value>Verwendet während des ersten Durchlaufs einer Encodierung in zwei Durchgängen Einstellungen, die den Vorgang beschleunigen.</value>
   </data>
   <data name="Video_TwoPass" xml:space="preserve">
-    <value>Führt eine Enkodierung in zwei Durchgängen durch.
+    <value>Führt eine Encodierung in zwei Durchgängen durch.
 
 Die Option "Bitrate" ist Voraussetzung. Während des ersten Durchlaufs werden Statistiken über
 das Video gesammelt. Dann, im zweiten Durchgang, werden diese Statistiken verwendet
@@ -304,13 +304,13 @@ um Entscheidungen über die Zuweisung von Bitraten zu treffen.</value>
 VFR ist nicht kompatibel mit manchen Abspielgeräten.</value>
   </data>
   <data name="MainView_WhenDone" xml:space="preserve">
-    <value>Sobald HandBrake die momentane Warteschlange oder Enkodierung beendet hat wird diese Aktion ausgeführt.</value>
+    <value>Sobald HandBrake die momentane Warteschlange oder Encodierung beendet hat wird diese Aktion ausgeführt.</value>
   </data>
   <data name="MainView_Browse" xml:space="preserve">
-    <value>Navigieren, um einen neuen Zielpfad und Dateinamen für die Enkodierung auszuwählen.</value>
+    <value>Navigieren, um einen neuen Zielpfad und Dateinamen für die Encodierung auszuwählen.</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Der Winkel des Videos zum Enkodieren. Nur auswählbar bei Multiangle-DVDs und -Blu-Rays.</value>
+    <value>Der Winkel des Videos zum Encodieren. Nur auswählbar bei Multiangle-DVDs und -Blu-Rays.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
     <value>Eine neue Voreinstellung hinzufügen.</value>
@@ -319,9 +319,9 @@ VFR ist nicht kompatibel mit manchen Abspielgeräten.</value>
     <value>Zusätzliche Voreinstellungsoptionen.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Voreinstellungen sind eine Gruppe von Enkodiereinstellungen, zugeschnitten auf ein bestimmtes Szenario. Es ist die Voreinstellung auszuwählen, die am besten zu den jeweiligen Bedürfnissen passt.
+    <value>Voreinstellungen sind eine Gruppe von Encodiereinstellungen, zugeschnitten auf ein bestimmtes Szenario. Es ist die Voreinstellung auszuwählen, die am besten zu den jeweiligen Bedürfnissen passt.
 
-Überschreibt alle Enkodiereinstellungen. Die Einstellungen können noch feinjustiert werden nachdem eine Voreinstellung ausgewählt wurde.</value>
+Überschreibt alle Encodiereinstellungen. Die Einstellungen können noch feinjustiert werden nachdem eine Voreinstellung ausgewählt wurde.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
     <value>Die ausgewählte Voreinstellung entfernen.</value>

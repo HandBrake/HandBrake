@@ -138,7 +138,7 @@ NLMEans是一种高质量的降噪滤镜，速度快。在质量比速度更重�
 HQDN3D是一种自适应的低通滤镜，比NLMEans更快，但在保持细节方面效果较差。</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
-    <value>反交错消除经过Telecine处理产生的梳状横纹，这是一种将交错扫描（即隔行扫描）转换为逐行扫描的过程。</value>
+    <value>反交错消除经过胶卷过带处理产生的梳状横纹，胶卷过带是将胶片帧率转换为电视帧率的过程。</value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
     <value>灰度消除了视频的颜色分量。通常被称为黑白视频。</value>
