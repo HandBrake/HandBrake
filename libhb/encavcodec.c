@@ -338,12 +338,13 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             char qualityI[7];
             char quality[7];
             char qualityB[7];
+
             double adjustedQualityI = job->vquality - 2;
             double adjustedQualityB = job->vquality + 2;
             if (adjustedQualityB > 51) {
                 adjustedQualityB = 51;
             }
-            
+
             if (adjustedQualityI < 0){
                 adjustedQualityI = 0;
             }
@@ -351,17 +352,23 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             snprintf(quality, 7, "%.2f", job->vquality);
             snprintf(qualityI, 7, "%.2f", adjustedQualityI);
             snprintf(qualityB, 7, "%.2f", adjustedQualityB);
-            av_dict_set( &av_opts, "rc", "constqp", 0 );
+
+            context->bit_rate = 0;
+
+            av_dict_set( &av_opts, "rc", "vbr_hq", 0 );
             av_dict_set( &av_opts, "cq", quality, 0 );
+            av_dict_set( &av_opts, "qmin", quality, 0 );
+            av_dict_set( &av_opts, "qmax", quality, 0 );
 
             // further Advanced Quality Settings in Constant Quality Mode
             av_dict_set( &av_opts, "init_qpP", quality, 0 );
             av_dict_set( &av_opts, "init_qpB", qualityB, 0 );
             av_dict_set( &av_opts, "init_qpI", qualityI, 0 );
-            hb_log( "encavcodec: encoding at rc=constqp QP %.2f", job->vquality );
+            hb_log( "encavcodec: encoding at rc=vbr %.2f", job->vquality );
 
             // Force IDR frames when we force a new keyframe for chapters
             av_dict_set( &av_opts, "forced-idr", "1", 0 );
+
         }
         else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
         {
