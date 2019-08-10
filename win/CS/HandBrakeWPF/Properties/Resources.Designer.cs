@@ -1926,7 +1926,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Meta Data.
+        ///   Looks up a localized string similar to Metadata.
         /// </summary>
         public static string MainView_MetaDataTab {
             get {
@@ -2457,11 +2457,83 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Meta Data.
+        ///   Looks up a localized string similar to Actors:.
+        /// </summary>
+        public static string MetadataView_Actors {
+            get {
+                return ResourceManager.GetString("MetadataView_Actors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comments:.
+        /// </summary>
+        public static string MetadataView_Comments {
+            get {
+                return ResourceManager.GetString("MetadataView_Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description:.
+        /// </summary>
+        public static string MetadataView_Description {
+            get {
+                return ResourceManager.GetString("MetadataView_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Director:.
+        /// </summary>
+        public static string MetadataView_Director {
+            get {
+                return ResourceManager.GetString("MetadataView_Director", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Genre:.
+        /// </summary>
+        public static string MetadataView_Genre {
+            get {
+                return ResourceManager.GetString("MetadataView_Genre", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plot:.
+        /// </summary>
+        public static string MetadataView_Plot {
+            get {
+                return ResourceManager.GetString("MetadataView_Plot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release Date:.
+        /// </summary>
+        public static string MetadataView_ReleaseDate {
+            get {
+                return ResourceManager.GetString("MetadataView_ReleaseDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Metadata.
         /// </summary>
         public static string MetaDataView_Title {
             get {
                 return ResourceManager.GetString("MetaDataView_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title:.
+        /// </summary>
+        public static string MetadataView_TitleTag {
+            get {
+                return ResourceManager.GetString("MetadataView_TitleTag", resourceCulture);
             }
         }
         
@@ -2991,6 +3063,15 @@ namespace HandBrakeWPF.Properties {
         public static string Options_ShowToolbarAddSelection {
             get {
                 return ResourceManager.GetString("Options_ShowToolbarAddSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System.
+        /// </summary>
+        public static string Options_SystemOptions {
+            get {
+                return ResourceManager.GetString("Options_SystemOptions", resourceCulture);
             }
         }
         

@@ -1022,7 +1022,7 @@ Would you like to overwrite it?</value>
     <value>iPod 5G Support</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>Meta Data</value>
+    <value>Metadata</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
     <value>(Modified)</value>
@@ -1142,7 +1142,7 @@ Would you like to overwrite it?</value>
     <value>Manage Preset</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>Meta Data</value>
+    <value>Metadata</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value>Allow use of the Nvidia NVENC Encoders</value>
@@ -2017,5 +2017,32 @@ Where supported, any user presets will have been imported.</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
     <value>Configure Automatic Subtitle Selections</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Actors:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Comments:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>Description:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Director:</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>Genre:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Plot:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>Release Date:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>Title:</value>
   </data>
 </root>

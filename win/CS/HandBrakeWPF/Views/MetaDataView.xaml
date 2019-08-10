@@ -10,33 +10,36 @@
 
     <UserControl.Resources>
         <converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
+
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Margin" Value="0,5,0,0"></Setter>
+        </Style>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid Margin="10,0,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{x:Static Properties:Resources.MetaDataView_Title}" FontWeight="Bold" Margin="10,5,0,0" Grid.Row="0" />
+        <TextBlock Text="{x:Static Properties:Resources.MetaDataView_Title}" FontWeight="Bold" Margin="0,5,0,0" Grid.Row="0" />
 
         <!-- Metadata Input Area -->
-        <Grid Grid.Row="1"  Margin="10,10,0,0">
+        <Grid Grid.Row="2"  Margin="0,10,0,10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" MinHeight="25" />
-                <RowDefinition Height="Auto" MinHeight="25" />
-                <RowDefinition Height="Auto" MinHeight="25" />
-                <RowDefinition Height="Auto" MinHeight="25" />
-                <RowDefinition Height="Auto" MinHeight="25" />
-                <RowDefinition Height="Auto" MinHeight="25" />
-                <RowDefinition Height="Auto" MinHeight="25" />
-                <RowDefinition Height="Auto" MinHeight="25" />
-                <RowDefinition Height="Auto" MinHeight="25" />
-                <RowDefinition Height="Auto" MinHeight="25" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
@@ -44,35 +47,32 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Album Artist:" Grid.Row="0" />
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding MetaData.AlbumArtist, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
 
-            <TextBlock Text="Album:" Grid.Row="1" Grid.Column="0" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MetaData.Album, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static Properties:Resources.MetadataView_TitleTag}" Grid.Row="0" Grid.Column="0" />
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding MetaData.Name, UpdateSourceTrigger=PropertyChanged}" Width="450" VerticalAlignment="Center" />
 
-            <TextBlock Text="Artist:" Grid.Row="2" Grid.Column="0" />
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding MetaData.Artist, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
-            
-            <TextBlock Text="Comment:" Grid.Row="3" Grid.Column="0" />
-            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MetaData.Comment, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
-                       
-            <TextBlock Text="Composer:" Grid.Row="4" Grid.Column="0" />
-            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding MetaData.Composer, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
-            
-            <TextBlock Text="Description:" Grid.Row="5" Grid.Column="0" />
-            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding MetaData.Description, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
-            
-            <TextBlock Text="Genre:" Grid.Row="6" Grid.Column="0" />
-            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding MetaData.Genre, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
-            
-            <TextBlock Text="Long Description:" Grid.Row="7" Grid.Column="0" />
-            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding MetaData.LongDescription, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
-            
-            <TextBlock Text="Name:" Grid.Row="8" Grid.Column="0" />
-            <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding MetaData.Name, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
-            
-            <TextBlock Text="Release Date:" Grid.Row="9" Grid.Column="0" />
-            <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding MetaData.ReleaseDate, UpdateSourceTrigger=PropertyChanged}" Width="350" VerticalAlignment="Center" />
+            <TextBlock Text="{x:Static Properties:Resources.MetadataView_Actors}" Grid.Row="1" Grid.Column="0" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MetaData.Artist, UpdateSourceTrigger=PropertyChanged}" Width="450" VerticalAlignment="Center" />
+
+            <TextBlock Text="{x:Static Properties:Resources.MetadataView_Director}" Grid.Row="2" />
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding MetaData.AlbumArtist, UpdateSourceTrigger=PropertyChanged}" Width="450" VerticalAlignment="Center" />
+
+            <TextBlock Text="{x:Static Properties:Resources.MetadataView_ReleaseDate}" Grid.Row="3" Grid.Column="0" />
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding MetaData.ReleaseDate, UpdateSourceTrigger=PropertyChanged}" Width="450" VerticalAlignment="Center" />
+
+            <TextBlock Text="{x:Static Properties:Resources.MetadataView_Comments}" Grid.Row="4" Grid.Column="0" />
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding MetaData.Comment, UpdateSourceTrigger=PropertyChanged}" Width="450" VerticalAlignment="Center" />
+
+            <TextBlock Text="{x:Static Properties:Resources.MetadataView_Genre}" Grid.Row="5" Grid.Column="0" />
+            <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding MetaData.Genre, UpdateSourceTrigger=PropertyChanged}" Width="450" VerticalAlignment="Center" />
+
+            <TextBlock Text="{x:Static Properties:Resources.MetadataView_Description}" Grid.Row="6" Grid.Column="0" />
+            <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding MetaData.Description, UpdateSourceTrigger=PropertyChanged}" Width="450" VerticalAlignment="Center" />
+
+            <TextBlock Text="{x:Static Properties:Resources.MetadataView_Plot}" Grid.Row="7" Grid.Column="0" />
+            <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding MetaData.LongDescription, UpdateSourceTrigger=PropertyChanged}" Width="450" 
+                     VerticalAlignment="Stretch" TextWrapping="WrapWithOverflow" VerticalContentAlignment="Stretch" />
+
         </Grid>
 
     </Grid>
