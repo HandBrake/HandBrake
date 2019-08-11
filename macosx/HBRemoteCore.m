@@ -11,10 +11,10 @@
 @interface HBRemoteCore () <HBRemoteProgressProtocol>
 
 @property (nonatomic, readonly) NSXPCConnection *connection;
-
 @property (nonatomic, readonly) id<HBRemoteCoreProtocol> proxy;
 
 @property (nonatomic, readwrite) HBState state;
+
 @property (nonatomic, readonly) NSInteger level;
 @property (nonatomic, readonly, copy) NSString *name;
 
@@ -125,11 +125,13 @@
 
 - (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds progressHandler:(nonnull HBCoreProgressHandler)progressHandler completionHandler:(nonnull HBCoreCompletionHandler)completionHandler
 {
-    self.progressHandler = progressHandler;
-    self.completionHandler = completionHandler;
-
+#ifdef __SANDBOX_ENABLED__
     NSData *bookmark = [url bookmarkDataWithOptions:0 includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
     [_proxy provideResourceAccessWithBookmarks:@[bookmark]];
+#endif
+
+    self.progressHandler = progressHandler;
+    self.completionHandler = completionHandler;
 
     self.state = HBStateScanning;
 
@@ -152,8 +154,10 @@
 
 - (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
+#ifdef __SANDBOX_ENABLED__
     NSData *bookmark = [job.outputURL bookmarkDataWithOptions:0 includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
     [_proxy provideResourceAccessWithBookmarks:@[bookmark]];
+#endif
 
     self.progressHandler = progressHandler;
     self.completionHandler = completionHandler;

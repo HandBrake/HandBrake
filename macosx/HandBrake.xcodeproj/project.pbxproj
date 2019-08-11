@@ -93,6 +93,7 @@
 		A916C99B1C844A0800C7B560 /* HBTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9EA43671A2210C400785E95 /* HBTableView.m */; };
 		A919430D1FB5E2FE001E9BB0 /* HBSummaryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A919430B1FB5E2FE001E9BB0 /* HBSummaryViewController.m */; };
 		A91943111FB5E39E001E9BB0 /* HBSummaryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A919430F1FB5E39E001E9BB0 /* HBSummaryViewController.xib */; };
+		A919992823003CFC0037F526 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A919992A23003CFC0037F526 /* Localizable.strings */; };
 		A91AD3401FB5D2FC00AEA822 /* HBAddCategoryController.m in Sources */ = {isa = PBXBuildFile; fileRef = A91AD33E1FB5D2FC00AEA822 /* HBAddCategoryController.m */; };
 		A91AD3441FB5D9A500AEA822 /* HBAddCategoryController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91AD3421FB5D9A500AEA822 /* HBAddCategoryController.xib */; };
 		A91AD3471FB5D9AA00AEA822 /* AddPreset.xib in Resources */ = {isa = PBXBuildFile; fileRef = A91AD3451FB5D9AA00AEA822 /* AddPreset.xib */; };
@@ -294,6 +295,7 @@
 		A9E1468316BC2AD800C307BC /* PrevTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467F16BC2AD800C307BC /* PrevTemplate.pdf */; };
 		A9E165521C523016003EF30E /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E165511C523016003EF30E /* libavfilter.a */; };
 		A9E52CD8218DD52B00E17B86 /* ExceptionAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9E52CD6218DD52A00E17B86 /* ExceptionAlert.xib */; };
+		A9E8F80523003B3000AA14E9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9E8F80423003B2F00AA14E9 /* Info.plist */; };
 		A9F217E61E2F934C00C10C6E /* container-migration.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9F217E51E2F934C00C10C6E /* container-migration.plist */; };
 		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
 		A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F7102519A475EC00F61301 /* HBDockTile.m */; };
@@ -511,6 +513,10 @@
 		A9181CB11BD76F8400E5C8B0 /* HBSubtitlesTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesTrack.m; sourceTree = "<group>"; };
 		A919430A1FB5E2FE001E9BB0 /* HBSummaryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBSummaryViewController.h; sourceTree = "<group>"; };
 		A919430B1FB5E2FE001E9BB0 /* HBSummaryViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBSummaryViewController.m; sourceTree = "<group>"; };
+		A919992923003CFC0037F526 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A919992B23003D710037F526 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A919992C23003D720037F526 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A919992D23003D730037F526 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A91AD33D1FB5D2FC00AEA822 /* HBAddCategoryController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBAddCategoryController.h; sourceTree = "<group>"; };
 		A91AD33E1FB5D2FC00AEA822 /* HBAddCategoryController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBAddCategoryController.m; sourceTree = "<group>"; };
 		A91AFD0A1A948827009BECED /* HBOutputFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBOutputFileWriter.h; sourceTree = "<group>"; };
@@ -619,7 +625,6 @@
 		A964D39822FDE8EE00DFCAEA /* HandBrakeXPCService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HandBrakeXPCService.h; sourceTree = "<group>"; };
 		A964D39922FDE8EE00DFCAEA /* HandBrakeXPCService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HandBrakeXPCService.m; sourceTree = "<group>"; };
 		A964D39B22FDE8EE00DFCAEA /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		A964D39D22FDE8EE00DFCAEA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A964D3A622FDE91A00DFCAEA /* HBRemoteCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBRemoteCore.h; sourceTree = "<group>"; };
 		A964D3A722FDE91B00DFCAEA /* HBRemoteCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBRemoteCore.m; sourceTree = "<group>"; };
 		A96664AD1CCE45BF00DA4A57 /* HBPlayerHUDController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPlayerHUDController.h; sourceTree = "<group>"; };
@@ -759,6 +764,7 @@
 		A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBAddPresetController.h; sourceTree = "<group>"; };
 		A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBAddPresetController.m; sourceTree = "<group>"; };
 		A9E52CD7218DD52A00E17B86 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/ExceptionAlert.xib; sourceTree = "<group>"; };
+		A9E8F80423003B2F00AA14E9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9EA43661A2210C400785E95 /* HBTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTableView.h; sourceTree = "<group>"; };
 		A9EA43671A2210C400785E95 /* HBTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTableView.m; sourceTree = "<group>"; };
 		A9F217E41E2F897D00C10C6E /* HandBrake.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HandBrake.entitlements; sourceTree = "<group>"; };
@@ -1329,7 +1335,8 @@
 				A964D39822FDE8EE00DFCAEA /* HandBrakeXPCService.h */,
 				A964D39922FDE8EE00DFCAEA /* HandBrakeXPCService.m */,
 				A964D39B22FDE8EE00DFCAEA /* main.m */,
-				A964D39D22FDE8EE00DFCAEA /* Info.plist */,
+				A9E8F80423003B2F00AA14E9 /* Info.plist */,
+				A919992A23003CFC0037F526 /* Localizable.strings */,
 			);
 			path = HandBrakeXPCService;
 			sourceTree = "<group>";
@@ -1825,6 +1832,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9E8F80523003B3000AA14E9 /* Info.plist in Resources */,
+				A919992823003CFC0037F526 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2080,6 +2089,17 @@
 				A90713D32242693B00372AA0 /* fr */,
 			);
 			name = HBSummaryViewController.xib;
+			sourceTree = "<group>";
+		};
+		A919992A23003CFC0037F526 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A919992923003CFC0037F526 /* en */,
+				A919992B23003D710037F526 /* it */,
+				A919992C23003D720037F526 /* fr */,
+				A919992D23003D730037F526 /* de */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 		A91AD3421FB5D9A500AEA822 /* HBAddCategoryController.xib */ = {
