@@ -10,7 +10,7 @@
 #include "hb.h"
 #include "hbffmpeg.h"
 #include <stdio.h>
-#include "samplerate.h"
+#include "audio_resample.h"
 
 #define SYNC_MAX_VIDEO_QUEUE_LEN    40
 #define SYNC_MIN_VIDEO_QUEUE_LEN    20
@@ -121,16 +121,12 @@ typedef struct
         // Audio stream context
         struct
         {
-            hb_audio_t     * audio;
+            hb_audio_t          * audio;
 
             // Audio filter settings
             // Samplerate conversion
-            struct
-            {
-                SRC_STATE  * ctx;
-                SRC_DATA     pkt;
-            } src;
-            double           gain_factor;
+            hb_audio_resample_t * resample;
+            double                gain_factor;
         } audio;
 
         // Subtitle stream context
@@ -2246,12 +2242,23 @@ static int InitAudio( sync_common_t * common, int index )
         audio->config.in.samplerate != audio->config.out.samplerate)
     {
         /* Initialize libsamplerate */
-        int error;
-        pv->stream->audio.src.ctx = src_new(SRC_SINC_MEDIUM_QUALITY,
-            hb_mixdown_get_discrete_channel_count(audio->config.out.mixdown),
-            &error);
-        if (pv->stream->audio.src.ctx == NULL) goto fail;
-        pv->stream->audio.src.pkt.end_of_input = 0;
+        pv->stream->audio.resample =
+            hb_audio_resample_init(AV_SAMPLE_FMT_FLT,
+                                   audio->config.out.samplerate,
+                                   audio->config.out.mixdown,
+                                   audio->config.out.normalize_mix_level);
+        if (pv->stream->audio.resample == NULL)
+        {
+            hb_error("sync: audio 0x%x resample init failed", audio->id);
+            goto fail;
+        }
+        hb_audio_resample_set_sample_rate(pv->stream->audio.resample,
+                                          audio->config.in.samplerate);
+        if (hb_audio_resample_update(pv->stream->audio.resample))
+        {
+            hb_error("sync: audio 0x%x resample update failed", audio->id);
+            goto fail;
+        }
     }
 
     pv->stream->audio.gain_factor = pow(10, audio->config.out.gain / 20);
@@ -2265,9 +2272,9 @@ fail:
     {
         if (pv->stream != NULL)
         {
-            if (pv->stream->audio.src.ctx)
+            if (pv->stream->audio.resample)
             {
-                src_delete(pv->stream->audio.src.ctx);
+                hb_audio_resample_free(pv->stream->audio.resample);
             }
             hb_list_close(&pv->stream->delta_list);
             hb_list_close(&pv->stream->in_queue);
@@ -3047,9 +3054,9 @@ static void syncAudioClose( hb_work_object_t * w )
     }
 
     // Free samplerate conversion context
-    if (pv->stream->audio.src.ctx)
+    if (pv->stream->audio.resample)
     {
-        src_delete(pv->stream->audio.src.ctx);
+        hb_audio_resample_free(pv->stream->audio.resample);
     }
 
     sync_delta_t * delta;
@@ -3136,54 +3143,27 @@ static hb_buffer_t * FilterAudioFrame( sync_stream_t * stream,
 
         // Audio is not passthru.  Check if we need to modify the audio
         // in any way.
-        if (stream->audio.src.ctx != NULL)
+        if (stream->audio.resample != NULL)
         {
             /* do sample rate conversion */
-            int count_in, count_out;
-            hb_buffer_t * buf_raw = buf;
-            int sample_size = hb_mixdown_get_discrete_channel_count(
-                                audio->config.out.mixdown ) * sizeof( float );
+            hb_buffer_t * out;
+            int           nsamples, sample_size;
 
-            count_in  = buf_raw->size / sample_size;
-            /*
-             * When using stupid rates like 44.1 there will always be some
-             * truncation error. E.g., a 1536 sample AC3 frame will turn into a
-             * 1536*44.1/48.0 = 1411.2 sample frame. If we just truncate the .2
-             * the error will build up over time and eventually the audio will
-             * substantially lag the video. libsamplerate will keep track of the
-             * fractional sample & give it to us when appropriate if we give it
-             * an extra sample of space in the output buffer.
-             */
-            count_out = (buf->s.duration * audio->config.out.samplerate) /
-                        90000 + 1;
+            sample_size = hb_mixdown_get_discrete_channel_count(
+                            audio->config.out.mixdown ) * sizeof( float );
 
-            stream->audio.src.pkt.input_frames  = count_in;
-            stream->audio.src.pkt.output_frames = count_out;
-            stream->audio.src.pkt.src_ratio =
-                (double)audio->config.out.samplerate /
-                        audio->config.in.samplerate;
-
-            buf = hb_buffer_init( count_out * sample_size );
-            buf->s = buf_raw->s;
-            stream->audio.src.pkt.data_in  = (float *) buf_raw->data;
-            stream->audio.src.pkt.data_out = (float *) buf->data;
-            if (src_process(stream->audio.src.ctx, &stream->audio.src.pkt))
+            nsamples  = buf->size / sample_size;
+            out = hb_audio_resample(stream->audio.resample,
+                                    (const uint8_t **)&buf->data,
+                                    nsamples);
+            hb_buffer_close(&buf);
+            if (out == NULL)
             {
-                /* XXX If this happens, we're screwed */
-                hb_error("sync: audio 0x%x src_process failed", audio->id);
-            }
-            hb_buffer_close(&buf_raw);
-
-            if (stream->audio.src.pkt.output_frames_gen <= 0)
-            {
-                hb_buffer_close(&buf);
                 return NULL;
             }
-            buf->size = stream->audio.src.pkt.output_frames_gen * sample_size;
-            buf->s.duration = 90000. * stream->audio.src.pkt.output_frames_gen /
-                              audio->config.out.samplerate;
-            buf->s.start = stream->next_pts;
-            buf->s.stop = stream->next_pts + buf->s.duration;
+            out->s.start = stream->next_pts;
+            out->s.stop  = stream->next_pts + out->s.duration;
+            buf = out;
         }
         if (audio->config.out.gain > 0.0)
         {
