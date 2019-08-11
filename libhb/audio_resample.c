@@ -274,8 +274,8 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
 
     if (resample->resample_needed)
     {
-        out_samples = (nsamples + 1) * resample->out.sample_rate /
-                                       resample->in.sample_rate;
+        out_samples = nsamples  * resample->out.sample_rate /
+                                  resample->in.sample_rate + 1;
         out_size = av_samples_get_buffer_size(NULL, resample->out.channels,
                                               out_samples,
                                               resample->out.sample_fmt, 0);
@@ -286,7 +286,9 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
         if (out_samples <= 0)
         {
             if (out_samples < 0)
+            {
                 hb_log("hb_audio_resample: swr_convert() failed");
+            }
             // don't send empty buffers downstream (EOF)
             hb_buffer_close(&out);
             return NULL;
@@ -322,6 +324,7 @@ hb_buffer_t* hb_audio_resample(hb_audio_resample_t *resample,
         }
         out->size = out_samples * sample_size;
     }
+    out->s.duration = 90000. * out_samples / resample->out.sample_rate;
 
     return out;
 }
