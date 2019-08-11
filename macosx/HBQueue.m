@@ -13,7 +13,6 @@
 static void *HBQueueContext = &HBQueueContext;
 
 NSString * const HBQueueDidChangeStateNotification = @"HBQueueDidChangeStateNotification";
-NSString * const HBQueueNotificationStateKey = @"HBQueueNotificationStateKey";
 
 NSString * const HBQueueDidAddItemNotification = @"HBQueueDidAddItemNotification";
 NSString * const HBQueueDidRemoveItemNotification = @"HBQueueDidRemoveItemNotification";
@@ -86,7 +85,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 {
     if (context == HBQueueContext)
     {
-        [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self userInfo:@{HBQueueNotificationStateKey: @(self.core.state)}];
+        [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self];
     }
     else
     {
@@ -437,7 +436,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 - (BOOL)isEncoding
 {
     HBState s = self.core.state;
-    return (s == HBStateScanning) || (s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing) || (s == HBStateSearching);
+    return self.currentItem || (s == HBStateScanning) || (s == HBStatePaused) || (s == HBStateWorking) || (s == HBStateMuxing) || (s == HBStateSearching);
 }
 
 - (BOOL)canPause
@@ -501,7 +500,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     self.failedItemsCount = failedCount;
     self.completedItemsCount = completedCount;
 
-    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self userInfo:@{HBQueueNotificationStateKey: @(self.core.state)}];
+    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self];
 }
 
 - (BOOL)isDiskSpaceLowAtURL:(NSURL *)url

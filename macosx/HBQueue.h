@@ -13,7 +13,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString * const HBQueueDidChangeStateNotification;
-extern NSString * const HBQueueNotificationStateKey;                 // HBState
 
 extern NSString * const HBQueueDidAddItemNotification;
 extern NSString * const HBQueueDidRemoveItemNotification;

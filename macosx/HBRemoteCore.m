@@ -59,7 +59,6 @@
     [_connection resume];
 }
 
-
 - (void)invalidate
 {
     [[_connection synchronousRemoteObjectProxyWithErrorHandler:^(NSError * _Nonnull error) {}] tearDown];
@@ -71,6 +70,7 @@
 {
     if (self.state != HBStateIdle)
     {
+        [self forwardError:@"XPC Service did crash"];
         self.progressHandler = nil;
         if (self.completionHandler)
         {
@@ -129,8 +129,10 @@
 
     [_proxy scanURL:url titleIndex:index previews:previewsNum minDuration:seconds withReply:^(HBCoreResult result) {
         dispatch_sync(dispatch_get_main_queue(), ^{
+            HBCoreCompletionHandler handler = weakSelf.completionHandler;
+            weakSelf.completionHandler = nil;
             weakSelf.progressHandler = nil;
-            weakSelf.completionHandler(result);
+            handler(result);
         });
     }];
 }
@@ -154,8 +156,10 @@
 
     [_proxy encodeJob:job withReply:^(HBCoreResult result) {
         dispatch_sync(dispatch_get_main_queue(), ^{
+            HBCoreCompletionHandler handler = weakSelf.completionHandler;
+            weakSelf.completionHandler = nil;
             weakSelf.progressHandler = nil;
-            weakSelf.completionHandler(result);
+            handler(result);
         });
     }];
 }
