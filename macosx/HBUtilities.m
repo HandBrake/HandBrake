@@ -54,6 +54,11 @@
     va_end(args);
 }
 
++ (void)writeToActivityLogWithNoHeader:(NSString *)text
+{
+    fprintf(stderr, "%s", text.UTF8String);
+}
+
 + (nullable NSURL *)URLFromBookmark:(NSData *)bookmark
 {
     NSParameterAssert(bookmark);

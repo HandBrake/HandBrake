@@ -6,15 +6,9 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "HBRedirect.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@protocol HBOutputRedirectListening <NSObject>
-
-- (void)stdoutRedirect:(NSString *)text;
-- (void)stderrRedirect:(NSString *)text;
-
-@end
 
 /**
  * This class is used to redirect @c stdout and @c stderr outputs. It is never
@@ -27,13 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
  *		 universal redirecting is needed, it can be done at file descriptor
  *		 level.
  */
-@interface HBOutputRedirect : NSObject
-
-+ (instancetype)stdoutRedirect;
-+ (instancetype)stderrRedirect;
-
-- (void)addListener:(id <HBOutputRedirectListening>)aListener;
-- (void)removeListener:(id <HBOutputRedirectListening>)aListener;
+@interface HBOutputRedirect : HBRedirect
 
 @end
 

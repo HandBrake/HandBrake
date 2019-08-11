@@ -5,8 +5,15 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBQueue.h"
-#import "NSArray+HBAdditions.h"
+#import "HBRemoteCore.h"
+
 #import "HBPreferencesKeys.h"
+#import "NSArray+HBAdditions.h"
+
+static void *HBQueueContext = &HBQueueContext;
+
+NSString * const HBQueueDidChangeStateNotification = @"HBQueueDidChangeStateNotification";
+NSString * const HBQueueNotificationStateKey = @"HBQueueNotificationStateKey";
 
 NSString * const HBQueueDidAddItemNotification = @"HBQueueDidAddItemNotification";
 NSString * const HBQueueDidRemoveItemNotification = @"HBQueueDidRemoveItemNotification";
@@ -38,7 +45,10 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 @interface HBQueue ()
 
+@property (nonatomic, readonly) HBRemoteCore *core;
 @property (nonatomic) BOOL stop;
+
+@property (nonatomic, nullable) HBJobOutputFileWriter *currentLog;
 
 @end
 
@@ -52,7 +62,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         NSInteger loggingLevel = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
 
         // Init a separate instance of libhb for the queue
-        _core = [[HBCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
+        _core = [[HBRemoteCore alloc] initWithLogLevel:loggingLevel name:@"QueueCore"];
         _core.automaticallyPreventSleep = NO;
 
         _items = [[HBDistributedArray alloc] initWithURL:queueURL class:[HBQueueItem class]];
@@ -62,8 +72,26 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadQueue) name:HBDistributedArrayChanged object:_items];
 
         [self updateStats];
+
+        // Set up observers
+        [self.core addObserver:self forKeyPath:@"state"
+                       options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
+                       context:HBQueueContext];
+
     }
     return self;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if (context == HBQueueContext)
+    {
+        [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self userInfo:@{HBQueueNotificationStateKey: @(self.core.state)}];
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
 }
 
 #pragma mark - Public methods
@@ -466,6 +494,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     self.pendingItemsCount = pendingCount;
     self.failedItemsCount = failedCount;
     self.completedItemsCount = completedCount;
+
+    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self userInfo:@{HBQueueNotificationStateKey: @(self.core.state)}];
 }
 
 - (BOOL)isDiskSpaceLowAtURL:(NSURL *)url
@@ -563,8 +593,9 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
             self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:nextItem.job];
             if (self.currentLog)
             {
-                [[HBOutputRedirect stderrRedirect] addListener:self.currentLog];
-                [[HBOutputRedirect stdoutRedirect] addListener:self.currentLog];
+                dispatch_queue_t mainQueue = dispatch_get_main_queue();
+                [self.core.stderrRedirect addListener:self.currentLog queue:mainQueue];
+                [self.core.stdoutRedirect addListener:self.currentLog queue:mainQueue];
             }
 
             self.currentItem = nextItem;
@@ -601,8 +632,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
     // Since we are done with this encode, tell output to stop writing to the
     // individual encode log.
-    [[HBOutputRedirect stderrRedirect] removeListener:self.currentLog];
-    [[HBOutputRedirect stdoutRedirect] removeListener:self.currentLog];
+    [self.core.stderrRedirect removeListener:self.currentLog];
+    [self.core.stdoutRedirect removeListener:self.currentLog];
 
     self.currentLog = nil;
 
@@ -693,14 +724,11 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
     HBJob *job = item.job;
 
-    // Reset the title in the job.
-    job.title = self.core.titles.firstObject;
-
     NSParameterAssert(job);
 
     HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
     formatter.twoLines = NO;
-    self.core.stateFormatter = formatter;
+    //self.core.stateFormatter = formatter;
 
     // Progress handler
     void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
@@ -739,9 +767,6 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
     // We should be all setup so let 'er rip
     [self.core encodeJob:job progressHandler:progressHandler completionHandler:completionHandler];
-
-    // We are done using the title, remove it from the job
-    job.title = nil;
 }
 
 /**

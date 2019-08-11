@@ -6,12 +6,14 @@
 
 #import <Foundation/Foundation.h>
 
-#import "HBCore.h"
 #import "HBDistributedArray.h"
 #import "HBQueueItem.h"
 #import "HBJobOutputFileWriter.h"
 
 NS_ASSUME_NONNULL_BEGIN
+
+extern NSString * const HBQueueDidChangeStateNotification;
+extern NSString * const HBQueueNotificationStateKey;                 // HBState
 
 extern NSString * const HBQueueDidAddItemNotification;
 extern NSString * const HBQueueDidRemoveItemNotification;
@@ -45,11 +47,9 @@ extern NSString * const HBQueueItemNotificationItemKey;              // HBQueueI
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithURL:(NSURL *)queueURL;
 
-@property (nonatomic, readonly) HBCore *core;
 @property (nonatomic, readonly) HBDistributedArray<HBQueueItem *> *items;
 
 @property (nonatomic, nullable) HBQueueItem *currentItem;
-@property (nonatomic, nullable) HBJobOutputFileWriter *currentLog;
 
 @property (nonatomic) NSUInteger pendingItemsCount;
 @property (nonatomic) NSUInteger failedItemsCount;

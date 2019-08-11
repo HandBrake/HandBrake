@@ -25,5 +25,9 @@
 
 #define decodeCollectionOfObjects3(x, cl, objectcl, objectcl2, objectcl3) x = [decoder decodeObjectOfClasses:[NSSet setWithObjects:[cl class], [objectcl class], [objectcl2 class], [objectcl3 class], nil] forKey:OBJC_STRINGIFY(x)];
 
+#define decodeCollectionOfObjects4(x, cl, objectcl, objectcl2, objectcl3, objectcl4) x = [decoder decodeObjectOfClasses:[NSSet setWithObjects:[cl class], [objectcl class], [objectcl2 class], [objectcl3 class], [objectcl4 class], nil] forKey:OBJC_STRINGIFY(x)];
+
+#define decodeCollectionOfObjects5(x, cl, objectcl, objectcl2, objectcl3, objectcl4, objectcl5) x = [decoder decodeObjectOfClasses:[NSSet setWithObjects:[cl class], [objectcl class], [objectcl2 class], [objectcl3 class], [objectcl4 class], [objectcl5 class], nil] forKey:OBJC_STRINGIFY(x)];
+
 
 #define decodeObjectOrFail(x, cl) x = [decoder decodeObjectOfClass:[cl class] forKey:OBJC_STRINGIFY(x)]; if (x == nil) {NSLog(@"Failed to decode: %@", OBJC_STRINGIFY(x)); goto fail;}

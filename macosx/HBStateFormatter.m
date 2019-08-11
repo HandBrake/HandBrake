@@ -145,7 +145,10 @@
         case HB_STATE_WORKING:
         case HB_STATE_PAUSED:
 #define p s.param.working
-            progress = (p.progress + p.pass - 1) / p.pass_count;
+            if (p.pass_count > 0)
+            {
+                progress = (p.progress + p.pass - 1) / p.pass_count;
+            }
 #undef p
 
             break;

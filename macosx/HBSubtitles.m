@@ -488,7 +488,7 @@ extern NSString *keySubTrackExternalFileURLBookmark;
     _tokens = [NSMutableArray array];
 
     decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
-    decodeCollectionOfObjects3(_sourceTracks, NSArray, NSDictionary, NSURL, NSData);
+    decodeCollectionOfObjects5(_sourceTracks, NSArray, NSDictionary, NSURL, NSData, NSString, NSNumber);
 
 #ifdef __SANDBOX_ENABLED__
     for (NSDictionary *sourceTrack in _sourceTracks)

@@ -41,7 +41,6 @@
 #import "HBPreferencesKeys.h"
 
 static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
-static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
 
 @interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDraggingDestination, NSPopoverDelegate>
 {
@@ -279,13 +278,9 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
                    options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                    context:HBControllerScanCoreContext];
 
-    [self.queue.core addObserver:self forKeyPath:@"state"
-                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                   context:HBControllerQueueCoreContext];
-
-    [self.queue addObserver:self forKeyPath:@"pendingItemsCount"
-              options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-              context:HBControllerQueueCoreContext];
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        [self updateQueueUI];
+    }];
 
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidStartNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
         self.bottomConstrain.animator.constant = 0;
@@ -383,22 +378,23 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
             [self _touchBar_validateUserInterfaceItems];
         }
     }
-    else if (context == HBControllerQueueCoreContext)
-    {
-        [self updateToolbarButtonsState];
-        [self.window.toolbar validateVisibleItems];
-        if (@available(macOS 10.12.2, *))
-        {
-            [self _touchBar_updateQueueButtonsState];
-            [self _touchBar_validateUserInterfaceItems];
-        }
-        NSUInteger count = self.queue.pendingItemsCount;
-        self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : nil;
-    }
     else
     {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (void)updateQueueUI
+{
+    [self updateToolbarButtonsState];
+    [self.window.toolbar validateVisibleItems];
+    if (@available(macOS 10.12.2, *))
+    {
+        [self _touchBar_updateQueueButtonsState];
+        [self _touchBar_validateUserInterfaceItems];
+    }
+    NSUInteger count = self.queue.pendingItemsCount;
+    self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : nil;
 }
 
 - (void)updateToolbarButtonsStateForScanCore:(HBState)state

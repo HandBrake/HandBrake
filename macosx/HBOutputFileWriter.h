@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#import "HBOutputRedirect.h"
+#import "HBRedirect.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

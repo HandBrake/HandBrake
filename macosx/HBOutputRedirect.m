@@ -17,28 +17,13 @@ static int stdoutwrite(void *inFD, const char *buffer, int size);
 static int stderrwrite(void *inFD, const char *buffer, int size);
 
 @interface HBOutputRedirect ()
-{
-    /// Set that contains all registered listeners for this output.
-    NSMutableSet *listeners;
 
-    /// Selector that is called on listeners to forward the output.
-    SEL forwardingSelector;
+/// Output stream (@c stdout or @c stderr) redirected by this object.
+@property (nonatomic, readonly) FILE *stream;
 
-    /// Output stream (@c stdout or @c stderr) redirected by this object.
-    FILE *stream;
+/// Pointer to old write function for the stream.
+@property (nonatomic, readonly) int (*oldWriteFunc)(void *, const char *, int);
 
-    /// Pointer to old write function for the stream.
-    int	(*oldWriteFunc)(void *, const char *, int);
-}
-
-@end
-
-
-@interface HBOutputRedirect (Private)
-- (instancetype)initWithStream:(FILE *)aStream selector:(SEL)aSelector;
-- (void)startRedirect;
-- (void)stopRedirect;
-- (void)forwardOutput:(NSData *)data;
 @end
 
 /**
@@ -48,8 +33,11 @@ int	stdoutwrite(void *inFD, const char *buffer, int size)
 {
     @autoreleasepool
     {
-        NSData *data = [[NSData alloc] initWithBytes:buffer length:size];
-        [g_stdoutRedirect performSelectorOnMainThread:@selector(forwardOutput:) withObject:data waitUntilDone:NO];
+        NSString *string = [[NSString alloc] initWithBytes:buffer length:size encoding:NSUTF8StringEncoding];
+        if (string)
+        {
+            [g_stdoutRedirect forwardOutput:string];
+        }
     }
     return size;
 }
@@ -58,8 +46,11 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 {
     @autoreleasepool
     {
-        NSData *data = [[NSData alloc] initWithBytes:buffer length:size];
-        [g_stderrRedirect performSelectorOnMainThread:@selector(forwardOutput:) withObject:data waitUntilDone:NO];
+        NSString *string = [[NSString alloc] initWithBytes:buffer length:size encoding:NSUTF8StringEncoding];
+        if (string)
+        {
+            [g_stderrRedirect forwardOutput:string];
+        }
     }
     return size;
 }
@@ -72,8 +63,9 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 + (instancetype)stdoutRedirect
 {
 	if (!g_stdoutRedirect)
-		g_stdoutRedirect = [[HBOutputRedirect alloc] initWithStream:stdout selector:@selector(stdoutRedirect:)];
-		
+    {
+		g_stdoutRedirect = [[HBOutputRedirect alloc] initWithStream:stdout type:HBRedirectTypeOutput];
+    }
 	return g_stdoutRedirect;
 }
 
@@ -83,73 +75,27 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 + (instancetype)stderrRedirect
 {
 	if (!g_stderrRedirect)
-		g_stderrRedirect = [[HBOutputRedirect alloc] initWithStream:stderr selector:@selector(stderrRedirect:)];
-		
+    {
+        g_stderrRedirect = [[HBOutputRedirect alloc] initWithStream:stderr type:HBRedirectTypeError];
+    }
 	return g_stderrRedirect;
 }
-
-/**
- * Adds specified object as listener for this output. Method @c stdoutRedirect:
- * or @c stderrRedirect: of the listener is called to redirect the output.
- */
-- (void)addListener:(id <HBOutputRedirectListening>)aListener
-{
-	NSAssert2([aListener respondsToSelector:forwardingSelector], @"Object %@ doesn't respond to selector \"%@\"", aListener, NSStringFromSelector(forwardingSelector));
-
-	if (![listeners containsObject:aListener])
-	{
-		[listeners addObject:aListener];
-	}
-	
-	if ([listeners count] > 0)
-		[self startRedirect];
-}
-
-/**
- * Stops forwarding for this output to the specified listener object.
- */
-- (void)removeListener:(id <HBOutputRedirectListening>)aListener
-{
-	if ([listeners containsObject:aListener])
-	{
-		[listeners removeObject:aListener];
-	}
-
-	// If last listener is removed, stop redirecting output and autorelease
-	// self. Remember to set proper global pointer to NULL so the object is
-	// recreated again when needed.
-	if ([listeners count] == 0)
-	{
-		[self stopRedirect];
-
-		if (self == g_stdoutRedirect)
-			g_stdoutRedirect = nil;
-		else if (self == g_stderrRedirect)
-			g_stderrRedirect = nil;
-	}
-}
-
-@end
-
-@implementation HBOutputRedirect (Private)
 
 /**
  * Private constructor which should not be called from outside. This is used to
  * initialize the class at @c stdoutRedirect and @c stderrRedirect.
  *
- * @param aStream	Stream that will be redirected (stdout or stderr).
- * @param aSelector	Selector that will be called in listeners to redirect the stream.
+ * @param stream	Stream that will be redirected (stdout or stderr).
+ * @param type   	Type that will be called in listeners to redirect the stream.
  *
  * @return New HBOutputRedirect object.
  */
-- (instancetype)initWithStream:(FILE *)aStream selector:(SEL)aSelector
+- (instancetype)initWithStream:(FILE *)stream type:(HBRedirectType)type
 {
-	if (self = [super init])
+	if (self = [self initWithType:type])
 	{
-		listeners = [[NSMutableSet alloc] init];
-		forwardingSelector = aSelector;
-		stream = aStream;
-		oldWriteFunc = NULL;
+		_stream = stream;
+		_oldWriteFunc = NULL;
 	}
 	return self;
 }
@@ -161,10 +107,10 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
  */
 - (void)startRedirect
 {
-	if (!oldWriteFunc)
+	if (!_oldWriteFunc)
 	{
-		oldWriteFunc = stream->_write;
-		stream->_write = stream == stdout ? stdoutwrite : stderrwrite;
+		_oldWriteFunc = _stream->_write;
+		_stream->_write = _stream == stdout ? stdoutwrite : stderrwrite;
 	}
 }
 
@@ -174,24 +120,11 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
  */
 - (void)stopRedirect
 {
-	if (oldWriteFunc)
+	if (_oldWriteFunc)
 	{
-		stream->_write = oldWriteFunc;
-		oldWriteFunc = NULL;
+		_stream->_write = _oldWriteFunc;
+		_oldWriteFunc = NULL;
 	}
-}
-
-/**
- * Called from @c stdoutwrite() and @c stderrwrite() to forward the output to 
- * listeners.
- */ 
-- (void)forwardOutput:(NSData *)data
-{
-	NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-    if (string)
-    {
-        [listeners makeObjectsPerformSelector:forwardingSelector withObject:string];
-    }
 }
 
 @end

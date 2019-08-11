@@ -278,7 +278,7 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
     self = [super init];
 
     decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
-    decodeCollectionOfObjects(_sourceTracks, NSArray, NSDictionary);
+    decodeCollectionOfObjects3(_sourceTracks, NSArray, NSDictionary, NSString, NSNumber);
     decodeCollectionOfObjects(_tracks, NSMutableArray, HBAudioTrack);
 
     for (HBAudioTrack *track in _tracks)

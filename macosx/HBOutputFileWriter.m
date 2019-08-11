@@ -74,12 +74,7 @@
     fflush(f);
 }
 
-- (void)stdoutRedirect:(NSString *)text
-{
-    [self write:text];
-}
-
-- (void)stderrRedirect:(NSString *)text
+- (void)redirect:(NSString *)text type:(HBRedirectType)type
 {
     [self write:text];
 }

@@ -20,8 +20,6 @@
 
 @import HandBrakeKit;
 
-static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
-
 @interface HBQueueController () <NSUserNotificationCenterDelegate, HBQueueTableViewControllerDelegate, HBQueueDetailsViewControllerDelegate>
 
 @property (weak) IBOutlet NSSplitView *splitView;
@@ -154,51 +152,41 @@ static void *HBControllerQueueCoreContext = &HBControllerQueueCoreContext;
     [self.window setFrameFromString:@"HBQueueWindowFrameAutosave"];
 
     // Set up observers
-    [self.queue.core addObserver:self forKeyPath:@"state"
-                         options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                         context:HBControllerQueueCoreContext];
-    [self.queue addObserver:self forKeyPath:@"pendingItemsCount"
-                   options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
-                   context:HBControllerQueueCoreContext];
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        [self updateUI];
+    }];
 
     [self tableViewDidSelectItemsAtIndexes:[NSIndexSet indexSet]];
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+- (void)updateUI
 {
-    if (context == HBControllerQueueCoreContext)
+    [self updateToolbarButtonsState];
+    [self.window.toolbar validateVisibleItems];
+
+    if (@available(macOS 10.12.2, *))
     {
-        [self updateToolbarButtonsState];
-        [self.window.toolbar validateVisibleItems];
+        [self _touchBar_updateButtonsState];
+        [self _touchBar_validateUserInterfaceItems];
+    }
 
-        if (@available(macOS 10.12.2, *))
-        {
-            [self _touchBar_updateButtonsState];
-            [self _touchBar_validateUserInterfaceItems];
-        }
-
-        NSString *string;
-        if (self.queue.pendingItemsCount == 0)
-        {
-            self.window.title = NSLocalizedString(@"Queue", @"Queue window title");
-        }
-        else
-        {
-            if (self.queue.pendingItemsCount == 1)
-            {
-                string = [NSString stringWithFormat: NSLocalizedString(@"%d encode pending", @"Queue status"), self.queue.pendingItemsCount];
-            }
-            else
-            {
-                string = [NSString stringWithFormat: NSLocalizedString(@"%d encodes pending", @"Queue status"), self.queue.pendingItemsCount];
-            }
-
-            self.window.title = [NSString stringWithFormat: NSLocalizedString(@"Queue (%@)", @"Queue window title"), string];
-        }
+    NSString *string;
+    if (self.queue.pendingItemsCount == 0)
+    {
+        self.window.title = NSLocalizedString(@"Queue", @"Queue window title");
     }
     else
     {
-        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+        if (self.queue.pendingItemsCount == 1)
+        {
+            string = [NSString stringWithFormat: NSLocalizedString(@"%d encode pending", @"Queue status"), self.queue.pendingItemsCount];
+        }
+        else
+        {
+            string = [NSString stringWithFormat: NSLocalizedString(@"%d encodes pending", @"Queue status"), self.queue.pendingItemsCount];
+        }
+
+        self.window.title = [NSString stringWithFormat: NSLocalizedString(@"Queue (%@)", @"Queue window title"), string];
     }
 }
 
