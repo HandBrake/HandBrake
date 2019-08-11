@@ -4,6 +4,7 @@
 
 #import "HBRemoteCore.h"
 #import "HBRemoteCoreProtocol.h"
+#import "HBPreferencesKeys.h"
 
 @import HandBrakeKit;
 
@@ -68,18 +69,24 @@
 
 - (void)handleInterruption
 {
+    [_proxy setUpWithLogLevel:self.level name:self.name];
+
     if (self.state != HBStateIdle)
     {
         [self forwardError:@"XPC Service did crash"];
+
+        HBCoreCompletionHandler handler = self.completionHandler;
+
         self.progressHandler = nil;
-        if (self.completionHandler)
-        {
-            self.completionHandler(HBCoreResultFailed);
-        }
         self.completionHandler = nil;
+
         self.state = HBStateIdle;
+
+        if (handler)
+        {
+            handler(HBCoreResultFailed);
+        }
     }
-    [_proxy setUpWithLogLevel:self.level name:self.name];
 }
 
 - (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name
@@ -89,6 +96,7 @@
     {
         _level = level;
         _name = name;
+        [_proxy setDVDNav:[NSUserDefaults.standardUserDefaults boolForKey:HBUseDvdNav]];
         [_proxy setUpWithLogLevel:level name:name];
     }
     return self;

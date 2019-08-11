@@ -44,6 +44,13 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     return self;
 }
 
+- (void)setDVDNav:(BOOL)enabled
+{
+    dispatch_sync(_queue, ^{
+        [HBCore setDVDNav:enabled];
+    });
+}
+
 - (void)setUpWithLogLevel:(NSInteger)level name:(NSString *)name
 {
     [HBCore initGlobal];

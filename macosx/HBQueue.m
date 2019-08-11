@@ -731,10 +731,6 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
     NSParameterAssert(job);
 
-    HBStateFormatter *formatter = [[HBStateFormatter alloc] init];
-    formatter.twoLines = NO;
-    //self.core.stateFormatter = formatter;
-
     // Progress handler
     void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
     {

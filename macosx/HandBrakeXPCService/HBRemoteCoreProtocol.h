@@ -8,6 +8,8 @@
 
 @protocol HBRemoteCoreProtocol
 
+- (void)setDVDNav:(BOOL)enabled;
+
 - (void)setUpWithLogLevel:(NSInteger)level name:(NSString *)name;
 - (void)tearDown;
 

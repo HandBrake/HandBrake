@@ -72,8 +72,11 @@
 
 - (void)setItem:(HBQueueItem *)item
 {
-    [super setItem:item];
     [self removeObservers];
+
+    self.progressField.stringValue = @"";
+
+    [super setItem:item];
 
     if (item.state == HBQueueItemStateWorking)
     {
