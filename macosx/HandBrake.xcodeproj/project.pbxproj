@@ -65,7 +65,6 @@
 		27D6C75A14B102DA00B785E4 /* libfribidi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73314B102DA00B785E4 /* libfribidi.a */; };
 		27D6C75F14B102DA00B785E4 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73614B102DA00B785E4 /* libmp3lame.a */; };
 		27D6C76514B102DA00B785E4 /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73914B102DA00B785E4 /* libogg.a */; };
-		27D6C76714B102DA00B785E4 /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73A14B102DA00B785E4 /* libsamplerate.a */; };
 		27D6C76914B102DA00B785E4 /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73B14B102DA00B785E4 /* libswscale.a */; };
 		27D6C76B14B102DA00B785E4 /* libtheora.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73C14B102DA00B785E4 /* libtheora.a */; };
 		27D6C76D14B102DA00B785E4 /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73D14B102DA00B785E4 /* libvorbis.a */; };
@@ -137,7 +136,6 @@
 		A91CE2BF1C7DABBC0068F46F /* libjansson.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A95512881A320A12001BFC6F /* libjansson.a */; };
 		A91CE2C01C7DABBC0068F46F /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73614B102DA00B785E4 /* libmp3lame.a */; };
 		A91CE2C11C7DABBC0068F46F /* libogg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73914B102DA00B785E4 /* libogg.a */; };
-		A91CE2C21C7DABBC0068F46F /* libsamplerate.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73A14B102DA00B785E4 /* libsamplerate.a */; };
 		A91CE2C31C7DABBC0068F46F /* libswscale.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73B14B102DA00B785E4 /* libswscale.a */; };
 		A91CE2C41C7DABBC0068F46F /* libtheora.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73C14B102DA00B785E4 /* libtheora.a */; };
 		A91CE2C51C7DABBC0068F46F /* libvorbis.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 27D6C73D14B102DA00B785E4 /* libvorbis.a */; };
@@ -453,7 +451,6 @@
 		27D6C73314B102DA00B785E4 /* libfribidi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfribidi.a; path = external/contrib/lib/libfribidi.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73614B102DA00B785E4 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmp3lame.a; path = external/contrib/lib/libmp3lame.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73914B102DA00B785E4 /* libogg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libogg.a; path = external/contrib/lib/libogg.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		27D6C73A14B102DA00B785E4 /* libsamplerate.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsamplerate.a; path = external/contrib/lib/libsamplerate.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73B14B102DA00B785E4 /* libswscale.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libswscale.a; path = external/contrib/lib/libswscale.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73C14B102DA00B785E4 /* libtheora.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libtheora.a; path = external/contrib/lib/libtheora.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		27D6C73D14B102DA00B785E4 /* libvorbis.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libvorbis.a; path = external/contrib/lib/libvorbis.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -841,7 +838,6 @@
 				1CBC683420BE014800A26CC2 /* liblzma.a in Frameworks */,
 				1C0695AC20BD193D001543DA /* libpostproc.a in Frameworks */,
 				27D6C76514B102DA00B785E4 /* libogg.a in Frameworks */,
-				27D6C76714B102DA00B785E4 /* libsamplerate.a in Frameworks */,
 				27D6C76914B102DA00B785E4 /* libswscale.a in Frameworks */,
 				27D6C76B14B102DA00B785E4 /* libtheora.a in Frameworks */,
 				27D6C76D14B102DA00B785E4 /* libvorbis.a in Frameworks */,
@@ -908,7 +904,6 @@
 				A91CE2BF1C7DABBC0068F46F /* libjansson.a in Frameworks */,
 				A91CE2C01C7DABBC0068F46F /* libmp3lame.a in Frameworks */,
 				A91CE2C11C7DABBC0068F46F /* libogg.a in Frameworks */,
-				A91CE2C21C7DABBC0068F46F /* libsamplerate.a in Frameworks */,
 				1C0695AD20BD193D001543DA /* libpostproc.a in Frameworks */,
 				A91CE2C31C7DABBC0068F46F /* libswscale.a in Frameworks */,
 				A91CE2C41C7DABBC0068F46F /* libtheora.a in Frameworks */,
@@ -952,7 +947,6 @@
 				27D6C73314B102DA00B785E4 /* libfribidi.a */,
 				27D6C73614B102DA00B785E4 /* libmp3lame.a */,
 				27D6C73914B102DA00B785E4 /* libogg.a */,
-				27D6C73A14B102DA00B785E4 /* libsamplerate.a */,
 				27D6C73B14B102DA00B785E4 /* libswscale.a */,
 				27D6C73C14B102DA00B785E4 /* libtheora.a */,
 				27D6C73D14B102DA00B785E4 /* libvorbis.a */,
