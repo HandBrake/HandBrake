@@ -128,7 +128,7 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
 @property (nonatomic, strong) HBAppDelegate *delegate;
 
 /// The queue.
-@property (nonatomic, strong) HBQueue *queue;
+@property (nonatomic, weak) HBQueue *queue;
 
 /// Whether the window is visible or occluded,
 /// useful to avoid updating the UI needlessly

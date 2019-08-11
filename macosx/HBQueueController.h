@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithQueue:(HBQueue *)queue;
 
-@property (nonatomic, readonly) HBQueue *queue;
+@property (nonatomic, weak, readonly) HBQueue *queue;
 
 @property (nonatomic, weak, nullable) HBAppDelegate *delegate;
 

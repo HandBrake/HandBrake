@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HBRemoteCore : NSObject
 
 - (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name;
+- (void)invalidate;
 
 @property (nonatomic, readonly) HBState state;
 

@@ -14,7 +14,7 @@
 
 @interface HBQueueTableViewController () <NSTableViewDataSource, NSTableViewDelegate, HBQueueItemViewDelegate>
 
-@property (nonatomic, readonly) HBQueue *queue;
+@property (nonatomic, weak, readonly) HBQueue *queue;
 @property (nonatomic) NSArray<HBQueueItem *> *dragNodesArray;
 
 @property (strong) id<HBQueueTableViewControllerDelegate> delegate;

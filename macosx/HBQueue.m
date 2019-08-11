@@ -94,6 +94,12 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     }
 }
 
+- (void)dealloc
+{
+    [self.core removeObserver:self forKeyPath:@"state"];
+    [self.core invalidate];
+}
+
 #pragma mark - Public methods
 
 - (void)addJob:(HBJob *)item
