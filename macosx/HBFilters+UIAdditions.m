@@ -68,7 +68,14 @@ static NSDictionary * filterParamsToNamesDict(hb_filter_param_t * (f)(int), int 
 
 - (id)transformedValue:(id)value
 {
-    return [[self.dict allKeysForObject:value] firstObject];
+    if (value)
+    {
+        return [[self.dict allKeysForObject:value] firstObject];
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 + (BOOL)allowsReverseTransformation

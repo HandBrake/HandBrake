@@ -82,7 +82,7 @@ extern NSString *keySubTrackExternalFileURLBookmark;
 
 #pragma mark - Data Source
 
-- (NSDictionary<NSString *, id> *)sourceTrackAtIndex:(NSUInteger)idx;
+- (NSDictionary<NSString *, id> *)sourceTrackAtIndex:(NSUInteger)idx
 {
     return self.sourceTracks[idx];
 }
@@ -101,7 +101,7 @@ extern NSString *keySubTrackExternalFileURLBookmark;
 
 #pragma mark - Delegate
 
-- (void)track:(HBSubtitlesTrack *)track didChangeSourceFrom:(NSUInteger)oldSourceIdx;
+- (void)track:(HBSubtitlesTrack *)track didChangeSourceFrom:(NSUInteger)oldSourceIdx
 {
     // If the source was changed to None, remove the track
     if (track.sourceTrackIdx == NONE_TRACK_INDEX)
@@ -553,7 +553,7 @@ fail:
     return self.tracks[index];
 }
 
-- (void)insertObject:(HBSubtitlesTrack *)track inTracksAtIndex:(NSUInteger)index;
+- (void)insertObject:(HBSubtitlesTrack *)track inTracksAtIndex:(NSUInteger)index
 {
     [[self.undo prepareWithInvocationTarget:self] removeObjectFromTracksAtIndex:index];
     [self.tracks insertObject:track atIndex:index];

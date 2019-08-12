@@ -57,8 +57,8 @@ NSString * const HBQueueAutoClearCompletedItems  = @"HBQueueAutoClearCompletedIt
     IBOutlet NSTextField    * fSendEncodeToAppField;
 }
 
-@property (unsafe_unretained) IBOutlet NSTokenField *formatTokenField;
-@property (unsafe_unretained) IBOutlet NSTokenField *builtInTokenField;
+@property (nonatomic, unsafe_unretained) IBOutlet NSTokenField *formatTokenField;
+@property (nonatomic, unsafe_unretained) IBOutlet NSTokenField *builtInTokenField;
 @property (nonatomic, readonly, strong) NSArray *buildInFormatTokens;
 @property (nonatomic, strong) NSArray *matches;
 

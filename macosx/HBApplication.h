@@ -7,5 +7,4 @@
 #import <Cocoa/Cocoa.h>
 
 @interface HBApplication : NSApplication
-
 @end

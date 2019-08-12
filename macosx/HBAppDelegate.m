@@ -27,7 +27,7 @@
 
 @property (nonatomic, strong) HBPresetsManager *presetsManager;
 @property (nonatomic, strong) HBPresetsMenuBuilder *presetsMenuBuilder;
-@property (unsafe_unretained) IBOutlet NSMenu *presetsMenu;
+@property (nonatomic, unsafe_unretained) IBOutlet NSMenu *presetsMenu;
 
 @property (nonatomic, strong) HBPreferencesController *preferencesController;
 

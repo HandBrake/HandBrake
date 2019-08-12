@@ -284,7 +284,7 @@
     return resultSize;
 }
 
-#pragma MARK: - Accessibility
+#pragma mark - Accessibility
 
 - (BOOL)isAccessibilityElement
 {

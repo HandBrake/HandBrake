@@ -8,11 +8,13 @@
 
 @class HBAudio;
 
-/**
- *  HBAudioController
- */
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBAudioController : NSViewController
 
 @property (nonatomic, readwrite, weak) HBAudio *audio;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

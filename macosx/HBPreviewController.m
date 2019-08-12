@@ -43,7 +43,7 @@
 @property (nonatomic) HBPictureController *pictureSettingsWindow;
 
 @property (nonatomic) NSPoint windowCenterPoint;
-@property (weak) IBOutlet HBPreviewView *previewView;
+@property (nonatomic, weak) IBOutlet HBPreviewView *previewView;
 
 @end
 
@@ -522,7 +522,7 @@
     [self switchStateToHUD:self.pictureHUD];
 }
 
-- (void)showAlert:(NSURL *)fileURL;
+- (void)showAlert:(NSURL *)fileURL
 {
     NSAlert *alert = [[NSAlert alloc] init];
     alert.messageText = NSLocalizedString(@"HandBrake can't open the preview.", @"Preview -> live preview alert message");
@@ -539,7 +539,7 @@
     }];
 }
 
-- (void)setUpPlaybackOfURL:(NSURL *)fileURL playerClass:(Class)class;
+- (void)setUpPlaybackOfURL:(NSURL *)fileURL playerClass:(Class)class
 {
     NSArray<Class> *availablePlayerClasses = @[[HBAVPlayer class]];
 
@@ -615,7 +615,7 @@
 
 - (void)keyDown:(NSEvent *)event
 {
-    if ([self.currentHUD HB_keyDown:event] == NO)
+    if (self.generator && [self.currentHUD HB_keyDown:event] == NO)
     {
         [super keyDown:event];
     }
@@ -623,7 +623,7 @@
 
 - (void)scrollWheel:(NSEvent *)event
 {
-    if ([self.currentHUD HB_scrollWheel:event] == NO)
+    if (self.generator && [self.currentHUD HB_scrollWheel:event] == NO)
     {
         [super scrollWheel:event];
     }

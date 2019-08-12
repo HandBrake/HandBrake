@@ -6,6 +6,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBDockTextField : NSTextField
 
 @property (nonatomic, copy) NSString *textToDisplay;
@@ -15,3 +17,6 @@
 - (void)changeGradientColors:(NSColor *)startColor endColor:(NSColor *)endColor;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

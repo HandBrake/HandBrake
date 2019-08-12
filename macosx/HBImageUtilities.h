@@ -6,6 +6,11 @@
 
 #import <Foundation/Foundation.h>
 
-CGImageRef CreateScaledCGImageFromCGImage(CGImageRef image, CGFloat thumbnailHeight);
-CGImageRef CGImageRotated(CGImageRef imgRef, CGFloat angle, BOOL flipped) CF_RETURNS_RETAINED;
+CF_ASSUME_NONNULL_BEGIN
+
+CGImageRef __nullable CreateScaledCGImageFromCGImage(CGImageRef image, CGFloat thumbnailHeight);
+CGImageRef __nullable CGImageRotated(CGImageRef imgRef, CGFloat angle, BOOL flipped) CF_RETURNS_RETAINED;
 CGColorSpaceRef copyColorSpace(int primaries, int transfer, int matrix);
+
+CF_ASSUME_NONNULL_END
+

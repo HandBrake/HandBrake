@@ -6,6 +6,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBDockTile : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
@@ -31,3 +33,6 @@
 - (void)updateDockIcon:(double)progress hours:(NSInteger)hours minutes:(NSInteger)minutes seconds:(NSInteger)seconds;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

@@ -238,7 +238,7 @@
  * @param index picture index in title.
  * @param duration the duration in seconds of the preview movie.
  */
-- (BOOL) createMovieAsyncWithImageAtIndex: (NSUInteger) index duration: (NSUInteger) seconds;
+- (BOOL) createMovieAsyncWithImageAtIndex: (NSUInteger) index duration: (NSUInteger) seconds
 {
     // return if an encoding if already started.
     if (self.core || index >= self.imagesCount)

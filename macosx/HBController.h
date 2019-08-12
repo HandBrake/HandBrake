@@ -12,6 +12,8 @@
 
 @class HBJob;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBController : NSWindowController
 
 - (instancetype)initWithDelegate:(HBAppDelegate *)delegate queue:(HBQueue *)queue presetsManager:(HBPresetsManager *)manager;
@@ -42,5 +44,7 @@
 - (IBAction)deletePreset:(id)sender;
 - (IBAction)reloadPreset:(id)sender;
 
-
 @end
+
+NS_ASSUME_NONNULL_END
+

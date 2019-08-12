@@ -149,7 +149,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     });
 }
 
- - (void)encodeJob:(HBJob *)job withReply:(void (^)(HBCoreResult))reply;
+ - (void)encodeJob:(HBJob *)job withReply:(void (^)(HBCoreResult))reply
 {
     dispatch_sync(_queue, ^{
         void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)

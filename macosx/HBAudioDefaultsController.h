@@ -8,8 +8,13 @@
 
 @class HBAudioDefaults;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBAudioDefaultsController : NSWindowController
 
 - (instancetype)initWithSettings:(HBAudioDefaults *)settings;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

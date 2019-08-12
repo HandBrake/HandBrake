@@ -83,7 +83,7 @@
     [self updatePicture];
 }
 
-#pragma MARK: - HUD
+#pragma mark - HUD
 
 - (void)mouseEntered:(NSEvent *)theEvent
 {
@@ -154,7 +154,7 @@
     }
 }
 
-#pragma MARK: - Preview index
+#pragma mark - Preview index
 
 - (void)setSelectedIndex:(NSInteger)selectedIndex
 {

@@ -15,7 +15,7 @@
 
 @implementation HBMutablePreset
 
-- (void)setObject:(id)obj forKey:(NSString *)key;
+- (void)setObject:(id)obj forKey:(NSString *)key
 {
     self.content[key] = obj;
 }

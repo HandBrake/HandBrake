@@ -10,16 +10,16 @@
 
 @interface HBPictureHUDController ()
 
-@property (weak) IBOutlet NSTextField *scaleLabel;
-@property (weak) IBOutlet NSTextField *infoLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *scaleLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *infoLabel;
 
-@property (weak) IBOutlet NSSlider *slider;
+@property (nonatomic, weak) IBOutlet NSSlider *slider;
 
-@property (weak) IBOutlet NSPopUpButton *durationPopUp;
-@property (weak) IBOutlet NSButton *scaleToScreenButton;
+@property (nonatomic, weak) IBOutlet NSPopUpButton *durationPopUp;
+@property (nonatomic, weak) IBOutlet NSButton *scaleToScreenButton;
 
-@property (weak) IBOutlet NSTextField *durationLabel;
-@property (weak) IBOutlet NSTextField *durationUnitLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *durationLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *durationUnitLabel;
 
 @property (nonatomic) BOOL fitToView;
 @property (nonatomic) BOOL ignoreUpdates;

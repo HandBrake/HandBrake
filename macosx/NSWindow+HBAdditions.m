@@ -73,7 +73,7 @@
     return center;
 }
 
-- (BOOL)HB_endEditing;
+- (BOOL)HB_endEditing
 {
     BOOL success;
     NSRange selectedRange = NSMakeRange(0, 0);
@@ -107,7 +107,7 @@
     return success;
 }
 
-- (void)HB_forceEndEditing;
+- (void)HB_forceEndEditing
 {
     [self endEditingFor:nil];
 }

@@ -391,7 +391,7 @@ typedef void (^HBCoreCleanupHandler)(void);
         hb_image_close(&image);
     }
 
-    if (angle || flipped)
+    if (img && (angle || flipped))
     {
         CGImageRef rotatedImg = CGImageRotated(img, angle, flipped);
         CGImageRelease(img);
@@ -410,7 +410,7 @@ typedef void (^HBCoreCleanupHandler)(void);
 
 #pragma mark - Encodes
 
-- (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;
+- (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
     NSAssert(self.state == HBStateIdle, @"[HBCore encodeJob:] called while another scan or encode already in progress");
     NSAssert(job, @"[HBCore encodeJob:] called with nil job");

@@ -53,7 +53,7 @@
     return self;
 }
 
-- (instancetype)initWithName:(NSString *)title content:(NSDictionary *)content builtIn:(BOOL)builtIn;
+- (instancetype)initWithName:(NSString *)title content:(NSDictionary *)content builtIn:(BOOL)builtIn
 {
     self = [self init];
     if (self)
@@ -69,7 +69,7 @@
     return self;
 }
 
-- (instancetype)initWithCategoryName:(NSString *)title builtIn:(BOOL)builtIn;
+- (instancetype)initWithCategoryName:(NSString *)title builtIn:(BOOL)builtIn
 {
     self = [self init];
     if (self)
@@ -110,7 +110,7 @@
     return self;
 }
 
-- (nullable instancetype)initWithContentsOfURL:(NSURL *)url error:(NSError **)outError
+- (nullable instancetype)initWithContentsOfURL:(NSURL *)url error:(NSError * __autoreleasing *)outError
 {
     NSParameterAssert(url);
 
@@ -246,7 +246,7 @@
     return output;
 }
 
-- (BOOL)writeToURL:(NSURL *)url atomically:(BOOL)atomically format:(HBPresetFormat)format removeRoot:(BOOL)removeRoot;
+- (BOOL)writeToURL:(NSURL *)url atomically:(BOOL)atomically format:(HBPresetFormat)format removeRoot:(BOOL)removeRoot
 {
     BOOL success = NO;
     NSArray *presetList;

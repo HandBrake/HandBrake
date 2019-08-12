@@ -71,6 +71,8 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         _chapterTitles = [title.chapters copy];
 
+        _presetName = @"";
+
         [self applyPreset:preset];
     }
 

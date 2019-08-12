@@ -12,8 +12,8 @@ static void *HBPictureViewControllerContext = &HBPictureViewControllerContext;
 
 @interface HBPictureViewController ()
 
-@property (weak) IBOutlet NSStepper *widthStepper;
-@property (weak) IBOutlet NSStepper *heightStepper;
+@property (nonatomic, weak) IBOutlet NSStepper *widthStepper;
+@property (nonatomic, weak) IBOutlet NSStepper *heightStepper;
 
 @property (nonatomic, readwrite) NSColor *labelColor;
 

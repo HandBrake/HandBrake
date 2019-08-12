@@ -13,7 +13,7 @@
     NSDateFormatter *_formatter;
 }
 
-- (nullable instancetype)initWithFileURL:(NSURL *)url;
+- (nullable instancetype)initWithFileURL:(NSURL *)url
 {
     self = [super init];
     if (self)

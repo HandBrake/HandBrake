@@ -10,11 +10,15 @@
 @class HBPicture;
 @class HBController;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBPreviewController : NSWindowController <NSWindowDelegate>
 
-@property (nonatomic, strong) HBPreviewGenerator *generator;
-@property (nonatomic, strong) HBPicture *picture;
+@property (nonatomic, strong, nullable) HBPreviewGenerator *generator;
+@property (nonatomic, strong, nullable) HBPicture *picture;
 
 @property (nonatomic, assign) HBController *documentController;
 
 @end
+
+NS_ASSUME_NONNULL_END

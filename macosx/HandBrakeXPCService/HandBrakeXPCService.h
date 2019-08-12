@@ -5,9 +5,14 @@
 #import <Foundation/Foundation.h>
 #import "HBRemoteCoreProtocol.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HandBrakeXPCService : NSObject <HBRemoteCoreProtocol>
 
 - (instancetype)init NS_UNAVAILABLE;
 - (instancetype)initWithConnection:(NSXPCConnection *)connection;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

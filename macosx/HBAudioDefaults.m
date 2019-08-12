@@ -509,7 +509,7 @@ fail:
     return self.tracksArray[index];
 }
 
-- (void)insertObject:(HBAudioTrackPreset *)track inTracksArrayAtIndex:(NSUInteger)index;
+- (void)insertObject:(HBAudioTrackPreset *)track inTracksArrayAtIndex:(NSUInteger)index
 {
     [[self.undo prepareWithInvocationTarget:self] removeObjectFromTracksArrayAtIndex:index];
     [self.tracksArray insertObject:track atIndex:index];

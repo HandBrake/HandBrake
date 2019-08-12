@@ -8,6 +8,8 @@
 
 @import HandBrakeKit;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBPresetsMenuBuilder : NSObject
 
 @property (nonatomic, readonly) NSMenu *menu;
@@ -20,3 +22,6 @@
 - (void)build;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

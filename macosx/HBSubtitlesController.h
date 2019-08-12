@@ -8,11 +8,13 @@
 
 @class HBSubtitles;
 
-/**
- *  HBSubtitlesController
- */
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBSubtitlesController : NSViewController
 
 @property (nonatomic, readwrite, weak) HBSubtitles *subtitles;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

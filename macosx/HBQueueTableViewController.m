@@ -17,9 +17,9 @@
 @property (nonatomic, weak, readonly) HBQueue *queue;
 @property (nonatomic) NSArray<HBQueueItem *> *dragNodesArray;
 
-@property (strong) id<HBQueueTableViewControllerDelegate> delegate;
+@property (nonatomic, strong) id<HBQueueTableViewControllerDelegate> delegate;
 
-@property (weak) IBOutlet HBTableView *tableView;
+@property (nonatomic, weak) IBOutlet HBTableView *tableView;
 
 @end
 
@@ -266,7 +266,7 @@
     [self removeSelectedQueueItem:tableView];
 }
 
-- (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard;
+- (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard *)pboard
 {
     NSArray<HBQueueItem *> *items = [self.queue.items objectsAtIndexes:rowIndexes];
     // Dragging is only allowed of the pending items.
@@ -297,7 +297,7 @@
 
     // We do not let the user drop a pending item before or *above*
     // already finished or currently encoding items.
-    NSInteger encodingRow = [self.queue.items indexOfObject:self.queue.currentItem];
+    NSInteger encodingRow = self.queue.currentItem ? [self.queue.items indexOfObject:self.queue.currentItem] : NSNotFound;
     if (encodingRow != NSNotFound && row <= encodingRow)
     {
         return NSDragOperationNone;

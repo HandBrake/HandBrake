@@ -8,8 +8,13 @@
 
 @class HBPicture;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBPictureViewController : NSViewController
 
 @property (nonatomic, readwrite, weak) HBPicture *picture;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

@@ -8,7 +8,7 @@
 
 @interface HBQueueMultiSelectionViewController ()
 
-@property (weak) IBOutlet NSTextField *label;
+@property (nonatomic, weak) IBOutlet NSTextField *label;
 
 @end
 

@@ -24,15 +24,15 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
 
 @interface HBAddPresetController ()
 
-@property (unsafe_unretained) IBOutlet NSTextField *name;
-@property (unsafe_unretained) IBOutlet NSTextField *desc;
+@property (nonatomic, unsafe_unretained) IBOutlet NSTextField *name;
+@property (nonatomic, unsafe_unretained) IBOutlet NSTextField *desc;
 
-@property (unsafe_unretained) IBOutlet NSPopUpButton *categories;
+@property (nonatomic, unsafe_unretained) IBOutlet NSPopUpButton *categories;
 
-@property (unsafe_unretained) IBOutlet NSPopUpButton *picSettingsPopUp;
-@property (unsafe_unretained) IBOutlet NSTextField *picWidth;
-@property (unsafe_unretained) IBOutlet NSTextField *picHeight;
-@property (unsafe_unretained) IBOutlet NSBox *picWidthHeightBox;
+@property (nonatomic, unsafe_unretained) IBOutlet NSPopUpButton *picSettingsPopUp;
+@property (nonatomic, unsafe_unretained) IBOutlet NSTextField *picWidth;
+@property (nonatomic, unsafe_unretained) IBOutlet NSTextField *picHeight;
+@property (nonatomic, unsafe_unretained) IBOutlet NSBox *picWidthHeightBox;
 
 @property (nonatomic, strong) HBPreset *preset;
 @property (nonatomic, strong) HBMutablePreset *mutablePreset;

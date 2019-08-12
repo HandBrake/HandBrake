@@ -8,8 +8,8 @@
 
 @interface HBEncodingProgressHUDController ()
 
-@property (weak) IBOutlet NSProgressIndicator *progressIndicator;
-@property (weak) IBOutlet NSTextField *infoLabel;
+@property (nonatomic, weak) IBOutlet NSProgressIndicator *progressIndicator;
+@property (nonatomic, weak) IBOutlet NSTextField *infoLabel;
 
 @end
 

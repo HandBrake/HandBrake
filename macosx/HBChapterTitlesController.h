@@ -8,11 +8,13 @@
 
 @class HBJob;
 
-/**
- *  HBChapterTitlesController
- */
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBChapterTitlesController : NSViewController
 
 @property (nonatomic, readwrite, weak) HBJob *job;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

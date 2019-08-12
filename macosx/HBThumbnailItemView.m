@@ -10,7 +10,7 @@
 
 @interface HBThumbnailItemView ()
 
-@property (strong) NSImageView *imageView;
+@property (nonatomic, strong) NSImageView *imageView;
 
 @end
 

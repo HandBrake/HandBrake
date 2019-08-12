@@ -124,7 +124,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
     HBPresetLoadingResultFailed
 };
 
-- (NSDictionary *)dictionaryWithPresetsAtURL:(NSURL *)url backup:(BOOL)backup result:(HBPresetLoadingResult *)result;
+- (NSDictionary *)dictionaryWithPresetsAtURL:(NSURL *)url backup:(BOOL)backup result:(HBPresetLoadingResult *)result
 {
     NSData *presetData = [[NSData alloc] initWithContentsOfURL:url];
 
@@ -180,7 +180,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
     return nil;
 }
 
-- (void)loadPresetsFromURL:(NSURL *)url;
+- (void)loadPresetsFromURL:(NSURL *)url
 {
     HBPresetLoadingResult result;
     NSDictionary *presetsDict;

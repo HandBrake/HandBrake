@@ -9,15 +9,15 @@
 
 @interface HBPlayerHUDController ()
 
-@property (weak) IBOutlet NSButton *playButton;
-@property (weak) IBOutlet NSSlider *slider;
+@property (nonatomic, weak) IBOutlet NSButton *playButton;
+@property (nonatomic, weak) IBOutlet NSSlider *slider;
 
-@property (weak) IBOutlet NSSlider *volumeSlider;
+@property (nonatomic, weak) IBOutlet NSSlider *volumeSlider;
 
-@property (weak) IBOutlet NSTextField *currentTimeLabel;
-@property (weak) IBOutlet NSTextField *remaingTimeLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *currentTimeLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *remaingTimeLabel;
 
-@property (weak) IBOutlet NSPopUpButton *tracksSelection;
+@property (nonatomic, weak) IBOutlet NSPopUpButton *tracksSelection;
 
 @property (nonatomic, readwrite) id rateObserver;
 @property (nonatomic, readwrite) id periodicObserver;
@@ -338,7 +338,7 @@
     return YES;
 }
 
-- (BOOL)HB_scrollWheel:(NSEvent *)theEvent;
+- (BOOL)HB_scrollWheel:(NSEvent *)theEvent
 {
     if (theEvent.deltaY < 0)
     {
@@ -466,7 +466,7 @@ static NSTouchBarItemIdentifier HBTouchBarTimeSlider = @"fr.handbrake.timeSlider
     slider.maxValue = duration;
 }
 
-- (NSString *)_timeToString:(NSTimeInterval)timeInSeconds negative:(BOOL)negative;
+- (NSString *)_timeToString:(NSTimeInterval)timeInSeconds negative:(BOOL)negative
 {
     UInt16 seconds = (UInt16)fmod(timeInSeconds, 60.0);
     UInt16 minutes = (UInt16)fmod(timeInSeconds / 60.0, 60.0);

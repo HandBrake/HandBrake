@@ -220,7 +220,7 @@ NSString *keySubTrackExternalFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
 
 - (void)setIsoLanguage:(NSString *)isoLanguage
 {
-    if (![isoLanguage isEqualToString:_isoLanguage])
+    if (_isoLanguage != isoLanguage || (_isoLanguage && ![isoLanguage isEqualToString:_isoLanguage]))
     {
         [[self.undo prepareWithInvocationTarget:self] setIsoLanguage:_isoLanguage];
     }
@@ -229,7 +229,7 @@ NSString *keySubTrackExternalFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
 
 - (void)setCharCode:(NSString *)charCode
 {
-    if (![charCode isEqualToString:_charCode])
+    if (_charCode != charCode || (_charCode && ![charCode isEqualToString:_charCode]))
     {
         [[self.undo prepareWithInvocationTarget:self] setCharCode:_charCode];
     }

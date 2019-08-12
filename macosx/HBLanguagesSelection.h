@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readwrite) BOOL isDragginEnabled;
 
-@property (unsafe_unretained) IBOutlet NSTableView *tableView;
+@property (nonatomic, unsafe_unretained) IBOutlet NSTableView *tableView;
 
 @end
 

@@ -10,6 +10,8 @@
 @class HBPreviewGenerator;
 @class HBPreviewController;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBPreviewViewController : NSViewController
 
 @property (nonatomic, readwrite, weak, nullable) HBPreviewGenerator *generator;
@@ -17,3 +19,6 @@
 - (void)update;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

@@ -9,6 +9,7 @@
 
 #import "HBPreferencesKeys.h"
 #import "NSArray+HBAdditions.h"
+#import "HBJobOutputFileWriter.h"
 
 static void *HBQueueContext = &HBQueueContext;
 
@@ -107,7 +108,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     [self addJobs:@[item]];
 }
 
-- (void)addJobs:(NSArray<HBJob *> *)jobs;
+- (void)addJobs:(NSArray<HBJob *> *)jobs
 {
     NSParameterAssert(jobs);
 
@@ -628,7 +629,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     [self.items commit];
 }
 
-- (void)completedItem:(HBQueueItem *)item result:(HBCoreResult)result;
+- (void)completedItem:(HBQueueItem *)item result:(HBCoreResult)result
 {
     NSParameterAssert(item);
     [self.items beginTransaction];

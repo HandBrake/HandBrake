@@ -8,9 +8,14 @@
 
 @class HBPicture;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBPictureController : NSWindowController <NSWindowDelegate>
 
 @property (nonatomic, readwrite, strong) HBPicture *picture;
 @property (nonatomic, readwrite, assign) NSWindowController *previewController;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

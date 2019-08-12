@@ -203,8 +203,11 @@ static NSDictionary     *shortHeightAttr;
     {
         [self resumedAtDate:endedDate];
     }
-    self.encodeDuration = [self.endedDate timeIntervalSinceDate:self.startedDate];
-    self.encodeDuration -= self.pauseDuration;
+    if (endedDate && self.startedDate)
+    {
+        self.encodeDuration = [self.endedDate timeIntervalSinceDate:self.startedDate];
+        self.encodeDuration -= self.pauseDuration;
+    }
 
     [self.completeOutputURL removeCachedResourceValueForKey:NSURLFileSizeKey];
     NSDictionary<NSURLResourceKey, id> *values = [self.completeOutputURL resourceValuesForKeys:@[NSURLFileSizeKey] error:NULL];

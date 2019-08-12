@@ -54,7 +54,7 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
 
 #pragma mark - Data Source
 
-- (NSDictionary<NSString *, id> *)sourceTrackAtIndex:(NSUInteger)idx;
+- (NSDictionary<NSString *, id> *)sourceTrackAtIndex:(NSUInteger)idx
 {
     return self.sourceTracks[idx];
 }
@@ -73,7 +73,7 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
 
 #pragma mark - Delegate
 
-- (void)track:(HBAudioTrack *)track didChangeSourceFrom:(NSUInteger)oldSourceIdx;
+- (void)track:(HBAudioTrack *)track didChangeSourceFrom:(NSUInteger)oldSourceIdx
 {
     // If the source was changed to None, remove the track
     if (track.sourceTrackIdx == NONE_TRACK_INDEX)
@@ -321,7 +321,7 @@ fail:
     return self.tracks[index];
 }
 
-- (void)insertObject:(HBAudioTrack *)track inTracksAtIndex:(NSUInteger)index;
+- (void)insertObject:(HBAudioTrack *)track inTracksAtIndex:(NSUInteger)index
 {
     [[self.undo prepareWithInvocationTarget:self] removeObjectFromTracksAtIndex:index];
     [self.tracks insertObject:track atIndex:index];

@@ -14,8 +14,8 @@ typedef NS_ENUM(NSUInteger, HBExceptionAlertControllerResult) {
 @interface HBExceptionAlertController : NSWindowController
 
 // Properties are used by bindings
-@property (copy) NSString *exceptionMessage;
-@property (copy) NSAttributedString *exceptionBacktrace;
+@property (nonatomic, copy) NSString *exceptionMessage;
+@property (nonatomic, copy) NSAttributedString *exceptionBacktrace;
 
 - (IBAction)btnCrashClicked:(id)sender;
 - (IBAction)btnContinueClicked:(id)sender;

@@ -7,6 +7,8 @@
 #import <Cocoa/Cocoa.h>
 #import "HBHUD.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol HBEncodingProgressHUDControllerDelegate <NSObject>
 
 - (void)cancelEncoding;
@@ -17,7 +19,10 @@
 
 @property (nonatomic, nullable, assign) id<HBEncodingProgressHUDControllerDelegate> delegate;
 
-@property (nonatomic, nonnull) NSString *info;
+@property (nonatomic) NSString *info;
 @property (nonatomic) double progress;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

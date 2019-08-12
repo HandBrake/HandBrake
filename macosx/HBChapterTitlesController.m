@@ -43,7 +43,7 @@
 //     <one>
 //     <John said, "Hello there.">
 //     <three>
-+ (nullable NSArray<NSArray<NSString *> *> *)HB_arrayWithContentsOfCSVURL:(NSURL *)url;
++ (nullable NSArray<NSArray<NSString *> *> *)HB_arrayWithContentsOfCSVURL:(NSURL *)url
 {
     NSString *str = [[NSString alloc] initWithContentsOfURL:url encoding:NSUTF8StringEncoding error:NULL];
 
@@ -157,7 +157,7 @@
 
 @interface HBChapterTitlesController () <NSTableViewDataSource, NSTableViewDelegate>
 
-@property (weak) IBOutlet NSTableView *table;
+@property (nonatomic, weak) IBOutlet NSTableView *table;
 @property (nonatomic, readwrite, strong) NSArray<HBChapter *> *chapterTitles;
 
 @end

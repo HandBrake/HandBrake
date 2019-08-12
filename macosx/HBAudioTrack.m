@@ -45,7 +45,7 @@ NSString *keyAudioTrackLanguageIsoCode = @"keyAudioTrackLanguageIsoCode";
 - (instancetype)initWithTrackIdx:(NSUInteger)index
                        container:(int)container
                       dataSource:(id<HBAudioTrackDataSource>)dataSource
-                        delegate:(id<HBAudioTrackDelegate>)delegate;
+                        delegate:(id<HBAudioTrackDelegate>)delegate
 {
     self = [super init];
     if (self)

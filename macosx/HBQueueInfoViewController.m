@@ -9,12 +9,12 @@
 
 @interface HBQueueInfoViewController ()
 
-@property (weak) IBOutlet NSView *statisticsHeader;
-@property (weak) IBOutlet NSTextField *statisticsLabel;
-@property (weak) IBOutlet NSTextField *summaryLabel;
-@property (weak) IBOutlet NSScrollView *scrollView;
+@property (nonatomic, weak) IBOutlet NSView *statisticsHeader;
+@property (nonatomic, weak) IBOutlet NSTextField *statisticsLabel;
+@property (nonatomic, weak) IBOutlet NSTextField *summaryLabel;
+@property (nonatomic, weak) IBOutlet NSScrollView *scrollView;
 
-@property (weak) id<HBQueueDetailsViewControllerDelegate> delegate;
+@property (nonatomic, weak) id<HBQueueDetailsViewControllerDelegate> delegate;
 
 @property (nonatomic) BOOL canReset;
 

@@ -8,11 +8,13 @@
 
 @class HBVideo;
 
-/**
- *  HBVideoController
- */
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBVideoController : NSViewController
 
 @property (nonatomic, readwrite, weak) HBVideo *video;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

@@ -28,7 +28,7 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 
 @implementation HBVideo
 
-- (instancetype)initWithJob:(HBJob *)job;
+- (instancetype)initWithJob:(HBJob *)job
 {
     self = [super init];
     if (self) {
@@ -42,6 +42,8 @@ NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
         _tune = @"none";
         _profile = @"auto";
         _level = @"auto";
+
+        _videoOptionExtra = @"";
 
         [self updateQualityBounds];
 

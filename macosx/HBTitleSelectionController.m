@@ -47,7 +47,7 @@
 
 @implementation HBTitleSelectionController
 
-- (instancetype)initWithTitles:(NSArray<HBTitle *> *)titles presetName:(NSString *)presetName delegate:(id<HBTitleSelectionDelegate>)delegate;
+- (instancetype)initWithTitles:(NSArray<HBTitle *> *)titles presetName:(NSString *)presetName delegate:(id<HBTitleSelectionDelegate>)delegate
 {
     self = [super initWithWindowNibName:@"HBTitleSelection"];
     if (self)

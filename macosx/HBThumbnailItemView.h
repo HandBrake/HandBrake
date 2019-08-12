@@ -9,11 +9,15 @@
 #import <Cocoa/Cocoa.h>
 #import "HBPreviewGenerator.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBThumbnailItemView : NSScrubberItemView
 
-@property (nonatomic) NSImage *thumbnail;
+@property (nonatomic, nullable) NSImage *thumbnail;
 @property (nonatomic) NSUInteger thumbnailIndex;
 @property (nonatomic, weak) HBPreviewGenerator *generator;
 
-
 @end
+
+NS_ASSUME_NONNULL_END
+

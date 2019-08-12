@@ -25,7 +25,7 @@ typedef void (^HBPlayableObverser)(void);
 
 @implementation HBAVPlayerRateObserver
 
-- (void)postNotification;
+- (void)postNotification
 {
     self.block();
 }
@@ -284,7 +284,7 @@ typedef void (^HBPlayableObverser)(void);
 
 #pragma mark public methods
 
-- (void)loadPlayableValueAsynchronouslyWithCompletionHandler:(nullable void (^)(void))handler;
+- (void)loadPlayableValueAsynchronouslyWithCompletionHandler:(nullable void (^)(void))handler
 {
     if (self.isLoaded)
     {

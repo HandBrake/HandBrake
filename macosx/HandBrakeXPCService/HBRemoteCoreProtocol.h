@@ -6,6 +6,8 @@
 
 @import HandBrakeKit;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol HBRemoteCoreProtocol
 
 - (void)setDVDNav:(BOOL)enabled;
@@ -40,4 +42,6 @@
 - (void)forwardError:(NSString *)text;
 
 @end
+
+NS_ASSUME_NONNULL_END
 

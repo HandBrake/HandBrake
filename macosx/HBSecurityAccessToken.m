@@ -13,7 +13,7 @@
 
 @implementation HBSecurityAccessToken
 
-- (instancetype)initWithObject:(id<HBSecurityScope>)object;
+- (instancetype)initWithObject:(id<HBSecurityScope>)object
 {
     self = [super init];
     if (self)

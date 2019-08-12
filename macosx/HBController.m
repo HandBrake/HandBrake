@@ -160,7 +160,7 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
 
 @implementation HBController
 
-- (instancetype)initWithDelegate:(HBAppDelegate *)delegate queue:(HBQueue *)queue presetsManager:(HBPresetsManager *)manager;
+- (instancetype)initWithDelegate:(HBAppDelegate *)delegate queue:(HBQueue *)queue presetsManager:(HBPresetsManager *)manager
 {
     self = [super initWithWindowNibName:@"MainWindow"];
     if (self)
@@ -394,7 +394,7 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
         [self _touchBar_validateUserInterfaceItems];
     }
     NSUInteger count = self.queue.pendingItemsCount;
-    self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : nil;
+    self.showQueueToolbarItem.badgeValue = count ? @(count).stringValue : @"";
 }
 
 - (void)updateToolbarButtonsStateForScanCore:(HBState)state
@@ -592,7 +592,7 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
     {
         if ([NSUserDefaults.standardUserDefaults boolForKey:HBShowOpenPanelAtLaunch])
         {
-            [self browseSources:nil];
+            [self browseSources:self];
         }
     }
 }
@@ -1168,7 +1168,7 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
     [self doAddTitlesToQueue:titles];
 }
 
-- (void)doAddTitlesToQueue:(NSArray<HBTitle *> *)titles;
+- (void)doAddTitlesToQueue:(NSArray<HBTitle *> *)titles
 {
     NSMutableArray<HBJob *> *jobs = [[NSMutableArray alloc] init];
     BOOL fileExists = NO;
@@ -1321,7 +1321,7 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
     }
 }
 
-- (void)reloadPreset:(id)sender;
+- (void)reloadPreset:(id)sender
 {
     // Reload the currently selected preset if it is selected.
     if (self.currentPreset != NULL)

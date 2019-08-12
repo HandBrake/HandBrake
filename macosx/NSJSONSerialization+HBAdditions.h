@@ -10,8 +10,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSJSONSerialization (HBAdditions)
 
-+ (nullable id)HB_JSONObjectWithUTF8String:(const char *)nullTerminatedCString options:(NSJSONReadingOptions)opt error:(NSError **)error;
-+ (nullable NSString *)HB_StringWithJSONObject:(id)obj options:(NSJSONWritingOptions)opt error:(NSError **)error;
++ (nullable id)HB_JSONObjectWithUTF8String:(const char *)nullTerminatedCString options:(NSJSONReadingOptions)opt error:(NSError * __autoreleasing *)error;
++ (nullable NSString *)HB_StringWithJSONObject:(id)obj options:(NSJSONWritingOptions)opt error:(NSError * __autoreleasing *)error;
 
 @end
 

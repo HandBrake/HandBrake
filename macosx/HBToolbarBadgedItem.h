@@ -7,6 +7,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBToolbarBadgedItem : NSToolbarItem
 
 @property (nonatomic, copy) NSString *badgeValue;
@@ -15,3 +17,6 @@
 @property (nonatomic, copy) NSColor *badgeFillColor;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

@@ -8,8 +8,13 @@
 
 @class HBSubtitlesDefaults;
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface HBSubtitlesDefaultsController : NSWindowController
 
 - (instancetype)initWithSettings:(HBSubtitlesDefaults *)settings;
 
 @end
+
+NS_ASSUME_NONNULL_END
+

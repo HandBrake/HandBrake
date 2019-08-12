@@ -17,10 +17,10 @@ static void *HBAudioDefaultsContext = &HBAudioDefaultsContext;
 
 @property (nonatomic, readonly, strong) HBLanguagesSelection *languagesList;
 
-@property (unsafe_unretained) IBOutlet HBLanguageArrayController *tableController;
-@property (unsafe_unretained) IBOutlet NSButton *showAllButton;
+@property (nonatomic, unsafe_unretained) IBOutlet HBLanguageArrayController *tableController;
+@property (nonatomic, unsafe_unretained) IBOutlet NSButton *showAllButton;
 
-@property (unsafe_unretained) IBOutlet NSArrayController *tracksController;
+@property (nonatomic, unsafe_unretained) IBOutlet NSArrayController *tracksController;
 
 @end
 

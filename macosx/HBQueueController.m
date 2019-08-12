@@ -22,7 +22,7 @@
 
 @interface HBQueueController () <NSUserNotificationCenterDelegate, HBQueueTableViewControllerDelegate, HBQueueDetailsViewControllerDelegate>
 
-@property (weak) IBOutlet NSSplitView *splitView;
+@property (nonatomic, weak) IBOutlet NSSplitView *splitView;
 @property (nonatomic) NSSplitViewController *splitViewController;
 @property (nonatomic) HBQueueTableViewController *tableViewController;
 @property (nonatomic) NSViewController *containerViewController;
@@ -329,7 +329,7 @@
                 return item.state == HBQueueItemStateWorking;
             }];
 
-            if ([workingItems containsObject:self.queue.currentItem])
+            if (self.queue.currentItem && [workingItems containsObject:self.queue.currentItem])
             {
                 NSString *alertTitle = [NSString stringWithFormat:NSLocalizedString(@"Stop This Encode and Remove It?", @"Queue Stop Alert -> stop and remove message")];
 
@@ -876,7 +876,7 @@ static NSTouchBarItemIdentifier HBTouchBarPause = @"fr.handbrake.pause";
     return nil;
 }
 
-- (void)_touchBar_updateButtonsState;
+- (void)_touchBar_updateButtonsState
 {
     NSButton *ripButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarRip] view];
     NSButton *pauseButton = (NSButton *)[[self.touchBar itemForIdentifier:HBTouchBarPause] view];
