@@ -626,6 +626,9 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
             [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteNotification object:self];
         }
     }
+
+    [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self];
+
     [self.items commit];
 }
 

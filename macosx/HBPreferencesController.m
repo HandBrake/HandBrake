@@ -74,15 +74,15 @@ NSString * const HBQueueAutoClearCompletedItems  = @"HBQueueAutoClearCompletedIt
  */
 + (void)registerUserDefaults
 {
-    NSString *desktopDirectory = [NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, NSUserDomainMask, YES) firstObject];
-    NSURL *desktopURL = [NSURL fileURLWithPath:desktopDirectory isDirectory:YES];
+    NSString *moviesDirectory = [NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES) firstObject];
+    NSURL *moviesURL = [NSURL fileURLWithPath:moviesDirectory isDirectory:YES];
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
         HBShowOpenPanelAtLaunch:            @YES,
         HBDefaultMpegExtension:             @"Auto",
         HBUseDvdNav:                        @YES,
-        HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:desktopURL],
-        HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:desktopURL],
+        HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
+        HBLastSourceDirectoryURL:           [NSKeyedArchiver archivedDataWithRootObject:moviesURL],
         HBDefaultAutoNaming:                @NO,
         HBAutoNamingFormat:                 @[@"{Source}", @" ", @"{Title}"],
         HBAlertWhenDone:                    @(HBDoneActionNotification),
@@ -102,7 +102,7 @@ NSString * const HBQueueAutoClearCompletedItems  = @"HBQueueAutoClearCompletedIt
     // Overwrite the update check interval because previous versions
     // could be set to a daily check.
     NSUInteger week = 60 * 60 * 24 * 7;
-    [[NSUserDefaults standardUserDefaults] setObject:@(week) forKey:@"SUScheduledCheckInterval"];
+    [NSUserDefaults.standardUserDefaults setObject:@(week) forKey:@"SUScheduledCheckInterval"];
 }
 
 /**

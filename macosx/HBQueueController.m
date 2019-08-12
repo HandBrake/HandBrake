@@ -155,6 +155,7 @@
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
         [self updateUI];
     }];
+    [self updateUI];
 
     [self tableViewDidSelectItemsAtIndexes:[NSIndexSet indexSet]];
 }

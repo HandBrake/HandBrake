@@ -278,10 +278,6 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
                    options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                    context:HBControllerScanCoreContext];
 
-    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
-        [self updateQueueUI];
-    }];
-
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidStartNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
         self.bottomConstrain.animator.constant = 0;
         self->fRipIndicator.hidden = NO;
@@ -313,6 +309,11 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
             [self updateProgress];
         }
     }];
+
+    [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
+        [self updateQueueUI];
+    }];
+    [self updateQueueUI];
 
     self.presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsPopup.menu
                                                                   action:@selector(selectPresetFromMenu:)
