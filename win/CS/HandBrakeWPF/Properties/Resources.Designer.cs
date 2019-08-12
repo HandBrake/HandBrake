@@ -5505,7 +5505,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extra Options:.
+        ///   Looks up a localized string similar to Advanced Options:.
         /// </summary>
         public static string VideoView_ExtraOptions {
             get {
