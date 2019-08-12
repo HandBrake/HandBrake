@@ -293,7 +293,6 @@
 		A9E1468316BC2AD800C307BC /* PrevTemplate.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A9E1467F16BC2AD800C307BC /* PrevTemplate.pdf */; };
 		A9E165521C523016003EF30E /* libavfilter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A9E165511C523016003EF30E /* libavfilter.a */; };
 		A9E52CD8218DD52B00E17B86 /* ExceptionAlert.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9E52CD6218DD52A00E17B86 /* ExceptionAlert.xib */; };
-		A9E8F80523003B3000AA14E9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9E8F80423003B2F00AA14E9 /* Info.plist */; };
 		A9F217E61E2F934C00C10C6E /* container-migration.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9F217E51E2F934C00C10C6E /* container-migration.plist */; };
 		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
 		A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F7102519A475EC00F61301 /* HBDockTile.m */; };
@@ -1826,7 +1825,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9E8F80523003B3000AA14E9 /* Info.plist in Resources */,
 				A919992823003CFC0037F526 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
