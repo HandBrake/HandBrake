@@ -71,12 +71,15 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     [self.core addObserver:self forKeyPath:@"state"
                    options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                    context:HandBrakeXPCServiceContext];
+
+    [NSProcessInfo.processInfo disableAutomaticTermination:@"Core started"];
 }
 
 - (void)tearDown
 {
     _core = nil;
     [HBCore closeGlobal];
+    [NSProcessInfo.processInfo enableSuddenTermination];
 }
 
 - (void)provideResourceAccessWithBookmarks:(NSArray<NSData *> *)bookmarks
