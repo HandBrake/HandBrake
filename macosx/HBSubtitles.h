@@ -10,6 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class HBSubtitlesTrack;
+@class HBTitleSubtitlesTrack;
 @class HBSubtitlesDefaults;
 
 @interface HBSubtitles : NSObject <NSSecureCoding, NSCopying>
@@ -20,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addExternalTrackFromURL:(NSURL *)fileURL;
 
-@property (nonatomic, readonly) NSArray<NSDictionary *> *sourceTracks;
+@property (nonatomic, readonly) NSArray<HBTitleSubtitlesTrack *> *sourceTracks;
 @property (nonatomic, readonly) NSMutableArray<HBSubtitlesTrack *> *tracks;
 
 @property (nonatomic, readwrite, strong) HBSubtitlesDefaults *defaults;

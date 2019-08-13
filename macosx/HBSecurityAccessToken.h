@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
+#import "HBJob.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,10 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface NSURL (HBSecurityScope) <HBSecurityScope>
+@end
 
-- (BOOL)startAccessingSecurityScopedResource;
-- (void)stopAccessingSecurityScopedResource;
-
+@interface HBJob (HBSecurityScope) <HBSecurityScope>
 @end
 
 @interface HBSecurityAccessToken : NSObject

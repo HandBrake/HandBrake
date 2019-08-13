@@ -7,23 +7,12 @@
 #import <Foundation/Foundation.h>
 
 @class HBAudioTrack;
+@class HBTitleAudioTrack;
 
 NS_ASSUME_NONNULL_BEGIN
 
-/**
- *  Audio track dicts keys.
- */
-extern NSString *keyAudioTrackIndex;
-extern NSString *keyAudioTrackName;
-extern NSString *keyAudioInputBitrate;
-extern NSString *keyAudioInputSampleRate;
-extern NSString *keyAudioInputCodec;
-extern NSString *keyAudioInputCodecParam;
-extern NSString *keyAudioInputChannelLayout;
-extern NSString *keyAudioTrackLanguageIsoCode;
-
 @protocol HBAudioTrackDataSource <NSObject>
-- (NSDictionary<NSString *, id> *)sourceTrackAtIndex:(NSUInteger)idx;
+- (HBTitleAudioTrack *)sourceTrackAtIndex:(NSUInteger)idx;
 - (NSArray<NSString *> *)sourceTracksArray;
 @end
 
@@ -56,6 +45,8 @@ extern NSString *keyAudioTrackLanguageIsoCode;
 
 @property (nonatomic, readwrite) double gain;
 @property (nonatomic, readwrite) double drc;
+
+@property (nonatomic, readwrite, nullable) NSString *title;
 
 @property (nonatomic, readonly, getter=isEnabled) BOOL enabled;
 

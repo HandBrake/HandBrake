@@ -357,10 +357,10 @@
             hb_audio_config_t *audio = (hb_audio_config_t *)calloc(1, sizeof(*audio));
             hb_audio_config_init(audio);
 
-            NSDictionary *inputTrack = self.audio.sourceTracks[audioTrack.sourceTrackIdx];
+            HBTitleAudioTrack *inputTrack = self.audio.sourceTracks[audioTrack.sourceTrackIdx];
 
             int sampleRateToUse = (audioTrack.sampleRate == 0 ?
-                                   [inputTrack[keyAudioInputSampleRate] intValue] :
+                                   inputTrack.sampleRate :
                                    audioTrack.sampleRate);
 
             audio->in.track = (int)audioTrack.sourceTrackIdx - 1;
@@ -386,8 +386,8 @@
                 audio->out.gain = 0;
             }
 
-            if (hb_audio_can_apply_drc([inputTrack[keyAudioInputCodec] intValue],
-                                       [inputTrack[keyAudioInputCodecParam] intValue],
+            if (hb_audio_can_apply_drc(inputTrack.codec,
+                                       inputTrack.codecParam,
                                        audioTrack.encoder))
             {
                 audio->out.dynamic_range_compression = audioTrack.drc;

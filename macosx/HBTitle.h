@@ -9,7 +9,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class HBChapter;
-@class HBPreset;
 
 @interface HBMetadata : NSObject
 
@@ -23,6 +22,37 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) NSString *genre;
 @property (nonatomic, readonly, nullable) NSString *shortDescription;
 @property (nonatomic, readonly, nullable) NSString *longDescription;
+
+@end
+
+@interface HBTitleAudioTrack : NSObject<NSSecureCoding>
+
+- (instancetype)initWithDisplayName:(NSString *)displayName;
+
+@property (nonatomic, readonly) NSString *displayName;
+@property (nonatomic, readonly, nullable) NSString *title;
+
+@property (nonatomic, readonly) int bitRate;
+@property (nonatomic, readonly) int sampleRate;
+@property (nonatomic, readonly) int codec;
+@property (nonatomic, readonly) int codecParam;
+@property (nonatomic, readonly) uint64_t channelLayout;
+
+@property (nonatomic, readonly) NSString *isoLanguageCode;
+
+@end
+
+@interface HBTitleSubtitlesTrack : NSObject<NSSecureCoding>
+
+- (instancetype)initWithDisplayName:(NSString *)displayName type:(int)type fileURL:(nullable NSURL *)fileURL;
+
+@property (nonatomic, readonly) NSString *displayName;
+@property (nonatomic, readonly, nullable) NSString *title;
+
+@property (nonatomic, readonly) int type;
+@property (nonatomic, readonly) NSString *isoLanguageCode;
+
+@property (nonatomic, readonly, nullable) NSURL *fileURL;
 
 @end
 
@@ -57,8 +87,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) int autoCropLeft;
 @property (nonatomic, readonly) int autoCropRight;
 
-@property (nonatomic, readonly) NSArray<NSDictionary<NSString *, id> *> *audioTracks;
-@property (nonatomic, readonly) NSArray<NSDictionary<NSString *, id> *> *subtitlesTracks;
+@property (nonatomic, readonly) NSArray<HBTitleAudioTrack *> *audioTracks;
+@property (nonatomic, readonly) NSArray<HBTitleSubtitlesTrack *> *subtitlesTracks;
 @property (nonatomic, readonly) NSArray<HBChapter *> *chapters;
 
 @property (nonatomic, readonly) HBMetadata *metadata;

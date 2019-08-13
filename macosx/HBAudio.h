@@ -8,6 +8,7 @@
 #import "HBPresetCoding.h"
 
 @class HBAudioTrack;
+@class HBTitleAudioTrack;
 @class HBAudioDefaults;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -16,7 +17,7 @@ extern NSString *HBAudioEncoderChangedNotification;
 
 @interface HBAudio : NSObject <NSSecureCoding, NSCopying>
 
-@property (nonatomic, readonly) NSArray<NSDictionary *> *sourceTracks;
+@property (nonatomic, readonly) NSArray<HBTitleAudioTrack *> *sourceTracks;
 @property (nonatomic, readonly) NSMutableArray<HBAudioTrack *> *tracks;
 
 @property (nonatomic, readwrite) HBAudioDefaults *defaults;

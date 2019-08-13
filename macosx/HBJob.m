@@ -371,7 +371,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:4 forKey:@"HBJobVersion"];
+    [coder encodeInt:5 forKey:@"HBJobVersion"];
 
     encodeObject(_name);
     encodeObject(_presetName);
@@ -424,7 +424,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 {
     int version = [decoder decodeIntForKey:@"HBJobVersion"];
 
-    if (version == 4 && (self = [super init]))
+    if (version == 5 && (self = [super init]))
     {
         decodeObjectOrFail(_name, NSString);
         decodeObjectOrFail(_presetName, NSString);

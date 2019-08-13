@@ -85,11 +85,16 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
 - (void)provideResourceAccessWithBookmarks:(NSArray<NSData *> *)bookmarks
 {
     dispatch_sync(_queue, ^{
+        NSMutableArray<NSURL *> *urls = [NSMutableArray array];
         for (NSData *bookmark in bookmarks)
         {
             NSURL *url = [NSURL URLByResolvingBookmarkData:bookmark options:0 relativeToURL:nil bookmarkDataIsStale:NULL error:NULL];
-            self.urls = @[url];
+            if (url)
+            {
+                [urls addObject:url];
+            }
         }
+        self.urls = urls;
     });
 }
 

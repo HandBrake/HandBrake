@@ -125,9 +125,15 @@
 
 - (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds progressHandler:(nonnull HBCoreProgressHandler)progressHandler completionHandler:(nonnull HBCoreCompletionHandler)completionHandler
 {
+
 #ifdef __SANDBOX_ENABLED__
+    __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
+
     NSData *bookmark = [url bookmarkDataWithOptions:0 includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
-    [_proxy provideResourceAccessWithBookmarks:@[bookmark]];
+    if (bookmark)
+    {
+        [_proxy provideResourceAccessWithBookmarks:@[bookmark]];
+    }
 #endif
 
     self.progressHandler = progressHandler;
@@ -142,6 +148,9 @@
             HBCoreCompletionHandler handler = weakSelf.completionHandler;
             weakSelf.completionHandler = nil;
             weakSelf.progressHandler = nil;
+#ifdef __SANDBOX_ENABLED__
+            token = nil;
+#endif
             handler(result);
         });
     }];
@@ -155,8 +164,30 @@
 - (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
 #ifdef __SANDBOX_ENABLED__
+    __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:job];
+
+    NSMutableArray<NSData *> *bookmarks = [NSMutableArray array];
+
+    for (HBSubtitlesTrack *track in job.subtitles.tracks)
+    {
+        if (track.fileURL)
+        {
+            NSData *subtitlesBookmark = [track.fileURL bookmarkDataWithOptions:0 includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
+            if (subtitlesBookmark)
+            {
+                [bookmarks addObject:subtitlesBookmark];
+            }
+        }
+    }
+
     NSData *bookmark = [job.outputURL bookmarkDataWithOptions:0 includingResourceValuesForKeys:nil relativeToURL:nil error:NULL];
-    [_proxy provideResourceAccessWithBookmarks:@[bookmark]];
+    if (bookmark)
+    {
+        [bookmarks addObject:bookmark];
+    }
+
+    [_proxy provideResourceAccessWithBookmarks:bookmarks];
+
 #endif
 
     self.progressHandler = progressHandler;
@@ -171,6 +202,9 @@
             HBCoreCompletionHandler handler = weakSelf.completionHandler;
             weakSelf.completionHandler = nil;
             weakSelf.progressHandler = nil;
+#ifdef __SANDBOX_ENABLED__
+            token = nil;
+#endif
             handler(result);
         });
     }];

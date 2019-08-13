@@ -8,13 +8,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class HBTitleSubtitlesTrack;
 @class HBSubtitlesTrack;
 
 /**
  *  HBTrackDataSource
  */
 @protocol HBTrackDataSource <NSObject>
-- (NSDictionary<NSString *, id> *)sourceTrackAtIndex:(NSUInteger)idx;
+- (HBTitleSubtitlesTrack *)sourceTrackAtIndex:(NSUInteger)idx;
 - (NSArray<NSString *> *)sourceTracksArray;
 @end
 
@@ -49,6 +50,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readwrite) BOOL burnedIn;
 /// Whether is the default track.
 @property (nonatomic, readwrite) BOOL def;
+
+@property (nonatomic, readwrite, nullable) NSString *title;
+
 
 /// The URL of the external subtitles file.
 @property (nonatomic, readwrite, copy, nullable) NSURL *fileURL;

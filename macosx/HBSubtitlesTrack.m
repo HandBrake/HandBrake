@@ -6,6 +6,7 @@
 
 #import "HBSubtitlesTrack.h"
 #import "HBCodingUtilities.h"
+#import "HBTitle.h"
 
 #include "common.h"
 #include "lang.h"
@@ -14,12 +15,6 @@
 
 static NSArray *charEncodingArray = nil;
 static NSArray *_languagesArray = nil;
-
-NSString *keySubTrackName = @"keySubTrackName";
-NSString *keySubTrackLanguageIsoCode = @"keySubTrackLanguageIsoCode";
-NSString *keySubTrackType = @"keySubTrackType";
-NSString *keySubTrackExternalFileURL = @"keySubTrackSrtFileURL";
-NSString *keySubTrackExternalFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
 
 @interface HBSubtitlesTrack ()
 @property (nonatomic, readwrite) BOOL validating;
@@ -71,8 +66,8 @@ NSString *keySubTrackExternalFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
 
 - (void)validateSettings
 {
-    NSDictionary *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
-    self.type = [sourceTrack[keySubTrackType] intValue];
+    HBTitleSubtitlesTrack *sourceTrack = [_dataSource sourceTrackAtIndex:_sourceTrackIdx];
+    self.type = sourceTrack.type;
 
     if (!hb_subtitle_can_burn(_type))
     {
@@ -100,7 +95,7 @@ NSString *keySubTrackExternalFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
     // check to see if we are an srt, in which case set our file path and source track type kvp's
     if (_type == IMPORTSRT || _type == IMPORTSSA)
     {
-        self.fileURL = [sourceTrack[keySubTrackExternalFileURL] copy];
+        self.fileURL = sourceTrack.fileURL;
         self.isoLanguage = @"eng";
         self.charCode = charEncodingArray[CHAR_CODE_DEFAULT_INDEX];
     }
@@ -350,7 +345,7 @@ NSString *keySubTrackExternalFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
 
 - (void)encodeWithCoder:(NSCoder *)coder
 {
-    [coder encodeInt:1 forKey:@"HBSubtitlesTrackVersion"];
+    [coder encodeInt:2 forKey:@"HBSubtitlesTrackVersion"];
 
     encodeInteger(_sourceTrackIdx);
     encodeInt(_type);
@@ -359,6 +354,7 @@ NSString *keySubTrackExternalFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
     encodeBool(_forcedOnly);
     encodeBool(_burnedIn);
     encodeBool(_def);
+    encodeObject(_title);
 
     encodeObject(_fileURL);
     encodeObject(_isoLanguage);
@@ -377,6 +373,7 @@ NSString *keySubTrackExternalFileURLBookmark = @"keySubTrackSrtFileURLBookmark";
     decodeBool(_forcedOnly);
     decodeBool(_burnedIn);
     decodeBool(_def);
+    decodeObject(_title, NSString);
 
     decodeObject(_fileURL, NSURL);
     decodeObject(_isoLanguage, NSString);

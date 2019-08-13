@@ -536,7 +536,7 @@ static NSDictionary            *shortHeightAttr;
         if (audioTrack.isEnabled)
         {
             NSMutableString *detailString = [NSMutableString stringWithFormat:HBKitLocalizedString(@"%@ ▸ Encoder: %@", @"Audio description"),
-                                      self.audio.sourceTracks[audioTrack.sourceTrackIdx][keyAudioTrackName],
+                                      self.audio.sourceTracks[audioTrack.sourceTrackIdx].displayName,
                                       @(hb_audio_encoder_get_name(audioTrack.encoder))];
 
             if ((audioTrack.encoder  & HB_ACODEC_PASS_FLAG) == 0)
@@ -594,7 +594,7 @@ static NSDictionary            *shortHeightAttr;
             NSMutableString *detailString = [NSMutableString string];
 
             // remember that index 0 of Subtitles can contain "Foreign Audio Search
-            [detailString appendString:self.subtitles.sourceTracks[track.sourceTrackIdx][@"keySubTrackName"]];
+            [detailString appendString:self.subtitles.sourceTracks[track.sourceTrackIdx].displayName];
 
             if (track.forcedOnly)
             {
@@ -790,7 +790,7 @@ static NSDictionary            *shortHeightAttr;
         if (track.isEnabled)
         {
             // remember that index 0 of Subtitles can contain "Foreign Audio Search
-            [info appendString:self.subtitles.sourceTracks[track.sourceTrackIdx][@"keySubTrackName"]];
+            [info appendString:self.subtitles.sourceTracks[track.sourceTrackIdx].displayName];
 
             if (track.burnedIn)
             {

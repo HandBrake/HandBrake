@@ -10,21 +10,11 @@
 #import "HBPreset.h"
 #import "NSDictionary+HBAdditions.h"
 #import "HBLocalizationUtilities.h"
+#import "HBCodingUtilities.h"
+#import "HBSecurityAccessToken.h"
+#import "HBUtilities.h"
 
 #include "lang.h"
-
-extern NSString *keyAudioTrackIndex;
-extern NSString *keyAudioTrackName;
-extern NSString *keyAudioInputBitrate;
-extern NSString *keyAudioInputSampleRate;
-extern NSString *keyAudioInputCodec;
-extern NSString *keyAudioInputCodecParam;
-extern NSString *keyAudioInputChannelLayout;
-extern NSString *keyAudioTrackLanguageIsoCode;
-
-extern NSString *keySubTrackName;
-extern NSString *keySubTrackLanguageIsoCode;
-extern NSString *keySubTrackType;
 
 @interface HBMetadata ()
 
@@ -55,6 +45,166 @@ extern NSString *keySubTrackType;
 
 @end
 
+@implementation HBTitleAudioTrack
+
+- (instancetype)initWithDisplayName:(NSString *)displayName
+{
+    self = [super init];
+    if (self)
+    {
+        _displayName = [displayName copy];
+        _title = @"";
+        _isoLanguageCode = @"";
+    }
+    return self;
+}
+
+- (instancetype)initWithAudioTrack:(hb_audio_config_t *)audio index:(int)index
+{
+    self = [super init];
+    if (self)
+    {
+        _displayName = [NSString stringWithFormat: @"%d: %@", index, @(audio->lang.description)];
+        _title = audio->in.name ? @(audio->in.name) : nil;
+        _bitRate = audio->in.bitrate / 1000;
+        _sampleRate = audio->in.samplerate;
+        _codec = audio->in.codec;
+        _codecParam = audio->in.codec_param;
+        _channelLayout = audio->in.channel_layout;
+
+        _isoLanguageCode = @(audio->lang.iso639_2);
+
+    }
+    return self;
+}
+
++ (BOOL)supportsSecureCoding { return YES; }
+
+- (void)encodeWithCoder:(nonnull NSCoder *)coder
+{
+    encodeObject(_displayName);
+    encodeObject(_title);
+    encodeInt(_bitRate);
+    encodeInt(_sampleRate);
+    encodeInt(_codec);
+    encodeInt(_codecParam);
+    encodeInteger(_channelLayout);
+
+    encodeObject(_isoLanguageCode);
+}
+
+- (nullable instancetype)initWithCoder:(nonnull NSCoder *)decoder
+{
+    self = [super init];
+    if (self)
+    {
+        decodeObjectOrFail(_displayName, NSString);
+        decodeObject(_title, NSString);
+        decodeInt(_bitRate);
+        decodeInt(_sampleRate);
+        decodeInt(_codec);
+        decodeInt(_codecParam);
+        decodeInteger(_channelLayout);
+        decodeObjectOrFail(_isoLanguageCode, NSString);
+    }
+    return self;
+fail:
+    return nil;
+}
+
+@end
+
+
+@interface HBTitleSubtitlesTrack ()
+
+@property (nonatomic, readonly, nullable) NSData *bookmark;
+
+@end
+
+@implementation HBTitleSubtitlesTrack
+
+- (instancetype)initWithDisplayName:(NSString *)displayName type:(int)type fileURL:(nullable NSURL *)fileURL
+{
+    self = [super init];
+    if (self)
+    {
+        _displayName = [displayName copy];
+        _title = @"";
+        _type = type;
+        _isoLanguageCode = @"";
+        _fileURL = fileURL;
+    }
+    return self;
+}
+
+- (instancetype)initWithSubtitlesTrack:(hb_subtitle_t *)subtitle index:(int)index
+{
+    self = [super init];
+    if (self)
+    {
+        _displayName = [NSString stringWithFormat:@"%d: %@", index, @(subtitle->lang)];
+        _title = subtitle->name ? @(subtitle->name) : nil;
+        _type = subtitle->source;
+        _isoLanguageCode = @(subtitle->iso639_2);
+    }
+    return self;
+}
+
++ (BOOL)supportsSecureCoding { return YES ;}
+
+- (void)encodeWithCoder:(nonnull NSCoder *)coder
+{
+    encodeObject(_displayName);
+    encodeObject(_title);
+    encodeInt(_type);
+    encodeObject(_isoLanguageCode);
+#ifdef __SANDBOX_ENABLED__
+    if (_fileURL)
+    {
+        if (!_bookmark)
+        {
+            _bookmark = [HBUtilities bookmarkFromURL:_fileURL
+                                                options:NSURLBookmarkCreationWithSecurityScope | NSURLBookmarkCreationSecurityScopeAllowOnlyReadAccess];
+        }
+        encodeObject(_bookmark);
+    }
+#endif
+    encodeObject(_fileURL);
+}
+
+- (nullable instancetype)initWithCoder:(nonnull NSCoder *)decoder
+{
+    self = [super init];
+    if (self)
+    {
+        decodeObjectOrFail(_displayName, NSString);
+        decodeObject(_title, NSString);
+        decodeInt(_type);
+        decodeObjectOrFail(_isoLanguageCode, NSString);
+
+#ifdef __SANDBOX_ENABLED__
+        decodeObject(_bookmark, NSData);
+
+        if (_bookmark)
+        {
+            _fileURL =  [HBUtilities URLFromBookmark:_bookmark];
+
+            if (!_fileURL)
+            {
+                decodeObjectOrFail(_fileURL, NSURL);
+            }
+        }
+#else
+        decodeObject(_fileURL, NSURL);
+#endif
+    }
+    return self;
+fail:
+    return nil;
+}
+
+@end
+
 @interface HBTitle ()
 
 @property (nonatomic, readonly) hb_title_t *hb_title;
@@ -62,8 +212,8 @@ extern NSString *keySubTrackType;
 @property (nonatomic, readwrite, copy) NSString *name;
 @property (nonatomic, readwrite) HBMetadata *metadata;
 @property (nonatomic, readwrite) NSArray *audioTracks;
-@property (nonatomic, readwrite) NSArray *subtitlesTracks;
-@property (nonatomic, readwrite) NSArray *chapters;
+@property (nonatomic, readwrite) NSArray<HBTitleSubtitlesTrack *> *subtitlesTracks;
+@property (nonatomic, readwrite) NSArray<HBChapter *> *chapters;
 
 @end
 
@@ -253,11 +403,11 @@ extern NSString *keySubTrackType;
 }
 
 
-- (NSArray *)audioTracks
+- (NSArray<HBTitleAudioTrack *> *)audioTracks
 {
     if (!_audioTracks)
     {
-        NSMutableArray *tracks = [NSMutableArray array];
+        NSMutableArray<HBTitleAudioTrack *> *tracks = [NSMutableArray array];
         hb_list_t *list = self.hb_title->list_audio;
         int count = hb_list_count(list);
 
@@ -265,14 +415,7 @@ extern NSString *keySubTrackType;
         for (int i = 0; i < count; i++)
         {
             hb_audio_config_t *audio = hb_list_audio_config_item(list, i);
-            [tracks addObject: @{keyAudioTrackIndex: @(i + 1),
-                                           keyAudioTrackName: [NSString stringWithFormat: @"%d: %@", i, @(audio->lang.description)],
-                                           keyAudioInputBitrate: @(audio->in.bitrate / 1000),
-                                           keyAudioInputSampleRate: @(audio->in.samplerate),
-                                           keyAudioInputCodec: @(audio->in.codec),
-                                           keyAudioInputCodecParam: @(audio->in.codec_param),
-                                           keyAudioInputChannelLayout: @(audio->in.channel_layout),
-                                           keyAudioTrackLanguageIsoCode: @(audio->lang.iso639_2)}];
+            [tracks addObject:[[HBTitleAudioTrack alloc ] initWithAudioTrack:audio index:i]];
         }
 
         _audioTracks = [tracks copy];
@@ -281,22 +424,18 @@ extern NSString *keySubTrackType;
     return _audioTracks;
 }
 
-- (NSArray *)subtitlesTracks
+- (NSArray<HBTitleSubtitlesTrack *> *)subtitlesTracks
 {
     if (!_subtitlesTracks)
     {
-        NSMutableArray *tracks = [NSMutableArray array];
+        NSMutableArray<HBTitleSubtitlesTrack *> *tracks = [NSMutableArray array];
         hb_list_t *list = self.hb_title->list_subtitle;
         int count = hb_list_count(list);
 
         for (int i = 0; i < count; i++)
         {
             hb_subtitle_t *subtitle = hb_list_item(self.hb_title->list_subtitle, i);
-
-            // create a dictionary of source subtitle information to store in our array
-            [tracks addObject:@{keySubTrackName: [NSString stringWithFormat:@"%d: %@", i, @(subtitle->lang)],
-                                              keySubTrackType: @(subtitle->source),
-                                              keySubTrackLanguageIsoCode: @(subtitle->iso639_2)}];
+            [tracks addObject:[[HBTitleSubtitlesTrack alloc] initWithSubtitlesTrack:subtitle index:i]];
         }
 
         _subtitlesTracks = [tracks copy];
