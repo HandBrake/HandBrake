@@ -126,6 +126,7 @@
     _splitViewController = [[NSSplitViewController alloc] init];
     _splitViewController.splitView = _splitView;
     _splitViewController.view.wantsLayer = YES;
+    [_splitViewController.view setFrameSize:NSMakeSize(780, 500)];
     _splitViewController.splitView.vertical = YES;
 
     _tableViewController = [[HBQueueTableViewController alloc] initWithQueue:self.queue delegate:self];
