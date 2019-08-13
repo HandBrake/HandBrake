@@ -56,13 +56,6 @@ namespace HandBrake.Interop.Interop.HbLib
         public static extern int hb_get_build(IntPtr hbHandle);
 
 
-        /// Return Type: int
-        ///h: hb_handle_t*
-        ///version: char**
-        [DllImport("hb", EntryPoint = "hb_check_update", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int hb_check_update(IntPtr handle, ref IntPtr version);
-
-
         /// Return Type: char*
         ///path: char*
         [DllImport("hb", EntryPoint = "hb_dvd_name", CallingConvention = CallingConvention.Cdecl)]

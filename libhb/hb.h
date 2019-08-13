@@ -38,13 +38,6 @@ const char  * hb_get_full_description(void);
 const char  * hb_get_version( hb_handle_t * );
 int           hb_get_build( hb_handle_t * );
 
-/* hb_check_update()
-   Checks for an update on the website. If there is, returns the build
-   number and points 'version' to a version description. Returns a
-   negative value otherwise. */
-int           hb_check_update( hb_handle_t * h, char ** version );
-
-
 char *        hb_dvd_name( char * path );
 void          hb_dvd_set_dvdnav( int enable );
 

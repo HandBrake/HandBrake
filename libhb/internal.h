@@ -12,7 +12,6 @@
 
 #include "project.h"
 #include "hbffmpeg.h"
-#include "extras/cl.h"
 #if HB_PROJECT_FEATURE_QSV
 #include "qsv_libav.h"
 #endif
