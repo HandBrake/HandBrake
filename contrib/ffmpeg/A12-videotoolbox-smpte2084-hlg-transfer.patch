@@ -1,0 +1,69 @@
+From 391b67fcb58f95b5cc65b75070fd9a3dce4f8ac6 Mon Sep 17 00:00:00 2001
+From: Limin Wang <lance.lmwang@gmail.com>
+Date: Wed, 26 Jun 2019 18:57:59 +0800
+Subject: [PATCH] lavc/videotoolboxenc: add hdr10, linear, hlg color transfer
+ function for videotoolboxenc
+
+Below is the testing ffmpeg command for the setting:
+./ffmpeg -i input.ts -c:v hevc_videotoolbox -color_primaries bt2020 -colorspace bt2020_ncl -color_trc smpte2084 smpte2048.ts
+./ffmpeg -i input.ts -c:v hevc_videotoolbox -color_primaries bt2020 -colorspace bt2020_ncl -color_trc linear linear.ts
+./ffmpeg -i input.ts -c:v hevc_videotoolbox -color_primaries bt2020 -colorspace bt2020_ncl -color_trc arib-std-b67 hlg.ts
+
+Signed-off-by: Limin Wang <lance.lmwang@gmail.com>
+Signed-off-by: Rick Kern <kernrj@gmail.com>
+---
+ configure                    |  6 ++++++
+ libavcodec/videotoolboxenc.c | 16 ++++++++++++++++
+ 2 files changed, 22 insertions(+)
+
+diff --git a/configure b/configure
+index 34c2adb4a4f..3fb8f3521d2 100755
+--- a/configure
++++ b/configure
+@@ -2268,6 +2268,9 @@ TOOLCHAIN_FEATURES="
+ TYPES_LIST="
+     kCMVideoCodecType_HEVC
+     kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange
++    kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ
++    kCVImageBufferTransferFunction_ITU_R_2100_HLG
++    kCVImageBufferTransferFunction_Linear
+     socklen_t
+     struct_addrinfo
+     struct_group_source_req
+@@ -6069,6 +6072,9 @@ enabled videotoolbox && {
+     check_lib coreservices CoreServices/CoreServices.h UTGetOSTypeFromString "-framework CoreServices"
+     check_func_headers CoreMedia/CMFormatDescription.h kCMVideoCodecType_HEVC "-framework CoreMedia"
+     check_func_headers CoreVideo/CVPixelBuffer.h kCVPixelFormatType_420YpCbCr10BiPlanarVideoRange "-framework CoreVideo"
++    check_func_headers CoreVideo/CVImageBuffer.h kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ "-framework CoreVideo"
++    check_func_headers CoreVideo/CVImageBuffer.h kCVImageBufferTransferFunction_ITU_R_2100_HLG "-framework CoreVideo"
++    check_func_headers CoreVideo/CVImageBuffer.h kCVImageBufferTransferFunction_Linear "-framework CoreVideo"
+ }
+ 
+ check_struct "sys/time.h sys/resource.h" "struct rusage" ru_maxrss
+diff --git a/libavcodec/videotoolboxenc.c b/libavcodec/videotoolboxenc.c
+index ff33c279c3a..ece9d6ea8fb 100644
+--- a/libavcodec/videotoolboxenc.c
++++ b/libavcodec/videotoolboxenc.c
+@@ -915,6 +915,22 @@ static int get_cv_transfer_function(AVCodecContext *avctx,
+             *transfer_fnc = kCVImageBufferTransferFunction_SMPTE_240M_1995;
+             break;
+ 
++#if HAVE_KCVIMAGEBUFFERTRANSFERFUNCTION_SMPTE_ST_2084_PQ
++        case AVCOL_TRC_SMPTE2084:
++            *transfer_fnc = kCVImageBufferTransferFunction_SMPTE_ST_2084_PQ;
++            break;
++#endif
++#if HAVE_KCVIMAGEBUFFERTRANSFERFUNCTION_LINEAR
++        case AVCOL_TRC_LINEAR:
++            *transfer_fnc = kCVImageBufferTransferFunction_Linear;
++            break;
++#endif
++#if HAVE_KCVIMAGEBUFFERTRANSFERFUNCTION_ITU_R_2100_HLG
++        case AVCOL_TRC_ARIB_STD_B67:
++            *transfer_fnc = kCVImageBufferTransferFunction_ITU_R_2100_HLG;
++            break;
++#endif
++
+         case AVCOL_TRC_GAMMA22:
+             gamma = 2.2;
+             *transfer_fnc = kCVImageBufferTransferFunction_UseGamma;
