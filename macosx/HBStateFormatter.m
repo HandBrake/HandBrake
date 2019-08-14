@@ -55,21 +55,28 @@
                 }
             }
 
-            if (_showPassNumber && p.pass_count > -1)
+            if (_showPassNumber)
             {
-                if (p.pass_id == HB_PASS_SUBTITLE)
+                if (p.pass_count > -1)
                 {
-                    NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@"Pass %d %@ of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
-                                      p.pass,
-                                      HBKitLocalizedString(@"(subtitle scan)", @"HBStateFormatter -> work pass type format"),
-                                      p.pass_count, 100.0 * p.progress];
-                    [string appendString:desc];
+                    if (p.pass_id == HB_PASS_SUBTITLE)
+                    {
+                        NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@"Pass %d %@ of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
+                                          p.pass,
+                                          HBKitLocalizedString(@"(subtitle scan)", @"HBStateFormatter -> work pass type format"),
+                                          p.pass_count, 100.0 * p.progress];
+                        [string appendString:desc];
+                    }
+                    else
+                    {
+                        NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@"Pass %d of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
+                                          p.pass, p.pass_count, 100.0 * p.progress];
+                        [string appendString:desc];
+                    }
                 }
                 else
                 {
-                    NSString *desc = [NSString localizedStringWithFormat:HBKitLocalizedString(@"Pass %d of %d, %.2f %%", @"HBStateFormatter -> work pass number format"),
-                                      p.pass, p.pass_count, 100.0 * p.progress];
-                    [string appendString:desc];
+                    [string appendString:HBKitLocalizedString(@"Pass 1", @"HBStateFormatter -> work first pass number format")];
                 }
             }
 

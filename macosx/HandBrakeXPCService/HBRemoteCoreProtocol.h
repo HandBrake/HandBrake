@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setUpWithLogLevel:(NSInteger)level name:(NSString *)name;
 - (void)tearDown;
 
+- (void)setLogLevel:(NSInteger)logLevel;
+
 - (void)provideResourceAccessWithBookmarks:(NSArray<NSData *> *)bookmarks;
 
 - (void)setAutomaticallyPreventSleep:(BOOL)automaticallyPreventSleep;
@@ -22,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)preventSleep;
 - (void)allowSleep;
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds withReply:(void (^)(HBCoreResult))reply;
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews withReply:(void (^)(HBCoreResult))reply;
 - (void)cancelScan;
 
 - (void)encodeJob:(HBJob *)job withReply:(void (^)(HBCoreResult))reply;

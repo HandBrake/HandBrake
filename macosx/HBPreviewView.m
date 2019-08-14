@@ -17,6 +17,7 @@
 @property (nonatomic, readwrite) CGFloat scale;
 @property (nonatomic, readwrite) NSRect pictureFrame;
 
+@property (nonatomic, readwrite) CGFloat scaleFactor;
 
 @end
 
@@ -88,6 +89,14 @@
 
     _scale = 1;
     _pictureFrame = _pictureLayer.frame;
+}
+
+- (void)viewDidChangeBackingProperties
+{
+    if (self.window)
+    {
+        self.scaleFactor = self.window.backingScaleFactor;
+    }
 }
 
 - (void)setImage:(CGImageRef)image
@@ -167,10 +176,8 @@
 
     if (imageSize.width > 0 && imageSize.height > 0) {
 
-        if (self.window)
-        {
-            backingScaleFactor = self.window.backingScaleFactor;
-        }
+        backingScaleFactor = self.scaleFactor;
+
         // HiDPI mode usually display everything
         // with double pixel count, but we don't
         // want to double the size of the video
@@ -238,13 +245,13 @@
  */
 - (NSSize)optimalViewSizeForImageSize:(NSSize)imageSize minSize:(NSSize)minSize
 {
-    if (self.window.backingScaleFactor != 1.0)
+    if (self.scaleFactor != 1.0)
     {
         // HiDPI mode usually display everything
         // with double pixel count, but we don't
         // want to double the size of the video
-        imageSize.height /= self.window.backingScaleFactor;
-        imageSize.width /= self.window.backingScaleFactor;
+        imageSize.height /= self.scaleFactor;
+        imageSize.width /= self.scaleFactor;
     }
 
     NSSize screenSize = self.window.screen.visibleFrame.size;

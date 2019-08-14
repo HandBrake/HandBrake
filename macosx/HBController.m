@@ -41,6 +41,7 @@
 #import "HBPreferencesKeys.h"
 
 static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
+static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 @interface HBController () <HBPresetsViewControllerDelegate, HBTitleSelectionDelegate, NSDraggingDestination, NSPopoverDelegate>
 {
@@ -313,13 +314,19 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
     [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidChangeStateNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
         [self updateQueueUI];
     }];
+
     [self updateQueueUI];
 
+    // Presets menu
     self.presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsPopup.menu
                                                                   action:@selector(selectPresetFromMenu:)
                                                                     size:[NSFont smallSystemFontSize]
                                                           presetsManager:presetManager];
     [self.presetsMenuBuilder build];
+
+    // Log level
+    [NSUserDefaultsController.sharedUserDefaultsController addObserver:self forKeyPath:@"values.LoggingLevel"
+                                                               options:0 context:HBControllerLogLevelContext];
 
     self.bottomConstrain.constant = -WINDOW_HEIGHT_OFFSET_INIT;
 
@@ -378,6 +385,10 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
             [self _touchBar_updateButtonsStateForScanCore:state];
             [self _touchBar_validateUserInterfaceItems];
         }
+    }
+    else if (context == HBControllerLogLevelContext)
+    {
+        self.core.logLevel = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
     }
     else
     {
@@ -658,7 +669,7 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
 
         [self.core scanURL:mediaURL
                 titleIndex:index
-                  previews:hb_num_previews minDuration:min_title_duration_seconds
+                  previews:hb_num_previews minDuration:min_title_duration_seconds keepPreviews:YES
            progressHandler:^(HBState state, HBProgress progress, NSString *info)
          {
              self->fSrcDVD2Field.stringValue = info;
@@ -1044,6 +1055,7 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"Warning!", @"Invalid destination alert -> message")];
         [alert setInformativeText:NSLocalizedString(@"This is not a valid destination directory!", @"Invalid destination alert -> informative text")];
+        [alert setAlertStyle:NSAlertStyleCritical];
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
     else if ([job.fileURL isEqual:job.completeOutputURL]||
@@ -1052,6 +1064,7 @@ static void *HBControllerScanCoreContext = &HBControllerScanCoreContext;
         NSAlert *alert = [[NSAlert alloc] init];
         [alert setMessageText:NSLocalizedString(@"A file already exists at the selected destination.", @"Destination same as source alert -> message")];
         [alert setInformativeText:NSLocalizedString(@"The destination is the same as the source, you can not overwrite your source file!", @"Destination same as source alert -> informative text")];
+        [alert setAlertStyle:NSAlertStyleCritical];
         [alert beginSheetModalForWindow:self.window completionHandler:handler];
     }
     else if ([[NSFileManager defaultManager] fileExistsAtPath:job.completeOutputURL.path])

@@ -482,6 +482,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 
         decodeBool(_chaptersEnabled);
         decodeCollectionOfObjects(_chapterTitles, NSArray, HBChapter);
+        if (_chapterTitles == nil) { goto fail; }
 
         return self;
     }

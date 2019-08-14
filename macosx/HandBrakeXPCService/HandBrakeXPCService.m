@@ -82,6 +82,13 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     [NSProcessInfo.processInfo enableSuddenTermination];
 }
 
+- (void)setLogLevel:(NSInteger)logLevel
+{
+    dispatch_sync(_queue, ^{
+        self.core.logLevel = logLevel;
+    });
+}
+
 - (void)provideResourceAccessWithBookmarks:(NSArray<NSData *> *)bookmarks
 {
     dispatch_sync(_queue, ^{
@@ -131,7 +138,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     });
 }
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds withReply:(void (^)(HBCoreResult))reply
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews withReply:(void (^)(HBCoreResult))reply
 {
     dispatch_sync(_queue, ^{
         void (^progressHandler)(HBState state, HBProgress progress, NSString *info) = ^(HBState state, HBProgress progress, NSString *info)
@@ -141,7 +148,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
         self->_progressHandler = progressHandler;
         self.reply = reply;
 
-        [self.core scanURL:url titleIndex:index previews:previewsNum minDuration:seconds
+        [self.core scanURL:url titleIndex:index previews:previewsNum minDuration:seconds keepPreviews:keepPreviews
            progressHandler:self.progressHandler
          completionHandler:self.completionHandler];
     });

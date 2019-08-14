@@ -73,7 +73,6 @@
         _channelLayout = audio->in.channel_layout;
 
         _isoLanguageCode = @(audio->lang.iso639_2);
-
     }
     return self;
 }

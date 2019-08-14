@@ -59,7 +59,7 @@
         _outputPanel = [[HBOutputPanelController alloc] init];
 
         // we init the HBPresetsManager
-        NSURL *appSupportURL = [HBUtilities appSupportURL];
+        NSURL *appSupportURL = HBUtilities.appSupportURL;
         _presetsManager = [[HBPresetsManager alloc] initWithURL:[appSupportURL URLByAppendingPathComponent:PRESET_FILE]];
 
         // Queue
@@ -99,16 +99,18 @@
 
     self.presetsMenuBuilder = [[HBPresetsMenuBuilder alloc] initWithMenu:self.presetsMenu
                                                                   action:@selector(selectPresetFromMenu:)
-                                                                    size:[NSFont systemFontSize]
+                                                                    size:NSFont.systemFontSize
                                                           presetsManager:self.presetsManager];
     [self.presetsMenuBuilder build];
 
     // Get the number of HandBrake instances currently running
-    NSUInteger instances = [NSRunningApplication runningApplicationsWithBundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]].count;
+    NSUInteger instances = [NSRunningApplication runningApplicationsWithBundleIdentifier:NSBundle.mainBundle.bundleIdentifier].count;
 
     // Open debug output window now if it was visible when HB was closed
     if ([ud boolForKey:@"OutputPanelIsOpen"])
+    {
         [self showOutputPanel:nil];
+    }
 
     // On Screen Notification
     // We check to see if there is already another instance of hb running.
@@ -136,7 +138,9 @@
     {
         // Open queue window now if it was visible when HB was closed
         if ([ud boolForKey:@"QueueWindowIsOpen"])
+        {
             [self showQueueWindow:nil];
+        }
 
         [self showMainWindow:self];
         [self.mainController launchAction];
@@ -192,8 +196,8 @@
 {
     [self.presetsManager savePresets];
 
-    [[NSUserDefaults standardUserDefaults] setBool:_queueController.window.isVisible forKey:@"QueueWindowIsOpen"];
-    [[NSUserDefaults standardUserDefaults] setBool:_outputPanel.window.isVisible forKey:@"OutputPanelIsOpen"];
+    [NSUserDefaults.standardUserDefaults setBool:_queueController.window.isVisible forKey:@"QueueWindowIsOpen"];
+    [NSUserDefaults.standardUserDefaults setBool:_outputPanel.window.isVisible forKey:@"OutputPanelIsOpen"];
 
     _mainController = nil;
     _queueController = nil;
@@ -236,7 +240,7 @@
  */
 - (void)cleanEncodeLogs
 {
-    NSURL *directoryUrl = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"EncodeLogs"];
+    NSURL *directoryUrl = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"EncodeLogs"];
 
     if (directoryUrl)
     {
@@ -264,15 +268,15 @@
 
 - (void)cleanPreviews
 {
-    NSURL *previewDirectory = [[HBUtilities appSupportURL] URLByAppendingPathComponent:@"Previews"];
+    NSURL *previewDirectory = [HBUtilities.appSupportURL URLByAppendingPathComponent:@"Previews"];
 
     if (previewDirectory)
     {
-        NSArray *contents = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:previewDirectory
-                                                          includingPropertiesForKeys:nil
-                                                                             options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
-                                                                                     NSDirectoryEnumerationSkipsPackageDescendants
-                                                                               error:NULL];
+        NSArray *contents = [NSFileManager.defaultManager contentsOfDirectoryAtURL:previewDirectory
+                                                        includingPropertiesForKeys:nil
+                                                                           options:NSDirectoryEnumerationSkipsSubdirectoryDescendants |
+                             NSDirectoryEnumerationSkipsPackageDescendants
+                                                                             error:NULL];
 
         NSFileManager *manager = [[NSFileManager alloc] init];
         for (NSURL *url in contents)
@@ -372,18 +376,16 @@
 
 - (IBAction)openHomepage:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL
-                                            URLWithString:@"https://handbrake.fr/"]];
+    [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:@"https://handbrake.fr/"]];
 }
 
 - (IBAction)openForums:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:[NSURL
-                                            URLWithString:@"https://forum.handbrake.fr/"]];
+    [NSWorkspace.sharedWorkspace openURL:[NSURL URLWithString:@"https://forum.handbrake.fr/"]];
 }
 - (IBAction)openUserGuide:(id)sender
 {
-    [[NSWorkspace sharedWorkspace] openURL:HBUtilities.documentationURL];
+    [NSWorkspace.sharedWorkspace openURL:HBUtilities.documentationURL];
 }
 
 @end

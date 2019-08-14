@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name;
 - (void)invalidate;
 
+@property (nonatomic, readwrite) NSInteger logLevel;
+
 @property (nonatomic, readonly) HBState state;
 
 @property (nonatomic, readonly) HBRedirect *stdoutRedirect;
@@ -24,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)preventSleep;
 - (void)allowSleep;
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(nonnull HBCoreProgressHandler)progressHandler completionHandler:(nonnull HBCoreCompletionHandler)completionHandler;
 
 - (void)cancelScan;
 

@@ -216,6 +216,15 @@
     _drc = drc;
 }
 
+- (void)setTitle:(NSString *)title
+{
+    if (title != _title)
+    {
+        [[self.undo prepareWithInvocationTarget:self] setTitle:_title];
+    }
+    _title = title;
+}
+
 #pragma mark - Validation
 
 - (int)sanatizeEncoderValue:(int)proposedEncoder
@@ -517,6 +526,8 @@
 
         copy->_gain = _gain;
         copy->_drc = _drc;
+
+        copy->_title = [_title copy];
     }
 
     return copy;

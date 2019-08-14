@@ -12,6 +12,7 @@
 #import "HBJobOutputFileWriter.h"
 
 static void *HBQueueContext = &HBQueueContext;
+static void *HBQueueLogLevelContext = &HBQueueLogLevelContext;
 
 NSString * const HBQueueDidChangeStateNotification = @"HBQueueDidChangeStateNotification";
 
@@ -78,6 +79,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
                        options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionInitial
                        context:HBQueueContext];
 
+        [NSUserDefaultsController.sharedUserDefaultsController addObserver:self forKeyPath:@"values.LoggingLevel"
+                                                                   options:0 context:HBQueueLogLevelContext];
     }
     return self;
 }
@@ -87,6 +90,10 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
     if (context == HBQueueContext)
     {
         [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self];
+    }
+    else if (context == HBQueueLogLevelContext)
+    {
+        self.core.logLevel = [NSUserDefaults.standardUserDefaults integerForKey:HBLoggingLevel];
     }
     else
     {
@@ -431,7 +438,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (BOOL)canEncode
 {
-    return self.pendingItemsCount > 0;
+    return self.pendingItemsCount > 0 && ![self isEncoding];
 }
 
 - (BOOL)isEncoding
@@ -549,7 +556,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
 
 - (void)start
 {
-    if (self.canEncode && self.core.state == HBStateIdle)
+    if (self.canEncode)
     {
         [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidStartNotification object:self];
         [self.core preventSleep];
@@ -720,6 +727,7 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
             titleIndex:item.job.titleIdx
               previews:10
            minDuration:0
+          keepPreviews:NO
        progressHandler:progressHandler
      completionHandler:completionHandler];
 }
@@ -802,8 +810,11 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
  */
 - (void)cancelCurrentItemAndStop
 {
-    self.stop = YES;
-    [self doCancelCurrentItem];
+    if (self.core.state != HBStateIdle)
+    {
+        self.stop = YES;
+        [self doCancelCurrentItem];
+    }
 }
 
 /**
@@ -811,7 +822,10 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
  */
 - (void)finishCurrentAndStop
 {
-    self.stop = YES;
+    if (self.core.state != HBStateIdle)
+    {
+        self.stop = YES;
+    }
 }
 
 @end

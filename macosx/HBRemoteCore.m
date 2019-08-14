@@ -55,7 +55,18 @@
         });
     };
 
-    _proxy = [_connection remoteObjectProxy];
+    _connection.invalidationHandler = ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [weakSelf forwardError:@"XPC: Service connection was invalidated\n"];
+        });
+    };
+
+    _proxy = [_connection remoteObjectProxyWithErrorHandler:^(NSError * _Nonnull error) {
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self forwardError:@"XPC: Service did report an error\n"];
+            [self forwardError:error.description];
+        });
+    }];
 
     [_connection resume];
 }
@@ -65,28 +76,27 @@
     [[_connection synchronousRemoteObjectProxyWithErrorHandler:^(NSError * _Nonnull error) {}] tearDown];
     [_connection invalidate];
     _connection = nil;
+    _proxy = nil;
 }
 
 - (void)handleInterruption
 {
+    [_proxy setDVDNav:[NSUserDefaults.standardUserDefaults boolForKey:HBUseDvdNav]];
     [_proxy setUpWithLogLevel:self.level name:self.name];
 
-    if (self.state != HBStateIdle)
+    HBCoreCompletionHandler handler = self.completionHandler;
+
+    self.progressHandler = nil;
+    self.completionHandler = nil;
+
+    self.state = HBStateIdle;
+
+    if (handler)
     {
-        [self forwardError:@"XPC Service did crash"];
-
-        HBCoreCompletionHandler handler = self.completionHandler;
-
-        self.progressHandler = nil;
-        self.completionHandler = nil;
-
-        self.state = HBStateIdle;
-
-        if (handler)
-        {
-            handler(HBCoreResultFailed);
-        }
+        handler(HBCoreResultFailed);
     }
+
+    [self forwardError:@"XPC: Service did crash\n"];
 }
 
 - (instancetype)initWithLogLevel:(NSInteger)level name:(NSString *)name
@@ -108,6 +118,12 @@
     });
 }
 
+- (void)setLogLevel:(NSInteger)logLevel
+{
+    _logLevel = logLevel;
+    [_proxy setLogLevel:logLevel];
+}
+
 - (void)setAutomaticallyPreventSleep:(BOOL)automaticallyPreventSleep
 {
     [_proxy setAutomaticallyPreventSleep:automaticallyPreventSleep];
@@ -123,7 +139,7 @@
     [_proxy preventSleep];
 }
 
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds progressHandler:(nonnull HBCoreProgressHandler)progressHandler completionHandler:(nonnull HBCoreCompletionHandler)completionHandler
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(nonnull HBCoreProgressHandler)progressHandler completionHandler:(nonnull HBCoreCompletionHandler)completionHandler
 {
 
 #ifdef __SANDBOX_ENABLED__
@@ -143,7 +159,7 @@
 
     __weak HBRemoteCore *weakSelf = self;
 
-    [_proxy scanURL:url titleIndex:index previews:previewsNum minDuration:seconds withReply:^(HBCoreResult result) {
+    [_proxy scanURL:url titleIndex:index previews:previewsNum minDuration:seconds keepPreviews:keepPreviews withReply:^(HBCoreResult result) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             HBCoreCompletionHandler handler = weakSelf.completionHandler;
             weakSelf.completionHandler = nil;

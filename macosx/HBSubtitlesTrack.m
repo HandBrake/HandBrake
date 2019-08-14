@@ -331,6 +331,8 @@ static NSArray *_languagesArray = nil;
         copy->_isoLanguage = [_isoLanguage copy];
         copy->_charCode = [_charCode copy];
         copy->_offset = _offset;
+
+        copy->_title = [_title copy];
     }
 
     return copy;

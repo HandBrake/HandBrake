@@ -260,7 +260,7 @@
                     hb_subtitle_config_t sub_config;
                     int type = subTrack.type;
 
-                    sub_config.name = NULL;
+                    sub_config.name = subTrack.title.UTF8String;
                     sub_config.offset = subTrack.offset;
 
                     // we need to strncpy file name and codeset
@@ -289,6 +289,7 @@
                     if (subt != NULL)
                     {
                         hb_subtitle_config_t sub_config = subt->config;
+                        sub_config.name = subTrack.title.UTF8String;
 
                         if (!subTrack.burnedIn && hb_subtitle_can_pass(subt->source, job->mux))
                         {
@@ -374,6 +375,7 @@
             audio->out.bitrate                   = audioTrack.bitRate;
             audio->out.samplerate                = sampleRateToUse;
             audio->out.dither_method             = hb_audio_dither_get_default();
+            audio->out.name                      = audioTrack.title.UTF8String;
 
             // output is not passthru so apply gain
             if (!(audioTrack.encoder & HB_ACODEC_PASS_FLAG))

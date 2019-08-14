@@ -155,10 +155,11 @@ typedef void (^HBCoreCompletionHandler)(HBCoreResult result);
  *  @param index            the index of the desired title. Use 0 to scan every title.
  *  @param previewsNum         the number of previews image to generate.
  *  @param seconds             the minimum duration of the wanted titles in seconds.
+ *  @param keepPreviews        whether the previews images are kept on disk or discarded.
  *  @param progressHandler     a block called periodically with the progress information.
  *  @param completionHandler   a block called with the scan result.
  */
-- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;
+- (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler;
 
 /**
  *  Cancels the scan execution.

@@ -43,7 +43,7 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
         _tracks = [[NSMutableArray alloc] init];
         _defaults = [[HBAudioDefaults alloc] init];
 
-        // Add the none and foreign track to the source array
+        // Add the none track to the source array
         NSMutableArray<HBTitleAudioTrack *> *sourceTracks = [job.title.audioTracks mutableCopy];
         HBTitleAudioTrack *none = [[HBTitleAudioTrack alloc] initWithDisplayName:HBKitLocalizedString(@"None", @"HBAudio -> none track name")];
         [sourceTracks insertObject:none atIndex:0];
@@ -279,7 +279,9 @@ NSString *HBAudioEncoderChangedNotification = @"HBAudioEncoderChangedNotificatio
 
     decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
     decodeCollectionOfObjects(_sourceTracks, NSArray, HBTitleAudioTrack);
+    if (_sourceTracks == nil || _sourceTracks.count < 1) { goto fail; }
     decodeCollectionOfObjects(_tracks, NSMutableArray, HBAudioTrack);
+    if (_tracks == nil) { goto fail; }
 
     for (HBAudioTrack *track in _tracks)
     {
