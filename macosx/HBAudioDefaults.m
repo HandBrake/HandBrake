@@ -474,11 +474,8 @@
         goto fail;
     }
 
-    decodeCollectionOfObjects(_trackSelectionLanguages, NSMutableArray, NSString);
-    if (_trackSelectionLanguages == nil) { goto fail; }
-
-    decodeCollectionOfObjects(_tracksArray, NSMutableArray, HBAudioTrackPreset);
-    if (_tracksArray == nil) { goto fail; }
+    decodeCollectionOfObjectsOrFail(_trackSelectionLanguages, NSMutableArray, NSString);
+    decodeCollectionOfObjectsOrFail(_tracksArray, NSMutableArray, HBAudioTrackPreset);
 
     decodeBool(_allowAACPassthru);
     decodeBool(_allowAC3Passthru);

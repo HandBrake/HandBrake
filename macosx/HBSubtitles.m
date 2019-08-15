@@ -461,10 +461,9 @@
     _tokens = [NSMutableArray array];
 
     decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
-    decodeCollectionOfObjects(_sourceTracks, NSArray, HBTitleSubtitlesTrack);
-    if (_sourceTracks == nil || _sourceTracks.count < 1) { goto fail; }
-    decodeCollectionOfObjects(_tracks, NSMutableArray, HBSubtitlesTrack);
-    if (_tracks == nil) { goto fail; }
+    decodeCollectionOfObjectsOrFail(_sourceTracks, NSArray, HBTitleSubtitlesTrack);
+    if (_sourceTracks.count < 1) { goto fail; }
+    decodeCollectionOfObjectsOrFail(_tracks, NSMutableArray, HBSubtitlesTrack);
 
     for (HBSubtitlesTrack *track in _tracks)
     {

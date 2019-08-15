@@ -194,19 +194,20 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
  */
 - (void)reload
 {
-    NSMutableArray<HBUniqueObject> *jobsArray = nil;
-    @try
+    NSMutableArray<HBUniqueObject> *jobsArray;
+    NSError *error;
+
+    NSData *queue = [NSData dataWithContentsOfURL:self.fileURL];
+    NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:queue];
+    unarchiver.requiresSecureCoding = YES;
+    jobsArray = [unarchiver decodeTopLevelObjectOfClasses:self.objectClasses forKey:NSKeyedArchiveRootObjectKey error:&error];
+
+    if (error)
     {
-        NSData *queue = [NSData dataWithContentsOfURL:self.fileURL];
-        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:queue];
-        unarchiver.requiresSecureCoding = YES;
-        jobsArray = [unarchiver decodeObjectOfClasses:self.objectClasses forKey:NSKeyedArchiveRootObjectKey];
-        [unarchiver finishDecoding];
+        [HBUtilities writeErrorToActivityLog:error];
     }
-    @catch (NSException *exception)
-    {
-        jobsArray = nil;
-    }
+
+    [unarchiver finishDecoding];
 
     // Swap the proxy objects representation with the new
     // one read from disk

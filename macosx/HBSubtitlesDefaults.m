@@ -230,8 +230,7 @@
     {
         goto fail;
     }
-    decodeCollectionOfObjects(_trackSelectionLanguages, NSMutableArray, NSString);
-    if (_trackSelectionLanguages == nil) { goto fail; }
+    decodeCollectionOfObjectsOrFail(_trackSelectionLanguages, NSMutableArray, NSString);
 
     decodeBool(_addForeignAudioSearch);
     decodeBool(_addForeignAudioSubtitle);

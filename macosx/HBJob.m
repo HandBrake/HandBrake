@@ -481,8 +481,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
         _video.job = self;
 
         decodeBool(_chaptersEnabled);
-        decodeCollectionOfObjects(_chapterTitles, NSArray, HBChapter);
-        if (_chapterTitles == nil) { goto fail; }
+        decodeCollectionOfObjectsOrFail(_chapterTitles, NSArray, HBChapter);
 
         return self;
     }
