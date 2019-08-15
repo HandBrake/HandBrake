@@ -779,7 +779,10 @@ subtitle_update_setting(GhbValue *val, const char *name, signal_user_data_t *ud)
     subsettings = subtitle_get_selected_settings(ud, NULL);
     if (subsettings != NULL)
     {
-        ghb_dict_set(subsettings, name, val);
+        if (val != NULL)
+            ghb_dict_set(subsettings, name, val);
+        else
+            ghb_dict_remove(subsettings, name);
         subtitle_list_refresh_selected(ud, subsettings);
         ghb_update_summary_info(ud);
         ghb_live_reset(ud);
