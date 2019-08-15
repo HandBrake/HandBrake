@@ -13,7 +13,7 @@
 
 + (NSString *)handBrakeVersion
 {
-    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSDictionary *infoDictionary = NSBundle.mainBundle.infoDictionary;
     return [NSString stringWithFormat:@"Handbrake Version: %@ (%@)",
             infoDictionary[@"CFBundleShortVersionString"],
             infoDictionary[@"CFBundleVersion"]];
@@ -54,6 +54,20 @@
     va_end(args);
 }
 
++ (void)writeErrorToActivityLog:(NSError *)error
+{
+    [self writeToActivityLog:"Error domain: %s", error.domain.UTF8String];
+    [self writeToActivityLog:"Error code: %d", error.code];
+    if (error.localizedDescription)
+    {
+        [self writeToActivityLog:"Error description: %s", error.localizedDescription.UTF8String];
+    }
+    if (error.debugDescription)
+    {
+        [self writeToActivityLog:"Error debug description: %s", error.debugDescription.UTF8String];
+    }
+}
+
 + (void)writeToActivityLogWithNoHeader:(NSString *)text
 {
     fprintf(stderr, "%s", text.UTF8String);
@@ -70,8 +84,7 @@
 
     if (error)
     {
-        NSString *error_message = [NSString stringWithFormat:@"Failed to resolved bookmark: %@", error];
-        [HBUtilities writeToActivityLog:"%s", error_message.UTF8String];
+        [HBUtilities writeErrorToActivityLog:error];
     }
 
     return isStale ? nil : url;

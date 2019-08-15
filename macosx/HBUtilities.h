@@ -32,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param format a standard c format string with varargs.
  */
 + (void)writeToActivityLog:(const char *)format, ...;
++ (void)writeErrorToActivityLog:(NSError *)error;
 + (void)writeToActivityLogWithNoHeader:(NSString *)text;
 
 + (nullable NSURL *)URLFromBookmark:(NSData *)bookmark;
