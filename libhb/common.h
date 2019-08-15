@@ -475,7 +475,7 @@ typedef enum
  *****************************************************************************/
 struct hb_job_s
 {
-    PRIVATE char  * json;   // JSON encoded job string
+    const char  * json;   // JSON encoded job string
 
     /* ID assigned by UI so it can groups job passes together */
     int             sequence_id;
@@ -858,7 +858,7 @@ struct hb_audio_config_s
                                     * These samples should be dropped
                                     * when decoding */
         PRIVATE hb_rational_t timebase;
-        PRIVATE char * name;
+        const char * name;
     } in;
 
     struct
