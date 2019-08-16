@@ -682,12 +682,12 @@ static void add_audio_for_lang(hb_value_array_t *list, const hb_dict_t *preset,
             hb_dict_set(audio_dict, "Track", hb_value_int(track));
             hb_dict_set(audio_dict, "Encoder", hb_value_string(
                         hb_audio_encoder_get_short_name(out_codec)));
-            if (hb_dict_get(encoder_dict, "AudioTrackName") != NULL)
+            const char * name = hb_dict_get_string(encoder_dict, "AudioTrackName");
+            if (name != NULL && name[0] != 0)
             {
-                hb_dict_set(audio_dict, "Name", hb_value_dup(
-                    hb_dict_get(encoder_dict, "AudioTrackName")));
+                hb_dict_set_string(audio_dict, "Name", name);
             }
-            else if (aconfig->in.name != NULL)
+            else if (aconfig->in.name != NULL && aconfig->in.name[0] != 0)
             {
                 hb_dict_set_string(audio_dict, "Name", aconfig->in.name);
             }
@@ -899,7 +899,10 @@ static void add_subtitle(hb_value_array_t *list, int track,
     hb_dict_set_bool(subtitle_dict, "Default", make_default);
     hb_dict_set_bool(subtitle_dict, "Forced", force);
     hb_dict_set_bool(subtitle_dict, "Burn", burn);
-    hb_dict_set_string(subtitle_dict, "Name", name);
+    if (name != NULL && name[0] != 0)
+    {
+        hb_dict_set_string(subtitle_dict, "Name", name);
+    }
     hb_value_array_append(list, subtitle_dict);
 }
 
