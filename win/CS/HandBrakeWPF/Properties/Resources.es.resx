@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -60,45 +60,45 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -1020,7 +1020,7 @@ Tiempo restante: {5},  Transcurrido: {6:d\:hh\:mm\:ss}</value>
     <value>iPod 5G Support</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>Meta Dato</value>
+    <value>Metadata</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
     <value>(Modificado)</value>
@@ -1140,7 +1140,7 @@ Tiempo restante: {5},  Transcurrido: {6:d\:hh\:mm\:ss}</value>
     <value>Administrar ajuste preestablecido</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>Meta Datos</value>
+    <value>Metadata</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value>Permitir el uso de los codificadores Nvidia NVENC</value>
@@ -1698,7 +1698,7 @@ Tiempo restante: {5},  Transcurrido: {6:d\:hh\:mm\:ss}</value>
     <value>Sintonizar Codificador:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>Opciones extra:</value>
+    <value>Advanced Options:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
     <value>Decodificación rápida</value>
@@ -1993,7 +1993,7 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
     <value>Exportar Cola (CLI Solo)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Usa el Tema Oscuro. (Requiere reiniciar) (ESTA ES UNA VISTA PREVIA TEMPRANA. ¡AÚN NO ESTÁ ACABADA!)</value>
+    <value>Use the Dark Theme. (Requires Restart, Windows 10 only)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>No disponible</value>
@@ -2002,7 +2002,7 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
     <value>GB</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>Alimentación de red de AC detectada. Reanudando la codificación... ({0} %) </value>
+    <value>Alimentación de red de AC detectada. Reanudando la codificación... (-0- %) </value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
     <value>¡La batería del sistema es crítica! ({0} %)</value>
@@ -2018,5 +2018,32 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
     <value>Configure Automatic Subtitle Selections</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Actors:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Comments:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>Descripcion:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Director:</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>Genre:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Plot:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>Release Date:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>Title:</value>
   </data>
 </root>

@@ -124,7 +124,7 @@
   <data name="Video_x264FastDecode" xml:space="preserve">
     <value>Reduziert die CPU-Auslastung des Decoders.
 
-Dies auswählen, wenn das Abspielgerät Probleme beim wiedergeben hat (z. B. wenn Einzelbilder ausgelassen werden).</value>
+Dies auswählen, wenn das Abspielgerät Probleme beim Wiedergeben hat (z. B. wenn Einzelbilder ausgelassen werden).</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
     <value>Warnung: RF 0 ist verlustfrei!</value>
@@ -176,7 +176,7 @@ Quellenmaximum: Kodiert nach Möglichkeit immer mit der Quellauflösung.</value>
   <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
     <value>Warnung: Wenn jedem Objekt, das in die Warteschlange aufgenommen werden soll, Untertitel hinzugefügt werden sollen, dann sollte vorher geprüft werden, dass die Standardeinstellungen für Untertitel im Untertitel-Tab richtig eingestellt sind.
 
-Möchten Sie fortfahren?</value>
+Trotzdem fortfahren?</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
     <value>Die automatische Dateibenennung muss aktiviert sein UND es muss ein Standardpfad in den Einstellungen vorgegeben sein, bevor es der Warteschlange hinzugefügt werden kann.</value>
@@ -194,7 +194,7 @@ Möchten Sie fortfahren?</value>
     <value>HandBrake encodiert bereits.</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>Es sind Aufgaben mit dem selben Zielpfad in der Warteschlange. Bitte einen anderen Pfad für die Aufgabe wählen.</value>
+    <value>Es sind Aufgaben mit demselben Zielpfad in der Warteschlange. Bitte einen anderen Pfad für die Aufgabe wählen.</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
     <value>Anstehende Aufgaben {0}</value>
@@ -215,7 +215,7 @@ Möchten Sie fortfahren?</value>
     <value>Bitte einen Ordner wählen.</value>
   </data>
   <data name="Main_PreparingToEncode" xml:space="preserve">
-    <value>Encodieren vorbereiten ...</value>
+    <value>Encodieren vorbereiten …</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
     <value>Es kann keine Voreinstellung mit demselben Namen einer installierten Voreinstellung importiert werden.</value>
@@ -234,7 +234,7 @@ Möchten Sie fortfahren?</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
     <value>HandBrake hat festgestellt, dass die installierten Voreinstellungen nicht mehr aktuell sind … Diese Voreinstellungen werden nun aktualisiert.
-Ihre eigenen Voreinstellungen wurden nicht aktualisiert, so dass diese möglicherweise neu erstellt werden müssen, indem Sie sie löschen und erneut hinzufügen.
+Die eigenen Voreinstellungen wurden nicht aktualisiert, so dass diese möglicherweise neu erstellt werden müssen, indem sie gelöscht und erneut hinzugefügt werden.
 Von der vorherigen Datei user_presets.xml wurde ein Backup angelegt.</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
@@ -250,22 +250,22 @@ Von der vorherigen Datei user_presets.xml wurde ein Backup angelegt.</value>
     <value>Überprüfen fehlgeschlagen:</value>
   </data>
   <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
-    <value>Überprüfen fehlgeschlagen ... Details im Aktivitätsprotokoll.</value>
+    <value>Überprüfen fehlgeschlagen … Details im Aktivitätsprotokoll.</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>Quelle überprüfen, bitte warten ...</value>
+    <value>Quelle überprüfen, bitte warten …</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
     <value>Titel {0} von {1} überprüfen ({2} %)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>Bevor eine Encodierung gestartet werden kann, muss eine Quelle überprüft und eine Aufgabe festgelegt werden. Bitte „Quelle“ in der Symbolleiste auswählen um fortzufahren.</value>
+    <value>Bevor eine Encodierung gestartet werden kann, muss eine Quelle überprüft und eine Aufgabe festgelegt werden. Bitte „Quelle“ in der Symbolleiste auswählen, um fortzufahren.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
     <value>Bitte sicherstellen, dass eine eigene Voreinstellung ausgewählt ist. Installierte Voreinstellungen können nicht exportiert werden.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>Bitte eine Voreinstellung zum aktualisieren auswählen.</value>
+    <value>Bitte eine Voreinstellung zum Aktualisieren auswählen.</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
     <value>„Quelle“ auswählen um fortzufahren</value>
@@ -292,8 +292,8 @@ Von der vorherigen Datei user_presets.xml wurde ein Backup angelegt.</value>
     <value>Version der Voreinstellung</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>Die Voreinstellung die importiert werden soll ist von einer anderen HandBrake-Version.
-Es ist möglich, dass nicht alle Werte der Voreinstellung importiert werden können.
+    <value>Die Voreinstellung, die importiert werden soll, stammt von einer anderen HandBrake-Version.
+Es ist möglich, dass nicht alle Werte dieser Voreinstellung importiert werden können.
 
 Trotzdem fortfahren?</value>
   </data>
@@ -304,7 +304,7 @@ Trotzdem fortfahren?</value>
     <value>Importieren der Voreinstellung nicht möglich, da sie beschädigt ist oder von einer älteren HandBrake-Version stammt.</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
-    <value>Vor dem Hinzufügen zur Warteschlange muss der Zielpfad für die Ausgabedatei angegeben werden.</value>
+    <value>Vor dem Hinzufügen zur Warteschlange, muss der Zielpfad für die Ausgabedatei angegeben werden.</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
     <value>Der eingegebene Zielpfad enthält ungültige Zeichen und wird nicht aktualisiert.</value>
@@ -333,7 +333,7 @@ Nicht beide zur selben Zeit!</value>
     <value>Es kann keine Datei mit demselben Pfad und Dateinamen wie die Quelldatei encodiert werden. Bitte den Namen der Zieldatei ändern, so dass er nicht der Quelldatei entspricht.</value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
-    <value>Ihr System hat HandBrake daran gehindert einen Webbrowser zu starten.</value>
+    <value>Das System hat HandBrake daran gehindert einen Webbrowser zu starten.</value>
   </data>
   <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
     <value>Die Hilfeseite kann auch direkt auf der Webseite unter https://handbrake.fr erreicht werden.</value>
@@ -349,10 +349,10 @@ Voreinstellungen aus älteren Versionen müssen mit einer aktuellen Version neu 
     <value>Zusätzliche erweiterte Argumente, die vom Videoencoder angewendet werden.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>Keine - Es werden nur Spuren eingebrannt, bei denen der Container das Format nicht unterstützt.
-Fremdsprachenspur - Die Fremdsprachenspur wird eingebrannt, falls vorhanden. 
-Erste Spur - Die erste Spur wird eingebrannt.
-Fremdsprachenton bevorzugt, sonst Erste - Wenn die Fremdsprachenspur existiert, wird sie eingebrannt, sonst wird die erste Spur ausgewählt.</value>
+    <value>Keine – Es werden nur Spuren eingebrannt, bei denen der Container das Format nicht unterstützt.
+Fremdsprachenspur – Die Fremdsprachenspur wird eingebrannt, falls vorhanden. 
+Erste Spur – Die erste Spur wird eingebrannt.
+Fremdsprachenton bevorzugt, sonst Erste – Wenn die Fremdsprachenspur existiert, wird sie eingebrannt, sonst wird die erste Spur ausgewählt.</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
     <value>WebM-Untertitel-Kompatibilität</value>
@@ -446,7 +446,7 @@ Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
     <value>Ein neues Update ist verfügbar! Bitte die Webseite auf Versionshinweise prüfen.</value>
   </data>
   <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>Ihr System unterstützt die 64bit-Version von HandBrake! Dies bietet Verbesserungen bezüglich Leistung und Stabilität, bezogen auf die 32bit-Version.
+    <value>Dieses System unterstützt die 64bit-Version von HandBrake! Diese bietet Verbesserungen bezüglich Leistung und Stabilität, bezogen auf die 32bit-Version.
 Bitte die Webseite auf Versionshinweise prüfen.</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
@@ -536,7 +536,7 @@ Soll HandBrake wirklich beendet werden?</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
     <value>VLC-Player nicht gefunden.
-Bitte stellen Sie sicher, dass VLC installiert und der Pfad in den HandBrake-Einstellungen korrekt ist (siehe „Extras &gt; Einstellungen &gt; Allgemein“)</value>
+Bitte sicherstellen, dass VLC installiert und der Pfad in den HandBrake-Einstellungen korrekt ist (siehe „Extras &gt; Einstellungen &gt; Allgemein“)</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
     <value>Vorschaudatei konnte nicht gefunden werden. Entweder wurde die Datei gelöscht oder die Encodierung ist fehlgeschlagen. Bitte das Aktivitätsprotokoll für Details prüfen.</value>
@@ -574,7 +574,7 @@ Die alten Voreinstellungen wurden archiviert unter:</value>
     <value>Geringer Speicherplatz</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
-    <value>Warnung, der verfügbare freie Speicherplatz wird knapp. HandBrake wird nicht in der Lage sein das Encodieren abzuschließen, sollte der freie Speicherplatz nicht ausreichen.</value>
+    <value>Warnung, der verfügbare freie Speicherplatz wird knapp. HandBrake wird nicht in der Lage sein, das Encodieren abzuschließen, sollte der freie Speicherplatz nicht ausreichen.</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
     <value>Zeile {0} ist ungültig. Es wird nichts importiert.</value>
@@ -613,8 +613,8 @@ Sollen die Kapitelnamen trotzdem importiert werden?</value>
     <value>Die Anzahl der Kapitel zwischen Quelle und Eingangsdatei stimmen nicht überein.</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
-    <value>Die berichtete Dauer des Kapitels des Quellmediums
- und die Dauer des Kapitels in der Eingabedatei differieren stark.
+    <value>Die gemeldete Kapiteldauer des Quellmediums und die
+Kapiteldauer der Eingabedatei unterscheiden sich stark.
 
 Es ist sehr wahrscheinlich, dass diese Kapiteldatei von einem anderen Quellmedium produziert wurde.
 
@@ -718,7 +718,7 @@ verbleibende Zeit: {5}, vergangen: {6:d\:hh\:mm\:ss}</value>
     <value>HandBrake benötigt Windows 7 oder neuer. Version 0.9.9 (XP) und 0.10.5 (Vista) waren die letzten mit einer Unterstützung für diese Version.</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>Soll versucht werden den Rest hinzuzufügen?</value>
+    <value>Soll versucht werden, den Rest hinzuzufügen?</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
     <value>Die Datei „{0}“ existiert bereits!
@@ -728,7 +728,7 @@ Soll sie überschrieben werden?</value>
     <value>Die Zwischenablage des Systems ist momentan nicht verfügbar.</value>
   </data>
   <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
-    <value>Ein möglicher Grund könnte eine andere Anwendung sein, die die Zwischenablage überwacht oder zwecks eigenem Gebrauch blockiert. Die Zwischenablage ist nicht verfügbar solange sie blockiert ist.</value>
+    <value>Ein möglicher Grund könnte eine andere Anwendung sein, die die Zwischenablage überwacht oder zwecks eigenem Gebrauch blockiert. Die Zwischenablage ist nicht verfügbar, solange sie blockiert ist.</value>
   </data>
   <data name="AboutView_License" xml:space="preserve">
     <value>Lizenz:</value>
@@ -797,7 +797,7 @@ Soll sie überschrieben werden?</value>
     <value>Zeigen</value>
   </data>
   <data name="AudioView_TrackName" xml:space="preserve">
-    <value>Spurenname</value>
+    <value>Spurname</value>
   </data>
   <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
     <value>Spurverhalten Sprache:</value>
@@ -1007,13 +1007,13 @@ Soll sie überschrieben werden?</value>
     <value>iPod 5G-Unterstützung</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>Metadaten</value>
+    <value>Metadata</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
     <value>(Modifiziert)</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
-    <value>Multiplexen: Dies kann etwas dauern ...</value>
+    <value>Multiplexen: Dies kann etwas dauern …</value>
   </data>
   <data name="MainView_Options" xml:space="preserve">
     <value>Einstellungen</value>
@@ -1088,7 +1088,7 @@ Soll sie überschrieben werden?</value>
     <value>Warteschlange starten</value>
   </data>
   <data name="MainView_Stop" xml:space="preserve">
-    <value>Stop</value>
+    <value>Stopp</value>
   </data>
   <data name="MainView_StopEncode" xml:space="preserve">
     <value>Encodierung anhalten</value>
@@ -1097,7 +1097,7 @@ Soll sie überschrieben werden?</value>
     <value>Soll das Encodieren wirklich abgebrochen werden?</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
-    <value>Bitte vor dem Import einer Untertiteldatei zuerst eine Quelle zum encodieren wählen.</value>
+    <value>Bitte vor dem Import einer Untertiteldatei zuerst eine Quelle zum Encodieren wählen.</value>
   </data>
   <data name="MainView_SubtitlesTab" xml:space="preserve">
     <value>Untertitel</value>
@@ -1127,7 +1127,7 @@ Soll sie überschrieben werden?</value>
     <value>Voreinstellungen verwalten</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>Metadaten</value>
+    <value>Metadata</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value>Verwendung des Nvidia NVENC-Encoders erlauben</value>
@@ -1205,7 +1205,7 @@ Soll sie überschrieben werden?</value>
     <value>DVD-Lesen</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>LibDVDNav deaktivieren (und statt dessen libdvdread verwenden).</value>
+    <value>LibDVDNav deaktivieren (und stattdessen libdvdread verwenden).</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
     <value>Encodieren</value>
@@ -1397,13 +1397,13 @@ Soll sie überschrieben werden?</value>
     <value>Alle löschen</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>fertige löschen</value>
+    <value>Fertige löschen</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
     <value>Warteschlange löschen</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>ausgewählte löschen</value>
+    <value>Ausgewählte löschen</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
     <value>Löschen</value>
@@ -1436,7 +1436,7 @@ Soll sie überschrieben werden?</value>
     <value>System sperren</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
-    <value>Das Aktivitätsprotokoll wird verfügbar sein, sobald das Encodieren abgeschlossen ist.</value>
+    <value>Das Aktivitätsprotokoll ist nach Abschluss der Encodierung verfügbar.</value>
   </data>
   <data name="WhenDone_Logoff" xml:space="preserve">
     <value>Ausloggen</value>
@@ -1535,16 +1535,16 @@ Soll sie überschrieben werden?</value>
     <value>Neu laden</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
-    <value>Disk zum überprüfen wählen</value>
+    <value>Disk zum Überprüfen wählen</value>
   </data>
   <data name="SourceSelection_ChooseFile" xml:space="preserve">
-    <value>Datei zum überprüfen wählen</value>
+    <value>Datei zum Überprüfen wählen</value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
-    <value>Ordner zum überprüfen wählen</value>
+    <value>Ordner zum Überprüfen wählen</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>Optional einen spezifischen Titel wählen:</value>
+    <value>Optional einen bestimmten Titel wählen:</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
     <value>Dann das Video / die Videos zum Encodieren auswählen:</value>
@@ -1664,7 +1664,7 @@ Soll sie überschrieben werden?</value>
     <value>Mittlere Bitrate (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Videoenkoder:</value>
+    <value>Videocodec:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Konstante Bildfrequenz</value>
@@ -1685,7 +1685,7 @@ Soll sie überschrieben werden?</value>
     <value>Abstimmung:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>Zusätzliche Einstellungen:</value>
+    <value>Advanced Options:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
     <value>Schnelle Decodierung</value>
@@ -1823,7 +1823,7 @@ Soll sie überschrieben werden?</value>
     <value>Bitte einen Ordner wählen.</value>
   </data>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
-    <value>'Wählen' auswählen um den Standardspeicherort festzulegen</value>
+    <value>'Wählen' auswählen, um den Standardspeicherort festzulegen</value>
   </data>
   <data name="MainView_Hide" xml:space="preserve">
     <value>Ausblenden</value>
@@ -1844,18 +1844,18 @@ Soll sie überschrieben werden?</value>
     <value>Programm-Symbolleiste</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>Zeige „Alles zur Warteschlange hinzufügen“ in der Symbolleiste</value>
+    <value>„Alles zur Warteschlange hinzufügen“ in der Symbolleiste anzeigen</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
     <value>„Auswahl zur Warteschlange hinzufügen“ in der Symbolleiste anzeigen</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Die Unterstützung für Hardware-Encodierung ist momentan deaktiviert. Bitte stellen Sie sicher, dass alle Grafikkarten-Treiber auf dem aktuellen Stand sind.
+    <value>Die Unterstützung für Hardware-Encodierung ist momentan deaktiviert. Bitte sicherstellen, dass alle Grafikkarten-Treiber auf dem aktuellen Stand sind.
 
 Dies hat keinen Einfluss auf die Software-Encoder.</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
-    <value>Bitte die Untertiteleinstellungen vor den Fortfahren korrigieren.</value>
+    <value>Bitte die Untertiteleinstellungen vor dem Fortfahren korrigieren.</value>
   </data>
   <data name="Generic_Apply" xml:space="preserve">
     <value>Anwenden</value>
@@ -1871,7 +1871,7 @@ Dies hat keinen Einfluss auf die Software-Encoder.</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
     <value>Encodieren: Durchgang {0} von {1}, {2:00.00} %, BpS: {3:000.0}, mittlere BpS: {4:000.0}
-verbleibende Zeit: {5:hh\:mm\:ss}, vergangene Zeit: {6:hh\:mm\:ss} {7}</value>
+verbleibende Zeit: {5:hh\:mm\:ss}, vergangen: {6:hh\:mm\:ss} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>Ausgewähltes löschen</value>
@@ -1890,7 +1890,7 @@ verbleibende Zeit: {5:hh\:mm\:ss}, vergangene Zeit: {6:hh\:mm\:ss} {7}</value>
     <value>Portabler Modus: Das Lesen von portable.ini ist nicht möglich. Die Datei könnte fehlerhaft sein. Bitte erneut portable.ini.template als Vorlage benutzen.</value>
   </data>
   <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrakes Engine konnte nicht initialisiert werden. Dies wird oft durch veraltete GPU-Treiber verursacht.\n Bitte aktualisieren Sie die GPU-Treiber für alle Onboard- und diskreten Grafikkarten, die Ihr System besitzt.</value>
+    <value>HandBrakes Engine konnte nicht initialisiert werden. Dies wird oft durch veraltete GPU-Treiber verursacht.\n Bitte die GPU-Treiber für alle Onboard- und diskreten Grafikkarten aktualisieren, die dieses System besitzt.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
     <value>Echtzeit-Update Optionen: {source} {title} {chapters} 
@@ -1957,7 +1957,7 @@ Nicht-Echtzeit Optionen: {date} {time} {creation-date} {creation-time} {quality}
     <value>Wiederherstellung der Warteschlange möglich</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>Ihre Voreinstellungsdatei beinhaltete installierte Voreinstellungen. Die Importfunktion unterstützt einen Import dieser nicht. Bitte verwenden Sie „Einstellungsmenu -&gt; Installierte Voreinstellungen zurücksetzen“ um den Standard wieder herzustellen. 
+    <value>Ihre Voreinstellungsdatei beinhaltete installierte Voreinstellungen. Die Importfunktion unterstützt einen Import dieser nicht. Bitte „Einstellungsmenü -&gt; Installierte Voreinstellungen zurücksetzen“ verwenden, um den Standard wieder herzustellen. 
 
 Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </value>
   </data>
@@ -1977,7 +1977,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Warteschlange exportieren (Nur CLI)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Das dunkle Erscheinungsbild verwenden. (Neustart benötigt)  (DIES IST EINE FRÜHE VORSCHAU. SIE IST NOCH NICHT KOMPLETT!)</value>
+    <value>Use the Dark Theme. (Requires Restart, Windows 10 only)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>Nicht verfügbar</value>
@@ -1986,13 +1986,13 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>GB</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>Netzspannung detektiert. Encodierung fortsetzen ... ({0} %)</value>
+    <value>Netzspannung erkannt. Encodierung wird fortgesetzt … ({0} %)</value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
     <value>Systembatterie kritisch! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>Systembatterie schwach! ({0} %). Die Encodierung wurde angehalten um das System zu schützen. Ruhezustand ist auf erlauben gesetzt!</value>
+    <value>Systembatterie schwach! ({0} %). Die Encodierung wurde angehalten, um das System zu schützen. Ruhezustand ist auf erlauben gesetzt!</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
     <value>Der verfügbare Speicherplatz auf dem Ziellaufwerk ist unter {0} GB gefallen. Encodierung angehalten ...</value>
@@ -2002,5 +2002,32 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
     <value>Automatische Untertitelauswahl konfigurieren</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Actors:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Comments:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>Beschreibung:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Director:</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>Genre:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Plot:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>Release Date:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>Title:</value>
   </data>
 </root>

@@ -1022,7 +1022,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Поддержка iPod 5G</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>Мета Данные</value>
+    <value>Metadata</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
     <value>(Измененный)</value>
@@ -1142,7 +1142,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Упрявлять Пресетами</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>Мета Данные</value>
+    <value>Metadata</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value>Разрешить использовать кодировщики Nvidia NVENC</value>
@@ -1700,7 +1700,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Настройка кодировщика:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>Экстра Опции:</value>
+    <value>Advanced Options:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
     <value>Быстрое Декодирование</value>
@@ -1991,7 +1991,7 @@ Time Remaining: {5:hh\:mm\:ss},  Elapsed: {6:hh\:mm\:ss} {7}</value>
     <value>Экспортировать очередь (только для интерфейса командной строки - CLI)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Использовать Темную тему. (необходим перезапуск)  (РАНЕЕ ПРЕВЬЮ. ФУНКЦИЯ ЕЩЕ НЕ ЗАВЕРШЕНА!)</value>
+    <value>Use the Dark Theme. (Requires Restart, Windows 10 only)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>Not Available</value>
@@ -2016,5 +2016,32 @@ Time Remaining: {5:hh\:mm\:ss},  Elapsed: {6:hh\:mm\:ss} {7}</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
     <value>Configure Automatic Subtitle Selections</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>Actors:</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>Comments:</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>Описание:</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>Director:</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>Genre:</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>Plot:</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>Release Date:</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>Title:</value>
   </data>
 </root>

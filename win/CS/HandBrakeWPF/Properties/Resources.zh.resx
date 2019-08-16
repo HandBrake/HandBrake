@@ -1690,7 +1690,7 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
     <value>编码器调优：</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>额外选项：</value>
+    <value>高级选项：</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
     <value>快速解码</value>
@@ -1981,7 +1981,7 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
     <value>导出列队（仅限命令行界面）</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>使用黑暗主题.(需要重新启动)(这是早期预览,尚未完成!)</value>
+    <value>使用黑暗主题。（需要重启软件，仅支持 Windows 10）</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>不可用</value>
@@ -2006,5 +2006,32 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
     <value>配置自动字幕选择</value>
+  </data>
+  <data name="Options_SystemOptions" xml:space="preserve">
+    <value>系统</value>
+  </data>
+  <data name="MetadataView_Actors" xml:space="preserve">
+    <value>演员：</value>
+  </data>
+  <data name="MetadataView_Comments" xml:space="preserve">
+    <value>评论：</value>
+  </data>
+  <data name="MetadataView_Description" xml:space="preserve">
+    <value>描述：</value>
+  </data>
+  <data name="MetadataView_Director" xml:space="preserve">
+    <value>导演：</value>
+  </data>
+  <data name="MetadataView_Genre" xml:space="preserve">
+    <value>类型：</value>
+  </data>
+  <data name="MetadataView_Plot" xml:space="preserve">
+    <value>剧情：</value>
+  </data>
+  <data name="MetadataView_ReleaseDate" xml:space="preserve">
+    <value>发行日期：</value>
+  </data>
+  <data name="MetadataView_TitleTag" xml:space="preserve">
+    <value>标题：</value>
   </data>
 </root>
