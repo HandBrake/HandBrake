@@ -102,6 +102,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 {
     int ret = 0;
     char reason[80];
+    char * codec_name = NULL;
     AVCodec * codec = NULL;
     AVCodecContext * context;
     AVRational fps;
@@ -121,37 +122,37 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         case AV_CODEC_ID_MPEG4:
         {
             hb_log("encavcodecInit: MPEG-4 ASP encoder");
-            codec = avcodec_find_encoder_by_name("mpeg4");
+            codec_name = "mpeg4";
         } break;
         case AV_CODEC_ID_MPEG2VIDEO:
         {
             hb_log("encavcodecInit: MPEG-2 encoder");
-            codec = avcodec_find_encoder_by_name("mpeg2video");
+            codec_name = "mpeg2video";
         } break;
         case AV_CODEC_ID_VP8:
         {
             hb_log("encavcodecInit: VP8 encoder");
-            codec = avcodec_find_encoder_by_name("libvpx");
+            codec_name = "libvpx";
         } break;
         case AV_CODEC_ID_VP9:
         {
             hb_log("encavcodecInit: VP9 encoder");
-            codec = avcodec_find_encoder_by_name("libvpx-vp9");
+            codec_name = "libvpx-vp9";
         } break;
         case AV_CODEC_ID_H264:
         {
             switch (job->vcodec) {
                 case HB_VCODEC_FFMPEG_NVENC_H264:
                     hb_log("encavcodecInit: H.264 (Nvidia NVENC)");
-                    codec = avcodec_find_encoder_by_name("h264_nvenc");
+                    codec_name = "h264_nvenc";
                     break;
                 case HB_VCODEC_FFMPEG_VCE_H264:
                     hb_log("encavcodecInit: H.264 (AMD VCE)");
-                    codec = avcodec_find_encoder_by_name("h264_amf");
+                    codec_name = "h264_amf";
                     break;
                 case HB_VCODEC_FFMPEG_VT_H264:
                     hb_log("encavcodecInit: H.264 (VideoToolbox)");
-                    codec = avcodec_find_encoder_by_name("h264_videotoolbox");
+                    codec_name = "h264_videotoolbox";
                     break;
             }
         }break;
@@ -160,15 +161,15 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             switch (job->vcodec) {
                 case HB_VCODEC_FFMPEG_NVENC_H265:
                     hb_log("encavcodecInit: H.265 (Nvidia NVENC)");
-                    codec = avcodec_find_encoder_by_name("hevc_nvenc");
+                    codec_name = "hevc_nvenc";
                     break;
                 case HB_VCODEC_FFMPEG_VCE_H265:
                     hb_log("encavcodecInit: H.265 (AMD VCE)");
-                    codec = avcodec_find_encoder_by_name("hevc_amf");
+                    codec_name = "hevc_amf";
                     break;
                 case HB_VCODEC_FFMPEG_VT_H265:
                     hb_log("encavcodecInit: H.265 (VideoToolbox)");
-                    codec = avcodec_find_encoder_by_name("hevc_videotoolbox");
+                    codec_name = "hevc_videotoolbox";
                     break;
             }
         }break;
@@ -180,10 +181,11 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
     }
 
+    codec = avcodec_find_encoder_by_name(codec_name);
     if( !codec )
     {
-        hb_log( "encavcodecInit: avcodec_find_encoder "
-                "failed" );
+        hb_log( "encavcodecInit: avcodec_find_encoder_by_name(%s) "
+                "failed", codec_name );
         ret = 1;
         goto done;
     }
