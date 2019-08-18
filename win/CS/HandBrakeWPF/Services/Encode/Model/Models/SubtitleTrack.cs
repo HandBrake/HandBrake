@@ -191,7 +191,10 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                     this.Forced = false;
                 }
 
-                this.Name = !string.IsNullOrEmpty(this.sourceTrack.Name) ? this.sourceTrack.Name : string.Empty;
+                if (this.sourceTrack != null)
+                {
+                    this.Name = !string.IsNullOrEmpty(this.sourceTrack.Name) ? this.sourceTrack.Name : string.Empty;
+                }
             }
         }
 
