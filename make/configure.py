@@ -1361,6 +1361,9 @@ def createCLI( cross = None ):
     h = IfHost( 'AMD VCE video encoder', '*-*-mingw*', none=argparse.SUPPRESS).value
     grp.add_argument( '--enable-vce', dest="enable_vce", default=IfHost(True, '*-*-mingw*', none=False).value, action='store_true', help=(( 'enable %s' %h ) if h != argparse.SUPPRESS else h) )
     grp.add_argument( '--disable-vce', dest="enable_vce", action='store_false', help=(( 'disable %s' %h ) if h != argparse.SUPPRESS else h) )
+    h = IfHost( 'enable the App Sandbox capability (currently macOS-only)', '*-*-darwin*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--enable-sandbox', dest="enable_sandbox", default=False, action='store_true', help=(( '%s' %h ) if h != argparse.SUPPRESS else h) )
+
 
 
     cli.add_argument_group( grp )
@@ -1666,6 +1669,10 @@ try:
     # Disable VCE on unsupported platforms
     options.enable_vce        = IfHost(options.enable_vce, '*-*-mingw*',
                                        none=False).value
+    # Sandboxing is currently only implemented on macOS
+    options.enable_sandbox    = IfHost(options.enable_sandbox, '*-*-darwin*',
+                                       none=False).value
+
 
     #########################################
     ## OSX specific library and tool checks
@@ -1961,6 +1968,7 @@ int main()
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
     doc.add( 'FEATURE.numa',       int( options.enable_numa ))
+    doc.add( 'FEATURE.sandbox',    int( options.enable_sandbox ))
 
     if build_tuple.match( '*-*-darwin*' ) and options.cross is None:
         doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
@@ -2083,6 +2091,8 @@ int main()
     stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.system == 'mingw') else stdout.write( '\n' )
     stdout.write( 'Enable VCE:         %s' % options.enable_vce )
     stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.system == 'mingw' else stdout.write( '\n' )
+    stdout.write( 'Enable Sandbox:     %s' % options.enable_sandbox )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.system == 'darwin' else stdout.write( '\n' )
 
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )
