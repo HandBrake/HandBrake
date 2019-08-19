@@ -5,6 +5,8 @@
 #import <Foundation/Foundation.h>
 #import "HandBrakeXPCService.h"
 
+@import HandBrakeKit;
+
 @interface HBXPCServiceDelegate : NSObject <NSXPCListenerDelegate>
 @end
 
@@ -27,6 +29,8 @@
 
 int main(int argc, const char *argv[])
 {
+    HBUtilities.resolveBookmarks = NO;
+
     HBXPCServiceDelegate *delegate = [HBXPCServiceDelegate new];
     
     NSXPCListener *listener = [NSXPCListener serviceListener];

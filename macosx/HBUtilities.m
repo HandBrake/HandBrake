@@ -9,6 +9,8 @@
 
 #include "lang.h"
 
+static BOOL hb_resolveBookmarks = YES;
+
 @implementation HBUtilities
 
 + (NSString *)handBrakeVersion
@@ -73,8 +75,23 @@
     fprintf(stderr, "%s", text.UTF8String);
 }
 
++ (void)setResolveBookmarks:(BOOL)resolveBookmarks
+{
+    hb_resolveBookmarks = resolveBookmarks;
+}
+
++ (BOOL)resolveBookmarks
+{
+    return hb_resolveBookmarks;
+}
+
 + (nullable NSURL *)URLFromBookmark:(NSData *)bookmark
 {
+    if (hb_resolveBookmarks == NO)
+    {
+        return nil;
+    }
+
     NSParameterAssert(bookmark);
 
     NSError *error;

@@ -35,6 +35,14 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)writeErrorToActivityLog:(NSError *)error;
 + (void)writeToActivityLogWithNoHeader:(NSString *)text;
 
+/**
+ Whether to resolve the security-scoped bookmarks or not.
+
+ Security-scoped bookmarks can't be resolved in a XPC service.
+ Use this options to avoid not useful errors
+ */
+@property (nonatomic, class, readwrite) BOOL resolveBookmarks;
+
 + (nullable NSURL *)URLFromBookmark:(NSData *)bookmark;
 + (nullable NSData *)bookmarkFromURL:(NSURL *)url;
 + (nullable NSData *)bookmarkFromURL:(NSURL *)url options:(NSURLBookmarkCreationOptions)options;
