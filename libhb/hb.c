@@ -1669,7 +1669,7 @@ int hb_global_init_no_hardware()
 int hb_global_init()
 {
     /* Print hardening status on global init */
-#if HB_PROJECT_HOST_HARDEN
+#if HB_PROJECT_SECURITY_HARDEN
     hb_log( "Compile-time hardening features are enabled" );
 #endif
 

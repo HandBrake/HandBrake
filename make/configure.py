@@ -1368,6 +1368,7 @@ def createCLI( cross = None ):
     grp = cli.add_argument_group( 'Security Options' )
     h = IfHost( 'enable the Sandbox capability (currently macOS-only)', '*-*-darwin*', none=argparse.SUPPRESS).value
     grp.add_argument( '--sandbox', dest="enable_sandbox", default=False, action='store_true', help=(( '%s' %h ) if h != argparse.SUPPRESS else h) )
+    grp.add_argument( '--hardening', dest="enable_harden", default=False, action='store_true', help='enable buffer overflow protection' )
     cli.add_argument_group( grp )
 
     ## add launch options
@@ -1389,8 +1390,6 @@ def createCLI( cross = None ):
     arch.mode.cli_add_argument( grp, '--arch' )
     grp.add_argument( '--cross', default=None, action='store', metavar='SPEC',
         help='specify GCC cross-compilation spec' )
-    grp.add_argument( '--enable-hardening', dest="enable_host_harden", default=False, action='store_true',
-        help='enable buffer overflow protection' )
     cli.add_argument_group( grp )
 
     ## add Xcode options
@@ -1945,7 +1944,6 @@ int main()
         doc.add( 'HOST.cross.prefix', '' )
 
     doc.add( 'HOST.arch',   arch.mode.mode )
-    doc.add( 'HOST.harden', int( options.enable_host_harden) )
 
     doc.addBlank()
     doc.add( 'SRC',     cfg.src_final )
@@ -1973,6 +1971,7 @@ int main()
 
     doc.addBlank()
     doc.add( 'SECURITY.sandbox',    int( options.enable_sandbox ))
+    doc.add( 'SECURITY.harden',     int( options.enable_harden ))
 
     if build_tuple.match( '*-*-darwin*' ) and options.cross is None:
         doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode) ))

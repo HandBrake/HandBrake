@@ -38,7 +38,6 @@ dnl
 <<#>>define HB_PROJECT_HOST_RELEASE              "__HOST_release"
 <<#>>define HB_PROJECT_HOST_TITLE                "__HOST_title"
 <<#>>define HB_PROJECT_HOST_ARCH                 "__HOST_arch"
-<<#>>define HB_PROJECT_HOST_HARDEN               __HOST_harden
 
 <<#>>define HB_PROJECT_FEATURE_ASM               __FEATURE_asm
 <<#>>define HB_PROJECT_FEATURE_FDK_AAC           __FEATURE_fdk_aac
@@ -53,5 +52,7 @@ dnl
 <<#>>define HB_PROJECT_FEATURE_VCE               __FEATURE_vce
 <<#>>define HB_PROJECT_FEATURE_X265              __FEATURE_x265
 <<#>>define HB_PROJECT_FEATURE_NUMA              __FEATURE_numa
+
+<<#>>define HB_PROJECT_SECURITY_HARDEN           __SECURITY_harden
 
 #endif /* HB_PROJECT_PROJECT_H */
