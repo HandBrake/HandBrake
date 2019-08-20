@@ -21,7 +21,7 @@ BUILD.out += $(MACOSX.osl.filelist)
 MACOSX.project = -project $(MACOSX.src/)HandBrake.xcodeproj
 
 ## configuration: must be one of { release, debug }
-ifeq (1,$(FEATURE.sandbox))
+ifeq (1,$(SECURITY.sandbox))
    MACOSX.configuration = -configuration $(MACOSX.map.g.$(MACOSX.GCC.g))-sandbox
 else
    MACOSX.configuration = -configuration $(MACOSX.map.g.$(MACOSX.GCC.g))
