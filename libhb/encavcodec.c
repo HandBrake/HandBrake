@@ -173,12 +173,17 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
                     break;
             }
         }break;
-        default:
-        {
-            hb_error("encavcodecInit: unsupported encoder!");
-            ret = 1;
-            goto done;
-        }
+    }
+
+    if (codec_name == NULL)
+    {
+        // Catch all when the switch above fails
+        hb_log( "encavcodecInit: Unable to determine codec_name "
+                "from hb_work_object_t.codec_param=%d and "
+                "hb_job_t.vcodec=%x", w->codec_param, 
+                job->vcodec );
+        ret = 1;
+        goto done;
     }
 
     codec = avcodec_find_encoder_by_name(codec_name);
