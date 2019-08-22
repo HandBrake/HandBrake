@@ -109,6 +109,7 @@ for TARGET in "${@}"; do
         done
 
         echo "  Signing XPC Services"
+        sign "${TARGET}"/Contents/XPCServices/HandBrakeXPCService.xpc fr.handbrake.HandBrake
         sign "${TARGET}"/Contents/XPCServices/org.sparkle-project.Downloader.xpc org.sparkle-project.Downloader
         sign "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc org.sparkle-project.InstallerConnection
         sign "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc org.sparkle-project.InstallerLauncher
@@ -127,6 +128,7 @@ for TARGET in "${@}"; do
         codesign --verify -vv "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/Current/Resources/Updater.app >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
 
         echo "  Validating XPC Services"
+        codesign --verify -vv "${TARGET}"/Contents/XPCServices/HandBrakeXPCService.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
         codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.Downloader.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
         codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
         codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
