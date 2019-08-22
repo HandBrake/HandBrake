@@ -1366,9 +1366,9 @@ def createCLI( cross = None ):
 
     ## add security options
     grp = cli.add_argument_group( 'Security Options' )
-    h = IfHost( 'enable the Sandbox capability (currently macOS-only)', '*-*-darwin*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--harden', dest="enable_harden", default=False, action='store_true', help='harden app to protect against buffer overflows' )
+    h = IfHost( 'sandbox app to limit host system access (macOS only)', '*-*-darwin*', none=argparse.SUPPRESS).value
     grp.add_argument( '--sandbox', dest="enable_sandbox", default=False, action='store_true', help=(( '%s' %h ) if h != argparse.SUPPRESS else h) )
-    grp.add_argument( '--hardening', dest="enable_harden", default=False, action='store_true', help='enable buffer overflow protection' )
     cli.add_argument_group( grp )
 
     ## add launch options
