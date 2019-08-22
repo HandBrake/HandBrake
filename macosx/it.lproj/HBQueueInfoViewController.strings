@@ -11,7 +11,7 @@
 "GaR-qk-UW7.title" = "Sommario";
 
 /* Class = "NSButtonCell"; title = "Reset"; ObjectID = "hgl-N3-x4S"; */
-"hgl-N3-x4S.title" = "Reset";
+"hgl-N3-x4S.title" = "Ripristina";
 
 /* Class = "NSTextFieldCell"; title = "Statistics"; ObjectID = "S15-bh-qKU"; */
 "S15-bh-qKU.title" = "Statistiche";

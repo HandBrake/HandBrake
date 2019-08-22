@@ -19,6 +19,9 @@
 @interface HBEncoderTransformer : NSValueTransformer
 @end
 
+@interface HBMixdownsTransformer : NSValueTransformer
+@end
+
 @interface HBMixdownTransformer : NSValueTransformer
 @end
 

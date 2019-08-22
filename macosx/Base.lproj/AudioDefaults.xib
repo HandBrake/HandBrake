@@ -360,13 +360,17 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                             </popUpButtonCell>
                                                             <accessibility description="Mixdown"/>
                                                             <connections>
-                                                                <binding destination="uS1-Fd-V9I" name="selectedValue" keyPath="objectValue.mixdown" previousBinding="Mgj-Wp-HJE" id="uAM-Z4-LBG">
+                                                                <binding destination="uS1-Fd-V9I" name="content" keyPath="objectValue.mixdowns" id="NKE-F5-7xp">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">HBMixdownsTransformer</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                                <binding destination="uS1-Fd-V9I" name="enabled" keyPath="objectValue.mixdownEnabled" id="c7n-yf-re8"/>
+                                                                <binding destination="uS1-Fd-V9I" name="selectedValue" keyPath="objectValue.mixdown" previousBinding="NKE-F5-7xp" id="OiI-FJ-A66">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">HBMixdownTransformer</string>
                                                                     </dictionary>
                                                                 </binding>
-                                                                <binding destination="uS1-Fd-V9I" name="enabled" keyPath="objectValue.mixdownEnabled" id="c7n-yf-re8"/>
-                                                                <binding destination="uS1-Fd-V9I" name="content" keyPath="objectValue.mixdowns" id="Mgj-Wp-HJE"/>
                                                             </connections>
                                                         </popUpButton>
                                                     </subviews>

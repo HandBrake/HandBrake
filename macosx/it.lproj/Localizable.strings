@@ -123,10 +123,17 @@
 /* Touch bar */
 "Done" = "Fine";
 
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode canceled" = "Conversione annullata";
+
 /* Queue status */
 "Encode Canceled." = "Conversione annullata.";
 
-/* Queue done notification failed message */
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode complete" = "Conversione completata";
+
+/* HBQueueItemView -> Encode state accessibility label
+ Queue done notification failed message */
 "Encode failed" = "Conversione fallita";
 
 /* Queue status */
@@ -134,6 +141,12 @@
 
 /* Queue status */
 "Encode Finished." = "Conversione completata.";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode ready" = "Conversione pronta";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode working" = "Conversione in corso";
 
 /* No comment provided by engineer. */
 "Encoding %@\n%@" = "Converto %1$@\n%2$@";
@@ -279,6 +292,9 @@
 /* Touch bar */
 "Remaining Time" = "Tempo rimanente";
 
+/* HBQueueItemView -> Remove button accessibility label */
+"Remove job" = "Rimuovi lavoro";
+
 /* Queue undo action name */
 "Remove Job From Queue" = "rimuovi lavoro dalla coda";
 
@@ -291,6 +307,9 @@
 /* Queue -> pause/resume men
  Toolbar Pause Item */
 "Resume Encoding" = "Riprendi conversione";
+
+/* HBQueueItemView -> Reveal button accessibility label */
+"Reveal destination in Finder" = "Mostra destinazione nel Finder";
 
 /* Job statistics */
 "Run time:" = "Tempo di conversione:";

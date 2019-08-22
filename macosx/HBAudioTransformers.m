@@ -119,6 +119,116 @@
 
 @end
 
+static NSDictionary<NSString *, NSString *> *localizedMixdownsNames;
+static NSDictionary<NSString *, NSNumber *> *localizedReversedMixdownsNames;
+
+@implementation HBMixdownsTransformer
+
++ (void)initialize
+{
+    if (self == [HBMixdownsTransformer class]) {
+        localizedMixdownsNames =
+        @{@"None": HBKitLocalizedString(@"None", @"HBAudio -> Mixdown"),
+          @"Mono": HBKitLocalizedString(@"Mono", @"HBAudio -> Mixdown"),
+          @"Mono (Left Only)": HBKitLocalizedString(@"Mono (Left Only)", @"HBAudio -> Mixdown"),
+          @"Mono (Right Only)": HBKitLocalizedString(@"Mono (Right Only)", @"HBAudio -> Mixdown"),
+          @"Stereo": HBKitLocalizedString(@"Stereo", @"HBAudio -> Mixdown"),
+          @"Dolby Surround": HBKitLocalizedString(@"Dolby Surround", @"HBAudio -> Mixdown"),
+          @"Dolby Pro Logic II": HBKitLocalizedString(@"Dolby Pro Logic II", @"HBAudio -> Mixdown"),
+          @"5.1 Channels": HBKitLocalizedString(@"5.1 Channels", @"HBAudio -> Mixdown"),
+          @"6.1 Channels": HBKitLocalizedString(@"6.1 Channels", @"HBAudio -> Mixdown"),
+          @"7.1 Channels": HBKitLocalizedString(@"7.1 Channels", @"HBAudio -> Mixdown"),
+          @"7.1 (5F/2R/LFE)": HBKitLocalizedString(@"7.1 (5F/2R/LFE)", @"HBAudio -> Mixdown"),
+          };
+
+        localizedReversedMixdownsNames =
+        @{HBKitLocalizedString(@"None", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_NONE),
+          HBKitLocalizedString(@"Mono", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_MONO),
+          HBKitLocalizedString(@"Mono (Left Only)", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_LEFT),
+          HBKitLocalizedString(@"Mono (Right Only)", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_RIGHT),
+          HBKitLocalizedString(@"Stereo", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_STEREO),
+          HBKitLocalizedString(@"Dolby Surround", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_DOLBY),
+          HBKitLocalizedString(@"Dolby Pro Logic II", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_DOLBYPLII),
+          HBKitLocalizedString(@"5.1 Channels", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_5POINT1),
+          HBKitLocalizedString(@"6.1 Channels", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_6POINT1),
+          HBKitLocalizedString(@"7.1 Channels", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_7POINT1),
+          HBKitLocalizedString(@"7.1 (5F/2R/LFE)", @"HBAudio -> Mixdown"): @(HB_AMIXDOWN_5_2_LFE),
+          };
+    }
+}
+
++ (NSString *)localizedNameFromMixdown:(int)mixdown
+{
+    switch(mixdown)
+    {
+        case HB_AMIXDOWN_NONE:
+            return HBKitLocalizedString(@"None", @"HBAudio -> Mixdown");
+        case HB_AMIXDOWN_MONO:
+            return HBKitLocalizedString(@"Mono", @"HBAudio -> Mixdown");
+        case HB_AMIXDOWN_LEFT:
+            return HBKitLocalizedString(@"Mono (Left Only)", @"HBAudio -> Mixdown");
+        case HB_AMIXDOWN_RIGHT:
+            return HBKitLocalizedString(@"Mono (Right Only)", @"HBAudio -> Mixdown");
+        case HB_AMIXDOWN_STEREO:
+            return HBKitLocalizedString(@"Stereo", @"HBAudio -> Mixdown");
+        case HB_AMIXDOWN_DOLBY:
+            return HBKitLocalizedString(@"Dolby Surround", @"HBAudio -> Mixdown");
+        case HB_AMIXDOWN_DOLBYPLII:
+            return HBKitLocalizedString(@"Dolby Pro Logic II", @"HBAudio -> Mixdown");
+        case HB_AMIXDOWN_5POINT1:
+            return HBKitLocalizedString(@"5.1 Channels", @"HBAudio -> Mixdown");
+        case HB_AMIXDOWN_6POINT1:
+            return HBKitLocalizedString(@"6.1 Channels", @"HBAudio -> Mixdown");
+        case HB_AMIXDOWN_7POINT1:
+            return HBKitLocalizedString(@"7.1 Channels", @"HBAudio -> Mixdown");
+        case HB_AMIXDOWN_5_2_LFE:
+            return HBKitLocalizedString(@"7.1 (5F/2R/LFE)", @"HBAudio -> Mixdown");
+        default:
+        {
+            const char *name = hb_mixdown_get_name(mixdown);
+            return name ? @(name) : nil;
+        }
+    }
+}
+
++ (NSNumber *)mixdownFromLocalizedName:(NSString *)name
+{
+    NSNumber *mixdown = localizedReversedMixdownsNames[name];
+    return mixdown ? mixdown : @(hb_mixdown_get_from_name(name.UTF8String));
+}
+
++ (Class)transformedValueClass
+{
+    return [NSArray class];
+}
+
+- (id)transformedValue:(id)value
+{
+    if (value != nil)
+    {
+        NSMutableArray *localizedArray = [[NSMutableArray alloc] initWithCapacity:[value count]];
+
+        for (NSString *text in value)
+        {
+            NSString *localizedName = localizedMixdownsNames[text];
+            if (localizedName)
+            {
+                [localizedArray addObject:localizedName];
+            }
+        }
+        return localizedArray;
+    }
+
+    return value;
+}
+
++ (BOOL)allowsReverseTransformation
+{
+    return NO;
+}
+
+@end
+
 @implementation HBMixdownTransformer
 
 + (Class)transformedValueClass
@@ -128,15 +238,7 @@
 
 - (id)transformedValue:(id)value
 {
-    const char *name = hb_mixdown_get_name([value intValue]);
-    if (name)
-    {
-        return @(name);
-    }
-    else
-    {
-        return nil;
-    }
+    return [HBMixdownsTransformer localizedNameFromMixdown:[value intValue]];
 }
 
 + (BOOL)allowsReverseTransformation
@@ -146,7 +248,7 @@
 
 - (id)reverseTransformedValue:(id)value
 {
-    return @(hb_mixdown_get_from_name([value UTF8String]));
+    return [HBMixdownsTransformer mixdownFromLocalizedName:value];
 }
 
 @end

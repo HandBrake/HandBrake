@@ -89,6 +89,18 @@
 /* Title description */
 "2 Video Passes First Turbo" = "2 passaggi video primo in turbo";
 
+/* HBAudio -> Mixdown */
+"5.1 Channels" = "5.1 Canali";
+
+/* HBAudio -> Mixdown */
+"6.1 Channels" = "6.1 Canali";
+
+/* HBAudio -> Mixdown */
+"7.1 (5F/2R/LFE)" = "7.1 (5F/2R/LFE)";
+
+/* HBAudio -> Mixdown */
+"7.1 Channels" = "7.1 Canali";
+
 /* Audio description */
 "Audio:" = "Audio:";
 
@@ -158,6 +170,15 @@
 
 /* Dimensions description */
 "Dimensions:" = "Dimensioni:";
+
+/* HBAudio -> Mixdown */
+"Dolby Pro Logic II" = "Dolby Pro Logic II";
+
+/* HBAudio -> Mixdown */
+"Dolby Surround" = "Dolby Surround";
+
+/* Audio description */
+"DRC: %.2f" = "DRC: %.2f";
 
 /* Video description */
 "Encoder: %@, " = "Codificatore: %@, ";
@@ -244,6 +265,15 @@
 /* HBJob -> Format display name */
 "MKV File" = "MKV File";
 
+/* HBAudio -> Mixdown */
+"Mono" = "Mono";
+
+/* HBAudio -> Mixdown */
+"Mono (Left Only)" = "Mono (Solo sinistro)";
+
+/* HBAudio -> Mixdown */
+"Mono (Right Only)" = "Mono (Solo destro)";
+
 /* HBJob -> Format display name */
 "MP4 File" = "MP4 File";
 
@@ -259,7 +289,8 @@
 /* HBVideo -> tune */
 "none" = "nessuna";
 
-/* HBAudio -> none track name
+/* HBAudio -> Mixdown
+   HBAudio -> none track name
    HBJob -> filters short description
    HBSubtitles -> none track name */
 "None" = "Nessuno";
@@ -276,6 +307,9 @@
 
 /* HBStateFormatter -> work pass number format */
 "Pass %d of %d, %.2f %%" = "Passaggio %1$d di %2$d, %3$.2f %%";
+
+/* HBStateFormatter -> work first pass number format */
+"Pass 1" = "Passaggio 1";
 
 /* HBStateFormatter -> pass display name */
 "Paused" = "In pausa";
@@ -333,6 +367,9 @@
 
 /* HBPicture -> short info */
 "Source: %dx%d, " = "Sorgente: %1$dx%2$d, ";
+
+/* HBAudio -> Mixdown */
+"Stereo" = "Stereo";
 
 /* Subtitles description */
 "Subtitles:" = "Sottotitoli:";
