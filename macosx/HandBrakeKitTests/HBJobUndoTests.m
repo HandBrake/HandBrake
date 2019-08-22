@@ -47,7 +47,7 @@
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
 
     self.core = [[HBCore alloc] initWithLogLevel:1 queue:self.queue];
-    [self.core scanURL:sampleURL titleIndex:0 previews:1 minDuration:0 progressHandler:^(HBState state, HBProgress progress, NSString * _Nonnull info) {
+    [self.core scanURL:sampleURL titleIndex:0 previews:1 minDuration:0 keepPreviews:NO progressHandler:^(HBState state, HBProgress progress, NSString * _Nonnull info) {
 
     } completionHandler:^(HBCoreResult result) {
         dispatch_semaphore_signal(sem);

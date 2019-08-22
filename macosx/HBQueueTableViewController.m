@@ -107,7 +107,7 @@
  */
 - (IBAction)removeSelectedQueueItem:(id)sender
 {
-    NSMutableIndexSet *targetedRows = [[self.tableView targetedRowIndexes] mutableCopy];
+    NSIndexSet *targetedRows = self.tableView.targetedRowIndexes;
     [self.delegate tableViewRemoveItemsAtIndexes:targetedRows];
 }
 
@@ -116,7 +116,7 @@
  */
 - (IBAction)revealSelectedQueueItems:(id)sender
 {
-    NSIndexSet *targetedRows = [self.tableView targetedRowIndexes];
+    NSIndexSet *targetedRows = self.tableView.targetedRowIndexes;
     NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
 
     NSUInteger currentIndex = [targetedRows firstIndex];

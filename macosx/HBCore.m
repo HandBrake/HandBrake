@@ -187,7 +187,7 @@ typedef void (^HBCoreCleanupHandler)(void);
     NSAssert(url, @"[HBCore canScan:] called with nil url.");
 
 #ifdef __SANDBOX_ENABLED__
-    HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
+    __unused HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
 #endif
 
     if (![[NSFileManager defaultManager] fileExistsAtPath:url.path]) {
