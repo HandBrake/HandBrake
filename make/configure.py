@@ -1300,9 +1300,15 @@ def createCLI( cross = None ):
     grp.add_argument( '--df-deny-url', default=[], action='append', metavar='SPEC', help='deny URLs matching regex pattern' )
     cli.add_argument_group( grp )
 
-    ## add install options
+    ## add tool locations
+    grp = cli.add_argument_group( 'Tool Basenames and Locations' )
+    for tool in ToolProbe.tools:
+        tool.cli_add_argument( grp )
+    cli.add_argument_group( grp )
+
+    ## add directory options
     grp = cli.add_argument_group( 'Directory Locations' )
-    h = 'specify sysroot of SDK for Xcode builds' if (build_tuple.match('*-*-darwin*') and cross is None) else argparse.SUPPRESS
+    h = 'specify Xcode SDK sysroot (macOS only)' if (build_tuple.match('*-*-darwin*') and cross is None) else argparse.SUPPRESS
     grp.add_argument( '--sysroot', default=None, action='store', metavar='DIR',
         help=h )
     grp.add_argument( '--src', default=cfg.src_dir, action='store', metavar='DIR',
@@ -1312,6 +1318,43 @@ def createCLI( cross = None ):
     grp.add_argument( '--prefix', default=cfg.prefix_dir, action='store', metavar='DIR',
         help='specify install dir for products [%s]' % (cfg.prefix_dir) )
     cli.add_argument_group( grp )
+
+    ## add build options
+    grp = cli.add_argument_group( 'Build Options' )
+    grp.add_argument( '--snapshot', default=False, action='store_true', help='Force a snapshot build' )
+    h = IfHost( 'Build extra contribs for flatpak packaging', '*-*-linux*', '*-*-freebsd*', none=argparse.SUPPRESS ).value
+    grp.add_argument( '--flatpak', default=False, action='store_true', help=h )
+    cli.add_argument_group( grp )
+
+    ## add compiler options
+    grp = cli.add_argument_group( 'Compiler Options' )
+    debugMode.cli_add_argument( grp, '--debug' )
+    optimizeMode.cli_add_argument( grp, '--optimize' )
+    arch.mode.cli_add_argument( grp, '--arch' )
+    grp.add_argument( '--cross', default=None, action='store', metavar='SPEC',
+        help='specify GCC cross-compilation spec' )
+    cli.add_argument_group( grp )
+
+    ## add security options
+    grp = cli.add_argument_group( 'Security Options' )
+    grp.add_argument( '--harden', dest="enable_harden", default=False, action='store_true', help='harden app to protect against buffer overflows' )
+    h = IfHost( 'sandbox app to limit host system access (macOS only)', '*-*-darwin*', none=argparse.SUPPRESS).value
+    grp.add_argument( '--sandbox', dest="enable_sandbox", default=False, action='store_true', help=(( '%s' %h ) if h != argparse.SUPPRESS else h) )
+    cli.add_argument_group( grp )
+
+    ## add Xcode options
+    if (build_tuple.match('*-*-darwin*') and cross is None):
+        grp = cli.add_argument_group( 'Xcode Options (macOS only)' )
+        grp.add_argument( '--disable-xcode', default=False, action='store_true',
+            help='disable Xcode' )
+        grp.add_argument( '--xcode-prefix', default=cfg.xcode_prefix_dir, action='store', metavar='DIR',
+            help='specify install dir for Xcode products [%s]' % (cfg.xcode_prefix_dir) )
+        grp.add_argument( '--xcode-symroot', default='xroot', action='store', metavar='DIR',
+            help='specify root of the directory hierarchy that contains product files and intermediate build files' )
+        xcconfigMode.cli_add_argument( grp, '--xcode-config' )
+        grp.add_argument( '--minver', default=None, action='store', metavar='VER',
+            help='specify deployment target for Xcode builds' )
+        cli.add_argument_group( grp )
 
     ## add feature options
     grp = cli.add_argument_group( 'Feature Options' )
@@ -1364,13 +1407,6 @@ def createCLI( cross = None ):
 
     cli.add_argument_group( grp )
 
-    ## add security options
-    grp = cli.add_argument_group( 'Security Options' )
-    grp.add_argument( '--harden', dest="enable_harden", default=False, action='store_true', help='harden app to protect against buffer overflows' )
-    h = IfHost( 'sandbox app to limit host system access (macOS only)', '*-*-darwin*', none=argparse.SUPPRESS).value
-    grp.add_argument( '--sandbox', dest="enable_sandbox", default=False, action='store_true', help=(( '%s' %h ) if h != argparse.SUPPRESS else h) )
-    cli.add_argument_group( grp )
-
     ## add launch options
     grp = cli.add_argument_group( 'Launch Options' )
     grp.add_argument( '--launch', default=False, action='store_true',
@@ -1381,45 +1417,6 @@ def createCLI( cross = None ):
         help='specify additional ARGS for launch command' )
     grp.add_argument( '--launch-quiet', default=False, action='store_true',
         help='do not echo build output while waiting' )
-    cli.add_argument_group( grp )
-
-    ## add compile options
-    grp = cli.add_argument_group( 'Compiler Options' )
-    debugMode.cli_add_argument( grp, '--debug' )
-    optimizeMode.cli_add_argument( grp, '--optimize' )
-    arch.mode.cli_add_argument( grp, '--arch' )
-    grp.add_argument( '--cross', default=None, action='store', metavar='SPEC',
-        help='specify GCC cross-compilation spec' )
-    cli.add_argument_group( grp )
-
-    ## add Xcode options
-    if (build_tuple.match('*-*-darwin*') and cross is None):
-        grp = cli.add_argument_group( 'Xcode Options' )
-        grp.add_argument( '--disable-xcode', default=False, action='store_true',
-            help='disable Xcode' )
-        grp.add_argument( '--xcode-prefix', default=cfg.xcode_prefix_dir, action='store', metavar='DIR',
-            help='specify install dir for Xcode products [%s]' % (cfg.xcode_prefix_dir) )
-        grp.add_argument( '--xcode-symroot', default='xroot', action='store', metavar='DIR',
-            help='specify root of the directory hierarchy that contains product files and intermediate build files' )
-        xcconfigMode.cli_add_argument( grp, '--xcode-config' )
-        grp.add_argument( '--minver', default=None, action='store', metavar='VER',
-            help='specify deployment target for Xcode builds' )
-        cli.add_argument_group( grp )
-
-    ## add tool locations
-    grp = cli.add_argument_group( 'Tool Basenames and Locations' )
-    for tool in ToolProbe.tools:
-        tool.cli_add_argument( grp )
-    cli.add_argument_group( grp )
-
-    ## add build options
-    grp = cli.add_argument_group( 'Build Options' )
-    grp.add_argument( '--snapshot', default=False, action='store_true',
-                    help='Force a snapshot build' )
-
-    h = IfHost( 'Build extra contribs for flatpak packaging', '*-*-linux*', '*-*-freebsd*', none=argparse.SUPPRESS ).value
-    grp.add_argument( '--flatpak', default=False, action='store_true', help=h )
-
     cli.add_argument_group( grp )
 
     return cli
@@ -1651,6 +1648,9 @@ try:
         action.run()
 
     ## Sanitize options
+    # Sandboxing is currently only implemented on macOS
+    options.enable_sandbox    = IfHost(options.enable_sandbox, '*-*-darwin*',
+                                       none=False).value
     # Require FFmpeg AAC on Linux and Windows
     options.enable_ffmpeg_aac = IfHost(options.enable_ffmpeg_aac, '*-*-darwin*',
                                        none=True).value
@@ -1669,9 +1669,6 @@ try:
                                        '*-*-mingw*', none=False).value
     # Disable VCE on unsupported platforms
     options.enable_vce        = IfHost(options.enable_vce, '*-*-mingw*',
-                                       none=False).value
-    # Sandboxing is currently only implemented on macOS
-    options.enable_sandbox    = IfHost(options.enable_sandbox, '*-*-darwin*',
                                        none=False).value
 
 
@@ -2085,6 +2082,9 @@ int main()
     stdout.write( 'Host system:        %s\n' % host_tuple.spec.rstrip('-') )
     stdout.write( 'Target platform:    %s' % host_tuple.system )
     stdout.write( ' (cross-compile)\n' ) if options.cross else stdout.write( '\n' )
+    stdout.write( 'Harden:             %s\n' % options.enable_harden )
+    stdout.write( 'Sandbox:            %s' % options.enable_sandbox )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.system == 'darwin' else stdout.write( '\n' )
     stdout.write( 'Enable FDK-AAC:     %s\n' % options.enable_fdk_aac )
     stdout.write( 'Enable FFmpeg AAC:  %s' % options.enable_ffmpeg_aac )
     stdout.write( '  (%s)\n' % note_required ) if host_tuple.system != 'darwin' else stdout.write( '\n' )
@@ -2094,8 +2094,6 @@ int main()
     stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.system == 'mingw') else stdout.write( '\n' )
     stdout.write( 'Enable VCE:         %s' % options.enable_vce )
     stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.system == 'mingw' else stdout.write( '\n' )
-    stdout.write( 'Enable Sandbox:     %s' % options.enable_sandbox )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.system == 'darwin' else stdout.write( '\n' )
 
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )
