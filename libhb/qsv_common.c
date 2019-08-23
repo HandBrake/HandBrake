@@ -1172,8 +1172,8 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            param->videoParam->mfx.TargetUsage = HB_QSV_CLIP3(MFX_TARGETUSAGE_1,
-                                                              MFX_TARGETUSAGE_7,
+            param->videoParam->mfx.TargetUsage = HB_QSV_CLIP3(MFX_TARGETUSAGE_BEST_QUALITY,
+                                                              MFX_TARGETUSAGE_BEST_SPEED,
                                                               ivalue);
         }
     }
@@ -1861,7 +1861,7 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
             {
                 param->rc.lookahead                = 0;
                 param->videoParam->mfx.NumRefFrame = 1;
-                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_4;
+                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_BALANCED;
             }
             else
             {
@@ -1902,7 +1902,7 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
                  */
                 param->rc.lookahead                = 0;
                 param->videoParam->mfx.NumRefFrame = 1;
-                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_6;
+                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_BEST_SPEED;
             }
             else
             {
@@ -1916,7 +1916,7 @@ int hb_qsv_param_default_preset(hb_qsv_param_t *param,
                  *     LookAhead:      Not Applicable
                  *     LookAheadDepth: Not Applicable
                  */
-                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_4;
+                param->videoParam->mfx.TargetUsage = MFX_TARGETUSAGE_BALANCED;
             }
         }
         else
@@ -2019,7 +2019,7 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->videoParam->Protected        = 0; // reserved, must be 0
         param->videoParam->NumExtParam      = 0;
         param->videoParam->IOPattern        = MFX_IOPATTERN_IN_SYSTEM_MEMORY;
-        param->videoParam->mfx.TargetUsage  = MFX_TARGETUSAGE_2;
+        param->videoParam->mfx.TargetUsage  = MFX_TARGETUSAGE_BEST_QUALITY;
         param->videoParam->mfx.GopOptFlag   = MFX_GOP_CLOSED;
         param->videoParam->mfx.NumThread    = 0; // deprecated, must be 0
         param->videoParam->mfx.EncodedOrder = 0; // input is in display order
