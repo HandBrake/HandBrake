@@ -64,6 +64,8 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 @property (nonatomic, readonly) sem_t *mutex;
 @property (nonatomic, readwrite) uint32_t mutexCount;
 
+@property (nonatomic, readwrite) BOOL multipleInstances;
+
 @end
 
 @implementation HBDistributedArray
@@ -98,9 +100,14 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
             [HBUtilities writeToActivityLog:"%s: %d", "Error in creating semaphore: ", errno];
         }
 
-        [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(handleNotification:) name:HBDistributedArraWrittenToDisk object:nil];
+        [self lock];
+        NSUInteger instances = [NSRunningApplication runningApplicationsWithBundleIdentifier:NSBundle.mainBundle.bundleIdentifier].count;
+        _multipleInstances = instances > 1;
+        [self unlock];
 
-        if ([[NSFileManager defaultManager] fileExistsAtPath:_fileURL.path])
+        [NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(handleNotification:) name:HBDistributedArraWrittenToDisk object:nil];
+
+        if ([NSFileManager.defaultManager fileExistsAtPath:_fileURL.path])
         {
             // Load the array from disk
             [self lock];
@@ -114,7 +121,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 
 - (void)dealloc
 {
-    [[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
+    [NSDistributedNotificationCenter.defaultCenter removeObserver:self];
 
     [self lock];
     [self synchronize];
@@ -123,7 +130,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
     sem_close(_mutex);
 }
 
-- (void)lock
+- (uint32_t)lock
 {
     if (self.mutexCount == 0)
     {
@@ -131,6 +138,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
     }
 
     self.mutexCount++;
+    return self.mutexCount;
 }
 
 - (void)unlock
@@ -145,19 +153,23 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 
 - (HBDistributedArrayContent)beginTransaction
 {
-    [self lock];
+    BOOL alreadyLocked = [self lock] > 1;
     // We got the lock, need to check if
     // someone else modified the file
     // while we were locked, because we
     // could have not received the notification yet
-    NSDate *date = nil;
-    [self.fileURL getResourceValue:&date forKey:NSURLAttributeModificationDateKey error:nil];
-    if (date.timeIntervalSinceReferenceDate > ceil(self.modifiedTime))
+    if (alreadyLocked == false && self.multipleInstances)
     {
-        // File was modified while we waited on the lock
-        // reload it
-        [self reload];
-        return HBDistributedArrayContentReload;
+        NSDate *date = nil;
+        [self.fileURL getResourceValue:&date forKey:NSURLAttributeModificationDateKey error:nil];
+
+        if (date.timeIntervalSinceReferenceDate > self.modifiedTime)
+        {
+            // File was modified while we waited on the lock
+            // reload it
+            [self reload];
+            return HBDistributedArrayContentReload;
+        }
     }
 
     return HBDistributedArrayContentAcquired;
@@ -183,6 +195,7 @@ NSString *HBDistributedArraWrittenToDisk = @"HBDistributedArraWrittenToDisk";
 {
     if (!([notification.object integerValue] == getpid()))
     {
+        self.multipleInstances = YES;
         [self lock];
         [self reload];
         [self unlock];
