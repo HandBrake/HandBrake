@@ -52,5 +52,5 @@ define X265.LINK
     for a in $(X265.SOURCE.libs); do \
         ($(RM.exe) -rf "$$a"_o && $(MKDIR.exe) -p "$$a"_o && $(AR.exe) x "$$a" && $(MV.exe) *$(X265.O.ext) "$$a"_o && $(AR.exe) cq $@ "$$a"_o/*$(X265.O.ext)); \
     done
-    $(AR.exe) s $@
+    $(RANLIB.exe) $@
 endef
