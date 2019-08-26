@@ -1868,11 +1868,11 @@ static void hb_dvdnav_close( hb_dvd_t ** _d )
 
     if (d->dvdnav) dvdnav_close( d->dvdnav );
     if (d->vmg)    ifoClose( d->vmg );
+    TitleCloseIfo(d);
     if (d->reader) DVDClose( d->reader );
 
     free(d->path);
 
-    TitleCloseIfo(d);
 
     free( d );
     *_d = NULL;
