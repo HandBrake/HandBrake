@@ -153,7 +153,7 @@ ghb_adjust_audio_rate_combos(signal_user_data_t *ud, GhbValue *asettings)
         ghb_ui_update(ud, "AudioBitrate",
                       ghb_dict_get_value(asettings, "Bitrate"));
         gdouble quality = get_ui_quality(asettings);
-        ghb_ui_update(ud, "AudioTrackQualityX", ghb_double_value_new(quality));
+        ghb_ui_update(ud, "AudioTrackQualityX", ghb_double_value(quality));
         ghb_ui_update(ud, "AudioSamplerate",
                       ghb_dict_get_value(asettings, "Samplerate"));
         ghb_ui_update(ud, "AudioMixdown",
@@ -400,7 +400,7 @@ void ghb_sanitize_audio_tracks(signal_user_data_t *ud)
         ghb_ui_update(ud, "AudioBitrate",
                       ghb_dict_get_value(asettings, "Bitrate"));
         gdouble quality = get_ui_quality(asettings);
-        ghb_ui_update(ud, "AudioTrackQualityX", ghb_double_value_new(quality));
+        ghb_ui_update(ud, "AudioTrackQualityX", ghb_double_value(quality));
         ghb_ui_update(ud, "AudioSamplerate",
                       ghb_dict_get_value(asettings, "Samplerate"));
         ghb_ui_update(ud, "AudioMixdown",
@@ -464,6 +464,7 @@ audio_update_dialog_widgets(signal_user_data_t *ud, GhbValue *asettings)
         drc = ghb_dict_get_double(asettings, "DRC");
         s_drc = get_drc_string(drc);
         ghb_ui_update(ud, "AudioTrackDRCValue", ghb_string_value(s_drc));
+        free(s_drc);
         ghb_ui_update(ud, "AudioTrackGainSlider",
                       ghb_dict_get_value(asettings, "Gain"));
         gain = ghb_dict_get_double(asettings, "Gain");
@@ -473,9 +474,10 @@ audio_update_dialog_widgets(signal_user_data_t *ud, GhbValue *asettings)
         int codec = ghb_settings_audio_encoder_codec(asettings, "Encoder");
         quality = ghb_dict_get_double(asettings, "Quality");
         qualityx = get_quality(codec, quality);
-        ghb_ui_update(ud, "AudioTrackQualityX", ghb_double_value_new(qualityx));
+        ghb_ui_update(ud, "AudioTrackQualityX", ghb_double_value(qualityx));
         s_quality = get_quality_string(codec, quality);
         ghb_ui_update(ud, "AudioTrackQualityValue", ghb_string_value(s_quality));
+        free(s_quality);
         // Setting a radio button to FALSE does not automatically make
         // the other one TRUE
         qe = ghb_audio_quality_enabled(asettings);

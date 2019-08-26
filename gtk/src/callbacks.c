@@ -2459,6 +2459,7 @@ ghb_update_summary_info(signal_user_data_t *ud)
         def         = ghb_dict_get_bool(subsettings, "Default");
 
         g_string_append_printf(str, "\n%s", desc);
+        free(desc);
         if (force)
         {
             g_string_append_printf(str, ", Forced Only");
@@ -4733,6 +4734,7 @@ when_complete_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     GhbValue * value = ghb_widget_value(widget);
     ghb_ui_update(ud, "QueueWhenComplete", value);
+    ghb_value_free(&value);
 
     ghb_widget_to_setting (ud->prefs, widget);
 
@@ -4747,6 +4749,7 @@ queue_when_complete_changed_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     GhbValue * value = ghb_widget_value(widget);
     ghb_ui_update(ud, "WhenComplete", value);
+    ghb_value_free(&value);
 }
 
 G_MODULE_EXPORT void

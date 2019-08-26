@@ -830,7 +830,7 @@ subtitle_forced_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 {
     ghb_widget_to_setting(ud->settings, widget);
     GhbValue *val = ghb_widget_value(widget);
-    subtitle_update_setting(ghb_value_dup(val), "Forced", ud);
+    subtitle_update_setting(val, "Forced", ud);
 }
 
 G_MODULE_EXPORT void
@@ -841,7 +841,7 @@ subtitle_burned_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ghb_widget_to_setting(ud->settings, widget);
     GhbValue *val = ghb_widget_value(widget);
-    subtitle_update_setting(ghb_value_dup(val), "Burn", ud);
+    subtitle_update_setting(val, "Burn", ud);
     subsettings = subtitle_get_selected_settings(ud, &index);
     if (subsettings != NULL)
     {
@@ -862,7 +862,7 @@ subtitle_default_toggled_cb(GtkWidget *widget, signal_user_data_t *ud)
 
     ghb_widget_to_setting(ud->settings, widget);
     GhbValue *val = ghb_widget_value(widget);
-    subtitle_update_setting(ghb_value_dup(val), "Default", ud);
+    subtitle_update_setting(val, "Default", ud);
     subsettings = subtitle_get_selected_settings(ud, &index);
     if (subsettings != NULL)
     {

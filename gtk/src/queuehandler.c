@@ -588,6 +588,7 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
         def         = ghb_dict_get_bool(subsettings, "Default");
 
         g_string_append_printf(str, "%s%s", sep, desc);
+        free(desc);
         if (force)
         {
             g_string_append_printf(str, _(", Forced Only"));

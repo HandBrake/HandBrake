@@ -101,6 +101,7 @@ create_chapter_row(int index, int64_t start, int64_t duration,
 
     str = g_strdup_printf("%d", index);
     label = gtk_label_new(str);
+    free(str);
     gtk_label_set_width_chars(GTK_LABEL(label), 5);
     gtk_label_set_xalign(GTK_LABEL(label), 0);
     ghb_box_append_child(hbox, label);
@@ -108,6 +109,7 @@ create_chapter_row(int index, int64_t start, int64_t duration,
     ghb_break_duration(start, &hh, &mm, &ss);
     str = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
     label = gtk_label_new(str);
+    free(str);
     gtk_label_set_width_chars(GTK_LABEL(label), 10);
     gtk_label_set_xalign(GTK_LABEL(label), 1);
     ghb_box_append_child(hbox, label);
@@ -115,6 +117,7 @@ create_chapter_row(int index, int64_t start, int64_t duration,
     ghb_break_duration(duration, &hh, &mm, &ss);
     str = g_strdup_printf("%02d:%02d:%02d", hh, mm, ss);
     label = gtk_label_new(str);
+    free(str);
     gtk_label_set_width_chars(GTK_LABEL(label), 10);
     gtk_label_set_xalign(GTK_LABEL(label), 1);
     ghb_box_append_child(hbox, label);
