@@ -5538,9 +5538,10 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     // Copy the extradata for the subtitle track
     if (codecpar->extradata != NULL)
     {
-        subtitle->extradata = malloc(codecpar->extradata_size);
+        subtitle->extradata = malloc(codecpar->extradata_size + 1);
         memcpy(subtitle->extradata,
                codecpar->extradata, codecpar->extradata_size);
+        subtitle->extradata[codecpar->extradata_size] = 0;
         subtitle->extradata_size = codecpar->extradata_size;
     }
 
