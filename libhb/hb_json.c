@@ -391,7 +391,7 @@ static hb_dict_t* hb_title_to_dict_internal( hb_title_t *title )
 
         attributes = hb_audio_attributes_to_dict(audio->config.lang.attributes);
         audio_dict = json_pack_ex(&error, 0,
-        "{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
+        "{s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o, s:o}",
             "Description",       hb_value_string(audio->config.lang.description),
             "Language",          hb_value_string(audio->config.lang.simple),
             "LanguageCode",      hb_value_string(audio->config.lang.iso639_2),
