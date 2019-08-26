@@ -118,6 +118,8 @@ int hb_picture_fill(uint8_t *data[], int stride[], hb_buffer_t *buf)
 
     for (ii = 0; ii <= buf->f.max_plane; ii++)
         stride[ii] = buf->plane[ii].stride;
+    for (; ii < 4; ii++)
+        stride[ii] = stride[ii - 1];
 
     ret = av_image_fill_pointers(data, buf->f.fmt,
                                  buf->plane[0].height_stride,
