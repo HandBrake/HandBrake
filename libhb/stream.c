@@ -5542,7 +5542,7 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
         memcpy(subtitle->extradata,
                codecpar->extradata, codecpar->extradata_size);
         subtitle->extradata[codecpar->extradata_size] = 0;
-        subtitle->extradata_size = codecpar->extradata_size;
+        subtitle->extradata_size = codecpar->extradata_size + 1;
     }
 
     if (st->disposition & AV_DISPOSITION_DEFAULT)
