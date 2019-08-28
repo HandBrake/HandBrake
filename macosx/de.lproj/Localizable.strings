@@ -123,10 +123,17 @@
 /* Touch bar */
 "Done" = "Fertig";
 
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode canceled" = "Encodierung abgebrochen";
+
 /* Queue status */
 "Encode Canceled." = "Encodierung abgebrochen.";
 
-/* Queue done notification failed message */
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode complete" = "Encodierung abgeschlossen";
+
+/* HBQueueItemView -> Encode state accessibility label
+   Queue done notification failed message */
 "Encode failed" = "Encodierung fehlgeschlagen";
 
 /* Queue status */
@@ -134,6 +141,12 @@
 
 /* Queue status */
 "Encode Finished." = "Encodierung beendet.";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode ready" = "Bereit zum Encodieren";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode working" = "Encodierung in Arbeit";
 
 /* No comment provided by engineer. */
 "Encoding %@\n%@" = "Encodiere %1$@\n%2$@";
@@ -279,6 +292,9 @@
 /* Touch bar */
 "Remaining Time" = "Verbleibende Zeit";
 
+/* HBQueueItemView -> Remove button accessibility label */
+"Remove job" = "Aufgabe entfernen";
+
 /* Queue undo action name */
 "Remove Job From Queue" = "Aufgabe aus der Warteschlange entfernen";
 
@@ -292,6 +308,9 @@
    Toolbar Pause Item */
 "Resume Encoding" = "Encodierung fortsetzen";
 
+/* HBQueueItemView -> Reveal button accessibility label */
+"Reveal destination in Finder" = "Ziel im Finder anzeigen";
+
 /* Job statistics */
 "Run time:" = "Bearbeitung:";
 
@@ -300,7 +319,7 @@
 "Scale To Screen" = "An Bildschirm anpassen";
 
 /* Queue Alert -> cancel rip informative text */
-"Select Continue Encoding to dismiss this dialog without making changes." = "Encodierung fortsetzen wählen um diesen Dialog ohne weitere Änderungen zu schließen.";
+"Select Continue Encoding to dismiss this dialog without making changes." = "'Encodierung fortsetzen' wählen um diesen Dialog ohne weitere Änderungen zu schließen.";
 
 /* Preferences -> send to app destination open panel */
 "Select the desired external application" = "Die gewünschte externe Anwendung auswählen";

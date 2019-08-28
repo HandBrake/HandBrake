@@ -5,7 +5,7 @@
 "5Rl-P0-bhc.title" = "Table View Cell";
 
 /* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
-"c1Z-ZC-b8b.title" = "Ziel im Finder zeigen";
+"c1Z-ZC-b8b.title" = "Ziel im Finder anzeigen";
 
 /* Class = "NSMenuItem"; title = "Edit Job Settings"; ObjectID = "DTF-om-j0l"; */
 "DTF-om-j0l.title" = "Aufgabeneinstellungen bearbeiten";
