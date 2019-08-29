@@ -8,4 +8,8 @@ LIBOPUS.FETCH.sha256  = 4f3d69aefdf2dbaf9825408e452a8a414ffc60494c70633560700398
 LIBOPUS.CONFIGURE.shared = --enable-shared=no
 LIBOPUS.CONFIGURE.extra = --disable-doc --disable-extra-programs
 
+# Suppress a warning given by opus_decoder.c that tells us
+# optimizations are turned off.
+LIBOPUS.GCC.args.extra += -DOPUS_WILL_BE_SLOW
+
 LIBOPUS.CONFIGURE.bootstrap = rm -fr aclocal.m4 autom4te.cache configure; autoreconf -fiv;
