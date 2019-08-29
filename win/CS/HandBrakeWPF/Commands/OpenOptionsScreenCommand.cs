@@ -62,6 +62,10 @@ namespace HandBrakeWPF.Commands
             if (parameter != null && parameter.GetType() == typeof(OptionsTab))
             {
                 optionsViewModel.GotoTab((OptionsTab)parameter);
+                if (((OptionsTab)parameter).Equals(OptionsTab.Updates))
+                {
+                    optionsViewModel.PerformUpdateCheck();
+                }
             }
         }
     }

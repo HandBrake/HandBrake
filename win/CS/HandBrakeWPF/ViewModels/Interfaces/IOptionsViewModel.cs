@@ -35,5 +35,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         void UpdateSettings();
 
         void Close();
+
+        void PerformUpdateCheck();
     }
 }
