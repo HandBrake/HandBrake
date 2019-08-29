@@ -94,6 +94,9 @@
         <Setter Property="ToolTipService.ShowDuration" Value="20000" />
     </Style>
 
+    <!-- Glyph -->
+    <SolidColorBrush x:Key="GlyphBrush" Color="WhiteSmoke"/>
+
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Controls/ComboBoxDark.xaml" />
         <ResourceDictionary Source="Controls/ButtonDark.xaml" />

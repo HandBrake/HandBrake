@@ -575,8 +575,6 @@ namespace HandBrakeWPF.Controls
 
                 this.UpdateNumberBindingFromBox();
             }
-
-            this.RefreshNumberBoxColor();
         }
 
         /// <summary>
@@ -601,8 +599,6 @@ namespace HandBrakeWPF.Controls
             if (this.AllowEmpty && this.Number == 0)
             {
                 this.numberBox.Text = this.hasFocus ? string.Empty : this.NoneCaption;
-
-                // this.numberBox.Foreground = new SolidColorBrush(Colors.Gray);
             }
             else
             {
@@ -614,19 +610,7 @@ namespace HandBrakeWPF.Controls
                 {
                     this.numberBox.Text = this.Number.ToString(CultureInfo.InvariantCulture);
                 }
-
-                // this.numberBox.Foreground = new SolidColorBrush(Colors.Black);
             }
-
-            this.RefreshNumberBoxColor();
-        }
-
-        /// <summary>
-        /// The refresh number box color.
-        /// </summary>
-        private void RefreshNumberBoxColor()
-        {
-            this.numberBox.Foreground = this.numberBox.Text == this.NoneCaption ? new SolidColorBrush(Colors.Gray) : new SolidColorBrush(Colors.Black);
         }
 
         /// <summary>
@@ -717,5 +701,21 @@ namespace HandBrakeWPF.Controls
         }
 
         #endregion
+
+        private void UpButton_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                this.IncrementNumber();
+            }
+        }
+
+        private void DownButton_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                this.DecrementNumber();
+            }
+        }
     }
 }

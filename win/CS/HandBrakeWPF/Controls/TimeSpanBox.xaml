@@ -143,29 +143,31 @@
 			TextChanged="NumberBoxTextChanged"
 			VerticalContentAlignment="Center"/>
         <Grid
-			Name="incrementButtonsGrid"
+			Name="upButton"
 			Grid.Column="1"
 			Width="16">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Button
+            <Button x:Name="incrementButtonsGrid"
 				Style="{StaticResource UpButton}"
 				Grid.Row="0"
 				FontSize="4"
 				PreviewMouseLeftButtonDown="UpButtonMouseLeftButtonDown"
-				PreviewMouseLeftButtonUp="UpButtonMouseLeftButtonUp">
+				PreviewMouseLeftButtonUp="UpButtonMouseLeftButtonUp"
+                PreviewKeyDown="UpButton_OnKeyDown">
                 <Polygon
 					Style="{StaticResource Arrow}"
 					Points="4,0 0,4 8,4" />
             </Button>
-            <Button
+            <Button x:Name="deIncrementButtonsGrid"
 				Style="{StaticResource DownButton}"
 				Grid.Row="1"
 				FontSize="4"
 				PreviewMouseLeftButtonDown="DownButtonMouseLeftButtonDown"
-				PreviewMouseLeftButtonUp="DownButtonMouseLeftButtonUp">
+				PreviewMouseLeftButtonUp="DownButtonMouseLeftButtonUp"
+                PreviewKeyDown="DownButton_OnKeyDown">
                 <Polygon
 					Style="{StaticResource Arrow}"
 					Points="0,0 8,0 4,4" />
