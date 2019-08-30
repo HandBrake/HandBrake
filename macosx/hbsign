@@ -106,20 +106,19 @@ if [[ "${SANDBOX}" == true ]]; then
 elif [[ "${RUNTIME}" == true ]]; then
     ENTITLEMENTS_MAIN_FLAGS="--entitlements $SCRIPTDIR/HandBrake-RuntimeOnly.entitlements"
     ENTITLEMENTS_XPC_FLAGS="--entitlements $SCRIPTDIR/HandBrakeXPCService/HandBrakeXPCService-RuntimeOnly.entitlements"
-    ENTITLEMENTS_CLI_FLAGS="--entitlements $SCRIPTDIR/HandBrake-RuntimeOnly.entitlements"
+    ENTITLEMENTS_CLI_FLAGS="${ENTITLEMENTS_MAIN_FLAGS}"
 fi
 
-function sign {  # sign flags target UID
-    local TARGET FLAGS
+function sign {  # sign flags target
+    local TARGET FLAGS ERR
     TARGET="${2:-}"
     if [[ "${TARGET}" == "" ]]; then
-        ERR="${SELF_NAME}: target not specified to sign function\ncommand was: sign ${1:-} ${2:-} ${3:-}"
+        ERR="${SELF_NAME}: target not specified to sign function\ncommand was: sign ${1:-} ${2:-}"
         echo -e "${ERR}" >> "${LOG}"
         exit_with_error 1 "${ERR}"
     fi
 
     FLAGS="${1:-}"
-
     if [[ "${FLAGS}" == "main" ]]; then
         codesign --force --verbose $RUNTIME_FLAGS $ENTITLEMENTS_MAIN_FLAGS -s "${IDENTITY}" "${2:-}" >>"${LOG}" 2>&1 || exit_with_error 1 "Signing failed. More info may be available in ${LOG}"
     elif [[ "${FLAGS}" == "xpc" ]]; then
@@ -171,7 +170,7 @@ for TARGET in "${@}"; do
 
     if [[ "${TARGET##*/}" == 'HandBrakeCLI' ]]; then
         sign "cli" "${TARGET}"
-   	fi
+    fi
 
     echo "  Signing Executable"
     sign "main" "${TARGET}" fr.handbrake.HandBrake
@@ -193,11 +192,11 @@ for TARGET in "${@}"; do
     fi
 
     echo "  Validating Bundle"
-	codesign --verify --deep --strict --verbose=4 "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+    codesign --verify --deep --strict --verbose=4 "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
 
     if [[ "${TARGET##*/}" != 'HandBrakeCLI' ]]; then
-	    echo "  Validating Execution Privileges"
-	    spctl -a -t exec -vv "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+        echo "  Validating Execution Privileges"
+        spctl -a -t exec -vv "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
     fi
 
 done
