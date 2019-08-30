@@ -14,6 +14,8 @@ namespace HandBrake.Interop.Interop.Json.Encode
     /// </summary>
     public class SubtitleTrack
     {
+        private string name;
+
         /// <summary>
         /// Gets or sets a value indicating whether burn.
         /// </summary>
@@ -44,7 +46,11 @@ namespace HandBrake.Interop.Interop.Json.Encode
         /// </summary>
         public int Track { get; set; }
 
-        public string Name { get; set; }
+        public string Name
+        {
+            get => string.IsNullOrEmpty(this.name) ? null : this.name;
+            set => this.name = value;
+        }
 
         /// <summary>
         /// Gets or sets the srt.
