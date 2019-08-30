@@ -22,7 +22,7 @@
             <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="136" y="318" width="500" height="200"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
             <value key="minSize" type="size" width="212" height="107"/>
             <view key="contentView" id="6">
                 <rect key="frame" x="0.0" y="0.0" width="500" height="200"/>
@@ -363,17 +363,17 @@
                 <constraint firstItem="2nU-46-chy" firstAttribute="centerX" secondItem="233" secondAttribute="centerX" id="cyU-le-zvE"/>
                 <constraint firstItem="2nU-46-chy" firstAttribute="top" secondItem="233" secondAttribute="top" id="lro-oX-OdV"/>
             </constraints>
-            <point key="canvasLocation" x="313" y="-199"/>
+            <point key="canvasLocation" x="298" y="-127"/>
         </customView>
         <customView id="236" userLabel="Advanced">
-            <rect key="frame" x="0.0" y="0.0" width="454" height="282"/>
+            <rect key="frame" x="0.0" y="0.0" width="454" height="316"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
                 <customView translatesAutoresizingMaskIntoConstraints="NO" id="4UU-uq-R9U">
-                    <rect key="frame" x="16" y="0.0" width="422" height="282"/>
+                    <rect key="frame" x="16" y="0.0" width="422" height="316"/>
                     <subviews>
                         <popUpButton toolTip="Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="363">
-                            <rect key="frame" x="164" y="105" width="90" height="22"/>
+                            <rect key="frame" x="164" y="139" width="90" height="22"/>
                             <popUpButtonCell key="cell" type="push" title="Standard" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="1" imageScaling="proportionallyDown" inset="2" selectedItem="369" id="364">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -391,7 +391,7 @@
                             </connections>
                         </popUpButton>
                         <popUpButton toolTip="Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments." horizontalHuggingPriority="249" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="387">
-                            <rect key="frame" x="284" y="243" width="60" height="22"/>
+                            <rect key="frame" x="284" y="277" width="60" height="22"/>
                             <popUpButtonCell key="cell" type="push" title="0.25" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="4" imageScaling="proportionallyDown" inset="2" selectedItem="391" id="388">
                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -414,7 +414,7 @@
                             </connections>
                         </popUpButton>
                         <button toolTip="Use libdvdnav to read DVDs. Only disable this for problematic DVDs where libdvdread works better (rare)." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="398">
-                            <rect key="frame" x="72" y="141" width="219" height="18"/>
+                            <rect key="frame" x="72" y="175" width="219" height="18"/>
                             <buttonCell key="cell" type="check" title="Use libdvdnav (instead of libdvdread)" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="399">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -424,7 +424,7 @@
                             </connections>
                         </button>
                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="347">
-                            <rect key="frame" x="72" y="87" width="256" height="18"/>
+                            <rect key="frame" x="72" y="121" width="256" height="18"/>
                             <buttonCell key="cell" type="check" title="Store Activity Logs in same location as video" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="348">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -434,7 +434,7 @@
                             </connections>
                         </button>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="442">
-                            <rect key="frame" x="-2" y="143" width="71" height="14"/>
+                            <rect key="frame" x="-2" y="177" width="71" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="DVD Reader:" id="443">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -442,7 +442,7 @@
                             </textFieldCell>
                         </textField>
                         <textField horizontalHuggingPriority="248" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="IV7-SY-HLR">
-                            <rect key="frame" x="-2" y="214" width="71" height="14"/>
+                            <rect key="frame" x="-2" y="248" width="71" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Title Scan:" id="c0L-TU-WML">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -450,7 +450,7 @@
                             </textFieldCell>
                         </textField>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="jPa-4p-Y29">
-                            <rect key="frame" x="-2" y="248" width="71" height="14"/>
+                            <rect key="frame" x="-2" y="282" width="71" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Encoder:" id="cqp-xU-GOe">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -458,7 +458,7 @@
                             </textFieldCell>
                         </textField>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="350">
-                            <rect key="frame" x="-2" y="110" width="71" height="14"/>
+                            <rect key="frame" x="-2" y="144" width="71" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Activity Logs:" id="351">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -466,7 +466,7 @@
                             </textFieldCell>
                         </textField>
                         <textField toolTip="Verbosity Level. Extended verbosity records more technical information to the Activity Log. Minimal verbosity records less." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="371">
-                            <rect key="frame" x="73" y="110" width="88" height="14"/>
+                            <rect key="frame" x="73" y="144" width="88" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Verbosity Level:" id="372">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -474,7 +474,7 @@
                             </textFieldCell>
                         </textField>
                         <textField toolTip="Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="359">
-                            <rect key="frame" x="73" y="192" width="195" height="14"/>
+                            <rect key="frame" x="73" y="226" width="195" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Number of picture previews to scan:" id="360">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -482,7 +482,7 @@
                             </textFieldCell>
                         </textField>
                         <textField toolTip="Minimum DVD and Blu-ray title duration in seconds. Shorter titles will be skipped." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="463">
-                            <rect key="frame" x="73" y="214" width="228" height="14"/>
+                            <rect key="frame" x="73" y="248" width="228" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Ignore DVD and Blu-ray titles shorter than:" id="464">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -490,7 +490,7 @@
                             </textFieldCell>
                         </textField>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="UXr-op-aKN">
-                            <rect key="frame" x="352" y="214" width="49" height="14"/>
+                            <rect key="frame" x="352" y="248" width="49" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="seconds" id="klQ-DW-Kc6">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -498,7 +498,7 @@
                             </textFieldCell>
                         </textField>
                         <textField toolTip="Determines the granularity of the x264 Constant Quality control. Smaller values allow for finer quality increments." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="400" translatesAutoresizingMaskIntoConstraints="NO" id="395">
-                            <rect key="frame" x="73" y="248" width="208" height="14"/>
+                            <rect key="frame" x="73" y="282" width="208" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Constant Quality fractional granularity:" id="396">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -506,7 +506,7 @@
                             </textFieldCell>
                         </textField>
                         <textField toolTip="Minimum title duration in seconds. Shorter titles will be skipped." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="480">
-                            <rect key="frame" x="307" y="211" width="40" height="19"/>
+                            <rect key="frame" x="307" y="245" width="40" height="19"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="40" id="y5Z-y6-LMm"/>
                             </constraints>
@@ -521,7 +521,7 @@
                             </connections>
                         </textField>
                         <popUpButton toolTip="Number of picture previews to scan. Higher values may increase automatic cropping accuracy at the expense of title scan time." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="352">
-                            <rect key="frame" x="271" y="187" width="56" height="22"/>
+                            <rect key="frame" x="271" y="221" width="56" height="22"/>
                             <constraints>
                                 <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="ASh-ct-Imw"/>
                             </constraints>
@@ -566,7 +566,7 @@
                             </connections>
                         </popUpButton>
                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ndp-Xh-ohY">
-                            <rect key="frame" x="72" y="69" width="342" height="18"/>
+                            <rect key="frame" x="72" y="103" width="342" height="18"/>
                             <buttonCell key="cell" type="check" title="Remove old logs from main Activity Logs folder after 30 days" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="lgn-RF-k0d">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -576,10 +576,10 @@
                             </connections>
                         </button>
                         <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="I0X-1x-9qe">
-                            <rect key="frame" x="0.0" y="171" width="422" height="5"/>
+                            <rect key="frame" x="0.0" y="205" width="422" height="5"/>
                         </box>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="sRQ-Oe-1xH">
-                            <rect key="frame" x="-2" y="37" width="71" height="14"/>
+                            <rect key="frame" x="-2" y="71" width="71" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Queue:" id="FKi-zh-5gc">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -587,7 +587,7 @@
                             </textFieldCell>
                         </textField>
                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="htF-lD-ZBh">
-                            <rect key="frame" x="72" y="35" width="232" height="18"/>
+                            <rect key="frame" x="72" y="69" width="232" height="18"/>
                             <buttonCell key="cell" type="check" title="Pause queue if disk space is lower than:" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="yG9-mz-tqQ">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -597,7 +597,7 @@
                             </connections>
                         </button>
                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Koh-5H-cdo">
-                            <rect key="frame" x="355" y="37" width="20" height="14"/>
+                            <rect key="frame" x="355" y="71" width="20" height="14"/>
                             <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="GB" id="FZE-ZR-g93">
                                 <font key="font" metaFont="smallSystem"/>
                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -605,7 +605,7 @@
                             </textFieldCell>
                         </textField>
                         <textField toolTip="Minimum free space on destination disk." verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PaR-zw-opS">
-                            <rect key="frame" x="310" y="34" width="40" height="19"/>
+                            <rect key="frame" x="310" y="68" width="40" height="19"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="40" id="uuf-kg-lmG"/>
                             </constraints>
@@ -620,7 +620,7 @@
                             </connections>
                         </textField>
                         <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Ls7-9W-hx0">
-                            <rect key="frame" x="72" y="17" width="322" height="18"/>
+                            <rect key="frame" x="72" y="51" width="322" height="18"/>
                             <buttonCell key="cell" type="check" title="Always clear completed items after an encode completes" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="BPU-E2-N8l">
                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                 <font key="font" metaFont="smallSystem"/>
@@ -629,18 +629,39 @@
                                 <binding destination="61" name="value" keyPath="values.HBQueueAutoClearCompletedItems" id="REM-0C-RXQ"/>
                             </connections>
                         </button>
+                        <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="6NP-6w-Wa6">
+                            <rect key="frame" x="-2" y="19" width="71" height="14"/>
+                            <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Summary:" id="GQJ-go-PoN">
+                                <font key="font" metaFont="smallSystem"/>
+                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                            </textFieldCell>
+                        </textField>
+                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="tTD-8F-0aT">
+                            <rect key="frame" x="72" y="17" width="136" height="18"/>
+                            <buttonCell key="cell" type="check" title="Show preview images" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Aao-Tf-JeJ">
+                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                <font key="font" metaFont="smallSystem"/>
+                            </buttonCell>
+                            <connections>
+                                <binding destination="61" name="value" keyPath="values.HBShowSummaryPreview" id="NcJ-BV-BdB"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <constraints>
                         <constraint firstItem="jPa-4p-Y29" firstAttribute="leading" secondItem="4UU-uq-R9U" secondAttribute="leading" id="0XL-N8-hhe"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="363" secondAttribute="trailing" constant="20" id="0by-WQ-IEO"/>
                         <constraint firstItem="442" firstAttribute="leading" secondItem="jPa-4p-Y29" secondAttribute="leading" id="0y2-cf-8RZ"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ls7-9W-hx0" secondAttribute="trailing" id="1mz-JE-wO6"/>
+                        <constraint firstItem="tTD-8F-0aT" firstAttribute="firstBaseline" secondItem="6NP-6w-Wa6" secondAttribute="firstBaseline" id="4SA-QV-ZJw"/>
                         <constraint firstItem="359" firstAttribute="baseline" secondItem="352" secondAttribute="baseline" id="7tL-h8-5AB"/>
                         <constraint firstItem="395" firstAttribute="baseline" secondItem="387" secondAttribute="baseline" id="80j-Xc-t7X"/>
+                        <constraint firstItem="tTD-8F-0aT" firstAttribute="leading" secondItem="6NP-6w-Wa6" secondAttribute="trailing" constant="8" id="BFP-es-G5m"/>
                         <constraint firstItem="347" firstAttribute="leading" secondItem="371" secondAttribute="leading" id="Bwa-R1-Sg0"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="UXr-op-aKN" secondAttribute="trailing" id="CRS-Yq-1Ur"/>
                         <constraint firstItem="htF-lD-ZBh" firstAttribute="baseline" secondItem="sRQ-Oe-1xH" secondAttribute="baseline" id="DMh-iO-Tvh"/>
                         <constraint firstItem="sRQ-Oe-1xH" firstAttribute="width" secondItem="jPa-4p-Y29" secondAttribute="width" id="DYV-81-ZgI"/>
+                        <constraint firstItem="6NP-6w-Wa6" firstAttribute="leading" secondItem="sRQ-Oe-1xH" secondAttribute="leading" id="Dcs-HM-CpI"/>
                         <constraint firstItem="IV7-SY-HLR" firstAttribute="width" secondItem="jPa-4p-Y29" secondAttribute="width" id="Ekr-Q8-lG6"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="347" secondAttribute="trailing" id="G8s-yJ-mYX"/>
                         <constraint firstItem="371" firstAttribute="leading" secondItem="350" secondAttribute="trailing" constant="8" id="GOV-QT-45K"/>
@@ -651,11 +672,13 @@
                         <constraint firstItem="463" firstAttribute="top" secondItem="395" secondAttribute="bottom" constant="20" id="LNo-ir-2Ih"/>
                         <constraint firstItem="jPa-4p-Y29" firstAttribute="top" secondItem="4UU-uq-R9U" secondAttribute="top" constant="20" id="Mib-9l-uBL"/>
                         <constraint firstItem="371" firstAttribute="top" secondItem="398" secondAttribute="bottom" constant="20" id="Mt3-Wx-Kuh"/>
+                        <constraint firstAttribute="bottom" secondItem="tTD-8F-0aT" secondAttribute="bottom" constant="20" id="NEV-0p-AMk"/>
                         <constraint firstItem="Ls7-9W-hx0" firstAttribute="leading" secondItem="htF-lD-ZBh" secondAttribute="leading" id="PdO-BP-qSB"/>
                         <constraint firstItem="442" firstAttribute="width" secondItem="jPa-4p-Y29" secondAttribute="width" id="Pqh-h0-NeI"/>
                         <constraint firstItem="Ls7-9W-hx0" firstAttribute="top" secondItem="htF-lD-ZBh" secondAttribute="bottom" constant="6" id="Rs7-bD-PiT"/>
                         <constraint firstItem="UXr-op-aKN" firstAttribute="leading" secondItem="480" secondAttribute="trailing" constant="7" id="TR5-Sj-PDx"/>
                         <constraint firstItem="htF-lD-ZBh" firstAttribute="leading" secondItem="sRQ-Oe-1xH" secondAttribute="trailing" constant="8" id="TW2-Vp-Dg8"/>
+                        <constraint firstItem="tTD-8F-0aT" firstAttribute="top" secondItem="Ls7-9W-hx0" secondAttribute="bottom" constant="22" id="TZq-90-UKk"/>
                         <constraint firstItem="I0X-1x-9qe" firstAttribute="top" secondItem="359" secondAttribute="bottom" constant="18" id="VUn-iF-GUU"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ndp-Xh-ohY" secondAttribute="trailing" id="W8N-xj-n7t"/>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="387" secondAttribute="trailing" id="WCG-H7-Rbj"/>
@@ -665,11 +688,11 @@
                         <constraint firstItem="359" firstAttribute="leading" secondItem="463" secondAttribute="leading" id="aat-Pn-NFf"/>
                         <constraint firstAttribute="trailing" secondItem="I0X-1x-9qe" secondAttribute="trailing" id="abk-lH-95N"/>
                         <constraint firstItem="363" firstAttribute="leading" secondItem="371" secondAttribute="trailing" constant="8" id="ao3-b4-L3n"/>
+                        <constraint firstItem="6NP-6w-Wa6" firstAttribute="width" secondItem="sRQ-Oe-1xH" secondAttribute="width" id="bGh-e1-j1Z"/>
                         <constraint firstItem="480" firstAttribute="baseline" secondItem="UXr-op-aKN" secondAttribute="baseline" id="bpm-N7-n6P"/>
                         <constraint firstItem="395" firstAttribute="leading" secondItem="jPa-4p-Y29" secondAttribute="trailing" constant="8" id="caX-fe-X6B"/>
                         <constraint firstItem="IV7-SY-HLR" firstAttribute="baseline" secondItem="463" secondAttribute="baseline" id="dGu-2J-ulw"/>
                         <constraint firstItem="398" firstAttribute="leading" secondItem="442" secondAttribute="trailing" constant="8" id="eps-Ux-xp1"/>
-                        <constraint firstAttribute="bottom" secondItem="Ls7-9W-hx0" secondAttribute="bottom" constant="20" id="eyC-wM-35U"/>
                         <constraint firstItem="IV7-SY-HLR" firstAttribute="leading" secondItem="jPa-4p-Y29" secondAttribute="leading" id="gET-Go-zxJ"/>
                         <constraint firstItem="398" firstAttribute="top" secondItem="I0X-1x-9qe" secondAttribute="bottom" constant="17" id="gdO-Fj-mGh"/>
                         <constraint firstItem="PaR-zw-opS" firstAttribute="leading" secondItem="htF-lD-ZBh" secondAttribute="trailing" constant="8" id="h3H-QH-Yvf"/>
@@ -684,6 +707,7 @@
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Koh-5H-cdo" secondAttribute="trailing" id="sEI-yd-xdc"/>
                         <constraint firstItem="371" firstAttribute="baseline" secondItem="363" secondAttribute="baseline" id="sKu-bO-LUe"/>
                         <constraint firstItem="Ndp-Xh-ohY" firstAttribute="leading" secondItem="347" secondAttribute="leading" id="tCO-d0-lRc"/>
+                        <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="tTD-8F-0aT" secondAttribute="trailing" id="tz0-KT-IAR"/>
                         <constraint firstItem="352" firstAttribute="leading" secondItem="359" secondAttribute="trailing" constant="8" id="u50-Ic-0EB"/>
                         <constraint firstItem="htF-lD-ZBh" firstAttribute="top" secondItem="Ndp-Xh-ohY" secondAttribute="bottom" constant="22" id="ujO-hF-lGo"/>
                         <constraint firstItem="463" firstAttribute="baseline" secondItem="480" secondAttribute="baseline" id="ulv-OM-ioh"/>
@@ -701,7 +725,7 @@
                 <constraint firstItem="4UU-uq-R9U" firstAttribute="leading" secondItem="236" secondAttribute="leading" constant="16" id="llp-tm-9Or"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="4UU-uq-R9U" secondAttribute="trailing" priority="750" constant="16" id="yAs-3j-mb6"/>
             </constraints>
-            <point key="canvasLocation" x="452" y="-560.5"/>
+            <point key="canvasLocation" x="452" y="-534.5"/>
         </customView>
         <customObject id="410" userLabel="Updater" customClass="SPUStandardUpdaterController"/>
     </objects>

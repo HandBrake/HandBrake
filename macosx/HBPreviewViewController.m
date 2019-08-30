@@ -70,12 +70,8 @@
     if (generator)
     {
         self.selectedIndex = self.selectedIndex;
-        [self updatePicture];
     }
-    else
-    {
-        self.previewView.image = nil;
-    }
+    [self updatePicture];
 }
 
 - (void)update
@@ -189,6 +185,12 @@
         CGImageRef fPreviewImage = [self.generator copyImageAtIndex:self.selectedIndex shouldCache:YES];
         self.previewView.image = fPreviewImage;
         CFRelease(fPreviewImage);
+    }
+    else
+    {
+        NSImage *bars = [NSImage imageNamed:@"ColorBars"];
+        CGImageRef image = [bars CGImageForProposedRect:NULL context:nil hints:nil];
+        self.previewView.image = image;
     }
 }
 

@@ -8,6 +8,7 @@
 
 #import "HBPreviewViewController.h"
 #import "HBPreviewGenerator.h"
+#import "HBPreferencesKeys.h"
 
 @import HandBrakeKit;
 
@@ -17,6 +18,7 @@ static void *HBSummaryViewControllerPictureContext = &HBSummaryViewControllerPic
 static void *HBSummaryViewControllerFiltersContext = &HBSummaryViewControllerFiltersContext;
 static void *HBSummaryViewControllerAudioContext = &HBSummaryViewControllerAudioContext;
 static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsContext;
+static void *HBSummaryViewControllerPreferencesContext = &HBSummaryViewControllerPreferencesContext;
 
 @interface HBSummaryViewController ()
 
@@ -45,6 +47,9 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
     {
         _labelColor = [NSColor disabledControlTextColor];
         _previewViewController = [[HBPreviewViewController alloc] init];
+
+        [NSUserDefaultsController.sharedUserDefaultsController addObserver:self forKeyPath:@"values.HBShowSummaryPreview"
+                                                                   options:0 context:HBSummaryViewControllerPreferencesContext];
     }
     return self;
 }
@@ -60,7 +65,8 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
 
 - (void)setGenerator:(HBPreviewGenerator *)generator
 {
-    self.previewViewController.generator = generator;
+    _generator = generator;
+    self.previewViewController.generator = [NSUserDefaults.standardUserDefaults boolForKey:HBShowSummaryPreview] ? generator : nil;
 }
 
 - (void)setJob:(HBJob *)job
@@ -123,6 +129,10 @@ static void *HBSummaryViewControllerSubsContext = &HBSummaryViewControllerSubsCo
     else if (context == HBSummaryViewControllerFiltersContext)
     {
         [self updatePicture:nil];
+    }
+    else if (context == HBSummaryViewControllerPreferencesContext)
+    {
+        self.generator = self.generator;
     }
     else
     {

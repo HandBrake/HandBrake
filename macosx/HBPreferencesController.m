@@ -6,6 +6,8 @@
 #import "HBPreferencesController.h"
 
 NSString * const HBShowOpenPanelAtLaunch              = @"HBShowOpenPanelAtLaunch";
+NSString * const HBShowSummaryPreview                 = @"HBShowSummaryPreview";
+
 NSString * const HBLastDestinationDirectoryURL        = @"HBLastDestinationDirectoryURL";
 NSString * const HBLastDestinationDirectoryBookmark   = @"HBLastDestinationDirectoryBookmark";
 NSString * const HBLastSourceDirectoryURL             = @"HBLastSourceDirectoryURL";
@@ -79,6 +81,7 @@ NSString * const HBQueueAutoClearCompletedItems  = @"HBQueueAutoClearCompletedIt
 
     [[NSUserDefaults standardUserDefaults] registerDefaults:@{
         HBShowOpenPanelAtLaunch:            @YES,
+        HBShowSummaryPreview:               @YES,
         HBDefaultMpegExtension:             @"Auto",
         HBUseDvdNav:                        @YES,
         HBLastDestinationDirectoryURL:      [NSKeyedArchiver archivedDataWithRootObject:moviesURL],

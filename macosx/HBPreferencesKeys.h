@@ -17,6 +17,7 @@ typedef NS_ENUM(NSUInteger, HBDoneAction) {
 };
 
 extern NSString * const HBShowOpenPanelAtLaunch;
+extern NSString * const HBShowSummaryPreview;
 
 extern NSString * const HBLastDestinationDirectoryURL;
 extern NSString * const HBLastDestinationDirectoryBookmark;
