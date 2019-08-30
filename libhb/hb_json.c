@@ -1548,7 +1548,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                     audio.out.dither_method = hb_value_get_int(dither);
                 }
             }
-            audio.out.name = name;
+            if (name != NULL)
+            {
+                audio.out.name = strdup(name);
+            }
             if (audio.in.track >= 0)
             {
                 audio.out.track = ii;
@@ -1615,7 +1618,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                 if (subtitle != NULL)
                 {
                     sub_config = subtitle->config;
-                    sub_config.name = name;
+                    if (name != NULL)
+                    {
+                        sub_config.name = strdup(name);
+                    }
                     result = json_unpack_ex(subtitle_dict, &error, 0,
                         "{s?b, s?b, s?b, s?I}",
                         "Default",  unpack_b(&sub_config.default_track),
@@ -1635,7 +1641,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
             }
             else if (importfile != NULL)
             {
-                sub_config.src_filename = importfile;
+                sub_config.src_filename = strdup(importfile);
 
                 const char * lang = "und";
                 const char * srtcodeset = "UTF-8";
@@ -1663,7 +1669,10 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
                     hb_job_close(&job);
                     return NULL;
                 }
-                sub_config.name = name;
+                if (name != NULL)
+                {
+                    sub_config.name = strdup(name);
+                }
                 sub_config.offset = offset;
                 sub_config.dest = burn ? RENDERSUB : PASSTHRUSUB;
                 strncpy(sub_config.src_codeset, srtcodeset, 39);
