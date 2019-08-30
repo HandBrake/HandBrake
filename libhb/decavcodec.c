@@ -1244,6 +1244,7 @@ int reinit_video_filters(hb_work_private_t * pv)
     filter_init.vrate.den         = vrate.den;
 
     pv->video_filters.graph = hb_avfilter_graph_init(filters, &filter_init);
+    hb_value_free(&filters);
     if (pv->video_filters.graph == NULL)
     {
         hb_error("reinit_video_filters: failed to create filter graph");
