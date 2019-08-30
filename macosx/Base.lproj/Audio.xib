@@ -93,7 +93,7 @@
                         <rect key="frame" x="1" y="0.0" width="884" height="257"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="25" rowSizeStyle="automatic" headerView="jdT-w6-s4n" viewBased="YES" id="yix-PF-sqH">
+                            <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="25" rowSizeStyle="automatic" headerView="jdT-w6-s4n" viewBased="YES" id="yix-PF-sqH">
                                 <rect key="frame" x="0.0" y="0.0" width="884" height="234"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <size key="intercellSpacing" width="3" height="2"/>
@@ -215,9 +215,10 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                         </popUpButtonCell>
                                                         <accessibility description="Mixdown"/>
                                                         <connections>
-                                                            <binding destination="JWs-Gl-4kd" name="contentValues" keyPath="objectValue.mixdowns" id="TBt-aW-GnZ">
+                                                            <binding destination="JWs-Gl-4kd" name="enabled" keyPath="objectValue.isEnabled" id="tgd-cw-Xvj"/>
+                                                            <binding destination="JWs-Gl-4kd" name="selectedValue" keyPath="objectValue.mixdown" id="gf4-Y4-8kb">
                                                                 <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">HBMixdownsTransformer</string>
+                                                                    <string key="NSValueTransformerName">HBMixdownTransformer</string>
                                                                 </dictionary>
                                                             </binding>
                                                             <binding destination="JWs-Gl-4kd" name="enabled2" keyPath="objectValue.mixdownEnabled" previousBinding="tgd-cw-Xvj" id="9fu-9h-CoA">
@@ -228,10 +229,9 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                                     <integer key="NSNullPlaceholder" value="-1"/>
                                                                 </dictionary>
                                                             </binding>
-                                                            <binding destination="JWs-Gl-4kd" name="enabled" keyPath="objectValue.isEnabled" id="tgd-cw-Xvj"/>
-                                                            <binding destination="JWs-Gl-4kd" name="selectedValue" keyPath="objectValue.mixdown" id="gf4-Y4-8kb">
+                                                            <binding destination="JWs-Gl-4kd" name="contentValues" keyPath="objectValue.mixdowns" id="TBt-aW-GnZ">
                                                                 <dictionary key="options">
-                                                                    <string key="NSValueTransformerName">HBMixdownTransformer</string>
+                                                                    <string key="NSValueTransformerName">HBMixdownsTransformer</string>
                                                                 </dictionary>
                                                             </binding>
                                                         </connections>
