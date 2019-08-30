@@ -45,7 +45,7 @@
         _dataSource = dataSource;
         _sourceTrackIdx = index;
         _container = container;
-        _title = [dataSource sourceTrackAtIndex:_sourceTrackIdx].title;
+        self.title = [dataSource sourceTrackAtIndex:_sourceTrackIdx].title;
 
         [self validateSettings];
 
@@ -221,6 +221,13 @@
 
 - (void)setTitle:(NSString *)title
 {
+    if ([title isEqualToString:@"Mono"] ||
+        [title isEqualToString:@"Stereo"] ||
+        [title isEqualToString:@"Surround"])
+    {
+        title = nil;
+    }
+
     if (title != _title)
     {
         [[self.undo prepareWithInvocationTarget:self] setTitle:_title];
