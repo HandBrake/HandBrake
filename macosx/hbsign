@@ -28,10 +28,13 @@ set -u
 SELF="${0}"
 SELF_NAME=$(basename "${SELF}")
 HELP="\
-usage: ${SELF_NAME} [-h]
+usage: ${SELF_NAME} [-hrs]
        ${SELF_NAME} identity application [application2 ...]
 where:
-   -h  display this help text"
+   -h  display this help text
+   -r  enable runtime hardening
+   -s  enable sandbox
+"
 
 # Logs error message and exits
 function exit_with_error {
@@ -49,12 +52,20 @@ LOG="${NAME}.log"
 touch "${LOG}" || exit_with_error 1 "${SELF_NAME}: unable to create log file ${LOG}"
 
 OPTIND=1
-while getopts ":h" OPT; do
+RUNTIME=false
+SANDBOX=false
+while getopts ":hrs" OPT; do
     case "${OPT}" in
         h)
             # Print help and exit
             echo -e "${HELP}"
             exit 0
+            ;;
+        r)
+            RUNTIME=true
+            ;;
+        s)
+            SANDBOX=true
             ;;
         :)
             # Option without required argument
@@ -77,11 +88,53 @@ if [[ ${#@} -eq 0 ]]; then
     exit_with_error 1 "${SELF_NAME}: application not specified" true
 fi
 
-function sign {  # sign file_or_folder
-    codesign --force --verbose -s "${IDENTITY}" --prefix "fr.handbrake." "${1:-}" >>"${LOG}" 2>&1 || exit_with_error 1 "Signing failed. More info may be available in ${NAME}.log"
+SCRIPTDIR=$(dirname "${SELF}")
+
+
+RUNTIME_FLAGS=""
+if [[ "${RUNTIME}" == true ]]; then
+    RUNTIME_FLAGS="--options=runtime"
+fi
+
+ENTITLEMENTS_MAIN_FLAGS=""
+ENTITLEMENTS_XPC_FLAGS=""
+ENTITLEMENTS_CLI_FLAGS=""
+
+if [[ "${SANDBOX}" == true ]]; then
+    ENTITLEMENTS_MAIN_FLAGS="--entitlements $SCRIPTDIR/HandBrake.entitlements"
+    ENTITLEMENTS_XPC_FLAGS="--entitlements $SCRIPTDIR/HandBrakeXPCService/HandBrakeXPCService.entitlements"
+elif [[ "${RUNTIME}" == true ]]; then
+    ENTITLEMENTS_MAIN_FLAGS="--entitlements $SCRIPTDIR/HandBrake-RuntimeOnly.entitlements"
+    ENTITLEMENTS_XPC_FLAGS="--entitlements $SCRIPTDIR/HandBrakeXPCService/HandBrakeXPCService-RuntimeOnly.entitlements"
+    ENTITLEMENTS_CLI_FLAGS="--entitlements $SCRIPTDIR/HandBrake-RuntimeOnly.entitlements"
+fi
+
+function sign {  # sign flags target UID
+    local TARGET FLAGS
+    TARGET="${2:-}"
+    if [[ "${TARGET}" == "" ]]; then
+        ERR="${SELF_NAME}: target not specified to sign function\ncommand was: sign ${1:-} ${2:-} ${3:-}"
+        echo -e "${ERR}" >> "${LOG}"
+        exit_with_error 1 "${ERR}"
+    fi
+
+    FLAGS="${1:-}"
+
+    if [[ "${FLAGS}" == "main" ]]; then
+        codesign --force --verbose $RUNTIME_FLAGS $ENTITLEMENTS_MAIN_FLAGS -s "${IDENTITY}" "${2:-}" >>"${LOG}" 2>&1 || exit_with_error 1 "Signing failed. More info may be available in ${LOG}"
+    elif [[ "${FLAGS}" == "xpc" ]]; then
+        codesign --force --verbose $RUNTIME_FLAGS $ENTITLEMENTS_XPC_FLAGS -s "${IDENTITY}" "${2:-}" >>"${LOG}" 2>&1 || exit_with_error 1 "Signing failed. More info may be available in ${LOG}"
+    elif [[ "${FLAGS}" == "cli" ]]; then
+        codesign --force --verbose $RUNTIME_FLAGS $ENTITLEMENTS_CLI_FLAGS -s "${IDENTITY}" "${2:-}" >>"${LOG}" 2>&1 || exit_with_error 1 "Signing failed. More info may be available in ${LOG}"
+    else
+        codesign --force --verbose $RUNTIME_FLAGS -s "${IDENTITY}" "${2:-}" >>"${LOG}" 2>&1 || exit_with_error 1 "Signing failed. More info may be available in ${LOG}"
+    fi
 }
 
+echo "Script dir: ${SCRIPTDIR}"
 echo "Identity: ${IDENTITY}"
+echo "Hardened runtime: ${RUNTIME}"
+echo "Sandbox: ${SANDBOX}"
 
 for TARGET in "${@}"; do
 
@@ -93,53 +146,59 @@ for TARGET in "${@}"; do
         find "${TARGET}"/Contents/Frameworks -type f -name ".DS_Store" -exec rm '{}' \; >/dev/null 2>&1
         find "${TARGET}"/Contents/Frameworks -type f -name "*.textile" -exec rm '{}' \; >/dev/null 2>&1
         find "${TARGET}"/Contents/Frameworks -type f -name "*.txt" -exec rm '{}' \; >/dev/null 2>&1
-        sign "${TARGET}"/Contents/Frameworks/HandBrakeKit.framework/Versions/A fr.handbrake.HandBrake
-        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Autoupdate
-        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Updater.app org.sparkle-project.Sparkle.Updater
-        sign "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/A org.sparkle-project.Sparkle
+        sign "default" "${TARGET}"/Contents/Frameworks/HandBrakeKit.framework/Versions/A
+        sign "default" "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Autoupdate
+        sign "default" "${TARGET}"/Contents/Frameworks/Sparkle.framework/Resources/Updater.app
+        sign "default" "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/A
         for FILE in $(find "${TARGET}"/Contents/Frameworks -type f -name "*.h" -o -name "*.nib" -o -name "*.plist" -o -name "*.strings" -exec echo {} \; >/dev/null 2>&1)
         do
-            sign "${FILE}"
+            sign "default" "${FILE}"
         done
 
         echo "  Signing Headers"
         for FILE in $(find "${TARGET}"/Contents/MacOS/include -type f -exec echo {} \; >/dev/null 2>&1)
         do
-            sign "${FILEF}"
+            sign "default" "${FILE}"
         done
 
         echo "  Signing XPC Services"
-        sign "${TARGET}"/Contents/XPCServices/HandBrakeXPCService.xpc fr.handbrake.HandBrake
-        sign "${TARGET}"/Contents/XPCServices/org.sparkle-project.Downloader.xpc org.sparkle-project.Downloader
-        sign "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc org.sparkle-project.InstallerConnection
-        sign "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc org.sparkle-project.InstallerLauncher
-        sign "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerStatus.xpc org.sparkle-project.InstallerStatus
+        sign "xpc"     "${TARGET}"/Contents/XPCServices/HandBrakeXPCService.xpc
+        sign "default" "${TARGET}"/Contents/XPCServices/org.sparkle-project.Downloader.xpc
+        sign "default" "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc
+        sign "default" "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc
+        sign "default" "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerStatus.xpc
     fi
 
+    if [[ "${TARGET##*/}" == 'HandBrakeCLI' ]]; then
+        sign "cli" "${TARGET}"
+   	fi
+
     echo "  Signing Executable"
-    sign "${TARGET}" fr.handbrake.HandBrake
+    sign "main" "${TARGET}" fr.handbrake.HandBrake
 
     if [[ "${TARGET##*/}" == 'HandBrake.app' ]]; then
         echo "  Validating Frameworks"
-        codesign --verify -vv "${TARGET}"/Contents/Frameworks/HandBrakeKit.framework >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
-        codesign --verify -vv "${TARGET}"/Contents/Frameworks/Sparkle.framework >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
+        codesign --verify -vv "${TARGET}"/Contents/Frameworks/HandBrakeKit.framework >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+        codesign --verify -vv "${TARGET}"/Contents/Frameworks/Sparkle.framework >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
 
         echo "  Validating Updater.app"
-        codesign --verify -vv "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/Current/Resources/Updater.app >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
+        codesign --verify -vv "${TARGET}"/Contents/Frameworks/Sparkle.framework/Versions/Current/Resources/Updater.app >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
 
         echo "  Validating XPC Services"
-        codesign --verify -vv "${TARGET}"/Contents/XPCServices/HandBrakeXPCService.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
-        codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.Downloader.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
-        codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
-        codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
-        codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerStatus.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
+        codesign --verify -vv "${TARGET}"/Contents/XPCServices/HandBrakeXPCService.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+        codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.Downloader.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+        codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerConnection.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+        codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerLauncher.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+        codesign --verify -vv "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerStatus.xpc >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
     fi
 
     echo "  Validating Bundle"
-    codesign --verify --deep --strict --verbose=4 "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
+	codesign --verify --deep --strict --verbose=4 "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
 
-    echo "  Validating Execution Privileges"
-    spctl -a -t exec -vv "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${NAME}.log"
+    if [[ "${TARGET##*/}" != 'HandBrakeCLI' ]]; then
+	    echo "  Validating Execution Privileges"
+	    spctl -a -t exec -vv "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Validation failed. More info may be available in ${LOG}"
+    fi
 
 done
 
