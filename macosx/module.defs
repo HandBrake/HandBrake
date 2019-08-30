@@ -99,4 +99,8 @@ MACOSX.XCODE_ARCHIVE = $(strip \
         -exportPath '$(MACOSX.xarchive/)' \
         -archivePath '$(MACOSX.xarchive/)' )
 
-MACOSX.SIGN = $(strip $(MACOSX.src/)hbsign '$(ID)' $(MACOSX.xroot/)HandBrake.app)
+ifeq (1,$(SECURITY.sandbox))
+MACOSX.SIGN = $(strip $(MACOSX.src/)hbsign -sr '$(ID)' $(MACOSX.xroot/)HandBrake.app $(MACOSX.xroot/)HandBrakeCLI)
+else
+MACOSX.SIGN = $(strip $(MACOSX.src/)hbsign -r '$(ID)' $(MACOSX.xroot/)HandBrake.app $(MACOSX.xroot/)HandBrakeCLI)
+endif
