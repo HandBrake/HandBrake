@@ -45,6 +45,7 @@
         _dataSource = dataSource;
         _sourceTrackIdx = index;
         _container = container;
+        _title = [dataSource sourceTrackAtIndex:_sourceTrackIdx].title;
 
         [self validateSettings];
 
@@ -91,6 +92,8 @@
 
     if (!(self.undo.isUndoing || self.undo.isRedoing))
     {
+        self.title = [self.dataSource sourceTrackAtIndex:_sourceTrackIdx].title;
+
         [self validateSettings];
 
         if (oldIdx != sourceTrackIdx)
