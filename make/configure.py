@@ -2093,7 +2093,7 @@ int main()
     stdout.write( 'Enable QSV:         %s' % options.enable_qsv )
     stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.system == 'mingw') else stdout.write( '\n' )
     stdout.write( 'Enable VCE:         %s' % options.enable_vce )
-    stdout.write( ' (%s)\n' % note_unsupported ) if not host_tuple.system == 'mingw' else stdout.write( '\n' )
+    stdout.write( ' (%s)\n' % note_unsupported ) if not (host_tuple.system == 'linux' or host_tuple.system == 'mingw') else stdout.write( '\n' )
 
     if options.launch:
         stdout.write( '%s\n' % ('-' * 79) )
