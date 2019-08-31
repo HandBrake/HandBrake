@@ -103,10 +103,11 @@ ENTITLEMENTS_CLI_FLAGS=""
 if [[ "${SANDBOX}" == true ]]; then
     ENTITLEMENTS_MAIN_FLAGS="--entitlements $SCRIPTDIR/HandBrake.entitlements"
     ENTITLEMENTS_XPC_FLAGS="--entitlements $SCRIPTDIR/HandBrakeXPCService/HandBrakeXPCService.entitlements"
+    ENTITLEMENTS_CLI_FLAGS="--entitlements $SCRIPTDIR/HandBrakeXPCService/HandBrakeXPCService-RuntimeOnly.entitlements"
 elif [[ "${RUNTIME}" == true ]]; then
     ENTITLEMENTS_MAIN_FLAGS="--entitlements $SCRIPTDIR/HandBrake-RuntimeOnly.entitlements"
     ENTITLEMENTS_XPC_FLAGS="--entitlements $SCRIPTDIR/HandBrakeXPCService/HandBrakeXPCService-RuntimeOnly.entitlements"
-    ENTITLEMENTS_CLI_FLAGS="${ENTITLEMENTS_MAIN_FLAGS}"
+    ENTITLEMENTS_CLI_FLAGS="${ENTITLEMENTS_XPC_FLAGS}"
 fi
 
 function sign {  # sign flags target
@@ -124,7 +125,7 @@ function sign {  # sign flags target
     elif [[ "${FLAGS}" == "xpc" ]]; then
         codesign --force --verbose $RUNTIME_FLAGS $ENTITLEMENTS_XPC_FLAGS -s "${IDENTITY}" "${2:-}" >>"${LOG}" 2>&1 || exit_with_error 1 "Signing failed. More info may be available in ${LOG}"
     elif [[ "${FLAGS}" == "cli" ]]; then
-        codesign --force --verbose $RUNTIME_FLAGS $ENTITLEMENTS_CLI_FLAGS -s "${IDENTITY}" "${2:-}" >>"${LOG}" 2>&1 || exit_with_error 1 "Signing failed. More info may be available in ${LOG}"
+        codesign --force --verbose $RUNTIME_FLAGS $ENTITLEMENTS_CLI_FLAGS --prefix fr.handbrake. -s "${IDENTITY}" "${2:-}" >>"${LOG}" 2>&1 || exit_with_error 1 "Signing failed. More info may be available in ${LOG}"
     else
         codesign --force --verbose $RUNTIME_FLAGS -s "${IDENTITY}" "${2:-}" >>"${LOG}" 2>&1 || exit_with_error 1 "Signing failed. More info may be available in ${LOG}"
     fi
@@ -168,12 +169,12 @@ for TARGET in "${@}"; do
         sign "default" "${TARGET}"/Contents/XPCServices/org.sparkle-project.InstallerStatus.xpc
     fi
 
+    echo "  Signing Executable"
     if [[ "${TARGET##*/}" == 'HandBrakeCLI' ]]; then
         sign "cli" "${TARGET}"
+    else
+        sign "main" "${TARGET}"
     fi
-
-    echo "  Signing Executable"
-    sign "main" "${TARGET}" fr.handbrake.HandBrake
 
     if [[ "${TARGET##*/}" == 'HandBrake.app' ]]; then
         echo "  Validating Frameworks"
