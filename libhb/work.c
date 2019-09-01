@@ -171,6 +171,7 @@ static void work_func( void * _work )
         hb_force_rescan(h);
     }
     
+    t = time(NULL);
     hb_log("Finished work at: %s", asctime(localtime(&t)));
     free( work );
 }
