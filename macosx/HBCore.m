@@ -210,10 +210,18 @@ typedef void (^HBCoreCleanupHandler)(void);
         if (detector.isVideoDVD)
         {
             lib = dlopen("libdvdcss.2.dylib", RTLD_LAZY);
+            if (!lib)
+            {
+                lib = dlopen("/usr/local/lib/libdvdcss.2.dylib", RTLD_LAZY);
+            }
         }
         else if (detector.isVideoBluRay)
         {
             lib = dlopen("libaacs.dylib", RTLD_LAZY);
+            if (!lib)
+            {
+                lib = dlopen("/usr/local/lib/libaacs.dylib", RTLD_LAZY);
+            }
         }
 
         if (lib)
@@ -223,6 +231,13 @@ typedef void (^HBCoreCleanupHandler)(void);
         }
         else
         {
+            const char *dlError = dlerror();
+
+            if (dlError)
+            {
+                [HBUtilities writeToActivityLog:"dlopen error: %s", dlError];
+            }
+
             // Notify the user that we don't support removal of copy protection.
             [HBUtilities writeToActivityLog:"%s, library not found for decrypting physical disc", self.name.UTF8String];
 
