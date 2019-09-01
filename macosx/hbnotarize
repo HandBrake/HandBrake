@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation; either version 2.1 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+
+NAME="hbnotarize"
+
+set -e
+set -u
+
+SELF="${0}"
+SELF_NAME=$(basename "${SELF}")
+HELP="\
+usage: ${SELF_NAME} [-h]
+       ${SELF_NAME} username application [application2 ...]
+where:
+   -h  display this help text
+"
+
+# Logs error message and exits
+function exit_with_error {
+    set +e
+    ERROR="${2}"
+    echo "${SELF_NAME}: ${ERROR}" >&2
+    PRINT_HELP="${3:-false}"
+    if [[ "${PRINT_HELP}" == true ]]; then
+        echo -e "${HELP}"
+    fi
+    exit "${1}"
+}
+
+LOG="${NAME}.log"
+touch "${LOG}" || exit_with_error 1 "${SELF_NAME}: unable to create log file ${LOG}"
+
+OPTIND=1
+while getopts ":h" OPT; do
+    case "${OPT}" in
+        h)
+            # Print help and exit
+            echo -e "${HELP}"
+            exit 0
+            ;;
+        :)
+            # Option without required argument
+            exit_with_error 1 "${SELF_NAME}: option -${OPTARG} requires a value" true
+            ;;
+        \?)
+            # Invalid option specified
+            exit_with_error 1 "${SELF_NAME}: invalid option: -${OPTARG}" true
+            ;;
+    esac
+done
+shift $((${OPTIND} - 1))
+
+USERNAME="${1:-}"
+if [[ "${USERNAME}" == "" ]]; then
+    exit_with_error 1 "${SELF_NAME}: username not specified" true
+fi
+shift 1
+
+if [[ ${#@} -eq 0 ]]; then
+    exit_with_error 1 "${SELF_NAME}: application not specified" true
+fi
+
+echo "Username: ${USERNAME}"
+echo -n "Password: "
+read -s PASSWORD
+echo
+if [[ "${PASSWORD}" == "" ]]; then
+    exit_with_error 1 "${SELF_NAME}: password not specified" true
+fi
+
+CREDENTIALS="--username ${USERNAME} --password ${PASSWORD}"
+
+for TARGET in "${@}"; do
+
+    TARGET="${TARGET#./}"
+    echo "${TARGET}:"
+
+    FILENAME=$(basename -- "${TARGET}")
+    EXTENSION="${TARGET##*.}"
+    ARCHIVE="${TARGET}"
+
+    # Notary service accepts only DMG, ZIP, and PKG
+    if [[ "${EXTENSION}" != "dmg" ]] && [[ "${EXTENSION}" != "pkg" ]]; then
+        echo "  Zipping app"
+        ARCHIVE="${TARGET}.zip"
+        ditto -c -k --sequesterRsrc --keepParent "${TARGET}" "${ARCHIVE}" >>"${LOG}" 2>&1 || exit_with_error 1 "Failed to compress the app. More info may be available in ${LOG}"
+    fi
+
+    echo "  Uploading app to notary service"
+
+    uuid=$(xcrun altool --notarize-app --primary-bundle-id "fr.handbrake.HandBrake" ${CREDENTIALS} --file "${ARCHIVE}" 2>&1 | grep 'RequestUUID' | awk '{ print $3 }')
+
+    echo "  Upload successful"
+    echo "  Identifier = ${uuid}"
+    echo "  Waiting for result"
+
+    sleep 20
+
+    while :
+        do
+        notaryStatus=$(xcrun altool --notarization-info "${uuid}" ${CREDENTIALS} 2>&1)
+        status=$(echo "$notaryStatus" | grep 'Status\:' | awk '{ print $2 }')
+        if [ "${status}" = "success" ]; then
+            # It's not possible to staple a command line exec
+            if [[ "${EXTENSION}" !=  "${TARGET}" ]]; then
+                xcrun stapler staple "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Failed to staple the app. More info may be available in ${LOG}"
+                xcrun stapler validate -v "${TARGET}" >>"${LOG}" 2>&1 || exit_with_error 1 "Failed to staple the app. More info may be available in ${LOG}"
+                echo "    Success, archive has been stapled"
+            else
+                echo "    Success"
+            fi
+            break
+        elif [ "$status" = "in" ]; then
+            echo "    In progress"
+            sleep 20
+        else
+            echo "    Failed:"
+            echo "    ${notaryStatus}"
+            exit_with_error 1 "${SELF_NAME}: Notarization failed ${LOG}"
+        fi
+    done
+
+done
+
+echo "Complete."
+exit 0

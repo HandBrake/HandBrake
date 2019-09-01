@@ -1,12 +1,15 @@
 ## This file is processed only when shunting build through xcodebuild
 
-.PHONY: macosx.build macosx.sign macosx.archive macosx.clean macosx.install macosx.install-strip macosx.uninstall
+.PHONY: macosx.build macosx.sign macosx.notarize macosx.archive macosx.clean macosx.install macosx.install-strip macosx.uninstall
 
 macosx.build:
 	$(call MACOSX.XCODE,HandBrakeCLI HandBrake,build)
 
 macosx.sign:
 	$(call MACOSX.SIGN,HandBrakeCLI HandBrake,sign)
+
+macosx.notarize:
+	$(call MACOSX.NOTARIZE,HandBrakeCLI HandBrake,notarize)
 
 macosx.archive:
 	$(call MACOSX.XCODE_ARCHIVE,HandBrake-Distribution,archive)
@@ -32,6 +35,7 @@ macosx.uninstall:
 
 build: macosx.build
 sign: macosx.sign
+notarize: macosx.notarize
 archive: macosx.archive
 clean: macosx.clean
 install: macosx.install
@@ -41,7 +45,7 @@ xclean: clean
 
 ###############################################################################
 
-MACOSX.goals = $(filter-out build sign archive clean install,$(MAKECMDGOALS))
+MACOSX.goals = $(filter-out build sign notarize archive clean install,$(MAKECMDGOALS))
 
 $(MACOSX.goals): __goals__
 	@true

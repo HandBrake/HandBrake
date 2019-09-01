@@ -104,3 +104,6 @@ ifeq (1,$(SECURITY.sandbox))
 else
     MACOSX.SIGN = $(strip $(MACOSX.src/)hbsign -r '$(ID)' $(MACOSX.xroot/)HandBrake.app $(MACOSX.xroot/)HandBrakeCLI)
 endif
+
+MACOSX.NOTARIZE = $(strip $(MACOSX.src/)hbnotarize '$(USERNAME)' $(MACOSX.xroot/)HandBrake.app $(MACOSX.xroot/)HandBrakeCLI)
+
