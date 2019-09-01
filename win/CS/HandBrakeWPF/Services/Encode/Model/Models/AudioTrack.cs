@@ -44,6 +44,7 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         private IEnumerable<double> encoderQualityValues;
         private AudioEncoderRateType encoderRateType;
         private double? quality;
+        private string trackName;
 
         /// <summary>
         ///   Initializes a new instance of the <see cref = "AudioTrack" /> class.
@@ -92,13 +93,17 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.scannedTrack = track.ScannedTrack ?? new Audio();
             }
 
-            this.TrackName = track.TrackName;
-            this.Quality = track.Quality;
-
             if (!string.IsNullOrEmpty(this.scannedTrack?.Name))
             {
                 this.TrackName = this.scannedTrack.Name;
             }
+
+            if (!string.IsNullOrEmpty(track.TrackName))
+            {
+                this.TrackName = track.TrackName;
+            }
+
+            this.Quality = track.Quality;
 
             // Setup Backing Properties
             this.encoderRateType = track.EncoderRateType;
@@ -337,7 +342,17 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         /// <summary>
         /// Gets or sets the track name.
         /// </summary>
-        public string TrackName { get; set; }
+        public string TrackName
+        {
+            get => this.trackName;
+            set
+            {
+                if (value == this.trackName) return;
+                this.trackName = value;
+                this.NotifyOfPropertyChange();
+            }
+        }
+
         #endregion
 
         /// <summary>
