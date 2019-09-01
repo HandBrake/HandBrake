@@ -54,6 +54,12 @@ static void *HBSummaryViewControllerPreferencesContext = &HBSummaryViewControlle
     return self;
 }
 
+- (void)dealloc
+{
+    self.job = nil;
+    [NSUserDefaultsController.sharedUserDefaultsController removeObserver:self forKeyPath:@"values.HBShowSummaryPreview" context:HBSummaryViewControllerPreferencesContext];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
