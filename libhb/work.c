@@ -102,6 +102,8 @@ static void work_func( void * _work )
     hb_work_t  * work = _work;
     hb_job_t   * job;
 
+    time_t t = time(NULL);
+    hb_log("Starting work at: %s", asctime(localtime(&t)));
     hb_log( "%d job(s) to process", hb_list_count( work->jobs ) );
 
     while( !*work->die && ( job = hb_list_item( work->jobs, 0 ) ) )
@@ -168,7 +170,8 @@ static void work_func( void * _work )
         // TODO: Fix this ugly hack!
         hb_force_rescan(h);
     }
-
+    
+    hb_log("Finished work at: %s", asctime(localtime(&t)));
     free( work );
 }
 
@@ -1450,15 +1453,15 @@ static void do_job(hb_job_t *job)
 
     if (job->indepth_scan)
     {
-        hb_log( "Starting Job: Subtitle Scan" );
+        hb_log( "Starting Task: Subtitle Scan" );
     } 
     else if (job->pass_id == HB_PASS_ENCODE_1ST) 
     {
-        hb_log( "Starting Job: Encode First Pass" );
+        hb_log( "Starting Task: Encode First Pass" );
     } 
     else 
     {
-        hb_log( "Starting Job: Encode Second Pass" );
+        hb_log( "Starting Task: Encode Second Pass" );
     }
 
     // This must be performed before initializing filters because
