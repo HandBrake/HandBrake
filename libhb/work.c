@@ -1448,7 +1448,18 @@ static void do_job(hb_job_t *job)
     w = hb_get_work(job->h, WORK_READER);
     hb_list_add(job->list_work, w);
 
-    hb_log( "starting job" );
+    if (job->indepth_scan)
+    {
+        hb_log( "Starting Job: Subtitle Scan" );
+    } 
+    else if (job->pass_id == HB_PASS_ENCODE_1ST) 
+    {
+        hb_log( "Starting Job: Encode First Pass" );
+    } 
+    else 
+    {
+        hb_log( "Starting Job: Encode Second Pass" );
+    }
 
     // This must be performed before initializing filters because
     // it can add the subtitle render filter.
