@@ -206,6 +206,8 @@ typedef struct QSVMid {
     AVBufferRef *hw_frames_ref;
     mfxHDL handle;
 
+    void *texture;
+
     AVFrame *locked_frame;
     AVFrame *hw_frame;
     mfxFrameSurface1 surf;
@@ -224,10 +226,11 @@ typedef struct QSVFrame {
     struct QSVFrame *next;
 } QSVFrame;
 
-#define HB_POOL_SURFACE_SIZE (200)
+#define HB_POOL_SURFACE_SIZE (64)
 
 typedef struct EncQSVFramesContext {
     AVBufferRef *hw_frames_ctx;
+    AVBufferRef *hw_frames_ctx2;
     //void *logctx;
 
     /* The memory ids for the external frames.
@@ -235,9 +238,13 @@ typedef struct EncQSVFramesContext {
      * (i.e. by the encoder/decoder) and another one given to the MFX session
      * from the frame allocator. */
     AVBufferRef *mids_buf;
+    AVBufferRef *mids_buf2;
     QSVMid *mids;
+    QSVMid *mids2;
     int  nb_mids;
     int pool[HB_POOL_SURFACE_SIZE];
+    int pool2[HB_POOL_SURFACE_SIZE];
+    void *input_texture;
 } EncQSVFramesContext;
 
 /* Full QSV pipeline helpers */
