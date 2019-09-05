@@ -30,12 +30,12 @@ typedef NS_ENUM(NSUInteger, HBQueueItemState) {
 @property (nonatomic, readonly) HBJob *job;
 
 /// Current state of the job.
-@property (nonatomic, readwrite) HBQueueItemState state;
+@property (nonatomic) HBQueueItemState state;
 
 /// The file URL of the source.
 @property (nonatomic, readonly) NSURL *fileURL;
 
-/// The file URL at which the new file will be created.
+/// The directory URL at which the new file will be created.
 @property (nonatomic, readonly, copy) NSURL *outputURL;
 
 /// The name of the new file that will be created.
@@ -43,6 +43,9 @@ typedef NS_ENUM(NSUInteger, HBQueueItemState) {
 
 /// The file URL at which the new file will be created.
 @property (nonatomic, readonly, copy) NSURL *completeOutputURL;
+
+/// The file URL at which the new file will be created.
+@property (nonatomic, copy, nullable) NSURL *activityLogURL;
 
 @property (nonatomic) NSTimeInterval encodeDuration;
 @property (nonatomic) NSTimeInterval pauseDuration;

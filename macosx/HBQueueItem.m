@@ -233,6 +233,8 @@ static NSString *versionKey = @"HBQueueItemVersion";
     encodeObject(_job);
     encodeObject(_uuid);
 
+    encodeObject(_activityLogURL);
+
     encodeDouble(_encodeDuration);
     encodeDouble(_pauseDuration);
 
@@ -251,6 +253,8 @@ static NSString *versionKey = @"HBQueueItemVersion";
         decodeInt(_state); if (_state < HBQueueItemStateReady || _state > HBQueueItemStateFailed) { goto fail; }
         decodeObjectOrFail(_job, HBJob);
         decodeObjectOrFail(_uuid, NSString);
+
+        decodeObject(_activityLogURL, NSURL);
 
         decodeDouble(_encodeDuration);
         decodeDouble(_pauseDuration);

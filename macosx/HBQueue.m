@@ -606,6 +606,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
             self.currentLog = [[HBJobOutputFileWriter alloc] initWithJob:nextItem.job];
             if (self.currentLog)
             {
+                nextItem.activityLogURL = self.currentLog.url;
+
                 dispatch_queue_t mainQueue = dispatch_get_main_queue();
                 [self.core.stderrRedirect addListener:self.currentLog queue:mainQueue];
                 [self.core.stdoutRedirect addListener:self.currentLog queue:mainQueue];
