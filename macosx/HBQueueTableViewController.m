@@ -119,29 +119,47 @@
     NSIndexSet *targetedRows = self.tableView.targetedRowIndexes;
     NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
 
-    NSUInteger currentIndex = [targetedRows firstIndex];
+    NSUInteger currentIndex = targetedRows.firstIndex;
     while (currentIndex != NSNotFound) {
         NSURL *url = [[self.queue.items objectAtIndex:currentIndex] completeOutputURL];
         [urls addObject:url];
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
 
-    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:urls];
+    [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:urls];
 }
 
 - (IBAction)revealSelectedQueueItemsSources:(id)sender
 {
-    NSIndexSet *targetedRows = [self.tableView targetedRowIndexes];
+    NSIndexSet *targetedRows = self.tableView.targetedRowIndexes;
     NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
 
-    NSUInteger currentIndex = [targetedRows firstIndex];
+    NSUInteger currentIndex = targetedRows.firstIndex;
     while (currentIndex != NSNotFound) {
         NSURL *url = [[self.queue.items objectAtIndex:currentIndex] fileURL];
         [urls addObject:url];
         currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
     }
 
-    [[NSWorkspace sharedWorkspace] activateFileViewerSelectingURLs:urls];
+    [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:urls];
+}
+
+- (IBAction)revealSelectedQueueItemsActivityLogs:(id)sender
+{
+    NSIndexSet *targetedRows = self.tableView.targetedRowIndexes;
+    NSMutableArray<NSURL *> *urls = [[NSMutableArray alloc] init];
+
+    NSUInteger currentIndex = targetedRows.firstIndex;
+    while (currentIndex != NSNotFound) {
+        NSURL *url = [[self.queue.items objectAtIndex:currentIndex] activityLogURL];
+        if (url)
+        {
+            [urls addObject:url];
+        }
+        currentIndex = [targetedRows indexGreaterThanIndex:currentIndex];
+    }
+
+    [NSWorkspace.sharedWorkspace activateFileViewerSelectingURLs:urls];
 }
 
 /**
@@ -149,7 +167,7 @@
  */
 - (IBAction)resetJobState:(id)sender
 {
-    NSIndexSet *targetedRows = [self.tableView targetedRowIndexes];
+    NSIndexSet *targetedRows = self.tableView.targetedRowIndexes;
     if (targetedRows.count)
     {
         [self.delegate tableViewResetItemsAtIndexes:targetedRows];
@@ -189,6 +207,11 @@
         action == @selector(removeSelectedQueueItem:) ||
         action == @selector(revealSelectedQueueItems:) ||
         action == @selector(revealSelectedQueueItemsSources:))
+    {
+        return (self.tableView.selectedRow != -1 || self.tableView.clickedRow != -1);
+    }
+
+    if (action == @selector(revealSelectedQueueItemsActivityLogs:))
     {
         return (self.tableView.selectedRow != -1 || self.tableView.clickedRow != -1);
     }

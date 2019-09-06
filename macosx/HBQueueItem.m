@@ -81,6 +81,7 @@ static NSDictionary     *shortHeightAttr;
     if (state == HBQueueItemStateReady)
     {
         [self resetStatistics];
+        self.activityLogURL = nil;
     }
 }
 

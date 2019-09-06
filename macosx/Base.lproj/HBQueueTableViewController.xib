@@ -208,14 +208,27 @@
                         <action selector="revealSelectedQueueItems:" target="-2" id="s3C-6U-Ycl"/>
                     </connections>
                 </menuItem>
+                <menuItem title="Show Activity Log in Finder" id="zA7-r8-i4L">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="revealSelectedQueueItemsActivityLogs:" target="-2" id="Ker-1p-I9C"/>
+                    </connections>
+                </menuItem>
                 <menuItem isSeparatorItem="YES" id="cVv-nf-8tx"/>
-                <menuItem title="Edit Job Settings" id="DTF-om-j0l">
+                <menuItem title="Remove" id="egD-8R-PTJ">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="removeSelectedQueueItem:" target="-2" id="EIy-d4-yhJ"/>
+                    </connections>
+                </menuItem>
+                <menuItem isSeparatorItem="YES" id="SeL-ME-sRY"/>
+                <menuItem title="Edit" id="DTF-om-j0l">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="editSelectedQueueItem:" target="-2" id="drH-QA-nh8"/>
                     </connections>
                 </menuItem>
-                <menuItem title="Reset Stopped Job" id="xMs-43-lL0">
+                <menuItem title="Reset" id="xMs-43-lL0">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="resetJobState:" target="-2" id="nsj-r6-Vd4"/>
@@ -232,12 +245,6 @@
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="removeCompleted:" target="-2" id="nUM-Me-Fr2"/>
-                    </connections>
-                </menuItem>
-                <menuItem title="Remove Selected Job" id="egD-8R-PTJ">
-                    <modifierMask key="keyEquivalentModifierMask"/>
-                    <connections>
-                        <action selector="removeSelectedQueueItem:" target="-2" id="EIy-d4-yhJ"/>
                     </connections>
                 </menuItem>
             </items>
