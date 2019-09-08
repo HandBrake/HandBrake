@@ -1458,11 +1458,11 @@ static void do_job(hb_job_t *job)
     } 
     else if (job->pass_id == HB_PASS_ENCODE_1ST) 
     {
-        hb_log( "Starting Task: Encode First Pass" );
+        hb_log( "Starting Task: Analysis Pass" );
     } 
     else 
     {
-        hb_log( "Starting Task: Encode Second Pass" );
+        hb_log( "Starting Task: Encoding Pass" );
     }
 
     // This must be performed before initializing filters because
