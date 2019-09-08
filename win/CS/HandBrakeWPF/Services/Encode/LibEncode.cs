@@ -60,7 +60,7 @@ namespace HandBrakeWPF.Services.Encode
         /// <param name="configuration">
         /// The configuration.
         /// </param>
-        public void Start(EncodeTask task, HBConfiguration configuration)
+        public void Start(EncodeTask task, HBConfiguration configuration, string basePresetName)
         {
             try
             {
@@ -96,6 +96,10 @@ namespace HandBrakeWPF.Services.Encode
                 }
 
                 this.ServiceLogMessage("Starting Encode ...");
+                if (!string.IsNullOrEmpty(basePresetName))
+                {
+                    this.TimedLogMessage(string.Format("base preset: {0}", basePresetName));
+                }
 
                 this.instance = task.IsPreviewEncode ? HandBrakeInstanceManager.GetPreviewInstance(configuration.Verbosity, configuration) : HandBrakeInstanceManager.GetEncodeInstance(configuration.Verbosity, configuration);
                 
@@ -189,6 +193,11 @@ namespace HandBrakeWPF.Services.Encode
         protected void ServiceLogMessage(string message)
         {
             this.log.LogMessage(string.Format("{0}# {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
+        }
+
+        protected void TimedLogMessage(string message)
+        {
+            this.log.LogMessage(string.Format("[{0}] {1}", DateTime.Now.ToString("hh:mm:ss"), message), LogMessageType.ScanOrEncode, LogLevel.Info);
         }
 
         /// <summary>

@@ -16,6 +16,7 @@ namespace HandBrakeWPF.Services.Queue
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.Interop.Json.Queue;
     using HandBrake.Interop.Model;
@@ -508,7 +509,7 @@ namespace HandBrakeWPF.Services.Queue
                     return;
                 }
 
-                this.EncodeService.Start(job.Task, job.Configuration);
+                this.EncodeService.Start(job.Task, job.Configuration, job.SelectedPresetKey);
                 this.BackupQueue(string.Empty);
             }
             else

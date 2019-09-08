@@ -22,7 +22,6 @@ namespace HandBrakeWPF.Services.Queue.Model
 
     using EncodeTask = HandBrakeWPF.Services.Encode.Model.EncodeTask;
 
-
     public class QueueTask : PropertyChangedBase
     {
         private static int id;
@@ -37,7 +36,7 @@ namespace HandBrakeWPF.Services.Queue.Model
             this.Statistics = new QueueStats();
         }
 
-        public QueueTask(EncodeTask task, HBConfiguration configuration, string scannedSourcePath, Preset currentPreset)
+        public QueueTask(EncodeTask task, HBConfiguration configuration, string scannedSourcePath, Preset currentPreset, bool isPresetModified)
         {
             this.Task = task;
             this.Configuration = configuration;
@@ -46,6 +45,10 @@ namespace HandBrakeWPF.Services.Queue.Model
             if (currentPreset != null)
             {
                 this.presetKey = currentPreset.Name;
+                if (isPresetModified)
+                {
+                    this.presetKey = this.presetKey + " (Modified)";
+                }
             }
 
             id = id + 1;

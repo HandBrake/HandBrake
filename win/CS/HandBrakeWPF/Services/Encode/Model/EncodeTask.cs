@@ -36,7 +36,6 @@ namespace HandBrakeWPF.Services.Encode.Model
 
     public class EncodeTask 
     {
-
         public EncodeTask()
         {
             this.Cropping = new Cropping();
