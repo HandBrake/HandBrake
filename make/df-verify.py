@@ -74,7 +74,10 @@ class Tool(hb_distfile.Tool):
             sys.exit(0)
         if len(self.args) < 1:
             raise error('no file specified')
-        filename = self.args[0]
+        if len(self.args) > 1:
+            filename = self.args[1]
+        else:
+            filename = self.args[0]
         if self.options.sha256:
             error.op = 'verify'
             r = self._verify(filename)
