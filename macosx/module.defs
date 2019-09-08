@@ -62,7 +62,7 @@ MACOSX.XCODE = $(strip \
         EXTERNAL_CONF_ARGS='$(CONF.args)' \
         EXTERNAL_DRIVER='$(XCODE.driver)' \
         EXTERNAL_GOALS='$(3)' \
-        EXTERNAL_JOBS='$(BUILD.jobs)' \
+        EXTERNAL_JOBS='$(MACOSX.JOBS)' \
         EXTERNAL_VARS='$(-*-command-variables-*-)' \
         \
         $(MACOSX.extra_cflags) \
@@ -87,7 +87,7 @@ MACOSX.XCODE_ARCHIVE = $(strip \
         EXTERNAL_CONF_ARGS='$(CONF.args)' \
         EXTERNAL_DRIVER='$(XCODE.driver)' \
         EXTERNAL_GOALS='$(3)' \
-        EXTERNAL_JOBS='$(BUILD.jobs)' \
+        EXTERNAL_JOBS='$(MACOSX.JOBS)' \
         EXTERNAL_VARS='$(-*-command-variables-*-)' \
         \
         $(MACOSX.extra_cflags) \

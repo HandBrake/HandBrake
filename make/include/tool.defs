@@ -14,3 +14,4 @@ LN.exe        = ln
 GIT.exe       = git
 SED.exe       = sed
 PKGCONFIG.exe = pkg-config
+GREP.exe      = grep
