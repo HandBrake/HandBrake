@@ -100,7 +100,7 @@ namespace HandBrakeWPF
             // Portable Mode
             if (Portable.IsPortable())
             {
-                if(!Portable.Initialise())
+                if (!Portable.Initialise())
                 {
                     Application.Current.Shutdown();
                     return;
@@ -116,7 +116,6 @@ namespace HandBrakeWPF
                 if (language != null)
                 {
                     CultureInfo ci = new CultureInfo(language.Culture);
-                    Thread.CurrentThread.CurrentCulture = ci;
                     Thread.CurrentThread.CurrentUICulture = ci;
                 }
             }
@@ -128,7 +127,6 @@ namespace HandBrakeWPF
                 darkTheme.Source = new Uri("Themes/Dark.xaml", UriKind.Relative);
                 Application.Current.Resources.MergedDictionaries.Add(darkTheme);
             }
-
 
             // NO-Hardware Mode
             bool noHardware = e.Args.Any(f => f.Equals("--no-hardware"))  || (Portable.IsPortable() && !Portable.IsHardwareEnabled());
