@@ -3056,7 +3056,7 @@ void ghb_init_lang_list(GtkTreeView *tv, signal_user_data_t *ud)
     for (iso639 = lang_get_any(); iso639 != NULL;
          iso639 = lang_get_next(iso639))
     {
-        int          index = lang_lookup_index(iso639->iso639_1);
+        int          index = lang_lookup_index(iso639->iso639_2);
         const char * lang;
         if (iso639->native_name != NULL && iso639->native_name[0] != 0)
         {
