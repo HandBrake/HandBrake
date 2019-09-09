@@ -6,7 +6,7 @@
 
 #import "HBAudioTrackPreset.h"
 #import "HBCodingUtilities.h"
-#include "hb.h"
+#include "handbrake.h"
 
 #define DEFAULT_SAMPLERATE 48000
 

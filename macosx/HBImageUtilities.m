@@ -6,7 +6,7 @@
 
 #import "HBImageUtilities.h"
 #import <Cocoa/Cocoa.h>
-#include "hb.h"
+#include "handbrake.h"
 
 CGImageRef CreateScaledCGImageFromCGImage(CGImageRef image, CGFloat thumbnailHeight)
 {

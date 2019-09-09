@@ -11,7 +11,7 @@
 
 #if HB_PROJECT_FEATURE_X265
 
-#include "hb.h"
+#include "handbrake.h"
 #include "hb_dict.h"
 #include "h265_common.h"
 #include "x265.h"

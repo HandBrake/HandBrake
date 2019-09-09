@@ -7,7 +7,7 @@
 #import <Foundation/Foundation.h>
 #import "HBTitle.h"
 #import "HBPreset.h"
-#include "hb.h"
+#include "handbrake.h"
 
 @interface HBTitle (Private)
 

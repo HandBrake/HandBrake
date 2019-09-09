@@ -18,7 +18,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "hb.h"
+#include "handbrake.h"
 #include "decsrtsub.h"
 
 struct hb_work_private_s

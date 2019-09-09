@@ -8,7 +8,7 @@
 
 #import <XCTest/XCTest.h>
 #import "NSDictionary+HBAdditions.h"
-#include "hb.h"
+#include "handbrake.h"
 
 @interface HBDictTests : XCTestCase
 

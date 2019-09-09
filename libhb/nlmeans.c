@@ -50,7 +50,7 @@
  *        etc...
  */
 
-#include "hb.h"
+#include "handbrake.h"
 #include "hbffmpeg.h"
 #include "taskset.h"
 #include "nlmeans.h"

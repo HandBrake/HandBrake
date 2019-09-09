@@ -12,7 +12,7 @@
 #include "libavutil/avstring.h"
 #include "libavutil/intreadwrite.h"
 
-#include "hb.h"
+#include "handbrake.h"
 #include "ssautil.h"
 #include "lang.h"
 

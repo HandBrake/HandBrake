@@ -9,7 +9,7 @@
 
 #include <stdarg.h>
 
-#include "hb.h"
+#include "handbrake.h"
 #include "hb_dict.h"
 #include "encx264.h"
 

@@ -7,7 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "hb.h"
+#include "handbrake.h"
 #include "hbffmpeg.h"
 #include "libavfilter/avfilter.h"
 #include "libavfilter/buffersrc.h"

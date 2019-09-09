@@ -26,7 +26,7 @@
 
 #include "values.h"
 #include "settings.h"
-#include "hb.h"
+#include "handbrake.h"
 #include "lang.h"
 
 enum

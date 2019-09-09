@@ -31,7 +31,7 @@
 #include <glib/gi18n.h>
 #include <string.h>
 #include "ghbcompat.h"
-#include "hb.h"
+#include "handbrake.h"
 #include "settings.h"
 #include "callbacks.h"
 #include "audiohandler.h"

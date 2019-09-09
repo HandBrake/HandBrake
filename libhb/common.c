@@ -12,7 +12,7 @@
 #include <ctype.h>
 #include <sys/time.h>
 
-#include "hb.h"
+#include "handbrake.h"
 #include "x264.h"
 #include "lang.h"
 #include "common.h"

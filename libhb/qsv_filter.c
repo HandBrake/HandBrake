@@ -30,7 +30,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #if HB_PROJECT_FEATURE_QSV
 
-#include "hb.h"
+#include "handbrake.h"
 #include "hbffmpeg.h"
 #include "qsv_filter.h"
 #include "qsv_libav.h"

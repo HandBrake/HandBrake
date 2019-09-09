@@ -6,7 +6,7 @@
 
 #import "HBStateFormatter.h"
 #import "HBLocalizationUtilities.h"
-#include "hb.h"
+#include "handbrake.h"
 
 @implementation HBStateFormatter
 

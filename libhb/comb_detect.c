@@ -28,7 +28,7 @@ Original "Faster" settings:
 #define FILTER_CLASSIC 1
 #define FILTER_ERODE_DILATE 2
 
-#include "hb.h"
+#include "handbrake.h"
 #include "taskset.h"
 
 typedef struct decomb_thread_arg_s {

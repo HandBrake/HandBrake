@@ -12,7 +12,7 @@
  * operate on each frame independently with no context carried over
  * from one frame to the next. */
 
-#include "hb.h"
+#include "handbrake.h"
 #include "taskset.h"
 
 typedef struct

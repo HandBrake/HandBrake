@@ -25,7 +25,7 @@
 #include <limits.h>
 #include <ctype.h>
 #include <math.h>
-#include "hb.h"
+#include "handbrake.h"
 #include "ghbcompat.h"
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>

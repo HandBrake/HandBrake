@@ -9,7 +9,7 @@
 #import "HBCodingUtilities.h"
 #import "HBMutablePreset.h"
 
-#import "hb.h"
+#import "handbrake.h"
 #import "lang.h"
 
 @interface HBAudioDefaults ()

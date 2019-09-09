@@ -12,7 +12,7 @@
 #include <string.h>
 #include <iconv.h>
 #include <errno.h>
-#include "hb.h"
+#include "handbrake.h"
 #include "colormap.h"
 #include "decsrtsub.h"
 

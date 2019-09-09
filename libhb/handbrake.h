@@ -1,4 +1,4 @@
-/* hb.h
+/* handbrake.h
 
    Copyright (c) 2003-2019 HandBrake Team
    This file is part of the HandBrake source code

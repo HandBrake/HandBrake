@@ -7,7 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "hb.h"
+#include "handbrake.h"
 #if HB_PROJECT_FEATURE_QSV
 #include "qsv_libav.h"
 #endif
