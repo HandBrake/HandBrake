@@ -1951,6 +1951,10 @@ int main()
     doc.add( 'PREFIX/', cfg.prefix_final + os.sep )
 
     doc.addBlank()
+    doc.add( 'SECURITY.sandbox',    int( options.enable_sandbox ))
+    doc.add( 'SECURITY.harden',     int( options.enable_harden ))
+
+    doc.addBlank()
     doc.add( 'FEATURE.asm',        int( 0 ))
     doc.add( 'FEATURE.fdk_aac',    int( options.enable_fdk_aac ))
     doc.add( 'FEATURE.ffmpeg_aac', int( options.enable_ffmpeg_aac ))
@@ -1965,10 +1969,6 @@ int main()
     doc.add( 'FEATURE.vce',        int( options.enable_vce ))
     doc.add( 'FEATURE.x265',       int( options.enable_x265 ))
     doc.add( 'FEATURE.numa',       int( options.enable_numa ))
-
-    doc.addBlank()
-    doc.add( 'SECURITY.sandbox',    int( options.enable_sandbox ))
-    doc.add( 'SECURITY.harden',     int( options.enable_harden ))
 
     if build_tuple.match( '*-*-darwin*' ) and options.cross is None:
         doc.add( 'FEATURE.xcode',      int( not (Tools.xcodebuild.fail or options.disable_xcode) ))
