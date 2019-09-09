@@ -1587,7 +1587,7 @@ hb_job_t* hb_dict_to_job( hb_handle_t * h, hb_dict_t *dict )
         for (ii = 0; ii < count; ii++)
         {
             subtitle_dict = hb_value_array_get(subtitle_list, ii);
-            hb_subtitle_config_t sub_config;
+            hb_subtitle_config_t sub_config = {0};
             int track = -1;
             int burn = 0;
             const char *importfile = NULL;
