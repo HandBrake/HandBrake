@@ -8,7 +8,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "hb.h"     // needed for ARCH_X86
+#include "handbrake.h"     // needed for ARCH_X86
 
 #if defined(ARCH_X86)
 

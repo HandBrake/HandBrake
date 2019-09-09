@@ -8,7 +8,7 @@
  */
 
 #include "hbffmpeg.h"
-#include "hb.h"
+#include "handbrake.h"
 
 #if HB_PROJECT_FEATURE_NVENC
 #include <ffnvcodec/nvEncodeAPI.h>

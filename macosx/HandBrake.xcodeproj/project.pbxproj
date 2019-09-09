@@ -1861,7 +1861,7 @@
 			);
 			outputPaths = (
 				"$(EXTERNAL_BUILD)/libhb/hb_dict.h",
-				"$(EXTERNAL_BUILD)/libhb/hb.h",
+				"$(EXTERNAL_BUILD)/libhb/handbrake.h",
 				"$(EXTERNAL_BUILD)/macosx/Info.plist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;

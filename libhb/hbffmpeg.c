@@ -1,4 +1,4 @@
-#include "hb.h"
+#include "handbrake.h"
 #include "hbffmpeg.h"
 
 static int get_frame_type(int type)

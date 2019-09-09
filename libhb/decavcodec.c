@@ -38,7 +38,7 @@
     VC1 decoder) can't easily be used by the HB mpeg stream reader.
  */
 
-#include "hb.h"
+#include "handbrake.h"
 #include "hbffmpeg.h"
 #include "hbavfilter.h"
 #include "libavfilter/avfilter.h"

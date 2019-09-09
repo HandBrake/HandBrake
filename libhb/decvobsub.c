@@ -27,7 +27,7 @@
  *   }
  */
 
-#include "hb.h"
+#include "handbrake.h"
 
 struct hb_work_private_s
 {

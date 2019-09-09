@@ -13,7 +13,7 @@
 #include "AMF/core/Factory.h"
 #include "AMF/components/VideoEncoderVCE.h"
 #include "AMF/components/VideoEncoderHEVC.h"
-#include "hb.h"
+#include "handbrake.h"
 
 AMF_RESULT check_component_available(const wchar_t *componentID)
 {

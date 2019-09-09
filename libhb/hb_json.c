@@ -8,7 +8,7 @@
  */
 
 #include <jansson.h>
-#include "hb.h"
+#include "handbrake.h"
 #include "hb_json.h"
 #include "libavutil/base64.h"
 #include "qsv_common.h"

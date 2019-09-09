@@ -88,7 +88,7 @@
 #include <stddef.h>
 #include <unistd.h>
 
-#include "hb.h"
+#include "handbrake.h"
 #include "libavutil/cpu.h"
 
 /************************************************************************

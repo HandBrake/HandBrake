@@ -8,7 +8,7 @@
 #import "HBTitle.h"
 #import "HBLocalizationUtilities.h"
 
-#include "hb.h"
+#include "handbrake.h"
 
 @implementation HBPicture (UIAdditions)
 

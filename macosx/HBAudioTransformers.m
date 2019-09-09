@@ -6,7 +6,7 @@
 
 #import "HBAudioTransformers.h"
 #import "HBLocalizationUtilities.h"
-#include "hb.h"
+#include "handbrake.h"
 
 #pragma mark - Value Transformers
 

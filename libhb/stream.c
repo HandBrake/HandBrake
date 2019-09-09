@@ -11,7 +11,7 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include "hb.h"
+#include "handbrake.h"
 #include "hbffmpeg.h"
 #include "lang.h"
 #include "libbluray/bluray.h"

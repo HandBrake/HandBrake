@@ -7,7 +7,7 @@
 #import "HBFilters+UIAdditions.h"
 #import "HBLocalizationUtilities.h"
 
-#import "hb.h"
+#import "handbrake.h"
 
 /**
  *  Converts a hb_filter_param_t * array to a NSArray of NSString.

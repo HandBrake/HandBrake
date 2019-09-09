@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "hb.h"
+#include "handbrake.h"
 #include "ports.h"
 #include "common.h"
 #include "hb_dict.h"
@@ -2279,7 +2279,7 @@ void hb_qsv_force_workarounds()
 #undef FORCE_WORKAROUNDS
 }
 
-#include "hb.h"
+#include "handbrake.h"
 #include "hbffmpeg.h"
 #include "libavfilter/avfilter.h"
 #include "libavfilter/buffersrc.h"

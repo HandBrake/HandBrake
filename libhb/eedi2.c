@@ -10,7 +10,7 @@
    http://web.missouri.edu/~kes25c/
 */
 
-#include "hb.h"
+#include "handbrake.h"
 #include "eedi2.h"
 
 /**

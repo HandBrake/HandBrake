@@ -19,7 +19,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "hb.h"
+#include "handbrake.h"
 #include "colormap.h"
 
 struct hb_work_private_s

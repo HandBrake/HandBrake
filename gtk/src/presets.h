@@ -24,7 +24,7 @@
 #if !defined(_GHB_PRESETS_H_)
 #define _GHB_PRESETS_H_
 
-#include "hb.h"
+#include "handbrake.h"
 #include "values.h"
 
 void ghb_presets_load(signal_user_data_t *ud);

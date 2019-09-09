@@ -30,7 +30,7 @@
 #endif
 
 #include <gtk/gtk.h>
-#include "hb.h"
+#include "handbrake.h"
 #include "values.h"
 #include "settings.h"
 

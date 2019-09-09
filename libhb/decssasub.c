@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "hb.h"
+#include "handbrake.h"
 
 #include <ass/ass.h>
 #include "decssasub.h"

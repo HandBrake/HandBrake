@@ -74,7 +74,7 @@
 #include <dbt.h>
 #endif
 
-#include "hb.h"
+#include "handbrake.h"
 #include "callbacks.h"
 #include "chapters.h"
 #include "queuehandler.h"

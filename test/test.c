@@ -30,7 +30,7 @@
 #include <pthread.h>
 #endif
 
-#include "hb.h"
+#include "handbrake.h"
 #include "lang.h"
 #include "parsecsv.h"
 

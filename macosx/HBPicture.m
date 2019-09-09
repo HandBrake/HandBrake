@@ -10,7 +10,7 @@
 #import "HBCodingUtilities.h"
 #import "HBMutablePreset.h"
 
-#include "hb.h"
+#include "handbrake.h"
 
 NSString * const HBPictureChangedNotification = @"HBPictureChangedNotification";
 

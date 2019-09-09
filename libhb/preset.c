@@ -8,7 +8,7 @@
  */
 
 #include "preset_builtin.h"
-#include "hb.h"
+#include "handbrake.h"
 #include "hb_dict.h"
 #include "plist.h"
 

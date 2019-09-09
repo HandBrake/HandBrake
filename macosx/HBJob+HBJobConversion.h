@@ -6,7 +6,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HBJob.h"
-#include "hb.h"
+#include "handbrake.h"
 
 @interface HBJob (HBJobConversion)
 
