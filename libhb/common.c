@@ -4927,6 +4927,10 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
     {
         subtitle->config.name = strdup(subtitlecfg->name);
     }
+    else
+    {
+        subtitle->config.name = NULL;
+    }
     subtitle->config.src_filename = NULL;
     subtitle->out_track = hb_list_count(job->list_subtitle) + 1;
     hb_list_add(job->list_subtitle, subtitle);
@@ -4970,6 +4974,10 @@ int hb_import_subtitle_add( const hb_job_t * job,
     if (subtitlecfg->name != NULL && subtitlecfg->name[0] != 0)
     {
         subtitle->config.name = strdup(subtitlecfg->name);
+    }
+    else
+    {
+        subtitle->config.name = NULL;
     }
     subtitle->config.src_filename = strdup(subtitlecfg->src_filename);
     hb_list_add(job->list_subtitle, subtitle);
