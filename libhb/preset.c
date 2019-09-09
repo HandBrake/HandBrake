@@ -866,7 +866,7 @@ int hb_preset_job_add_audio(hb_handle_t *h, int title_index,
     if (hb_value_array_len(list) <= 0)
     {
         add_audio_for_lang(list, preset, title, mux, copy_mask, fallback,
-                           "any", behavior, mode, track_dict);
+                           "any", 1, mode, track_dict);
     }
     hb_dict_free(&track_dict);
     return 0;
