@@ -35,7 +35,8 @@ namespace HandBrake.Interop.Utilities
 
             languageMap = new Dictionary<string, string>
                           {
-                              { "(Any)", "und" },
+                              { "(Any)", "any" },
+                              { "(Unknown)", "und" },
                               { "Afar", "aar" },
                               { "Abkhazian", "abk" },
                               { "Afrikaans", "afr" },
