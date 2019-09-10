@@ -1860,6 +1860,17 @@ int main()
     strerror_r = LDProbe( 'strerror_r', '%s' % Tools.gcc.pathname, '', strerror_r_test )
     strerror_r.run()
 
+    #########################################
+    ## Compiler option checks
+    #########################################
+    gcc_w_extra = []
+
+    Wno_format_truncation_command = '%s -O2 -Werror -Wno-format-truncation -S -o /dev/null -xc /dev/null > /dev/null 2>&1' % Tools.gcc.pathname
+    Wno_format_truncation = ShellProbe('checking for -Wno-format-truncation', '%s' % Wno_format_truncation_command)
+    Wno_format_truncation.run()
+    if Wno_format_truncation.fail is False:
+        gcc_w_extra.append('no-format-truncation')
+
     ## cfg hook before doc prep
     cfg.doc_ready()
 
@@ -2030,6 +2041,7 @@ int main()
     else:
         doc.add( 'GCC.sysroot', '' )
         doc.add( 'GCC.minver', '' )
+    doc.add( 'GCC.W.extra', " ".join(gcc_w_extra) )
 
     if host_tuple.match( 'i?86-*' ):
         doc.add( 'LIBHB.GCC.D', 'ARCH_X86_32', append=True )
