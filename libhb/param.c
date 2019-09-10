@@ -1168,7 +1168,7 @@ generate_generic_settings(int filter_id, const char * preset,
     hb_filter_param_t *table;
     hb_filter_param_t *entry;
 
-    hb_value_t * settings, * tune_settings;
+    hb_value_t * settings = NULL, * tune_settings = NULL;
 
     table = filter_param_get_presets_internal(filter_id, &count);
     entry = filter_param_get_entry(table, preset, count);
