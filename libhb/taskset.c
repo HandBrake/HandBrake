@@ -110,8 +110,7 @@ fail:
             free( ts->task_begin_bitmap );
             /* FALL THROUGH */
         case 2:
-            if( ts->task_threads_args == NULL )
-                free( ts->task_threads_args );
+            free( ts->task_threads_args );
             /* FALL THROUGH */
         case 1:
             free( ts->task_threads );
