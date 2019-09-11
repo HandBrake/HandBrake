@@ -9,7 +9,7 @@
 #if !defined(HB_DICT_H)
 #define HB_DICT_H
 
-#include "hbtypes.h"
+#include "handbrake/hbtypes.h"
 #include <jansson.h>
 
 #define HB_VALUE_TYPE_DICT      JSON_OBJECT

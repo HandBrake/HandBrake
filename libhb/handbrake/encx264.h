@@ -11,7 +11,7 @@
 #define HB_ENCX264_H
 
 #include "x264.h"
-#include "h264_common.h"
+#include "handbrake/h264_common.h"
 
 /* x264 preferred option names (left) and synonyms (right).
  * The "preferred" names match names used in x264's param2string function more

@@ -50,10 +50,10 @@
  *        etc...
  */
 
-#include "handbrake.h"
-#include "hbffmpeg.h"
-#include "taskset.h"
-#include "nlmeans.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/taskset.h"
+#include "handbrake/nlmeans.h"
 
 #define NLMEANS_STRENGTH_LUMA_DEFAULT      6
 #define NLMEANS_STRENGTH_CHROMA_DEFAULT    6

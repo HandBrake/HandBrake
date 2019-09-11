@@ -8,7 +8,7 @@
  */
 
 #include <fcntl.h>
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 #include "parsecsv.h"
 
 /* Internal declarations */

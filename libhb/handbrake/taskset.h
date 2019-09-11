@@ -12,7 +12,7 @@
 
 #define TASKSET_POSIX_COMPLIANT 1
 
-#include "bits.h"
+#include "handbrake/bits.h"
 
 typedef struct hb_taskset_s {
     int                thread_count;

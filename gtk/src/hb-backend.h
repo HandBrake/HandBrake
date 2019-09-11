@@ -26,8 +26,8 @@
 
 #include "values.h"
 #include "settings.h"
-#include "handbrake.h"
-#include "lang.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/lang.h"
 
 enum
 {

@@ -12,14 +12,14 @@
 
 int            hb_qsv_available();
 
-#include "project.h"
+#include "handbrake/project.h"
 
 #if HB_PROJECT_FEATURE_QSV
 
 #include "mfx/mfxvideo.h"
 #include "mfx/mfxplugin.h"
 #include "libavcodec/avcodec.h"
-#include "hb_dict.h"
+#include "handbrake/hb_dict.h"
 
 /* Minimum Intel Media SDK version (currently 1.3, for Sandy Bridge support) */
 #define HB_QSV_MINVERSION_MAJOR HB_QSV_MSDK_VERSION_MAJOR

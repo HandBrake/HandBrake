@@ -10,7 +10,7 @@
 #ifndef HB_AVFILTER_H
 #define HB_AVFILTER_H
 
-#include "common.h"
+#include "handbrake/common.h"
 
 typedef struct hb_avfilter_graph_s hb_avfilter_graph_t;
 

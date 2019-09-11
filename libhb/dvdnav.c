@@ -7,9 +7,9 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "handbrake.h"
-#include "lang.h"
-#include "dvd.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/lang.h"
+#include "handbrake/dvd.h"
 
 #include "dvdnav/dvdnav.h"
 #include "dvdread/ifo_read.h"

@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#include "hb_dict.h"
+#include "handbrake/hb_dict.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

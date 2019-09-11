@@ -10,7 +10,7 @@
 #ifndef HB_H265_COMMON_H
 #define HB_H265_COMMON_H
 
-#include "project.h"
+#include "handbrake/project.h"
 
 // inspired by libavcodec/hevc.h
 // in HEVC, all "random access point" NAL units are keyframes

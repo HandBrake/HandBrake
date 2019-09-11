@@ -12,15 +12,15 @@
 #include <ctype.h>
 #include <sys/time.h>
 
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 #include "x264.h"
-#include "lang.h"
-#include "common.h"
-#include "h264_common.h"
-#include "h265_common.h"
-#include "encx264.h"
+#include "handbrake/lang.h"
+#include "handbrake/common.h"
+#include "handbrake/h264_common.h"
+#include "handbrake/h265_common.h"
+#include "handbrake/encx264.h"
 #if HB_PROJECT_FEATURE_QSV
-#include "qsv_common.h"
+#include "handbrake/qsv_common.h"
 #endif
 
 #if HB_PROJECT_FEATURE_X265
@@ -32,10 +32,10 @@
 #endif
 
 #if HB_PROJECT_FEATURE_NVENC
-#include "nvenc_common.h"
+#include "handbrake/nvenc_common.h"
 #endif
 #if HB_PROJECT_FEATURE_VCE
-#include "vce_common.h"
+#include "handbrake/vce_common.h"
 #endif
 
 #ifdef __APPLE__

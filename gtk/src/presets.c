@@ -31,7 +31,7 @@
 #include <glib/gi18n.h>
 #include <string.h>
 #include "ghbcompat.h"
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 #include "settings.h"
 #include "callbacks.h"
 #include "audiohandler.h"
@@ -40,7 +40,7 @@
 #include "resources.h"
 #include "presets.h"
 #include "values.h"
-#include "lang.h"
+#include "handbrake/lang.h"
 #include "videohandler.h"
 
 #define MAX_NESTED_PRESET 3

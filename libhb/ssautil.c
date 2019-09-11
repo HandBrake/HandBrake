@@ -8,8 +8,8 @@
  */
 #include <stdio.h>
 #include <ctype.h>
-#include "handbrake.h"
-#include "ssautil.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/ssautil.h"
 
 struct hb_subtitle_style_s
 {

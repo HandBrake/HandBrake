@@ -30,12 +30,12 @@
 #include <pthread.h>
 #endif
 
-#include "handbrake.h"
-#include "lang.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/lang.h"
 #include "parsecsv.h"
 
 #if HB_PROJECT_FEATURE_QSV
-#include "qsv_common.h"
+#include "handbrake/qsv_common.h"
 #endif
 
 #if defined( __APPLE_CC__ )

@@ -26,11 +26,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 #include <ass/ass.h>
-#include "decssasub.h"
-#include "colormap.h"
+#include "handbrake/decssasub.h"
+#include "handbrake/colormap.h"
 
 struct hb_work_private_s
 {

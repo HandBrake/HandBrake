@@ -21,7 +21,7 @@
 #include "libavutil/display.h"
 #include "libswscale/swscale.h"
 #include "libswresample/swresample.h"
-#include "common.h"
+#include "handbrake/common.h"
 
 #define HB_FFMPEG_THREADS_AUTO (-1) // let hb_avcodec_open() decide thread_count
 

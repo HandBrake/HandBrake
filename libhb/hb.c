@@ -7,16 +7,16 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "handbrake.h"
-#include "hbffmpeg.h"
-#include "encx264.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/encx264.h"
 #include "libavfilter/avfilter.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <fcntl.h>
 
 #if HB_PROJECT_FEATURE_QSV
-#include "qsv_common.h"
+#include "handbrake/qsv_common.h"
 #endif
 
 #if defined( SYS_MINGW )

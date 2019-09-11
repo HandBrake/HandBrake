@@ -7,7 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 //#define HB_DEBUG_CFR_DROPS 1
 #define MAX_FRAME_ANALYSIS_DEPTH 10

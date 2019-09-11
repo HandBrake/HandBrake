@@ -7,9 +7,9 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "common.h"
-#include "hbffmpeg.h"
-#include "audio_remap.h"
+#include "handbrake/common.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/audio_remap.h"
 
 // source: libavutil/channel_layout.h
 hb_chan_map_t hb_libav_chan_map =

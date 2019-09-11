@@ -7,13 +7,13 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "handbrake.h"
-#include "hbffmpeg.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
 #include "libavfilter/avfilter.h"
 #include "libavfilter/buffersrc.h"
 #include "libavfilter/buffersink.h"
-#include "hbavfilter.h"
-#include "avfilter_priv.h"
+#include "handbrake/hbavfilter.h"
+#include "handbrake/avfilter_priv.h"
 
 struct hb_avfilter_graph_s
 {

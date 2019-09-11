@@ -9,8 +9,8 @@
 
 #include <ctype.h>
 #include <stdio.h>
-#include "handbrake.h"
-#include "hb_dict.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hb_dict.h"
 
 hb_value_type_t hb_value_type(const hb_value_t *value)
 {

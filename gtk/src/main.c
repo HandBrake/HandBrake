@@ -47,7 +47,7 @@
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 #include <gio/gio.h>
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 #include "renderer_button.h"
 #include "hb-backend.h"
 #include "ghb-dvd.h"

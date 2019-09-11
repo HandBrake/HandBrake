@@ -8,10 +8,10 @@
  */
 
 #include <jansson.h>
-#include "handbrake.h"
-#include "hb_json.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hb_json.h"
 #include "libavutil/base64.h"
-#include "qsv_common.h"
+#include "handbrake/qsv_common.h"
 
 /**
  * Convert an hb_state_t to a jansson dict

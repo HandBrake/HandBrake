@@ -8,8 +8,8 @@
 #import "HBCodingUtilities.h"
 #import "HBTitle.h"
 
-#include "common.h"
-#include "lang.h"
+#include "handbrake/common.h"
+#include "handbrake/lang.h"
 
 #define CHAR_CODE_DEFAULT_INDEX 28
 

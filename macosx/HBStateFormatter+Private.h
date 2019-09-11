@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HBStateFormatter.h"
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

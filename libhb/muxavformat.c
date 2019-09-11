@@ -12,9 +12,9 @@
 #include "libavutil/avstring.h"
 #include "libavutil/intreadwrite.h"
 
-#include "handbrake.h"
-#include "ssautil.h"
-#include "lang.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/ssautil.h"
+#include "handbrake/lang.h"
 
 struct hb_mux_data_s
 {

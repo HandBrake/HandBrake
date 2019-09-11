@@ -17,8 +17,8 @@
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-#include "handbrake.h"
-#include "hbffmpeg.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
 
 #define HQDN3D_SPATIAL_LUMA_DEFAULT    4.0f
 #define HQDN3D_SPATIAL_CHROMA_DEFAULT  3.0f

@@ -12,7 +12,7 @@
 
 #include <stdint.h>
 
-#include "common.h"
+#include "handbrake/common.h"
 
 /*
  * Write a NAL unit of the specified size to the provided

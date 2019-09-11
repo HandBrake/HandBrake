@@ -17,7 +17,7 @@
 #import "HBUtilities.h"
 #import "HBSecurityAccessToken.h"
 
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 NSString *HBContainerChangedNotification = @"HBContainerChangedNotification";
 NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";

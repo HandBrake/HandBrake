@@ -19,8 +19,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "handbrake.h"
-#include "colormap.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/colormap.h"
 
 struct hb_work_private_s
 {

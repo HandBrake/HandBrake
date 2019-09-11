@@ -7,20 +7,26 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "project.h"
+#include "handbrake/project.h"
 
 #if HB_PROJECT_FEATURE_QSV
 
 #include <stdio.h>
 #include <string.h>
 
-#include "handbrake.h"
-#include "ports.h"
-#include "common.h"
-#include "hb_dict.h"
-#include "qsv_common.h"
-#include "h264_common.h"
-#include "h265_common.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/ports.h"
+#include "handbrake/common.h"
+#include "handbrake/hb_dict.h"
+#include "handbrake/qsv_common.h"
+#include "handbrake/h264_common.h"
+#include "handbrake/h265_common.h"
+#include "handbrake/hbffmpeg.h"
+#include "libavfilter/avfilter.h"
+#include "libavfilter/buffersrc.h"
+#include "libavfilter/buffersink.h"
+#include "libavutil/hwcontext_qsv.h"
+#include "libavutil/hwcontext.h"
 
 // QSV info for each codec
 static hb_qsv_info_t *hb_qsv_info_avc       = NULL;
@@ -2278,16 +2284,6 @@ void hb_qsv_force_workarounds()
     qsv_hardware_info_hevc.capabilities &= FORCE_WORKAROUNDS;
 #undef FORCE_WORKAROUNDS
 }
-
-#include "handbrake.h"
-#include "hbffmpeg.h"
-#include "libavfilter/avfilter.h"
-#include "libavfilter/buffersrc.h"
-#include "libavfilter/buffersink.h"
-#include "libavutil/hwcontext_qsv.h"
-#include "libavutil/hwcontext.h"
-#include "lang.h"
-#include "audio_resample.h"
 
 AVBufferRef *enc_hw_frames_ctx = NULL;
 extern EncQSVFramesContext hb_enc_qsv_frames_ctx;

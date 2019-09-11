@@ -29,12 +29,12 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #ifndef QSV_MEMORY_H
 #define QSV_MEMORY_H
 
-#include "project.h"
+#include "handbrake/project.h"
 
 #if HB_PROJECT_FEATURE_QSV
 
 #include "mfx/mfxplugin.h"
-#include "qsv_libav.h"
+#include "handbrake/qsv_libav.h"
 
 typedef struct{
 

@@ -9,7 +9,7 @@
 #import "HBCodingUtilities.h"
 #import "HBMutablePreset.h"
 
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 NSString * const HBVideoChangedNotification = @"HBVideoChangedNotification";
 

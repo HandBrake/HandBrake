@@ -54,11 +54,11 @@ which will feed EEDI2 interpolations to yadif.
 12-15: EEDI2 will override cubic interpolation
 *****/
 
-#include "handbrake.h"
-#include "hbffmpeg.h"
-#include "eedi2.h"
-#include "taskset.h"
-#include "decomb.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/eedi2.h"
+#include "handbrake/taskset.h"
+#include "handbrake/decomb.h"
 
 #define PARITY_DEFAULT   -1
 

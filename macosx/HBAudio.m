@@ -17,7 +17,7 @@
 #import "HBLocalizationUtilities.h"
 #import "HBJob+Private.h"
 
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 #define NONE_TRACK_INDEX 0
 

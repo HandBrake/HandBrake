@@ -26,16 +26,16 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
-#include "project.h"
+#include "handbrake/project.h"
 
 #if HB_PROJECT_FEATURE_QSV
 
-#include "handbrake.h"
-#include "nal_units.h"
-#include "qsv_common.h"
-#include "qsv_memory.h"
-#include "h264_common.h"
-#include "h265_common.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/nal_units.h"
+#include "handbrake/qsv_common.h"
+#include "handbrake/qsv_memory.h"
+#include "handbrake/h264_common.h"
+#include "handbrake/h265_common.h"
 
 #include "libavutil/hwcontext_qsv.h"
 #include "libavutil/hwcontext.h"

@@ -1,5 +1,5 @@
-#include "handbrake.h"
-#include "hbffmpeg.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
 
 static int get_frame_type(int type)
 {

@@ -11,7 +11,7 @@
 #define _HB_PLIST_H_
 
 #include <stdio.h>
-#include "hb_dict.h"
+#include "handbrake/hb_dict.h"
 
 hb_value_t * hb_plist_parse(const char *buf, size_t len);
 hb_value_t * hb_plist_parse_file(const char *filename);

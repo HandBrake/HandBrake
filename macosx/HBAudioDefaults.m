@@ -9,8 +9,8 @@
 #import "HBCodingUtilities.h"
 #import "HBMutablePreset.h"
 
-#import "handbrake.h"
-#import "lang.h"
+#import "handbrake/handbrake.h"
+#import "handbrake/lang.h"
 
 @interface HBAudioDefaults ()
 

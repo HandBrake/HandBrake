@@ -18,7 +18,7 @@
 #import "HBJob+Private.h"
 #import "HBSecurityAccessToken.h"
 
-#include "common.h"
+#include "handbrake/common.h"
 
 #define NONE_TRACK_INDEX        0
 #define FOREIGN_TRACK_INDEX     1
