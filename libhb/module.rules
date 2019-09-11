@@ -9,7 +9,6 @@ $(LIBHB.a): $(LIBHB.c.o) $(LIBHB.m.o)
 $(LIBHB.c.o): $(LIBHB.d)
 $(LIBHB.c.o): | $(dir $(LIBHB.c.o))
 $(LIBHB.c.o): $(BUILD/)%.o: $(SRC/)%.c
-	echo "$(LIBHB.m4.out)"
 	$(call LIBHB.GCC.C_O,$@,$<)
 $(LIBHB.m.o): | $(dir $(LIBHB.m.o))
 $(LIBHB.m.o): $(BUILD/)%.o: $(SRC/)%.m
