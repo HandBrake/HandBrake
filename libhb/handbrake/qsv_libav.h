@@ -26,8 +26,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
-#ifndef HB_QSV_LIBAV_H
-#define HB_QSV_LIBAV_H
+#ifndef HANDBRAKE_QSV_LIBAV_H
+#define HANDBRAKE_QSV_LIBAV_H
 
 /**
  * @file
@@ -478,4 +478,4 @@ void *hb_qsv_list_item(hb_qsv_list *, int);
 
 /* @} */
 
-#endif // HB_QSV_LIBAV_H
+#endif // HANDBRAKE_QSV_LIBAV_H

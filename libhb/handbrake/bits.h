@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_BITS_H
-#define HB_BITS_H
+#ifndef HANDBRAKE_BITS_H
+#define HANDBRAKE_BITS_H
 
 static inline int
 allbits_set(uint32_t *bitmap, int num_words)
@@ -87,4 +87,4 @@ bit_nset(uint32_t *bit_map, int start_pos, int stop_pos)
     }
 }
 
-#endif /* HB_BITS_H */
+#endif /* HANDBRAKE_BITS_H */

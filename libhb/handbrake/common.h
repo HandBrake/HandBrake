@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
  
-#ifndef HB_COMMON_H
-#define HB_COMMON_H
+#ifndef HANDBRAKE_COMMON_H
+#define HANDBRAKE_COMMON_H
 
 #include "handbrake/project.h"
 #include "handbrake/hbtypes.h"
@@ -1443,4 +1443,4 @@ int hb_output_color_matrix(hb_job_t * job);
 #define HB_BOOL_REG      "(yes|no|true|false|[01])"
 #define HB_ALL_REG       "(.*)"
 
-#endif
+#endif // HANDBRAKE_COMMON_H

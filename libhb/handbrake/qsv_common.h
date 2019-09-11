@@ -7,8 +7,8 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_QSV_COMMON_H
-#define HB_QSV_COMMON_H
+#ifndef HANDBRAKE_QSV_COMMON_H
+#define HANDBRAKE_QSV_COMMON_H
 
 int            hb_qsv_available();
 
@@ -247,4 +247,4 @@ void hb_qsv_uninit_dec(AVCodecContext *s);
 void hb_qsv_uninit_enc();
 
 #endif // HB_PROJECT_FEATURE_QSV
-#endif // HB_QSV_COMMON_H
+#endif // HANDBRAKE_QSV_COMMON_H

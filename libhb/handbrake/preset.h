@@ -6,8 +6,8 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
-#if !defined(HB_PRESET_H)
-#define HB_PRESET_H
+#if !defined(HANDBRAKE_PRESET_H)
+#define HANDBRAKE_PRESET_H
 
 #include "handbrake/common.h"
 #include "handbrake/hb_dict.h"
@@ -200,4 +200,4 @@ char       * hb_presets_package_json(const hb_value_t *presets);
 // and return as json string
 char       * hb_presets_json_package(const char *json_presets);
 
-#endif // HB_PRESET_H
+#endif // HANDBRAKE_PRESET_H

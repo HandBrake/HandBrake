@@ -14,8 +14,8 @@
  * sample_rate conversion will come later (libswresample doesn't support
  * sample_rate conversion with float samples yet). */
 
-#ifndef AUDIO_RESAMPLE_H
-#define AUDIO_RESAMPLE_H
+#ifndef HANDBRAKE_AUDIO_RESAMPLE_H
+#define HANDBRAKE_AUDIO_RESAMPLE_H
 
 #include <math.h>
 #include <stdint.h>
@@ -117,4 +117,4 @@ void                 hb_audio_resample_free(hb_audio_resample_t *resample);
 hb_buffer_t*         hb_audio_resample(hb_audio_resample_t *resample,
                                        const uint8_t **samples, int nsamples);
 
-#endif /* AUDIO_RESAMPLE_H */
+#endif /* HANDBRAKE_AUDIO_RESAMPLE_H */

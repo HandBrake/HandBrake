@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_JSON_H
-#define HB_JSON_H
+#ifndef HANDBRAKE_JSON_H
+#define HANDBRAKE_JSON_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,4 +43,4 @@ hb_dict_t  * hb_version_dict(void);
 }
 #endif
 
-#endif // HB_JSON_H
+#endif // HANDBRAKE_JSON_H

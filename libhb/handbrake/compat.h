@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_COMPAT_H
-#define HB_COMPAT_H
+#ifndef HANDBRAKE_COMPAT_H
+#define HANDBRAKE_COMPAT_H
 
 #ifdef HB_NEED_STRTOK_R
 /*
@@ -35,4 +35,4 @@ int strerror_r(int errnum, char *strerrbuf, size_t buflen);
 #endif // _GNU_SOURCE
 #endif // HAVE_STRERROR_R
 
-#endif // HB_COMPAT_H
+#endif // HANDBRAKE_COMPAT_H

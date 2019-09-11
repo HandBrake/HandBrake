@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_PORTS_H
-#define HB_PORTS_H
+#ifndef HANDBRAKE_PORTS_H
+#define HANDBRAKE_PORTS_H
 
 #if ARCH_X86_64 || ARCH_X86_32
 #define ARCH_X86
@@ -236,5 +236,4 @@ int    hb_dlclose(void *h);
 
 #endif /* __LIBHB__ */
 
-#endif
-
+#endif // HANDBRAKE_PORTS_H

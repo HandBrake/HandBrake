@@ -7,5 +7,10 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#ifndef HANDBRAKE_NVENC_COMMON_H
+#define HANDBRAKE_NVENC_COMMON_H
+
 int            hb_nvenc_h264_available();
 int            hb_nvenc_h265_available();
+
+#endif // HANDBRAKE_NVENC_COMMON_H

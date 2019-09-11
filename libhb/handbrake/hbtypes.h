@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_TYPES_H
-#define HB_TYPES_H
+#ifndef HANDBRAKE_TYPES_H
+#define HANDBRAKE_TYPES_H
 
 typedef struct hb_handle_s hb_handle_t;
 typedef struct hb_list_s hb_list_t;
@@ -45,4 +45,4 @@ typedef struct hb_image_format_s hb_image_format_t;
 typedef struct hb_fifo_s hb_fifo_t;
 typedef struct hb_lock_s hb_lock_t;
 
-#endif // HB_TYPES_H
+#endif // HANDBRAKE_TYPES_H

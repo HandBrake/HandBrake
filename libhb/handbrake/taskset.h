@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_TASKSET_H
-#define HB_TASKSET_H
+#ifndef HANDBRAKE_TASKSET_H
+#define HANDBRAKE_TASKSET_H
 
 #define TASKSET_POSIX_COMPLIANT 1
 
@@ -52,4 +52,4 @@ taskset_thread_stop( taskset_t *ts, int thr_idx )
     return bit_is_set( ts->task_stop_bitmap, thr_idx );
 }
 
-#endif /* HB_TASKSET_H */
+#endif /* HANDBRAKE_TASKSET_H */

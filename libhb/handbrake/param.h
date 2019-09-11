@@ -6,8 +6,9 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
-#ifndef HB_PARAM_H
-#define HB_PARAM_H
+
+#ifndef HANDBRAKE_PARAM_H
+#define HANDBRAKE_PARAM_H
 
 typedef struct hb_filter_param_s hb_filter_param_t;
 
@@ -44,4 +45,4 @@ char ** hb_filter_get_tunes_name(int filter_id);
 char  * hb_filter_get_presets_json(int filter_id);
 char  * hb_filter_get_tunes_json(int filter_id);
 
-#endif // HB_PARAM_H
+#endif // HANDBRAKE_PARAM_H

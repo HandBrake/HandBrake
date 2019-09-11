@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_INTERNAL_H
-#define HB_INTERNAL_H
+#ifndef HANDBRAKE_INTERNAL_H
+#define HANDBRAKE_INTERNAL_H
 
 #include "handbrake/project.h"
 #include "handbrake/hbffmpeg.h"
@@ -538,4 +538,4 @@ void                 hb_chapter_dequeue(hb_chapter_queue_t *q, hb_buffer_t *b);
 #define HB_FONT_SANS "sans-serif"
 #endif
 
-#endif // HB_INTERNAL_H
+#endif // HANDBRAKE_INTERNAL_H

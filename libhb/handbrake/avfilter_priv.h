@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_AVFILTER_PRIV_H
-#define HB_AVFILTER_PRIV_H
+#ifndef HANDBRAKE_AVFILTER_PRIV_H
+#define HANDBRAKE_AVFILTER_PRIV_H
 
 #include "libavfilter/avfilter.h"
 #include "handbrake/hbavfilter.h"
@@ -31,4 +31,4 @@ int  hb_avfilter_null_work( hb_filter_object_t * filter,
                             hb_buffer_t ** buf_in, hb_buffer_t ** buf_out );
 void hb_avfilter_alias_close( hb_filter_object_t * filter );
 
-#endif // HB_AVFILTER_PRIV_H
+#endif // HANDBRAKE_AVFILTER_PRIV_H

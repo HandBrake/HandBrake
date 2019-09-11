@@ -7,7 +7,7 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef __DECSSASUB_H__
-#define __DECSSASUB_H__
+#ifndef HANDBRAKE_DECSSASUB_H
+#define HANDBRAKE_DECSSASUB_H
 
-#endif // __DECSSASUB_H__
+#endif // HANDBRAKE_DECSSASUB_H

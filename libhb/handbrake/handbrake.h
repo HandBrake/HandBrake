@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
  
-#ifndef HB_HB_H
-#define HB_HB_H
+#ifndef HANDBRAKE_HANDBRAKE_H
+#define HANDBRAKE_HANDBRAKE_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -142,4 +142,4 @@ int is_hardware_disabled(void);
 }
 #endif
 
-#endif
+#endif // HANDBRAKE_HANDBRAKE_H

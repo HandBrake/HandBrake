@@ -8,6 +8,9 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#ifndef HANDBRAKE_NLMEANS_H
+#define HANDBRAKE_NLMEANS_H
+
 typedef struct
 {
     void (*build_integral)(uint32_t *integral,
@@ -25,3 +28,5 @@ typedef struct
 } NLMeansFunctions;
 
 void nlmeans_init_x86(NLMeansFunctions *functions);
+
+#endif // HANDBRAKE_NLMEANS_H
