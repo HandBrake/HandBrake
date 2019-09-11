@@ -25,6 +25,6 @@ trap "rm ${JSON_TEMP} ${C_TEMP}" EXIT INT TERM
 echo 'const char hb_builtin_presets_json[] =' > "${C_TEMP}"
 "${SELF_DIR}/quotestring.py" "${JSON_TEMP}" >> "${C_TEMP}"
 echo ';' >> "${C_TEMP}"
-cp "${C_TEMP}" "${LIBHB_DIR}/preset_builtin.h"
+cp "${C_TEMP}" "${LIBHB_DIR}/handbrake/preset_builtin.h"
 
 exit 0
