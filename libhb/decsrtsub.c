@@ -12,9 +12,9 @@
 #include <string.h>
 #include <iconv.h>
 #include <errno.h>
-#include "handbrake.h"
-#include "colormap.h"
-#include "decsrtsub.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/colormap.h"
+#include "handbrake/decsrtsub.h"
 
 struct start_and_end {
     unsigned long start, end;

@@ -8,7 +8,7 @@
 #import "HBJob+Private.h"
 #import "HBLocalizationUtilities.h"
 
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 @implementation HBVideo (UIAdditions)
 

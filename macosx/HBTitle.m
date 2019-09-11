@@ -14,7 +14,7 @@
 #import "HBSecurityAccessToken.h"
 #import "HBUtilities.h"
 
-#include "lang.h"
+#include "handbrake/lang.h"
 
 @interface HBMetadata ()
 

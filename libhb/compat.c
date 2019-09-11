@@ -7,7 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "compat.h"
+#include "handbrake/compat.h"
 
 #ifdef HB_NEED_STRTOK_R
 #include <string.h>

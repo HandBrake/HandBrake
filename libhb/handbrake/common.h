@@ -10,9 +10,9 @@
 #ifndef HB_COMMON_H
 #define HB_COMMON_H
 
-#include "project.h"
-#include "hbtypes.h"
-#include "hb_dict.h"
+#include "handbrake/project.h"
+#include "handbrake/hbtypes.h"
+#include "handbrake/hb_dict.h"
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>

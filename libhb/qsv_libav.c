@@ -26,12 +26,12 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
-#include "project.h"
+#include "handbrake/project.h"
 
 #if HB_PROJECT_FEATURE_QSV
 
-#include "hbffmpeg.h"
-#include "qsv_libav.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/qsv_libav.h"
 
 int hb_qsv_get_free_encode_task(hb_qsv_list * tasks)
 {

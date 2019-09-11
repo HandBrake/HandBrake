@@ -11,9 +11,9 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include "handbrake.h"
-#include "hbffmpeg.h"
-#include "lang.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/lang.h"
 #include "libbluray/bluray.h"
 
 #define min(a, b) a < b ? a : b

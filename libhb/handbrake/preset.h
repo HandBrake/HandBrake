@@ -9,8 +9,8 @@
 #if !defined(HB_PRESET_H)
 #define HB_PRESET_H
 
-#include "common.h"
-#include "hb_dict.h"
+#include "handbrake/common.h"
+#include "handbrake/hb_dict.h"
 
 #define HB_MAX_PRESET_FOLDER_DEPTH  8
 

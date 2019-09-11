@@ -8,13 +8,13 @@
  * http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "project.h"
-#include "hb_dict.h"
-#include "param.h"
-#include "common.h"
-#include "colormap.h"
+#include "handbrake/project.h"
+#include "handbrake/hb_dict.h"
+#include "handbrake/param.h"
+#include "handbrake/common.h"
+#include "handbrake/colormap.h"
 #if HB_PROJECT_FEATURE_QSV
-#include "qsv_common.h"
+#include "handbrake/qsv_common.h"
 #endif
 #include <regex.h>
 

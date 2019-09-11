@@ -9,7 +9,7 @@
 #import "HBJob.h"
 #import "HBCodingUtilities.h"
 #import "HBTitle.h"
-#import "handbrake.h"
+#import "handbrake/handbrake.h"
 
 #define DEFAULT_SAMPLERATE 48000
 

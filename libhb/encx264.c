@@ -9,9 +9,9 @@
 
 #include <stdarg.h>
 
-#include "handbrake.h"
-#include "hb_dict.h"
-#include "encx264.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hb_dict.h"
+#include "handbrake/encx264.h"
 
 int  encx264Init( hb_work_object_t *, hb_job_t * );
 int  encx264Work( hb_work_object_t *, hb_buffer_t **, hb_buffer_t ** );

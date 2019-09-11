@@ -14,14 +14,14 @@
 extern "C" {
 #endif
 
-#include "common.h"
-#include "project.h"
-#include "compat.h"
-#include "hb_json.h"
-#include "preset.h"
-#include "plist.h"
-#include "param.h"
-#include "colormap.h"
+#include "handbrake/common.h"
+#include "handbrake/project.h"
+#include "handbrake/compat.h"
+#include "handbrake/hb_json.h"
+#include "handbrake/preset.h"
+#include "handbrake/plist.h"
+#include "handbrake/param.h"
+#include "handbrake/colormap.h"
 
 /* hb_init()
    Initializes a libhb session (launches his own thread, detects CPUs,

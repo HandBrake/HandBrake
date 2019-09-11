@@ -7,8 +7,8 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "hbffmpeg.h"
-#include "handbrake.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/handbrake.h"
 
 #if HB_PROJECT_FEATURE_NVENC
 #include <ffnvcodec/nvEncodeAPI.h>

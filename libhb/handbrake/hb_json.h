@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-#include "common.h"
+#include "handbrake/common.h"
 
 hb_dict_t  * hb_state_to_dict( hb_state_t * state);
 hb_dict_t  * hb_job_to_dict( const hb_job_t * job );

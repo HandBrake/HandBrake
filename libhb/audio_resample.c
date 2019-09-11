@@ -7,9 +7,9 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "common.h"
-#include "hbffmpeg.h"
-#include "audio_resample.h"
+#include "handbrake/common.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/audio_resample.h"
 
 hb_audio_resample_t* hb_audio_resample_init(enum AVSampleFormat sample_fmt,
                                             int sample_rate,

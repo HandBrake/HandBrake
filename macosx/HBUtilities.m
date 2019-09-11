@@ -7,7 +7,7 @@
 #import "HBUtilities.h"
 #import <Cocoa/Cocoa.h>
 
-#include "lang.h"
+#include "handbrake/lang.h"
 
 static BOOL hb_resolveBookmarks = YES;
 

@@ -7,9 +7,9 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "handbrake.h"
-#include "ports.h"
-#include "taskset.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/ports.h"
+#include "handbrake/taskset.h"
 
 int
 taskset_init( taskset_t *ts, int thread_count, size_t arg_size )

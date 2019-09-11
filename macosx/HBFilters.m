@@ -10,7 +10,7 @@
 #import "NSDictionary+HBAdditions.h"
 #import "HBMutablePreset.h"
 
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 NSString * const HBFiltersChangedNotification = @"HBFiltersChangedNotification";
 

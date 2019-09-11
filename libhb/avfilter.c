@@ -7,9 +7,9 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "common.h"
-#include "hbavfilter.h"
-#include "avfilter_priv.h"
+#include "handbrake/common.h"
+#include "handbrake/hbavfilter.h"
+#include "handbrake/avfilter_priv.h"
 
 static int  avfilter_init(hb_filter_object_t * filter, hb_filter_init_t * init);
 static int  avfilter_post_init( hb_filter_object_t * filter, hb_job_t * job );

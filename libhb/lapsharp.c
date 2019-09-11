@@ -7,7 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 #define LAPSHARP_STRENGTH_LUMA_DEFAULT   0.2
 #define LAPSHARP_STRENGTH_CHROMA_DEFAULT 0.2

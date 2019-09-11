@@ -7,13 +7,13 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "project.h"
+#include "handbrake/project.h"
 
 #if HB_PROJECT_FEATURE_VCE
 #include "AMF/core/Factory.h"
 #include "AMF/components/VideoEncoderVCE.h"
 #include "AMF/components/VideoEncoderHEVC.h"
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 AMF_RESULT check_component_available(const wchar_t *componentID)
 {

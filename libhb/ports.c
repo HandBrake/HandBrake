@@ -7,7 +7,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "project.h"
+#include "handbrake/project.h"
 
 #ifdef SYS_MINGW
 #define _WIN32_WINNT 0x600
@@ -88,7 +88,7 @@
 #include <stddef.h>
 #include <unistd.h>
 
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 #include "libavutil/cpu.h"
 
 /************************************************************************

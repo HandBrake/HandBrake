@@ -8,7 +8,7 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 #define UNSHARP_STRENGTH_LUMA_DEFAULT 0.25
 #define UNSHARP_SIZE_LUMA_DEFAULT 7

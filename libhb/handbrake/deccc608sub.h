@@ -13,7 +13,7 @@
 #ifndef __DECCC608SUB_H__
 #define __DECCC608SUB_H__
 
-#include "common.h"
+#include "handbrake/common.h"
 
 struct s_write;
 

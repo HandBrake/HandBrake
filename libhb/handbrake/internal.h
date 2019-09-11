@@ -10,10 +10,10 @@
 #ifndef HB_INTERNAL_H
 #define HB_INTERNAL_H
 
-#include "project.h"
-#include "hbffmpeg.h"
+#include "handbrake/project.h"
+#include "handbrake/hbffmpeg.h"
 #if HB_PROJECT_FEATURE_QSV
-#include "qsv_libav.h"
+#include "handbrake/qsv_libav.h"
 #endif
 
 /***********************************************************************

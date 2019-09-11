@@ -14,9 +14,9 @@
 #include <inttypes.h>
 #include "libxml/parser.h"
 
-#include "common.h"
-#include "hb_dict.h"
-#include "plist.h"
+#include "handbrake/common.h"
+#include "handbrake/hb_dict.h"
+#include "handbrake/plist.h"
 
 #define BUF_SZ  (128*1024)
 

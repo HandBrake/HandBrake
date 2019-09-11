@@ -26,16 +26,16 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 \* ********************************************************************* */
 
-#include "project.h"
+#include "handbrake/project.h"
 
 #if HB_PROJECT_FEATURE_QSV
 
-#include "handbrake.h"
-#include "hbffmpeg.h"
-#include "qsv_filter_pp.h"
-#include "qsv_filter.h"
-#include "qsv_libav.h"
-#include "qsv_memory.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/qsv_filter_pp.h"
+#include "handbrake/qsv_filter.h"
+#include "handbrake/qsv_libav.h"
+#include "handbrake/qsv_memory.h"
 
 
 static int hb_qsv_filter_pre_init( hb_filter_object_t * filter,

@@ -28,8 +28,8 @@ Original "Faster" settings:
 #define FILTER_CLASSIC 1
 #define FILTER_ERODE_DILATE 2
 
-#include "handbrake.h"
-#include "taskset.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/taskset.h"
 
 typedef struct decomb_thread_arg_s {
     hb_filter_private_t *pv;

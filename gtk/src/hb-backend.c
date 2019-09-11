@@ -25,7 +25,7 @@
 #include <limits.h>
 #include <ctype.h>
 #include <math.h>
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 #include "ghbcompat.h"
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
@@ -39,7 +39,7 @@
 #include "preview.h"
 #include "presets.h"
 #include "values.h"
-#include "lang.h"
+#include "handbrake/lang.h"
 #include "jansson.h"
 
 typedef struct

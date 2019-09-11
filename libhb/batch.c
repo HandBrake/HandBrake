@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
  
-#include "handbrake.h"
-#include "lang.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/lang.h"
 
 struct hb_batch_s
 {

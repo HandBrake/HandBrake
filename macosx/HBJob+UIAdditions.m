@@ -20,7 +20,7 @@
 
 #import "HBLocalizationUtilities.h"
 
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 // Text Styles
 static NSDictionary            *detailAttr;

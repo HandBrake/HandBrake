@@ -43,7 +43,7 @@
 #include "preview.h"
 #include "values.h"
 #include "queuehandler.h"
-#include "handbrake.h"
+#include "handbrake/handbrake.h"
 
 #define PREVIEW_STATE_IMAGE 0
 #define PREVIEW_STATE_LIVE 1

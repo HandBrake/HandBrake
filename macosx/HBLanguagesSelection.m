@@ -5,7 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import "HBLanguagesSelection.h"
-#include "lang.h"
+#include "handbrake/lang.h"
 
 @implementation HBLang
 

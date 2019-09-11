@@ -24,7 +24,7 @@
 #define IS_DIR_SEP(c) (c == '/')
 #endif
 
-#include "project.h"
+#include "handbrake/project.h"
 
 #if HB_PROJECT_FEATURE_QSV
 #include "mfx/mfxstructures.h"

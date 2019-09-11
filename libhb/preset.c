@@ -7,14 +7,14 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "preset_builtin.h"
-#include "handbrake.h"
-#include "hb_dict.h"
-#include "plist.h"
-#include "lang.h"
+#include "handbrake/preset_builtin.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hb_dict.h"
+#include "handbrake/plist.h"
+#include "handbrake/lang.h"
 
 #if HB_PROJECT_FEATURE_QSV
-#include "qsv_common.h"
+#include "handbrake/qsv_common.h"
 #endif
 
 #if defined(SYS_LINUX)

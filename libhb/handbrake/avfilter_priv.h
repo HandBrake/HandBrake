@@ -11,7 +11,7 @@
 #define HB_AVFILTER_PRIV_H
 
 #include "libavfilter/avfilter.h"
-#include "hbavfilter.h"
+#include "handbrake/hbavfilter.h"
 
 struct hb_filter_private_s
 {

@@ -18,8 +18,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "handbrake.h"
-#include "decsrtsub.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/decsrtsub.h"
 
 struct hb_work_private_s
 {

@@ -38,20 +38,20 @@
     VC1 decoder) can't easily be used by the HB mpeg stream reader.
  */
 
-#include "handbrake.h"
-#include "hbffmpeg.h"
-#include "hbavfilter.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/hbavfilter.h"
 #include "libavfilter/avfilter.h"
 #include "libavfilter/buffersrc.h"
 #include "libavfilter/buffersink.h"
 #include "libavutil/hwcontext.h"
-#include "lang.h"
-#include "audio_resample.h"
+#include "handbrake/lang.h"
+#include "handbrake/audio_resample.h"
 
 #if HB_PROJECT_FEATURE_QSV
 #include "libavutil/hwcontext_qsv.h"
-#include "qsv_common.h"
-#include "qsv_libav.h"
+#include "handbrake/qsv_common.h"
+#include "handbrake/qsv_libav.h"
 #endif
 
 static void compute_frame_duration( hb_work_private_t *pv );

@@ -6,7 +6,7 @@
 
 #import "HBJob+HBAdditions.h"
 #import "HBPreferencesKeys.h"
-#import "handbrake.h"
+#import "handbrake/handbrake.h"
 
 static NSDateFormatter *_timeFormatter = nil;
 static NSDateFormatter *_dateFormatter = nil;

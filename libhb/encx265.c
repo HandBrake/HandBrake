@@ -7,13 +7,13 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "project.h"
+#include "handbrake/project.h"
 
 #if HB_PROJECT_FEATURE_X265
 
-#include "handbrake.h"
-#include "hb_dict.h"
-#include "h265_common.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hb_dict.h"
+#include "handbrake/h265_common.h"
 #include "x265.h"
 
 int  encx265Init (hb_work_object_t*, hb_job_t*);

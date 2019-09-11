@@ -10,8 +10,8 @@
    http://web.missouri.edu/~kes25c/
 */
 
-#include "handbrake.h"
-#include "eedi2.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/eedi2.h"
 
 /**
  * EEDI2 directional limit lookup table

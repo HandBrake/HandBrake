@@ -26,7 +26,7 @@
 
 #include <glib.h>
 #include <glib-object.h>
-#include "hb_dict.h"
+#include "handbrake/hb_dict.h"
 
 #define GHB_DICT    HB_VALUE_TYPE_DICT
 #define GHB_ARRAY   HB_VALUE_TYPE_ARRAY

@@ -7,12 +7,12 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#include "handbrake.h"
-#include "hb_dict.h"
-#include "hbffmpeg.h"
-#include "h264_common.h"
-#include "h265_common.h"
-#include "nal_units.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/hb_dict.h"
+#include "handbrake/hbffmpeg.h"
+#include "handbrake/h264_common.h"
+#include "handbrake/h265_common.h"
+#include "handbrake/nal_units.h"
 
 /*
  * The frame info struct remembers information about each frame across calls

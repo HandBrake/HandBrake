@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <strings.h>
-#include "colormap.h"
+#include "handbrake/colormap.h"
 
 typedef struct
 {

@@ -12,8 +12,8 @@
  * operate on each frame independently with no context carried over
  * from one frame to the next. */
 
-#include "handbrake.h"
-#include "taskset.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/taskset.h"
 
 typedef struct
 {

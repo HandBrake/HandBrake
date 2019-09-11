@@ -13,8 +13,8 @@
  *
  * Note that the SRT sub generation from CC could be useful for mkv subs.
  */
-#include "handbrake.h"
-#include "deccc608sub.h"
+#include "handbrake/handbrake.h"
+#include "handbrake/deccc608sub.h"
 
 #define SSA_PREAMBLE_LEN 24
 /*

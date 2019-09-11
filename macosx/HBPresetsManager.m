@@ -10,7 +10,7 @@
 #import "HBUtilities.h"
 #import "NSJSONSerialization+HBAdditions.h"
 
-#include "preset.h"
+#include "handbrake/preset.h"
 
 NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
