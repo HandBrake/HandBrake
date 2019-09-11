@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
  
-#ifndef HB_DECOMB_H
-#define HB_DECOMB_H
+#ifndef HANDBRAKE_DECOMB_H
+#define HANDBRAKE_DECOMB_H
 
 #define MODE_DECOMB_YADIF       1 // Use yadif
 #define MODE_DECOMB_BLEND       2 // Use blending interpolation
@@ -22,4 +22,4 @@
 #define MODE_YADIF_BOB          4
 #define MODE_DEINTERLACE_QSV    8
 
-#endif // HB_DECOMB_H
+#endif // HANDBRAKE_DECOMB_H

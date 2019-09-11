@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_LANG_H
-#define HB_LANG_H
+#ifndef HANDBRAKE_LANG_H
+#define HANDBRAKE_LANG_H
 
 typedef struct iso639_lang_t
 {
@@ -62,4 +62,4 @@ const iso639_lang_t* lang_get_next(const iso639_lang_t *last);
 #ifdef __cplusplus
 }
 #endif
-#endif
+#endif // HANDBRAKE_LANG_H

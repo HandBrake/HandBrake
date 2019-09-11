@@ -7,10 +7,10 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef __DECSRTSUB_H__
-#define __DECSRTSUB_H__
+#ifndef HANDBRAKE_DECSRTSUB_H
+#define HANDBRAKE_DECSRTSUB_H
 
 void hb_srt_to_ssa(hb_buffer_t *sub_in, int line);
 
-#endif // __DECSRTSUB_H__
+#endif // HANDBRAKE_DECSRTSUB_H
 

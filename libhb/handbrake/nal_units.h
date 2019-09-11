@@ -7,8 +7,8 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_NAL_UNITS_H
-#define HB_NAL_UNITS_H
+#ifndef HANDBRAKE_NAL_UNITS_H
+#define HANDBRAKE_NAL_UNITS_H
 
 #include <stdint.h>
 
@@ -48,4 +48,4 @@ uint8_t* hb_annexb_find_next_nalu(const uint8_t *start, size_t *size);
 hb_buffer_t* hb_nal_bitstream_annexb_to_mp4(const uint8_t *data, const size_t size);
 hb_buffer_t* hb_nal_bitstream_mp4_to_annexb(const uint8_t *data, const size_t size, const uint8_t nal_length_size);
 
-#endif // HB_NAL_UNITS_H
+#endif // HANDBRAKE_NAL_UNITS_H

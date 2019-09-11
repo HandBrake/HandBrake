@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_H264_COMMON_H
-#define HB_H264_COMMON_H
+#ifndef HANDBRAKE_H264_COMMON_H
+#define HANDBRAKE_H264_COMMON_H
 
 static const char * const hb_h264_profile_names_8bit[]  = {
     "auto", "high", "main", "baseline", NULL, };
@@ -37,4 +37,4 @@ static const char * const hb_h264_colmatrix_names[] = {
     "GBR", "bt709", "undef", "", "fcc", "bt470bg", "smpte170m",
     "smpte240m", "YCgCo", "bt2020nc", "bt2020c", NULL, };
 
-#endif  //HB_H264_COMMON_H
+#endif // HANDBRAKE_H264_COMMON_H

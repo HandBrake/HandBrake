@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_AVFILTER_H
-#define HB_AVFILTER_H
+#ifndef HANDBRAKE_AVFILTER_H
+#define HANDBRAKE_AVFILTER_H
 
 #include "handbrake/common.h"
 
@@ -39,4 +39,4 @@ void    hb_avfilter_append_dict(hb_value_array_t * filters,
 
 void    hb_avfilter_combine(hb_list_t * list);
 
-#endif // HB_AVFILTER_H
+#endif // HANDBRAKE_AVFILTER_H

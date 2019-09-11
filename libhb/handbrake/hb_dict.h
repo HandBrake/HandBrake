@@ -6,8 +6,8 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
-#if !defined(HB_DICT_H)
-#define HB_DICT_H
+#if !defined(HANDBRAKE_DICT_H)
+#define HANDBRAKE_DICT_H
 
 #include "handbrake/hbtypes.h"
 #include <jansson.h>
@@ -166,4 +166,4 @@ char      * hb_dict_to_encopts(const hb_dict_t * dict);
 #define hb_dict_set_bool(dict, key, val) hb_dict_set(dict, key, hb_value_bool(val))
 
 
-#endif // !defined(HB_DICT_H)
+#endif // !defined(HANDBRAKE_DICT_H)

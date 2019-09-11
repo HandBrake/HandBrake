@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#if !defined(_HB_PLIST_H_)
-#define _HB_PLIST_H_
+#if !defined(HANDBRAKE_PLIST_H)
+#define HANDBRAKE_PLIST_H
 
 #include <stdio.h>
 #include "handbrake/hb_dict.h"
@@ -18,5 +18,4 @@ hb_value_t * hb_plist_parse_file(const char *filename);
 void         hb_plist_write(FILE *file, hb_value_t  *val);
 void         hb_plist_write_file(const char *filename, hb_value_t  *val);
 
-#endif // _HB_PLIST_H_
-
+#endif // HANDBRAKE_PLIST_H

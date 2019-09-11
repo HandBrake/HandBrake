@@ -7,6 +7,9 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
  
+#ifndef HANDBRAKE_EEDI2_H
+#define HANDBRAKE_EEDI2_H
+
 // Used to order a sequence of metrics for median filtering
 void eedi2_sort_metrics( int *order, const int length );
 
@@ -91,3 +94,5 @@ void eedi2_calc_derivatives( uint8_t *srcp, int src_pitch, int height, int width
 
 void eedi2_post_process_corner( int *x2, int *y2, int *xy, const int pitch, uint8_t * mskp, int msk_pitch,
                                 uint8_t * dstp, int dst_pitch, int height, int width, int field );
+
+#endif // HANDBRAKE_EEDI2_H

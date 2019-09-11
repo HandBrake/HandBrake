@@ -10,8 +10,8 @@
 /*
  * From ccextractor...
  */
-#ifndef __DECCC608SUB_H__
-#define __DECCC608SUB_H__
+#ifndef HANDBRAKE_DECCC608SUB_H
+#define HANDBRAKE_DECCC608SUB_H
 
 #include "handbrake/common.h"
 
@@ -143,4 +143,4 @@ enum output_format
     OF_RCWT = 4
 };
 
-#endif // __DECCC608SUB_H__
+#endif // HANDBRAKE_DECCC608SUB_H

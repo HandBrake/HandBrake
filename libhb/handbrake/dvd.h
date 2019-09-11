@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_DVD_H
-#define HB_DVD_H
+#ifndef HANDBRAKE_DVD_H
+#define HANDBRAKE_DVD_H
 
 #include "dvdnav/dvdnav.h"
 #include "dvdread/ifo_read.h"
@@ -115,6 +115,4 @@ typedef struct hb_dvd_func_s hb_dvd_func_t;
 hb_dvd_func_t * hb_dvdnav_methods( void );
 hb_dvd_func_t * hb_dvdread_methods( void );
 
-#endif // HB_DVD_H
-
-
+#endif // HANDBRAKE_DVD_H

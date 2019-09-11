@@ -23,8 +23,8 @@
  * Left/Right Surround == Side Left/Right
  * Left/Right Rear Surround == Back Left/Right */
 
-#ifndef AUDIO_REMAP_H
-#define AUDIO_REMAP_H
+#ifndef HANDBRAKE_AUDIO_REMAP_H
+#define HANDBRAKE_AUDIO_REMAP_H
 
 #include <stdint.h>
 #include "libavutil/samplefmt.h"
@@ -101,4 +101,4 @@ void              hb_audio_remap_build_table(hb_chan_map_t *channel_map_out,
                                              uint64_t channel_layout,
                                              int *remap_table);
 
-#endif /* AUDIO_REMAP_H */
+#endif /* HANDBRAKE_AUDIO_REMAP_H */

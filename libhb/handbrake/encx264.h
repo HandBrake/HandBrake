@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_ENCX264_H
-#define HB_ENCX264_H
+#ifndef HANDBRAKE_ENCX264_H
+#define HANDBRAKE_ENCX264_H
 
 #include "x264.h"
 #include "handbrake/h264_common.h"
@@ -62,4 +62,4 @@ typedef struct x264_api_s
 void               hb_x264_global_init(void);
 const x264_api_t * hb_x264_api_get(int bit_depth);
 
-#endif // HB_ENCX264_H
+#endif // HANDBRAKE_ENCX264_H

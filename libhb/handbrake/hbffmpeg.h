@@ -7,8 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_FFMPEG_H
-#define HB_FFMPEG_H
+#ifndef HANDBRAKE_FFMPEG_H
+#define HANDBRAKE_FFMPEG_H
 
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
@@ -59,4 +59,4 @@ int hb_av_encoder_present(int encoder);
 const char* const* hb_av_profile_get_names(int encoder);
 const char* const* hb_av_level_get_names(int encoder);
 
-#endif
+#endif // HANDBRAKE_FFMPEG_H

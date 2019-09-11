@@ -7,8 +7,8 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef HB_COLORMAP_H
-#define HB_COLORMAP_H
+#ifndef HANDBRAKE_COLORMAP_H
+#define HANDBRAKE_COLORMAP_H
 
 #define HB_RGB_TO_BGR(c)    (((c & 0xff0000) >> 16) | \
                              ((c & 0x00ff00)      ) | \
@@ -17,4 +17,4 @@
 
 uint32_t hb_rgb_lookup_by_name(const char *color);
 
-#endif // HB_COLORMAP_H
+#endif // HANDBRAKE_COLORMAP_H

@@ -7,8 +7,8 @@
  * For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-#ifndef __SSAUTIL_H__
-#define __SSAUTIL_H__
+#ifndef HANDBRAKE_SSAUTIL_H
+#define HANDBRAKE_SSAUTIL_H
 
 typedef struct hb_subtitle_style_s hb_subtitle_style_t;
 typedef struct hb_subtitle_style_context_s hb_subtitle_style_context_t;
@@ -31,4 +31,4 @@ void hb_muxmp4_process_subtitle_style(
         uint8_t  * input, uint8_t  ** output,
         uint8_t ** style, uint16_t  * stylesize);
 
-#endif // __SSAUTIL_H__
+#endif // HANDBRAKE_SSAUTIL_H
