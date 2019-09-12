@@ -1228,6 +1228,15 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
             return HB_QSV_PARAM_UNSUPPORTED;
         }
     }
+    else if (!strcasecmp(key, "idr-interval") ||
+             !strcasecmp(key, "idrinterval"))
+    {
+        ivalue = hb_qsv_atoi(value, &error);
+        if (!error)
+        {
+            param->videoParam->mfx.IdrInterval = HB_QSV_CLIP3(0, UINT16_MAX, ivalue);
+        }
+    }
     else if (!strcasecmp(key, "scenecut"))
     {
         ivalue = hb_qsv_atobool(value, &error);
@@ -2038,6 +2047,10 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->videoParam->mfx.NumRefFrame  = 0; // use Media SDK default
         param->videoParam->mfx.GopPicSize   = 0; // use Media SDK default
         param->videoParam->mfx.GopRefDist   = 0; // use Media SDK default
+        if (info->codec_id==MFX_CODEC_HEVC) {
+            // 0 has a different meaning in h264 vs hevc. Make so every I-Frame is IDR!
+            param->videoParam->mfx.IdrInterval = 1;
+        }
         // introduced in API 1.1
         param->videoParam->AsyncDepth = HB_QSV_ASYNC_DEPTH_DEFAULT;
         // introduced in API 1.3
