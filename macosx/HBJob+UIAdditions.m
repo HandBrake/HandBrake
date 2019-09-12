@@ -713,11 +713,11 @@ static NSDictionary            *shortHeightAttr;
         }
         if (self.video.frameRateMode == 0)
         {
-            [info appendString:@" FPS PFR"];
+            [info appendString:HBKitLocalizedString(@" FPS PFR", @"HBJob -> video short description framerate")];
         }
         else
         {
-            [info appendString:@" FPS CFR"];
+            [info appendString:HBKitLocalizedString(@" FPS CFR", @"HBJob -> video short description framerate")];
         }
     }
 
