@@ -11,7 +11,7 @@ Please replace this text with your username.
 
 Please replace this text with the language or languages you wish to translate.
 
-### Please tell us with UI's you wish to translate. (After submitting, you all that are relevant.
+### Please tell us with UI's you wish to translate. (These can be checked after posting).
 
 - [ ] Windows
 - [ ] Mac
