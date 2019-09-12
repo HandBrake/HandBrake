@@ -60,6 +60,7 @@ hb_list_t   * hb_get_titles( hb_handle_t * );
    by the latest scan and title set data. */
 hb_title_set_t   * hb_get_title_set( hb_handle_t * );
 
+#ifdef __LIBHB__
 /* hb_detect_comb()
    Analyze a frame for interlacing artifacts, returns true if they're found.
    Taken from Thomas Oestreich's 32detect filter in the Transcode project.  */
@@ -70,6 +71,8 @@ int           hb_save_preview( hb_handle_t * h, int title, int preview,
                                hb_buffer_t *buf );
 hb_buffer_t * hb_read_preview( hb_handle_t * h, hb_title_t *title,
                                int preview );
+#endif // __LIBHB__
+
 hb_image_t  * hb_get_preview2(hb_handle_t * h, int title_idx, int picture,
                               hb_geometry_settings_t *geo, int deinterlace);
 void          hb_set_anamorphic_size2(hb_geometry_t *src_geo,

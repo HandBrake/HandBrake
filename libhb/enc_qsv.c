@@ -32,6 +32,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include "handbrake/handbrake.h"
 #include "handbrake/nal_units.h"
+#include "handbrake/hbffmpeg.h"
 #include "handbrake/qsv_common.h"
 #include "handbrake/qsv_memory.h"
 #include "handbrake/h264_common.h"
@@ -775,22 +776,9 @@ int qsv_enc_init(hb_work_private_t *pv)
         else
         {
             mfxStatus err;
-            //qsv->mfx_session = pv->mfx_session;
-            AVHWFramesContext    *frames_ctx = (AVHWFramesContext*)hb_enc_qsv_frames_ctx.hw_frames_ctx->data;
-            AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;
 
             mfxVersion    ver;
             mfxIMPL       impl;
-            mfxHDL        handle = NULL;
-            mfxHandleType handle_type;
-
-            static const mfxHandleType handle_types[] = {
-                MFX_HANDLE_VA_DISPLAY,
-                MFX_HANDLE_D3D9_DEVICE_MANAGER,
-                MFX_HANDLE_D3D11_DEVICE,
-            };
-
-            int i;
 
             AVHWDeviceContext    *device_ctx = (AVHWDeviceContext*)hb_hw_device_ctx->data;
             AVQSVDeviceContext *device_hwctx = device_ctx->hwctx;

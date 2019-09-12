@@ -10,6 +10,7 @@
 #ifndef HANDBRAKE_AVFILTER_H
 #define HANDBRAKE_AVFILTER_H
 
+#include "libavcodec/avcodec.h"
 #include "handbrake/common.h"
 
 typedef struct hb_avfilter_graph_s hb_avfilter_graph_t;

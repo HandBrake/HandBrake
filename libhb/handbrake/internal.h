@@ -10,10 +10,13 @@
 #ifndef HANDBRAKE_INTERNAL_H
 #define HANDBRAKE_INTERNAL_H
 
+#include "libavutil/imgutils.h"
+#include "libavutil/pixdesc.h"
+
 #include "handbrake/project.h"
-#include "handbrake/hbffmpeg.h"
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_libav.h"
+#include "libavcodec/avcodec.h"
 #endif
 
 /***********************************************************************
@@ -59,6 +62,8 @@ void hb_job_setup_passes(hb_handle_t *h, hb_job_t *job, hb_list_t *list_pass);
  * May have metadata associated with it via extra fields
  * that are conditionally used depending on the type of packet.
  */
+typedef struct hb_buffer_s hb_buffer_t;
+
 struct hb_buffer_settings_s
 {
     enum { OTHER_BUF, AUDIO_BUF, VIDEO_BUF, SUBTITLE_BUF, FRAME_BUF } type;

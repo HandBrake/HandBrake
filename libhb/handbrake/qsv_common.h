@@ -16,6 +16,13 @@ int            hb_qsv_available();
 
 #if HB_PROJECT_FEATURE_QSV
 
+// Public API
+int  hb_qsv_impl_set_preferred(const char *name);
+void hb_qsv_force_workarounds(); // for developers only
+
+#ifdef __LIBHB__
+// Private API
+
 #include "mfx/mfxvideo.h"
 #include "mfx/mfxplugin.h"
 #include "libavcodec/avcodec.h"
@@ -191,11 +198,9 @@ const char* hb_qsv_level_name    (uint32_t codec_id, uint16_t level_id);
 const char* hb_qsv_frametype_name(uint16_t qsv_frametype);
 uint8_t     hb_qsv_frametype_xlat(uint16_t qsv_frametype, uint16_t *out_flags);
 
-int         hb_qsv_impl_set_preferred(const char *name);
 const char* hb_qsv_impl_get_name(int impl);
 const char* hb_qsv_impl_get_via_name(int impl);
 
-void hb_qsv_force_workarounds(); // for developers only
 
 typedef struct QSVMid {
     AVBufferRef *hw_frames_ref;
@@ -246,5 +251,6 @@ int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict);
 void hb_qsv_uninit_dec(AVCodecContext *s);
 void hb_qsv_uninit_enc();
 
+#endif // __LIBHB__
 #endif // HB_PROJECT_FEATURE_QSV
 #endif // HANDBRAKE_QSV_COMMON_H

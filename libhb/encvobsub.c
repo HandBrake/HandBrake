@@ -8,6 +8,7 @@
  */
  
 #include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
 
 struct hb_work_private_s
 {
