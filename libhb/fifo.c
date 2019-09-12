@@ -7,6 +7,8 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+#include "libavcodec/avcodec.h"
+
 #include "handbrake/handbrake.h"
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_libav.h"

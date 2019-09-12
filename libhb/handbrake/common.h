@@ -107,6 +107,7 @@ typedef enum
 #include "qsv_libav.h"
 #endif
 
+#ifdef __LIBHB__
 struct hb_buffer_list_s
 {
     hb_buffer_t *head;
@@ -127,6 +128,7 @@ hb_buffer_t* hb_buffer_list_set(hb_buffer_list_t *list, hb_buffer_t *buf);
 void hb_buffer_list_close(hb_buffer_list_t *list);
 int hb_buffer_list_count(hb_buffer_list_t *list);
 int hb_buffer_list_size(hb_buffer_list_t *list);
+#endif // __LIBHB__
 
 hb_list_t * hb_list_init(void);
 int         hb_list_count( const hb_list_t * );

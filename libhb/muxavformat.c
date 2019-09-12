@@ -15,6 +15,7 @@
 #include "handbrake/handbrake.h"
 #include "handbrake/ssautil.h"
 #include "handbrake/lang.h"
+#include "handbrake/hbffmpeg.h"
 
 struct hb_mux_data_s
 {

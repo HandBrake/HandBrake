@@ -13,6 +13,7 @@
 #include <sys/time.h>
 
 #include "handbrake/handbrake.h"
+#include "handbrake/hbffmpeg.h"
 #include "x264.h"
 #include "handbrake/lang.h"
 #include "handbrake/common.h"
