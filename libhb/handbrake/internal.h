@@ -16,6 +16,7 @@
 #include "handbrake/project.h"
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_libav.h"
+#include "libavcodec/avcodec.h"
 #endif
 
 /***********************************************************************

@@ -33,6 +33,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #if HB_PROJECT_FEATURE_QSV
 
+#include "libswscale/swscale.h"
 #include "mfx/mfxplugin.h"
 #include "handbrake/qsv_libav.h"
 
