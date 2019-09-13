@@ -11,12 +11,10 @@ jobs:
     - uses: actions/checkout@master
       with:
         fetch-depth: 1
-    
-    - name: Setup Environment
-      run: |
-        echo %PATH%
-        set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin;%PATH%
         
     - name: Build HandBrake Linux
-      run: |
+      run: |      
+        set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin;%PATH%
+        echo %PATH%
+        msbuild -version
         msbuild win\cs\build.xml /t:Nightly
