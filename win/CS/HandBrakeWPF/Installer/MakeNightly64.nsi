@@ -17,6 +17,8 @@
 SetCompressor lzma
 ManifestDPIAware true
 
+!addplugindir ..\..\..\..\nsis
+
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 !include WinVer.nsh
