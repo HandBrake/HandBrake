@@ -1,0 +1,22 @@
+name: HandBrake macOS build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 1
+    
+    - name: Setup Environment
+      run: |
+        scripts/mac-toolchain-build /usr/local
+        
+    - name: Build HandBrake
+      run: |
+        ./configure --launch-jobs=$(sysctl -n hw.ncpu) --launch
+       
