@@ -12,6 +12,10 @@ jobs:
       with:
         fetch-depth: 1
         
+    - name: Environment Setup
+      run: |
+        choco install nsis --force
+  
     - name: NuGet Restore
       run: |
          choco install nuget.commandline
