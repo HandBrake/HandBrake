@@ -14,8 +14,8 @@ jobs:
     
     - name: Setup Environment
       run: |
-        choco install nsis
-        choco install 7zip.install
+        echo %PATH%
+        set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin;%PATH%
         
     - name: Build HandBrake Linux
       run: |
