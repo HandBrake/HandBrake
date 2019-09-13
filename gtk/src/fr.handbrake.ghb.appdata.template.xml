@@ -7,16 +7,16 @@
   <launchable type="desktop-id">fr.handbrake.ghb.desktop</launchable>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0+</project_license>
-  <_name>HandBrake</_name>
-  <_summary>Video Transcoder</_summary>
+  <name>HandBrake</name>
+  <summary>Video Transcoder</summary>
 
   <description>
-    <_p>HandBrake is a tool for converting video from nearly any format to a selection of modern, widely supported codecs.</_p>
-    <_p>Reasons you'll love Handbrake:</_p>
+    <p>HandBrake is a tool for converting video from nearly any format to a selection of modern, widely supported codecs.</p>
+    <p>Reasons you'll love Handbrake:</p>
     <ul>
-      <_li>Convert video from nearly any format</_li>
-      <_li>Free and Open Source</_li>
-      <_li>Multi-Platform (Windows, Mac and Linux)</_li>
+      <li>Convert video from nearly any format</li>
+      <li>Free and Open Source</li>
+      <li>Multi-Platform (Windows, Mac and Linux)</li>
     </ul>
   </description>
 
@@ -60,23 +60,23 @@
   <screenshots>
     <screenshot type="default">
       <image>https://download.handbrake.fr/handbrake/images/HandBrake_1.1.x_Summary_linux.png</image>
-      <_caption>Main window and settings summary</_caption>
+      <caption>Main window and settings summary</caption>
     </screenshot>
     <screenshot>
       <image>https://download.handbrake.fr/handbrake/images/HandBrake_1.1.x_Dimensions_linux.png</image>
-      <_caption>Video resolution and cropping settings</_caption>
+      <caption>Video resolution and cropping settings</caption>
     </screenshot>
     <screenshot>
       <image>https://download.handbrake.fr/handbrake/images/HandBrake_1.1.x_Video_linux.png</image>
-      <_caption>Video encoder settings</_caption>
+      <caption>Video encoder settings</caption>
     </screenshot>
     <screenshot>
       <image>https://download.handbrake.fr/handbrake/images/HandBrake_1.1.x_Audio_linux.png</image>
-      <_caption>Audio track selection and settings</_caption>
+      <caption>Audio track selection and settings</caption>
     </screenshot>
     <screenshot>
       <image>https://download.handbrake.fr/handbrake/images/HandBrake_1.1.x_Chapters_linux.png</image>
-      <_caption>Chapter title editing</_caption>
+      <caption>Chapter title editing</caption>
     </screenshot>
   </screenshots>
 
