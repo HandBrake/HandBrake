@@ -15,3 +15,5 @@ dist-hook:
 		fi \
 	done
 
+
+ACLOCAL_AMFLAGS = -I m4

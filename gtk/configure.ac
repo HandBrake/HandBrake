@@ -1,10 +1,9 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl Created by Anjuta application wizard.
 
-AC_INIT(ghb, 0.1)
+AC_INIT([ghb], [0.1])
+AM_INIT_AUTOMAKE([-Wall 1.7.9 foreign dist-bzip2 dist-zip])
 
-AM_INIT_AUTOMAKE([1.7.9 foreign dist-bzip2 dist-zip])
-AM_CONFIG_HEADER(config.h)
 AM_MAINTAINER_MODE
 
 AC_USE_SYSTEM_EXTENSIONS
@@ -13,6 +12,16 @@ AC_ISC_POSIX
 AC_PROG_CXX(g++ clang++)
 AM_PROG_CC_STDC
 AC_HEADER_STDC
+
+AM_CONFIG_HEADER([config.h])
+AC_CONFIG_FILES([
+po/Makefile.in
+Makefile
+src/Makefile
+])
+
+AM_GNU_GETTEXT([external])
+AM_GNU_GETTEXT_VERSION([0.19.8])
 
 if test x"$CC_FOR_BUILD" = x; then
 	if test x"$cross_compiling" = x"yes"; then
@@ -105,8 +114,6 @@ dnl ***************************************************************************
 GETTEXT_PACKAGE=ghb
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name])
-AM_GLIB_GNU_GETTEXT
-IT_PROG_INTLTOOL([0.35.0])
 
 AM_PROG_LIBTOOL
 
@@ -252,8 +259,4 @@ AC_SUBST(HB_LIBS)
 AC_SUBST(GHB_CFLAGS)
 AC_SUBST(GHB_LIBS)
 
-AC_OUTPUT([
-Makefile
-src/Makefile
-po/Makefile.in
-])
+AC_OUTPUT

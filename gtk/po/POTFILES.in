@@ -1,10 +1,9 @@
 # List of source files containing translatable strings.
-[type: gettext/glade]src/ghb.m4
-[type: gettext/xml]src/fr.handbrake.ghb.appdata.xml.template
-src/main.c
+src/ghb3.ui
+src/fr.handbrake.ghb.appdata.template.xml
 src/audiohandler.c
 src/callbacks.c
-src/ghbcellrenderertext.c
+src/chapters.c
 src/ghb-dvd.c
 src/hb-backend.c
 src/main.c
