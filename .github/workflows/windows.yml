@@ -3,10 +3,28 @@ name: Windows Build
 on: [push, pull_request]
 
 jobs:
-  build:
-    name: Build on Windows
-    runs-on: windows-latest
+  build_mingw:
+    name: Build Windows UI
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
     
+    - name: Environment Setup
+      run: |
+        sudo apt-get install automake autoconf build-essential cmake curl gcc git intltool libtool libtool-bin m4 make nasm patch pkg-config python tar yasm zlib1g-dev
+        sudo apt-get install bison bzip2 flex g++ gzip pax
+    
+    - name: Compile Toolchain
+      run: |
+        scripts/mingw-w64-build x86_64 ~/toolchains
+        
+    - name: Build CLI and LibHB
+      run: |
+        ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --launch-jobs=$(nproc) --launch
+    
+  build_gui:
+    name: Build Windows UI
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@master
         
@@ -32,3 +50,4 @@ jobs:
         echo %PATH%
         msbuild -version
         msbuild win\cs\build.xml /t:Nightly
+
