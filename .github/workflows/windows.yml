@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build_mingw:
-    name: Build Windows UI
+    name: Build Windows CLI / LibHandBrake
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
