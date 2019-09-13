@@ -25,6 +25,7 @@ jobs:
   build_gui:
     name: Build Windows UI
     runs-on: windows-latest
+    needs: build_mingw
     steps:
     - uses: actions/checkout@master
         
