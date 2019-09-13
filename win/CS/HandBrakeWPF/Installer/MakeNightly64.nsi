@@ -19,7 +19,7 @@ ManifestDPIAware true
 
 ; Required for Github Actions (or local builds were inetc is not part of the installed NSIS)
 ; Extract inetc.zip to the HandBrake root directory into a folder called plugins.
-!addplugindir plugins\Plugins\
+!addplugindir /x86-ansi plugins\Plugins\
 
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
