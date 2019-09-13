@@ -16,11 +16,10 @@ jobs:
       run: |
         choco install wget
         wget https://nsis.sourceforge.io/mediawiki/images/c/c9/Inetc.zip
-        dir
         mkdir plugins
         move Inetc.zip plugins
         cd plugins        
-        7z e Inetc.zip
+        7z x Inetc.zip
         dir
   
     - name: NuGet Restore
