@@ -1,0 +1,22 @@
+name: Windows Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build on Windows
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@master
+      with:
+        fetch-depth: 1
+    
+    - name: Setup Environment
+      run: |
+        choco install nsis
+        choco install 7zip.install
+        
+    - name: Build HandBrake Linux
+      run: |
+        msbuild win\cs\build.xml /t:Nightly
