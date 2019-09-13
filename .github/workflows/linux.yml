@@ -9,8 +9,6 @@ jobs:
     
     steps:
     - uses: actions/checkout@master
-      with:
-        fetch-depth: 1
     
     - name: Setup Environment
       run: |
