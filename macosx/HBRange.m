@@ -12,8 +12,6 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 
 @implementation HBRange
 
-#pragma mark - NSCoding
-
 - (instancetype)initWithTitle:(HBTitle *)title
 {
     self = [super init];
@@ -193,7 +191,7 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 {
     [coder encodeInt:1 forKey:@"HBRangeVersion"];
 
-    encodeInt(_type);
+    encodeInteger(_type);
 
     encodeInt(_chapterStart);
     encodeInt(_chapterStop);
@@ -209,7 +207,7 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 {
     self = [super init];
 
-    decodeInt(_type); if (_type < HBRangeTypeChapters || _type > HBRangePreviewIndex) { goto fail; }
+    decodeInteger(_type); if (_type < HBRangeTypeChapters || _type > HBRangePreviewIndex) { goto fail; }
     decodeInt(_chapterStart);  if (_chapterStart < 0) { goto fail; }
     decodeInt(_chapterStop);  if (_chapterStop < _chapterStart) { goto fail; }
 

@@ -87,9 +87,11 @@
     [super showWindow:sender];
 }
 
+/**
+ Write the HandBrake version number to the log
+ */
 - (void)writeHeader
 {
-    // Lets report the HandBrake version number here to the activity log and text log file
     NSDictionary *infoDict = NSBundle.mainBundle.infoDictionary;
     NSString *versionStringFull = [NSString stringWithFormat:@"Handbrake Version: %@ (%@)", infoDict[@"CFBundleShortVersionString"], infoDict[@"CFBundleVersion"]];
     [HBUtilities writeToActivityLog:"%s", versionStringFull.UTF8String];
@@ -140,7 +142,6 @@
  */
 - (IBAction)openActivityLogFile:(id)sender
 {
-    // Opens the activity window log file in the users default text editor
     [NSWorkspace.sharedWorkspace openURL:self.outputFile.url];
 }
 

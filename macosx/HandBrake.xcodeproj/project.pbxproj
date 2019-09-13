@@ -1710,7 +1710,7 @@
 		273F1FE014AD9DA40021BE6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1010;
+				LastUpgradeCheck = 1100;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
 						SystemCapabilities = {
@@ -2655,6 +2655,7 @@
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/lib\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -2687,6 +2688,7 @@
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/lib\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3473,6 +3475,7 @@
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/lib\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -3723,6 +3726,7 @@
 					"\"$(EXTERNAL_BUILD)/libhb\"",
 					"\"$(EXTERNAL_BUILD)/contrib/lib\"",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

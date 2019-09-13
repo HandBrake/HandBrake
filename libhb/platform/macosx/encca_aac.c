@@ -9,6 +9,7 @@
 
 #include "handbrake/handbrake.h"
 #include "handbrake/audio_remap.h"
+#include "handbrake/hbffmpeg.h"
 #include <AudioToolbox/AudioToolbox.h>
 #include <CoreAudio/CoreAudio.h>
 

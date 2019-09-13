@@ -128,9 +128,8 @@ fail:
     if (self)
     {
         _displayName = [displayName copy];
-        _title = @"";
         _type = type;
-        _isoLanguageCode = @"";
+        _isoLanguageCode = @"und";
         _fileURL = fileURL;
     }
     return self;
