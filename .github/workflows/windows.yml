@@ -12,7 +12,12 @@ jobs:
       with:
         fetch-depth: 1
         
-    - name: Build HandBrake Linux
+    - name: NuGet Restore
+      run: |
+         cd win/CS/
+         nuget restore HandBrake.sln
+        
+    - name: Build Windows GUI
       run: |      
         set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin;%PATH%
         echo %PATH%
