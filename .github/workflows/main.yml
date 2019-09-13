@@ -1,4 +1,4 @@
-name: HandBrake Linux Build
+name: Linux Build
 
 on: [push, pull_request]
 
