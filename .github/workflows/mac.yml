@@ -1,10 +1,10 @@
-name: HandBrake macOS build
+name: macOS build
 
 on: [push, pull_request]
 
 jobs:
   build:
-    name: Build on node ${{ matrix.node_version }} and ${{ matrix.os }}
+    name: Build on macOS
     runs-on: macOS-latest
 
     steps:
