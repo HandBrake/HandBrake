@@ -27,7 +27,7 @@ download/
 
 # Gtk autoconf spam
 gtk/Makefile.in*
-gtk/*/Makefile.in*
+gtk/src/Makefile.in*
 gtk/aclocal.m4
 gtk/autom4te.cache
 gtk/compile

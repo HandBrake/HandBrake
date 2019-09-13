@@ -1,8 +1,8 @@
 {
     "app-id": "fr.handbrake.ghb",
-    "runtime": "org.freedesktop.Platform",
-    "runtime-version": "18.08",
-    "sdk": "org.freedesktop.Sdk",
+    "runtime": "org.gnome.Platform",
+    "runtime-version": "3.34",
+    "sdk": "org.gnome.Sdk",
     "command": "ghb",
     "finish-args": [
         "--device=dri",
@@ -39,19 +39,6 @@
                     "type": "archive",
                     "url": "https://github.com/numactl/numactl/releases/download/v2.0.12/numactl-2.0.12.tar.gz",
                     "sha256": "55bbda363f5b32abd057b6fbb4551dd71323f5dbb66335ba758ba93de2ada729"
-                }
-            ]
-        },
-        {
-            "name": "gvfs",
-            "cleanup": [ "/libexec/*", "/share/dbus-1/services/*", "/share/gvfs/mounts" ],
-            "config-opts": [ "--disable-hal", "--disable-gdu", "--disable-gcr", "--disable-obexftp",
-                             "--disable-avahi", "--disable-documentation", "--disable-admin" ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://download.gnome.org/sources/gvfs/1.36/gvfs-1.36.1.tar.xz",
-                    "sha256": "3840dff386c2c8a445337bea4ade0eb71339efaff8602767659fa2896792f026"
                 }
             ]
         },

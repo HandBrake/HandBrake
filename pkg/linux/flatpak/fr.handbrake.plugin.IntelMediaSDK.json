@@ -3,18 +3,33 @@
     "branch": "1",
     "runtime": "fr.handbrake.ghb",
     "runtime-version": "development",
-    "sdk": "org.freedesktop.Sdk//18.08",
+    "sdk": "org.gnome.Sdk//3.34",
     "build-extension": true,
     "separate-locales": false,
     "appstream-compose": false,
     "modules": [
         {
+            "name": "libdrm",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://dri.freedesktop.org/libdrm/libdrm-2.4.99.tar.gz",
+                    "sha256": "597fb879e2f45193431a0d352d10cd79ef61a24ab31f44320168583e10cb6302"
+                }
+            ],
+            "no-autogen": true,
+            "config-opts": [],
+            "build-options": {
+                "prefix" : "/app/extensions/IntelMediaSDK"
+            }
+        },
+        {
             "name": "intel-gmmlib",
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/gmmlib/archive/intel-gmmlib-18.4.1.tar.gz",
-                    "sha256": "7970a8ae4e16efb98f38fbbc0346eea03227fc4462a9bd8e8077277cc3430a84"
+                    "url": "https://github.com/intel/gmmlib/archive/intel-gmmlib-19.2.3.tar.gz",
+                    "sha256": "60944d54a4992553f92d71ba9f8f4191d297407b564b0f24e9912b415689582e"
                 }
             ],
             "buildsystem": "cmake",
@@ -37,8 +52,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva/releases/download/2.4.0/libva-2.4.0.tar.bz2",
-                    "sha256": "99263056c21593a26f2ece812aee6fe60142b49e6cd46cb33c8dddf18fc19391"
+                    "url": "https://github.com/intel/libva/releases/download/2.5.0/libva-2.5.0.tar.bz2",
+                    "sha256": "3aa89cd369a506ac4dbe5de7c0ef5da4f3d220bf986403f02fa1f6f702af6878"
                 }
             ],
             "no-autogen": true,
@@ -52,8 +67,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/libva-utils/releases/download/2.4.0/libva-utils-2.4.0.tar.bz2",
-                    "sha256": "5b7d1954b40fcb2c0544be20125c71a0852049715ab85a3e8aba60434a40c6b3"
+                    "url": "https://github.com/intel/libva-utils/releases/download/2.5.0/libva-utils-2.5.0.tar.bz2",
+                    "sha256": "9238c9d5110d60f935683390b8383fdac3507346384cd5f117a23c6db1d72a17"
                 }
             ],
             "no-autogen": true,
@@ -67,14 +82,19 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/intel/media-driver/archive/intel-media-18.4.1.tar.gz",
-                    "sha256": "f04467e725a530c2fb80e081a45d5b7910d1b3ccbf89ff2d0b1ea7996dd93ce1"
+                    "url": "https://github.com/intel/media-driver/archive/intel-media-19.2.1.tar.gz",
+                    "sha256": "79279c991d918deaa52239dac55787b9c7562e520cd58744171b468d28b8af40"
+                },
+                {
+                    "type": "patch",
+                    "path": "patch/intel-media-driver-implicit-function-decl-error.patch"
                 }
             ],
             "buildsystem": "cmake",
             "builddir": true,
             "config-opts": [
-                "-DCMAKE_BUILD_TYPE=Release"
+                "-DCMAKE_BUILD_TYPE=Release",
+                "-DMEDIA_RUN_TEST_SUITE=OFF"
             ],
             "build-options": {
                 "prefix" : "/app/extensions/IntelMediaSDK",
@@ -86,14 +106,18 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/intel-mediasdk-18.4.1.tar.gz",
-                    "sha256": "2a7b282f71e12f626a6cc70024a5b571a71ffdc5f673e2c8fc4858e9a1e1187b"
+                    "url": "https://github.com/Intel-Media-SDK/MediaSDK/archive/intel-mediasdk-19.2.1.tar.gz",
+                    "sha256": "03c11a0379b61e292e789fa3dc9308ce45f36d68b4ebf437806c0e2c32357970"
                 }
             ],
             "buildsystem": "cmake",
             "builddir": true,
             "config-opts": [
                 "-DCMAKE_BUILD_TYPE=Release",
+                "-DBUILD_SAMPLES=OFF",
+                "-DBUILD_TESTS=OFF",
+                "-DBUILD_TOOLS=OFF",
+                "-DBUILD_TESTS=OFF",
                 "-DMFX_ENABLE_SW_FALLBACK=OFF"
             ],
             "build-options": {

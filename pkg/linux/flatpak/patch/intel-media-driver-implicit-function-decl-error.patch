@@ -1,0 +1,11 @@
+diff -ur media-driver-intel-media-19.2.1.orig/media_driver/cmake/linux/media_compile_flags_linux.cmake media-driver-intel-media-19.2.1/media_driver/cmake/linux/media_compile_flags_linux.cmake
+--- media-driver-intel-media-19.2.1.orig/media_driver/cmake/linux/media_compile_flags_linux.cmake	2019-07-30 19:33:34.000000000 -0700
++++ media-driver-intel-media-19.2.1/media_driver/cmake/linux/media_compile_flags_linux.cmake	2019-09-13 12:15:31.275816235 -0700
+@@ -32,7 +32,6 @@
+     -Wno-overflow
+     -Wno-parentheses
+     -Wno-delete-incomplete
+-    -Werror=implicit-function-declaration
+     -Werror=address
+     -Werror=format-security
+     -Werror=non-virtual-dtor
