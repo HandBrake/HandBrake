@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build_mingw:
-    name: Build CLI / LibHB
+    name: CLI / LibHB
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -24,7 +24,7 @@ jobs:
         ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --launch-jobs=$(nproc) --launch
     
   build_gui:
-    name: Build Windows UI
+    name: Windows UI
     runs-on: windows-latest
     needs: build_mingw
     steps:
