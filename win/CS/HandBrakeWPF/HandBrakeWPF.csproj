@@ -110,6 +110,7 @@
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\MenuItemExtensions.cs" />
     <Compile Include="AttachedProperties\WindowHelper.cs" />
+    <Compile Include="Behaviours\DoubleClickFileBehaviours.cs" />
     <Compile Include="Collections\SerializableDictionary.cs" />
     <Compile Include="Commands\InputBindingTrigger.cs" />
     <Compile Include="Commands\Menu\QueueCommandParams.cs" />
@@ -786,6 +787,7 @@
   <ItemGroup>
     <Resource Include="Views\Images\Dark\Disc.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <TargetFrameworkSDKToolsDirectory Condition=" '$(Platform)' == 'x64'">$(TargetFrameworkSDKToolsDirectory)$(Platform)\</TargetFrameworkSDKToolsDirectory>

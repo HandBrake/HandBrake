@@ -11,6 +11,7 @@
              xmlns:helpers="clr-namespace:HandBrakeWPF.Helpers"
              xmlns:loc="clr-namespace:HandBrakeWPF.Services.Presets.Model"
              xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
+             xmlns:behaviours="clr-namespace:HandBrakeWPF.Behaviours"
              AllowDrop="True"
              FontSize="11"
              cal:Message.Attach="[Event Loaded] = [Action Load]"
@@ -572,6 +573,10 @@
                              Margin="5,0,0,0" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Destination}"
                              Text="{Binding Destination,
                                             UpdateSourceTrigger=PropertyChanged}">
+
+                        <i:Interaction.Behaviors>
+                            <behaviours:DoubleClickFileBehaviours/>
+                        </i:Interaction.Behaviors>
                         <TextBox.ContextMenu>
                             <ContextMenu>
                                 <MenuItem Header="Open this Directory" cal:Message.Attach="[Event Click] = [Action OpenDestinationDirectory]" />
