@@ -12,7 +12,8 @@ LIBDAV1D.CONFIGURE.shared =
 LIBDAV1D.CONFIGURE.host   =
 LIBDAV1D.CONFIGURE.build  =
 LIBDAV1D.CONFIGURE.static = -Ddefault_library=static
-LIBDAV1D.CONFIGURE.extra  = --libdir=$(call fn.ABSOLUTE,$(CONTRIB.build/))lib/ --buildtype=release
+LIBDAV1D.CONFIGURE.extra  = --libdir=$(call fn.ABSOLUTE,$(CONTRIB.build/))lib/ --buildtype=release \
+                            -Denable_tools=false -Denable_tests=false
 LIBDAV1D.CONFIGURE.env    =
 
 ifeq (1-mingw,$(HOST.cross)-$(HOST.system))
