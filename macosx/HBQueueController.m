@@ -22,7 +22,6 @@
 
 @interface HBQueueController () <NSUserNotificationCenterDelegate, HBQueueTableViewControllerDelegate, HBQueueDetailsViewControllerDelegate>
 
-@property (nonatomic, weak) IBOutlet NSSplitView *splitView;
 @property (nonatomic) NSSplitViewController *splitViewController;
 @property (nonatomic) HBQueueTableViewController *tableViewController;
 @property (nonatomic) NSViewController *containerViewController;
@@ -34,7 +33,6 @@
 @property (nonatomic) BOOL visible;
 
 @property (nonatomic, readonly) HBDockTile *dockTile;
-@property (nonatomic) double dockIconProgress;
 
 @property (nonatomic) IBOutlet NSToolbarItem *ripToolbarItem;
 @property (nonatomic) IBOutlet NSToolbarItem *pauseToolbarItem;
@@ -56,10 +54,11 @@
     if (self = [super initWithWindowNibName:@"Queue"])
     {
         _queue = queue;
-        
+
         // Load the dockTile and instantiate initial text fields
         _dockTile = [[HBDockTile alloc] initWithDockTile:NSApplication.sharedApplication.dockTile
                                                   image:NSApplication.sharedApplication.applicationIconImage];
+        __block double dockIconProgress;
 
         [NSNotificationCenter.defaultCenter addObserverForName:HBQueueLowSpaceAlertNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
             [self queueLowDiskSpaceAlert];
@@ -75,21 +74,21 @@
 
 #define dockTileUpdateFrequency 0.1f
 
-            if (self.dockIconProgress < 100.0 * progress)
+            if (dockIconProgress < 100.0 * progress)
             {
                 double hours = [note.userInfo[HBQueueProgressNotificationHoursKey] doubleValue];
                 double minutes = [note.userInfo[HBQueueProgressNotificationMinutesKey] doubleValue];
                 double seconds = [note.userInfo[HBQueueProgressNotificationSecondsKey] doubleValue];
 
                 [self.dockTile updateDockIcon:progress hours:hours minutes:minutes seconds:seconds];
-                self.dockIconProgress += dockTileUpdateFrequency;
+                dockIconProgress += dockTileUpdateFrequency;
             }
         }];
 
         [NSNotificationCenter.defaultCenter addObserverForName:HBQueueDidCompleteItemNotification object:_queue queue:NSOperationQueue.mainQueue usingBlock:^(NSNotification * _Nonnull note) {
             // Restore dock icon
             [self.dockTile updateDockIcon:-1.0 withETA:@""];
-            self.dockIconProgress = 0;
+            dockIconProgress = 0;
 
             // Run the per item notification and actions
             HBQueueItem *item = note.userInfo[HBQueueItemNotificationItemKey];
@@ -124,7 +123,6 @@
 
     // Set up the child view controllers
     _splitViewController = [[NSSplitViewController alloc] init];
-    _splitViewController.splitView = _splitView;
     _splitViewController.view.wantsLayer = YES;
     [_splitViewController.view setFrameSize:NSMakeSize(780, 500)];
     _splitViewController.splitView.vertical = YES;
