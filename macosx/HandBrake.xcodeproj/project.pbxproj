@@ -296,6 +296,8 @@
 		A9F217E61E2F934C00C10C6E /* container-migration.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9F217E51E2F934C00C10C6E /* container-migration.plist */; };
 		A9F472891976B7F30009EC65 /* HBSubtitlesDefaultsController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F472871976B7F30009EC65 /* HBSubtitlesDefaultsController.m */; };
 		A9F7102619A475EC00F61301 /* HBDockTile.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F7102519A475EC00F61301 /* HBDockTile.m */; };
+		D0DC8F682331573500C12A24 /* libdav1d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DC8F672331573500C12A24 /* libdav1d.a */; };
+		D0DC8F69233159C700C12A24 /* libdav1d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0DC8F672331573500C12A24 /* libdav1d.a */; };
 		D86C9DD51C6D372500F06F1B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D86C9DD41C6D372500F06F1B /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -801,6 +803,7 @@
 		A9F7102519A475EC00F61301 /* HBDockTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBDockTile.m; sourceTree = "<group>"; };
 		D062DF6422FAE05700A65A9E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
 		D062DF6522FAE06000A65A9E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
+		D0DC8F672331573500C12A24 /* libdav1d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdav1d.a; path = external/contrib/lib/libdav1d.a; sourceTree = "BUILT_PRODUCTS_DIR"; };
 		D86C9DD41C6D372500F06F1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -828,6 +831,7 @@
 				27D6C74814B102DA00B785E4 /* libavformat.a in Frameworks */,
 				27D6C74A14B102DA00B785E4 /* libavutil.a in Frameworks */,
 				27D6C74C14B102DA00B785E4 /* libbluray.a in Frameworks */,
+				D0DC8F682331573500C12A24 /* libdav1d.a in Frameworks */,
 				27D6C75014B102DA00B785E4 /* libdvdnav.a in Frameworks */,
 				27D6C75214B102DA00B785E4 /* libdvdread.a in Frameworks */,
 				1C53DE8C20BD598D006BBCA8 /* libspeex.a in Frameworks */,
@@ -895,6 +899,7 @@
 				A91CE2B61C7DABBC0068F46F /* libavformat.a in Frameworks */,
 				A91CE2B81C7DABBC0068F46F /* libavutil.a in Frameworks */,
 				A91CE2B91C7DABBC0068F46F /* libbluray.a in Frameworks */,
+				D0DC8F69233159C700C12A24 /* libdav1d.a in Frameworks */,
 				A91CE2BA1C7DABBC0068F46F /* libdvdnav.a in Frameworks */,
 				A91CE2BB1C7DABBC0068F46F /* libdvdread.a in Frameworks */,
 				1C6D76561CD7733400F5B943 /* libharfbuzz.a in Frameworks */,
@@ -1013,6 +1018,7 @@
 		273F203414ADBAC30021BE6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D0DC8F672331573500C12A24 /* libdav1d.a */,
 				A9A25D9B21182741005A8A0F /* CoreMedia.framework */,
 				A9AB9AA721181CC700BB3C7E /* CoreVideo.framework */,
 				A9AB9AA4211819A500BB3C7E /* VideoToolbox.framework */,
