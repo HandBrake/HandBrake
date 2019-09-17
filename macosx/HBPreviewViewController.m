@@ -185,12 +185,14 @@
         CGImageRef fPreviewImage = [self.generator copyImageAtIndex:self.selectedIndex shouldCache:YES];
         self.previewView.image = fPreviewImage;
         CFRelease(fPreviewImage);
+        self.previewView.layer.opacity = 1;
     }
     else
     {
         NSImage *bars = [NSImage imageNamed:@"ColorBars"];
         CGImageRef image = [bars CGImageForProposedRect:NULL context:nil hints:nil];
         self.previewView.image = image;
+        self.previewView.layer.opacity = .3;
     }
 }
 
