@@ -26,10 +26,10 @@
 "307.title" = "Beim Start:";
 
 /* Class = "NSTextFieldCell"; title = "Output Files:"; ObjectID = "308"; */
-"308.title" = "Ausgabedateien:";
+"308.title" = "Ausgabedatei:";
 
 /* Class = "NSButtonCell"; title = "Store Activity Logs in same location as video"; ObjectID = "348"; */
-"348.title" = "Aktivitätsprotokoll an selbem Ort wie das Video ablegen";
+"348.title" = "Aktivitätsprotokoll am selben Ort wie das Video ablegen";
 
 /* Class = "NSTextFieldCell"; title = "Activity Logs:"; ObjectID = "351"; */
 "351.title" = "Protokoll:";
@@ -140,7 +140,7 @@
 "485.title" = ".mp4";
 
 /* Class = "NSTextFieldCell"; title = "Default MP4 Extension:"; ObjectID = "487"; */
-"487.title" = "Standard MP4-Dateiendung:";
+"487.title" = "MP4-Dateiendung:";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "493"; */
 "493.title" = "OtherViews";
@@ -181,6 +181,9 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
+/* Class = "NSButtonCell"; title = "Show preview images"; ObjectID = "Aao-Tf-JeJ"; */
+"Aao-Tf-JeJ.title" = "Vorschaubild anzeigen";
+
 /* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
 "BPU-E2-N8l.title" = "Nach erfolgter Encodierung Einträge abgeschlossener Aufgaben immer entfernen";
 
@@ -191,7 +194,7 @@
 "cqp-xU-GOe.title" = "Encoder:";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
-"dQ6-Dh-9sD.title" = "Labels in das Formatfenster ziehen um das Benennungsschema festzulegen.";
+"dQ6-Dh-9sD.title" = "Labels in das Formatfenster ziehen, um das Benennungsschema festzulegen.";
 
 /* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "None"; ObjectID = "f36-PN-c5F"; */
 "f36-PN-c5F.ibShadowedIsNilPlaceholder" = "Keine";
@@ -204,6 +207,9 @@
 
 /* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "ggR-Zs-P8G"; */
 "ggR-Zs-P8G.title" = "Großbuchstaben korrigieren";
+
+/* Class = "NSTextFieldCell"; title = "Summary:"; ObjectID = "GQJ-go-PoN"; */
+"GQJ-go-PoN.title" = "Übersicht:";
 
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "Sekunden";
@@ -218,7 +224,7 @@
 "pUi-lK-cHw.title" = "Unterstriche durch Leerzeichen ersetzen";
 
 /* Class = "NSTokenField"; ibShadowedToolTip = "Drag labels to the Format field to compose a naming format."; ObjectID = "Tk3-Ig-fFI"; */
-"Tk3-Ig-fFI.ibShadowedToolTip" = "Label in das Format schieben um einen Benennungssysntax zu erstellen.";
+"Tk3-Ig-fFI.ibShadowedToolTip" = "Labels in das Formatfenster ziehen, um das Benennungsschema festzulegen.";
 
 /* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "Uxv-oN-c1r"; */
 "Uxv-oN-c1r.title" = "Bei jedem Start auf \"Nichts tun\" zurücksetzen";
@@ -227,7 +233,7 @@
 "wo5-iR-2mb.title" = "Punktationen entfernen";
 
 /* Class = "NSButtonCell"; title = "Pause queue if disk space is lower than:"; ObjectID = "yG9-mz-tqQ"; */
-"yG9-mz-tqQ.title" = "Warteschlange anhalten wenn der verfügbare Speicherplatz kleiner ist als (GB):";
+"yG9-mz-tqQ.title" = "Warteschlange anhalten, wenn der verfügbare Speicherplatz kleiner ist als (GB):";
 
 /* Class = "NSButtonCell"; title = "Show Open Source panel"; ObjectID = "Zqz-Kn-xOS"; */
 "Zqz-Kn-xOS.title" = "Öffnen-Dialog anzeigen";

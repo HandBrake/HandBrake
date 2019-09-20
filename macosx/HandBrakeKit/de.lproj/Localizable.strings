@@ -8,6 +8,12 @@
    HBStateFormatter -> work time format */
 " (ETA %@)" = " (ETA %@)";
 
+/* HBJob -> video short description framerate */
+" FPS CFR" = " BpS CFR";
+
+/* HBJob -> video short description framerate */
+" FPS PFR" = " BpS PFR";
+
 /* Dimensions description */
 " Keep Aspect Ratio" = " Bildformat erhalten";
 
@@ -81,13 +87,13 @@
 "+ 1 additional subtitles track" = "+ 1 zusätzliche Untertitelspur";
 
 /* Title description */
-"1 Foreign Language Search Pass - " = "1 Fremdsprachensuche-Durchgang -";
+"1 Foreign Language Search Pass - " = "1 Fremdsprachensuche-Durchgang - ";
 
 /* Title description */
 "2 Video Passes" = "2 Videodurchgänge";
 
 /* Title description */
-"2 Video Passes First Turbo" = "2 Video-Durchgänge erster beschleunigt";
+"2 Video Passes First Turbo" = "2 Videodurchgänge, erster beschleunigt";
 
 /* HBAudio -> Mixdown */
 "5.1 Channels" = "5.1 Kanäle";
@@ -181,16 +187,16 @@
 "DRC: %.2f" = "DRC: %.2f";
 
 /* Video description */
-"Encoder: %@, " = "Encoder: %@,";
+"Encoder: %@, " = "Encoder: %@, ";
 
 /* HBStateFormatter -> work pass display name */
-"Encoding %@ " = "Encodiere %@";
+"Encoding %@ " = "Encodiere %@ ";
 
 /* Filters description */
 "Filters:" = "Filter:";
 
 /* Subtitles description */
-"Forced Only" = "Erzwungene";
+"Forced Only" = "Nur erzwungene";
 
 /* HBSubtitles -> search pass name */
 "Foreign Audio Search" = "Fremdsprachentonsuche";
@@ -199,7 +205,7 @@
 "Format:" = "Format:";
 
 /* Video description */
-"Framerate: " = "Bildrate:";
+"Framerate: " = "Bildrate: ";
 
 /* HBRange -> display name */
 "Frames" = "Einzelbilder";
@@ -402,7 +408,7 @@
 "Title %d, %@, %@" = "Titel %1$d, %2$@, %3$@";
 
 /* Video description */
-"Tune: " = "Abstimmung:";
+"Tune: " = "Abstimmung: ";
 
 /* HBJob -> video short description encoder name
    Video description */
@@ -418,7 +424,7 @@
 "VFR" = "VFR";
 
 /* Video description */
-"Video Options:" = "Videooptionen:";
+"Video Options:" = "Parameter:";
 
 /* Video description */
 "Video:" = "Video:";

@@ -23,7 +23,7 @@
 "kfi-wq-mgV.ibShadowedToolTip" = "Erstellt neue benutzerdefinierte Voreinstellungen basierend auf den momentanen Einstellungen.";
 
 /* Class = "NSMenu"; title = "Presets Action Menu"; ObjectID = "LQk-kD-5sj"; */
-"LQk-kD-5sj.title" = "Voreinstellungsmenüoptionen";
+"LQk-kD-5sj.title" = "Voreinstellungen des Dienste-Menüs";
 
 /* Class = "NSMenuItem"; title = "Import…"; ObjectID = "LUl-ag-Iu6"; */
 "LUl-ag-Iu6.title" = "Importieren …";

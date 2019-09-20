@@ -125,7 +125,7 @@
 "zSD-4Y-1cI.title" = "Abstimmung:";
 
 /* Class = "NSTextFieldCell"; title = "Additional Options:"; ObjectID = "ZSm-03-g0B"; */
-"ZSm-03-g0B.title" = "Zusätzliche Einstellungen:";
+"ZSm-03-g0B.title" = "Zusätzliche Parameter:";
 
 /* Class = "NSButtonCell"; title = "Variable Framerate"; ObjectID = "zZo-75-1WG"; */
 "zZo-75-1WG.title" = "Variable Bildfrequenz";
