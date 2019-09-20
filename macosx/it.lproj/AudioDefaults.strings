@@ -179,7 +179,7 @@
 "s6s-EH-5CB.title" = "Auto Passthru:";
 
 /* Class = "NSButtonCell"; title = "MP3"; ObjectID = "sdZ-Rx-JoG"; */
-"sdZ-Rx-JoG.title" = "MP3:";
+"sdZ-Rx-JoG.title" = "MP3";
 
 /* Class = "NSButtonCell"; title = "E-AC3"; ObjectID = "u9h-dn-wcK"; */
 "u9h-dn-wcK.title" = "E-AC3";

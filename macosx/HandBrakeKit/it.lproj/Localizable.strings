@@ -8,6 +8,12 @@
    HBStateFormatter -> work time format */
 " (ETA %@)" = " (ETA %@)";
 
+/* HBJob -> video short description framerate */
+" FPS CFR" = " FPS CFR";
+
+/* HBJob -> video short description framerate */
+" FPS PFR" = " FPS PFR";
+
 /* Dimensions description */
 " Keep Aspect Ratio" = " Mantieni rapporto dimensioni";
 

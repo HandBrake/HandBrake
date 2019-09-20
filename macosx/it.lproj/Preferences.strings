@@ -181,6 +181,9 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
+/* Class = "NSButtonCell"; title = "Show preview images"; ObjectID = "Aao-Tf-JeJ"; */
+"Aao-Tf-JeJ.title" = "Mostra immagini d'anteprima";
+
 /* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
 "BPU-E2-N8l.title" = "Rimuovi automaticamente gli elementi completati";
 
@@ -204,6 +207,9 @@
 
 /* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "ggR-Zs-P8G"; */
 "ggR-Zs-P8G.title" = "Cambia minuscole/maiuscole in Tutte Iniziali Maiuscole";
+
+/* Class = "NSTextFieldCell"; title = "Summary:"; ObjectID = "GQJ-go-PoN"; */
+"GQJ-go-PoN.title" = "Sommario:";
 
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "secondi";

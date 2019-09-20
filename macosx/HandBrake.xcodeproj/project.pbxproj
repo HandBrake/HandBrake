@@ -803,7 +803,7 @@
 		A9F7102519A475EC00F61301 /* HBDockTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBDockTile.m; sourceTree = "<group>"; };
 		D062DF6422FAE05700A65A9E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
 		D062DF6522FAE06000A65A9E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
-		D0DC8F672331573500C12A24 /* libdav1d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdav1d.a; path = external/contrib/lib/libdav1d.a; sourceTree = "BUILT_PRODUCTS_DIR"; };
+		D0DC8F672331573500C12A24 /* libdav1d.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libdav1d.a; path = external/contrib/lib/libdav1d.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		D86C9DD41C6D372500F06F1B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
