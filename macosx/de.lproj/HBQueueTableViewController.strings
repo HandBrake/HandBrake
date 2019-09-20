@@ -7,14 +7,14 @@
 /* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "c1Z-ZC-b8b"; */
 "c1Z-ZC-b8b.title" = "Ziel im Finder anzeigen";
 
-/* Class = "NSMenuItem"; title = "Edit Job Settings"; ObjectID = "DTF-om-j0l"; */
-"DTF-om-j0l.title" = "Aufgabeneinstellungen bearbeiten";
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "DTF-om-j0l"; */
+"DTF-om-j0l.title" = "Bearbeiten";
 
 /* Class = "NSTextFieldCell"; title = "Encoding status"; ObjectID = "eEU-Dr-Qh8"; */
 "eEU-Dr-Qh8.title" = "Encodierungsstatus";
 
-/* Class = "NSMenuItem"; title = "Remove Selected Job"; ObjectID = "egD-8R-PTJ"; */
-"egD-8R-PTJ.title" = "Ausgewählte Aufgabe entfernen";
+/* Class = "NSMenuItem"; title = "Remove"; ObjectID = "egD-8R-PTJ"; */
+"egD-8R-PTJ.title" = "Entfernen";
 
 /* Class = "NSMenuItem"; title = "Remove Completed Jobs"; ObjectID = "gNj-D1-wa7"; */
 "gNj-D1-wa7.title" = "Abgeschlossene Aufgaben entfernen";
@@ -25,9 +25,12 @@
 /* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "Pps-jm-zcd"; */
 "Pps-jm-zcd.title" = "Zeige Quelle im Finder";
 
-/* Class = "NSMenuItem"; title = "Reset Stopped Job"; ObjectID = "xMs-43-lL0"; */
-"xMs-43-lL0.title" = "Gestoppte Aufgaben zurücksetzen";
+/* Class = "NSMenuItem"; title = "Reset"; ObjectID = "xMs-43-lL0"; */
+"xMs-43-lL0.title" = "Zurücksetzen";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "xSd-Hl-5Qk"; */
 "xSd-Hl-5Qk.title" = "Table View Cell";
+
+/* Class = "NSMenuItem"; title = "Show Activity Log in Finder"; ObjectID = "zA7-r8-i4L"; */
+"zA7-r8-i4L.title" = "Aktivitätsprotokoll im Finder anzeigen";
 

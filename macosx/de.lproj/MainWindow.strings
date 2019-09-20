@@ -83,7 +83,7 @@
 "1561.ibExternalAccessibilityDescription" = "Dateiname der Ausgabe";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "File name. This is what your new video will be named."; ObjectID = "1561"; */
-"1561.ibShadowedToolTip" = "Dateiname. Dies wird der neue Name der enkodierten Datei.";
+"1561.ibShadowedToolTip" = "Dateiname. Dies wird der neue Name der encodierten Datei.";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "Browse Destination"; ObjectID = "1562"; */
 "1562.ibExternalAccessibilityDescription" = "Ziel auswählen";
