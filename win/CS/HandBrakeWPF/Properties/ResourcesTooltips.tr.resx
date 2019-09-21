@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>Deblok, düşük kaliteli video sıkıştırma işleminden kaynaklanan bloklu eserleri azaltır.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>Ayrıştırmayı seç veya filtre seçeneklerini değiştir.
+
+Ayrıştırma filtresi, geçmeli görünen çerçeveleri seçici olarak ayırır.
+Bu, iç içe geçmeyen çerçevelerde kaliteyi koruyacaktır.
+
+Klasik geçmeli filtre tüm çerçevelere uygulanır.
+Geçmeli olmayan çerçeveler bazı kalite bozulmalarına neden olur.</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>Gürültüsüzlük, ses ve taneli görünümünü azaltır veya kaldırır. Bu, sıkıştırma verimini artırabilir ve daha küçük dosya boyutlarında daha yüksek kalitede video oluşturabilir. 
+Aşırı güçlü Gürültüsüzlük ayarları, ayrıntıları kaldırarak görüntü kalitesine zarar verebilir.
+         
+NLMeans, hızlandırma maliyeti yüksek kaliteli bir gürültüsüzlük filtresidir. Kalitenin hızdan daha önemli olduğu yerlerde kullanın.
+         
+HQDN3D, NLMeans'dan daha hızlı ancak ince detayların korunmasında daha az etkili olan, uyarlamalı bir düşük geçirgen filtredir.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>Detelecine, film kare hızlarını televizyon kare hızlarına dönüştürmek için bir işlem olan telesine ait tarak eserlerini ortadan kaldırır.</value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>Gri tonlama, videonun renk bileşenini kaldırır. Genellikle Siyah ve Beyaz denir. Beyaz video.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>Dizin ve dosya adı dahil olmak üzere hedef yolu. Yeni videonuzun yaratılacağı yer ve adı ne olacak.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>2006 dolaylarında, eski iPod 5. Nesil cihazlarda çalınmasını sağlamak için özel bir MP4 işaretleyici ekleyin. Diğer ayarlar uyumluluğu etkileyebilir.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>Konteyner formatı Video, ses ve diğer parçalar bu tür tek bir dosyada birleştirilir. Uyumluluğu etkiler.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>Aşamalı indirme için MP4'ü optimize edin. Kodlamadan sonra, tüm dosyayı indirmeye gerek kalmadan ağ üzerinden anında oynatmaya izin vermek için veriler yeniden düzenlenir ve yeniden yazılır.</value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>Kaynak aralığı seçimi. Varsayılan olarak, tüm bölümler seçilir ve tüm kaynak kodlanır.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>Kodlanacak başlık veya video klip.
+Blu-ray ve DVD kaynakları genellikle birden fazla başlığa sahiptir, en uzun olanı tipik olarak ana özelliktir.</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>Anamorfik, oynatma sırasında orijinal yönü korurken, rastgele saklama boyutlarına izin verir.
+
+Kapalı anamorfik devre dışı bırakır. Video depolama boyutları ve ekran boyutları aynı olacaktır. Sadece belirli eski cihazlarla uyumluluk için kullanışlıdır.
+
+Orijinal ekran en boy oranını korurken, Otomatik depolama çözünürlüğünü maksimuma çıkarır. Tavsiye edilen.
+
+Gevşek, Otomatik'e benzer, ancak depolama en boy oranını korumaya çalışır. Bu, Otomatik'e kıyasla hafif bir depolama çözünürlüğü kaybına neden olabilir.
+
+Özel, tüm parametrelerin elle ayarlanmasına izin verir. Hatalı bir kaynak gösterimi yönünü düzeltmek ve post-prodüksiyonda ileri kontrol gerektiren profesyoneller için kullanışlıdır.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>Videonun kenarlarında siyah kenarlıkları otomatik olarak kırp.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>Videoyu alttan kırp.</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>Videoyu sol taraftan kırp.</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>Videoyu sağ taraftan kırp.</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>Videoyu üstten kırp.</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>Bu, videonun kaydedileceği yüksekliktir.
+Piksel en boy oranı 1:1 değilse gerçek ekran boyutları farklılık gösterir.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>Videoyu manuel olarak kırp.</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>Depolama boyutlarını bu değerin katlarıyla aynı hizaya getirin.
+
+Bu ayar yalnızca bazı cihazlarla uyumluluk için gereklidir.
+Uyumluluk sorunları yaşamadığınız sürece 2 kullanmanız gerekir.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>Piksel yönü, piksellerin şeklini tanımlar.
+1:1 oranı bir kare pikseli tanımlar. Diğer değerler dikdörtgen şekilleri tanımlar.
+Oyuncular belirtilen yönü elde etmek için görüntüyü ölçeklendirir.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>Bu, videonun kaydedileceği genişliktir.
+Piksel en boy oranı 1:1 değilse gerçek ekran boyutları farklılık gösterir.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>İşi sıradan silin.</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>İş durumunu Bekleme olarak sıfırla.</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>İşi düzenleme için ana pencereye geri gönderin.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>Ortalama bit hızını ayarlayın.
+
+Anlık bit hızı, zamanın herhangi bir noktasında çok daha yüksek veya daha düşük olabilir.
+Ancak uzun bir süre boyunca ortalama burada ayarlanan değer olacaktır.  Eğer ihtiyacın varsa
+anlık bit hızını sınırlamak için x264'ün vbv-bufsize ve vbv-maxrate ayarlarına bakın.</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>Sabit kare hızı çıkışını etkinleştirir.</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>Mevcut video kodlayıcıları.</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>Genel senaryolar için optimize etmek üzere ayarları yapın.
+
+Bu, belirli kaynak karakteristikleri için verimi artırabilir veya çıkış
+dosyasının ayar özelliklerini değiştirebilir. Değişiklikler ön ayardan
+sonra ancak diğer tüm parametrelerden önce uygulanacaktır.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>Ek kodlayıcı ayarları.
+
+Kodlayıcı seçeneklerinin iki nokta üst üste ayrılmış listesi.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>Kod çözücü CPU kullanımını azaltın.
+
+Cihazınız çıkışı oynatmakta zorlanıyorsa (bırakılan kareler) bunu ayarlayın.</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>Çıktı kare hızı.
+
+'Kaynakla aynı' önerilir. Kaynak videonuzun değişken bir kare hızı varsa, 'Kaynakla aynı' onu koruyacaktır.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>Ayarlar ve belirtilen düzeyde uyum sağlar.
+
+Diğer tüm ayarları geçersiz kılar.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>Kare hızı ayarıyla belirlenen, en yüksek hızda değişken kare hızı çıkışını etkinleştirir.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>Kodlama hızına karşı sıkıştırma verimliliğini dengelemek için kodlayıcı ayarlarını yapar.
+
+Bu, varsayılan kodlayıcı ayarlarınızı belirler.
+Ezgiler, profiller, seviyeler ve gelişmiş seçenek dizgisi buna uygulanacaktır.
+Daha yavaş ayarlar daha iyi kalitede veya daha küçük dosyalar elde edeceğinden, bu seçeneği
+genellikle taşıyabileceğiniz en yavaş değere ayarlamanız gerekir.</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>Belirtilen profile uygunluğu ayarlar ve sağlar.
+
+Diğer tüm ayarları geçersiz kılar.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>İstediğiniz kalite faktörünü ayarlayın.
+Kodlayıcı belirli bir kaliteyi hedefliyor.
+Her video kodlayıcı tarafından kullanılan ölçek farklıdır.
+
+x264 ölçeği logaritmiktir ve düşük değerler daha yüksek kaliteye karşılık gelir.
+Dolayısıyla değerdeki küçük düşüşler, sonuçta oluşan dosya
+boyutunda aşamalı olarak daha büyük artışlara neden olur. 0 değeri,
+kayıpsız demektir ve kaynak kayıpsız olmadığı sürece, orijinal
+kaynaktan daha büyük bir dosya boyutuna neden olur.
+Önerilen değerler: standart tanım kaynakları için 18 ila 20 ve yüksek
+tanım kaynakları için 20 ila 23'tür.
+
+FFMpeg ve Theora'nın ölçeği daha doğrusaldır.
+Bu kodlayıcılar kayıpsız bir moda sahip değildir.</value>
+  </data>
+  <data name="Video_TurboFirstPass" xml:space="preserve">
+    <value>2 geçiş kodlamasının 1. geçişi sırasında, işleri hızlandıran ayarları kullanın.</value>
+  </data>
+  <data name="Video_TwoPass" xml:space="preserve">
+    <value>2 Geçiş Kodlaması Gerçekleştirin.
+
+'Bit Hızı' seçeneği ön şarttır. 1. geçişte, videoyla ilgili istatistikler
+toplanır. Sonra ikinci geçişte, bu istatistikler bit hızı tahsis kararları
+vermek için kullanılır.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>Değişken kare hızı çıkışını etkinleştirir.
+
+VFR bazı oynatıcılarla uyumlu değil.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>HandBrake mevcut sırayı tamamladığında veya kodladığında bu işlemi gerçekleştirir.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>Kodunuz için yeni bir hedef yolu ve dosya adı seçmek üzere göz atın.</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>Kodlanacak video açısı. Sadece çok açılı DVD ve Blu-ray için geçerlidir.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>Yeni bir ön ayar ekleyin.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>Ek Ön Ayar Seçenekleri.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>Ön ayarlar, belirli senaryolar için uyarlanmış kodlama ayarları gruplarıdır. Amacınıza en yakın olanı seçin.
+ 
+Tüm kodlama ayarlarını geçersiz kılar. Bir ön ayar seçildikten sonra ayarlar daha da ayarlanabilir.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>Seçilen ön ayarı kaldırın.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>Tüm başlıklar yerine yalnızca belirtilen başlığı tarayın.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>Özel  Gürültüsüzlük parametreleri.
+ 
+NLMeans sözdizimi: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+NLMeans varsayılan: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D sözdizimi: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D varsayılan: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>Gürültüsüzlük filtresi ön ayarı. Filtrenin gücünü ayarlar.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Gürültüsüzlük ayarı. Ayrıca, belirli senaryolar için ayarları optimize etmek üzere Gürültüsüzlük ön ayarını da ayarlar.
+ 
+- Hiçbiri varsayılan ön ayar ayarlarını kullanmaz.
+ 
+- Film, en canlı hareketli içeriklerle kullanım için ayarları iyileştirir.
+ 
+- Tane, sadece renk kanallarını işler. Renk gürültüsünü azaltırken veya çıkarırken parlaklık tanesinin film benzeri görünümünü korumak için kullanışlıdır.
+
+- Yüksek Hareket, renkli kanallar için geçici işlemden kaçınarak yüksek hareketli sahnelerde renk bulaşmasını azaltır. Spor ve aksiyon videoları için kullanışlıdır.
+
+- Animasyon, anime ve çizgi film gibi cel animasyonu için kullanışlıdır.
+
+- Bant, Film'in istenen bir sonuç üretmediği VHS gibi düşük detaylı analog bant kaynakları için kullanışlıdır.
+
+- Hareketli, 1-/4-/8-/16-bit 2 boyutlu oyunlar için yararlıdır. Hareketli, yüksek çözünürlüklü video için tasarlanmamıştır.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>Ayırıcı, resimden karışmış kalıntıları kaldırır.
+
+Yadif popüler ve hızlı bir ayırıcıdır.
+
+Ayrıştırma, hız ve kalite için çoklu enterpolasyon algoritmaları arasında geçiş yapar.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>Özel Ayırıcı parametreleri.
+ 
+ Yadif sözdizimi: mode=m:parity=p
+ 
+ Yadif varsayılan: mode=3
+ 
+ Ayırıcı sözdizimi: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+ 
+ Ayırıcı varsayılan: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>Ayırma filtresi ön ayarı.
+
+Varsayılan hız ve kalite için iyi dengelenmiş.
+
+Uzamsal Kontrolü Atlama, Yadif'in hafif bir hız artışı için kaçınılabilir bazı kalıntıları düzeltmeyi atlamasını sağlar.
+
+EEDI2, Ayrıştırma için daha yavaş, daha kaliteli bir enterpolasyon algoritması kullanır. En zor kaynaklar için kullanışlıdır.
+
+Bob, algılanan çözünürlüğe hafif bir vuruş için hareketi daha iyi korumaya çalışır.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>Yatay eksende resmi döndürür (aynalar).</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>Geçmeli Algılama, etkin olduğunda Ayrıştırma filtresinin yalnızca geçmeli video karelerini işlemesine izin verir.</value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>Özel Geçmeli Algılama parametreleri.
+ 
+ Sözdizimi: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+ 
+ Varsayılan: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>Resmi 90 derecelik artışlarla saat yönünde döndürün.</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>Seçilen kaynak aralığının Saat:Dakika:Saniye cinsinden süresi</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>En Boy Oranını Koru, kaynağın orijinal görüntü özelliğini korur. Bunun devre dışı bırakılması, uzatılmış veya sıkışmış bir görüntüyle sonuçlanabilir.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>Özel Keskinleştirme parametreleri.
+
+Keskinleştirme sözdizimi: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+Keskinleştirme varsayılan: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Lapsharp sözdizimi: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Lapsharp varsayılan: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Keskinleştirme, özellikle kenarların ayrıntı görünümünü artırır. Aşırı güçlü Keskinleştirme ayarları, zil sesleri oluşturarak ve gürültüyü artırarak, sıkıştırma verimliliğini azaltabilecek şekilde resim kalitesine zarar verebilir.
+
+Keskinleştirme, genel amaçlı bir keskinleştirme maskeleme filtresidir. Bulanıklaştırma ile netleşir, ardından bulanık resim ile orijinal arasındaki farkı hesaplar.
+
+Lapsharp, Laplacian kenar filtrelerine yakın olan evrişimli çekirdekleri kullanarak keskinleşir, bazen keskin olmayan maskelemeden daha yüksek kaliteli sonuçlar verir.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>Keskinleştirme filtresi ön ayarı. Filtrenin gücünü ayarlar.</value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Keskinleştirme ayarı. Ayrıca, belirli senaryolar için ayarları optimize etmek üzere Keskinleştirme hazır ayarını da ayarlar.
+
+Hiçbiri varsayılan ön ayar ayarlarını kullanmaz.
+
+Keskinleştirme, Ultra İnce, İnce, Orta, Kaba veya Çok Kaba keskinleştirme için ayarlanabilir. Çıktı resmin çözünürlüğüne ve geliştirilecek ayrıntı inceliğine göre birini seçin.
+
+Lapsharp'ın Film ayarı, en canlı hareketli içeriklerle kullanım için ayarları düzenler. Film, tüm kenarları benzer şekilde keskinleştirmek için izotropik bir Laplacian çekirdeği kullanır ve parlaklık (aydınlık) bilgisi, krominans (renk) bilgisinden daha fazla keskinleştirilir.
+
+Lapsharp'ın Tane ayarı, Film'e benzer, ancak gürültü ve Tane üzerindeki etkiyi azaltmak için Gauss çekirdeğinin izotropik bir Laplacian'ı kullanır. Taneyi korumak için ve Film ayarlarına genel bir alternatif olarak kullanışlıdır.
+
+Lapsharp'ın Animasyon ayarı, anime ve çizgi film gibi cel animasyonu için yararlıdır. Animasyon filmle aynıdır, ancak eserler oluşturmaktan kaçınmak için genel güç azaltılır.
+
+Lapsharp'ın Hareketli ayarı, 1-/4-/8-/16-bit 2 boyutlu oyunlar için yararlıdır. Hareketli, dikey ve yatay kenarları çapraz kenarlardan daha fazla geliştiren 4 komşulu bir Laplacian çekirdeği kullanır.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>Boş kareler ekleyerek veya kareler bırakarak tüm ses ve video akışlarının başlangıç zaman damgalarını hizalar. MP4 düzenleme listelerine uymayan bozuk oynatıcılar için ses/video senkronizasyonunu iyileştirebilir.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>Ön ayarları kontrol etme seçenekleri.</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>Bu aralığın bitiş noktası.</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>Bu aralığın başlangıç noktası.</value>
+  </data>
+</root>

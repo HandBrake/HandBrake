@@ -1022,7 +1022,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Поддержка iPod 5G</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>Metadata</value>
+    <value>Метаданные</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
     <value>(Измененный)</value>
@@ -1142,7 +1142,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Упрявлять Пресетами</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>Metadata</value>
+    <value>Метаданные</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value>Разрешить использовать кодировщики Nvidia NVENC</value>
@@ -1541,7 +1541,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Выберите языки:</value>
   </data>
   <data name="Shared_ChosenLangages" xml:space="preserve">
-    <value>Selected Languages:</value>
+    <value>Выбранные языки:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
     <value>Сконфигурировать Поведения по умолчанию</value>
@@ -1700,7 +1700,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Настройка кодировщика:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>Advanced Options:</value>
+    <value>Дополнительные параметры:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
     <value>Быстрое Декодирование</value>
@@ -1997,7 +1997,7 @@ Time Remaining: {5:hh\:mm\:ss},  Elapsed: {6:hh\:mm\:ss} {7}</value>
     <value>Not Available</value>
   </data>
   <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
-    <value>GB</value>
+    <value>ГБ</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
     <value>AC Mains power detected. Resuming encode... ({0} %)</value>

@@ -472,6 +472,7 @@
     <EmbeddedResource Include="Properties\Resources.es.resx" />
     <EmbeddedResource Include="Properties\Resources.fr.resx" />
     <EmbeddedResource Include="Properties\Resources.ru.resx" />
+    <EmbeddedResource Include="Properties\Resources.tr.resx" />
     <EmbeddedResource Include="Properties\Resources.zh.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.de.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.es.resx" />
@@ -492,6 +493,7 @@
     <None Include="Installer\MakeNightly64.nsi" />
     <AppDesigner Include="Properties\" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.ru.resx" />
+    <EmbeddedResource Include="Properties\ResourcesTooltips.tr.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.zh.resx" />
     <EmbeddedResource Include="public.key" />
     <None Include="packages.config" />
