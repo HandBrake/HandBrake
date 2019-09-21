@@ -1,0 +1,20 @@
+name: macOS build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build on macOS
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Setup Environment
+      run: |
+        scripts/mac-toolchain-build /usr/local
+        
+    - name: Build HandBrake
+      run: |
+        ./configure --launch-jobs=$(sysctl -n hw.ncpu) --launch
+       
