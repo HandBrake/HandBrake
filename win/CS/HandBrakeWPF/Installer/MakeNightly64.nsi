@@ -17,6 +17,10 @@
 SetCompressor lzma
 ManifestDPIAware true
 
+; Required for Github Actions (or local builds were inetc is not part of the installed NSIS)
+; Extract inetc.zip to the HandBrake root directory into a folder called plugins.
+!addplugindir /x86-ansi "..\..\..\..\..\..\plugins\Plugins\x86-ansi"
+
 ; MUI 1.67 compatible ------
 !include "MUI.nsh"
 !include WinVer.nsh
