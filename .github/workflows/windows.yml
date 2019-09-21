@@ -1,0 +1,54 @@
+name: Windows Build
+
+on: [push, pull_request]
+
+jobs:
+  build_mingw:
+    name: CLI / LibHB
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - name: Environment Setup
+      run: |
+        sudo apt-get install automake autoconf build-essential cmake curl gcc git intltool libtool libtool-bin m4 make nasm patch pkg-config python tar yasm zlib1g-dev
+        sudo apt-get install bison bzip2 flex g++ gzip pax
+    
+    - name: Compile Toolchain
+      run: |
+        scripts/mingw-w64-build x86_64 ~/toolchains
+        
+    - name: Build CLI and LibHB
+      run: |
+        export PATH="/home/runner/toolchains/mingw-w64-x86_64/bin:${PATH}"
+        ./configure --cross=x86_64-w64-mingw32 --enable-qsv --enable-vce --enable-nvenc --launch-jobs=$(nproc) --launch
+    
+  build_gui:
+    name: Windows UI
+    runs-on: windows-latest
+    needs: build_mingw
+    steps:
+    - uses: actions/checkout@master
+        
+    - name: Environment Setup
+      run: |
+        choco install wget
+        wget https://nsis.sourceforge.io/mediawiki/images/c/c9/Inetc.zip
+        mkdir plugins
+        move Inetc.zip plugins
+        cd plugins        
+        7z x Inetc.zip
+        dir
+  
+    - name: NuGet Restore
+      run: |
+         choco install nuget.commandline
+         cd win/CS/
+         nuget restore HandBrake.sln
+        
+    - name: Build Windows GUI
+      run: |      
+        set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin;%PATH%
+        echo %PATH%
+        msbuild -version
+        msbuild win\cs\build.xml /t:Nightly
