@@ -13,6 +13,9 @@ jobs:
       run: |
         sudo apt-get install automake autoconf build-essential cmake curl gcc git intltool libtool libtool-bin m4 make nasm patch pkg-config python tar yasm zlib1g-dev
         sudo apt-get install bison bzip2 flex g++ gzip pax
+        sudo apt-get install python3-pip
+        sudo apt-get install python3-setuptools
+        sudo pip3 install meson
     
     - name: Compile Toolchain
       run: |
