@@ -92,7 +92,11 @@ elif [ "$EXTERNAL_SRC/make/configure.py" -nt "$EXTERNAL_BUILD/GNUmakefile" ]; th
     reconfigure="configure script was updated"
 elif [ "$EXTERNAL_DRIVER" == "bootstrap" ]; then
     reconfigure="driver bootstrap"
-elif [ "${PATH#$SYSTEM_DEVELOPER_BIN_DIR}" != "${PATH}" ]; then
+elif [[ "${PATH}" == "${DEVELOPER_BIN_DIR%/bin}"* ]] ||
+     [[ "${PATH}" == "${DT_TOOLCHAIN_DIR%/bin}"* ]]  ||
+     [[ "${PATH}" == "${PLATFORM_DIR%/bin}"* ]]      ||
+     [[ "${PATH}" == "${PLATFORM_DEVELOPER_BIN_DIR%/bin}"* ]] ||
+     [[ "${PATH}" == "${SYSTEM_DEVELOPER_BIN_DIR%/bin}"*   ]]; then
     reconfigure="unclobber PATH"
 else
     reconfigure=
@@ -103,7 +107,25 @@ if [ -n "$reconfigure" ]; then
     echo "reconfiguring ($reconfigure)"
 
     ## respect PATH priority
-    export PATH="${PATH#$SYSTEM_DEVELOPER_BIN_DIR:}:${SYSTEM_DEVELOPER_BIN_DIR}"
+    OIFS="${IFS}"
+    IFS=':'
+    read -r -a PATH_ITEMS <<< "${PATH}"
+    IFS="${OIFS}"
+    PATH=""
+    APPLE_PATH=""
+    for ITEM in "${PATH_ITEMS[@]}"; do
+        if [[ "${ITEM}" == "${DEVELOPER_BIN_DIR%/bin}"* ]] ||
+           [[ "${ITEM}" == "${DT_TOOLCHAIN_DIR%/bin}"* ]]  ||
+           [[ "${ITEM}" == "${PLATFORM_DIR%/bin}"* ]]      ||
+           [[ "${ITEM}" == "${PLATFORM_DEVELOPER_BIN_DIR%/bin}"* ]] ||
+           [[ "${ITEM}" == "${SYSTEM_DEVELOPER_BIN_DIR%/bin}"*   ]]; then
+            APPLE_PATH="${APPLE_PATH}:${ITEM}"
+        else
+            PATH="${PATH}:${ITEM}"
+        fi
+    done
+    PATH="${PATH}${APPLE_PATH}"
+    export PATH="${PATH:2}"
     echo "Unclobbering PATH:"
     echo "    export PATH=\"${PATH}\""
 
