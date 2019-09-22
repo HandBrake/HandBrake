@@ -485,7 +485,7 @@ namespace HandBrake.Interop.Interop.HbLib.Wrappers
             [In] [MarshalAs(UnmanagedType.LPStr)] string tune,
             [In] [MarshalAs(UnmanagedType.LPStr)] string custom)
         {
-            return this.hb_generate_filter_settings_json(filter_id, preset, tune, custom);
+            return HBFunctions.hb_generate_filter_settings_json(filter_id, preset, tune, custom);
         }
 
         public IntPtr hb_filter_get_presets_json(int filter_id)
