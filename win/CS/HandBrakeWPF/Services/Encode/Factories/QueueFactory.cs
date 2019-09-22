@@ -11,10 +11,15 @@ namespace HandBrakeWPF.Services.Encode.Factories
 {
     using System.Collections.Generic;
 
+    using Caliburn.Micro;
+
+    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Json.Queue;
+    using HandBrake.Interop.Interop.Providers.Interfaces;
     using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Services.Encode.Model;
+    using HandBrakeWPF.Services.Interfaces;
 
     using Newtonsoft.Json;
 
@@ -42,10 +47,13 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 NullValueHandling = NullValueHandling.Ignore,
             };
 
+            IHbFunctionsProvider provider = IoC.Get<IHbFunctionsProvider>(); // TODO remove IoC call.
+            IHbFunctions hbFunctions = provider.GetHbFunctionsWrapper();
+
             List<Task> queueJobs = new List<Task>();
             foreach (var item in tasks)
             {
-                Task task = new Task { Job = EncodeTaskFactory.Create(item, configuration) };
+                Task task = new Task { Job = EncodeTaskFactory.Create(item, configuration, hbFunctions) };
                 queueJobs.Add(task);
             }
 

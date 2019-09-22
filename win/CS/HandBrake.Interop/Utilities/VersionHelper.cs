@@ -13,12 +13,20 @@ namespace HandBrake.Interop.Utilities
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
+    using HandBrake.Interop.Interop.Providers;
+    using HandBrake.Interop.Interop.Providers.Interfaces;
 
-    /// <summary>
-    /// Version Utility
-    /// </summary>
     public class VersionHelper
     {
+        private static IHbFunctions hbFunctions;
+
+        static VersionHelper()
+        {
+            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
+            hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
+        }
+
         /// <summary>
         /// The get build.
         /// </summary>
@@ -54,7 +62,7 @@ namespace HandBrake.Interop.Utilities
         {
             get
             {
-                var versionPtr = HBFunctions.hb_get_version(IntPtr.Zero); // Pointer isn't actually used.
+                var versionPtr = hbFunctions.hb_get_version(IntPtr.Zero); // Pointer isn't actually used.
                 return Marshal.PtrToStringAnsi(versionPtr);
             }
         }
@@ -66,7 +74,7 @@ namespace HandBrake.Interop.Utilities
         {
             get
             {
-                return HBFunctions.hb_get_build(IntPtr.Zero);
+                return hbFunctions.hb_get_build(IntPtr.Zero);
             }
         }
     }

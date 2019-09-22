@@ -12,13 +12,18 @@ namespace HandBrake.Interop.Interop.Model.Encoding
     using System.Collections.Generic;
 
     using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Helpers;
+    using HandBrake.Interop.Interop.Providers;
+    using HandBrake.Interop.Interop.Providers.Interfaces;
 
     /// <summary>
     /// The hb video encoder.
     /// </summary>
     public class HBVideoEncoder
     {
+        private IHbFunctions hbFunctions;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="HBVideoEncoder"/> class.
         /// </summary>
@@ -36,6 +41,9 @@ namespace HandBrake.Interop.Interop.Model.Encoding
         /// </param>
         public HBVideoEncoder(int compatibleContainers, string displayName, int id, string shortName)
         {
+            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
+            hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
+
             this.CompatibleContainers = compatibleContainers;
             this.DisplayName = displayName;
             this.Id = id;
@@ -69,7 +77,7 @@ namespace HandBrake.Interop.Interop.Model.Encoding
         {
             get
             {
-                return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_presets(this.Id));
+                return InteropUtilities.ToStringListFromArrayPtr(hbFunctions.hb_video_encoder_get_presets(this.Id));
             }
         }
 
@@ -80,7 +88,7 @@ namespace HandBrake.Interop.Interop.Model.Encoding
         {
             get
             {
-                return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_tunes(this.Id));
+                return InteropUtilities.ToStringListFromArrayPtr(hbFunctions.hb_video_encoder_get_tunes(this.Id));
             }
         }
 
@@ -91,7 +99,7 @@ namespace HandBrake.Interop.Interop.Model.Encoding
         {
             get
             {
-                return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_profiles(this.Id));
+                return InteropUtilities.ToStringListFromArrayPtr(hbFunctions.hb_video_encoder_get_profiles(this.Id));
             }
         }
 
@@ -102,7 +110,7 @@ namespace HandBrake.Interop.Interop.Model.Encoding
         {
             get
             {
-                return InteropUtilities.ToStringListFromArrayPtr(HBFunctions.hb_video_encoder_get_levels(this.Id));
+                return InteropUtilities.ToStringListFromArrayPtr(hbFunctions.hb_video_encoder_get_levels(this.Id));
             }
         } 
     }

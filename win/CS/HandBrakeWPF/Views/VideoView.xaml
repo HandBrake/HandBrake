@@ -186,13 +186,8 @@
                             </ContextMenu>
                         </TextBox.ContextMenu>
                     </TextBox>
-
-
                 </Grid>
             </Grid>
-
-
         </Grid>
-
     </Grid>
 </UserControl>

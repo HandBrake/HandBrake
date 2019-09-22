@@ -15,9 +15,12 @@ namespace HandBrake.Interop.Interop
     using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Json.Filters;
     using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Providers;
+    using HandBrake.Interop.Interop.Providers.Interfaces;
 
     using Newtonsoft.Json;
 
@@ -26,6 +29,14 @@ namespace HandBrake.Interop.Interop
     /// </summary>
     public class HandBrakeFilterHelpers
     {
+        private static IHbFunctions hbFunctions;
+
+        static HandBrakeFilterHelpers()
+        {
+            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
+            hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
+        }
+
         /// <summary>
         /// The get filter presets.
         /// </summary>
@@ -37,7 +48,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static List<HBPresetTune> GetFilterPresets(int filter)
         {
-            IntPtr ptr = HBFunctions.hb_filter_get_presets_json(filter);
+            IntPtr ptr = hbFunctions.hb_filter_get_presets_json(filter);
             string result = Marshal.PtrToStringAnsi(ptr);
             List<PresetTune> list = JsonConvert.DeserializeObject<List<PresetTune>>(result);
 
@@ -55,7 +66,7 @@ namespace HandBrake.Interop.Interop
         /// </returns>
         public static List<HBPresetTune> GetFilterTunes(int filter)
         {
-            IntPtr ptr = HBFunctions.hb_filter_get_tunes_json(filter);
+            IntPtr ptr = hbFunctions.hb_filter_get_tunes_json(filter);
             string result = Marshal.PtrToStringAnsi(ptr);
             List<PresetTune> list = JsonConvert.DeserializeObject<List<PresetTune>>(result);
 
@@ -69,7 +80,7 @@ namespace HandBrake.Interop.Interop
         /// <returns>The list of keys for custom settings for the filter.</returns>
         public static List<string> GetFilterKeys(int filter)
         {
-            IntPtr ptr = HBFunctions.hb_filter_get_keys(filter);
+            IntPtr ptr = hbFunctions.hb_filter_get_keys(filter);
             return InteropUtilities.ToStringListFromArrayPtr(ptr);
         }
 
@@ -96,7 +107,7 @@ namespace HandBrake.Interop.Interop
                 return new Dictionary<string, string>();
             }
 
-            IntPtr ptr = HBFunctions.hb_generate_filter_settings_json(filter, presetName, null, null);
+            IntPtr ptr = hbFunctions.hb_generate_filter_settings_json(filter, presetName, null, null);
             string result = Marshal.PtrToStringAnsi(ptr);
             return JsonConvert.DeserializeObject<Dictionary<string, string>>(result);
         }

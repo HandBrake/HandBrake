@@ -20,6 +20,7 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.Factories;
     using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Json.Encode;
@@ -27,11 +28,14 @@ namespace HandBrake.Interop.Interop
     using HandBrake.Interop.Interop.Json.State;
     using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Interop.Model.Preview;
+    using HandBrake.Interop.Interop.Providers;
+    using HandBrake.Interop.Interop.Providers.Interfaces;
 
     using Newtonsoft.Json;
 
     public class HandBrakeInstance : IHandBrakeInstance, IDisposable
     {
+        private IHbFunctions hbFunctions;
         private const double ScanPollIntervalMs = 250;
         private const double EncodePollIntervalMs = 250;
         private Timer scanPollTimer;
@@ -97,12 +101,12 @@ namespace HandBrake.Interop.Interop
         /// <summary>
         /// Gets the HandBrake version string.
         /// </summary>
-        public string Version => Marshal.PtrToStringAnsi(HBFunctions.hb_get_version(this.Handle));
+        public string Version => Marshal.PtrToStringAnsi(hbFunctions.hb_get_version(this.Handle));
 
         /// <summary>
         /// Gets the HandBrake build number.
         /// </summary>
-        public int Build => HBFunctions.hb_get_build(this.Handle);
+        public int Build => hbFunctions.hb_get_build(this.Handle);
 
         /// <summary>
         /// Initializes this instance.
@@ -115,10 +119,13 @@ namespace HandBrake.Interop.Interop
         /// </param>
         public void Initialize(int verbosity, bool noHardware)
         {
+            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
+            hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
+
             HandBrakeUtils.EnsureGlobalInit(noHardware);
 
             HandBrakeUtils.RegisterLogger();
-            this.Handle = HBFunctions.hb_init(verbosity, update_check: 0);
+            this.Handle = hbFunctions.hb_init(verbosity, update_check: 0);
         }
 
         /// <summary>
@@ -141,7 +148,7 @@ namespace HandBrake.Interop.Interop
             this.PreviewCount = previewCount;
 
             IntPtr pathPtr = InteropUtilities.ToUtf8PtrFromString(path);
-            HBFunctions.hb_scan(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
+            hbFunctions.hb_scan(this.Handle, pathPtr, titleIndex, previewCount, 1, (ulong)(minDuration.TotalSeconds * 90000));
             Marshal.FreeHGlobal(pathPtr);
 
             this.scanPollTimer = new Timer();
@@ -170,7 +177,7 @@ namespace HandBrake.Interop.Interop
         public void StopScan()
         {
             this.scanPollTimer.Stop();
-            HBFunctions.hb_scan_stop(this.Handle);
+            hbFunctions.hb_scan_stop(this.Handle);
         }
 
         /// <summary>
@@ -217,7 +224,7 @@ namespace HandBrake.Interop.Interop
             };
 
             // Fetch the image data from LibHb
-            IntPtr resultingImageStuct = HBFunctions.hb_get_preview2(this.Handle, settings.TitleNumber, previewNumber, ref uiGeometry, deinterlace ? 1 : 0);
+            IntPtr resultingImageStuct = hbFunctions.hb_get_preview2(this.Handle, settings.TitleNumber, previewNumber, ref uiGeometry, deinterlace ? 1 : 0);
             hb_image_s image = InteropUtilities.ToStructureFromPtr<hb_image_s>(resultingImageStuct);
 
             // Copy the filled image buffer to a managed array.
@@ -233,7 +240,7 @@ namespace HandBrake.Interop.Interop
             // Close the image so we don't leak memory.
             IntPtr nativeJobPtrPtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(IntPtr)));
             Marshal.WriteIntPtr(nativeJobPtrPtr, resultingImageStuct);
-            HBFunctions.hb_image_close(nativeJobPtrPtr);
+            hbFunctions.hb_image_close(nativeJobPtrPtr);
             Marshal.FreeHGlobal(nativeJobPtrPtr);
 
             return preview;
@@ -248,7 +255,7 @@ namespace HandBrake.Interop.Interop
         /// <returns>True if DRC can be applied to the track with the given encoder.</returns>
         public bool CanApplyDrc(int trackNumber, HBAudioEncoder encoder, int title)
         {
-            return HBFunctions.hb_audio_can_apply_drc2(this.Handle, title, trackNumber, encoder.Id) > 0;
+            return hbFunctions.hb_audio_can_apply_drc2(this.Handle, title, trackNumber, encoder.Id) > 0;
         }
 
         /// <summary>
@@ -276,8 +283,8 @@ namespace HandBrake.Interop.Interop
         [HandleProcessCorruptedStateExceptions]
         public void StartEncode(string encodeJson)
         {
-            HBFunctions.hb_add_json(this.Handle, InteropUtilities.ToUtf8PtrFromString(encodeJson));
-            HBFunctions.hb_start(this.Handle);
+            hbFunctions.hb_add_json(this.Handle, InteropUtilities.ToUtf8PtrFromString(encodeJson));
+            hbFunctions.hb_start(this.Handle);
 
             this.encodePollTimer = new Timer();
             this.encodePollTimer.Interval = EncodePollIntervalMs;
@@ -302,7 +309,7 @@ namespace HandBrake.Interop.Interop
         [HandleProcessCorruptedStateExceptions]
         public void PauseEncode()
         {
-            HBFunctions.hb_pause(this.Handle);
+            hbFunctions.hb_pause(this.Handle);
         }
 
         /// <summary>
@@ -311,7 +318,7 @@ namespace HandBrake.Interop.Interop
         [HandleProcessCorruptedStateExceptions]
         public void ResumeEncode()
         {
-            HBFunctions.hb_resume(this.Handle);
+            hbFunctions.hb_resume(this.Handle);
         }
 
         /// <summary>
@@ -320,20 +327,20 @@ namespace HandBrake.Interop.Interop
         [HandleProcessCorruptedStateExceptions]
         public void StopEncode()
         {
-            HBFunctions.hb_stop(this.Handle);
+            hbFunctions.hb_stop(this.Handle);
 
             // Also remove all jobs from the queue (in case we stopped a 2-pass encode)
             var currentJobs = new List<IntPtr>();
 
-            int jobs = HBFunctions.hb_count(this.Handle);
+            int jobs = hbFunctions.hb_count(this.Handle);
             for (int i = 0; i < jobs; i++)
             {
-                currentJobs.Add(HBFunctions.hb_job(this.Handle, 0));
+                currentJobs.Add(hbFunctions.hb_job(this.Handle, 0));
             }
 
             foreach (IntPtr job in currentJobs)
             {
-                HBFunctions.hb_rem(this.Handle, job);
+                hbFunctions.hb_rem(this.Handle, job);
             }
         }
 
@@ -346,7 +353,7 @@ namespace HandBrake.Interop.Interop
         [HandleProcessCorruptedStateExceptions]
         public JsonState GetEncodeProgress()
         {
-            IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
+            IntPtr json = hbFunctions.hb_get_state_json(this.Handle);
             string statusJson = Marshal.PtrToStringAnsi(json);
 
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);
@@ -394,7 +401,7 @@ namespace HandBrake.Interop.Interop
             // Free unmanaged objects.
             IntPtr handlePtr = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(IntPtr)));
             Marshal.WriteIntPtr(handlePtr, this.Handle);
-            HBFunctions.hb_close(handlePtr);
+            hbFunctions.hb_close(handlePtr);
             Marshal.FreeHGlobal(handlePtr);
 
             this.disposed = true;
@@ -406,7 +413,7 @@ namespace HandBrake.Interop.Interop
         [HandleProcessCorruptedStateExceptions]
         private void PollScanProgress()
         {
-            IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
+            IntPtr json = hbFunctions.hb_get_state_json(this.Handle);
             string statusJson = Marshal.PtrToStringAnsi(json);
             JsonState state = null;
             if (!string.IsNullOrEmpty(statusJson))
@@ -427,7 +434,7 @@ namespace HandBrake.Interop.Interop
             {
                 this.scanPollTimer.Stop();
 
-                var jsonMsg = HBFunctions.hb_get_title_set_json(this.Handle);
+                var jsonMsg = hbFunctions.hb_get_title_set_json(this.Handle);
                 this.TitlesJson = InteropUtilities.ToStringFromUtf8Ptr(jsonMsg);
 
                 if (!string.IsNullOrEmpty(this.TitlesJson))
@@ -452,7 +459,7 @@ namespace HandBrake.Interop.Interop
         [HandleProcessCorruptedStateExceptions]
         private void PollEncodeProgress()
         {
-            IntPtr json = HBFunctions.hb_get_state_json(this.Handle);
+            IntPtr json = hbFunctions.hb_get_state_json(this.Handle);
             string statusJson = Marshal.PtrToStringAnsi(json);
 
             JsonState state = JsonConvert.DeserializeObject<JsonState>(statusJson);

@@ -80,6 +80,8 @@
     <Compile Include="Interop\HbLib\hb_subtitle.cs" />
     <Compile Include="Interop\HbLib\iso639_lang_t.cs" />
     <Compile Include="Interop\HbLib\NativeConstants.cs" />
+    <Compile Include="Interop\HbLib\Wrappers\HbFunctionsDirect.cs" />
+    <Compile Include="Interop\HbLib\Wrappers\Interfaces\IHbFunctions.cs" />
     <Compile Include="Interop\Helpers\InteropUtilities.cs" />
     <Compile Include="Interop\Helpers\NativeList.cs" />
     <Compile Include="Interop\Helpers\Utilities.cs" />
@@ -123,6 +125,8 @@
     <Compile Include="Interop\Model\Encoding\Sharpen.cs" />
     <Compile Include="Interop\Model\PresetVersion.cs" />
     <Compile Include="Interop\Model\Preview\RawPreviewData.cs" />
+    <Compile Include="Interop\Providers\HbFunctionsProvider.cs" />
+    <Compile Include="Interop\Providers\Interfaces\IHbFunctionsProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Interop\Json\Scan\SourceAudioTrack.cs" />
     <Compile Include="Interop\Json\Scan\SourceChapter.cs" />
@@ -186,6 +190,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <TargetFrameworkSDKToolsDirectory Condition=" '$(Platform)' == 'x64'">$(TargetFrameworkSDKToolsDirectory)$(Platform)\</TargetFrameworkSDKToolsDirectory>

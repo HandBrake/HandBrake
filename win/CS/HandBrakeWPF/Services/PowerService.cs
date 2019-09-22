@@ -3,10 +3,9 @@
 //   This file is part of the HandBrake source code - It may be used under the terms of the GNU General Public License.
 // </copyright>
 // <summary>
-//   The Error Service
+//   The Power Service
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
-
 
 namespace HandBrakeWPF.Services
 {
@@ -17,7 +16,6 @@ namespace HandBrakeWPF.Services
     {
         private void GetPowerState()
         {
-
             System.Management.ObjectQuery query = new ObjectQuery("Select * FROM Win32_Battery");
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
 
@@ -30,7 +28,6 @@ namespace HandBrakeWPF.Services
                     Console.WriteLine("Property {0}: Value is {1}", property.Name, property.Value);
                 }
             }
-
         }
     }
 }

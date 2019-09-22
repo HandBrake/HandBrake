@@ -16,12 +16,23 @@ namespace HandBrake.Interop.Interop.Helpers
     using System.Text;
 
     using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
+    using HandBrake.Interop.Interop.Providers;
+    using HandBrake.Interop.Interop.Providers.Interfaces;
 
     /// <summary>
     /// Helper utilities for native interop.
     /// </summary>
     internal static class InteropUtilities
     {
+        private static IHbFunctions hbFunctions;
+
+        static InteropUtilities()
+        {
+            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
+            hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
+        }
+
         /// <summary>
         /// Reads the given native structure pointer.
         /// </summary>
@@ -262,7 +273,7 @@ namespace HandBrake.Interop.Interop.Helpers
 
             // Assign the new pointer to the job pointer and tell HB to clean the job up.
             Marshal.WriteIntPtr(nativeJobPtrPtr, nativeJobPtr);
-            HBFunctions.hb_job_close(nativeJobPtrPtr);
+            hbFunctions.hb_job_close(nativeJobPtrPtr);
 
             // Free the pointer we used.
             Marshal.FreeHGlobal(nativeJobPtrPtr);

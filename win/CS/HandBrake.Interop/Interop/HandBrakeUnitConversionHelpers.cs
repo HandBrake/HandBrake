@@ -14,15 +14,20 @@ namespace HandBrake.Interop.Interop
     using System.Globalization;
 
     using HandBrake.Interop.Interop.HbLib;
+    using HandBrake.Interop.Interop.HbLib.Wrappers.Interfaces;
     using HandBrake.Interop.Interop.Helpers;
     using HandBrake.Interop.Interop.Model;
     using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Providers;
+    using HandBrake.Interop.Interop.Providers.Interfaces;
 
     /// <summary>
     /// Converters for various encoding values.
     /// </summary>
     public static class HandBrakeUnitConversionHelpers
     {
+        private static IHbFunctions hbFunctions;
+        
         /// <summary>
         /// Video Frame Rates
         /// </summary>
@@ -33,6 +38,9 @@ namespace HandBrake.Interop.Interop
         /// </summary>
         static HandBrakeUnitConversionHelpers()
         {
+            IHbFunctionsProvider hbFunctionsProvider = new HbFunctionsProvider();
+            hbFunctions = hbFunctionsProvider.GetHbFunctionsWrapper();
+
             if (!HandBrakeUtils.IsInitialised())
             {
                 throw new Exception("Please Initialise with HandBrakeUtils.EnsureGlobalInit before using!");
@@ -95,8 +103,8 @@ namespace HandBrake.Interop.Interop
             var result = new HBAudioEncoder(
                 encoder.muxers,
                 HandBrakeEncoderHelpers.GetAudioCompressionLimits(encoder.codec),
-                HBFunctions.hb_audio_compression_get_default((uint)encoder.codec),
-                HBFunctions.hb_audio_quality_get_default((uint)encoder.codec),
+                hbFunctions.hb_audio_compression_get_default((uint)encoder.codec),
+                hbFunctions.hb_audio_quality_get_default((uint)encoder.codec),
                 encoder.name,
                 encoder.codec,
                 HandBrakeEncoderHelpers.GetAudioQualityLimits(encoder.codec),

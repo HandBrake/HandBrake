@@ -16,11 +16,13 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Interop.Interop.Interfaces;
     using HandBrake.Interop.Interop.Json.State;
+    using HandBrake.Interop.Interop.Providers.Interfaces;
     using HandBrake.Interop.Model;
 
     using HandBrakeWPF.Exceptions;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Factories;
+    using HandBrakeWPF.Services.Interfaces;
 
     using EncodeTask = Model.EncodeTask;
     using HandBrakeInstanceManager = Instance.HandBrakeInstanceManager;
@@ -38,6 +40,7 @@ namespace HandBrakeWPF.Services.Encode
         #region Private Variables
 
         private ILog log = LogService.GetLogger();
+        private readonly IHbFunctionsProvider hbFunctionsProvider;
         private IEncodeInstance instance;
         private DateTime startTime;
         private EncodeTask currentTask;
@@ -45,6 +48,11 @@ namespace HandBrakeWPF.Services.Encode
         private bool isPreviewInstance;
 
         #endregion
+
+        public LibEncode(IHbFunctionsProvider hbFunctionsProvider)
+        {
+            this.hbFunctionsProvider = hbFunctionsProvider;
+        }
 
         /// <summary>
         /// Gets a value indicating whether is pasued.
@@ -113,7 +121,7 @@ namespace HandBrakeWPF.Services.Encode
                 this.VerifyEncodeDestinationPath(task);
 
                 // Get an EncodeJob object for the Interop Library
-                this.instance.StartEncode(EncodeTaskFactory.Create(task, configuration));
+                this.instance.StartEncode(EncodeTaskFactory.Create(task, configuration, hbFunctionsProvider.GetHbFunctionsWrapper()));
 
                 // Fire the Encode Started Event
                 this.InvokeEncodeStarted(System.EventArgs.Empty);

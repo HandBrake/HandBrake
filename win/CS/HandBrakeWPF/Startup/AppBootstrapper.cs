@@ -14,6 +14,9 @@ namespace HandBrakeWPF.Startup
 
     using Caliburn.Micro;
 
+    using HandBrake.Interop.Interop.Providers;
+    using HandBrake.Interop.Interop.Providers.Interfaces;
+
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets;
@@ -80,6 +83,7 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<IMiniViewModel, MiniViewModel>();
             this.container.Singleton<IStaticPreviewViewModel, StaticPreviewViewModel>();
             this.container.Singleton<ISystemService, SystemService>();
+            this.container.Singleton<IHbFunctionsProvider, HbFunctionsProvider>();
             
             // Tab Components
             this.container.Singleton<IAudioViewModel, AudioViewModel>();

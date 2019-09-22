@@ -21,6 +21,7 @@ namespace HandBrakeWPF.ViewModels
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.Interop.Model.Encoding;
+    using HandBrake.Interop.Interop.Providers.Interfaces;
 
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Properties;
@@ -120,19 +121,7 @@ namespace HandBrakeWPF.ViewModels
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StaticPreviewViewModel"/> class.
-        /// </summary>
-        /// <param name="scanService">
-        /// The scan service.
-        /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        /// <param name="errorService">
-        /// The error Service.
-        /// </param>
-        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService)
+        public StaticPreviewViewModel(IScan scanService, IUserSettingService userSettingService, IErrorService errorService, IHbFunctionsProvider hbFunctionsProvider)
         {
             this.scanService = scanService;
             this.selectedPreviewImage = 1;
@@ -142,7 +131,7 @@ namespace HandBrakeWPF.ViewModels
             // Live Preview
             this.userSettingService = userSettingService;
             this.errorService = errorService;
-            this.encodeService = new LibEncode(); // Preview needs a separate instance rather than the shared singleton. This could maybe do with being refactored at some point
+            this.encodeService = new LibEncode(hbFunctionsProvider); // Preview needs a separate instance rather than the shared singleton. This could maybe do with being refactored at some point
 
             this.Title = "Preview";
             this.Percentage = "0.00%";
