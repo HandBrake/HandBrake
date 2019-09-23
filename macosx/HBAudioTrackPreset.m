@@ -444,7 +444,7 @@
     decodeInt(_fallbackEncoder); if (_fallbackEncoder < 0) { goto fail; }
     decodeInt(_mixdown); if (_mixdown < 0) { goto fail; }
     decodeInt(_sampleRate); if (_sampleRate < 0) { goto fail; }
-    decodeInt(_bitRate); if (_bitRate < 0) { goto fail; }
+    decodeInt(_bitRate); if (_bitRate < -1) { goto fail; }
 
     decodeDouble(_gain);
     decodeDouble(_drc);
