@@ -6,7 +6,10 @@ LIBGNURX.FETCH.url    += https://sourceforge.net/projects/mingw/files/Other/User
 LIBGNURX.FETCH.sha256  = 7147b7f806ec3d007843b38e19f42a5b7c65894a57ffc297a76b0dcd5f675d76
 LIBGNURX.EXTRACT.tarbase = mingw-libgnurx-2.5.1
 
-LIBGNURX.CONFIGURE.env += AR="$(AR.exe)"
+LIBGNURX.CONFIGURE.deps   =
+LIBGNURX.CONFIGURE.shared =
+LIBGNURX.CONFIGURE.static =
+LIBGNURX.CONFIGURE.env   += AR="$(AR.exe)"
 LIBGNURX.CONFIGURE.bootstrap = autoreconf -fiv;
 
 LIBGNURX.BUILD.ntargets = libregex.a-static

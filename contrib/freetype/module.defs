@@ -6,4 +6,5 @@ FREETYPE.FETCH.url     = https://download.handbrake.fr/handbrake/contrib/freetyp
 FREETYPE.FETCH.url    += https://download.savannah.gnu.org/releases/freetype/freetype-2.9.1.tar.bz2
 FREETYPE.FETCH.sha256  = db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d
 
+FREETYPE.CONFIGURE.deps  =
 FREETYPE.CONFIGURE.extra = --with-harfbuzz=no --with-png=no
