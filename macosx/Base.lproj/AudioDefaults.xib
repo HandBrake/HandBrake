@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14868" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14868"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -16,11 +16,11 @@
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
-        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" visibleAtLaunch="NO" animationBehavior="default" id="kwM-lz-5lG">
+        <window title="Audio Selection Behaviour" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" visibleAtLaunch="NO" animationBehavior="default" id="kwM-lz-5lG">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
             <rect key="contentRect" x="175" y="825" width="794" height="474"/>
-            <rect key="screenRect" x="0.0" y="0.0" width="1440" height="877"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1177"/>
             <view key="contentView" id="ZP2-Cp-K5w">
                 <rect key="frame" x="0.0" y="0.0" width="794" height="474"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -360,15 +360,15 @@ Dolby Surround and Dolby Pro Logic II convert multi-channel audio to stereo and 
                                                             </popUpButtonCell>
                                                             <accessibility description="Mixdown"/>
                                                             <connections>
-                                                                <binding destination="uS1-Fd-V9I" name="content" keyPath="objectValue.mixdowns" id="NKE-F5-7xp">
-                                                                    <dictionary key="options">
-                                                                        <string key="NSValueTransformerName">HBMixdownsTransformer</string>
-                                                                    </dictionary>
-                                                                </binding>
-                                                                <binding destination="uS1-Fd-V9I" name="enabled" keyPath="objectValue.mixdownEnabled" id="c7n-yf-re8"/>
                                                                 <binding destination="uS1-Fd-V9I" name="selectedValue" keyPath="objectValue.mixdown" previousBinding="NKE-F5-7xp" id="OiI-FJ-A66">
                                                                     <dictionary key="options">
                                                                         <string key="NSValueTransformerName">HBMixdownTransformer</string>
+                                                                    </dictionary>
+                                                                </binding>
+                                                                <binding destination="uS1-Fd-V9I" name="enabled" keyPath="objectValue.mixdownEnabled" id="c7n-yf-re8"/>
+                                                                <binding destination="uS1-Fd-V9I" name="content" keyPath="objectValue.mixdowns" id="NKE-F5-7xp">
+                                                                    <dictionary key="options">
+                                                                        <string key="NSValueTransformerName">HBMixdownsTransformer</string>
                                                                     </dictionary>
                                                                 </binding>
                                                             </connections>
@@ -641,7 +641,7 @@ Gw
                             <rect key="frame" x="1" y="1" width="248" height="133"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" viewBased="YES" id="Of7-71-Ci6">
+                                <tableView verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnResizing="NO" autosaveColumns="NO" rowHeight="14" viewBased="YES" id="Of7-71-Ci6">
                                     <rect key="frame" x="0.0" y="0.0" width="248" height="133"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
