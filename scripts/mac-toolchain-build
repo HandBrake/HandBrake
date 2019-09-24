@@ -77,8 +77,8 @@ function mac_toolchain_build {
     printf "Downloading [%02i/%02i] %s " "2" "${TOTAL}" "automake 1.16.1"
     curl -Lf --connect-timeout 30 https://ftp.gnu.org/gnu/automake/automake-1.16.1.tar.gz -o "automake-1.16.1.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
     echo -en "${CREL}"
-    printf "Downloading [%02i/%02i] %s " "3" "${TOTAL}" "cmake 3.14.5"
-    curl -Lf --connect-timeout 30 https://cmake.org/files/v3.14/cmake-3.14.5.tar.gz -o "cmake-3.14.5.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
+    printf "Downloading [%02i/%02i] %s " "3" "${TOTAL}" "cmake 3.15.3"
+    curl -Lf --connect-timeout 30 https://cmake.org/files/v3.15/cmake-3.15.3.tar.gz -o "cmake-3.15.3.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
     echo -en "${CREL}"
     printf "Downloading [%02i/%02i] %s " "4" "${TOTAL}" "libtool 2.4.6"
     curl -Lf --connect-timeout 30 https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz -o "libtool-2.4.6.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
@@ -122,13 +122,13 @@ function mac_toolchain_build {
     # cmake
     cd "${TEMP_DIR}"
     echo "You may safely dismiss and ignore any prompt to install Java."
-    printf "Building    [%02i/%02i] %s " "3" "${TOTAL}" "cmake 3.14.5"
+    printf "Building    [%02i/%02i] %s " "3" "${TOTAL}" "cmake 3.15.3"
     [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xf cmake-3.14.5.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-    cd cmake-3.14.5 >/dev/null 2>&1 || print_fail_and_exit
-    ./configure --prefix="${PREFIX}" --no-qt-gui --system-curl >../cmake-3.14.5.log 2>&1 || print_fail_and_exit
-    make --jobs="${MAKEJOBS}" >>../cmake-3.14.5.log 2>&1 || print_fail_and_exit
-    ${SUDO} make install >>../cmake-3.14.5.log 2>&1 || print_fail_and_exit
+    tar -xf cmake-3.15.3.tar.gz >/dev/null 2>&1 || print_fail_and_exit
+    cd cmake-3.15.3 >/dev/null 2>&1 || print_fail_and_exit
+    ./configure --prefix="${PREFIX}" --no-qt-gui --system-curl >../cmake-3.15.3.log 2>&1 || print_fail_and_exit
+    make --jobs="${MAKEJOBS}" >>../cmake-3.15.3.log 2>&1 || print_fail_and_exit
+    ${SUDO} make install >>../cmake-3.15.3.log 2>&1 || print_fail_and_exit
 
     # libtool
     cd "${TEMP_DIR}"
