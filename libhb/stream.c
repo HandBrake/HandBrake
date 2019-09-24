@@ -278,8 +278,6 @@ static int ffmpeg_seek_ts( hb_stream_t *stream, int64_t ts );
 static inline unsigned int bits_get(bitbuf_t *bb, int bits);
 static inline void bits_init(bitbuf_t *bb, uint8_t* buf, int bufsize, int clear);
 static inline unsigned int bits_peek(bitbuf_t *bb, int bits);
-static inline int bits_eob(bitbuf_t *bb);
-static inline int bits_read_ue(bitbuf_t *bb );
 static void pes_add_audio_to_title(hb_stream_t *s, int i, hb_title_t *t, int sort);
 static int hb_parse_ps( hb_stream_t *stream, uint8_t *buf, int len, hb_pes_info_t *pes_info );
 static void hb_ts_resolve_pid_types(hb_stream_t *stream);
@@ -2487,11 +2485,6 @@ static inline int bits_bytes_left(bitbuf_t *bb)
     return bb->size - (bb->pos >> 3);
 }
 
-static inline int bits_eob(bitbuf_t *bb)
-{
-    return bb->pos >> 3 == bb->size;
-}
-
 static inline unsigned int bits_peek(bitbuf_t *bb, int bits)
 {
     unsigned int val;
@@ -2549,17 +2542,6 @@ static inline unsigned int bits_get(bitbuf_t *bb, int bits)
     }
 
     return val;
-}
-
-static inline int bits_read_ue(bitbuf_t *bb )
-{
-    int ii = 0;
-
-    while( bits_get( bb, 1 ) == 0 && !bits_eob( bb ) && ii < 32 )
-    {
-        ii++;
-    }
-    return( ( 1 << ii) - 1 + bits_get( bb, ii ) );
 }
 
 static inline int bits_skip(bitbuf_t *bb, int bits)

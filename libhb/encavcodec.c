@@ -863,7 +863,7 @@ static void Encode( hb_work_object_t *w, hb_buffer_t *in,
                     hb_buffer_list_t *list )
 {
     hb_work_private_t * pv = w->private_data;
-    AVFrame             frame = {0};
+    AVFrame             frame = {{0}};
     int                 ret;
 
     frame.width       = in->f.width;
