@@ -18,6 +18,7 @@
 #import "HBPicture+UIAdditions.h"
 #import "HBFilters+UIAdditions.h"
 
+#import "HBAudioTransformers.h"
 #import "HBLocalizationUtilities.h"
 
 #include "handbrake/handbrake.h"
@@ -26,6 +27,7 @@
 static NSDictionary            *detailAttr;
 static NSDictionary            *detailBoldAttr;
 static NSDictionary            *shortHeightAttr;
+static HBMixdownTransformer    *mixdownTransformer;
 
 @implementation HBJob (UIAdditions)
 
@@ -112,6 +114,14 @@ static NSDictionary            *shortHeightAttr;
                            NSForegroundColorAttributeName: NSColor.labelColor};
 
         shortHeightAttr = @{NSFontAttributeName: [NSFont systemFontOfSize:6.0]};
+    }
+}
+
+- (void)initTransformers
+{
+    if (!mixdownTransformer)
+    {
+        mixdownTransformer = [[HBMixdownTransformer alloc] init];
     }
 }
 
@@ -539,11 +549,13 @@ static NSDictionary            *shortHeightAttr;
                                       self.audio.sourceTracks[audioTrack.sourceTrackIdx].displayName,
                                       @(hb_audio_encoder_get_name(audioTrack.encoder))];
 
-            if ((audioTrack.encoder  & HB_ACODEC_PASS_FLAG) == 0)
+            if ((audioTrack.encoder & HB_ACODEC_PASS_FLAG) == 0)
             {
+                NSString *mixdown = [mixdownTransformer transformedValue:@(audioTrack.mixdown)];
+
                 [detailString appendString:@", "];
                 [detailString appendFormat:HBKitLocalizedString(@"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps", @"Audio description"),
-                                            @(hb_mixdown_get_name(audioTrack.mixdown)),
+                                            mixdown,
                                             audioTrack.sampleRate ? [NSString stringWithFormat:@"%@ khz", @(hb_audio_samplerate_get_name(audioTrack.sampleRate))] : @"Auto",
                                             audioTrack.bitRate];
 
@@ -633,6 +645,7 @@ static NSDictionary            *shortHeightAttr;
 {
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] init];
     [self initStyles];
+    [self initTransformers];
 
     @autoreleasepool
     {
@@ -739,13 +752,13 @@ static NSDictionary            *shortHeightAttr;
                 [info appendString:@(encoder)];
             }
 
-            if ((audioTrack.encoder  & HB_ACODEC_PASS_FLAG) == 0)
+            if ((audioTrack.encoder & HB_ACODEC_PASS_FLAG) == 0)
             {
-                const char *mixdown = hb_mixdown_get_name(audioTrack.mixdown);
+                NSString *mixdown = [mixdownTransformer transformedValue:@(audioTrack.mixdown)];
                 if (mixdown)
                 {
                     [info appendString:@", "];
-                    [info appendString:@(mixdown)];
+                    [info appendString:mixdown];
                 }
             }
 
@@ -830,6 +843,8 @@ static NSDictionary            *shortHeightAttr;
 - (NSString *)shortDescription
 {
     NSMutableString *info = [NSMutableString string];
+
+    [self initTransformers];
 
     [info appendString:[self videoShortDescription]];
 
