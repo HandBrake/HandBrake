@@ -282,6 +282,8 @@
 		A9D0FA771C1C284D0003F2A9 /* HBFocusRingView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D0FA761C1C284D0003F2A9 /* HBFocusRingView.m */; };
 		A9D1E41718262364002F6424 /* HBPreviewGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D1E41618262364002F6424 /* HBPreviewGenerator.m */; };
 		A9D363512209C08600D8EFEA /* HBQueueItemView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9D363502209C08500D8EFEA /* HBQueueItemView.m */; };
+		A9DA024E233C9DBC00DFF1D0 /* HBTrackTitleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DA024C233C9DBC00DFF1D0 /* HBTrackTitleViewController.m */; };
+		A9DA024F233C9DBC00DFF1D0 /* HBTrackTitleViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9DA024D233C9DBC00DFF1D0 /* HBTrackTitleViewController.xib */; };
 		A9DC6C52196F04F6002AE6B4 /* HBSubtitlesController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */; };
 		A9DF49271C884C4E008AC14A /* HBJobTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DF49221C884C4E008AC14A /* HBJobTests.m */; };
 		A9DF49281C884C4E008AC14A /* HBJobUndoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = A9DF49231C884C4E008AC14A /* HBJobUndoTests.m */; };
@@ -740,6 +742,9 @@
 		A9D363502209C08500D8EFEA /* HBQueueItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBQueueItemView.m; sourceTree = "<group>"; };
 		A9D488A31996270300E9B1BA /* HBTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTreeNode.h; sourceTree = "<group>"; };
 		A9D488A41996270300E9B1BA /* HBTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTreeNode.m; sourceTree = "<group>"; };
+		A9DA024B233C9DBC00DFF1D0 /* HBTrackTitleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBTrackTitleViewController.h; sourceTree = "<group>"; };
+		A9DA024C233C9DBC00DFF1D0 /* HBTrackTitleViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBTrackTitleViewController.m; sourceTree = "<group>"; };
+		A9DA024D233C9DBC00DFF1D0 /* HBTrackTitleViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HBTrackTitleViewController.xib; sourceTree = "<group>"; };
 		A9DC6C4F196F04F6002AE6B4 /* HBSubtitlesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBSubtitlesController.h; sourceTree = SOURCE_ROOT; };
 		A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBSubtitlesController.m; sourceTree = SOURCE_ROOT; };
 		A9DEC8721A23C87500C79B48 /* HBCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBCore.h; sourceTree = "<group>"; };
@@ -1491,6 +1496,9 @@
 				A9DC6C50196F04F6002AE6B4 /* HBSubtitlesController.m */,
 				A9A96BC920CAD61800A39AFB /* Subtitles.xib */,
 				A9F472851976B7AA0009EC65 /* Subtitles Defaults */,
+				A9DA024B233C9DBC00DFF1D0 /* HBTrackTitleViewController.h */,
+				A9DA024C233C9DBC00DFF1D0 /* HBTrackTitleViewController.m */,
+				A9DA024D233C9DBC00DFF1D0 /* HBTrackTitleViewController.xib */,
 				A91726E5197291BC00D1AFEF /* HBChapterTitlesController.h */,
 				A91726E6197291BC00D1AFEF /* HBChapterTitlesController.m */,
 				A9A96BCF20CAD62500A39AFB /* ChaptersTitles.xib */,
@@ -1716,7 +1724,7 @@
 		273F1FE014AD9DA40021BE6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1100;
+				LastUpgradeCheck = 1110;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
 						SystemCapabilities = {
@@ -1808,6 +1816,7 @@
 				A9A96BD720CAD64300A39AFB /* PictureSettings.xib in Resources */,
 				A9A96BD120CAD62500A39AFB /* ChaptersTitles.xib in Resources */,
 				A91AD3441FB5D9A500AEA822 /* HBAddCategoryController.xib in Resources */,
+				A9DA024F233C9DBC00DFF1D0 /* HBTrackTitleViewController.xib in Resources */,
 				A9A96B8520CAD2CC00A39AFB /* HBEncodingProgressHUDController.xib in Resources */,
 				A9A96BC820CAD61000A39AFB /* AudioDefaults.xib in Resources */,
 				A9A96BB920CAD5EE00A39AFB /* HBPictureViewController.xib in Resources */,
@@ -1909,6 +1918,7 @@
 				A916C9931C8449A100C7B560 /* HBAddPresetController.m in Sources */,
 				A916C9921C84498F00C7B560 /* HBDockTextField.m in Sources */,
 				A9706CB41AC1436F00BAEAA8 /* HBApplication.m in Sources */,
+				A9DA024E233C9DBC00DFF1D0 /* HBTrackTitleViewController.m in Sources */,
 				273F20B514ADBE670021BE6D /* HBPreferencesController.m in Sources */,
 				273F20AC14ADBE670021BE6D /* HBController.m in Sources */,
 				A93E0ED31972957000FD67FB /* HBVideoController.m in Sources */,
@@ -2573,6 +2583,7 @@
 					"-filelist",
 					"$(EXTERNAL_BUILD)/macosx/osl.filelist.txt",
 					"-lc++",
+					"-w",
 				);
 				SDKROOT = macosx;
 				SHARED_PRECOMPS_DIR = "$(CONFIGURATION_TEMP_DIR)/PrecompiledHeaders";

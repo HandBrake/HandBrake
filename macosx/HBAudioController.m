@@ -6,12 +6,14 @@
 
 #import "HBAudioController.h"
 #import "HBAudioDefaultsController.h"
+#import "HBTrackTitleViewController.h"
 
 @import HandBrakeKit;
 
 @interface HBAudioController ()
 
 @property (nonatomic, readwrite, strong) HBAudioDefaultsController *defaultsController;
+@property (nonatomic, weak) IBOutlet NSTableView *table;
 
 @end
 
@@ -36,6 +38,17 @@
 - (IBAction)removeAll:(id)sender
 {
     [self.audio removeAll];
+}
+
+- (IBAction)showAdditionalSettingsPopOver:(id)sender
+{
+    HBTrackTitleViewController *controller = [[HBTrackTitleViewController alloc] init];
+    NSInteger index = [self.table rowForView:sender];
+    if (index != -1)
+    {
+        controller.track = [self.audio objectInTracksAtIndex:index];
+        [self presentViewController:controller asPopoverRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSRectEdgeMinX behavior:NSPopoverBehaviorTransient];
+    }
 }
 
 #pragma mark - Defaults

@@ -6,13 +6,14 @@
 
 #import "HBSubtitlesController.h"
 #import "HBSubtitlesDefaultsController.h"
+#import "HBTrackTitleViewController.h"
 
 @import HandBrakeKit;
 
 @interface HBSubtitlesController ()
 
-// Defaults
 @property (nonatomic, readwrite, strong) HBSubtitlesDefaultsController *defaultsController;
+@property (nonatomic, weak) IBOutlet NSTableView *table;
 
 @end
 
@@ -68,6 +69,17 @@
         }
         self.defaultsController = nil;
     }];
+}
+
+- (IBAction)showAdditionalSettingsPopOver:(id)sender
+{
+    HBTrackTitleViewController *controller = [[HBTrackTitleViewController alloc] init];
+    NSInteger index = [self.table rowForView:sender];
+    if (index != -1)
+    {
+        controller.track = [self.subtitles objectInTracksAtIndex:index];
+        [self presentViewController:controller asPopoverRelativeToRect:[sender bounds] ofView:sender preferredEdge:NSRectEdgeMinX behavior:NSPopoverBehaviorTransient];
+    }
 }
 
 #pragma mark - External subtitles import
