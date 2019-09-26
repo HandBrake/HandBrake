@@ -25,7 +25,7 @@
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
                 </textField>
-                <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FpM-Jx-vLD">
+                <textField toolTip="Players may use this in the audio/subtitles selection list." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="FpM-Jx-vLD">
                     <rect key="frame" x="52" y="34" width="240" height="19"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="Jvz-9x-Y8X"/>
@@ -59,6 +59,7 @@ DQ
                 <constraint firstItem="FpM-Jx-vLD" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="10" id="BiM-cE-kbQ"/>
                 <constraint firstItem="2TT-sX-tpi" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="10" id="CmB-Dc-3ni"/>
                 <constraint firstAttribute="bottom" secondItem="nNR-jx-7j9" secondAttribute="bottom" constant="10" id="Owq-7k-9Kt"/>
+                <constraint firstItem="nNR-jx-7j9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="YFL-Cj-0O9"/>
                 <constraint firstAttribute="trailing" secondItem="FpM-Jx-vLD" secondAttribute="trailing" constant="10" id="jWk-Bq-Frh"/>
                 <constraint firstItem="2TT-sX-tpi" firstAttribute="firstBaseline" secondItem="FpM-Jx-vLD" secondAttribute="firstBaseline" id="mZA-T3-A3z"/>
                 <constraint firstItem="FpM-Jx-vLD" firstAttribute="leading" secondItem="2TT-sX-tpi" secondAttribute="trailing" constant="8" id="nF0-ua-5BP"/>
