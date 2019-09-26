@@ -38,6 +38,7 @@
 - (nullable instancetype)initWithCoder:(NSCoder *)coder
 {
     self = [super initWithCoder:coder];
+
     if (self)
     {
         [self setUp];
@@ -57,16 +58,16 @@
     self.wantsLayer = YES;
 
     _backLayer = [CALayer layer];
-    [_backLayer setBounds:CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height)];
-    [_backLayer setBackgroundColor: NSColor.whiteColor.CGColor];
-    [_backLayer setShadowOpacity:0.5f];
-    [_backLayer setShadowOffset:CGSizeMake(0, 0)];
-    [_backLayer setAnchorPoint:CGPointMake(0, 0)];
+    _backLayer.bounds = CGRectMake(0.0, 0.0, self.frame.size.width, self.frame.size.height);
+    _backLayer.backgroundColor = NSColor.whiteColor.CGColor;
+    _backLayer.shadowOpacity = 0.5f;
+    _backLayer.shadowOffset = CGSizeZero;
+    _backLayer.anchorPoint = CGPointZero;
     _backLayer.opaque = YES;
 
     _pictureLayer = [CALayer layer];
-    [_pictureLayer setBounds:CGRectMake(0.0, 0.0, self.frame.size.width - (BORDER_SIZE * 2), self.frame.size.height - (BORDER_SIZE * 2))];
-    [_pictureLayer setAnchorPoint:CGPointMake(0, 0)];
+    _pictureLayer.bounds = CGRectMake(0.0, 0.0, self.frame.size.width - (BORDER_SIZE * 2), self.frame.size.height - (BORDER_SIZE * 2));
+    _pictureLayer.anchorPoint = CGPointZero;
     _pictureLayer.opaque = YES;
 
     // Disable fade on contents change.
@@ -86,7 +87,6 @@
     _backLayer.hidden = YES;
 
     _showBorder = YES;
-
     _scale = 1;
     _pictureFrame = _pictureLayer.frame;
 }
@@ -174,8 +174,8 @@
     NSSize imageSize = NSMakeSize(CGImageGetWidth(self.image), CGImageGetHeight(self.image));
     CGFloat backingScaleFactor = 1.0;
 
-    if (imageSize.width > 0 && imageSize.height > 0) {
-
+    if (imageSize.width > 0 && imageSize.height > 0)
+    {
         backingScaleFactor = self.scaleFactor;
 
         // HiDPI mode usually display everything
@@ -196,41 +196,27 @@
             // size so we can scale from there.
             imageScaledSize = [self scaledSize:imageScaledSize toFit:frameSize];
         }
-        else
+        else if (imageScaledSize.width > frameSize.width || imageScaledSize.height > frameSize.height)
         {
             // If the image is larger then the view, scale the image
-            if (imageScaledSize.width > frameSize.width || imageScaledSize.height > frameSize.height)
-            {
-                imageScaledSize = [self scaledSize:imageScaledSize toFit:frameSize];
-            }
+            imageScaledSize = [self scaledSize:imageScaledSize toFit:frameSize];
         }
 
         [NSAnimationContext beginGrouping];
-        [[NSAnimationContext currentContext] setDuration:0];
+        [NSAnimationContext.currentContext setDuration:0];
 
-        // Resize the CALayers
-        CGRect backRect = CGRectMake(0, 0, imageScaledSize.width + (BORDER_SIZE * 2), imageScaledSize.height + (BORDER_SIZE * 2));
-        CGRect pictureRect = CGRectMake(0, 0, imageScaledSize.width, imageScaledSize.height);
+        // Resize and position the CALayers
+        CGFloat width = imageScaledSize.width + (BORDER_SIZE * 2);
+        CGFloat height = imageScaledSize.height + (BORDER_SIZE * 2);
 
-        backRect = CGRectIntegral(backRect);
-        pictureRect = CGRectIntegral(pictureRect);
+        CGFloat offsetX = (self.frame.size.width - width) / 2;
+        CGFloat offsetY = (self.frame.size.height - height) / 2;
 
-        self.backLayer.bounds = backRect;
-        self.pictureLayer.bounds = pictureRect;
+        NSRect alignedRect = [self backingAlignedRect:NSMakeRect(offsetX, offsetY, width, height) options:NSAlignAllEdgesNearest];
 
-        // Position the CALayers
-        NSRect alignedRect = [self backingAlignedRect:NSMakeRect(0, 0,
-                                                                 self.frame.size.width - pictureRect.size.width,
-                                                                 self.frame.size.height - pictureRect.size.height)
-                                              options:NSAlignAllEdgesNearest];
+        self.backLayer.frame = alignedRect;
+        self.pictureLayer.frame = NSInsetRect(alignedRect, 2, 2);
 
-        CGPoint anchor = CGPointMake(alignedRect.size.width / 2,
-                                     alignedRect.size.height / 2);
-        [self.pictureLayer setPosition:anchor];
-
-        CGPoint backAchor = CGPointMake(anchor.x - BORDER_SIZE, anchor.y - BORDER_SIZE);
-        [self.backLayer setPosition:backAchor];
-        
         [NSAnimationContext endGrouping];
         
         // Update the properties
