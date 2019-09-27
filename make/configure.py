@@ -1018,7 +1018,10 @@ class ToolProbe( Action ):
         self.name = self.names[0]
         self.pretext = self.name
         self.pathname = self.names[0]
+        self.abort = kwargs.get('abort', True)
+        self.versionopt = kwargs.get('versionopt', '--version')
         self.minversion = kwargs.get('minversion', None)
+        self.rexpr = kwargs.get('rexpr', None)
 
     def _action( self ):
         self.session = []
@@ -1034,7 +1037,7 @@ class ToolProbe( Action ):
         if self.fail:
             self.msg_end = 'not found'
         elif self.minversion:
-            self.version = VersionProbe( [self.pathname, '--version'], minversion=self.minversion )
+            self.version = VersionProbe( self.name, [self.pathname, self.versionopt], abort=self.abort, minversion=self.minversion, rexpr=self.rexpr )
 
     def cli_add_argument( self, parser ):
         parser.add_argument( '--'+self.option, nargs=1, metavar='PROG',
@@ -1073,13 +1076,16 @@ class ToolProbe( Action ):
 ## ivers   = result. int[3] of version tuple
 ##
 class VersionProbe( Action ):
-    def __init__( self, command, minversion=None, rexpr=None, abort=False ):
-        super( VersionProbe, self ).__init__( 'version probe', os.path.basename(command[0]), abort )
+    def __init__( self, name, command, minversion=None, rexpr=None, abort=False ):
+        super( VersionProbe, self ).__init__( 'version probe', '%s %s' % (os.path.basename(command[0]),'.'.join([str(i) for i in minversion])), abort )
+        self.name = name
         self.command = command
+        self.abort = abort
         self.minversion = minversion
-        if not rexpr:
-            rexpr = '(?P<name>[^.]+)\s+(?P<svers>(?P<i0>\d+)(\.(?P<i1>\d+))?(\.(?P<i2>\d+))?)'
-        self.rexpr = rexpr
+        self.rexprs = [ '(?P<name>[^.]+)\s+(?P<svers>(?P<i0>\d+)(\.(?P<i1>\d+))?(\.(?P<i2>\d+))?)',
+                        '(?P<svers>(?P<i0>\d+)(\.(?P<i1>\d+))?(\.(?P<i2>\d+))?)' ]
+        if rexpr:
+            self.rexprs.insert(0,rexpr)
 
     def _action( self ):
         ## pipe and redirect stderr to stdout; effects communicate result
@@ -1103,20 +1109,30 @@ class VersionProbe( Action ):
             self.ivers = [0,0,0]
             self.msg_end = str(x)
 
+        if self.inadequate():
+            self.fail = True
+            if self.abort is True:
+                stdout.write('(%s) %s\n' % (self.msg_fail,self.svers))
+                raise AbortError( 'minimum required %s version is %s and %s is %s\n' % (self.name,'.'.join([str(i) for i in self.minversion]),self.command[0],self.svers) )
+
     def _dumpSession( self, printf ):
         printf( '  + %s\n', ' '.join(self.command) )
         super( VersionProbe, self )._dumpSession( printf )
 
     def _parse( self ):
-        mo = re.match( self.rexpr, self.session[0].decode('utf-8'), re.IGNORECASE )
-        md = mo.groupdict()
-        self.svers = md['svers']
-        if 'i0' in md and md['i0']:
-            self.ivers[0] = int(md['i0'])
-        if 'i1' in md and md['i1']:
-            self.ivers[1] = int(md['i1'])
-        if 'i2' in md and md['i2']:
-            self.ivers[2] = int(md['i2'])
+        for expression in self.rexprs:
+            mo = re.match( expression, self.session[0].decode('utf-8'), re.IGNORECASE )
+            if mo is None:
+                continue
+            md = mo.groupdict()
+            self.svers = md['svers']
+            if 'i0' in md and md['i0']:
+                self.ivers[0] = int(md['i0'])
+            if 'i1' in md and md['i1']:
+                self.ivers[1] = int(md['i1'])
+            if 'i2' in md and md['i2']:
+                self.ivers[2] = int(md['i2'])
+            break
 
     def inadequate( self ):
         if not self.minversion:
@@ -1544,10 +1560,36 @@ try:
     repo    = RepoProbe()
     project = Project()
 
+    # options is created by parse_known_args(), which is called directly after
+    # createCLI(). we need cross info earlier and cannot parse args twice, so
+    # extract the info we need here
+    cross = None
+    for i in range(len(sys.argv)):
+        cross_pattern = re.compile( '^--cross=(.+)$' )
+        m = cross_pattern.match( sys.argv[i] )
+        if m:
+            cross = sys.argv[i][8:]
+            continue
+        cross_pattern = re.compile( '^--cross$' )
+        m = cross_pattern.match( sys.argv[i] )
+        if m and ((i + 1) < len(sys.argv)):
+            cross = sys.argv[i+1]
+            cross = None if cross == '' else cross
+            continue
+
     ## create tools in a scope
     class Tools:
         ar         = ToolProbe( 'AR.exe',         'ar',         'ar', abort=True )
         cp         = ToolProbe( 'CP.exe',         'cp',         'cp', abort=True )
+        m4         = ToolProbe( 'M4.exe',         'm4',         'gm4', 'm4', abort=True )
+        mkdir      = ToolProbe( 'MKDIR.exe',      'mkdir',      'mkdir', abort=True )
+        patch      = ToolProbe( 'PATCH.exe',      'patch',      'gpatch', 'patch', abort=True )
+        rm         = ToolProbe( 'RM.exe',         'rm',         'rm', abort=True )
+        ranlib     = ToolProbe( 'RANLIB.exe',     'ranlib',     'ranlib', abort=True )
+        strip      = ToolProbe( 'STRIP.exe',      'strip',      'strip', abort=True )
+        tar        = ToolProbe( 'TAR.exe',        'tar',        'gtar', 'tar', abort=True )
+        python     = ToolProbe( 'PYTHON.exe',     'python',     os.path.basename(sys.executable), abort=True )
+
         gcc_tools  = ['GCC.gcc',
                       'cc',
                       os.environ.get('CC', None),
@@ -1555,31 +1597,22 @@ try:
                       IfBuild( 'clang', '*-*-freebsd*' ),
                       IfBuild( 'gcc-4', '*-*-cygwin*' )]
         gcc        = ToolProbe(*filter(None, gcc_tools))
-
         if build_tuple.match( '*-*-darwin*' ):
             gmake  = ToolProbe( 'GMAKE.exe',      'make',       'make', 'gmake', abort=True )
         else:
             gmake  = ToolProbe( 'GMAKE.exe',      'make',       'gmake', 'make', abort=True )
 
-        m4         = ToolProbe( 'M4.exe',         'm4',         'gm4', 'm4', abort=True )
-        meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True )
-        mkdir      = ToolProbe( 'MKDIR.exe',      'mkdir',      'mkdir', abort=True )
-        ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja-build', 'ninja', abort=True )
-        patch      = ToolProbe( 'PATCH.exe',      'patch',      'gpatch', 'patch', abort=True )
-        rm         = ToolProbe( 'RM.exe',         'rm',         'rm', abort=True )
-        ranlib     = ToolProbe( 'RANLIB.exe',     'ranlib',     'ranlib', abort=True )
-        strip      = ToolProbe( 'STRIP.exe',      'strip',      'strip', abort=True )
-        tar        = ToolProbe( 'TAR.exe',        'tar',        'gtar', 'tar', abort=True )
-        nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=False, minversion=[2,13,0] )
-        autoconf   = ToolProbe( 'AUTOCONF.exe',   'autoconf',   'autoconf', abort=True )
-        automake   = ToolProbe( 'AUTOMAKE.exe',   'automake',   'automake', abort=True )
-        cmake      = ToolProbe( 'CMAKE.exe',      'cmake',      'cmake', abort=True )
-        libtool    = ToolProbe( 'LIBTOOL.exe',    'libtool',    'libtool', abort=True )
-        pkgconfig  = ToolProbe( 'PKGCONFIG.exe',  'pkgconfig',  'pkg-config', abort=True )
-
-        xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', 'xcodebuild', abort=False )
+        autoconf   = ToolProbe( 'AUTOCONF.exe',   'autoconf',   'autoconf', abort=True, minversion=[2,69,0] )
+        automake   = ToolProbe( 'AUTOMAKE.exe',   'automake',   'automake', abort=True, minversion=[1,16,0] )
+        libtool    = ToolProbe( 'LIBTOOL.exe',    'libtool',    'libtool', abort=True, minversion=[2,4,6] )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo',       'lipo', abort=False )
-        python     = ToolProbe( 'PYTHON.exe',     'python',     os.path.basename(sys.executable), abort=True )
+        pkgconfig  = ToolProbe( 'PKGCONFIG.exe',  'pkgconfig',  'pkg-config', abort=True, minversion=[0,29,2] )
+
+        meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True, minversion=[0,47,0] )
+        nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
+        ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja-build', 'ninja', abort=True )
+
+        xcodebuild = ToolProbe( 'XCODEBUILD.exe', 'xcodebuild', 'xcodebuild', abort=(True if (build_tuple.match('*-*-darwin*') and cross is None) else False), versionopt='-version', minversion=[10,3,0] )
 
     ## run tool probes
     for tool in ToolProbe.tools:
@@ -1601,33 +1634,17 @@ try:
         xcconfigMode.default = 'native'
         xcconfigMode.mode = xcconfigMode.default
 
-    # options is created by parse_known_args(), which is called directly after
-    # createCLI(). we need cross info for createCLI() to set defaults, and
-    # cannot parse args twice, so extract the info we need here
-    cross = None
-    for i in range(len(sys.argv)):
-        cross_pattern = re.compile( '^--cross=(.+)$' )
-        m = cross_pattern.match( sys.argv[i] )
-        if m:
-            cross = sys.argv[i][8:]
-            continue
-        cross_pattern = re.compile( '^--cross$' )
-        m = cross_pattern.match( sys.argv[i] )
-        if m and ((i + 1) < len(sys.argv)):
-            cross = sys.argv[i+1]
-            cross = None if cross == '' else cross
-            continue
-
     ## re-run tools with cross-compilation needs
     if cross:
         for tool in ( Tools.ar, Tools.gcc, Tools.ranlib, Tools.strip ):
             tool.__init__( tool.var, tool.option, '%s-%s' % (cross,tool.name), **tool.kwargs )
             tool.run()
 
-    # create CLI and parse
+    # run host tuple and arch actions
     host_tuple = HostTupleAction(cross)
     arch       = ArchAction(); arch.run()
 
+    # create CLI and parse
     cli = createCLI( cross )
     options, args = cli.parse_known_args()
 
@@ -1673,16 +1690,18 @@ try:
     options.enable_vce        = IfHost(options.enable_vce, '*-*-linux*', '*-*-mingw*',
                                        none=False).value
 
-
-    #########################################
-    ## OSX specific library and tool checks
-    #########################################
-    if build_tuple.match( '*-*-darwin*' ) or options.cross:
-        ## fail on missing or old nasm where needed
-        if Tools.nasm.fail:
-            raise AbortError( 'error: nasm missing\n' )
-        elif Tools.nasm.version.inadequate():
-            raise AbortError( 'error: minimum required nasm version is %s and %s is %s\n' % ('.'.join([str(i) for i in Tools.nasm.version.minversion]),Tools.nasm.pathname,Tools.nasm.version.svers) )
+    #####################################
+    ## Additional library and tool checks
+    #####################################
+    if options.flatpak or host_tuple.match('*-*-darwin*', '*-*-mingw'):
+        # Requires Jansson which requires CMake 3.1.0 or later
+        Tools.cmake = ToolProbe('CMAKE.exe', 'cmake', 'cmake', abort=True, minversion=[3,1,0])
+    else:
+        Tools.cmake = ToolProbe('CMAKE.exe', 'cmake', 'cmake', abort=True, minversion=[2,8,12])
+    Tools.cmake.__init__( Tools.cmake.var, Tools.cmake.option, Tools.cmake.name, **Tools.cmake.kwargs )
+    Tools.cmake.run()
+    for action in Action.actions:
+        action.run()
 
     #########################################
     ## MinGW specific library and tool checks
