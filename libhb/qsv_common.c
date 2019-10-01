@@ -273,7 +273,6 @@ static void init_ext_coding_option2(mfxExtCodingOption2 *extCodingOption2)
     extCodingOption2->BRefType        = MFX_B_REF_PYRAMID;
     extCodingOption2->AdaptiveI       = MFX_CODINGOPTION_ON;
     extCodingOption2->AdaptiveB       = MFX_CODINGOPTION_ON;
-    extCodingOption2->LookAheadDS     = MFX_LOOKAHEAD_DS_4x;
     extCodingOption2->NumMbPerSlice   = 2040; // 1920x1088/4
 }
 
@@ -296,10 +295,10 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
      */
     mfxStatus     status;
     hb_list_t    *mfxPluginList;
-    mfxExtBuffer *videoExtParam[1];
+    mfxExtBuffer *videoExtParam[1], *videoExtParamOut[1];
     mfxVideoParam videoParam, inputParam;
     mfxExtCodingOption    extCodingOption;
-    mfxExtCodingOption2   extCodingOption2;
+    mfxExtCodingOption2   extCodingOption2, extCodingOption2Out;
     mfxExtVideoSignalInfo extVideoSignalInfo;
 
     /* Reset capabilities before querying */
@@ -536,30 +535,39 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
          * suffers from false positives instead. The latter is probably easier
          * and/or safer to sanitize for us, so use mode 1.
          */
-        if (HB_CHECK_MFX_VERSION(version, 1, 6) && info->codec_id == MFX_CODEC_AVC)
+        if (HB_CHECK_MFX_VERSION(version, 1, 6))
         {
-            init_video_param(&videoParam);
-            videoParam.mfx.CodecId = info->codec_id;
+            init_video_param(&inputParam);
+            inputParam.mfx.CodecId = info->codec_id;
 
             init_ext_coding_option2(&extCodingOption2);
-            videoParam.ExtParam    = videoExtParam;
-            videoParam.ExtParam[0] = (mfxExtBuffer*)&extCodingOption2;
+            inputParam.ExtParam    = videoExtParam;
+            inputParam.ExtParam[0] = (mfxExtBuffer*)&extCodingOption2;
+            inputParam.NumExtParam = 1;
+
+            memset(&videoParam, 0, sizeof(mfxVideoParam));
+            videoParam.mfx.CodecId = inputParam.mfx.CodecId;
+            memset(&extCodingOption2Out, 0, sizeof(extCodingOption2Out));
+            extCodingOption2Out.Header.BufferId = MFX_EXTBUFF_CODING_OPTION2;
+            extCodingOption2Out.Header.BufferSz = sizeof(mfxExtCodingOption2);
+
+            videoParam.ExtParam    = videoExtParamOut;
+            videoParam.ExtParam[0] = (mfxExtBuffer*)&extCodingOption2Out;
             videoParam.NumExtParam = 1;
 
-            status = MFXVideoENCODE_Query(session, NULL, &videoParam);
+            status = MFXVideoENCODE_Query(session, &inputParam, &videoParam);
             if (status >= MFX_ERR_NONE)
             {
-#if 0
+#if 1
                 // testing code that could come in handy
                 fprintf(stderr, "-------------------\n");
-                fprintf(stderr, "MBBRC:         0x%02X\n",     extCodingOption2.MBBRC);
-                fprintf(stderr, "ExtBRC:        0x%02X\n",     extCodingOption2.ExtBRC);
-                fprintf(stderr, "Trellis:       0x%02X\n",     extCodingOption2.Trellis);
-                fprintf(stderr, "RepeatPPS:     0x%02X\n",     extCodingOption2.RepeatPPS);
-                fprintf(stderr, "BRefType:      %4"PRIu16"\n", extCodingOption2.BRefType);
-                fprintf(stderr, "AdaptiveI:     0x%02X\n",     extCodingOption2.AdaptiveI);
-                fprintf(stderr, "AdaptiveB:     0x%02X\n",     extCodingOption2.AdaptiveB);
-                fprintf(stderr, "LookAheadDS:   %4"PRIu16"\n", extCodingOption2.LookAheadDS);
+                fprintf(stderr, "MBBRC:         In=0x%02X Out=0x%02X\n",     extCodingOption2.MBBRC, extCodingOption2Out.MBBRC);
+                fprintf(stderr, "ExtBRC:        In=0x%02X Out=0x%02X\n",     extCodingOption2.ExtBRC, extCodingOption2Out.ExtBRC);
+                fprintf(stderr, "Trellis:       In=0x%02X Out=0x%02X\n",     extCodingOption2.Trellis, extCodingOption2Out.Trellis);
+                fprintf(stderr, "RepeatPPS:     In=0x%02X Out=0x%02X\n",     extCodingOption2.RepeatPPS, extCodingOption2Out.RepeatPPS);
+                fprintf(stderr, "BRefType:      In=%4"PRIu16" Out=%4"PRIu16"\n", extCodingOption2.BRefType, extCodingOption2Out.BRefType);
+                fprintf(stderr, "AdaptiveI:     In=0x%02X Out=0x%02X\n",     extCodingOption2.AdaptiveI, extCodingOption2Out.AdaptiveI);
+                fprintf(stderr, "AdaptiveB:     In=0x%02X Out=0x%02X\n",     extCodingOption2.AdaptiveB, extCodingOption2Out.AdaptiveB);
                 fprintf(stderr, "-------------------\n");
 #endif
 
@@ -575,7 +583,7 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                 if (qsv_implementation_is_hardware(info->implementation) &&
                     qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
                 {
-                    if (extCodingOption2.MBBRC)
+                    if (extCodingOption2.MBBRC == extCodingOption2Out.MBBRC)
                     {
                         info->capabilities |= HB_QSV_CAP_OPTION2_MBBRC;
                     }
@@ -583,7 +591,7 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                 if (qsv_implementation_is_hardware(info->implementation) &&
                     qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G2)
                 {
-                    if (extCodingOption2.ExtBRC)
+                    if (extCodingOption2.ExtBRC == extCodingOption2Out.ExtBRC)
                     {
                         info->capabilities |= HB_QSV_CAP_OPTION2_EXTBRC;
                     }
@@ -599,7 +607,7 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                     if (qsv_implementation_is_hardware(info->implementation) &&
                         qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G3)
                     {
-                        if (extCodingOption2.Trellis)
+                        if (extCodingOption2.Trellis == extCodingOption2Out.Trellis)
                         {
                             info->capabilities |= HB_QSV_CAP_OPTION2_TRELLIS;
                         }
@@ -617,23 +625,16 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                 {
                     if (info->capabilities & HB_QSV_CAP_B_REF_PYRAMID)
                     {
-                        if (extCodingOption2.BRefType)
+                        if (extCodingOption2.BRefType == extCodingOption2Out.BRefType)
                         {
                             info->capabilities |= HB_QSV_CAP_OPTION2_BREFTYPE;
                         }
                     }
-                    if (info->capabilities & HB_QSV_CAP_RATECONTROL_LA)
-                    {
-                        if (extCodingOption2.LookAheadDS)
-                        {
-                            info->capabilities |= HB_QSV_CAP_OPTION2_LA_DOWNS;
-                        }
-                    }
-                    if (extCodingOption2.AdaptiveI && extCodingOption2.AdaptiveB)
+                    if (extCodingOption2.AdaptiveI == extCodingOption2Out.AdaptiveI && extCodingOption2.AdaptiveB == extCodingOption2Out.AdaptiveB)
                     {
                         info->capabilities |= HB_QSV_CAP_OPTION2_IB_ADAPT;
                     }
-                    if (extCodingOption2.NumMbPerSlice)
+                    if (extCodingOption2.NumMbPerSlice ==  extCodingOption2Out.NumMbPerSlice)
                     {
                         info->capabilities |= HB_QSV_CAP_OPTION2_NMPSLICE;
                     }
@@ -645,6 +646,54 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                         "hb_qsv_info_init: mfxExtCodingOption2 check failed (0x%"PRIX32", 0x%"PRIX32", %d)\n",
                         info->codec_id, info->implementation, status);
             }
+
+            /*
+             * Determine whether mfxExtCodingOption2 and its fields for lookahead are supported
+             */
+            if (HB_CHECK_MFX_VERSION(version, 1, 6)) // && info->capabilities & HB_QSV_CAP_RATECONTROL_LA)
+            {
+                init_video_param(&inputParam);
+                inputParam.mfx.CodecId = info->codec_id;
+                inputParam.mfx.RateControlMethod = MFX_RATECONTROL_LA;
+
+                memset(&extCodingOption2, 0, sizeof(extCodingOption2));
+                extCodingOption2.Header.BufferId = MFX_EXTBUFF_CODING_OPTION2;
+                extCodingOption2.Header.BufferSz = sizeof(mfxExtCodingOption2);
+                extCodingOption2.LookAheadDS = MFX_LOOKAHEAD_DS_4x;
+
+                inputParam.ExtParam    = videoExtParam;
+                inputParam.ExtParam[0] = (mfxExtBuffer*)&extCodingOption2;
+                inputParam.NumExtParam = 1;
+
+                memset(&videoParam, 0, sizeof(mfxVideoParam));
+                videoParam.mfx.CodecId = inputParam.mfx.CodecId;
+                memset(&extCodingOption2Out, 0, sizeof(extCodingOption2Out));
+                extCodingOption2Out.Header.BufferId = MFX_EXTBUFF_CODING_OPTION2;
+                extCodingOption2Out.Header.BufferSz = sizeof(mfxExtCodingOption2);
+
+                videoParam.ExtParam    = videoExtParamOut;
+                videoParam.ExtParam[0] = (mfxExtBuffer*)&extCodingOption2Out;
+                videoParam.NumExtParam = 1;
+
+                status = MFXVideoENCODE_Query(session, &inputParam, &videoParam);
+                if (status >= MFX_ERR_NONE)
+                {
+    #if 1
+                    fprintf(stderr, "LookAheadDS:   In=%4"PRIu16" Out=%4"PRIu16"\n", extCodingOption2.LookAheadDS, extCodingOption2Out.LookAheadDS);
+    #endif
+                    if ((MFX_LOOKAHEAD_DS_4x | MFX_LOOKAHEAD_DS_2x) & extCodingOption2Out.LookAheadDS)
+                    {
+                         info->capabilities |= HB_QSV_CAP_OPTION2_LA_DOWNS;
+                    }
+                }
+                else
+                {
+                     fprintf(stderr,
+                             "hb_qsv_info_init: mfxExtCodingOption2 check failed (0x%"PRIX32", 0x%"PRIX32", %d) for lookahead rate control\n",
+                             info->codec_id, info->implementation, status);
+                }
+            }
+
         }
     }
 
@@ -1974,6 +2023,9 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->codingOption.VuiNalHrdParameters  = MFX_CODINGOPTION_UNKNOWN;
         param->codingOption.FramePicture         = MFX_CODINGOPTION_UNKNOWN;
         param->codingOption.CAVLC                = MFX_CODINGOPTION_OFF;
+        if (info->codec_id==MFX_CODEC_HEVC) {
+            param->codingOption.CAVLC                = MFX_CODINGOPTION_UNKNOWN;
+        }
         // introduced in API 1.3
         param->codingOption.RefPicMarkRep        = MFX_CODINGOPTION_UNKNOWN;
         param->codingOption.FieldOutput          = MFX_CODINGOPTION_UNKNOWN;
@@ -2001,21 +2053,40 @@ int hb_qsv_param_default(hb_qsv_param_t *param, mfxVideoParam *videoParam,
         param->codingOption2.Header.BufferId = MFX_EXTBUFF_CODING_OPTION2;
         param->codingOption2.Header.BufferSz = sizeof(mfxExtCodingOption2);
         param->codingOption2.IntRefType      = 0;
-        param->codingOption2.IntRefCycleSize = 2;
+        param->codingOption2.IntRefCycleSize = 0;
         param->codingOption2.IntRefQPDelta   = 0;
         param->codingOption2.MaxFrameSize    = 0;
         param->codingOption2.BitrateLimit    = MFX_CODINGOPTION_ON;
-        param->codingOption2.MBBRC           = MFX_CODINGOPTION_ON;
-        param->codingOption2.ExtBRC          = MFX_CODINGOPTION_OFF;
+        if (info->capabilities & HB_QSV_CAP_OPTION2_MBBRC) {
+            param->codingOption2.MBBRC           = MFX_CODINGOPTION_ON;
+        }
+        if (info->capabilities & HB_QSV_CAP_OPTION2_EXTBRC) {
+            param->codingOption2.ExtBRC          = MFX_CODINGOPTION_OFF;
+        }
         // introduced in API 1.7
-        param->codingOption2.LookAheadDepth  = 40;
-        param->codingOption2.Trellis         = MFX_TRELLIS_OFF;
+        if (info->capabilities & HB_QSV_CAP_RATECONTROL_LA) {
+            param->codingOption2.LookAheadDepth  = 40;
+        }
+        if (info->capabilities & HB_QSV_CAP_OPTION2_TRELLIS) {
+            param->codingOption2.Trellis         = MFX_TRELLIS_OFF;
+        }
         // introduced in API 1.8
-        param->codingOption2.RepeatPPS       = MFX_CODINGOPTION_ON;
-        param->codingOption2.BRefType        = MFX_B_REF_UNKNOWN; // controlled via gop.b_pyramid
-        param->codingOption2.AdaptiveI       = MFX_CODINGOPTION_OFF;
-        param->codingOption2.AdaptiveB       = MFX_CODINGOPTION_OFF;
-        param->codingOption2.LookAheadDS     = MFX_LOOKAHEAD_DS_OFF;
+        if (info->codec_id==MFX_CODEC_AVC) {
+            param->codingOption2.RepeatPPS       = MFX_CODINGOPTION_ON;
+        }
+        else if (info->codec_id==MFX_CODEC_HEVC) {
+            param->codingOption2.RepeatPPS       = MFX_CODINGOPTION_OFF;
+        }
+        if (info->capabilities & HB_QSV_CAP_OPTION2_BREFTYPE) {
+            param->codingOption2.BRefType        = MFX_B_REF_UNKNOWN; // controlled via gop.b_pyramid
+        }
+        if (info->capabilities & HB_QSV_CAP_OPTION2_IB_ADAPT) {
+            param->codingOption2.AdaptiveI       = MFX_CODINGOPTION_OFF;
+            param->codingOption2.AdaptiveB       = MFX_CODINGOPTION_OFF;
+        }
+        if (info->capabilities & HB_QSV_CAP_OPTION2_LA_DOWNS) {
+            param->codingOption2.LookAheadDS     = MFX_LOOKAHEAD_DS_OFF;
+        }
         param->codingOption2.NumMbPerSlice   = 0;
 
         // GOP & rate control
