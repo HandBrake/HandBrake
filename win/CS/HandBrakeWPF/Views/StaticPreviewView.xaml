@@ -31,16 +31,18 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+
                 <Slider Maximum="{Binding TotalPreviews}" Minimum="0" AutomationProperties.Name="{x:Static Properties:Resources.StaticPreviewView_SelectPreviewImage}"
                 Value="{Binding SelectedPreviewImage}"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Stretch"
-                Background="Transparent" TickPlacement="TopLeft"
-                        Margin="0,0,0,5"
-                />
+                Background="Transparent" TickPlacement="TopLeft" Margin="0,0,0,5" />
 
-                <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Left">
+                <CheckBox IsChecked="{Binding PreviewRotateFlip}" Content="{x:Static Properties:Resources.StaticPreviewView_PreviewRotationFlip}" Foreground="White" Grid.Row="1" Margin="0,0,0,10" />
+
+                <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Left">
                     <Button Content="{x:Static Properties:Resources.StaticPreviewView_LivePreview}" Padding="8,2" cal:Message.Attach="[Event Click] = [Action Play]" />
                     <TextBlock Margin="10,0,5,0" VerticalAlignment="Center" Foreground="White" Text="{x:Static Properties:Resources.StaticPreviewView_Duration}" />
                     <ComboBox Width="60"
@@ -50,11 +52,7 @@
                     <CheckBox VerticalAlignment="Center" Content="{x:Static Properties:Resources.StaticPreviewView_UseSystemDefault}" Foreground="White" Margin="10,0,0,0" IsChecked="{Binding UseSystemDefaultPlayer}" />
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="0,5,0,0">
-
-                </StackPanel>
-
-                <Grid  Margin="0,10,10,0" Grid.Row="2" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}}">
+                <Grid  Margin="0,10,10,0" Grid.Row="3" Visibility="{Binding IsEncoding, Converter={StaticResource booleanToVisibilityConverter}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="23*" />
                         <ColumnDefinition Width="289*"/>

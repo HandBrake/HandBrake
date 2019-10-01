@@ -82,6 +82,7 @@ namespace HandBrakeWPF.Utilities
 
                         foreach (PropertyData pc in share.Properties)
                         {
+                            Console.WriteLine(pc.Name + ": " + pc.Value);
                             if (!string.IsNullOrEmpty(pc.Name) && pc.Value != null)
                             {
                                 if (pc.Name.Equals("DriverVersion")) version = pc.Value.ToString();

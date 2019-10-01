@@ -2045,4 +2045,7 @@ Where supported, any user presets will have been imported.</value>
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>Title:</value>
   </data>
+  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
+    <value>Preview Rotation and Flip</value>
+  </data>
 </root>

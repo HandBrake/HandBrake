@@ -36,7 +36,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// </summary>
         bool IsOpen { get; set; }
 
-        BitmapImage PreviewImage { get; }
+        BitmapSource PreviewImage { get; }
 
         void PreviousPreview();
         void NextPreview();

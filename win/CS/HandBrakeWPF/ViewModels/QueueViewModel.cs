@@ -253,7 +253,7 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 if (this.SelectedTask != null &&
-                    (this.selectedTask.Status == QueueItemStatus.Completed || this.selectedTask.Status == QueueItemStatus.Error))
+                    (this.selectedTask.Status == QueueItemStatus.Completed || this.selectedTask.Status == QueueItemStatus.Error || this.selectedTask.Status == QueueItemStatus.InProgress))
                 {
                     return true;
                 }
@@ -726,7 +726,6 @@ namespace HandBrakeWPF.ViewModels
                     if (directory != null && Directory.Exists(directory))
                     {
                         Process.Start(directory);
-
                     }
                 }
             }

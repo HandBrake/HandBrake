@@ -30,6 +30,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Services.Scan.Interfaces;
     using HandBrakeWPF.Services.Scan.Model;
+    using HandBrakeWPF.Utilities;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     using EncodeCompletedEventArgs = HandBrakeWPF.Services.Encode.EventArgs.EncodeCompletedEventArgs;
@@ -45,79 +46,20 @@ namespace HandBrakeWPF.ViewModels
     /// </summary>
     public class StaticPreviewViewModel : ViewModelBase, IStaticPreviewViewModel
     {
-        /*
-         * TODO
-         * - Window Size / Scale to screen etc.
-         */
-
-        #region Fields
-
-        /// <summary>
-        ///     The scan service.
-        /// </summary>
         private readonly IScan scanService;
-
-        /// <summary>
-        /// Backing field for the encode service.
-        /// </summary>
         private readonly IEncode encodeService;
-
-        /// <summary>
-        /// The error service
-        /// </summary>
         private readonly IErrorService errorService;
-
-        /// <summary>
-        /// The user Setting Service
-        /// </summary>
         private readonly IUserSettingService userSettingService;
-
-        /// <summary>
-        ///     The height.
-        /// </summary>
         private int height;
-
-        /// <summary>
-        ///     The preview image.
-        /// </summary>
-        private BitmapImage previewImage;
-
-        /// <summary>
-        ///     The selected preview image.
-        /// </summary>
+        private BitmapSource previewImage;
         private int selectedPreviewImage;
-
-        /// <summary>
-        ///     The width.
-        /// </summary>
         private int width;
-
-        /// <summary>
-        /// The preview not available.
-        /// </summary>
         private bool previewNotAvailable;
-
-        /// <summary>
-        /// The percentage.
-        /// </summary>
         private string percentage;
-
-        /// <summary>
-        /// The percentage value.
-        /// </summary>
         private double percentageValue;
-
-        /// <summary>
-        /// The Backing field for IsEncoding
-        /// </summary>
         private bool isEncoding;
-
-        /// <summary>
-        /// Backing field for use system default player
-        /// </summary>
         private bool useSystemDefaultPlayer;
-
-        #endregion
+        private bool previewRotateFlip;
 
         #region Constructors and Destructors
 
@@ -141,6 +83,8 @@ namespace HandBrakeWPF.ViewModels
 
             this.useSystemDefaultPlayer = userSettingService.GetUserSetting<bool>(UserSettingConstants.DefaultPlayer);
             this.Duration = userSettingService.GetUserSetting<int>(UserSettingConstants.LastPreviewDuration);
+            this.previewRotateFlip = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreviewRotationFlip);
+            this.NotifyOfPropertyChange(() => this.previewRotateFlip); // Don't want to trigger an Update, so setting the backing variable. 
         }
 
         #endregion
@@ -170,7 +114,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         ///     Gets or sets the preview image.
         /// </summary>
-        public BitmapImage PreviewImage
+        public BitmapSource PreviewImage
         {
             get
             {
@@ -207,6 +151,24 @@ namespace HandBrakeWPF.ViewModels
                 this.NotifyOfPropertyChange(() => this.SelectedPreviewImage);
 
                 this.UpdatePreviewFrame();
+            }
+        }
+
+        public bool PreviewRotateFlip
+        {
+            get => this.previewRotateFlip;
+            set
+            {
+                if (value == this.previewRotateFlip)
+                {
+                    return;
+                }
+
+                this.previewRotateFlip = value;
+                this.NotifyOfPropertyChange(() => this.PreviewRotateFlip);
+
+                this.UpdatePreviewFrame();
+                this.userSettingService.SetUserSetting(UserSettingConstants.PreviewRotationFlip, value);
             }
         }
 
@@ -455,7 +417,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            BitmapImage image = null;
+            BitmapSource image = null;
             try
             {
                 image = this.scanService.GetPreview(this.Task, this.SelectedPreviewImage, HBConfigurationFactory.Create());
@@ -468,6 +430,11 @@ namespace HandBrakeWPF.ViewModels
 
             if (image != null)
             {
+                if (previewRotateFlip)
+                {
+                    image = BitmapHelpers.CreateTransformedBitmap(image, this.Task.Rotation, this.Task.FlipVideo);
+                }
+
                 PreviewNotAvailable = false;
                 this.Width = (int)Math.Ceiling(image.Width);
                 this.Height = (int)Math.Ceiling(image.Height);

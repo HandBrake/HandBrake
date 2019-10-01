@@ -259,6 +259,7 @@
     <Compile Include="Services\UserSettingService.cs" />
     <Compile Include="Startup\StartupOptions.cs" />
     <Compile Include="Utilities\AppcastReader.cs" />
+    <Compile Include="Utilities\BitmapHelpers.cs" />
     <Compile Include="Utilities\BitmapUtilities.cs" />
     <Compile Include="Utilities\DelayedActionProcessor.cs" />
     <Compile Include="Utilities\DPIAwareness.cs" />

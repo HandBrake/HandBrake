@@ -15,6 +15,7 @@ namespace HandBrakeWPF.ViewModels
     using System.IO;
     using System.Runtime.ExceptionServices;
     using System.Text;
+    using System.Windows.Media;
     using System.Windows.Media.Imaging;
 
     using HandBrake.Interop.Interop;
@@ -131,7 +132,7 @@ namespace HandBrakeWPF.ViewModels
 
         #region DisplayProperties
 
-        public BitmapImage PreviewImage { get; set; }
+        public BitmapSource PreviewImage { get; set; }
         public bool PreviewNotAvailable { get; set; }
         public int MaxWidth { get; set; }
         public int MaxHeight { get; set; }
@@ -668,7 +669,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            BitmapImage image = null;
+            BitmapSource image = null;
             try
             {
                 image = this.scanService.GetPreview(this.Task, this.selectedPreview - 1, HBConfigurationFactory.Create()); 
@@ -681,6 +682,8 @@ namespace HandBrakeWPF.ViewModels
 
             if (image != null)
             {
+                image = BitmapHelpers.CreateTransformedBitmap(image, this.task.Rotation, this.task.FlipVideo);
+
                 this.PreviewNotAvailable = false;
                 this.PreviewImage = image;
                 this.MaxWidth = (int)image.Width;

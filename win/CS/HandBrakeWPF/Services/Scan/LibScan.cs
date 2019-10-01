@@ -217,7 +217,7 @@ namespace HandBrakeWPF.Services.Scan
                                                    PixelAspectY = job.PixelAspectY
                                                };
 
-                var bitmapData = this.instance.GetPreview(settings, preview, job.DeinterlaceFilter != DeinterlaceFilter.Off);
+                RawPreviewData bitmapData = this.instance.GetPreview(settings, preview, job.DeinterlaceFilter != DeinterlaceFilter.Off);
                 bitmapImage = BitmapUtilities.ConvertToBitmapImage(BitmapUtilities.ConvertByteArrayToBitmap(bitmapData));
             }
             catch (AccessViolationException e)

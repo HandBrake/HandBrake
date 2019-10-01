@@ -73,5 +73,6 @@ namespace HandBrakeWPF
         public const string AutonameFilePrePostString = "AutonameFilePrePostString";
         public const string WhenDonePerformActionImmediately = "WhenDonePerformActionImmediately";
         public const string UseDarkTheme = "UseDarkTheme";
+        public const string PreviewRotationFlip = "PreviewRotationFlip";
     }
 }

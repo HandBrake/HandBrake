@@ -64,7 +64,7 @@ namespace HandBrakeWPF.Views
 
         private void UpdateWindowTitle()
         {
-            BitmapImage image = ((IStaticPreviewViewModel)this.DataContext).PreviewImage;
+            BitmapSource image = ((IStaticPreviewViewModel)this.DataContext).PreviewImage;
             if (image != null && this.previewImage != null && this.previewImage.ActualWidth > 0)
             {
                 double origWidth = Math.Round(image.Width, 0);
