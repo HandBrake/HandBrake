@@ -158,7 +158,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define HB_QSV_ID_BUFFER MFX_MAKEFOURCC('B','U','F','F')
 #define HB_QSV_ID_FRAME  MFX_MAKEFOURCC('F','R','M','E')
 
-#define HB_QSV_SURFACE_NUM              80
+// You can blame HEVC encoding as it has a maximum gop size of 256.
+#define HB_QSV_SURFACE_NUM              268
+
 #define HB_QSV_SYNC_NUM                 HB_QSV_SURFACE_NUM*3/4
 #define HB_QSV_BUF_SIZE_DEFAULT         4096*2160*10
 #define HB_QSV_JOB_SIZE_DEFAULT         10

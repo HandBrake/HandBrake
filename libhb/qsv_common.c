@@ -1191,7 +1191,17 @@ int hb_qsv_param_parse(hb_qsv_param_t *param, hb_qsv_info_t *info,
         ivalue = hb_qsv_atoi(value, &error);
         if (!error)
         {
-            param->gop.gop_ref_dist = HB_QSV_CLIP3(-1, 32, ivalue);
+            switch (info->codec_id)
+            {
+                case MFX_CODEC_AVC:
+                    param->gop.gop_ref_dist = HB_QSV_CLIP3(-1, 32, ivalue);
+                    break;
+                case MFX_CODEC_HEVC:
+                    param->gop.gop_ref_dist = HB_QSV_CLIP3(0, 256, ivalue);
+                    break;
+                default:
+                    return HB_QSV_PARAM_UNSUPPORTED;
+            }
         }
     }
     else if (!strcasecmp(key, "gop-pic-size") ||

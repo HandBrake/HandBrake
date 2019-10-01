@@ -1374,22 +1374,33 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
     pv->param.videoParam->mfx.GopPicSize = pv->param.gop.gop_pic_size;
 
     // sanitize some settings that affect memory consumption
-    if (!pv->is_sys_mem)
+    if (pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC)
     {
-        // limit these to avoid running out of resources (causes hang)
-        pv->param.videoParam->mfx.GopRefDist   = FFMIN(pv->param.videoParam->mfx.GopRefDist,
-                                                       pv->param.rc.lookahead ? 8 : 16);
-        pv->param.codingOption2.LookAheadDepth = FFMIN(pv->param.codingOption2.LookAheadDepth,
-                                                       pv->param.rc.lookahead ? (48 - pv->param.videoParam->mfx.GopRefDist -
-                                                                                 3 * !pv->param.videoParam->mfx.GopRefDist) : 0);
+        // HEVC encoding takes a lot of memory .. you got to live with it.
+        pv->param.videoParam->mfx.GopRefDist   = FFMIN(pv->param.videoParam->mfx.GopRefDist, 256);
     }
     else
     {
-        // encode-only is a bit less sensitive to memory issues
-        pv->param.videoParam->mfx.GopRefDist   = FFMIN(pv->param.videoParam->mfx.GopRefDist, 16);
-        pv->param.codingOption2.LookAheadDepth = FFMIN(pv->param.codingOption2.LookAheadDepth,
-                                                       pv->param.rc.lookahead ? 100 : 0);
+        if (!pv->is_sys_mem)
+        {
+            // limit these to avoid running out of resources (causes hang)
+            pv->param.videoParam->mfx.GopRefDist   = FFMIN(pv->param.videoParam->mfx.GopRefDist,
+                                                           pv->param.rc.lookahead ? 8 : 16);
+            pv->param.codingOption2.LookAheadDepth = FFMIN(pv->param.codingOption2.LookAheadDepth,
+                                                           pv->param.rc.lookahead ? (48 - pv->param.videoParam->mfx.GopRefDist -
+                                                                                     3 * !pv->param.videoParam->mfx.GopRefDist) : 0);
+        }
+        else
+        {
+            // encode-only is a bit less sensitive to memory issues
+            pv->param.videoParam->mfx.GopRefDist   = FFMIN(pv->param.videoParam->mfx.GopRefDist, 16);
+            pv->param.codingOption2.LookAheadDepth = FFMIN(pv->param.codingOption2.LookAheadDepth,
+                                                           pv->param.rc.lookahead ? 100 : 0);
+        }
     }
+
+
+
     if (pv->param.rc.lookahead)
     {
         // LookAheadDepth 10 will cause a hang with some driver versions
