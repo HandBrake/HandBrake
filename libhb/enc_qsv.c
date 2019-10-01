@@ -175,6 +175,19 @@ static int64_t get_frame_duration(hb_work_private_t *pv, hb_buffer_t *buf)
     return pv->frame_duration[i];
 }
 
+// compute power of two greater than or equal to n
+uint16_t find_next_power_of_2(uint16_t val)
+{
+    // decrement by 1 in case already power of 2
+    val = val - 1;
+
+    // calculate position of last set bit of n
+    uint16_t lg = log2(val);
+
+    // next power of two will have bit set at position (lg + 1)
+    return 1U << (lg + 1);
+}
+
 static void qsv_handle_breftype(hb_work_private_t *pv)
 {
     /*
@@ -227,6 +240,63 @@ static void qsv_handle_breftype(hb_work_private_t *pv)
         pv->param.gop.b_pyramid = pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP;
     }
 
+    /*
+     * If using HEVC and CQP then hierarchical B pyramid will be disabled if gop_ref_dist is not a power of 2 that is
+     * at most 256 and is larger than 2. NumRefFrame also implicit from the references defined in CodingOption3
+     * and so we hard wire it to 15 .. as codingOption3 is not supported and the GopPicSize should be a multiple
+     * of GopRefDist. Suitable defaults are provided if they are zerod and hierarchical B frame is applied.
+     * This is pointless with ICQ.
+     */
+    if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP &&
+        pv->param.gop.b_pyramid && pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC) {
+        if (pv->param.videoParam->mfx.GopRefDist <= 0) {
+            pv->param.videoParam->mfx.GopRefDist = 256;
+        }
+        pv->param.videoParam->mfx.GopRefDist = FFMIN(find_next_power_of_2(pv->param.videoParam->mfx.GopRefDist), 256);
+        pv->param.videoParam->mfx.NumRefFrame = 15;
+        if (pv->param.videoParam->mfx.GopPicSize)
+        {
+            pv->param.videoParam->mfx.GopPicSize = FFALIGN(pv->param.videoParam->mfx.GopPicSize,
+                                                           pv->param.videoParam->mfx.GopRefDist);
+        }
+        else
+        {
+            pv->param.videoParam->mfx.GopPicSize = 3 * pv->param.videoParam->mfx.GopRefDist;
+        }
+
+        /*
+         * With the b pyramid the QP for a frame is based on the layer in the pyramid
+         * added onto the QP used for B frames. With the default GOP of 256, that means
+         * one in 256 frames gets QPI or QPP and the remaining 255 get up to QPB + 8.
+         * This makes QPB nothing more than an offset to all frames and produces a much
+         * larger average QP than if e.g. 16 frame GOPs are used.
+         * Change the default P and B offsets so the user defined QP value remains
+         * roughly comparable. User defined P and B offsets are ignored as the
+         * QP offset by layer is not controllable. Instead allow offsets so that
+         * average QP is very very roughly comparable with other GOP sizes.
+         */
+        if (pv->param.videoParam->mfx.QPP != pv->param.videoParam->mfx.QPI + 2 ||
+            pv->param.videoParam->mfx.QPB != pv->param.videoParam->mfx.QPI + 4)
+        {
+            hb_log("qsv_hevc: Ignoring user provided QP offset for P and B frames as binary B tree is in use and offset is defined by layer in tree. Adjust QP instead.");
+        }
+        if (pv->param.videoParam->mfx.GopRefDist > 64)
+        {
+            pv->param.videoParam->mfx.QPP = pv->param.videoParam->mfx.QPI;
+            pv->param.videoParam->mfx.QPB = pv->param.videoParam->mfx.QPI + 1;
+        }
+        else if (pv->param.videoParam->mfx.GopRefDist > 16)
+        {
+            pv->param.videoParam->mfx.QPP = pv->param.videoParam->mfx.QPI + 1;
+            pv->param.videoParam->mfx.QPB = pv->param.videoParam->mfx.QPI + 2;
+        }
+        else
+        {
+            pv->param.videoParam->mfx.QPP = pv->param.videoParam->mfx.QPI + 2;
+            pv->param.videoParam->mfx.QPB = pv->param.videoParam->mfx.QPI + 4;
+        }
+    }
+
     if (pv->qsv_info->capabilities & HB_QSV_CAP_OPTION2_BREFTYPE)
     {
         /* B-pyramid can be controlled directly */
@@ -239,11 +309,12 @@ static void qsv_handle_breftype(hb_work_private_t *pv)
             pv->param.codingOption2.BRefType = MFX_B_REF_OFF;
         }
     }
-    else
+    else if (pv->param.gop.b_pyramid && pv->param.videoParam->mfx.CodecId == MFX_CODEC_AVC)
     {
         /*
          * We can't control B-pyramid directly, do it indirectly by
          * adjusting GopRefDist, GopPicSize and NumRefFrame instead.
+         * For HEVC this has to be performed regardless so has already been applied.
          */
         pv->param.codingOption2.BRefType = MFX_B_REF_UNKNOWN;
 
@@ -1342,35 +1413,45 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         }
     }
 
-    // set the GOP structure
-    if (pv->param.gop.gop_ref_dist < 0)
+    // Use 0s for HEVC .. as you will get valid defaults
+    if (pv->param.videoParam->mfx.CodecId == MFX_CODEC_HEVC)
     {
-        if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
+        pv->param.gop.gop_ref_dist=FFMAX(pv->param.gop.gop_ref_dist, 0);
+        pv->param.gop.gop_pic_size=FFMAX(pv->param.gop.gop_pic_size, 0);
+    }
+
+    if (pv->param.videoParam->mfx.CodecId == MFX_CODEC_AVC)
+    {
+        // set the GOP structure for x264
+        if (pv->param.gop.gop_ref_dist < 0)
         {
-            pv->param.gop.gop_ref_dist = 4;
+            if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
+            {
+                pv->param.gop.gop_ref_dist = 4;
+            }
+            else
+            {
+                pv->param.gop.gop_ref_dist = 3;
+            }
         }
-        else
+
+        // set the keyframe interval
+        if (pv->param.gop.gop_pic_size < 0)
         {
-            pv->param.gop.gop_ref_dist = 3;
+            int rate = (double)job->orig_vrate.num / job->orig_vrate.den + 0.5;
+            if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
+            {
+                // ensure B-pyramid is enabled for CQP on Haswell
+                pv->param.gop.gop_pic_size = 32;
+            }
+            else
+            {
+                // set the keyframe interval based on the framerate
+                pv->param.gop.gop_pic_size = rate;
+            }
         }
     }
     pv->param.videoParam->mfx.GopRefDist = pv->param.gop.gop_ref_dist;
-
-    // set the keyframe interval
-    if (pv->param.gop.gop_pic_size < 0)
-    {
-        int rate = (double)job->orig_vrate.num / job->orig_vrate.den + 0.5;
-        if (pv->param.videoParam->mfx.RateControlMethod == MFX_RATECONTROL_CQP)
-        {
-            // ensure B-pyramid is enabled for CQP on Haswell
-            pv->param.gop.gop_pic_size = 32;
-        }
-        else
-        {
-            // set the keyframe interval based on the framerate
-            pv->param.gop.gop_pic_size = rate;
-        }
-    }
     pv->param.videoParam->mfx.GopPicSize = pv->param.gop.gop_pic_size;
 
     // sanitize some settings that affect memory consumption
