@@ -152,7 +152,7 @@ $(PKG.src.deb.stamp): GNUmakefile
 	$(CP.exe) $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/control.disco $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/control
 	$(CP.exe) $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/rules.disco $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/rules
 	echo "$(HB.name.lower) (1:$(HB.debversion)-zhb-1ppa1~disco1) disco; urgency=low" > $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
-	echo "" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
+	echo "" >> $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
 	echo "  * Snapshot: See commit history at" >> $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
 	echo "    https://github.com/HandBrake/HandBrake" >> $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
