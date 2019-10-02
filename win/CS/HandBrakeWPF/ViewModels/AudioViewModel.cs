@@ -226,10 +226,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void ShowAudioDefaults()
         {
-            AudioDefaultsView view = new AudioDefaultsView();
-            view.DataContext = this.AudioDefaultsViewModel;
-
-            if (view.ShowDialog() == true)
+            if (this.windowManager.ShowDialog(this.AudioDefaultsViewModel) == true)
             {
                 this.OnTabStatusChanged(null);
             }

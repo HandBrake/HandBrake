@@ -307,10 +307,7 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void EditAudioDefaults()
         {
-            AudioDefaultsView view = new AudioDefaultsView();
-            view.DataContext = this.audioDefaultsViewModel;
-
-            if (view.ShowDialog() == true)
+            if (this.windowManager.ShowDialog(this.audioDefaultsViewModel) == true)
             {
                 this.Preset.AudioTrackBehaviours = this.audioDefaultsViewModel.AudioBehaviours.Clone();
             }
