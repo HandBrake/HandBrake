@@ -40,7 +40,7 @@ PKG.cli.deb = $(PKG.out.abs/)$(HB.name)-$(HB.debversion)-Ubuntu_CLI_$(HOST.machi
 PKG.gui.deb = $(PKG.out.abs/)$(HB.name)-$(HB.debversion)-Ubuntu_GUI_$(HOST.machine).deb
 PKG.deb.basename = $(HB.name.lower)-$(HB.debversion)
 PKG.src.deb.tar = $(HB.name.lower)_$(HB.debversion).tar.gz
-PKG.src.deb.stamp = $(STAGE.out.src.abs/).debsrc.stamp
+PKG.src.deb.stamp = $(STAGE.out.src.abs/).debsrc-$(HB.debversion).stamp
 PKG.src.deb = $(PKG.out.abs/)$(HB.name.lower)_$(HB.debversion).deb
 
 PKG.cli.tmp.deb = $(PKG.out.abs/)$(HB.name.lower)-cli_$(HB.debversion)_$(PKG.deb.machine).deb
