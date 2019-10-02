@@ -137,8 +137,9 @@ $(PKG.src.deb.stamp): GNUmakefile
 	$(CP.exe) $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/control.bionic $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/control
 	$(CP.exe) $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/rules.bionic $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/rules
 	echo "$(HB.name.lower) (1:$(HB.debversion)-zhb-1ppa1~bionic1) bionic; urgency=low" > $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
-	echo "  * Snapshot" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
-	echo "    - See commit history at https://github.com/HandBrake/HandBrake/commits/master" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
+	echo "" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
+	echo "  * Snapshot: See commit history at" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
+	echo "    https://github.com/HandBrake/HandBrake" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
 	echo " -- John Stebbins <jstebbins.hb@gmail.com>  $(DEBIAN_CHANGELOG_DATE)" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)bionic/$(PKG.src.deb.tar) -C $(STAGE.out.src/)bionic $(PKG.deb.basename)
@@ -151,8 +152,9 @@ $(PKG.src.deb.stamp): GNUmakefile
 	$(CP.exe) $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/control.disco $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/control
 	$(CP.exe) $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/rules.disco $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/rules
 	echo "$(HB.name.lower) (1:$(HB.debversion)-zhb-1ppa1~disco1) disco; urgency=low" > $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
-	echo "  * Snapshot" >> $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
-	echo "    - See commit history at https://github.com/HandBrake/HandBrake/commits/master" >> $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
+	echo "" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
+	echo "  * Snapshot: See commit history at" >> $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
+	echo "    https://github.com/HandBrake/HandBrake" >> $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
 	echo "" >> $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
 	echo " -- John Stebbins <jstebbins.hb@gmail.com>  $(DEBIAN_CHANGELOG_DATE)" >> $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)disco/$(PKG.src.deb.tar) -C $(STAGE.out.src/)disco $(PKG.deb.basename)
