@@ -129,21 +129,6 @@ pkg.push.src.deb:: $(PKG.src.deb.stamp)
 $(PKG.src.deb.stamp): GNUmakefile
 	-$(RM.exe) -rf $(STAGE.out.src/)
 	make contrib.fetch
-	$(MKDIR.exe) -p $(STAGE.out.src/)bionic
-	$(GIT.exe) -C $(SRC/) archive --format=tar --prefix=$(PKG.deb.basename)/ $(HB.repo.shorthash) | $(TAR.exe) -xC $(STAGE.out.src/)bionic/
-	$(SRC/)scripts/repo-info.sh $(SRC/) > $(STAGE.out.src/)bionic/$(PKG.deb.basename)/version.txt
-	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)bionic/$(PKG.deb.basename)
-	cp -a $(PKG.debian) $(STAGE.out.src/)bionic/$(PKG.deb.basename)
-	$(CP.exe) $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/control.bionic $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/control
-	$(CP.exe) $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/rules.bionic $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/rules
-	echo "$(HB.name.lower) (1:$(HB.debversion)-zhb-1ppa1~bionic1) bionic; urgency=low" > $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
-	echo "" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
-	echo "  * Snapshot: See commit history at" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
-	echo "    https://github.com/HandBrake/HandBrake" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
-	echo "" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
-	echo " -- John Stebbins <jstebbins.hb@gmail.com>  $(DEBIAN_CHANGELOG_DATE)" >> $(STAGE.out.src/)bionic/$(PKG.deb.basename)/debian/changelog
-	$(TAR.exe) czf $(STAGE.out.src/)bionic/$(PKG.src.deb.tar) -C $(STAGE.out.src/)bionic $(PKG.deb.basename)
-	(cd $(STAGE.out.src/)bionic/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	$(MKDIR.exe) -p $(STAGE.out.src/)disco
 	$(GIT.exe) -C $(SRC/) archive --format=tar --prefix=$(PKG.deb.basename)/ $(HB.repo.shorthash) | $(TAR.exe) -xC $(STAGE.out.src/)disco/
 	$(SRC/)scripts/repo-info.sh $(SRC/) > $(STAGE.out.src/)disco/$(PKG.deb.basename)/version.txt
