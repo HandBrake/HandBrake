@@ -1062,10 +1062,17 @@
 			children = (
 				A9F217E41E2F897D00C10C6E /* HandBrake.entitlements */,
 				A9F217E51E2F934C00C10C6E /* container-migration.plist */,
-				A9B34D6F197683FE00871B7D /* Controllers */,
+				A92268761A6E555500A8D5C5 /* HBAppDelegate.h */,
+				A92268771A6E555500A8D5C5 /* HBAppDelegate.m */,
+				A9A96BAB20CAD5A100A39AFB /* MainMenu.xib */,
+				A901C23F1BC7CFD100D77735 /* Main Window */,
+				A901C2401BC7CFDC00D77735 /* Queue */,
+				A901C2411BC7CFFD00D77735 /* Preview */,
+				A9B34D6F197683FE00871B7D /* Preferences */,
+				A941390123473BE5003B647F /* Presets */,
 				A98F00771A972007001C2298 /* Output Redirect */,
-				A901C2431BC7D05000D77735 /* Others */,
 				A9B34D711976844500871B7D /* UI Views */,
+				A901C2431BC7D05000D77735 /* Others */,
 			);
 			name = HandBrake;
 			sourceTree = "<group>";
@@ -1296,6 +1303,24 @@
 			name = Player;
 			sourceTree = "<group>";
 		};
+		A941390123473BE5003B647F /* Presets */ = {
+			isa = PBXGroup;
+			children = (
+				A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */,
+				A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */,
+				A91AD3451FB5D9AA00AEA822 /* AddPreset.xib */,
+				A91AD33D1FB5D2FC00AEA822 /* HBAddCategoryController.h */,
+				A91AD33E1FB5D2FC00AEA822 /* HBAddCategoryController.m */,
+				A91AD3421FB5D9A500AEA822 /* HBAddCategoryController.xib */,
+				A939DD891FC8826A00135F2A /* HBPresetsMenuBuilder.h */,
+				A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */,
+				1C7776A1202300DC001C31EB /* HBRenamePresetController.h */,
+				1C7776A0202300DC001C31EB /* HBRenamePresetController.m */,
+				1C7776A3202301D5001C31EB /* HBRenamePresetController.xib */,
+			);
+			name = Presets;
+			sourceTree = "<group>";
+		};
 		A952392E199A647F00588AEF /* Presets */ = {
 			isa = PBXGroup;
 			children = (
@@ -1415,6 +1440,9 @@
 				A91AFD0B1A948827009BECED /* HBOutputFileWriter.m */,
 				A91AFD0D1A949472009BECED /* HBJobOutputFileWriter.h */,
 				A91AFD0E1A949472009BECED /* HBJobOutputFileWriter.m */,
+				273F209B14ADBE670021BE6D /* HBOutputPanelController.h */,
+				273F209C14ADBE670021BE6D /* HBOutputPanelController.m */,
+				A9A96BDB20CAD66000A39AFB /* OutputPanel.xib */,
 			);
 			name = "Output Redirect";
 			sourceTree = "<group>";
@@ -1436,35 +1464,15 @@
 			name = Audio;
 			sourceTree = "<group>";
 		};
-		A9B34D6F197683FE00871B7D /* Controllers */ = {
+		A9B34D6F197683FE00871B7D /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
-				A92268761A6E555500A8D5C5 /* HBAppDelegate.h */,
-				A92268771A6E555500A8D5C5 /* HBAppDelegate.m */,
-				A9A96BAB20CAD5A100A39AFB /* MainMenu.xib */,
-				A901C23F1BC7CFD100D77735 /* Main Window */,
-				A901C2401BC7CFDC00D77735 /* Queue */,
-				A901C2411BC7CFFD00D77735 /* Preview */,
-				A9E2FD241A21BC4A000E8D3F /* HBAddPresetController.h */,
-				A9E2FD251A21BC4A000E8D3F /* HBAddPresetController.m */,
-				A91AD3451FB5D9AA00AEA822 /* AddPreset.xib */,
-				A91AD33D1FB5D2FC00AEA822 /* HBAddCategoryController.h */,
-				A91AD33E1FB5D2FC00AEA822 /* HBAddCategoryController.m */,
-				A91AD3421FB5D9A500AEA822 /* HBAddCategoryController.xib */,
-				273F209B14ADBE670021BE6D /* HBOutputPanelController.h */,
-				273F209C14ADBE670021BE6D /* HBOutputPanelController.m */,
-				A9A96BDB20CAD66000A39AFB /* OutputPanel.xib */,
 				A945CC3122ED7C6A00E9C2E3 /* HBPreferencesKeys.h */,
 				273F209F14ADBE670021BE6D /* HBPreferencesController.h */,
 				273F20A014ADBE670021BE6D /* HBPreferencesController.m */,
 				A9A96BDE20CAD66500A39AFB /* Preferences.xib */,
-				A939DD891FC8826A00135F2A /* HBPresetsMenuBuilder.h */,
-				A939DD8A1FC8826A00135F2A /* HBPresetsMenuBuilder.m */,
-				1C7776A1202300DC001C31EB /* HBRenamePresetController.h */,
-				1C7776A0202300DC001C31EB /* HBRenamePresetController.m */,
-				1C7776A3202301D5001C31EB /* HBRenamePresetController.xib */,
 			);
-			name = Controllers;
+			name = Preferences;
 			sourceTree = "<group>";
 		};
 		A9B34D701976841800871B7D /* View Controllers */ = {
@@ -1724,7 +1732,7 @@
 		273F1FE014AD9DA40021BE6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1110;
+				LastUpgradeCheck = 1120;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
 						SystemCapabilities = {

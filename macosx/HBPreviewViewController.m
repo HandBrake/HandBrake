@@ -1,9 +1,8 @@
-//
-//  HBPreviewViewController.m
-//  HandBrake
-//
-//  Created by Damiano Galassi on 14/12/2017.
-//
+/*  HBPreviewViewController.m
+
+This file is part of the HandBrake source code.
+Homepage: <http://handbrake.fr/>.
+It may be used under the terms of the GNU General Public License. */
 
 #import <QuartzCore/QuartzCore.h>
 #import "HBPreviewViewController.h"

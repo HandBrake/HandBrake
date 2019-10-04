@@ -1,10 +1,8 @@
-//
-//  HBStateFormatter+Private.h
-//  HandBrake
-//
-//  Created by Damiano Galassi on 24/02/16.
-//
-//
+/*  HBStateFormatter+Private.h
+
+This file is part of the HandBrake source code.
+Homepage: <http://handbrake.fr/>.
+It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
 #import "HBStateFormatter.h"
