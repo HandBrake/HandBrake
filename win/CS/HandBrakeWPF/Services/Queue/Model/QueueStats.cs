@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Services.Queue.Model
 {
     using System;
+    using System.Runtime.CompilerServices;
 
     using Caliburn.Micro;
 
@@ -26,6 +27,8 @@ namespace HandBrakeWPF.Services.Queue.Model
         private DateTime pausedStartPoint;
         private TimeSpan pausedTimespan;
 
+        private bool isPaused;
+
         public QueueStats()
         {
             this.pausedTimespan = new TimeSpan();
@@ -40,7 +43,11 @@ namespace HandBrakeWPF.Services.Queue.Model
 
             set
             {
-                if (value.Equals(this.startTime)) return;
+                if (value.Equals(this.startTime))
+                {
+                    return;
+                }
+
                 this.startTime = value;
                 this.NotifyOfPropertyChange(() => this.StartTime);
                 this.NotifyOfPropertyChange(() => this.Duration);
@@ -70,7 +77,11 @@ namespace HandBrakeWPF.Services.Queue.Model
 
             set
             {
-                if (value.Equals(this.endTime)) return;
+                if (value.Equals(this.endTime))
+                {
+                    return;
+                }
+
                 this.endTime = value;
                 this.NotifyOfPropertyChange(() => this.EndTime);
                 this.NotifyOfPropertyChange(() => this.Duration);
@@ -84,7 +95,7 @@ namespace HandBrakeWPF.Services.Queue.Model
             {
                 if (this.endTime == DateTime.MinValue)
                 {
-                    return Resources.QueueView_NotAvailable;
+                    return string.Empty;
                 }
 
                 return this.endTime.ToString();
@@ -96,6 +107,24 @@ namespace HandBrakeWPF.Services.Queue.Model
             get
             {
                 return this.pausedTimespan;
+            }
+        }
+
+        public string PausedDisplay
+        {
+            get
+            {
+                if (this.isPaused)
+                {
+                    return Resources.QueueView_CurrentlyPaused;
+                }
+
+                if (this.PausedDuration == TimeSpan.Zero)
+                {
+                    return string.Empty;
+                }
+
+                return PausedDuration.ToString("hh\\:mm\\:ss");
             }
         }
 
@@ -112,9 +141,19 @@ namespace HandBrakeWPF.Services.Queue.Model
             }
         }
 
-        /// <summary>
-        /// Final filesize in Bytes
-        /// </summary>
+        public string DurationDisplay
+        {
+            get
+            {
+                if (this.Duration == TimeSpan.Zero)
+                {
+                    return string.Empty;
+                }
+
+                return this.Duration.ToString("hh\\:mm\\:ss");
+            }
+        }
+
         public long? FinalFileSize
         {
             get
@@ -124,7 +163,11 @@ namespace HandBrakeWPF.Services.Queue.Model
 
             set
             {
-                if (value == this.finalFileSize) return;
+                if (value == this.finalFileSize)
+                {
+                    return;
+                }
+
                 this.finalFileSize = value;
                 this.NotifyOfPropertyChange(() => this.FinalFileSize);
                 this.NotifyOfPropertyChange(() => this.FinalFileSizeInMegaBytes);
@@ -144,10 +187,24 @@ namespace HandBrakeWPF.Services.Queue.Model
             }
         }
 
+        public string FileSizeDisplay
+        {
+            get
+            {
+                if (FinalFileSizeInMegaBytes == 0)
+                {
+                    return string.Empty;
+                }
+
+                return string.Format("{0:##.###} MB", FinalFileSizeInMegaBytes);
+            }
+        }
+
         public string CompletedActivityLogPath { get; set; }
 
         public void SetPaused(bool isPaused)
         {
+            this.isPaused = isPaused;
             if (isPaused)
             {
                 this.pausedStartPoint = DateTime.Now;
@@ -157,6 +214,8 @@ namespace HandBrakeWPF.Services.Queue.Model
                 TimeSpan pausedDuration = DateTime.Now - this.pausedStartPoint;
                 this.pausedTimespan = this.PausedDuration.Add(pausedDuration);
             }
+
+            this.NotifyOfPropertyChange(() => this.PausedDisplay);
         }
 
         public void Reset()
@@ -170,7 +229,7 @@ namespace HandBrakeWPF.Services.Queue.Model
 
             this.NotifyOfPropertyChange(() => this.FinalFileSizeInMegaBytes);
             this.NotifyOfPropertyChange(() => this.PausedDuration);
-            this.NotifyOfPropertyChange(() => this.Duration);
+            this.NotifyOfPropertyChange(() => this.DurationDisplay);
         }
     }
 }

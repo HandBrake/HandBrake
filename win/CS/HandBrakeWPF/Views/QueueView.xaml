@@ -466,7 +466,7 @@
                                 </Grid.RowDefinitions>
 
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" MinWidth="100" />
+                                    <ColumnDefinition Width="Auto" MinWidth="125" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
@@ -477,19 +477,14 @@
                                 <TextBlock Text="{Binding SelectedTask.Statistics.EndTimeDisplay}" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1" />
 
                                 <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_PausedDuration}" VerticalAlignment="Top" Grid.Row="2" Grid.Column="0" />
-                                <TextBlock Text="{Binding SelectedTask.Statistics.PausedDuration,StringFormat=hh\\:mm\\:ss}" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" />
+                                <TextBlock Text="{Binding SelectedTask.Statistics.PausedDisplay}" TextWrapping="Wrap" Grid.Row="2" Grid.Column="1" />
 
                                 <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_Duration}" VerticalAlignment="Top" Grid.Row="3" Grid.Column="0" />
-                                <TextBlock Text="{Binding SelectedTask.Statistics.Duration,StringFormat=hh\\:mm\\:ss}" TextWrapping="Wrap" Grid.Row="3" Grid.Column="1" />
+                                <TextBlock Text="{Binding SelectedTask.Statistics.DurationDisplay}" TextWrapping="Wrap" Grid.Row="3" Grid.Column="1" />
 
                                 <TextBlock FontWeight="Bold" Text="{x:Static Properties:Resources.QueueView_FileSize}" VerticalAlignment="Top" Grid.Row="4" Grid.Column="0" />
-                                <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="1" >
-                                    <TextBlock Text="{Binding SelectedTask.Statistics.FinalFileSizeInMegaBytes}" TextWrapping="Wrap" />
-                                    <TextBlock Text=" MB" />
-                                </StackPanel>
-
+                                    <TextBlock Text="{Binding SelectedTask.Statistics.FileSizeDisplay}" TextWrapping="Wrap" Grid.Row="4" Grid.Column="1"  />
                             </Grid>
-
                         </StackPanel>
                     </ScrollViewer>
                 </TabItem>
