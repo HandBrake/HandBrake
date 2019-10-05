@@ -65,7 +65,7 @@
 
         <!-- Row 1 -->
         <StackPanel  Grid.Row="0" Grid.ColumnSpan="2" Orientation="Vertical">
-            <TextBlock Text="Preferences" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" Grid.ColumnSpan="2" />
+            <TextBlock Text="{x:Static Properties:Resources.Preferences}" FontSize="26" FontFamily="Segoe UI Light" FontWeight="Bold" Margin="10,10,10,10" Grid.Row="0" Grid.ColumnSpan="2" />
         </StackPanel>
 
         <Border BorderBrush="DarkGray"  Grid.Column="0" Grid.Row="1"  BorderThickness="0,0,1,0">
@@ -73,7 +73,7 @@
             <StackPanel Orientation="Vertical" Margin="11,0,-1,0">
 
 
-                <Button Content="&#60; Back" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]" 
+                <Button Content="{x:Static Properties:Resources.OptionsView_BackButton}" IsDefault="True" cal:Message.Attach="[Event Click] = [Action Close]" 
                             HorizontalAlignment="Left" Padding="12,2" Margin="0,0,0,10" FontWeight="Bold" />
 
                 <ListBox ItemsSource="{Binding Source={StaticResource OptionTabsList}, Converter={StaticResource optionTabConverter}}" SelectedItem="{Binding SelectedTab}"
@@ -140,7 +140,7 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_Path}" />
                                 <TextBox Name="vlcPath" Text="{Binding VLCPath}"  Width="250" />
-                                <Button Content="Browse" cal:Message.Attach="[Event Click] = [Action BrowseVlcPath]" Margin="5,0,0,0" />
+                                <Button Content="{x:Static Properties:Resources.Browse}" cal:Message.Attach="[Event Click] = [Action BrowseVlcPath]" Margin="5,0,0,0" />
                             </StackPanel>
                             <TextBlock Margin="35,0,0,0" Text="{x:Static Properties:Resources.Options_VideoPreviewPath}" />
 
@@ -180,7 +180,7 @@
                                 <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_DefaultPath}" Grid.Column="0" Grid.Row="0" />
                                 <TextBox Name="autoNameOutputPath" Text="{Binding AutoNameDefaultPath}" Width="380" Grid.Column="1" Grid.Row="0" 
                                          ToolTip="{x:Static Properties:Resources.Options_DefaultPathAdditionalParams}" HorizontalAlignment="Left" />
-                                <Button Content="Browse" Margin="5,0,0,0" Grid.Column="2" Grid.Row="0" cal:Message.Attach="[Event Click] = [Action BrowseAutoNamePath]" HorizontalAlignment="Left" />
+                                <Button Content="{x:Static Properties:Resources.Browse}" Margin="5,0,0,0" Grid.Column="2" Grid.Row="0" cal:Message.Attach="[Event Click] = [Action BrowseAutoNamePath]" HorizontalAlignment="Left" />
                                 <TextBlock Text="{x:Static Properties:Resources.OptionsView_PathOptions}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" FontStyle="Italic"  FontSize="11" TextWrapping="Wrap" />
 
                                 <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_Format}"  Grid.Column="0" Grid.Row="3" Margin="0,5,0,0" />
@@ -259,7 +259,7 @@
                                     </StackPanel>
                                 </CheckBox>
 
-                                <Button Content="Browse" cal:Message.Attach="[Event Click] = [Action BrowseSendFileTo]" />
+                                <Button Content="{x:Static Properties:Resources.Browse}" cal:Message.Attach="[Event Click] = [Action BrowseSendFileTo]" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -396,7 +396,7 @@
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <TextBlock Text="{x:Static Properties:Resources.Options_LogPath}" VerticalAlignment="Center" />
                                 <TextBox Width="380" Text="{Binding LogDirectory}" />
-                                <Button Content="Browse" Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action BrowseLogPath]" />
+                                <Button Content="{x:Static Properties:Resources.Browse}" Margin="5,0,0,0" cal:Message.Attach="[Event Click] = [Action BrowseLogPath]" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                                 <Button Content="{x:Static Properties:Resources.Options_ViewLogDirectory}" cal:Message.Attach="[Event Click] = [Action ViewLogDirectory]" Margin="0,0,5,0" />

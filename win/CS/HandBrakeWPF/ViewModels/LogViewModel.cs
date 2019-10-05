@@ -48,7 +48,7 @@ namespace HandBrakeWPF.ViewModels
         {
             this.errorService = errorService;
             this.logService = LogService.GetLogger();
-            this.Title = "Log Viewer";
+            this.Title = Resources.LogViewModel_Title;
         }
 
         /// <summary>

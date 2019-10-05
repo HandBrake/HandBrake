@@ -108,7 +108,7 @@ namespace HandBrakeWPF.Controls
         /// </summary>
         public NumberBox()
         {
-            this.noneCaption = "(none)";
+            this.noneCaption = string.Empty;
             this.UpdateBindingOnTextChange = true;
             this.ShowIncrementButtons = true;
             this.SelectAllOnClick = true;

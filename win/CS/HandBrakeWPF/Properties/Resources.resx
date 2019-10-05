@@ -1741,7 +1741,7 @@ Would you like to overwrite it?</value>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Help</value>
   </data>
-  <data name="SourceSelection_Preferences" xml:space="preserve">
+  <data name="Preferences" xml:space="preserve">
     <value>Preferences</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
@@ -2047,5 +2047,32 @@ Where supported, any user presets will have been imported.</value>
   </data>
   <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
     <value>Preview Rotation and Flip</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>Log Viewer</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>Aspect:</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>Filters:</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>Size:</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>Tracks:</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>Click 'Check for Updates' to check for new versions</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&amp;#60; Back</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>Currently Paused</value>
   </data>
 </root>

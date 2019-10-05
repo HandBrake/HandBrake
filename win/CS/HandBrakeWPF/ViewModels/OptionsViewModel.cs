@@ -141,7 +141,7 @@ namespace HandBrakeWPF.ViewModels
             this.OnLoad();
 
             this.SelectedTab = OptionsTab.General;
-            this.UpdateMessage = "Click 'Check for Updates' to check for new versions";
+            this.UpdateMessage = Resources.OptionsViewModel_CheckForUpdatesMsg;
         }
 
         #endregion

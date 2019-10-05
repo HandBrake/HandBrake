@@ -78,7 +78,7 @@
             </StackPanel>
 
             <StackPanel Orientation="Vertical" Grid.Column="1">
-                <TextBlock Text="Quality" FontWeight="Bold" Margin="0,0,0,10"/>
+                <TextBlock Text="{x:Static Properties:Resources.VideoView_Quality}" FontWeight="Bold" Margin="0,0,0,10"/>
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,10" >
                     <RadioButton Content="{x:Static Properties:Resources.VideoView_ConstantQuality}" IsChecked="{Binding IsConstantQuantity}"  Margin="0,0,10,0"

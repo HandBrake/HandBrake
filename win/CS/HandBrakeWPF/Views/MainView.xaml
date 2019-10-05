@@ -313,7 +313,7 @@
                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Activity2.png'}"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Activity Log"/>
+                               Content="{x:Static Properties:Resources.MainView_ActivityLog}"/>
                     </StackPanel>
                 </Button>
 
@@ -325,7 +325,7 @@
                                Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Presets2.png'}"/>
                         <Label Margin="8,0,0,0"
                                VerticalAlignment="Center"
-                               Content="Presets"/>
+                               Content="{x:Static Properties:Resources.MainView_Presets}"/>
                     </StackPanel>
                 </Button>
             </ToolBar>
@@ -453,7 +453,7 @@
 
             <!--  Presets Options  -->
             <StackPanel Grid.Row="1" Orientation="Horizontal"  Margin="10,10,10,5" IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}">
-                <Label Content="Presets:" FontWeight="Bold" VerticalAlignment="Center" />
+                <Label Content="{x:Static Properties:Resources.MainView_Presets}" FontWeight="Bold" VerticalAlignment="Center" />
                 <StackPanel Orientation="Horizontal" Margin="5,0,0,0" Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}, ConverterParameter=true}">
 
                     <Button x:Name="SelectPresetsButton"  VerticalAlignment="Center" Click="SelectPreset_OnClick" Width="255">
@@ -586,7 +586,7 @@
                     <Button Name="DestinationBrowser"
                             Grid.Column="2"
                             Margin="10,0,0,0" FontWeight="Bold"
-                            Content="Browse" 
+                            Content="{x:Static Properties:Resources.Browse}" 
                             ToolTip="{x:Static Properties:ResourcesTooltips.MainView_Browse}"
                             cal:Message.Attach="[Event Click] = [Action BrowseDestination]"
                     />

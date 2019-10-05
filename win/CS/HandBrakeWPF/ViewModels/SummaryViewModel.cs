@@ -111,6 +111,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.currentTitle;
             }
+
             set
             {
                 if (Equals(value, this.currentTitle)) return;
@@ -133,20 +134,29 @@ namespace HandBrakeWPF.ViewModels
         #region DisplayProperties
 
         public BitmapSource PreviewImage { get; set; }
+
         public bool PreviewNotAvailable { get; set; }
+
         public int MaxWidth { get; set; }
+
         public int MaxHeight { get; set; }
 
         public string VideoTrackInfo { get; set; }
+
         public string AudioTrackInfo { get; set; }
+
         public string SubtitleTrackInfo { get; set; }
+
         public string ChapterInfo { get; set; }
+
         public string FiltersInfo { get; set; }
 
         public string DimensionInfo { get; set; }
+
         public string AspectInfo { get; set; }
 
         public bool IsPreviewInfoVisible { get; set; }
+
         public string PreviewInfo { get; set; }
 
         public bool IsPreviousPreviewControlVisible
@@ -155,6 +165,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.isPreviousPreviewControlVisible;
             }
+
             set
             {
                 if (value == this.isPreviousPreviewControlVisible) return;
@@ -169,6 +180,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.isNextPreviewControlVisible;
             }
+
             set
             {
                 if (value == this.isNextPreviewControlVisible) return;
@@ -183,6 +195,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.showPreview;
             }
+
             set
             {
                 if (value == this.showPreview) return;
