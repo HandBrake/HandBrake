@@ -1,0 +1,26 @@
+diff --git a/src/dvd_input.c b/src/dvd_input.c
+index d28efe7..4de0ce7 100644
+--- a/src/dvd_input.c
++++ b/src/dvd_input.c
+@@ -277,6 +277,7 @@ int dvdinput_setup(void)
+ 
+ #ifdef __APPLE__
+   #define CSS_LIB "libdvdcss.2.dylib"
++  #define CSS_USR_LOCAL_LIB "/usr/local/lib/libdvdcss.2.dylib"
+ #elif defined(WIN32)
+   #define CSS_LIB "libdvdcss-2.dll"
+ #elif defined(__OS2__)
+@@ -286,6 +287,13 @@ int dvdinput_setup(void)
+ #endif
+   dvdcss_library = dlopen(CSS_LIB, RTLD_LAZY);
+ 
++#ifdef __APPLE__
++  // Use the absolute path, required by the hardened runtime
++  if(dvdcss_library == NULL) {
++    dvdcss_library = dlopen(CSS_USR_LOCAL_LIB, RTLD_LAZY);
++  }
++#endif
++
+   if(dvdcss_library != NULL) {
+ #if defined(__OpenBSD__) && !defined(__ELF__) || defined(__OS2__)
+ #define U_S "_"
