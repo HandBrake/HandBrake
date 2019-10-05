@@ -214,7 +214,7 @@ function mac_toolchain_build {
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP CREL SUDO TOTAL
     NAME="mac-toolchain-build"
-    VERSION="1.0.0"
+    VERSION="1.1.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -305,9 +305,10 @@ default install-dir: /usr/local"
     PREFIX="${1:-/usr/local}"
 
     # check installed tool versions, skip if adequate
-    local INSTALLED_VERSIONS SKIP TOOL_PATH
+    local INSTALLED_VERSIONS SKIP NOT_SKIPPED_TOTAL TOOL_PATH
     INSTALLED_VERSIONS=()
     SKIP=()
+    NOT_SKIPPED_TOTAL=0
     for I in "${!NAMES[@]}"; do
         if [[ "${NAMES[I]}" == "meson" ]]; then
             TOOL_PATH=
@@ -318,6 +319,7 @@ default install-dir: /usr/local"
         if [[ "${FORCE}" == false ]] && check_version_gte "${INSTALLED_VERSIONS[I]}" "${VERSIONS[I]}"; then
             SKIP[$I]=true
         else
+            NOT_SKIPPED_TOTAL=$((NOT_SKIPPED_TOTAL+1))
             SKIP[$I]=false
         fi
     done
@@ -354,18 +356,19 @@ default install-dir: /usr/local"
 
     # host
     local CPU_COUNT
-    CPU_COUNT=$(sysctl -n hw.ncpu 2>/dev/null)
+    CPU_COUNT=$(sysctl -n hw.activecpu 2>/dev/null)
     CPU_COUNT="${CPU_COUNT:-1}"
 
     # verify/fetch
-    local DOWNLOAD_VERBOSE I URLS_IREF URLS CHECKSUM
+    local DOWNLOAD_VERBOSE COUNT I URLS_IREF URLS CHECKSUM
     DOWNLOAD_VERBOSE=false
+    COUNT=0
     for I in "${!PKGS[@]}"; do
-        printf "Downloading [%02i/%02i] %s " "$((I+1))" "${#PKGS[@]}" "${NAMES[I]} ${VERSIONS[I]}"
         if [[ "${SKIP[I]}" == true ]]; then
-            echo "(${INSTALLED_VERSIONS[I]} installed, skipping)"
             continue
         fi
+        COUNT=$((COUNT+1))
+        printf "Downloading [%02i/%02i] %s " "${COUNT}" "${NOT_SKIPPED_TOTAL}" "${NAMES[I]} ${VERSIONS[I]}"
         URLS_IREF="${URLS_VARNAMES[I]}[@]"
         URLS="${!URLS_IREF}"
         CHECKSUM=$(${SHA256} "${PKG_DIR}/${PKGS[I]}" 2>/dev/null | awk '{ print $1 }')
@@ -383,12 +386,13 @@ default install-dir: /usr/local"
     done
 
     # extract
+    COUNT=0
     for I in "${!PKGS[@]}"; do
-        printf "Extracting  [%02i/%02i] %s " "$((I+1))" "${#PKGS[@]}" "${PKGS[I]}"
         if [[ "${SKIP[I]}" == true ]]; then
-            echo "(${INSTALLED_VERSIONS[I]} installed, skipping)"
             continue
         fi
+        COUNT=$((COUNT+1))
+        printf "Extracting  [%02i/%02i] %s " "${COUNT}" "${NOT_SKIPPED_TOTAL}" "${PKGS[I]}"
         if [[ -e "${SOURCE_DIR}/${NAMES[I]}" ]]; then
             rm -rf "${SOURCE_DIR}/${NAMES[I]}"
         fi
@@ -401,7 +405,7 @@ default install-dir: /usr/local"
     done
 
     # build
-    local COUNT
+    local INDEX
 
     # autoconf
     INDEX=0
@@ -471,7 +475,7 @@ default install-dir: /usr/local"
     INDEX=$((INDEX+1))
     printf "Building    [%02i/%02i] %s " "$((INDEX+1))" "${TOTAL}" "${NAMES[$INDEX]} ${VERSIONS[$INDEX]}"
     if [[ "${SKIP[$INDEX]}" == true ]]; then
-        echo "(${INSTALLED_VERSIONS[$INDEX]} installed, skipping)"
+        echo "(${INSTALLED_VERSIONS[$INDEX]} installed globally, skipping)"
     else
         [[ "${SUDO}" != "" ]] && ${SUDO} -v
         touch "${BUILD_DIR}/${NAMES[$INDEX]}.log"
