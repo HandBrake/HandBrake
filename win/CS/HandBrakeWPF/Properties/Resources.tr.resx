@@ -2045,4 +2045,7 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>Başlık:</value>
   </data>
+  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
+    <value>Preview Rotation and Flip</value>
+  </data>
 </root>

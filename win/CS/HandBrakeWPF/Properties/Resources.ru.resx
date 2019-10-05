@@ -503,7 +503,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
     <value>Очередь Приостановлена</value>
   </data>
   <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
-    <value>Очередь была остановлена. Текущее задание будет выполнено, а будущие - не начнутся.</value>
+    <value>Очередь была приостановлена. Текущее задание будет выполнено, а будущие - не начнутся.</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
     <value>Вы уверены, что хотите удалить выбранные задания?</value>
@@ -540,7 +540,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
 Вы уверены, что хотите выйти из HandBrake?</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
-    <value>Превью Изображения</value>
+    <value>Изображения Предпросмотра</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
     <value>Невозможно удалить предыдущий файл предпросмотра. Возможно вам придеться перезапустить программу.</value>
@@ -692,7 +692,7 @@ Foreign Audio Preferred, else First - Если существует дорожк
 Осталось: {4}</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>Очередь остановлена. Внимание, на диске, на котором находится кодируемый файл, мало свободного места. Пожалуйста, освободите немного места и нажмите "Старт" для продолжения. Вы также можете выбрать минимальный уровень пространства в настройках.</value>
+    <value>Очередь приостановлена. Внимание, на диске, на котором находится кодируемый файл, мало свободного места. Пожалуйста, освободите немного места и нажмите "Старт" для продолжения. Вы также можете выбрать минимальный уровень пространства в настройках.</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
     <value>Очередь Приостановлена</value>
@@ -770,7 +770,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Размеры:</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>Source Track Selection</value>
+    <value>Выбор Дорожки Источника</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
     <value>Разрешить проход:</value>
@@ -899,7 +899,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Фильтры</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Перевернуть</value>
+    <value>Отражение</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
     <value>Оттенки серого</value>
@@ -1241,7 +1241,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Путь Лога:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Pause queue if disk space is lower than:</value>
+    <value>Приостановить очередь, если на диске свободного пространства меньше, чем:</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
     <value>Минимизировать в системный трей (необходим перезапуск)</value>
@@ -1424,7 +1424,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Удалить</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>Destination:</value>
+    <value>Путь Назначения:</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
     <value>Ничего не делать</value>
@@ -1466,7 +1466,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Опции</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Остановить очередь</value>
+    <value>Приостановить очередь</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
     <value>Время паузы:</value>
@@ -1748,7 +1748,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Добавить Дорожку</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>Audio encoder settings for each chosen track:</value>
+    <value>Настройки аудио-кодировщика для каждого из выбранных дорожек:</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
     <value>Очистить</value>
@@ -1885,8 +1885,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
     <value>Импортировать очередь</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
-Time Remaining: {5:hh\:mm\:ss},  Elapsed: {6:hh\:mm\:ss} {7}</value>
+    <value>Кодирование: Проход {0} из {1}, {2:00.00}%, FPS: {3:000.0}, Среднее: {4:000.0}, Осталось времени: {5:hh\:mm\:ss} , Прошло: {6:d\:hh\:mm\:ss} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>Удалить выбранное</value>
@@ -1991,57 +1990,60 @@ Time Remaining: {5:hh\:mm\:ss},  Elapsed: {6:hh\:mm\:ss} {7}</value>
     <value>Экспортировать очередь (только для интерфейса командной строки - CLI)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Use the Dark Theme. (Requires Restart, Windows 10 only)</value>
+    <value>Использовать Темную Тему. (Необходим Перезапуск, только для Windows 10)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
-    <value>Not Available</value>
+    <value>Недоступно</value>
   </data>
   <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
     <value>ГБ</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>AC Mains power detected. Resuming encode... ({0} %)</value>
+    <value>Обнаружено подключение к электросети. Продолжаю кодирование... ({0} %)</value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
-    <value>System Battery Critical! ({0} %)</value>
+    <value>Критическое Состояние Батареи! ({0} %)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>System Battery Low! ({0} %). Your encode has been paused to protect the system. System sleep is set to allowed!</value>
+    <value>Низкий Уровень Заряда Батареи ({0} %). Ваши задания кодирования были поставлены на паузу для защиты системы. Режим сна активен!</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>Remaining drive storage has dropped below {0} GB on the destination drive. Pausing encode...</value>
+    <value>Свободное пространство на указанном диске ниже {0} ГБ. Ставлю кодирование на паузу...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Configure Automatic Audio Selections</value>
+    <value>Настроить Автовыбор Аудио</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Configure Automatic Subtitle Selections</value>
+    <value>Настроить Автовыбор Субтитров</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
-    <value>System</value>
+    <value>Система</value>
   </data>
   <data name="MetadataView_Actors" xml:space="preserve">
-    <value>Actors:</value>
+    <value>Исполнители:</value>
   </data>
   <data name="MetadataView_Comments" xml:space="preserve">
-    <value>Comments:</value>
+    <value>Комментарии:</value>
   </data>
   <data name="MetadataView_Description" xml:space="preserve">
     <value>Описание:</value>
   </data>
   <data name="MetadataView_Director" xml:space="preserve">
-    <value>Director:</value>
+    <value>Режиссер:</value>
   </data>
   <data name="MetadataView_Genre" xml:space="preserve">
-    <value>Genre:</value>
+    <value>Жанр:</value>
   </data>
   <data name="MetadataView_Plot" xml:space="preserve">
-    <value>Plot:</value>
+    <value>Сюжет:</value>
   </data>
   <data name="MetadataView_ReleaseDate" xml:space="preserve">
-    <value>Release Date:</value>
+    <value>Дата выхода:</value>
   </data>
   <data name="MetadataView_TitleTag" xml:space="preserve">
-    <value>Title:</value>
+    <value>Название:</value>
+  </data>
+  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
+    <value>Предпросмотр Поворота и Отражения</value>
   </data>
 </root>

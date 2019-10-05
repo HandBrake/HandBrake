@@ -1226,7 +1226,7 @@ Soll sie überschrieben werden?</value>
     <value>Aktivitätsprotokollpfad:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Warteschlange anhalten, wenn der Speicherplatz geringer ist als:</value>
+    <value>Anhalten, wenn Speicherplatz kleiner als:</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
     <value>Den Infobereich (System Tray) minimieren (erfordert einen Neustart)</value>
@@ -1721,7 +1721,7 @@ Soll sie überschrieben werden?</value>
     <value>Über HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Oder hier eine Datei/Ordner ablegen ...</value>
+    <value>Oder hier eine Datei / einen Ordner ablegen ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Hilfe</value>
@@ -2029,5 +2029,8 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
   </data>
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>Titel:</value>
+  </data>
+  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
+    <value>Vorschau von Drehung und Spiegeln</value>
   </data>
 </root>

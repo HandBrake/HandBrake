@@ -2034,4 +2034,7 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>标题：</value>
   </data>
+  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
+    <value>Preview Rotation and Flip</value>
+  </data>
 </root>

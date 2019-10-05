@@ -2046,4 +2046,7 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
   <data name="MetadataView_TitleTag" xml:space="preserve">
     <value>Title:</value>
   </data>
+  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
+    <value>Preview Rotation and Flip</value>
+  </data>
 </root>

@@ -770,7 +770,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Dimensions :</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>Source Track Selection</value>
+    <value>Sélection de la piste source</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
     <value>Autoriser le passthru de :</value>
@@ -1022,7 +1022,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Support iPod 5G </value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>Metadata</value>
+    <value>Métadonnées</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
     <value>(Modifié)</value>
@@ -1142,7 +1142,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Gérer les préréglages</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>Metadata</value>
+    <value>Métadonnées</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
     <value>Autoriser l'utilisation des encodeurs Nvidia NVENC</value>
@@ -1541,7 +1541,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Choisir les langues :</value>
   </data>
   <data name="Shared_ChosenLangages" xml:space="preserve">
-    <value>Selected Languages:</value>
+    <value>Langues sélectionnées :</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
     <value>Configurer les comportements par défaut</value>
@@ -1700,7 +1700,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Réglage de l'encodeur :</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>Advanced Options:</value>
+    <value>Options avancées :</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
     <value>Décodage Rapide</value>
@@ -1748,7 +1748,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Ajouter une piste</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>Audio encoder settings for each chosen track:</value>
+    <value>Paramètres de l'encodage audio pour chaque piste choisie :</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
     <value>Nettoyer</value>
@@ -1885,8 +1885,8 @@ Cela n'aura aucun impact sur les encodeurs logiciels.</value>
     <value>Importer une file d'attente</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encoding: Pass {0} of {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0}
-Time Remaining: {5:hh\:mm\:ss},  Elapsed: {6:hh\:mm\:ss} {7}</value>
+    <value>Encodage : Passage {0} sur {1},  {2:00.00}%, FPS : {3:000.0}, FPS Moy : {4:000.0}
+Temps Restant : {5:hh\:mm\:ss}, Écoulé : {6:hh\:mm\:ss} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
     <value>Supprimer la sélection</value>
@@ -1992,7 +1992,7 @@ Là où pris en charge, tous les préréglages utilisateur auront été importé
     <value>Exporter la file d'attente (CLI seulement)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Use the Dark Theme. (Requires Restart, Windows 10 only)</value>
+    <value>Utilisez le thème sombre. (Nécessite un redémarrage, disponible sur Windows 10 uniquement)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>Indisponible</value>
@@ -2013,36 +2013,39 @@ Là où pris en charge, tous les préréglages utilisateur auront été importé
     <value>La capacité de stockage restante est tombée sous les {0} GB sur le disque de destination. Interruption de l'encodage...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Configure Automatic Audio Selections</value>
+    <value>Configurer les sélections audio automatiquement</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Configure Automatic Subtitle Selections</value>
+    <value>Configurer les sélections de sous-titres automatiquement</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
-    <value>System</value>
+    <value>Système</value>
   </data>
   <data name="MetadataView_Actors" xml:space="preserve">
-    <value>Actors:</value>
+    <value>Acteurs :</value>
   </data>
   <data name="MetadataView_Comments" xml:space="preserve">
-    <value>Comments:</value>
+    <value>Commentaires : </value>
   </data>
   <data name="MetadataView_Description" xml:space="preserve">
     <value>Description :</value>
   </data>
   <data name="MetadataView_Director" xml:space="preserve">
-    <value>Director:</value>
+    <value>Réalisateur :</value>
   </data>
   <data name="MetadataView_Genre" xml:space="preserve">
-    <value>Genre:</value>
+    <value>Genre :</value>
   </data>
   <data name="MetadataView_Plot" xml:space="preserve">
-    <value>Plot:</value>
+    <value>Synopsis : </value>
   </data>
   <data name="MetadataView_ReleaseDate" xml:space="preserve">
-    <value>Release Date:</value>
+    <value>Date de sortie :</value>
   </data>
   <data name="MetadataView_TitleTag" xml:space="preserve">
-    <value>Title:</value>
+    <value>Titre : </value>
+  </data>
+  <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
+    <value>Aperçu de la rotation et du retournement</value>
   </data>
 </root>
