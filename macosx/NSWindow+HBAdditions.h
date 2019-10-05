@@ -11,7 +11,7 @@
 /**
  *  Resizes the entire window to accommodate a view of a particular size.
  */
-- (void)HB_resizeToBestSizeForViewSize:(NSSize)viewSize center:(NSPoint)center animate:(BOOL)performAnimation;
+- (void)HB_resizeToBestSizeForViewSize:(NSSize)viewSize keepInScreenRect:(BOOL)keepInScreenRect centerPoint:(NSPoint)center animate:(BOOL)animateFlag;
 
 /**
  *  Calculates and returns the center point of the window

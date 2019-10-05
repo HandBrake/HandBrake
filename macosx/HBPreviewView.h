@@ -49,7 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
  * Given the size of the preview image to be shown, returns the best possible
  * size for the view.
  */
-- (NSSize)optimalViewSizeForImageSize:(NSSize)imageSize minSize:(NSSize)minSize;
+- (NSSize)optimalViewSizeForImageSize:(NSSize)imageSize minSize:(NSSize)minSize scaleFactor:(CGFloat)scaleFactor;
 
 @end
 
