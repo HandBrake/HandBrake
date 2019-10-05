@@ -1,4 +1,111 @@
 #!/usr/bin/env bash
+# mac-toolchain-build - download and build common macOS toolchain components
+#
+# Copyright 2019 Bradley Sepos
+# Released under the MIT License. See LICENSE for details.
+# https://github.com/bradleysepos/mac-toolchain-build
+
+# checks for required external tools
+function check_dependencies {  # check_dependencies $DEP1 $DEP2 ...
+    local DEPS DEPS_EACH DEPS_MULTI ERRORS FOUND
+    DEPS=("${@}");
+    ERRORS=()
+    for DEPS_EACH in ${DEPS[@]}; do
+        DEPS_MULTI=(${DEPS_EACH//|/ })
+        FOUND=false
+        for DEP in ${DEPS_MULTI[@]}; do
+            if echo "${DEP}" | grep '/' >/dev/null 2>&1 && [[ -x "${DEP}" ]]; then
+                FOUND=true
+                break
+            elif hash "${DEP}" >/dev/null 2>&1; then
+                FOUND=true
+                break
+            fi
+        done
+        if [[ "${FOUND}" == false ]]; then
+            ERRORS+=("$(echo ${DEPS_MULTI[@]} | sed 's/ /|/')")
+        fi
+    done
+    if [[ "${#ERRORS[@]}" -ne 0 ]]; then
+        echo "dependencies: ${DEPS[@]}"
+        echo "unable to find command(s): ${ERRORS[*]}" >&2
+        return 1
+    fi
+}
+
+# checks version is greater than or equal to target version
+function check_version_gte {  # check_version_gte $VERSION $TARGET
+    if [[ "${1:-}" == "${2:-}" ]]; then
+        return 0
+    fi
+    local VERSION TARGET INDEX
+    IFS='.' read -r -a VERSION <<< "${1:-}"
+    IFS='.' read -r -a TARGET <<< "${2:-}"
+    for ((INDEX=${#VERSION[@]}; INDEX<${#TARGET[@]}; INDEX++)); do
+        VERSION[INDEX]=0
+    done
+    for ((INDEX=0; INDEX<${#VERSION[@]}; INDEX++))
+    do
+        if [[ -z ${TARGET[INDEX]} ]]; then
+            TARGET[INDEX]=0
+        fi
+        if ((10#${VERSION[INDEX]} > 10#${TARGET[INDEX]})); then
+            return 0
+        fi
+        if ((10#${VERSION[INDEX]} < 10#${TARGET[INDEX]})); then
+            return 1
+        fi
+    done
+    return 0
+}
+
+# downloads from one or more urls
+function download_url {  # download_url $VERBOSE $FILE $URLS
+    local VERBOSE FILE URLS I FAILED
+    OPTIND=1
+    VERBOSE="${1}"
+    FILE="${2}"
+    shift 2
+    URLS=("${@}")
+    if [[ "${#URLS[@]}" -eq 0 ]] || [[ "${URLS[0]:-}" == "" ]]; then
+        echo "url not specified for download" >&2
+        return 1
+    fi
+    if [[ "${FILE:-}" == "" ]]; then
+        echo "output path not specified for download: ${FILE}" >&2
+        return 1
+    fi
+    FAILED=()
+    for I in "${!URLS[@]}"; do
+        if ! curl --head -Lf --connect-timeout 30 "${URLS[I]}" >/dev/null 2>&1; then
+            FAILED+=("${URLS[I]}")
+            if [[ "$(( ${I} + 1 ))" -lt "${#URLS[@]}" ]]; then
+                continue
+            else
+                echo "unable to download from urls: ${FAILED[@]}" >&2
+                echo "unable to download to file: ${FILE}" >&2
+                return 1
+            fi
+        fi
+        if ! touch "${FILE}" >/dev/null 2>&1; then
+            echo "unable to create path: ${FILE}" >&2
+            return 1
+        fi
+        if [[ "${VERBOSE:-}" == true ]]; then
+            echo "curl -Lf --connect-timeout 30 \"${URLS[I]}\" -o \"${FILE}\""
+        fi
+        if ! curl -Lf --connect-timeout 30 "${URLS[I]}" -o "${FILE}" >/dev/null 2>&1; then
+            FAILED+=("${URLS[I]}")
+            if [[ "$(( ${I} + 1 ))" -lt "${#URLS[@]}" ]]; then
+                continue
+            else
+                echo "unable to download from urls: ${FAILED[@]}" >&2
+                echo "unable to download to file: ${FILE}" >&2
+                return 1
+            fi
+        fi
+    done
+}
 
 # prints continuous output to avoid timeouts on build systems like Travis
 function display_progress {
@@ -15,9 +122,11 @@ function die_gracefully {
     trap - EXIT INT
     trap ":" INT  # prevent recursion due to spamming ctrl-c
     echo ""
+    echo "logs and temporary files may exist at ${TMPDIR%/}/mac-toolchain-build-*" >&2
     trap - TERM && kill -- -$$
 }
 
+# builds toolchain components
 function mac_toolchain_build {
     set -o pipefail
 
@@ -27,23 +136,194 @@ function mac_toolchain_build {
         exit 1
     fi
 
-    # vars
-    PREFIX="${1:-/usr/local}"
-    CREL=$(echo -e "\r"$(tput el))
-    if ! MAKEJOBS=$(sysctl -n hw.ncpu 2>/dev/null); then
-        MAKEJOBS="4"
-    fi
-    SUDO=
-    TOTAL=8
+    # dependencies
+    local DEPS
+    DEPS=("curl" "shasum|sha256sum")
+    check_dependencies "${DEPS[@]}" || return 1
 
-    # functions
-    function print_fail_and_exit {
-        echo -en " [FAIL]\n"
-        echo "Logs and temporary files remain at: ${TEMP_DIR:-}" >&2
-        exit 1
-    }
+    # package names
+    local AUTOCONF_NAME AUTOMAKE_NAME CMAKE_NAME LIBTOOL_NAME MESON_NAME NASM_NAME NINJA_NAME PKGCONFIG_NAME NAMES
+    AUTOCONF_NAME="autoconf"
+    AUTOMAKE_NAME="automake"
+    CMAKE_NAME="cmake"
+    LIBTOOL_NAME="libtool"
+    MESON_NAME="meson"
+    NASM_NAME="nasm"
+    NINJA_NAME="ninja"
+    PKGCONFIG_NAME="pkg-config"
+    NAMES=("${AUTOCONF_NAME}" "${AUTOMAKE_NAME}" "${CMAKE_NAME}" "${LIBTOOL_NAME}" "${MESON_NAME}" "${NASM_NAME}" "${NINJA_NAME}" "${PKGCONFIG_NAME}")
+
+    # versions
+    local AUTOCONF_VER AUTOMAKE_VER CMAKE_VER LIBTOOL_VER MESON_VER NASM_VER NINJA_VER PKGCONFIG_VER VERSIONS
+    AUTOCONF_VER="2.69"
+    AUTOMAKE_VER="1.16.1"
+    CMAKE_VER="3.15.3"
+    LIBTOOL_VER="2.4.6"
+    MESON_VER="0.51.2"
+    NASM_VER="2.14.02"
+    NINJA_VER="1.9.0"
+    PKGCONFIG_VER="0.29.2"
+    VERSIONS=("${AUTOCONF_VER}" "${AUTOMAKE_VER}" "${CMAKE_VER}" "${LIBTOOL_VER}" "${MESON_VER}" "${NASM_VER}" "${NINJA_VER}" "${PKGCONFIG_VER}")
+
+    # filenames
+    local AUTOCONF_PKG AUTOMAKE_PKG CMAKE_PKG LIBTOOL_PKG MESON_PKG NASM_PKG NINJA_PKG PKGCONFIG_PKG PKGS
+    AUTOCONF_PKG="autoconf-${AUTOCONF_VER}.tar.gz"
+    AUTOMAKE_PKG="automake-${AUTOMAKE_VER}.tar.gz"
+    CMAKE_PKG="cmake-${CMAKE_VER}.tar.gz"
+    LIBTOOL_PKG="libtool-${LIBTOOL_VER}.tar.gz"
+    MESON_PKG="meson-${MESON_VER}.tar.gz"
+    NASM_PKG="nasm-${NASM_VER}.tar.bz2"
+    NINJA_PKG="ninja-${NINJA_VER}.tar.gz"
+    PKGCONFIG_PKG="pkg-config-${PKGCONFIG_VER}.tar.gz"
+    PKGS=("${AUTOCONF_PKG}" "${AUTOMAKE_PKG}" "${CMAKE_PKG}" "${LIBTOOL_PKG}" "${MESON_PKG}" "${NASM_PKG}" "${NINJA_PKG}" "${PKGCONFIG_PKG}")
+
+    # urls
+    local AUTOCONF_URLS AUTOMAKE_URLS CMAKE_URLS LIBTOOL_URLS MESON_URLS NASM_URLS NINJA_URLS PKGCONFIG_URLS URLS_VARNAMES
+    AUTOCONF_URLS=("https://ftp.gnu.org/gnu/autoconf/autoconf-${AUTOCONF_VER}.tar.gz")
+    AUTOMAKE_URLS=("https://ftp.gnu.org/gnu/automake/automake-${AUTOMAKE_VER}.tar.gz")
+    CMAKE_URLS=("https://cmake.org/files/v3.15/cmake-${CMAKE_VER}.tar.gz")
+    LIBTOOL_URLS=("https://ftp.gnu.org/gnu/libtool/libtool-${LIBTOOL_VER}.tar.gz")
+    MESON_URLS=("https://github.com/mesonbuild/meson/archive/${MESON_VER}.tar.gz")
+    NASM_URLS=("https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-${NASM_VER}.tar.bz2")
+    NINJA_URLS=("https://github.com/ninja-build/ninja/archive/v${NINJA_VER}.tar.gz")
+    PKGCONFIG_URLS=("https://pkg-config.freedesktop.org/releases/pkg-config-${PKGCONFIG_VER}.tar.gz")
+    URLS_VARNAMES=('AUTOCONF_URLS' 'AUTOMAKE_URLS' 'CMAKE_URLS' 'LIBTOOL_URLS' 'MESON_URLS' 'NASM_URLS' 'NINJA_URLS' 'PKGCONFIG_URLS')
+
+    # checksums
+    local AUTOCONF_SHA256 AUTOMAKE_SHA256 CMAKE_SHA256 LIBTOOL_SHA256 MESON_SHA256 NASM_SHA256 NINJA_SHA256 PKGCONFIG_SHA256 CHECKSUMS
+    AUTOCONF_SHA256="954bd69b391edc12d6a4a51a2dd1476543da5c6bbf05a95b59dc0dd6fd4c2969"
+    AUTOMAKE_SHA256="608a97523f97db32f1f5d5615c98ca69326ced2054c9f82e65bade7fc4c9dea8"
+    CMAKE_SHA256="13958243a01365b05652fa01b21d40fa834f70a9e30efa69c02604e64f58b8f5"
+    LIBTOOL_SHA256="e3bd4d5d3d025a36c21dd6af7ea818a2afcd4dfc1ea5a17b39d7854bcd0c06e3"
+    MESON_SHA256="96871cf62c9cf2b212e2f38aa3e543323403b1314fd3835e14120ef837c00f01"
+    NASM_SHA256="34fd26c70a277a9fdd54cb5ecf389badedaf48047b269d1008fbc819b24e80bc"
+    NINJA_SHA256="5d7ec75828f8d3fd1a0c2f31b5b0cea780cdfe1031359228c428c1a48bfcd5b9"
+    PKGCONFIG_SHA256="6fc69c01688c9458a57eb9a1664c9aba372ccda420a02bf4429fe610e7e7d591"
+    CHECKSUMS=("${AUTOCONF_SHA256}" "${AUTOMAKE_SHA256}" "${CMAKE_SHA256}" "${LIBTOOL_SHA256}" "${MESON_SHA256}" "${NASM_SHA256}" "${NINJA_SHA256}" "${PKGCONFIG_SHA256}")
+
+    # sha256 binary
+    local SHA256
+    if hash shasum >/dev/null 2>&1; then
+        SHA256="shasum -a 256"
+    elif hash sha256sum >/dev/null 2>&1; then
+        SHA256="sha256sum"
+    else
+        return 1
+    fi
+
+    # internal vars
+    local NAME VERSION SELF SELF_NAME HELP CREL SUDO TOTAL
+    NAME="mac-toolchain-build"
+    VERSION="1.0.0"
+    SELF="${BASH_SOURCE[0]}"
+    SELF_NAME=$(basename "${SELF}")
+    HELP="\
+usage: ${SELF_NAME} [-h | --help]
+       ${SELF_NAME} [-v | --version]
+       ${SELF_NAME} [-f | --force] [install-dir]
+where:
+  -f, --force
+        force installation even if adequate versions of tools are installed
+default install-dir: /usr/local"
+    CREL=$(echo -e "\r"$(tput el))
+    SUDO=
+    TOTAL="${#NAMES[@]}"
+
+    # args
+    local FORCE OPTIND OPTSPEC OPTARRAY PREFIX
+    FORCE=false
+    OPTIND=1
+    OPTSPEC=":-:hvf"
+    OPTARRAY=('-h' '--help' '-v' '--version' '-f' '--force')  # all short and long options
+    while getopts "${OPTSPEC}" OPT; do
+        case "${OPT}" in
+            -)
+                case "${OPTARG}" in
+                    help)
+                        # Print help and exit
+                        echo -e "${HELP}"
+                        exit 0
+                        ;;
+                    help=*)
+                        # Print help and exit
+                        echo -e "${HELP}"
+                        exit 0
+                        ;;
+                    version)
+                        # Print version and exit
+                        echo -e "${NAME} ${VERSION}"
+                        exit 0
+                        ;;
+                    version=*)
+                        # Print version and exit
+                        echo -e "${NAME} ${VERSION}"
+                        exit 0
+                        ;;
+                    force)
+                        # Force installation
+                        FORCE=true
+                        ;;
+                    *)
+                        if [[ "${OPTERR}" == 1 ]]; then
+                            # Invalid option specified
+                            echo "Invalid option: --${OPTARG}" >&2
+                            echo -e "${HELP}"
+                            exit 1
+                        fi
+                        ;;
+                esac
+                ;;
+            h)
+                # Print help and exit
+                echo -e "${HELP}"
+                exit 0
+                ;;
+            v)
+                # Print version and exit
+                echo "${NAME} ${VERSION}"
+                exit 0
+                ;;
+            f)
+                # Force installation
+                FORCE=true
+                ;;
+            :)
+                # Option without required value
+                echo "Option -${OPTARG} requires a value" >&2
+                echo -e "${HELP}"
+                exit 1
+                ;;
+            \?)
+                # Invalid option specified
+                echo "Invalid option: -${OPTARG}" >&2
+                echo -e "${HELP}"
+                exit 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+    PREFIX="${1:-/usr/local}"
+
+    # check installed tool versions, skip if adequate
+    local INSTALLED_VERSIONS SKIP TOOL_PATH
+    INSTALLED_VERSIONS=()
+    SKIP=()
+    for I in "${!NAMES[@]}"; do
+        if [[ "${NAMES[I]}" == "meson" ]]; then
+            TOOL_PATH=
+        else
+            TOOL_PATH="${PREFIX}/bin/"
+        fi
+        INSTALLED_VERSIONS[$I]=$("${TOOL_PATH}${NAMES[I]}" --version 2>&1 | head -n 1 | grep -Eo '[0-9]+\.[0-9]+(\.[0-9]+)?' 2>&1 | head -n 1)
+        if [[ "${FORCE}" == false ]] && check_version_gte "${INSTALLED_VERSIONS[I]}" "${VERSIONS[I]}"; then
+            SKIP[$I]=true
+        else
+            SKIP[$I]=false
+        fi
+    done
 
     # permissions
+    local PATH_ORIG
     mkdir -p "${PREFIX}" >/dev/null 2>&1
     if [[ ! -w "${PREFIX}" ]]; then
         if ! sudo -n date >/dev/null 2>&1; then
@@ -62,134 +342,202 @@ function mac_toolchain_build {
     PATH_ORIG="${PATH}"
     export PATH="${PREFIX}/bin${PATH:+:$PATH}"
 
-    # temp dir
-    TEMP_DIR=$(mktemp -d "${TMPDIR:-/tmp/}toolchain-XXXXXX")
-    if [[ $? -ne 0 ]]; then
-        echo "Unable to create temporary directory" >&2
-        exit 1
+    # directory creation
+    local PKG_DIR SOURCE_DIR BUILD_DIR
+    PKG_DIR=$(mktemp -d "${TMPDIR:-/tmp/}mac-toolchain-build-XXXXXX")
+    if [[ ! -d "${PKG_DIR}" ]]; then
+        echo "unable to create directory: ${PKG_DIR}" >&2
+        return 1
     fi
-    cd "${TEMP_DIR}"
+    SOURCE_DIR="${PKG_DIR}"
+    BUILD_DIR="${PKG_DIR}"
 
-    # download
-    printf "Downloading [%02i/%02i] %s " "1" "${TOTAL}" "autoconf 2.69"
-    curl -Lf --connect-timeout 30 https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz -o "autoconf-2.69.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-    printf "Downloading [%02i/%02i] %s " "2" "${TOTAL}" "automake 1.16.1"
-    curl -Lf --connect-timeout 30 https://ftp.gnu.org/gnu/automake/automake-1.16.1.tar.gz -o "automake-1.16.1.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-    printf "Downloading [%02i/%02i] %s " "3" "${TOTAL}" "cmake 3.15.3"
-    curl -Lf --connect-timeout 30 https://cmake.org/files/v3.15/cmake-3.15.3.tar.gz -o "cmake-3.15.3.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-    printf "Downloading [%02i/%02i] %s " "4" "${TOTAL}" "libtool 2.4.6"
-    curl -Lf --connect-timeout 30 https://ftp.gnu.org/gnu/libtool/libtool-2.4.6.tar.gz -o "libtool-2.4.6.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-    printf "Downloading [%02i/%02i] %s " "5" "${TOTAL}" "pkg-config 0.29.2"
-    curl -Lf --connect-timeout 30 https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz -o "pkg-config-0.29.2.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-    printf "Downloading [%02i/%02i] %s " "6" "${TOTAL}" "nasm 2.14.02"
-    curl -Lf --connect-timeout 30 https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.bz2 -o "nasm-2.14.02.tar.bz2" >/dev/null 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-    printf "Downloading [%02i/%02i] %s " "7" "${TOTAL}" "ninja 1.9.0"
-    curl -Lf --connect-timeout 30 https://github.com/ninja-build/ninja/archive/v1.9.0.tar.gz -o "ninja-1.9.0.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-    printf "Downloading [%02i/%02i] %s " "8" "${TOTAL}" "meson 0.51.2"
-    curl -Lf --connect-timeout 30 https://github.com/mesonbuild/meson/archive/0.51.2.tar.gz -o "meson-0.51.2.tar.gz" >/dev/null 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-    printf "Downloading [%02i/%02i] complete.\n" "${TOTAL}" "${TOTAL}"
+    # host
+    local CPU_COUNT
+    CPU_COUNT=$(sysctl -n hw.ncpu 2>/dev/null)
+    CPU_COUNT="${CPU_COUNT:-1}"
+
+    # verify/fetch
+    local DOWNLOAD_VERBOSE I URLS_IREF URLS CHECKSUM
+    DOWNLOAD_VERBOSE=false
+    for I in "${!PKGS[@]}"; do
+        printf "Downloading [%02i/%02i] %s " "$((I+1))" "${#PKGS[@]}" "${NAMES[I]} ${VERSIONS[I]}"
+        if [[ "${SKIP[I]}" == true ]]; then
+            echo "(${INSTALLED_VERSIONS[I]} installed, skipping)"
+            continue
+        fi
+        URLS_IREF="${URLS_VARNAMES[I]}[@]"
+        URLS="${!URLS_IREF}"
+        CHECKSUM=$(${SHA256} "${PKG_DIR}/${PKGS[I]}" 2>/dev/null | awk '{ print $1 }')
+        if [[ "${CHECKSUM}" != "${CHECKSUMS[I]}" ]] >/dev/null 2>&1; then
+            download_url "${DOWNLOAD_VERBOSE}" "${PKG_DIR}/${PKGS[I]}" ${URLS[@]} || return 1
+        fi
+        CHECKSUM=$(${SHA256} "${PKG_DIR}/${PKGS[I]}" 2>/dev/null | awk '{ print $1 }')
+        if [[ "${CHECKSUM}" != "${CHECKSUMS[I]}" ]]; then
+            echo "checksum mismatch for package: ${PKG_DIR}/${PKGS[I]}" >&2
+            echo "expected: ${CHECKSUMS[I]}" >&2
+            echo "actual:   ${CHECKSUM}" >&2
+            return 1
+        fi
+        echo ""
+    done
+
+    # extract
+    for I in "${!PKGS[@]}"; do
+        printf "Extracting  [%02i/%02i] %s " "$((I+1))" "${#PKGS[@]}" "${PKGS[I]}"
+        if [[ "${SKIP[I]}" == true ]]; then
+            echo "(${INSTALLED_VERSIONS[I]} installed, skipping)"
+            continue
+        fi
+        if [[ -e "${SOURCE_DIR}/${NAMES[I]}" ]]; then
+            rm -rf "${SOURCE_DIR}/${NAMES[I]}"
+        fi
+        mkdir -p "${SOURCE_DIR}/${NAMES[I]}"
+        if ! tar -xf "${PKG_DIR}/${PKGS[I]}" -C "${SOURCE_DIR}/${NAMES[I]}" >/dev/null 2>&1; then
+            echo "unable to extract package: ${PKG_DIR}/${PKGS[I]}" >&2
+            return 1
+        fi
+        echo ""
+    done
+
+    # build
+    local COUNT
 
     # autoconf
-    cd "${TEMP_DIR}"
-    printf "Building    [%02i/%02i] %s " "1" "${TOTAL}" "autoconf 2.69"
-    [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xf autoconf-2.69.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-    cd autoconf-2.69 >/dev/null 2>&1 || print_fail_and_exit
-    ./configure --prefix="${PREFIX}" >../autoconf-2.69.log 2>&1 || print_fail_and_exit
-    make --jobs="${MAKEJOBS}" >>../autoconf-2.69.log 2>&1 || print_fail_and_exit
-    ${SUDO} make install >>../autoconf-2.69.log 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
+    INDEX=0
+    printf "Building    [%02i/%02i] %s " "$((INDEX+1))" "${TOTAL}" "${NAMES[$INDEX]} ${VERSIONS[$INDEX]}"
+    if [[ "${SKIP[$INDEX]}" == true ]]; then
+        echo "(${INSTALLED_VERSIONS[$INDEX]} installed, skipping)"
+    else
+        [[ "${SUDO}" != "" ]] && ${SUDO} -v
+        touch "${BUILD_DIR}/${NAMES[$INDEX]}.log"
+        mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        cd "${BUILD_DIR}/${NAMES[$INDEX]}"
+        "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${CPU_COUNT}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        echo ""
+    fi
 
     # automake
-    cd "${TEMP_DIR}"
-    printf "Building    [%02i/%02i] %s " "2" "${TOTAL}" "automake 1.16.1"
-    [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xf automake-1.16.1.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-    cd automake-1.16.1 >/dev/null 2>&1 || print_fail_and_exit
-    ./configure --prefix="${PREFIX}" >../automake-1.16.1.log 2>&1 || print_fail_and_exit
-    make --jobs="${MAKEJOBS}" >>../automake-1.16.1.log 2>&1 || print_fail_and_exit
-    ${SUDO} make install >>../automake-1.16.1.log 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
+    INDEX=$((INDEX+1))
+    printf "Building    [%02i/%02i] %s " "$((INDEX+1))" "${TOTAL}" "${NAMES[$INDEX]} ${VERSIONS[$INDEX]}"
+    if [[ "${SKIP[$INDEX]}" == true ]]; then
+        echo "(${INSTALLED_VERSIONS[$INDEX]} installed, skipping)"
+    else
+        [[ "${SUDO}" != "" ]] && ${SUDO} -v
+        touch "${BUILD_DIR}/${NAMES[$INDEX]}.log"
+        mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        cd "${BUILD_DIR}/${NAMES[$INDEX]}"
+        "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${CPU_COUNT}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        echo ""
+    fi
 
     # cmake
-    cd "${TEMP_DIR}"
-    echo "You may safely dismiss and ignore any prompt to install Java."
-    printf "Building    [%02i/%02i] %s " "3" "${TOTAL}" "cmake 3.15.3"
-    [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xf cmake-3.15.3.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-    cd cmake-3.15.3 >/dev/null 2>&1 || print_fail_and_exit
-    ./configure --prefix="${PREFIX}" --no-qt-gui --system-curl >../cmake-3.15.3.log 2>&1 || print_fail_and_exit
-    make --jobs="${MAKEJOBS}" >>../cmake-3.15.3.log 2>&1 || print_fail_and_exit
-    ${SUDO} make install >>../cmake-3.15.3.log 2>&1 || print_fail_and_exit
+    INDEX=$((INDEX+1))
+    printf "Building    [%02i/%02i] %s " "$((INDEX+1))" "${TOTAL}" "${NAMES[$INDEX]} ${VERSIONS[$INDEX]}"
+    if [[ "${SKIP[$INDEX]}" == true ]]; then
+        echo "(${INSTALLED_VERSIONS[$INDEX]} installed, skipping)"
+    else
+        [[ "${SUDO}" != "" ]] && ${SUDO} -v
+        touch "${BUILD_DIR}/${NAMES[$INDEX]}.log"
+        mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        cd "${BUILD_DIR}/${NAMES[$INDEX]}"
+        "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" --no-qt-gui --system-curl >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${CPU_COUNT}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        echo ""
+    fi
 
     # libtool
-    cd "${TEMP_DIR}"
-    printf "Building    [%02i/%02i] %s " "4" "${TOTAL}" "libtool 2.4.6"
-    [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xf libtool-2.4.6.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-    cd libtool-2.4.6 >/dev/null 2>&1 || print_fail_and_exit
-    ./configure --prefix="${PREFIX}" >../libtool-2.4.6.log 2>&1 || print_fail_and_exit
-    make --jobs="${MAKEJOBS}" >>../libtool-2.4.6.log 2>&1 || print_fail_and_exit
-    ${SUDO} make install >>../libtool-2.4.6.log 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-
-    # pkg-config
-    cd "${TEMP_DIR}"
-    printf "Building    [%02i/%02i] %s " "5" "${TOTAL}" "pkg-config 0.29.2"
-    [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xf pkg-config-0.29.2.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-    cd pkg-config-0.29.2 >/dev/null 2>&1 || print_fail_and_exit
-    ./configure --prefix="${PREFIX}" --with-internal-glib --disable-host-tool >../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
-    make --jobs="${MAKEJOBS}" >>../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
-    ${SUDO} make install >>../pkg-config-0.29.2.log 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-
-    # nasm
-    cd "${TEMP_DIR}"
-    printf "Building    [%02i/%02i] %s " "6" "${TOTAL}" "nasm 2.14.02"
-    [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xf nasm-2.14.02.tar.bz2 >/dev/null 2>&1 || print_fail_and_exit
-    cd nasm-2.14.02 >/dev/null 2>&1 || print_fail_and_exit
-    ./configure --prefix="${PREFIX}" --enable-sections --enable-lto >../nasm-2.14.02.log 2>&1 || print_fail_and_exit
-    make --jobs="${MAKEJOBS}" AR=ar RANLIB=ranlib >>../nasm-2.14.02.log 2>&1 || print_fail_and_exit
-    ${SUDO} make install >>../nasm-2.14.02.log 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
-
-    # ninja
-    cd "${TEMP_DIR}"
-    printf "Building    [%02i/%02i] %s " "7" "${TOTAL}" "ninja 1.9.0"
-    [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xf ninja-1.9.0.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-    cd ninja-1.9.0 >/dev/null 2>&1 || print_fail_and_exit
-    ./configure.py --bootstrap >../ninja-1.9.0.log 2>&1 || print_fail_and_exit
-    ${SUDO} mv ninja /usr/local/bin >>../ninja-1.9.0.log 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
+    INDEX=$((INDEX+1))
+    printf "Building    [%02i/%02i] %s " "$((INDEX+1))" "${TOTAL}" "${NAMES[$INDEX]} ${VERSIONS[$INDEX]}"
+    if [[ "${SKIP[$INDEX]}" == true ]]; then
+        echo "(${INSTALLED_VERSIONS[$INDEX]} installed, skipping)"
+    else
+        [[ "${SUDO}" != "" ]] && ${SUDO} -v
+        touch "${BUILD_DIR}/${NAMES[$INDEX]}.log"
+        mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        cd "${BUILD_DIR}/${NAMES[$INDEX]}"
+        "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${CPU_COUNT}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        echo ""
+    fi
 
     # meson
-    cd "${TEMP_DIR}"
-    printf "Building    [%02i/%02i] %s " "8" "${TOTAL}" "meson 0.51.2"
-    [[ "${SUDO}" != "" ]] && ${SUDO} -v
-    tar -xf meson-0.51.2.tar.gz >/dev/null 2>&1 || print_fail_and_exit
-    cd meson-0.51.2 >/dev/null 2>&1 || print_fail_and_exit
-    ${SUDO} python3 setup.py install >>../meson-0.51.2.log 2>&1 || print_fail_and_exit
-    echo -en "${CREL}"
+    INDEX=$((INDEX+1))
+    printf "Building    [%02i/%02i] %s " "$((INDEX+1))" "${TOTAL}" "${NAMES[$INDEX]} ${VERSIONS[$INDEX]}"
+    if [[ "${SKIP[$INDEX]}" == true ]]; then
+        echo "(${INSTALLED_VERSIONS[$INDEX]} installed, skipping)"
+    else
+        [[ "${SUDO}" != "" ]] && ${SUDO} -v
+        touch "${BUILD_DIR}/${NAMES[$INDEX]}.log"
+        mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        cd "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}"
+        ${SUDO} python3 setup.py install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        echo ""
+    fi
+
+    # nasm
+    INDEX=$((INDEX+1))
+    printf "Building    [%02i/%02i] %s " "$((INDEX+1))" "${TOTAL}" "${NAMES[$INDEX]} ${VERSIONS[$INDEX]}"
+    if [[ "${SKIP[$INDEX]}" == true ]]; then
+        echo "(${INSTALLED_VERSIONS[$INDEX]} installed, skipping)"
+    else
+        [[ "${SUDO}" != "" ]] && ${SUDO} -v
+        touch "${BUILD_DIR}/${NAMES[$INDEX]}.log"
+        mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        cd "${BUILD_DIR}/${NAMES[$INDEX]}"
+        "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" --enable-sections --enable-lto >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${CPU_COUNT}" AR=ar RANLIB=ranlib >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        echo ""
+    fi
+
+    # ninja
+    INDEX=$((INDEX+1))
+    printf "Building    [%02i/%02i] %s " "$((INDEX+1))" "${TOTAL}" "${NAMES[$INDEX]} ${VERSIONS[$INDEX]}"
+    if [[ "${SKIP[$INDEX]}" == true ]]; then
+        echo "(${INSTALLED_VERSIONS[$INDEX]} installed, skipping)"
+    else
+        [[ "${SUDO}" != "" ]] && ${SUDO} -v
+        touch "${BUILD_DIR}/${NAMES[$INDEX]}.log"
+        mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        cd "${BUILD_DIR}/${NAMES[$INDEX]}"
+        "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure.py" --bootstrap >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} mv ninja "${PREFIX}/bin" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        echo ""
+    fi
+
+    # pkg-config
+    INDEX=$((INDEX+1))
+    printf "Building    [%02i/%02i] %s " "$((INDEX+1))" "${TOTAL}" "${NAMES[$INDEX]} ${VERSIONS[$INDEX]}"
+    if [[ "${SKIP[$INDEX]}" == true ]]; then
+        echo "(${INSTALLED_VERSIONS[$INDEX]} installed, skipping)"
+    else
+        [[ "${SUDO}" != "" ]] && ${SUDO} -v
+        touch "${BUILD_DIR}/${NAMES[$INDEX]}.log"
+        mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        cd "${BUILD_DIR}/${NAMES[$INDEX]}"
+        "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" --with-internal-glib --disable-host-tool >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${CPU_COUNT}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        echo ""
+    fi
+
+    # clean up
+    ${SUDO} rm -rf "${PKG_DIR}"
 
     # done
-    printf "Building    [%02i/%02i] complete.\n" "${TOTAL}" "${TOTAL}"
-    ${SUDO} rm -rf "${TEMP_DIR}"
     if [[ "${PREFIX}" != "/usr/local" ]]; then
-        echo "bin: ${PREFIX}/bin"
-        echo "  add to your shell startup script (${HOME}/.bash_profile):"
+        echo "  run the following command and add it to your shell startup script"
+        echo "  (e.g., .bashrc or .bash_profile) to make persistent across sessions:"
         echo "    export PATH=\"${PREFIX}/bin:\${PATH}\""
     fi
+    echo "Complete."
 
     # restore original PATH
     export PATH="${PATH_ORIG}"
@@ -206,4 +554,8 @@ wait "${PID}" || CODE=$?
 
 trap - EXIT INT TERM
 
-exit "${CODE:-0}"
+if [[ "${CODE}" -ne 0 ]]; then
+    echo -n "error: subprocess returned non-zero error code (${CODE})" >&2
+    die_gracefully
+fi
+exit 0
