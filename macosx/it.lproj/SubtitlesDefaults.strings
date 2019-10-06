@@ -40,8 +40,8 @@
 /* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
 "jDd-Ji-7Sm.title" = "La prima corrispondente alle lingue selezionate";
 
-/* Class = "NSWindow"; title = "Window"; ObjectID = "kwM-lz-5lG"; */
-"kwM-lz-5lG.title" = "Finestra";
+/* Class = "NSWindow"; title = "Subtitles Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
+"kwM-lz-5lG.title" = "Comportamento di selezione sottotitoli";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
 "Kwy-lU-VuU.title" = "OtherViews";

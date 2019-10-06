@@ -181,11 +181,17 @@
 /* Class = "NSMenuItem"; title = "60"; ObjectID = "519"; */
 "519.title" = "60";
 
+/* Class = "NSButtonCell"; title = "Show preview images"; ObjectID = "Aao-Tf-JeJ"; */
+"Aao-Tf-JeJ.title" = "Afficher les images d'aperçu";
+
+/* Class = "NSButtonCell"; title = "Always clear completed items after an encode completes"; ObjectID = "BPU-E2-N8l"; */
+"BPU-E2-N8l.title" = "Toujours effacer les éléments terminés après la fin de l'encodage";
+
 /* Class = "NSTextFieldCell"; title = "Title Scan:"; ObjectID = "c0L-TU-WML"; */
 "c0L-TU-WML.title" = "Scan du titre :";
 
-/* Class = "NSTextFieldCell"; title = "x264 Encoder:"; ObjectID = "cqp-xU-GOe"; */
-"cqp-xU-GOe.title" = "Encodeur x264 :";
+/* Class = "NSTextFieldCell"; title = "Encoder:"; ObjectID = "cqp-xU-GOe"; */
+"cqp-xU-GOe.title" = "Encodeur :";
 
 /* Class = "NSTextFieldCell"; title = "Drag labels to Format to compose a naming format."; ObjectID = "dQ6-Dh-9sD"; */
 "dQ6-Dh-9sD.title" = "Glisser les labels vers Format pour composer un format de nommage.";
@@ -201,6 +207,9 @@
 
 /* Class = "NSButtonCell"; title = "Change case to Title Case"; ObjectID = "ggR-Zs-P8G"; */
 "ggR-Zs-P8G.title" = "Changer la casse pour la casse de titre";
+
+/* Class = "NSTextFieldCell"; title = "Summary:"; ObjectID = "GQJ-go-PoN"; */
+"GQJ-go-PoN.title" = "Résumé : ";
 
 /* Class = "NSTextFieldCell"; title = "seconds"; ObjectID = "klQ-DW-Kc6"; */
 "klQ-DW-Kc6.title" = "secondes";

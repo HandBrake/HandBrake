@@ -28,6 +28,9 @@
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "akB-JW-MPe"; */
 "akB-JW-MPe.title" = "AutresVues";
 
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "b6A-ax-2Ed"; */
+"b6A-ax-2Ed.title" = "AutresVues";
+
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Preset"; ObjectID = "bac-vC-bD4"; */
 "bac-vC-bD4.ibExternalAccessibilityDescription" = "Préréglage Affiner";
 
@@ -37,8 +40,17 @@
 /* Class = "NSMenuItem"; title = "180°"; ObjectID = "bEe-EV-Q73"; */
 "bEe-EV-Q73.title" = "180°";
 
-/* Class = "NSTextFieldCell"; title = "Off"; ObjectID = "CIX-Cq-deK"; */
-"CIX-Cq-deK.title" = "Off";
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Sharpen Tune"; ObjectID = "bRd-Km-Wa8"; */
+"bRd-Km-Wa8.ibExternalAccessibilityDescription" = "Réglage Renforcer";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deblock tune. Further adjusts the Deblock preset to optimize settings for specific scenarios."; ObjectID = "bRd-Km-Wa8"; */
+"bRd-Km-Wa8.ibShadowedToolTip" = "Réglage de l'anti-blocs. Ajuste ensuite le préréglage Anti-blocs pour optimiser les paramètres pour des scénarios spécifiques.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Deblock Preset"; ObjectID = "bz8-FC-vYp"; */
+"bz8-FC-vYp.ibExternalAccessibilityDescription" = "Préréglage de l'anti-blocs";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Deblock reduces blocky artifacts caused by low quality video compression."; ObjectID = "bz8-FC-vYp"; */
+"bz8-FC-vYp.ibShadowedToolTip" = "Le déblocage réduit les artefacts générés par une compression vidéo de mauvaise qualité.";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Denoise Preset"; ObjectID = "cTy-PO-BSd"; */
 "cTy-PO-BSd.ibExternalAccessibilityDescription" = "Préréglage de réduction du bruit";
@@ -51,6 +63,9 @@
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Detelecine removes comb artifacts that are the result of telecine, a process for converting film frame rates to television frame rates."; ObjectID = "DER-tS-cLx"; */
 "DER-tS-cLx.ibShadowedToolTip" = "\"Detelecine\" supprime les artefacts en peigne liés au mode Télécinéma, un mécanisme convertissant le débit d'images film vers un débit d'images télévision.";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Custom Deblock parameters.\n\nstrength=s:thresh=t:blocksize=b"; ObjectID = "DI9-Ed-acp"; */
+"DI9-Ed-acp.ibShadowedToolTip" = "Paramètres de l'anti-blocs personnalisés.\n\nstrength=s:thresh=t:blocksize=b";
 
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Rotate the picture clockwise in 90 degree increments."; ObjectID = "dsH-ZQ-dBs"; */
 "dsH-ZQ-dBs.ibShadowedToolTip" = "Tourner l'image de 90 degrés dans le sens horaire.";
@@ -133,17 +148,17 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Deinterlace parameters.\n\nYadif syntax: mode=m:parity=p\n\nYadif default: mode=3\n\nDecomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7"; ObjectID = "r64-vI-ymx"; */
 "r64-vI-ymx.ibShadowedToolTip" = "Paramètres personnalisés Désentrelacement.\n\nSyntaxe Yadif: mode=m:parity=p\n\nYadif par défaut: mode=3\n\nSyntaxe Decomb: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb par défaut: mode=7";
 
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "rfp-ah-CVB"; */
+"rfp-ah-CVB.title" = "AutresVues";
+
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Interlace Detection parameters.\n\nSyntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDefault: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16"; ObjectID = "rPg-F2-gtl"; */
 "rPg-F2-gtl.ibShadowedToolTip" = "Paramètres personnalisés Détection d'Entrelacement.\n\nSyntaxe: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d\n\nDéfaut: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16";
 
 /* Class = "NSTextFieldCell"; title = "Denoise:"; ObjectID = "Rxe-Xm-vXj"; */
-"Rxe-Xm-vXj.title" = "Réduction du bruit :";
+"Rxe-Xm-vXj.title" = "Réduction du bruit :";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "tAS-YR-VfA"; */
 "tAS-YR-VfA.title" = "AutresVues";
-
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "Off"; ObjectID = "tG7-P3-mWx"; */
-"tG7-P3-mWx.ibShadowedIsNilPlaceholder" = "Off";
 
 /* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "tje-4P-jKt"; */
 "tje-4P-jKt.title" = "Régler :";
@@ -157,9 +172,6 @@
 /* Class = "NSTextFieldCell"; title = "Color:"; ObjectID = "uDH-ts-vs5"; */
 "uDH-ts-vs5.title" = "Couleur :";
 
-/* Class = "NSSlider"; ibShadowedToolTip = "Deblock reduces blocky artifacts caused by low quality video compression."; ObjectID = "VHj-6u-NVp"; */
-"VHj-6u-NVp.ibShadowedToolTip" = "Le déblocage réduit les artefacts générés par une compression vidéo de mauvaise qualité.";
-
 /* Class = "NSTextFieldCell"; title = "Deinterlace:"; ObjectID = "VsK-mC-9Pj"; */
 "VsK-mC-9Pj.title" = "Désentrelacer :";
 
@@ -172,8 +184,14 @@
 /* Class = "NSTextFieldCell"; title = "Interlace Detection:"; ObjectID = "xHD-vC-ePQ"; */
 "xHD-vC-ePQ.title" = "Détection d'Entrelacement :";
 
+/* Class = "NSTextFieldCell"; title = "Custom:"; ObjectID = "xqk-dM-L3o"; */
+"xqk-dM-L3o.title" = "Personnalisé :";
+
+/* Class = "NSTextFieldCell"; title = "Tune:"; ObjectID = "ydN-tP-vpt"; */
+"ydN-tP-vpt.title" = "Régler :";
+
 /* Class = "NSTextField"; ibShadowedToolTip = "Custom Denoise parameters.\n\nNLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nNLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nHQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nHQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3"; ObjectID = "ZR9-YG-pfn"; */
-"ZR9-YG-pfn.ibShadowedToolTip" = "Paramètres personnalisés de réduction du bruit.\n\nSyntaxe NLMeans : y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nParamètres par défaut NLMeans : y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nSyntaxe HQDN3D : y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nParamètres par défaut HQDN3D : y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
+"ZR9-YG-pfn.ibShadowedToolTip" = "Paramètres personnalisés de réduction du bruit.\n\nSyntaxe NLMeans : y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nParamètres par défaut NLMeans : y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0\n\nSyntaxe HQDN3D : y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nParamètres par défaut HQDN3D : y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
 
 /* Class = "NSTextFieldCell"; title = "Preset:"; ObjectID = "zvZ-ZX-yKE"; */
 "zvZ-ZX-yKE.title" = "Préréglage :";

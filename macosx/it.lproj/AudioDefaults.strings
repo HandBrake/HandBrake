@@ -109,8 +109,8 @@
 /* Class = "NSButtonCell"; title = "OK"; ObjectID = "kDe-1L-VkD"; */
 "kDe-1L-VkD.title" = "OK";
 
-/* Class = "NSWindow"; title = "Window"; ObjectID = "kwM-lz-5lG"; */
-"kwM-lz-5lG.title" = "Finestra";
+/* Class = "NSWindow"; title = "Audio Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
+"kwM-lz-5lG.title" = "Comportamento di selezione audio";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
 "Kwy-lU-VuU.title" = "OtherViews";

@@ -2,17 +2,17 @@
 " - fastdecode" = "- décodage rapide";
 
 /* HBStateFormatter -> work time format */
-" (%.2f fps, avg %.2f fps, ETA %02d:%02d:%02d)" = " (%1$.2f fps, avg %2$.2f fps, ETA %3$d:%4$d:%5$d)";
+" (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f fps, env. %2$.2f fps, ETA %3$@)";
 
 /* HBStateFormatter -> search time format
    HBStateFormatter -> work time format */
-" (ETA %02d:%02d:%02d)" = " (ETA %1$d:%2$d:%3$d)";
+" (ETA %@)" = " (ETA %@)";
 
-/* Title description */
-" (Title %d, %@, %@) ▸ %@\n" = " (Titre %1$d, %2$@, %3$@) ▸ %4$@\n";
+/* HBJob -> video short description framerate */
+" FPS CFR" = " FPS CFR";
 
-/* Title description */
-" (Title %d, %@) ▸ %@\n" = " (Titre %1$d, %2$@) ▸ %3$@\n";
+/* HBJob -> video short description framerate */
+" FPS PFR" = " FPS PFR";
 
 /* Dimensions description */
 " Keep Aspect Ratio" = "Conserver les proportions";
@@ -39,13 +39,13 @@
 ", Chapter Markers" = ", marqueurs de chapitre";
 
 /* HBPicture -> summary */
-", Crop: %@ %d/%d/%d/%d" = ", Recadrage: %1$@ %2$d/%3$d/%4$d/%5$d";
+", Crop: %@ %d/%d/%d/%d" = ", Recadrage : %1$@ %2$d/%3$d/%4$d/%5$d";
 
 /* Format description */
 ", iPod 5G Support" = ", Prise en charge de l'iPod 5G";
 
 /* HBPicture -> summary */
-", Modulus: %d" = ", Module: %d";
+", Modulus: %d" = ", Module : %d";
 
 /* Format description */
 ", Web Optimized" = ", Optimisé pour le Web";
@@ -63,13 +63,13 @@
 "%@Output: %dx%d" = "%1$@Sortie : %2$dx%3$d";
 
 /* HBPicture -> short info */
-"%@Output: %dx%d, Anamorphic: %dx%d Auto" = "%1$@Sortie: %2$dx%3$d, Anamorphique: %4$dx%5$d Auto";
+"%@Output: %dx%d, Anamorphic: %dx%d Auto" = "%1$@Sortie : %2$dx%3$d, Anamorphique : %4$dx%5$d Auto";
 
 /* HBPicture -> short info */
-"%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Sortie: %2$dx%3$d, Anamorphique: %4$dx%5$d Personnalisé";
+"%@Output: %dx%d, Anamorphic: %dx%d Custom" = "%1$@Sortie : %2$dx%3$d, Anamorphique : %4$dx%5$d Personnalisé";
 
 /* HBPicture -> short info */
-"%@Output: %dx%d, Anamorphic: %dx%d Loose" = "%1$@Sortie: %2$dx%3$d, Anamorphique: %4$dx%5$d Perte";
+"%@Output: %dx%d, Anamorphic: %dx%d Loose" = "%1$@Sortie : %2$dx%3$d, Anamorphique : %4$dx%5$d Perte";
 
 /* HBPicture -> short info */
 "%dx%d Storage, %dx%d Display" = "%1$dx%2$d Stockage, %3$dx%4$d Affichage";
@@ -94,6 +94,18 @@
 
 /* Title description */
 "2 Video Passes First Turbo" = "Vidéo en 2 passes, première passe en turbo";
+
+/* HBAudio -> Mixdown */
+"5.1 Channels" = "Canaux 5.1";
+
+/* HBAudio -> Mixdown */
+"6.1 Channels" = "Canaux 6.1";
+
+/* HBAudio -> Mixdown */
+"7.1 (5F/2R/LFE)" = "7.1 (5F/2R/LFE)";
+
+/* HBAudio -> Mixdown */
+"7.1 Channels" = "Canaux 7.1";
 
 /* Audio description */
 "Audio:" = "Audio :";
@@ -137,11 +149,14 @@
    HBJob -> filters short description */
 "Deblock" = "Débloquer";
 
+/* HBJob -> invalid deblock custom settings error recovery suggestion */
+"Deblock syntax: strength=s:thresh=t:blocksize=b" = "Syntaxe de l'anti-blocs : strength=s:thresh=t:blocksize=b";
+
 /* HBFilters -> filter display name */
 "Decomb" = "Suppression du peigne";
 
 /* HBJob -> invalid Decomb custom settings error recovery suggestion */
-"Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7" = "Syntaxe suppression du peigne: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nSuppression du peigne par défaut: mode=7";
+"Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7" = "Syntaxe suppression du peigne : mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nSuppression du peigne par défaut : mode=7";
 
 /* Subtitles description */
 "Default" = "Défaut";
@@ -161,6 +176,12 @@
 
 /* Dimensions description */
 "Dimensions:" = "Dimensions :";
+
+/* HBAudio -> Mixdown */
+"Dolby Pro Logic II" = "Dolby Pro Logic II";
+
+/* HBAudio -> Mixdown */
+"Dolby Surround" = "Dolby Surround";
 
 /* Audio description */
 "DRC: %.2f" = "DRC : %.2f";
@@ -203,7 +224,7 @@
 "HQDN3D" = "HQDN3D";
 
 /* HBJob -> invalid name error recovery suggestion */
-"HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nDefault settings: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3" = "Syntaxe HQDN3D: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nRéglage par défaut: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
+"HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nDefault settings: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3" = "Syntaxe HQDN3D : y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c\n\nRéglage par défaut : y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3";
 
 /* HBFilters -> invalid comb detect custom string description */
 "Invalid custom comb detect settings." = "Réglage personnalisé de détection du peigne invalide.";
@@ -216,6 +237,9 @@
 
 /* HBFilters -> invalid denoise custom string description */
 "Invalid custom NLMeans settings" = "Paramètres NLMeans personnalisés non valides";
+
+/* HBFilters -> invalid deblock custom string description */
+"Invalid deblock custom settings." = "Paramètres personnalisés de l'anti-blocs non valides.";
 
 /* HBFilters -> invalid Decomb custom string description */
 "Invalid Decomb custom settings." = "Paramètres personnalisés Decomb non valides.";
@@ -236,16 +260,25 @@
 "Lapsharp" = "Lapsharp";
 
 /* HBJob -> invalid lapsharp custom settings error recovery suggestion */
-"Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap" = "Syntaxe Lapsharp: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp par défaut: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap";
+"Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap" = "Syntaxe Lapsharp : y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c\n\nLapsharp par défaut : y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap";
 
 /* Video description */
 "Level: %@" = "Niveau : %@";
 
 /* Audio description */
-"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Mixage: %1$@, Taux d'échantillon: %2$@, Débit: %3$dkbps";
+"Mixdown: %@, Samplerate: %@, Bitrate: %d kbps" = "Mixage : %1$@, Taux d'échantillon : %2$@, Débit: %3$dkbps";
 
 /* HBJob -> Format display name */
 "MKV File" = "Fichier MKV";
+
+/* HBAudio -> Mixdown */
+"Mono" = "Mono";
+
+/* HBAudio -> Mixdown */
+"Mono (Left Only)" = "Mono (à gauche seulement)";
+
+/* HBAudio -> Mixdown */
+"Mono (Right Only)" = "Mono (à droite seulement)";
 
 /* HBJob -> Format display name */
 "MP4 File" = "Fichier MP4";
@@ -257,15 +290,18 @@
 "NLMeans" = "NLMeans";
 
 /* HBJob -> invalid name error recovery suggestion */
-"NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nDefault settings: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0" = "Syntaxe NLMeans: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nRéglage par défaut: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0";
+"NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nDefault settings: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0" = "Syntaxe NLMeans : y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t\n\nRéglage par défaut : y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0";
 
-/* HBAudio -> none track name
+/* HBVideo -> tune */
+"none" = "aucun";
+
+/* HBAudio -> Mixdown
+   HBAudio -> none track name
    HBJob -> filters short description
    HBSubtitles -> none track name */
 "None" = "Aucune";
 
 /* HBFilters -> filter display name
-   HBFilters -> filter summary
    HBFilters -> off display name */
 "Off" = "Off";
 
@@ -277,6 +313,9 @@
 
 /* HBStateFormatter -> work pass number format */
 "Pass %d of %d, %.2f %%" = "Passe %1$d sur %2$d, %3$.2f %%";
+
+/* HBStateFormatter -> work first pass number format */
+"Pass 1" = "Passage 1";
 
 /* HBStateFormatter -> pass display name */
 "Paused" = "En pause";
@@ -295,6 +334,9 @@
 
 /* Video description */
 "Profile: %@" = "Profil : %@";
+
+/* Range description */
+"Range:" = "Plage :";
 
 /* HBJob -> filters short description */
 "Rotation" = "Rotation";
@@ -315,7 +357,7 @@
 "Scanning title %d of %d…" = "Scan du titre %1$d sur %2$d ...";
 
 /* HBStateFormatter -> search pass display name */
-"Searching for start point:  %.2f %%" = "Recherche du point de départ: %.2f %%";
+"Searching for start point:  %.2f %%" = "Recherche du point de départ : %.2f %%";
 
 /* HBRange -> display name */
 "Seconds" = "Secondes";
@@ -326,8 +368,14 @@
 /* Filters description */
 "Sharpen" = "Augmenter la netteté";
 
+/* Source description */
+"Source:" = "Source :";
+
 /* HBPicture -> short info */
 "Source: %dx%d, " = "Source : %1$dx%2$d, ";
+
+/* HBAudio -> Mixdown */
+"Stereo" = "Stéréo";
 
 /* Subtitles description */
 "Subtitles:" = "Sous-titres :";
@@ -337,6 +385,9 @@
 
 /* HBJob -> invalid detelecine custom settings error recovery suggestion */
 "Syntax: skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDefault: skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0" = "Syntaxe : skip-left=s:skip-right=s:skip-top=s:skip-bottom=s:strict-breaks=s:plane=p:parity=p:disable=d\n\nDéfaut : skip-left=1:skip-right=1:skip-top=4:skip-bottom=4:plane=0";
+
+/* HBJob -> invalid name error recovery suggestion */
+"The file name can't be empty." = "Le nom du fichier ne peut être vide.";
 
 /* HBJob -> invalid name error recovery suggestion */
 "The file name can't contain the / character." = "Le nom du fichier ne peut pas contenir le caractère \"/\"";
@@ -349,6 +400,12 @@
 
 /* Preset -> import error reason */
 "The selected preset was created with a newer version of HandBrake." = "Le préréglage sélectionné a été créé avec une version plus récente de Handbrake.";
+
+/* Title description */
+"Title %d, %@" = "Titre %1$d, %2$@";
+
+/* Title description */
+"Title %d, %@, %@" = "Titre %1$d, %2$@, %3$@";
 
 /* Video description */
 "Tune: " = "Régler :";
@@ -374,6 +431,9 @@
 
 /* HBJob -> Format display name */
 "WebM File" = "Fichier WebM";
+
+/* HBFilters -> filter display name */
+"Yadif" = "Yadif";
 
 /* HBJob -> invalid Yadif custom settings error recovery suggestion */
 "Yadif syntax: mode=m:parity=p\n\nYadif default: mode=3" = "Syntaxe YADIF : mode=m:parity=p\n\nYADIF par défaut: mode=3";

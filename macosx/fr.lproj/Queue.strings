@@ -1,20 +1,11 @@
+/* Class = "NSMenuItem"; title = "Reset Failed Jobs"; ObjectID = "0zn-7P-JbR"; */
+"0zn-7P-JbR.title" = "Recommencer les tâches échoués";
+
+/* Class = "NSMenuItem"; title = "Remove Completed Jobs"; ObjectID = "9tg-YJ-DuI"; */
+"9tg-YJ-DuI.title" = "Supprimer les tâches terminées";
+
 /* Class = "NSWindow"; title = "Queue"; ObjectID = "2576"; */
 "2576.title" = "File d'attente";
-
-/* Class = "NSTextFieldCell"; title = "Pending Jobs"; ObjectID = "2637"; */
-"2637.title" = "Tâches en attente";
-
-/* Class = "NSTextFieldCell"; title = "There are no jobs currently encoding"; ObjectID = "2647"; */
-"2647.title" = "Il n'y a aucune tâche en cours d'encodage";
-
-/* Class = "NSMenuItem"; title = "Edit Job Settings"; ObjectID = "2650"; */
-"2650.title" = "Éditer les réglages de la tâche";
-
-/* Class = "NSMenuItem"; title = "Clear All Jobs"; ObjectID = "2652"; */
-"2652.title" = "Effacer toutes les tâches";
-
-/* Class = "NSMenuItem"; title = "Show Destination in Finder"; ObjectID = "2655"; */
-"2655.title" = "Afficher la destination dans le Finder";
 
 /* Class = "NSToolbarItem"; label = "When Done"; ObjectID = "a3c-kV-98E"; */
 "a3c-kV-98E.label" = "Quand terminé";
@@ -28,17 +19,20 @@
 /* Class = "NSMenuItem"; title = "Alert and Notification"; ObjectID = "aat-1N-Odn"; */
 "aat-1N-Odn.title" = "Alertes et notifications";
 
-/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "anR-ZS-eOK"; */
-"anR-ZS-eOK.title" = "Vue des cellules du tableau ";
+/* Class = "NSToolbarItem"; label = "Action"; ObjectID = "DCB-WP-NRs"; */
+"DCB-WP-NRs.label" = "Action";
 
-/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "F1i-sW-mz6"; */
-"F1i-sW-mz6.title" = "Vue des cellules du tableau ";
+/* Class = "NSToolbarItem"; paletteLabel = "Action"; ObjectID = "DCB-WP-NRs"; */
+"DCB-WP-NRs.paletteLabel" = "Action";
+
+/* Class = "NSToolbarItem"; label = "Details"; ObjectID = "DfN-Iw-bzy"; */
+"DfN-Iw-bzy.label" = "Détails";
+
+/* Class = "NSToolbarItem"; paletteLabel = "Details"; ObjectID = "DfN-Iw-bzy"; */
+"DfN-Iw-bzy.paletteLabel" = "Détails";
 
 /* Class = "NSMenuItem"; title = "Alert"; ObjectID = "fAD-ky-zo6"; */
 "fAD-ky-zo6.title" = "Alerter";
-
-/* Class = "NSMenuItem"; title = "Show Source in Finder"; ObjectID = "gbW-g1-lEc"; */
-"gbW-g1-lEc.title" = "Montrer l'emplacement du fichier source dans le Finder";
 
 /* Class = "NSMenuItem"; title = "Put Computer to Sleep"; ObjectID = "GUQ-xb-HVS"; */
 "GUQ-xb-HVS.title" = "Mettre en veille l'ordinateur";
@@ -46,8 +40,8 @@
 /* Class = "NSMenuItem"; title = "Notification"; ObjectID = "jDL-sB-8e3"; */
 "jDL-sB-8e3.title" = "Notification";
 
-/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "MWq-ie-HjX"; */
-"MWq-ie-HjX.title" = "Cellule de texte";
+/* Class = "NSMenuItem"; title = "Reset All Jobs"; ObjectID = "kPX-am-UX1"; */
+"kPX-am-UX1.title" = "Recommencer toutes les tâches";
 
 /* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "QmP-SQ-XKK"; */
 "QmP-SQ-XKK.title" = "Éteindre l'ordinateur";
@@ -73,12 +67,6 @@
 /* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "SX6-mq-Hck"; */
 "SX6-mq-Hck.toolTip" = "Démarrage l'encodage";
 
-/* Class = "NSMenuItem"; title = "Clear Selected Job"; ObjectID = "Wfz-Kj-Vtx"; */
-"Wfz-Kj-Vtx.title" = "Effacer la tâche sélectionnée";
-
-/* Class = "NSMenuItem"; title = "Clear Completed Jobs"; ObjectID = "XdJ-Sl-pwu"; */
-"XdJ-Sl-pwu.title" = "Effacer les tâches terminées";
-
-/* Class = "NSMenuItem"; title = "Reset Stopped Job"; ObjectID = "zy6-ab-ush"; */
-"zy6-ab-ush.title" = "Recommencer la tâche interrompue";
+/* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "Tvo-xt-sag"; */
+"Tvo-xt-sag.title" = "Supprimer toutes les tâches";
 

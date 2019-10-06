@@ -1,0 +1,9 @@
+/* Class = "NSTextFieldCell"; title = "Name:"; ObjectID = "eBw-qE-Hyb"; */
+"eBw-qE-Hyb.title" = "Titel:";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Players may use this in the audio/subtitles selection list."; ObjectID = "FpM-Jx-vLD"; */
+"FpM-Jx-vLD.ibShadowedToolTip" = "Abspielgeräte können dies in der Auswahlliste für Audio/Untertitel verwenden.";
+
+/* Class = "NSButtonCell"; title = "Done"; ObjectID = "Vzr-yd-VKe"; */
+"Vzr-yd-VKe.title" = "Fertig";
+

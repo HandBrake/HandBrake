@@ -50,7 +50,7 @@
 "FwZ-6T-zJe.ibExternalAccessibilityDescription" = "Largeur Stockage";
 
 /* Class = "NSTextFieldCell"; title = "PAR:"; ObjectID = "gVj-RG-PcL"; */
-"gVj-RG-PcL.title" = "PAR:";
+"gVj-RG-PcL.title" = "PAR :";
 
 /* Class = "NSTextFieldCell"; title = "Cropping:"; ObjectID = "haC-cO-jDm"; */
 "haC-cO-jDm.title" = "Recadrage :";

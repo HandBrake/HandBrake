@@ -121,6 +121,9 @@
 /* Class = "NSPopUpButton"; ibShadowedToolTip = "Audio encoder."; ObjectID = "tYY-w7-ZIq"; */
 "tYY-w7-ZIq.ibShadowedToolTip" = "Audioencoder.";
 
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "U4U-1b-rQF"; */
+"U4U-1b-rQF.title" = "Text Cell";
+
 /* Class = "NSButton"; ibShadowedToolTip = "Configure audio tracks Selection Behavior. These settings affect which tracks will be added to the audio tracks list, and the settings used for each track."; ObjectID = "vFP-nq-IQg"; */
 "vFP-nq-IQg.ibShadowedToolTip" = "Konfiguriert das Auswahlverhalten der Tonspur. Diese Einstellungen bestimmen welche Spuren zur Tonspurliste hinzugefügt werden und die Einstellungen welche für jede Spur benutzt werden.";
 

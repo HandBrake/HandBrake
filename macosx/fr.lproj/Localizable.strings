@@ -13,9 +13,6 @@
 /* Preview -> size info label */
 "(Actual size)" = "(Taille réelle)";
 
-/* Language selection */
-"(Any)" = "(Toute)";
-
 /* Main Window -> preset modified */
 "(Modified)" = "(Modifié)";
 
@@ -24,6 +21,9 @@
 
 /* Queue status */
 "%d encodes pending" = "%d tâches en attente";
+
+/* No comment provided by engineer. */
+"%llu jobs selected" = "%llu tâches sélectionnées";
 
 /* Destination same as source alert -> message
    File already exists alert -> message */
@@ -120,10 +120,17 @@
 /* Touch bar */
 "Done" = "Terminé";
 
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode canceled" = "Encodage interrompu";
+
 /* Queue status */
 "Encode Canceled." = "Encodage interrompu.";
 
-/* Queue done notification failed message */
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode complete" = "Encodage terminé";
+
+/* HBQueueItemView -> Encode state accessibility label
+   Queue done notification failed message */
 "Encode failed" = "Échec de l'encodage";
 
 /* Queue status */
@@ -131,6 +138,18 @@
 
 /* Queue status */
 "Encode Finished." = "Encodage terminé.";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode ready" = "Prêt à encoder";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode working" = "Encodage en cours";
+
+/* No comment provided by engineer. */
+"Encoding %@\n%@" = "Encodage %1$@\n%2$@";
+
+/* Job statistics */
+"Ended at:" = "Fini à : ";
 
 /* Export presets save panel title */
 "Export presets" = "Exporter les préréglages";
@@ -175,11 +194,11 @@
 /* Queue undo action name */
 "Move Jobs in Queue" = "Déplacer les tâches dans la file d'attente";
 
-/* Queue status */
-"No encode pending" = "Aucun encodage en cours";
-
 /* Preview -> accessibility label */
 "No image" = "Pas d'image";
+
+/* No comment provided by engineer. */
+"No job selected" = "Aucune tâche sélectionnée";
 
 /* Main Window -> Info text */
 "No Valid Source Found" = "Aucune source valide trouvée";
@@ -215,6 +234,9 @@
 
 /* Touch bar */
 "Pause/Resume Encoding" = "Mettre en pause/Reprendre l'encodage";
+
+/* Job statistics */
+"Paused time:" = "Temps de pause :";
 
 /* Video -> Framerate */
 "Peak Framerate (VFR)" = "Fréquence de pointe (VFR)";
@@ -255,11 +277,20 @@
 /* Preferences -> Output Name Token */
 "Quality/Bitrate" = "Qualité/Débit";
 
+/* Queue window title */
+"Queue" = "File d'attente";
+
+/* Queue window title */
+"Queue (%@)" = "File d'attente (%@)";
+
 /* Quit Alert -> first button */
 "Quit" = "Quitter";
 
 /* Touch bar */
 "Remaining Time" = "Temps restant";
+
+/* HBQueueItemView -> Remove button accessibility label */
+"Remove job" = "Supprimer la tâche";
 
 /* Queue undo action name */
 "Remove Job From Queue" = "Supprimer la tâche de la file d'attente";
@@ -273,6 +304,12 @@
 /* Queue -> pause/resume men
    Toolbar Pause Item */
 "Resume Encoding" = "Reprendre l'encodage";
+
+/* HBQueueItemView -> Reveal button accessibility label */
+"Reveal destination in Finder" = "Révéler la destination dans Finder";
+
+/* Job statistics */
+"Run time:" = "Temps d'exécution :";
 
 /* Picture HUD -> scale button
    Touch bar */
@@ -295,6 +332,9 @@
 
 /* Touch bar */
 "Show Preview Window" = "Afficher la fenêtre d'aperçu";
+
+/* Job statistics */
+"Size:" = "Taille :";
 
 /* Queue Alert -> cancel rip second button */
 "Skip Current Job" = "Ignorer le travail en cours";
@@ -321,6 +361,9 @@
 
 /* Touch bar */
 "Start/Stop Encoding" = "Démarrer/Arrêter l'encodage";
+
+/* Job statistics */
+"Started at:" = "Commencé à :";
 
 /* Toolbar Start/Stop Item */
 "Stop" = "Arrêter";

@@ -55,9 +55,6 @@
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
 "GPu-Ht-bKg.ibShadowedToolTip" = "\"Qualité Constante\" fait varier le débit pour s'assurer que la qualité visuelle reste constante tout au long de la vidéo.\n\nAjuster le curseur de qualité vers la droite pour augmenter la qualité ou vers la gauche pour la diminuer, par petits incréments de plus ou moins 1-2.\n\nLes valeurs recommandées pour les encodeurs x264 et x265 sont RF 18-28. Un réglage supérieur de la qualité peut produire des fichiers très volumineux.\n\nRéglé sur la qualité 0, l'encodage x264 est sans perte.";
 
-/* Class = "CocoaBindingsConnection"; ibShadowedIsNilPlaceholder = "none"; ObjectID = "gu5-Qw-6oi"; */
-"gu5-Qw-6oi.ibShadowedIsNilPlaceholder" = "aucun";
-
 /* Class = "NSTextFieldCell"; title = "Profile:"; ObjectID = "hib-wi-BDx"; */
 "hib-wi-BDx.title" = "Profile :";
 

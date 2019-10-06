@@ -620,6 +620,11 @@
 		A9637DA820F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBPictureViewController.strings; sourceTree = "<group>"; };
 		A9637DA920F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBPlayerHUDController.strings; sourceTree = "<group>"; };
 		A9637DAA20F7A252001EAE7C /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/ChaptersTitles.strings; sourceTree = "<group>"; };
+		A963D9962349D5E7001ED0EC /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
+		A963D9972349D5E7001ED0EC /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBTrackTitleViewController.strings; sourceTree = "<group>"; };
+		A963D9982349D5E7001ED0EC /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
+		A963D99C2349D636001ED0EC /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/HBTrackTitleViewController.strings; sourceTree = "<group>"; };
+		A963D9A02349D654001ED0EC /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/HBTrackTitleViewController.strings; sourceTree = "<group>"; };
 		A964D39522FDE8EE00DFCAEA /* HandBrakeXPCService.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = HandBrakeXPCService.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		A964D39722FDE8EE00DFCAEA /* HBRemoteCoreProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBRemoteCoreProtocol.h; sourceTree = "<group>"; };
 		A964D39822FDE8EE00DFCAEA /* HandBrakeXPCService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HandBrakeXPCService.h; sourceTree = "<group>"; };
@@ -2157,6 +2162,7 @@
 				A958EAC322E24D6400D83AF4 /* Base */,
 				A9C313B322F98F0D0001C438 /* it */,
 				D062DF6422FAE05700A65A9E /* de */,
+				A963D9962349D5E7001ED0EC /* fr */,
 			);
 			name = HBQueueTableViewController.xib;
 			sourceTree = "<group>";
@@ -2167,6 +2173,7 @@
 				A958EAC622E24D6800D83AF4 /* Base */,
 				A9C313B222F98F0D0001C438 /* it */,
 				D062DF6522FAE06000A65A9E /* de */,
+				A963D9982349D5E7001ED0EC /* fr */,
 			);
 			name = HBQueueInfoViewController.xib;
 			sourceTree = "<group>";
@@ -2405,6 +2412,9 @@
 			isa = PBXVariantGroup;
 			children = (
 				A9AB054E233CC60B00F26894 /* Base */,
+				A963D9972349D5E7001ED0EC /* fr */,
+				A963D99C2349D636001ED0EC /* de */,
+				A963D9A02349D654001ED0EC /* it */,
 			);
 			name = HBTrackTitleViewController.xib;
 			sourceTree = "<group>";
