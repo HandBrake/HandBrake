@@ -11,28 +11,19 @@
 
 static void *HBVideoControllerContext = &HBVideoControllerContext;
 
-@interface HBVideoController () {
-    // Framerate Radio Button Framerate Controls
-    IBOutlet NSButton *fFramerateVfrPfrButton;
+@interface HBVideoController ()
 
-    // Video Encoder
-    IBOutlet NSSlider *fVidQualitySlider;
+@property (nonatomic, weak) IBOutlet NSButton *framerateVfrPfrButton;
+@property (nonatomic, weak) IBOutlet NSSlider *vidQualitySlider;
 
-    // Encoder options views
-    IBOutlet NSView *fPresetView;
-    IBOutlet NSView *fSimplePresetView;
+// Advanced encoder options
+@property (nonatomic, weak) IBOutlet NSView *encoderOptionsView;
+@property (nonatomic, weak) IBOutlet NSSlider *presetSlider;
+// Text Field to show the expanded opts from unparse()
+@property (nonatomic, weak) IBOutlet NSTextField *unparseTextField;
 
-    IBOutlet NSTextField *fEncoderOptionsLabel;
-
-    // x264/x265 Presets Box
-    IBOutlet NSBox          *fPresetsBox;
-    IBOutlet NSSlider       *fPresetsSlider;
-
-    // Text Field to show the expanded opts from unparse()
-    IBOutlet NSTextField *fDisplayX264PresetsUnparseTextField;
-}
-
-@property (nonatomic, weak) IBOutlet NSTextField *additionalsOptions;
+// Simple encoder options
+@property (nonatomic, weak) IBOutlet NSView *encoderOptionsSimpleView;
 
 @property (nonatomic) BOOL presetViewEnabled;
 @property (nonatomic) NSColor *labelColor;
@@ -63,6 +54,12 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
     }
 
     return self;
+}
+
+- (void)viewDidLoad
+{
+    self.encoderOptionsView.hidden = YES;
+    self.encoderOptionsSimpleView.hidden = YES;
 }
 
 - (void)setVideo:(HBVideo *)video
@@ -99,30 +96,30 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
             // fFramerateVfrPfrCell
             if (self.video.frameRate == 0) // We are Same as Source
             {
-                [fFramerateVfrPfrButton setTitle:NSLocalizedString(@"Variable Framerate", @"Video -> Framerate")];
+                [self.framerateVfrPfrButton setTitle:NSLocalizedString(@"Variable Framerate", @"Video -> Framerate")];
             }
             else
             {
-                [fFramerateVfrPfrButton setTitle:NSLocalizedString(@"Peak Framerate (VFR)", @"Video -> Framerate")];
+                [self.framerateVfrPfrButton setTitle:NSLocalizedString(@"Peak Framerate (VFR)", @"Video -> Framerate")];
             }
         }
         else if ([keyPath isEqualToString:@"video.quality"])
         {
-            fVidQualitySlider.accessibilityValueDescription = [NSString stringWithFormat:@"%@ %.2f", self.video.constantQualityLabel, self.video.quality];;
+            self.vidQualitySlider.accessibilityValueDescription = [NSString stringWithFormat:@"%@ %.2f", self.video.constantQualityLabel, self.video.quality];;
         }
         else if ([keyPath isEqualToString:@"video.preset"])
         {
-            fPresetsSlider.accessibilityValueDescription = self.video.preset;
+            self.presetSlider.accessibilityValueDescription = self.video.preset;
         }
         else if ([keyPath isEqualToString:@"video.unparseOptions"])
         {
             if ([self.video isUnparsedSupported:self.video.encoder])
             {
-                fDisplayX264PresetsUnparseTextField.stringValue = [NSString stringWithFormat:@"x264 Unparse: %@", self.video.unparseOptions];
+                self.unparseTextField.stringValue = [NSString stringWithFormat:@"x264 Unparse: %@", self.video.unparseOptions];
             }
             else
             {
-                fDisplayX264PresetsUnparseTextField.stringValue = @"";
+                self.unparseTextField.stringValue = @"";
             }
         }
         else if ([keyPath isEqualToString:@"values.HBx264CqSliderFractional"])
@@ -155,17 +152,17 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
         granularity = 1.0f / [NSUserDefaults.standardUserDefaults
                        integerForKey:HBCqSliderFractional];
     }
-    fVidQualitySlider.minValue = minValue;
-    fVidQualitySlider.maxValue = maxValue;
+    self.vidQualitySlider.minValue = minValue;
+    self.vidQualitySlider.maxValue = maxValue;
 
     NSInteger numberOfTickMarks = (NSInteger)((maxValue - minValue) * (1.0f / granularity)) + 1;
-    fVidQualitySlider.numberOfTickMarks = numberOfTickMarks;
+    self.vidQualitySlider.numberOfTickMarks = numberOfTickMarks;
 
     // Replace the slider transformer with a new one,
     // configured with the new max/min/direction values.
-    [fVidQualitySlider unbind:@"value"];
+    [self.vidQualitySlider unbind:@"value"];
     HBQualityTransformer *transformer = [[HBQualityTransformer alloc] initWithReversedDirection:(direction != 0) min:minValue max:maxValue];
-    [fVidQualitySlider bind:@"value" toObject:self withKeyPath:@"self.video.quality" options:@{NSValueTransformerBindingOption: transformer}];
+    [self.vidQualitySlider bind:@"value" toObject:self withKeyPath:@"self.video.quality" options:@{NSValueTransformerBindingOption: transformer}];
 }
 
 #pragma mark - Video x264/x265 Presets
@@ -175,18 +172,13 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
  */
 - (void)switchPresetView
 {
+    BOOL supportPresets = [self.video isPresetSystemSupported:self.video.encoder];
+    self.encoderOptionsView.hidden = !supportPresets;
+    self.encoderOptionsSimpleView.hidden = !([self.video isSimpleOptionsPanelSupported:self.video.encoder] && !supportPresets);
+
     if ([self.video isPresetSystemSupported:self.video.encoder])
     {
-        fPresetsBox.contentView = fPresetView;
         [self setupPresetsSlider];
-    }
-    else if ([self.video isSimpleOptionsPanelSupported:self.video.encoder])
-    {
-        fPresetsBox.contentView = fSimplePresetView;
-    }
-    else
-    {
-        fPresetsBox.contentView = nil;
     }
 }
 
@@ -205,15 +197,14 @@ static void *HBVideoControllerContext = &HBVideoControllerContext;
 - (void)setupPresetsSlider
 {
     // setup the preset slider
-    [fPresetsSlider setMaxValue:self.video.presets.count - 1];
-    [fPresetsSlider setNumberOfTickMarks:self.video.presets.count];
+    self.presetSlider.maxValue = self.video.presets.count - 1;
+    self.presetSlider.numberOfTickMarks = self.video.presets.count;
 
     // Bind the slider value to a custom value transformer,
     // done here because it can't be done in IB.
-    [fPresetsSlider unbind:@"value"];
+    [self.presetSlider unbind:@"value"];
     HBPresetsTransformer *transformer = [[HBPresetsTransformer alloc] initWithEncoder:self.video.encoder];
-    [fPresetsSlider bind:@"value" toObject:self withKeyPath:@"self.video.preset" options:@{NSValueTransformerBindingOption: transformer}];
+    [self.presetSlider bind:@"value" toObject:self withKeyPath:@"self.video.preset" options:@{NSValueTransformerBindingOption: transformer}];
 }
-
 
 @end

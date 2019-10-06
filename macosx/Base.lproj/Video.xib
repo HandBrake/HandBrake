@@ -1,35 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15504" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBVideoController">
             <connections>
-                <outlet property="additionalsOptions" destination="oJk-ur-wgc" id="OEm-fb-AY8"/>
-                <outlet property="fDisplayX264PresetsUnparseTextField" destination="wk1-2U-z4i" id="aIk-h1-bOP"/>
-                <outlet property="fEncoderOptionsLabel" destination="mkM-81-g3d" id="eWq-95-kTO"/>
-                <outlet property="fFramerateVfrPfrButton" destination="Fc1-EX-DWd" id="0Jj-Pc-4iW"/>
-                <outlet property="fPresetView" destination="2dX-Hf-Hxl" id="OEP-rM-gGp"/>
-                <outlet property="fPresetsBox" destination="A4U-3F-pYq" id="m5l-h9-Ak8"/>
-                <outlet property="fPresetsSlider" destination="Biw-5K-pPD" id="so9-VX-eit"/>
-                <outlet property="fSimplePresetView" destination="aRi-vN-oR0" id="e0P-NK-oHv"/>
-                <outlet property="fVidQualitySlider" destination="GPu-Ht-bKg" id="faR-df-PGL"/>
+                <outlet property="encoderOptionsSimpleView" destination="lOx-h5-YMt" id="i2J-jz-bUi"/>
+                <outlet property="encoderOptionsView" destination="6Tf-Wn-haS" id="i6p-jq-gD8"/>
+                <outlet property="framerateVfrPfrButton" destination="Fc1-EX-DWd" id="8QD-xk-iyu"/>
+                <outlet property="presetSlider" destination="fue-2d-Bjn" id="Y5o-X7-1oU"/>
+                <outlet property="unparseTextField" destination="dwn-bf-Ua0" id="nAq-NT-A51"/>
+                <outlet property="vidQualitySlider" destination="GPu-Ht-bKg" id="UgM-J6-en4"/>
                 <outlet property="view" destination="wAC-5p-nXb" id="i3V-vv-tDn"/>
             </connections>
         </customObject>
         <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <view id="wAC-5p-nXb">
-            <rect key="frame" x="0.0" y="0.0" width="912" height="314"/>
+            <rect key="frame" x="0.0" y="0.0" width="920" height="375"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="150" translatesAutoresizingMaskIntoConstraints="NO" id="gfa-Hb-cDP">
-                    <rect key="frame" x="294" y="282" width="45" height="14"/>
+                    <rect key="frame" x="294" y="343" width="45" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Quality:" id="F3s-qR-qeE">
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -38,7 +35,7 @@
                     </connections>
                 </textField>
                 <textField toolTip="Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video." verticalHuggingPriority="750" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A3o-Zx-OfM">
-                    <rect key="frame" x="498" y="232" width="78" height="19"/>
+                    <rect key="frame" x="498" y="294" width="78" height="19"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="78" id="EZ2-qD-5pb"/>
                     </constraints>
@@ -46,7 +43,7 @@
                         <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" minimumIntegerDigits="0" maximumIntegerDigits="42" id="TQJ-nd-2BX">
                             <real key="minimum" value="0.0"/>
                         </numberFormatter>
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -77,10 +74,10 @@
                     </connections>
                 </textField>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="50" translatesAutoresizingMaskIntoConstraints="NO" id="Pai-3Q-Gs3">
-                    <rect key="frame" x="521" y="282" width="11" height="14"/>
+                    <rect key="frame" x="521" y="343" width="11" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="0" id="bvD-W7-O0N">
                         <numberFormatter key="formatter" formatterBehavior="default10_4" numberStyle="decimal" minimumIntegerDigits="1" maximumIntegerDigits="2000000000" maximumFractionDigits="3" id="wYW-16-bWA"/>
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -91,10 +88,10 @@
                     </connections>
                 </textField>
                 <popUpButton toolTip="Framerate (Frames Per Second). Number of pictures displayed during each second of video." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="9tc-EO-QMd">
-                    <rect key="frame" x="114" y="252" width="149" height="22"/>
+                    <rect key="frame" x="114" y="312" width="149" height="22"/>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="0VS-Ah-Q3S">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                         <menu key="menu" title="OtherViews" id="Jj0-Qw-HF8">
                             <items>
                                 <menuItem id="Xzy-hl-maq"/>
@@ -118,11 +115,11 @@
                     </connections>
                 </popUpButton>
                 <button translatesAutoresizingMaskIntoConstraints="NO" id="bnV-aE-FVh">
-                    <rect key="frame" x="358" y="209" width="111" height="18"/>
+                    <rect key="frame" x="358" y="270" width="111" height="18"/>
                     <string key="toolTip">2-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode.</string>
                     <buttonCell key="cell" type="check" title="2-pass encoding" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="nPA-nO-Eik">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                     </buttonCell>
                     <connections>
                         <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="7aV-7j-MzB" id="c4g-dz-q05">
@@ -151,10 +148,10 @@
                     </connections>
                 </button>
                 <button toolTip="Turbo first pass speeds up the first pass of a 2-pass encode for a slight penalty to analysis." translatesAutoresizingMaskIntoConstraints="NO" id="olm-zg-k9Y">
-                    <rect key="frame" x="495" y="209" width="104" height="18"/>
+                    <rect key="frame" x="495" y="270" width="104" height="18"/>
                     <buttonCell key="cell" type="check" title="Turbo first pass" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="vSc-VB-NEv">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                     </buttonCell>
                     <connections>
                         <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="iZE-er-OQN" id="Fbv-qd-JTg">
@@ -189,13 +186,13 @@
                     </connections>
                 </button>
                 <popUpButton toolTip="Video encoder. Determines video type and settings used during encoding." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="xwK-Yu-a1e">
-                    <rect key="frame" x="114" y="278" width="149" height="22"/>
+                    <rect key="frame" x="114" y="338" width="149" height="22"/>
                     <constraints>
                         <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="143" id="8aS-6C-FvY"/>
                     </constraints>
                     <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="clipping" borderStyle="borderAndBezel" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="KHu-7m-NR7">
                         <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                         <menu key="menu" title="OtherViews" id="6Cs-jo-8Q6">
                             <items>
                                 <menuItem id="cZC-bI-lgS"/>
@@ -219,9 +216,9 @@
                     </connections>
                 </popUpButton>
                 <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="bAn-iZ-ieF">
-                    <rect key="frame" x="18" y="256" width="93" height="14"/>
+                    <rect key="frame" x="18" y="317" width="93" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Framerate (FPS):" id="SJc-tv-AMH">
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -230,9 +227,9 @@
                     </connections>
                 </textField>
                 <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="1000" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="rOd-nt-22T">
-                    <rect key="frame" x="18" y="282" width="93" height="14"/>
+                    <rect key="frame" x="18" y="343" width="93" height="14"/>
                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Video Encoder:" id="Mrb-6Q-0YM">
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -241,7 +238,7 @@
                     </connections>
                 </textField>
                 <slider horizontalHuggingPriority="1000" verticalHuggingPriority="749" horizontalCompressionResistancePriority="200" translatesAutoresizingMaskIntoConstraints="NO" id="GPu-Ht-bKg">
-                    <rect key="frame" x="361" y="259" width="531" height="15"/>
+                    <rect key="frame" x="361" y="320" width="539" height="15"/>
                     <string key="toolTip">Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.
 
 Adjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.
@@ -250,7 +247,7 @@ Recommended values for the x264 and x265 encoders are RF 18-28. Higher quality s
 
 x264 is lossless at RF 0.</string>
                     <sliderCell key="cell" controlSize="mini" continuous="YES" state="on" alignment="left" maxValue="51" doubleValue="33.149999999999999" tickMarkPosition="above" numberOfTickMarks="101" allowsTickMarkValuesOnly="YES" sliderType="linear" id="hOs-xu-ZdT">
-                        <font key="font" metaFont="miniSystem"/>
+                        <font key="font" metaFont="label" size="9"/>
                     </sliderCell>
                     <connections>
                         <binding destination="-2" name="enabled2" keyPath="self.video" previousBinding="wCA-ag-GHJ" id="ywk-WQ-GNY">
@@ -274,9 +271,9 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </slider>
                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="60" translatesAutoresizingMaskIntoConstraints="NO" id="1au-ZO-l1i">
-                    <rect key="frame" x="496" y="282" width="21" height="14"/>
+                    <rect key="frame" x="496" y="343" width="21" height="14"/>
                     <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="left" title="RF:" id="rRB-9F-pHn">
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </textFieldCell>
@@ -286,18 +283,11 @@ x264 is lossless at RF 0.</string>
                         <binding destination="-2" name="enabled" keyPath="self.video.isConstantQualitySupported" id="6YN-nu-K6b"/>
                     </connections>
                 </textField>
-                <box autoresizesSubviews="NO" boxType="custom" borderType="none" title="x264 Presets" titlePosition="noTitle" transparent="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A4U-3F-pYq">
-                    <rect key="frame" x="0.0" y="20" width="912" height="176"/>
-                    <view key="contentView" id="orG-bd-6do">
-                        <rect key="frame" x="0.0" y="0.0" width="912" height="176"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    </view>
-                </box>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Vae-sv-7Up">
-                    <rect key="frame" x="343" y="280" width="110" height="18"/>
+                    <rect key="frame" x="343" y="341" width="110" height="18"/>
                     <buttonCell key="cell" type="radio" title="Constant Quality" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="ZjL-cY-O5f">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                     </buttonCell>
                     <connections>
                         <binding destination="-2" name="enabled" keyPath="self.video" id="Ewd-OO-T3Z">
@@ -317,10 +307,10 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="brN-9J-qa1">
-                    <rect key="frame" x="343" y="233" width="143" height="18"/>
+                    <rect key="frame" x="343" y="294" width="143" height="18"/>
                     <buttonCell key="cell" type="radio" title="Average Bitrate (kbps):" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="VQe-CK-YDR">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                     </buttonCell>
                     <connections>
                         <binding destination="-2" name="enabled" keyPath="self.video" id="Lf0-yc-zAF">
@@ -336,10 +326,10 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Fc1-EX-DWd">
-                    <rect key="frame" x="115" y="233" width="121" height="18"/>
+                    <rect key="frame" x="115" y="293" width="121" height="18"/>
                     <buttonCell key="cell" type="radio" title="Variable Framerate" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="zZo-75-1WG">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                     </buttonCell>
                     <connections>
                         <binding destination="-2" name="enabled" keyPath="self.video" id="CRn-MS-g4d">
@@ -355,10 +345,10 @@ x264 is lossless at RF 0.</string>
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Y3k-tv-pIb">
-                    <rect key="frame" x="115" y="211" width="127" height="18"/>
+                    <rect key="frame" x="115" y="271" width="127" height="18"/>
                     <buttonCell key="cell" type="radio" title="Constant Framerate" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="6Dd-IP-Pwt">
                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
+                        <font key="font" metaFont="controlContent" size="11"/>
                     </buttonCell>
                     <connections>
                         <binding destination="-2" name="enabled" keyPath="self.video" id="pSp-Yq-ng6">
@@ -369,6 +359,316 @@ x264 is lossless at RF 0.</string>
                         <binding destination="-2" name="value" keyPath="self.video.frameRateMode" id="aEW-Di-Bkn"/>
                     </connections>
                 </button>
+                <stackView distribution="fill" orientation="vertical" alignment="centerX" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h2m-9o-ibu">
+                    <rect key="frame" x="0.0" y="20" width="920" height="237"/>
+                    <subviews>
+                        <customView id="6Tf-Wn-haS" userLabel="x264/x264 presets view">
+                            <rect key="frame" x="0.0" y="33" width="920" height="204"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <subviews>
+                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="w5n-Cd-ztl">
+                                    <rect key="frame" x="58" y="155" width="42" height="14"/>
+                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="QWu-rv-zfM">
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="6co-mW-Uij"/>
+                                    </connections>
+                                </textField>
+                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="O1a-XY-efg">
+                                    <rect key="frame" x="58" y="132" width="42" height="14"/>
+                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="fzT-im-zKN">
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="qqN-38-Teg"/>
+                                    </connections>
+                                </textField>
+                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="LUQ-6T-KDP">
+                                    <rect key="frame" x="58" y="106" width="42" height="14"/>
+                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Profile:" id="Hho-GY-qOR">
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="bfj-4o-20r"/>
+                                    </connections>
+                                </textField>
+                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="Axj-zl-Cyb">
+                                    <rect key="frame" x="58" y="80" width="42" height="14"/>
+                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Level:" id="sTM-lk-DBC">
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="cYi-Rc-gI9"/>
+                                    </connections>
+                                </textField>
+                                <popUpButton toolTip="Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cXd-X7-OhB">
+                                    <rect key="frame" x="103" y="127" width="130" height="22"/>
+                                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="DM4-nK-RoT">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <menu key="menu" title="OtherViews" id="rXn-NC-pEv"/>
+                                    </popUpButtonCell>
+                                    <connections>
+                                        <accessibilityConnection property="title" destination="O1a-XY-efg" id="trc-UR-fhX"/>
+                                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="Wpm-H8-E4d"/>
+                                        <binding destination="-2" name="selectedValue" keyPath="self.video.tune" previousBinding="MXu-MX-2ny" id="TEI-Z1-Pbs">
+                                            <dictionary key="options">
+                                                <string key="NSValueTransformerName">HBTuneTransformer</string>
+                                            </dictionary>
+                                        </binding>
+                                        <binding destination="-2" name="contentValues" keyPath="self.video.tunes" id="MXu-MX-2ny">
+                                            <dictionary key="options">
+                                                <string key="NSValueTransformerName">HBTunesTransformer</string>
+                                            </dictionary>
+                                        </binding>
+                                    </connections>
+                                </popUpButton>
+                                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="kh8-d2-hSD">
+                                    <rect key="frame" x="103" y="101" width="130" height="22"/>
+                                    <string key="toolTip">Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings.</string>
+                                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="Pod-LO-yvB">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <menu key="menu" title="OtherViews" id="gIJ-Xs-uVF"/>
+                                    </popUpButtonCell>
+                                    <connections>
+                                        <accessibilityConnection property="title" destination="LUQ-6T-KDP" id="zfD-Yv-FWB"/>
+                                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="OYk-nJ-dpx"/>
+                                        <binding destination="-2" name="selectedValue" keyPath="self.video.profile" previousBinding="ZNW-OE-4rP" id="CRz-On-Jen">
+                                            <dictionary key="options">
+                                                <string key="NSNullPlaceholder">auto</string>
+                                            </dictionary>
+                                        </binding>
+                                        <binding destination="-2" name="content" keyPath="self.video.profiles" id="ZNW-OE-4rP"/>
+                                    </connections>
+                                </popUpButton>
+                                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8CM-4G-oId">
+                                    <rect key="frame" x="103" y="75" width="130" height="22"/>
+                                    <string key="toolTip">Video encoder level. Sets and ensures compliance with the specified video compression standard level. Overrides all other settings.</string>
+                                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="hlv-UO-sPl">
+                                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <menu key="menu" title="OtherViews" id="Aes-nP-7qS"/>
+                                    </popUpButtonCell>
+                                    <connections>
+                                        <accessibilityConnection property="title" destination="Axj-zl-Cyb" id="v1S-v6-Ub4"/>
+                                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="sp3-SA-dvF"/>
+                                        <binding destination="-2" name="selectedValue" keyPath="self.video.level" previousBinding="Qra-An-Qa9" id="4Hq-BG-Ulb">
+                                            <dictionary key="options">
+                                                <string key="NSNullPlaceholder">auto</string>
+                                            </dictionary>
+                                        </binding>
+                                        <binding destination="-2" name="content" keyPath="self.video.levels" id="Qra-An-Qa9"/>
+                                    </connections>
+                                </popUpButton>
+                                <button translatesAutoresizingMaskIntoConstraints="NO" id="stU-Fo-Avu">
+                                    <rect key="frame" x="248" y="130" width="88" height="18"/>
+                                    <string key="toolTip">Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering.</string>
+                                    <buttonCell key="cell" type="check" title="Fast Decode" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="EcY-w1-bc8">
+                                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                    </buttonCell>
+                                    <connections>
+                                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="FIH-tq-fAP"/>
+                                        <binding destination="-2" name="value" keyPath="self.video.fastDecode" id="4jp-4p-LNV"/>
+                                        <binding destination="-2" name="hidden" keyPath="self.video.fastDecodeSupported" previousBinding="FIH-tq-fAP" id="AfB-x5-8eN">
+                                            <dictionary key="options">
+                                                <string key="NSValueTransformerName">NSNegateBoolean</string>
+                                            </dictionary>
+                                        </binding>
+                                    </connections>
+                                </button>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="t4D-CZ-8G3">
+                                    <rect key="frame" x="248" y="106" width="104" height="14"/>
+                                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Additional Options:" id="ja7-Zr-y1P">
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="7kM-A1-tFP"/>
+                                    </connections>
+                                </textField>
+                                <textField horizontalHuggingPriority="240" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rbo-w6-ENd">
+                                    <rect key="frame" x="358" y="78" width="542" height="42"/>
+                                    <string key="toolTip">Additional video encoder options. For advanced use only.
+
+Syntax: option-1=foo:opt2=bar,baz</string>
+                                    <constraints>
+                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="300" id="YcB-hR-KrW"/>
+                                        <constraint firstAttribute="height" constant="42" id="a6X-k4-xjy"/>
+                                    </constraints>
+                                    <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="zMF-lE-Bfa">
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <accessibilityConnection property="title" destination="t4D-CZ-8G3" id="8GZ-2Y-Fsd"/>
+                                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="7Pf-kN-lAP"/>
+                                        <binding destination="-2" name="value" keyPath="self.video.videoOptionExtra" id="FNg-9F-Ukg"/>
+                                    </connections>
+                                </textField>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="SOa-xA-qAq">
+                                    <rect key="frame" x="237" y="155" width="54" height="14"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="A77-A3-lQn"/>
+                                    </constraints>
+                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="J2V-D8-55I">
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="dfQ-ef-HDl"/>
+                                        <binding destination="-2" name="value" keyPath="self.video.preset" id="pVA-9B-hDu"/>
+                                    </connections>
+                                </textField>
+                                <textField toolTip="Displays all internal video encoder options." horizontalHuggingPriority="240" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="1000" translatesAutoresizingMaskIntoConstraints="NO" id="dwn-bf-Ua0">
+                                    <rect key="frame" x="18" y="12" width="884" height="50"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="aXf-QV-oea"/>
+                                    </constraints>
+                                    <textFieldCell key="cell" lineBreakMode="charWrapping" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" title="Unparse:" id="CLk-dp-1b7">
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Rk3-rM-Cbd"/>
+                                    </connections>
+                                </textField>
+                                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="Rrl-E5-sJ2">
+                                    <rect key="frame" x="18" y="180" width="95" height="14"/>
+                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Encoder Options:" id="cRF-pz-1jt">
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="UoW-6H-vgy"/>
+                                    </connections>
+                                </textField>
+                                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="Ve7-0n-AJu">
+                                    <rect key="frame" x="119" y="185" width="781" height="5"/>
+                                </box>
+                                <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fue-2d-Bjn">
+                                    <rect key="frame" x="106" y="155" width="124" height="18"/>
+                                    <string key="toolTip">Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.</string>
+                                    <constraints>
+                                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="124" id="1VD-1X-Ivb"/>
+                                    </constraints>
+                                    <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="5" tickMarkPosition="above" numberOfTickMarks="2" allowsTickMarkValuesOnly="YES" sliderType="linear" id="ZSO-Fx-xZB"/>
+                                    <connections>
+                                        <accessibilityConnection property="title" destination="w5n-Cd-ztl" id="OR5-aR-Ihc"/>
+                                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="DEx-eY-Kf9"/>
+                                    </connections>
+                                </slider>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="fue-2d-Bjn" firstAttribute="width" secondItem="kh8-d2-hSD" secondAttribute="width" id="5pl-Yh-gh3"/>
+                                <constraint firstItem="w5n-Cd-ztl" firstAttribute="width" secondItem="LUQ-6T-KDP" secondAttribute="width" id="7oh-PN-d1I"/>
+                                <constraint firstItem="stU-Fo-Avu" firstAttribute="leading" secondItem="cXd-X7-OhB" secondAttribute="trailing" constant="21" id="9QH-2W-D4E"/>
+                                <constraint firstItem="t4D-CZ-8G3" firstAttribute="top" secondItem="rbo-w6-ENd" secondAttribute="top" id="9ne-7F-dEL"/>
+                                <constraint firstItem="O1a-XY-efg" firstAttribute="width" secondItem="w5n-Cd-ztl" secondAttribute="width" id="A4s-6l-CkH"/>
+                                <constraint firstItem="LUQ-6T-KDP" firstAttribute="leading" secondItem="O1a-XY-efg" secondAttribute="leading" id="D4w-FS-SK0"/>
+                                <constraint firstAttribute="bottom" secondItem="dwn-bf-Ua0" secondAttribute="bottom" constant="12" id="Fji-vZ-D9B"/>
+                                <constraint firstAttribute="trailing" secondItem="Ve7-0n-AJu" secondAttribute="trailing" constant="20" id="GKz-ra-Za0"/>
+                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="stU-Fo-Avu" secondAttribute="trailing" constant="20" symbolic="YES" id="HFW-m8-KXl"/>
+                                <constraint firstItem="t4D-CZ-8G3" firstAttribute="leading" secondItem="8CM-4G-oId" secondAttribute="trailing" constant="20" id="HUN-Zo-wTw"/>
+                                <constraint firstItem="O1a-XY-efg" firstAttribute="leading" secondItem="w5n-Cd-ztl" secondAttribute="leading" id="Hj9-DD-Jgc"/>
+                                <constraint firstItem="fue-2d-Bjn" firstAttribute="width" secondItem="cXd-X7-OhB" secondAttribute="width" id="HnJ-Pu-jJg"/>
+                                <constraint firstItem="fue-2d-Bjn" firstAttribute="baseline" secondItem="w5n-Cd-ztl" secondAttribute="baseline" id="Hvn-wn-ziW"/>
+                                <constraint firstItem="cXd-X7-OhB" firstAttribute="leading" secondItem="O1a-XY-efg" secondAttribute="trailing" constant="8" id="J6M-u0-s7L"/>
+                                <constraint firstItem="8CM-4G-oId" firstAttribute="top" secondItem="kh8-d2-hSD" secondAttribute="bottom" constant="8" id="LJJ-Pb-ZUM"/>
+                                <constraint firstItem="fue-2d-Bjn" firstAttribute="width" secondItem="8CM-4G-oId" secondAttribute="width" id="LvT-8v-Jix"/>
+                                <constraint firstAttribute="trailing" secondItem="rbo-w6-ENd" secondAttribute="trailing" constant="20" id="NeT-ot-UTb"/>
+                                <constraint firstItem="Ve7-0n-AJu" firstAttribute="trailing" secondItem="rbo-w6-ENd" secondAttribute="trailing" id="QHc-qt-Fhw"/>
+                                <constraint firstItem="cXd-X7-OhB" firstAttribute="baseline" secondItem="stU-Fo-Avu" secondAttribute="baseline" id="TY7-aI-GSe"/>
+                                <constraint firstItem="Rrl-E5-sJ2" firstAttribute="top" secondItem="6Tf-Wn-haS" secondAttribute="top" constant="10" id="TgQ-uN-cdN"/>
+                                <constraint firstItem="8CM-4G-oId" firstAttribute="baseline" secondItem="Axj-zl-Cyb" secondAttribute="baseline" id="V2P-Xb-6NM"/>
+                                <constraint firstItem="dwn-bf-Ua0" firstAttribute="leading" secondItem="6Tf-Wn-haS" secondAttribute="leading" constant="20" id="YLU-sI-wE9"/>
+                                <constraint firstItem="kh8-d2-hSD" firstAttribute="baseline" secondItem="LUQ-6T-KDP" secondAttribute="baseline" id="ZSR-Qu-TTl"/>
+                                <constraint firstItem="Rrl-E5-sJ2" firstAttribute="leading" secondItem="6Tf-Wn-haS" secondAttribute="leading" constant="20" id="cFy-gt-4Tm"/>
+                                <constraint firstItem="fue-2d-Bjn" firstAttribute="baseline" secondItem="SOa-xA-qAq" secondAttribute="baseline" id="d0H-uT-C2g"/>
+                                <constraint firstItem="fue-2d-Bjn" firstAttribute="leading" secondItem="w5n-Cd-ztl" secondAttribute="trailing" constant="8" id="d4w-dN-Kor"/>
+                                <constraint firstItem="rbo-w6-ENd" firstAttribute="leading" secondItem="t4D-CZ-8G3" secondAttribute="trailing" constant="8" id="fX5-ge-qgJ"/>
+                                <constraint firstItem="SOa-xA-qAq" firstAttribute="leading" secondItem="fue-2d-Bjn" secondAttribute="trailing" constant="9" id="fpM-FM-v0i"/>
+                                <constraint firstItem="cXd-X7-OhB" firstAttribute="top" secondItem="fue-2d-Bjn" secondAttribute="bottom" constant="8" id="gFK-Ja-0uF"/>
+                                <constraint firstItem="Axj-zl-Cyb" firstAttribute="leading" secondItem="LUQ-6T-KDP" secondAttribute="leading" id="gYb-xX-wdk"/>
+                                <constraint firstItem="cXd-X7-OhB" firstAttribute="baseline" secondItem="O1a-XY-efg" secondAttribute="baseline" id="gZb-41-Ibw"/>
+                                <constraint firstItem="w5n-Cd-ztl" firstAttribute="leading" secondItem="Rrl-E5-sJ2" secondAttribute="leading" constant="40" id="hUf-oP-F12"/>
+                                <constraint firstItem="LUQ-6T-KDP" firstAttribute="width" secondItem="Axj-zl-Cyb" secondAttribute="width" id="nFY-kt-Oe1"/>
+                                <constraint firstItem="kh8-d2-hSD" firstAttribute="top" secondItem="cXd-X7-OhB" secondAttribute="bottom" constant="8" id="oKf-gB-vp9"/>
+                                <constraint firstItem="Ve7-0n-AJu" firstAttribute="centerY" secondItem="Rrl-E5-sJ2" secondAttribute="centerY" id="pI2-l6-05s"/>
+                                <constraint firstItem="kh8-d2-hSD" firstAttribute="leading" secondItem="LUQ-6T-KDP" secondAttribute="trailing" constant="8" id="qQs-Cd-Crl"/>
+                                <constraint firstItem="dwn-bf-Ua0" firstAttribute="top" secondItem="8CM-4G-oId" secondAttribute="bottom" constant="16" id="s9P-cd-eHu"/>
+                                <constraint firstItem="Ve7-0n-AJu" firstAttribute="leading" secondItem="Rrl-E5-sJ2" secondAttribute="trailing" constant="8" id="uiY-F7-gJR"/>
+                                <constraint firstItem="8CM-4G-oId" firstAttribute="leading" secondItem="Axj-zl-Cyb" secondAttribute="trailing" constant="8" id="vVd-h7-c1U"/>
+                                <constraint firstItem="fue-2d-Bjn" firstAttribute="top" secondItem="Rrl-E5-sJ2" secondAttribute="bottom" constant="7" id="wYd-q0-rdZ"/>
+                                <constraint firstItem="kh8-d2-hSD" firstAttribute="baseline" secondItem="t4D-CZ-8G3" secondAttribute="baseline" id="wwz-lH-VCZ"/>
+                                <constraint firstItem="t4D-CZ-8G3" firstAttribute="leading" secondItem="kh8-d2-hSD" secondAttribute="trailing" constant="20" id="xYM-Nu-tX6"/>
+                                <constraint firstAttribute="trailing" secondItem="dwn-bf-Ua0" secondAttribute="trailing" constant="20" id="zQp-7m-Fm7"/>
+                            </constraints>
+                        </customView>
+                        <customView id="lOx-h5-YMt" userLabel="ffmpeg presets view">
+                            <rect key="frame" x="0.0" y="0.0" width="920" height="34"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <subviews>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gEp-lv-YUY">
+                                    <rect key="frame" x="107" y="2" width="545" height="32"/>
+                                    <string key="toolTip">Additional video encoder options. For advanced use only.
+
+Syntax: option-1=foo:opt2=bar</string>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="32" id="5fc-dP-NWu"/>
+                                        <constraint firstAttribute="width" constant="545" id="rbI-3K-IQQ"/>
+                                    </constraints>
+                                    <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="p2l-er-OIt">
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <binding destination="-2" name="value" keyPath="self.video.videoOptionExtra" id="QVN-eE-7i3"/>
+                                    </connections>
+                                </textField>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="PmG-Ts-xi9">
+                                    <rect key="frame" x="6" y="20" width="95" height="14"/>
+                                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Encoder Options:" id="kPs-u2-fDn">
+                                        <font key="font" metaFont="controlContent" size="11"/>
+                                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="PmG-Ts-xi9" firstAttribute="top" secondItem="lOx-h5-YMt" secondAttribute="top" id="IUf-4G-SJC"/>
+                                <constraint firstItem="PmG-Ts-xi9" firstAttribute="top" secondItem="gEp-lv-YUY" secondAttribute="top" id="Pg0-OJ-1UM"/>
+                                <constraint firstItem="gEp-lv-YUY" firstAttribute="leading" secondItem="PmG-Ts-xi9" secondAttribute="trailing" constant="8" symbolic="YES" id="RNr-Cc-MLe"/>
+                                <constraint firstItem="PmG-Ts-xi9" firstAttribute="leading" secondItem="lOx-h5-YMt" secondAttribute="leading" constant="8" id="gxT-Np-QVO"/>
+                                <constraint firstAttribute="bottom" secondItem="PmG-Ts-xi9" secondAttribute="bottom" constant="20" symbolic="YES" id="nla-Mh-8U2"/>
+                            </constraints>
+                        </customView>
+                    </subviews>
+                    <visibilityPriorities>
+                        <integer value="1000"/>
+                        <integer value="1000"/>
+                    </visibilityPriorities>
+                    <customSpacing>
+                        <real value="3.4028234663852886e+38"/>
+                        <real value="3.4028234663852886e+38"/>
+                    </customSpacing>
+                </stackView>
             </subviews>
             <constraints>
                 <constraint firstItem="gfa-Hb-cDP" firstAttribute="firstBaseline" secondItem="Vae-sv-7Up" secondAttribute="firstBaseline" id="0kX-Ab-X5K"/>
@@ -386,6 +686,7 @@ x264 is lossless at RF 0.</string>
                 <constraint firstItem="A3o-Zx-OfM" firstAttribute="leading" secondItem="1au-ZO-l1i" secondAttribute="leading" id="F0a-Kc-s3X"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="olm-zg-k9Y" secondAttribute="trailing" constant="20" id="Fsh-Kh-XyK"/>
                 <constraint firstItem="Pai-3Q-Gs3" firstAttribute="leading" secondItem="1au-ZO-l1i" secondAttribute="trailing" constant="8" symbolic="YES" id="GPO-LT-xtY"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="h2m-9o-ibu" secondAttribute="bottom" constant="18" id="GUs-eQ-AGW"/>
                 <constraint firstItem="9tc-EO-QMd" firstAttribute="top" secondItem="xwK-Yu-a1e" secondAttribute="bottom" constant="8" id="GeU-VZ-YTd"/>
                 <constraint firstItem="olm-zg-k9Y" firstAttribute="leading" secondItem="bnV-aE-FVh" secondAttribute="trailing" constant="31" id="HWr-FL-VKu"/>
                 <constraint firstItem="xwK-Yu-a1e" firstAttribute="baseline" secondItem="gfa-Hb-cDP" secondAttribute="baseline" id="KMY-23-CNr"/>
@@ -393,7 +694,6 @@ x264 is lossless at RF 0.</string>
                 <constraint firstItem="GPu-Ht-bKg" firstAttribute="top" secondItem="Vae-sv-7Up" secondAttribute="bottom" constant="8" id="PIy-tb-2VH"/>
                 <constraint firstItem="Vae-sv-7Up" firstAttribute="leading" secondItem="brN-9J-qa1" secondAttribute="leading" id="SDC-yH-bYi"/>
                 <constraint firstItem="rOd-nt-22T" firstAttribute="leading" secondItem="wAC-5p-nXb" secondAttribute="leading" constant="20" id="U8S-gG-od4"/>
-                <constraint firstAttribute="trailing" secondItem="A4U-3F-pYq" secondAttribute="trailing" id="UAi-Rf-EqT"/>
                 <constraint firstItem="Y3k-tv-pIb" firstAttribute="top" secondItem="Fc1-EX-DWd" secondAttribute="bottom" constant="8" id="V4I-Zk-x8R"/>
                 <constraint firstItem="gfa-Hb-cDP" firstAttribute="leading" secondItem="xwK-Yu-a1e" secondAttribute="trailing" constant="36" id="X7s-4B-e33"/>
                 <constraint firstItem="gfa-Hb-cDP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Fc1-EX-DWd" secondAttribute="trailing" constant="8" symbolic="YES" id="XpL-gA-cOo"/>
@@ -402,320 +702,22 @@ x264 is lossless at RF 0.</string>
                 <constraint firstItem="xwK-Yu-a1e" firstAttribute="leading" secondItem="rOd-nt-22T" secondAttribute="trailing" constant="8" id="bV5-2x-8ji"/>
                 <constraint firstItem="bnV-aE-FVh" firstAttribute="baseline" secondItem="olm-zg-k9Y" secondAttribute="baseline" id="gA6-nQ-o4p"/>
                 <constraint firstItem="rOd-nt-22T" firstAttribute="baseline" secondItem="xwK-Yu-a1e" secondAttribute="baseline" id="gSI-9O-c0a"/>
+                <constraint firstItem="h2m-9o-ibu" firstAttribute="leading" secondItem="wAC-5p-nXb" secondAttribute="leading" id="gVM-KS-um6"/>
                 <constraint firstItem="Fc1-EX-DWd" firstAttribute="top" secondItem="9tc-EO-QMd" secondAttribute="bottom" constant="6" id="h8H-lD-5AW"/>
                 <constraint firstItem="A3o-Zx-OfM" firstAttribute="leading" secondItem="brN-9J-qa1" secondAttribute="trailing" constant="13" id="hDQ-FZ-M9G"/>
-                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="A4U-3F-pYq" secondAttribute="bottom" constant="20" symbolic="YES" id="hwA-f3-WWM"/>
                 <constraint firstItem="Fc1-EX-DWd" firstAttribute="leading" secondItem="9tc-EO-QMd" secondAttribute="leading" id="ich-lj-Kpj"/>
-                <constraint firstItem="A4U-3F-pYq" firstAttribute="top" secondItem="bnV-aE-FVh" secondAttribute="bottom" constant="16" id="ilD-Us-GwD"/>
+                <constraint firstAttribute="trailing" secondItem="h2m-9o-ibu" secondAttribute="trailing" id="kS2-4n-24U"/>
                 <constraint firstItem="gfa-Hb-cDP" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Y3k-tv-pIb" secondAttribute="trailing" constant="8" symbolic="YES" id="kXy-RO-xGg"/>
                 <constraint firstItem="rOd-nt-22T" firstAttribute="top" secondItem="wAC-5p-nXb" secondAttribute="top" constant="18" id="lZs-Yt-3BK"/>
                 <constraint firstItem="Vae-sv-7Up" firstAttribute="firstBaseline" secondItem="1au-ZO-l1i" secondAttribute="firstBaseline" id="m6s-yk-F1V"/>
-                <constraint firstItem="orG-bd-6do" firstAttribute="top" secondItem="Y3k-tv-pIb" secondAttribute="bottom" constant="17" id="rcf-2a-ePX"/>
                 <constraint firstAttribute="trailing" secondItem="GPu-Ht-bKg" secondAttribute="trailing" constant="20" id="sL1-if-zZ9"/>
                 <constraint firstItem="Pai-3Q-Gs3" firstAttribute="baseline" secondItem="1au-ZO-l1i" secondAttribute="baseline" id="sVB-mt-wYZ"/>
-                <constraint firstItem="A4U-3F-pYq" firstAttribute="leading" secondItem="wAC-5p-nXb" secondAttribute="leading" id="xFf-rj-qaL"/>
                 <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Pai-3Q-Gs3" secondAttribute="trailing" constant="20" symbolic="YES" id="yJK-FI-8b5"/>
                 <constraint firstItem="A3o-Zx-OfM" firstAttribute="leading" secondItem="olm-zg-k9Y" secondAttribute="leading" id="ydG-Lc-8Ru"/>
+                <constraint firstItem="h2m-9o-ibu" firstAttribute="top" secondItem="bnV-aE-FVh" secondAttribute="bottom" constant="16" id="zmx-5X-iAt"/>
                 <constraint firstItem="Vae-sv-7Up" firstAttribute="leading" secondItem="gfa-Hb-cDP" secondAttribute="trailing" constant="8" id="zxZ-dZ-W0N"/>
             </constraints>
-            <point key="canvasLocation" x="-37" y="174"/>
+            <point key="canvasLocation" x="-37" y="203.5"/>
         </view>
-        <customView id="2dX-Hf-Hxl" userLabel="x264/x264 presets view">
-            <rect key="frame" x="0.0" y="0.0" width="920" height="204"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <subviews>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="0sa-ep-yfr">
-                    <rect key="frame" x="58" y="155" width="42" height="14"/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Preset:" id="iab-iA-j04">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="jwX-Os-rhB"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="gzq-SL-YVY">
-                    <rect key="frame" x="58" y="131" width="42" height="14"/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Tune:" id="zSD-4Y-1cI">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="wpX-b9-mYI"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="dY9-5D-mXX">
-                    <rect key="frame" x="58" y="105" width="42" height="14"/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Profile:" id="hib-wi-BDx">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="nkv-vu-agJ"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="BY1-IG-JvI">
-                    <rect key="frame" x="58" y="79" width="42" height="14"/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Level:" id="QyZ-rl-uGw">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="0LN-xF-Kg6"/>
-                    </connections>
-                </textField>
-                <popUpButton toolTip="Video encoder tune. Further adjusts encoder preset to optimize settings for specific scenarios." verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="A7d-wM-Xmp">
-                    <rect key="frame" x="103" y="127" width="130" height="22"/>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="dy8-w4-ycN">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="c4N-uO-iVC"/>
-                    </popUpButtonCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="gzq-SL-YVY" id="W8X-Zk-cQD"/>
-                        <binding destination="-2" name="selectedValue" keyPath="self.video.tune" previousBinding="puD-Y8-zxp" id="yp7-SK-DVh">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBTuneTransformer</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="jwX-If-Tz7"/>
-                        <binding destination="-2" name="contentValues" keyPath="self.video.tunes" id="puD-Y8-zxp">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">HBTunesTransformer</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </popUpButton>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="CPP-lh-FbN">
-                    <rect key="frame" x="103" y="101" width="130" height="22"/>
-                    <string key="toolTip">Video encoder profile. Sets and ensures compliance with the specified video compression standard profile. Overrides all other settings.</string>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="oOm-hC-AoS">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="7CG-ga-88H"/>
-                    </popUpButtonCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="dY9-5D-mXX" id="gPk-3N-uSS"/>
-                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="daB-50-blQ"/>
-                        <binding destination="-2" name="selectedValue" keyPath="self.video.profile" previousBinding="Njf-bs-Nub" id="ioS-p7-9Ri">
-                            <dictionary key="options">
-                                <string key="NSNullPlaceholder">auto</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="content" keyPath="self.video.profiles" id="Njf-bs-Nub"/>
-                    </connections>
-                </popUpButton>
-                <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="P7c-Zk-G99">
-                    <rect key="frame" x="103" y="75" width="130" height="22"/>
-                    <string key="toolTip">Video encoder level. Sets and ensures compliance with the specified video compression standard level. Overrides all other settings.</string>
-                    <popUpButtonCell key="cell" type="push" bezelStyle="rounded" alignment="left" controlSize="small" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" id="PhX-Wa-Vhs">
-                        <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                        <menu key="menu" title="OtherViews" id="pPu-oR-2R8"/>
-                    </popUpButtonCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="BY1-IG-JvI" id="1gh-Gw-TgJ"/>
-                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="gyc-y2-3XD"/>
-                        <binding destination="-2" name="selectedValue" keyPath="self.video.level" previousBinding="MXA-St-eVu" id="v8q-ly-ZVP">
-                            <dictionary key="options">
-                                <string key="NSNullPlaceholder">auto</string>
-                            </dictionary>
-                        </binding>
-                        <binding destination="-2" name="content" keyPath="self.video.levels" id="MXA-St-eVu"/>
-                    </connections>
-                </popUpButton>
-                <button translatesAutoresizingMaskIntoConstraints="NO" id="z7F-H2-Vfr">
-                    <rect key="frame" x="248" y="129" width="88" height="18"/>
-                    <string key="toolTip">Fast Decode uses settings that reduce CPU usage during playback of the encoded video. Useful for devices that struggle to play video without stuttering.</string>
-                    <buttonCell key="cell" type="check" title="Fast Decode" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="5De-nU-l3h">
-                        <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                        <font key="font" metaFont="smallSystem"/>
-                    </buttonCell>
-                    <connections>
-                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="JTS-dn-Hyg"/>
-                        <binding destination="-2" name="value" keyPath="self.video.fastDecode" id="3I9-0k-Ixu"/>
-                        <binding destination="-2" name="hidden" keyPath="self.video.fastDecodeSupported" previousBinding="JTS-dn-Hyg" id="IVa-dm-KVJ">
-                            <dictionary key="options">
-                                <string key="NSValueTransformerName">NSNegateBoolean</string>
-                            </dictionary>
-                        </binding>
-                    </connections>
-                </button>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="ijg-ux-uvb">
-                    <rect key="frame" x="248" y="105" width="104" height="14"/>
-                    <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Additional Options:" id="ZSm-03-g0B">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="g1c-DV-iaX"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oJk-ur-wgc">
-                    <rect key="frame" x="358" y="77" width="542" height="42"/>
-                    <string key="toolTip">Additional video encoder options. For advanced use only.
-
-Syntax: option-1=foo:opt2=bar,baz</string>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="42" id="V7i-4l-jh0"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="IID-yp-or8">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <accessibilityConnection property="title" destination="ijg-ux-uvb" id="AB3-ux-BmA"/>
-                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="wBW-sS-Bk8"/>
-                        <binding destination="-2" name="value" keyPath="self.video.videoOptionExtra" id="OfI-jr-h9v"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="100" translatesAutoresizingMaskIntoConstraints="NO" id="gvn-wG-crj">
-                    <rect key="frame" x="237" y="155" width="54" height="14"/>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="5KI-9a-wCg"/>
-                    </constraints>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" id="rHx-Kg-tc2">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Dpc-uO-tKp"/>
-                        <binding destination="-2" name="value" keyPath="self.video.preset" id="yix-Fd-Qfi"/>
-                    </connections>
-                </textField>
-                <textField toolTip="Displays all internal video encoder options." verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="1000" translatesAutoresizingMaskIntoConstraints="NO" id="wk1-2U-z4i">
-                    <rect key="frame" x="18" y="12" width="884" height="50"/>
-                    <constraints>
-                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="D6L-pe-byu"/>
-                    </constraints>
-                    <textFieldCell key="cell" lineBreakMode="charWrapping" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" title="Unparse:" id="G8P-IF-mpl">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="ewb-Ig-EKG"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="mkM-81-g3d">
-                    <rect key="frame" x="18" y="180" width="95" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Encoder Options:" id="XIe-8Z-tIF">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="textColor" keyPath="self.labelColor" id="Qg2-rj-XNj"/>
-                    </connections>
-                </textField>
-                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="FHY-Ih-1rd">
-                    <rect key="frame" x="119" y="185" width="781" height="5"/>
-                </box>
-                <slider verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Biw-5K-pPD">
-                    <rect key="frame" x="106" y="155" width="124" height="18"/>
-                    <string key="toolTip">Video encoder preset. Adjusts encoder settings to balance compression efficiency and encoding speed. Slower encoder presets may use settings that are less compatible with certain devices.</string>
-                    <constraints>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="124" id="oM4-tJ-0DZ"/>
-                    </constraints>
-                    <sliderCell key="cell" controlSize="small" continuous="YES" state="on" alignment="left" maxValue="5" tickMarkPosition="above" numberOfTickMarks="2" allowsTickMarkValuesOnly="YES" sliderType="linear" id="suZ-F3-AGy"/>
-                    <connections>
-                        <accessibilityConnection property="title" destination="0sa-ep-yfr" id="1L4-1l-EVG"/>
-                        <binding destination="-2" name="enabled" keyPath="self.presetViewEnabled" id="exe-6L-bUd"/>
-                    </connections>
-                </slider>
-            </subviews>
-            <constraints>
-                <constraint firstItem="FHY-Ih-1rd" firstAttribute="leading" secondItem="mkM-81-g3d" secondAttribute="trailing" constant="8" id="3G2-hx-8o2"/>
-                <constraint firstItem="wk1-2U-z4i" firstAttribute="leading" secondItem="2dX-Hf-Hxl" secondAttribute="leading" constant="20" id="3kM-Si-5bP"/>
-                <constraint firstItem="Biw-5K-pPD" firstAttribute="leading" secondItem="0sa-ep-yfr" secondAttribute="trailing" constant="8" id="508-6c-imQ"/>
-                <constraint firstItem="z7F-H2-Vfr" firstAttribute="leading" secondItem="A7d-wM-Xmp" secondAttribute="trailing" constant="21" id="5Fh-Ft-8yx"/>
-                <constraint firstItem="A7d-wM-Xmp" firstAttribute="leading" secondItem="gzq-SL-YVY" secondAttribute="trailing" constant="8" id="6Pp-Lz-PWg"/>
-                <constraint firstItem="Biw-5K-pPD" firstAttribute="top" secondItem="mkM-81-g3d" secondAttribute="bottom" constant="7" id="6Xb-Jy-J4E"/>
-                <constraint firstItem="A7d-wM-Xmp" firstAttribute="top" secondItem="Biw-5K-pPD" secondAttribute="bottom" constant="8" id="7Bq-IJ-UHE"/>
-                <constraint firstAttribute="trailing" secondItem="FHY-Ih-1rd" secondAttribute="trailing" constant="20" id="8Jj-Q6-WXo"/>
-                <constraint firstItem="FHY-Ih-1rd" firstAttribute="centerY" secondItem="mkM-81-g3d" secondAttribute="centerY" id="9JU-Qg-Nak"/>
-                <constraint firstItem="Biw-5K-pPD" firstAttribute="baseline" secondItem="0sa-ep-yfr" secondAttribute="baseline" id="Cbm-Km-GEi"/>
-                <constraint firstItem="ijg-ux-uvb" firstAttribute="leading" secondItem="CPP-lh-FbN" secondAttribute="trailing" constant="20" id="Fk2-g3-kkn"/>
-                <constraint firstItem="dY9-5D-mXX" firstAttribute="leading" secondItem="gzq-SL-YVY" secondAttribute="leading" id="GwZ-V8-Dqc"/>
-                <constraint firstItem="P7c-Zk-G99" firstAttribute="leading" secondItem="BY1-IG-JvI" secondAttribute="trailing" constant="8" id="HN7-rS-WK1"/>
-                <constraint firstItem="gvn-wG-crj" firstAttribute="leading" secondItem="Biw-5K-pPD" secondAttribute="trailing" constant="9" id="Hwe-sH-N2U"/>
-                <constraint firstAttribute="trailing" secondItem="wk1-2U-z4i" secondAttribute="trailing" constant="20" id="JCt-zI-fap"/>
-                <constraint firstItem="gzq-SL-YVY" firstAttribute="width" secondItem="0sa-ep-yfr" secondAttribute="width" id="Jok-nf-Rwv"/>
-                <constraint firstItem="ijg-ux-uvb" firstAttribute="top" secondItem="oJk-ur-wgc" secondAttribute="top" id="KfF-Ww-6F9"/>
-                <constraint firstItem="Biw-5K-pPD" firstAttribute="width" secondItem="CPP-lh-FbN" secondAttribute="width" id="MEf-RX-TWL"/>
-                <constraint firstItem="Biw-5K-pPD" firstAttribute="baseline" secondItem="gvn-wG-crj" secondAttribute="baseline" id="Pu8-j1-VUv"/>
-                <constraint firstAttribute="trailing" secondItem="oJk-ur-wgc" secondAttribute="trailing" constant="20" id="QDW-bb-Wfi"/>
-                <constraint firstItem="A7d-wM-Xmp" firstAttribute="baseline" secondItem="z7F-H2-Vfr" secondAttribute="baseline" id="REc-OI-QEd"/>
-                <constraint firstItem="CPP-lh-FbN" firstAttribute="baseline" secondItem="dY9-5D-mXX" secondAttribute="baseline" id="RGq-9W-pTG"/>
-                <constraint firstItem="wk1-2U-z4i" firstAttribute="top" secondItem="P7c-Zk-G99" secondAttribute="bottom" constant="16" id="Rwr-N1-ZOP"/>
-                <constraint firstItem="dY9-5D-mXX" firstAttribute="width" secondItem="BY1-IG-JvI" secondAttribute="width" id="UD2-7t-J4D"/>
-                <constraint firstItem="CPP-lh-FbN" firstAttribute="top" secondItem="A7d-wM-Xmp" secondAttribute="bottom" constant="8" id="XiU-dF-VrA"/>
-                <constraint firstItem="A7d-wM-Xmp" firstAttribute="baseline" secondItem="gzq-SL-YVY" secondAttribute="baseline" id="b04-C3-p8U"/>
-                <constraint firstItem="mkM-81-g3d" firstAttribute="top" secondItem="2dX-Hf-Hxl" secondAttribute="top" constant="10" id="b3d-uT-3DC"/>
-                <constraint firstItem="mkM-81-g3d" firstAttribute="leading" secondItem="2dX-Hf-Hxl" secondAttribute="leading" constant="20" id="dRX-Dc-WbC"/>
-                <constraint firstItem="P7c-Zk-G99" firstAttribute="baseline" secondItem="BY1-IG-JvI" secondAttribute="baseline" id="di0-4c-Nqj"/>
-                <constraint firstItem="gzq-SL-YVY" firstAttribute="leading" secondItem="0sa-ep-yfr" secondAttribute="leading" id="ehu-8e-5ci"/>
-                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="z7F-H2-Vfr" secondAttribute="trailing" constant="20" symbolic="YES" id="fHZ-Dm-Woa"/>
-                <constraint firstItem="Biw-5K-pPD" firstAttribute="width" secondItem="A7d-wM-Xmp" secondAttribute="width" id="fzL-Ib-VAe"/>
-                <constraint firstItem="CPP-lh-FbN" firstAttribute="leading" secondItem="dY9-5D-mXX" secondAttribute="trailing" constant="8" id="iXi-0D-sED"/>
-                <constraint firstItem="P7c-Zk-G99" firstAttribute="top" secondItem="CPP-lh-FbN" secondAttribute="bottom" constant="8" id="kDE-kd-szR"/>
-                <constraint firstItem="FHY-Ih-1rd" firstAttribute="trailing" secondItem="oJk-ur-wgc" secondAttribute="trailing" id="lxq-Ja-WBX"/>
-                <constraint firstItem="BY1-IG-JvI" firstAttribute="leading" secondItem="dY9-5D-mXX" secondAttribute="leading" id="oNW-bu-AjP"/>
-                <constraint firstItem="CPP-lh-FbN" firstAttribute="baseline" secondItem="ijg-ux-uvb" secondAttribute="baseline" id="oZ8-v8-CmD"/>
-                <constraint firstItem="Biw-5K-pPD" firstAttribute="width" secondItem="P7c-Zk-G99" secondAttribute="width" id="pJk-eY-1r2"/>
-                <constraint firstItem="0sa-ep-yfr" firstAttribute="leading" secondItem="mkM-81-g3d" secondAttribute="leading" constant="40" id="sdR-pt-ls6"/>
-                <constraint firstItem="oJk-ur-wgc" firstAttribute="leading" secondItem="ijg-ux-uvb" secondAttribute="trailing" constant="8" id="wsw-IM-Ooe"/>
-                <constraint firstItem="0sa-ep-yfr" firstAttribute="width" secondItem="dY9-5D-mXX" secondAttribute="width" id="xvU-on-9bJ"/>
-                <constraint firstItem="ijg-ux-uvb" firstAttribute="leading" secondItem="P7c-Zk-G99" secondAttribute="trailing" constant="20" id="zKk-dV-w0d"/>
-            </constraints>
-            <point key="canvasLocation" x="-130" y="483"/>
-        </customView>
-        <customView id="aRi-vN-oR0" userLabel="ffmpeg presets view">
-            <rect key="frame" x="0.0" y="0.0" width="920" height="34"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <subviews>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mL3-yC-hUj">
-                    <rect key="frame" x="107" y="2" width="545" height="32"/>
-                    <string key="toolTip">Additional video encoder options. For advanced use only.
-
-Syntax: option-1=foo:opt2=bar</string>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="32" id="TBn-Xh-NDz"/>
-                        <constraint firstAttribute="width" constant="545" id="yk5-Lp-IGe"/>
-                    </constraints>
-                    <textFieldCell key="cell" controlSize="small" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="z0u-VS-m0l">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                    <connections>
-                        <binding destination="-2" name="value" keyPath="self.video.videoOptionExtra" id="HNx-Oj-zHh"/>
-                    </connections>
-                </textField>
-                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="300" translatesAutoresizingMaskIntoConstraints="NO" id="26w-dz-St2">
-                    <rect key="frame" x="6" y="20" width="95" height="14"/>
-                    <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Encoder Options:" id="7bP-tR-sAX">
-                        <font key="font" metaFont="smallSystem"/>
-                        <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                        <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                    </textFieldCell>
-                </textField>
-            </subviews>
-            <constraints>
-                <constraint firstItem="26w-dz-St2" firstAttribute="leading" secondItem="aRi-vN-oR0" secondAttribute="leading" constant="8" id="2Dv-8f-Qyb"/>
-                <constraint firstAttribute="bottom" secondItem="26w-dz-St2" secondAttribute="bottom" constant="20" symbolic="YES" id="FAx-fv-jiC"/>
-                <constraint firstItem="26w-dz-St2" firstAttribute="top" secondItem="mL3-yC-hUj" secondAttribute="top" id="dWy-DR-9L6"/>
-                <constraint firstItem="26w-dz-St2" firstAttribute="top" secondItem="aRi-vN-oR0" secondAttribute="top" id="xe6-rw-8jO"/>
-                <constraint firstItem="mL3-yC-hUj" firstAttribute="leading" secondItem="26w-dz-St2" secondAttribute="trailing" constant="8" symbolic="YES" id="xoW-dC-AYp"/>
-            </constraints>
-            <point key="canvasLocation" x="162" y="635"/>
-        </customView>
     </objects>
 </document>
