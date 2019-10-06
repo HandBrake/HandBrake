@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 47;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -746,6 +746,38 @@
 		A9D1E41618262364002F6424 /* HBPreviewGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBPreviewGenerator.m; sourceTree = "<group>"; };
 		A9D3634F2209C08500D8EFEA /* HBQueueItemView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBQueueItemView.h; sourceTree = "<group>"; };
 		A9D363502209C08500D8EFEA /* HBQueueItemView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBQueueItemView.m; sourceTree = "<group>"; };
+		A9D3E2F3234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBPictureHUDController.strings; sourceTree = "<group>"; };
+		A9D3E2F7234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A9D3E2F8234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Presets.strings; sourceTree = "<group>"; };
+		A9D3E2F9234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/MainMenu.strings; sourceTree = "<group>"; };
+		A9D3E2FA234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBPlayerHUDController.strings; sourceTree = "<group>"; };
+		A9D3E2FB234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBAddCategoryController.strings; sourceTree = "<group>"; };
+		A9D3E2FC234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBFiltersViewController.strings; sourceTree = "<group>"; };
+		A9D3E2FD234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
+		A9D3E2FE234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/AddPreset.strings; sourceTree = "<group>"; };
+		A9D3E2FF234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBSummaryViewController.strings; sourceTree = "<group>"; };
+		A9D3E300234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/PicturePreview.strings; sourceTree = "<group>"; };
+		A9D3E301234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/AudioDefaults.strings; sourceTree = "<group>"; };
+		A9D3E302234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/MainWindow.strings; sourceTree = "<group>"; };
+		A9D3E303234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/PictureSettings.strings; sourceTree = "<group>"; };
+		A9D3E304234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBTrackTitleViewController.strings; sourceTree = "<group>"; };
+		A9D3E305234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Subtitles.strings; sourceTree = "<group>"; };
+		A9D3E306234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Queue.strings; sourceTree = "<group>"; };
+		A9D3E307234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBTitleSelection.strings; sourceTree = "<group>"; };
+		A9D3E308234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBRenamePresetController.strings; sourceTree = "<group>"; };
+		A9D3E309234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBPreviewViewController.strings; sourceTree = "<group>"; };
+		A9D3E30A234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/SubtitlesDefaults.strings; sourceTree = "<group>"; };
+		A9D3E30B234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Audio.strings; sourceTree = "<group>"; };
+		A9D3E30C234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/ChaptersTitles.strings; sourceTree = "<group>"; };
+		A9D3E30D234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
+		A9D3E30E234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Preferences.strings; sourceTree = "<group>"; };
+		A9D3E30F234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/OutputPanel.strings; sourceTree = "<group>"; };
+		A9D3E310234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/ExceptionAlert.strings; sourceTree = "<group>"; };
+		A9D3E311234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBEncodingProgressHUDController.strings; sourceTree = "<group>"; };
+		A9D3E312234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/HBPictureViewController.strings; sourceTree = "<group>"; };
+		A9D3E313234A119400F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Video.strings; sourceTree = "<group>"; };
+		A9D3E314234A11C800F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A9D3E315234A11E600F39385 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A9D488A31996270300E9B1BA /* HBTreeNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBTreeNode.h; sourceTree = "<group>"; };
 		A9D488A41996270300E9B1BA /* HBTreeNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTreeNode.m; sourceTree = "<group>"; };
 		A9DA024B233C9DBC00DFF1D0 /* HBTrackTitleViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBTrackTitleViewController.h; sourceTree = "<group>"; };
@@ -1737,7 +1769,9 @@
 		273F1FE014AD9DA40021BE6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = HB;
 				LastUpgradeCheck = 1120;
+				ORGANIZATIONNAME = HandBrake;
 				TargetAttributes = {
 					273F203814ADBC200021BE6D = {
 						SystemCapabilities = {
@@ -1772,7 +1806,7 @@
 				};
 			};
 			buildConfigurationList = 273F1FE314AD9DA40021BE6D /* Build configuration list for PBXProject "HandBrake" */;
-			compatibilityVersion = "Xcode 6.3";
+			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1781,6 +1815,7 @@
 				de,
 				it,
 				fr,
+				ru,
 			);
 			mainGroup = 273F1FDE14AD9DA40021BE6D;
 			productRefGroup = 273F200014ADAE950021BE6D /* Products */;
@@ -2089,6 +2124,7 @@
 				A9637D9F20F7A252001EAE7C /* de */,
 				A9F5E3442215D85A0046FA4B /* it */,
 				A90713D02242693B00372AA0 /* fr */,
+				A9D3E308234A119400F39385 /* ru */,
 			);
 			name = HBRenamePresetController.xib;
 			sourceTree = "<group>";
@@ -2108,6 +2144,7 @@
 				A9637DA220F7A252001EAE7C /* de */,
 				A9F5E3472215D85A0046FA4B /* it */,
 				A90713D32242693B00372AA0 /* fr */,
+				A9D3E2FF234A119400F39385 /* ru */,
 			);
 			name = HBSummaryViewController.xib;
 			sourceTree = "<group>";
@@ -2119,6 +2156,7 @@
 				A919992B23003D710037F526 /* it */,
 				A919992C23003D720037F526 /* fr */,
 				A919992D23003D730037F526 /* de */,
+				A9D3E315234A11E600F39385 /* ru */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2130,6 +2168,7 @@
 				A9637DA120F7A252001EAE7C /* de */,
 				A9F5E3462215D85A0046FA4B /* it */,
 				A90713D22242693B00372AA0 /* fr */,
+				A9D3E2FB234A119400F39385 /* ru */,
 			);
 			name = HBAddCategoryController.xib;
 			sourceTree = "<group>";
@@ -2141,6 +2180,7 @@
 				A9637D9420F7A252001EAE7C /* de */,
 				A9F5E3382215D85A0046FA4B /* it */,
 				A90713C42242693B00372AA0 /* fr */,
+				A9D3E2FE234A119400F39385 /* ru */,
 			);
 			name = AddPreset.xib;
 			sourceTree = "<group>";
@@ -2152,6 +2192,7 @@
 				A9637D9B20F7A252001EAE7C /* de */,
 				A9F5E3412215D85A0046FA4B /* it */,
 				A90713CC2242693B00372AA0 /* fr */,
+				A9D3E302234A119400F39385 /* ru */,
 			);
 			name = MainWindow.xib;
 			sourceTree = "<group>";
@@ -2163,6 +2204,7 @@
 				A9C313B322F98F0D0001C438 /* it */,
 				D062DF6422FAE05700A65A9E /* de */,
 				A963D9962349D5E7001ED0EC /* fr */,
+				A9D3E2FD234A119400F39385 /* ru */,
 			);
 			name = HBQueueTableViewController.xib;
 			sourceTree = "<group>";
@@ -2174,6 +2216,7 @@
 				A9C313B222F98F0D0001C438 /* it */,
 				D062DF6522FAE06000A65A9E /* de */,
 				A963D9982349D5E7001ED0EC /* fr */,
+				A9D3E30D234A119400F39385 /* ru */,
 			);
 			name = HBQueueInfoViewController.xib;
 			sourceTree = "<group>";
@@ -2184,6 +2227,7 @@
 				A975B02120F7AF29004675CC /* de */,
 				A958605B2216A5E5002092B1 /* it */,
 				A90713DB2242697B00372AA0 /* fr */,
+				A9D3E314234A11C800F39385 /* ru */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2195,6 +2239,7 @@
 				A9637D9D20F7A252001EAE7C /* de */,
 				A9F5E3422215D85A0046FA4B /* it */,
 				A90713CE2242693B00372AA0 /* fr */,
+				A9D3E2F3234A119400F39385 /* ru */,
 			);
 			name = HBPictureHUDController.xib;
 			sourceTree = "<group>";
@@ -2206,6 +2251,7 @@
 				A9637D9120F7A252001EAE7C /* de */,
 				A9F5E3352215D85A0046FA4B /* it */,
 				A90713C12242693B00372AA0 /* fr */,
+				A9D3E311234A119400F39385 /* ru */,
 			);
 			name = HBEncodingProgressHUDController.xib;
 			sourceTree = "<group>";
@@ -2217,6 +2263,7 @@
 				A9637DA920F7A252001EAE7C /* de */,
 				A9F5E34D2215D85A0046FA4B /* it */,
 				A90713D92242693B00372AA0 /* fr */,
+				A9D3E2FA234A119400F39385 /* ru */,
 			);
 			name = HBPlayerHUDController.xib;
 			sourceTree = "<group>";
@@ -2228,6 +2275,7 @@
 				A9637D9620F7A252001EAE7C /* de */,
 				A9F5E33B2215D85A0046FA4B /* it */,
 				A90713C72242693B00372AA0 /* fr */,
+				A9D3E2F9234A119400F39385 /* ru */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
@@ -2239,6 +2287,7 @@
 				A9637D9320F7A252001EAE7C /* de */,
 				A9F5E3372215D85A0046FA4B /* it */,
 				A90713C32242693B00372AA0 /* fr */,
+				A9D3E2F8234A119400F39385 /* ru */,
 			);
 			name = Presets.xib;
 			sourceTree = "<group>";
@@ -2250,6 +2299,7 @@
 				A9637D9220F7A252001EAE7C /* de */,
 				A9F5E3362215D85A0046FA4B /* it */,
 				A90713C22242693B00372AA0 /* fr */,
+				A9D3E307234A119400F39385 /* ru */,
 			);
 			name = HBTitleSelection.xib;
 			sourceTree = "<group>";
@@ -2261,6 +2311,7 @@
 				A9637DA820F7A252001EAE7C /* de */,
 				A9F5E34C2215D85A0046FA4B /* it */,
 				A90713D82242693B00372AA0 /* fr */,
+				A9D3E312234A119400F39385 /* ru */,
 			);
 			name = HBPictureViewController.xib;
 			sourceTree = "<group>";
@@ -2272,6 +2323,7 @@
 				A9637D9A20F7A252001EAE7C /* de */,
 				A9F5E33F2215D85A0046FA4B /* it */,
 				A90713CB2242693B00372AA0 /* fr */,
+				A9D3E2FC234A119400F39385 /* ru */,
 			);
 			name = HBFiltersViewController.xib;
 			sourceTree = "<group>";
@@ -2283,6 +2335,7 @@
 				A9637D9820F7A252001EAE7C /* de */,
 				A9F5E33D2215D85A0046FA4B /* it */,
 				A90713C92242693B00372AA0 /* fr */,
+				A9D3E313234A119400F39385 /* ru */,
 			);
 			name = Video.xib;
 			sourceTree = "<group>";
@@ -2294,6 +2347,7 @@
 				A9637D9E20F7A252001EAE7C /* de */,
 				A9F5E3432215D85A0046FA4B /* it */,
 				A90713CF2242693B00372AA0 /* fr */,
+				A9D3E30B234A119400F39385 /* ru */,
 			);
 			name = Audio.xib;
 			sourceTree = "<group>";
@@ -2305,6 +2359,7 @@
 				A9637DA620F7A252001EAE7C /* de */,
 				A9F5E34A2215D85A0046FA4B /* it */,
 				A90713D72242693B00372AA0 /* fr */,
+				A9D3E301234A119400F39385 /* ru */,
 			);
 			name = AudioDefaults.xib;
 			sourceTree = "<group>";
@@ -2316,6 +2371,7 @@
 				A9637D9720F7A252001EAE7C /* de */,
 				A9F5E33C2215D85A0046FA4B /* it */,
 				A90713C82242693B00372AA0 /* fr */,
+				A9D3E305234A119400F39385 /* ru */,
 			);
 			name = Subtitles.xib;
 			sourceTree = "<group>";
@@ -2327,6 +2383,7 @@
 				A9637DA420F7A252001EAE7C /* de */,
 				A9F5E3492215D85A0046FA4B /* it */,
 				A90713D52242693B00372AA0 /* fr */,
+				A9D3E30A234A119400F39385 /* ru */,
 			);
 			name = SubtitlesDefaults.xib;
 			sourceTree = "<group>";
@@ -2338,6 +2395,7 @@
 				A9637DAA20F7A252001EAE7C /* de */,
 				A9F5E34E2215D85A0046FA4B /* it */,
 				A90713DA2242693B00372AA0 /* fr */,
+				A9D3E30C234A119400F39385 /* ru */,
 			);
 			name = ChaptersTitles.xib;
 			sourceTree = "<group>";
@@ -2349,6 +2407,7 @@
 				A9637DA720F7A252001EAE7C /* de */,
 				A9F5E34B2215D85A0046FA4B /* it */,
 				A90713D62242693B00372AA0 /* fr */,
+				A9D3E306234A119400F39385 /* ru */,
 			);
 			name = Queue.xib;
 			sourceTree = "<group>";
@@ -2360,6 +2419,7 @@
 				A9637D9920F7A252001EAE7C /* de */,
 				A9F5E33E2215D85A0046FA4B /* it */,
 				A90713CA2242693B00372AA0 /* fr */,
+				A9D3E303234A119400F39385 /* ru */,
 			);
 			name = PictureSettings.xib;
 			sourceTree = "<group>";
@@ -2371,6 +2431,7 @@
 				A9637DA320F7A252001EAE7C /* de */,
 				A9F5E3482215D85A0046FA4B /* it */,
 				A90713D42242693B00372AA0 /* fr */,
+				A9D3E300234A119400F39385 /* ru */,
 			);
 			name = PicturePreview.xib;
 			sourceTree = "<group>";
@@ -2382,6 +2443,7 @@
 				A9637DA020F7A252001EAE7C /* de */,
 				A9F5E3452215D85A0046FA4B /* it */,
 				A90713D12242693B00372AA0 /* fr */,
+				A9D3E30F234A119400F39385 /* ru */,
 			);
 			name = OutputPanel.xib;
 			sourceTree = "<group>";
@@ -2393,6 +2455,7 @@
 				A9637D9C20F7A252001EAE7C /* de */,
 				A9F5E3402215D85A0046FA4B /* it */,
 				A90713CD2242693B00372AA0 /* fr */,
+				A9D3E30E234A119400F39385 /* ru */,
 			);
 			name = Preferences.xib;
 			sourceTree = "<group>";
@@ -2404,6 +2467,7 @@
 				A9637D9520F7A252001EAE7C /* de */,
 				A9F5E3392215D85A0046FA4B /* it */,
 				A90713C52242693B00372AA0 /* fr */,
+				A9D3E309234A119400F39385 /* ru */,
 			);
 			name = HBPreviewViewController.xib;
 			sourceTree = "<group>";
@@ -2415,6 +2479,7 @@
 				A963D9972349D5E7001ED0EC /* fr */,
 				A963D99C2349D636001ED0EC /* de */,
 				A963D9A02349D654001ED0EC /* it */,
+				A9D3E304234A119400F39385 /* ru */,
 			);
 			name = HBTrackTitleViewController.xib;
 			sourceTree = "<group>";
@@ -2436,6 +2501,7 @@
 				A9B6B9F3217B408E00B957AE /* de */,
 				A9F5E3342215D85A0046FA4B /* it */,
 				A90713BD2242693B00372AA0 /* fr */,
+				A9D3E2F7234A119400F39385 /* ru */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -2447,6 +2513,7 @@
 				A9F5E33A2215D85A0046FA4B /* it */,
 				A90713C62242693B00372AA0 /* fr */,
 				A90713DF22426AD100372AA0 /* de */,
+				A9D3E310234A119400F39385 /* ru */,
 			);
 			name = ExceptionAlert.xib;
 			sourceTree = "<group>";
@@ -2690,7 +2757,10 @@
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = "$(EXTERNAL_BUILD)/macosx/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@loader_path/../Frameworks",
+					"@executable_path/../Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",
@@ -2723,7 +2793,10 @@
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = "$(EXTERNAL_BUILD)/macosx/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@loader_path/../Frameworks",
+					"@executable_path/../Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",
@@ -3084,7 +3157,11 @@
 				);
 				INFOPLIST_FILE = HandBrakeKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",
@@ -3142,7 +3219,11 @@
 				);
 				INFOPLIST_FILE = HandBrakeKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",
@@ -3199,7 +3280,11 @@
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = HandBrakeKitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeKitTests;
@@ -3244,7 +3329,11 @@
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = HandBrakeKitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3420,7 +3509,11 @@
 				);
 				INFOPLIST_FILE = HandBrakeKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",
@@ -3478,7 +3571,11 @@
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = HandBrakeKitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeKitTests;
@@ -3509,7 +3606,10 @@
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = "$(EXTERNAL_BUILD)/macosx/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@loader_path/../Frameworks",
+					"@executable_path/../Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",
@@ -3679,7 +3779,11 @@
 				);
 				INFOPLIST_FILE = HandBrakeKit/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",
@@ -3730,7 +3834,11 @@
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = HandBrakeKitTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = fr.handbrake.HandBrakeKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -3760,7 +3868,10 @@
 					"\"$(EXTERNAL_BUILD)/contrib/include\"",
 				);
 				INFOPLIST_FILE = "$(EXTERNAL_BUILD)/macosx/Info.plist";
-				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"@loader_path/../Frameworks",
+					"@executable_path/../Frameworks",
+				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(EXTERNAL_BUILD)/libhb\"",

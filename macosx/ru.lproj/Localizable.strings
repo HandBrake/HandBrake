@@ -1,0 +1,469 @@
+/* Preview -> size info label */
+" Scaled To Screen" = "Масштабировано к Экрану";
+
+/* No comment provided by engineer. */
+"- --:--" = "- --:--";
+
+/* No comment provided by engineer. */
+"--:--" = "--:--";
+
+/* Preview -> size info label */
+"(%.0f%% actual size)" = "(%.0f%% реальный размер)";
+
+/* Preview -> size info label */
+"(Actual size)" = "(Реальный размер)";
+
+/* Main Window -> preset modified */
+"(Modified)" = "(Изменено)";
+
+/* Queue status */
+"%d encode pending" = "%d работа в ожидании";
+
+/* Queue status */
+"%d encodes pending" = "%d работ в ожидании";
+
+/* No comment provided by engineer. */
+"%llu jobs selected" = "%llu заданий выбрано";
+
+/* Destination same as source alert -> message
+   File already exists alert -> message */
+"A file already exists at the selected destination." = "Файл уже существует в выбранной папке назначения.";
+
+/* Picture HUD -> scale button */
+"Actual Scale" = "Реальный Масштаб";
+
+/* Queue undo action name */
+"Add Job To Queue" = "Добавить задание в очередь";
+
+/* Queue undo action name */
+"Add Jobs To Queue" = "Добавить задания в очередь";
+
+/* Touch bar */
+"Add Preset" = "Добавить пресет";
+
+/* Touch bar */
+"Add Titles To Queue" = "Добавить заголовки в очередь";
+
+/* Touch bar */
+"Add To Queue" = "Добавить в очередь";
+
+/* Preferences Advanced Toolbar Item */
+"Advanced" = "Расширенное";
+
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected preset?" = "Вы уверены, что хотите безвозвратно удалить выбранный пресет?";
+
+/* Quit Alert -> message */
+"Are you sure you want to quit HandBrake?" = "Вы уверены, что хотите выйти из HandBrake?";
+
+/* Copy Protection Alert -> first button */
+"Attempt Scan Anyway" = "Всё Равно Попробовать Сканировать";
+
+/* Player HUD -> audio menu */
+"Audio" = "Аудио";
+
+/* Copy Protection Alert -> second button
+   Delete preset alert -> second button
+   File already exists alert -> first button
+   File already exists in queue alert -> first button
+   Preview -> live preview alert alternate button
+   Touch bar */
+"Cancel" = "Отмена";
+
+/* Touch bar */
+"Cancel Encoding" = "Отменить кодирование";
+
+/* Toolbar Open/Cancel Item
+   Touch bar */
+"Cancel Scan" = "Отменить Сканирование";
+
+/* Toolbar Open/Cancel Item */
+"Cancel Scanning Source" = "Отменить Сканирование Исходного Файла";
+
+/* Preferences -> Output Name Token */
+"Chapters" = "Главы";
+
+/* Main Window -> Destination open panel */
+"Choose" = "Выбрать";
+
+/* Queue Alert -> cancel rip first button */
+"Continue Encoding" = "Продолжить кодирование";
+
+/* Copy Protection Alert -> message */
+"Copy-Protected sources are not supported." = "Защищенные от копирования Исходные Файлы не поддерживаются.";
+
+/* Preferences -> Output Name Token */
+"Creation-Date" = "Дата-Создания";
+
+/* Preferences -> Output Name Token */
+"Creation-Time" = "Время-Создания";
+
+/* Touch bar */
+"Current Time" = "Текущее Время";
+
+/* Add preset window -> picture setting */
+"Custom" = "Пользовательское";
+
+/* Preferences -> Output Name Token */
+"Date" = "Дата";
+
+/* Delete preset alert -> first button */
+"Delete Preset" = "Удалить пресет";
+
+/* File already exists alert -> informative text
+   File already exists in queue alert -> informative text */
+"Do you want to overwrite %@?" = "Вы хотите перезаписать %@?";
+
+/* Quit Alert -> second button */
+"Don't Quit" = "Не Выходить";
+
+/* Touch bar */
+"Done" = "Завершено";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode canceled" = "Кодирование отменено";
+
+/* Queue status */
+"Encode Canceled." = "Кодирование отменено.";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode complete" = "Кодирование завершено";
+
+/* HBQueueItemView -> Encode state accessibility label
+   Queue done notification failed message */
+"Encode failed" = "Кодирование не удалось";
+
+/* Queue status */
+"Encode Failed." = "Кодирование не удалось.";
+
+/* Queue status */
+"Encode Finished." = "Кодирование завершено.";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode ready" = "Кодирование готово";
+
+/* HBQueueItemView -> Encode state accessibility label */
+"Encode working" = "Кодирование в процессе";
+
+/* No comment provided by engineer. */
+"Encoding %@\n%@" = "Кодирование %1$@\n%2$@";
+
+/* Job statistics */
+"Ended at:" = "Закончено: ";
+
+/* Export presets save panel title */
+"Export presets" = "Экспортировать пресеты";
+
+/* File already exists alert -> message */
+"File already exists." = "Файл уже существует.";
+
+/* Preferences General Toolbar Item */
+"General" = "Общие";
+
+/* Main Window -> title */
+"HandBrake" = "HandBrake";
+
+/* Preview -> live preview alert message */
+"HandBrake can't open the preview." = "HandBrake не может открыть предпросмотр.";
+
+/* Preview -> live preview alert informative text */
+"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake не может воспроизвести данную комбинацию формата видео/аудио/контейнера. Вы хотите открыть её во внешнем проигрывателе?";
+
+/* Quit Alert -> informative text */
+"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Если вы выйдете из HandBrake, ваша текущая работа будет перезагружена в вашу очередь при следующем запуске. Вы действительно хотите выйти?";
+
+/* Import preset open panel title */
+"Import presets" = "Импортировать пресеты";
+
+/* Chapters import -> invalid CSV line count description */
+"Incorrect line count" = "Неверное количество строк";
+
+/* Chapters import -> invalid CSV description */
+"Invalid chapters CSV file" = "Недействительный CSV-файл с главами";
+
+/* Queue Edit Alert -> stop and edit first button
+   Queue Stop Alert -> stop and remove first button */
+"Keep Encoding" = "Продолжить кодировать";
+
+/* Touch bar */
+"Live Preview" = "Живой предпросмотр";
+
+/* Queue undo action name */
+"Move Job in Queue" = "Переместить задание в очереди";
+
+/* Queue undo action name */
+"Move Jobs in Queue" = "Переместить задания в очереди";
+
+/* Preview -> accessibility label */
+"No image" = "Нет Изображения";
+
+/* No comment provided by engineer. */
+"No job selected" = "Задание не выбрано";
+
+/* Main Window -> Info text */
+"No Valid Source Found" = "Не Найдено Действительного Исходного Файла";
+
+/* Add preset window -> picture setting */
+"None" = "Ничего";
+
+/* Queue Done Alert -> shut down first button
+   Queue Done Alert -> sleep first button */
+"OK" = "ОК";
+
+/* File already exists alert -> informative text */
+"One or more file already exists. Do you want to overwrite?" = "Один или несколько файлов уже существуют. Вы хотите их перезаписать?";
+
+/* Preview -> live preview alert default button */
+"Open in external player" = "Открыть во внешнем проигрывателе";
+
+/* Toolbar Open/Cancel Item
+   Touch bar */
+"Open Source" = "Открыть Исходный Файл";
+
+/* File already exists alert -> second button
+   File already exists in queue alert -> second button */
+"Overwrite" = "Перезаписать";
+
+/* Toolbar Pause Item */
+"Pause" = "Пауза";
+
+/* Queue -> pause/resume menu
+   Toolbar Pause Item
+   Touch bar */
+"Pause Encoding" = "Поставить кодирование на паузу";
+
+/* Touch bar */
+"Pause/Resume Encoding" = "Поставить на паузу/продолжить кодирование";
+
+/* Job statistics */
+"Paused time:" = "Время паузы:";
+
+/* Video -> Framerate */
+"Peak Framerate (VFR)" = "Наивысшая частота кадров (VFR)";
+
+/* Touch bar */
+"Play/Pause" = "Воспроизвести/Пауза";
+
+/* Add preset window -> name alert informative text
+   Rename preset window -> name alert informative text */
+"Please enter a name." = "Пожалуйста, введите название.";
+
+/* Copy Protection Alert -> informative text */
+"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "Пожалуйста, примите во внимание, что handBrake не поддерживает удаление защиты от копирования DVD-дисков. Если захотите, вы можете использовать любое другое программное обеспечения для этой функции. Это предупреждение будет показываться только один раз, но при каждом запуске HandBrake.";
+
+/* Queue Done Alert -> shut down second button
+   Queue Done Alert -> sleep second button */
+"Preferences…" = "Настройки...";
+
+/* Preview -> progress formatter title */
+"preview" = "предпросмотр";
+
+/* Preview -> window title */
+"Preview" = "Предпросмотр";
+
+/* Preview -> window title format */
+"Preview - %@ %@" = "Предпросмотр - %1$@ %2$@";
+
+/* Preview -> accessibility label */
+"Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Изображение предпросмотра, Размер: %1$zu x %2$zu, Масштаб: %3$.0f%%";
+
+/* Touch bar */
+"Previews" = "Изображения предпросмотра";
+
+/* Queue done alert message
+   Queue notification alert message */
+"Put down that cocktail…" = "Отложите в сторону этот коктейл...";
+
+/* Preferences -> Output Name Token */
+"Quality/Bitrate" = "Качетсво/Битрейт";
+
+/* Queue window title */
+"Queue" = "Очередь";
+
+/* Queue window title */
+"Queue (%@)" = "Очередь (%@)";
+
+/* Quit Alert -> first button */
+"Quit" = "Выход";
+
+/* Touch bar */
+"Remaining Time" = "Осталось Времени";
+
+/* HBQueueItemView -> Remove button accessibility label */
+"Remove job" = "Удалить задание";
+
+/* Queue undo action name */
+"Remove Job From Queue" = "Удалить задание из очереди";
+
+/* Queue undo action name */
+"Remove Jobs From Queue" = "Удалить задания из очереди";
+
+/* Toolbar Pause Item */
+"Resume" = "Продолжить";
+
+/* Queue -> pause/resume men
+   Toolbar Pause Item */
+"Resume Encoding" = "Продолжить кодирование";
+
+/* HBQueueItemView -> Reveal button accessibility label */
+"Reveal destination in Finder" = "Открыть путь назначения в Finder";
+
+/* Job statistics */
+"Run time:" = "Время работы:";
+
+/* Picture HUD -> scale button
+   Touch bar */
+"Scale To Screen" = "Масштабировать к Размеру Экрана";
+
+/* Queue Alert -> cancel rip informative text */
+"Select Continue Encoding to dismiss this dialog without making changes." = "Выберите 'Продолжить кодирование', чтобы закрыть это диалоговое окно без применения изменений.";
+
+/* Preferences -> send to app destination open panel */
+"Select the desired external application" = "Выбрать предпочитаемое внешнее приложение";
+
+/* Titles selection sheet -> informative text */
+"Select the titles to add to the queue using the %@ preset:" = "Выберите заголовки для добавления в очередь используя пресет %@:";
+
+/* Notification -> Show in Finder */
+"Show" = "Показать";
+
+/* Touch bar */
+"Show Activity Window" = "Показать Окно Активности";
+
+/* Touch bar */
+"Show Preview Window" = "Показать окно предпросмотра";
+
+/* Job statistics */
+"Size:" = "Размеры:";
+
+/* Queue Alert -> cancel rip second button */
+"Skip Current Job" = "Пропустить Текущее Задание";
+
+/* Touch bar */
+"Slider" = "Ползунок";
+
+/* Preferences -> Output Name Token */
+"Source" = "Исходный файл";
+
+/* Add preset window -> picture setting */
+"Source Maximum" = "Максимум исходного файла";
+
+/* Toolbar Start/Stop Item */
+"Start" = "Начало";
+
+/* Menu Start/Stop Item
+   Queue -> start/stop menu
+   Toolbar Start/Stop Item */
+"Start Encoding" = "Начать кодирование";
+
+/* Toolbar Start/Stop Item */
+"Start Queue" = "Запустить очередь";
+
+/* Touch bar */
+"Start/Stop Encoding" = "Начать/остановить кодирование";
+
+/* Job statistics */
+"Started at:" = "Начало в:";
+
+/* Toolbar Start/Stop Item */
+"Stop" = "Остановить";
+
+/* Queue Alert -> cancel rip third button */
+"Stop After Current Job" = "Остановить После Текущего Задания";
+
+/* Queue Alert -> cancel rip fourth button */
+"Stop All" = "Остановить Все";
+
+/* Queue -> start/stop menu
+   Toolbar Start/Stop Item */
+"Stop Encoding" = "Остановить кодирование";
+
+/* Queue Stop Alert -> stop and remove second button */
+"Stop Encoding and Delete" = "Остановить кодирование и удалить";
+
+/* Queue Edit Alert -> stop and edit second button */
+"Stop Encoding and Edit" = "Остановить кодирование и редактировать";
+
+/* Queue Edit Alert -> stop and edit message */
+"Stop This Encode and Edit It?" = "Остановить эту работу и редактировать её?";
+
+/* Queue Stop Alert -> stop and remove message */
+"Stop This Encode and Remove It?" = "Остановить эту работу и удалить её?";
+
+/* Player HUD -> subtitles menu */
+"Subtitles" = "Субтитры";
+
+/* Queue Done Alert -> shut down message */
+"The computer will shut down after encoding is done." = "Компьютер будет выключен после завершения кодирования.";
+
+/* Queue Done Alert -> sleep message */
+"The computer will sleep after encoding is done." = "Компьютер будет переведен в спящий режим после завершения кодирования.";
+
+/* Chapters import -> invalid CSV recovery suggestion */
+"The CSV file is not a valid chapters CSV file." = "CSV-файл не является действительным CSV-файлом с главами";
+
+/* Destination same as source alert -> informative text */
+"The destination is the same as the source, you can not overwrite your source file!" = "Путь назначения совпадает с исходным файлом, вы не можете перезаписать исходный файл!";
+
+/* Chapters import -> invalid CSV line count recovery suggestion */
+"The line count in the chapters CSV file does not match the number of chapters in the movie." = "Количество строк в CSV-файле с главами не совпадает с количеством глав в фильме.";
+
+/* Add preset window -> name alert message
+   Rename preset window -> name alert message */
+"The preset name cannot be empty." = "Название пресета не может быть пустым.";
+
+/* Queue -> Multiple instances alert informative text */
+"The queue will be shared between the instances." = "Очередь будет общей между экземплярами.";
+
+/* File already exists in queue alert -> message */
+"There is already a queue item for this destination." = "Уже существует задание в очереди с таким путем назначения.";
+
+/* Queue -> Multiple instances alert message */
+"There is already an instance of HandBrake running." = "Один экземпляр HandBrake уже работает.";
+
+/* Invalid destination alert -> informative text */
+"This is not a valid destination directory!" = "Данная папка не является действительным путем назначения!";
+
+/* Preferences -> Output Name Token */
+"Time" = "Время";
+
+/* Preferences -> Output Name Token */
+"Title" = "Заголовок";
+
+/* Video -> Framerate */
+"Variable Framerate" = "Переменная Частота Кадров";
+
+/* Invalid destination alert -> message */
+"Warning!" = "Предупреждение!";
+
+/* Queue Alert -> cancel rip message */
+"You are currently encoding. What would you like to do?" = "В данный момент вы кодируете. Что вы хотите сделать?";
+
+/* Delete preset alert -> informative text */
+"You can't undo this action." = "Вы не можете отменить это действие.";
+
+/* Queue Done Alert -> shut down informative text */
+"You have selected to shut down the computer after encoding. To turn off shut down, go to the HandBrake preferences." = "Вы выбрали выключение компьютера после заврешения кодирования. Чтобы отключить, перейдите в настройки HandBrake.";
+
+/* Queue Done Alert -> sleep informative text */
+"You have selected to sleep the computer after encoding. To turn off sleeping, go to the HandBrake preferences." = "Вы выбрали перевести компьютер в спящий режим после заврешения кодирования. Чтобы отключить, перейдите в настройки HandBrake.";
+
+/* Queue -> disk almost full alert informative text */
+"You need to make more space available on your destination disk." = "Вам необходимо больше освободить диск назначения.";
+
+/* Queue -> disk almost full alert message */
+"Your destination disk is almost full." = "На диск пути назначения практически не осталось места.";
+
+/* Queue done notification message */
+"Your encode %@ couldn't be completed." = "Ваше кодирование %@ не может быть завершено.";
+
+/* Queue done notification message */
+"Your encode %@ is done!" = "Ваше кодирование %@ завершено!";
+
+/* Queue done alert informative text */
+"Your HandBrake queue is done!" = "Задания в вашей очереди HandBrake выполнены!";
+
+/* Queue Edit Alert -> stop and edit informative text
+   Queue Stop Alert -> stop and remove informative text */
+"Your movie will be lost if you don't continue encoding." = "Ваш фильм будет потерян если вы не продолжите кодирование.";
+

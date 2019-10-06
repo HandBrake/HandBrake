@@ -1,0 +1,75 @@
+/* Class = "NSTextFieldCell"; title = "00:00:00"; ObjectID = "6A0-9h-5UY"; */
+"6A0-9h-5UY.title" = "00:00:00";
+
+/* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "6BQ-wU-p2C"; */
+"6BQ-wU-p2C.title" = "Дорожки";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "End Live Preview"; ObjectID = "84p-08-fGK"; */
+"84p-08-fGK.ibExternalAccessibilityDescription" = "Закончить живой предпросмотр";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Exit player and return to still image previews."; ObjectID = "84p-08-fGK"; */
+"84p-08-fGK.ibShadowedToolTip" = "Выйти из проигрывателя и вернуться к статичным изображениям предпросмотра";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
+"CQ0-pk-SFk.ibExternalAccessibilityDescription" = "Перейти в конец";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Go To End"; ObjectID = "CQ0-pk-SFk"; */
+"CQ0-pk-SFk.ibShadowedToolTip" = "Перейти в конец";
+
+/* Class = "NSTextFieldCell"; title = "00:00:00"; ObjectID = "dGi-LK-P1E"; */
+"dGi-LK-P1E.title" = "00:00:00";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
+"euL-Tg-dmT.ibExternalAccessibilityDescription" = "Без звука";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Mute Volume"; ObjectID = "euL-Tg-dmT"; */
+"euL-Tg-dmT.ibShadowedToolTip" = "Без звука";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Volume Control"; ObjectID = "gzA-no-jdv"; */
+"gzA-no-jdv.ibExternalAccessibilityDescription" = "Управление громкостью";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Drag to change volume."; ObjectID = "gzA-no-jdv"; */
+"gzA-no-jdv.ibShadowedToolTip" = "Перетащите для изменения громкости.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
+"Kiv-cL-wYI.ibExternalAccessibilityDescription" = "Полная громкость";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Full Volume"; ObjectID = "Kiv-cL-wYI"; */
+"Kiv-cL-wYI.ibShadowedToolTip" = "Полная громкость";
+
+/* Class = "NSSlider"; ibExternalAccessibilityDescription = "Timeline"; ObjectID = "lBp-JT-ehn"; */
+"lBp-JT-ehn.ibExternalAccessibilityDescription" = "Временная шкала";
+
+/* Class = "NSSlider"; ibShadowedToolTip = "Drag to change timeline position."; ObjectID = "lBp-JT-ehn"; */
+"lBp-JT-ehn.ibShadowedToolTip" = "Перетащите для изменения положения на временной шкале.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Play/Pause"; ObjectID = "mLA-ei-4sK"; */
+"mLA-ei-4sK.ibExternalAccessibilityDescription" = "Воспроизвести/пауза";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Toggle Play/Pause"; ObjectID = "mLA-ei-4sK"; */
+"mLA-ei-4sK.ibShadowedToolTip" = "Переключить воспроизвести/пауза.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Time Remaining"; ObjectID = "PVD-pq-1ZG"; */
+"PVD-pq-1ZG.ibExternalAccessibilityDescription" = "Осталось времени";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Time remaining."; ObjectID = "PVD-pq-1ZG"; */
+"PVD-pq-1ZG.ibShadowedToolTip" = "Осталось времени.";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Current Timeline Position"; ObjectID = "uYx-2C-8et"; */
+"uYx-2C-8et.ibExternalAccessibilityDescription" = "Текущее положение на временной шкале";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Current timeline position."; ObjectID = "uYx-2C-8et"; */
+"uYx-2C-8et.ibShadowedToolTip" = "Текущее положение на временной шкале.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Tracks Selection"; ObjectID = "Vj1-Za-AUV"; */
+"Vj1-Za-AUV.ibExternalAccessibilityDescription" = "Выбор дорожки";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Enable or disable tracks."; ObjectID = "Vj1-Za-AUV"; */
+"Vj1-Za-AUV.ibShadowedToolTip" = "Включает или выключает дорожки.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
+"WuP-9l-8AN.ibExternalAccessibilityDescription" = "Перейти в начало";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Go To Beginning"; ObjectID = "WuP-9l-8AN"; */
+"WuP-9l-8AN.ibShadowedToolTip" = "Перейти в начало";
+

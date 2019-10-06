@@ -1,0 +1,174 @@
+/* Class = "NSTableView"; ibExternalAccessibilityDescription = "Subtitles tracks"; ObjectID = "0yM-wE-D2x"; */
+"0yM-wE-D2x.ibExternalAccessibilityDescription" = "Дорожки субтитров";
+
+/* Class = "NSTableColumn"; headerCell.title = "Encoding"; ObjectID = "1Qg-We-ltR"; */
+"1Qg-We-ltR.headerCell.title" = "Кодирование";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "4PX-In-DpF"; */
+"4PX-In-DpF.title" = "Добавить все дорожки";
+
+/* Class = "NSTableColumn"; headerCell.title = "Language"; ObjectID = "9ka-9O-WDj"; */
+"9ka-9O-WDj.headerCell.title" = "Язык";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "ABd-Ec-K2L"; */
+"ABd-Ec-K2L.title" = "OtherViews";
+
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "SRT/SSA Offset"; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibExternalAccessibilityDescription" = "Смещение SRT/SSA";
+
+/* Class = "NSTextField"; ibShadowedToolTip = "Positive or negative offset in milliseconds (ms) for the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "aJi-zQ-0cg"; */
+"aJi-zQ-0cg.ibShadowedToolTip" = "Положительное или отрицательное смещение в миллисекундах (мс) для выбранной исходной дорожки формата SRT/SSA. Не применяется к другим форматам.";
+
+/* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "cSW-OC-qKA"; */
+"cSW-OC-qKA.title" = "Всплывающее Окно";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "dap-ee-kor"; */
+"dap-ee-kor.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "fAW-To-EeP"; */
+"fAW-To-EeP.title" = "Item 3";
+
+/* Class = "NSTableColumn"; headerCell.title = "Offset"; ObjectID = "Fgh-pZ-6uu"; */
+"Fgh-pZ-6uu.headerCell.title" = "Смещение";
+
+/* Class = "NSTableColumn"; headerCell.title = "Burned In"; ObjectID = "fIe-Fg-ufj"; */
+"fIe-Fg-ufj.headerCell.title" = "Вшитые";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Fr7-eG-NuL"; */
+"Fr7-eG-NuL.title" = "OtherViews";
+
+/* Class = "NSTableColumn"; headerCell.title = "Default"; ObjectID = "fvq-pE-sOC"; */
+"fvq-pE-sOC.headerCell.title" = "По умолчанию";
+
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "fXD-7h-jMl"; */
+"fXD-7h-jMl.title" = "Добавить Внешнюю Дорожку Субтитров...";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "g4b-FM-qX4"; */
+"g4b-FM-qX4.title" = "Item 2";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "gHY-6m-ASb"; */
+"gHY-6m-ASb.title" = "Item 2";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "gYk-0C-2tR"; */
+"gYk-0C-2tR.title" = "Text Cell";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Forced subtitles only"; ObjectID = "HC5-ql-Vcr"; */
+"HC5-ql-Vcr.ibExternalAccessibilityDescription" = "Только принудительные субтитры";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Forced Only. Use only subtitles marked as “forced” in the selected source track."; ObjectID = "HC5-ql-Vcr"; */
+"HC5-ql-Vcr.ibShadowedToolTip" = "Только принудительно. Использовать только субтитры, отмеченные как \"принудительно\" в выбранной исходной дорожке.";
+
+/* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hhH-c3-gD0"; */
+"hhH-c3-gD0.title" = "0";
+
+/* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "HQq-Mp-4sI"; */
+"HQq-Mp-4sI.title" = "Item 2";
+
+/* Class = "NSMenuItem"; ibShadowedToolTip = "Add new SRT/SSA subtitle to the list."; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.ibShadowedToolTip" = "Добавить новые SRT/SSA субтитры в список.";
+
+/* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "HW0-PS-t0U"; */
+"HW0-PS-t0U.title" = "Добавить Внешнюю Дорожку Субтитров...";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Language"; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibExternalAccessibilityDescription" = "Язык SRT/SSA";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Language of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "Inz-O5-B8g"; */
+"Inz-O5-B8g.ibShadowedToolTip" = "Язык выбранной аудио-дорожки в формате SRT/SSA. Не применяется к другим форматам.";
+
+/* Class = "NSMenuItem"; title = "Reload"; ObjectID = "jcM-HL-QJ6"; */
+"jcM-HL-QJ6.title" = "Перезагрузить";
+
+/* Class = "NSButtonCell"; title = "Reload"; ObjectID = "jG8-uo-1tv"; */
+"jG8-uo-1tv.title" = "Перезагрузить";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "JLr-Qi-X0X"; */
+"JLr-Qi-X0X.title" = "Выбрать";
+
+/* Class = "NSTableColumn"; headerCell.title = "Forced Only"; ObjectID = "klV-Gy-igk"; */
+"klV-Gy-igk.headerCell.title" = "Только принудительно";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Default"; ObjectID = "mdO-Qu-3Pb"; */
+"mdO-Qu-3Pb.ibExternalAccessibilityDescription" = "По умолчанию";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Default flag. Mark the selected subtitles track as the default to be displayed on playback."; ObjectID = "mdO-Qu-3Pb"; */
+"mdO-Qu-3Pb.ibShadowedToolTip" = "Стандартный флаг. Пометить выбранные дорожки субтитров как по умолчанию для показа при воспроизведении.";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "mVi-zH-KUq"; */
+"mVi-zH-KUq.title" = "Удалить все дорожки";
+
+/* Class = "NSTableColumn"; headerCell.title = "Track"; ObjectID = "N3S-st-yGv"; */
+"N3S-st-yGv.headerCell.title" = "Дорожка";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "ooy-Sh-Edm"; */
+"ooy-Sh-Edm.title" = "Выбрать";
+
+/* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
+"oxg-bs-1si.title" = "Поведение Выбора...";
+
+/* Class = "NSMenuItem"; title = "Selection Behavior…"; ObjectID = "pwm-PV-1x4"; */
+"pwm-PV-1x4.title" = "Поведение Выбора...";
+
+/* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
+"QRj-KI-a03.title" = "Текст";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Configure subtitle tracks Selection Behavior. These settings affect which tracks will be added to the subtitle tracks list, and the settings used for each track."; ObjectID = "QsM-28-Pya"; */
+"QsM-28-Pya.ibShadowedToolTip" = "Настроить Поведение Выбора субтитров. Эти настройки повлияют на то, какие дорожки будут добавлены в список дорожек субтитров, и какие настройки будут выбраны для каждой дорожки.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "SRT/SSA Character Encoding"; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibExternalAccessibilityDescription" = "Кодировка символов SRT/SSA";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Character encoding/codeset of the selected SRT/SSA format source track. Not applicable to other formats."; ObjectID = "QV0-kE-4yR"; */
+"QV0-kE-4yR.ibShadowedToolTip" = "Кодирование/кодировка символов выбранной исходной дорожки формата SRT/SSA. Не применяется к другим форматам.";
+
+/* Class = "NSMenuItem"; title = "Remove All Tracks"; ObjectID = "R8a-qg-ASg"; */
+"R8a-qg-ASg.title" = "Удалить все дорожки";
+
+/* Class = "NSButtonCell"; title = "Check"; ObjectID = "R9w-Bn-CCt"; */
+"R9w-Bn-CCt.title" = "Выбрать";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "Rj8-KI-k4L"; */
+"Rj8-KI-k4L.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Add All Tracks"; ObjectID = "S2I-Jd-Lyg"; */
+"S2I-Jd-Lyg.title" = "Добавить все дорожки";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Subtitle tracks list. Track selection behavior and settings are loaded from the selected preset, and may be configured using the subtitle Selection Behavior dialog."; ObjectID = "Syo-rH-vof"; */
+"Syo-rH-vof.ibShadowedToolTip" = "Список дорожек субтитров. Поведение выбора и настройки загружаются их выбранного пресета, и могут быть настроены в диалоге Поведение Выбора субтитров.";
+
+/* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Selected track"; ObjectID = "Tf3-cP-TGw"; */
+"Tf3-cP-TGw.ibExternalAccessibilityDescription" = "Выбранная дорожка";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Subtitles language and type."; ObjectID = "Tf3-cP-TGw"; */
+"Tf3-cP-TGw.ibShadowedToolTip" = "Язык и тип субтитров.";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "ThR-Cn-Vfr"; */
+"ThR-Cn-Vfr.title" = "Item 3";
+
+/* Class = "NSMenuItem"; title = "Tracks"; ObjectID = "TJO-RZ-jgb"; */
+"TJO-RZ-jgb.title" = "Дорожки";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Umu-1b-U1Z"; */
+"Umu-1b-U1Z.title" = "OtherViews";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "UOP-xa-WpP"; */
+"UOP-xa-WpP.title" = "OtherViews";
+
+/* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "vHW-fn-RSG"; */
+"vHW-fn-RSG.title" = "Всплывающее Окно";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Reload the subtitles tracks list using the configured Selection Behavior."; ObjectID = "Vxx-gk-9kY"; */
+"Vxx-gk-9kY.ibShadowedToolTip" = "Перезагрузить список дорожек субтитров используя настроенное Поведение Выбора.";
+
+/* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "yDg-DK-z5D"; */
+"yDg-DK-z5D.title" = "Item 1";
+
+/* Class = "NSMenuItem"; title = "Item 3"; ObjectID = "yEC-jb-q8b"; */
+"yEC-jb-q8b.title" = "Item 3";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Burned In"; ObjectID = "zpm-9Z-Hsq"; */
+"zpm-9Z-Hsq.ibExternalAccessibilityDescription" = "Вшитые";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burned In. Make the selected subtitles permanent by overlaying them onto the video track."; ObjectID = "zpm-9Z-Hsq"; */
+"zpm-9Z-Hsq.ibShadowedToolTip" = "Вшитые. Делает выбранные субтитры постоянными путем наложения их на видео-дорожку.";
+

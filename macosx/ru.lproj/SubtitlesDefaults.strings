@@ -1,0 +1,96 @@
+/* Class = "NSButtonCell"; title = "Add Closed Captions when available"; ObjectID = "66v-2g-DHn"; */
+"66v-2g-DHn.title" = "Добавлять Скрытые Субтитры, когда возможно";
+
+/* Class = "NSButtonCell"; title = "DVD Subtitles"; ObjectID = "69Q-xB-Vyq"; */
+"69Q-xB-Vyq.title" = "DVD-субтитры";
+
+/* Class = "NSTextFieldCell"; title = "Burn-In Behavior:"; ObjectID = "640-NB-Uby"; */
+"640-NB-Uby.title" = "Поведение для вшитых:";
+
+/* Class = "NSScrollView"; ibExternalAccessibilityDescription = "Subtitles Track Languages"; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibExternalAccessibilityDescription" = "Языки дорожек субтитров";
+
+/* Class = "NSScrollView"; ibShadowedToolTip = "Select the languages to use with the Track Selection Behavior setting."; ObjectID = "aTC-39-h6S"; */
+"aTC-39-h6S.ibShadowedToolTip" = "Выберите языки для использования с настройками Поведения Выбора Дорожек.";
+
+/* Class = "NSButtonCell"; title = "Blu-ray Subtitles"; ObjectID = "bfV-9D-6dh"; */
+"bfV-9D-6dh.title" = "Субтитры Blu-ray";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected DVD subtitle track. All other DVD subtitle tracks will be discarded. Use this option if your playback software or device does not support DVD subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "ceZ-On-t5S"; */
+"ceZ-On-t5S.ibShadowedToolTip" = "Вшивать первую выбранную дорожку субтитров DVD. Все другие дорожки субтитров DVD будут отброшены. Используйте эту опцию в том случае, если ваше программное обеспечение или устройство не поддерживает субтитры DVD.\n\nТолько одна дорожка субтитров может быть вшита.";
+
+/* Class = "NSMenuItem"; title = "Foreign Audio, then First Selected Track"; ObjectID = "d79-2j-fhc"; */
+"d79-2j-fhc.title" = "Иноязычное Аудио, затем Первая Выбранная Дорожка";
+
+/* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "ego-rt-a64"; */
+"ego-rt-a64.title" = "Отмена";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "ej8-4k-1vd"; */
+"ej8-4k-1vd.title" = "Нет";
+
+/* Class = "NSTextFieldCell"; title = "Track Selection Behavior:"; ObjectID = "GbM-vm-RC2"; */
+"GbM-vm-RC2.title" = "Поведение выбора дорожек:";
+
+/* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
+"GZP-q7-SYy.title" = "Все совпадающие с выбранными языками";
+
+/* Class = "NSButtonCell"; title = "OK"; ObjectID = "iLI-Nb-D7t"; */
+"iLI-Nb-D7t.title" = "ОК";
+
+/* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
+"jDd-Ji-7Sm.title" = "Первая совпадающая с выбранными языками";
+
+/* Class = "NSWindow"; title = "Subtitles Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
+"kwM-lz-5lG.title" = "Поведение Выбора Субтитров";
+
+/* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
+"Kwy-lU-VuU.title" = "OtherViews";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Burn-In Behavior. Select which subtitles to make permanent by overlaying them onto the video track.\n\nOnly one subtitles track can be burned in."; ObjectID = "Lsa-kB-2BP"; */
+"Lsa-kB-2BP.ibShadowedToolTip" = "Поведение для вшитых. Выбирает, какие субтитры будут постоянными путем наложения их на видео-дорожку.\n\nТолько одна дорожка субтитров может быть вшита.";
+
+/* Class = "NSTextFieldCell"; title = "Languages:"; ObjectID = "mAT-Jp-SG1"; */
+"mAT-Jp-SG1.title" = "Языки:";
+
+/* Class = "NSMenuItem"; title = "First Selected Track"; ObjectID = "mnl-P8-dtK"; */
+"mnl-P8-dtK.title" = "Первая Выбранная Дорожка";
+
+/* Class = "NSMenuItem"; title = "None"; ObjectID = "mvw-Hg-JFM"; */
+"mvw-Hg-JFM.title" = "Нет";
+
+/* Class = "NSTextFieldCell"; title = "Only one subtitles burn-in option will be applied, starting with the first (top)."; ObjectID = "N4s-K9-RwM"; */
+"N4s-K9-RwM.title" = "Только одна опция вшития субтитров может быть применена, начиная с верха списка.";
+
+/* Class = "NSTextFieldCell"; title = "Options:"; ObjectID = "NJl-q3-zXL"; */
+"NJl-q3-zXL.title" = "Опции:";
+
+/* Class = "NSPopUpButton"; ibShadowedToolTip = "Track Selection Behavior.\n\nNone will not select any audio tracks by default.\n\nFirst Matching Selected Languages adds the first audio track matching each of the selected languages present in the source.\n\nAll Matching Selected Languages adds all audio tracks matching each of the selected languages present in the source."; ObjectID = "oiD-QI-wly"; */
+"oiD-QI-wly.ibShadowedToolTip" = "Поведение выбора дорожек.\n\n'Нет' не будет выбирать никакую дорожку аудио по умолчанию.\n\n'Первая совпадающая с выбранными языками' добавит первую дорожку, которая совпадает с каждым из выбранных языков в исходном файле.\n\n'Все совпадающие с выбранными языками' добавит все дорожки, которые совпадают с каждым из выбранных языков в исходном файле.";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Foreign Audio Search scans the source for short sequences of foreign or alien audio that are displayed by default."; ObjectID = "OOC-GZ-OFA"; */
+"OOC-GZ-OFA.ibShadowedToolTip" = "'Поиск иноязычного аудио' сканирует исходный файл на наличие коротких последовательностей иноязычных или инородных аудио которые по умолчанию показываются.";
+
+/* Class = "NSButtonCell"; title = "Show All"; ObjectID = "PiQ-bA-7P1"; */
+"PiQ-bA-7P1.title" = "Показать всё";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Burn in the first selected Blu-ray subtitle track. All other Blu-ray subtitle tracks will be discarded. Use this option if your playback software or device does not support Blu-ray subtitles.\n\nOnly one subtitles track can be burned in."; ObjectID = "Px8-G6-NVX"; */
+"Px8-G6-NVX.ibShadowedToolTip" = "Вшивать первую выбранную дорожку субтитров Blu-ray. Все другие дорожки субтитров Blu-ray будут отброшены. Используйте эту опцию в том случае, если ваше программное обеспечение или устройство не поддерживает субтитры Blu-ray.\n\nТолько одна дорожка субтитров может быть вшита.";
+
+/* Class = "NSButton"; ibExternalAccessibilityDescription = "Show all subtitles languages"; ObjectID = "QAt-5X-NBT"; */
+"QAt-5X-NBT.ibExternalAccessibilityDescription" = "Показывать все языки субтитров";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Show all subtitles languages in the Languages list."; ObjectID = "QAt-5X-NBT"; */
+"QAt-5X-NBT.ibShadowedToolTip" = "Показывать все языки субтитров в списке языков.";
+
+/* Class = "NSMenuItem"; title = "Foreign Audio Subtitles Track"; ObjectID = "QRd-XH-6TH"; */
+"QRd-XH-6TH.title" = "Дорожка Субтитров Иноязычного Аудио";
+
+/* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
+"qVQ-fS-w1S.title" = "Table View Cell";
+
+/* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
+"uF5-6E-EIe.ibShadowedToolTip" = "Добавлять Скрытые Субтитры как 'мягкую' дорожку (не вшитую).";
+
+/* Class = "NSButtonCell"; title = "Add Foreign Audio Search"; ObjectID = "vNY-OC-hTJ"; */
+"vNY-OC-hTJ.title" = "Добавить Поиск Иноязычного Аудио";
+
