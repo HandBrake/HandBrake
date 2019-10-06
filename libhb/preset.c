@@ -1265,7 +1265,6 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
 
     // Detelecine filter
     hb_value_t *detel_val = hb_dict_get(preset, "PictureDetelecine");
-    int is_detel = 0;
     if (detel_val != NULL)
     {
         const char *custom;
@@ -1287,7 +1286,6 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
             hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_DETELECINE));
             hb_dict_set(filter_dict, "Settings", filter_settings);
             hb_add_filter2(filter_list, filter_dict);
-            is_detel = 1;
         }
         else
         {
@@ -1621,16 +1619,19 @@ int hb_preset_apply_filters(const hb_dict_t *preset, hb_dict_t *job_dict)
         hb_value_free(&filter_settings);
         return -1;
     }
-    if (is_detel != 0 || fr_mode != 0)
+
+    filter_dict = hb_dict_init();
+    hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_VFR));
+    hb_dict_set(filter_dict, "Settings", filter_settings);
+#if HB_PROJECT_FEATURE_QSV
+    if(hb_qsv_preset_is_zero_copy_enabled(job_dict))
     {
-        filter_dict = hb_dict_init();
-        hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_VFR));
-        hb_dict_set(filter_dict, "Settings", filter_settings);
-        hb_add_filter2(filter_list, filter_dict);
+        hb_log("HB_FILTER_VFR filter is disabled");
     }
     else
+#endif
     {
-        hb_log("Skipping VRF filter");
+        hb_add_filter2(filter_list, filter_dict);
     }
     return 0;
 }
@@ -2006,16 +2007,16 @@ int hb_preset_apply_title(hb_handle_t *h, int title_index,
     filter_dict = hb_dict_init();
     hb_dict_set(filter_dict, "ID", hb_value_int(HB_FILTER_CROP_SCALE));
     hb_dict_set(filter_dict, "Settings", filter_settings);
-    if ((srcGeo.width != resultGeo.width) || (srcGeo.height != resultGeo.height) ||
-        (geo.crop[0] != 0) || (geo.crop[1] !=0) || (geo.crop[2] != 0) || (geo.crop[3] != 0))
+#if HB_PROJECT_FEATURE_QSV
+    if(hb_qsv_preset_is_zero_copy_enabled(job_dict))
+    {
+        hb_log("HB_FILTER_CROP_SCALE filter is disabled");
+    }
+    else
+#endif
     {
         hb_add_filter2(filter_list, filter_dict);
     }
-    else
-    {
-        hb_log("Skipping CROP_SCALE filter");
-    }
-
     // Audio settings
     if (hb_preset_job_add_audio(h, title_index, preset, job_dict) != 0)
     {
