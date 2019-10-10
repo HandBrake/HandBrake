@@ -1227,6 +1227,33 @@ static int sanitize_audio(hb_job_t *job)
 static int sanitize_qsv( hb_job_t * job )
 {
 #if HB_PROJECT_FEATURE_QSV
+    /* modify filter list while QSV VPP is not implemented
+        Commmand line run usually enables 2 following filters:
+            ID=6 Framerate Shaper (mode=0)
+            ID=12 Crop and Scale (width=1920:height=1080:crop-top=0:crop-bottom=0:crop-left=0:crop-right=0)
+        GUI run usually enables 4 following filters depends on preset:
+            ID=3 Comb Detect (mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16)
+            ID=4 Decomb (mode=39)
+            ID =6 Framerate Shaper (mode=0)
+            ID=12 Crop and Scale (width=1920:height=1080:crop-top=0:crop-bottom=0:crop-left=0:crop-right=0)
+    */
+    if (job->list_filter && hb_list_count(job->list_filter))
+    {
+        // if QSV full is enabled we need to disable filters
+        if(hb_qsv_full_path_is_enabled(job))
+        {
+            for(int filter_id = HB_FILTER_FIRST; filter_id <= HB_FILTER_LAST; filter_id++)
+            {
+                hb_filter_object_t * filter = hb_filter_find(job->list_filter, filter_id);
+                if (filter != NULL)
+                {
+                    hb_list_rem(job->list_filter, filter);
+                    hb_filter_close(&filter);
+                    hb_log("Skip filter with ID=%d", filter_id);
+                }
+            }
+        }
+    }
 #if 0 // TODO: re-implement QSV VPP filtering and QSV zerocopy path
     int i;
 
@@ -1395,7 +1422,7 @@ static int sanitize_qsv( hb_job_t * job )
     return 0;
 }
 
-static void sanitize_filter_list(hb_list_t *list)
+static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
 {
     // Add selective deinterlacing mode if comb detection is enabled
     if (hb_filter_find(list, HB_FILTER_COMB_DETECT) != NULL)
@@ -1412,6 +1439,50 @@ static void sanitize_filter_list(hb_list_t *list)
                 mode |= MODE_DECOMB_SELECTIVE;
                 hb_dict_set(filter->settings, "mode", hb_value_int(mode));
                 break;
+            }
+        }
+    }
+
+    int is_detel = 0;
+    hb_filter_object_t * filter = hb_filter_find(list, HB_FILTER_DETELECINE);
+    if (filter != NULL)
+    {
+        is_detel = 1;
+    }
+
+    filter = hb_filter_find(list, HB_FILTER_VFR);
+    if (filter != NULL)
+    {
+        int mode = hb_dict_get_int(filter->settings, "mode");
+        // "Same as source" FPS and no HB_FILTER_DETELECINE
+        if ( (mode == 0) || (is_detel = 0) )
+        {
+            hb_list_rem(list, filter);
+            hb_filter_close(&filter);
+            hb_log("Skipping VRF filter");
+        }
+    }
+    
+    filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+    if (filter != NULL)
+    {
+        hb_dict_t* settings = filter->settings;
+        if (settings != NULL)
+        {
+            int width, height, top, bottom, left, right;
+            hb_dict_extract_int(&width, settings, "width");
+            hb_dict_extract_int(&height, settings, "height");
+            hb_dict_extract_int(&top, settings, "crop-top");
+            hb_dict_extract_int(&bottom, settings, "crop-bottom");
+            hb_dict_extract_int(&left, settings, "crop-left");
+            hb_dict_extract_int(&right, settings, "crop-right");
+            
+            if ( (src_geo.width == width) && (src_geo.height == height) &&
+                (top == 0) && (bottom == 0 ) && (left == 0) && (right == 0) )
+            {
+                hb_list_rem(list, filter);
+                hb_filter_close(&filter);
+                hb_log("Skipping CROP filter");
             }
         }
     }
@@ -1475,23 +1546,13 @@ static void do_job(hb_job_t *job)
         goto cleanup;
     }
 
-    // sanitize_qsv looks for subtitle render filter, so must happen after
-    // sanitize_subtitle
-    result = sanitize_qsv(job);
-    if (result)
-    {
-        *job->done_error = HB_ERROR_WRONG_INPUT;
-        *job->die = 1;
-        goto cleanup;
-    }
-
     // Filters have an effect on settings.
     // So initialize the filters and update the job.
     if (job->list_filter && hb_list_count(job->list_filter))
     {
         hb_filter_init_t init;
 
-        sanitize_filter_list(job->list_filter);
+        sanitize_filter_list(job->list_filter, title->geometry);
 
         memset(&init, 0, sizeof(init));
         init.time_base.num = 1;
@@ -1566,6 +1627,16 @@ static void do_job(hb_job_t *job)
         memset(job->crop, 0, sizeof(int[4]));
         job->vrate = title->vrate;
         job->cfr = 0;
+    }
+
+    // sanitize_qsv looks for subtitle render filter, so must happen after
+    // sanitize_subtitle
+    result = sanitize_qsv(job);
+    if (result)
+    {
+        *job->done_error = HB_ERROR_WRONG_INPUT;
+        *job->die = 1;
+        goto cleanup;
     }
 
     job->orig_vrate = job->vrate;
