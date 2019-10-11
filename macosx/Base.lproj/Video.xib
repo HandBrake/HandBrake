@@ -533,10 +533,10 @@ Syntax: option-1=foo:opt2=bar,baz</string>
                                         <binding destination="-2" name="value" keyPath="self.video.preset" id="pVA-9B-hDu"/>
                                     </connections>
                                 </textField>
-                                <textField toolTip="Displays all internal video encoder options." horizontalHuggingPriority="240" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="1000" translatesAutoresizingMaskIntoConstraints="NO" id="dwn-bf-Ua0">
+                                <textField toolTip="Displays all internal video encoder options." horizontalHuggingPriority="240" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" preferredMaxLayoutWidth="1000" translatesAutoresizingMaskIntoConstraints="NO" id="dwn-bf-Ua0">
                                     <rect key="frame" x="18" y="12" width="884" height="50"/>
                                     <constraints>
-                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="aXf-QV-oea"/>
+                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="aXf-QV-oea"/>
                                     </constraints>
                                     <textFieldCell key="cell" lineBreakMode="charWrapping" selectable="YES" sendsActionOnEndEditing="YES" alignment="left" title="Unparse:" id="CLk-dp-1b7">
                                         <font key="font" metaFont="controlContent" size="11"/>
