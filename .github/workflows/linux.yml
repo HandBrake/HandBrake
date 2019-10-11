@@ -19,9 +19,8 @@ jobs:
         sudo apt-get install python3-setuptools
         sudo pip3 install meson
         sudo apt-get install gstreamer1.0-libav intltool libappindicator-dev libdbus-glib-1-dev libglib2.0-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgtk-3-dev libgudev-1.0-dev libnotify-dev
-        sudo apt-get install libwebkit2gtk-4.0-dev
         sudo apt-get install libva-dev libdrm-dev
         
     - name: Build HandBrake Linux
       run: |
-        ./configure --launch-jobs=0 --launch
+        ./configure --launch-jobs=0 --disable-gtk-update-checks  --enable-qsv --launch
