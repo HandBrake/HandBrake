@@ -1,0 +1,33 @@
+From c8fca6b4a02d695b1ceea39b330d4406001c03ed Mon Sep 17 00:00:00 2001
+From: Tristan Matthews <tmatth@videolan.org>
+Date: Sat, 7 Sep 2019 00:46:59 -0400
+Subject: [PATCH] os_types: fix unsigned typedefs for MacOS
+
+This effectively reverts f8ce071e1040c766157d630d920d6165d35fe422 which was
+probably broken by 6449883ccacfee276ed9d99fa047342cdc51ab88.
+---
+ include/ogg/os_types.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/ogg/os_types.h b/include/ogg/os_types.h
+index eb8a322..e655a1d 100644
+--- a/include/ogg/os_types.h
++++ b/include/ogg/os_types.h
+@@ -72,11 +72,11 @@
+ 
+ #  include <sys/types.h>
+    typedef int16_t ogg_int16_t;
+-   typedef uint16_t ogg_uint16_t;
++   typedef u_int16_t ogg_uint16_t;
+    typedef int32_t ogg_int32_t;
+-   typedef uint32_t ogg_uint32_t;
++   typedef u_int32_t ogg_uint32_t;
+    typedef int64_t ogg_int64_t;
+-   typedef uint64_t ogg_uint64_t;
++   typedef u_int64_t ogg_uint64_t;
+ 
+ #elif defined(__HAIKU__)
+ 
+-- 
+2.17.1
+
