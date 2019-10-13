@@ -136,6 +136,11 @@
     <Compile Include="Converters\LongToIntConverter.cs" />
     <Compile Include="Converters\Options\FileSizeConverter.cs" />
     <Compile Include="Converters\Options\LogLevelConverter.cs" />
+    <Compile Include="Converters\Options\Mp4BehaviourConverter.cs" />
+    <Compile Include="Converters\Options\UpdateCheckConverter.cs" />
+    <Compile Include="Converters\ResourceConverterBase.cs" />
+    <Compile Include="Model\Options\Mp4Behaviour.cs" />
+    <Compile Include="Converters\Options\ProcessPriorityConverter.cs" />
     <Compile Include="Converters\OptionTabConverter.cs" />
     <Compile Include="Converters\PresetsMenuConverter.cs" />
     <Compile Include="Converters\Queue\InlineQueueConverter.cs" />
@@ -173,14 +178,16 @@
     <Compile Include="Model\Filters\FilterTune.cs" />
     <Compile Include="Model\Filters\FilterPreset.cs" />
     <Compile Include="Model\InterfaceLanguage.cs" />
+    <Compile Include="Model\Options\ProcessPriority.cs" />
+    <Compile Include="Model\Options\UpdateCheck.cs" />
     <Compile Include="Model\Options\WhenDone.cs" />
     <Compile Include="Model\Picture\PresetPictureSettingsMode.cs" />
     <Compile Include="Model\Subtitles\SubtitleBurnInBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviourModes.cs" />
     <Compile Include="Model\Subtitles\SubtitleBehaviours.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Properties\ResourcesTooltips.Designer.cs">

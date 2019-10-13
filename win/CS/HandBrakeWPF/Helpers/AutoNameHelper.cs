@@ -179,15 +179,15 @@ namespace HandBrakeWPF.Helpers
              */
             if (task.OutputFormat == OutputFormat.Mp4)
             {
-                switch (userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
+                switch ((Mp4Behaviour)userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
                 {
-                    case 0: // Automatic
+                    case Mp4Behaviour.Auto: // Automatic
                         destinationFilename += task.IncludeChapterMarkers || MP4Helper.RequiresM4v(task) ? ".m4v" : ".mp4";
                         break;
-                    case 1: // Always MP4
+                    case Mp4Behaviour.MP4: // Always MP4
                         destinationFilename += ".mp4";
                         break;
-                    case 2: // Always M4V
+                    case Mp4Behaviour.M4V: // Always M4V
                         destinationFilename += ".m4v";
                         break;
                 }

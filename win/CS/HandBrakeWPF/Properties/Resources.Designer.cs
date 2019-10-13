@@ -221,6 +221,51 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Matching Selected Languages.
+        /// </summary>
+        public static string AudioBehaviourModes_AllMatching {
+            get {
+                return ResourceManager.GetString("AudioBehaviourModes_AllMatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use All Tracks as templates.
+        /// </summary>
+        public static string AudioBehaviourModes_AllTracks {
+            get {
+                return ResourceManager.GetString("AudioBehaviourModes_AllTracks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First Matching Selected Language.
+        /// </summary>
+        public static string AudioBehaviourModes_FirstMatch {
+            get {
+                return ResourceManager.GetString("AudioBehaviourModes_FirstMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use First Track as template.
+        /// </summary>
+        public static string AudioBehaviourModes_FirstTrack {
+            get {
+                return ResourceManager.GetString("AudioBehaviourModes_FirstTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Audio.
+        /// </summary>
+        public static string AudioBehaviourModes_None {
+            get {
+                return ResourceManager.GetString("AudioBehaviourModes_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Track.
         /// </summary>
         public static string AudioDefaultsView_AddTrack {
@@ -687,6 +732,15 @@ namespace HandBrakeWPF.Properties {
         public static string ChapterView_ResetChapterNames {
             get {
                 return ResourceManager.GetString("ChapterView_ResetChapterNames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chapter {0}.
+        /// </summary>
+        public static string ChapterViewModel_Chapter {
+            get {
+                return ResourceManager.GetString("ChapterViewModel_Chapter", resourceCulture);
             }
         }
         
@@ -2594,6 +2648,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Automatic.
+        /// </summary>
+        public static string Mp4Behaviour_Auto {
+            get {
+                return ResourceManager.GetString("Mp4Behaviour_Auto", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Always use M4V.
+        /// </summary>
+        public static string Mp4Behaviour_UseM4v {
+            get {
+                return ResourceManager.GetString("Mp4Behaviour_UseM4v", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Always use MP4.
+        /// </summary>
+        public static string Mp4Behaviour_UseMp4 {
+            get {
+                return ResourceManager.GetString("Mp4Behaviour_UseMp4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Additional Information.
         /// </summary>
         public static string NoAdditionalInformation {
@@ -2950,6 +3031,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Output Files.
+        /// </summary>
+        public static string Options_OutputFiles {
+            get {
+                return ResourceManager.GetString("Options_OutputFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Path: .
         /// </summary>
         public static string Options_Path {
@@ -3238,7 +3328,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &amp;#60; Back.
+        ///   Looks up a localized string similar to &lt; Back.
         /// </summary>
         public static string OptionsView_BackButton {
             get {
@@ -3755,6 +3845,42 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chapters.
+        /// </summary>
+        public static string PointToPointMode_Chapters {
+            get {
+                return ResourceManager.GetString("PointToPointMode_Chapters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frames.
+        /// </summary>
+        public static string PointToPointMode_Frames {
+            get {
+                return ResourceManager.GetString("PointToPointMode_Frames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview.
+        /// </summary>
+        public static string PointToPointMode_Preview {
+            get {
+                return ResourceManager.GetString("PointToPointMode_Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seconds.
+        /// </summary>
+        public static string PointToPointMode_Seconds {
+            get {
+                return ResourceManager.GetString("PointToPointMode_Seconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Portable Mode: Unable to read portable.ini. There may be an error in this file. Please retry using portable.ini.template as a guide..
         /// </summary>
         public static string Portable_IniFileError {
@@ -3870,6 +3996,33 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string PresetPictureSettingsMode_Custom {
+            get {
+                return ResourceManager.GetString("PresetPictureSettingsMode_Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string PresetPictureSettingsMode_None {
+            get {
+                return ResourceManager.GetString("PresetPictureSettingsMode_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Always use Source Resolution.
+        /// </summary>
+        public static string PresetPictureSettingsMode_SourceMaximum {
+            get {
+                return ResourceManager.GetString("PresetPictureSettingsMode_SourceMaximum", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HandBrake is unable to upgrade your presets file to a new version format.
         ///Your preset file will be archived and new one created. You will need to re-create your own presets..
         /// </summary>
@@ -3952,6 +4105,51 @@ namespace HandBrakeWPF.Properties {
         public static string Preview_Scaled {
             get {
                 return ResourceManager.GetString("Preview_Scaled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Above Normal.
+        /// </summary>
+        public static string ProcessPriority_AboveNormal {
+            get {
+                return ResourceManager.GetString("ProcessPriority_AboveNormal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Below Normal.
+        /// </summary>
+        public static string ProcessPriority_BelowNormal {
+            get {
+                return ResourceManager.GetString("ProcessPriority_BelowNormal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to High.
+        /// </summary>
+        public static string ProcessPriority_High {
+            get {
+                return ResourceManager.GetString("ProcessPriority_High", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Low.
+        /// </summary>
+        public static string ProcessPriority_Low {
+            get {
+                return ResourceManager.GetString("ProcessPriority_Low", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal.
+        /// </summary>
+        public static string ProcessPriority_Normal {
+            get {
+                return ResourceManager.GetString("ProcessPriority_Normal", resourceCulture);
             }
         }
         
@@ -5003,6 +5201,78 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Foreign Audio Scan.
+        /// </summary>
+        public static string Subtitle_ForeignAudioScan {
+            get {
+                return ResourceManager.GetString("Subtitle_ForeignAudioScan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Matching Selected Languages.
+        /// </summary>
+        public static string SubtitleBehaviourModes_AllMatching {
+            get {
+                return ResourceManager.GetString("SubtitleBehaviourModes_AllMatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First Matching Selected Language.
+        /// </summary>
+        public static string SubtitleBehaviourModes_FirstMatching {
+            get {
+                return ResourceManager.GetString("SubtitleBehaviourModes_FirstMatching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string SubtitleBehaviourModes_None {
+            get {
+                return ResourceManager.GetString("SubtitleBehaviourModes_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First Track.
+        /// </summary>
+        public static string SubtitleBurnInBehaviourModes_FirstTrack {
+            get {
+                return ResourceManager.GetString("SubtitleBurnInBehaviourModes_FirstTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Foreign Audio Preferred, else First.
+        /// </summary>
+        public static string SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst {
+            get {
+                return ResourceManager.GetString("SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Foreign Audio Track.
+        /// </summary>
+        public static string SubtitleBurnInBehaviourModes_ForeignAudioTrack {
+            get {
+                return ResourceManager.GetString("SubtitleBurnInBehaviourModes_ForeignAudioTrack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string SubtitleBurnInBehaviourModes_None {
+            get {
+                return ResourceManager.GetString("SubtitleBurnInBehaviourModes_None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to None - Only tracks where the container does not support the format will be burned in.
         ///Foreign Audio Track - The Foreign Audio track will be burned in if available. 
         ///First Track - The first track will be burned in.
@@ -5168,6 +5438,15 @@ namespace HandBrakeWPF.Properties {
         public static string SubtitleView_SubtitleDefaultsDescription {
             get {
                 return ResourceManager.GetString("SubtitleView_SubtitleDefaultsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Foreign Audio Search.
+        /// </summary>
+        public static string SubtitleViewModel_ForeignAudioSearch {
+            get {
+                return ResourceManager.GetString("SubtitleViewModel_ForeignAudioSearch", resourceCulture);
             }
         }
         
@@ -5376,6 +5655,24 @@ namespace HandBrakeWPF.Properties {
         public static string UnknownError {
             get {
                 return ResourceManager.GetString("UnknownError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Monthly.
+        /// </summary>
+        public static string UpdateCheck_Monthly {
+            get {
+                return ResourceManager.GetString("UpdateCheck_Monthly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weekly.
+        /// </summary>
+        public static string UpdateCheck_Weekly {
+            get {
+                return ResourceManager.GetString("UpdateCheck_Weekly", resourceCulture);
             }
         }
         

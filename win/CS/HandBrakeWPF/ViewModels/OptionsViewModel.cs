@@ -55,8 +55,7 @@ namespace HandBrakeWPF.ViewModels
         private string autonameFormat;
         private bool changeToTitleCase;
         private bool checkForUpdates;
-        private BindingList<string> checkForUpdatesFrequencies = new BindingList<string>();
-        private int checkForUpdatesFrequency;
+        private UpdateCheck checkForUpdatesFrequency;
         private bool clearOldOlgs;
         private BindingList<string> constantQualityGranularity = new BindingList<string>();
         private bool copyLogToEncodeDirectory;
@@ -66,22 +65,19 @@ namespace HandBrakeWPF.ViewModels
         private BindingList<int> logVerbosityOptions = new BindingList<int>();
         private long minLength;
         private bool minimiseToTray;
-        private BindingList<string> mp4ExtensionOptions = new BindingList<string>();
         private bool preventSleep;
         private BindingList<int> previewPicturesToScan = new BindingList<int>();
-        private BindingList<string> priorityLevelOptions = new BindingList<string>();
         private bool removeUnderscores;
         private string selectedGranulairty;
-        private int selectedMp4Extension;
+        private Mp4Behaviour selectedMp4Extension;
         private int selectedPreviewCount;
-        private string selectedPriority;
+        private ProcessPriority selectedPriority;
         private int selectedVerbosity;
         private bool sendFileAfterEncode;
         private string sendFileTo;
         private string sendFileToPath;
         private string vlcPath;
         private WhenDone whenDone;
-        private BindingList<WhenDone> whenDoneOptions = new BindingList<WhenDone>();
         private bool clearQueueOnEncodeCompleted;
         private OptionsTab selectedTab;
         private string updateMessage;
@@ -250,24 +246,18 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets CheckForUpdatesFrequencies.
         /// </summary>
-        public BindingList<string> CheckForUpdatesFrequencies
+        public BindingList<UpdateCheck> CheckForUpdatesFrequencies
         {
             get
             {
-                return this.checkForUpdatesFrequencies;
-            }
-
-            set
-            {
-                this.checkForUpdatesFrequencies = value;
-                this.NotifyOfPropertyChange("CheckForUpdatesFrequencies");
+                return new BindingList<UpdateCheck>(EnumHelper<UpdateCheck>.GetEnumList().ToList());
             }
         }
 
         /// <summary>
         /// Gets or sets a value indicating whether CheckForUpdatesFrequency.
         /// </summary>
-        public int CheckForUpdatesFrequency
+        public UpdateCheck CheckForUpdatesFrequency
         {
             get
             {
@@ -277,7 +267,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.checkForUpdatesFrequency = value;
-                this.NotifyOfPropertyChange("CheckForUpdatesFrequency");
+                this.NotifyOfPropertyChange(() => this.CheckForUpdatesFrequency);
             }
         }
 
@@ -585,23 +575,6 @@ namespace HandBrakeWPF.ViewModels
         }
 
         /// <summary>
-        /// Gets or sets Mp4ExtensionOptions.
-        /// </summary>
-        public BindingList<string> Mp4ExtensionOptions
-        {
-            get
-            {
-                return this.mp4ExtensionOptions;
-            }
-
-            set
-            {
-                this.mp4ExtensionOptions = value;
-                this.NotifyOfPropertyChange("Mp4ExtensionOptions");
-            }
-        }
-
-        /// <summary>
         /// Gets or sets a value indicating whether RemoveUnderscores.
         /// </summary>
         public bool RemoveUnderscores
@@ -618,10 +591,18 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public BindingList<Mp4Behaviour> Mp4ExtensionOptions
+        {
+            get
+            {
+                return new BindingList<Mp4Behaviour>(EnumHelper<Mp4Behaviour>.GetEnumList().ToList());
+            }
+        }
+
         /// <summary>
         /// Gets or sets SelectedMp4Extension.
         /// </summary>
-        public int SelectedMp4Extension
+        public Mp4Behaviour SelectedMp4Extension
         {
             get
             {
@@ -631,7 +612,7 @@ namespace HandBrakeWPF.ViewModels
             set
             {
                 this.selectedMp4Extension = value;
-                this.NotifyOfPropertyChange("SelectedMp4Extension");
+                this.NotifyOfPropertyChange(() => this.SelectedMp4Extension);
             }
         }
 
@@ -851,20 +832,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets or sets PriorityLevelOptions.
-        /// </summary>
-        public BindingList<string> PriorityLevelOptions
+        public BindingList<ProcessPriority> PriorityLevelOptions
         {
             get
             {
-                return this.priorityLevelOptions;
-            }
-
-            set
-            {
-                this.priorityLevelOptions = value;
-                this.NotifyOfPropertyChange("PriorityLevelOptions");
+                return new BindingList<ProcessPriority>(EnumHelper<ProcessPriority>.GetEnumList().ToList());
             }
         }
 
@@ -888,7 +860,7 @@ namespace HandBrakeWPF.ViewModels
         /// <summary>
         /// Gets or sets SelectedPriority.
         /// </summary>
-        public string SelectedPriority
+        public ProcessPriority SelectedPriority
         {
             get
             {
@@ -903,19 +875,19 @@ namespace HandBrakeWPF.ViewModels
                 // Set the Process Priority
                 switch (value)
                 {
-                    case "Realtime":
-                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
-                        break;
-                    case "High":
+                    case ProcessPriority.High:
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
                         break;
-                    case "Above Normal":
+                    case ProcessPriority.AboveNormal:
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
                         break;
-                    case "Normal":
+                    case ProcessPriority.Normal:
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
                         break;
-                    case "Low":
+                    case ProcessPriority.BelowNormal:
+                        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+                        break;
+                    case ProcessPriority.Low:
                         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
                         break;
                     default:
@@ -1439,18 +1411,7 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedLanguage = InterfaceLanguageUtilities.FindInterfaceLanguage(culture);
 
             this.CheckForUpdates = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.UpdateStatus);
-
-            // Days between update checks
-            this.checkForUpdatesFrequencies.Clear();
-            this.checkForUpdatesFrequencies.Add("Weekly");
-            this.checkForUpdatesFrequencies.Add("Monthly");
-
-            this.CheckForUpdatesFrequency = this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck);
-            if (this.CheckForUpdatesFrequency > 1)
-            {
-                this.CheckForUpdatesFrequency = 1;
-            }
-
+            this.CheckForUpdatesFrequency = (UpdateCheck)this.userSettingService.GetUserSetting<int>(UserSettingConstants.DaysBetweenUpdateCheck);
             this.ShowStatusInTitleBar = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowStatusInTitleBar);
             this.ShowPreviewOnSummaryTab = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPreviewOnSummaryTab);
             this.ShowAddAllToQueue = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowAddAllToQueue);
@@ -1460,16 +1421,6 @@ namespace HandBrakeWPF.ViewModels
             // #############################
             // When Done
             // #############################
-
-            // On Encode Completion Action
-            this.whenDoneOptions.Clear();
-            this.whenDoneOptions.Add(WhenDone.DoNothing);
-            this.whenDoneOptions.Add(WhenDone.Shutdown);
-            this.whenDoneOptions.Add(WhenDone.Sleep);
-            this.whenDoneOptions.Add(WhenDone.Hibernate);
-            this.whenDoneOptions.Add(WhenDone.LockSystem);
-            this.whenDoneOptions.Add(WhenDone.LogOff);
-            this.whenDoneOptions.Add(WhenDone.QuickHandBrake);
 
             this.WhenDone = (WhenDone)this.userSettingService.GetUserSetting<int>(UserSettingConstants.WhenCompleteAction);
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ResetWhenDoneAction))
@@ -1505,11 +1456,7 @@ namespace HandBrakeWPF.ViewModels
             this.AutonameFormat = this.IsValidAutonameFormat(anf, true) ? anf : "{source}-{title}";
 
             // Use iPod/iTunes friendly .m4v extension for MP4 files.
-            this.mp4ExtensionOptions.Clear();
-            this.mp4ExtensionOptions.Add("Automatic");
-            this.mp4ExtensionOptions.Add("Always use MP4");
-            this.mp4ExtensionOptions.Add("Always use M4V");
-            this.SelectedMp4Extension = this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v);
+            this.SelectedMp4Extension = (Mp4Behaviour)this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v);
 
             // Remove Underscores
             this.RemoveUnderscores = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore);
@@ -1550,15 +1497,7 @@ namespace HandBrakeWPF.ViewModels
             // #############################
             // CLI
             // #############################
-
-            // Priority level for encodes
-            this.priorityLevelOptions.Clear();
-            this.priorityLevelOptions.Add("High");
-            this.priorityLevelOptions.Add("Above Normal");
-            this.priorityLevelOptions.Add("Normal");
-            this.priorityLevelOptions.Add("Below Normal");
-            this.priorityLevelOptions.Add("Low");
-            this.SelectedPriority = userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority);
+            this.SelectedPriority = (ProcessPriority)userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessPriorityInt);
 
             this.PreventSleep = userSettingService.GetUserSetting<bool>(UserSettingConstants.PreventSleep);
             this.PauseOnLowDiskspace = userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace);
@@ -1670,7 +1609,6 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenDone, this.PlaySoundWhenDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.PlaySoundWhenQueueDone, this.PlaySoundWhenQueueDone);
             this.userSettingService.SetUserSetting(UserSettingConstants.WhenDoneAudioFile, this.WhenDoneAudioFileFullPath);
-            
 
             /* Output Files */
             this.userSettingService.SetUserSetting(UserSettingConstants.AutoNaming, this.AutomaticallyNameFiles);
@@ -1697,7 +1635,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.EnableNvencEncoder, this.EnableNvencEncoder);
 
             /* System and Logging */
-            this.userSettingService.SetUserSetting(UserSettingConstants.ProcessPriority, this.SelectedPriority);
+            this.userSettingService.SetUserSetting(UserSettingConstants.ProcessPriorityInt, this.SelectedPriority);
             this.userSettingService.SetUserSetting(UserSettingConstants.PreventSleep, this.PreventSleep);
             this.userSettingService.SetUserSetting(UserSettingConstants.PauseOnLowDiskspace, this.PauseOnLowDiskspace);
             this.userSettingService.SetUserSetting(UserSettingConstants.PauseQueueOnLowDiskspaceLevel, this.PauseOnLowDiskspaceLevel);

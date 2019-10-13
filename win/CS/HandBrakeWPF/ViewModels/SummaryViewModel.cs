@@ -24,6 +24,7 @@ namespace HandBrakeWPF.ViewModels
     using HandBrakeWPF.EventArgs;
     using HandBrakeWPF.Factories;
     using HandBrakeWPF.Helpers;
+    using HandBrakeWPF.Model.Options;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Encode.Model.Models;
@@ -455,15 +456,15 @@ namespace HandBrakeWPF.ViewModels
             // Make sure the output extension is set correctly based on the users preferences and selection.
             if (newExtension == ".mp4" || newExtension == ".m4v")
             {
-                switch (this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
+                switch ((Mp4Behaviour)this.userSettingService.GetUserSetting<int>(UserSettingConstants.UseM4v))
                 {
-                    case 0: // Auto
+                    case Mp4Behaviour.Auto: // Auto
                         newExtension = MP4Helper.RequiresM4v(this.Task) ? ".m4v" : ".mp4";
                         break;
-                    case 1: // MP4
+                    case Mp4Behaviour.MP4: // MP4
                         newExtension = ".mp4";
                         break;
-                    case 2: // M4v
+                    case Mp4Behaviour.M4V: // M4v
                         newExtension = ".m4v";
                         break;
                 }

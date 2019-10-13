@@ -2070,9 +2070,108 @@ Where supported, any user presets will have been imported.</value>
     <value>Click 'Check for Updates' to check for new versions</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
-    <value>&amp;#60; Back</value>
+    <value>&lt; Back</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
     <value>Currently Paused</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>Output Files</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>Chapters</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>Frames</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Seconds</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>All Matching Selected Languages</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>First Matching Selected Language</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>First Track</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>Foreign Audio Preferred, else First</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>Foreign Audio Track</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Foreign Audio Search</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Foreign Audio Scan</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>All Matching Selected Languages</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>Use All Tracks as templates</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>First Matching Selected Language</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Use First Track as template</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>No Audio</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>Chapter {0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>Automatic</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>Always use M4V</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>Always use MP4</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Always use Source Resolution</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Above Normal</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Below Normal</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>High</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>Low</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>Monthly</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>Weekly</value>
   </data>
 </root>

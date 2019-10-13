@@ -72,7 +72,7 @@ namespace HandBrakeWPF.ViewModels
             this.Langauges = LanguageUtilities.MapLanguages().Keys;
             this.CharacterCodes = CharCodesUtilities.GetCharacterCodes();
 
-            this.foreignAudioSearchTrack = new Subtitle { SubtitleType = SubtitleType.ForeignAudioSearch, Language = "Foreign Audio Search" };
+            this.foreignAudioSearchTrack = new Subtitle { SubtitleType = SubtitleType.ForeignAudioSearch, Language = Resources.SubtitleViewModel_ForeignAudioSearch };
             this.SourceTracks = new List<Subtitle> { this.foreignAudioSearchTrack };
         }
 

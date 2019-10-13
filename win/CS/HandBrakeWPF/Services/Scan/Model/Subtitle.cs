@@ -14,6 +14,7 @@ namespace HandBrakeWPF.Services.Scan.Model
 
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Model.Models;
     using HandBrakeWPF.Utilities;
 
@@ -122,7 +123,7 @@ namespace HandBrakeWPF.Services.Scan.Model
         /// <returns>A string formatted as: {track #} {language}</returns>
         public override string ToString()
         {
-            return this.SubtitleType == SubtitleType.ForeignAudioSearch ? "Foreign Audio Scan" : string.Format("{0} {1}", this.TrackNumber, this.Language);
+            return this.SubtitleType == SubtitleType.ForeignAudioSearch ? Resources.Subtitle_ForeignAudioScan : string.Format("{0} {1}", this.TrackNumber, this.Language);
         }
 
         /// <summary>

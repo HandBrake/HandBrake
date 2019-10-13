@@ -38,7 +38,9 @@
         <Options:LogLevelConverter x:Key="LogLevelConverter" />
         <Options:FileSizeConverter x:Key="fileSizeConverter" />
         <Converters:OptionTabConverter x:Key="optionTabConverter" />
-        
+        <Options:ProcessPriorityConverter x:Key="ProcessPriorityConverter" />
+        <Options:Mp4BehaviourConverter x:Key="Mp4BehaviourConverter" />
+        <Options:UpdateCheckConverter x:Key="UpdateCheckConverter" />
 
         <Converters:BooleanToVisibilityConverter x:Key="boolToVisConverter" />
 
@@ -102,7 +104,7 @@
 
                         <StackPanel Orientation="Vertical" Margin="20,0,0,0">
                             <CheckBox Content="{x:Static Properties:Resources.Options_CheckForUpdates}" IsChecked="{Binding CheckForUpdates}" />
-                            <ComboBox Name="checkForUpdateFrequency" ItemsSource="{Binding CheckForUpdatesFrequencies}" SelectedIndex="{Binding CheckForUpdatesFrequency}" Margin="25,0,0,5" HorizontalAlignment="Left" Width="120"></ComboBox>
+                            <ComboBox Name="checkForUpdateFrequency" ItemsSource="{Binding CheckForUpdatesFrequencies, Converter={StaticResource UpdateCheckConverter}}" SelectedItem="{Binding CheckForUpdatesFrequency, Converter={StaticResource UpdateCheckConverter}}" Margin="25,0,0,5" HorizontalAlignment="Left" Width="120"></ComboBox>
                         </StackPanel>
                     </StackPanel>
 
@@ -204,7 +206,7 @@
 
                             <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
                                 <TextBlock VerticalAlignment="Center" Text="{x:Static Properties:Resources.Options_MP4FileExtension}" />
-                                <ComboBox Name="mp4FileExtension" Width="120" ItemsSource="{Binding Mp4ExtensionOptions}" SelectedIndex="{Binding SelectedMp4Extension}" HorizontalAlignment="Left" />
+                                <ComboBox Name="mp4FileExtension" ItemsSource="{Binding Mp4ExtensionOptions, Converter={StaticResource Mp4BehaviourConverter}}" SelectedItem="{Binding SelectedMp4Extension, Converter={StaticResource Mp4BehaviourConverter}}" Width="120" HorizontalAlignment="Left"  />
                             </StackPanel>
 
                         </StackPanel>
@@ -367,7 +369,7 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <TextBlock Text="{x:Static Properties:Resources.Options_PriorityLevel}" Width="250" VerticalAlignment="Center" />
-                                <ComboBox Name="processPriorityLevel" ItemsSource="{Binding PriorityLevelOptions}" SelectedItem="{Binding SelectedPriority}" Width="120" />
+                                <ComboBox Name="processPriorityLevel" ItemsSource="{Binding PriorityLevelOptions, Converter={StaticResource ProcessPriorityConverter}}" SelectedItem="{Binding SelectedPriority, Converter={StaticResource ProcessPriorityConverter}}" Width="120" />
                             </StackPanel>
                   </StackPanel>
                     </StackPanel>

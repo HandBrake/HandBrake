@@ -11,16 +11,20 @@ namespace HandBrakeWPF.Model.Picture
 {
     using HandBrake.Interop.Attributes;
 
+    using HandBrakeWPF.Properties;
+
     /// <summary>
     /// Picture Settings Mode when adding presets
     /// </summary>
     public enum PresetPictureSettingsMode
     {
-        [DisplayName("None")]
+        [DisplayName(typeof(Resources), "PresetPictureSettingsMode_None")]
         None = 0,
-        [DisplayName("Custom")]
+
+        [DisplayName(typeof(Resources), "PresetPictureSettingsMode_Custom")]
         Custom = 1,
-        [DisplayName("Always use Source Resolution")]
+
+        [DisplayName(typeof(Resources), "PresetPictureSettingsMode_SourceMaximum")]
         SourceMaximum = 2,
     }
 }

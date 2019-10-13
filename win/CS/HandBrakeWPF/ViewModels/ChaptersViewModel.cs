@@ -348,7 +348,7 @@ namespace HandBrakeWPF.ViewModels
 
             foreach (Chapter chapter in this.SourceChapterList)
             {
-                string chapterName = string.IsNullOrEmpty(chapter.ChapterName) ? string.Format("Chapter {0}", counter) : chapter.ChapterName;
+                string chapterName = string.IsNullOrEmpty(chapter.ChapterName) ? string.Format(Resources.ChapterViewModel_Chapter, counter) : chapter.ChapterName;
                 var marker = new ChapterMarker(chapter.ChapterNumber, chapterName, chapter.Duration);
                 this.Chapters.Add(marker);
 

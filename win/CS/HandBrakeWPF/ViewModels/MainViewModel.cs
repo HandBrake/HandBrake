@@ -173,21 +173,18 @@ namespace HandBrakeWPF.ViewModels
             this.Drives = new BindingList<SourceMenuItem>();
 
             // Set Process Priority
-            switch (this.userSettingService.GetUserSetting<string>(UserSettingConstants.ProcessPriority))
+            switch ((ProcessPriority)this.userSettingService.GetUserSetting<int>(UserSettingConstants.ProcessPriorityInt))
             {
-                case "Realtime":
-                    Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.RealTime;
-                    break;
-                case "High":
+                case ProcessPriority.High:
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.High;
                     break;
-                case "Above Normal":
+                case ProcessPriority.AboveNormal:
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
                     break;
-                case "Normal":
+                case ProcessPriority.Normal:
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Normal;
                     break;
-                case "Low":
+                case ProcessPriority.Low:
                     Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.Idle;
                     break;
                 default:

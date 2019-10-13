@@ -48,7 +48,7 @@ namespace HandBrakeWPF
         public const string PreviewScanCount = "previewScanCount";
         public const string Verbosity = "Verbosity";
         public const string MinScanDuration = "MinTitleScanDuration";
-        public const string ProcessPriority = "ProcessPriority";
+        public const string ProcessPriorityInt = "ProcessPriorityInt";
         public const string SaveLogToCopyDirectory = "SaveLogToCopyDirectory";
         public const string SaveLogWithVideo = "SaveLogWithVideo";
         public const string SaveLogCopyDirectory = "SaveLogCopyDirectory";

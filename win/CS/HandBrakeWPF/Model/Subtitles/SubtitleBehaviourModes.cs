@@ -11,20 +11,22 @@ namespace HandBrakeWPF.Model.Subtitles
 {
     using HandBrake.Interop.Attributes;
 
+    using HandBrakeWPF.Properties;
+
     /// <summary>
     /// The subtitle behaviours modes.
     /// </summary>
     public enum SubtitleBehaviourModes
     {
-        [DisplayName("None")]
+        [DisplayName(typeof(Resources), "SubtitleBehaviourModes_None")]
         [ShortName("none")]
         None = 0,
 
-        [DisplayName("First Matching Selected Language")]
+        [DisplayName(typeof(Resources), "SubtitleBehaviourModes_FirstMatching")]
         [ShortName("first")]
         FirstMatch,
 
-        [DisplayName("All Matching Selected Languages")]
+        [DisplayName(typeof(Resources), "SubtitleBehaviourModes_AllMatching")]
         [ShortName("all")]
         AllMatching,
     }
