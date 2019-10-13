@@ -20,5 +20,4 @@
 
 - (void)openJob:(HBJob *)job completionHandler:(void (^)(BOOL result))handler;
 
-
 @end

@@ -225,8 +225,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self updateProgress];
 
     // Register HBController's Window as a receiver for files/folders drag & drop operations
-    [self.window registerForDraggedTypes:@[NSFilenamesPboardType]];
-    [fMainTabView registerForDraggedTypes:@[NSFilenamesPboardType]];
+    [self.window registerForDraggedTypes:@[(NSString *)kUTTypeFileURL]];
+    [fMainTabView registerForDraggedTypes:@[(NSString *)kUTTypeFileURL]];
 
     fPresetsView = [[HBPresetsViewController alloc] initWithPresetManager:presetManager];
     fPresetsView.delegate = self;
@@ -570,11 +570,11 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     {
         if ([menuItem.representedObject isEqualTo:self.currentPreset] && self.edited == NO)
         {
-            menuItem.state = NSOnState;
+            menuItem.state = NSControlStateValueOn;
         }
         else
         {
-            menuItem.state = NSOffState;
+            menuItem.state = NSControlStateValueOff;
         }
         return (self.job != nil);
     }
