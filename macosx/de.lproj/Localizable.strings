@@ -167,7 +167,7 @@
 "HandBrake can't open the preview." = "HandBrake kann die Vorschau nicht öffnen.";
 
 /* Preview -> live preview alert informative text */
-"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake kann die Kombination aus Audio/Video/Kontainer-Format nicht wiedergeben. Soll es extern geöffnet werden?";
+"HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake kann die Kombination aus Audio/Video/Container-Format nicht wiedergeben. Soll es extern geöffnet werden?";
 
 /* Quit Alert -> informative text */
 "If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Wenn Sie HandBrake nun beenden werden Ihre momentanen Encodierungen beim nächsten Start wieder in die Warteschlange geladen. Wollen Sie trotzdem beenden?";
@@ -262,7 +262,7 @@
 "Preview" = "Vorschau";
 
 /* Preview -> window title format */
-"Preview - %@ %@" = "Vorschau - %1$@ %2$@";
+"Preview - %@ %@" = "Vorschau – %1$@ %2$@";
 
 /* Preview -> accessibility label */
 "Preview Image, Size: %zu x %zu, Scale: %.0f%%" = "Vorschaubild, Größe: %1$zu x %2$zu, Skalierung: %3$.0f%%";
@@ -316,7 +316,7 @@
 "Scale To Screen" = "An Bildschirm anpassen";
 
 /* Queue Alert -> cancel rip informative text */
-"Select Continue Encoding to dismiss this dialog without making changes." = "'Encodierung fortsetzen' wählen um diesen Dialog ohne weitere Änderungen zu schließen.";
+"Select Continue Encoding to dismiss this dialog without making changes." = "„Encodierung fortsetzen“ wählen um diesen Dialog ohne weitere Änderungen zu schließen.";
 
 /* Preferences -> send to app destination open panel */
 "Select the desired external application" = "Die gewünschte externe Anwendung auswählen";

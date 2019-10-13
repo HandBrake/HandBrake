@@ -1,5 +1,5 @@
 /* Class = "NSButtonCell"; title = "Add Closed Captions when available"; ObjectID = "66v-2g-DHn"; */
-"66v-2g-DHn.title" = "Добавлять Скрытые Субтитры, когда возможно";
+"66v-2g-DHn.title" = "Добавлять скрытые субтитры, когда возможно";
 
 /* Class = "NSButtonCell"; title = "DVD Subtitles"; ObjectID = "69Q-xB-Vyq"; */
 "69Q-xB-Vyq.title" = "DVD-субтитры";
@@ -20,7 +20,7 @@
 "ceZ-On-t5S.ibShadowedToolTip" = "Вшивать первую выбранную дорожку субтитров DVD. Все другие дорожки субтитров DVD будут отброшены. Используйте эту опцию в том случае, если ваше программное обеспечение или устройство не поддерживает субтитры DVD.\n\nТолько одна дорожка субтитров может быть вшита.";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio, then First Selected Track"; ObjectID = "d79-2j-fhc"; */
-"d79-2j-fhc.title" = "Иноязычное Аудио, затем Первая Выбранная Дорожка";
+"d79-2j-fhc.title" = "Иноязычное аудио, затем первая выбранная дорожка";
 
 /* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "ego-rt-a64"; */
 "ego-rt-a64.title" = "Отмена";
@@ -41,7 +41,7 @@
 "jDd-Ji-7Sm.title" = "Первая совпадающая с выбранными языками";
 
 /* Class = "NSWindow"; title = "Subtitles Selection Behaviour"; ObjectID = "kwM-lz-5lG"; */
-"kwM-lz-5lG.title" = "Поведение Выбора Субтитров";
+"kwM-lz-5lG.title" = "Поведение выбора субтитров";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Kwy-lU-VuU"; */
 "Kwy-lU-VuU.title" = "OtherViews";
@@ -53,7 +53,7 @@
 "mAT-Jp-SG1.title" = "Языки:";
 
 /* Class = "NSMenuItem"; title = "First Selected Track"; ObjectID = "mnl-P8-dtK"; */
-"mnl-P8-dtK.title" = "Первая Выбранная Дорожка";
+"mnl-P8-dtK.title" = "Первая выбранная дорожка";
 
 /* Class = "NSMenuItem"; title = "None"; ObjectID = "mvw-Hg-JFM"; */
 "mvw-Hg-JFM.title" = "Нет";
@@ -83,14 +83,14 @@
 "QAt-5X-NBT.ibShadowedToolTip" = "Показывать все языки субтитров в списке языков.";
 
 /* Class = "NSMenuItem"; title = "Foreign Audio Subtitles Track"; ObjectID = "QRd-XH-6TH"; */
-"QRd-XH-6TH.title" = "Дорожка Субтитров Иноязычного Аудио";
+"QRd-XH-6TH.title" = "Дорожка субтитров иноязычного аудио";
 
 /* Class = "NSTextFieldCell"; title = "Table View Cell"; ObjectID = "qVQ-fS-w1S"; */
 "qVQ-fS-w1S.title" = "Table View Cell";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Add Closed Caption subtitles as a soft subtitle track (not burned-in)."; ObjectID = "uF5-6E-EIe"; */
-"uF5-6E-EIe.ibShadowedToolTip" = "Добавлять Скрытые Субтитры как 'мягкую' дорожку (не вшитую).";
+"uF5-6E-EIe.ibShadowedToolTip" = "Добавлять скрытые субтитры как 'мягкую' дорожку (не вшитую).";
 
 /* Class = "NSButtonCell"; title = "Add Foreign Audio Search"; ObjectID = "vNY-OC-hTJ"; */
-"vNY-OC-hTJ.title" = "Добавить Поиск Иноязычного Аудио";
+"vNY-OC-hTJ.title" = "Добавить поиск иноязычного аудио";
 

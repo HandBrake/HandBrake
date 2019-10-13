@@ -227,7 +227,7 @@
 "Tk3-Ig-fFI.ibShadowedToolTip" = "Labels in das Formatfenster ziehen, um das Benennungsschema festzulegen.";
 
 /* Class = "NSButtonCell"; title = "Reset to \"Do nothing\" on launch"; ObjectID = "Uxv-oN-c1r"; */
-"Uxv-oN-c1r.title" = "Bei jedem Start auf \"Nichts tun\" zurücksetzen";
+"Uxv-oN-c1r.title" = "Bei jedem Start auf „Nichts tun“ zurücksetzen";
 
 /* Class = "NSButtonCell"; title = "Remove common punctuation"; ObjectID = "wo5-iR-2mb"; */
 "wo5-iR-2mb.title" = "Punktationen entfernen";

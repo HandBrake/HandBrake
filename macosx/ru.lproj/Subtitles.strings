@@ -41,7 +41,7 @@
 "fvq-pE-sOC.headerCell.title" = "По умолчанию";
 
 /* Class = "NSMenuItem"; title = "Add External Subtitles Track…"; ObjectID = "fXD-7h-jMl"; */
-"fXD-7h-jMl.title" = "Добавить Внешнюю Дорожку Субтитров...";
+"fXD-7h-jMl.title" = "Добавить внешнюю дорожку субтитров...";
 
 /* Class = "NSMenuItem"; title = "Item 2"; ObjectID = "g4b-FM-qX4"; */
 "g4b-FM-qX4.title" = "Item 2";
@@ -104,10 +104,10 @@
 "ooy-Sh-Edm.title" = "Выбрать";
 
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "oxg-bs-1si"; */
-"oxg-bs-1si.title" = "Поведение Выбора...";
+"oxg-bs-1si.title" = "Поведение выбора...";
 
 /* Class = "NSMenuItem"; title = "Selection Behavior…"; ObjectID = "pwm-PV-1x4"; */
-"pwm-PV-1x4.title" = "Поведение Выбора...";
+"pwm-PV-1x4.title" = "Поведение выбора...";
 
 /* Class = "NSTextFieldCell"; title = "Text"; ObjectID = "QRj-KI-a03"; */
 "QRj-KI-a03.title" = "Текст";
@@ -155,10 +155,10 @@
 "UOP-xa-WpP.title" = "OtherViews";
 
 /* Class = "NSMenuItem"; title = "Pop Up"; ObjectID = "vHW-fn-RSG"; */
-"vHW-fn-RSG.title" = "Всплывающее Окно";
+"vHW-fn-RSG.title" = "Всплывающее окно";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Reload the subtitles tracks list using the configured Selection Behavior."; ObjectID = "Vxx-gk-9kY"; */
-"Vxx-gk-9kY.ibShadowedToolTip" = "Перезагрузить список дорожек субтитров используя настроенное Поведение Выбора.";
+"Vxx-gk-9kY.ibShadowedToolTip" = "Перезагрузить список дорожек субтитров используя настроенное поведение выбора.";
 
 /* Class = "NSMenuItem"; title = "Item 1"; ObjectID = "yDg-DK-z5D"; */
 "yDg-DK-z5D.title" = "Item 1";

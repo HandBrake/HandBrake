@@ -65,7 +65,7 @@
 "gIJ-Xs-uVF.title" = "OtherViews";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
-"GPu-Ht-bKg.ibShadowedToolTip" = "Konstante Qualität variiert die Bitrate um eine gleichbleibende visuelle Qualität über das ganze Video zu garantieren.\n\nWird der Qualitätsregler nach rechts bewegt erhöht sich die Qualität, nach links erniedrigt sie sich.\n\nEmpfohlene Werte für x264 und x265 sind zwischen RF 18-28. Höhere Qualitätseinstellungen produzieren evtl. sehr große Dateien.\n\nx264 ist verlustfrei bei RF 0.";
+"GPu-Ht-bKg.ibShadowedToolTip" = "Konstante Qualität variiert die Bitrate um eine gleichbleibende visuelle Qualität über das ganze Video zu garantieren.\n\nWird der Qualitätsregler nach rechts bewegt erhöht sich die Qualität, nach links erniedrigt sie sich, jeweils in kleinen Schritten von plus oder minus 1–2.\n\nEmpfohlene Werte für x264 und x265 sind zwischen RF 18–28. Höhere Qualitätseinstellungen produzieren evtl. sehr große Dateien.\n\nx264 ist verlustfrei bei RF 0.";
 
 /* Class = "NSTextFieldCell"; title = "Profile:"; ObjectID = "Hho-GY-qOR"; */
 "Hho-GY-qOR.title" = "Profil:";
@@ -86,7 +86,7 @@
 "Mrb-6Q-0YM.title" = "Videoencoder:";
 
 /* Class = "NSButtonCell"; title = "2-pass encoding"; ObjectID = "nPA-nO-Eik"; */
-"nPA-nO-Eik.title" = "Encodierung in 2 Durchgängen";
+"nPA-nO-Eik.title" = "Encodierung in zwei Durchgängen";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Turbo first pass speeds up the first pass of a 2-pass encode for a slight penalty to analysis."; ObjectID = "olm-zg-k9Y"; */
 "olm-zg-k9Y.ibShadowedToolTip" = "Der beschleunigte erste Durchgang beschleunigt die Encodierung in zwei Durchgängen, ist aber mit einer etwas schlechteren Analyseleistung behaftet.";

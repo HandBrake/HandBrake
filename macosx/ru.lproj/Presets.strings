@@ -11,10 +11,10 @@
 "cm5-Kl-dB3.title" = "Сбросить официальные пресеты";
 
 /* Class = "NSMenuItem"; title = "Make Default"; ObjectID = "D2t-YG-Frn"; */
-"D2t-YG-Frn.title" = "Выбрать По Умолчанию";
+"D2t-YG-Frn.title" = "Выбрать по умолчанию";
 
 /* Class = "NSMenuItem"; title = "New Category"; ObjectID = "Io0-Vm-Qez"; */
-"Io0-Vm-Qez.title" = "Новая Категория";
+"Io0-Vm-Qez.title" = "Новая категория";
 
 /* Class = "NSButton"; ibExternalAccessibilityDescription = "New Preset"; ObjectID = "kfi-wq-mgV"; */
 "kfi-wq-mgV.ibExternalAccessibilityDescription" = "Новый пресет";

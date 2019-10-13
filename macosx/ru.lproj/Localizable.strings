@@ -1,5 +1,5 @@
 /* Preview -> size info label */
-" Scaled To Screen" = "Масштабировано к Экрану";
+" Scaled To Screen" = "Масштабировано к размеру экрана";
 
 /* No comment provided by engineer. */
 "- --:--" = "- --:--";
@@ -30,7 +30,7 @@
 "A file already exists at the selected destination." = "Файл уже существует в выбранной папке назначения.";
 
 /* Picture HUD -> scale button */
-"Actual Scale" = "Реальный Масштаб";
+"Actual Scale" = "Реальный масштаб";
 
 /* Queue undo action name */
 "Add Job To Queue" = "Добавить задание в очередь";
@@ -57,7 +57,7 @@
 "Are you sure you want to quit HandBrake?" = "Вы уверены, что хотите выйти из HandBrake?";
 
 /* Copy Protection Alert -> first button */
-"Attempt Scan Anyway" = "Всё Равно Попробовать Сканировать";
+"Attempt Scan Anyway" = "Всё равно попробовать сканировать";
 
 /* Player HUD -> audio menu */
 "Audio" = "Аудио";
@@ -75,10 +75,10 @@
 
 /* Toolbar Open/Cancel Item
    Touch bar */
-"Cancel Scan" = "Отменить Сканирование";
+"Cancel Scan" = "Отменить сканирование";
 
 /* Toolbar Open/Cancel Item */
-"Cancel Scanning Source" = "Отменить Сканирование Исходного Файла";
+"Cancel Scanning Source" = "Отменить сканирование исходного файла";
 
 /* Preferences -> Output Name Token */
 "Chapters" = "Главы";
@@ -195,13 +195,13 @@
 "Move Jobs in Queue" = "Переместить задания в очереди";
 
 /* Preview -> accessibility label */
-"No image" = "Нет Изображения";
+"No image" = "Нет изображения";
 
 /* No comment provided by engineer. */
 "No job selected" = "Задание не выбрано";
 
 /* Main Window -> Info text */
-"No Valid Source Found" = "Не Найдено Действительного Исходного Файла";
+"No Valid Source Found" = "Не найдено действительного исходного файла";
 
 /* Add preset window -> picture setting */
 "None" = "Ничего";
@@ -218,7 +218,7 @@
 
 /* Toolbar Open/Cancel Item
    Touch bar */
-"Open Source" = "Открыть Исходный Файл";
+"Open Source" = "Открыть источник";
 
 /* File already exists alert -> second button
    File already exists in queue alert -> second button */
@@ -242,14 +242,14 @@
 "Peak Framerate (VFR)" = "Наивысшая частота кадров (VFR)";
 
 /* Touch bar */
-"Play/Pause" = "Воспроизвести/Пауза";
+"Play/Pause" = "Воспроизвести/пауза";
 
 /* Add preset window -> name alert informative text
    Rename preset window -> name alert informative text */
 "Please enter a name." = "Пожалуйста, введите название.";
 
 /* Copy Protection Alert -> informative text */
-"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "Пожалуйста, примите во внимание, что handBrake не поддерживает удаление защиты от копирования DVD-дисков. Если захотите, вы можете использовать любое другое программное обеспечения для этой функции. Это предупреждение будет показываться только один раз, но при каждом запуске HandBrake.";
+"Please note that HandBrake does not support the removal of copy-protection from DVD Discs. You can if you wish use any other 3rd party software for this function. This warning will be shown only once each time HandBrake is run." = "Пожалуйста, примите во внимание, что HandBrake не поддерживает удаление защиты от копирования DVD-дисков. Если захотите, вы можете использовать любое другое программное обеспечения для этой функции. Это предупреждение будет показываться только один раз, но при каждом запуске HandBrake.";
 
 /* Queue Done Alert -> shut down second button
    Queue Done Alert -> sleep second button */
@@ -275,7 +275,7 @@
 "Put down that cocktail…" = "Отложите в сторону этот коктейл...";
 
 /* Preferences -> Output Name Token */
-"Quality/Bitrate" = "Качетсво/Битрейт";
+"Quality/Bitrate" = "Качетсво/битрейт";
 
 /* Queue window title */
 "Queue" = "Очередь";
@@ -287,7 +287,7 @@
 "Quit" = "Выход";
 
 /* Touch bar */
-"Remaining Time" = "Осталось Времени";
+"Remaining Time" = "Осталось времени";
 
 /* HBQueueItemView -> Remove button accessibility label */
 "Remove job" = "Удалить задание";
@@ -313,7 +313,7 @@
 
 /* Picture HUD -> scale button
    Touch bar */
-"Scale To Screen" = "Масштабировать к Размеру Экрана";
+"Scale To Screen" = "Масштабировать к размеру экрана";
 
 /* Queue Alert -> cancel rip informative text */
 "Select Continue Encoding to dismiss this dialog without making changes." = "Выберите 'Продолжить кодирование', чтобы закрыть это диалоговое окно без применения изменений.";
@@ -328,7 +328,7 @@
 "Show" = "Показать";
 
 /* Touch bar */
-"Show Activity Window" = "Показать Окно Активности";
+"Show Activity Window" = "Показать окно активности";
 
 /* Touch bar */
 "Show Preview Window" = "Показать окно предпросмотра";
@@ -337,7 +337,7 @@
 "Size:" = "Размеры:";
 
 /* Queue Alert -> cancel rip second button */
-"Skip Current Job" = "Пропустить Текущее Задание";
+"Skip Current Job" = "Пропустить текущее задание";
 
 /* Touch bar */
 "Slider" = "Ползунок";
@@ -369,10 +369,10 @@
 "Stop" = "Остановить";
 
 /* Queue Alert -> cancel rip third button */
-"Stop After Current Job" = "Остановить После Текущего Задания";
+"Stop After Current Job" = "Остановить после текущего задания";
 
 /* Queue Alert -> cancel rip fourth button */
-"Stop All" = "Остановить Все";
+"Stop All" = "Остановить все";
 
 /* Queue -> start/stop menu
    Toolbar Start/Stop Item */
@@ -431,7 +431,7 @@
 "Title" = "Заголовок";
 
 /* Video -> Framerate */
-"Variable Framerate" = "Переменная Частота Кадров";
+"Variable Framerate" = "Переменная";
 
 /* Invalid destination alert -> message */
 "Warning!" = "Предупреждение!";
@@ -452,7 +452,7 @@
 "You need to make more space available on your destination disk." = "Вам необходимо больше освободить диск назначения.";
 
 /* Queue -> disk almost full alert message */
-"Your destination disk is almost full." = "На диск пути назначения практически не осталось места.";
+"Your destination disk is almost full." = "На диске пути назначения практически не осталось места.";
 
 /* Queue done notification message */
 "Your encode %@ couldn't be completed." = "Ваше кодирование %@ не может быть завершено.";

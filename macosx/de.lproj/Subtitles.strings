@@ -56,7 +56,7 @@
 "HC5-ql-Vcr.ibExternalAccessibilityDescription" = "Nur erzwungene Untertitel";
 
 /* Class = "NSButton"; ibShadowedToolTip = "Forced Only. Use only subtitles marked as “forced” in the selected source track."; ObjectID = "HC5-ql-Vcr"; */
-"HC5-ql-Vcr.ibShadowedToolTip" = "Nur erzwungene. Benutze nur Untertitel die in der ausgewählten Quelle als “erzwungen” markiert sind.";
+"HC5-ql-Vcr.ibShadowedToolTip" = "Nur erzwungene. Benutze nur Untertitel die in der ausgewählten Quelle als „erzwungen“ markiert sind.";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "hhH-c3-gD0"; */
 "hhH-c3-gD0.title" = "0";

@@ -1,5 +1,5 @@
 /* Video description */
-" - fastdecode" = "- быстрдекод";
+" - fastdecode" = " - fastdecode";
 
 /* HBStateFormatter -> work time format */
 " (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f к/с, сред. %2$.2f к/с, ост. %3$@)";
@@ -15,7 +15,7 @@
 " FPS PFR" = " FPS PFR";
 
 /* Dimensions description */
-" Keep Aspect Ratio" = "Сохранять Соотношение Сторон";
+" Keep Aspect Ratio" = "Сохранять соотношение сторон";
 
 /* Title short description -> audio format */
 ", %d audio tracks" = ", %d аудио-дорожек";
@@ -30,7 +30,7 @@
 ", 1 subtitles track" = ", 1 дорожка субтитров";
 
 /* Format description */
-", Align A/V Start" = ", Выравнять Начало A/V";
+", Align A/V Start" = ", Выравнять начало A/V";
 
 /* HBJob -> subtitles short description */
 ", Burned" = ", Вшитые";
@@ -90,10 +90,10 @@
 "1 Foreign Language Search Pass - " = "1 Проход поиска иностранных языков - ";
 
 /* Title description */
-"2 Video Passes" = "2 Прохода Видео";
+"2 Video Passes" = "2 Прохода видео";
 
 /* Title description */
-"2 Video Passes First Turbo" = "2 Прохода Видео Ускоренный Первый";
+"2 Video Passes First Turbo" = "2 Прохода видео, ускоренный первый";
 
 /* HBAudio -> Mixdown */
 "5.1 Channels" = "5.1 Каналов";
@@ -133,10 +133,10 @@
 "Chapters %d through %d" = "Главы %1$d из %2$d";
 
 /* HBJob -> filters short description */
-"Comb Detect" = "Поиск \"Гребенки\"";
+"Comb Detect" = "Обнаружение гребенки";
 
 /* Video description */
-"Constant Quality: %.2f %s" = "Постоянное Качество: %1$.2f %2$s";
+"Constant Quality: %.2f %s" = "Постоянное качество: %1$.2f %2$s";
 
 /* HBJob -> video short description framerate */
 "CRF" = "CRF";
@@ -150,13 +150,13 @@
 "Deblock" = "Деблокинг";
 
 /* HBJob -> invalid deblock custom settings error recovery suggestion */
-"Deblock syntax: strength=s:thresh=t:blocksize=b" = "Синтаксис Деблокинга: strength=s:thresh=t:blocksize=b";
+"Deblock syntax: strength=s:thresh=t:blocksize=b" = "Синтаксис деблокинга: strength=s:thresh=t:blocksize=b";
 
 /* HBFilters -> filter display name */
-"Decomb" = "Удаление \"Гребенки\"";
+"Decomb" = "Удаление гребенки";
 
 /* HBJob -> invalid Decomb custom settings error recovery suggestion */
-"Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7" = "Синтаксис Удаления \"Гребенки\": mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nУдаления \"Гребенки\" по умолчанию: mode=7";
+"Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nDecomb default: mode=7" = "Синтаксис удаления гребенки: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p\n\nУдаления гребенки по умолчанию: mode=7";
 
 /* Subtitles description */
 "Default" = "По умолчанию";
@@ -172,7 +172,7 @@
 
 /* Dimensions description
    HBJob -> filters short description */
-"Detelecine" = "Удаление ТВ-\"гребенки\"";
+"Detelecine" = "Удаление гребенки";
 
 /* Dimensions description */
 "Dimensions:" = "Размеры:";
@@ -199,7 +199,7 @@
 "Forced Only" = "Только принудительно";
 
 /* HBSubtitles -> search pass name */
-"Foreign Audio Search" = "Поиск Иноязычного Аудио";
+"Foreign Audio Search" = "Поиск иноязычного аудио";
 
 /* Format description */
 "Format:" = "Формат:";
@@ -275,10 +275,10 @@
 "Mono" = "Моно";
 
 /* HBAudio -> Mixdown */
-"Mono (Left Only)" = "Моно (Только Левый)";
+"Mono (Left Only)" = "Моно (только левый)";
 
 /* HBAudio -> Mixdown */
-"Mono (Right Only)" = "Моно (Только Правый)";
+"Mono (Right Only)" = "Моно (только правый)";
 
 /* HBJob -> Format display name */
 "MP4 File" = "MP4-файл";
@@ -424,7 +424,7 @@
 "VFR" = "VFR";
 
 /* Video description */
-"Video Options:" = "Опции Видео:";
+"Video Options:" = "Опции видео:";
 
 /* Video description */
 "Video:" = "Видео:";

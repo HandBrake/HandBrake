@@ -14,13 +14,13 @@
 "9tc-EO-QMd.ibShadowedToolTip" = "Частота кадров (кадров в секунду). Количество изображений, показываемых каждую секунду видео.";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Average Bitrate varies quality to ensure the data rate remains relatively consistent throughout the video."; ObjectID = "A3o-Zx-OfM"; */
-"A3o-Zx-OfM.ibShadowedToolTip" = "Средний Битрейт меняет качество, чтобы удостоверится, что частота данных остается относительно постоянной на всем протяжении файла.";
+"A3o-Zx-OfM.ibShadowedToolTip" = "Средний битрейт меняет качество, чтобы удостоверится, что частота данных остается относительно постоянной на всем протяжении файла.";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Aes-nP-7qS"; */
 "Aes-nP-7qS.title" = "OtherViews";
 
 /* Class = "NSButton"; ibShadowedToolTip = "2-pass encoding analyzes the entire source video before encoding. The information gathered enables the encoder to make more informed decisions about quality and data rate in Average Bitrate mode."; ObjectID = "bnV-aE-FVh"; */
-"bnV-aE-FVh.ibShadowedToolTip" = "2-проходное кодирование анализирует весь источник видео перед кодированием. Собранная информация позволяет кодировщику принимать более осмысленные решения о качестве и частоте данных в режиме Среднего Битрейта.";
+"bnV-aE-FVh.ibShadowedToolTip" = "2-проходное кодирование анализирует весь источник видео перед кодированием. Собранная информация позволяет кодировщику принимать более осмысленные решения о качестве и частоте данных в режиме среднего битрейта.";
 
 /* Class = "NSTextFieldCell"; title = "0"; ObjectID = "bvD-W7-O0N"; */
 "bvD-W7-O0N.title" = "0";
@@ -65,13 +65,13 @@
 "gIJ-Xs-uVF.title" = "OtherViews";
 
 /* Class = "NSSlider"; ibShadowedToolTip = "Constant Quality varies bitrate to ensure visual quality remains relatively consistent throughout the video.\n\nAdjust the quality slider to the right to increase quality or to the left to decrease quality, in small increments of plus or minus 1-2.\n\nRecommended values for the x264 and x265 encoders are RF 18-28. Higher quality settings may produce extremely large files.\n\nx264 is lossless at RF 0."; ObjectID = "GPu-Ht-bKg"; */
-"GPu-Ht-bKg.ibShadowedToolTip" = "Постоянное Качество меняет битрейт, чтобы удостоверится, что визуальное качество изображения остается относительно постоянным на всем протяжении видео.\n\nПереместите ползунок правее для увеличения качества или левее для уменьшения качества, небольшими шагами в плюс или минус 1-2.\n\nРекомендованные значения для кодировщиков x264 и x265 - RF 18-28. Большие значения могут привести к чрезвычайно большому размеру файла.\n\nx264 без сжатия находится на RF 0.";
+"GPu-Ht-bKg.ibShadowedToolTip" = "Постоянное качество меняет битрейт, чтобы удостоверится, что визуальное качество изображения остается относительно постоянным на всем протяжении видео.\n\nПереместите ползунок правее для увеличения качества или левее для уменьшения качества, небольшими шагами в плюс или минус 1-2.\n\nРекомендованные значения для кодировщиков x264 и x265 - RF 18-28. Большие значения могут привести к чрезвычайно большому размеру файла.\n\nx264 без сжатия находится на RF 0.";
 
 /* Class = "NSTextFieldCell"; title = "Profile:"; ObjectID = "Hho-GY-qOR"; */
 "Hho-GY-qOR.title" = "Профиль:";
 
 /* Class = "NSTextFieldCell"; title = "Additional Options:"; ObjectID = "ja7-Zr-y1P"; */
-"ja7-Zr-y1P.title" = "Дополнительные Опции:";
+"ja7-Zr-y1P.title" = "Дополнительные опции:";
 
 /* Class = "NSMenu"; title = "OtherViews"; ObjectID = "Jj0-Qw-HF8"; */
 "Jj0-Qw-HF8.title" = "OtherViews";
@@ -113,7 +113,7 @@
 "stU-Fo-Avu.ibShadowedToolTip" = "'Быстрое декодирование' использует настройки, которые снижают нагрузку на процессор во время воспроизведения кодированного видео. Полезно для устройств, которые не могут воспроизвести видео без подергиваний.";
 
 /* Class = "NSButtonCell"; title = "Average Bitrate (kbps):"; ObjectID = "VQe-CK-YDR"; */
-"VQe-CK-YDR.title" = "Средний Битрейт (кбит/с)";
+"VQe-CK-YDR.title" = "Средний битрейт (кбит/с)";
 
 /* Class = "NSButtonCell"; title = "Turbo first pass"; ObjectID = "vSc-VB-NEv"; */
 "vSc-VB-NEv.title" = "Ускорить первый проход";
@@ -122,8 +122,8 @@
 "xwK-Yu-a1e.ibShadowedToolTip" = "Кодировщик видео. Определяет тип видео и настройки, используемые во время кодирования.";
 
 /* Class = "NSButtonCell"; title = "Constant Quality"; ObjectID = "ZjL-cY-O5f"; */
-"ZjL-cY-O5f.title" = "Постоянное Качество";
+"ZjL-cY-O5f.title" = "Постоянное качество";
 
 /* Class = "NSButtonCell"; title = "Variable Framerate"; ObjectID = "zZo-75-1WG"; */
-"zZo-75-1WG.title" = "Переменная Частота Кадров";
+"zZo-75-1WG.title" = "Переменная";
 

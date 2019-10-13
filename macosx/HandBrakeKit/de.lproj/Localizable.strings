@@ -1,5 +1,5 @@
 /* Video description */
-" - fastdecode" = " - Schnelldecodierung";
+" - fastdecode" = " – Schnelldecodierung";
 
 /* HBStateFormatter -> work time format */
 " (%.2f fps, avg %.2f fps, ETA %@)" = " (%1$.2f BpS, im Mittel %2$.2f BpS, ETA %3$@)";
@@ -87,7 +87,7 @@
 "+ 1 additional subtitles track" = "+ 1 zusätzliche Untertitelspur";
 
 /* Title description */
-"1 Foreign Language Search Pass - " = "1 Fremdsprachensuche-Durchgang - ";
+"1 Foreign Language Search Pass - " = "1 Fremdsprachensuche-Durchgang – ";
 
 /* Title description */
 "2 Video Passes" = "2 Videodurchgänge";
@@ -393,7 +393,7 @@
 "The file name can't contain the / character." = "Der Dateiname darf kein /-Zeichen enthalten.";
 
 /* Preset -> import error description */
-"The preset \"%@\" could not be imported." = "Die Voreinstellung \"%@\" konnte nicht importiert werden.";
+"The preset \"%@\" could not be imported." = "Die Voreinstellung „%@“ konnte nicht importiert werden.";
 
 /* Preset -> import error reason */
 "The selected preset is invalid." = "Die ausgewählte Voreinstellung ist ungültig.";

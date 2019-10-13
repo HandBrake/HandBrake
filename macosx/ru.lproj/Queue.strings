@@ -1,23 +1,23 @@
 /* Class = "NSMenuItem"; title = "Reset Failed Jobs"; ObjectID = "0zn-7P-JbR"; */
-"0zn-7P-JbR.title" = "Сбросить Неудавшиеся Задания";
+"0zn-7P-JbR.title" = "Сбросить неудавшиеся задания";
 
 /* Class = "NSMenuItem"; title = "Remove Completed Jobs"; ObjectID = "9tg-YJ-DuI"; */
-"9tg-YJ-DuI.title" = "Удалить Завершенные Задания";
+"9tg-YJ-DuI.title" = "Удалить завершенные задания";
 
 /* Class = "NSWindow"; title = "Queue"; ObjectID = "2576"; */
 "2576.title" = "Очередь";
 
 /* Class = "NSToolbarItem"; label = "When Done"; ObjectID = "a3c-kV-98E"; */
-"a3c-kV-98E.label" = "При Завершении";
+"a3c-kV-98E.label" = "При завершении";
 
 /* Class = "NSToolbarItem"; paletteLabel = "When Done"; ObjectID = "a3c-kV-98E"; */
-"a3c-kV-98E.paletteLabel" = "При Завершении";
+"a3c-kV-98E.paletteLabel" = "При завершении";
 
 /* Class = "NSToolbarItem"; toolTip = "Action to perform when encoding is complete."; ObjectID = "a3c-kV-98E"; */
 "a3c-kV-98E.toolTip" = "Действие для выполнения при завершении кодирования.";
 
 /* Class = "NSMenuItem"; title = "Alert and Notification"; ObjectID = "aat-1N-Odn"; */
-"aat-1N-Odn.title" = "Предупреждения и Уведомления";
+"aat-1N-Odn.title" = "Предупреждения и уведомления";
 
 /* Class = "NSToolbarItem"; label = "Action"; ObjectID = "DCB-WP-NRs"; */
 "DCB-WP-NRs.label" = "Действие";
@@ -41,7 +41,7 @@
 "jDL-sB-8e3.title" = "Уведомление";
 
 /* Class = "NSMenuItem"; title = "Reset All Jobs"; ObjectID = "kPX-am-UX1"; */
-"kPX-am-UX1.title" = "Сбросить Все Задания";
+"kPX-am-UX1.title" = "Сбросить все задания";
 
 /* Class = "NSMenuItem"; title = "Shut Down Computer"; ObjectID = "QmP-SQ-XKK"; */
 "QmP-SQ-XKK.title" = "Выключать компьютер";
@@ -56,17 +56,17 @@
 "s7o-pK-heI.toolTip" = "Поставить кодирование на паузу";
 
 /* Class = "NSMenuItem"; title = "Do Nothing"; ObjectID = "sm5-26-sAg"; */
-"sm5-26-sAg.title" = "Ничего Не Делать";
+"sm5-26-sAg.title" = "Ничего не делать";
 
 /* Class = "NSToolbarItem"; label = "Start"; ObjectID = "SX6-mq-Hck"; */
 "SX6-mq-Hck.label" = "Начало";
 
 /* Class = "NSToolbarItem"; paletteLabel = "Start/Cancel"; ObjectID = "SX6-mq-Hck"; */
-"SX6-mq-Hck.paletteLabel" = "Начать/Отменить";
+"SX6-mq-Hck.paletteLabel" = "Начать/отменить";
 
 /* Class = "NSToolbarItem"; toolTip = "Start Encoding"; ObjectID = "SX6-mq-Hck"; */
 "SX6-mq-Hck.toolTip" = "Начать кодирование";
 
 /* Class = "NSMenuItem"; title = "Remove All Jobs"; ObjectID = "Tvo-xt-sag"; */
-"Tvo-xt-sag.title" = "Удалить Все Задания";
+"Tvo-xt-sag.title" = "Удалить все задания";
 
