@@ -132,20 +132,20 @@ function mingw-w64-build {  # mingw-w64-build [args] $TARGET_PARAM $TARGET_DIR
 
     # versions
     local CONFIG_VER BINUTILS_VER MINGW_W64_VER GMP_VER MPFR_VER MPC_VER ISL_VER GCC_VER GDB_VER VERSIONS
-    CONFIG_VER="f83dbaa"  # config.guess 2019-06-10
-    BINUTILS_VER="2.32"
+    CONFIG_VER="1912ca5"  # config.guess 2019-09-12
+    BINUTILS_VER="2.33.1"
     MINGW_W64_VER="6.0.0"
     GMP_VER="6.1.2"
     MPFR_VER="4.0.2"
     MPC_VER="1.1.0"
     ISL_VER="0.21"
-    GCC_VER="9.1.0"
+    GCC_VER="9.2.0"
     VERSIONS=("${CONFIG_VER}" "${BINUTILS_VER}" "${MINGW_W64_VER}" "${GMP_VER}" "${MPFR_VER}" "${MPC_VER}" "${ISL_VER}" "${GCC_VER}")
 
     # filenames
     local CONFIG_PKG BINUTILS_PKG MINGW_W64_PKG GMP_PKG MPFR_PKG MPC_PKG ISL_PKG GCC_PKG GDB_PKG PKGS
     CONFIG_PKG="config-${CONFIG_VER}.tar.gz"
-    BINUTILS_PKG="binutils-${BINUTILS_VER}.tar.bz2"
+    BINUTILS_PKG="binutils-${BINUTILS_VER}.tar.xz"
     MINGW_W64_PKG="mingw-w64-v${MINGW_W64_VER}.tar.bz2"
     GMP_PKG="gmp-${GMP_VER}.tar.bz2"
     MPFR_PKG="mpfr-${MPFR_VER}.tar.gz"
@@ -157,7 +157,7 @@ function mingw-w64-build {  # mingw-w64-build [args] $TARGET_PARAM $TARGET_DIR
     # urls
     local CONFIG_URLS BINUTILS_URLS MINGW_W64_URLS GMP_URLS MPFR_URLS MPC_URLS ISL_URLS GCC_URLS GDB_URLS URLS_VARNAMES
     CONFIG_URLS=("https://git.savannah.gnu.org/gitweb/?p=config.git;a=snapshot;h=${CONFIG_VER};sf=tgz")
-    BINUTILS_URLS=("https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.bz2")
+    BINUTILS_URLS=("https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VER}.tar.xz")
     MINGW_W64_URLS=("http://downloads.sourceforge.net/project/mingw-w64/mingw-w64/mingw-w64-release/mingw-w64-v${MINGW_W64_VER}.tar.bz2")
     GMP_URLS=("https://ftp.gnu.org/gnu/gmp/gmp-${GMP_VER}.tar.bz2")
     MPFR_URLS=("https://ftp.gnu.org/gnu/mpfr/mpfr-${MPFR_VER}.tar.gz")
@@ -168,20 +168,20 @@ function mingw-w64-build {  # mingw-w64-build [args] $TARGET_PARAM $TARGET_DIR
 
     # checksums
     local CONFIG_SHA256 BINUTILS_SHA256 MINGW_W64_SHA256 GMP_SHA256 MPFR_SHA256 MPC_SHA256 ISL_SHA256 GCC_SHA256 GDB_SHA256 CHECKSUMS
-    CONFIG_SHA256="8521a473f248601b324e993a0425fa744ad11c72f648d4616cfb7b7abc4576a9"
-    BINUTILS_SHA256="de38b15c902eb2725eac6af21183a5f34ea4634cb0bcef19612b50e5ed31072d"
+    CONFIG_SHA256="3b9142de353991dada446a1bc55599838c0e066091ed63a184a9abce50f54724"
+    BINUTILS_SHA256="ab66fc2d1c3ec0359b8e08843c9f33b63e8707efdff5e4cc5c200eae24722cbf"
     MINGW_W64_SHA256="805e11101e26d7897fce7d49cbb140d7bac15f3e085a91e0001e80b2adaf48f0"
     GMP_SHA256="5275bb04f4863a13516b2f39392ac5e272f5e1bb8057b18aec1c9b79d73d8fb2"
     MPFR_SHA256="ae26cace63a498f07047a784cd3b0e4d010b44d2b193bab82af693de57a19a78"
     MPC_SHA256="6985c538143c1208dcb1ac42cedad6ff52e267b47e5f970183a3e75125b43c2e"
     ISL_SHA256="d18ca11f8ad1a39ab6d03d3dcb3365ab416720fcb65b42d69f34f51bf0a0e859"
-    GCC_SHA256="be303f7a8292982a35381489f5a9178603cbe9a4715ee4fa4a815d6bcd2b658d"
+    GCC_SHA256="a931a750d6feadacbeecb321d73925cd5ebb6dfa7eff0802984af3aef63759f4"
     CHECKSUMS=("${CONFIG_SHA256}" "${BINUTILS_SHA256}" "${MINGW_W64_SHA256}" "${GMP_SHA256}" "${MPFR_SHA256}" "${MPC_SHA256}" "${ISL_SHA256}" "${GCC_SHA256}")
 
     # internal vars
     local NAME VERSION SELF SELF_NAME HELP
     NAME="mingw-w64-build"
-    VERSION="7.0.0"
+    VERSION="7.1.0"
     SELF="${BASH_SOURCE[0]}"
     SELF_NAME=$(basename "${SELF}")
     HELP="\
@@ -312,13 +312,13 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER
     if [[ "${DISABLE_GDB}" == false ]]; then
         GDB_NAME="gdb"
         NAMES+=("${GDB_NAME}")
-        GDB_VER="8.3"
+        GDB_VER="8.3.1"
         VERSIONS+=("${GDB_VER}")
         GDB_PKG="gdb-${GDB_VER}.tar.gz"
         PKGS+=("${GDB_PKG}")
         GDB_URLS=("https://ftp.gnu.org/gnu/gdb/gdb-${GDB_VER}.tar.gz")
         URLS_VARNAMES+=('GDB_URLS')
-        GDB_SHA256="b2266ec592440d0eec18ee1790f8558b3b8a2845b76cc83a872e39b501ce8a28"
+        GDB_SHA256="26ce655216cd03f4611518a7a1c31d80ec8e884c16715e9ba8b436822e51434b"
         CHECKSUMS+=("${GDB_SHA256}")
     fi
 
@@ -423,8 +423,10 @@ default install-dir: ${HOME}/toolchains/mingw-w64-${MINGW_W64_VER}-gcc-${GCC_VER
         fi
         mkdir -p "${SOURCE_DIR}/${NAMES[I]}"
         if ! tar -xf "${PKG_DIR}/${PKGS[I]}" -C "${SOURCE_DIR}/${NAMES[I]}" >/dev/null 2>&1; then
-            echo "unable to extract package: ${PKG_DIR}/${PKGS[I]}" >&2
-            return 1
+            if ! unzip -d "${SOURCE_DIR}/${NAMES[I]}" "${PKG_DIR}/${PKGS[I]}" >/dev/null 2>&1; then
+                echo "unable to extract package: ${PKG_DIR}/${PKGS[I]}" >&2
+                return 1
+            fi
         fi
     done
 
