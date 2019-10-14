@@ -1,0 +1,73 @@
+# HG changeset patch
+# User joelgalid@gmail.com
+# Date 1568357212 -19800
+# Branch Release_3.2
+# Node ID cdd80b53c90d224fd9281ad13de3ca9a1b6e1d39
+# Parent  329345aea40f95dc94aedf3c7cdb098bbb6d34f1
+Fix: AQ mode 4 commit (21db162) introduces slowdown even is not used AQ mode 4.
+
+diff --git a/source/encoder/slicetype.cpp b/source/encoder/slicetype.cpp
+--- a/source/encoder/slicetype.cpp
++++ b/source/encoder/slicetype.cpp
+@@ -480,17 +480,24 @@
+             {
+ #define AQ_EDGE_BIAS 0.5
+ #define EDGE_INCLINATION 45
+-                uint32_t numCuInHeight = (maxRow + param->maxCUSize - 1) / param->maxCUSize;
+-                int maxHeight = numCuInHeight * param->maxCUSize;
+-                intptr_t stride = curFrame->m_fencPic->m_stride;
+-                pixel *edgePic = X265_MALLOC(pixel, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)));
+-                pixel *gaussianPic = X265_MALLOC(pixel, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)));
+-                pixel *thetaPic = X265_MALLOC(pixel, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)));
+-                memset(edgePic, 0, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)) * sizeof(pixel));
+-                memset(gaussianPic, 0, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)) * sizeof(pixel));
+-                memset(thetaPic, 0, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)) * sizeof(pixel));
++
++                pixel *edgePic = NULL;
++                pixel *gaussianPic = NULL;
++                pixel *thetaPic = NULL;
++
+                 if (param->rc.aqMode == X265_AQ_EDGE)
++                {
++                    uint32_t numCuInHeight = (maxRow + param->maxCUSize - 1) / param->maxCUSize;
++                    int maxHeight = numCuInHeight * param->maxCUSize;
++                    intptr_t stride = curFrame->m_fencPic->m_stride;
++                    edgePic = X265_MALLOC(pixel, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)));
++                    gaussianPic = X265_MALLOC(pixel, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)));
++                    thetaPic = X265_MALLOC(pixel, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)));
++                    memset(edgePic, 0, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)) * sizeof(pixel));
++                    memset(gaussianPic, 0, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)) * sizeof(pixel));
++                    memset(thetaPic, 0, stride * (maxHeight + (curFrame->m_fencPic->m_lumaMarginY * 2)) * sizeof(pixel));
+                     edgeFilter(curFrame, edgePic, gaussianPic, thetaPic, stride, maxRow, maxCol);
++                }                  
+ 
+                 int blockXY = 0, inclinedEdge = 0;
+                 double avg_adj_pow2 = 0, avg_adj = 0, qp_adj = 0;
+@@ -507,8 +514,8 @@
+                             energy = acEnergyCu(curFrame, blockX, blockY, param->internalCsp, param->rc.qgSize);
+                             if (param->rc.aqMode == X265_AQ_EDGE)
+                             {
+-                                pixel *edgeImage = edgePic + curFrame->m_fencPic->m_lumaMarginY * stride + curFrame->m_fencPic->m_lumaMarginX;
+-                                pixel *edgeTheta = thetaPic + curFrame->m_fencPic->m_lumaMarginY * stride + curFrame->m_fencPic->m_lumaMarginX;
++                                pixel *edgeImage = edgePic + curFrame->m_fencPic->m_lumaMarginY * curFrame->m_fencPic->m_stride + curFrame->m_fencPic->m_lumaMarginX;
++                                pixel *edgeTheta = thetaPic + curFrame->m_fencPic->m_lumaMarginY * curFrame->m_fencPic->m_stride + curFrame->m_fencPic->m_lumaMarginX;
+                                 edgeDensity = edgeDensityCu(curFrame, edgeImage, edgeTheta, avgAngle, blockX, blockY, param->rc.qgSize);
+                                 if (edgeDensity)
+                                 {
+@@ -542,9 +549,13 @@
+                 else
+                     strength = param->rc.aqStrength * 1.0397f;
+ 
+-                X265_FREE(edgePic);
+-                X265_FREE(gaussianPic);
+-                X265_FREE(thetaPic);
++                if (param->rc.aqMode == X265_AQ_EDGE)
++                {
++                    X265_FREE(edgePic);
++                    X265_FREE(gaussianPic);
++                    X265_FREE(thetaPic);
++                }
++
+                 blockXY = 0;
+                 for (int blockY = 0; blockY < maxRow; blockY += loopIncr)
+                 {
