@@ -717,9 +717,16 @@ namespace HandBrakeWPF.ViewModels
             {
                 if (!string.IsNullOrEmpty(directory))
                 {
+                    if (File.Exists(directory))
+                    {
+                        string argument = "/select, \"" + directory + "\"";
+                        Process.Start("explorer.exe", argument);
+                        return;
+                    }
+                    
                     if (!File.Exists(directory) && !directory.EndsWith("\\"))
                     {
-                        directory = directory + "\\";
+                        directory = Path.GetDirectoryName(directory) + "\\";
                     }
 
                     directory = Path.GetDirectoryName(directory);
