@@ -431,8 +431,21 @@ namespace HandBrakeWPF.ViewModels
         {
             get
             {
-                return this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10 || this.SelectedVideoEncoder == VideoEncoder.X265
-                       || this.SelectedVideoEncoder == VideoEncoder.X265_10 || this.SelectedVideoEncoder == VideoEncoder.X265_12 ? "RF" : "QP";
+                if (this.SelectedVideoEncoder == VideoEncoder.X264 || this.SelectedVideoEncoder == VideoEncoder.X264_10
+                                                                   || this.SelectedVideoEncoder == VideoEncoder.X265
+                                                                   || this.SelectedVideoEncoder == VideoEncoder.X265_10
+                                                                   || this.SelectedVideoEncoder == VideoEncoder.X265_12)
+                {
+                    return "RF";
+                }
+
+                if (this.SelectedVideoEncoder == VideoEncoder.NvencH264
+                    || this.SelectedVideoEncoder == VideoEncoder.NvencH265)
+                {
+                    return string.Empty;
+                }
+
+                return "QP";
             }
         }
 
