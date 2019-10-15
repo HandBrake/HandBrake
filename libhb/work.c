@@ -1432,7 +1432,7 @@ static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
         {
             hb_list_rem(list, filter);
             hb_filter_close(&filter);
-            hb_log("Skipping VRF filter");
+            hb_log("Skipping vfr filter");
         }
     }
     
@@ -1455,7 +1455,7 @@ static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
             {
                 hb_list_rem(list, filter);
                 hb_filter_close(&filter);
-                hb_log("Skipping CROP filter");
+                hb_log("Skipping crop/scale filter");
             }
         }
     }
