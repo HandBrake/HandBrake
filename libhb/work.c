@@ -1395,7 +1395,7 @@ static int sanitize_qsv( hb_job_t * job )
     return 0;
 }
 
-static void sanitize_filter_list(hb_list_t *list)
+static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
 {
     // Add selective deinterlacing mode if comb detection is enabled
     if (hb_filter_find(list, HB_FILTER_COMB_DETECT) != NULL)
@@ -1412,6 +1412,50 @@ static void sanitize_filter_list(hb_list_t *list)
                 mode |= MODE_DECOMB_SELECTIVE;
                 hb_dict_set(filter->settings, "mode", hb_value_int(mode));
                 break;
+            }
+        }
+    }
+
+    int is_detel = 0;
+    hb_filter_object_t * filter = hb_filter_find(list, HB_FILTER_DETELECINE);
+    if (filter != NULL)
+    {
+        is_detel = 1;
+    }
+
+    filter = hb_filter_find(list, HB_FILTER_VFR);
+    if (filter != NULL)
+    {
+        int mode = hb_dict_get_int(filter->settings, "mode");
+        // "Same as source" FPS and no HB_FILTER_DETELECINE
+        if ( (mode == 0) || (is_detel == 0) )
+        {
+            hb_list_rem(list, filter);
+            hb_filter_close(&filter);
+            hb_log("Skipping vfr filter");
+        }
+    }
+    
+    filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
+    if (filter != NULL)
+    {
+        hb_dict_t* settings = filter->settings;
+        if (settings != NULL)
+        {
+            int width, height, top, bottom, left, right;
+            width = hb_dict_get_int(settings, "width");
+            height = hb_dict_get_int(settings, "height");
+            top = hb_dict_get_int(settings, "crop-top");
+            bottom = hb_dict_get_int(settings, "crop-bottom");
+            left = hb_dict_get_int(settings, "crop-left");
+            right = hb_dict_get_int(settings, "crop-right");
+            
+            if ( (src_geo.width == width) && (src_geo.height == height) &&
+                (top == 0) && (bottom == 0 ) && (left == 0) && (right == 0) )
+            {
+                hb_list_rem(list, filter);
+                hb_filter_close(&filter);
+                hb_log("Skipping crop/scale filter");
             }
         }
     }
@@ -1484,14 +1528,13 @@ static void do_job(hb_job_t *job)
         *job->die = 1;
         goto cleanup;
     }
-
     // Filters have an effect on settings.
     // So initialize the filters and update the job.
     if (job->list_filter && hb_list_count(job->list_filter))
     {
         hb_filter_init_t init;
 
-        sanitize_filter_list(job->list_filter);
+        sanitize_filter_list(job->list_filter, title->geometry);
 
         memset(&init, 0, sizeof(init));
         init.time_base.num = 1;
