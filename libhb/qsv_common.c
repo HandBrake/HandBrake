@@ -1004,13 +1004,18 @@ int hb_qsv_full_path_is_enabled(hb_job_t *job)
 {
     static int device_check_completed = 0;
     static int device_check_succeded = 0;
+    int filter_count = hb_list_count(job->list_filter);
+
     if(!device_check_completed)
     {
        device_check_succeded = ((hb_d3d11va_device_check() >= 0)
         || (hb_dxva2_device_check() == 0)) ? 1 : 0;
        device_check_completed = 1;
     }
-    return (hb_qsv_decode_is_enabled(job) && hb_qsv_info_get(job->vcodec) && device_check_succeded);
+    return (hb_qsv_decode_is_enabled(job) &&
+        hb_qsv_info_get(job->vcodec) &&
+        device_check_succeded &&
+        (filter_count == 0));
 }
 
 int hb_qsv_copyframe_is_slow(int encoder)
