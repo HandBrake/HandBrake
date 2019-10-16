@@ -315,7 +315,7 @@ Custom (Пользовательский) позволяет вручную на
     <value>Выбрать новый путь назначения и имя файла для вашего кодирования.</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Угол видео для кодировния. Применяется только для многоугловых DVD и Blu-ray.</value>
+    <value>Ракурс видео для кодирования. Применимо только для многоракурсных DVD и Blu-ray.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
     <value>Добавить новый пресет.</value>
@@ -368,7 +368,7 @@ HQDN3D по умолчанию: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal
 
 Yadif - распространенный и быстрый алгоритм деинтерлейсинга.
 
-Удаление "гребенки" переключается между несколькими алгоритмами интерполяции для достижения скорости и качества.</value>
+Decomb переключается между несколькими алгоритмами интерполяции для достижения скорости и качества.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
     <value>Пользовательские параметры Деинтерлейсинга.
@@ -377,9 +377,9 @@ Yadif - распространенный и быстрый алгоритм де
 
 Yadif по умолчанию: mode=3
 
-Синтаксис удаления "гребенки": mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+Синтаксис Decomb: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
 
-Удаление "гребенки" по умолчанию:  mode=7</value>
+Decomb по умолчанию:  mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
     <value>Пресет фильтра деинтерлейсинга.
@@ -451,7 +451,7 @@ Unsharp может быть настроен для Ultrafine (Очень тон
 Настройка Sprite (Спрайт) из Lapsharp полезна для 1-/4-/8-/16-битных 2D-игр. Эта настройка использует ядро Лапласа для 4 соседних для улучшения вертикальных и горизонтальных краев в большей степени, чем диагональных.</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>Расположить исходные временные маркеры всех аудио- и видео-потоков с помощью включения пустых кадров или пропуска кадров. Может улучшить синхронизацию аудио и видео для сломанных проигрывателей, которые игнорируют списки редактирования MP4.</value>
+    <value>Расположить исходные временные метки всех аудио- и видео-потоков с помощью включения пустых кадров или пропуска кадров. Может улучшить синхронизацию аудио и видео для сломанных проигрывателей, которые игнорируют списки редактирования MP4.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Опции для управления пресетами.</value>

@@ -1541,7 +1541,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Choisir les langues :</value>
   </data>
   <data name="Shared_ChosenLangages" xml:space="preserve">
-    <value>Langues sélectionnées :</value>
+    <value>Langues sélectionnées :</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
     <value>Configurer les comportements par défaut</value>
@@ -1700,7 +1700,7 @@ Souhaitez-vous l'écraser ?</value>
     <value>Réglage de l'encodeur :</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>Options avancées :</value>
+    <value>Options avancées :</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
     <value>Décodage Rapide</value>
@@ -1741,14 +1741,14 @@ Souhaitez-vous l'écraser ?</value>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Aide</value>
   </data>
-  <data name="SourceSelection_Preferences" xml:space="preserve">
+  <data name="Preferences" xml:space="preserve">
     <value>Préférences</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
     <value>Ajouter une piste</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>Paramètres de l'encodage audio pour chaque piste choisie :</value>
+    <value>Paramètres de l'encodage audio pour chaque piste choisie :</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
     <value>Nettoyer</value>
@@ -1992,7 +1992,7 @@ Là où pris en charge, tous les préréglages utilisateur auront été importé
     <value>Exporter la file d'attente (CLI seulement)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Utilisez le thème sombre. (Nécessite un redémarrage, disponible sur Windows 10 uniquement)</value>
+    <value>Utiliser le thème sombre. (Nécessite un redémarrage, disponible sur Windows 10 uniquement)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>Indisponible</value>
@@ -2013,19 +2013,19 @@ Là où pris en charge, tous les préréglages utilisateur auront été importé
     <value>La capacité de stockage restante est tombée sous les {0} GB sur le disque de destination. Interruption de l'encodage...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Configurer les sélections audio automatiquement</value>
+    <value>Configurer les sélections audio automatiques</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Configurer les sélections de sous-titres automatiquement</value>
+    <value>Configurer les sélections de sous-titres automatiques</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
     <value>Système</value>
   </data>
   <data name="MetadataView_Actors" xml:space="preserve">
-    <value>Acteurs :</value>
+    <value>Acteurs :</value>
   </data>
   <data name="MetadataView_Comments" xml:space="preserve">
-    <value>Commentaires : </value>
+    <value>Commentaires : </value>
   </data>
   <data name="MetadataView_Description" xml:space="preserve">
     <value>Description :</value>
@@ -2047,5 +2047,131 @@ Là où pris en charge, tous les préréglages utilisateur auront été importé
   </data>
   <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
     <value>Aperçu de la rotation et du retournement</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>Visionneuse de journal</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>Format :</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>Filtres :</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>Taille :</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>Pistes :</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>Général</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>Cliquez sur « Vérifier les mises à jour » pour vérifier les nouvelles versions</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&lt; Retour</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>Actuellement en pause</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>Fichiers de sortie</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>Chapitres</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>Images</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>Aperçu</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Secondes</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Toutes les langues correspondantes</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>Première langue correspondante</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>Aucun</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Première piste</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>Piste audio étrangère en priorité, sinon la première</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>Piste audio étrangère</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>Aucun</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Recherche piste audio étrangère</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Scan piste audio étrangère</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Toutes les langues correspondantes</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>Utiliser toutes les pistes comme modèles</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>Première langue correspondante</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Utiliser la première piste comme modèle</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>Pas de piste audio</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>Chapitre{0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>Automatique</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>Toujours utiliser M4V</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>Toujours utiliser MP4</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>Personnalisé</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>Aucun</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Toujours utiliser la résolution de la vidéo source</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Plus élévé que la normale</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Moins élévé que la normale</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>Élevé</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>Faible</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>Normale</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>Mensuelle</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>Hebdomadaire</value>
   </data>
 </root>
