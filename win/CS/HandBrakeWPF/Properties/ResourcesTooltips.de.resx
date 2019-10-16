@@ -149,7 +149,7 @@ HQDN3D ist ein adaptiver Tiefpassfilter, schneller als NLMeans, aber weniger eff
     <value>Fügt einen speziellen MP4-Marker hinzu, um die Wiedergabe auf älteren iPods der 5. Generation um 2006 zu ermöglichen. Andere Einstellungen können die Kompatibilität beeinträchtigen.</value>
   </data>
   <data name="MainView_Mux" xml:space="preserve">
-    <value>Kontainerformat. Video, Audio und andere Spuren werden zu einer einzigen Datei dieses Typs kombiniert. Beeinflusst die Kompatibilität.</value>
+    <value>Containerformat. Video, Audio und andere Spuren werden zu einer einzigen Datei dieses Typs kombiniert. Beeinflusst die Kompatibilität.</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
     <value>Optimiert MP4 für den schrittweisen Download. Nach der Encodierung werden die Daten so umgeschrieben, dass ein direktes Abspielen übers Internet ermöglicht wird ohne den gesamten Film herunterladen zu müssen.</value>
@@ -251,7 +251,7 @@ Dies einstellen, wenn das Gerät Schwierigkeiten hat, die Ausgabe wiederzugeben 
   <data name="Video_Framerate" xml:space="preserve">
     <value>Ausgabebildfrequenz.
 
-'Wie die Quelle' ist angeraten. Hat das Quellvideo eine variable Bildfrequenz wird 'Wie die Quelle' dies so beibehalten.</value>
+„Wie die Quelle“ ist angeraten. Hat das Quellvideo eine variable Bildfrequenz wird „Wie die Quelle“ dies so beibehalten.</value>
   </data>
   <data name="Video_Level" xml:space="preserve">
     <value>Setzt und stellt Konformität zu einem spezifischen Level her.
@@ -294,7 +294,7 @@ Diese Encoder haben keinen verlustfreien Modus.</value>
   <data name="Video_TwoPass" xml:space="preserve">
     <value>Führt eine Encodierung in zwei Durchgängen durch.
 
-Die Option "Bitrate" ist Voraussetzung. Während des ersten Durchlaufs werden Statistiken über
+Die Option „Bitrate“ ist Voraussetzung. Während des ersten Durchlaufs werden Statistiken über
 das Video gesammelt. Dann, im zweiten Durchgang, werden diese Statistiken verwendet
 um Entscheidungen über die Zuweisung von Bitraten zu treffen.</value>
   </data>

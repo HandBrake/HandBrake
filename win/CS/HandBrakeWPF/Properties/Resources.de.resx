@@ -147,7 +147,7 @@ Eigene: Es kann optional eine maximale Breite und Höhe eingestellt werden. Dabe
 Quellenmaximum: Kodiert nach Möglichkeit immer mit der Quellauflösung.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2019 Das HandBrake-TeamDieses Programm ist freie Software; es kann unter den Bedingungen der GNU General Public License, wie sie von der Free Software Foundation veröffentlicht wurde, weitergeben und/oder verändert werden; entweder Version 2 der Lizenz oder (nach eigener Wahl) jede spätere Version.Dieses Programm wird in der Hoffnung verteilt, dass es nützlich sein wird, aber OHNE JEGLICHE GEWÄHRLEISTUNG; auch ohne die stillschweigende Gewährleistung der MARKTREIFE oder Tauglichkeit für einen bestimmten Zweck. Weitere Informationen finden Sie in der GNU General Public License.Sie sollten eine Kopie der GNU General Public License zusammen mit diesem Programm erhalten haben; wenn nicht, schreiben Sie an die Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
+    <value>Copyright (C) 2003–2019 Das HandBrake-TeamDieses Programm ist freie Software; es kann unter den Bedingungen der GNU General Public License, wie sie von der Free Software Foundation veröffentlicht wurde, weitergeben und/oder verändert werden; entweder Version 2 der Lizenz oder (nach eigener Wahl) jede spätere Version.Dieses Programm wird in der Hoffnung verteilt, dass es nützlich sein wird, aber OHNE JEGLICHE GEWÄHRLEISTUNG; auch ohne die stillschweigende Gewährleistung der MARKTREIFE oder Tauglichkeit für einen bestimmten Zweck. Weitere Informationen finden Sie in der GNU General Public License.Sie sollten eine Kopie der GNU General Public License zusammen mit diesem Programm erhalten haben; wenn nicht, schreiben Sie an die Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
     <value>WARNUNG: Die automatische Dateibenennung ist nicht aktiviert. Bitte diese Funktion aktivieren.</value>
@@ -346,7 +346,7 @@ Nicht beide zur selben Zeit!</value>
 Voreinstellungen aus älteren Versionen müssen mit einer aktuellen Version neu erstellt werden.</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
-    <value>Zusätzliche erweiterte Argumente, die vom Videoencoder angewendet werden.</value>
+    <value>Zusätzliche erweiterte Parameter, die vom Videoencoder angewendet werden.</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
     <value>Keine – Es werden nur Spuren eingebrannt, bei denen der Container das Format nicht unterstützt.
@@ -370,9 +370,9 @@ Beim Fortfahren gehen nicht-eingebrannte Untertitel verloren.</value>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
     <value>HandBrake kann die ausgewählte Quelle nicht kodieren, da es keine gültige Quelle mit zu kodierenden Titeln gefunden hat. 
 Dies kann auf einen der folgenden Gründe zurückzuführen sein: 
-- Die Dauer jedes Titels liegt unterhalb des Schwellenwertes „Minimale Titeldauer“ in „Einstellungen &gt; Erweitert“. 
-- Die Quelldatei ist keine gültige Videodatei oder befindet sich in einem Format, das HandBrake nicht unterstützt.
-- Die Quelle kann kopiergeschützt sein oder DRM enthalten. Bitte beachten Sie, dass HandBrake das Entfernen von Kopierschutzmaßnahmen nicht unterstützt. 
+– Die Dauer jedes Titels liegt unterhalb des Schwellenwertes „Minimale Titeldauer“ in „Einstellungen &gt; Erweitert“. 
+– Die Quelldatei ist keine gültige Videodatei oder befindet sich in einem Format, das HandBrake nicht unterstützt.
+– Die Quelle kann kopiergeschützt sein oder DRM enthalten. Bitte beachten Sie, dass HandBrake das Entfernen von Kopierschutzmaßnahmen nicht unterstützt. 
 
 Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
   </data>
@@ -624,7 +624,7 @@ Sollen die Kapitelnamen wirklich importiert werden?</value>
     <value>Die Dauer der Kapitel zwischen Quelle und Eingangsdatei stimmen nicht überein.</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>Beim Abbrechen der Überprüfung ist ein Fehler aufgetreten. Bitte HandBrake neu starten.</value>
+    <value>Beim Stoppen der Überprüfung ist ein Fehler aufgetreten. Bitte HandBrake neu starten.</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
     <value>HandBrake kann die Voreinstellungsdatei nicht auf eine neue Version aktualisieren.
@@ -701,7 +701,7 @@ Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Vor
     <value>HandBrake encodiert bereits eine Datei.</value>
   </data>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
-    <value>Bitte das momentane Encodieren abbrechen. Falls das Problem anhält, bitte HandBrake neu starten.</value>
+    <value>Bitte das momentane Encodieren stoppen. Falls das Problem anhält, bitte HandBrake neu starten.</value>
   </data>
   <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
     <value>Encodieren: Durchgang {0} von {1}, {2:00.00} %
@@ -824,10 +824,10 @@ Soll sie überschrieben werden?</value>
     <value>Dauer</value>
   </data>
   <data name="ChaptersView_Export" xml:space="preserve">
-    <value>Exportieren</value>
+    <value>Export</value>
   </data>
   <data name="ChaptersView_Import" xml:space="preserve">
-    <value>Importieren</value>
+    <value>Import</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
     <value>Namen exportieren</value>
@@ -1022,7 +1022,7 @@ Soll sie überschrieben werden?</value>
     <value>Ausgabeeinstellungen</value>
   </data>
   <data name="MainView_Pause" xml:space="preserve">
-    <value>Pause</value>
+    <value>Anhalten</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
     <value>Bildgröße</value>
@@ -1091,10 +1091,10 @@ Soll sie überschrieben werden?</value>
     <value>Stop</value>
   </data>
   <data name="MainView_StopEncode" xml:space="preserve">
-    <value>Encodierung anhalten</value>
+    <value>Encodierung gestoppt</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
-    <value>Soll das Encodieren wirklich abgebrochen werden?</value>
+    <value>Soll das Encodieren wirklich gestoppt werden?</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
     <value>Bitte vor dem Import einer Untertiteldatei zuerst eine Quelle zum Encodieren wählen.</value>
@@ -1394,16 +1394,16 @@ Soll sie überschrieben werden?</value>
     <value>Audio:</value>
   </data>
   <data name="QueueView_ClearAll" xml:space="preserve">
-    <value>Alle löschen</value>
+    <value>Alle Aufgaben löschen</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>Fertige löschen</value>
+    <value>Abgeschlossene Aufgaben entfernen</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
     <value>Warteschlange löschen</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>Ausgewählte löschen</value>
+    <value>Ausgewählte Aufgaben löschen</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
     <value>Löschen</value>
@@ -1415,7 +1415,7 @@ Soll sie überschrieben werden?</value>
     <value>Nichts tun</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>Encodierungszeit:</value>
+    <value>Encodierung:</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
     <value>Bearbeiten</value>
@@ -1454,10 +1454,10 @@ Soll sie überschrieben werden?</value>
     <value>Warteschlange anhalten</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>Pausendauer:</value>
+    <value>Angehalten:</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
-    <value>Bildeinstellungen:</value>
+    <value>Bildparameter:</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
     <value>HandBrake beenden</value>
@@ -1466,7 +1466,7 @@ Soll sie überschrieben werden?</value>
     <value>Alle Aufgaben wiederholen</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>Wiederholen fehlgeschlagen</value>
+    <value>Fehlgeschlagene Aufgaben wiederholen</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
     <value>Ausgewählte Aufgaben zurücksetzen</value>
@@ -1499,7 +1499,7 @@ Soll sie überschrieben werden?</value>
     <value>Übersicht</value>
   </data>
   <data name="WhenDone_Suspend" xml:space="preserve">
-    <value>Ruhezustand</value>
+    <value>Energie sparen</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
     <value>Video:</value>
@@ -1664,7 +1664,7 @@ Soll sie überschrieben werden?</value>
     <value>Mittlere Bitrate (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Videocodec:</value>
+    <value>Videoencoder:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
     <value>Konstante Bildfrequenz</value>
@@ -1685,7 +1685,7 @@ Soll sie überschrieben werden?</value>
     <value>Abstimmung:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>Erweiterte Parameter:</value>
+    <value>Zusätzliche Parameter:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
     <value>Schnelle Decodierung</value>
@@ -1721,12 +1721,12 @@ Soll sie überschrieben werden?</value>
     <value>Über HandBrake</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Oder hier eine Datei / einen Ordner ablegen ...</value>
+    <value>Oder hier eine Datei / einen Ordner ablegen …</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Hilfe</value>
   </data>
-  <data name="SourceSelection_Preferences" xml:space="preserve">
+  <data name="Preferences" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
@@ -1748,7 +1748,7 @@ Soll sie überschrieben werden?</value>
     <value>Nur erzwungene</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>_Über ...</value>
+    <value>_Über …</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
     <value>_Aktivitätsprotokoll</value>
@@ -1799,7 +1799,7 @@ Soll sie überschrieben werden?</value>
     <value>_Extras</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>Auf Updates prüfen ...</value>
+    <value>Auf Updates prüfen …</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
     <value>Soll das Verzeichnis der Aktivitätsprotokolle wirklich bereinigt werden?</value>
@@ -1808,7 +1808,7 @@ Soll sie überschrieben werden?</value>
     <value>Aktivitätsprotokolle bereinigen</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
-    <value>Herunterladen ...</value>
+    <value>Herunterladen …</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
     <value>Das Verlaufsprotokollverzeichnis von HandBrake wurde bereinigt!</value>
@@ -1817,13 +1817,13 @@ Soll sie überschrieben werden?</value>
     <value>Hinweis</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>Update vorbereiten ...</value>
+    <value>Update vorbereiten …</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
     <value>Bitte einen Ordner wählen.</value>
   </data>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
-    <value>'Wählen' auswählen, um den Standardspeicherort festzulegen</value>
+    <value>„Wählen“ auswählen, um den Standardspeicherort festzulegen</value>
   </data>
   <data name="MainView_Hide" xml:space="preserve">
     <value>Ausblenden</value>
@@ -1995,7 +1995,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Systembatterie schwach! ({0} %). Die Encodierung wurde angehalten, um das System zu schützen. Ruhezustand ist auf erlauben gesetzt!</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>Der verfügbare Speicherplatz auf dem Ziellaufwerk ist unter {0} GB gefallen. Encodierung angehalten ...</value>
+    <value>Der verfügbare Speicherplatz auf dem Ziellaufwerk ist unter {0} GB gefallen. Encodierung angehalten …</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
     <value>Automatische Tonauswahl konfigurieren</value>
@@ -2032,5 +2032,131 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
   </data>
   <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
     <value>Vorschau von Drehung und Spiegeln</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>Aktivitätslog</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>Bildformat:</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>Filter:</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>Größe:</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>Spuren:</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>„Auf Updates prüfen“ wählen um auf eine neuere Versionen zu prüfen</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&lt;Zurück</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>Momentan angehalten</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>Ausgabedateien</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>Kapitel</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>Bilder</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>Vorschau</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Sekunden</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Alle passenden ausgewählten Sprachen</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>Erste passende ausgewählte Sprache</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Erste Spur</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>Fremdsprache bevorzugt, andere zuerst</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>Fremdsprachentonspur</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Fremdsprachentonsuche</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Fremdsprachentonüberprüfung</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Alle passenden ausgewählten Sprachen</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>Alle Spuren als Vorlage verwenden</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>Erste passende Sprache auswählen</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>Erste Spur als Vorlage verwenden</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>Kein Ton</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>Kapitel {0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>Automatisch</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>Immer M4V verwenden</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>Immer MP4 verwenden</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>Eigene</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>Keine</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Immer Auflösung der Quelle verwenden</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Über normal</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Unter normal</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>Hoch</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>Niedrig</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>Monatlich</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>Wöchentlich</value>
   </data>
 </root>
