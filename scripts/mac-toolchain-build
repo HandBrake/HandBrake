@@ -112,7 +112,7 @@ function display_progress {
     local str=""
     while [ "$(ps a | awk '{print $1}' | grep ${1})" ]; do
         printf "%c" "$str"
-        sleep 15
+        sleep 5
         str="."
     done
 }
@@ -129,17 +129,6 @@ function die_gracefully {
 # builds toolchain components
 function mac_toolchain_build {
     set -o pipefail
-
-    # mac only
-    if [[ "$(uname)" != "Darwin" ]]; then
-        echo "macOS/Darwin required" >&2
-        exit 1
-    fi
-
-    # dependencies
-    local DEPS
-    DEPS=("curl" "shasum|sha256sum")
-    check_dependencies "${DEPS[@]}" || return 1
 
     # package names
     local AUTOCONF_NAME AUTOMAKE_NAME CMAKE_NAME LIBTOOL_NAME MESON_NAME NASM_NAME NINJA_NAME PKGCONFIG_NAME NAMES
@@ -201,6 +190,203 @@ function mac_toolchain_build {
     PKGCONFIG_SHA256="6fc69c01688c9458a57eb9a1664c9aba372ccda420a02bf4429fe610e7e7d591"
     CHECKSUMS=("${AUTOCONF_SHA256}" "${AUTOMAKE_SHA256}" "${CMAKE_SHA256}" "${LIBTOOL_SHA256}" "${MESON_SHA256}" "${NASM_SHA256}" "${NINJA_SHA256}" "${PKGCONFIG_SHA256}")
 
+    # internal vars
+    local NAME VERSION SELF SELF_NAME HELP SUDO TOTAL
+    NAME="mac-toolchain-build"
+    VERSION="2.0.0"
+    SELF="${BASH_SOURCE[0]}"
+    SELF_NAME=$(basename "${SELF}")
+    HELP="\
+${NAME} ${VERSION}
+usage: ${SELF_NAME} [-h | --help]
+       ${SELF_NAME} [-l | --list]
+       ${SELF_NAME} [-v | --version]
+       ${SELF_NAME} [-f | --force] [-j # | --jobs #] [install-dir]
+where:
+  -h, --help
+        display this help text
+  -l, --list
+        display components list
+  -v, --version
+        display version information
+  -f, --force
+        force installation even if adequate versions of tools are installed
+  -j, --jobs
+        number of concurrent build jobs to run
+        default: 0 (automatic)
+default install-dir: /usr/local"
+    SUDO=
+    TOTAL="${#NAMES[@]}"
+
+    # args
+    local FORCE JOBS LIST OPTIND OPTSPEC OPTARRAY PREFIX
+    FORCE=false
+    JOBS=0
+    LIST=false
+    OPTIND=1
+    OPTSPEC=":-:hlvfj:"
+    OPTARRAY=('-h' '--help' '-l' '--list' '-v' '--version' '-f' '--force' '-j' '--jobs')  # all short and long options
+    while getopts "${OPTSPEC}" OPT; do
+        case "${OPT}" in
+            -)
+                case "${OPTARG}" in
+                    help)
+                        # Print help and exit
+                        echo -e "${HELP}"
+                        return 0
+                        ;;
+                    help=*)
+                        # Print help and exit
+                        echo -e "${HELP}"
+                        return 0
+                        ;;
+                    list)
+                        # List components
+                        LIST=true
+                        ;;
+                    list=*)
+                        # List components
+                        LIST=true
+                        ;;
+                    version)
+                        # Print version and exit
+                        echo -e "${NAME} ${VERSION}"
+                        return 0
+                        ;;
+                    version=*)
+                        # Print version and exit
+                        echo -e "${NAME} ${VERSION}"
+                        return 0
+                        ;;
+                    force)
+                        # Force installation
+                        FORCE=true
+                        ;;
+                    force=*)
+                        # Option with prohibited value
+                        echo "Option --${OPTARG%%=*} takes no value" >&2
+                        echo -e "${HELP}"
+                        return 1
+                        ;;
+                    jobs)
+                        # Number of jobs
+                        if [[ -z ${!OPTIND+isset} ]] || in_array "${!OPTIND}" "${OPTARRAY[@]}"; then
+                            # Option without required argument
+                            echo "Option --${OPTARG} requires a value" >&2
+                            echo -e "${HELP}"
+                            return 1
+                        fi
+                        JOBS="${!OPTIND}"
+                        if [[ ! "${JOBS}" =~ ^[0-9]*$ ]]; then
+                            echo "Option --${OPTARG} requires a numeric value" >&2
+                            echo -e "${HELP}"
+                            return 1
+                        fi
+                        OPTIND=$((OPTIND + 1))
+                        ;;
+                    jobs=*)
+                        # Number of jobs
+                        JOBS="${OPTARG#*=}"
+                        if [[ ! "${JOBS}" =~ ^[0-9]*$ ]]; then
+                            echo "Option --${OPTARG} requires a numeric value" >&2
+                            echo -e "${HELP}"
+                            return 1
+                        fi
+                        ;;
+                    *)
+                        if [[ "${OPTERR}" == 1 ]]; then
+                            # Invalid option specified
+                            echo "Invalid option: --${OPTARG}" >&2
+                            echo -e "${HELP}"
+                            return 1
+                        fi
+                        ;;
+                esac
+                ;;
+            h)
+                # Print help and exit
+                echo -e "${HELP}"
+                return 0
+                ;;
+            l)
+                # List components
+                LIST=true
+                ;;
+            v)
+                # Print version and exit
+                echo "${NAME} ${VERSION}"
+                return 0
+                ;;
+            f)
+                # Force installation
+                FORCE=true
+                ;;
+            j)
+                # Number of jobs
+                JOBS="${OPTARG}"
+                if [[ ! "${JOBS}" =~ ^[0-9]*$ ]]; then
+                    echo "Option -${OPT} requires a numeric value" >&2
+                    echo -e "${HELP}"
+                    return 1
+                fi
+                ;;
+            :)
+                # Option without required value
+                echo "Option -${OPTARG} requires a value" >&2
+                echo -e "${HELP}"
+                return 1
+                ;;
+            \?)
+                # Invalid option specified
+                echo "Invalid option: -${OPTARG}" >&2
+                echo -e "${HELP}"
+                return 1
+                ;;
+        esac
+    done
+    shift $((OPTIND - 1))
+
+    # host
+    local SYS_NAME CPU_COUNT
+    SYS_NAME=$(uname | awk '{ print tolower($0)}')
+    if [[ "${SYS_NAME}" == "darwin" ]]; then
+        CPU_COUNT=$(sysctl -n hw.activecpu 2>/dev/null)
+    fi
+    CPU_COUNT="${CPU_COUNT:-1}"
+    [[ "${JOBS}" -eq 0 ]] && JOBS="${CPU_COUNT}"
+
+    # begin output
+    echo "${NAME} ${VERSION} (${JOBS} job$([[ ${JOBS} -gt 1 ]] && echo 's'))"
+
+    # list components
+    if [[ "${LIST}" == true ]]; then
+        local COMPONENTS COMPONENTS_TEMP
+        COMPONENTS_TEMP=()
+        for I in "${!NAMES[@]}"; do
+            COMPONENTS_TEMP+=("${NAMES[$I]} ${VERSIONS[$I]}")
+        done
+        OIFS="${IFS}"
+        IFS=$'\n'
+        COMPONENTS=($(sort <<< "${COMPONENTS_TEMP[*]}"))
+        IFS="${OIFS}"
+        echo "Components:"
+        for I in "${!COMPONENTS[@]}"; do
+            echo "  ${COMPONENTS[$I]}"
+        done
+        return 0
+    fi
+
+    # mac only
+    if [[ "${SYS_NAME}" != "darwin" ]]; then
+        echo "macOS/Darwin required" >&2
+        return 1
+    fi
+
+    # dependencies
+    local DEPS
+    DEPS=("curl" "shasum|sha256sum")
+    check_dependencies "${DEPS[@]}" || return 1
+
     # sha256 binary
     local SHA256
     if hash shasum >/dev/null 2>&1; then
@@ -211,97 +397,7 @@ function mac_toolchain_build {
         return 1
     fi
 
-    # internal vars
-    local NAME VERSION SELF SELF_NAME HELP CREL SUDO TOTAL
-    NAME="mac-toolchain-build"
-    VERSION="1.2.0"
-    SELF="${BASH_SOURCE[0]}"
-    SELF_NAME=$(basename "${SELF}")
-    HELP="\
-usage: ${SELF_NAME} [-h | --help]
-       ${SELF_NAME} [-v | --version]
-       ${SELF_NAME} [-f | --force] [install-dir]
-where:
-  -f, --force
-        force installation even if adequate versions of tools are installed
-default install-dir: /usr/local"
-    CREL=$(echo -e "\r"$(tput el))
-    SUDO=
-    TOTAL="${#NAMES[@]}"
-
-    # args
-    local FORCE OPTIND OPTSPEC OPTARRAY PREFIX
-    FORCE=false
-    OPTIND=1
-    OPTSPEC=":-:hvf"
-    OPTARRAY=('-h' '--help' '-v' '--version' '-f' '--force')  # all short and long options
-    while getopts "${OPTSPEC}" OPT; do
-        case "${OPT}" in
-            -)
-                case "${OPTARG}" in
-                    help)
-                        # Print help and exit
-                        echo -e "${HELP}"
-                        exit 0
-                        ;;
-                    help=*)
-                        # Print help and exit
-                        echo -e "${HELP}"
-                        exit 0
-                        ;;
-                    version)
-                        # Print version and exit
-                        echo -e "${NAME} ${VERSION}"
-                        exit 0
-                        ;;
-                    version=*)
-                        # Print version and exit
-                        echo -e "${NAME} ${VERSION}"
-                        exit 0
-                        ;;
-                    force)
-                        # Force installation
-                        FORCE=true
-                        ;;
-                    *)
-                        if [[ "${OPTERR}" == 1 ]]; then
-                            # Invalid option specified
-                            echo "Invalid option: --${OPTARG}" >&2
-                            echo -e "${HELP}"
-                            exit 1
-                        fi
-                        ;;
-                esac
-                ;;
-            h)
-                # Print help and exit
-                echo -e "${HELP}"
-                exit 0
-                ;;
-            v)
-                # Print version and exit
-                echo "${NAME} ${VERSION}"
-                exit 0
-                ;;
-            f)
-                # Force installation
-                FORCE=true
-                ;;
-            :)
-                # Option without required value
-                echo "Option -${OPTARG} requires a value" >&2
-                echo -e "${HELP}"
-                exit 1
-                ;;
-            \?)
-                # Invalid option specified
-                echo "Invalid option: -${OPTARG}" >&2
-                echo -e "${HELP}"
-                exit 1
-                ;;
-        esac
-    done
-    shift $((OPTIND - 1))
+    # prefix
     PREFIX="${1:-/usr/local}"
 
     # check installed tool versions, skip if adequate
@@ -325,24 +421,23 @@ default install-dir: /usr/local"
     done
 
     # permissions
-    local PATH_ORIG
-    mkdir -p "${PREFIX}" >/dev/null 2>&1
-    if [[ ! -w "${PREFIX}" ]]; then
-        if ! sudo -n date >/dev/null 2>&1; then
-            echo "sudo is required to install files to ${PREFIX}"
-            [[ "${SUDO}" != "" ]] && ${SUDO} -v
-        fi
-        sudo mkdir -p "${PREFIX}" >/dev/null 2>&1
-        if sudo touch "${PREFIX}" >/dev/null 2>&1; then
-            SUDO=sudo
-        else
-            echo "Unable to write to directory: ${PREFIX}" >&2
-            exit 1
+    if [[ "${NOT_SKIPPED_TOTAL}" -gt 0 ]]; then
+        mkdir -p "${PREFIX}" >/dev/null 2>&1
+        if [[ ! -w "${PREFIX}" ]]; then
+            if ! sudo -n date >/dev/null 2>&1; then
+                echo "sudo is required to install files to ${PREFIX}"
+                [[ "${SUDO}" != "" ]] && ${SUDO} -v
+            fi
+            sudo mkdir -p "${PREFIX}" >/dev/null 2>&1
+            if sudo touch "${PREFIX}" >/dev/null 2>&1; then
+                SUDO=sudo
+            else
+                echo "Unable to write to directory: ${PREFIX}" >&2
+                return 1
+            fi
         fi
     fi
     PREFIX=$(cd "${PREFIX}" && pwd -P)
-    PATH_ORIG="${PATH}"
-    export PATH="${PREFIX}/bin${PATH:+:$PATH}"
 
     # directory creation
     local PKG_DIR SOURCE_DIR BUILD_DIR
@@ -353,11 +448,6 @@ default install-dir: /usr/local"
     fi
     SOURCE_DIR="${PKG_DIR}"
     BUILD_DIR="${PKG_DIR}"
-
-    # host
-    local CPU_COUNT
-    CPU_COUNT=$(sysctl -n hw.activecpu 2>/dev/null)
-    CPU_COUNT="${CPU_COUNT:-1}"
 
     # verify/fetch
     local DOWNLOAD_VERBOSE COUNT I URLS_IREF URLS CHECKSUM
@@ -406,6 +496,7 @@ default install-dir: /usr/local"
 
     # build
     local INDEX
+    export PATH="${PREFIX}/bin${PATH:+:$PATH}"
 
     # autoconf
     INDEX=0
@@ -418,7 +509,7 @@ default install-dir: /usr/local"
         mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         cd "${BUILD_DIR}/${NAMES[$INDEX]}"
         "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
-        make -j "${CPU_COUNT}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${JOBS}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         echo ""
     fi
@@ -434,7 +525,7 @@ default install-dir: /usr/local"
         mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         cd "${BUILD_DIR}/${NAMES[$INDEX]}"
         "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
-        make -j "${CPU_COUNT}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${JOBS}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         echo ""
     fi
@@ -450,7 +541,7 @@ default install-dir: /usr/local"
         mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         cd "${BUILD_DIR}/${NAMES[$INDEX]}"
         "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" --no-qt-gui --system-curl >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
-        make -j "${CPU_COUNT}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${JOBS}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         echo ""
     fi
@@ -466,7 +557,7 @@ default install-dir: /usr/local"
         mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         cd "${BUILD_DIR}/${NAMES[$INDEX]}"
         "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
-        make -j "${CPU_COUNT}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${JOBS}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         echo ""
     fi
@@ -496,7 +587,7 @@ default install-dir: /usr/local"
         mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         cd "${BUILD_DIR}/${NAMES[$INDEX]}"
         "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" --enable-sections --enable-lto >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
-        make -j "${CPU_COUNT}" AR=ar RANLIB=ranlib >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${JOBS}" AR=ar RANLIB=ranlib >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         echo ""
     fi
@@ -527,7 +618,7 @@ default install-dir: /usr/local"
         mkdir -pv "${BUILD_DIR}/${NAMES[$INDEX]}" > "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         cd "${BUILD_DIR}/${NAMES[$INDEX]}"
         "${SOURCE_DIR}/${NAMES[$INDEX]}/${PKGS[$INDEX]%\.tar\.*}/configure" --prefix="${PREFIX}" --with-internal-glib --disable-host-tool >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
-        make -j "${CPU_COUNT}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
+        make -j "${JOBS}" >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         ${SUDO} make install >> "${BUILD_DIR}/${NAMES[$INDEX]}.log" 2>&1 || return 1
         echo ""
     fi
@@ -536,15 +627,12 @@ default install-dir: /usr/local"
     ${SUDO} rm -rf "${PKG_DIR}"
 
     # done
-    if [[ "${PREFIX}" != "/usr/local" ]]; then
+    if [[ "${PREFIX}" != "/usr/local" ]] && [[ "${NOT_SKIPPED_TOTAL}" -gt 0 ]]; then
         echo "  run the following command and add it to your shell startup script"
         echo "  (e.g., .bashrc or .bash_profile) to make persistent across sessions:"
         echo "    export PATH=\"${PREFIX}/bin:\${PATH}\""
     fi
     echo "Complete."
-
-    # restore original PATH
-    export PATH="${PATH_ORIG}"
 
     set +o pipefail
 }
