@@ -61,7 +61,8 @@ namespace HandBrakeWPF.Views
                     Stream iconStream = streamResourceInfo.Stream;
                     this.notifyIcon.Icon = new Icon(iconStream);
                 }
-                this.notifyIcon.DoubleClick += this.NotifyIconClick;
+
+                this.notifyIcon.Click += this.NotifyIconClick;
                 this.StateChanged += this.ShellViewStateChanged;
             }
 
@@ -88,7 +89,6 @@ namespace HandBrakeWPF.Views
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D5, ModifierKeys.Control)), new KeyGesture(Key.D5, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D6, ModifierKeys.Control)), new KeyGesture(Key.D6, ModifierKeys.Control)));
             this.InputBindings.Add(new InputBinding(new ProcessShortcutCommand(new KeyGesture(Key.D7, ModifierKeys.Control)), new KeyGesture(Key.D7, ModifierKeys.Control)));
-
 
             // Enable Windows 7 Taskbar progress indication.
             if (this.TaskbarItemInfo == null)
@@ -157,6 +157,7 @@ namespace HandBrakeWPF.Views
         private void NotifyIconClick(object sender, EventArgs e)
         {
             this.WindowState = WindowState.Normal;
+            this.Topmost = true;
         }
 
         /// <summary>
