@@ -170,7 +170,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
     <value>UYARI: Şu anda otomatik ses ve altyazı parçası seçim ayarınız yok. Varsayılan parça seçimi davranışını seçeneklerde ayarlayabilirsiniz.</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>Yerleşik hazır ayarlar sıfırlandı.</value>
+    <value>Yerleşik ön ayarlar sıfırlandı.</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
     <value>Sıfırlama Tamamlandı</value>
@@ -223,7 +223,7 @@ Devam etmek istiyor musun?</value>
     <value>Ön Ayar seçilmedi.</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>Yerleşik hazır ayarlarda değişiklik yapamazsınız. Lütfen kendi ön ayarlarınızdan birini seçin.</value>
+    <value>Yerleşik ön ayarlarda değişiklik yapamazsınız. Lütfen kendi ön ayarlarınızdan birini seçin.</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
     <value>Lütfen bir klasör seçin.</value>
@@ -232,19 +232,19 @@ Devam etmek istiyor musun?</value>
     <value>Kodlamaya hazırlanıyor ...</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>Yerleşik bir hazır ayarla aynı ada sahip bir hazır ayarı içe aktaramazsınız.</value>
+    <value>Yerleşik bir ön ayarla aynı ada sahip bir ön ayarı içe aktaramazsınız.</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
     <value>Ön ayar "{0}" zaten var. Üzerine yazmak ister misiniz?</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>Hazır ayarlar</value>
+    <value>Ön ayarlar</value>
   </data>
   <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
     <value>Seçilen ön ayarı güncellemek istediğinizden emin misiniz?</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>Önayar şimdi geçerli ayarlarınızla güncellendi.</value>
+    <value>Ön ayar şimdi geçerli ayarlarınızla güncellendi.</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
     <value>HandBrake yerleşik ön ayarlarınızın güncel olmadığını belirledi ... Bu ön ayar şimdi güncellenecek.
@@ -276,7 +276,7 @@ Devam etmek istiyor musun?</value>
     <value>İlk önce bir kaynak taramanız ve bir kodlamaya başlamadan önce işinizi kurmanız gerekir. Devam etmek için araç çubuğundaki 'Kaynak' düğmesini tıklayın.</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>Lütfen kendi önayarlarınızdan birini seçtiğinizden emin olun. Yerleşik hazır ayarları dışa aktaramayacağınızı lütfen unutmayın.</value>
+    <value>Lütfen kendi ön ayarlarınızdan birini seçtiğinizden emin olun. Yerleşik ön ayarları dışa aktaramayacağınızı lütfen unutmayın.</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
     <value>Lütfen güncellemek için bir ön ayar seçin.</value>
@@ -303,7 +303,7 @@ Devam etmek istiyor musun?</value>
     <value>Güncellenmiş</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>Mevcut Sürüm</value>
+    <value>Ön Ayarlı Sürüm</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
     <value>Almaya çalıştığınız ön ayar, HandBrake'in farklı bir sürümünden. 
@@ -312,10 +312,10 @@ Tüm değerleri bu ön ayardan içe aktarmak mümkün olmayabilir.
 Devam etmek istiyor musunuz?</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>Ön ayar alınamıyor!</value>
+    <value>Ön ayar içe alınamıyor!</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>Hazır ayar bozulmuş gibi veya HandBrake'nin eski bir sürümünden alınamıyor.</value>
+    <value>Ön ayar bozulmuş gibi veya HandBrake'nin eski bir sürümünden içe alınamıyor.</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
     <value>Sıraya eklemeden önce çıktı dosyasının hedef yolunu ayarlamanız gerekir.</value>
@@ -353,7 +353,7 @@ Her ikisi de aynı anda değil!</value>
     <value>Doğrudan web sitesini ziyaret ederek yardım sayfalarına erişebilirsiniz: https://handbrake.fr</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
-    <value>Seçilen ön ayar alınamıyor.</value>
+    <value>Seçilen ön ayar içe alınamıyor!</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
     <value>Ön ayar bozuk veya desteklenmeyen daha eski bir HandBrake sürümünden olabilir. 
@@ -403,7 +403,7 @@ Faaliyet günlüğü daha fazla bilgi içerebilir.</value>
     <value>Varsayılan ön ayarı silemezsiniz. Lütfen ilk önce varsayılan olarak başka bir ön ayar ayarlayın.</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>Hazır ayarı silmek istediğinizden emin misiniz: </value>
+    <value>Ön ayarı silmek istediğinizden emin misiniz: </value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
     <value>Kodlama: Geçiş {0} / {1},  {2:00.00}%, FPS: {3:000.0},  Avg FPS: {4:000.0},  Kalan Süre: {5},  Geçen: {6:d\:hh\:mm\:ss} {7}</value>
@@ -577,9 +577,9 @@ Lütfen VLC'nin kurulu olduğundan ve HandBrake'nin seçeneklerinde belirtilen d
     <value>Ön ayarlar yüklenemiyor.</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake önceden ayarlanmış dosyanızı yükleyemedi. Daha önce desteklenmeyen bir HandBrake sürümünden alınmış veya bozulmuş olabilir. 
+    <value>HandBrake ön ayarlı dosyanızı yükleyemedi. Daha önce desteklenmeyen bir HandBrake sürümünden alınmış veya bozulmuş olabilir. 
 
-Eski hazır ayar dosyanız şu şekilde arşivlendi:</value>
+Eski ön ayarlı dosyanız şu şekilde arşivlendi:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
     <value> ile {0} hata veya iptal tespit edildi.</value>
@@ -881,13 +881,13 @@ Kalan Süre: {5},  Geçen: {6:d\:hh\:mm\:ss}</value>
     <value>Ön Ayar:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>Ön Ayarı Ayırma</value>
+    <value>Ayırma Ön Ayarı</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
     <value>İptal Et:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>Ön Ayarı İptal Et</value>
+    <value>İptal Etme Ön Ayarı</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
     <value>Ayarlamayı İptal Et</value>
@@ -1043,16 +1043,16 @@ Kalan Süre: {5},  Geçen: {6:d\:hh\:mm\:ss}</value>
     <value>Boyutlar</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Ön Ayarı Yeniden Adlandır</value>
+    <value>Yeniden Adlandırma Ön Ayarı</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
     <value>Ön Ayar Seçenekleri Bağlam Menüsü</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>Ön Ayarı Sil</value>
+    <value>Silme Ön Ayarı</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Hazır ayarlar</value>
+    <value>Ön Ayarlar</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
     <value>Önizleme</value>
@@ -1073,7 +1073,7 @@ Kalan Süre: {5},  Geçen: {6:d\:hh\:mm\:ss}</value>
     <value>Yerleşik Ön Ayarları Sıfırla</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>Yeni Ön Ayarı Kaydet</value>
+    <value>Yeni Kaydetme Ön Ayarı</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
     <value>Başlangıç ​​zamanı aranıyor</value>
@@ -1118,7 +1118,7 @@ Kalan Süre: {5},  Geçen: {6:d\:hh\:mm\:ss}</value>
     <value>Altyazı</value>
   </data>
   <data name="MainView_SubtitleTracksCount" xml:space="preserve">
-    <value>Altyazı İzleri</value>
+    <value>Altyazı Parçaları</value>
   </data>
   <data name="MainView_SummaryTab" xml:space="preserve">
     <value>Özet</value>
@@ -1741,7 +1741,7 @@ Kalan Süre: {5},  Geçen: {6:d\:hh\:mm\:ss}</value>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>Yardım</value>
   </data>
-  <data name="SourceSelection_Preferences" xml:space="preserve">
+  <data name="Preferences" xml:space="preserve">
     <value>Tercihler</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
@@ -1972,7 +1972,7 @@ Canlı Olmayan Seçenekler: {date} {time} {creation-date} {creation-time} {quali
     <value>Sıra Kurtarma Mümkün</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>Ön ayar dosyanız, yerleşik hazır ayarları içeriyordu. İçe aktarma işlevi bunların içe aktarılmasını desteklemez. Standart ön ayarları geri yüklemek için lütfen 'Ön Ayarlar Menüsü -&gt; Yerleşik Ön Ayarları Sıfırla'yı kullanın.
+    <value>Ön ayar dosyanız, yerleşik ön ayarları içeriyordu. İçe aktarma işlevi bunların içe aktarılmasını desteklemez. Standart ön ayarları geri yüklemek için lütfen 'Ön Ayarlar Menüsü -&gt; Yerleşik Ön Ayarları Sıfırla'yı kullanın.
 
 Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak.</value>
   </data>
@@ -2046,6 +2046,132 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
     <value>Başlık:</value>
   </data>
   <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
-    <value>Preview Rotation and Flip</value>
+    <value>Döndürme ve Çevirme Önizlemesi</value>
+  </data>
+  <data name="LogViewModel_Title" xml:space="preserve">
+    <value>Günlük Görüntüleyici</value>
+  </data>
+  <data name="MainView_Aspect" xml:space="preserve">
+    <value>Görünüş:</value>
+  </data>
+  <data name="MainView_Filters" xml:space="preserve">
+    <value>Filtreler:</value>
+  </data>
+  <data name="MainView_Size" xml:space="preserve">
+    <value>Boyut:</value>
+  </data>
+  <data name="MainView_Tracks" xml:space="preserve">
+    <value>Parçalar:</value>
+  </data>
+  <data name="OptionsTab_General" xml:space="preserve">
+    <value>Genel</value>
+  </data>
+  <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
+    <value>Yeni sürümleri kontrol etmek için 'Güncellemeleri Kontrol Et'i tıklayın</value>
+  </data>
+  <data name="OptionsView_BackButton" xml:space="preserve">
+    <value>&lt; Geri</value>
+  </data>
+  <data name="QueueView_CurrentlyPaused" xml:space="preserve">
+    <value>Şu Anda Duraklatıldı</value>
+  </data>
+  <data name="Options_OutputFiles" xml:space="preserve">
+    <value>Çıktı Dosyaları</value>
+  </data>
+  <data name="PointToPointMode_Chapters" xml:space="preserve">
+    <value>Bölümler</value>
+  </data>
+  <data name="PointToPointMode_Frames" xml:space="preserve">
+    <value>Çerçeveler</value>
+  </data>
+  <data name="PointToPointMode_Preview" xml:space="preserve">
+    <value>Önizleme</value>
+  </data>
+  <data name="PointToPointMode_Seconds" xml:space="preserve">
+    <value>Saniye</value>
+  </data>
+  <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Tüm Seçilen Dillerin Eşleşmesi</value>
+  </data>
+  <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
+    <value>Seçilen Dilin İlk Eşleşmesi</value>
+  </data>
+  <data name="SubtitleBehaviourModes_None" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>İlk Parça</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
+    <value>Yabancı Ses Tercih Edildi, Başka İlk</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
+    <value>Yabancı Ses Parçası</value>
+  </data>
+  <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
+    <value>Yabancı Ses Ara</value>
+  </data>
+  <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
+    <value>Yabancı Ses Taraması</value>
+  </data>
+  <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
+    <value>Tüm Seçilen Dillerin Eşleşmesi</value>
+  </data>
+  <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
+    <value>Tüm Parçaları şablon olarak kullan</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
+    <value>Seçilen Dilin İlk Eşleşmesi</value>
+  </data>
+  <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
+    <value>İlk Parçayı şablon olarak kullan</value>
+  </data>
+  <data name="AudioBehaviourModes_None" xml:space="preserve">
+    <value>Ses Yok</value>
+  </data>
+  <data name="ChapterViewModel_Chapter" xml:space="preserve">
+    <value>Böüm {0}</value>
+  </data>
+  <data name="Mp4Behaviour_Auto" xml:space="preserve">
+    <value>Otomatik</value>
+  </data>
+  <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
+    <value>Her zaman M4V kullan</value>
+  </data>
+  <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
+    <value>Her zaman MP4 kullan</value>
+  </data>
+  <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
+    <value>Özel</value>
+  </data>
+  <data name="PresetPictureSettingsMode_None" xml:space="preserve">
+    <value>Yok</value>
+  </data>
+  <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
+    <value>Her zaman Kaynak Çözünürlüğünü kullan</value>
+  </data>
+  <data name="ProcessPriority_AboveNormal" xml:space="preserve">
+    <value>Normalin Üstünde</value>
+  </data>
+  <data name="ProcessPriority_BelowNormal" xml:space="preserve">
+    <value>Normalin Altında</value>
+  </data>
+  <data name="ProcessPriority_High" xml:space="preserve">
+    <value>Yüksek</value>
+  </data>
+  <data name="ProcessPriority_Low" xml:space="preserve">
+    <value>Düşük</value>
+  </data>
+  <data name="ProcessPriority_Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="UpdateCheck_Monthly" xml:space="preserve">
+    <value>Aylık</value>
+  </data>
+  <data name="UpdateCheck_Weekly" xml:space="preserve">
+    <value>Haftalık</value>
   </data>
 </root>
