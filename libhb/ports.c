@@ -573,7 +573,7 @@ void hb_get_user_config_directory( char path[512] )
         return;
     }
 #elif defined( __APPLE__ )
-    if (osx_get_user_config_directory(path) == 0)
+    if (macOS_get_user_config_directory(path) == 0)
     {
         return;
     }

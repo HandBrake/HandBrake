@@ -1,18 +1,49 @@
 #import <Foundation/Foundation.h>
 
-int osx_get_user_config_directory(char path[512])
+static NSURL * macOS_last_modified_url(NSURL *url1, NSURL* url2)
+{
+    NSString *presetFile = @"HandBrake/UserPresets.json";
+
+    NSURL *presetsUrl1 = [url1 URLByAppendingPathComponent:presetFile isDirectory:NO];
+    NSURL *presetsUrl2 = [url2 URLByAppendingPathComponent:presetFile isDirectory:NO];
+    
+    NSDate *date1 = nil;
+    [presetsUrl1 getResourceValue:&date1 forKey:NSURLAttributeModificationDateKey error:nil];
+
+    NSDate *date2 = nil;
+    [presetsUrl2 getResourceValue:&date2 forKey:NSURLAttributeModificationDateKey error:nil];
+
+    return presetsUrl2 && (date1 == nil || [date2 compare:date1] == NSOrderedDescending) ? url2 : url1;
+}
+
+static NSURL * macOS_get_application_support_url()
+{
+    NSFileManager *fileManager = NSFileManager.defaultManager;
+    NSArray<NSURL *> *applicationSupportUrls = [fileManager URLsForDirectory:NSApplicationSupportDirectory
+                                                                   inDomains:NSUserDomainMask];
+
+    NSURL *appSupportURL = applicationSupportUrls.firstObject;
+
+    NSArray<NSURL *> *libraryUrls = [fileManager URLsForDirectory:NSLibraryDirectory
+                                                        inDomains:NSUserDomainMask];
+    NSString *sandboxPath = @"Containers/fr.handbrake.HandBrake/Data/Library/Application Support";
+    NSURL *sandboxAppSupportURL = [libraryUrls.firstObject URLByAppendingPathComponent:sandboxPath isDirectory:YES];
+
+    return macOS_last_modified_url(appSupportURL, sandboxAppSupportURL);
+}
+
+int macOS_get_user_config_directory(char path[512])
 {
     @autoreleasepool
     {
-        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSApplicationSupportDirectory,
-                                                             NSUserDomainMask, YES);
-        NSString  *dir = paths.firstObject;
-        if (dir.UTF8String == nil)
+        NSURL *url = macOS_get_application_support_url();
+
+        if (url == nil)
         {
             return -1;
         }
 
-        strncpy(path, dir.UTF8String, 511);
+        strncpy(path, url.fileSystemRepresentation, 511);
         path[511] = 0;
         return 0;
     }
