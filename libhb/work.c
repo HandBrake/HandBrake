@@ -1428,7 +1428,7 @@ static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
     {
         int mode = hb_dict_get_int(filter->settings, "mode");
         // "Same as source" FPS and no HB_FILTER_DETELECINE
-        if ( (mode == 0) || (is_detel == 0) )
+        if ( (mode == 0) && (is_detel == 0) )
         {
             hb_list_rem(list, filter);
             hb_filter_close(&filter);
