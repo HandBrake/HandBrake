@@ -381,9 +381,9 @@ Decomb wechselt zwischen verschiedenen Interpolationsalgorithmen für Geschwindi
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
     <value>Deinterlace-Voreinstellungen.
 
-Standard ist eine gute Balance zwischen Qualität und Geschwindigkeit.
+Default (Standard): ist eine gute Balance zwischen Qualität und Geschwindigkeit.
 
-Keine räumliche Prüfung: Yadif überspringt einige Korrekturen mit geringem Geschwindigkeitsgewinn.
+Skip Spatial Check: Yadif überspringt einige Korrekturen mit geringem Geschwindigkeitsgewinn.
 
 EEDI2 benutzt einen langsameren, Algorithmus hoher Qualität für das Decomb. Für die meisten schwierigen Quellen geeignet.
 
@@ -435,7 +435,7 @@ Lapsharp schärft mit Hilfe von Convolution angenähert an den Laplaceschen Kant
   <data name="FilterView_SharpenTune" xml:space="preserve">
     <value>Schärfen-Abstimmung. Erweiterte Einstellung der Schärfen-Option für bestimmte Szenarien.
 
-Ohne: Verwendet die Standardeinstellungen.
+None: Verwendet die Standardeinstellungen.
 
 Unscharf Maskieren kann abgestimmt werden auf Ultrafein, Fein, Medium, Grob, oder Sehr Grob. Die Auswahl sollte anhand der Auflösung des Ausgangsmaterials und der Feinheit der zu Erhöhenden Details getroffen werden.
 

@@ -361,7 +361,7 @@ HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3
 
 "Cassette" est utile pour les vidéos provenant de sources analogiques de faibles qualités telles que les VHS, où "Film" ne produit pas le résultat désiré.
 
-"Sprite" est utile pour les jeux bidimensionnels 2D en 1, 4, 8 ou 16 bits. Il n'est pas destiné à la haute définition.</value>
+"Sprite" est utile pour les jeux 2D en 1, 4, 8 ou 16 bits. Il n'est pas destiné à la haute définition.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
     <value>Le désentrelacement supprime les artefacts de l'image.

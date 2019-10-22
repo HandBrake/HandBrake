@@ -1154,7 +1154,7 @@ Soll sie überschrieben werden?</value>
     <value>Den Encodierungsstatus in der Titelleiste des Programms anzeigen</value>
   </data>
   <data name="Options_30DayLogClear" xml:space="preserve">
-    <value>Aktivitätsprotokolle älter als 30 Tage löschen</value>
+    <value>Alte Aktivitätsprotokolle nach 30 Tagen löschen</value>
   </data>
   <data name="Options_About" xml:space="preserve">
     <value>Über HandBrake</value>
@@ -1178,13 +1178,13 @@ Soll sie überschrieben werden?</value>
     <value>Auf Updates prüfen</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>Nach einer erfolgreichen Encodierung immer alle erledigten Aufgaben aus der Warteschlange löschen</value>
+    <value>Nach erfolgter Encodierung Einträge abgeschlossener Aufgaben immer entfernen</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
     <value>Verlauf der Aktivitätsprotokolle löschen</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>Eine Kopie des Encodierungsprotokolls an einen anderen Speicherort ablegen:</value>
+    <value>Eine Kopie des Encodierungsprotokolls an einem anderen Speicherort ablegen:</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
     <value>Eine Kopie des Encodierungsprotokolls am selben Speicherort wie das encodierte Video ablegen</value>
@@ -1205,7 +1205,7 @@ Soll sie überschrieben werden?</value>
     <value>DVD-Lesen</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>LibDVDNav deaktivieren (und stattdessen libdvdread verwenden).</value>
+    <value>Libdvdnav deaktivieren (und stattdessen libdvdread verwenden).</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
     <value>Encodieren</value>
@@ -1223,7 +1223,7 @@ Soll sie überschrieben werden?</value>
     <value>Aufzeichnungsumfang des Aktivitätsprotokolls:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Aktivitätsprotokollpfad:</value>
+    <value>Pfad des Protokolls:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
     <value>Anhalten, wenn Speicherplatz kleiner als:</value>
@@ -1253,7 +1253,7 @@ Soll sie überschrieben werden?</value>
     <value>Das System daran hindern während der Encodierung in den Ruhezustand zu fahren</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Anzahl an Vorschaubildern für die Überprüfung:</value>
+    <value>Anzahl der Bilder für die Vorschau:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
     <value>Prioritätslevel:</value>
@@ -1271,7 +1271,7 @@ Soll sie überschrieben werden?</value>
     <value>Unterstriche durch Leerzeichen ersetzen</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>Auf „Nichts tun“ zurücksetzen, wenn das Programm startet.</value>
+    <value>Bei jedem Start auf „Nichts tun“ zurücksetzen.</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
     <value>Skalierer wählen:</value>
@@ -1658,7 +1658,7 @@ Soll sie überschrieben werden?</value>
     <value>Original</value>
   </data>
   <data name="VideoView_2Pass" xml:space="preserve">
-    <value>Encodieren in 2 Durchgängen</value>
+    <value>Encodierung in zwei Durchgängen</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
     <value>Mittlere Bitrate (kbps):</value>
@@ -1962,7 +1962,7 @@ Nicht-Echtzeit Optionen: {date} {time} {creation-date} {creation-time} {quality}
 Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>Aktion sofort ausführen. (Dies deaktiviert den 60-Sekunden-Bestätigungsdialog)</value>
+    <value>Aktion sofort ausführen (dies deaktiviert den 60-Sekunden-Bestätigungsdialog).</value>
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Wählen</value>
@@ -1977,7 +1977,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Warteschlange exportieren (Nur CLI)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Dunkles Erscheinungsbild verwenden (Benötigt Neustart, nur Windows 10)</value>
+    <value>Dunkles Erscheinungsbild verwenden (benötigt Neustart, nur Windows 10)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>Nicht verfügbar</value>
@@ -2034,7 +2034,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Vorschau von Drehung und Spiegeln</value>
   </data>
   <data name="LogViewModel_Title" xml:space="preserve">
-    <value>Aktivitätslog</value>
+    <value>Aktivitätsprotokoll</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
     <value>Bildformat:</value>
@@ -2100,7 +2100,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
     <value>Fremdsprachentonsuche</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>Fremdsprachentonüberprüfung</value>
+    <value>Fremdsprachentonsuche</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
     <value>Alle passenden ausgewählten Sprachen</value>
