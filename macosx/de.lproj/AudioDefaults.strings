@@ -83,7 +83,7 @@
 "GbM-vm-RC2.title" = "Spurverhalten Sprache:";
 
 /* Class = "NSMenuItem"; title = "All Matching Selected Languages"; ObjectID = "GZP-q7-SYy"; */
-"GZP-q7-SYy.title" = "Alle passenden Sprachen auswählen";
+"GZP-q7-SYy.title" = "Alle passenden ausgewählten Sprachen";
 
 /* Class = "NSPopUpButton"; ibExternalAccessibilityDescription = "Bitrate"; ObjectID = "hHP-dw-nba"; */
 "hHP-dw-nba.ibExternalAccessibilityDescription" = "Bitrate";
@@ -101,7 +101,7 @@
 "IxI-o9-jMs.ibShadowedToolTip" = "Dies aktivieren, wenn das Abspielgerät DTS-HD unterstützt. Dies erlaubt das Durchschleifen von DTS-HD, wenn das automatische Durchschleifen aktiviert ist.";
 
 /* Class = "NSMenuItem"; title = "First Matching Selected Languages"; ObjectID = "jDd-Ji-7Sm"; */
-"jDd-Ji-7Sm.title" = "Erste passende Sprache auswählen";
+"jDd-Ji-7Sm.title" = "Erste passende ausgewählte Sprache";
 
 /* Class = "NSButtonCell"; title = "Cancel"; ObjectID = "Jn4-1L-J1g"; */
 "Jn4-1L-J1g.title" = "Abbrechen";
