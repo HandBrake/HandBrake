@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FilterView_Deblock" xml:space="preserve">
+    <value>Deblock은 품질이 낮은 비디오 압축으로 인해 발생하는 고르지 않은 인공물을 줄인다.</value>
+  </data>
+  <data name="FilterView_DecombDeinterlace" xml:space="preserve">
+    <value>decomb 또는 deinterlace 필터 옵션을 선택하십시오.
+
+</value>
+  </data>
+  <data name="FilterView_Denoise" xml:space="preserve">
+    <value>잡음 제거는 잡음과 잡티의 모양을 줄이거나 제거합니다. 이것은 압축을 효율적으로 해주고 높은 품질의 비디오를 작은 사이즈의 파일로 만들어줍니다.
+너무 강한 잡음 제거 설정은 디테일을 제거함으로써 그림 화질을 손상시킬 수 있습니다.
+NLMeans는 비용이 많이 드는 높은 품질의 잡음 제거 필터입니다.
+HQDN3D는 적응형 low-pass 필터로 NLMeans보다 빠르지만 세부 사항을 유지하는데 덜 효과적입니다.</value>
+  </data>
+  <data name="FilterView_Detelecine" xml:space="preserve">
+    <value>Detelecine은 영화 프레임률을 TV 프레임률로 바꿔주는 과정인 telecine의 결과물인 comb artifact를 제거합니다. </value>
+  </data>
+  <data name="FilterView_Grayscale" xml:space="preserve">
+    <value>Grayscale은 비디오의 색상 구성 요소를 제거합니다. 종종 Black&amp;amp; White 비디오라고 불립니다.</value>
+  </data>
+  <data name="MainView_Destination" xml:space="preserve">
+    <value>디렉토리 및 파일 이름을 포함한 대상 경로. 이곳에서 새 비디오가 생성되고 이름이 지정됩니다.</value>
+  </data>
+  <data name="MainView_IpodAtom" xml:space="preserve">
+    <value>빈티지 iPod 5세대 장치에서 재생할 수 있도록 MP4 마커를 2006년 경에 추가하세요. 다른 설정들은 호환성에 영향을 미칠 수 있습니다.</value>
+  </data>
+  <data name="MainView_Mux" xml:space="preserve">
+    <value>컨테이너 형식. 비디오, 오디오 및 기타 트래은 이 유형의 단일 파일로 결합됩니다. 호환성에 영향을 줍니다.</value>
+  </data>
+  <data name="MainView_Optimise" xml:space="preserve">
+    <value>더 빠른 다운로드를 위해 MP4를 최적화합니다. 인코딩 후, 전체 파일을 다운로드할 필요 없이, 네트워크를 통해 즉시 재생 가능하기 위해서 데이터를 재편성하여 다시 씁니다. </value>
+  </data>
+  <data name="MainView_Range" xml:space="preserve">
+    <value>소스 범위 선택. 기본적으로 모든 챕터가 선택되고 전체 소스가 인코딩됩니다.</value>
+  </data>
+  <data name="MainView_Title" xml:space="preserve">
+    <value>인코딩할 제목, 또는 비디오 클립.
+Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그 중 가장 긴 것은 일반적으로 주요 기능이다.</value>
+  </data>
+  <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
+    <value>아나모픽은 재생하는 동안 원래의 가로 세로를 보존하면서 임의의 저장 공간을 허용합니다.
+
+Off는 아나모픽을 비활성화합니다. 비디오 저장 공간과 화면의 크기는 동일할 것입니다. 특정한 오래된 기기들과의 호환성에만 유용합니다.
+
+Auto는 원본 화면의 가로 세로 비율을 유지하면서 저장물의 해상도를 최대로 높입니다. 추천합니다.
+
+Loose는 Auto와 유사하지만 저장물의 가로 세로 비율을 유지하려 합니다. 이것은 Auto에 비해 저장물의 해상도가 약간 떨어질 수 있습니다.
+
+Custom은 모든 파라미터들을 수동으로 설정할 수 있습니다. 잘못된 원본 화면의 가로 세로를 수정하고 후반작업에서 고급 컨트롤을 필요로 하는 전문가들에게 유용합니다.</value>
+  </data>
+  <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
+    <value>비디오 가장자리 주위에 검은 색 테두리를 자동으로 자릅니다.</value>
+  </data>
+  <data name="PictureSettingsView_CropBottom" xml:space="preserve">
+    <value>아래에서부터 비디오 자르기</value>
+  </data>
+  <data name="PictureSettingsView_CropLeft" xml:space="preserve">
+    <value>왼쪽에서부터 비디오 자르기</value>
+  </data>
+  <data name="PictureSettingsView_CropRight" xml:space="preserve">
+    <value>오른쪽에서부터 비디오 자르기</value>
+  </data>
+  <data name="PictureSettingsView_CropTop" xml:space="preserve">
+    <value>위에서부터 비디오 자르기</value>
+  </data>
+  <data name="PictureSettingsView_Height" xml:space="preserve">
+    <value>비디오가 저장 될 높이입니다. 픽셀 종횡비가 1:1이 아닌 경우 실제 디스플레이 크기가 달라집니다.</value>
+  </data>
+  <data name="PictureSettingsView_ManualCrop" xml:space="preserve">
+    <value>수동으로 비디오 자르기</value>
+  </data>
+  <data name="PictureSettingsView_Modulus" xml:space="preserve">
+    <value>스토리지 차원을 이 값의 배수로 정렬하십시오. 
+
+이 설정은 일부 장치화의 호환성에만 필요합니다.
+호환성 문제가 발생하지 않는 한 2를  사용해야합니다.</value>
+  </data>
+  <data name="PictureSettingsView_PAR" xml:space="preserve">
+    <value>픽셀 가로 세로는 픽셀들의 모양을 결정합니다.
+1:1 비율은 정사각형 픽셀을 정의합니다. 다른 값들은 직사각형 모양을 정의합니다.
+사용자들은 특정 가로 세로를 얻기 위해 이미지 크기를 조정할 것입니다.</value>
+  </data>
+  <data name="PictureSettingsView_Width" xml:space="preserve">
+    <value>비디오가 저장 될 너비입니다. 픽셀 종횡비가 1:1이 아닌 경우 실제 디스플레이 크기가 달라집니다.</value>
+  </data>
+  <data name="QueueView_DeleteJob" xml:space="preserve">
+    <value>queue에서 job 삭제하기</value>
+  </data>
+  <data name="QueueView_ResetJobStatus" xml:space="preserve">
+    <value>작업 상태를 대기로 재설정</value>
+  </data>
+  <data name="QueueView_SendJobBack" xml:space="preserve">
+    <value>편집을 위해 작업을 기본창으로 다시 보내십시오.</value>
+  </data>
+  <data name="Video_AvgBitrate" xml:space="preserve">
+    <value>평균 비트 전송률 설정.
+
+순간 비트 전송률은 어느 시점에서나 훨씬 높거나 낮을 수 있습니다.
+</value>
+  </data>
+  <data name="Video_ConstantFramerate" xml:space="preserve">
+    <value>일정한 프레임 속도 출력 가능</value>
+  </data>
+  <data name="Video_Encoders" xml:space="preserve">
+    <value>사용가능한 비디오 인코더</value>
+  </data>
+  <data name="Video_EncoderTune" xml:space="preserve">
+    <value>일반적인 시나리오에 맞게 설정을 조정하십시오.
+
+이는 특정 소스 특성의 효율성을 향상시커거나 출력 파일의 특성을 설정할 수 있습니다.
+변경 사항은 사전 설정 후 다른 모든 파라미터보다 먼저 적용됩니다.</value>
+  </data>
+  <data name="Video_ExtraOpts" xml:space="preserve">
+    <value>추가 인코더 설정. 콜론으로 구분된 인코더 옵션 목록.</value>
+  </data>
+  <data name="Video_FastDecode" xml:space="preserve">
+    <value>디코더 CPU 사용량을 줄입니다. 
+
+장치가 출력(손실된 프레임)을 재생하지 못하는 경우 디코더 CPU 사용량을 줄입니다.</value>
+  </data>
+  <data name="Video_Framerate" xml:space="preserve">
+    <value>출력 프레임 속도. 
+
+'소스와 동일'이 권장됩니다. 소스 비디오의 프레임 속도가 가변적인 경우 '소스와 동일'이 비디오를 보존합니다.</value>
+  </data>
+  <data name="Video_Level" xml:space="preserve">
+    <value>지정된 레벨을 준수하도록 설정하고 보장합니다.
+
+다른 모든 설정을 무시합니다.</value>
+  </data>
+  <data name="Video_PeakFramerate" xml:space="preserve">
+    <value>프레임 속도 설정에 의해 결정된 피크 속도록 가변 프레임 속도 출력을 활성화합니다.</value>
+  </data>
+  <data name="Video_Presets" xml:space="preserve">
+    <value>평균 비트 전송률 설정.
+
+순간 비트 전송률은 어느 시점에서나 훨씬 높거나 낮을 수 있습니다.
+</value>
+  </data>
+  <data name="Video_Profile" xml:space="preserve">
+    <value>지정된 프로파일을 준수하고 설정합니다.
+
+다른 모든 설정을 무시합니다.</value>
+  </data>
+  <data name="Video_Quality" xml:space="preserve">
+    <value>원하는 품질 요소을 설정하시오.
+인코더는 특정 품질을 목표로 합니다.
+각 비디오 인코더에서 사용되는 스케일은 다릅니다.
+x264의 척도는 로그이며 더 낮은 값은 더 높은 품질에 해당합니다.
+따라서 값이 소폭 감소하면 점진적으로 결과 파일에서 더 큰 증가가 발생할 수 있습니다. 값이 0이면 무손실을 의미하며, 원본 역시 무손실인 경우가 아니라면 원본보다 파일 크기가 더 커집니다.
+권장하는 값: 표준 정의 파일의 경우 18에서 20, 고화질 파일의 경우 20에서 23입니다.
+
+FFMpeg와 Theora의 척도는 더 선형적입니다.
+이 인코더들은 무손실 모드를 갖고 있지 않습니다.</value>
+  </data>
+  <data name="Video_TurboFirstPass" xml:space="preserve">
+    <value>2 pass 인코딩 중 첫 번째 pass를 하는 동안, 속도를 조절하는 설정을 사용하십시오.</value>
+  </data>
+  <data name="Video_TwoPass" xml:space="preserve">
+    <value>2 Pass 인코딩을 수행하세요.
+
+'비트 전송 속도' 설정이 필요합니다. 첫 번째 pass 동안, 비디오에 대한
+통계가 수집됩니다. 그러면 두 번째 pass 동안, 전송 속도 할당이 결정되는 데 통계가 사용됩니다.</value>
+  </data>
+  <data name="Video_VariableFramerate" xml:space="preserve">
+    <value>가변 프레임 속도 출력을 활성화합니다. VFR은 일부 플레이어와 호환되지 않습니다.</value>
+  </data>
+  <data name="MainView_WhenDone" xml:space="preserve">
+    <value>HandBrake가 현재 대기열을 완료하거나 인코딩하면 이 작업을 수행합니다.</value>
+  </data>
+  <data name="MainView_Browse" xml:space="preserve">
+    <value>인코디할 새 대상 경로 및 파일 이름 선택하기</value>
+  </data>
+  <data name="MainView_Angle" xml:space="preserve">
+    <value>인코딩할 비디오 각도. 다양한 각도의 DVD와 Blu-rau만 적용 가능합니다.</value>
+  </data>
+  <data name="MainView_AddPreset" xml:space="preserve">
+    <value>새로운 사전 설정을 추가하세요.</value>
+  </data>
+  <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
+    <value>추가적인 사전 설정 옵션.</value>
+  </data>
+  <data name="MainView_Presets" xml:space="preserve">
+    <value>사전 설정은 특정 시나리오에 맞게 조정된 인코딩 설정 그룹입니다. 당신의 의도에 가장 가까운 것을 선택하십시오.
+
+모든 인코딩 설정을 무시합니다. 사전 설정을 선택한 후 설정을 추가로 조정할 수 있습니다.</value>
+  </data>
+  <data name="MainView_RemovePreset" xml:space="preserve">
+    <value>선택된 사전 설정을 제거하세요.</value>
+  </data>
+  <data name="SourceSelection_TitleSpecific" xml:space="preserve">
+    <value>모든 제목 대신 특정 제목만 스캔하세요.</value>
+  </data>
+  <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
+    <value>사용자 설정 Denoise 파라미터.
+
+NLMeans 구문: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
+
+NLMeans 기본값: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
+
+HQDN3D 구문: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:cr-temporal=c
+
+HQDN3D 기본값: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
+  </data>
+  <data name="FilterView_DenoisePreset" xml:space="preserve">
+    <value>잡음 제거 필터 사전 설정. 필터의 강도를 설정합니다.</value>
+  </data>
+  <data name="FilterView_DenoiseTune" xml:space="preserve">
+    <value>Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
+ 
+- None uses the default preset settings.
+ 
+- Film refines settings for use with most live action content.
+ 
+- Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
+
+- High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
+
+- Animation is useful for cel animation such as anime and cartoons.
+
+- Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
+
+- Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</value>
+  </data>
+  <data name="FilterView_Deinterlace" xml:space="preserve">
+    <value>비인터레이스(Deinterlace)는 comb 아티팩트를 그림에서 제거한다.
+
+Yadif는 유명하고 빠른 비인터레이서(deinterlacer) 이다.
+
+Decomb은 속도와 품질을 위해 복수의 보간 알고리즘을 전환한다.</value>
+  </data>
+  <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
+    <value>사용자 설정 비인터레이스 파라미터.
+
+Yadif 구문: mode=m:parity=p
+
+Yadif 기본값: mode=3
+
+Decomb 구문: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+Decomb 기본값: mode=7</value>
+  </data>
+  <data name="FilterView_DeinterlacePreset" xml:space="preserve">
+    <value>비인터레이스 필터(Deinterlace filter) 사전 설정.
+
+기본값은 속도와 품질의 균형을 맞춘다.
+
+'공간 검사 건너뛰기'는 약간의 속도 증가를 위해서 Yadif는 피할 수 있는 특정 아티팩트를 수집하는 것을 건너뛰게 한다.
+
+EEDI2는 Decomb에 대해 더 느린 고품질 보간법 알고리즘을 사용한다. 복잡한 자료에 대해 유용하다.
+
+Bob는 문제가 있다고 인지된 해상도에 대한 모션을 더욱 잘 보존하려고 한다.</value>
+  </data>
+  <data name="FilterView_Flip" xml:space="preserve">
+    <value>가로축에서 그림을 뒤집는다.</value>
+  </data>
+  <data name="FilterView_InterlaceDetection" xml:space="preserve">
+    <value>인터레이스 검출(Interlace Detection)이 활성화된 경우 비인터레이스 필터(Deinterlace filter)가 인터레이스된 비디오 프레임을 처리만 할 수 있도록 한다. </value>
+  </data>
+  <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
+    <value>사용자 설정 인터레이스 검출 파라미터.
+
+구문 : mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+
+기본값: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+  </data>
+  <data name="FilterView_Rotate" xml:space="preserve">
+    <value>사진을 시계 방향으로 90도씩 회전</value>
+  </data>
+  <data name="MainView_Duration" xml:space="preserve">
+    <value>선택한 소스 범위의 지속 시간(시간: 분 : 초)</value>
+  </data>
+  <data name="PictureSettingsView_KeepAR" xml:space="preserve">
+    <value>Keep Aspect Ratio는 소스의 원래 디스플레이 측면을 유지합니다. 이 기능을 비활성화하면 사진이 늘어지거나 압착될 수 있습니다.</value>
+  </data>
+  <data name="FilterView_CustomSharpenParams" xml:space="preserve">
+    <value>사용자 설정 선명도 파라미터.
+
+언샵 구문: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+
+언샵 기본값: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+
+Lapsharp 구문: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+
+Lapsharp 기본값: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+  </data>
+  <data name="FilterView_Sharpen" xml:space="preserve">
+    <value>Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
+
+Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
+
+Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
+  </data>
+  <data name="FilterView_SharpenPreset" xml:space="preserve">
+    <value>Sharpen 필터 사전 설정. 필터의 강도를 설정합니다. </value>
+  </data>
+  <data name="FilterView_SharpenTune" xml:space="preserve">
+    <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
+
+None uses the default preset settings.
+
+Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
+
+Lapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.
+
+Lapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.
+
+Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
+
+Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</value>
+  </data>
+  <data name="MainView_AlignAVStart" xml:space="preserve">
+    <value>빈 프레임을 삽입하거나 프레임을 삭제하여 모든 오디오 및 비디오 스트림의 초기 타임 스탬프를 정렬합니다. MP4 편집 목록을 준수하지 않는 손상된 플레이어의 오디오/비디오 동기화를 향상시킬 수 있습니다.</value>
+  </data>
+  <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
+    <value>사전 설정을 제어하는 옵션</value>
+  </data>
+  <data name="MainView_EndPoint" xml:space="preserve">
+    <value>이 범위의 종점</value>
+  </data>
+  <data name="MainView_StartPoint" xml:space="preserve">
+    <value>이 범위의 시작점</value>
+  </data>
+</root>
