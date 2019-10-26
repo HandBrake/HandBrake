@@ -2858,9 +2858,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available additional Options: {source_path} or {source_folder_name} 
-        ///
-        ///Not both at the same time!.
+        ///   Looks up a localized string similar to Available additional Options: {source_path} or {source_folder_name} or {source}.
         /// </summary>
         public static string Options_DefaultPathAdditionalParams {
             get {
@@ -3493,7 +3491,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available Options: {source_path} {source_folder_name}  (Not both at the same time!).
+        ///   Looks up a localized string similar to Available Options: {source_path} {source_folder_name} {source}.
         /// </summary>
         public static string OptionsView_PathOptions {
             get {

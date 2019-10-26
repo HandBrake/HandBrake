@@ -339,9 +339,7 @@ Live Update Options: {source} {title} {chapters}
 Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Available additional Options: {source_path} or {source_folder_name} 
-
-Not both at the same time!</value>
+    <value>Available additional Options: {source_path} or {source_folder_name} or {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>You cannot encode to a file with the same path and filename as the source file. Please update the destination filename so that it does not match the source file.</value>
@@ -1912,7 +1910,7 @@ Time Remaining: {5:hh\:mm\:ss},  Elapsed: {6:hh\:mm\:ss} {7}</value>
 Non-Live Options: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (These only change if you scan a new source, change title or chapters)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Available Options: {source_path} {source_folder_name}  (Not both at the same time!)</value>
+    <value>Available Options: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Ask to overwrite file</value>

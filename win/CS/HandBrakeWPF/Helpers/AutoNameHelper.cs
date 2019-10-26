@@ -12,13 +12,16 @@ namespace HandBrakeWPF.Helpers
     using System;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
 
     using Caliburn.Micro;
 
     using HandBrake.Interop.Interop.Model.Encoding;
 
+    using HandBrakeWPF.Converters;
     using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Model.Options;
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;
 
@@ -111,8 +114,10 @@ namespace HandBrakeWPF.Helpers
                  * Generate the full path and filename
                  */
                 string destinationFilename = GenerateDestinationFileName(task, userSettingService, sourceName, dvdTitle, combinedChapterTag, createDate, createTime);
-                string autoNamePath = GetAutonamePath(userSettingService, task, destinationFilename);
-                autoNamePath = CheckAndHandleFilenameCollisions(autoNamePath, destinationFilename, task, userSettingService);
+                string autoNamePath = GetAutonamePath(userSettingService, task, sourceName);
+                string finalPath = Path.Combine(autoNamePath, destinationFilename);
+
+                autoNamePath = CheckAndHandleFilenameCollisions(finalPath, destinationFilename, task, userSettingService);
                 return autoNamePath;
             }
 
@@ -204,7 +209,7 @@ namespace HandBrakeWPF.Helpers
             return destinationFilename;
         }
 
-        private static string GetAutonamePath(IUserSettingService userSettingService, EncodeTask task, string destinationFilename)
+        private static string GetAutonamePath(IUserSettingService userSettingService, EncodeTask task, string sourceName)
         {
             string autoNamePath = string.Empty;
 
@@ -216,11 +221,20 @@ namespace HandBrakeWPF.Helpers
                 string directory = Directory.Exists(task.Source)
                                        ? task.Source
                                        : Path.GetDirectoryName(task.Source);
-                string requestedPath = Path.Combine(directory, savedPath);
-
-                autoNamePath = Path.Combine(requestedPath, destinationFilename);
+                autoNamePath = Path.Combine(directory, savedPath);
             }
-            else if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source_folder_name}") && !string.IsNullOrEmpty(task.Source))
+            else
+            {
+                autoNamePath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim();
+            }
+
+            if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source}") && !string.IsNullOrEmpty(task.Source))
+            {
+                sourceName = Path.GetInvalidPathChars().Aggregate(sourceName, (current, character) => current.Replace(character.ToString(), string.Empty));
+                autoNamePath = autoNamePath.Replace("{source}", sourceName);
+            }
+
+            if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source_folder_name}") && !string.IsNullOrEmpty(task.Source))
             {
                 // Second Case: We have a Path, with "{source_folder}" in it, therefore we need to replace it with the folder name from the source.
                 string path = Path.GetDirectoryName(task.Source);
@@ -229,30 +243,16 @@ namespace HandBrakeWPF.Helpers
                     string[] filesArray = path.Split(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
                     string sourceFolder = filesArray[filesArray.Length - 1];
 
-                    autoNamePath = Path.Combine(userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Replace("{source_folder_name}", sourceFolder), destinationFilename);
+                    autoNamePath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Replace("{source_folder_name}", sourceFolder);
                 }
-            }
-            else if (!task.Destination.Contains(Path.DirectorySeparatorChar.ToString()))
-            {
-                // Third case: If the destination box doesn't already contain a path, make one.
-                if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim() != string.Empty &&
-                    userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim() != "Click 'Browse' to set the default location")
-                {
-                    autoNamePath = Path.Combine(userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath), destinationFilename);
-                }
-                else
-                {
-                    // ...otherwise, output to the source directory
-                    autoNamePath = null;
-                }
-            }
-            else
-            {
-                // Otherwise, use the path that is already there.
-                // Use the path and change the file extension to match the previous destination
-                autoNamePath = Path.Combine(Path.GetDirectoryName(task.Destination), destinationFilename);
             }
 
+            // Fallback to the users "Videos" folder.
+            if (string.IsNullOrEmpty(autoNamePath) || autoNamePath == Resources.OptionsView_SetDefaultLocationOutputFIle)
+            {
+                autoNamePath = Environment.GetFolderPath(Environment.SpecialFolder.MyVideos);
+            }
+            
             return autoNamePath;
         }
 
