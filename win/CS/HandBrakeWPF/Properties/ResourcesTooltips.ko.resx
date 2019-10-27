@@ -121,9 +121,13 @@
     <value>Deblock은 품질이 낮은 비디오 압축으로 인해 발생하는 고르지 않은 인공물을 줄인다.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
-    <value>decomb 또는 deinterlace 필터 옵션을 선택하십시오.
+    <value>decomb 또는 비인터레이스(Deinterlace) 필터 옵션을 선택하십시오.
 
-</value>
+decomb 필터는 선택적으로 인터레이스된 프레임을 비인터레이스로 바꾸어줍니다. 
+이것은 인터레이스화 되지 않은 프레임의 품질을 보존합니다.
+
+대표적인 비인터레이스 필터는 모든 프레임에 적용됩니다.
+인터레이스화 되지 않은 프레임은 품질 저하가 일어날 것입니다.</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
     <value>잡음 제거는 잡음과 잡티의 모양을 줄이거나 제거합니다. 이것은 압축을 효율적으로 해주고 높은 품질의 비디오를 작은 사이즈의 파일로 만들어줍니다.
@@ -212,10 +216,11 @@ Custom은 모든 파라미터들을 수동으로 설정할 수 있습니다. 잘
     <value>편집을 위해 작업을 기본창으로 다시 보내십시오.</value>
   </data>
   <data name="Video_AvgBitrate" xml:space="preserve">
-    <value>평균 비트 전송률 설정.
+    <value>평균 비트 전송률을 설정하십시오.
 
-순간 비트 전송률은 어느 시점에서나 훨씬 높거나 낮을 수 있습니다.
-</value>
+순간 비트 전송률은 어느 시점에서 훨씬 높거나 낮을 수 있습니다.
+하지만 긴 시간 동안의 평균은 여기에 설정된 값이 될 것입니다.
+순간 비트 전송률을 제한해야 하는 경우 x264의 vbv-bufsize 와 vbv-maxrate 설정들을 확인하십시오.</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
     <value>일정한 프레임 속도 출력 가능</value>
@@ -251,10 +256,12 @@ Custom은 모든 파라미터들을 수동으로 설정할 수 있습니다. 잘
     <value>프레임 속도 설정에 의해 결정된 피크 속도록 가변 프레임 속도 출력을 활성화합니다.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>평균 비트 전송률 설정.
+    <value>인코더 설정을 인코딩 속도와 비교하여 압축 효율을 유지하도록 바꾸십시오.
 
-순간 비트 전송률은 어느 시점에서나 훨씬 높거나 낮을 수 있습니다.
-</value>
+이렇게 하면 기본 인코더 설정이 설정됩니다.
+음정, 개요, 수준, 고급 옵션 문자열이 해당 설정에서 적용될 것입니다.
+느린 설정은 품질이 향상되거나 파일의 크기가 작아지기 때문에 일반적으로 
+이 옵션을 가장 느리게 설정해야 합니다.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
     <value>지정된 프로파일을 준수하고 설정합니다.
@@ -325,21 +332,21 @@ HQDN3D 기본값: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal
     <value>잡음 제거 필터 사전 설정. 필터의 강도를 설정합니다.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
- 
-- None uses the default preset settings.
- 
-- Film refines settings for use with most live action content.
- 
-- Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
+    <value>Denoise 설정. Denoise 사전 설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
 
-- High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
+- 없음은 기본 사전 설정을 사용합니다.
 
-- Animation is useful for cel animation such as anime and cartoons.
+- Film은 대부분 라이브 액션 콘텐츠와 함께 사용하기 위한 설정을 개선합니다.
 
-- Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
+- Grain은 색상 채널만 처리합니다. 색상 잡음을 줄이거나 제거하면서 영화 같은 표면 밝기 질감을 보존하는데 유용합니다.
 
-- Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</value>
+- High Motion은 역동적으로 움직이는 장면에서 색상 채널에 대한 시간 처리를 줄임으로써 색상이 문질러진 듯한 효과를 줄입니다. 스포츠와 액션 비디오에 대해 유용합니다.
+
+- Animation은 애니메이션이나 만화와 같은 셀 애니메이션에 대해 유용합니다. 
+
+- Tape는 VHS와 같은 저화질의 아날로그 테이프 파일에 대해 유용하며, 이는 Film에서는 바람직한 결과물을 만들어낼 수 없습니다.
+
+- Sprite는 1-/4-/8-/16-비트의 2-차원 게임에 대해 유용합니다. Sprite는 고화질 비디오용으로 설계되지 않았습니다.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
     <value>비인터레이스(Deinterlace)는 comb 아티팩트를 그림에서 제거한다.
@@ -404,29 +411,29 @@ Lapsharp 구문: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c
 Lapsharp 기본값: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
+    <value>Sharpening(선명화)은 상세한 모양 중 특히 가장자리의 선명도를 향상시킵니다. 지나치게 높은 선명도 설정은 Ringing artifact를 만들고 잡음을 개선하여 화면 품질을 손상시킬 수 있으며, 이는 압축 효율성을 저하시킬 수 있습니다.
 
-Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
+Unsharp은 일반적인 용도의 unsharp masking 필터입니다. 화질을 흐리게 하여 선명해지면, 흐려진 화질의 화면과 원본 화면의 차이를 계산합니다.
 
-Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
+Lapsharp은 Laplacian edge 필터를 근사하게 하는 콘벌루션 커널을 사용하여 선명하게 하며, 때때로 unsharp masking보다 더욱 높은 품질의 결과물을 생산하기도 합니다.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
     <value>Sharpen 필터 사전 설정. 필터의 강도를 설정합니다. </value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
+    <value>Sharpen 설정. Sharpen 사전 설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
 
-None uses the default preset settings.
+없음은 기본 사전 설정을 사용합니다.
 
-Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
+Unsharp은 Ultrafine, Fine, Medium, Coarse, Very Coarse 선명화를 설정할 수 있습니다. 출력 화면 해상도 및 세부 정보에 기반해서 하나를 선택하십시오.
 
-Lapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.
+Lapsharp's Film 설정은 대부분 라이브 액션 콘텐츠와 함께 사용하기 위한 설정을 개선합니다. Film은 모든 가장자리를 동일하게 선명화하기 위해  등방 Laplacian 커널을 사용하고, 밝기(선명함) 정보는 크롬(색상) 정보보다 더욱 선명해집니다
 
-Lapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.
+Lapsharp's 표면 질감 설정은 Film과 비슷하지만, 잡음과 표면 질감에 대한 효과를 줄이기 위해 가우스풍 커널의 동방 Laplacian을 사용합니다. 표면 질감을 보존하고 Film 조정에 대한 일반적인 대체제로 유용합니다.
 
-Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
+Lapsharp's Animation 설정은 애니메이션이나 만화와 같은 셀 애니메이션에 대해 유용합니다. 애니메이션은 Film과 동일하지만, 아티팩트가 생성되지 않도록 전체적인 강도를 줄입니다.
 
-Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</value>
+Lapsharp's Sprite 설정은 1-/4-/8-/16-비트의 2-차원 게임에 대해 유용합니다. Sprite는 대각선 모서리보다 수평과 수직 모서리를 향상시키는 4개의 주변 Laplacian 커널을 사용합니다. </value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
     <value>빈 프레임을 삽입하거나 프레임을 삭제하여 모든 오디오 및 비디오 스트림의 초기 타임 스탬프를 정렬합니다. MP4 편집 목록을 준수하지 않는 손상된 플레이어의 오디오/비디오 동기화를 향상시킬 수 있습니다.</value>

@@ -259,7 +259,7 @@ Dies einstellen, wenn das Gerät Schwierigkeiten hat, die Ausgabe wiederzugeben 
 Überschreibt alle anderen Einstellungen.</value>
   </data>
   <data name="Video_PeakFramerate" xml:space="preserve">
-    <value>Ermöglicht die Ausgabe mit variabler Bildfrequenz mit einer maximalen Bildfrequenz, die durch die Einstellung der Bildfrequenz bestimmt wird.</value>
+    <value>Aktiviert die Ausgabe mit variabler Bildfrequenz mit einer maximalen Frequenz, die durch die Einstellung der Bildfrequenz bestimmt wird.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
     <value>Stellt die Encodereinstellungen so ein, dass die Kompressionseffizienz gegen die Kodiergeschwindigkeit abgewogen wird. 
@@ -299,7 +299,7 @@ das Video gesammelt. Dann, im zweiten Durchgang, werden diese Statistiken verwen
 um Entscheidungen über die Zuweisung von Bitraten zu treffen.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
-    <value>Aktiviert die variable Bildfrequenz.
+    <value>Aktiviert variable Bildfrequenz.
 
 VFR ist nicht kompatibel mit manchen Abspielgeräten.</value>
   </data>
