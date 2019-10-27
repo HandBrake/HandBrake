@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -332,9 +332,7 @@ GNU通用公共许可证的条款重新分发和/或修改它；无论你依据�
 非实时选项：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （只有扫描新源、更改标题或章节时才会更改）</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>可用的附加选项：{source_path} 或 {source_folder_name} 
-
-两个不能同时存在！</value>
+    <value>可用的附加选项: {source_path} 或 {source_folder_name} 或 {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>您不能编码到与源文件具有相同路径和文件名的文件。请更新目标文件名，使其与源文件不匹配。</value>
@@ -1901,7 +1899,7 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
 非实时更新选项：{date} {time} {creation-date} {creation-time} {quality} {bitrate} （只有扫描新源、更改标题或章节时才会更改）</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>可选的附加项：{source_path} {source_folder_name} {source}</value>
+    <value>可用的附加选项: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>询问是否覆盖文件</value>
