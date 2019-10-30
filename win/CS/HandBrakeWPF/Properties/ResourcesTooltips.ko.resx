@@ -118,58 +118,60 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="FilterView_Deblock" xml:space="preserve">
-    <value>Deblock은 품질이 낮은 비디오 압축으로 인해 발생하는 고르지 않은 인공물을 줄인다.</value>
+    <value>Deblock은 품질이 낮은 비디오 압축으로 인해 발생하는 고르지 않은 아티팩트를 줄입니다.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
     <value>decomb 또는 비인터레이스(Deinterlace) 필터 옵션을 선택하십시오.
 
 decomb 필터는 선택적으로 인터레이스된 프레임을 비인터레이스로 바꾸어줍니다. 
-이것은 인터레이스화 되지 않은 프레임의 품질을 보존합니다.
+이것은 인터레이스 되지 않은 프레임의 품질을 보존합니다.
 
 대표적인 비인터레이스 필터는 모든 프레임에 적용됩니다.
-인터레이스화 되지 않은 프레임은 품질 저하가 일어날 것입니다.</value>
+인터레이스 되지 않은 프레임은 품질 저하가 일어날 것입니다.</value>
   </data>
   <data name="FilterView_Denoise" xml:space="preserve">
-    <value>잡음 제거는 잡음과 잡티의 모양을 줄이거나 제거합니다. 이것은 압축을 효율적으로 해주고 높은 품질의 비디오를 작은 사이즈의 파일로 만들어줍니다.
-너무 강한 잡음 제거 설정은 디테일을 제거함으로써 그림 화질을 손상시킬 수 있습니다.
-NLMeans는 비용이 많이 드는 높은 품질의 잡음 제거 필터입니다.
+    <value>Denoise는 잡음과 잡티가 나타나는 것을 줄이거나 제거합니다. 이것은 압축을 효율적으로 해주고 높은 품질의 비디오를 작은 사이즈의 파일로 만들어줍니다.
+지나치게 강한 잡음 제거 설정은 디테일을 제거함으로써 그림 화질을 손상시킬 수 있습니다.
+
+NLMeans는 비용이 많이 드는 높은 품질의 잡음 제거 필터입니다. 실행 속도보다 품질이 중요한 경우 사용됩니다.
+
 HQDN3D는 적응형 low-pass 필터로 NLMeans보다 빠르지만 세부 사항을 유지하는데 덜 효과적입니다.</value>
   </data>
   <data name="FilterView_Detelecine" xml:space="preserve">
     <value>Detelecine은 영화 프레임률을 TV 프레임률로 바꿔주는 과정인 telecine의 결과물인 comb artifact를 제거합니다. </value>
   </data>
   <data name="FilterView_Grayscale" xml:space="preserve">
-    <value>Grayscale은 비디오의 색상 구성 요소를 제거합니다. 종종 Black&amp;amp; White 비디오라고 불립니다.</value>
+    <value>Grayscale은 비디오의 색상 구성 요소를 제거합니다. 보통Black&amp;amp; White 비디오라고 불립니다.</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>디렉토리 및 파일 이름을 포함한 대상 경로. 이곳에서 새 비디오가 생성되고 이름이 지정됩니다.</value>
+    <value>디렉토리 및 파일 이름을 포함한 대상 경로. 이곳에서 새로운 비디오가 생성되고 이름이 지정됩니다.</value>
   </data>
   <data name="MainView_IpodAtom" xml:space="preserve">
-    <value>빈티지 iPod 5세대 장치에서 재생할 수 있도록 MP4 마커를 2006년 경에 추가하세요. 다른 설정들은 호환성에 영향을 미칠 수 있습니다.</value>
+    <value>2006년에 출시된 빈티지 iPod 5세대 장치에서 재생할 수 있도록 MP4 마커를 추가하십시오. 다른 설정들은 호환성에 영향을 미칠 수 있습니다.</value>
   </data>
   <data name="MainView_Mux" xml:space="preserve">
-    <value>컨테이너 형식. 비디오, 오디오 및 기타 트래은 이 유형의 단일 파일로 결합됩니다. 호환성에 영향을 줍니다.</value>
+    <value>컨테이너 형식. 비디오, 오디오 및 기타 트랙은 이러한 형식의 단일 파일로 결합됩니다. 호환성에 영향을 줍니다.</value>
   </data>
   <data name="MainView_Optimise" xml:space="preserve">
     <value>더 빠른 다운로드를 위해 MP4를 최적화합니다. 인코딩 후, 전체 파일을 다운로드할 필요 없이, 네트워크를 통해 즉시 재생 가능하기 위해서 데이터를 재편성하여 다시 씁니다. </value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>소스 범위 선택. 기본적으로 모든 챕터가 선택되고 전체 소스가 인코딩됩니다.</value>
+    <value>소스 범위 선택. 기본적으로, 모든 챕터를 선택하고 전체 소스를 인코딩합니다.</value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
     <value>인코딩할 제목, 또는 비디오 클립.
 Blu-ray와 DVD 자료는 대개 여러 개의 제목을 가지고 있으며, 그 중 가장 긴 것은 일반적으로 주요 기능이다.</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>아나모픽은 재생하는 동안 원래의 가로 세로를 보존하면서 임의의 저장 공간을 허용합니다.
+    <value>Anamorphic은 재생하는 동안 원래의 가로 세로를 보존하면서 임의의 저장 공간을 허용합니다.
 
-Off는 아나모픽을 비활성화합니다. 비디오 저장 공간과 화면의 크기는 동일할 것입니다. 특정한 오래된 기기들과의 호환성에만 유용합니다.
+Off는 anamorphic을 비활성화합니다. 비디오 저장 공간과 화면의 크기는 동일할 것입니다. 특정한 오래된 기기들과의 호환성에만 유용합니다.
 
 Auto는 원본 화면의 가로 세로 비율을 유지하면서 저장물의 해상도를 최대로 높입니다. 추천합니다.
 
 Loose는 Auto와 유사하지만 저장물의 가로 세로 비율을 유지하려 합니다. 이것은 Auto에 비해 저장물의 해상도가 약간 떨어질 수 있습니다.
 
-Custom은 모든 파라미터들을 수동으로 설정할 수 있습니다. 잘못된 원본 화면의 가로 세로를 수정하고 후반작업에서 고급 컨트롤을 필요로 하는 전문가들에게 유용합니다.</value>
+Custom은 모든 파라미터들을 수동으로 설정할 수 있습니다. 잘못된 원본 화면의 가로 세로를 수정하고 후반 작업에서 고급 컨트롤을 필요로 하는 전문가들에게 유용합니다.</value>
   </data>
   <data name="PictureSettingsView_AutoCrop" xml:space="preserve">
     <value>비디오 가장자리 주위에 검은 색 테두리를 자동으로 자릅니다.</value>
@@ -195,7 +197,7 @@ Custom은 모든 파라미터들을 수동으로 설정할 수 있습니다. 잘
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
     <value>스토리지 차원을 이 값의 배수로 정렬하십시오. 
 
-이 설정은 일부 장치화의 호환성에만 필요합니다.
+이 설정은 일부 장치화와의 호환성에만 필요합니다.
 호환성 문제가 발생하지 않는 한 2를  사용해야합니다.</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
@@ -219,20 +221,21 @@ Custom은 모든 파라미터들을 수동으로 설정할 수 있습니다. 잘
     <value>평균 비트 전송률을 설정하십시오.
 
 순간 비트 전송률은 어느 시점에서 훨씬 높거나 낮을 수 있습니다.
-하지만 긴 시간 동안의 평균은 여기에 설정된 값이 될 것입니다.
-순간 비트 전송률을 제한해야 하는 경우 x264의 vbv-bufsize 와 vbv-maxrate 설정들을 확인하십시오.</value>
+하지만 긴 전송 시간 동안의 평균은 여기서 설정한 값이 될 것입니다.
+순간 비트 전송률을 제한해야 하는 경우 x264의 vbv-bufsize 와 vbv-maxrate 설정을 확인하십시오.</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
-    <value>일정한 프레임 속도 출력 가능</value>
+    <value>일정한 프레임 속도 출력을 가능하게 합니다.</value>
   </data>
   <data name="Video_Encoders" xml:space="preserve">
-    <value>사용가능한 비디오 인코더</value>
+    <value>사용 가능한 비디오 인코더.</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
-    <value>일반적인 시나리오에 맞게 설정을 조정하십시오.
+    <value>일반적인 시나리오에 최적화되도록 설정하십시오.
 
 이는 특정 소스 특성의 효율성을 향상시커거나 출력 파일의 특성을 설정할 수 있습니다.
-변경 사항은 사전 설정 후 다른 모든 파라미터보다 먼저 적용됩니다.</value>
+변경 사항은 환경 설정 후 
+다른 모든 파라미터보다 먼저 적용됩니다.</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
     <value>추가 인코더 설정. 콜론으로 구분된 인코더 옵션 목록.</value>
@@ -240,12 +243,12 @@ Custom은 모든 파라미터들을 수동으로 설정할 수 있습니다. 잘
   <data name="Video_FastDecode" xml:space="preserve">
     <value>디코더 CPU 사용량을 줄입니다. 
 
-장치가 출력(손실된 프레임)을 재생하지 못하는 경우 디코더 CPU 사용량을 줄입니다.</value>
+장치가 출력(손실된 프레임)을 재생하지 못하는 경우 디코더 CPU 사용량을 설정하십시오.</value>
   </data>
   <data name="Video_Framerate" xml:space="preserve">
     <value>출력 프레임 속도. 
 
-'소스와 동일'이 권장됩니다. 소스 비디오의 프레임 속도가 가변적인 경우 '소스와 동일'이 비디오를 보존합니다.</value>
+'원본 파일과 동일'이 권장됩니다. 원본 파일 비디오의 프레임 속도가 가변적인 경우, '원본 파일과 동일'이 비디오를 보존하게 됩니다.</value>
   </data>
   <data name="Video_Level" xml:space="preserve">
     <value>지정된 레벨을 준수하도록 설정하고 보장합니다.
@@ -253,7 +256,7 @@ Custom은 모든 파라미터들을 수동으로 설정할 수 있습니다. 잘
 다른 모든 설정을 무시합니다.</value>
   </data>
   <data name="Video_PeakFramerate" xml:space="preserve">
-    <value>프레임 속도 설정에 의해 결정된 피크 속도록 가변 프레임 속도 출력을 활성화합니다.</value>
+    <value>프레임 속도 설정에 의해 결정된 최고 속도로 가변 프레임 속도 출력을 활성화합니다.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
     <value>인코더 설정을 인코딩 속도와 비교하여 압축 효율을 유지하도록 바꾸십시오.
@@ -269,11 +272,15 @@ Custom은 모든 파라미터들을 수동으로 설정할 수 있습니다. 잘
 다른 모든 설정을 무시합니다.</value>
   </data>
   <data name="Video_Quality" xml:space="preserve">
-    <value>원하는 품질 요소을 설정하시오.
+    <value>원하는 품질 요소을 설정하십시오.
 인코더는 특정 품질을 목표로 합니다.
 각 비디오 인코더에서 사용되는 스케일은 다릅니다.
+
 x264의 척도는 로그이며 더 낮은 값은 더 높은 품질에 해당합니다.
-따라서 값이 소폭 감소하면 점진적으로 결과 파일에서 더 큰 증가가 발생할 수 있습니다. 값이 0이면 무손실을 의미하며, 원본 역시 무손실인 경우가 아니라면 원본보다 파일 크기가 더 커집니다.
+따라서 값이 소폭 감소하면 점진적으로 결과 파일에서 더 큰 증가가 발생할 수 있습니다. 
+값이 0이면 무손실을 의미하며, 
+원본 역시 무손실인 경우가 아니라면 
+원본보다 파일 크기가 더 커집니다.
 권장하는 값: 표준 정의 파일의 경우 18에서 20, 고화질 파일의 경우 20에서 23입니다.
 
 FFMpeg와 Theora의 척도는 더 선형적입니다.
@@ -283,7 +290,7 @@ FFMpeg와 Theora의 척도는 더 선형적입니다.
     <value>2 pass 인코딩 중 첫 번째 pass를 하는 동안, 속도를 조절하는 설정을 사용하십시오.</value>
   </data>
   <data name="Video_TwoPass" xml:space="preserve">
-    <value>2 Pass 인코딩을 수행하세요.
+    <value>2 Pass 인코딩을 수행하십시오.
 
 '비트 전송 속도' 설정이 필요합니다. 첫 번째 pass 동안, 비디오에 대한
 통계가 수집됩니다. 그러면 두 번째 pass 동안, 전송 속도 할당이 결정되는 데 통계가 사용됩니다.</value>
@@ -292,30 +299,30 @@ FFMpeg와 Theora의 척도는 더 선형적입니다.
     <value>가변 프레임 속도 출력을 활성화합니다. VFR은 일부 플레이어와 호환되지 않습니다.</value>
   </data>
   <data name="MainView_WhenDone" xml:space="preserve">
-    <value>HandBrake가 현재 대기열을 완료하거나 인코딩하면 이 작업을 수행합니다.</value>
+    <value>HandBrake가 현재 대기열이나 인코딩을 완료하면 해당 작업을 수행합니다.</value>
   </data>
   <data name="MainView_Browse" xml:space="preserve">
-    <value>인코디할 새 대상 경로 및 파일 이름 선택하기</value>
+    <value>인코딩할 새로운 대상 경로 및 파일 이름 선택하기</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
     <value>인코딩할 비디오 각도. 다양한 각도의 DVD와 Blu-rau만 적용 가능합니다.</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
-    <value>새로운 사전 설정을 추가하세요.</value>
+    <value>새로운 환경 설정을 추가하십시오.</value>
   </data>
   <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
-    <value>추가적인 사전 설정 옵션.</value>
+    <value>추가적인 환경 설정 옵션.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>사전 설정은 특정 시나리오에 맞게 조정된 인코딩 설정 그룹입니다. 당신의 의도에 가장 가까운 것을 선택하십시오.
+    <value>환경 설정은 특정 시나리오에 맞게 조정된 인코딩 설정 그룹입니다. 당신의 의도에 가장 가까운 것을 선택하십시오.
 
-모든 인코딩 설정을 무시합니다. 사전 설정을 선택한 후 설정을 추가로 조정할 수 있습니다.</value>
+모든 인코딩 설정을 무시합니다. 환경 설정을 선택한 후 설정을 추가로 조정할 수 있습니다.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
-    <value>선택된 사전 설정을 제거하세요.</value>
+    <value>선택된 환경 설정을 제거하십시오.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>모든 제목 대신 특정 제목만 스캔하세요.</value>
+    <value>모든 제목 대신 특정 제목만 스캔하십시오.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
     <value>사용자 설정 Denoise 파라미터.
@@ -329,12 +336,12 @@ HQDN3D 구문: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:
 HQDN3D 기본값: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
-    <value>잡음 제거 필터 사전 설정. 필터의 강도를 설정합니다.</value>
+    <value>Denoise 필터 환경 설정. 필터의 강도를 설정합니다.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Denoise 설정. Denoise 사전 설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
+    <value>Denoise 설정. Denoise 환경 설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
 
-- 없음은 기본 사전 설정을 사용합니다.
+- 없음은 기본 환경 설정을 사용합니다.
 
 - Film은 대부분 라이브 액션 콘텐츠와 함께 사용하기 위한 설정을 개선합니다.
 
@@ -367,18 +374,18 @@ Decomb 구문: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:di
 Decomb 기본값: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
-    <value>비인터레이스 필터(Deinterlace filter) 사전 설정.
+    <value>Deinterlace 필터 환경 설정.
 
-기본값은 속도와 품질의 균형을 맞춘다.
+기본값은 속도와 품질의 균형을 맞춥니다.
 
-'공간 검사 건너뛰기'는 약간의 속도 증가를 위해서 Yadif는 피할 수 있는 특정 아티팩트를 수집하는 것을 건너뛰게 한다.
+'공간 검사 건너뛰기'는 약간의 속도 증가를 위해서 Yadif는 피할 수 있는 특정 아티팩트를 수집하는 것을 건너뛰게 합니다.
 
-EEDI2는 Decomb에 대해 더 느린 고품질 보간법 알고리즘을 사용한다. 복잡한 자료에 대해 유용하다.
+EEDI2는 Decomb에 대해 더 느린 고품질 보관법 알고리즘을 사용합니다. 복잡한 자료에 대해 유용합니다.
 
-Bob는 문제가 있다고 인지된 해상도에 대한 모션을 더욱 잘 보존하려고 한다.</value>
+Bob는 문제가 있다고 인지된 해상도에 대한 모션을 더욱 잘 보존하려고 합니다.</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
-    <value>가로축에서 그림을 뒤집는다.</value>
+    <value>가로축에서 그림을 뒤집습니다.</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
     <value>인터레이스 검출(Interlace Detection)이 활성화된 경우 비인터레이스 필터(Deinterlace filter)가 인터레이스된 비디오 프레임을 처리만 할 수 있도록 한다. </value>
@@ -418,12 +425,12 @@ Unsharp은 일반적인 용도의 unsharp masking 필터입니다. 화질을 흐
 Lapsharp은 Laplacian edge 필터를 근사하게 하는 콘벌루션 커널을 사용하여 선명하게 하며, 때때로 unsharp masking보다 더욱 높은 품질의 결과물을 생산하기도 합니다.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
-    <value>Sharpen 필터 사전 설정. 필터의 강도를 설정합니다. </value>
+    <value>선명도 필터 환경 설정. 필터의 강도를 설정합니다. </value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>Sharpen 설정. Sharpen 사전 설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
+    <value>선명도 설정. 선명도 환경 설정을 추가로 조정하여 특정한 상황에 대한 설정을 최적화합니다.
 
-없음은 기본 사전 설정을 사용합니다.
+없음은 기본 환경 설정을 사용합니다.
 
 Unsharp은 Ultrafine, Fine, Medium, Coarse, Very Coarse 선명화를 설정할 수 있습니다. 출력 화면 해상도 및 세부 정보에 기반해서 하나를 선택하십시오.
 
@@ -439,12 +446,12 @@ Lapsharp's Sprite 설정은 1-/4-/8-/16-비트의 2-차원 게임에 대해 유�
     <value>빈 프레임을 삽입하거나 프레임을 삭제하여 모든 오디오 및 비디오 스트림의 초기 타임 스탬프를 정렬합니다. MP4 편집 목록을 준수하지 않는 손상된 플레이어의 오디오/비디오 동기화를 향상시킬 수 있습니다.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>사전 설정을 제어하는 옵션</value>
+    <value>환경 설정을 제어하는 옵션.</value>
   </data>
   <data name="MainView_EndPoint" xml:space="preserve">
-    <value>이 범위의 종점</value>
+    <value>이 범위의 종점.</value>
   </data>
   <data name="MainView_StartPoint" xml:space="preserve">
-    <value>이 범위의 시작점</value>
+    <value>이 범위의 시작점.</value>
   </data>
 </root>
