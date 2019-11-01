@@ -1901,8 +1901,8 @@ FPS: {3:000.0}, 평균 FPS: {4:000.0}
     <value>HandBrake 엔진이 초기화하는데 실패하였습니다. GPU 드라이버들이 오래되었을 경우 종종 발생하는 문제입니다.\n 시스템에 탑재된 개별 그래픽에 대한 GPU 드라이버들을 업데이트하십시오.</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Live 업데이트 옵션: {파일} {제목} {챕터} 
-Non-Live 옵션: {날짜} {시간} {생성-날짜} {생성-시간} {화질} {비트 전송속도} (이것들은 새로운 파일을 스캔하거나, 제목이나 챕터를 수정할 때만 변경할 수 있습니다.)</value>
+    <value>Live 업데이트 옵션: {source} {title} {chapters}
+Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (이것들은 새로운 파일을 스캔하거나, 제목이나 챕터를 수정할 때만 변경할 수 있습니다.)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
     <value>사용 가능한 옵션: {파일_경로} {파일_폴더_이름} {파일}</value>
