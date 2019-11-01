@@ -509,7 +509,7 @@ int main( int argc, char ** argv )
     hb_register_error_handler(&hb_cli_error_handler);
 
     hb_dvd_set_dvdnav( dvdnav );
-    
+
     /* Show version */
     fprintf( stderr, "%s - %s - %s\n",
              HB_PROJECT_TITLE, HB_PROJECT_HOST_TITLE, HB_PROJECT_URL_WEBSITE );
@@ -1994,7 +1994,7 @@ static char** str_width_split( const char *str, int width )
     count++;
     ret = calloc( ( count + 1 ), sizeof(char*) );
     if ( ret == NULL ) return ret;
-    
+
     pos = str;
     end = pos + width;
     for (ii = 0; ii < count - 1 && end < str + len; ii++)

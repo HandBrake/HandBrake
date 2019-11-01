@@ -837,7 +837,7 @@ static int hb_detelecine_init( hb_filter_object_t * filter,
     ctx->strict_breaks = -1;
     ctx->metric_plane  = 0;
     ctx->parity = -1;
-    
+
     // "Skip" array [top, bottom, left, right]
     hb_dict_extract_int(&ctx->junk_top, filter->settings, "skip-top");
     hb_dict_extract_int(&ctx->junk_bottom, filter->settings, "skip-bottom");

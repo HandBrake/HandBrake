@@ -130,7 +130,7 @@
         NSSize imageSize = NSMakeSize(CGImageGetWidth(self.image), CGImageGetHeight(self.image));
         CGFloat backingScaleFactor = self.window.backingScaleFactor;
         CGFloat borderSize = self.showBorder ? BORDER_SIZE : 0;
-        
+
         NSSize imageScaledSize = [self imageScaledSize:imageSize toFit:self.frame.size borderSize:borderSize scaleFactor:self.window.backingScaleFactor];
 
         return (imageScaledSize.width - borderSize * 2) / imageSize.width * backingScaleFactor;
@@ -175,16 +175,16 @@
     // with double pixel count, but we don't
     // want to double the size of the video
     NSSize scaledSource = NSMakeSize(source.width / scaleFactor, source.height / scaleFactor);
-    
+
     scaledSource.width += borderSize * 2;
     scaledSource.height += borderSize * 2;
-        
+
     if (self.fitToView == YES || scaledSource.width > destination.width || scaledSource.height > destination.height)
     {
         // If the image is larger then the view or if we are in Fit to View mode, scale the image
         scaledSource = [self scaledSize:source toFit:destination];
     }
-    
+
     return scaledSource;
 }
 
@@ -197,12 +197,12 @@
     {
         CGFloat borderSize = self.showBorder ? BORDER_SIZE : 0;
         NSSize frameSize = self.frame.size;
-        
+
         NSSize imageScaledSize = [self imageScaledSize:imageSize
                                                  toFit:frameSize
                                             borderSize:borderSize
                                            scaleFactor:self.window.backingScaleFactor];
-        
+
         [CATransaction begin];
         CATransaction.disableActions = YES;
 
@@ -216,7 +216,7 @@
 
         self.backLayer.frame = alignedRect;
         self.pictureLayer.frame = NSInsetRect(alignedRect, borderSize, borderSize);
-        
+
         [CATransaction commit];
     }
 }

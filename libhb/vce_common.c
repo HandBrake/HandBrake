@@ -125,8 +125,8 @@ int hb_vce_h264_available()
     if (is_hardware_disabled())
     {
         return 0;
-    } 
-    
+    }
+
     return (check_component_available(AMFVideoEncoderVCE_AVC) == AMF_OK) ? 1 : 0;
 }
 
@@ -135,8 +135,8 @@ int hb_vce_h265_available()
     if (is_hardware_disabled())
     {
         return 0;
-    } 
-    
+    }
+
     return (check_component_available(AMFVideoEncoder_HEVC) == AMF_OK) ? 1 : 0;
 }
 

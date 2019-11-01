@@ -103,7 +103,7 @@ int	stderrwrite(void *inFD, const char *buffer, int size)
 /**
  * Starts redirecting the stream by redirecting its output to function
  * @c stdoutwrite() or @c stderrwrite(). Old _write function is stored to
- * @c oldWriteFunc so it can be restored. 
+ * @c oldWriteFunc so it can be restored.
  */
 - (void)startRedirect
 {

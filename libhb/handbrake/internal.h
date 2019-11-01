@@ -27,7 +27,7 @@ extern int global_verbosity_level; // Global variable for hb_deep_log
 typedef enum hb_debug_level_s
 {
     HB_SUPPORT_LOG      = 1, // helpful in tech support
-    HB_HOUSEKEEPING_LOG = 2, // stuff we hate scrolling through  
+    HB_HOUSEKEEPING_LOG = 2, // stuff we hate scrolling through
     HB_GRANULAR_LOG     = 3  // sample-by-sample
 } hb_debug_level_t;
 void hb_valog( hb_debug_level_t level, const char * prefix, const char * log, va_list args) HB_WPRINTF(3,0);
@@ -58,7 +58,7 @@ void hb_job_setup_passes(hb_handle_t *h, hb_job_t *job, hb_list_t *list_pass);
 
 /*
  * Holds a packet of data that is moving through the transcoding process.
- * 
+ *
  * May have metadata associated with it via extra fields
  * that are conditionally used depending on the type of packet.
  */
@@ -74,7 +74,7 @@ struct hb_buffer_settings_s
     int64_t       stop;         // stop time of frame
     int64_t       renderOffset; // DTS used by b-frame offsets in muxmp4
     int64_t       pcr;
-    int           scr_sequence; // The SCR sequence that this buffer's 
+    int           scr_sequence; // The SCR sequence that this buffer's
                                 // timestamps are referenced to
     int           split;
     uint8_t       discontinuity;
@@ -271,9 +271,9 @@ static inline hb_buffer_t * hb_video_buffer_init( int width, int height )
 /***********************************************************************
  * Threads: scan.c, work.c, reader.c, muxcommon.c
  **********************************************************************/
-hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die, 
-                            const char * path, int title_index, 
-                            hb_title_set_t * title_set, int preview_count, 
+hb_thread_t * hb_scan_init( hb_handle_t *, volatile int * die,
+                            const char * path, int title_index,
+                            hb_title_set_t * title_set, int preview_count,
                             int store_previews, uint64_t min_duration );
 hb_thread_t * hb_work_init( hb_list_t * jobs,
                             volatile int * die, hb_error_code * error, hb_job_t ** job );

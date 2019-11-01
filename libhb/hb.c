@@ -1685,7 +1685,7 @@ int hb_global_init()
     }
 
 #if HB_PROJECT_FEATURE_QSV
-    if (!disable_hardware) 
+    if (!disable_hardware)
     {
         result = hb_qsv_info_init();
         if (result < 0)
@@ -1730,7 +1730,7 @@ int hb_global_init()
     hb_register(&hb_encx265);
 #endif
 #if HB_PROJECT_FEATURE_QSV
-    if (!disable_hardware) 
+    if (!disable_hardware)
     {
         hb_register(&hb_encqsv);
     }

@@ -197,10 +197,10 @@ static void add_audio(int track, hb_list_t *list_audio, BLURAY_STREAM_INFO *bdau
 
     audio->config.lang.attributes = HB_AUDIO_ATTR_NONE;
 
-    snprintf( audio->config.lang.simple, 
+    snprintf( audio->config.lang.simple,
               sizeof( audio->config.lang.simple ), "%s",
               strlen( lang->native_name ) ? lang->native_name : lang->eng_name );
-    snprintf( audio->config.lang.iso639_2, 
+    snprintf( audio->config.lang.iso639_2,
               sizeof( audio->config.lang.iso639_2 ), "%s", lang->iso639_2 );
 
     hb_log("bd: audio id=0x%x, lang=%s (%s), 3cc=%s", audio->id,
@@ -436,7 +436,7 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         // All BD clips are not all required to have the same audio.
         // But clips that have seamless transition are required
         // to have the same audio as the previous clip.
-        // So find the clip that has the most other clips with the 
+        // So find the clip that has the most other clips with the
         // matching audio.
         for ( ii = 0; ii < ti->clip_count; ii++ )
         {
@@ -637,7 +637,7 @@ int hb_bd_main_feature( hb_bd_t * d, hb_list_t * list_title )
     {
         hb_title_t * title = hb_list_item( list_title, ii );
         ti = d->title_info[title->index - 1];
-        if ( ti ) 
+        if ( ti )
         {
             BLURAY_STREAM_INFO * bdvideo = &ti->clips[0].video_streams[0];
             if ( title->duration > longest_duration * 0.7 && bdvideo->format < 8 )

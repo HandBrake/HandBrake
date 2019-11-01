@@ -6,7 +6,7 @@ static NSURL * macOS_last_modified_url(NSURL *url1, NSURL* url2)
 
     NSURL *presetsUrl1 = [url1 URLByAppendingPathComponent:presetFile isDirectory:NO];
     NSURL *presetsUrl2 = [url2 URLByAppendingPathComponent:presetFile isDirectory:NO];
-    
+
     NSDate *date1 = nil;
     [presetsUrl1 getResourceValue:&date1 forKey:NSURLAttributeModificationDateKey error:nil];
 

@@ -170,7 +170,7 @@ static void work_func( void * _work )
         // TODO: Fix this ugly hack!
         hb_force_rescan(h);
     }
-    
+
     t = time(NULL);
     hb_log("Finished work at: %s", asctime(localtime(&t)));
     free( work );
@@ -1435,7 +1435,7 @@ static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
             hb_log("Skipping vfr filter");
         }
     }
-    
+
     filter = hb_filter_find(list, HB_FILTER_CROP_SCALE);
     if (filter != NULL)
     {
@@ -1449,7 +1449,7 @@ static void sanitize_filter_list(hb_list_t *list, hb_geometry_t src_geo)
             bottom = hb_dict_get_int(settings, "crop-bottom");
             left = hb_dict_get_int(settings, "crop-left");
             right = hb_dict_get_int(settings, "crop-right");
-            
+
             if ( (src_geo.width == width) && (src_geo.height == height) &&
                 (top == 0) && (bottom == 0 ) && (left == 0) && (right == 0) )
             {
@@ -1499,12 +1499,12 @@ static void do_job(hb_job_t *job)
     if (job->indepth_scan)
     {
         hb_log( "Starting Task: Subtitle Scan" );
-    } 
-    else if (job->pass_id == HB_PASS_ENCODE_1ST) 
+    }
+    else if (job->pass_id == HB_PASS_ENCODE_1ST)
     {
         hb_log( "Starting Task: Analysis Pass" );
-    } 
-    else 
+    }
+    else
     {
         hb_log( "Starting Task: Encoding Pass" );
     }

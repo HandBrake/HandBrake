@@ -6,7 +6,7 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
- 
+
 #ifndef HANDBRAKE_EEDI2_H
 #define HANDBRAKE_EEDI2_H
 
@@ -46,7 +46,7 @@ void eedi2_erode_edge_mask( uint8_t *mskp, int msk_pitch, uint8_t *dstp, int dst
 // If none of the 6 horizontally adjacent pixels are masked,
 // don't consider the current pixel masked. If there are any
 // masked on both sides, consider the current pixel masked.
-void eedi2_remove_small_gaps( uint8_t * mskp, int msk_pitch, uint8_t * dstp, int dst_pitch, 
+void eedi2_remove_small_gaps( uint8_t * mskp, int msk_pitch, uint8_t * dstp, int dst_pitch,
                               int height, int width );
 
 // Spatial vectors. Looks at maximum_search_distance surrounding pixels
@@ -85,10 +85,10 @@ void eedi2_post_process( uint8_t * nmskp, int nmsk_pitch, uint8_t * omskp, int o
 
 void eedi2_gaussian_blur1( uint8_t * src, int src_pitch, uint8_t * tmp, int tmp_pitch, uint8_t * dst,
                            int dst_pitch, int height, int width );
-                           
+
 void eedi2_gaussian_blur_sqrt2( int *src, int *tmp, int *dst, const int pitch,
                                 const int height, const int width );
-                                
+
 void eedi2_calc_derivatives( uint8_t *srcp, int src_pitch, int height, int width,
                              int *x2, int *y2, int *xy);
 

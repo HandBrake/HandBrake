@@ -983,8 +983,8 @@ static hb_buffer_t * hb_dvdread_read( hb_dvd_t * e )
                         continue;
                     }
                     break;
-                } else {  
-                    // First retry the same block, then try the next one, 
+                } else {
+                    // First retry the same block, then try the next one,
                     // adjust the skip increment upwards so that we can skip
                     // large sections of bad blocks more efficiently (at the
                     // cost of some missed good blocks at the end).
@@ -992,7 +992,7 @@ static hb_buffer_t * hb_dvdread_read( hb_dvd_t * e )
                             d->next_vobu, (read_retry * 10));
                     d->next_vobu += (read_retry * 10);
                 }
-                
+
             }
 
             if( read_retry == 1024 )
@@ -1021,7 +1021,7 @@ static hb_buffer_t * hb_dvdread_read( hb_dvd_t * e )
                     hb_log("dvd: Lost sync, searching for NAV pack at blk %d",
                            d->next_vobu);
                     d->in_sync = 0;
-                } 
+                }
                 continue;
             }
 

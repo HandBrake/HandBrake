@@ -75,12 +75,12 @@ static const char * const h26x_nvenc_preset_names[] =
 
 static const char * const h264_nvenc_profile_names[] =
 {
-    "auto", "baseline", "main", "high", NULL  // "high444p" not supported. 
+    "auto", "baseline", "main", "high", NULL  // "high444p" not supported.
 };
 
 static const char * const h265_nvenc_profile_names[] =
 {
-    "auto", "main", NULL // "main10", "rext"  We do not currently support 10bit encodes with this encoder. 
+    "auto", "main", NULL // "main10", "rext"  We do not currently support 10bit encodes with this encoder.
 };
 
 static const char * const h26x_vt_preset_name[] =
@@ -95,7 +95,7 @@ static const char * const h264_vt_profile_name[] =
 
 static const char * const h265_vt_profile_name[] =
 {
-    "auto", "main",  NULL // "main10" not currently supported. 
+    "auto", "main",  NULL // "main10" not currently supported.
 };
 
 int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
@@ -180,7 +180,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         // Catch all when the switch above fails
         hb_log( "encavcodecInit: Unable to determine codec_name "
                 "from hb_work_object_t.codec_param=%d and "
-                "hb_job_t.vcodec=%x", w->codec_param, 
+                "hb_job_t.vcodec=%x", w->codec_param,
                 job->vcodec );
         ret = 1;
         goto done;
@@ -308,7 +308,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         // ffmpeg's mpeg2 encoder requires that the bit_rate_tolerance be >=
         // bitrate * fps
         context->bit_rate_tolerance = context->bit_rate * av_q2d(fps) + 1;
-        
+
         if ( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
                   job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 ) {
             av_dict_set( &av_opts, "rc", "cbr_hq", 0 );
@@ -327,7 +327,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             // what was previously used
             context->flags |= AV_CODEC_FLAG_QSCALE;
             context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
-        
+
             char quality[7];
             snprintf(quality, 7, "%.2f", job->vquality);
             av_dict_set( &av_opts, "crf", quality, 0 );
@@ -381,16 +381,16 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
             snprintf(quality, 7, "%.2f", job->vquality);
             snprintf(qualityB, 7, "%.2f", adjustedQualityB);
-            
+
             if (adjustedQualityB > 51) {
                 adjustedQualityB = 51;
             }
 
             av_dict_set( &av_opts, "rc", "cqp", 0 );
-           
+
             av_dict_set( &av_opts, "qp_i", quality, 0 );
             av_dict_set( &av_opts, "qp_p", quality, 0 );
-            
+
             if ( job->vcodec != HB_VCODEC_FFMPEG_VCE_H265 )
             {
                 av_dict_set( &av_opts, "qp_b", qualityB, 0 );
@@ -403,7 +403,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
             // what was previously used
             context->flags |= AV_CODEC_FLAG_QSCALE;
             context->global_quality = FF_QP2LAMBDA * job->vquality + 0.5;
-            
+
             hb_log( "encavcodec: encoding at constant quantizer %d",
                     context->global_quality );
         }
@@ -532,7 +532,7 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         // FIXME
         //context->tier = FF_TIER_UNKNOWN;
     }
-    
+
     if (job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
         job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265)
     {
@@ -1059,7 +1059,7 @@ static int apply_encoder_preset(int vcodec, AVDictionary ** av_opts,
         default:
             break;
     }
-    
+
     return 0;
 }
 

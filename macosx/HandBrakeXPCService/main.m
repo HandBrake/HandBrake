@@ -21,7 +21,7 @@
     newConnection.exportedObject = exportedObject;
 
     [newConnection resume];
-    
+
     return YES;
 }
 
@@ -32,10 +32,10 @@ int main(int argc, const char *argv[])
     HBUtilities.resolveBookmarks = NO;
 
     HBXPCServiceDelegate *delegate = [HBXPCServiceDelegate new];
-    
+
     NSXPCListener *listener = [NSXPCListener serviceListener];
     listener.delegate = delegate;
-    
+
     [listener resume];
 
     return 0;

@@ -26,7 +26,7 @@ static void CrashMyApplication()
         [result appendAttributedString:attrS];
     }
     [result addAttribute:NSFontAttributeName value:[NSFont fontWithName:@"Monaco" size:10] range:NSMakeRange(0, result.length)];
-    return result;    
+    return result;
 }
 
 - (void)reportException:(NSException *)exception
@@ -58,7 +58,7 @@ static void CrashMyApplication()
     @catch (NSException *e)
     {
         // Suppress any exceptions raised in the handling
-    }    
+    }
 }
 
 @end

@@ -104,7 +104,7 @@ static char * hb_dvdnav_name( char * path )
 static int hb_dvdnav_reset( hb_dvdnav_t * d )
 {
     char * path_ccp = hb_utf8_to_cp( d->path );
-    if ( d->dvdnav ) 
+    if ( d->dvdnav )
         dvdnav_close( d->dvdnav );
 
     /* Open device */
@@ -128,7 +128,7 @@ static int hb_dvdnav_reset( hb_dvdnav_t * d )
     /*
      ** set the PGC positioning flag to have position information
      ** relatively to the whole feature instead of just relatively to the
-     ** current chapter 
+     ** current chapter
      **/
     if (dvdnav_set_PGC_positioning_flag(d->dvdnav, 1) != DVDNAV_STATUS_OK)
     {
@@ -201,7 +201,7 @@ static hb_dvd_t * hb_dvdnav_init( hb_handle_t * h, const char * path )
     /*
      ** set the PGC positioning flag to have position information
      ** relatively to the whole feature instead of just relatively to the
-     ** current chapter 
+     ** current chapter
      **/
     if (dvdnav_set_PGC_positioning_flag(d->dvdnav, 1) != DVDNAV_STATUS_OK)
     {
@@ -1109,8 +1109,8 @@ static int try_button( dvdnav_t * dvdnav, int button, hb_list_t * list_title )
             {
                 if ( hbtitle->duration / 90000 > 10 * 60 )
                 {
-                    hb_deep_log( 3, "dvdnav: Found candidate feature title %d duration %02d:%02d:%02d on button %d", 
-                    cur_title, hbtitle->hours, hbtitle->minutes, 
+                    hb_deep_log( 3, "dvdnav: Found candidate feature title %d duration %02d:%02d:%02d on button %d",
+                    cur_title, hbtitle->hours, hbtitle->minutes,
                     hbtitle->seconds, button+1 );
                     return cur_title;
                 }
@@ -1134,18 +1134,18 @@ done:
         hbtitle = hb_list_item( list_title, index );
         if ( hbtitle != NULL )
         {
-            hb_deep_log( 3, "dvdnav: Found candidate feature title %d duration %02d:%02d:%02d on button %d", 
-            longest, hbtitle->hours, hbtitle->minutes, 
+            hb_deep_log( 3, "dvdnav: Found candidate feature title %d duration %02d:%02d:%02d on button %d",
+            longest, hbtitle->hours, hbtitle->minutes,
             hbtitle->seconds, button+1 );
         }
     }
     return longest;
 }
 
-static int try_menu( 
-    hb_dvdnav_t * d, 
-    hb_list_t * list_title, 
-    DVDMenuID_t menu, 
+static int try_menu(
+    hb_dvdnav_t * d,
+    hb_list_t * list_title,
+    DVDMenuID_t menu,
     uint64_t fallback_duration )
 {
     int result, event, len;
@@ -1359,7 +1359,7 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
     if ( title )
     {
         hb_deep_log( 2, "dvdnav: Longest title %d duration %02d:%02d:%02d",
-                    longest_fallback, title->hours, title->minutes, 
+                    longest_fallback, title->hours, title->minutes,
                     title->seconds );
     }
 
@@ -1384,7 +1384,7 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
         }
     }
 
-    if ( longest_root < 0 || 
+    if ( longest_root < 0 ||
          (float)longest_duration_fallback * 0.7 > longest_duration_root)
     {
         longest_root = try_menu( d, list_title, DVD_MENU_Root, longest_duration_fallback );
@@ -1405,7 +1405,7 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
         }
     }
 
-    if ( longest_root < 0 || 
+    if ( longest_root < 0 ||
          (float)longest_duration_fallback * 0.7 > longest_duration_root)
     {
         longest_title = try_menu( d, list_title, DVD_MENU_Title, longest_duration_fallback );
@@ -1417,7 +1417,7 @@ static int hb_dvdnav_main_feature( hb_dvd_t * e, hb_list_t * list_title )
             {
                 longest_duration_title = title->duration;
                 hb_deep_log( 2, "dvdnav: found title %d duration %02d:%02d:%02d",
-                            longest_title, title->hours, title->minutes, 
+                            longest_title, title->hours, title->minutes,
                             title->seconds );
             }
         }
@@ -1483,7 +1483,7 @@ static int hb_dvdnav_start( hb_dvd_t * e, hb_title_t *title, int c )
         result = dvdnav_part_play(d->dvdnav, t, 1);
     if (result != DVDNAV_STATUS_OK)
     {
-        hb_error( "dvd: dvdnav_*_play failed - %s", 
+        hb_error( "dvd: dvdnav_*_play failed - %s",
                   dvdnav_err_to_string(d->dvdnav) );
         return 0;
     }
@@ -1612,7 +1612,7 @@ static int hb_dvdnav_seek( hb_dvd_t * e, float f )
 
     if (dvdnav_sector_search(d->dvdnav, sector, SEEK_SET) != DVDNAV_STATUS_OK)
     {
-        hb_error( "dvd: dvdnav_sector_search failed - %s", 
+        hb_error( "dvd: dvdnav_sector_search failed - %s",
                   dvdnav_err_to_string(d->dvdnav) );
         return 0;
     }
@@ -1675,7 +1675,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
 
         case DVDNAV_NOP:
             /*
-            * Nothing to do here. 
+            * Nothing to do here.
             */
             break;
 
@@ -1685,8 +1685,8 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             * would wait the amount of time specified by the still's
             * length while still handling user input to make menus and
             * other interactive stills work. A length of 0xff means an
-            * indefinite still which has to be skipped indirectly by some 
-            * user interaction. 
+            * indefinite still which has to be skipped indirectly by some
+            * user interaction.
             */
             dvdnav_still_skip( d->dvdnav );
             break;
@@ -1699,36 +1699,36 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             * always the fifo's length ahead in the stream compared to
             * what the application sees. Such applications should wait
             * until their fifos are empty when they receive this type of
-            * event. 
+            * event.
             */
             dvdnav_wait_skip( d->dvdnav );
             break;
 
         case DVDNAV_SPU_CLUT_CHANGE:
             /*
-            * Player applications should pass the new colour lookup table 
-            * to their SPU decoder 
+            * Player applications should pass the new colour lookup table
+            * to their SPU decoder
             */
             break;
 
         case DVDNAV_SPU_STREAM_CHANGE:
             /*
             * Player applications should inform their SPU decoder to
-            * switch channels 
+            * switch channels
             */
             break;
 
         case DVDNAV_AUDIO_STREAM_CHANGE:
             /*
             * Player applications should inform their audio decoder to
-            * switch channels 
+            * switch channels
             */
             break;
 
         case DVDNAV_HIGHLIGHT:
             /*
             * Player applications should inform their overlay engine to
-            * highlight the given button 
+            * highlight the given button
             */
             break;
 
@@ -1737,7 +1737,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             * Some status information like video aspect and video scale
             * permissions do not change inside a VTS. Therefore this
             * event can be used to query such information only when
-            * necessary and update the decoding/displaying accordingly. 
+            * necessary and update the decoding/displaying accordingly.
             */
             {
                 int tt = 0, pgcn = 0, pgn = 0;
@@ -1758,7 +1758,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             * Some status information like the current Title and Part
             * numbers do not change inside a cell. Therefore this event
             * can be used to query such information only when necessary
-            * and update the decoding/displaying accordingly. 
+            * and update the decoding/displaying accordingly.
             */
             {
                 dvdnav_cell_change_event_t * cell_event;
@@ -1804,7 +1804,7 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             * Angles are handled completely inside libdvdnav. For the
             * menus to work, the NAV packet information has to be passed
             * to the overlay engine of the player so that it knows the
-            * dimensions of the button areas. 
+            * dimensions of the button areas.
             */
 
             // mpegdemux expects to get these.  I don't think it does
@@ -1818,13 +1818,13 @@ static hb_buffer_t * hb_dvdnav_read( hb_dvd_t * e )
             /*
             * This event is issued whenever a non-seamless operation has
             * been executed. Applications with fifos should drop the
-            * fifos content to speed up responsiveness. 
+            * fifos content to speed up responsiveness.
             */
             break;
 
         case DVDNAV_STOP:
             /*
-            * Playback should end here. 
+            * Playback should end here.
             */
             d->stopped = 1;
             hb_buffer_close( &b );

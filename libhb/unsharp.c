@@ -144,7 +144,7 @@ static void unsharp(const uint8_t *src,
             {
                 const uint8_t * srx = src - steps * stride + x - steps;
                 uint8_t       * dsx = dst - steps * stride + x - steps;
-        
+
                 res = (int32_t)*srx + ((((int32_t)*srx -
                      (int32_t)((Tmp1 + halfscale) >> scalebits)) * amount) >> 16);
                 *dsx = res > 255 ? 255 : res < 0 ? 0 : (uint8_t)res;

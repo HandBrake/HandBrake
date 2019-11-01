@@ -93,7 +93,7 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
      * frames plus the start of the 7th, the second packet will contain the
      * end of the 7th, 8-13 & the start of 14, etc. The frame structure is
      * important because the PTS on the packet gives the time of the first
-     * frame that starts in the packet *NOT* the time of the first sample 
+     * frame that starts in the packet *NOT* the time of the first sample
      * in the packet. Also samples get split across packet boundaries
      * so we can't assume that we can consume all the data in one packet
      * on every call to the work routine.
@@ -132,7 +132,7 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
      * of channels times the bits per sample divided by 8 to get bytes.
      * (we have to compute in bits because 20 bit samples are not an integral
      * number of bytes). We do all the multiplies first then the divides to
-     * avoid truncation errors. 
+     * avoid truncation errors.
      */
     /*
      * Don't trust the number of frames given in the header.  We've seen
@@ -143,11 +143,11 @@ static void lpcmInfo( hb_work_object_t *w, hb_buffer_t *in )
     int samples = chunks * samples_per_chunk;
 
     // Calculate number of frames that start in this packet
-    int frames = ( 90000 * samples / ( pv->samplerate * pv->nchannels ) + 
+    int frames = ( 90000 * samples / ( pv->samplerate * pv->nchannels ) +
                    149 ) / 150;
 
     pv->duration = frames * 150;
-    pv->nchunks =  ( pv->duration * pv->nchannels * pv->samplerate + 
+    pv->nchunks =  ( pv->duration * pv->nchannels * pv->samplerate +
                     samples_per_chunk - 1 ) / ( 90000 * samples_per_chunk );
     pv->nsamples = ( pv->duration * pv->samplerate ) / 90000;
     pv->size = pv->nchunks * chunk_size;
@@ -183,7 +183,7 @@ static int declpcmInit( hb_work_object_t * w, hb_job_t * job )
     return 0;
 }
 
-/* 
+/*
  * Convert DVD encapsulated LPCM to floating point PCM audio buffers.
  * The amount of audio in a PCM frame is always <= the amount that will fit
  * in a DVD block (2048 bytes) but the standard doesn't require that the audio
@@ -238,7 +238,7 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
 {
     hb_work_private_t *pv = w->private_data;
     hb_buffer_t *out;
- 
+
     if (pv->nsamples == 0)
         return NULL;
 
@@ -265,7 +265,7 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
                     // Shifts below result in sign extension which gives
                     // us proper signed values. The final division adjusts
                     // the range to [-1.0 ... 1.0]
-                    *odat++ = (float)( ( (int)( frm[0] << 24 ) >> 16 ) | 
+                    *odat++ = (float)( ( (int)( frm[0] << 24 ) >> 16 ) |
                                        frm[1] ) / 32768.0;
                     frm += 2;
                 }
@@ -324,7 +324,7 @@ static hb_buffer_t *Decode( hb_work_object_t *w )
                         // us proper signed values. The final division adjusts
                         // the range to [-1.0 ... 1.0]
                         *odat++ = (float)( ( (int)( frm[0] << 24 ) >> 8 ) |
-                                           ( frm[1] << 8 ) | lsb[0] ) / 
+                                           ( frm[1] << 8 ) | lsb[0] ) /
                                   (256. * 32768.0);
                         frm += 2;
                         lsb++;

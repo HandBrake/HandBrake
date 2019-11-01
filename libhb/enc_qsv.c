@@ -1277,7 +1277,7 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
         else
         {
             // introduced in API 1.1
-            // HEVC 10b has QP range as [-12;51] 
+            // HEVC 10b has QP range as [-12;51]
             // with shift +12 needed to be in QSV's U16 range
             unsigned int upper_limit = 51;
 

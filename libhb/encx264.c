@@ -441,12 +441,12 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
             min_auto = param.i_keyint_max / 10;
 
         char min[40], max[40];
-        param.i_keyint_min == X264_KEYINT_MIN_AUTO ? 
-            snprintf( min, 40, "auto (%d)", min_auto ) : 
+        param.i_keyint_min == X264_KEYINT_MIN_AUTO ?
+            snprintf( min, 40, "auto (%d)", min_auto ) :
             snprintf( min, 40, "%d", param.i_keyint_min );
 
-        param.i_keyint_max == X264_KEYINT_MAX_INFINITE ? 
-            snprintf( max, 40, "infinite" ) : 
+        param.i_keyint_max == X264_KEYINT_MAX_INFINITE ?
+            snprintf( max, 40, "infinite" ) :
             snprintf( max, 40, "%d", param.i_keyint_max );
 
         hb_log( "encx264: min-keyint: %s, keyint: %s", min, max );
@@ -526,7 +526,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
 
     /* B-pyramid is enabled by default. */
     job->areBframes = 2;
-    
+
     if( !param.i_bframe )
     {
         job->areBframes = 0;
@@ -535,7 +535,7 @@ int encx264Init( hb_work_object_t * w, hb_job_t * job )
     {
         job->areBframes = 1;
     }
-    
+
     /* Log the unparsed x264 options string. */
     char *x264_opts_unparsed = hb_x264_param_unparse(pv->api->bit_depth,
                                                      job->encoder_preset,

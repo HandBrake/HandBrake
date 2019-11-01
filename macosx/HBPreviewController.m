@@ -169,7 +169,7 @@
     }
 
     [self switchStateToHUD:self.pictureHUD];
-    
+
     if (generator)
     {
         [self resizeToOptimalSize];
@@ -346,7 +346,7 @@
     {
         controller.view.hidden = YES;
     }
-    
+
     if (self.generator)
     {
         hud.view.hidden = NO;

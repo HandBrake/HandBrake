@@ -6,7 +6,7 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
- 
+
 #include "handbrake/handbrake.h"
 #include "handbrake/hbffmpeg.h"
 
@@ -57,7 +57,7 @@ int encsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         *buf_in = NULL;
     }
 
-    return HB_WORK_OK; 
+    return HB_WORK_OK;
 }
 
 void encsubClose( hb_work_object_t * w )

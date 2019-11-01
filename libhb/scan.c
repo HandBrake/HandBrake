@@ -1319,19 +1319,19 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
     if (audio->config.lang.attributes & HB_AUDIO_ATTR_VISUALLY_IMPAIRED)
     {
         strncat(audio->config.lang.description, " (Visually Impaired)",
-                sizeof(audio->config.lang.description) - 
+                sizeof(audio->config.lang.description) -
                 strlen(audio->config.lang.description) - 1);
     }
     if (audio->config.lang.attributes & HB_AUDIO_ATTR_COMMENTARY)
     {
         strncat(audio->config.lang.description, " (Director's Commentary 1)",
-                sizeof(audio->config.lang.description) - 
+                sizeof(audio->config.lang.description) -
                 strlen(audio->config.lang.description) - 1);
     }
     if (audio->config.lang.attributes & HB_AUDIO_ATTR_ALT_COMMENTARY)
     {
         strncat(audio->config.lang.description, " (Director's Commentary 2)",
-                sizeof(audio->config.lang.description) - 
+                sizeof(audio->config.lang.description) -
                 strlen(audio->config.lang.description) - 1);
     }
 
@@ -1380,11 +1380,11 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
 
     // Append input bitrate in kbps to the end of the description if greater than 1
     // ffmpeg may report some audio bitrates as 1, not an issue
-    if (audio->config.in.bitrate > 1) 
+    if (audio->config.in.bitrate > 1)
     {
         char in_bitrate_str[19];
         snprintf(in_bitrate_str, 18, " (%d kbps)", audio->config.in.bitrate / 1000);
-        strncat(audio->config.lang.description, in_bitrate_str, 
+        strncat(audio->config.lang.description, in_bitrate_str,
                 sizeof(audio->config.lang.description) - strlen(audio->config.lang.description) - 1);
     }
 

@@ -332,7 +332,7 @@ typedef void (^HBCoreCleanupHandler)(void);
 }
 
 #pragma mark - Preview images
-        
+
 - (CGImageRef)copyImageAtIndex:(NSUInteger)index
                       forTitle:(HBTitle *)title
                   pictureFrame:(HBPicture *)frame
