@@ -183,7 +183,7 @@ static int filter_init( hb_qsv_context* qsv, hb_filter_private_t * pv ){
         pv->CropY += pv->crop[0];
         pv->CropW -= pv->crop[2] + pv->crop[3];
         pv->CropH -= pv->crop[0] + pv->crop[1];
-        
+
 
         qsv_vpp->m_mfxVideoParam.vpp.In.FourCC          = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.FourCC;
         qsv_vpp->m_mfxVideoParam.vpp.In.ChromaFormat    = qsv->dec_space->m_mfxVideoParam.mfx.FrameInfo.ChromaFormat;
@@ -608,7 +608,7 @@ static int hb_qsv_filter_work( hb_filter_object_t * filter,
         *buf_in = NULL;
         return HB_FILTER_OK;
     }
-    
+
     hb_qsv_context* qsv = pv->job->qsv.ctx;
 
     while(1)

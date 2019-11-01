@@ -216,7 +216,7 @@ NSString *HBRangeChangedNotification = @"HBRangeChangedNotification";
 
     decodeInt(_frameStart);
     decodeInt(_frameStop);
-    
+
     return self;
 
 fail:

@@ -74,7 +74,7 @@ typedef void (^HBPlayableObverser)(void);
 
         }];
     }
-    
+
     return self;
 }
 

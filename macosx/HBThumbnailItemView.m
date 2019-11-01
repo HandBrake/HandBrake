@@ -1,7 +1,7 @@
 /*
  Copyright (C) 2017 Apple Inc. All Rights Reserved.
  See LICENSE.txt for this sample’s licensing information
- 
+
  Abstract:
  Custom NSScrubberItemView used to display an image.
  */
@@ -31,7 +31,7 @@
 
         [self addSubview:_imageView];
     }
-    
+
     return self;
 }
 

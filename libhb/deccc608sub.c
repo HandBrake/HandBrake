@@ -877,8 +877,8 @@ static int write_cc_buffer_as_ssa(struct eia608_screen *data,
     safe_y = 0.1 * wb->height;
     min_safe_x = 0.025 * cropped_width;
     min_safe_y = 0.025 * cropped_height;
-    cell_height = (wb->height - 2 * safe_y) / 16; 
-    cell_width  = (wb->width  - 2 * safe_x) / screen_columns; 
+    cell_height = (wb->height - 2 * safe_y) / 16;
+    cell_width  = (wb->width  - 2 * safe_x) / screen_columns;
 
     char *pos;
     int y, x, top;
@@ -1365,7 +1365,7 @@ static void handle_command(unsigned char c1, const unsigned char c2,
             }
             erase_memory (wb,1);
 
-            // the last pts is the time to remove the previously 
+            // the last pts is the time to remove the previously
             // displayed CC from the display
             wb->data608->current_visible_start_ms = wb->last_pts;
             wb->data608->current_visible_scr_sequence = wb->last_scr_sequence;
@@ -1513,7 +1513,7 @@ static void handle_pac(unsigned char c1, unsigned char c2, struct s_write *wb)
                 font_text[wb->data608->font]);
 
     // CC spec says to the preferred method to handle a roll-up base row
-    // that causes the display to scroll off the top of the screen is to 
+    // that causes the display to scroll off the top of the screen is to
     // adjust the base row down.
     int keep_lines;
     switch (wb->data608->mode)

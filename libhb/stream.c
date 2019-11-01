@@ -1757,7 +1757,7 @@ int hb_stream_seek_chapter( hb_stream_t * stream, int chapter_num )
     {
         return 0;
     }
-    
+
     if ( stream->hb_stream_type != ffmpeg )
     {
         // currently meaningless for transport and program streams

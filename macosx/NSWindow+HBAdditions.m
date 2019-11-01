@@ -45,7 +45,7 @@
     // sure that upon resize we do not have the window off the screen
     // So check the origin against the screen origin and adjust if
     // necessary.
-    
+
     if (center.x == 0 && center.y == 0)
     {
         center = [self HB_centerPoint];
@@ -69,7 +69,7 @@
             // the right side of the preview is off the screen, so shift to the left
             frame.origin.x = (screenOrigin.x + screenSize.width) - frame.size.width;
         }
-        
+
         // our origin is off the screen to the bottom
         if (frame.origin.y < screenOrigin.y)
         {

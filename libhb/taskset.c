@@ -78,7 +78,7 @@ taskset_init( taskset_t *ts, int thread_count, size_t arg_size )
     memset(ts->task_begin_bitmap, 0xFF, sizeof( uint32_t ) * ts->bitmap_elements );
     memset(ts->task_complete_bitmap, 0xFF, sizeof( uint32_t ) * ts->bitmap_elements );
     memset(ts->task_stop_bitmap, 0, sizeof( uint32_t ) * ts->bitmap_elements );
-    
+
     /*
      * Important to start off with the threads locked waiting
      * on input, no work completed, and not asked to stop.

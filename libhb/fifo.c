@@ -57,7 +57,7 @@ struct hb_fifo_s
 };
 
 #if defined(HB_FIFO_DEBUG)
-static hb_fifo_t fifo_list = 
+static hb_fifo_t fifo_list =
 {
     .next = NULL
 };
@@ -768,7 +768,7 @@ void hb_buffer_close( hb_buffer_t ** _b )
             continue;
         }
         // either the pool is full or this size doesn't use a pool
-        // free the buf 
+        // free the buf
         if( b->data )
         {
             av_free(b->data);
@@ -1199,7 +1199,7 @@ void hb_fifo_push_head( hb_fifo_t * f, hb_buffer_t * b )
     if( f->size > 0 )
     {
         tmp->next = f->first;
-    } 
+    }
     else
     {
         f->last = tmp;

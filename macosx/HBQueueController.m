@@ -768,7 +768,7 @@ NSString * const HBQueueItemNotificationPathKey = @"HBQueueItemNotificationPathK
             [firstChild.view removeFromSuperviewWithoutNeedingDisplay];
             [firstChild removeFromParentViewController];
         }
-        
+
         [self.containerViewController addChildViewController:viewController];
         viewController.view.frame = self.containerViewController.view.bounds;
         viewController.view.autoresizingMask = NSViewWidthSizable | NSViewHeightSizable;

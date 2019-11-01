@@ -430,7 +430,7 @@
         copy->_container = _container;
         copy->_secondaryEncoderMode = _secondaryEncoderMode;
     }
-    
+
     return copy;
 }
 

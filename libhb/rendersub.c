@@ -452,7 +452,7 @@ static uint8_t ssaAlpha( ASS_Image *frame, int x, int y )
     return (uint8_t)alpha;
 }
 
-// Returns a subtitle rendered to a YUVA420P frame 
+// Returns a subtitle rendered to a YUVA420P frame
 static hb_buffer_t * RenderSSAFrame( hb_filter_private_t * pv, ASS_Image * frame )
 {
     hb_buffer_t *sub;

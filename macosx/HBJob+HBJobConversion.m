@@ -535,7 +535,7 @@
     filter = hb_filter_init(HB_FILTER_VFR);
     hb_add_filter(job, filter, [[NSString stringWithFormat:@"mode=%d:rate=%d/%d",
                                  fps_mode, fps_num, fps_den] UTF8String]);
-    
+
     return job;
 }
 

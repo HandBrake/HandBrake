@@ -5,7 +5,7 @@
    Homepage: <http://handbrake.fr/>.
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
-   
+
    The EEDI2 interpolator was created by tritical:
    http://web.missouri.edu/~kes25c/
 */
@@ -18,7 +18,7 @@
  *
  * These values are used to limit the range of edge direction searches and filtering.
  */
-const int eedi2_limlut[33] __attribute__ ((aligned (16))) = { 
+const int eedi2_limlut[33] __attribute__ ((aligned (16))) = {
                          6, 6, 7, 7, 8, 8, 9, 9, 9, 10,
                          10, 11, 11, 12, 12, 12, 12, 12, 12, 12,
                          12, 12, 12, 12, 12, 12, 12, 12, 12, 12,
@@ -66,11 +66,11 @@ void eedi2_aligned_free( void *ptr )
 void eedi2_sort_metrics( int *order, const int length )
 {
     int i;
-    for( i = 1; i < length; ++i ) 
+    for( i = 1; i < length; ++i )
     {
         int j = i;
         const int temp = order[j];
-        while( j > 0 && order[j-1] > temp ) 
+        while( j > 0 && order[j-1] > temp )
         {
             order[j] = order[j-1];
             --j;
@@ -80,7 +80,7 @@ void eedi2_sort_metrics( int *order, const int length )
 }
 
 /**
- * Bitblits an image plane (overwrites one bitmap with another) 
+ * Bitblits an image plane (overwrites one bitmap with another)
  * @param dtsp Pointer to destination bitmap
  * @param dst_pitch Stride of destination bitmap
  * @param srcp Pointer to source bitmap
@@ -90,11 +90,11 @@ void eedi2_sort_metrics( int *order, const int length )
  *
  * When row_size, dst_pitch, and src_pitch are equal, eedi2_bit_blit can work more quickly by copying the whole plane at once instead of individual lines.
  */
-void eedi2_bit_blit( uint8_t * dstp, int dst_pitch, 
+void eedi2_bit_blit( uint8_t * dstp, int dst_pitch,
                      const uint8_t * srcp, int src_pitch,
                      int row_size, int height )
 {
-    if( ( !height ) || ( !row_size ) ) 
+    if( ( !height ) || ( !row_size ) )
         return;
 
     if( height == 1 || ( dst_pitch == src_pitch && src_pitch == row_size ) )
@@ -151,7 +151,7 @@ void eedi2_upscale_by_2( uint8_t * srcp, uint8_t * dstp, int height, int pitch )
       memcpy( dstp, srcp, pitch );
       srcp += pitch;
       dstp += pitch;
-    }    
+    }
 }
 
 /**
@@ -170,12 +170,12 @@ void eedi2_build_edge_mask( uint8_t * dstp, int dst_pitch, uint8_t *srcp, int sr
                             int mthresh, int lthresh, int vthresh, int height, int width )
 {
     int x, y;
-    
+
     mthresh = mthresh * 10;
     vthresh = vthresh * 81;
-    
+
     memset( dstp, 0, ( height / 2 ) * dst_pitch );
-    
+
     srcp += src_pitch;
     dstp += dst_pitch;
     unsigned char *srcpp = srcp-src_pitch;
@@ -195,11 +195,11 @@ void eedi2_build_edge_mask( uint8_t * dstp, int dst_pitch, uint8_t *srcp, int sr
                   abs(  srcp[x+1] - srcpn[x+1] ) < 10 &&
                   abs( srcpp[x+1] - srcpn[x+1] ) < 10) )
                 continue;
-            
+
             const int sum = srcpp[x-1] + srcpp[x] + srcpp[x+1] +
                              srcp[x-1] +  srcp[x]+   srcp[x+1] +
                             srcpn[x-1] + srcpn[x] + srcpn[x+1];
-            
+
             const int sumsq = srcpp[x-1] * srcpp[x-1] +
                               srcpp[x]   * srcpp[x]   +
                               srcpp[x+1] * srcpp[x+1] +
@@ -212,7 +212,7 @@ void eedi2_build_edge_mask( uint8_t * dstp, int dst_pitch, uint8_t *srcp, int sr
 
             if( 9 * sumsq-sum * sum < vthresh )
                 continue;
-            
+
             const int Ix = srcp[x+1] - srcp[x-1];
             const int Iy = MAX( MAX( abs( srcpp[x] - srcpn[x] ),
                                      abs( srcpp[x] -  srcp[x] ) ),
@@ -249,9 +249,9 @@ void eedi2_dilate_edge_mask( uint8_t *mskp, int msk_pitch, uint8_t *dstp, int ds
                              int dstr, int height, int width )
 {
     int x, y;
-    
+
     eedi2_bit_blit( dstp, dst_pitch, mskp, msk_pitch, width, height );
-    
+
     mskp += msk_pitch;
     unsigned char *mskpp = mskp - msk_pitch;
     unsigned char *mskpn = mskp + msk_pitch;
@@ -272,7 +272,7 @@ void eedi2_dilate_edge_mask( uint8_t *mskp, int msk_pitch, uint8_t *dstp, int ds
             if( mskpn[x-1] == 0xFF ) ++count;
             if( mskpn[x]   == 0xFF ) ++count;
             if( mskpn[x+1] == 0xFF ) ++count;
-                
+
             if( count >= dstr )
                 dstp[x] = 0xFF;
         }
@@ -297,9 +297,9 @@ void eedi2_erode_edge_mask( uint8_t *mskp, int msk_pitch, uint8_t *dstp, int dst
                             int estr, int height, int width )
 {
     int x, y;
-    
+
     eedi2_bit_blit( dstp, dst_pitch, mskp, msk_pitch, width, height );
-    
+
     mskp += msk_pitch;
     unsigned char *mskpp = mskp - msk_pitch;
     unsigned char *mskpn = mskp + msk_pitch;
@@ -309,7 +309,7 @@ void eedi2_erode_edge_mask( uint8_t *mskp, int msk_pitch, uint8_t *dstp, int dst
         for ( x = 1; x < width - 1; ++x )
         {
             if( mskp[x] != 0xFF ) continue;
-            
+
             int count = 0;
             if  ( mskpp[x-1] == 0xFF ) ++count;
             if  ( mskpp[x]   == 0xFF ) ++count;
@@ -342,13 +342,13 @@ void eedi2_erode_edge_mask( uint8_t *mskp, int msk_pitch, uint8_t *dstp, int dst
  * @param height Height of half-height field-sized frame
  * @param width Width of mskp bitmap rows, as opposed to the pdded stride in msk_pitch
  */
-void eedi2_remove_small_gaps( uint8_t * mskp, int msk_pitch, uint8_t * dstp, int dst_pitch, 
+void eedi2_remove_small_gaps( uint8_t * mskp, int msk_pitch, uint8_t * dstp, int dst_pitch,
                               int height, int width )
 {
     int x, y;
-    
+
     eedi2_bit_blit( dstp, dst_pitch, mskp, msk_pitch, width, height );
-    
+
     mskp += msk_pitch;
     dstp += dst_pitch;
     for( y = 1; y < height - 1; ++y )
@@ -396,7 +396,7 @@ void eedi2_calc_directions( const int plane, uint8_t * mskp, int msk_pitch, uint
                             uint8_t * dstp, int dst_pitch, int maxd, int nt, int height, int width  )
 {
     int x, y, u, i;
-    
+
     memset( dstp, 255, dst_pitch * height );
     mskp += msk_pitch;
     dstp += dst_pitch;
@@ -464,8 +464,8 @@ void eedi2_calc_directions( const int plane, uint8_t * mskp, int msk_pitch, uint
                             const int diff2pp = abs( src2p[x-1] - srcpp[x-1-u] ) +
                                             abs( src2p[x]   - srcpp[x-u] )   +
                                             abs( src2p[x+1] - srcpp[x+1-u] );
-                            const int diffp2p = abs( srcpp[x-1] - src2p[x-1+u] ) + 
-                                            abs( srcpp[x]   - src2p[x+u] )   + 
+                            const int diffp2p = abs( srcpp[x-1] - src2p[x-1+u] ) +
+                                            abs( srcpp[x]   - src2p[x+u] )   +
                                             abs( srcpp[x+1] - src2p[x+1+u] );
                             const int diffa = diff + diff2pp + diffp2p;
                             diffd += diffp2p;
@@ -515,7 +515,7 @@ void eedi2_calc_directions( const int plane, uint8_t * mskp, int msk_pitch, uint
             if( k > 1 )
             {
                 eedi2_sort_metrics( order, k );
-                const int mid = ( k & 1 ) ? 
+                const int mid = ( k & 1 ) ?
                                     order[k>>1] :
                                     ( order[(k-1)>>1] + order[k>>1] + 1 ) >> 1;
                 const int tlim = MAX( eedi2_limlut[abs(mid)] >> 2, 2 );
@@ -528,7 +528,7 @@ void eedi2_calc_directions( const int plane, uint8_t * mskp, int msk_pitch, uint
                         sum += order[i];
                     }
                 }
-                if( count > 1 ) 
+                if( count > 1 )
                     dstp[x] = 128 + ( (int)( (float)sum / (float)count ) * 4 );
                 else
                     dstp[x] = 128;
@@ -564,7 +564,7 @@ void eedi2_filter_map( uint8_t * mskp, int msk_pitch, uint8_t * dmskp, int dmsk_
     int x, y, j;
 
     eedi2_bit_blit( dstp, dst_pitch, dmskp, dmsk_pitch, width, height );
-    
+
     mskp += msk_pitch;
     dmskp += dmsk_pitch;
     dstp += dst_pitch;
@@ -666,9 +666,9 @@ void eedi2_filter_dir_map( uint8_t * mskp, int msk_pitch, uint8_t * dmskp, int d
                            uint8_t * dstp, int dst_pitch, int height, int width )
 {
     int x, y, i;
-    
+
     eedi2_bit_blit( dstp, dst_pitch, dmskp, dmsk_pitch, width, height );
-    
+
     dmskp += dmsk_pitch;
     unsigned char *dmskpp = dmskp - dmsk_pitch;
     unsigned char *dmskpn = dmskp + dmsk_pitch;
@@ -739,7 +739,7 @@ void eedi2_expand_dir_map( uint8_t * mskp, int msk_pitch, uint8_t * dmskp, int d
     int x, y, i;
 
     eedi2_bit_blit( dstp, dst_pitch, dmskp, dmsk_pitch, width, height );
-    
+
     dmskp += dmsk_pitch;
     unsigned char *dmskpp = dmskp - dmsk_pitch;
     unsigned char *dmskpn = dmskp + dmsk_pitch;
@@ -1034,15 +1034,15 @@ void eedi2_fill_gaps_2x( uint8_t *mskp, int msk_pitch, uint8_t * dmskp, int dmsk
     {
         for( x = 1; x < width - 1; ++x )
         {
-            if( dmskp[x] != 0xFF || 
+            if( dmskp[x] != 0xFF ||
                 ( mskp[x] != 0xFF && mskpn[x] != 0xFF ) ) continue;
             int u = x - 1, back = 500, forward = -500;
             while( u )
             {
-                if( dmskp[u] != 0xFF ) 
-                { 
-                    back = dmskp[u]; 
-                    break; 
+                if( dmskp[u] != 0xFF )
+                {
+                    back = dmskp[u];
+                    break;
                 }
                 if( mskp[u] != 0xFF && mskpn[u] != 0xFF ) break;
                 --u;
@@ -1135,7 +1135,7 @@ void eedi2_interpolate_lattice( const int plane, uint8_t * dmskp, int dmsk_pitch
                                 int height, int width )
 {
     int x, y, u;
-    
+
     if( field == 1 )
     {
         eedi2_bit_blit( dstp + ( height - 1 ) * dst_pitch,
@@ -1179,7 +1179,7 @@ void eedi2_interpolate_lattice( const int plane, uint8_t * dmskp, int dmsk_pitch
             {
                 const int sum =   dstp[x-1] +   dstp[x] +   dstp[x+1] +
                                 dstpnn[x-1] + dstpnn[x] + dstpnn[x+1];
-                const int sumsq = dstp[x-1] *   dstp[x-1] + 
+                const int sumsq = dstp[x-1] *   dstp[x-1] +
                                   dstp[x]   *   dstp[x]   +
                                   dstp[x+1] *   dstp[x+1] +
                                 dstpnn[x-1] * dstpnn[x-1] +
@@ -1192,7 +1192,7 @@ void eedi2_interpolate_lattice( const int plane, uint8_t * dmskp, int dmsk_pitch
                     continue;
                 }
             }
-            if( x > 1 && x < width - 2 && 
+            if( x > 1 && x < width - 2 &&
                 ( (   dstp[x] < MAX(   dstp[x-2],   dstp[x-1] ) - 3 &&
                       dstp[x] < MAX(   dstp[x+2],   dstp[x+1] ) - 3 &&
                     dstpnn[x] < MAX( dstpnn[x-2], dstpnn[x-1] ) - 3 &&
@@ -1223,11 +1223,11 @@ void eedi2_interpolate_lattice( const int plane, uint8_t * dmskp, int dmsk_pitch
                 const int diff =
                     abs(   dstp[x-1] - dstpnn[x-u-1] ) +
                     abs(   dstp[x]   - dstpnn[x-u] )   +
-                    abs(   dstp[x+1] - dstpnn[x-u+1] ) + 
-                    abs( dstpnn[x-1] -   dstp[x+u-1] ) + 
+                    abs(   dstp[x+1] - dstpnn[x-u+1] ) +
+                    abs( dstpnn[x-1] -   dstp[x+u-1] ) +
                     abs( dstpnn[x]   -   dstp[x+u] )   +
                     abs( dstpnn[x+1] -   dstp[x+u+1] );
-                if( diff < min && 
+                if( diff < min &&
                     ( ( omskp[x-1+u] != 0xFF && abs( omskp[x-1+u] - dmskp[x] ) <= lim ) ||
                      (  omskp[x+u]   != 0xFF && abs( omskp[x+u]   - dmskp[x]) <= lim )  ||
                      (  omskp[x+1+u] != 0xFF && abs( omskp[x+1+u] - dmskp[x]) <= lim ) ) &&
@@ -1235,18 +1235,18 @@ void eedi2_interpolate_lattice( const int plane, uint8_t * dmskp, int dmsk_pitch
                      (  omskn[x-u]   != 0xFF && abs( omskn[x-u]   - dmskp[x]) <= lim ) ||
                      (  omskn[x+1-u] != 0xFF && abs( omskn[x+1-u] - dmskp[x]) <= lim ) ) )
                 {
-                    const int diff2 = 
+                    const int diff2 =
                         abs( dstp[x+(u>>1)-1] - dstpnn[x-(u>>1)-1] ) +
                         abs( dstp[x+(u>>1)]   - dstpnn[x-(u>>1)]   ) +
                         abs( dstp[x+(u>>1)+1] - dstpnn[x-(u>>1)+1] );
                     if( diff2 < 4 * nt &&
                         ( ( ( abs( omskp[x+(u>>1)] - omskn[x-(u>>1)]     ) <= lim ||
-                              abs( omskp[x+(u>>1)] - omskn[x-((u+1)>>1)] ) <= lim ) && 
+                              abs( omskp[x+(u>>1)] - omskn[x-((u+1)>>1)] ) <= lim ) &&
                             omskp[x+(u>>1)] != 0xFF )
-                          || 
+                          ||
                           ( ( abs( omskp[x+((u+1)>>1)] - omskn[x-(u>>1)] )     <= lim ||
-                              abs( omskp[x+((u+1)>>1)] - omskn[x-((u+1)>>1)] ) <= lim ) && 
-                            omskp[x+((u+1)>>1)] != 0xFF ) ) ) 
+                              abs( omskp[x+((u+1)>>1)] - omskn[x-((u+1)>>1)] ) <= lim ) &&
+                            omskp[x+((u+1)>>1)] != 0xFF ) ) )
                     {
                         if( ( abs( dmskp[x] - omskp[x+(u>>1)] )     <= lim ||
                               abs( dmskp[x] - omskp[x+((u+1)>>1)] ) <= lim ) &&
@@ -1266,7 +1266,7 @@ void eedi2_interpolate_lattice( const int plane, uint8_t * dmskp, int dmsk_pitch
                 dstpn[x] = val;
                 dmskp[x] = 128 + dir * 4;
             }
-            else 
+            else
             {
                 const int minm = MIN( dstp[x], dstpnn[x] );
                 const int maxm = MAX( dstp[x], dstpnn[x] );
@@ -1279,11 +1279,11 @@ void eedi2_interpolate_lattice( const int plane, uint8_t * dmskp, int dmsk_pitch
                     const int p1 =   dstp[x+(u>>1)] +   dstp[x+((u+1)>>1)];
                     const int p2 = dstpnn[x-(u>>1)] + dstpnn[x-((u+1)>>1)];
                     const int diff =
-                        abs(   dstp[x-1] - dstpnn[x-u-1] ) + 
+                        abs(   dstp[x-1] - dstpnn[x-u-1] ) +
                         abs(   dstp[x]   - dstpnn[x-u] )   +
                         abs(   dstp[x+1] - dstpnn[x-u+1] ) +
-                        abs( dstpnn[x-1] - dstp[x+u-1] )   + 
-                        abs( dstpnn[x]   - dstp[x+u] )     + 
+                        abs( dstpnn[x-1] - dstp[x+u-1] )   +
+                        abs( dstpnn[x]   - dstp[x+u] )     +
                         abs( dstpnn[x+1] - dstp[x+u+1] )   +
                         abs( p1 - p2 );
                     if( diff < min )
@@ -1327,7 +1327,7 @@ void eedi2_post_process( uint8_t * nmskp, int nmsk_pitch, uint8_t * omskp, int o
                          uint8_t * dstp, int src_pitch, int field, int height, int width )
 {
     int x, y;
-    
+
     nmskp += ( 2 - field ) * nmsk_pitch;
     omskp += ( 2 - field ) * omsk_pitch;
     dstp += ( 2 - field ) * src_pitch;
@@ -1368,13 +1368,13 @@ void eedi2_gaussian_blur1( uint8_t * src, int src_pitch, uint8_t * tmp, int tmp_
 
     for( y = 0; y < height; ++y )
     {
-        dstp[0] = ( srcp[3] * 582 + srcp[2] * 7078 + srcp[1] * 31724 + 
+        dstp[0] = ( srcp[3] * 582 + srcp[2] * 7078 + srcp[1] * 31724 +
                     srcp[0] * 26152 + 32768 ) >> 16;
         dstp[1] = ( srcp[4] * 582 + srcp[3] * 7078 +
                     ( srcp[0] + srcp[2] ) * 15862 +
                     srcp[1] * 26152 + 32768 ) >> 16;
         dstp[2] = ( srcp[5] * 582 + ( srcp[0] + srcp[4] ) * 3539 +
-                    ( srcp[1] + srcp[3] ) * 15862 + 
+                    ( srcp[1] + srcp[3] ) * 15862 +
                     srcp[2]*26152 + 32768 ) >> 16;
         for( x = 3; x < width - 3; ++x )
         {
@@ -1406,7 +1406,7 @@ void eedi2_gaussian_blur1( uint8_t * src, int src_pitch, uint8_t * tmp, int tmp_
     unsigned char *src3n = srcp + tmp_pitch * 3;
     for( x = 0; x < width; ++x )
     {
-        dstp[x] = ( src3n[x] * 582 + src2n[x] * 7078 + srcpn[x] * 31724 + 
+        dstp[x] = ( src3n[x] * 582 + src2n[x] * 7078 + srcpn[x] * 31724 +
                      srcp[x] * 26152 + 32768 ) >> 16;
     }
     src3p += tmp_pitch;
@@ -1433,7 +1433,7 @@ void eedi2_gaussian_blur1( uint8_t * src, int src_pitch, uint8_t * tmp, int tmp_
     dstp += dst_pitch;
     for( x = 0; x < width; ++x )
     {
-        dstp[x] = ( src3n[x] * 582 + ( src2p[x] + src2n[x] ) * 3539 + 
+        dstp[x] = ( src3n[x] * 582 + ( src2p[x] + src2n[x] ) * 3539 +
                     ( srcpp[x] + srcpn[x] ) * 15862 +
                     srcp[x] * 26152 + 32768 ) >> 16;
     }
@@ -1513,51 +1513,51 @@ void eedi2_gaussian_blur_sqrt2( int *src, int *tmp, int *dst, const int pitch, i
     int * srcp = src;
     int * dstp = tmp;
     int x, y;
-    
+
     for( y = 0; y < height; ++y )
     {
         x = 0;
         dstp[x] = ( srcp[x+4] * 678   + srcp[x+3] * 3902  + srcp[x+2] * 13618 +
                     srcp[x+1] * 28830 + srcp[x]   * 18508 + 32768 ) >> 16;
         ++x;
-        dstp[x] = ( srcp[x+4] * 678   + srcp[x+3] * 3902 + srcp[x+2] * 13618 + 
+        dstp[x] = ( srcp[x+4] * 678   + srcp[x+3] * 3902 + srcp[x+2] * 13618 +
                     ( srcp[x-1] + srcp[x+1] ) *14415 +
                     srcp[x]   * 18508 + 32768 ) >> 16;
         ++x;
-        dstp[x] = ( srcp[x+4] * 678   + srcp[x+3] * 3902 + 
+        dstp[x] = ( srcp[x+4] * 678   + srcp[x+3] * 3902 +
                     ( srcp[x-2] + srcp[x+2] ) * 6809 +
-                    ( srcp[x-1] + srcp[x+1] ) * 14415 + 
+                    ( srcp[x-1] + srcp[x+1] ) * 14415 +
                     srcp[x]   * 18508 + 32768 ) >> 16;
         ++x;
-        dstp[x] = ( srcp[x+4] * 678   + ( srcp[x-3] + srcp[x+3] ) * 1951 + 
+        dstp[x] = ( srcp[x+4] * 678   + ( srcp[x-3] + srcp[x+3] ) * 1951 +
                     ( srcp[x-2] + srcp[x+2] ) * 6809 +
-                    ( srcp[x-1] + srcp[x+1] ) * 14415 + 
+                    ( srcp[x-1] + srcp[x+1] ) * 14415 +
                     srcp[x]   * 18508 + 32768 ) >> 16;
 
         for( x = 4; x < width - 4; ++x )
         {
-            dstp[x] = ( ( srcp[x-4] + srcp[x+4] ) * 339 + 
-                        ( srcp[x-3] + srcp[x+3] ) * 1951 + 
+            dstp[x] = ( ( srcp[x-4] + srcp[x+4] ) * 339 +
+                        ( srcp[x-3] + srcp[x+3] ) * 1951 +
                         ( srcp[x-2] + srcp[x+2] ) * 6809 +
-                        ( srcp[x-1] + srcp[x+1] ) * 14415 + 
+                        ( srcp[x-1] + srcp[x+1] ) * 14415 +
                         srcp[x] * 18508 + 32768 ) >> 16;
         }
 
-        dstp[x] = ( srcp[x-4] * 678 + ( srcp[x-3] + srcp[x+3] ) * 1951 + 
+        dstp[x] = ( srcp[x-4] * 678 + ( srcp[x-3] + srcp[x+3] ) * 1951 +
                     ( srcp[x-2] + srcp[x+2] ) * 6809  +
-                    ( srcp[x-1] + srcp[x+1] ) * 14415 + 
-                    srcp[x] * 18508 + 32768 ) >> 16;
-        ++x;
-        dstp[x] = ( srcp[x-4] * 678 + srcp[x-3] * 3902 + 
-                    ( srcp[x-2] + srcp[x+2] ) * 6809 +
-                    ( srcp[x-1] + srcp[x+1] ) * 14415 + 
-                    srcp[x] * 18508 + 32768 ) >> 16;
-        ++x;
-        dstp[x] = ( srcp[x-4] * 678 + srcp[x+3] * 3902 + srcp[x-2] * 13618 + 
                     ( srcp[x-1] + srcp[x+1] ) * 14415 +
                     srcp[x] * 18508 + 32768 ) >> 16;
         ++x;
-        dstp[x] = ( srcp[x-4] * 678 + srcp[x-3] * 3902 + srcp[x-2] * 13618 + 
+        dstp[x] = ( srcp[x-4] * 678 + srcp[x-3] * 3902 +
+                    ( srcp[x-2] + srcp[x+2] ) * 6809 +
+                    ( srcp[x-1] + srcp[x+1] ) * 14415 +
+                    srcp[x] * 18508 + 32768 ) >> 16;
+        ++x;
+        dstp[x] = ( srcp[x-4] * 678 + srcp[x+3] * 3902 + srcp[x-2] * 13618 +
+                    ( srcp[x-1] + srcp[x+1] ) * 14415 +
+                    srcp[x] * 18508 + 32768 ) >> 16;
+        ++x;
+        dstp[x] = ( srcp[x-4] * 678 + srcp[x-3] * 3902 + srcp[x-2] * 13618 +
                     srcp[x-1] * 28830 +
                     srcp[x] * 18508 + 32768 ) >> 16;
         srcp += pitch;
@@ -1575,7 +1575,7 @@ void eedi2_gaussian_blur_sqrt2( int *src, int *tmp, int *dst, const int pitch, i
     int * src4n = srcp + pitch * 4;
     for( x = 0; x < width; ++x )
     {
-        dstp[x] = ( src4n[x] * 678   + src3n[x] * 3902  + 
+        dstp[x] = ( src4n[x] * 678   + src3n[x] * 3902  +
                     src2n[x] * 13618 + srcpn[x] * 28830 +
                      srcp[x] * 18508 + 32768 ) >> 18;
     }
@@ -1591,7 +1591,7 @@ void eedi2_gaussian_blur_sqrt2( int *src, int *tmp, int *dst, const int pitch, i
     dstp += pitch;
     for( x = 0; x < width; ++x )
     {
-        dstp[x] = ( src4n[x] * 678 + src3n[x] * 3902 + src2n[x] * 13618 + 
+        dstp[x] = ( src4n[x] * 678 + src3n[x] * 3902 + src2n[x] * 13618 +
                     ( srcpp[x] + srcpn[x] ) * 14415 +
                     srcp[x] * 18508 + 32768 ) >> 18;
     }
@@ -1607,8 +1607,8 @@ void eedi2_gaussian_blur_sqrt2( int *src, int *tmp, int *dst, const int pitch, i
     dstp += pitch;
     for( x = 0; x < width; ++x )
     {
-        dstp[x] = ( src4n[x] * 678 + src3n[x] * 3902 + 
-                    ( src2p[x] + src2n[x] ) * 6809 + 
+        dstp[x] = ( src4n[x] * 678 + src3n[x] * 3902 +
+                    ( src2p[x] + src2n[x] ) * 6809 +
                     ( srcpp[x] + srcpn[x] ) * 14415 +
                     srcp[x] * 18508 + 32768 ) >> 18;
     }
@@ -1731,7 +1731,7 @@ void eedi2_gaussian_blur_sqrt2( int *src, int *tmp, int *dst, const int pitch, i
  */
 void eedi2_calc_derivatives( uint8_t *srcp, int src_pitch, int height, int width, int *x2, int *y2, int *xy)
 {
-    
+
     unsigned char * srcpp = srcp - src_pitch;
     unsigned char * srcpn = srcp + src_pitch;
     int x, y;
@@ -1845,7 +1845,7 @@ void eedi2_post_process_corner( int *x2, int *y2, int *xy, const int pitch, uint
     int *y2n = y2 + pitch;
     int *xyn = xy + pitch;
     int x, y;
-    
+
     for( y = 8 - field; y < height - 7; y += 2 )
     {
         for( x = 4; x < width - 4; ++x )
@@ -1853,7 +1853,7 @@ void eedi2_post_process_corner( int *x2, int *y2, int *xy, const int pitch, uint
             if( mskp[x] == 255 || mskp[x] == 128 ) continue;
             const int c1 = (int)( x2[x]  *  y2[x] -  xy[x] * xy[x] - 0.09 *
                                   ( x2[x]  + y2[x] )  * ( x2[x]  + y2[x] ) );
-            const int c2 = (int)( x2n[x] * y2n[x] - xyn[x]* xyn[x] - 0.09 * 
+            const int c2 = (int)( x2n[x] * y2n[x] - xyn[x]* xyn[x] - 0.09 *
                                   ( x2n[x] + y2n[x] ) * ( x2n[x] + y2n[x] ) );
             if (c1 > 775 || c2 > 775)
                 dstp[x] = ( dstpp[x] + dstpn[x] + 1 ) >> 1;

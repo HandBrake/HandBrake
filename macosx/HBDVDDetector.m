@@ -1,7 +1,7 @@
 /**
  * HBDriveDetector.m
  * 8/17/2007
- * 
+ *
  * This file is part of the HandBrake source code.
  * Homepage: <http://handbrake.fr/>.
  * It may be used under the terms of the GNU General Public License.
@@ -36,7 +36,7 @@
 - (HBDVDDetector *)initWithPath: (NSString *)aPath
 {
     NSAssert(aPath, @"nil string passed to drive detector.");
-	if( self = [super init] )	
+	if( self = [super init] )
 	{
         path = aPath;
         bsdName = nil;
@@ -159,12 +159,12 @@
 - (BOOL)isService: (io_service_t)service class:(const io_name_t)class
 {
     // Find the IOMedia object that represents the entire (whole) media that the
-    // volume is on. 
+    // volume is on.
     //
     // If the volume is on partitioned media, the whole media object will be a
     // parent of the volume's media object. If the media is not partitioned, the
     // volume's media object will be the whole media object.
-    // 
+    //
     // The whole media object is indicated in the IORegistry by the presence of
     // a property with the key "Whole" and value "Yes".
 
@@ -208,15 +208,15 @@
     // Determine if the object passed in represents an IOMedia (or subclass) object.
     // If it does, test the "Whole" property.
     //
-    
+
     Boolean isWholeMedia = NO;
-    
+
     if( IOObjectConformsTo(service, kIOMediaClass) )
     {
         CFTypeRef wholeMedia;
-        wholeMedia = IORegistryEntryCreateCFProperty( service, 
-                                                      CFSTR(kIOMediaWholeKey), 
-                                                      kCFAllocatorDefault, 
+        wholeMedia = IORegistryEntryCreateCFProperty( service,
+                                                      CFSTR(kIOMediaWholeKey),
+                                                      kCFAllocatorDefault,
                                                       0);
         if( !wholeMedia )
         {

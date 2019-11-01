@@ -6,7 +6,7 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
- 
+
 #ifndef HANDBRAKE_COMMON_H
 #define HANDBRAKE_COMMON_H
 
@@ -170,7 +170,7 @@ int hb_subtitle_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlec
 int hb_import_subtitle_add( const hb_job_t * job,
                 const hb_subtitle_config_t * subtitlecfg,
                 const char *lang_code, int source );
-int hb_srt_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg, 
+int hb_srt_add(const hb_job_t * job, const hb_subtitle_config_t * subtitlecfg,
                const char *lang);
 int hb_subtitle_can_force( int source );
 int hb_subtitle_can_burn( int source );
@@ -684,7 +684,7 @@ struct hb_job_s
 
     int             angle;              // dvd angle to encode
     int             frame_to_start;     // declare eof when we hit this frame
-    int64_t         pts_to_start;       // drop frames until  we pass this pts 
+    int64_t         pts_to_start;       // drop frames until  we pass this pts
                                         //  in the time-linearized input stream
     int             frame_to_stop;      // declare eof when we hit this frame
     int64_t         pts_to_stop;        // declare eof when we pass this pts in
@@ -912,7 +912,7 @@ struct hb_chapter_s
 
 /*
  * A subtitle track.
- * 
+ *
  * Required fields when a demuxer creates a subtitle track are:
  * > id
  *     - ID of this track
@@ -927,7 +927,7 @@ struct hb_chapter_s
  * > source
  *     - used to create the appropriate subtitle decoder work-object in do_job()
  * > config.dest
- *     - whether to render the subtitle on the video track (RENDERSUB) or 
+ *     - whether to render the subtitle on the video track (RENDERSUB) or
  *       to pass it through its own subtitle track in the output container (PASSTHRUSUB)
  *     - all newly created non-VOBSUB tracks should default to PASSTHRUSUB
  *     - all newly created VOBSUB tracks should default to RENDERSUB, for legacy compatibility
@@ -973,14 +973,14 @@ struct hb_subtitle_s
     char         lang[1024];
     char         iso639_2[4];
     uint32_t     attributes; /* Closed Caption, Childrens, Directors etc */
-    
+
     // Color lookup table for VOB subtitle tracks. Each entry is in YCbCr format.
     // Must be filled out by the demuxer for VOB subtitle tracks.
     uint32_t    palette[16];
     uint8_t     palette_set;
     int         width;
     int         height;
-    
+
     // Codec private data for subtitles originating from FFMPEG sources
     uint8_t *   extradata;
     int         extradata_size;
@@ -1005,7 +1005,7 @@ struct hb_subtitle_s
 
 /*
  * An attachment.
- * 
+ *
  * These are usually used for attaching embedded fonts to movies containing SSA subtitles.
  */
 struct hb_attachment_s
@@ -1029,7 +1029,7 @@ struct hb_coverart_s
     } type;
 };
 
-struct hb_metadata_s 
+struct hb_metadata_s
 {
     char  *name;
     char  *artist;          // Actors
@@ -1217,7 +1217,7 @@ struct hb_work_object_s
      * decode (it can be called even if init & work haven't been).
      * currently it's only called for audio streams & can be null for
      * other work objects. */
-    int              (* bsinfo)  ( hb_work_object_t *, const hb_buffer_t *, 
+    int              (* bsinfo)  ( hb_work_object_t *, const hb_buffer_t *,
                                    hb_work_info_t * );
     void             (* flush)   ( hb_work_object_t * );
 

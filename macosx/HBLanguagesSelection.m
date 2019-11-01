@@ -84,7 +84,7 @@
             {
                 [internal addObject:item];
             }
-            
+
         }
 
         // Insert the selected items
@@ -198,7 +198,7 @@ NSString *kHBLanguagesDragRowsType = @"kHBLanguagesDragRowsType";
         [pboard declareTypes:@[kHBLanguagesDragRowsType] owner:self];
         [pboard setData:data forType:kHBLanguagesDragRowsType];
     }
-    
+
     return self.isDragginEnabled;
 }
 

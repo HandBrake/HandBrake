@@ -13,7 +13,7 @@
 #if HB_PROJECT_FEATURE_NVENC
 #include <ffnvcodec/nvEncodeAPI.h>
 #include <ffnvcodec/dynlink_loader.h>
-#endif 
+#endif
 
 int hb_check_nvenc_available();
 
@@ -23,7 +23,7 @@ int hb_nvenc_h264_available()
         return hb_check_nvenc_available();
     #else
         return 0;
-    #endif 
+    #endif
 }
 
 int hb_nvenc_h265_available()
@@ -32,21 +32,21 @@ int hb_nvenc_h265_available()
         return hb_check_nvenc_available();
     #else
         return 0;
-    #endif 
+    #endif
 }
 
 static int isAvailable = -1;
-int hb_check_nvenc_available() 
+int hb_check_nvenc_available()
 {
     if (is_hardware_disabled())
     {
         return 0;
-    } 
-    
+    }
+
     if (isAvailable != -1){
         return isAvailable;
     }
-    
+
     #if HB_PROJECT_FEATURE_NVENC
         uint32_t nvenc_ver;
         void *context = NULL;
@@ -57,14 +57,14 @@ int hb_check_nvenc_available()
             isAvailable = 0;
             return 0;
         }
-  
+
         NVENCSTATUS apiErr = nvenc_dl->NvEncodeAPIGetMaxSupportedVersion(&nvenc_ver);
         if (apiErr != NV_ENC_SUCCESS)
         {
             isAvailable = 0;
             return 0;
         }
-        
+
         hb_log("Nvenc version %d.%d\n", nvenc_ver >> 4, nvenc_ver & 0xf);
         if ((NVENCAPI_MAJOR_VERSION << 4 | NVENCAPI_MINOR_VERSION) > nvenc_ver) {
             hb_log("NVENC version not supported. Disabling feature.");
@@ -76,5 +76,5 @@ int hb_check_nvenc_available()
         return 1;
     #else
         return 0;
-    #endif 
+    #endif
 }

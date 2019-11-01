@@ -95,7 +95,7 @@ ghb_queue_drag_n_drop_init(signal_user_data_t * ud)
     widget = GHB_WIDGET(ud->builder, "queue_list");
     targets = gdk_content_formats_new(queue_drag_entries,
                                       G_N_ELEMENTS(queue_drag_entries));
-    gtk_drag_dest_set(widget, GTK_DEST_DEFAULT_MOTION|GTK_DEST_DEFAULT_DROP, 
+    gtk_drag_dest_set(widget, GTK_DEST_DEFAULT_MOTION|GTK_DEST_DEFAULT_DROP,
                       targets, GDK_ACTION_MOVE);
     gdk_content_formats_unref(targets);
 }
@@ -110,7 +110,7 @@ ghb_queue_drag_n_drop_init(signal_user_data_t * ud)
     GtkWidget * widget;
 
     widget = GHB_WIDGET(ud->builder, "queue_list");
-    gtk_drag_dest_set(widget, GTK_DEST_DEFAULT_MOTION|GTK_DEST_DEFAULT_DROP, 
+    gtk_drag_dest_set(widget, GTK_DEST_DEFAULT_MOTION|GTK_DEST_DEFAULT_DROP,
                       queue_drag_entries, 1, GDK_ACTION_MOVE);
 }
 #endif
@@ -281,7 +281,7 @@ queue_update_summary(GhbValue * queueDict, signal_user_data_t *ud)
                              "%dx%d storage, %dx%d display\n"
                              "%d:%d Pixel Aspect Ratio\n"
                              "%s Display Aspect Ratio"),
-                           crop[0], crop[1], crop[2], crop[3], 
+                           crop[0], crop[1], crop[2], crop[3],
                            width, height, (int)display_width, display_height,
                            par_width, par_height, display_aspect);
     widget = GHB_WIDGET(ud->builder, "queue_summary_dimensions");
@@ -1723,11 +1723,11 @@ ghb_low_disk_check(signal_user_data_t *ud)
             _("%sThe destination filesystem is almost full: %"PRId64" MB free.\n"
               "Destination: %s\n"
               "Encode may be incomplete if you proceed.\n"),
-            paused_msg, free_size / (1024 * 1024), dest); 
+            paused_msg, free_size / (1024 * 1024), dest);
     gtk_dialog_add_buttons( GTK_DIALOG(dialog),
                            _("Resume, I've fixed the problem"), 1,
                            _("Resume, Don't tell me again"), 2,
-                           _("Cancel Current and Stop"), 3, 
+                           _("Cancel Current and Stop"), 3,
                            NULL);
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);

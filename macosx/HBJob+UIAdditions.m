@@ -528,7 +528,7 @@ static HBMixdownTransformer    *mixdownTransformer;
         [attrString appendString:lavcInfo   withAttributes:detailAttr];
         [attrString appendString:@"\n"      withAttributes:detailAttr];
     }
-    
+
     return attrString;
 }
 

@@ -6,7 +6,7 @@
    It may be used under the terms of the GNU General Public License v2.
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
- 
+
 #ifndef HANDBRAKE_HANDBRAKE_H
 #define HANDBRAKE_HANDBRAKE_H
 
@@ -67,7 +67,7 @@ hb_title_set_t   * hb_get_title_set( hb_handle_t * );
 int hb_detect_comb( hb_buffer_t * buf, int color_equal, int color_diff, int threshold, int prog_equal, int prog_diff, int prog_threshold );
 
 // JJJ: title->job?
-int           hb_save_preview( hb_handle_t * h, int title, int preview, 
+int           hb_save_preview( hb_handle_t * h, int title, int preview,
                                hb_buffer_t *buf );
 hb_buffer_t * hb_read_preview( hb_handle_t * h, hb_title_t *title,
                                int preview );
@@ -80,7 +80,7 @@ void          hb_set_anamorphic_size2(hb_geometry_t *src_geo,
                                       hb_geometry_t *result);
 void          hb_add_filter_dict( hb_job_t * job, hb_filter_object_t * filter,
                                   const hb_dict_t * settings_in );
-void          hb_add_filter( hb_job_t * job, hb_filter_object_t * filter, 
+void          hb_add_filter( hb_job_t * job, hb_filter_object_t * filter,
                              const char * settings );
 void          hb_add_filter2( hb_value_array_t * list, hb_dict_t * filter );
 
@@ -115,7 +115,7 @@ typedef struct hb_interjob_s
     hb_subtitle_t *select_subtitle; /* foreign language scan subtitle */
 } hb_interjob_t;
 
-hb_interjob_t * hb_interjob_get( hb_handle_t * ); 
+hb_interjob_t * hb_interjob_get( hb_handle_t * );
 
 /* hb_get_state()
    Should be regularly called by the UI (like 5 or 10 times a second).

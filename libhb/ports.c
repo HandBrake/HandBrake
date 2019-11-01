@@ -1357,7 +1357,7 @@ void hb_system_sleep_private_disable(void *opaque)
         hb_error("hb_system_sleep: opaque is NULL");
         return;
     }
-    
+
     IOPMAssertionID *assertionID = (IOPMAssertionID*)opaque;
     if (*assertionID != -1)
     {

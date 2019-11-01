@@ -105,7 +105,7 @@
     NSAttributedString *attributedString = [[NSAttributedString alloc] initWithString:text attributes:_textAttributes];
 	// Actually write the libhb output to the text view (outputTextStorage)
     [_outputTextStorage appendAttributedString:attributedString];
-    
+
 	// remove text from outputTextStorage as defined by TextStorageUpperSizeLimit and TextStorageLowerSizeLimit */
     if (_outputTextStorage.length > TextStorageUpperSizeLimit)
     {

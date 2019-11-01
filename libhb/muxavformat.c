@@ -1158,7 +1158,7 @@ static int add_chapter(hb_mux_object_t *m, int64_t start, int64_t end, char * ti
     chap->id = nchap;
     chap->time_base = m->time_base;
     // libav does not currently have a good way to deal with chapters and
-    // delayed stream timestamps.  It makes no corrections to the chapter 
+    // delayed stream timestamps.  It makes no corrections to the chapter
     // track.  A patch to libav would touch a lot of things, so for now,
     // work around the issue here.
     chap->start = start;

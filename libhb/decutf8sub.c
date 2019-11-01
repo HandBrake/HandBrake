@@ -9,10 +9,10 @@
 
 /*
  * Decoder for UTF-8 subtitles obtained from file input-sources.
- * 
+ *
  * Input and output packet format is UTF-8 encoded text,
  * with limited HTML-style markup (only <b>, <i>, and <u>).
- * 
+ *
  * @author David Foster (davidfstr)
  */
 

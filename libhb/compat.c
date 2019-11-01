@@ -12,7 +12,7 @@
 #ifdef HB_NEED_STRTOK_R
 #include <string.h>
 
-char *strtok_r(char *s, const char *delim, char **save_ptr) 
+char *strtok_r(char *s, const char *delim, char **save_ptr)
 {
     char *token;
 

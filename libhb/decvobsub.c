@@ -9,7 +9,7 @@
 
 /*
  * Decoder for DVD bitmap subtitles, also known as "VOB subtitles" within the HandBrake source code.
- * 
+ *
  * Input format of the subtitle packets is described here:
  *   http://sam.zoy.org/writings/dvd/subtitles/
  *
@@ -68,7 +68,7 @@ int decsubInit( hb_work_object_t * w, hb_job_t * job )
 
     pv->job = job;
     pv->pts = 0;
-    
+
     // Warn if the input color palette is empty
     pv->palette_set = w->subtitle->palette_set;
     if ( pv->palette_set )
@@ -180,7 +180,7 @@ int decsubWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
         {
             // If we don't get a valid next timestamp, use the stop time
             // of the current sub as the start of the next.
-            // This can happen if reader invalidates timestamps while 
+            // This can happen if reader invalidates timestamps while
             // waiting for an audio to update the SCR.
             pv->pts                  = pv->pts_stop;
             pv->current_scr_sequence = pv->scr_sequence;

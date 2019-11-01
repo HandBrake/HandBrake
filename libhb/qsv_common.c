@@ -161,8 +161,8 @@ int hb_qsv_available()
     if (is_hardware_disabled())
     {
         return 0;
-    } 
-    
+    }
+
     return ((hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H264) ? HB_VCODEC_QSV_H264 : 0) |
             (hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H265) ? HB_VCODEC_QSV_H265 : 0) |
             (hb_qsv_video_encoder_is_enabled(HB_VCODEC_QSV_H265_10BIT) ? HB_VCODEC_QSV_H265_10BIT : 0));
@@ -1669,7 +1669,7 @@ int hb_qsv_profile_parse(hb_qsv_param_t *param, hb_qsv_info_t *info, const char 
         param->videoParam->mfx.CodecProfile = profile->value;
     }
     /* HEVC 10 bits defautls to Main 10 */
-    else if (((profile_key != NULL && !strcasecmp(profile_key, "auto")) || profile_key == NULL) && 
+    else if (((profile_key != NULL && !strcasecmp(profile_key, "auto")) || profile_key == NULL) &&
               codec == HB_VCODEC_QSV_H265_10BIT &&
               param->videoParam->mfx.CodecId == MFX_CODEC_HEVC &&
               qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G6)
