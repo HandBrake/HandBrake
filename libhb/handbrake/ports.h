@@ -141,7 +141,7 @@ char * hb_utf8_to_cp(const char *src);
 int hb_dvd_region(char *device, int *region_mask);
 
 #if defined( SYS_DARWIN )
-int osx_get_user_config_directory( char path[512] );
+int macOS_get_user_config_directory( char path[512] );
 #endif
 void hb_get_user_config_directory( char path[512] );
 void hb_get_user_config_filename( char name[1024], char *fmt, ... );
