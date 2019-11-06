@@ -1,4 +1,4 @@
-This package was debianized by John Dong <jdong@ubuntu.com> on
+This package was debianized by John Stebbins <jstebbins.hb@gmail.com> on
 Fri, 28 Nov 2008 14:17:16 -0500.
 
 It was downloaded from http://handbrake.fr/
@@ -25,6 +25,7 @@ Upstream Author(s): See AUTHORS file for details
     Chris Thoman <cthoman@gmail.com> (huevos_rancheros)
     Mark Krenek <markkrenek@mac.com> (travistex)
     Van Jacobson <vanj.hb@gmail.com> (van)
+    John Stebbins <jstebbins.hb@gmail.com> (j45)
 
 Copyright:
   
@@ -34,8 +35,7 @@ License:
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation; either version 2 of the License.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
