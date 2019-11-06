@@ -25,7 +25,8 @@ build/
 build.*/
 download/
 
-# Gtk autoconf spam
+# Gtk
+gtk/ABOUT-NLS
 gtk/Makefile.in*
 gtk/src/Makefile.in*
 gtk/aclocal.m4
@@ -36,4 +37,8 @@ gtk/configure
 gtk/depcomp
 gtk/install-sh
 gtk/ltmain.sh
+gtk/m4
 gtk/missing
+gtk/po/Makevars.template
+gtk/po/*.gmo
+gtk/po/*.po~
