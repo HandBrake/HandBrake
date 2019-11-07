@@ -71,7 +71,20 @@
         const iso639_lang_t *lang;
         for (lang = lang_get_any(); lang != NULL; lang = lang_get_next(lang))
         {
-            NSString *nativeLanguage = strlen(lang->native_name) ? @(lang->native_name) : @(lang->eng_name);
+            NSString *nativeLanguage;
+
+            if (!strncmp(lang->iso639_2, "any", 3))
+            {
+                nativeLanguage = NSLocalizedString(@"Any", @"HBLanguage -> Any language");
+            }
+            else if (!strncmp(lang->iso639_2, "und", 3))
+            {
+                nativeLanguage = NSLocalizedString(@"Unknown", @"HBLanguage -> Unknown language");
+            }
+            else
+            {
+                nativeLanguage = strlen(lang->native_name) ? @(lang->native_name) : @(lang->eng_name);
+            }
 
             HBLang *item = [[HBLang alloc] initWithLanguage:nativeLanguage
                                                 iso639_2code:@(lang->iso639_2)];
@@ -84,7 +97,6 @@
             {
                 [internal addObject:item];
             }
-
         }
 
         // Insert the selected items
