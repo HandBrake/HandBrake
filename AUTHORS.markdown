@@ -168,3 +168,9 @@ Maxym Dm (maxim_d33)
 
 - Hardware acceleration / Intel QSV
 - Miscellaneous fixes and enhancements
+
+Simon L (Nomis101)
+
+- Internationalization / UI translations lead
+- Build system and toolchains fixes and enhancements
+- Miscellaneous fixes and enhancements
