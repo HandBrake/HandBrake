@@ -1430,7 +1430,7 @@ Copyright © 2004 - , HandBrake Devs</property>
     <property name="website">https://handbrake.fr</property>
     <property name="website_label" translatable="yes">https://handbrake.fr</property>
     <property name="license-type">GTK_LICENSE_GPL_2_0_ONLY</property>
-    <property name="license" translatable="yes">HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License.
+    <property name="license" translatable="yes">HandBrake is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License version 2, as published by the Free Software Foundation.
 
 HandBrake is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 
