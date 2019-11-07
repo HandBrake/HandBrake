@@ -50,6 +50,9 @@
 /* Preferences Advanced Toolbar Item */
 "Advanced" = "Erweitert";
 
+/* HBLanguage -> Any language */
+"Any" = "Beliebig";
+
 /* Delete preset alert -> message */
 "Are you sure you want to permanently delete the selected preset?" = "Soll die ausgewählte Voreinstellung wirklich endgültig gelöscht werden?";
 
@@ -429,6 +432,9 @@
 
 /* Preferences -> Output Name Token */
 "Title" = "Titel";
+
+/* HBLanguage -> Unknown language */
+"Unknown" = "Unbekannt";
 
 /* Video -> Framerate */
 "Variable Framerate" = "Variable Bildfrequenz";
