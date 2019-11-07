@@ -31,9 +31,6 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width."; ObjectID = "gOg-oO-8ar"; */
 "gOg-oO-8ar.ibShadowedToolTip" = "Larghezza massima di archiviazione video in pixel consentita dal preset. Impostare su 0 per altezza illimitata.";
 
-/* Class = "NSBox"; title = "Box"; ObjectID = "H9n-64-GXz"; */
-"H9n-64-GXz.title" = "Box";
-
 /* Class = "NSTextFieldCell"; title = "Description:"; ObjectID = "hc8-1h-Jye"; */
 "hc8-1h-Jye.title" = "Descrizione:";
 
@@ -49,8 +46,8 @@
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "LPX-Rc-KLa"; */
 "LPX-Rc-KLa.title" = "Comportamento di selezione…";
 
-/* Class = "NSTextField"; ibExternalAccessibilityDescription = "PictureHeight"; ObjectID = "Mga-dS-8BF"; */
-"Mga-dS-8BF.ibExternalAccessibilityDescription" = "Altezza immagine";
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Height"; ObjectID = "Mga-dS-8BF"; */
+"Mga-dS-8BF.ibExternalAccessibilityDescription" = "Altezza Immagine";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage height in pixels allowed by the preset. Set to 0 for unlimited height."; ObjectID = "Mga-dS-8BF"; */
 "Mga-dS-8BF.ibShadowedToolTip" = "Altezza massima di archiviazione video in pixel consentita dal preset. Impostare su 0 per altezza illimitata.";
