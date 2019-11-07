@@ -43,7 +43,10 @@ Joe Crain (dynaflash)
 
 Damiano Galassi (ritsuka)
 
-- Mac OS X GUI enhancements
+- macOS GUI
+- macOS sandbox and hardened runtime support
+- Improved color spaces support
+- Various libhb fixes and enhancements
 
 Edward Groenendaal (eddyg)
 
@@ -113,13 +116,20 @@ Jonathon Rubin (jbrjake)
 Scott (s55)
 
 - Windows GUI
+- UI concepts and design
+- Hardware acceleration
+- Devops and infrastructure
+- Online documentation
 
 John Stebbins (j45)
 
 - GTK GUI
 - TrueHD demuxing
 - libavcodec video encoding quality enhancements
-- Numerous bug fixes
+- Libhb architecture improvements, JSON API
+- Stream and sync improvements
+- Flatpak support
+- Numerous bug fixes and enhancements
 
 Chris Thoman (huevos_rancheros)
 
@@ -140,13 +150,19 @@ David Rickard (RandomEngy)
 
 Tim Walker (Rodeo)
 
+- Hardware acceleration / Intel QSV
+- Libhb and macOS GUI fixes and enhancements
+- Dependencies support and integration
 - Miscellaneous fixes and enhancements
 
 Bradley Sepos (BradleyS)
 
-- NLMeans denoiser
-- Presets and device testing
-- Miscellaneous improvements and bug fixes
+- Build system and toolchains
+- Dependencies, platform, and device testing
+- NLMeans denoiser and other filters
+- UI concepts and design
+- Official presets
+- Online documentation
 
 Maxym Dm (maxim_d33)
 
