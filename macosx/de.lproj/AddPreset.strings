@@ -31,9 +31,6 @@
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage width in pixels allowed by the preset. Set to 0 for unlimited width."; ObjectID = "gOg-oO-8ar"; */
 "gOg-oO-8ar.ibShadowedToolTip" = "Maximale Breite des Videos in Pixel, das durch die Voreinstellung erlaubt wird. Für unbegrenzte Breite auf 0 setzen.";
 
-/* Class = "NSBox"; title = "Box"; ObjectID = "H9n-64-GXz"; */
-"H9n-64-GXz.title" = "Box";
-
 /* Class = "NSTextFieldCell"; title = "Description:"; ObjectID = "hc8-1h-Jye"; */
 "hc8-1h-Jye.title" = "Beschreibung:";
 
@@ -49,7 +46,7 @@
 /* Class = "NSButtonCell"; title = "Selection Behavior…"; ObjectID = "LPX-Rc-KLa"; */
 "LPX-Rc-KLa.title" = "Auswahlverhalten …";
 
-/* Class = "NSTextField"; ibExternalAccessibilityDescription = "PictureHeight"; ObjectID = "Mga-dS-8BF"; */
+/* Class = "NSTextField"; ibExternalAccessibilityDescription = "Picture Height"; ObjectID = "Mga-dS-8BF"; */
 "Mga-dS-8BF.ibExternalAccessibilityDescription" = "Bildhöhe";
 
 /* Class = "NSTextField"; ibShadowedToolTip = "Maximum video storage height in pixels allowed by the preset. Set to 0 for unlimited height."; ObjectID = "Mga-dS-8BF"; */

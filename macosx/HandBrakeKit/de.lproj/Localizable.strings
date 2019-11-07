@@ -205,7 +205,7 @@
 "Format:" = "Format:";
 
 /* Video description */
-"Framerate: " = "Bildrate: ";
+"Framerate: " = "Bildfrequenz: ";
 
 /* HBRange -> display name */
 "Frames" = "Einzelbilder";
