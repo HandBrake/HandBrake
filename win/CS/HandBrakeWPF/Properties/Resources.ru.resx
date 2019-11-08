@@ -339,9 +339,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
 Опции Нереального Обновления: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Они только меняются если вы сканируете новый источник, изменяете заголовок или главы)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Доступные дополнительные опции: {source_path} или {source_folder_name} 
-
-Не обе одновременно!</value>
+    <value>Доступные дополнительные опции: {source_path} либо {source_folder_name} либо {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>Невозможно кодировать файл с таким же путем и именем, как и файл, выбранный в качестве источника. Пожалуйста, обновите имя файла назначения, чтобы оно не совпадало с именем файла-источника.</value>
