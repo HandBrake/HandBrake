@@ -364,8 +364,6 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
 
             av_dict_set( &av_opts, "rc", "vbr_hq", 0 );
             av_dict_set( &av_opts, "cq", quality, 0 );
-            av_dict_set( &av_opts, "qmin", quality, 0 );
-            av_dict_set( &av_opts, "qmax", quality, 0 );
 
             // further Advanced Quality Settings in Constant Quality Mode
             av_dict_set( &av_opts, "init_qpP", quality, 0 );
