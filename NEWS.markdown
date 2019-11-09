@@ -141,6 +141,7 @@
 - Added translations:
   - French
   - Italian
+  - Russian
 - Added preference to disable preview image on summary tab
 - Miscellaneous bug fixes and improvements
 
