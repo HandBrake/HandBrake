@@ -1,5 +1,175 @@
 # HandBrake News
 
+## HandBrake 1.3.0
+
+### All platforms
+
+#### General
+
+- HandBrake is now translated into many more languages
+- Redesigned queue UI
+- Removed Windows Mobile presets
+  - See the [list of compatible replacements on GitHub](https://github.com/HandBrake/HandBrake-docs/blob/03682bdd741cea425c80b06818e4bdaec75bdc5e/source/docs/en/latest/technical/official-presets.markdown#windows-mobile-presets)
+- Improved log output by silencing many lines at standard log level
+- Improved quality of Gmail presets slightly
+- Added Playstation 2160p60 4K Surround preset (supports PS4 Pro)
+- Added Discord and Discord Nitro presets
+
+#### Video
+
+- Updated Intel Quick Sync Video to use Direct3D 11 API
+- Updated minimum title scan duration to only apply to disc-based sources like Blu-ray and DVD
+- Improved detection of MPEG-1 video in program streams
+- Improved interface to FFmpeg avfilter and color handling
+- Improved Nvidia NVENC constant quality encoding slightly by not setting qmin and qmax
+- Replaced pp7 Deblock filter with FFmpeg Deblock filter
+- Added support for reading Ultra HD Blu-ray discs (without copy protection)
+- Added support for reading AV1 via libdav1d
+- Added encoding to WebM container format
+- Added Chroma Smooth filter (CLI only)
+- Added zero-copy path for Intel QSV encoding removed in a previous release
+- Added support for Intel QSV low power encoding (lowpower=1)
+- Added support for AMD VCE encoding on Linux via Vulkan
+- Added ability to select x265 encoder level and Fast Decode tune
+
+#### Audio
+
+- Updated audio resampling code to use FFmpeg swresample instead of libsamplerate
+- Added source audio bit rate to tracks list
+- Added ability to select unknown language tracks
+- Added automatic track name pass through
+
+#### Subtitles
+
+- Added ability to import external SSA/ASS subtitles
+- Added ability to select unknown language tracks
+- Added automatic track name pass through
+
+#### Command line interface
+
+- Added additional unit aliases to --start-at and --stop-at, notably seconds and frames
+
+#### Build system
+
+- HandBrake now builds with libnuma on Linux
+- Fixed Python bytestrings causing newlines to be ignored in build output
+- Fixed Xcode ignoring make jobs parameter and utilizing all CPU cores (macOS only)
+- Updated configure to enable most hardware encoders by default where appropriate by platform
+- Updated all scripts for compatibility with Python 3
+- Updated mac-toolchain-build script with newer tool versions many improvements
+- Updated mingw-w64-build script with mingw-w64 6.0.0, GCC 9.2, and many improvements
+- Improved compatibility with GCC 9 and recent Clang releases
+- Improved compatibility with recent Xcode releases (macOS only)
+- Improved host/build semantics
+- Improved namespace isolation
+- Improved handling of all options passed to configure
+- Improved configure help output
+- Improved detection of missing executable dependencies during configure
+- Added support for building on NetBSD
+- Added --harden configure parameter to enable buffer overflow protections
+- Added --sandbox configure parameter to enable sandbox build target on macOS
+- Added --enable-gtk4 configure parameter to build with GTK 4 instead of GTK 3
+- Added summary of build options to configure output
+- Miscellaneous bug fixes and improvements
+
+#### Third-party libraries
+
+- Removed libraries
+  - libsamplerate (audio resampling)
+- Updated libraries
+  - AMF 1.4.9 (AMD VCE encoding)
+  - bzip2 1.0.8 (general)
+  - FDK AAC 2.0.1 (AAC audio encoding, must compile from source)
+  - FFmpeg 4.2.1 (decoding and filters)
+  - FreeType 2.10.1 (subtitles)
+  - Fribidi 1.0.7 (subtitles)
+  - HarfBuzz 2.6.4 (subtitles)
+  - Jansson 2.12 (JSON architecture)
+  - libbluray 1.1.2 (Blu-ray decoding)
+  - libdav1d 0.5.1 (AV1 decoding)
+  - libdvdnav 6.0.1 (DVD decoding)
+  - libdvdread 6.0.2 (DVD decoding)
+  - libiconv 1.16 (character encoding support)
+  - libmfx (Intel QSV support)
+  - libogg 1.3.4 (Xiph codecs support)
+  - libopus 1.3.1 (Opus audio encoding)
+  - libvorbis 1.3.6 (Vorbis audio encoding)
+  - libvpx 1.8.1 (VP8/VP9 video encoding)
+  - libxml2 2.9.9 (general)
+  - nv-codec-headers 9.0.18.1 (Nvidia NVENC encoding)
+  - x265 3.2.1 (H.265/HEVC video encoding)
+
+### Linux
+
+- Fixed slider control not showing complete values
+- Updated translations (levels of completeness vary):
+  - Czech
+  - Chinese
+  - French
+  - German
+  - Italian
+  - Japanese
+  - Korean
+  - Norwegian
+  - Russian
+  - Spanish
+  - Thai
+- Added translations (levels of completeness vary):
+  - Afrikaans
+  - Basque
+  - Croatian
+  - Dutch
+  - Polish
+  - Portuguese
+  - Romanian
+  - Slovak
+  - Swedish
+  - Turkish
+  - Ukrainian
+- Added Intel QSV support to Flatpak (requires additional plugin installation)
+- Added ability to double-click to edit audio track settings
+- Added options to open encode log and log directory to actions menu on queue window
+- Miscellaneous bug fixes and improvements
+
+### Mac
+
+- HandBrake now requires OS X 10.11 El Capitan or later
+- HandBrake is now sandboxed and uses the macOS hardened runtime
+- Updated priority for low-priority threads on macOS to avoid potential stalls in future macOS
+- Updated translations:
+  - German
+- Added translations:
+  - French
+  - Italian
+- Added preference to disable preview image on summary tab
+- Miscellaneous bug fixes and improvements
+
+### Windows
+
+- Improved browse dialog recently used to fallback to parent directory
+- Improved preferences layout
+- Improved auto naming collision behavior and file overwriting
+- Added preference to test selected notification sound
+- Added preference to perform when done action immmediately without countdown
+- Added preference to disable preview image on summary tab
+- Added hardware.enabled option to portable.ini
+- Added dark theme for Windows 10
+- Added queue import/export removed in a previous release
+- Added new low battery level and disk space safety measures
+  - Encoding jobs automatically pause when battery level is low, system sleep is allowed, and jobs resume when power is restored
+  - Encoding jobs automatically pause when disk space drops to critical levels
+- Added translations (levels of completeness vary):
+  - French
+  - German
+  - Chinese
+  - Korean
+  - Russian
+  - Spanish
+  - Turkish
+- HandBrake now requires .NET Framework 4.7.1 or later (installer offers download if missing)
+- Miscellaneous bug fixes and improvements
+
+
 ## HandBrake 1.2.2
 
 ### Mac
