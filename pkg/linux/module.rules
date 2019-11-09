@@ -122,8 +122,8 @@ $(PKG.cli.deb): $(PKG.gui.tmp.deb)
 # Debian source package rules
 #
 pkg.push.src.deb:: $(PKG.src.deb.stamp)
-	(cd $(STAGE.out.src/)bionic && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)-zhb-1ppa1~bionic1_source.changes )
 	(cd $(STAGE.out.src/)disco && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)-zhb-1ppa1~disco1_source.changes )
+	(cd $(STAGE.out.src/)eoan && dput handbrake-git-snapshots $(HB.name.lower)_$(HB.debversion)-zhb-1ppa1~eoan1_source.changes )
 
 
 $(PKG.src.deb.stamp): GNUmakefile
@@ -144,4 +144,20 @@ $(PKG.src.deb.stamp): GNUmakefile
 	echo " -- John Stebbins <jstebbins.hb@gmail.com>  $(DEBIAN_CHANGELOG_DATE)" >> $(STAGE.out.src/)disco/$(PKG.deb.basename)/debian/changelog
 	$(TAR.exe) czf $(STAGE.out.src/)disco/$(PKG.src.deb.tar) -C $(STAGE.out.src/)disco $(PKG.deb.basename)
 	(cd $(STAGE.out.src/)disco/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
+	$(TOUCH.exe) $(PKG.src.deb.stamp)
+	$(MKDIR.exe) -p $(STAGE.out.src/)eoan
+	$(GIT.exe) -C $(SRC/) archive --format=tar --prefix=$(PKG.deb.basename)/ $(HB.repo.shorthash) | $(TAR.exe) -xC $(STAGE.out.src/)eoan/
+	$(SRC/)scripts/repo-info.sh $(SRC/) > $(STAGE.out.src/)eoan/$(PKG.deb.basename)/version.txt
+	$(CP.exe) -a $(SRC/)download $(STAGE.out.src/)eoan/$(PKG.deb.basename)
+	cp -a $(PKG.debian) $(STAGE.out.src/)eoan/$(PKG.deb.basename)
+	$(CP.exe) $(STAGE.out.src/)eoan/$(PKG.deb.basename)/debian/control.eoan $(STAGE.out.src/)eoan/$(PKG.deb.basename)/debian/control
+	$(CP.exe) $(STAGE.out.src/)eoan/$(PKG.deb.basename)/debian/rules.eoan $(STAGE.out.src/)eoan/$(PKG.deb.basename)/debian/rules
+	echo "$(HB.name.lower) (1:$(HB.debversion)-zhb-1ppa1~eoan1) eoan; urgency=low" > $(STAGE.out.src/)eoan/$(PKG.deb.basename)/debian/changelog
+	echo "" >> $(STAGE.out.src/)eoan/$(PKG.deb.basename)/debian/changelog
+	echo "  * Snapshot: See commit history at" >> $(STAGE.out.src/)eoan/$(PKG.deb.basename)/debian/changelog
+	echo "    https://github.com/HandBrake/HandBrake" >> $(STAGE.out.src/)eoan/$(PKG.deb.basename)/debian/changelog
+	echo "" >> $(STAGE.out.src/)eoan/$(PKG.deb.basename)/debian/changelog
+	echo " -- John Stebbins <jstebbins.hb@gmail.com>  $(DEBIAN_CHANGELOG_DATE)" >> $(STAGE.out.src/)eoan/$(PKG.deb.basename)/debian/changelog
+	$(TAR.exe) czf $(STAGE.out.src/)eoan/$(PKG.src.deb.tar) -C $(STAGE.out.src/)eoan $(PKG.deb.basename)
+	(cd $(STAGE.out.src/)eoan/$(PKG.deb.basename) && debuild -S -kjstebbins.hb)
 	$(TOUCH.exe) $(PKG.src.deb.stamp)
