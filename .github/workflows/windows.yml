@@ -18,7 +18,7 @@ jobs:
         sudo pip3 install meson
         
     - name: Toolchain Cache
-      id: cache-toolchain
+      id: mingw-toolchain
       uses: actions/cache@v1
       with:
         path: /home/runner/toolchains/
