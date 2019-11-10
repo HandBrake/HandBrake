@@ -10,7 +10,15 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
+    - name: Toolchain Cache
+      id: mac-toolchain
+      uses: actions/cache@v1
+      with:
+        path: /usr/local
+        key: mac-toolchain
+
     - name: Setup Environment
+      if: steps.mac-toolchain.outputs.cache-hit != 'true'
       run: |
         scripts/mac-toolchain-build /usr/local
         
