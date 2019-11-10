@@ -16,8 +16,16 @@ jobs:
         sudo apt-get install python3-pip
         sudo apt-get install python3-setuptools
         sudo pip3 install meson
+        
+    - name: Toolchain Cache
+      id: cache-toolchain
+      uses: actions/cache@v1
+      with:
+        path: /home/runner/toolchains/
+        key: mingw-toolchain         
     
     - name: Compile Toolchain
+      if: steps.mingw-toolchain.outputs.cache-hit != 'true'
       run: |
         ./scripts/mingw-w64-build --disable-gdb x86_64 ~/toolchains
         ./scripts/mingw-w64-build x86_64.clean
@@ -25,14 +33,7 @@ jobs:
         cd /home/runner/toolchains/
         ls -la
         du -hs
-    
-    - name: Cache Toolchain
-      id: cache-toolchain
-      uses: actions/cache@v1
-      with:
-        path: /home/runner/toolchains/
-        key: mingw-toolchain         
-        
+          
     - name: Build CLI and LibHB
       run: |
         export PATH="/home/runner/toolchains/mingw-w64-x86_64/bin:${PATH}"
