@@ -60,7 +60,7 @@ jobs:
         
     - name: Build Windows GUI
       run: |      
-        set PATH=C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin;%PATH%
+        set PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin";%PATH%
         echo %PATH%
         msbuild -version
         msbuild win\cs\build.xml /t:Nightly
