@@ -22,11 +22,19 @@ jobs:
         ./scripts/mingw-w64-build --disable-gdb x86_64 ~/toolchains
         ./scripts/mingw-w64-build x86_64.clean
         ./scripts/mingw-w64-build pkgclean
-        cd ../
-        ls -la
-        cd toolchains
+        cd /home/runner/toolchains/
         ls -la
         du -hs
+        cd .. 
+        tar cvzf toolchain.tar.gz toolchains/
+        ls -la
+    
+    - name: Cache Toolchain
+      id: cache-toolchain
+      uses: actions/cache@v1
+      with:
+        path: /home/runner/toolchain.tar.gz
+        key: mingw-toolchain         
         
     - name: Build CLI and LibHB
       run: |
