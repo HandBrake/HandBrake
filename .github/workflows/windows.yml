@@ -25,15 +25,12 @@ jobs:
         cd /home/runner/toolchains/
         ls -la
         du -hs
-        cd .. 
-        tar cvzf toolchain.tar.gz toolchains/
-        ls -la
     
     - name: Cache Toolchain
       id: cache-toolchain
       uses: actions/cache@v1
       with:
-        path: /home/runner/toolchain.tar.gz
+        path: /home/runner/toolchains/
         key: mingw-toolchain         
         
     - name: Build CLI and LibHB
