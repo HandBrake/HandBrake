@@ -31,6 +31,9 @@ jobs:
         ./scripts/mingw-w64-build x86_64.clean
         ./scripts/mingw-w64-build pkgclean
         cd /home/runner/toolchains/
+        rm -rf build-mingw-w64-x86_64.noindex
+        rm -rf source.noindex
+        rm -rf pkg
         ls -la
         du -hs
           
