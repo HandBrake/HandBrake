@@ -72,28 +72,26 @@ namespace HandBrakeWPF.Services.Scan.Factories
 
                 switch (track.Source)
                 {
-                    case 0:
+                    case (int)hb_subtitle_s_subsource.VOBSUB:
                         convertedType = SubtitleType.VobSub;
                         break;
-                    case 4:
-                        convertedType = SubtitleType.UTF8Sub;
+                    case (int)hb_subtitle_s_subsource.CC608SUB:
+                    case (int)hb_subtitle_s_subsource.CC708SUB:
+                        convertedType = SubtitleType.CC;
                         break;
-                    case 5:
-                        convertedType = SubtitleType.TX3G;
-                        break;
-                    case 6:
-                        convertedType = SubtitleType.SSA;
-                        break;
-                    case 1:
+                    case (int)hb_subtitle_s_subsource.IMPORTSRT:
                         convertedType = SubtitleType.SRT;
                         break;
-                    case 2:
-                        convertedType = SubtitleType.CC;
+                    case (int)hb_subtitle_s_subsource.UTF8SUB:
+                        convertedType = SubtitleType.UTF8Sub;
                         break;
-                    case 3:
-                        convertedType = SubtitleType.CC;
+                    case (int)hb_subtitle_s_subsource.TX3GSUB:
+                        convertedType = SubtitleType.TX3G;
                         break;
-                    case 7:
+                    case (int)hb_subtitle_s_subsource.SSASUB:
+                        convertedType = SubtitleType.SSA;
+                        break;
+                    case (int)hb_subtitle_s_subsource.PGSSUB:
                         convertedType = SubtitleType.PGS;
                         break;
                 }
