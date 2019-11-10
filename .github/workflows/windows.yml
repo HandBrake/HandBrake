@@ -20,6 +20,13 @@ jobs:
     - name: Compile Toolchain
       run: |
         scripts/mingw-w64-build x86_64 ~/toolchains
+        scripts/mingw-w64-build x86_64.clean
+        scripts/mignw-w64-build pkgclean
+        cd ../
+        ls -la
+        cd toolchains
+        ls -la
+        du -hs
         
     - name: Build CLI and LibHB
       run: |
