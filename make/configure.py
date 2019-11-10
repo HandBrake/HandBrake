@@ -1606,8 +1606,7 @@ try:
         automake   = ToolProbe( 'AUTOMAKE.exe',   'automake',   'automake', abort=True, minversion=[1,15,0] )
         libtool    = ToolProbe( 'LIBTOOL.exe',    'libtool',    'libtool', abort=True )
         lipo       = ToolProbe( 'LIPO.exe',       'lipo',       'lipo', abort=False )
-        pkgconfig  = ToolProbe( 'PKGCONFIG.exe',  'pkgconfig',  'pkg-config', abort=True, minversion=[0,29,0] )
-
+        pkgconfig  = ToolProbe( 'PKGCONFIG.exe',  'pkgconfig',  'pkg-config', abort=True, minversion=[0,29,1] )
         meson      = ToolProbe( 'MESON.exe',      'meson',      'meson', abort=True, minversion=[0,47,0] )
         nasm       = ToolProbe( 'NASM.exe',       'asm',        'nasm', abort=True, minversion=[2,13,0] )
         ninja      = ToolProbe( 'NINJA.exe',      'ninja',      'ninja-build', 'ninja', abort=True )
