@@ -19,9 +19,9 @@ jobs:
     
     - name: Compile Toolchain
       run: |
-        scripts/mingw-w64-build x86_64 ~/toolchains
-        scripts/mingw-w64-build x86_64.clean
-        scripts/mignw-w64-build pkgclean
+        ./scripts/mingw-w64-build --disable-gdb x86_64 ~/toolchains
+        ./scripts/mingw-w64-build x86_64.clean
+        ./scripts/mingw-w64-build pkgclean
         cd ../
         ls -la
         cd toolchains
