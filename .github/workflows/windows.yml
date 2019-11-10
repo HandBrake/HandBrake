@@ -22,7 +22,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: /home/runner/toolchains/
-        key: mingw-toolchain         
+        key: mingw-toolchain
     
     - name: Compile Toolchain
       if: steps.mingw-toolchain.outputs.cache-hit != 'true'
