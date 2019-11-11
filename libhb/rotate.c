@@ -131,7 +131,7 @@ static int rotate_init(hb_filter_object_t * filter, hb_filter_init_t * init)
             hb_dict_set(avfilter, "hflip", hb_value_null());
             hb_value_array_append(avfilters, avfilter);
         }
-        pv->avfilters = avfilter;
+        pv->avfilters = avfilters;
     }
     else
     {
