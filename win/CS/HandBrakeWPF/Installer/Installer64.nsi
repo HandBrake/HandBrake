@@ -161,6 +161,26 @@ Section "HandBrake" SEC01
   SetOverwrite ifnewer
   File "zh\*.*"
 
+  SetOutPath "$INSTDIR\es"
+  SetOverwrite ifnewer
+  File "es\*.*"
+
+  SetOutPath "$INSTDIR\fr"
+  SetOverwrite ifnewer
+  File "fr\*.*"
+
+  SetOutPath "$INSTDIR\ko"
+  SetOverwrite ifnewer
+  File "ko\*.*"
+
+  SetOutPath "$INSTDIR\ru"
+  SetOverwrite ifnewer
+  File "ru\*.*"
+
+  SetOutPath "$INSTDIR\tr"
+  SetOverwrite ifnewer
+  File "tr\*.*"
+
   ; Copy the standard doc set into the doc folder
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
@@ -207,6 +227,17 @@ Section Uninstall
   RMDir  "$INSTDIR\de"
   Delete "$INSTDIR\zh\*.*"
   RMDir  "$INSTDIR\zh"
+  Delete "$INSTDIR\es\*.*"
+  RMDir  "$INSTDIR\es"
+  Delete "$INSTDIR\fr\*.*"
+  RMDir  "$INSTDIR\fr"
+  Delete "$INSTDIR\ko\*.*"
+  RMDir  "$INSTDIR\ko"
+  Delete "$INSTDIR\ru\*.*"
+  RMDir  "$INSTDIR\ru"
+  Delete "$INSTDIR\tr\*.*"
+  RMDir  "$INSTDIR\tr"
+  RMDir  "$INSTDIR"
 
   Delete "$SMPROGRAMS\HandBrake\Uninstall.lnk"
   Delete "$DESKTOP\HandBrake.lnk"
