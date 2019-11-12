@@ -54,7 +54,7 @@ AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
-	$(GHB_CFLAGS)
+	$(HB_CPPFLAGS)
 
 AM_CFLAGS = -Wall -g
 
@@ -121,7 +121,7 @@ ghb_LDFLAGS = \
 	-Wl,--export-dynamic -Wl,--exclude-libs,ALL
 endif
 
-ghb_LDADD = $(HB_LIBS) $(GHB_LIBS)
+ghb_LDADD = $(HB_LIBS)
 
 ghb_DEPENDENCIES = $(HB_DIR)/libhb/libhandbrake.a
 

@@ -139,35 +139,38 @@ PKG_PROG_PKG_CONFIG
 HAVE_GTK_400=0
 HAVE_GTK_316=0
 if test "x$use_gtk4" = "xyes" ; then
-    PKG_CHECK_MODULES([GHB_GTK_4_0], [gtk4 >= 3.92], [HAVE_GTK_400=1], [HAVE_GTK_400=0])
+    PKG_CHECK_MODULES([gtk], [gtk4 >= 3.92], [HAVE_GTK_400=1], [HAVE_GTK_400=0])
 else
-    PKG_CHECK_MODULES([GHB_GTK_3_16], [gtk+-3.0 >= 3.16], [HAVE_GTK_316=1], [HAVE_GTK_316=0])
+    PKG_CHECK_MODULES([gtk], [gtk+-3.0 >= 3.16], [HAVE_GTK_316=1], [HAVE_GTK_316=0])
 fi
 
 if test "$HAVE_GTK_316" -eq 0 -a "$HAVE_GTK_400" -eq 0 ; then
     AC_MSG_ERROR("GTK 3.16 or above is required)
 fi
+HB_LIBS="$HB_LIBS $gtk_LIBS"
+HB_CPPFLAGS="$HB_CPPFLAGS $gtk_CFLAGS"
 
-if test "$HAVE_GTK_400" -eq 1 ; then
-    GHB_PACKAGES="gtk4 $GHB_PACKAGES"
-else
-    GHB_PACKAGES="gtk+-3.0 $GHB_PACKAGES"
-fi
+PKG_CHECK_MODULES([GHB], [$GHB_PACKAGES])
+HB_LIBS="$HB_LIBS $GHB_LIBS"
+HB_CPPFLAGS="$HB_CPPFLAGS $GHB_CFLAGS"
 
-GST1_MODULES="gstreamer-1.0 gstreamer-video-1.0 gstreamer-audio-1.0 gstreamer-pbutils-1.0"
 
 pkg_gudev="gudev-1.0"
-PKG_CHECK_MODULES(Gudev, [$pkg_gudev], have_gudev=yes, have_gudev=no)
+PKG_CHECK_MODULES([gudev], [$pkg_gudev], have_gudev=yes, have_gudev=no)
 if test "x$have_gudev" = "xyes" ; then
-    GHB_PACKAGES="$GHB_PACKAGES $pkg_gudev"
+    HB_LIBS="$HB_LIBS $gudev_LIBS"
+    HB_CPPFLAGS="$HB_CPPFLAGS $gudev_CFLAGS"
+
 	CXXFLAGS="$CXXFLAGS -D_HAVE_GUDEV"
 	CFLAGS="$CFLAGS -D_HAVE_GUDEV"
 fi
 
+GST1_MODULES="gstreamer-1.0 gstreamer-video-1.0 gstreamer-audio-1.0 gstreamer-pbutils-1.0"
 if test "x$gst_disable" = "xno" ; then
-    PKG_CHECK_MODULES(GStreamer1, [$GST1_MODULES], use_gst1=yes, use_gst1=no)
+    PKG_CHECK_MODULES([gstreamer1], [$GST1_MODULES], use_gst1=yes, use_gst1=no)
     if test "x$use_gst1" = "xyes" ; then
-        GHB_PACKAGES="$GHB_PACKAGES $GST1_MODULES"
+        HB_LIBS="$HB_LIBS $gstreamer1_LIBS"
+        HB_CPPFLAGS="$HB_CPPFLAGS $gstreamer1_CFLAGS"
     else
         gst_disable="yes"
     fi
@@ -179,9 +182,10 @@ if test "x$gst_disable" = "xno" ; then
 fi
 
 if test "x$update_checks" = "xyes" ; then
-    PKG_CHECK_MODULES(WebKitGtk3, webkitgtk-3.0, use_webkitgtk=yes, use_webkitgtk=no)
+    PKG_CHECK_MODULES([webkitgtk], webkitgtk-3.0, use_webkitgtk=yes, use_webkitgtk=no)
     if test "x$use_webkitgtk" = "xyes" ; then
-        GHB_PACKAGES="$GHB_PACKAGES webkitgtk-3.0"
+        HB_LIBS="$HB_LIBS $webkitgtk_LIBS"
+        HB_CPPFLAGS="$HB_CPPFLAGS $webkitgtk_CFLAGS"
     else
         update_checks="no"
         CFLAGS="$CFLAGS -D_NO_UPDATE_CHECK"
@@ -195,11 +199,17 @@ AM_CONDITIONAL([GHB_GTK_3_16], [test "$HAVE_GTK_316" -eq 1])
 
 AM_CONDITIONAL([MINGW], [test "x$mingw_flag" = "xyes"])
 
-PKG_CHECK_MODULES(GHB, [$GHB_PACKAGES])
+HB_LIBS="$HB_LIBS -lhandbrake -lavformat -lavfilter -lavcodec -lavutil -ldav1d -lswresample -lpostproc -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson -lopus -lspeex -llzma"
+HB_CPPFLAGS="$HB_CPPFLAGS $HBINC"
 
-GHB_CFLAGS="$HBINC $GHB_CFLAGS"
-
-HB_LIBS="-lhandbrake -lavformat -lavfilter -lavcodec -lavutil -ldav1d -lswresample -lpostproc -ldvdnav -ldvdread -lmp3lame -lvorbis -lvorbisenc -logg -lx264 -lswscale -ltheoraenc -ltheoradec -lvpx -lz -lbz2 -lbluray -lass -lfontconfig -lfreetype -lxml2 -ljansson -lopus -lspeex -llzma"
+PKG_CHECK_MODULES([x264], [x264], sys_x264=yes, sys_x264=no)
+if test "x$sys_x264" = "xyes" ; then
+    HB_LIBS="$HB_LIBS $x264_LIBS"
+    HB_CPPFLAGS="$HB_CPPFLAGS $x264_CFLAGS"
+else
+    # Assume it's built as a libhandbrake contrib package
+    HB_LIBS="$HB_LIBS -lx264"
+fi
 
 if test "x$use_fdk_aac" = "xyes" ; then
     HB_LIBS="$HB_LIBS -lfdk-aac"
@@ -240,6 +250,7 @@ case $host in
         HB_LIBS="$HB_LIBS -lnuma"
     fi
     fi
+    HB_LIBS="$HB_LIBS -ldl -lpthread"
     ;;
   *)
     HB_LIBS="$HB_LIBS -ldl -lpthread"
@@ -256,7 +267,6 @@ fi
 
 AC_SUBST(HB_PYTHON)
 AC_SUBST(HB_LIBS)
-AC_SUBST(GHB_CFLAGS)
-AC_SUBST(GHB_LIBS)
+AC_SUBST(HB_CPPFLAGS)
 
 AC_OUTPUT
