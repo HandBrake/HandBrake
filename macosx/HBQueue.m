@@ -619,8 +619,6 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
             [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidStartItemNotification object:self userInfo:@{HBQueueItemNotificationItemKey: nextItem,
                                                                                                                             HBQueueItemNotificationIndexesKey: indexes}];
 
-            [self updateStats];
-
             // now we can go ahead and scan the new pending queue item
             [self encodeItem:nextItem];
 
@@ -635,6 +633,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
             [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidCompleteNotification object:self];
         }
     }
+
+    [self updateStats];
 
     [NSNotificationCenter.defaultCenter postNotificationName:HBQueueDidChangeStateNotification object:self];
 
