@@ -103,7 +103,7 @@ hb_buffer_t * hb_avframe_to_video_buffer(AVFrame *frame, AVRational time_base)
         int stride    = buf->plane[pp].stride;
         int height    = buf->plane[pp].height;
         int linesize  = frame->linesize[pp];
-        int size = linesize < stride ? linesize : stride;
+        int size = linesize < stride ? ABS(linesize) : stride;
         uint8_t * dst = buf->plane[pp].data;
         uint8_t * src = frame->data[pp];
 
