@@ -24,6 +24,5 @@ We accept bug reports (including security reports) for the following versions:
 
 | Version            | Supported          |
 | ------------------ | ------------------ |
-| 1.2.2              | :white_check_mark: |
-| 1.2.1              | :white_check_mark: (Linux Only) |
+| 1.3.0              | :white_check_mark: |
 | Earlier Releases   | :x:                |
