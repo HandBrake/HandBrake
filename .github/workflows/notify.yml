@@ -2,7 +2,7 @@ name: "Push Notification"
 on: [push, pull_request]
 
 jobs:
-  test:
+  Send_IRC_Notification:
     runs-on: ubuntu-latest
     steps:
       - name: Handle Commit
@@ -16,8 +16,7 @@ jobs:
           tls: true
           message: |
             ${{ github.actor }} pushed ${{ github.event.ref }} ${{ github.event.compare }}
-            ${{ join(github.event.commits.*.message) }}
-            
+            ${{ join(github.event.commits.*.message) }}     
       - name: Handle Pull Request
         uses: rectalogic/notify-irc@v1
         if: github.event_name == 'pull_request' && github.repository == 'HandBrake/HandBrake'
@@ -28,4 +27,4 @@ jobs:
           port: 6697
           tls: true
           message: |
-            ${{ github.actor }} opened PR ${{ github.event.html_url }}
+            ${{ github.actor }} opened or updated a Pull Request ${{ github.event.html_url }}
