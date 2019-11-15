@@ -3,7 +3,6 @@ name: Linux Build
 on: [push, pull_request]
 
 jobs:
-  
   handle_forks:
     name: Forked Repo
     runs-on: ubuntu-latest
@@ -12,7 +11,7 @@ jobs:
     - name: Print Warning
       run: |
         echo "Builds are disabled for forked repositories."      
-        
+
   build:
     name: Build on Ubuntu
     runs-on: ubuntu-latest
