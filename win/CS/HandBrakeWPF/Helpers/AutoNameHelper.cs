@@ -139,10 +139,13 @@ namespace HandBrakeWPF.Helpers
                 return false;
             }
 
-            // If there is an auto name path, use it...
-            return userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith(Constants.SourcePath) ||
-                (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains(Constants.SourceFolderName) ||
-                 Directory.Exists(userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim()));
+            if (string.IsNullOrEmpty(
+                    userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim()))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private static string GenerateDestinationFileName(EncodeTask task, IUserSettingService userSettingService, string sourceName, string dvdTitle, string combinedChapterTag, string createDate, string createTime)
