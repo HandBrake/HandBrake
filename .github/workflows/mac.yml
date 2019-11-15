@@ -6,7 +6,7 @@ jobs:
   build:
     name: Build on macOS
     runs-on: macOS-latest
-
+    if: github.repository == 'HandBrake/HandBrake'
     steps:
     - uses: actions/checkout@master
 

@@ -6,6 +6,7 @@ jobs:
   build_mingw:
     name: CLI / LibHB
     runs-on: ubuntu-latest
+    if: github.repository == 'HandBrake/HandBrake'
     steps:
     - uses: actions/checkout@master
     
@@ -45,6 +46,7 @@ jobs:
   build_gui:
     name: Windows UI
     runs-on: windows-latest
+    if: github.repository == 'HandBrake/HandBrake'
     needs: build_mingw
     steps:
     - uses: actions/checkout@master
