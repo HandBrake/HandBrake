@@ -486,6 +486,7 @@
     <EmbeddedResource Include="Properties\ResourcesTooltips.de.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.es.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.fr.resx" />
+    <EmbeddedResource Include="Properties\ResourcesTooltips.ko.resx" />
     <EmbeddedResource Include="Properties\ResourcesTooltips.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ResourcesTooltips.Designer.cs</LastGenOutput>
