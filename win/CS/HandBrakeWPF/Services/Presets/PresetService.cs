@@ -18,6 +18,7 @@ namespace HandBrakeWPF.Services.Presets
     using System.IO;
     using System.Linq;
     using System.Windows;
+    using System.Windows.Documents;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Json.Presets;
@@ -56,7 +57,6 @@ namespace HandBrakeWPF.Services.Presets
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
         private ILog log = LogService.GetLogger();
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PresetService"/> class.
@@ -725,8 +725,14 @@ namespace HandBrakeWPF.Services.Presets
                     this.UpdateBuiltInPresets(); // Update built-in presets stores the presets locally, so just return.
                     return;
                 }
-
+                
                 this.ProcessPresetList(container);
+
+                PresetVersion presetVersion = HandBrakePresetService.GetCurrentPresetVersion();
+                if (container.VersionMajor != presetVersion.Major || container.VersionMinor != presetVersion.Minor || container.VersionMicro != presetVersion.Micro)
+                {
+                    this.UpdateBuiltInPresets();
+                }
             }
             catch (Exception ex)
             {
