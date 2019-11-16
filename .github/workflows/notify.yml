@@ -5,12 +5,6 @@ jobs:
   Send_IRC_Notification:
     runs-on: ubuntu-latest
     steps:
-      - name: Dump Data
-        run: |
-          echo ${{ github.event.html_url }}
-          echo ${{ github.event }}
-          echo ${{ github }} 
-      
       - name: Handle Commit
         uses: rectalogic/notify-irc@v1
         if: github.event_name == 'push' && github.repository == 'HandBrake/HandBrake'
