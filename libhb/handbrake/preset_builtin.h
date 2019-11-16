@@ -8982,7 +8982,7 @@ const char hb_builtin_presets_json[] =
 "            \"x264Option\": \"\", \n"
 "            \"x264UseAdvancedOptions\": false\n"
 "        }, \n"
-"        \"VersionMajor\": 40, \n"
+"        \"VersionMajor\": 41, \n"
 "        \"VersionMicro\": 0, \n"
 "        \"VersionMinor\": 0\n"
 "    }\n"
