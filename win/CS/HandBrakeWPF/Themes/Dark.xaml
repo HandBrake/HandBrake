@@ -30,6 +30,12 @@
         <Setter Property="Foreground" Value="White" />
     </Style>
 
+    <!-- Tooltip -->
+    <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
+        <Setter Property="Background" Value="{DynamicResource Ui.Mid}" />
+        <Setter Property="HasDropShadow" Value="True" />
+    </Style>
+
     <!-- Toolbar -->
     <Style TargetType="ToolBar">
         <Setter Property="Background" Value="Black" />
