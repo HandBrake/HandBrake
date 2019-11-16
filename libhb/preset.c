@@ -2515,6 +2515,36 @@ static hb_value_t * import_hierarchy_29_0_0(hb_value_t *presets)
     return hb_value_dup(presets);
 }
 
+static void und_to_any(hb_value_array_t * list)
+{
+    if (list == NULL)
+    {
+        return;
+    }
+
+    int count = hb_value_array_len(list);
+    int ii;
+    for (ii = 0; ii < count; ii++)
+    {
+        const char *lang;
+        lang = hb_value_get_string(hb_value_array_get(list, ii));
+        if (!strcasecmp(lang, "und"))
+        {
+            hb_value_array_set(list, ii, hb_value_string("any"));
+        }
+    }
+}
+
+static void import_lang_list_40_0_0(hb_value_t *preset)
+{
+    hb_value_array_t * lang_list;
+
+    lang_list = hb_dict_get(preset, "AudioLanguageList");
+    und_to_any(lang_list);
+    lang_list = hb_dict_get(preset, "SubtitleLanguageList");
+    und_to_any(lang_list);
+}
+
 static void import_deblock_35_0_0(hb_value_t *preset)
 {
     int deblock = hb_dict_get_int(preset, "PictureDeblock");
@@ -3154,9 +3184,16 @@ static void import_video_0_0_0(hb_value_t *preset)
     }
 }
 
+static void import_40_0_0(hb_value_t *preset)
+{
+    import_lang_list_40_0_0(preset);
+}
+
 static void import_35_0_0(hb_value_t *preset)
 {
     import_deblock_35_0_0(preset);
+
+    import_40_0_0(preset);
 }
 
 static void import_25_0_0(hb_value_t *preset)
@@ -3274,6 +3311,11 @@ static int preset_import(hb_value_t *preset, int major, int minor, int micro)
         else if (cmpVersion(major, minor, micro, 35, 0, 0) <= 0)
         {
             import_35_0_0(preset);
+            result = 1;
+        }
+        else if (cmpVersion(major, minor, micro, 40, 0, 0) <= 0)
+        {
+            import_40_0_0(preset);
             result = 1;
         }
         preset_clean(preset, hb_preset_template);
