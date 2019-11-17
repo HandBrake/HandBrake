@@ -74,5 +74,6 @@ namespace HandBrakeWPF
         public const string WhenDonePerformActionImmediately = "WhenDonePerformActionImmediately";
         public const string UseDarkTheme = "UseDarkTheme";
         public const string PreviewRotationFlip = "PreviewRotationFlip";
+        public const string AlwaysUseDefaultPath = "AlwaysUseDefaultPath";
     }
 }

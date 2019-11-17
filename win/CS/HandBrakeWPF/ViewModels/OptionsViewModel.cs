@@ -107,6 +107,7 @@ namespace HandBrakeWPF.ViewModels
         private bool showPrePostFilenameBox;
         private bool whenDonePerformActionImmediately;
         private bool useDarkTheme;
+        private bool alwaysUseDefaultPath;
 
         #endregion
 
@@ -685,6 +686,21 @@ namespace HandBrakeWPF.ViewModels
                 if (value == this.showPrePostFilenameBox) return;
                 this.showPrePostFilenameBox = value;
                 this.NotifyOfPropertyChange(() => this.ShowPrePostFilenameBox);
+            }
+        }
+
+        public bool AlwaysUseDefaultPath
+        {
+            get => this.alwaysUseDefaultPath;
+            set
+            {
+                if (value == this.alwaysUseDefaultPath)
+                {
+                    return;
+                }
+
+                this.alwaysUseDefaultPath = value;
+                this.NotifyOfPropertyChange(() => this.AlwaysUseDefaultPath);
             }
         }
 
@@ -1476,6 +1492,8 @@ namespace HandBrakeWPF.ViewModels
             this.SelectedCollisionBehaviour = this.userSettingService.GetUserSetting<int>(UserSettingConstants.AutonameFileCollisionBehaviour);
             this.PrePostFilenameText = this.userSettingService.GetUserSetting<string>(UserSettingConstants.AutonameFilePrePostString);
 
+            this.AlwaysUseDefaultPath = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.AlwaysUseDefaultPath);
+
             // #############################
             // Picture Tab
             // #############################
@@ -1621,6 +1639,7 @@ namespace HandBrakeWPF.ViewModels
             this.userSettingService.SetUserSetting(UserSettingConstants.FileOverwriteBehaviour, this.SelectedOverwriteBehaviour);
             this.userSettingService.SetUserSetting(UserSettingConstants.AutonameFileCollisionBehaviour, this.SelectedCollisionBehaviour);
             this.userSettingService.SetUserSetting(UserSettingConstants.AutonameFilePrePostString, this.PrePostFilenameText);
+            this.userSettingService.SetUserSetting(UserSettingConstants.AlwaysUseDefaultPath, this.AlwaysUseDefaultPath);
 
             /* Previews */
             this.userSettingService.SetUserSetting(UserSettingConstants.VLCPath, this.VLCPath);

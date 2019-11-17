@@ -464,6 +464,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When enabled time the auto name generates a new filename, it will use the default path. When disabled, it will use the path in the destination box on the main window..
+        /// </summary>
+        public static string OptionsView_AlwaysUseDefaultPath {
+            get {
+                return ResourceManager.GetString("OptionsView_AlwaysUseDefaultPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Anamorphic allows arbitrary storage dimensions while preserving the original aspect during playback.
         ///
         ///Off disables anamorphic. Video storage dimensions and display dimensions will be identical. Only useful for compatibility with certain legacy devices.

@@ -2172,4 +2172,7 @@ Where supported, any user presets will have been imported.</value>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
     <value>Weekly</value>
   </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Always use the default path for each new name generated.</value>
+  </data>
 </root>
