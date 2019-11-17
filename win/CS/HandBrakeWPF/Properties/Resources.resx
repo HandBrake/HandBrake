@@ -2175,4 +2175,7 @@ Where supported, any user presets will have been imported.</value>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>A new version of HandBrake is available!</value>
   </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Always use the default path for each new name generated.</value>
+  </data>
 </root>

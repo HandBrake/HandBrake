@@ -13,6 +13,7 @@ namespace HandBrakeWPF.Helpers
     using System.IO;
     using System.Linq;
     using System.Reflection;
+    using System.Runtime.CompilerServices;
 
     using Caliburn.Micro;
 
@@ -47,27 +48,9 @@ namespace HandBrakeWPF.Helpers
 
             if (task.Title != 0)
             {
-                // Get the Source Name and remove any invalid characters
+                // Get the Source Name and remove any invalid characters and clean it per users options.
                 string sourceName = Path.GetInvalidFileNameChars().Aggregate(sourceOrLabelName, (current, character) => current.Replace(character.ToString(), string.Empty));
-
-                // Remove Underscores
-                if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore))
-                {
-                    sourceName = sourceName.Replace("_", " ");
-                }
-
-                if (userSettingService.GetUserSetting<bool>(UserSettingConstants.RemovePunctuation))
-                {
-                    sourceName = sourceName.Replace("-", string.Empty);
-                    sourceName = sourceName.Replace(",", string.Empty);
-                    sourceName = sourceName.Replace(".", string.Empty); 
-                }
-                  
-                // Switch to "Title Case"
-                if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameTitleCase))
-                {
-                    sourceName = sourceName.ToTitleCase();
-                }
+                sourceName = CleanupSourceName(sourceName, userSettingService);
 
                 // Get the Selected Title Number
                 string dvdTitle = task.Title.ToString();
@@ -81,32 +64,8 @@ namespace HandBrakeWPF.Helpers
                     combinedChapterTag = chapterStart + "-" + chapterFinish;
                 }
 
-                // Local method to check if we have a creation time in the meta data. If not, fall back to source file creation time.
-                DateTime obtainCreateDateObject()
-                {
-                    var rd = task.MetaData.ReleaseDate;
-                    if (DateTime.TryParse(rd, out var d))
-                    {
-                        return d;
-                    }
-
-                    try
-                    {
-                        return File.GetCreationTime(task.Source);
-                    }
-                    catch (Exception e)
-                    {
-                        if (e is UnauthorizedAccessException || e is PathTooLongException || e is NotSupportedException)
-                        {
-                            // Suspect the most likely concerns trying to grab the creation date in which we would want to swallow exception.
-                            return default(DateTime);
-                        }
-
-                        throw e;                            
-                    }
-                }
-
-                var creationDateTime = obtainCreateDateObject();
+                // Creation Date / Time
+                var creationDateTime = ObtainCreateDateObject(task);
                 string createDate = creationDateTime.Date.ToShortDateString().Replace('/', '-');
                 string createTime = creationDateTime.ToString("HH-mm"); 
 
@@ -146,6 +105,29 @@ namespace HandBrakeWPF.Helpers
             }
 
             return true;
+        }
+
+        private static string CleanupSourceName(string sourceName, IUserSettingService userSettingService)
+        {
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameRemoveUnderscore))
+            {
+                sourceName = sourceName.Replace("_", " ");
+            }
+
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.RemovePunctuation))
+            {
+                sourceName = sourceName.Replace("-", string.Empty);
+                sourceName = sourceName.Replace(",", string.Empty);
+                sourceName = sourceName.Replace(".", string.Empty);
+            }
+
+            // Switch to "Title Case"
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.AutoNameTitleCase))
+            {
+                sourceName = sourceName.ToTitleCase();
+            }
+
+            return sourceName;
         }
 
         private static string GenerateDestinationFileName(EncodeTask task, IUserSettingService userSettingService, string sourceName, string dvdTitle, string combinedChapterTag, string createDate, string createTime)
@@ -214,29 +196,34 @@ namespace HandBrakeWPF.Helpers
 
         private static string GetAutonamePath(IUserSettingService userSettingService, EncodeTask task, string sourceName)
         {
-            string autoNamePath = string.Empty;
+            string autoNamePath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim();
 
-            // If there is an auto name path, use it...
+            // If enabled, use the current Destination path.
+            if (!userSettingService.GetUserSetting<bool>(UserSettingConstants.AlwaysUseDefaultPath) && !string.IsNullOrEmpty(task.Destination))
+            {
+                string path = Path.GetDirectoryName(task.Destination);
+                if (!string.IsNullOrEmpty(path))
+                {
+                    return path;
+                }
+            }
+
+            // Handle {source_path} 
             if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith("{source_path}") && !string.IsNullOrEmpty(task.Source))
             {
                 string savedPath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().Replace("{source_path}\\", string.Empty).Replace("{source_path}", string.Empty);
-
-                string directory = Directory.Exists(task.Source)
-                                       ? task.Source
-                                       : Path.GetDirectoryName(task.Source);
+                string directory = Directory.Exists(task.Source) ? task.Source : Path.GetDirectoryName(task.Source);
                 autoNamePath = Path.Combine(directory, savedPath);
             }
-            else
-            {
-                autoNamePath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim();
-            }
 
+            // Handle {source}
             if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source}") && !string.IsNullOrEmpty(task.Source))
             {
                 sourceName = Path.GetInvalidPathChars().Aggregate(sourceName, (current, character) => current.Replace(character.ToString(), string.Empty));
                 autoNamePath = autoNamePath.Replace("{source}", sourceName);
             }
 
+            // Handle {source_folder_name}
             if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Contains("{source_folder_name}") && !string.IsNullOrEmpty(task.Source))
             {
                 // Second Case: We have a Path, with "{source_folder}" in it, therefore we need to replace it with the folder name from the source.
@@ -303,6 +290,30 @@ namespace HandBrakeWPF.Helpers
             }
 
             return autoNamePath;
+        }
+
+        private static DateTime ObtainCreateDateObject(EncodeTask task)
+        {
+            var rd = task.MetaData.ReleaseDate;
+            if (DateTime.TryParse(rd, out var d))
+            {
+                return d;
+            }
+
+            try
+            {
+                return File.GetCreationTime(task.Source);
+            }
+            catch (Exception e)
+            {
+                if (e is UnauthorizedAccessException || e is PathTooLongException || e is NotSupportedException)
+                {
+                    // Suspect the most likely concerns trying to grab the creation date in which we would want to swallow exception.
+                    return default(DateTime);
+                }
+
+                throw e;
+            }
         }
     }
 }
