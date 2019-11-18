@@ -46,7 +46,7 @@ Windows UI:
 - [handbrake.fr](https://handbrake.fr) web hosting courtesy of Eric Petit
 - [Freenode IRC](https://freenode.net/)
 - [GitHub](https://github.com)
-- [JetBrains ReSharper](https://www.jetbrains.com/resharper/)
+- JetBrains](https://www.jetbrains.com/?from=HandBrake) Thanks for providing an All Products License!
 - [phpBB](http://www.phpbb.com/)
 
 
