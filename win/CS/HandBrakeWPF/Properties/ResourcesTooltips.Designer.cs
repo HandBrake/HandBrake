@@ -464,7 +464,8 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When enabled time the auto name generates a new filename, it will use the default path. When disabled, it will use the path in the destination box on the main window..
+        ///   Looks up a localized string similar to When enabled the auto name system will always use the default path. 
+        ///When disabled, it will use the path in the destination box on the main window if populated, otherwise it will use the default path..
         /// </summary>
         public static string OptionsView_AlwaysUseDefaultPath {
             get {
