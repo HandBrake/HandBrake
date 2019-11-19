@@ -991,12 +991,12 @@ static int hb_rendersub_post_init( hb_filter_object_t * filter, hb_job_t *job )
         case VOBSUB:
         {
             return vobsub_post_init( filter, job );
-        } break;
+        }
 
         case SSASUB:
         {
             return ssa_post_init( filter, job );
-        } break;
+        }
 
         case IMPORTSRT:
         case IMPORTSSA:
@@ -1004,25 +1004,24 @@ static int hb_rendersub_post_init( hb_filter_object_t * filter, hb_job_t *job )
         case TX3GSUB:
         {
             return textsub_post_init( filter, job );
-        } break;
+        }
 
         case CC608SUB:
         {
             return cc608sub_post_init( filter, job );
-        } break;
+        }
 
         case PGSSUB:
         {
             return pgssub_post_init( filter, job );
-        } break;
+        }
 
         default:
         {
             hb_log("rendersub: unsupported subtitle format %d", pv->type );
             return 1;
-        } break;
+        }
     }
-    return 0;
 }
 
 static int hb_rendersub_work( hb_filter_object_t * filter,
@@ -1035,12 +1034,12 @@ static int hb_rendersub_work( hb_filter_object_t * filter,
         case VOBSUB:
         {
             return vobsub_work( filter, buf_in, buf_out );
-        } break;
+        }
 
         case SSASUB:
         {
             return ssa_work( filter, buf_in, buf_out );
-        } break;
+        }
 
         case IMPORTSRT:
         case IMPORTSSA:
@@ -1049,18 +1048,18 @@ static int hb_rendersub_work( hb_filter_object_t * filter,
         case TX3GSUB:
         {
             return textsub_work( filter, buf_in, buf_out );
-        } break;
+        }
 
         case PGSSUB:
         {
             return pgssub_work( filter, buf_in, buf_out );
-        } break;
+        }
 
         default:
         {
             hb_error("rendersub: unsupported subtitle format %d", pv->type );
             return 1;
-        } break;
+        }
     }
 }
 

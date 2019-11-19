@@ -383,7 +383,7 @@ end_element(
             if (pd->key) free(pd->key);
             pd->key = strdup(value);
             return;
-        } break;
+        }
         case P_DICT:
         {
             queue_pop_head(pd->stack);
