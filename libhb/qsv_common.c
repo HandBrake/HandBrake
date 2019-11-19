@@ -2865,6 +2865,8 @@ enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat
             }
             return AV_PIX_FMT_QSV;
         }
+
+        pix_fmts++;
     }
 
     hb_error("hb_qsv_get_format: the QSV pixel format not offered in get_format()");
