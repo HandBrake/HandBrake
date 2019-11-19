@@ -33,6 +33,9 @@ static const char * const hb_h265_profile_names_16bit[]     = {
 static const char * const hb_h265_level_names[]             = {
     "auto", "1.0", "2.0", "2.1", "3.0", "3.1", "4.0", "4.1",
     "5.0", "5.1", "5.2", "6.0", "6.1", "6.2",  NULL, };
+static const char * const hb_h265_level_names2[]            = {
+    "auto", "10", "20", "21", "30", "31", "40", "41",
+    "50", "51", "52", "60", "61", "62",  NULL, };
 static const int          hb_h265_level_values[]            = {
     -1,  30,  60,  63,  90,  93, 120, 123,
     150, 153, 156, 180, 183, 186,   0, };

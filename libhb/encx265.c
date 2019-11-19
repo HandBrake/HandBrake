@@ -93,9 +93,11 @@ int apply_h265_level(hb_work_private_t *pv,  x265_param *param,
     int i;
     for (i = 1; hb_h265_level_values[i]; i++)
     {
-        if (!strcmp(hb_h265_level_names[i], h265_level))
+        if (!strcmp(hb_h265_level_names[i], h265_level) ||
+            !strcmp(hb_h265_level_names2[i], h265_level))
         {
-            return param_parse(pv, param, "level-idc", h265_level);
+            return param_parse(pv, param, "level-idc",
+                    hb_h265_level_names2[i]);
         }
     }
 
