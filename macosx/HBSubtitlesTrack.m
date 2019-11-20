@@ -372,7 +372,7 @@ static NSArray *_languagesArray = nil;
     self = [super init];
 
     decodeInteger(_sourceTrackIdx); if (_sourceTrackIdx < 0) { goto fail; }
-    decodeInt(_type); if (_type < VOBSUB || _type > SRTSUB) { goto fail; }
+    decodeInt(_type); if (_type < VOBSUB || _type > IMPORTSSA) { goto fail; }
     decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
 
     decodeBool(_forcedOnly);
