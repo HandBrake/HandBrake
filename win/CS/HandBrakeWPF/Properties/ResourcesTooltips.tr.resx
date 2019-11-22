@@ -462,4 +462,8 @@ Lapsharp'ın Hareketli ayarı, 1-/4-/8-/16-bit 2 boyutlu oyunlar için yararlıd
   <data name="MainView_StartPoint" xml:space="preserve">
     <value>Bu aralığın başlangıç noktası.</value>
   </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Etkinleştirildiğinde, otomatik ad sistemi her zaman varsayılan yolu kullanır.
+Devre dışı bırakıldığında, doldurulursa ana penceredeki hedef kutusundaki yolu kullanır, aksi takdirde varsayılan yolu kullanır.</value>
+  </data>
 </root>

@@ -458,4 +458,8 @@ Lapsharp 预设 Sprite 优化适用于 1-/4-/8-/16-bit 2D游戏。Sprite使用4�
   <data name="MainView_StartPoint" xml:space="preserve">
     <value>此范围的起点。</value>
   </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>启用时，自动名称系统将始终使用默认路径。
+禁用时，如果已填充，它将使用主窗口上“目标”框中的路径，否则将使用默认路径。</value>
+  </data>
 </root>

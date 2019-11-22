@@ -339,9 +339,7 @@ Canlı güncelleme seçenekleri: {source} {title} {chapters}
 Canlı olmayan Seçenekler: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (bunlar yalnızca yeni bir kaynak tararsanız, başlığı veya bölümleri değiştirirseniz değişir)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Mevcut ek Seçenekler: {source_path} veya {source_folder_name} 
-
-Her ikisi de aynı anda değil!</value>
+    <value>Mevcut ek Seçenekler: {source_path} veya {source_folder_name} veya {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
     <value>Kaynak dosyayla aynı yol ve dosya adına sahip bir dosyayı kodlayamazsınız. Lütfen hedef dosya adını kaynak dosyayla eşleşmeyecek şekilde güncelleyin.</value>
@@ -1912,7 +1910,7 @@ Kalan Süre: {5:hh\:mm\:ss},  Geçen: {6:hh\:mm\:ss} {7}</value>
 Canlı Olmayan Seçenekler: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Bunlar yalnızca yeni bir kaynak tararsanız, başlığı veya bölümleri değiştirirseniz değişir)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Kullanılabilir Seçenekler: {source_path} {source_folder_name} {source}</value>
+    <value>Mevcut Seçenekler: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
     <value>Dosyanın üzerine yazılmasını isteyin</value>
@@ -2173,5 +2171,8 @@ Desteklendiğinde, herhangi bir kullanıcı ön ayarı içe aktarılmış olacak
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
     <value>Haftalık</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Üretilen her yeni ad için her zaman varsayılan yolu kullanın.</value>
   </data>
 </root>

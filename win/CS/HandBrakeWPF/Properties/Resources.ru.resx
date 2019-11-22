@@ -2171,4 +2171,7 @@ FPS: {3:000.0},  Сред FPS: {4:000.0}
   <data name="UpdateCheck_Weekly" xml:space="preserve">
     <value>Еженедельно</value>
   </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Всегда использовать путь по умолчанию для каждого нового сгенерированного имени.</value>
+  </data>
 </root>

@@ -121,7 +121,7 @@
     <value>Deblock은 품질이 낮은 비디오 압축으로 인해 발생하는 고르지 않은 아티팩트를 줄입니다.</value>
   </data>
   <data name="FilterView_DecombDeinterlace" xml:space="preserve">
-    <value>decomb 또는 비인터레이스(Deinterlace) 필터 옵션을 선택하십시오.
+    <value>decomb 또는 deinterlace 필터 옵션을 선택하십시오.
 
 decomb 필터는 선택적으로 인터레이스된 프레임을 비인터레이스로 바꾸어줍니다. 
 이것은 인터레이스 되지 않은 프레임의 품질을 보존합니다.
@@ -356,11 +356,11 @@ HQDN3D 기본값: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal
 - Sprite는 1-/4-/8-/16-비트의 2-차원 게임에 대해 유용합니다. Sprite는 고화질 비디오용으로 설계되지 않았습니다.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>비인터레이스(Deinterlace)는 comb 아티팩트를 그림에서 제거합니다.
+    <value>Deinterlace는 comb 아티팩트를 그림에서 제거합니다.
 
-Yadif는 유명하고 빠른 비인터레이서(deinterlacer) 입니다.
+Yadif는 유명하고 빠른 deinterlacer 입니다.
 
-Decomb은 속도와 품질을 위해 복수의 보간 알고리즘을 전환합니다.</value>
+Decomb은 속도와 품질을 위해 복수의 interpolation 알고리즘을 전환합니다.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
     <value>사용자 설정 비인터레이스 파라미터.
@@ -388,7 +388,7 @@ Bob는 문제가 있다고 인지된 해상도에 대한 모션을 더욱 잘 �
     <value>가로축에서 그림을 뒤집습니다.</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
-    <value>인터레이스 검출(Interlace Detection)이 활성화된 경우 비인터레이스 필터(Deinterlace filter)가 인터레이스된 비디오 프레임만 처리 할 수 있도록 합니다. </value>
+    <value>Interlace Detection이 활성화된 경우 Deinterlace filter가 interlace된 비디오 프레임만 처리 할 수 있도록 합니다. </value>
   </data>
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
     <value>사용자 설정 인터레이스 검출 파라미터.
@@ -409,16 +409,16 @@ Bob는 문제가 있다고 인지된 해상도에 대한 모션을 더욱 잘 �
   <data name="FilterView_CustomSharpenParams" xml:space="preserve">
     <value>사용자 설정 선명도 파라미터.
 
-언샵 구문: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+Unsharp 구문: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
 
-언샵 기본값: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+Unsharp 기본값: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
 
 Lapsharp 구문: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
 
 Lapsharp 기본값: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>Sharpening(선명화)은 디테일, 특히 가장자리의 외관을 향상시킵니다. 지나치게 높은 선명도 설정은 Ringing artifact를 만들고 잡음을 개선하여 화면 품질을 손상시킬 수 있으며, 이는 압축 효율성을 저하시킬 수 있습니다.
+    <value>Sharpening은 디테일, 특히 가장자리의 외관을 향상시킵니다. 지나치게 높은 선명도 설정은 Ringing artifact를 만들고 잡음을 개선하여 화면 품질을 손상시킬 수 있으며, 이는 압축 효율성을 저하시킬 수 있습니다.
 
 Unsharp은 일반적인 용도의 unsharp masking 필터입니다. 화질을 흐리게 하여 선명해지면, 흐려진 화질의 화면과 원본 화면의 차이를 계산합니다.
 
@@ -453,5 +453,9 @@ Lapsharp's Sprite 설정은 1-/4-/8-/16-비트의 2-차원 게임에 대해 유�
   </data>
   <data name="MainView_StartPoint" xml:space="preserve">
     <value>이 범위의 시작점.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>자동 이름 완성 기능을 활성화 시, 기본 저장 경로를 사용할 것입니다. 
+비활성화 시, 이름을 입력하였다면, 기본 윈도우의 대상 경로를 사용하게 되며, 입력하지 않았다면, 기본 경로를 사용하게 됩니다.</value>
   </data>
 </root>
