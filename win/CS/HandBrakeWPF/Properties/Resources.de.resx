@@ -2160,4 +2160,7 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
   <data name="UpdateCheck_Weekly" xml:space="preserve">
     <value>Wöchentlich</value>
   </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Verwende immer den Standardpfad für jeden neu erstellten Namen.</value>
+  </data>
 </root>

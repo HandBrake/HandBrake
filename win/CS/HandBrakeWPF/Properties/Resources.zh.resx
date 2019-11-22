@@ -290,7 +290,7 @@ GNU通用公共许可证的条款重新分发和/或修改它；无论你依据�
     <value>问题</value>
   </data>
   <data name="State_Ready" xml:space="preserve">
-    <value>准备</value>
+    <value>准备就绪</value>
   </data>
   <data name="Updated" xml:space="preserve">
     <value>更新</value>
@@ -1235,7 +1235,7 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
     <value>最小化到系统托盘(需要重启)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>DVD和蓝光标题的最短持续时间（秒）。将跳过较短的标题：</value>
+    <value>DVD和蓝光标题的最短持续时间"秒"。将跳过较短的标题：</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
     <value>MP4 文件扩展名：</value>
@@ -1574,7 +1574,7 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
     <value>打开单个视频文件。</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>源选取</value>
+    <value>选择源</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
     <value>时长：</value>
@@ -2160,5 +2160,8 @@ FPS: {3:000.0},  平均FPS: {4:000.0}
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
     <value>每周</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>始终为生成的每个新名称使用默认路径。</value>
   </data>
 </root>

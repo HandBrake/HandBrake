@@ -1334,7 +1334,7 @@ FPS: {3:000.0}, 평균 FPS: {4:000.0}
     <value>맨 아래</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>절단</value>
+    <value>자르기</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
     <value>사용자 설정</value>
@@ -1730,7 +1730,7 @@ FPS: {3:000.0}, 평균 FPS: {4:000.0}
     <value>HandBrake에 대해서</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>또는 파일이나 폴더를 이곳으로 드롭하십시오 ...</value>
+    <value>파일이나 폴더를 여기에 드롭하십시오...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
     <value>도움말</value>
@@ -2167,5 +2167,8 @@ Non-Live 옵션: {date} {time} {creation-date} {creation-time} {quality} {bitrat
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
     <value>매 주</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>각 생성된 새로운 이름에 항상 기본 경로를 사용합니다.</value>
   </data>
 </root>

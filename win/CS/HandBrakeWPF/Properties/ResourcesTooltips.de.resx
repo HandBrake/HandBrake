@@ -385,9 +385,9 @@ Default (Standard): ist eine gute Balance zwischen Qualität und Geschwindigkeit
 
 Skip Spatial Check: Yadif überspringt einige Korrekturen mit geringem Geschwindigkeitsgewinn.
 
-EEDI2 benutzt einen langsameren, Algorithmus hoher Qualität für das Decomb. Für die meisten schwierigen Quellen geeignet.
+EEDI2: benutzt einen langsameren Algorithmus hoher Qualität für das Decomb. Für die meisten schwierigen Quellen geeignet.
 
-Bob versucht besser Bewegungen zu erhalten, mit kleinen Einbußen in der Auflösung.</value>
+Bob: versucht besser Bewegungen zu erhalten, mit kleinen Einbußen in der Auflösung.</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
     <value>Dreht (spiegelt) das Bild an der horizontalen Achse.</value>
@@ -458,5 +458,9 @@ Lapsharp's Abstimmung Sprite: Ist nützlich für 1-/4-/8-/16-bit 2D-Spiele. Spri
   </data>
   <data name="MainView_StartPoint" xml:space="preserve">
     <value>Der Startpunkt für diesen Bereich.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Wenn aktiviert, verwendet die automatische Dateibenennung steht den Standardpfad.
+Wenn nicht aktiviert, wird der Pfad im Zielfeld des Hauptfensters verwendet, wenn er ausgefüllt ist, andernfalls wird der Standardpfad verwendet.</value>
   </data>
 </root>
