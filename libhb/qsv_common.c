@@ -558,7 +558,7 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
             status = MFXVideoENCODE_Query(session, &inputParam, &videoParam);
             if (status >= MFX_ERR_NONE)
             {
-#if 1
+#if 0
                 // testing code that could come in handy
                 fprintf(stderr, "-------------------\n");
                 fprintf(stderr, "MBBRC:         In=0x%02X Out=0x%02X\n",     extCodingOption2.MBBRC, extCodingOption2Out.MBBRC);
@@ -650,7 +650,7 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
             /*
              * Determine whether mfxExtCodingOption2 and its fields for lookahead are supported
              */
-            if (HB_CHECK_MFX_VERSION(version, 1, 6)) // && info->capabilities & HB_QSV_CAP_RATECONTROL_LA)
+            if (HB_CHECK_MFX_VERSION(version, 1, 8) && (info->capabilities & HB_QSV_CAP_RATECONTROL_LA))
             {
                 init_video_param(&inputParam);
                 inputParam.mfx.CodecId = info->codec_id;
@@ -676,21 +676,15 @@ static int query_capabilities(mfxSession session, mfxVersion version, hb_qsv_inf
                 videoParam.NumExtParam = 1;
 
                 status = MFXVideoENCODE_Query(session, &inputParam, &videoParam);
-                if (status >= MFX_ERR_NONE)
+                if (status >= MFX_ERR_NONE && inputParam.mfx.RateControlMethod == videoParam.mfx.RateControlMethod)
                 {
-    #if 1
+    #if 0
                     fprintf(stderr, "LookAheadDS:   In=%4"PRIu16" Out=%4"PRIu16"\n", extCodingOption2.LookAheadDS, extCodingOption2Out.LookAheadDS);
     #endif
                     if ((MFX_LOOKAHEAD_DS_4x | MFX_LOOKAHEAD_DS_2x) & extCodingOption2Out.LookAheadDS)
                     {
                          info->capabilities |= HB_QSV_CAP_OPTION2_LA_DOWNS;
                     }
-                }
-                else
-                {
-                     fprintf(stderr,
-                             "hb_qsv_info_init: mfxExtCodingOption2 check failed (0x%"PRIX32", 0x%"PRIX32", %d) for lookahead rate control\n",
-                             info->codec_id, info->implementation, status);
                 }
             }
 
