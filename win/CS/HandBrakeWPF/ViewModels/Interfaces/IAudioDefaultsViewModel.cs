@@ -23,6 +23,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// </summary>
         AudioBehaviours AudioBehaviours { get; }
 
+        bool IsApplied { get; }
+
         /// <summary>
         /// The setup languages.
         /// </summary>
@@ -38,5 +40,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The refresh task.
         /// </summary>
         void RefreshTask();
+
+        void ResetApplied();
     }
 }

@@ -56,6 +56,8 @@ namespace HandBrakeWPF.ViewModels
 
         #region Properties
 
+        public bool IsApplied { get; set; }
+
         /// <summary>
         /// Gets CharacterCodes.
         /// </summary>
@@ -213,6 +215,11 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public void ResetApplied()
+        {
+            this.IsApplied = false;
+        }
+
         /// <summary>
         /// The setup languages.
         /// </summary>
@@ -221,6 +228,9 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void SetupLanguages(SubtitleBehaviours behaviours)
         {
+            // Reset
+            this.IsApplied = false;
+
             // Step 1, Set the behaviour mode
             this.SubtitleBehaviours.SelectedBehaviour = SubtitleBehaviourModes.None;
             this.SubtitleBehaviours.SelectedBurnInBehaviour = SubtitleBurnInBehaviourModes.None;

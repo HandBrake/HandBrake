@@ -22,6 +22,8 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// </summary>
         SubtitleBehaviours SubtitleBehaviours { get; }
 
+        bool IsApplied { get; }
+
         /// <summary>
         /// The setup languages.
         /// </summary>
@@ -37,5 +39,7 @@ namespace HandBrakeWPF.ViewModels.Interfaces
         /// The behaviours.
         /// </param>
         void SetupLanguages(SubtitleBehaviours behaviours);
+
+        void ResetApplied();
     }
 }

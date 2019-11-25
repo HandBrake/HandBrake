@@ -130,6 +130,8 @@ namespace HandBrakeWPF.ViewModels
             }
         }
 
+        public bool IsApplied { get; set; }
+
         /// <summary>
         /// Gets SelectedLangauges.
         /// </summary>
@@ -430,6 +432,11 @@ namespace HandBrakeWPF.ViewModels
             this.AudioBehaviours.SelectedLangauges.Clear();
         }
 
+        public void ResetApplied()
+        {
+            this.IsApplied = false;
+        }
+
         #endregion
 
         #region Methods
@@ -446,6 +453,7 @@ namespace HandBrakeWPF.ViewModels
         public void Setup(Preset preset, EncodeTask task)
         {
             // Reset
+            this.IsApplied = false;
             this.AudioBehaviours = new AudioBehaviours();
 
             // Setup for this Encode Task.
