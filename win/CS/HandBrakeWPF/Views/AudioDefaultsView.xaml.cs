@@ -12,6 +12,8 @@ namespace HandBrakeWPF.Views
     using System.Windows;
     using System.Windows.Controls;
 
+    using HandBrakeWPF.ViewModels;
+
     /// <summary>
     /// Interaction logic for AudioDefaultsView.xaml
     /// </summary>
@@ -27,6 +29,7 @@ namespace HandBrakeWPF.Views
 
         private void Apply_OnClick(object sender, RoutedEventArgs e)
         {
+            ((AudioDefaultsViewModel)DataContext).IsApplied = true;
             this.Close();
         }
     }

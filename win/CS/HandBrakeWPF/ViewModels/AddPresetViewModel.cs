@@ -307,7 +307,9 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void EditAudioDefaults()
         {
-            if (this.windowManager.ShowDialog(this.audioDefaultsViewModel) == true)
+            this.audioDefaultsViewModel.ResetApplied();
+            bool? result = this.windowManager.ShowDialog(this.audioDefaultsViewModel);
+            if (audioDefaultsViewModel.IsApplied)
             {
                 this.Preset.AudioTrackBehaviours = this.audioDefaultsViewModel.AudioBehaviours.Clone();
             }
@@ -318,10 +320,12 @@ namespace HandBrakeWPF.ViewModels
         /// </summary>
         public void EditSubtitleDefaults()
         {
+            this.subtitlesDefaultsViewModel.ResetApplied();
             SubtitlesDefaultsView view = new SubtitlesDefaultsView();
             view.DataContext = this.subtitlesDefaultsViewModel;
+            view.ShowDialog();
 
-            if (view.ShowDialog() == true)
+            if (subtitlesDefaultsViewModel.IsApplied)
             {
                 this.Preset.SubtitleTrackBehaviours = this.subtitlesDefaultsViewModel.SubtitleBehaviours.Clone();
             }
