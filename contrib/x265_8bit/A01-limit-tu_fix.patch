@@ -1,0 +1,26 @@
+# HG changeset patch
+# User Aruna Matheswaran <aruna@multicorewareinc.com>
+# Date 1573207250 -19800
+# Branch Release_3.2
+# Node ID 09f3b1d9349ac84d74f14f99297f9418bc8b2b02
+# Parent  b5c86a64bbbede216b25092def72272ecde5523a
+limit-tu: Fix bug in loading co-located CU's TU depth
+
+diff --git a/source/encoder/analysis.cpp b/source/encoder/analysis.cpp
+--- a/source/encoder/analysis.cpp
++++ b/source/encoder/analysis.cpp
+@@ -375,12 +375,12 @@
+     CUData* neighbourCU;
+     uint8_t count = 0;
+     int32_t maxTUDepth = -1;
+-    neighbourCU = m_slice->m_refFrameList[0][0]->m_encData->m_picCTU;
++    neighbourCU = &m_slice->m_refFrameList[0][0]->m_encData->m_picCTU[parentCTU.m_cuAddr];
+     predDepth += neighbourCU->m_refTuDepth[cuGeom.geomRecurId];
+     count++;
+     if (m_slice->isInterB())
+     {
+-        neighbourCU = m_slice->m_refFrameList[1][0]->m_encData->m_picCTU;
++        neighbourCU = &m_slice->m_refFrameList[1][0]->m_encData->m_picCTU[parentCTU.m_cuAddr];
+         predDepth += neighbourCU->m_refTuDepth[cuGeom.geomRecurId];
+         count++;
+     }
