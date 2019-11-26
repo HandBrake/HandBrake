@@ -197,6 +197,10 @@ namespace HandBrakeWPF.Services.Queue
                 {
                     this.queue.Add(task);
                 }
+                if (reloadedQueue.Count > 0)
+                {
+                    this.InvokeQueueChanged(EventArgs.Empty);
+                }
             }
         }
 
