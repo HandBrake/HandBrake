@@ -1,0 +1,19 @@
+# HG changeset patch
+# User Niranjan <niranjan@multicorewareinc.com>
+# Date 1574665937 -19800
+# Node ID f0fe46ce379dbdf21ee255146796dbf5c4e02ac7
+# Parent  4a29e0c5bfaf30aaed2c5224bcba1f464d68de83
+Fix pass 2 encode failure (Issue #524)
+
+diff --git a/source/encoder/ratecontrol.cpp b/source/encoder/ratecontrol.cpp
+--- a/source/encoder/ratecontrol.cpp
++++ b/source/encoder/ratecontrol.cpp
+@@ -53,7 +53,7 @@
+ {\
+     bErr = 0;\
+     p = strstr(opts, opt "=");\
+-    char* q = strstr(opts, "no-" opt);\
++    char* q = strstr(opts, "no-" opt " ");\
+     if (p && sscanf(p, opt "=%d" , &i) && param_val != i)\
+         bErr = 1;\
+     else if (!param_val && !q && !p)\
