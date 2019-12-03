@@ -1824,6 +1824,8 @@ static void ShowHelp()
 "                           or less is selected. This should locate subtitles\n"
 "                           for short foreign language segments. Best used in\n"
 "                           conjunction with --subtitle-forced.\n"
+"  -S, --subname <string>   Set subtitle track name(s).\n"
+"                           Separate tracks by commas.\n"
 "  -F, --subtitle-forced[=string]\n"
 "                           Only display subtitles from the selected stream\n"
 "                           if the subtitle has the forced flag set. The\n"
