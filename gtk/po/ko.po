@@ -4,6 +4,9 @@
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 # 
 # Translators:
+# Mia_Kim <minju980508@gmail.com>, 2019
+# JinHee Kim <sinnanjini@gmail.com>, 2019
+# nayoon kim <belloyv@gmail.com>, 2019
 # Changkyoon Kim <ocnblu@gmail.com>, 2014
 # 
 #, fuzzy
@@ -13,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-10 11:11-0700\n"
 "PO-Revision-Date: 2018-10-10 18:14+0000\n"
-"Last-Translator: Changkyoon Kim <ocnblu@gmail.com>, 2014\n"
+"Last-Translator: nayoon kim <belloyv@gmail.com>, 2019\n"
 "Language-Team: Korean (https://www.transifex.com/HandBrakeProject/teams/92423/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -111,6 +114,17 @@ msgid ""
 "language scene.  This option is best used in\n"
 "conjunction with the \"Forced\" option."
 msgstr ""
+"파일 자막 트랙\n"
+"\n"
+"해당 비디오 파일에서 인식되는\n"
+"어떤 자막이든 선택할 수 있습니다.\n"
+"\n"
+"또한, \"외부 오디오 스캔\"이라는\n"
+"특별한 트랙 옵션이 있습니다. 해당 옵션은\n"
+"외국어 장면에 필요한 자막을\n"
+"검색하는 인코딩에 추가 패스를\n"
+"추가합니다. 이 옵션은 \"강제\" 옵션과\n"
+"함께 사용하는 것이 가장 좋습니다."
 
 #: ../src/ghb.m4.h:38
 msgid "<b>Track</b>"
@@ -122,7 +136,7 @@ msgstr "사전설정(_P)"
 
 #: ../src/ghb.m4.h:40
 msgid "Set De_fault"
-msgstr ""
+msgstr "기본값 설정"
 
 #: ../src/ghb.m4.h:41
 msgid "_Save"
@@ -130,11 +144,11 @@ msgstr "저장(_S)"
 
 #: ../src/ghb.m4.h:42
 msgid "Save _As"
-msgstr ""
+msgstr "다른 이름으로 저장"
 
 #: ../src/ghb.m4.h:43
 msgid "_Rename"
-msgstr ""
+msgstr "이름 바꾸기"
 
 #: ../src/ghb.m4.h:44
 msgid "_Delete"
@@ -150,11 +164,11 @@ msgstr "내보내기(_E)"
 
 #: ../src/ghb.m4.h:47
 msgid "Reset _Built-in Presets"
-msgstr ""
+msgstr "내장된 환경 설정 재설정"
 
 #: ../src/ghb.m4.h:48
 msgid "<b>Presets List</b>"
-msgstr "<b>사전설정 목록</b>"
+msgstr "<b>환경설정 목록</b>"
 
 #: ../src/ghb.m4.h:49
 msgid "About HandBrake"
@@ -165,6 +179,8 @@ msgid ""
 "Copyright © 2008 -  John Stebbins\n"
 "Copyright © 2004 - , HandBrake Devs"
 msgstr ""
+"Copyright © 2008 - John Stebbins\n"
+"Copyright © 2004 - , HandBrake Devs"
 
 #: ../src/ghb.m4.h:52
 msgid ""
@@ -173,7 +189,7 @@ msgstr "HandBrake는 GPL 라이센스를 따르며, 다중플랫폼, 다중쓰�
 
 #: ../src/ghb.m4.h:53
 msgid "https://handbrake.fr"
-msgstr ""
+msgstr "https://handbrake.fr"
 
 #: ../src/ghb.m4.h:54
 msgid ""
@@ -199,15 +215,15 @@ msgstr "파일(_F)"
 
 #: ../src/ghb.m4.h:61
 msgid "Open _Source"
-msgstr ""
+msgstr "오픈 소스"
 
 #: ../src/ghb.m4.h:62
 msgid "Open Single _Title"
-msgstr ""
+msgstr "단일 제목 열기"
 
 #: ../src/ghb.m4.h:63
 msgid "Set _Destination"
-msgstr ""
+msgstr "경로 설정"
 
 #: ../src/ghb.m4.h:64
 msgid "_Preferences"
@@ -231,19 +247,19 @@ msgstr "다중 추가(_M)"
 
 #: ../src/ghb.m4.h:69 ../src/queuehandler.c:2374
 msgid "_Start Encoding"
-msgstr ""
+msgstr "인코딩 시작"
 
 #: ../src/ghb.m4.h:70 ../src/queuehandler.c:2385
 msgid "_Pause Encoding"
-msgstr ""
+msgstr "인코딩 중지"
 
 #: ../src/ghb.m4.h:71
 msgid "S_ave Queue"
-msgstr ""
+msgstr "대기열 저장"
 
 #: ../src/ghb.m4.h:72
 msgid "_Load Queue File"
-msgstr ""
+msgstr "대기열 파일 로드"
 
 #: ../src/ghb.m4.h:73
 msgid "_View"
@@ -255,7 +271,7 @@ msgstr "더미에 대한 HandBrake(_D)"
 
 #: ../src/ghb.m4.h:75
 msgid "Presets _List"
-msgstr ""
+msgstr "환경설정 목록"
 
 #: ../src/ghb.m4.h:76
 msgid "_Preview"
@@ -283,7 +299,7 @@ msgstr "비디오 원본 선택"
 
 #: ../src/ghb.m4.h:82 ../src/callbacks.c:4075
 msgid "Open Source"
-msgstr ""
+msgstr "오픈 소스"
 
 #: ../src/ghb.m4.h:83
 msgid "Add to Queue"
@@ -291,7 +307,7 @@ msgstr "큐에 추가하기"
 
 #: ../src/ghb.m4.h:84
 msgid "Add To Queue"
-msgstr ""
+msgstr "대기열 추가"
 
 #: ../src/ghb.m4.h:85 ../src/queuehandler.c:2350 ../src/queuehandler.c:2375
 msgid "Start Encoding"
@@ -311,7 +327,7 @@ msgstr "정지"
 
 #: ../src/ghb.m4.h:89
 msgid "Show Presets Window"
-msgstr ""
+msgstr "설정 화면 보이기"
 
 #: ../src/ghb.m4.h:90
 msgid "Presets"
@@ -319,7 +335,7 @@ msgstr "사전설정"
 
 #: ../src/ghb.m4.h:91
 msgid "Show Preview Window"
-msgstr ""
+msgstr "미리보기 화면 보이기"
 
 #: ../src/ghb.m4.h:92
 msgid "Preview"
@@ -358,7 +374,7 @@ msgstr "검색 중..."
 
 #: ../src/ghb.m4.h:100
 msgid "<b>Title:</b>"
-msgstr ""
+msgstr "<b>제목:</b>"
 
 #: ../src/ghb.m4.h:101
 msgid ""
@@ -372,11 +388,11 @@ msgstr ""
 
 #: ../src/ghb.m4.h:104
 msgid "<small>No Titles</small>"
-msgstr ""
+msgstr "<small>제목 없음</small>"
 
 #: ../src/ghb.m4.h:105
 msgid "<b>Angle:</b>"
-msgstr ""
+msgstr "<b>구도:</b>"
 
 #: ../src/ghb.m4.h:106
 msgid "For multi-angle DVD's, select the desired angle to encode."
@@ -384,7 +400,7 @@ msgstr "멀티 앵글 DVD의 경우, 인코딩할 앵글을 선택합니다."
 
 #: ../src/ghb.m4.h:107
 msgid "<b>Range:</b>"
-msgstr ""
+msgstr "<b>범위:</b>"
 
 #: ../src/ghb.m4.h:108
 msgid "Range of title to encode. Can be chapters, seconds, or frames."
@@ -396,7 +412,7 @@ msgstr "인코딩할 첫 챕터 설정"
 
 #: ../src/ghb.m4.h:110
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #: ../src/ghb.m4.h:111
 msgid "Set the last chapter to encode."
@@ -404,15 +420,15 @@ msgstr "인코딩할 마지막 챕터 설정"
 
 #: ../src/ghb.m4.h:112
 msgid "<b>Preset:</b>"
-msgstr ""
+msgstr "<b>환경설정:</b>"
 
 #: ../src/ghb.m4.h:113
 msgid "Choose Preset"
-msgstr ""
+msgstr "환경설정 선택"
 
 #: ../src/ghb.m4.h:114
 msgid "<u><i>Modified</i></u>"
-msgstr ""
+msgstr "<u><i>수정</i></u>"
 
 #: ../src/ghb.m4.h:115
 msgid "Reload"
@@ -423,14 +439,16 @@ msgid ""
 "Reload the settings for the currently selected preset.\n"
 "Modifications will be discarded."
 msgstr ""
+"현재 선택된 환경설정으로 설정을 다시 로드합니다.\n"
+"수정사항은 폐기됩니다."
 
 #: ../src/ghb.m4.h:118
 msgid "Save New Preset"
-msgstr ""
+msgstr "새 환경설정 저장"
 
 #: ../src/ghb.m4.h:119
 msgid "Save the current settings to a new Preset."
-msgstr ""
+msgstr "현재 설정을 새 환경설정에 저장"
 
 #: ../src/ghb.m4.h:120
 msgid "Format:"
@@ -454,7 +472,7 @@ msgstr ""
 
 #: ../src/ghb.m4.h:125
 msgid "Align A/V Start"
-msgstr ""
+msgstr "A/V 시작 정렬"
 
 #: ../src/ghb.m4.h:126
 msgid ""
@@ -462,6 +480,8 @@ msgid ""
 "inserting blank frames or dropping frames. May improve audio/video\n"
 "sync for broken players that do not honor MP4 edit lists."
 msgstr ""
+"빈 프레임을 삽입하거나 프레임을 삭제하여 모든 오디오 및 비디오 스트림의 초기 타임 스탬프를 정렬합니다. \n"
+"MP4 편집 목록을 준수하지 않는 손상된 플레이어의 오디오/비디오 동기화를 향상시킬 수 있습니다."
 
 #: ../src/ghb.m4.h:129
 msgid "iPod 5G Support"
@@ -477,23 +497,23 @@ msgstr "재생시간:"
 
 #: ../src/ghb.m4.h:132
 msgid "hh:mm:ss"
-msgstr ""
+msgstr "hh:mm:ss"
 
 #: ../src/ghb.m4.h:133
 msgid "Tracks:"
-msgstr ""
+msgstr "트랙:"
 
 #: ../src/ghb.m4.h:134
 msgid "Filters:"
-msgstr ""
+msgstr "필터:"
 
 #: ../src/ghb.m4.h:135
 msgid "Size:"
-msgstr ""
+msgstr "크기:"
 
 #: ../src/ghb.m4.h:136
 msgid "--"
-msgstr ""
+msgstr "--"
 
 #: ../src/ghb.m4.h:137
 msgid "Summary"
@@ -542,7 +562,7 @@ msgstr "우측 잘라내기"
 
 #: ../src/ghb.m4.h:150
 msgid "Crop Dimensions:"
-msgstr ""
+msgstr " 절단 치수:"
 
 #: ../src/ghb.m4.h:151
 msgid "<b>Cropping</b>"
@@ -557,10 +577,12 @@ msgid ""
 "If enabled, select the 'optimal' storage resolution.\n"
 "This will be the resolution that most closely matches the source resolution after cropping."
 msgstr ""
+"활성화된 경우, '최적' 스토리지 해상도를 선택하십시오.\n"
+"크롭핑 후 원본 자료 해상도와 가장 적절하게 일치하는 해상도가 될 것입니다."
 
 #: ../src/ghb.m4.h:155
 msgid "Width:"
-msgstr ""
+msgstr "너비:"
 
 #: ../src/ghb.m4.h:156
 msgid ""
@@ -572,7 +594,7 @@ msgstr ""
 
 #: ../src/ghb.m4.h:158
 msgid "Height:"
-msgstr ""
+msgstr "높이:"
 
 #: ../src/ghb.m4.h:159
 msgid ""
@@ -599,6 +621,15 @@ msgid ""
 "            storage resolution while preserving the original\n"
 "            display aspect ratio</tt></small>"
 msgstr ""
+"<b>아나모픽 모드:</b>\n"
+"<small><tt>\n"
+"없음      - 1:1로 가로 세로 픽셀 비율 강제 적용\n"
+"느슨함  - 원본 디스플레이 가로 세로 비율을 유지하면서\n"
+"            원본 파일의 가로 세로 픽셀 비율과 최대한 가까운\n"
+"            가로 세로 픽셀 비율 사용\n"
+"자동      - 기존 디스플레이 가로 세로 비율을 유지하면서\n"
+"            스토리지 해상도를 극대화하는 가로 세로 픽셀\n"
+"            비율 사용</tt></small>"
 
 #: ../src/ghb.m4.h:172
 msgid "Alignment:"
@@ -611,10 +642,14 @@ msgid ""
 "This setting is only necessary for compatibility with some devices.\n"
 "You should use 2 unless you experience compatibility issues."
 msgstr ""
+"스토리지 치수를 해당 값의 배수로 정렬하십시오.\n"
+"\n"
+"해당 설정은 일부 장치와 호환하는 데 반드시 필요합니다.\n"
+"호환성 문제가 발생하지 않는 한 2로 설정해야 합니다."
 
 #: ../src/ghb.m4.h:177
 msgid "<b>Storage Geometry</b>"
-msgstr ""
+msgstr "<b>저장 형상</b>"
 
 #: ../src/ghb.m4.h:178
 msgid "Keep Aspect"
@@ -629,7 +664,7 @@ msgstr "활성화하면, 원본의 화면 종횡비가 유지됩니다."
 msgid ""
 "This is the display width. It is the result of scaling the storage "
 "dimensions by the pixel aspect."
-msgstr ""
+msgstr "디스플레이 너비입니다. 픽셀 크기로 저장 크기를 조정한 결과입니다."
 
 #: ../src/ghb.m4.h:181
 msgid "Pixel Aspect:"
@@ -667,15 +702,15 @@ msgstr "화면 비율:"
 
 #: ../src/ghb.m4.h:191
 msgid "--:--"
-msgstr ""
+msgstr "--:--"
 
 #: ../src/ghb.m4.h:192
 msgid "<b>Display Geometry</b>"
-msgstr ""
+msgstr "<b>디스플레이 구조</b>"
 
 #: ../src/ghb.m4.h:193
 msgid "Dimensions"
-msgstr ""
+msgstr "크기"
 
 #: ../src/ghb.m4.h:194
 msgid "Detelecine:"
@@ -687,6 +722,9 @@ msgid ""
 "\n"
 "Telecining is a process that adjusts film framerates that are 24fps to NTSC video frame rates which are 30fps."
 msgstr ""
+"해당 필터는 telecining의 결과물인 'combing' artifacts를 제거합니다.\n"
+"\n"
+"Telecining은 24fps인 필름 프레임률을 30fps인 NTSC 비디오 프레임률로 조정하는 과정입니다."
 
 #: ../src/ghb.m4.h:198
 msgid ""
@@ -700,7 +738,7 @@ msgstr ""
 
 #: ../src/ghb.m4.h:201
 msgid "Interlace Detection:"
-msgstr ""
+msgstr "인터레이스 검출:"
 
 #: ../src/ghb.m4.h:202
 msgid ""
@@ -709,6 +747,9 @@ msgid ""
 "If a deinterlace filter is enabled, only frames that this filter finds\n"
 "to be interlaced will be deinterlaced."
 msgstr ""
+"해당 필터는 인터페이스된(interlaced) 프레임을 검출합니다.\n"
+"\n"
+"비인터레이스(deinterlace) 필터가 활성화된 경우, 이 필터가 인터레이스되었다 판단한 프레임만을 비인터레이스합니다."
 
 #: ../src/ghb.m4.h:206
 msgid ""
@@ -717,6 +758,10 @@ msgid ""
 "Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:\n"
 "Block Thresh: Block Width: Block Height"
 msgstr ""
+"사용자 설정 인터레이스 검출 필터 문장 형식\n"
+"\n"
+"모드:공간 메트릭:모션 스레시:마스크 필터 모드:\n"
+"블록 스레시: 블록 폭: 블록 높이"
 
 #: ../src/ghb.m4.h:210
 msgid "Deinterlace:"
@@ -729,10 +774,14 @@ msgid ""
 "The decomb filter supports a variety of interpolation algorithms.\n"
 "The deinterlace filter is a classic YADIF deinterlacer.\n"
 msgstr ""
+"decomb이나 deinterlace 필터를 선택하십시오.\n"
+"\n"
+"decomb 필터는 다양한 보간법 알고리즘을 지원합니다.\n"
+"deinterlace 필터는 고전적인 YADIF deinterlacer입니다.\n"
 
 #: ../src/ghb.m4.h:216
 msgid "Deinterlace Preset:"
-msgstr ""
+msgstr "Deinterlace 설정:"
 
 #: ../src/ghb.m4.h:217
 msgid ""
@@ -741,6 +790,10 @@ msgid ""
 "The decomb filter supports a variety of interpolation algorithms.\n"
 "The deinterlace filter is a classic YADIF deinterlacer.\n"
 msgstr ""
+"decomb이나 deinterlace 필터를 선택하십시오.\n"
+"\n"
+"decomb 필터는 다양한 보간법 알고리즘을 지원합니다.\n"
+"deinterlace 필터는 고전적인 YADIF deinterlacer입니다.\n"
 
 #: ../src/ghb.m4.h:222
 msgid "Deblock:"
@@ -788,29 +841,31 @@ msgstr ""
 
 #: ../src/ghb.m4.h:234
 msgid "Sharpen Filter:"
-msgstr ""
+msgstr "선명도 필터:"
 
 #: ../src/ghb.m4.h:235
 msgid ""
 "Sharpen filtering enhances edges and other\n"
 "high frequency components in the video."
 msgstr ""
+"선명도(Sharpen) 필터링은 비디오의 가장자리\n"
+"및 높은 빈도의 구성요소를 향상시킵니다."
 
 #: ../src/ghb.m4.h:237
 msgid "Sharpen Preset:"
-msgstr ""
+msgstr "선명도 설정:"
 
 #: ../src/ghb.m4.h:238
 msgid "Sharpen Tune:"
-msgstr ""
+msgstr "선명도 조정:"
 
 #: ../src/ghb.m4.h:239
 msgid "Rotate Filter:"
-msgstr ""
+msgstr "회전 필터:"
 
 #: ../src/ghb.m4.h:240
 msgid "Rotate the video clockwise in 90 degree increments."
-msgstr ""
+msgstr "비디오를 시계 방향으로 90도 회전"
 
 #: ../src/ghb.m4.h:241
 msgid "Grayscale"
@@ -818,11 +873,11 @@ msgstr "회색조"
 
 #: ../src/ghb.m4.h:242
 msgid "If enabled, filter colour components out of video."
-msgstr ""
+msgstr "활성화된 경우, 컬러 구성 요소를 비디오에서 필터링하십시오."
 
 #: ../src/ghb.m4.h:243
 msgid "Filters"
-msgstr ""
+msgstr "필터:"
 
 #: ../src/ghb.m4.h:244
 msgid "Video Encoder:"
@@ -1009,6 +1064,11 @@ msgid ""
 "characteristics of the output file.  Changes will be applied after the\n"
 "preset but before all other parameters."
 msgstr ""
+"일반적인 시나리오에 맞도록 설정을 조정하십시오.\n"
+"\n"
+"특정한 파일의 특성에 대한 효율성을 증가시킬 수 있거나 출력 파일의\n"
+"특성을 설정할 수 있습니다. 변경 사항은 환경 설정 후 다른 모든 파라미터보다\n"
+"먼저 적용됩니다. "
 
 #: ../src/ghb.m4.h:306
 msgid "Fast Decode"
@@ -1026,7 +1086,7 @@ msgstr ""
 
 #: ../src/ghb.m4.h:310
 msgid "Zero Latency"
-msgstr ""
+msgstr "대기 시간 없음"
 
 #: ../src/ghb.m4.h:311
 msgid ""
@@ -1037,6 +1097,12 @@ msgid ""
 "Since HandBrake is not suitable for live stream broadcast purposes,\n"
 "this setting is of little value here."
 msgstr ""
+"인코더의 입력과 디코더의 출력 사이의 지연 시간을 최소화합니다.\n"
+"\n"
+"이는 라이브 스트리밍 방송 시에 유용합니다.\n"
+"\n"
+"HandBrake는 라이브 스트리밍 방송 목적으로는 적합하지 않기 때문에,\n"
+"이러한 설정은 여기서 별로 가치가 없습니다."
 
 #: ../src/ghb.m4.h:317
 msgid "Profile:"
@@ -1086,19 +1152,19 @@ msgstr "비디오"
 
 #: ../src/ghb.m4.h:330
 msgid "Track List"
-msgstr ""
+msgstr "트랙 목록"
 
 #: ../src/ghb.m4.h:331
 msgid "Show Output Audio Track List"
-msgstr ""
+msgstr "출력 오디오 트랙 목록 보여주기"
 
 #: ../src/ghb.m4.h:332
 msgid "Track Selection"
-msgstr ""
+msgstr "트랙 선택"
 
 #: ../src/ghb.m4.h:333
 msgid "Show Source Track Selection Options"
-msgstr ""
+msgstr "소스 트랙 선택 옵션 표시"
 
 #. Add Button
 #: ../src/ghb.m4.h:334 ../src/audiohandler.c:1723
@@ -1127,13 +1193,15 @@ msgstr "선택 동작:"
 
 #: ../src/ghb.m4.h:340
 msgid "Choose which audio tracks of the source media are used."
-msgstr ""
+msgstr "사용할 소스 미디어의 오디오 트랙을 선택하십시오"
 
 #: ../src/ghb.m4.h:341
 msgid ""
 "Create a list of languages you would like to select audio for.\n"
 "Tracks matching these languages will be selected using the chosen Selection Behavior."
 msgstr ""
+"오디오를 선택할 언어 목록을 만드십시오.\n"
+"이러한 언어와 일치하는 트랙은 선택한 '선택 동작'을 사용하여 선택됩니다."
 
 #: ../src/ghb.m4.h:343
 msgid "Remove"
@@ -1156,6 +1224,8 @@ msgid ""
 "Only the primary audio track will be encoded with the full encoder list.\n"
 "        All other secondary audio output tracks will be encoded with first encoder only."
 msgstr ""
+"기본 오디오 트래만 전체 인코더 목록으로 인코딩됩니다.\n"
+"다른 모든 보조 오디오 출력 트랙은  첫 번째 인코더로만 인코딩됩니다."
 
 #: ../src/ghb.m4.h:349
 msgid "Auto Passthru:"
@@ -1170,76 +1240,92 @@ msgid ""
 "Enable this if your playback device supports MP3.\n"
 "        This permits MP3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"재생 장치가 MP3를 지원하는 경우 활성하십시오.\n"
+"이를 통해 자동 경유 선택이 활성화 된 경우 MP3 경유를 선택할 수 있습니다."
 
 #: ../src/ghb.m4.h:353
 msgid "AAC"
-msgstr ""
+msgstr "AAC"
 
 #: ../src/ghb.m4.h:354
 msgid ""
 "Enable this if your playback device supports AAC.\n"
 "        This permits AAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"재생 장치가 AAC를 지원하는 경우 활성하십시오.\n"
+"이를 통해 자동 경유 선택이 활성화 된 경우 AAC경유를 선택할 수 있습니다."
 
 #: ../src/ghb.m4.h:356
 msgid "AC-3"
-msgstr ""
+msgstr "AC-3"
 
 #: ../src/ghb.m4.h:357
 msgid ""
 "Enable this if your playback device supports AC-3.\n"
 "        This permits AC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"재생 장치가 AC-3를 지원하는 경우 활성하십시오.\n"
+"이를 통해 자동 경유 선택이 활성화 된 경우 AC-3 경유를 선택할 수 있습니다."
 
 #: ../src/ghb.m4.h:359
 msgid "DTS"
-msgstr ""
+msgstr "DTS"
 
 #: ../src/ghb.m4.h:360
 msgid ""
 "Enable this if your playback device supports DTS.\n"
 "        This permits DTS passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"재생 장치가 DTS를 지원하는 경우 활성하십시오.\n"
+"이를 통해 자동 경유 선택이 활성화 된 경우 DTS경유를 선택할 수 있습니다."
 
 #: ../src/ghb.m4.h:362
 msgid "DTS-HD"
-msgstr ""
+msgstr "DTS-HD"
 
 #: ../src/ghb.m4.h:363
 msgid ""
 "Enable this if your playback device supports DTS-HD.\n"
 "        This permits DTS-HD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"재생 장치가 DTS-HD를 지원하는 경우 활성하십시오.\n"
+"이를 통해 자동 경유 선택이 활성화 된 경우 DTS-HD 경유를 선택할 수 있습니다."
 
 #: ../src/ghb.m4.h:365
 msgid "EAC-3"
-msgstr ""
+msgstr "EAC-3"
 
 #: ../src/ghb.m4.h:366
 msgid ""
 "Enable this if your playback device supports EAC-3.\n"
 "        This permits EAC-3 passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"재생 장치가 EAC-3를 지원하는 경우 활성하십시오.\n"
+"이를 통해 자동 경유 선택이 활성화 된 경우 EAC-3경유를 선택할 수 있습니다."
 
 #: ../src/ghb.m4.h:368
 msgid "TrueHD"
-msgstr ""
+msgstr "TrueHD"
 
 #: ../src/ghb.m4.h:369
 msgid ""
 "Enable this if your playback device supports TrueHD.\n"
 "        This permits TrueHD passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"재생 장치가 TrueHD를 지원하는 경우 활성하십시오.\n"
+"이를 통해 자동 경유 선택이 활성화 된 경우 TrueHD 경유를 선택할 수 있습니다."
 
 #: ../src/ghb.m4.h:371
 msgid "FLAC"
-msgstr ""
+msgstr "FLAC"
 
 #: ../src/ghb.m4.h:372
 msgid ""
 "Enable this if your playback device supports FLAC.\n"
 "        This permits FLAC passthru to be selected when automatic passthru selection is enabled."
 msgstr ""
+"재생 장치가 FLAC를 지원하는 경우 활성하십시오.\n"
+"이를 통해 자동 경유 선택이 활성화 된 경우 FLAC 경유를 선택할 수 있습니다."
 
 #: ../src/ghb.m4.h:374
 msgid "Passthru Fallback:"
@@ -1281,15 +1367,15 @@ msgstr "게인"
 
 #: ../src/ghb.m4.h:383
 msgid "DRC"
-msgstr ""
+msgstr "DRC"
 
 #: ../src/ghb.m4.h:384
 msgid "Audio"
-msgstr ""
+msgstr "오디오"
 
 #: ../src/ghb.m4.h:385
 msgid "Show Output Subtitle Track List"
-msgstr ""
+msgstr "출력 자막 트랙 목록 보이기"
 
 #: ../src/ghb.m4.h:386
 msgid "Add new subtitle settings to the list"
@@ -1302,7 +1388,7 @@ msgstr "모든 자막 트랙을 목록에 추가"
 #: ../src/ghb.m4.h:388 ../src/queuehandler.c:111 ../src/queuehandler.c:164
 #: ../src/subtitlehandler.c:382
 msgid "Foreign Audio Scan"
-msgstr ""
+msgstr "외부 오디오 스캔"
 
 #: ../src/ghb.m4.h:389
 msgid ""
@@ -1310,6 +1396,9 @@ msgid ""
 "        for subtitle candidates that provide subtitles for\n"
 "        segments of the audio that are in a foreign language."
 msgstr ""
+"외국어 오디오로 된 부분에 대해서 \n"
+"        자막을 제공하는 자막 후보들을 \n"
+"        검색하는 인코딩에 추가 패스를 넣으십시오."
 
 #: ../src/ghb.m4.h:392
 msgid "Reload all subtitle settings from defaults"
@@ -1317,7 +1406,7 @@ msgstr "기본 설정에서 모든 자막 설정 다시 불러오기"
 
 #: ../src/ghb.m4.h:393
 msgid "Choose which subtitle tracks of the source media are used."
-msgstr ""
+msgstr "사용할 소스 미디어의 자막 트랙을 선택하십시오 "
 
 #: ../src/ghb.m4.h:394
 msgid ""
@@ -1327,6 +1416,11 @@ msgid ""
 "The first language in this list is your \"preferred\" language and will be used\n"
 "for determining subtitle selection settings when there is foreign audio."
 msgstr ""
+"자막을 선택할 언어들의 목록을 만드십시오.\n"
+"이 언어들과 일치하는 트랙들은 정해진 선택 동작을 사용하여 선택됩니다.\n"
+"\n"
+"이 목록의 첫번째 언어는 \"기본 설정\" 언어이며\n"
+"외부 오디오가 있을 때 자막 선택 설정을 결정하는 데 사용됩니다."
 
 #: ../src/ghb.m4.h:399
 msgid "Preferred Language: None"
@@ -1334,7 +1428,7 @@ msgstr "선호하는 언어: 없음"
 
 #: ../src/ghb.m4.h:400
 msgid "Add Foreign Audio Scan Pass"
-msgstr ""
+msgstr "외부 오디오 스캔 패스 추가"
 
 #: ../src/ghb.m4.h:401
 msgid ""
@@ -1343,6 +1437,10 @@ msgid ""
 "\n"
 "        This option requires a language to be set in the Selected Languages list."
 msgstr ""
+"기본 오디오 트랙이 선호하는 언어인 경우 \"외부 오디오 스캔\"을 추가하십시오.\n"
+"이 검색 단계는 짧은 외부 오디오 시퀀스를 찾아서 자막을 제공합니다.\n"
+"\n"
+"이 옵션을 사용하려면 선택한 언어 목록에서 언어를 설정해야합니다."
 
 #: ../src/ghb.m4.h:405
 msgid "Add subtitle track if default audio is foreign"
@@ -1354,6 +1452,9 @@ msgid ""
 "\n"
 "        This option requires a language to be set in the Selected Languages list."
 msgstr ""
+"기본 오디오 트랙이 기본 언어가 아닐 경우 자막 트랙을 추가하십시오.\n"
+"\n"
+"이 옵션을 사용하려면 선택된 언어 목록에서 언어가 설정되어야 합니다."
 
 #: ../src/ghb.m4.h:409
 msgid "Add Closed Captions when available"
@@ -1364,10 +1465,12 @@ msgid ""
 "Closed captions are text subtitles that can be added to any container as a "
 "soft subtitle track"
 msgstr ""
+"오디오를 선택하려는 언어 목록을 작성하십시오.\n"
+"이 언어와 일치하는 트랙은 선택한 Selection Behavior를 사용하여 선택됩니다."
 
 #: ../src/ghb.m4.h:411
 msgid "Burn-In Behavior*:"
-msgstr ""
+msgstr "복제 시 행동*:"
 
 #: ../src/ghb.m4.h:412
 msgid ""
@@ -1376,14 +1479,18 @@ msgid ""
 "        Burned-In subtitles are part of the video and can not be disabled during playback.\n"
 "        Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
+"자막의 동작을 \"Burn-In\"으로 설정하시오.\n"
+"\n"
+"Burned-In 자막들은 비디오의 일부분이며 재생 중에는 비활성화할 수 없습니다.\n"
+"오직 하나의 자막 트랙만이 burned될 수 있습니다! 충돌이 일어날 수 있기 때문에, 가장 먼저 선택된 것이 이깁니다."
 
 #: ../src/ghb.m4.h:416
 msgid "Burn-In for deficient players*:"
-msgstr ""
+msgstr "결함이 있는 플레이어를 위한 복제*:"
 
 #: ../src/ghb.m4.h:417
 msgid "DVD Subtitles"
-msgstr ""
+msgstr "DVD 자막"
 
 #: ../src/ghb.m4.h:418
 msgid ""
@@ -1392,10 +1499,14 @@ msgid ""
 "\n"
 "        Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
+"처음 선택된 DVD 자막 트랙을 굽으십시오. 모든 다른 DVD 자막 트랙들은 삭제될 것입니다.\n"
+"플레이어의 소프트웨어 또는 장치가 DVD 자막을 지원하지 않는 경우 이 옵션을 사용하십시오.\n"
+"\n"
+"오직 하나의 자막 트랙만이 구워질 수 있습니다! 충돌이 일어날 수 이씩 때문에, 가장 먼저 선택된 것이 적용됩니다."
 
 #: ../src/ghb.m4.h:422
 msgid "Blu-ray Subtitles"
-msgstr ""
+msgstr "Blu-ray 자막"
 
 #: ../src/ghb.m4.h:423
 msgid ""
@@ -1404,18 +1515,22 @@ msgid ""
 "\n"
 "        Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
+"처음 선택된 Blu-ray 자막 트랙을 굽으십시오. 모든 다른 Blu-ray 자막 트랙들은 삭제될 것입니다.\n"
+"플레이어의 소프트웨어 또는 장치가 DVD 자막을 지원하지 않는 경우 이 옵션을 사용하십시오.\n"
+"\n"
+"오직 하나의 자막 트랙만이 구워질 수 있습니다! 충돌이 일어날 수 이씩 때문에, 가장 먼저 선택된 것이 적용됩니다."
 
 #: ../src/ghb.m4.h:427
 msgid ""
 "<small>* Only one of the above subtitle burn options will be applied, "
 "starting with the top.</small>"
-msgstr ""
+msgstr "<small>*위에서부터 시작하여 위의 자막 레코딩 옵션 중 하나만 적용됩니다.</small>"
 
 #: ../src/ghb.m4.h:428
 msgid ""
 "Only one subtitle track can be burned! Since conflicts can occur, the first "
 "chosen wins."
-msgstr ""
+msgstr "하나의 자막 트랙만 레코딩할 수 있습니다! 충돌이 발생할 수 있기 때문에 처음 선택한 것만 적용가능합니다."
 
 #: ../src/ghb.m4.h:429
 msgid "Subtitles"
@@ -1434,10 +1549,14 @@ msgid ""
 "frames, so if you're encoding for a handheld or standalone player, don't touch this unless\n"
 "you're absolutely sure you know what you're doing!"
 msgstr ""
+"정상적인 값은 ~1-6입니다. 더 많이 추가할 수록 압축은 좋아지지만 인코딩은 더 느려집니다.\n"
+"Cel 애니메이션은 영화 콘텐츠보다 더 많은 참조 프레임들로부터 이익을 얻는 경향이 있습니다.\n"
+"\n"
+"많은 하드웨어 장치들은 지원되는 참조 프레임 수에 제한이 있으므로 휴대용 또는 standalone 플레이어를 인코딩한다면 자신이 무엇을 하고 있는지에 대해 확실히 알지 않는다면 이것을 건드리지 마십시오!"
 
 #: ../src/ghb.m4.h:437
 msgid "<small>Maximum B-Frames:</small>"
-msgstr ""
+msgstr "<small>최대 B-프레임:</small>"
 
 #: ../src/ghb.m4.h:438
 msgid ""
@@ -1449,10 +1568,16 @@ msgid ""
 "\n"
 "Baseline profile, as required for iPods and similar devices, requires B-frames to be set to 0 (off)."
 msgstr ""
+"정상적인 값은 ~2-5입니다. 이것은 인코더가 사용할 수 있는 순차 B 프레임의 최대 값을 명시합니다.\n"
+"\n"
+"adaptvie B-frames이 Optimal로 설정되어 있지 않는다면 큰 숫자들은 일반적으로 큰 도움이 되질 않습니다.\n"
+"Cel-애니메이션으로 된 원본과 B-pyramid 또한 더 큰 값의 유용성을 굉장히 증사시킵니다.\n"
+"\n"
+"iPods 및 이와 유사한 기기에 필요한 baseline 프로파일은 B-frames를 0(off)로 설정해야 합니다."
 
 #: ../src/ghb.m4.h:445
 msgid "<small>Pyramidal B-Frames:</small>"
-msgstr ""
+msgstr "<small>피라미드 B-프레임:</small>"
 
 #: ../src/ghb.m4.h:446
 msgid ""
@@ -1461,10 +1586,13 @@ msgid ""
 "\n"
 "Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit."
 msgstr ""
+"B-pyramid는 B-frames의 피라미드 구조(그 이름은 여기서 유래했습니다)를 만들어 B-frames이 서로 다른 것을 참조할 수 있도록 하여 압축을 개선합니다.\n"
+"\n"
+"1보다 큰 최대 B-frames 필요; 최대 압축 이익을 위해 B-frames가 강력히 권장됩니다."
 
 #: ../src/ghb.m4.h:450
 msgid "<small>Weighted P-Frames:</small>"
-msgstr ""
+msgstr "<small>가중 P-프레임:</small>"
 
 #: ../src/ghb.m4.h:451
 msgid ""
@@ -1477,6 +1605,11 @@ msgid ""
 "Main Profile, may have problems with Weighted P-frame prediction: the Apple TV is\n"
 "completely incompatible with it, for example."
 msgstr ""
+"각 프레임에 대한 가중 파라미터 결정을 위해 추가 분석을 수행하십시오.\n"
+"\n"
+"이것은 전체적인 압축을 약간 향상시키고 fade의 품질을 크게 향상시킵니다.\n"
+"\n"
+"iPods과 유사한 기기에 필요한 Baseline profile은 weighted P-frame 예측을 비활성화해야 합니다. Main profile을 지원하는 기기나 플레이어들 조차도 Weighted P-frame 예측에 문제가 있을 수 있다는 점에 유의하십시오: 예를 들어, Apple TV는 이것과 완전히 호환되지 않습니다."
 
 #: ../src/ghb.m4.h:459
 msgid "8x8 Transform"
@@ -1491,6 +1624,11 @@ msgid ""
 "provide an unusually high visual quality benefit compared to its compression\n"
 "gain.  However, it requires High Profile, which many devices may not support."
 msgstr ""
+"8x8 변환은 속도당 압축이라는 부분에서 x264의 가장 유용한 기능입니다.\n"
+"\n"
+"이는 매우 적은 속도 비용으로 압축을 최소 5% 가량 향상시키며 압축 증폭과\n"
+"비교하면 보기 드물게 시각적 품질의 높은 이익을 제공할 수도 있습니다.\n"
+"하지만, 최대 증폭을 요구하며, 이는 많은 기기들에 지원되지 않고 있습니다."
 
 #: ../src/ghb.m4.h:466
 msgid "CABAC Entropy Encoding"
@@ -1507,6 +1645,12 @@ msgid ""
 "If you're looking to minimize CPU requirements for video playback, disable this option.\n"
 "Baseline profile, as required for iPods and similar devices, requires CABAC to be disabled."
 msgstr ""
+"인코더가 작업을 마치면, ZIP나 RAR과 비슷하게 손실없이 압축해야할 필요가 있는 데이터들이 있습니다. H.264는 이에 대하여 두 가지 옵션을\n"
+"제공합니다: CAVLC와 CABAC. CABAC는 디코딩 속도가 매우 느리지만\n"
+"특히 낮은 비트 전송속도로, 상당히 압축 성능이 좋은 편(10-30%)입니다.\n"
+"\n"
+"비디오 재생에 필요한 CPU 요구 사항을 최소화하고자 한다면, 이 옵션을 사용할 수 없습니다.\n"
+"iPod 및 이와 비슷한 장치에 필요한 기본 조건은 CABAC를 비활성화해야합니다."
 
 #: ../src/ghb.m4.h:475
 msgid "<small><b>Encoding Features</b></small>"
@@ -1542,7 +1686,7 @@ msgstr ""
 
 #: ../src/ghb.m4.h:487
 msgid "<small>Subpel ME &amp; Mode:</small>"
-msgstr ""
+msgstr "<small>Subpel ME &amp; 모드:</small>"
 
 #: ../src/ghb.m4.h:488
 msgid ""
@@ -1555,6 +1699,14 @@ msgid ""
 "11 disables all early terminations in analysis.\n"
 "10 and 11, the most powerful and slowest options, require adaptive quantization (aq-mode > 0) and trellis 2 (always)."
 msgstr ""
+"이 설정은 부가 픽셀-정밀 모션 평가와 모드 결정 방법을 모두 제어합니다.\n"
+"\n"
+"부가 픽셀 평가는 단순한 픽셀 정확도에서 끝나는 것이 아니라 추정치를 정제하여 압축을 향상시키는 데 사용됩니다.\n"
+"모드 결정은 프레임의 각 블록을 인코딩하는 방법을 선택하는 데 사용되는 방법으로 매우 중요한 결정입니다.\n"
+"SAD는 가장 빠른 방법으로, 그 뒤로는 SATD, RD, RD 정교화와 가장 느린 QPRD가 있습니다.\n"
+"6이상은 강력히 추천됩니다: 세부사항을 유지하는 데 도움이 되는 매우 강력한 psy 최적화인 Psy-RD는 RD를 필요로 합니다.\n"
+"11은 분석에 있어서 모든 초기 종료를 비활성화합니다.\n"
+"가장 강력하고 느린 옵션인 10과 11은 적응 정량화(aq-mode>0)와 (항상) trellis 2를 필요로 합니다."
 
 #: ../src/ghb.m4.h:496
 msgid "<small>Motion Est. Range:</small>"
@@ -1569,10 +1721,15 @@ msgid ""
 "especially at HD resolutions, may benefit from higher ranges, albeit at\n"
 "a high speed cost."
 msgstr ""
+"이것은 블록의 움직임을 찾기 위해 블록의 움직임을 처음 추측한 것에서부터 x264가 검색하는 거리입니다.\n"
+"\n"
+"기본값은 대부분의 움직임에 대해 정상이지만, 특히 HD 해상도에서, 극도로\n"
+"많은 움직이는 비디오는 높은 속도 비용에도 불구하고, 더 높은 범위의\n"
+"이점을 얻을 수 있습니다."
 
 #: ../src/ghb.m4.h:503
 msgid "<small>Adaptive Direct Mode:</small>"
-msgstr ""
+msgstr "<small>적응형 다이렉트 모드:</small>"
 
 #: ../src/ghb.m4.h:504
 msgid ""
@@ -1582,10 +1739,14 @@ msgid ""
 "x264 can, at the cost of a small amount of speed (and accordingly for a small compression gain),\n"
 "adaptively select which is better for each particular frame."
 msgstr ""
+"H.264는 B-frames에서 공간과 시간이라는 두 가지 다른 예측 모드를 허용합니다.\n"
+"\n"
+"기본적으로 공간이 거의 항상 더 좋지만, 시간도 때때로 유용합니다.\n"
+"x264는 작은 속도의 비용(그리고 작은 압축에 따른 이득)으로 각 특정 프레임에 더 적합한 것을 적절히 선택할 수 있습니다."
 
 #: ../src/ghb.m4.h:509
 msgid "<small>Adaptive B-Frames:</small>"
-msgstr ""
+msgstr "<small>적응형 B-프레임:</small>"
 
 #: ../src/ghb.m4.h:510
 msgid ""
@@ -1597,10 +1758,17 @@ msgid ""
 "Optimal mode gets slower as the maximum number of B-Frames increases,\n"
 "but makes much more accurate decisions, especially when used with B-pyramid."
 msgstr ""
+"x264에는 B-프레임 사용 시기와 사용할 수 있는 개수를 결정하는 다양한 알고리즘이 있습니다.\n"
+"\n"
+"빠른 모드는 지정한 B-프레임 수에 상관없이 대략 동일한 시간이 소요됩니다.\n"
+"하지만, 아무리 빠르더라도, 이 결정은 어디까지나 차선책입니다.\n"
+"\n"
+"최적화 모드는 B-프레임의 최대 개수가 증가함에 따라서 점점 느려지게 되지만,\n"
+"특히 B-피라미드와 함께 사용할 경우 훨씬 더 정확한 결정을 내리게 됩니다."
 
 #: ../src/ghb.m4.h:517
 msgid "<small>Partitions:</small>"
-msgstr ""
+msgstr "<small>분할:</small>"
 
 #: ../src/ghb.m4.h:518
 msgid ""
@@ -1610,10 +1778,15 @@ msgid ""
 "Fewer partitions to check means faster encoding, at the cost of worse\n"
 "decisions, since the best option might have been one that was turned off."
 msgstr ""
+"모드 결정은 해당 결정을 하기 위한 다양한 옵션에서 고르는 것입니다.:\n"
+"이 옵션은 어떤 옵션인지를 선택합니다.\n"
+"\n"
+"가장 좋은 옵션은 비활성화된 옵션일 수 있기 때문에 더 안 좋은 결정이라는 측면에서, \n"
+"확인한 더 적은 파티션은 더 빠른 인코딩을 의미합니다. "
 
 #: ../src/ghb.m4.h:523
 msgid "<small>Trellis:</small>"
-msgstr ""
+msgstr "<small>트레일리스:</small>"
 
 #: ../src/ghb.m4.h:525
 #, no-c-format
@@ -1626,6 +1799,13 @@ msgid ""
 "\n"
 "Trellis costs more speed at higher bitrates and requires CABAC."
 msgstr ""
+"Trellis는 일정한 속도 비용으로 3-5% 더 많은 압축을 제거하기 위해\n"
+"변환 계수 반올림을 미세하게 조정합니다.\n"
+"\n"
+"\"항상\"은 메인 인코딩 프로세스 동안만 사용되는 것일 뿐만 아니라, 분석 중에도\n"
+"사용되는데, 이는 엄청난 속도 비용이 들지만 압축 성능을 훨씬 향상시킵니다.\n"
+"\n"
+"Trellis는 더 높은 비트 전송률로 더 많은 속도를 내며 CABAC를 필요로 합니다."
 
 #: ../src/ghb.m4.h:532
 msgid "<small><b>Analysis</b></small>"
@@ -1633,7 +1813,7 @@ msgstr "<small><b>분석</b></small>"
 
 #: ../src/ghb.m4.h:533
 msgid "<small>Adaptive Quantization Strength:</small>"
-msgstr ""
+msgstr "<small>조정 양자화 강도:</small>"
 
 #: ../src/ghb.m4.h:534
 msgid ""
@@ -1641,10 +1821,13 @@ msgid ""
 "\n"
 "Higher values take more bits away from edges and complex areas to improve areas with finer detail."
 msgstr ""
+"적응 양자화는 인코더가 프레임에 비트를 분배하는 방법을 제어합니다.\n"
+"\n"
+"값이 높을수록 가장자리와 복잡한 영역에서 더 많은 비트를 가져와서 미세한 영역으로 영역을 향상시킵니다."
 
 #: ../src/ghb.m4.h:537
 msgid "<small>Psychovisual Rate Distortion:</small>"
-msgstr ""
+msgstr "<small>Psychovisual Rate 왜곡:</small>"
 
 #: ../src/ghb.m4.h:538
 msgid ""
@@ -1653,6 +1836,9 @@ msgid ""
 "The effect can be made weaker or stronger by adjusting the strength.\n"
 "Being an RD algorithm, it requires mode decision to be at least \"6\"."
 msgstr ""
+"Psychovisual rate-distortion 최적화는 인간 비전의 특성을 활용하여 외관상 세밀함과 선명도를 극적으로 향상시킵니다.\n"
+"강도를 조정하여 효과를 약하거나 강하게 만들 수 있습니다.\n"
+"RD 알고리즘이므로 모드 결정은 \"6\"이상이어야 합니다."
 
 #: ../src/ghb.m4.h:542
 msgid "<small>Psychovisual Trellis:</small>"
@@ -1667,6 +1853,10 @@ msgid ""
 "grainy video or lower bitrate encodes.  Not recommended for cel animation\n"
 "and other sharp-edged graphics."
 msgstr ""
+"Psychovisual 격자는 Psychovisual RD보다 선명도와 디테일 유지를 더욱 향상시키는 실험 알고리즘입니다.\n"
+"\n"
+"권장 값은 0.2정도이지만 값이 커지면 매우 작은 비디오나 낮은 비트레이트 인코드에 도움이 될 수 있습니다.\n"
+"셀 애니메이션 및 기타 선명도 그래픽에는 권장되지 않습니다."
 
 #: ../src/ghb.m4.h:549
 msgid "Deblocking: "
@@ -1686,10 +1876,21 @@ msgid ""
 "(or few) edges it applies to. Lower values mean less deblocking, higher values mean more deblocking.\n"
 "The default is 0 (normal strength) for both parameters."
 msgstr ""
+"H.264 deblocking 필터.\n"
+"\n"
+"h.264는 각 프레임을 디코딩한 후 blocking artifacts를 없애는 내장 deblocking\n"
+"필터를 가지고 있습니다. 이는 시각적 품질을 향상시킬 뿐만 아니라, 또한\n"
+"압축에도 크게 도움이 됩니다. deblocking 필터는 상당한 CPU 전력을 필요로 하며,\n"
+"만약 비디오 재생을 위한 CPU 요구 사항을 최소화하려면, 이 부분을 비활성화하십시오.\n"
+"\n"
+"deblocking 필터는 두 개의 조정 가능한 파라미터, \"강도\" (Alpha) 와 \"한계점\" (Beta) 를 가집니다.\n"
+"전자는 deblocker가 얼마나 강한 지 (약한 지) 를 조절하지만, 후자는 얼마나 많은 (적은) 엣지를 \n"
+"적용할 지를 조절합니다. 적은 값은 적은 deblocking을 의미하며, 높은 값은 높은 deblocking을 의미합니다.\n"
+"두 개의 파라미터에 대해서 기본값은 0 (기본 강도) 입니다."
 
 #: ../src/ghb.m4.h:561
 msgid "No DCT Decimate"
-msgstr ""
+msgstr "DCT 훼손 없음"
 
 #: ../src/ghb.m4.h:562
 msgid ""
@@ -1701,6 +1902,13 @@ msgid ""
 "Don't touch this unless you're having banding issues or other such cases\n"
 "where you are having trouble keeping fine noise."
 msgstr ""
+"x264는 일반적으로 비어 있는 데이터 블록을 0으로 설정하여 비트를 저장하면서\n"
+"비디오의 다른 목적으로 더욱 잘 사용합니다. 하지만, 이것은 가끔 미묘한\n"
+"그레인과 디더링을 유지하는 데에 부정적인 영향을 끼칠 수 있습니다.\n"
+"\n"
+"\n"
+"미세한 소음을 유지하는 데 문제가 있는 다른 경우가 아니라면 x264의 옵션을 \n"
+"건드리지 마십시오."
 
 #: ../src/ghb.m4.h:569
 msgid "<small><b>Psychovisual</b></small>"
@@ -1814,33 +2022,35 @@ msgstr ""
 
 #: ../src/ghb.m4.h:600
 msgid "Delete All"
-msgstr ""
+msgstr "전체 삭제"
 
 #: ../src/ghb.m4.h:601
 msgid "Delete all items in the queue."
-msgstr ""
+msgstr "대기열에서 모든 항목 삭제"
 
 #: ../src/ghb.m4.h:602
 msgid "Save Queue"
-msgstr ""
+msgstr "대기열 저장"
 
 #: ../src/ghb.m4.h:603
 msgid ""
 "Save the current queue of encode jobs to a file.\n"
 "This file may be reloaded at a later time to edit your jobs and re-encode."
 msgstr ""
+"현재 인코딩 작업 큐를 파일에 저장하십시오.\n"
+"작업을 편집하고 다시 인코딩하기 위해 이 파일을 이후에 다시 로드할 수 있습니다."
 
 #: ../src/ghb.m4.h:605
 msgid "Load Queue File"
-msgstr ""
+msgstr "대기열 파일 불러오기"
 
 #: ../src/ghb.m4.h:606
 msgid "Load a previously saved queue file."
-msgstr ""
+msgstr "이전에 저장한 대기열 파일 불러오기"
 
 #: ../src/ghb.m4.h:607
 msgid "<b>Save As:</b>"
-msgstr ""
+msgstr "<b>다른 이름으로 저장:</b>"
 
 #: ../src/ghb.m4.h:608
 msgid "Destination filename for your encode."
@@ -1848,7 +2058,7 @@ msgstr "인코딩에 대한 대상 파일 이름"
 
 #: ../src/ghb.m4.h:609
 msgid "<b>To:</b>"
-msgstr ""
+msgstr "<b>위치:</b>"
 
 #: ../src/ghb.m4.h:610
 msgid "Destination directory for your encode."
@@ -1917,6 +2127,8 @@ msgid ""
 "Available Options: {source} {title} {preset} {chapters} {date} {time} "
 "{creation-date} {creation-time} {quality} {bitrate}"
 msgstr ""
+"사용가능한 옵션: {source} {title} {preset} {chapters} {date} {time} {creation-date}"
+" {creation-time} {quality} {bitrate}"
 
 #: ../src/ghb.m4.h:625
 msgid "Use iPod/iTunes friendly (.m4v) file extension for MP4"
@@ -1944,15 +2156,15 @@ msgstr "(libdvdread 대신) dvdnav 사용"
 
 #: ../src/ghb.m4.h:631
 msgid "Monitor destination disk free space"
-msgstr ""
+msgstr "저장 경로 사용 가능한 디스크 공간 검사"
 
 #: ../src/ghb.m4.h:632
 msgid "Pause encoding if free disk space drops below limit"
-msgstr ""
+msgstr "한도 이하로 사용가능한 디스크 공간이 없을 시, 인코딩 중지"
 
 #: ../src/ghb.m4.h:633
 msgid "MB Limit"
-msgstr ""
+msgstr "MB 한계"
 
 #: ../src/ghb.m4.h:634
 msgid "Put individual encode logs in same location as movie"
@@ -1980,7 +2192,7 @@ msgstr "새로운 디스크가 삽입되면 DVD 검색"
 
 #: ../src/ghb.m4.h:640
 msgid "Activity Window Font Size"
-msgstr ""
+msgstr "액티비티 화면 글자 크기"
 
 #: ../src/ghb.m4.h:641
 msgid "Hide Advanced Video Options Tab"
@@ -2010,7 +2222,7 @@ msgstr ""
 
 #: ../src/ghb.m4.h:648
 msgid "Use the same settings for all titles in a batch"
-msgstr ""
+msgstr "묶인 모든 파일들에 대해 동일한 설정 적용"
 
 #: ../src/ghb.m4.h:649
 msgid ""
@@ -2019,6 +2231,8 @@ msgid ""
 "\n"
 "Uncheck this if you want to allow changing each title's settings independently."
 msgstr ""
+"이 옵션을 선택하면 대기열에 일련의 타이틀을 추가할 때 모든 타이틀이 동일한 설정을 사용합니다.\n"
+"각 타이틀의 설정을 독립적으로 변경하려면 선택을 해제하십시오."
 
 #: ../src/ghb.m4.h:653
 msgid "Allow Tweaks"
@@ -2026,7 +2240,7 @@ msgstr "설정 변경 허용"
 
 #: ../src/ghb.m4.h:654
 msgid "Allow HandBrake For Dummies"
-msgstr ""
+msgstr "초보자를 위한 HandBrake를 허용"
 
 #: ../src/ghb.m4.h:655
 msgid "Advanced"
@@ -2042,23 +2256,23 @@ msgstr "<b>설명</b>"
 
 #: ../src/ghb.m4.h:658
 msgid "<span size=\"x-large\">Rename Preset</span>"
-msgstr ""
+msgstr "<span size=\"x-large\">이름 바꾸기 환경 설정</span>"
 
 #: ../src/ghb.m4.h:659
 msgid "Name:"
-msgstr ""
+msgstr "이름:"
 
 #: ../src/ghb.m4.h:660
 msgid "Category:"
-msgstr ""
+msgstr "카테고리:"
 
 #: ../src/ghb.m4.h:661
 msgid "Set the category that this preset will be shown under."
-msgstr ""
+msgstr "해당 설정을 표시할 카테고리를 설정하십시오."
 
 #: ../src/ghb.m4.h:662
 msgid "Category Name:"
-msgstr ""
+msgstr "카테고리 이름:"
 
 #: ../src/ghb.m4.h:663
 msgid "Preset Name:"
@@ -2066,15 +2280,15 @@ msgstr "사전설정 이름:"
 
 #: ../src/ghb.m4.h:664
 msgid "Default Preset"
-msgstr ""
+msgstr "기본 설정"
 
 #: ../src/ghb.m4.h:665
 msgid "Make this the default Preset when HandBrake starts"
-msgstr ""
+msgstr "HandBrake 실행 시, 이를 기본 환경 설정으로 설정하십시오."
 
 #: ../src/ghb.m4.h:666
 msgid "<b>Custom Picture Dimensions</b>"
-msgstr ""
+msgstr "<b>사용자 설정 화면 크기</b>"
 
 #: ../src/ghb.m4.h:667
 msgid "Maximum Width:"
@@ -2144,19 +2358,19 @@ msgstr "미리보기에서 잘라낸 영역 보기"
 
 #: ../src/ghb.m4.h:685
 msgid "Source Resolution"
-msgstr ""
+msgstr "영상 해상도"
 
 #: ../src/ghb.m4.h:686
 msgid "Reset preview window to the source video's resolution"
-msgstr ""
+msgstr "미리보기 화면을 원본 파일의 해상도로 재설정"
 
 #: ../src/ghb.m4.h:687
 msgid "_Cancel"
-msgstr ""
+msgstr "_취소"
 
 #: ../src/ghb.m4.h:688
 msgid "_Open"
-msgstr ""
+msgstr "_열기"
 
 #: ../src/ghb.m4.h:689
 msgid "Title Number:"
@@ -2387,49 +2601,49 @@ msgstr "<b>배포 기록</b>"
 
 #: ../src/fr.handbrake.ghb.appdata.xml.template.h:2
 msgid "Video Transcoder"
-msgstr ""
+msgstr "비디오 트랜스코더"
 
 #: ../src/fr.handbrake.ghb.appdata.xml.template.h:3
 msgid ""
 "HandBrake is a tool for converting video from nearly any format to a "
 "selection of modern, widely supported codecs."
-msgstr ""
+msgstr "HandBrake는 현대적이며 널리 지원되는 코덱을 사용하여 대부분의 형식으로 비디오를 변환하는 도구(tool)입니다."
 
 #: ../src/fr.handbrake.ghb.appdata.xml.template.h:4
 msgid "Reasons you'll love Handbrake:"
-msgstr ""
+msgstr "HandBrake를 좋아하게 될 이유:"
 
 #: ../src/fr.handbrake.ghb.appdata.xml.template.h:5
 msgid "Convert video from nearly any format"
-msgstr ""
+msgstr "대부분의 형식으로 비디오 변환"
 
 #: ../src/fr.handbrake.ghb.appdata.xml.template.h:6
 msgid "Free and Open Source"
-msgstr ""
+msgstr "자유 및 오픈 소스"
 
 #: ../src/fr.handbrake.ghb.appdata.xml.template.h:7
 msgid "Multi-Platform (Windows, Mac and Linux)"
-msgstr ""
+msgstr "멀티-플랫폼 (Windows, Mac and Linux)"
 
 #: ../src/fr.handbrake.ghb.appdata.xml.template.h:8
 msgid "Main window and settings summary"
-msgstr ""
+msgstr "메인화면 및 설정 요약"
 
 #: ../src/fr.handbrake.ghb.appdata.xml.template.h:9
 msgid "Video resolution and cropping settings"
-msgstr ""
+msgstr "비디오 해상도와 자르기 설정"
 
 #: ../src/fr.handbrake.ghb.appdata.xml.template.h:10
 msgid "Video encoder settings"
-msgstr ""
+msgstr "비디오 인코더 설정"
 
 #: ../src/fr.handbrake.ghb.appdata.xml.template.h:11
 msgid "Audio track selection and settings"
-msgstr ""
+msgstr "오디오 트랙 선택 및 설정"
 
 #: ../src/fr.handbrake.ghb.appdata.xml.template.h:12
 msgid "Chapter title editing"
-msgstr ""
+msgstr "챕터 제목 변경"
 
 #: ../src/main.c:100
 #, c-format
@@ -2478,15 +2692,15 @@ msgstr "인코딩에 사용할 사전설정 값"
 
 #: ../src/main.c:674
 msgid "Spam a lot"
-msgstr ""
+msgstr "Spam a lot"
 
 #: ../src/main.c:675
 msgid "The path to override user config dir"
-msgstr ""
+msgstr "사용자 설정 디렉토리를 덮어 쓸 경로"
 
 #: ../src/main.c:677
 msgid "Open a console for debug output"
-msgstr ""
+msgstr "디버그 출력을 위한 콘솔 열기"
 
 #: ../src/main.c:1151 ../src/hb-backend.c:337 ../src/queuehandler.c:929
 msgid "All"
@@ -2505,7 +2719,7 @@ msgstr "품질:"
 #: ../src/audiohandler.c:722
 #, c-format
 msgid "Bitrate: %dkbps\n"
-msgstr ""
+msgstr "비트 전송속도: %dkbps\n"
 
 #: ../src/audiohandler.c:734
 #, c-format
@@ -2534,6 +2748,9 @@ msgid ""
 "DRC: %s\n"
 "Track Name: %s"
 msgstr ""
+"%s얻기: %s\n"
+"DRC: %s\n"
+"트랙 이름: %s"
 
 #: ../src/audiohandler.c:774
 #, c-format
@@ -2541,6 +2758,8 @@ msgid ""
 "%sGain: %s\n"
 "DRC: %s"
 msgstr ""
+"%s얻기: %s\n"
+"DRC: %s"
 
 #: ../src/audiohandler.c:1725
 msgid ""
@@ -2587,7 +2806,7 @@ msgstr "발견된 타이틀 없음"
 
 #: ../src/callbacks.c:2668
 msgid "New Video"
-msgstr ""
+msgstr "새 비디오"
 
 #: ../src/callbacks.c:3461 ../src/callbacks.c:3483 ../src/callbacks.c:3502
 #: ../src/callbacks.c:3534
@@ -2740,15 +2959,15 @@ msgstr "선택된 언어에 부합하는 모든 트랙"
 
 #: ../src/hb-backend.c:73
 msgid "Foreign Audio Subtitle Track"
-msgstr ""
+msgstr "외부 오디오 자막 트랙"
 
 #: ../src/hb-backend.c:74
 msgid "First Selected Track"
-msgstr ""
+msgstr "처음 선택된 트랙"
 
 #: ../src/hb-backend.c:75
 msgid "Foreign Audio, then First Selected Track"
-msgstr ""
+msgstr "외부 오디오 그리고 처음 선택된 트랙"
 
 #: ../src/hb-backend.c:97
 msgid "Chapters:"
@@ -2808,7 +3027,7 @@ msgstr "연도"
 
 #: ../src/hb-backend.c:165
 msgid "Immortal"
-msgstr ""
+msgstr "Immortal"
 
 #: ../src/hb-backend.c:175
 msgid "Never"
@@ -2832,35 +3051,35 @@ msgstr "Decomb"
 
 #: ../src/hb-backend.c:203
 msgid "Yadif"
-msgstr ""
+msgstr "Yadif"
 
 #: ../src/hb-backend.c:214
 msgid "NLMeans"
-msgstr ""
+msgstr "NLMeans"
 
 #: ../src/hb-backend.c:215
 msgid "HQDN3D"
-msgstr ""
+msgstr "HQDN3D"
 
 #: ../src/hb-backend.c:226
 msgid "Unsharp"
-msgstr ""
+msgstr "Unsharp"
 
 #: ../src/hb-backend.c:227
 msgid "Lapsharp"
-msgstr ""
+msgstr "Lapsharp"
 
 #: ../src/hb-backend.c:238
 msgid "90 Degrees"
-msgstr ""
+msgstr "90º"
 
 #: ../src/hb-backend.c:239
 msgid "180 Degrees"
-msgstr ""
+msgstr "180º"
 
 #: ../src/hb-backend.c:240
 msgid "270 Degrees"
-msgstr ""
+msgstr "270º"
 
 #: ../src/hb-backend.c:251
 msgid "Spatial"
@@ -2892,7 +3111,7 @@ msgstr "단순"
 
 #: ../src/hb-backend.c:289
 msgid "Smart"
-msgstr ""
+msgstr "스마트"
 
 #: ../src/hb-backend.c:299
 msgid "Diamond"
@@ -2920,15 +3139,15 @@ msgstr "0: SAD, 부화소 없음"
 
 #: ../src/hb-backend.c:314
 msgid "1: SAD, qpel"
-msgstr ""
+msgstr "1: SAD, qpel"
 
 #: ../src/hb-backend.c:315
 msgid "2: SATD, qpel"
-msgstr ""
+msgstr "2: SATD, qpel"
 
 #: ../src/hb-backend.c:316
 msgid "3: SATD: multi-qpel"
-msgstr ""
+msgstr "3: SATD: multi-qpel"
 
 #: ../src/hb-backend.c:317
 msgid "4: SATD, qpel on all"
@@ -2997,27 +3216,27 @@ msgstr "(NTSC 비디오)"
 #: ../src/hb-backend.c:2092
 #, c-format
 msgid "%s - (%05d.MPLS)"
-msgstr ""
+msgstr "%s - (%05d.MPLS)"
 
 #: ../src/hb-backend.c:2242
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - %s"
-msgstr ""
+msgstr "%3d - %02dh%02dm%02ds - %s"
 
 #: ../src/hb-backend.c:2261
 #, c-format
 msgid "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
-msgstr ""
+msgstr "%3d - %02dh%02dm%02ds - (%05d.MPLS)"
 
 #: ../src/hb-backend.c:2267
 #, c-format
 msgid "%3d - (%05d.MPLS)"
-msgstr ""
+msgstr "%3d - (%05d.MPSL)"
 
 #: ../src/hb-backend.c:2273
 #, c-format
 msgid "%3d - %02dh%02dm%02ds"
-msgstr ""
+msgstr "%3d - %02dh%02dm%02ds"
 
 #: ../src/hb-backend.c:2307
 msgid "No Titles"
@@ -3040,6 +3259,10 @@ msgid ""
 "Preset:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
+"사용 불가능한 Detelecine 설정:\n"
+"\n"
+"환경설정:\t%s\n"
+"사용자 설정:\t%s\n"
 
 #: ../src/hb-backend.c:4215
 #, c-format
@@ -3048,6 +3271,9 @@ msgid ""
 "\n"
 "Preset:\t%s\n"
 msgstr ""
+"사용 불가능한 Deinterlace 설정:\n"
+"\n"
+"환경설정:\t%s\n"
 
 #: ../src/hb-backend.c:4241
 #, c-format
@@ -3057,6 +3283,10 @@ msgid ""
 "Preset:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
+"사용 불가능한 Comb Detect 설정:\n"
+"\n"
+"환경설정:\t%s\n"
+"사용자 설정:\t%s\n"
 
 #: ../src/hb-backend.c:4248
 #, c-format
@@ -3065,6 +3295,9 @@ msgid ""
 "\n"
 "Preset:\t%s\n"
 msgstr ""
+"사용 불가능한 Comb Detect 설정:\n"
+"\n"
+"환경설정:\t%s\n"
 
 #: ../src/hb-backend.c:4277
 #, c-format
@@ -3075,6 +3308,11 @@ msgid ""
 "Preset:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
+"사용 불가능한 Deinterlace 설정:\n"
+"\n"
+"필터:\t%s\n"
+"환경설정:\t%s\n"
+"사용자 설정\t%s\n"
 
 #: ../src/hb-backend.c:4286
 #, c-format
@@ -3084,6 +3322,10 @@ msgid ""
 "Filter:\t%s\n"
 "Preset:\t%s\n"
 msgstr ""
+"사용 불가능한 Deinterlace 설정:\n"
+"\n"
+"필터:\t%s\n"
+"환경설정:\t%s\n"
 
 #: ../src/hb-backend.c:4315
 #, c-format
@@ -3095,6 +3337,12 @@ msgid ""
 "Tune:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
+"사용 불가능한 Denoise 설정:\n"
+"\n"
+"필터:\t%s\n"
+"환경설정:\t%s\n"
+"조정:\t%s\n"
+"사용자 설정:\t%s\n"
 
 #: ../src/hb-backend.c:4343
 #, c-format
@@ -3106,6 +3354,12 @@ msgid ""
 "Tune:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
+"사용 불가능한 Sharpen 설정:\n"
+"\n"
+"필터: \t%s\n"
+"환경설정:\t%s\n"
+"조정:\t%s\n"
+"사용자 설정:\t%s\n"
 
 #: ../src/hb-backend.c:4375
 #, c-format
@@ -3151,6 +3405,10 @@ msgid ""
 "You should choose a valid file.\n"
 "If you continue, this subtitle will be ignored."
 msgstr ""
+"SRT 파일이 존재하지 않거나 정상적인 파일이 아닙니다.\n"
+"\n"
+"사용 가능한 파일을 선택해야 합니다.\n"
+"계속하시면, 해당 자막이 무시됩니다."
 
 #: ../src/hb-backend.c:4510
 #, c-format
@@ -3160,7 +3418,7 @@ msgid ""
 "You should choose a different audio codec.\n"
 "If you continue, one will be chosen for you."
 msgstr ""
-"원본이 패스쓰루를 지원하지 않습니다.\n"
+"원본이 Pass-Thru를 지원하지 않습니다.\n"
 "\n"
 "다른 오디오 코덱을 선택해야 합니다.\n"
 "계속하면, 임의의 코덱이 선택됩니다."
@@ -3180,11 +3438,11 @@ msgstr ""
 
 #: ../src/presets.c:1192
 msgid "ghb_presets_menu_init: Failed to find presets folder."
-msgstr ""
+msgstr "ghp_환경설정_초기_메뉴: 환경설정 폴더를 찾지 못하였습니다. "
 
 #: ../src/presets.c:1348
 msgid "Failed to find parent folder when adding child."
-msgstr ""
+msgstr "파일 추가 도중 상위 폴더를 찾지 못하였습니다."
 
 #: ../src/presets.c:1822
 #, c-format
@@ -3193,14 +3451,17 @@ msgid ""
 "\n"
 "Would you like to continue?"
 msgstr ""
+"발견된 환경설정이 현재 버전의 HandBrake에서 지원되는 설정보다 최신 버전입니다.\n"
+"\n"
+"계속하시겠습니까?"
 
 #: ../src/presets.c:1825
 msgid "Get me out of here!"
-msgstr ""
+msgstr "날 여기서 꺼내줘!"
 
 #: ../src/presets.c:1825
 msgid "Load backup presets"
-msgstr ""
+msgstr "백업 환경설정 로드"
 
 #: ../src/presets.c:1971
 msgid "All (*)"
@@ -3208,11 +3469,11 @@ msgstr "모두 (*)"
 
 #: ../src/presets.c:1976
 msgid "Presets (*.json)"
-msgstr ""
+msgstr "환경설정 (*.json)"
 
 #: ../src/presets.c:1982
 msgid "Legacy Presets (*.plist)"
-msgstr ""
+msgstr "이전 환경설정 (*.plist)"
 
 #: ../src/presets.c:2077
 msgid "Export Preset"
@@ -3355,12 +3616,12 @@ msgstr "%sDetelecine"
 #: ../src/queuehandler.c:460
 #, c-format
 msgid "%s%s:"
-msgstr ""
+msgstr "%s%s:"
 
 #: ../src/queuehandler.c:475
 #, c-format
 msgid "%sDenoise %s:"
-msgstr ""
+msgstr "%sDenoise %s:"
 
 #: ../src/queuehandler.c:497
 #, c-format
@@ -3457,12 +3718,12 @@ msgstr "비트레이트: %d"
 #: ../src/queuehandler.c:702
 #, c-format
 msgid "%d - %s --> Encoder: %s"
-msgstr ""
+msgstr "%d - %s --> 인코딩: %s"
 
 #: ../src/queuehandler.c:707
 #, c-format
 msgid "%d - %s --> Encoder: %s, Mixdown: %s, SampleRate: %s, %s"
-msgstr ""
+msgstr "%d - %s --> 인코딩: %s, 믹스다운: %s, 견본 비율: %s, %s"
 
 #: ../src/queuehandler.c:733
 msgid "<b>Subtitle:</b> "
@@ -3475,7 +3736,7 @@ msgstr "<b>자막 트랙: %d</b>\n"
 
 #: ../src/queuehandler.c:751 ../src/queuehandler.c:778
 msgid " (Forced Only)"
-msgstr ""
+msgstr "(강제로)"
 
 #: ../src/queuehandler.c:752 ../src/queuehandler.c:779
 msgid " (Burn)"
@@ -3488,7 +3749,7 @@ msgstr "(기본)"
 #: ../src/queuehandler.c:787
 #, c-format
 msgid "<small> %s, Offset (ms) %d%s</small>\n"
-msgstr ""
+msgstr "<small>%s, 오프셋 (ms) %d%s</small>\n"
 
 #: ../src/queuehandler.c:1151
 #, c-format
@@ -3497,14 +3758,17 @@ msgid ""
 "Destination: %s\n"
 "Encode may be incomplete if you proceed.\n"
 msgstr ""
+"%s 파일 경로 디스크 공간이 부족합니다: %<PRIu64>MB 남았습니다.\n"
+"경로 : %s\n"
+"계속 진행 시 인코딩이 완료되지 못할 수도 있습니다.\n"
 
 #: ../src/queuehandler.c:1156
 msgid "Resume, I've fixed the problem"
-msgstr ""
+msgstr "다시 시작, 해당 문제를 해결하였습니다."
 
 #: ../src/queuehandler.c:1157
 msgid "Resume, Don't tell me again"
-msgstr ""
+msgstr "다시 시작, 다시는 묻지 마십시오."
 
 #: ../src/queuehandler.c:1211
 #, c-format
@@ -3595,11 +3859,11 @@ msgstr "인코딩 다시 시작"
 
 #: ../src/queuehandler.c:2369
 msgid "S_top Encoding"
-msgstr ""
+msgstr "인코딩 중단"
 
 #: ../src/queuehandler.c:2380
 msgid "_Resume Encoding"
-msgstr ""
+msgstr "인코딩 다시 시작하기"
 
 #: ../src/queuehandler.c:2419
 msgid ""
@@ -3622,7 +3886,7 @@ msgstr "%s 자막 트랙을 기본 오디오 트랙이 %s 아닌 경우 추가"
 #: ../src/subtitlehandler.c:1299
 #, c-format
 msgid "Add subtitle track if default audio is not your preferred language"
-msgstr ""
+msgstr "기본 오디오가 선호하는 언어가 아닐 경우 자막 트랙 추가"
 
 #: ../src/videohandler.c:207 ../src/videohandler.c:226
 #: ../src/x264handler.c:173
