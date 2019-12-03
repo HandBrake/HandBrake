@@ -110,7 +110,7 @@ msgid ""
 "conjunction with the \"Forced\" option."
 msgstr ""
 "Die Untertitelspur der Quelle\n"
-"Es kann irgendeine der erkannten\n"
+"Es kann eine der erkannten\n"
 "Untertitel aus den Quelldateien auswählt werden.\n"
 "Zusätzlich gibt es eine spezielle Option\n"
 "„Fremdsprachentonsuche“. Diese fügt der \n"
@@ -249,15 +249,15 @@ msgstr "Encoding _Pausieren"
 
 #: ../src/ghb.m4.h:71
 msgid "S_ave Queue"
-msgstr "Warteschlangen speichern"
+msgstr "Warteschlange speichern"
 
 #: ../src/ghb.m4.h:72
 msgid "_Load Queue File"
-msgstr "Warteschlangendatei laden"
+msgstr "_Warteschlangendatei laden"
 
 #: ../src/ghb.m4.h:73
 msgid "_View"
-msgstr "Ansicht"
+msgstr "_Ansicht"
 
 #: ../src/ghb.m4.h:74
 msgid "HandBrake For _Dumbies"
@@ -269,7 +269,7 @@ msgstr "Voreinstellungen _Liste"
 
 #: ../src/ghb.m4.h:76
 msgid "_Preview"
-msgstr "Vorschau"
+msgstr "_Vorschau"
 
 #: ../src/ghb.m4.h:77
 msgid "_Activity Window"
@@ -390,7 +390,7 @@ msgstr "<b>Winkel:</b>"
 
 #: ../src/ghb.m4.h:106
 msgid "For multi-angle DVD's, select the desired angle to encode."
-msgstr "Wähle für DVD's mit mehreren Blickwinkeln, den gewünschten aus."
+msgstr "Wähle für DVD's mit mehreren Blickwinkeln den gewünschten aus."
 
 #: ../src/ghb.m4.h:107
 msgid "<b>Range:</b>"
@@ -440,7 +440,7 @@ msgstr ""
 
 #: ../src/ghb.m4.h:118
 msgid "Save New Preset"
-msgstr "Speichere neue Voreinstellung"
+msgstr "Neue Voreinstellung speichern"
 
 #: ../src/ghb.m4.h:119
 msgid "Save the current settings to a new Preset."
@@ -624,7 +624,7 @@ msgstr ""
 "<b>Anamorphischer Modus:</b>\n"
 "<small><tt>\n"
 "Kein             - Erzwingt das Bildformat von 1:1.\n"
-"Lose            - Verwende ein Bildformat das möglichst\n"
+"Loose            - Verwende ein Bildformat das möglichst\n"
 "                    nahe dem der Quelldatei ist und das originale\n"
 "                    Bildformat der Anzeige beibehält.\n"
 "Automatisch - Verwende ein Bildformat welches die\n"
@@ -749,9 +749,9 @@ msgid ""
 "If a deinterlace filter is enabled, only frames that this filter finds\n"
 "to be interlaced will be deinterlaced."
 msgstr ""
-"Dieser Filter erkennt Interlaced Einzelbilder.\n"
+"Dieser Filter erkennt interlaced Einzelbilder.\n"
 "\n"
-"Falls ein Deinterlace Filter aktiviert ist, werden nur Einzelbilder die von diesem Filter als Interlaced erkannt werden deinterlaced."
+"Falls ein Deinterlace-Filter aktiviert ist, werden nur Einzelbilder die von diesem Filter als Interlaced erkannt werden deinterlaced."
 
 #: ../src/ghb.m4.h:206
 msgid ""
@@ -760,7 +760,7 @@ msgid ""
 "Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:\n"
 "Block Thresh: Block Width: Block Height"
 msgstr ""
-"Benutzerdefinierter Interlace Erkennungsfilter Zeichenketten Format\n"
+"Benutzerdefiniertes Zeichenkettenformat des Interlacefilters\n"
 "\n"
 "Mode:Spatial Metric:Motion Thresh:Spatial Thresh:Mask Filter Mode:\n"
 "Block Thresh: Block Width: Block Height"
@@ -806,7 +806,7 @@ msgid ""
 "The deblocking filter removes a common type of compression artifact.\n"
 "If your source exhibits 'blockiness', this filter may help clean it up."
 msgstr ""
-"Der Entblockungs-Filter entfernt die bekannten Formen von Kompressionsartefakten.\n"
+"Der Deblockfilter entfernt die bekannte Form der Kompressionsartefakte.\n"
 "Wenn die Quelle Blockartefakte zeigt, könnte der Filter hilfreich sein."
 
 #: ../src/ghb.m4.h:225
@@ -825,7 +825,7 @@ msgstr ""
 
 #: ../src/ghb.m4.h:229
 msgid "Denoise Preset:"
-msgstr "Entrausch-Voreinstellung:"
+msgstr "Entrauschvoreinstellung:"
 
 #: ../src/ghb.m4.h:230
 msgid "Denoise Tune:"
@@ -837,7 +837,7 @@ msgid ""
 "\n"
 "SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 msgstr ""
-"Benutzerdefiniertes Entrauschen-Filter-Zeichenkettenformat\n"
+"Benutzerdefiniertes Zeichenkettenformat des Entrauschfilters\n"
 "\n"
 "SpatialLuma:SpatialChroma:TemporalLuma:TemporalChroma"
 
@@ -867,7 +867,7 @@ msgstr "Rotationsfilter:"
 
 #: ../src/ghb.m4.h:240
 msgid "Rotate the video clockwise in 90 degree increments."
-msgstr "Rotiere das Video in Richtung der Uhrzeit in 90 Grad Stufen."
+msgstr "Rotiere das Video im Uhrzeigersinn in 90 Grad-Schritten."
 
 #: ../src/ghb.m4.h:241
 msgid "Grayscale"
@@ -912,7 +912,7 @@ msgstr "Konstante Bildfrequenz:"
 
 #: ../src/ghb.m4.h:252
 msgid "Enables constant framerate output."
-msgstr "Aktiviert konstante Bildfrequenz der Ausgabe"
+msgstr "Aktiviert eine konstante Bildfrequenz der Ausgabe"
 
 #: ../src/ghb.m4.h:253
 msgid "Peak Framerate (VFR)"
@@ -990,7 +990,7 @@ msgstr ""
 "Setzt die durchschnittliche Bitrate.\n"
 "Die Bitrate kann in willkürlichen Punkten weitaus höher oder niedriger sein.\n"
 "Die Durchschnittsrate über einen langen Zeitraum kann jedoch hier gesetzt werden.\n"
-"Falls die Bitrate unbedingt eingehalten werden muss, schau dir x264's vbv-bufsize und vbv-maxrate Einstellungen an."
+"Falls die Bitrate unbedingt eingehalten werden muss, kann x264's vbv-bufsize und vbv-maxrate verwendet werden."
 
 #: ../src/ghb.m4.h:281
 msgid "2-Pass Encoding"
@@ -1006,7 +1006,7 @@ msgid ""
 msgstr ""
 "Führe eine Encodierung in zwei Durchgängen durch.\n"
 "\n"
-"Die Bitrate muss hierfür angegeben werden. Im 1ten Durchgang werden Statistiken über das Video erhoben. \n"
+"Die Bitrate muss hierfür angegeben werden. Im ersten Durchgang werden Statistiken über das Video erhoben. \n"
 "Im zweiten Durchgang werden diese Statistiken verwendet, um Entscheidungen über die Zuweisungen der Bitrate zu treffen."
 
 #: ../src/ghb.m4.h:287
@@ -1018,8 +1018,8 @@ msgid ""
 "During the 1st pass of a 2 pass encode, use settings that speed things "
 "along."
 msgstr ""
-"Verwende während des 1ten Durchlaufs einer Encodierung in zwei Durchgängen "
-"Einstellungen um die Verarbeitung zu beschleunigen. "
+"Verwende während des ersten Durchgangs einer Encodierung in zwei Durchgängen"
+" Einstellungen um die Verarbeitung zu beschleunigen. "
 
 #: ../src/ghb.m4.h:289
 msgid "Use Advanced Options"
@@ -1031,7 +1031,7 @@ msgid ""
 "\n"
 "Use at your own risk!"
 msgstr ""
-"Verwende Erweiterte Optionen Tab für x264 Einstellungen.\n"
+"Verwende das Erweiterte Optionen Tab für x264-Einstellungen.\n"
 "Verwendung auf eigene Gefahr!"
 
 #: ../src/ghb.m4.h:293
@@ -1065,7 +1065,7 @@ msgid ""
 "characteristics of the output file.  Changes will be applied after the\n"
 "preset but before all other parameters."
 msgstr ""
-"Verändere Einstellungen zur Optimierung bekannter Szenarien.\n"
+"Verändert Einstellungen zur Optimierung bekannter Szenarien.\n"
 "\n"
 "Dies kann die Kodierung effizenter machen oder für bessere Qualität sorgen. Diese Veränderungen werden nach den Voreinstellungen gemacht, aber vor allen anderen Parametern."
 
@@ -1084,7 +1084,7 @@ msgstr ""
 
 #: ../src/ghb.m4.h:310
 msgid "Zero Latency"
-msgstr "Nulllatenz"
+msgstr "Keine Latenz"
 
 #: ../src/ghb.m4.h:311
 msgid ""
@@ -1139,7 +1139,7 @@ msgid ""
 msgstr ""
 "Zusätzliche Kodierereinstellungen.\n"
 "\n"
-"Liste von Kodiereroptionen getrennt durch Doppelpunkt."
+"Liste von Kodiereroptionen, getrennt durch Doppelpunkte."
 
 #: ../src/ghb.m4.h:329 ../src/main.c:1155
 msgid "Video"
@@ -1172,7 +1172,7 @@ msgstr "Füge neue Audioeinstellungen der Liste hinzu"
 
 #: ../src/ghb.m4.h:336
 msgid "Add All"
-msgstr "Alle Hinzufügen"
+msgstr "Alle hinzufügen"
 
 #: ../src/ghb.m4.h:337
 msgid "Add all audio tracks to the list"
@@ -1416,7 +1416,7 @@ msgstr ""
 "Erstellen Sie eine Liste der Sprachen, für die Sie Untertitel auswählen möchten. \n"
 "Spuren, die diesen Sprachen entsprechen, werden mit dem gewählten Auswahlverhalten ausgewählt.\n"
 "\n"
-"Die erste Sprache in dieser Liste ist Ihre „bevorzugte“ Sprache und wird verwendet.\n"
+"Die erste Sprache in dieser Liste ist Ihre „bevorzugte“ Sprache und wird verwendet\n"
 "zum Bestimmen der Einstellungen für die Untertitelauswahl bei Fremdsprachenton."
 
 #: ../src/ghb.m4.h:399
@@ -1450,7 +1450,7 @@ msgid ""
 "\n"
 "        This option requires a language to be set in the Selected Languages list."
 msgstr ""
-"Falls die Standardtonspur nicht in der bevorzugten Sprache ist, füge eine Untertitelspur hinzu.\n"
+"Fügt eine Untertitelspur hinzu, falls die Standardtonspur nicht in der bevorzugten Sprache ist.\n"
 "\n"
 "Diese Option benötigt eine Sprache welche in der „gewählten Sprachen“ Liste gesetzt wurde."
 
@@ -1477,10 +1477,10 @@ msgid ""
 "        Burned-In subtitles are part of the video and can not be disabled during playback.\n"
 "        Only one subtitle track can be burned! Since conflicts can occur, the first chosen wins."
 msgstr ""
-"Setzt das Verhalten von der Untertitel-Einbrennung.\n"
+"Setzt das Verhalten der eingebrannten Untertitel.\n"
 "\n"
 "Eingebrannte Untertitel sind Teil des Videos und können nicht mehr deaktiviert werden.\n"
-"Nur eine Untertitelspur kann eingebrannt werden! Wenn Konflikte auftauchen, gewinnt die erste Spur."
+"Nur eine Untertitelspur kann eingebrannt werden! Wenn Konflikte auftreten, wird nur die Erste verwendet."
 
 #: ../src/ghb.m4.h:416
 msgid "Burn-In for deficient players*:"
@@ -1531,8 +1531,8 @@ msgid ""
 "Only one subtitle track can be burned! Since conflicts can occur, the first "
 "chosen wins."
 msgstr ""
-"Nur eine Untertitelspur kann eingebrannt werden! Da Konflikte entstehen "
-"können, gewinnt die erste ausgewählte."
+"Nur eine Untertitelspur kann eingebrannt werden! Wenn Konflikte auftreten, "
+"wird nur die Erste verwendet."
 
 #: ../src/ghb.m4.h:429
 msgid "Subtitles"
@@ -1590,7 +1590,7 @@ msgid ""
 "\n"
 "Requires Max B-frames greater than 1; optimal adaptive B-frames is strongly recommended for full compression benefit."
 msgstr ""
-"B-Pyramiden vergrößern die Kompression durch Erstellen von Pyramidenförmigen\n"
+"B-Pyramiden vergrößern die Kompression durch Erstellen von pyramidenförmigen\n"
 "Strukturen (daher der Name) aus B-Frames. Dies erlaubt den B-Bildern sich auf sich gegenseitig zu beziehen um die Kompression zu steigern.\n"
 "\n"
 "Erfordert einen maximalen B-Frames-Wert größer als 1; Optional sind adaptive B-Frames für optimale Kompression stark empfohlen."
@@ -1612,7 +1612,7 @@ msgid ""
 msgstr ""
 "Vollzieht zusätzliche Analysen um über gewichtete Parameter jedes Bildes zu entscheiden.\n"
 "\n"
-"Dies verstärkt die Kompression im Allgemeinen etwas und verbessert die Qualität von Blenden gewaltig.\n"
+"Dies verstärkt die Kompression im Allgemeinen etwas und verbessert die Qualität von Überblendungen gewaltig.\n"
 "\n"
 "Das Basis-Profile, iPods und ähnliche Geräte, erfordern es die gewichtete P-Bilder Vorhersage auszuschalten. \n"
 "Beachte das andere Geräte die das Haupt-Profil unterstützen, auch mit dieser Funktion Probleme haben könnten.\n"
@@ -1635,7 +1635,7 @@ msgstr ""
 "\n"
 "Es verstärkt die Kompression um mindestens 5% bei minimalen\n"
 "Geschwindigkeitseinbußen und ergibt möglicherweise einen ungewöhnlich hohen Qualitätsvorteil \n"
-"verglichen mit dem Kompressionsanstieg. Jedoch erfordert es das Hohe Profil das viele Geräte möglicherweise nicht unterstützen."
+"verglichen mit dem Kompressionsanstieg. Jedoch erfordert es das High-Profil das viele Geräte möglicherweise nicht unterstützen."
 
 #: ../src/ghb.m4.h:466
 msgid "CABAC Entropy Encoding"
@@ -2018,8 +2018,8 @@ msgid ""
 "Mark selected queue entry as pending.\n"
 "Resets the queue job to pending and ready to run again."
 msgstr ""
-"Markiere den selektierten Warteschlangeneintrag als ausständig.\n"
-"Setzt die Warteschlangenaufgabe als ausstehend und bereit zum Neustart zurück."
+"Markiere den ausgewählten Warteschlangeneintrag als bevorstehend.\n"
+"Setzt die Warteschlangenaufgabe als bevorstehend und bereit zum Neustart zurück."
 
 #: ../src/ghb.m4.h:597
 msgid "Reload All"
@@ -2030,8 +2030,8 @@ msgid ""
 "Mark all queue entries as pending.\n"
 "Resets all queue jobs to pending and ready to run again."
 msgstr ""
-"Markiere alle Warteschlangeneinträge als ausständig.\n"
-"Setzt alle Warteschlangenaufgabe als ausstehend und bereit zum Neustart zurück."
+"Markiere alle Warteschlangeneinträge als abevorstehend.\n"
+"Setzt alle Warteschlangenaufgabe als abevorstehend und bereit zum Neustart zurück."
 
 #: ../src/ghb.m4.h:600
 msgid "Delete All"
@@ -2126,7 +2126,7 @@ msgstr "Automatisch nach Updates suchen"
 
 #: ../src/ghb.m4.h:621
 msgid "When all encodes are complete"
-msgstr "When alle Encodierungen abgeschlossen sind"
+msgstr "Wenn alle Encodierungen abgeschlossen sind"
 
 #: ../src/ghb.m4.h:622
 msgid "Use automatic naming (uses modified source name)"
@@ -2190,7 +2190,7 @@ msgstr ""
 
 #: ../src/ghb.m4.h:635
 msgid "Activity Log Verbosity Level"
-msgstr "AAktivitätsprotokoll-Ausführlichkeitsstufe"
+msgstr "Aktivitätsprotokoll-Ausführlichkeitsstufe"
 
 #: ../src/ghb.m4.h:636
 msgid "Activity Log Longevity"
@@ -2295,7 +2295,7 @@ msgstr "Kategoriename:"
 
 #: ../src/ghb.m4.h:663
 msgid "Preset Name:"
-msgstr "Voreinstellungname:"
+msgstr "Voreinstellungsname:"
 
 #: ../src/ghb.m4.h:664
 msgid "Default Preset"
@@ -2303,7 +2303,7 @@ msgstr "Standard-Voreinstellung"
 
 #: ../src/ghb.m4.h:665
 msgid "Make this the default Preset when HandBrake starts"
-msgstr "Setze dies als Standard Voreinstellung wenn HandBrake startet"
+msgstr "Setze dies als Standard-Voreinstellung wenn HandBrake startet"
 
 #: ../src/ghb.m4.h:666
 msgid "<b>Custom Picture Dimensions</b>"
@@ -2397,7 +2397,7 @@ msgstr "Öffnen"
 
 #: ../src/ghb.m4.h:689
 msgid "Title Number:"
-msgstr "Titel Nummer:"
+msgstr "Titelnummer:"
 
 #: ../src/ghb.m4.h:690
 msgid "Detected DVD devices:"
@@ -2451,7 +2451,7 @@ msgid ""
 "We translate the character set to UTF-8.\n"
 "The source's character code is needed in order to perform this translation."
 msgstr ""
-"Setze den Character Code der von der importierten SRT Datei verwendet wird.\n"
+"Setze den Character Code der von der importierten SRT-Datei verwendet wird.\n"
 "\n"
 "SRTs gibt es in allen möglichen Character Sets.\n"
 "Wir übersetzen das Character Set zu UTF-8.\n"
@@ -2463,7 +2463,7 @@ msgstr "Wähle die zu importierende SRT-Datei."
 
 #: ../src/ghb.m4.h:707
 msgid "Srt File"
-msgstr "Srt-Datei"
+msgstr "SRT-Datei"
 
 #: ../src/ghb.m4.h:708
 msgid "Adjust the offset in milliseconds between video and SRT timestamps"
@@ -2538,7 +2538,7 @@ msgstr ""
 "<b>Dynamic Range Compression:</b>Adjustiere den Dynamikumfang der Tonspur der Ausgabe.\n"
 "\n"
 "Für Quellaudio welches einen großen Dynamikumfang hat (sehr laute und sehr leise sequenzen),\n"
-"erlaubt DRC diesen umfang zu komprimieren indem laute Geräusche\n"
+"erlaubt DRC diesen Umfang zu komprimieren indem laute Geräusche\n"
 "leiser und leise Geräusche lauter gemacht werden."
 
 #: ../src/ghb.m4.h:728 ../src/audiohandler.c:1747
@@ -2712,7 +2712,7 @@ msgstr "Spurinformation"
 
 #: ../src/main.c:466
 msgid "Preset Name"
-msgstr "Voreinstellungname:"
+msgstr "Voreinstellungsname:"
 
 #: ../src/main.c:672
 msgid "The device or file to encode"
@@ -2798,16 +2798,16 @@ msgid ""
 "Add an audio encoder.\n"
 "Each selected source track will be encoded with all selected encoders."
 msgstr ""
-"Füge einen Audio Kodierer hinzu.\n"
-"Jede ausgewählte Quellspur wird mit allen selektierten Kodierern kodiert."
+"Füge einen Audioencoder hinzu.\n"
+"Jede ausgewählte Quellspur wird mit allen ausgewählten Encodern kodiert."
 
 #: ../src/audiohandler.c:1806
 msgid ""
 "<b>Audio Quality:</b>\n"
 "For encoders that support it, adjust the quality of the output."
 msgstr ""
-"<b>Audio Qualität:</b>\n"
-"Verändere die Qualität der Ausgabe für Kodierer die es unterstützen."
+"<b>Audioqualität:</b>\n"
+"Verändert die Qualität der Ausgabe für Encoder die es unterstützen."
 
 #: ../src/audiohandler.c:1928
 msgid "Remove this audio encoder"
@@ -2903,12 +2903,12 @@ msgstr ""
 #: ../src/callbacks.c:3939 ../src/callbacks.c:3979
 #, c-format
 msgid "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
-msgstr "Encoding: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
+msgstr "Encodierung: %s%s%.2f %% (ETA %02dh%02dm%02ds)"
 
 #: ../src/callbacks.c:3949 ../src/callbacks.c:3988
 #, c-format
 msgid "Encoding: %s%s%.2f %%"
-msgstr "Encoding: %s%s%.2f %%"
+msgstr "Encodierung: %s%s%.2f %%"
 
 #: ../src/callbacks.c:3975
 #, c-format
@@ -2977,7 +2977,7 @@ msgstr "Fahre den Computer herunter"
 
 #: ../src/callbacks.c:5722
 msgid "Putting computer to sleep"
-msgstr "Versetze Computer in Schlafmodus"
+msgstr "Versetze Computer in Ruhezustand"
 
 #: ../src/callbacks.c:5730
 msgid "Quitting Handbrake"
@@ -2993,7 +2993,7 @@ msgstr "Alle Spuren mit den ausgwählten Sprachen"
 
 #: ../src/hb-backend.c:73
 msgid "Foreign Audio Subtitle Track"
-msgstr "Fremdsprachige Audio Untertitelspur"
+msgstr "Fremdsprachige Audiountertitelspur"
 
 #: ../src/hb-backend.c:74
 msgid "First Selected Track"
@@ -3029,7 +3029,7 @@ msgstr "HandBrake beenden"
 
 #: ../src/hb-backend.c:112
 msgid "Put Computer To Sleep"
-msgstr "Versetze Computer in Schlafmodus"
+msgstr "Versetze Computer in Ruhezustand"
 
 #: ../src/hb-backend.c:113
 msgid "Shutdown Computer"
@@ -3041,7 +3041,7 @@ msgstr "Automatisch"
 
 #: ../src/hb-backend.c:125
 msgid "Loose"
-msgstr "Lose"
+msgstr "Loose"
 
 #: ../src/hb-backend.c:126 ../src/hb-backend.c:338
 msgid "Custom"
@@ -3293,7 +3293,7 @@ msgid ""
 "Preset:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
-"Ungültige Detelecine Einstellungen:\n"
+"Ungültige Detelecine-Einstellungen:\n"
 "\n"
 "Voreinstellung:\t%s\n"
 "Benutzerdefiniert:\t%s\n"
@@ -3305,7 +3305,7 @@ msgid ""
 "\n"
 "Preset:\t%s\n"
 msgstr ""
-"Ungültige Detelecine Einstellungen:\n"
+"Ungültige Detelecine-Einstellungen:\n"
 "\n"
 "Voreinstellung:\t%s\n"
 
@@ -3317,7 +3317,7 @@ msgid ""
 "Preset:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
-"Ungültige Comb Erkennungseinstellungen:\n"
+"Ungültige Comb-Erkennungseinstellungen:\n"
 "\n"
 "Voreinstellung:\t%s\n"
 "Benutzerdefiniert:\t%s\n"
@@ -3329,7 +3329,7 @@ msgid ""
 "\n"
 "Preset:\t%s\n"
 msgstr ""
-"Ungültige Comb Erkennungseinstellungen:\n"
+"Ungültige Comb-Erkennungseinstellungen:\n"
 "\n"
 "Voreinstellung:\t%s\n"
 
@@ -3342,7 +3342,7 @@ msgid ""
 "Preset:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
-"Ungültige Deinterlace Einstellungen:\n"
+"Ungültige Deinterlace-Einstellungen:\n"
 "\n"
 "Filter:\t%s\n"
 "Voreinstellung:\t%s\n"
@@ -3356,7 +3356,7 @@ msgid ""
 "Filter:\t%s\n"
 "Preset:\t%s\n"
 msgstr ""
-"Ungültige Deinterlace Einstellungen:\n"
+"Ungültige Deinterlace-Einstellungen:\n"
 "\n"
 "Filter:\t%s\n"
 "Voreinstellung:\t%s\n"
@@ -3371,7 +3371,7 @@ msgid ""
 "Tune:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
-"Ungültige Enrauschen Einstellungen:\n"
+"Ungültige Enrauschen-Einstellungen:\n"
 "\n"
 "Filter:\t%s\n"
 "Voreinstellung:\t%s\n"
@@ -3388,7 +3388,7 @@ msgid ""
 "Tune:\t%s\n"
 "Custom:\t%s\n"
 msgstr ""
-"Ungültige Schärfe Einstellungen:\n"
+"Ungültige Schärfeeinstellungen:\n"
 "\n"
 "Filter:\t%s\n"
 "Voreinstellung:\t%s\n"
@@ -3426,10 +3426,10 @@ msgid ""
 "You should change your subtitle selections.\n"
 "If you continue, some subtitles will be lost."
 msgstr ""
-"Nur ein Untertitel kann in das Video gebrennt werden.\n"
+"Nur ein Untertitel kann in das Video gebrannt werden.\n"
 "\n"
-"Du solltest deine Untertitelselektionen abändern.\n"
-"Falls du fortfährst, gehen manche Untertitel verloren."
+"Du solltest deine Untertitelauswahl ändern.\n"
+"Falls fortgefahren wird, gehen manche Untertitel verloren."
 
 #: ../src/hb-backend.c:4449
 #, c-format
@@ -3441,8 +3441,8 @@ msgid ""
 msgstr ""
 "SRT-Datei existiert nicht oder ist keine reguläre Datei.\n"
 "\n"
-"Du solltest eine gültige Datei auswählen.\n"
-"Falls du fortfährst, wird dieser Untertitel ignoriert."
+"Es sollte eine gültige Datei ausgewählt werden.\n"
+"Falls fortgefahren wird, wird dieser Untertitel ignoriert."
 
 #: ../src/hb-backend.c:4510
 #, c-format
@@ -3454,8 +3454,8 @@ msgid ""
 msgstr ""
 "Die Quelle unterstützt keine Durchleitung.\n"
 "\n"
-"Du solltest einen anderen Audio Codec wählen.\n"
-"Falls du fortfährst, wird einer für dich ausgewählt."
+"Es sollte ein anderer Audiocodec ausgewählt werden.\n"
+"Falls fortgefahren wird, wird einer ausgewählt."
 
 #: ../src/hb-backend.c:4551
 #, c-format
@@ -3467,8 +3467,8 @@ msgid ""
 msgstr ""
 "%s wird vom %s Container nicht unterstützt.\n"
 "\n"
-"Du solltest einen anderen Audio Codec wählen.\n"
-"Falls du fortfährst, wird einer für dich ausgewählt."
+"Es sollte ein anderer Audiocodec ausgewählt werden.\n"
+"Falls fortgefahren wird, wird einer ausgewählt."
 
 #: ../src/presets.c:1192
 msgid "ghb_presets_menu_init: Failed to find presets folder."
@@ -3488,7 +3488,7 @@ msgid ""
 msgstr ""
 "Voreinstellungen wurden gefunden, welche neuer sind als die, die von dieser Version von HandBrake unterstützt werden!\n"
 "\n"
-"Möchtest du fortfahren?"
+"Soll fortgefahren werden?"
 
 #: ../src/presets.c:1825
 msgid "Get me out of here!"
@@ -3711,7 +3711,7 @@ msgstr "kbps"
 
 #: ../src/queuehandler.c:567
 msgid "<b>Turbo 1st Pass:</b> <small>On</small>\n"
-msgstr "<b>Turbo 1st Durchgang:</b> <small>Ein</small>\n"
+msgstr "<b>Turbo erster Durchgang:</b> <small>Ein</small>\n"
 
 #: ../src/queuehandler.c:592
 #, c-format
@@ -3875,7 +3875,7 @@ msgid ""
 msgstr ""
 "Es gibt bereits einen anderen Titel mit demselben Dateinamen.\n"
 "Dieser Titel wird nicht zur Warteschlange hinzugefügt solange der\n"
-"Dateiname nicht abgeändert wird.\n"
+"Dateiname nicht geändert wird.\n"
 
 #: ../src/queuehandler.c:2343
 msgid "Stop"
@@ -3895,7 +3895,7 @@ msgstr "Kodierung fortsetzen"
 
 #: ../src/queuehandler.c:2369
 msgid "S_top Encoding"
-msgstr "S_toppe Koderung"
+msgstr "S_toppe Kodierung"
 
 #: ../src/queuehandler.c:2380
 msgid "_Resume Encoding"
@@ -3906,7 +3906,7 @@ msgid ""
 "You are currently encoding.  What would you like to do?\n"
 "\n"
 msgstr ""
-"Du kodierst gerade. Was soll getan werden?\n"
+"Es wird gerade kodiert. Was soll getan werden?\n"
 "\n"
 
 #: ../src/subtitlehandler.c:1280
@@ -3917,13 +3917,13 @@ msgstr "Bevorzugte Sprache: %s"
 #: ../src/subtitlehandler.c:1294
 #, c-format
 msgid "Add %s subtitle track if default audio is not %s"
-msgstr "Füge %s Untertitelspur hinzu falls standard Audio nicht %s ist"
+msgstr "Füge %s Untertitelspur hinzu falls Standardaudio nicht %s ist"
 
 #: ../src/subtitlehandler.c:1299
 #, c-format
 msgid "Add subtitle track if default audio is not your preferred language"
 msgstr ""
-"Untertitelspur hinzufügen, wenn Standard-Audio nicht die bevorzugte Sprache "
+"Untertitelspur hinzufügen, wenn Standardaudio nicht die bevorzugte Sprache "
 "ist."
 
 #: ../src/videohandler.c:207 ../src/videohandler.c:226
