@@ -52,6 +52,7 @@ namespace HandBrakeWPF.Services.Queue.Model
                 this.NotifyOfPropertyChange(() => this.StartTime);
                 this.NotifyOfPropertyChange(() => this.Duration);
                 this.NotifyOfPropertyChange(() => this.StartTimeDisplay);
+                this.NotifyOfPropertyChange(() => this.DurationDisplay);
             }
         }
 
@@ -86,6 +87,7 @@ namespace HandBrakeWPF.Services.Queue.Model
                 this.NotifyOfPropertyChange(() => this.EndTime);
                 this.NotifyOfPropertyChange(() => this.Duration);
                 this.NotifyOfPropertyChange(() => this.EndTimeDisplay);
+                this.NotifyOfPropertyChange(() => this.DurationDisplay);
             }
         }
 
@@ -171,6 +173,7 @@ namespace HandBrakeWPF.Services.Queue.Model
                 this.finalFileSize = value;
                 this.NotifyOfPropertyChange(() => this.FinalFileSize);
                 this.NotifyOfPropertyChange(() => this.FinalFileSizeInMegaBytes);
+                this.NotifyOfPropertyChange(() => this.FileSizeDisplay);
             }
         }
 
@@ -220,16 +223,16 @@ namespace HandBrakeWPF.Services.Queue.Model
 
         public void Reset()
         {
+            this.isPaused = false;
+            this.pausedTimespan = TimeSpan.Zero;
+            this.pausedStartPoint = DateTime.MinValue;
             this.StartTime = DateTime.MinValue;
             this.EndTime = DateTime.MinValue;
             this.FinalFileSize = 0;
-            this.pausedTimespan = TimeSpan.Zero;
-            this.pausedStartPoint = DateTime.MinValue;
             this.CompletedActivityLogPath = null;
 
-            this.NotifyOfPropertyChange(() => this.FinalFileSizeInMegaBytes);
             this.NotifyOfPropertyChange(() => this.PausedDuration);
-            this.NotifyOfPropertyChange(() => this.DurationDisplay);
+            this.NotifyOfPropertyChange(() => this.PausedDisplay);
         }
     }
 }
