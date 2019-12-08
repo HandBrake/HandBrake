@@ -85,7 +85,7 @@ static const stream2codec_t st2codec[256] = {
 
     st(0x8a, A, HB_ACODEC_DCA,    AV_CODEC_ID_DTS,        "DTS"),
 
-    st(0x90, S, WORK_DECPGSSUB,   0,                      "PGS Subtitle"),
+    st(0x90, S, WORK_DECAVSUB,    AV_CODEC_ID_HDMV_PGS_SUBTITLE, "PGS Subtitle"),
     // 0x91 can be AC3 or BD Interactive Graphics Stream.
     st(0x91, U, 0,                0,                      "AC3/IGS"),
     st(0x92, N, 0,                0,                      "Subtitle"),
@@ -1976,13 +1976,24 @@ static void pes_add_subtitle_to_title(
     subtitle->timebase.num = 1;
     subtitle->timebase.den = 90000;
 
-    switch ( pes->codec )
+    switch (pes->codec)
     {
-        case WORK_DECPGSSUB:
-            subtitle->source = PGSSUB;
-            subtitle->format = PICTURESUB;
-            subtitle->config.dest = RENDERSUB;
-            break;
+        case WORK_DECAVSUB:
+        {
+            switch (pes->codec_param)
+            {
+                case AV_CODEC_ID_HDMV_PGS_SUBTITLE:
+                    subtitle->source = PGSSUB;
+                    subtitle->format = PICTURESUB;
+                    subtitle->config.dest = RENDERSUB;
+                    break;
+                default:
+                    // Unrecognized, don't add to list
+                    hb_log("unrecognized subtitle!");
+                    free( subtitle );
+                    return;
+            }
+        } break;
         case WORK_DECVOBSUB:
             subtitle->source = VOBSUB;
             subtitle->format = PICTURESUB;
@@ -1994,16 +2005,18 @@ static void pes_add_subtitle_to_title(
             free( subtitle );
             return;
     }
+
     lang = lang_for_code( pes->lang_code );
     snprintf(subtitle->lang, sizeof( subtitle->lang ), "%s [%s]",
              strlen(lang->native_name) ? lang->native_name : lang->eng_name,
              hb_subsource_name(subtitle->source));
     snprintf(subtitle->iso639_2, sizeof( subtitle->iso639_2 ), "%s",
              lang->iso639_2);
-    subtitle->reg_desc = stream->reg_desc;
-    subtitle->stream_type = pes->stream_type;
+    subtitle->reg_desc       = stream->reg_desc;
+    subtitle->stream_type    = pes->stream_type;
     subtitle->substream_type = pes->stream_id_ext;
-    subtitle->codec = pes->codec;
+    subtitle->codec          = pes->codec;
+    subtitle->codec_param    = pes->codec_param;
 
     // Create a default palette since vob files do not include the
     // vobsub palette.
@@ -5475,10 +5488,11 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             break;
         case AV_CODEC_ID_TEXT:
         case AV_CODEC_ID_SUBRIP:
-            subtitle->format = TEXTSUB;
-            subtitle->source = UTF8SUB;
+            subtitle->format      = TEXTSUB;
+            subtitle->source      = UTF8SUB;
             subtitle->config.dest = PASSTHRUSUB;
-            subtitle->codec = WORK_DECUTF8SUB;
+            subtitle->codec       = WORK_DECAVSUB;
+            subtitle->codec_param = codecpar->codec_id;
             break;
         case AV_CODEC_ID_MOV_TEXT: // TX3G
             subtitle->format = TEXTSUB;
@@ -5487,16 +5501,18 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             subtitle->codec = WORK_DECTX3GSUB;
             break;
         case AV_CODEC_ID_ASS:
-            subtitle->format = TEXTSUB;
-            subtitle->source = SSASUB;
+            subtitle->format      = TEXTSUB;
+            subtitle->source      = SSASUB;
             subtitle->config.dest = PASSTHRUSUB;
-            subtitle->codec = WORK_DECSSASUB;
+            subtitle->codec       = WORK_DECAVSUB;
+            subtitle->codec_param = codecpar->codec_id;
             break;
         case AV_CODEC_ID_HDMV_PGS_SUBTITLE:
-            subtitle->format = PICTURESUB;
-            subtitle->source = PGSSUB;
+            subtitle->format      = PICTURESUB;
+            subtitle->source      = PGSSUB;
             subtitle->config.dest = RENDERSUB;
-            subtitle->codec = WORK_DECPGSSUB;
+            subtitle->codec       = WORK_DECAVSUB;
+            subtitle->codec_param = codecpar->codec_id;
             break;
         case AV_CODEC_ID_EIA_608:
             subtitle->format = TEXTSUB;
@@ -5966,6 +5982,7 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
         }
         ++stream->frames;
     }
+    AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt.stream_index];
     if ( stream->ffmpeg_pkt.size <= 0 )
     {
         // M$ "invalid and inefficient" packed b-frames require 'null frames'
@@ -5985,8 +6002,24 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
             av_packet_unref(&stream->ffmpeg_pkt);
             return hb_ffmpeg_read( stream );
         }
-        buf = hb_buffer_init( stream->ffmpeg_pkt.size );
-        memcpy( buf->data, stream->ffmpeg_pkt.data, stream->ffmpeg_pkt.size );
+        switch (s->codecpar->codec_type)
+        {
+            case AVMEDIA_TYPE_SUBTITLE:
+                // Some ffmpeg subtitle decoders expect a null terminated
+                // string, but the null is not included in the packet size.
+                // WTF ffmpeg.
+                buf = hb_buffer_init(stream->ffmpeg_pkt.size + 1);
+                memcpy(buf->data, stream->ffmpeg_pkt.data,
+                                  stream->ffmpeg_pkt.size);
+                buf->data[stream->ffmpeg_pkt.size] = 0;
+                buf->size = stream->ffmpeg_pkt.size;
+                break;
+            default:
+                buf = hb_buffer_init(stream->ffmpeg_pkt.size);
+                memcpy(buf->data, stream->ffmpeg_pkt.data,
+                                  stream->ffmpeg_pkt.size);
+                break;
+        }
 
         const uint8_t *palette;
         int size;
@@ -6006,7 +6039,6 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
 
     // compute a conversion factor to go from the ffmpeg
     // timebase for the stream to HB's 90kHz timebase.
-    AVStream *s = stream->ffmpeg_ic->streams[stream->ffmpeg_pkt.stream_index];
     double tsconv = (double)90000. * s->time_base.num / s->time_base.den;
     int64_t offset = 90000LL * ffmpeg_initial_timestamp(stream) / AV_TIME_BASE;
 

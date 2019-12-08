@@ -7,7 +7,6 @@
    For full terms see the file COPYING file or visit http://www.gnu.org/licenses/gpl-2.0.html
  */
 #include "handbrake/handbrake.h"
-#include "handbrake/decssasub.h"
 
 #define MIN_BUFFERING (1024*1024*10)
 #define MAX_BUFFERING (1024*1024*50)

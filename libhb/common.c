@@ -4952,11 +4952,15 @@ int hb_import_subtitle_add( const hb_job_t * job,
         return 0;
     }
 
-    subtitle->id = (hb_list_count(job->list_subtitle) << 8) |
-                   HB_SUBTITLE_IMPORT_TAG;
-    subtitle->format = TEXTSUB;
-    subtitle->source = source;
-    subtitle->codec = source == IMPORTSRT ? WORK_DECSRTSUB : WORK_DECSSASUB;
+    subtitle->id           = (hb_list_count(job->list_subtitle) << 8) |
+                             HB_SUBTITLE_IMPORT_TAG;
+    subtitle->format       = TEXTSUB;
+    subtitle->source       = source;
+    subtitle->codec        = WORK_DECSRTSUB;
+    subtitle->codec        = source == IMPORTSRT ? WORK_DECSRTSUB :
+                                                   WORK_DECSSASUB;
+    subtitle->codec_param  = source == IMPORTSRT ? AV_CODEC_ID_SUBRIP :
+                                                   AV_CODEC_ID_ASS;
     subtitle->timebase.num = 1;
     subtitle->timebase.den = 90000;
 

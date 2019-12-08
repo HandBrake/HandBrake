@@ -1710,11 +1710,10 @@ int hb_global_init()
     hb_register(&hb_decavcodeca);
     hb_register(&hb_declpcm);
     hb_register(&hb_deccc608);
-    hb_register(&hb_decpgssub);
+    hb_register(&hb_decavsub);
     hb_register(&hb_decsrtsub);
     hb_register(&hb_decssasub);
     hb_register(&hb_dectx3gsub);
-    hb_register(&hb_decutf8sub);
     hb_register(&hb_decvobsub);
     hb_register(&hb_encvobsub);
     hb_register(&hb_encavcodec);

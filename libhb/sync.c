@@ -2835,6 +2835,10 @@ static hb_buffer_t * sanitizeSubtitle(
             hb_buffer_list_append(&out_list, sub);
             sub = hb_buffer_list_rem_head(&list);
         }
+        if (sub != NULL)
+        {
+            hb_buffer_close(&sub);
+        }
         return hb_buffer_list_clear(&out_list);
     }
 

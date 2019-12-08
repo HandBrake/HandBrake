@@ -88,7 +88,7 @@ int hb_bd_title_count( hb_bd_t * d )
     return d->title_count;
 }
 
-static void add_subtitle(int track, hb_list_t *list_subtitle, BLURAY_STREAM_INFO *bdsub, uint32_t codec)
+static void add_subtitle(int track, hb_list_t *list_subtitle, BLURAY_STREAM_INFO *bdsub, uint32_t codec, uint32_t codec_param)
 {
     hb_subtitle_t * subtitle;
     iso639_lang_t * lang;
@@ -120,6 +120,7 @@ static void add_subtitle(int track, hb_list_t *list_subtitle, BLURAY_STREAM_INFO
     subtitle->reg_desc     = STR4_TO_UINT32("HDMV");
     subtitle->stream_type  = bdsub->coding_type;
     subtitle->codec        = codec;
+    subtitle->codec_param  = codec_param;
     subtitle->timebase.num = 1;
     subtitle->timebase.den = 90000;
 
@@ -633,7 +634,8 @@ hb_title_t * hb_bd_title_scan( hb_bd_t * d, int tt, uint64_t min_duration )
         switch( bdpgs->coding_type )
         {
             case BLURAY_STREAM_TYPE_SUB_PG:
-                add_subtitle(ii, title->list_subtitle, bdpgs, WORK_DECPGSSUB);
+                add_subtitle(ii, title->list_subtitle, bdpgs, WORK_DECAVSUB,
+                             AV_CODEC_ID_HDMV_PGS_SUBTITLE);
                 break;
             default:
                 hb_log( "scan: unknown subtitle pid 0x%x codec 0x%x",
