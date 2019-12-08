@@ -29,11 +29,12 @@
 #include "handbrake/handbrake.h"
 
 #include <ass/ass.h>
-#include "handbrake/decssasub.h"
+#include "handbrake/decavsub.h"
 #include "handbrake/colormap.h"
 
 struct hb_work_private_s
 {
+    hb_avsub_context_t * ctx;
     hb_job_t      * job;
     hb_subtitle_t * subtitle;
 
@@ -117,25 +118,37 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
     int                 ii;
 
     pv              = calloc( 1, sizeof( hb_work_private_t ) );
+    if (pv == NULL)
+    {
+        goto fail;
+    }
     w->private_data = pv;
+    pv->ctx = decavsubInit(w, job);
+    if (pv->ctx == NULL)
+    {
+        goto fail;
+    }
     pv->job         = job;
     pv->subtitle    = w->subtitle;
 
-    if (w->fifo_in == NULL && pv->subtitle->config.src_filename != NULL)
+    if (pv->subtitle->config.src_filename == NULL)
     {
-        pv->file = hb_fopen(pv->subtitle->config.src_filename, "r");
-        if(pv->file == NULL)
-        {
-            hb_error("Could not open the SSA subtitle file '%s'\n",
-                     pv->subtitle->config.src_filename);
-            goto fail;
-        }
+        hb_error("No SSA subtitle file specified");
+        goto fail;
+    }
 
-        // Read SSA header and store in subtitle extradata
-        if (extradataInit(pv))
-        {
-            goto fail;
-        }
+    pv->file = hb_fopen(pv->subtitle->config.src_filename, "r");
+    if(pv->file == NULL)
+    {
+        hb_error("Could not open the SSA subtitle file '%s'\n",
+                 pv->subtitle->config.src_filename);
+        goto fail;
+    }
+
+    // Read SSA header and store in subtitle extradata
+    if (extradataInit(pv))
+    {
+        goto fail;
     }
 
     /*
@@ -179,6 +192,7 @@ static int decssaInit( hb_work_object_t * w, hb_job_t * job )
 fail:
     if (pv != NULL)
     {
+        decavsubClose(pv->ctx);
         if (pv->file != NULL)
         {
             fclose(pv->file);
@@ -358,6 +372,11 @@ static hb_buffer_t * ssa_read( hb_work_private_t * pv )
 {
     hb_buffer_t * out;
 
+    if (!pv->file)
+    {
+        return hb_buffer_eof_init();
+    }
+
     if (pv->job->reader_pts_offset == AV_NOPTS_VALUE)
     {
         // We need to wait for reader to initialize it's pts offset so that
@@ -405,41 +424,33 @@ static int decssaWork( hb_work_object_t * w, hb_buffer_t ** buf_in,
                         hb_buffer_t ** buf_out )
 {
     hb_work_private_t * pv =  w->private_data;
-    hb_buffer_t       * in = *buf_in;
+    hb_buffer_t       * in;
+    int                 result;
 
-    *buf_in  = NULL;
-    *buf_out = NULL;
-    if (in == NULL && pv->file != NULL)
+    in = ssa_read(pv);
+    if (in == NULL)
     {
-        in = ssa_read(pv);
-        if (in == NULL)
-        {
-            return HB_WORK_OK;
-        }
-    }
-    *buf_out = in;
-    if (in->s.flags & HB_BUF_FLAG_EOF)
-    {
-        return HB_WORK_DONE;
+        return HB_WORK_OK;
     }
 
-    // Not much to do here.  ffmpeg already supplies SSA subtitles in the
-    // required matroska packet format.
-    //
-    // We require string termination of the buffer
-    hb_buffer_realloc(in, ++in->size);
-    in->data[in->size - 1] = '\0';
-
-#if SSA_VERBOSE_PACKETS
-    printf("\nPACKET(%"PRId64",%"PRId64"): %.*s\n", in->s.start/90, in->s.stop/90, in->size, in->data);
-#endif
-
-    return HB_WORK_OK;
+    result = decavsubWork(pv->ctx, &in, buf_out);
+    if (in != NULL)
+    {
+        hb_buffer_close(&in);
+    }
+    return result;
 }
 
 static void decssaClose( hb_work_object_t * w )
 {
-    free( w->private_data );
+    hb_work_private_t * pv = w->private_data;
+    if (pv != NULL)
+    {
+        decavsubClose(pv->ctx);
+        fclose(pv->file);
+        free(pv);
+    }
+    w->private_data = NULL;
 }
 
 hb_work_object_t hb_decssasub =

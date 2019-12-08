@@ -991,6 +991,7 @@ struct hb_subtitle_s
 #ifdef __LIBHB__
     /* Internal data */
     uint32_t        codec;          /* Input "codec" */
+    uint32_t        codec_param;    /* Per-codec config info */
     uint32_t        reg_desc;       /* registration descriptor of source */
     uint32_t        stream_type;    /* stream type from source stream */
     uint32_t        substream_type; /* substream for multiplexed streams */
@@ -1257,7 +1258,7 @@ extern hb_work_object_t hb_decsrtsub;
 extern hb_work_object_t hb_decutf8sub;
 extern hb_work_object_t hb_dectx3gsub;
 extern hb_work_object_t hb_decssasub;
-extern hb_work_object_t hb_decpgssub;
+extern hb_work_object_t hb_decavsub;
 extern hb_work_object_t hb_encavcodec;
 extern hb_work_object_t hb_encqsv;
 extern hb_work_object_t hb_encx264;
