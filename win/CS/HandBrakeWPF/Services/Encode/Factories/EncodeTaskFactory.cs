@@ -23,6 +23,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
     using HandBrake.Interop.Interop.Model.Encoding;
     using HandBrake.Interop.Model;
 
+    using HandBrakeWPF.Helpers;
     using HandBrakeWPF.Utilities;
 
     using Newtonsoft.Json.Linq;
@@ -150,7 +151,7 @@ namespace HandBrakeWPF.Services.Encode.Factories
                 File = job.Destination,
                 Mp4Options = new Mp4Options
                 {
-                    IpodAtom = job.IPod5GSupport,
+                    IpodAtom = VideoEncoderHelpers.IsH264(job.VideoEncoder) ? job.IPod5GSupport : false,
                     Mp4Optimize = job.OptimizeMP4
                 },
                 ChapterMarkers = job.IncludeChapterMarkers,

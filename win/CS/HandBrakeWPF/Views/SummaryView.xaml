@@ -75,7 +75,7 @@
                               Content="{x:Static Properties:Resources.MainView_iPod5G}"
                               ToolTip="{x:Static Properties:ResourcesTooltips.MainView_IpodAtom}"
                               IsChecked="{Binding Path=IPod5GSupport}"
-                              Visibility="{Binding IsMkvOrWebm, Converter={StaticResource boolToVisConverter},  ConverterParameter=true}" />
+                              Visibility="{Binding IsIpodAtomVisible, Converter={StaticResource boolToVisConverter}}" />
 
             <TextBlock Text="{x:Static Properties:Resources.MainView_Tracks}" FontWeight="Bold" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
             <TextBlock Text="{Binding VideoTrackInfo}" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" />
