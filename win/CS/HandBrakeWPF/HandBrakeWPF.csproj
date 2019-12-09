@@ -139,6 +139,7 @@
     <Compile Include="Converters\Options\Mp4BehaviourConverter.cs" />
     <Compile Include="Converters\Options\UpdateCheckConverter.cs" />
     <Compile Include="Converters\ResourceConverterBase.cs" />
+    <Compile Include="Helpers\VideoEncoderHelpers.cs" />
     <Compile Include="Model\Options\Mp4Behaviour.cs" />
     <Compile Include="Converters\Options\ProcessPriorityConverter.cs" />
     <Compile Include="Converters\OptionTabConverter.cs" />

@@ -228,6 +228,7 @@ namespace HandBrakeWPF.ViewModels
                     this.NotifyOfPropertyChange(() => this.SelectedOutputFormat);
                     this.NotifyOfPropertyChange(() => this.Task.OutputFormat);
                     this.NotifyOfPropertyChange(() => this.IsMkvOrWebm);
+                    this.NotifyOfPropertyChange(() => this.IsIpodAtomVisible);
                     this.SetExtension(string.Format(".{0}", this.Task.OutputFormat.ToString().ToLower()));
                     this.UpdateDisplayedInfo(); // output format may coreced to another due to container incompatibility
 
@@ -245,6 +246,19 @@ namespace HandBrakeWPF.ViewModels
             get
             {
                 return this.SelectedOutputFormat == OutputFormat.Mkv || this.SelectedOutputFormat == OutputFormat.WebM;
+            }
+        }
+
+        public bool IsIpodAtomVisible
+        {
+            get
+            {
+                if (this.task == null)
+                {
+                    return false;
+                }
+
+                return this.SelectedOutputFormat == OutputFormat.Mp4 && VideoEncoderHelpers.IsH264(this.task.VideoEncoder);
             }
         }
 
@@ -278,6 +292,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 return this.Task?.IPod5GSupport ?? false;
             }
+
             set
             {
                 if (value == this.Task.IPod5GSupport)
@@ -334,7 +349,8 @@ namespace HandBrakeWPF.ViewModels
 
             this.NotifyOfPropertyChange(() => this.SelectedOutputFormat);
             this.NotifyOfPropertyChange(() => this.IsMkvOrWebm);
- 
+            this.NotifyOfPropertyChange(() => this.IsIpodAtomVisible);
+
             this.NotifyOfPropertyChange(() => this.OptimizeMP4);
             this.NotifyOfPropertyChange(() => this.IPod5GSupport);
             this.NotifyOfPropertyChange(() => this.AlignAVStart);
@@ -478,7 +494,13 @@ namespace HandBrakeWPF.ViewModels
                 this.AlignAVStart = false;
             }
 
+            if (!VideoEncoderHelpers.IsH264(this.task.VideoEncoder))
+            {
+                this.IPod5GSupport = false;
+            }
+
             this.NotifyOfPropertyChange(() => this.IsMkvOrWebm);
+            this.NotifyOfPropertyChange(() => this.IsIpodAtomVisible);
 
             // Update The browse file extension display
             if (Path.HasExtension(newExtension))
@@ -526,6 +548,8 @@ namespace HandBrakeWPF.ViewModels
             this.NotifyOfPropertyChange(() => this.PreviewInfo);
 
             this.ShowPreview = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.ShowPreviewOnSummaryTab);
+
+            this.NotifyOfPropertyChange(() => this.IsIpodAtomVisible);
         }
 
         private string GetFilterDescription()
