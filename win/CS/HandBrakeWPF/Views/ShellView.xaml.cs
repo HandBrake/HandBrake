@@ -157,7 +157,10 @@ namespace HandBrakeWPF.Views
         private void NotifyIconClick(object sender, EventArgs e)
         {
             this.WindowState = WindowState.Normal;
-            this.Topmost = true;
+
+            // Bit of a hack but does work
+            this.Topmost = true; 
+            this.Topmost = false;
         }
 
         /// <summary>
