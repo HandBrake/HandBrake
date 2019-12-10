@@ -5016,6 +5016,7 @@ int hb_subtitle_can_pass( int source, int mux )
         case HB_MUX_AV_MKV:
             switch( source )
             {
+                case DVBSUB:
                 case PGSSUB:
                 case VOBSUB:
                 case SSASUB:
