@@ -227,7 +227,7 @@ typedef struct QSVFrame {
 } QSVFrame;
 
 // Large size is driven by hevc which has a maximum GOP size of 256
-#define HB_POOL_SURFACE_SIZE (268)
+#define HB_POOL_SURFACE_SIZE (64)
 
 typedef struct EncQSVFramesContext {
     AVBufferRef *hw_frames_ctx;

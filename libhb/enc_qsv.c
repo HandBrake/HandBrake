@@ -1493,7 +1493,17 @@ int encqsvInit(hb_work_object_t *w, hb_job_t *job)
      * NumRefFrame to enable or disable B-pyramid, so do it last.
      */
     qsv_handle_breftype(pv);
-
+    
+    pv->param.videoParam->AsyncDepth = pv->param.videoParam->AsyncDepth ? pv->param.videoParam->AsyncDepth : HB_QSV_ASYNC_DEPTH_DEFAULT;
+    if (pv->param.videoParam->mfx.GopRefDist >= 64) {
+        pv->is_sys_mem         = 1;
+        //hb_log("encqsvInit: max cached frames = %"PRIu16" %d ",(pv->param.videoParam->mfx.GopRefDist + pv->param.videoParam->AsyncDepth), pv->param.videoParam->AsyncDepth);
+        if ((pv->param.videoParam->mfx.GopRefDist + pv->param.videoParam->AsyncDepth) >= 256) {
+            pv->param.videoParam->AsyncDepth = FFMIN(pv->param.videoParam->AsyncDepth, FFMAX(256-pv->param.videoParam->mfx.GopRefDist,1));
+            hb_log("encqsvInit: forced max_async_depth=%"PRIu16" to prevent max cached frames being invalid (>256)",pv->param.videoParam->AsyncDepth);
+        }
+    }
+    
     /*
      * init a dummy encode-only session to get the SPS/PPS
      * and the final output settings sanitized by Media SDK
