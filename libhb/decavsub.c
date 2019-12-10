@@ -31,9 +31,6 @@ struct hb_avsub_context_s
     // display) - when doing forced-only extraction, only pass empty subtitles
     // through if we've seen a forced sub since the last empty sub
     uint8_t seen_forced_sub;
-    // if we start encoding partway through the source, we may encounter empty
-    // subtitles before we see any actual subtitle content - discard them
-    uint8_t discard_subtitle;
 };
 
 struct hb_work_private_s
@@ -49,7 +46,6 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     {
         return NULL;
     }
-    ctx->discard_subtitle      = 1;
     ctx->seen_forced_sub       = 0;
     ctx->last_pts              = AV_NOPTS_VALUE;
     ctx->job                   = job;
@@ -287,6 +283,14 @@ int decavsubWork( hb_avsub_context_t * ctx,
             return HB_WORK_OK;
         }
 
+        // Ugly hack, but ffmpeg doesn't consume a trailing 0xff in
+        // DVB subtitle buffers :(
+        if (ctx->subtitle->source == DVBSUB &&
+            avp.size > usedBytes &&
+            avp.data[usedBytes] == 0xff)
+        {
+            usedBytes++;
+        }
         if (usedBytes <= avp.size)
         {
             avp.data += usedBytes;
@@ -319,16 +323,6 @@ int decavsubWork( hb_avsub_context_t * ctx,
         else
         {
             clear_sub = 1;
-        }
-
-        // Discard leading empty subtitles
-        ctx->discard_subtitle = ctx->discard_subtitle && clear_sub;
-
-        // are we doing Foreign Audio Search? or subtitle needs to be discarded?
-        if (ctx->job->indepth_scan || ctx->discard_subtitle)
-        {
-            avsubtitle_free(&subtitle);
-            continue;
         }
 
         // do we need this subtitle?

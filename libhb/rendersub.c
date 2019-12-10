@@ -1011,6 +1011,7 @@ static int hb_rendersub_post_init( hb_filter_object_t * filter, hb_job_t *job )
             return cc608sub_post_init( filter, job );
         }
 
+        case DVBSUB:
         case PGSSUB:
         {
             return pgssub_post_init( filter, job );
@@ -1050,6 +1051,7 @@ static int hb_rendersub_work( hb_filter_object_t * filter,
             return textsub_work( filter, buf_in, buf_out );
         }
 
+        case DVBSUB:
         case PGSSUB:
         {
             return pgssub_work( filter, buf_in, buf_out );
@@ -1092,6 +1094,7 @@ static void hb_rendersub_close( hb_filter_object_t * filter )
             textsub_close( filter );
         } break;
 
+        case DVBSUB:
         case PGSSUB:
         {
             pgssub_close( filter );

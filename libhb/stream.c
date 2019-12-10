@@ -1913,13 +1913,13 @@ static const char *stream_type_name2(hb_stream_t *stream, hb_pes_stream_t *pes)
                 break;
         }
     }
-    if ( st2codec[pes->stream_type].name )
-    {
-        return st2codec[pes->stream_type].name;
-    }
     if ( pes->codec_name[0] != 0 )
     {
         return pes->codec_name;
+    }
+    if ( st2codec[pes->stream_type].name )
+    {
+        return st2codec[pes->stream_type].name;
     }
     if ( pes->codec & HB_ACODEC_FF_MASK )
     {
@@ -1982,6 +1982,11 @@ static void pes_add_subtitle_to_title(
         {
             switch (pes->codec_param)
             {
+                case AV_CODEC_ID_DVB_SUBTITLE:
+                    subtitle->source = DVBSUB;
+                    subtitle->format = PICTURESUB;
+                    subtitle->config.dest = RENDERSUB;
+                    break;
                 case AV_CODEC_ID_HDMV_PGS_SUBTITLE:
                     subtitle->source = PGSSUB;
                     subtitle->format = PICTURESUB;
@@ -2618,10 +2623,10 @@ static void decode_element_descriptors(
 
             case 0x59:  // DVB Subtitleing descriptor
             {
-                // We don't currently process subtitles from
-                // TS or PS streams.  Set stream 'kind' to N
                 stream->pes.list[pes_idx].stream_type = 0x00;
-                stream->pes.list[pes_idx].stream_kind = N;
+                stream->pes.list[pes_idx].stream_kind = S;
+                stream->pes.list[pes_idx].codec = WORK_DECAVSUB;
+                stream->pes.list[pes_idx].codec_param = AV_CODEC_ID_DVB_SUBTITLE;
                 strncpy(stream->pes.list[pes_idx].codec_name,
                         "DVB Subtitling", 80);
                 bits_skip(bb, 8 * len);
@@ -3160,6 +3165,21 @@ static int parse_pes_header(
             pes_info->header_len += 4;
         }
     }
+    if ( pes_info->stream_id == 0xbd && stream->hb_stream_type == transport )
+    {
+        if ( bits_bytes_left(bb) < 2 )
+        {
+            return 0;
+        }
+        int ssid = bits_peek(bb, 8);
+        if ( ssid == 0x20 )
+        {
+            // DVB (subtitles)
+            bits_skip(bb, 8);
+            pes_info->bd_substream_id = bits_get(bb, 8);
+            pes_info->header_len += 2;
+        }
+    }
     return 1;
 }
 
@@ -3250,7 +3270,15 @@ static int hb_parse_ps(
             return 0;
         }
         pes_info->packet_len = bits_get(&bb, 16);
-        pes_info->header_len = bb.pos >> 3;
+        if ( pes_info->stream_id == 0xbe )
+        {
+            // Skip all stuffing
+            pes_info->header_len = 6 + pes_info->packet_len;
+        }
+        else
+        {
+            pes_info->header_len = bb.pos >> 3;
+        }
         return 1;
     }
 }
@@ -4617,6 +4645,14 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
 
     if (es_size <= 0)
     {
+        if (ts_stream->pes_info.packet_len > 0 &&
+            ts_stream->packet_len >= ts_stream->pes_info.packet_len + 6)
+        {
+            ts_stream->pes_info_valid = 0;
+            ts_stream->packet_len = 0;
+        }
+        b->size = 0;
+        ts_stream->packet_offset = 0;
         return NULL;
     }
 
@@ -5485,6 +5521,13 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             if (ffmpeg_parse_vobsub_extradata(codecpar, subtitle))
                 hb_log( "add_ffmpeg_subtitle: malformed extradata for VOB subtitle track; "
                         "subtitle colors likely to be wrong" );
+            break;
+        case AV_CODEC_ID_DVB_SUBTITLE:
+            subtitle->format      = PICTURESUB;
+            subtitle->source      = DVBSUB;
+            subtitle->config.dest = RENDERSUB;
+            subtitle->codec       = WORK_DECAVSUB;
+            subtitle->codec_param = codecpar->codec_id;
             break;
         case AV_CODEC_ID_TEXT:
         case AV_CODEC_ID_SUBRIP:

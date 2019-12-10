@@ -966,9 +966,19 @@ struct hb_subtitle_s
     hb_subtitle_config_t config;
 
     enum subtype { PICTURESUB, TEXTSUB } format;
-    enum subsource { VOBSUB, CC608SUB, /*unused*/CC708SUB,
-                     UTF8SUB, TX3GSUB, SSASUB, PGSSUB,
-                     IMPORTSRT, IMPORTSSA, SRTSUB = IMPORTSRT } source;
+    enum subsource {
+        VOBSUB,
+        CC608SUB,
+        CC708SUB, // unused
+        UTF8SUB,
+        TX3GSUB,
+        SSASUB,
+        PGSSUB,
+        IMPORTSRT,
+        IMPORTSSA,
+        DVBSUB,
+        SRTSUB = IMPORTSRT
+    } source;
     const char * name;
     char         lang[1024];
     char         iso639_2[4];
