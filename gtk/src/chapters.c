@@ -172,6 +172,7 @@ chapter_refresh_list_ui(signal_user_data_t *ud)
     GtkListBox * lb;
     GtkWidget  * row;
     gint         ii, count;
+    int64_t      start = 0, duration;
 
     lb = GTK_LIST_BOX(GHB_WIDGET(ud->builder, "chapters_list"));
 
@@ -182,7 +183,6 @@ chapter_refresh_list_ui(signal_user_data_t *ud)
         GhbValue   * chapter_dict;
         GhbValue   * duration_dict;
         const char * name;
-        int64_t start = 0, duration;
 
         chapter_dict  = ghb_array_get(chapter_list, ii);
         name          = ghb_dict_get_string(chapter_dict, "Name");
