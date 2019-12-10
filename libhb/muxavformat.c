@@ -853,6 +853,11 @@ static int avformatInit( hb_mux_object_t * m )
                 track->st->codecpar->codec_id = AV_CODEC_ID_HDMV_PGS_SUBTITLE;
             } break;
 
+            case DVBSUB:
+            {
+                track->st->codecpar->codec_id = AV_CODEC_ID_DVB_SUBTITLE;
+            } break;
+
             case CC608SUB:
             case CC708SUB:
             case TX3GSUB:
