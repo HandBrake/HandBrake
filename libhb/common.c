@@ -5006,7 +5006,7 @@ int hb_subtitle_can_burn( int source )
 {
     return source == VOBSUB    || source == PGSSUB    || source == SSASUB  ||
            source == CC608SUB  || source == UTF8SUB   || source == TX3GSUB ||
-           source == IMPORTSRT || source == IMPORTSSA;
+           source == IMPORTSRT || source == IMPORTSSA || source == DVBSUB;
 }
 
 int hb_subtitle_can_pass( int source, int mux )
