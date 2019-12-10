@@ -469,6 +469,7 @@ audio_update_dialog_widgets(signal_user_data_t *ud, GhbValue *asettings)
         gain = ghb_dict_get_double(asettings, "Gain");
         s_gain = get_gain_string(gain);
         ghb_ui_update(ud, "AudioTrackGainValue", ghb_string_value(s_gain));
+        g_free(s_gain);
 
         int codec = ghb_settings_audio_encoder_codec(asettings, "Encoder");
         quality = ghb_dict_get_double(asettings, "Quality");
