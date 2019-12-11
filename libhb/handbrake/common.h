@@ -1263,7 +1263,6 @@ extern hb_work_object_t hb_sync_audio;
 extern hb_work_object_t hb_sync_subtitle;
 extern hb_work_object_t hb_decvobsub;
 extern hb_work_object_t hb_encvobsub;
-extern hb_work_object_t hb_deccc608;
 extern hb_work_object_t hb_decsrtsub;
 extern hb_work_object_t hb_decutf8sub;
 extern hb_work_object_t hb_dectx3gsub;
