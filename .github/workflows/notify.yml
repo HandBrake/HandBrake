@@ -29,4 +29,4 @@ jobs:
           port: 6697
           tls: true
           message: |
-            PULL REQUEST: ${{ github.actor }} ${{ github.event.action }} a Pull Request ${{ github.event.pull_request }}
+            PULL REQUEST: ${{ github.actor }} ${{ github.event.action }} a Pull Request ${{ github.event.pull_request.html_url }}
