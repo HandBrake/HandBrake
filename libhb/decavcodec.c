@@ -935,39 +935,9 @@ static void cc_send_to_decoder(hb_work_private_t *pv, hb_buffer_t *buf)
 
 static hb_buffer_t * cc_fill_buffer(hb_work_private_t *pv, uint8_t *cc, int size)
 {
-    int cc_count[4] = {0,};
-    int ii;
-    hb_buffer_t *buf = NULL;
+    hb_buffer_t * buf = hb_buffer_init(size);
 
-    for (ii = 0; ii < size; ii += 3)
-    {
-        if ((cc[ii] & 0x04) == 0)    // not valid
-            continue;
-        if ((cc[ii+1] & 0x7f) == 0 && (cc[ii+2] & 0x7f) == 0) // stuffing
-            continue;
-        int type = cc[ii] & 0x03;
-        cc_count[type]++;
-    }
-
-    // Only handles CC1 for now.
-    if (cc_count[0] > 0)
-    {
-        buf = hb_buffer_init(cc_count[0] * 2);
-        int jj = 0;
-        for (ii = 0; ii < size; ii += 3)
-        {
-            if ((cc[ii] & 0x04) == 0)    // not valid
-                continue;
-            if ((cc[ii+1] & 0x7f) == 0 && (cc[ii+2] & 0x7f) == 0) // stuffing
-                continue;
-            int type = cc[ii] & 0x03;
-            if (type == 0)
-            {
-                buf->data[jj++] = cc[ii+1];
-                buf->data[jj++] = cc[ii+2];
-            }
-        }
-    }
+    memcpy(buf->data, cc, size);
     return buf;
 }
 
@@ -1074,12 +1044,15 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
 
                 subtitle        = calloc(sizeof( hb_subtitle_t ), 1);
                 subtitle->track = hb_list_count(pv->title->list_subtitle);
-                subtitle->id          = HB_SUBTITLE_EMBEDDED_CC_TAG;
-                subtitle->format      = TEXTSUB;
-                subtitle->source      = CC608SUB;
-                subtitle->config.dest = PASSTHRUSUB;
-                subtitle->codec       = WORK_DECCC608;
-                subtitle->attributes  = HB_SUBTITLE_ATTR_CC;
+                subtitle->id           = HB_SUBTITLE_EMBEDDED_CC_TAG;
+                subtitle->format       = TEXTSUB;
+                subtitle->source       = CC608SUB;
+                subtitle->config.dest  = PASSTHRUSUB;
+                subtitle->codec        = WORK_DECAVSUB;
+                subtitle->codec_param  = AV_CODEC_ID_EIA_608;
+                subtitle->attributes   = HB_SUBTITLE_ATTR_CC;
+                subtitle->timebase.num = 1;
+                subtitle->timebase.den = 90000;
 
                 /*
                  * The language of the subtitles will be the same as the
@@ -1110,6 +1083,7 @@ static hb_buffer_t *copy_frame( hb_work_private_t *pv )
             if (cc_buf != NULL)
             {
                 cc_buf->s.start        = out->s.start;
+                cc_buf->s.duration     = (int64_t)AV_NOPTS_VALUE;
                 cc_buf->s.scr_sequence = out->s.scr_sequence;
             }
             cc_send_to_decoder(pv, cc_buf);

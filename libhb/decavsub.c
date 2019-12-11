@@ -65,6 +65,10 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     // Set decoder opts...
     AVDictionary * av_opts = NULL;
     av_dict_set( &av_opts, "sub_text_format", "ass", 0 );
+    if (ctx->subtitle->source == CC608SUB)
+    {
+        av_dict_set( &av_opts, "real_time", "1", 0 );
+    }
 
     if (hb_avcodec_open(ctx->context, codec, &av_opts, 0))
     {
@@ -90,7 +94,7 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
             {
                 // Mono font for CC
                 hb_subtitle_add_ssa_header(ctx->subtitle, HB_FONT_MONO,
-                    .066 * job->title->geometry.height, width, height);
+                    30, 384, 288);
             } break;
 
             default:
@@ -223,6 +227,24 @@ static void make_empty_sub( int source, hb_buffer_list_t * list_pass )
     }
 }
 
+// Returns a pointer to the first character after the ASS preamble
+static const char * ssa_text(const char * ssa)
+{
+    int ii;
+    const char * text = ssa;
+
+    if (ssa == NULL)
+        return NULL;
+    for (ii = 0; ii < 8; ii++)
+    {
+        text = strchr(text, ',');
+        if (text == NULL)
+            break;
+        text++;
+    }
+    return text;
+}
+
 int decavsubWork( hb_avsub_context_t * ctx,
                   hb_buffer_t ** buf_in,
                   hb_buffer_t ** buf_out )
@@ -290,6 +312,11 @@ int decavsubWork( hb_avsub_context_t * ctx,
             avp.data[usedBytes] == 0xff)
         {
             usedBytes++;
+        }
+        // Another ugly hack, ffmpeg always returns 0 for CC decoder :(
+        if (ctx->subtitle->source == CC608SUB)
+        {
+            usedBytes = avp.size;
         }
         if (usedBytes <= avp.size)
         {
@@ -424,11 +451,23 @@ int decavsubWork( hb_avsub_context_t * ctx,
             // Text subtitles are treated the same regardless of
             // whether we are burning or passing through.  They
             // get translated to SSA
-            if (!clear_sub && subtitle.rects[0]->ass != NULL)
+            //
+            // When using the "real_time" option with CC608 subtitles,
+            // ffmpeg prepends an ASS rect that has only the preample
+            // to every list of returned rects.  libass doesn't like this
+            // and logs a warning for every one of these. So strip these
+            // out by using only the last rect in the list.
+            //
+            // Also, when a CC needs to be removed from the screen, ffmpeg
+            // emits a single rect with only the preamble.  Detect this
+            // and flag an "End Of Subtitle" EOS.
+            int ii = subtitle.num_rects - 1;
+            const char * text = ssa_text(subtitle.rects[ii]->ass);
+            if (!clear_sub && text != NULL && *text != 0)
             {
-                int size = strlen(subtitle.rects[0]->ass) + 1;
+                int size = strlen(subtitle.rects[ii]->ass) + 1;
                 out = hb_buffer_init(size);
-                strcpy((char*)out->data, subtitle.rects[0]->ass);
+                strcpy((char*)out->data, subtitle.rects[ii]->ass);
             }
             else
             {

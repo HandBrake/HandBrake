@@ -5558,10 +5558,11 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
             subtitle->codec_param = codecpar->codec_id;
             break;
         case AV_CODEC_ID_EIA_608:
-            subtitle->format = TEXTSUB;
-            subtitle->source = CC608SUB;
+            subtitle->format      = TEXTSUB;
+            subtitle->source      = CC608SUB;
             subtitle->config.dest = PASSTHRUSUB;
-            subtitle->codec = WORK_DECCC608;
+            subtitle->codec       = WORK_DECAVSUB;
+            subtitle->codec_param = codecpar->codec_id;
             subtitle->attributes  = HB_SUBTITLE_ATTR_CC;
             break;
         default:
@@ -6123,6 +6124,10 @@ hb_buffer_t * hb_ffmpeg_read( hb_stream_t *stream )
             {
                 buf->s.duration = av_to_hb_pts(pkt_duration, tsconv, 0);
                 buf->s.stop = buf->s.start + buf->s.duration;
+            }
+            else
+            {
+                buf->s.duration = (int64_t)AV_NOPTS_VALUE;
             }
             buf->s.type = SUBTITLE_BUF;
         } break;
