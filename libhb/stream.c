@@ -1992,6 +1992,11 @@ static void pes_add_subtitle_to_title(
                     subtitle->format = PICTURESUB;
                     subtitle->config.dest = RENDERSUB;
                     break;
+                case AV_CODEC_ID_DVD_SUBTITLE:
+                    subtitle->source = VOBSUB;
+                    subtitle->format = PICTURESUB;
+                    subtitle->config.dest = RENDERSUB;
+                    break;
                 default:
                     // Unrecognized, don't add to list
                     hb_log("unrecognized subtitle!");
@@ -1999,11 +2004,6 @@ static void pes_add_subtitle_to_title(
                     return;
             }
         } break;
-        case WORK_DECVOBSUB:
-            subtitle->source = VOBSUB;
-            subtitle->format = PICTURESUB;
-            subtitle->config.dest = RENDERSUB;
-            break;
         default:
             // Unrecognized, don't add to list
             hb_log("unrecognized subtitle!");
@@ -3875,7 +3875,8 @@ static void hb_ps_stream_find_streams(hb_stream_t *stream)
                     int idx = update_ps_streams( stream, pes_info.stream_id,
                                             pes_info.bd_substream_id, 0, -1 );
                     stream->pes.list[idx].stream_kind = S;
-                    stream->pes.list[idx].codec = WORK_DECVOBSUB;
+                    stream->pes.list[idx].codec = WORK_DECAVSUB;
+                    stream->pes.list[idx].codec_param = AV_CODEC_ID_DVD_SUBTITLE;
                     strncpy(stream->pes.list[idx].codec_name,
                             "DVD Subtitle", 80);
                     continue;
@@ -4719,6 +4720,7 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
             stream->ts.pcr = AV_NOPTS_VALUE;
             buf->s.start = ts_stream->pes_info.pts;
             buf->s.renderOffset = ts_stream->pes_info.dts;
+            buf->s.duration = (int64_t)AV_NOPTS_VALUE;
         }
         else
         {
@@ -5514,13 +5516,16 @@ static void add_ffmpeg_subtitle( hb_title_t *title, hb_stream_t *stream, int id 
     switch ( codecpar->codec_id )
     {
         case AV_CODEC_ID_DVD_SUBTITLE:
-            subtitle->format = PICTURESUB;
-            subtitle->source = VOBSUB;
-            subtitle->config.dest = RENDERSUB;  // By default render (burn-in) the VOBSUB.
-            subtitle->codec = WORK_DECVOBSUB;
+            subtitle->format      = PICTURESUB;
+            subtitle->source      = VOBSUB;
+            subtitle->config.dest = RENDERSUB;
+            subtitle->codec       = WORK_DECAVSUB;
+            subtitle->codec_param = AV_CODEC_ID_DVD_SUBTITLE;
             if (ffmpeg_parse_vobsub_extradata(codecpar, subtitle))
+            {
                 hb_log( "add_ffmpeg_subtitle: malformed extradata for VOB subtitle track; "
                         "subtitle colors likely to be wrong" );
+            }
             break;
         case AV_CODEC_ID_DVB_SUBTITLE:
             subtitle->format      = PICTURESUB;
