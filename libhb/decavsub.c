@@ -23,6 +23,20 @@ struct hb_avsub_context_s
     hb_buffer_list_t list_pass;
     // List of subtitle packets to be output by this decoder.
     hb_buffer_list_t list;
+    // DVD subtitles: ffmpeg returns the timestamp of the last packet
+    // submitted when a DVD subtitle spans multiple packets.  So we must
+    // keep track of the start time of the first packet. In this case
+    // sub_pts is reset when ffmpeg delivers us a subtitle.
+    //
+    // BUT, EIA 608 can have many nil packets before the actual subtitle
+    // begins and the ffmpeg decoder keeps track of the timestamp where
+    // the subtitle actually begins for us. In this case sub_pts must be
+    // reset for every packet.  I.e. the opposite of what we have to do for
+    // DVD subtitle :(
+    //
+    // PGS subtitles should also reset this for each packet since the packet
+    // with the presentation segment defines the display time.
+    int64_t sub_pts;
     // XXX: we may occasionally see subtitles with broken timestamps
     //      while this should really get fixed elsewhere,
     //      dropping subtitles should be avoided as much as possible
@@ -48,6 +62,7 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     }
     ctx->seen_forced_sub       = 0;
     ctx->last_pts              = AV_NOPTS_VALUE;
+    ctx->sub_pts               = AV_NOPTS_VALUE;
     ctx->job                   = job;
     ctx->subtitle              = w->subtitle;
 
@@ -68,6 +83,29 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     if (ctx->subtitle->source == CC608SUB)
     {
         av_dict_set( &av_opts, "real_time", "1", 0 );
+    }
+    if (ctx->subtitle->source == VOBSUB && ctx->subtitle->palette_set)
+    {
+        char * palette = hb_strdup_printf(
+            "%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x,%x",
+            hb_yuv2rgb(ctx->subtitle->palette[0]),
+            hb_yuv2rgb(ctx->subtitle->palette[1]),
+            hb_yuv2rgb(ctx->subtitle->palette[2]),
+            hb_yuv2rgb(ctx->subtitle->palette[3]),
+            hb_yuv2rgb(ctx->subtitle->palette[4]),
+            hb_yuv2rgb(ctx->subtitle->palette[5]),
+            hb_yuv2rgb(ctx->subtitle->palette[6]),
+            hb_yuv2rgb(ctx->subtitle->palette[7]),
+            hb_yuv2rgb(ctx->subtitle->palette[8]),
+            hb_yuv2rgb(ctx->subtitle->palette[9]),
+            hb_yuv2rgb(ctx->subtitle->palette[10]),
+            hb_yuv2rgb(ctx->subtitle->palette[11]),
+            hb_yuv2rgb(ctx->subtitle->palette[12]),
+            hb_yuv2rgb(ctx->subtitle->palette[13]),
+            hb_yuv2rgb(ctx->subtitle->palette[14]),
+            hb_yuv2rgb(ctx->subtitle->palette[15]));
+        av_dict_set( &av_opts, "palette", palette, 0 );
+        free(palette);
     }
 
     if (hb_avcodec_open(ctx->context, codec, &av_opts, 0))
@@ -280,10 +318,14 @@ int decavsubWork( hb_avsub_context_t * ctx,
     int64_t duration = AV_NOPTS_VALUE;
     AVPacket avp;
 
+    if (ctx->sub_pts == AV_NOPTS_VALUE)
+    {
+        ctx->sub_pts = in->s.start;
+    }
     av_init_packet( &avp );
     avp.data = in->data;
     avp.size = in->size;
-    avp.pts  = in->s.start;
+    avp.pts  = ctx->sub_pts;
     duration = in->s.duration;
 
     if (duration <= 0 &&
@@ -305,6 +347,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
             return HB_WORK_OK;
         }
 
+        // <UGLY_HACKS>
         // Ugly hack, but ffmpeg doesn't consume a trailing 0xff in
         // DVB subtitle buffers :(
         if (ctx->subtitle->source == DVBSUB &&
@@ -314,10 +357,23 @@ int decavsubWork( hb_avsub_context_t * ctx,
             usedBytes++;
         }
         // Another ugly hack, ffmpeg always returns 0 for CC decoder :(
-        if (ctx->subtitle->source == CC608SUB)
+        //
+        // Also returns 0 for DVD subtitles, until it emits an AVSubtitle,
+        // then it returns the total number of bytes used to construct
+        // that subtitle :(
+        if (ctx->subtitle->source == CC608SUB ||
+            ctx->subtitle->source == VOBSUB)
         {
             usedBytes = avp.size;
         }
+        // ffmpeg needs us to remember the timestamp of the first packet of
+        // DVD subtitles
+        if (ctx->subtitle->source != VOBSUB)
+        {
+            ctx->sub_pts = AV_NOPTS_VALUE;
+        }
+        // </UGLY_HACKS>
+
         if (usedBytes <= avp.size)
         {
             avp.data += usedBytes;
@@ -332,6 +388,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
         {
             continue;
         }
+        ctx->sub_pts = AV_NOPTS_VALUE;
 
         uint8_t forced_sub = 0;
         uint8_t usable_sub = 0;
@@ -474,13 +531,6 @@ int decavsubWork( hb_avsub_context_t * ctx,
                 out = hb_buffer_init(0);
                 out->s.flags = HB_BUF_FLAG_EOS;
             }
-            out->s.frametype    = HB_FRAME_SUBTITLE;
-            out->s.start        = pts;
-            if (duration != AV_NOPTS_VALUE)
-            {
-                out->s.stop      = pts + duration;
-                out->s.duration  = duration;
-            }
             hb_buffer_list_close(&ctx->list_pass);
         }
         else if (ctx->subtitle->config.dest == PASSTHRUSUB &&
@@ -522,11 +572,11 @@ int decavsubWork( hb_avsub_context_t * ctx,
                     b = b->next;
                 }
                 hb_buffer_list_close(&ctx->list_pass);
-
-                out->s        = in->s;
             }
-            out->s.frametype    = HB_FRAME_SUBTITLE;
-            out->s.start        = pts;
+            if (clear_sub)
+            {
+                out->s.flags = HB_BUF_FLAG_EOS;
+            }
         }
         else
         {
@@ -558,10 +608,6 @@ int decavsubWork( hb_avsub_context_t * ctx,
                 out = hb_frame_buffer_init(AV_PIX_FMT_YUVA420P, w, h);
                 memset(out->data, 0, out->size);
 
-                out->s.frametype     = HB_FRAME_SUBTITLE;
-                out->s.id            = in->s.id;
-                out->s.start         = pts;
-                out->s.scr_sequence  = in->s.scr_sequence;
                 out->f.x             = x0;
                 out->f.y             = y0;
                 out->f.window_width  = ctx->context->width;
@@ -613,25 +659,29 @@ int decavsubWork( hb_avsub_context_t * ctx,
                         alpha += out->plane[3].stride;
                     }
                 }
-                hb_buffer_list_append(&ctx->list, out);
-                out = NULL;
             }
             else
             {
                 out = hb_buffer_init( 0 );
 
-                out->s.frametype    = HB_FRAME_SUBTITLE;
-                out->s.flags        = HB_BUF_FLAG_EOS;
-                out->s.id           = in->s.id;
-                out->s.start        = pts;
-                out->s.stop         = pts;
-                out->s.scr_sequence = in->s.scr_sequence;
-                out->f.x            = 0;
-                out->f.y            = 0;
-                out->f.width        = 0;
-                out->f.height       = 0;
+                out->s.flags  = HB_BUF_FLAG_EOS;
+                out->f.x      = 0;
+                out->f.y      = 0;
+                out->f.width  = 0;
+                out->f.height = 0;
+                duration      = 0;
             }
         }
+        out->s.id           = in->s.id;
+        out->s.scr_sequence = in->s.scr_sequence;
+        out->s.frametype    = HB_FRAME_SUBTITLE;
+        out->s.start        = pts;
+        if (duration != AV_NOPTS_VALUE)
+        {
+            out->s.stop      = pts + duration;
+            out->s.duration  = duration;
+        }
+
         hb_buffer_list_append(&ctx->list, out);
         avsubtitle_free(&subtitle);
     }

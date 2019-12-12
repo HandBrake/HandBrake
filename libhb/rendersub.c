@@ -22,7 +22,7 @@ struct hb_filter_private_s
     int                 sws_width;
     int                 sws_height;
 
-    // VOBSUB
+    // VOBSUB && PGSSUB
     hb_list_t         * sub_list; // List of active subs
 
     // SSA
@@ -345,6 +345,8 @@ static void ApplyVOBSubs( hb_filter_private_t * pv, hb_buffer_t * buf )
     int ii;
     hb_buffer_t *sub, *next;
 
+    // Note that VOBSUBs can overlap in time.
+    // I.e. more than one may be rendered to the screen at once.
     for( ii = 0; ii < hb_list_count(pv->sub_list); )
     {
         sub = hb_list_item( pv->sub_list, ii );

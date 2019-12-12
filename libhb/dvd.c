@@ -205,7 +205,8 @@ static void add_subtitle( hb_list_t * list_subtitle, int position,
     subtitle->config.dest    = RENDERSUB;
     subtitle->stream_type    = 0xbd;
     subtitle->substream_type = 0x20 + position;
-    subtitle->codec          = WORK_DECVOBSUB;
+    subtitle->codec          = WORK_DECAVSUB;
+    subtitle->codec_param    = AV_CODEC_ID_DVD_SUBTITLE;
     subtitle->timebase.num   = 1;
     subtitle->timebase.den   = 90000;
 

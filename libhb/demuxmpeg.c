@@ -222,10 +222,11 @@ static void demux_dvd_ps( hb_buffer_t * buf, hb_buffer_list_t * list_es,
             /* Here we hit we ES payload */
             buf_es = hb_buffer_init( pes_packet_end - pos );
 
-            buf_es->s.id       = id;
-            buf_es->s.start    = pts;
+            buf_es->s.id           = id;
+            buf_es->s.start        = pts;
             buf_es->s.renderOffset = dts;
-            buf_es->s.stop     = AV_NOPTS_VALUE;
+            buf_es->s.duration     = (int64_t)AV_NOPTS_VALUE;
+            buf_es->s.stop         = AV_NOPTS_VALUE;
             if ( state && id == 0xE0)
             {
                 // Consume a chapter break, and apply it to the ES.
