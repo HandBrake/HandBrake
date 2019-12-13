@@ -2225,11 +2225,12 @@ static int InitSubtitle( sync_common_t * common, int index )
         // Merge overlapping subtitles since mpv tx3g does not support them
         pv->stream->subtitle.sanitizer.merge = 1;
     }
-    // PGS subtitles don't need to be linked because there are explicit
+    // PGS & DVB subtitles don't need to be linked because there are explicit
     // "clear" subtitle packets that indicate the end time of the
     // previous subtitle
     if (subtitle->config.dest == PASSTHRUSUB &&
-        subtitle->source != PGSSUB)
+        subtitle->source != PGSSUB &&
+        subtitle->source != DVBSUB)
     {
         // Fill in stop time when it is missing
         pv->stream->subtitle.sanitizer.link = 1;
