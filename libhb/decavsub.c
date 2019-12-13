@@ -259,6 +259,8 @@ static void make_empty_sub( int source, hb_buffer_list_t * list_pass )
         case PGSSUB:
             make_empty_pgs(hb_buffer_list_head(list_pass));
             break;
+        case DVBSUB:
+            break;
         default:
             hb_buffer_list_close(list_pass);
             break;
@@ -441,7 +443,9 @@ int decavsubWork( hb_avsub_context_t * ctx,
         {
             duration = 0;
         }
-        else if (subtitle.end_display_time > 0 &&
+        else if (ctx->subtitle->source != DVBSUB &&
+                 ctx->subtitle->source != PGSSUB &&
+                 subtitle.end_display_time > 0 &&
                  subtitle.end_display_time < UINT32_MAX)
         {
             duration = av_rescale(subtitle.end_display_time, 90000, 1000);
