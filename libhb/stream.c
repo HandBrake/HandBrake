@@ -122,6 +122,7 @@ typedef struct
     int64_t scr;
     int     header_len;
     int     packet_len;
+    int     stuffing_len;
 } hb_pes_info_t;
 
 typedef struct {
@@ -2948,7 +2949,8 @@ static int parse_pes_header(
     }
 
     bits_skip(bb, 8 * 4);
-    pes_info->packet_len = bits_get(bb, 16);
+    pes_info->packet_len   = bits_get(bb, 16);
+    pes_info->stuffing_len = 0;
 
     /*
      * This would normally be an error.  But the decoders can generally
@@ -3178,6 +3180,7 @@ static int parse_pes_header(
             bits_skip(bb, 8);
             pes_info->bd_substream_id = bits_get(bb, 8);
             pes_info->header_len += 2;
+            pes_info->stuffing_len = 1;
         }
     }
     return 1;
@@ -4644,6 +4647,11 @@ static hb_buffer_t * generate_output_data(hb_stream_t *stream, int curstream)
     uint8_t *tdat = b->data + ts_stream->packet_offset;
     int es_size = b->size - ts_stream->packet_offset;
 
+    if (ts_stream->packet_len >= ts_stream->pes_info.packet_len + 6)
+    {
+        // Remove trailing stuffing bytes (DVB subtitles)
+        es_size -= ts_stream->pes_info.stuffing_len;
+    }
     if (es_size <= 0)
     {
         if (ts_stream->pes_info.packet_len > 0 &&
