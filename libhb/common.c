@@ -5570,6 +5570,8 @@ const char * hb_subsource_name( int source )
             return "SSA";
         case PGSSUB:
             return "PGS";
+        case DVBSUB:
+            return "DVB";
         default:
             return "Unknown";
     }
