@@ -348,15 +348,7 @@ int decavsubWork( hb_avsub_context_t * ctx,
         }
 
         // <UGLY_HACKS>
-        // Ugly hack, but ffmpeg doesn't consume a trailing 0xff in
-        // DVB subtitle buffers :(
-        if (ctx->subtitle->source == DVBSUB &&
-            avp.size > usedBytes &&
-            avp.data[usedBytes] == 0xff)
-        {
-            usedBytes++;
-        }
-        // Another ugly hack, ffmpeg always returns 0 for CC decoder :(
+        // ffmpeg always returns 0 for CC decoder :(
         //
         // Also returns 0 for DVD subtitles, until it emits an AVSubtitle,
         // then it returns the total number of bytes used to construct
