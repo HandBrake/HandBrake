@@ -476,7 +476,7 @@ namespace HandBrakeWPF.ViewModels
             }
             set
             {
-                if (value == "Same as source")
+                if (value == "Same as source" || value == null)
                 {
                     this.Task.Framerate = null;
                     this.ShowPeakFramerate = false;
@@ -1215,7 +1215,14 @@ namespace HandBrakeWPF.ViewModels
         /// </returns>
         private string GetActualx264Query()
         {
-            if (this.SelectedVideoEncoder != VideoEncoder.X264 && this.SelectedVideoEncoder != VideoEncoder.X264_10)
+            VideoEncoder encoder = this.SelectedVideoEncoder;
+            if (encoder != VideoEncoder.X264 && encoder != VideoEncoder.X264_10)
+            {
+                return string.Empty;
+            }
+
+            HBVideoEncoder hbEncoder = HandBrakeEncoderHelpers.VideoEncoders.FirstOrDefault(s => s.ShortName == EnumHelper<VideoEncoder>.GetShortName(encoder));
+            if (hbEncoder == null || !hbEncoder.Presets.Contains(this.VideoPreset?.ShortName))
             {
                 return string.Empty;
             }
@@ -1498,8 +1505,7 @@ namespace HandBrakeWPF.ViewModels
             {
                 this.TwoPass = false;
                 this.TurboFirstPass = false;
-                this.Task.Framerate = null;
-                this.NotifyOfPropertyChange(() => this.SelectedFramerate);
+                this.SelectedFramerate = null;
             }
 
             if (selectedEncoder == VideoEncoder.NvencH264 || selectedEncoder == VideoEncoder.NvencH265 
