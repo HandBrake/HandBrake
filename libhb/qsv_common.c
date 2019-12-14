@@ -2299,6 +2299,7 @@ extern EncQSVFramesContext hb_enc_qsv_frames_ctx;
 AVBufferRef *hb_hw_device_ctx = NULL;
 char *qsv_device = NULL;
 mfxHDL device_manager_handle = NULL;
+mfxHandleType device_handle_type = MFX_HANDLE_D3D11_DEVICE;
 
 #if defined(_WIN32) || defined(__MINGW32__)
 // Direct X
@@ -2320,13 +2321,13 @@ static int hb_dxva2_device_create9(HMODULE d3dlib, UINT adapter, IDirect3D9 **d3
 {
     pDirect3DCreate9 *createD3D = (pDirect3DCreate9 *)hb_dlsym(d3dlib, "Direct3DCreate9");
     if (!createD3D) {
-        hb_error("Failed to locate Direct3DCreate9");
+        hb_error("hb_dxva2_device_create9: failed to locate Direct3DCreate9");
         return -1;
     }
 
     IDirect3D9 *d3d9 = createD3D(D3D_SDK_VERSION);
     if (!d3d9) {
-        hb_error("Failed to create IDirect3D object");
+        hb_error("hb_dxva2_device_create9: createD3D failed");
         return -1;
     }
     *d3d9_out = d3d9;
@@ -2340,14 +2341,14 @@ static int hb_dxva2_device_create9ex(HMODULE d3dlib, UINT adapter, IDirect3D9 **
     pDirect3DCreate9Ex *createD3DEx = (pDirect3DCreate9Ex *)hb_dlsym(d3dlib, "Direct3DCreate9Ex");
     if (!createD3DEx)
     {
-        hb_error("Failed to locate Direct3DCreate9Ex");
+        hb_error("hb_dxva2_device_create9ex: failed to locate Direct3DCreate9Ex");
         return -1;
     }
 
     hr = createD3DEx(D3D_SDK_VERSION, &d3d9ex);
     if (FAILED(hr))
     {
-        hb_error("Failed to create IDirect3DEx object");
+        hb_error("hb_dxva2_device_create9ex: createD3DEx failed %d", hr);
         return -1;
     }
     *d3d9_out = (IDirect3D9 *)d3d9ex;
@@ -2362,7 +2363,7 @@ static int hb_d3d11va_device_check()
     dxgilib = hb_dlopen("dxgi.dll");
     if (!d3dlib || !dxgilib)
     {
-        hb_error("Failed to load d3d11.dll and dxgi.dll");
+        hb_error("hb_d3d11va_device_check: failed to load d3d11.dll and dxgi.dll");
         return -1;
     }
 
@@ -2372,7 +2373,7 @@ static int hb_d3d11va_device_check()
     mCreateDXGIFactory = (HB_PFN_CREATE_DXGI_FACTORY)hb_dlsym(dxgilib, "CreateDXGIFactory1");
 
     if (!mD3D11CreateDevice || !mCreateDXGIFactory) {
-        hb_error("Failed to load D3D11 library functions");
+        hb_error("hb_d3d11va_device_check: failed to locate D3D11CreateDevice and CreateDXGIFactory1 functions");
         return -1;
     }
 
@@ -2388,13 +2389,13 @@ static int hb_d3d11va_device_check()
 
         hr = mD3D11CreateDevice(pAdapter, D3D_DRIVER_TYPE_UNKNOWN, NULL, D3D11_CREATE_DEVICE_VIDEO_SUPPORT, NULL, 0, D3D11_SDK_VERSION, &g_pd3dDevice, NULL, NULL);
         if (FAILED(hr)) {
-            hb_error("D3D11CreateDevice returned error");
+            hb_error("hb_d3d11va_device_check: D3D11CreateDevice returned %d", hr);
             continue;
         }
 
         hr = IDXGIAdapter2_GetDesc(pAdapter, &adapterDesc);
         if (FAILED(hr)) {
-            hb_error("IDXGIAdapter2_GetDesc returned error");
+            hb_error("hb_d3d11va_device_check: IDXGIAdapter2_GetDesc returned %d", hr);
             continue;
         }
 
@@ -2403,7 +2404,7 @@ static int hb_d3d11va_device_check()
 
         if (adapterDesc.VendorId == 0x8086) {
             IDXGIFactory2_Release(pDXGIFactory);
-            hb_log("D3D11: QSV adapter with id %d has been found", adapter_id - 1);
+            hb_log("hb_d3d11va_device_check: QSV adapter with id %d has been found", adapter_id - 1);
             return adapter_id - 1;
         }
     }
@@ -2413,36 +2414,36 @@ static int hb_d3d11va_device_check()
 
 static int hb_dxva2_device_check()
 {
+    HRESULT hr;
     HMODULE d3dlib = NULL;
     IDirect3D9 *d3d9 = NULL;
     D3DADAPTER_IDENTIFIER9 identifier;
     D3DADAPTER_IDENTIFIER9 *d3dai = &identifier;
     UINT adapter = D3DADAPTER_DEFAULT;
-    int err = 0;
 
     d3dlib = hb_dlopen("d3d9.dll");
     if (!d3dlib)
     {
-        hb_error("Failed to load D3D9 library");
+        hb_error("hb_dxva2_device_check: failed to load d3d9 library");
         return -1;
     }
 
     if (hb_dxva2_device_create9ex(d3dlib, adapter, &d3d9) < 0)
     {
         // Retry with "classic" d3d9
-        err = hb_dxva2_device_create9(d3dlib, adapter, &d3d9);
-        if (err < 0)
+        hr = hb_dxva2_device_create9(d3dlib, adapter, &d3d9);
+        if (hr < 0)
         {
-            err = -1;
+            hr = -1;
             goto clean_up;
         }
     }
 
-    UINT adapter_count = IDirect3D9_GetAdapterCount(d3d9);
-    if (FAILED(IDirect3D9_GetAdapterIdentifier(d3d9, D3DADAPTER_DEFAULT, 0, d3dai)))
+    hr = IDirect3D9_GetAdapterIdentifier(d3d9, D3DADAPTER_DEFAULT, 0, d3dai);
+    if (FAILED(hr))
     {
-        hb_error("Failed to get Direct3D adapter identifier");
-        err = -1;
+        hb_error("hb_dxva2_device_check: IDirect3D9_GetAdapterIdentifier failed");
+        hr = -1;
         goto clean_up;
     }
 
@@ -2451,12 +2452,12 @@ static int hb_dxva2_device_check()
     {
         if(d3dai->VendorId != intel_id)
         {
-            hb_error("D3D9: adapter that was found does not support QSV. It is required for zero-copy QSV path");
-            err = -1;
+            hb_error("hb_dxva2_device_check: adapter that was found does not support QSV. It is required for zero-copy QSV path");
+            hr = -1;
             goto clean_up;
         }
     }
-    err = 0;
+    hr = 0;
 
 clean_up:
     if (d3d9)
@@ -2465,7 +2466,7 @@ clean_up:
     if (d3dlib)
         hb_dlclose(d3dlib);
 
-    return err;
+    return hr;
 }
 
 static HRESULT lock_device(
@@ -2663,13 +2664,8 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
 
     QSVMid *mid = NULL;
     mfxFrameSurface1* output_surface = NULL;
-    AVHWFramesContext *frames_ctx = (AVHWFramesContext*)hb_enc_qsv_frames_ctx.hw_frames_ctx->data;
-    AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;
 
     hb_qsv_get_free_surface_from_pool(0, HB_POOL_SURFACE_SIZE - HB_POOL_ENCODER_SIZE, &mid, &output_surface);
-
-    // Get D3DDeviceManger handle from Media SDK
-    mfxHandleType handle_type;
 
     static const mfxHandleType handle_types[] = {
         MFX_HANDLE_VA_DISPLAY,
@@ -2690,7 +2686,7 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
             int err = MFXVideoCORE_GetHandle(parent_session, handle_types[i], &device_manager_handle);
             if (err == MFX_ERR_NONE)
             {
-                handle_type = handle_types[i];
+                device_handle_type = handle_types[i];
                 break;
             }
             device_manager_handle = NULL;
@@ -2698,13 +2694,13 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
 
         if (!device_manager_handle)
         {
-            hb_error("No supported hw handle could be retrieved "
+            hb_error("hb_qsv_copy_frame: no supported hw handle could be retrieved "
                 "from the session\n");
             return out;
         }
     }
 
-    if (handle_type == MFX_HANDLE_D3D9_DEVICE_MANAGER)
+    if (device_handle_type == MFX_HANDLE_D3D9_DEVICE_MANAGER)
     {
         IDirect3DDevice9 *pDevice = NULL;
         HANDLE handle;
@@ -2712,7 +2708,7 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
         HRESULT result = lock_device((IDirect3DDeviceManager9 *)device_manager_handle, 0, &pDevice, &handle);
         if (FAILED(result))
         {
-            hb_error("copy_frame qsv: LockDevice failded=%d", result);
+            hb_error("hb_qsv_copy_frame: lock_device failded %d", result);
             return out;
         }
 
@@ -2726,13 +2722,13 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
         result = IDirect3DDevice9_StretchRect(pDevice, input_surface->Data.MemId, 0, mid->handle, 0, D3DTEXF_LINEAR);
         if (FAILED(result))
         {
-            hb_error("copy_frame qsv: IDirect3DDevice9_StretchRect failded=%d", result);
+            hb_error("hb_qsv_copy_frame: IDirect3DDevice9_StretchRect failded %d", result);
             return out;
         }
         result = unlock_device((IDirect3DDeviceManager9 *)device_manager_handle, handle);
         if (FAILED(result))
         {
-            hb_error("copy_frame qsv: UnlockDevice failded=%d", result);
+            hb_error("hb_qsv_copy_frame: unlock_device failded %d", result);
             return out;
         }
     }
@@ -2751,10 +2747,10 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
         // replace the mem id to mem id from the pool
         output_surface->Data.MemId = mid;
         // copy input sufrace to sufrace from the pool
-        ID3D11DeviceContext_CopySubresourceRegion(device_context, mid->texture, mid->handle, 0, 0, 0, hb_enc_qsv_frames_ctx.input_texture, input_surface->Data.MemId, NULL);
+        ID3D11DeviceContext_CopySubresourceRegion(device_context, mid->texture, (uint64_t)mid->handle, 0, 0, 0, hb_enc_qsv_frames_ctx.input_texture, (uint64_t)input_surface->Data.MemId, NULL);
     }
 
-    out->qsv_details.frame->data[3] = output_surface;
+    out->qsv_details.frame->data[3] = (uint8_t*)output_surface;
     out->qsv_details.qsv_atom = 0;
     out->qsv_details.ctx      = qsv_ctx;
     return out;
@@ -2801,7 +2797,7 @@ static int qsv_device_init(AVCodecContext *s)
     err = av_hwdevice_ctx_create(&hb_hw_device_ctx, AV_HWDEVICE_TYPE_QSV,
                                  0, dict, 0);
     if (err < 0) {
-        av_log(NULL, AV_LOG_ERROR, "Error creating a QSV device\n");
+        hb_error("qsv_device_init: error creating a QSV device %d", err);
         goto err_out;
     }
 
@@ -2842,7 +2838,7 @@ static int qsv_init(AVCodecContext *s)
 
     ret = av_hwframe_ctx_init(s->hw_frames_ctx);
     if (ret < 0) {
-        av_log(NULL, AV_LOG_ERROR, "Error initializing a QSV frame pool\n");
+        hb_error("qsv_init: av_hwframe_ctx_init failed %d", ret);
         return ret;
     }
 
@@ -2866,7 +2862,7 @@ static int qsv_init(AVCodecContext *s)
 
     ret = av_hwframe_ctx_init(enc_hw_frames_ctx);
     if (ret < 0) {
-        av_log(NULL, AV_LOG_ERROR, "Error initializing a QSV frame pool\n");
+        hb_error("qsv_init: av_hwframe_ctx_init failed %d", ret);
         return ret;
     }
 
@@ -2887,7 +2883,7 @@ static int qsv_init(AVCodecContext *s)
 
     ret = av_hwframe_ctx_init(enc_hw_frames_ctx);
     if (ret < 0) {
-        av_log(NULL, AV_LOG_ERROR, "Error initializing a QSV frame pool\n");
+        hb_error("qsv_init: av_hwframe_ctx_init failed %d", ret);
         return ret;
     }
 
@@ -2919,20 +2915,11 @@ int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags)
 
 enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts)
 {
-    const enum AVPixelFormat *p;
-    int ret;
-
-    for (p = pix_fmts; *p != AV_PIX_FMT_NONE; p++) {
-        const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(*p);
-
-        if (!(desc->flags & AV_PIX_FMT_FLAG_HWACCEL))
-            break;
-
-        if(*p == AV_PIX_FMT_QSV)
-        {
-            ret = qsv_init(s);
+    while (*pix_fmts != AV_PIX_FMT_NONE) {
+        if (*pix_fmts == AV_PIX_FMT_QSV) {
+            int ret = qsv_init(s);
             if (ret < 0) {
-                av_log(NULL, AV_LOG_FATAL, "QSV hwaccel requested for input stream but cannot be initialized.\n");
+                hb_error("hb_qsv_get_format: QSV hwaccel initialization failed");
                 return AV_PIX_FMT_NONE;
             }
 
@@ -2941,15 +2928,14 @@ enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat
                 if (!s->hw_frames_ctx)
                     return AV_PIX_FMT_NONE;
             }
-            break;
+            return AV_PIX_FMT_QSV;
         }
-        else
-        {
-            hb_error("get_format: *p != AV_PIX_FMT_QSV");
-        }
+
+        pix_fmts++;
     }
 
-    return *p;
+    hb_error("hb_qsv_get_format: the QSV pixel format not offered in get_format()");
+    return AV_PIX_FMT_NONE;
 }
 
 int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict)
