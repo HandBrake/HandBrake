@@ -23,20 +23,6 @@ struct hb_avsub_context_s
     hb_buffer_list_t list_pass;
     // List of subtitle packets to be output by this decoder.
     hb_buffer_list_t list;
-    // DVD subtitles: ffmpeg returns the timestamp of the last packet
-    // submitted when a DVD subtitle spans multiple packets.  So we must
-    // keep track of the start time of the first packet. In this case
-    // sub_pts is reset when ffmpeg delivers us a subtitle.
-    //
-    // BUT, EIA 608 can have many nil packets before the actual subtitle
-    // begins and the ffmpeg decoder keeps track of the timestamp where
-    // the subtitle actually begins for us. In this case sub_pts must be
-    // reset for every packet.  I.e. the opposite of what we have to do for
-    // DVD subtitle :(
-    //
-    // PGS subtitles should also reset this for each packet since the packet
-    // with the presentation segment defines the display time.
-    int64_t sub_pts;
     // XXX: we may occasionally see subtitles with broken timestamps
     //      while this should really get fixed elsewhere,
     //      dropping subtitles should be avoided as much as possible
@@ -62,7 +48,6 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
     }
     ctx->seen_forced_sub       = 0;
     ctx->last_pts              = AV_NOPTS_VALUE;
-    ctx->sub_pts               = AV_NOPTS_VALUE;
     ctx->job                   = job;
     ctx->subtitle              = w->subtitle;
 
@@ -320,14 +305,10 @@ int decavsubWork( hb_avsub_context_t * ctx,
     int64_t duration = AV_NOPTS_VALUE;
     AVPacket avp;
 
-    if (ctx->sub_pts == AV_NOPTS_VALUE)
-    {
-        ctx->sub_pts = in->s.start;
-    }
     av_init_packet( &avp );
     avp.data = in->data;
     avp.size = in->size;
-    avp.pts  = ctx->sub_pts;
+    avp.pts  = in->s.start;
     duration = in->s.duration;
 
     if (duration <= 0 &&
@@ -345,28 +326,17 @@ int decavsubWork( hb_avsub_context_t * ctx,
                                                  &has_subtitle, &avp );
         if (usedBytes < 0)
         {
-            hb_log("unable to decode subtitle with %d bytes.", avp.size);
+            hb_error("unable to decode subtitle with %d bytes.", avp.size);
             return HB_WORK_OK;
         }
 
-        // <UGLY_HACKS>
-        // ffmpeg always returns 0 for CC decoder :(
-        //
-        // Also returns 0 for DVD subtitles, until it emits an AVSubtitle,
-        // then it returns the total number of bytes used to construct
-        // that subtitle :(
-        if (ctx->subtitle->source == CC608SUB ||
-            ctx->subtitle->source == VOBSUB)
+        if (usedBytes == 0)
         {
+            // We expect avcodec_decode_subtitle2 to return the number
+            // of bytes consumed, or an error.  If for some unforseen reason
+            // it returns 0, lets not get stuck in an infinite loop!
             usedBytes = avp.size;
         }
-        // ffmpeg needs us to remember the timestamp of the first packet of
-        // DVD subtitles
-        if (ctx->subtitle->source != VOBSUB)
-        {
-            ctx->sub_pts = AV_NOPTS_VALUE;
-        }
-        // </UGLY_HACKS>
 
         if (usedBytes <= avp.size)
         {
@@ -382,7 +352,6 @@ int decavsubWork( hb_avsub_context_t * ctx,
         {
             continue;
         }
-        ctx->sub_pts = AV_NOPTS_VALUE;
 
         uint8_t forced_sub = 0;
         uint8_t usable_sub = 0;
