@@ -59,21 +59,15 @@ int hb_check_nvenc_available()
         }
 
         NVENCSTATUS apiErr = nvenc_dl->NvEncodeAPIGetMaxSupportedVersion(&nvenc_ver);
-        if (apiErr != NV_ENC_SUCCESS)
-        {
+        if (apiErr != NV_ENC_SUCCESS) {
             isAvailable = 0;
             return 0;
+        } else {
+            hb_log("Nvenc version %d.%d\n", nvenc_ver >> 4, nvenc_ver & 0xf);
+            isAvailable = 1;
         }
 
-        hb_log("Nvenc version %d.%d\n", nvenc_ver >> 4, nvenc_ver & 0xf);
-        if ((NVENCAPI_MAJOR_VERSION << 4 | NVENCAPI_MINOR_VERSION) > nvenc_ver) {
-            hb_log("NVENC version not supported. Disabling feature.");
-            isAvailable = 0;
-            return 0;
-        }
-
-        isAvailable = 1;
-        return 1;
+        return isAvailable;
     #else
         return 0;
     #endif
