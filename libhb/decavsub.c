@@ -132,7 +132,7 @@ hb_avsub_context_t * decavsubInit( hb_work_object_t * w, hb_job_t * job )
             {
                 // Mono font for CC
                 hb_subtitle_add_ssa_header(ctx->subtitle, HB_FONT_MONO,
-                    30, 384, 288);
+                    20, 384, 288);
             } break;
 
             default:
