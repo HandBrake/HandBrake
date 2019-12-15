@@ -35,16 +35,12 @@ int hb_nvenc_h265_available()
     #endif
 }
 
-static int isAvailable = -1;
+
 int hb_check_nvenc_available()
 {
     if (is_hardware_disabled())
     {
         return 0;
-    }
-
-    if (isAvailable != -1){
-        return isAvailable;
     }
 
     #if HB_PROJECT_FEATURE_NVENC
@@ -54,20 +50,18 @@ int hb_check_nvenc_available()
 
         int loadErr = nvenc_load_functions(&nvenc_dl, context);
         if (loadErr < 0) {
-            isAvailable = 0;
             return 0;
         }
 
         NVENCSTATUS apiErr = nvenc_dl->NvEncodeAPIGetMaxSupportedVersion(&nvenc_ver);
         if (apiErr != NV_ENC_SUCCESS) {
-            isAvailable = 0;
             return 0;
         } else {
             hb_log("Nvenc version %d.%d\n", nvenc_ver >> 4, nvenc_ver & 0xf);
-            isAvailable = 1;
+            return 1;
         }
 
-        return isAvailable;
+        return 1;
     #else
         return 0;
     #endif
