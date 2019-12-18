@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeTools", "HandBrakeTools\HandBrakeTools.csproj", "{3BAEBAC7-9042-4863-876F-C550ADCA66DC}"
 EndProject
-Project("{262852C6-CD72-467D-83FE-5EEB1973A190}") = "HandBrakeAppX", "HandBrakeAppX\HandBrakeAppX.jsproj", "{6E855245-E402-4C0F-BB0B-EEB63082F6AC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.Worker", "HandBrake.Worker\HandBrake.Worker.csproj", "{F8370F37-B226-4830-AEE7-6D7AE403E3D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandBrake.Interop", "HandBrake.Interop\HandBrake.Interop.csproj", "{ED5C8D53-0988-4CEB-934A-6B1D840C6335}"
@@ -27,8 +25,6 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3BAEBAC7-9042-4863-876F-C550ADCA66DC}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{3BAEBAC7-9042-4863-876F-C550ADCA66DC}.Release|x64.ActiveCfg = Release|Any CPU
-		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Debug|x64.ActiveCfg = Debug|x64
-		{6E855245-E402-4C0F-BB0B-EEB63082F6AC}.Release|x64.ActiveCfg = Release|x64
 		{F8370F37-B226-4830-AEE7-6D7AE403E3D2}.Debug|x64.ActiveCfg = Debug|x64
 		{F8370F37-B226-4830-AEE7-6D7AE403E3D2}.Release|x64.ActiveCfg = Release|x64
 		{ED5C8D53-0988-4CEB-934A-6B1D840C6335}.Debug|x64.ActiveCfg = Debug|x64
