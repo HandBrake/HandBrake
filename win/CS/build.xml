@@ -20,12 +20,13 @@
   <PropertyGroup>
     <Configuration>Release</Configuration>
     <Platform Condition="'$(Platform)'==''">x64</Platform>
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <!-- Build all the main cproj files.-->
   <ItemGroup>
     <ProjectsToBuild Include="HandBrake.Interop\*proj" Exclude="$(MSBuildProjectFile)"/>
-    <ProjectsToBuild Include="HandBrakeWPF\HandBrakeWPF.*proj" Exclude="$(MSBuildProjectFile)"/>
+    <ProjectsToBuild Include="HandBrakeWPF\*proj" Exclude="$(MSBuildProjectFile)"/>
   </ItemGroup>
 
   <!-- Dependencies -->
@@ -40,9 +41,10 @@
 
   <!-- Build All Components (WPF, Interop, Interop) -->
   <Target Name="BuildRelease">
+    <Message Text="Project File Name = $(Platform)" />
     <MSBuild Projects ="@(ProjectsToBuild)"
              ContinueOnError ="false"
-             Properties="Configuration=$(Configuration)" >
+             Properties="Configuration=$(Configuration);Platform=$(Platform)" >
       <Output ItemName="OutputFiles" TaskParameter="TargetOutputs"/>
     </MSBuild>
   </Target>
