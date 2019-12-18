@@ -15,7 +15,7 @@
     <tags>Open-Source Video Transcoder</tags>
 
     <dependencies>
-      <dependency id="Newtonsoft.Json" version="11.0.2" />
+      <dependency id="Newtonsoft.Json" version="12.0.2" />
     </dependencies>
   </metadata>
 
