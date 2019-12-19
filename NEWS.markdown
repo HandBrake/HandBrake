@@ -4,6 +4,10 @@
 
 ### All platforms
 
+#### General
+
+- Fixed potential crash when opening a DVD source
+
 #### Video
 
 - Fixed rotation/flip not working properly in some cases
