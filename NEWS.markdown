@@ -1,5 +1,64 @@
 # HandBrake News
 
+## HandBrake 1.3.1
+
+### All platforms
+
+#### Video
+
+- Fixed rotation/flip not working properly in some cases
+- Improved AMD VCE rate control by always explicitly setting the rate control method
+- Added a workaround to fix x265 not parsing the H.265 Level setting where localized
+- Added an upstream patch to fix x265 limit-tu bug in loading co-located CU's TU depth
+- Added an upstream patch to fix x265 2-pass encoding failure
+
+#### Audio
+
+- Fixed importing older presets where "und" was used to select any language track
+  - Since HandBrake 1.3.0, "any" selects any language track and "und" selects undefined language tracks only
+
+#### Subtitles
+
+- Fixed importing older presets where "und" was used to select any language track
+  - Since HandBrake 1.3.0, "any" selects any language track and "und" selects undefined language tracks only
+
+#### Build system
+
+- Fixed cpp and lib flags causing build failures on some Linux systems
+
+### Linux
+
+- Fixed UI translations not working in some cases
+- Fixed display of chapter start times
+- Fixed small memory leak in audio list
+
+### Mac
+
+- Fixed importing external ASS/SSA subtitles
+- Fixed statistics not updating after queue completion
+- Updated documentation link to the most recent documentation version
+
+### Windows
+
+- Fixed missing UI translations for some languages
+  - Español (Spanish)
+  - Français (French)
+  - 한국어 (Korean)
+  - русский (Russian)
+  - Türkçe (Turkish)
+- Fixed official presets not updating after installing a new release
+- Fixed preference for automatically naming file extension MP4/M4V not working
+- Fixed an issue preventing the use of relative paths for automatic naming
+- Fixed audio and subtitles selection behavior not saving when set via the Save New Preset dialog
+- Fixed closed captions not being added automatically per selection behavior
+- Fixed iPod 5G support option displaying when an incompatible encoder is selected
+- Fixed queue updating slowly or not updating in some cases
+- Fixed tooltip text color in dark theme
+- Fixed crash related to dark theme
+- Fixed window not restoring properly after minimizing to system tray
+- Fixed frame rate mode not updating on video codec change, preventing QSV zero-copy mode
+
+
 ## HandBrake 1.3.0
 
 ### All platforms
