@@ -592,7 +592,6 @@ namespace HandBrakeWPF.ViewModels
                         string ext = string.Empty;
                         try
                         {
-                            ext = Path.GetExtension(value);
                             if (FileHelper.FilePathHasInvalidChars(value))
                             {
                                 this.errorService.ShowMessageBox(Resources.Main_InvalidDestination, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
@@ -604,6 +603,8 @@ namespace HandBrakeWPF.ViewModels
                                 this.errorService.ShowMessageBox(Resources.Main_MatchingFileOverwriteWarning, Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                                 return;
                             }
+
+                            ext = Path.GetExtension(value);
                         }
                         catch (Exception exc)
                         {
