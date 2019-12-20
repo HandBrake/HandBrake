@@ -94,7 +94,6 @@
                       Grid.Column="1"
                       Width="125"
                       HorizontalAlignment="Left" VerticalAlignment="Center"
-                      Style="{StaticResource LongToolTipHolder}"
                       ToolTip="{x:Static Properties:Resources.AddPreset_PictureSizeMode}"
                       ItemsSource="{Binding PictureSettingsModes,
                                             Converter={StaticResource enumComboConverter}}"
