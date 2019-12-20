@@ -57,8 +57,7 @@
 - Fixed closed captions not being added automatically per selection behavior
 - Fixed iPod 5G support option displaying when an incompatible encoder is selected
 - Fixed queue updating slowly or not updating in some cases
-- Fixed tooltip text color in dark theme
-- Fixed crash related to dark theme
+- Fixed a few UI issues and a crash with the new dark theme.
 - Fixed window not restoring properly after minimizing to system tray
 - Fixed frame rate mode not updating on video codec change, preventing QSV zero-copy mode
 
