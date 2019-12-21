@@ -10,6 +10,7 @@
 namespace HandBrakeWPF.Views
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
@@ -35,6 +36,8 @@ namespace HandBrakeWPF.Views
             this.textBlock = textBlock;
         }
 
+        public event EventHandler CanExecuteChanged;
+
         public bool CanExecute(object parameter)
         {
             return true;
@@ -48,6 +51,9 @@ namespace HandBrakeWPF.Views
             }      
         }
 
-        public event EventHandler CanExecuteChanged;
+        protected virtual void OnCanExecuteChanged()
+        {
+            this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

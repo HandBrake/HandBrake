@@ -79,9 +79,9 @@ namespace HandBrakeWPF.ViewModels
         public void SetSource(Source source, Title selectedTitle, Preset currentPreset, EncodeTask encodeTask)
         {
             return; // Disabled for now.
-            this.task = encodeTask;
-            this.task.MetaData = new MetaData(selectedTitle.Metadata);
-            this.NotifyOfPropertyChange(() => this.MetaData);
+            // this.task = encodeTask;
+            // this.task.MetaData = new MetaData(selectedTitle.Metadata);
+            // this.NotifyOfPropertyChange(() => this.MetaData);
         }
 
         /// <summary>

@@ -91,7 +91,7 @@ namespace HandBrake.Interop.Interop
                         initSuccess = TryInit();
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     initSuccess = false;
                 }
@@ -375,7 +375,7 @@ namespace HandBrake.Interop.Interop
                     throw new InvalidOperationException("HB global init failed.");
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }

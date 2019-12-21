@@ -177,7 +177,6 @@ namespace HandBrakeWPF.Services.Queue
 
         public void ImportJson(string path)
         {
-            List<Task> tasks;
             using (StreamReader reader = new StreamReader(path))
             {
                 string fileContent = reader.ReadToEnd();
@@ -197,6 +196,7 @@ namespace HandBrakeWPF.Services.Queue
                 {
                     this.queue.Add(task);
                 }
+
                 if (reloadedQueue.Count > 0)
                 {
                     this.InvokeQueueChanged(EventArgs.Empty);

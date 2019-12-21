@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrake.Worker", "HandBra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandBrake.Interop", "HandBrake.Interop\HandBrake.Interop.csproj", "{ED5C8D53-0988-4CEB-934A-6B1D840C6335}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandBrakeWPF", "HandBrakeWPF\HandBrakeWPF.csproj", "{C3A8A5D8-2793-42FD-ADC5-9A296F1C4335}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandBrakeWPF", "HandBrakeWPF\HandBrakeWPF.csproj", "{C3A8A5D8-2793-42FD-ADC5-9A296F1C4335}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

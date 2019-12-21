@@ -173,7 +173,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
                 this.NotifyOfPropertyChange(() => this.SourceTrack);
                 if (this.sourceTrack != null)
                 {
-                    this.Track = this.sourceTrack.ToString();
                     this.SubtitleType = this.sourceTrack.SubtitleType;
                 }
                 
@@ -256,12 +255,6 @@ namespace HandBrakeWPF.Services.Encode.Model.Models
         ///   Gets or sets the type of the subtitle
         /// </summary>
         public SubtitleType SubtitleType { get; set; }
-
-        /// <summary>
-        ///   Gets or sets Track.
-        /// </summary>
-        [Obsolete("Use SourceTrack Instead")]
-        public string Track { get; set; }
 
         public string Name
         {
