@@ -1334,6 +1334,12 @@ static void LookForAudio(hb_scan_t *scan, hb_title_t * title, hb_buffer_t * b)
                 sizeof(audio->config.lang.description) -
                 strlen(audio->config.lang.description) - 1);
     }
+    if (audio->config.lang.attributes & HB_AUDIO_ATTR_SECONDARY)
+    {
+        strncat(audio->config.lang.description, " (Secondary)",
+                sizeof(audio->config.lang.description) -
+                strlen(audio->config.lang.description) - 1);
+    }
 
     if (audio->config.in.channel_layout)
     {

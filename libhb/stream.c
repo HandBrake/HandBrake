@@ -95,7 +95,7 @@ static const stream2codec_t st2codec[256] = {
     // BD E-AC3 Secondary audio
     st(0xa1, U, 0,                0,                      "E-AC3"),
     // BD DTS-HD Secondary audio
-    st(0xa2, U, 0,                0,                      "DTS-HD LBR"),
+    st(0xa2, U, HB_ACODEC_DCA_HD, AV_CODEC_ID_DTS,        "DTS-HD LBR"),
 
     st(0xea, V, WORK_DECAVCODECV, AV_CODEC_ID_VC1,        "VC-1"),
 };
@@ -4288,11 +4288,16 @@ static void hb_ts_resolve_pid_types(hb_stream_t *stream)
             stream->pes.list[pes_idx].codec_param = AV_CODEC_ID_EAC3;
             continue;
         }
-        // 0xa2 is DTS-HD LBR used in HD-DVD and bluray for
-        // secondary audio streams. FFmpeg can not decode yet.
-        // Having it in the audio list causes delays during scan
-        // while we try to get stream parameters. So skip
-        // this type for now.
+        if ( stype == 0xa2 &&
+             stream->reg_desc == STR4_TO_UINT32("HDMV") )
+        {
+            // Blueray DTS-HD LBR audio
+            // This is no interleaved DTS core
+            update_ts_streams( stream, pid, 0, stype, A, &pes_idx );
+            stream->pes.list[pes_idx].codec = HB_ACODEC_DCA_HD;
+            stream->pes.list[pes_idx].codec_param = AV_CODEC_ID_DTS;
+            continue;
+        }
         if ( stype == 0x85 &&
              stream->reg_desc == STR4_TO_UINT32("HDMV") )
         {
