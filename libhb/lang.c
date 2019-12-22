@@ -13,7 +13,7 @@
 
 // Fake iso639 entry to deal with selection of "any" language
 static iso639_lang_t lang_any =
-  { "Any", "", "", "any" };
+  { "Any", "", "yy", "any" };
 
 static const iso639_lang_t languages[] =
 { { "Unknown", "", "", "und" },
