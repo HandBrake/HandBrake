@@ -1,0 +1,21 @@
+diff --git a/src/file/mount_darwin.c b/src/file/mount_darwin.c
+index f7abb1a..394437a 100644
+--- a/src/file/mount_darwin.c
++++ b/src/file/mount_darwin.c
+@@ -45,11 +45,15 @@ char *mount_get_mountpoint(const char *device_path)
+         return str_dup(device_path);
+     }
+ 
+-    struct statfs mbuf[128];
++    struct statfs mbuf[256];
+     int fs_count;
+ 
+     if ( (fs_count = getfsstat (NULL, 0, MNT_NOWAIT)) != -1 ) {
+ 
++        if (fs_count > 256) {
++            fs_count = 256;
++        }
++
+         getfsstat (mbuf, fs_count * sizeof(mbuf[0]), MNT_NOWAIT);
+ 
+         for ( int i = 0; i < fs_count; ++i) {
