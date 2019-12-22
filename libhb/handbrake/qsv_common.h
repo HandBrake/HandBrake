@@ -227,6 +227,7 @@ typedef struct QSVFrame {
 } QSVFrame;
 
 #define HB_POOL_SURFACE_SIZE (64)
+#define HB_POOL_ENCODER_SIZE (8)
 
 typedef struct EncQSVFramesContext {
     AVBufferRef *hw_frames_ctx;
@@ -251,7 +252,9 @@ typedef struct EncQSVFramesContext {
 int hb_qsv_full_path_is_enabled(hb_job_t *job);
 AVBufferRef *hb_qsv_create_mids(AVBufferRef *hw_frames_ref);
 hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx);
-void hb_qsv_get_free_surface_from_pool(QSVMid **out_mid, mfxFrameSurface1 **out_surface, int pool_size);
+void hb_qsv_get_free_surface_from_pool(const int start_index, const int end_index, QSVMid **out_mid, mfxFrameSurface1 **out_surface);
+int hb_qsv_replace_surface_mid(const QSVMid *mid, mfxFrameSurface1 *surface);
+int hb_qsv_release_surface_from_pool(const QSVMid *mid);
 int hb_qsv_get_buffer(AVCodecContext *s, AVFrame *frame, int flags);
 enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts);
 int hb_qsv_preset_is_zero_copy_enabled(const hb_dict_t *job_dict);

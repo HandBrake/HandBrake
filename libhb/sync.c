@@ -12,6 +12,10 @@
 #include <stdio.h>
 #include "handbrake/audio_resample.h"
 
+#if HB_PROJECT_FEATURE_QSV
+#include "handbrake/qsv_common.h"
+#endif
+
 #define SYNC_MAX_VIDEO_QUEUE_LEN    40
 #define SYNC_MIN_VIDEO_QUEUE_LEN    20
 
