@@ -39,13 +39,14 @@ namespace HandBrakeWPF.Views
             // Make the view adaptive. 
             if (e.WidthChanged)
             {
-                int queueSizeLimit = 675;
+                int queueSizeLimit = 745;
 
                 this.summaryTabControl.Visibility = this.ActualWidth < queueSizeLimit ? Visibility.Collapsed : Visibility.Visible;
                 this.leftTabPanel.Width = this.ActualWidth < queueSizeLimit ? new GridLength(this.ActualWidth - 10, GridUnitType.Star) : new GridLength(3, GridUnitType.Star);
-                this.leftTabPanel.MaxWidth = this.ActualWidth < queueSizeLimit ? 680 : 500;
+                this.leftTabPanel.MaxWidth = this.ActualWidth < queueSizeLimit ? 750 : 650;
             }
         }
+
         private void ContextMenu_OnOpened(object sender, RoutedEventArgs e)
         {
             ContextMenu menu = sender as ContextMenu;
