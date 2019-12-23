@@ -196,7 +196,8 @@ namespace HandBrakeWPF.Helpers
 
         private static string GetAutonamePath(IUserSettingService userSettingService, EncodeTask task, string sourceName)
         {
-            string autoNamePath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim();
+            string autoNamePath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim()
+                .Replace("/", "\\");
 
             // If enabled, use the current Destination path.
             if (!userSettingService.GetUserSetting<bool>(UserSettingConstants.AlwaysUseDefaultPath) && !string.IsNullOrEmpty(task.Destination))
@@ -209,9 +210,9 @@ namespace HandBrakeWPF.Helpers
             }
 
             // Handle {source_path} 
-            if (userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().StartsWith("{source_path}") && !string.IsNullOrEmpty(task.Source))
+            if (autoNamePath.StartsWith("{source_path}") && !string.IsNullOrEmpty(task.Source))
             {
-                string savedPath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath).Trim().Replace("{source_path}\\", string.Empty).Replace("{source_path}", string.Empty);
+                string savedPath = autoNamePath.Replace("{source_path}\\", string.Empty).Replace("{source_path}", string.Empty);
                 string directory = Directory.Exists(task.Source) ? task.Source : Path.GetDirectoryName(task.Source);
                 autoNamePath = Path.Combine(directory, savedPath);
             }
