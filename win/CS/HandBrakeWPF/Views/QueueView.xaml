@@ -15,8 +15,8 @@
         xmlns:Properties="clr-namespace:HandBrakeWPF.Properties"
         xmlns:queue="clr-namespace:HandBrakeWPF.Converters.Queue"
         Title="{Binding Title}"
-        Width="900"
-        Height="520"
+        Width="975"
+        Height="550"
         MinWidth="400"
         MinHeight="300"
         WindowStartupLocation="CenterScreen"
@@ -65,7 +65,7 @@
 
         <Grid Grid.Row="2" Margin="0,15,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*" MaxWidth="600" x:Name="leftTabPanel" />
+                <ColumnDefinition Width="3*" MaxWidth="750" x:Name="leftTabPanel" />
                 <ColumnDefinition Width="4*" x:Name="rightTabPanel"  />
             </Grid.ColumnDefinitions>
 
