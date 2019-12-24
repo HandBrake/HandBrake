@@ -7,6 +7,7 @@
 #### General
 
 - Fixed potential crash when opening a DVD source
+- Fixed an issue where certain secondary audio tracks on bluray sources would not be detected. 
 
 #### Video
 
@@ -40,6 +41,7 @@
 
 - Fixed importing external ASS/SSA subtitles
 - Fixed statistics not updating after queue completion
+- Fixed a crash that can occur when reading bluray sources. 
 - Updated documentation link to the most recent documentation version
 
 ### Windows
