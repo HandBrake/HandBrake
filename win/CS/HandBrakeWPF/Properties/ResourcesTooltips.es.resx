@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -202,138 +202,138 @@ Esta configuración sólo es necesaria para la compatibilidad con algunos dispos
 Debería usar 2 a menos que experimente problemas de compatibilidad.</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>Pixel aspect defines the shape of the pixels.
-A 1:1 ratio defines a square pixel.  Other values define rectangular shapes.
-Players will scale the image in order to achieve the specified aspect.</value>
+    <value>El aspecto del píxel define la forma de los píxeles.
+La relación 1:1 define un píxel cuadrado. Otros valores definen formas rectangulares.
+Los reproductores escalarán la imagen para lograr el aspecto indicado.</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>This is the width that the video will be stored at.
-The actual display dimensions will differ if the pixel aspect ratio is not 1:1.</value>
+    <value>Este es el ancho con el que se almacenará el video.
+Las dimensiones de visualización reales diferirán si la relación de aspecto de los píxeles no es 1:1.</value>
   </data>
   <data name="QueueView_DeleteJob" xml:space="preserve">
-    <value>Delete the job from the queue.</value>
+    <value>Borrar el trabajo de la cola.</value>
   </data>
   <data name="QueueView_ResetJobStatus" xml:space="preserve">
-    <value>Reset job status to Waiting.</value>
+    <value>Restablecer el estado del trabajo a Esperando</value>
   </data>
   <data name="QueueView_SendJobBack" xml:space="preserve">
-    <value>Send the job back to the main window for editing.</value>
+    <value>Envia el trabajo de vuelta a la ventana principal para su edición</value>
   </data>
   <data name="Video_AvgBitrate" xml:space="preserve">
-    <value>Set the average bitrate.
+    <value>Establecer el promedio de tasa de bits.
 
-The instantaneous bitrate can be much higher or lower at any point in time.
-But the average over a long duration will be the value set here.  If you need
-to limit instantaneous bitrate, look into x264's vbv-bufsize and vbv-maxrate settings.</value>
+La tasa de bits instantánea puede ser mucho mayor o menor en cualquier momento.
+Pero el promedio durante una larga duración será el valor establecido aquí. Si necesitas
+limitar la tasa de bits instantánea, mire las configuraciones vbv-bufsize y vbv-maxrate de x264.</value>
   </data>
   <data name="Video_ConstantFramerate" xml:space="preserve">
-    <value>Enables constant framerate output.</value>
+    <value>Habilita la salida de velocidad de fotogramas constante.</value>
   </data>
   <data name="Video_Encoders" xml:space="preserve">
-    <value>Available video encoders.</value>
+    <value>Codificadores de video disponibles.</value>
   </data>
   <data name="Video_EncoderTune" xml:space="preserve">
-    <value>Tune settings to optimize for common scenarios.
+    <value>Ajuste la configuración para optimizar escenarios comunes.
 
-This can improve efficiency for particular source characteristics or set
-characteristics of the output file.  Changes will be applied after the
-preset but before all other parameters.</value>
+Esto puede mejorar la eficiencia de determinadas características de origen o establecer 
+características del archivo de salida.  Los cambios se aplicarán después del preajuste
+pero antes de todos los demás parámetros.</value>
   </data>
   <data name="Video_ExtraOpts" xml:space="preserve">
-    <value>Additional encoder settings.
+    <value>Ajustes adicionales del codificador.
 
-Colon separated list of encoder options.</value>
+Lista de las opciones del codificador separada por dos puntos.</value>
   </data>
   <data name="Video_FastDecode" xml:space="preserve">
-    <value>Reduce decoder CPU usage.
+    <value>Reduce el uso de la CPU del decodificador.
 
-Set this if your device is struggling to play the output (dropped frames).</value>
+Establezca esto si su dispositivo tiene dificultades para reproducir la salida (cuadros descartados).</value>
   </data>
   <data name="Video_Framerate" xml:space="preserve">
-    <value>Output framerate.
+    <value>Velocidad de fotogramas de salida.
 
-'Same as source' is recommended. If your source video has a variable framerate, 'Same as source' will preserve it.</value>
+Se recomienda 'Igual que la fuente'. Si su video fuente tiene una velocidad de fotogramas variable, 'Igual que la fuente' lo conservará.</value>
   </data>
   <data name="Video_Level" xml:space="preserve">
-    <value>Sets and ensures compliance with the specified level.
+    <value>Establece y garantiza el cumplimiento del nivel especificado.
 
-Overrides all other settings.</value>
+Anula todas las demás configuraciones.</value>
   </data>
   <data name="Video_PeakFramerate" xml:space="preserve">
-    <value>Enables variable framerate output with a peak rate determined by the framerate setting.</value>
+    <value>Permite la salida de velocidad de fotogramas variable con una velocidad máxima determinada por la configuración de velocidad de fotogramas.</value>
   </data>
   <data name="Video_Presets" xml:space="preserve">
-    <value>Adjusts encoder settings to trade off compression efficiency against encoding speed.
+    <value>Ajusta la configuración del codificador para compensar la eficiencia de compresión con la velocidad de codificación.
 
-This establishes your default encoder settings.
-Tunes, profiles, levels and advanced option string will be applied to this.
-You should generally set this option to the slowest you can bear since slower
-settings will result in better quality or smaller files.</value>
+Esto establece la configuración predeterminada del codificador.
+Las melodías, los perfiles, los niveles y la cadena de opciones avanzadas se aplicarán a esto.
+En general, debe configurar esta opción lo más lento posible, ya que una configuración
+más lenta dará como resultado una mejor calidad o archivos más pequeños.</value>
   </data>
   <data name="Video_Profile" xml:space="preserve">
-    <value>Sets and ensures compliance with the specified profile.
+    <value>Establece y garantiza el cumplimiento del perfil especificado.
 
-Overrides all other settings.</value>
+Anula todas las demás configuraciones.</value>
   </data>
   <data name="Video_Quality" xml:space="preserve">
-    <value>Set the desired quality factor.
-The encoder targets a certain quality.
-The scale used by each video encoder is different.
+    <value>Establezca el factor de calidad deseado.
+El codificador apunta a una cierta calidad.
+La escala utilizada por cada codificador de video es diferente.
 
-x264's scale is logarithmic and lower values correspond to higher quality.
-So small decreases in value will result in progressively larger increases
-in the resulting file size.  A value of 0 means lossless and will result
-in a file size that is larger than the original source, unless the source
-was also lossless.
-Suggested values are: 18 to 20 for standard definition sources and 20 to 23 for high definition sources.
+La escala de x264 es logarítmica y los valores más bajos corresponden a una calidad más alta.
+Por lo tanto, pequeñas disminuciones en el valor resultarán en incrementos progresivamente
+mayores en el tamaño del archivo resultante. Un valor de 0 significa sin pérdidas y dará como
+resultado un tamaño de archivo que es mayor que la fuente original, a menos que la fuente
+también sea sin pérdidas.
+Los valores sugeridos son: 18 a 20 para fuentes de definición estándar y 20 a 23 para fuentes de alta definición.
 
-FFMpeg's and Theora's scale is more linear.
-These encoders do not have a lossless mode.</value>
+La escala de FFMpeg y Theora es más lineal.
+Estos codificadores no tienen un modo sin pérdidas.</value>
   </data>
   <data name="Video_TurboFirstPass" xml:space="preserve">
-    <value>During the 1st pass of a 2 pass encode, use settings that speed things along.</value>
+    <value>Durante la 1ª pasada de una codificación de 2 pasadas, use configuraciones que aceleren las cosas.</value>
   </data>
   <data name="Video_TwoPass" xml:space="preserve">
-    <value>Perform 2 Pass Encoding.
+    <value>Realice la codificación de 2 pasos.
 
-The 'Bitrate' option is prerequisite. During the 1st pass, statistics about
-the video are collected.  Then in the second pass, those statistics are used
-to make bitrate allocation decisions.</value>
+La opción 'Bitrate' es un requisito previo. Durante el 1º paso, se recopilan estadísticas sobre
+el video. Luego, en el segundo paso, esas estadísticas se utilizan para tomar decisiones
+de asignación de bitrate.</value>
   </data>
   <data name="Video_VariableFramerate" xml:space="preserve">
-    <value>Enables variable framerate output.
+    <value>Habilita la salida de velocidad de fotogramas variable.
 
-VFR is not compatible with some players.</value>
+VFR no es compatible con algunos jugadores.</value>
   </data>
   <data name="MainView_WhenDone" xml:space="preserve">
-    <value>When HandBrake has finished the current queue or encode it will perform this action.</value>
+    <value>Cuando HandBrake haya finalizado la cola actual o codificación, realizará esta acción.</value>
   </data>
   <data name="MainView_Browse" xml:space="preserve">
-    <value>Browse to select a new destination path and file name for your encode.</value>
+    <value>Naveguar para seleccionar una nueva ruta de destino y nombre de archivo para su codificación.</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Video angle to encode. Only applicable to multi-angle DVD and Blu-ray.</value>
+    <value>Ángulo de video a codificar. Solo aplicable a DVD multi-ángulo y Blu-ray</value>
   </data>
   <data name="MainView_AddPreset" xml:space="preserve">
-    <value>Add a new preset.</value>
+    <value>Añadir nuevo preajuste.</value>
   </data>
   <data name="MainView_PresetAdditionalOptions" xml:space="preserve">
-    <value>Additional Preset Options.</value>
+    <value>Opciones de Preajustes Adicionales.</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Presets are groups of encode settings tailored for specific scenarios. Select the one closest matching your intent.
- 
- Overrides all encode settings. Settings may be further adjusted after selecting a preset.</value>
+    <value>Los preajustes son grupos de configuraciones de codificación adaptadas para escenarios específicos. Seleccione el que más se asemeja a su propósito
+
+Anula todas las configuraciones de codificación. La configuración se puede ajustar aún más después de seleccionar un preset.</value>
   </data>
   <data name="MainView_RemovePreset" xml:space="preserve">
-    <value>Remove the selected preset.</value>
+    <value>Eliminar el preajuste seleccionado.</value>
   </data>
   <data name="SourceSelection_TitleSpecific" xml:space="preserve">
-    <value>Scan only the specified title instead of all titles.</value>
+    <value>Escanear solo el título especificado en lugar de todos los títulos.</value>
   </data>
   <data name="FilterView_CustomDenoiseParams" xml:space="preserve">
-    <value>Custom Denoise parameters.
- 
+    <value>Parámetros personalizados de Denoise.
+
 NLMeans syntax: y-strength=y:y-origin-tune=y:y-patch-size=y:y-range=y:y-frame-count=y:y-prefilter=y:cb-strength=c:cb-origin-tune=c:cb-patch-size=c:cb-range=c:cb-frame-count=c:cb-prefilter=c:cr-strength=c:cr-origin-tune=c:cr-patch-size=c:cr-range=c:cr-frame-count=c:cr-prefilter=c:threads=t
 
 NLMeans default: y-strength=6:y-origin-tune=1:y-patch-size=7:y-range=3:y-frame-count=2:y-prefilter=0:cb-strength=6:cb-origin-tune=1:cb-patch-size=7:cb-range=3:cb-frame-count=2:cb-prefilter=0
@@ -343,122 +343,126 @@ HQDN3D syntax: y-spatial=y:cb-spatial=c:cr-spatial=c:y-temporal=y:cb-temporal=c:
 HQDN3D default: y-spatial=3:cb-spatial=2:cr-spatial=2:y-temporal=2:cb-temporal=3:cr-temporal=3</value>
   </data>
   <data name="FilterView_DenoisePreset" xml:space="preserve">
-    <value>Denoise filter preset. Sets the strength of the filter.</value>
+    <value>Filtro de Eliminación de Ruido preestablecido. Establece la fuerza del filtro.</value>
   </data>
   <data name="FilterView_DenoiseTune" xml:space="preserve">
-    <value>Denoise tune. Further adjusts the Denoise preset to optimize settings for specific scenarios.
- 
-- None uses the default preset settings.
- 
-- Film refines settings for use with most live action content.
- 
-- Grain only processes color channels. Useful for preserving the film-like look of luminance grain while reducing or removing color noise.
+    <value>Denoise tune. Ajusta aún más el preajuste de Denoise para optimizar la configuración para escenarios específicos.
+ 
+- Ninguno usa la configuración de preajustes por predeterminada.
+ 
+- La película refina la configuración para usar con la mayoría del contenido de acción en vivo.
+ 
+- El grano solo procesa canales de color. Útil para preservar el aspecto de película del grano de luminancia al tiempo que reduce o elimina el ruido de color.
 
-- High Motion reduces color smearing in high motion scenes by avoiding temporal processing for color channels. Useful for sports and action videos.
+- High Motion reduce las manchas de color en escenas de alto movimiento al evitar el procesamiento temporal de los canales de color. Útil para deportes y videos de acción.
 
-- Animation is useful for cel animation such as anime and cartoons.
+- La animación es útil para la animación celular como el anime y los dibujos animados.
 
-- Tape is useful for low-detail analog tape sources such as VHS, where Film does not produce a desirable result.
+- La cinta es útil para fuentes de cinta analógica de bajo detalle como VHS, donde la película no produce un resultado deseable.
 
-- Sprite is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite is not designed for high definition video.</value>
+- Sprite es útil para juegos bidimensionales de 1-/4-/8-/16 bits. Sprite no está diseñado para video de alta definición.</value>
   </data>
   <data name="FilterView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace removes comb artifacts from the picture.
+    <value>Deinterlace elimina los artefactos de peine de la imagen.
 
-Yadif is a popular and fast deinterlacer.
+Yadif es un desentrelazador popular y rápido.
 
-Decomb switches between multiple interpolation algorithms for speed and quality.</value>
+Decomb cambia entre múltiples algoritmos de interpolación para velocidad y calidad.</value>
   </data>
   <data name="FilterView_DeinterlaceCustom" xml:space="preserve">
-    <value>Custom Deinterlace parameters.
- 
- Yadif syntax: mode=m:parity=p
- 
- Yadif default: mode=3
- 
- Decomb syntax: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
- 
- Decomb default: mode=7</value>
+    <value>Parámetros de desentrelazado personalizados.
+ 
+  Sintaxis de Yadif: mode=m:parity=p
+
+  Valor predeterminado de Yadif: mode=3
+ 
+  Sintaxis de reducción: mode=m:magnitude-thresh=m:variance-thresh=v:laplacian-thresh=l:dilation-thresh=d:erosion-thresh=e:noise-thresh=n:search-distance=s:postproc=p:parity=p
+
+  Decomb por defecto: mode=7</value>
   </data>
   <data name="FilterView_DeinterlacePreset" xml:space="preserve">
-    <value>Deinterlace filter preset.
+    <value>Filtro de desentrelazado preestablecido.
 
-Default is well balanced for speed and quality.
+El valor predeterminado está bien equilibrado en cuanto a velocidad y calidad.
 
-Skip Spatial Check lets Yadif skip correcting certain avoidable artifacts for a slight speed boost.
+Omitir comprobación espacial permite a Yadif omitir la corrección de ciertos artefactos evitables para un ligero aumento de velocidad.
 
-EEDI2 uses a slower, higher quality interpolation algorithm for Decomb. Useful for the most difficult sources.
+EEDI2 utiliza un algoritmo de interpolación más lento y de mayor calidad para Decomb. Útil para las fuentes más difíciles.
 
-Bob attempts to better preserve motion for a slight penalty to perceived resolution.</value>
+Bob intenta preservar mejor el movimiento para una leve penalización a la resolución percibida.</value>
   </data>
   <data name="FilterView_Flip" xml:space="preserve">
-    <value>Flips (mirrors) the picture on the horizontal axis.</value>
+    <value>Voltea (refleja) la imagen en el eje horizontal.</value>
   </data>
   <data name="FilterView_InterlaceDetection" xml:space="preserve">
-    <value>Interlace Detection, when enabled, allows the Deinterlace filter to only process interlaced video frames.</value>
+    <value>Detección de Entrelazado, cuando está habilitado, permite que el filtro de Desentrelazado solo procese cuadros de video entrelazados.</value>
   </data>
   <data name="FilterView_InterlaceDetectionCustom" xml:space="preserve">
-    <value>Custom Interlace Detection parameters.
- 
- Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
- 
- Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
+    <value>Parámetros personalizados de detección de entrelazado.
+
+ Syntax: mode=m:spatial-metric=s:motion-thresh=m:spatial-thresh=s:filter-mode=f:block-thresh=b:block-width=b:block-height=b:disable=d
+
+Default: mode=3:spatial-metric=2:motion-thresh=1:spatial-thresh=1:filter-mode=2:block-thresh=40:block-width=16:block-height=16</value>
   </data>
   <data name="FilterView_Rotate" xml:space="preserve">
-    <value>Rotate the picture clockwise in 90 degree increments.</value>
+    <value>Gira la imagen en sentido horario en incrementos de 90 grados.</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>Duration of the selected source range in Hours:Minutes:Seconds</value>
+    <value>Duración del rango de origen seleccionado en Horas:Minutos:Segundos</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Keep Aspect Ratio maintains the original display aspect of the source. Disabling this may result in a stretched or squeezed picture.</value>
+    <value>Mantener relación de aspecto mantiene el aspecto de visualización original de la fuente. Deshabilitar esto puede resultar en una imagen estirada o comprimida.</value>
   </data>
   <data name="FilterView_CustomSharpenParams" xml:space="preserve">
-    <value>Custom Sharpen parameters.
+    <value>Parámetros de enfoque personalizados.
 
-Unsharp syntax: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
+Sintaxis de desenfoque: y-strength=y:y-size=y:cb-strength=c:cb-size=c:cr-strength=c:cr-size=c
 
-Unsharp default: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
+Valor predeterminado de desenfoque: y-strength=0.25:y-size=7:cb-strength=0.25:cb-size=7
 
-Lapsharp syntax: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
+Sintaxis Lapsharp: y-strength=y:y-kernel=y:cb-strength=c:cb-kernel=c:cr-strength=c:cr-kernel=c
 
-Lapsharp default: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
+Valor predeterminado de Lapsharp: y-strength=0.2:y-kernel=isolap:cb-strength=0.2:cb-kernel=isolap</value>
   </data>
   <data name="FilterView_Sharpen" xml:space="preserve">
-    <value>Sharpening enhances the appearance of detail, especially edges. Overly strong Sharpen settings may damage picture quality by creating ringing artifacts and enhancing noise, which can reduce compression efficiency.
+    <value>El Sharpening mejora la apariencia de los detalles, especialmente los bordes. Los ajustes de nitidez demasiado fuertes pueden dañar la calidad de la imagen al crear artefactos de llamada y mejorar el ruido, lo que puede reducir la eficiencia de la compresión.
 
-Unsharp is a general purpose unsharp masking filter. It sharpens by blurring, then calculating the difference between the blurred picture and the original.
+Unsharp es un filtro de enmascaramiento de enfoque general. Se agudiza al difuminarse y luego calcula la diferencia entre la imagen borrosa y el original.
 
-Lapsharp sharpens using convolution kernels approximating Laplacian edge filters, sometimes producing higher quality results than unsharp masking.</value>
+El Lapsharp se agudiza utilizando núcleos de convolución que se aproximan a los filtros de borde laplaciano, a veces produciendo resultados de mayor calidad que el enmascaramiento de enfoque.</value>
   </data>
   <data name="FilterView_SharpenPreset" xml:space="preserve">
-    <value>Sharpen filter preset. Sets the strength of the filter.</value>
+    <value>Afile el filtro preestablecido. Establece la fuerza del filtro.</value>
   </data>
   <data name="FilterView_SharpenTune" xml:space="preserve">
-    <value>Sharpen tune. Further adjusts the Sharpen preset to optimize settings for specific scenarios.
+    <value>Afina la melodía. Ajusta aún más el ajuste predeterminado de Nitidez para optimizar la configuración para escenarios específicos.
 
-None uses the default preset settings.
+Ninguno usa la configuración predeterminada por defecto.
 
-Unsharp can be tuned for Ultrafine, Fine, Medium, Coarse, or Very Coarse sharpening. Select one based on the output picture resolution and fineness of detail to enhance.
+El enfoque puede ajustarse para un afilado ultrafino, fino, medio, grueso o muy grueso. Seleccione uno en función de la resolución de la imagen de salida y la precisión de los detalles para mejorar.
 
-Lapsharp's Film tune refines settings for use with most live action content. Film uses an isotropic Laplacian kernel to sharpen all edges similarly, and luminance (brightness) information is sharpened more than chrominance (color) information.
+La melodía Film de Lapsharp refina la configuración para usar con la mayoría del contenido de acción en vivo. La película utiliza un núcleo laplaciano isotrópico para afilar todos los bordes de manera similar, y la información de luminancia (brillo) se agudiza más que la información de crominancia (color).
 
-Lapsharp's Grain tune is similar to Film, but uses an isotropic Laplacian of Gaussian kernel to reduce the effect on noise and grain. Useful for preserving grain and as a general alternative to the Film tune.
+La melodía Grain de Lapsharp es similar a Film, pero utiliza un laplaciano isotrópico de grano gaussiano para reducir el efecto sobre el ruido y el grano. Útil para preservar el grano y como alternativa general a la melodía de la película.
 
-Lapsharp's Animation tune is useful for cel animation such as anime and cartoons. Animation is identical to Film, but overall strength is reduced to avoid creating artifacts.
+La melodía de animación de Lapsharp es útil para la animación de celdas como el anime y los dibujos animados. La animación es idéntica a la película, pero la fuerza general se reduce para evitar la creación de artefactos.
 
-Lapsharp's Sprite tune is useful for 1-/4-/8-/16-bit 2-dimensional games. Sprite uses a 4-neighbor Laplacian kernel that enhances vertical and horizontal edges more than diagonal edges.</value>
+La melodía Sprite de Lapsharp es útil para juegos de 2 dimensiones de 1/4-/8-/16 bits. Sprite utiliza un núcleo laplaciano de 4 vecinos que mejora los bordes verticales y horizontales más que los bordes diagonales.</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>Aligns the initial timestamps of all audio and video streams by inserting blank frames or dropping frames. May improve audio/video sync for broken players that do not honor MP4 edit lists.</value>
+    <value>Alinea las marcas de tiempo iniciales de todas las transmisiones de audio y video insertando cuadros en blanco o soltando cuadros. Puede mejorar la sincronización de audio / video para reproductores rotos que no cumplen con las listas de edición de MP4.</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Options to control presets.</value>
+    <value>Opciones para controlar los preajustes.</value>
   </data>
   <data name="MainView_EndPoint" xml:space="preserve">
-    <value>The end point for this range.</value>
+    <value>Punto final para este rango.</value>
   </data>
   <data name="MainView_StartPoint" xml:space="preserve">
-    <value>The start point for this range.</value>
+    <value>Punto de inicio para este rango.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Cuando está habilitado, el sistema de nombre automático siempre usará la ruta predeterminada.
+Cuando está deshabilitado, usará la ruta en el cuadro de destino en la ventana principal si está lleno, de lo contrario, usará la ruta predeterminada.</value>
   </data>
 </root>

@@ -118,2049 +118,2061 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Video_EncoderExtraArgs" xml:space="preserve">
-    <value>Komplette Liste der Encoderparameter:
+    <value>エンコーダーパラメーターの一覧:
 {0}</value>
   </data>
   <data name="Video_x264FastDecode" xml:space="preserve">
-    <value>Reduziert die CPU-Auslastung des Decoders.
+    <value>デコーダのCPU使用率を減らします。
 
-Dies auswählen, wenn das Abspielgerät Probleme beim Wiedergeben hat (z. B. wenn Einzelbilder ausgelassen werden).</value>
+再生に問題があるようであればこれを使用してください。 (例:フレーム落ち)</value>
   </data>
   <data name="Video_LosslessWarning" xml:space="preserve">
-    <value>Warnung: RF 0 ist verlustfrei!</value>
+    <value>警告:RF 0は可逆圧縮です！</value>
   </data>
   <data name="Video_LosslessWarningTooltip" xml:space="preserve">
-    <value>Ein Wert von 0 bedeutet verlustfrei und führt zu einer Datei, die größer als die ursprüngliche Quelle ist,
-es sei denn, die Quelldatei war ebenfalls verlustfrei.
+    <value>0はロスレスを意味し、ソースもロスレスでなければ、元より大きいファイルサイズになるでしょう。
 
-Bei x264 und x265 ist die Skala logarithmisch und kleinere Werte bedeuten eine höhere Qualität.
+x264とx265は対数スケールで低い数値の方が品質が高くなります。
 
-Daher führen kleine Erhöhungen der Werte zu einer stark zunehmende Erhöhung der Dateigröße.</value>
+なので値を上げる以上に出力されるファイルサイズは大きくなります。</value>
   </data>
   <data name="AddPreset_PictureSizeMode" xml:space="preserve">
-    <value>Mit dieser Voreinstellung kann optional eine Bildeinstellung gespeichert werden. Es gibt 3 Modi: 
+    <value>このプリセットに画面設定を保存することができます。これには3つの方法があります:
 
-Keine: Die Bildeinstellungen werden nicht in der Voreinstellung gespeichert. Beim Laden einer Quelle bleiben sie innerhalb der Grenzen der Quellauflösung. Dies betrifft auch Anamorph, Modulus, Beschneidung usw. 
+なし: 画面設定はプリセットには保存されません。ソースを読み込むと、ソース解像度の中で設定が維持されます。これはアナモルフィック、モジュール、切り抜き設定等にも影響します。
 
-Eigene: Es kann optional eine maximale Breite und Höhe eingestellt werden. Dabei ist eine Kodierung kleiner oder gleich diesen Werten. „Das Seitenverhältnis beibehalten“ wird automatisch angewendet.
+カスタム: 最大の幅と高さを設定することができます。これを使用すると同一か低い値でエンコードされます。アスペクト比は自動で維持されます。
 
-Quellenmaximum: Kodiert nach Möglichkeit immer mit der Quellauflösung.</value>
+ソース最大: 常に可能な最大の解像度でソースがエンコードされます。</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003–2019 Das HandBrake-TeamDieses Programm ist freie Software; es kann unter den Bedingungen der GNU General Public License, wie sie von der Free Software Foundation veröffentlicht wurde, weitergeben und/oder verändert werden; entweder Version 2 der Lizenz oder (nach eigener Wahl) jede spätere Version.
-Dieses Programm wird in der Hoffnung verteilt, dass es nützlich sein wird, aber OHNE JEGLICHE GEWÄHRLEISTUNG; auch ohne die stillschweigende Gewährleistung der MARKTREIFE oder Tauglichkeit für einen bestimmten Zweck. Weitere Informationen finden Sie in der GNU General Public License.
+    <value>Copyright (C) 2003-2019 The HandBrake Team
 
-Sie sollten eine Kopie der GNU General Public License zusammen mit diesem Programm erhalten haben; wenn nicht, schreiben Sie an die Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
+このプログラムは無料のソフトウェアです; フリーソフトウェア財団による
+GNU General Public License バージョン2、または(お好みであれば)
+それ以降の下で改変、再頒布することができます。
+
+このプログラムは有益であれとの願いを込めて頒布されます、
+ですが一切の保障はしません; 商品性と特定目的適合性の保障も
+含みません。詳しくはGNU General Public Licenseをご覧ください。
+
+GNU General Public Licenseはこのプログラムと一緒に受け取られている
+はずですが、もしそうでなければ下記にお尋ねください。
+Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
-    <value>WARNUNG: Die automatische Dateibenennung ist nicht aktiviert. Bitte diese Funktion aktivieren.</value>
+    <value>警告:ファイルの自動設定がオンになっていません。オプションでこれを有効にしてください。</value>
   </data>
   <data name="QueueSelection_AutoTrackSelectionWarning" xml:space="preserve">
-    <value>WARNUNG: Die automatische Auswahl der Tonspur und der Untertitelspur ist nicht eingestellt. Die Standardauswahl der Spuren kann in den Einstellungen vorgenommen werden.</value>
+    <value>警告: 音声と字幕トラックの自動選択が現在設定されていません。オプションから既定のトラック選択を設定することができます。</value>
   </data>
   <data name="Presets_ResetComplete" xml:space="preserve">
-    <value>Die installierten Voreinstellungen wurden zurückgesetzt.</value>
+    <value>内蔵プリセットをリセットしました。</value>
   </data>
   <data name="Presets_ResetHeader" xml:space="preserve">
-    <value>Zurücksetzen erfolgreich</value>
+    <value>リセット完了</value>
   </data>
   <data name="Video_HigherQuality" xml:space="preserve">
-    <value>Höhere Qualität |</value>
+    <value>最高品質</value>
   </data>
   <data name="Video_LowQuality" xml:space="preserve">
-    <value>| Niedrige Qualität</value>
+    <value>| 低品質</value>
   </data>
   <data name="Video_PlaceboQuality" xml:space="preserve">
-    <value>Placebo Qualität |</value>
+    <value>高品質 |</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Fehler</value>
+    <value>エラー</value>
   </data>
   <data name="Main_AutoAdd_AudioAndSubWarning" xml:space="preserve">
-    <value>Warnung: Wenn jedem Objekt, das in die Warteschlange aufgenommen werden soll, Untertitel hinzugefügt werden sollen, dann sollte vorher geprüft werden, dass die Standardeinstellungen für Untertitel im Untertitel-Tab richtig eingestellt sind.
-
-Trotzdem fortfahren?</value>
+    <value>警告：キューに入れようとしている各アイテムに字幕を追加する場合は、[字幕]タブで字幕のデフォルト設定が正しく設定されていることを確認してください。
+    
+続けますか？</value>
   </data>
   <data name="Main_TurnOnAutoFileNaming" xml:space="preserve">
-    <value>Die automatische Dateibenennung muss aktiviert sein UND es muss ein Standardpfad in den Einstellungen vorgegeben sein, bevor es der Warteschlange hinzugefügt werden kann.</value>
+    <value>キューに追加する前に自動ファイル名を設定し、かつ、既定の保存先を設定から設定しなければいけません。</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warnung</value>
+    <value>警告</value>
   </data>
   <data name="AreYouSure" xml:space="preserve">
-    <value>Sind Sie sicher?</value>
+    <value>本当によろしいですか？</value>
   </data>
   <data name="HandBrake_Title" xml:space="preserve">
     <value>HandBrake</value>
   </data>
   <data name="Main_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake encodiert bereits.</value>
+    <value>HandBrakeはすでにエンコード中です。</value>
   </data>
   <data name="Main_DuplicateDestinationOnQueue" xml:space="preserve">
-    <value>Es sind Aufgaben mit demselben Zielpfad in der Warteschlange. Bitte einen anderen Pfad für die Aufgabe wählen.</value>
+    <value>キューに同じ保存先のジョブがあります。違う保存先を選択してください。</value>
   </data>
   <data name="Main_JobsPending_addon" xml:space="preserve">
-    <value>Anstehende Aufgaben {0}</value>
+    <value>待機中のジョブ{0}</value>
   </data>
   <data name="Main_NewDefaultPreset" xml:space="preserve">
-    <value>Neue Standardvoreinstellung: {0}</value>
+    <value>新しい既定のプリセット: {0}</value>
   </data>
   <data name="Main_NewUpdate" xml:space="preserve">
-    <value>Ein neues Update ist verfügbar. Bitte zum Menü Extras  &gt; Einstellungen wechseln, um es zu installieren.</value>
+    <value>新しいアップデートが入手可能です。 ツールメニュー&gt;オプション&gt;インストールする</value>
   </data>
   <data name="Main_NoPresetSelected" xml:space="preserve">
-    <value>Keine Voreinstellung ausgewählt.</value>
+    <value>プリセットが選択されていません。</value>
   </data>
   <data name="Main_NoUpdateOfBuiltInPresets" xml:space="preserve">
-    <value>Installierte Voreinstellungen können nicht geändert werden. Bitte eine eigene Voreinstellung auswählen.</value>
+    <value>ビルトインプリセットを編集することはできません。ご自身のプリセットを選んでください。</value>
   </data>
   <data name="Main_PleaseSelectFolder" xml:space="preserve">
-    <value>Bitte einen Ordner wählen.</value>
+    <value>フォルダを選択してください。</value>
   </data>
   <data name="Main_PreparingToEncode" xml:space="preserve">
-    <value>Encodieren vorbereiten …</value>
+    <value>エンコードの準備をしています ...</value>
   </data>
   <data name="Main_PresetErrorBuiltInName" xml:space="preserve">
-    <value>Es kann keine Voreinstellung mit demselben Namen einer installierten Voreinstellung importiert werden.</value>
+    <value>内蔵プリセットと同じ名前のプリセットを読み込むことはできません。</value>
   </data>
   <data name="Main_PresetOverwriteWarning" xml:space="preserve">
-    <value>Die Voreinstellung „{0}“ existiert bereits. Soll sie überschrieben werden?</value>
+    <value>プリセット {0} は既に存在しています。上書きしますか？</value>
   </data>
   <data name="Main_Presets" xml:space="preserve">
-    <value>Voreinstellungen</value>
+    <value>プリセット</value>
   </data>
   <data name="Main_PresetUpdateConfrimation" xml:space="preserve">
-    <value>Soll die ausgewählte Voreinstellung wirklich aktualisiert werden?</value>
+    <value>選択したプリセットを更新してもよろしいですか？</value>
   </data>
   <data name="Main_PresetUpdated" xml:space="preserve">
-    <value>Die Voreinstellung wurde nun mit den aktuellen Einstellungen aktualisiert.</value>
+    <value>プリセットが現在の設定で更新されました。</value>
   </data>
   <data name="Main_PresetUpdateNotification" xml:space="preserve">
-    <value>HandBrake hat festgestellt, dass die installierten Voreinstellungen nicht mehr aktuell sind … Diese Voreinstellungen werden nun aktualisiert.
-Die eigenen Voreinstellungen wurden nicht aktualisiert, so dass diese möglicherweise neu erstellt werden müssen, indem sie gelöscht und erneut hinzugefügt werden.
-Von der vorherigen Datei user_presets.xml wurde ein Backup angelegt.</value>
+    <value>HandBrakeはビルトインプリセットが古すぎると判断しました... これらは更新されます。
+カスタムプリセットは更新されませんので、削除して再追加することで作り直す必要があるでしょう。
+前の user_presets.xml ファイルはバックアップされました。</value>
   </data>
   <data name="Main_QueueFinished" xml:space="preserve">
-    <value>Warteschlange beendet</value>
+    <value>キュー終了</value>
   </data>
   <data name="Main_ScanCancelled" xml:space="preserve">
-    <value>Überprüfen abgebrochen.</value>
+    <value>スキャン中止</value>
   </data>
   <data name="Main_ScanCompleted" xml:space="preserve">
-    <value>Überprüfen abgeschlossen</value>
+    <value>スキャン完了</value>
   </data>
   <data name="Main_ScanFailed_NoReason" xml:space="preserve">
-    <value>Überprüfen fehlgeschlagen:</value>
+    <value>スキャン失敗:</value>
   </data>
   <data name="Main_ScanFailled_CheckLog" xml:space="preserve">
-    <value>Überprüfen fehlgeschlagen … Details im Aktivitätsprotokoll.</value>
+    <value>スキャンに失敗しました。詳細については、履歴ウィンドウを参照してください。</value>
   </data>
   <data name="Main_ScanningPleaseWait" xml:space="preserve">
-    <value>Quelle überprüfen, bitte warten …</value>
+    <value>スキャン中お待ちください...</value>
   </data>
   <data name="Main_ScanningTitleXOfY" xml:space="preserve">
-    <value>Titel {0} von {1} überprüfen ({2} %)</value>
+    <value>タイトルをスキャン中{0}/{1}({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>Bevor eine Encodierung gestartet werden kann, muss eine Quelle überprüft und eine Aufgabe festgelegt werden. Bitte „Quelle“ in der Symbolleiste auswählen, um fortzufahren.</value>
+    <value>エンコードを開始する前に、まずソースをスキャンしてジョブを設定する必要があります。ツールバーの「ソース 」ボタンをクリックして続行します。</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
-    <value>Bitte sicherstellen, dass eine eigene Voreinstellung ausgewählt ist. Installierte Voreinstellungen können nicht exportiert werden.</value>
+    <value>ご自身のプリセットを選んでいるかよく確認してください。ビルトインプリセットをエクスポートすることはできません。</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>Bitte eine Voreinstellung zum Aktualisieren auswählen.</value>
+    <value>更新するプリセットを選択してください。
+</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
-    <value>„Quelle“ auswählen um fortzufahren</value>
+    <value>「変換元」をクリックしてください</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} Encodierungen anstehend</value>
+    <value>{0}個のエンコードが待機中</value>
   </data>
   <data name="Notice" xml:space="preserve">
-    <value>Hinweis</value>
+    <value>通知</value>
   </data>
   <data name="Overwrite" xml:space="preserve">
-    <value>Überschreiben?</value>
+    <value>上書きしますか？</value>
   </data>
   <data name="Question" xml:space="preserve">
-    <value>Frage</value>
+    <value>質問</value>
   </data>
   <data name="State_Ready" xml:space="preserve">
-    <value>Fertig</value>
+    <value>準備完了</value>
   </data>
   <data name="Updated" xml:space="preserve">
-    <value>Aktualisiert</value>
+    <value>更新</value>
   </data>
   <data name="Preset_OldVersion_Header" xml:space="preserve">
-    <value>Version der Voreinstellung</value>
+    <value>プリセットバージョン</value>
   </data>
   <data name="Preset_OldVersion_Message" xml:space="preserve">
-    <value>Die Voreinstellung, die importiert werden soll, stammt von einer anderen HandBrake-Version.
-Es ist möglich, dass nicht alle Werte dieser Voreinstellung importiert werden können.
+    <value>インポートしようとしているプリセットはHandBrakeの違うバージョンのものです。
 
-Trotzdem fortfahren?</value>
+このプリセットからすべての値を読み込むことはできない可能性があります。
+
+続けますか？</value>
   </data>
   <data name="Preset_UnableToImport_Header" xml:space="preserve">
-    <value>Importieren der Voreinstellung nicht möglich!</value>
+    <value>プリセットをインポートできませんでした！</value>
   </data>
   <data name="Preset_UnableToImport_Message" xml:space="preserve">
-    <value>Importieren der Voreinstellung nicht möglich, da sie beschädigt ist oder von einer älteren HandBrake-Version stammt.</value>
+    <value>プリセットが壊れているか、HandBrakeのバージョンが古いようでインポートできませんでした。</value>
   </data>
   <data name="Main_SetDestination" xml:space="preserve">
-    <value>Vor dem Hinzufügen zur Warteschlange, muss der Zielpfad für die Ausgabedatei angegeben werden.</value>
+    <value>キューに追加する前に出力ファイルの保存先を設定する必要があります。</value>
   </data>
   <data name="Main_InvalidDestination" xml:space="preserve">
-    <value>Der eingegebene Zielpfad enthält ungültige Zeichen und wird nicht aktualisiert.</value>
+    <value>入力された保存先は不正な文字が含まれていたため変更できませんでした。</value>
   </data>
   <data name="Preview" xml:space="preserve">
-    <value>Vorschau {0}</value>
+    <value>プレビュー {0}</value>
   </data>
   <data name="Preview_Scaled" xml:space="preserve">
-    <value>Vorschau (Skaliert)</value>
+    <value>プレビュー（拡大縮小）</value>
   </data>
   <data name="PictureSettings_OutputResolution" xml:space="preserve">
-    <value>Ausgabe: {0}</value>
+    <value>出力先: {0}</value>
   </data>
   <data name="Options_AdditionalFormatOptions" xml:space="preserve">
-    <value>Das Format der Ausgabedatei. Zusätzlich zu allen unterstützten Dateisystemzeichen können die folgenden Platzhalter verwendet werden, die ersetzt werden, wenn der Titel geändert oder eine Quelle überprüft wird.
+    <value>出力ファイルの形式です。通常のファイル名のほかに、ソースのスキャンやタイトルの変更をするごとに変わる次のプレースホルダを使用することができます。
 
-Live-Update-Optionen: {source} {title} {chapters}  
-Nicht-Live-Optionen: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Diese ändern sich nur, wenn eine neue Quelle überprüft wird, der Titel oder die Kapitel geändert werden).</value>
+リアルタイムオプション: {source} {title} {chapters} 
+リアルタイムでないオプション: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (これらは新しいソースをスキャンするか、タイトルやチャプターを変更したときのみ変わります。)</value>
   </data>
   <data name="Options_DefaultPathAdditionalParams" xml:space="preserve">
-    <value>Verfügbare zusätzliche Optionen: {source_path} oder {source_folder_name} oder {source}</value>
+    <value>次のオプションも利用可能です: {source_path}  {source_folder_name}  {source}</value>
   </data>
   <data name="Main_MatchingFileOverwriteWarning" xml:space="preserve">
-    <value>Es kann keine Datei mit demselben Pfad und Dateinamen wie die Quelldatei encodiert werden. Bitte den Namen der Zieldatei ändern, so dass er nicht der Quelldatei entspricht.</value>
+    <value>ソースファイルと同じ場所とファイル名にエンコードすることはできません。ソースファイルと一致させないために、保存先のファイル名を変更してください。</value>
   </data>
   <data name="Main_UnableToLoadHelpMessage" xml:space="preserve">
-    <value>Das System hat HandBrake daran gehindert einen Webbrowser zu starten.</value>
+    <value>システムによってHandBrakeはウェブブラウザを開くことができませんでした。</value>
   </data>
   <data name="Main_UnableToLoadHelpSolution" xml:space="preserve">
-    <value>Die Hilfeseite kann auch direkt auf der Webseite unter https://handbrake.fr erreicht werden.</value>
+    <value>以下のウェブサイトに直接行くことでヘルプページにアクセスすることもできます:https://handbrake.fr</value>
   </data>
   <data name="Main_PresetImportFailed" xml:space="preserve">
-    <value>Importieren der ausgewählten Voreinstellung nicht möglich. </value>
+    <value>選択されたプリセットをインポートすることができません。</value>
   </data>
   <data name="Main_PresetImportFailedSolution" xml:space="preserve">
-    <value>Die Voreinstellung könnte beschädigt sein oder von einer älteren HandBrake-Version stammen, die nicht mehr unterstützt wird.
-Voreinstellungen aus älteren Versionen müssen mit einer aktuellen Version neu erstellt werden.</value>
+    <value>プリセットがサポートされていない古いバージョンのHandBrakeのものか、壊れています。
+古いバージョンのプリセットは現在のバージョンで再作成されなければいけません。</value>
   </data>
   <data name="Video_EncoderExtraArgsTooltip" xml:space="preserve">
-    <value>Zusätzliche erweiterte Parameter, die vom Videoencoder angewendet werden.</value>
+    <value>ビデオエンコーダーに直接渡せる追加の高度な引数です。</value>
   </data>
   <data name="Subtitles_BurnInBehaviourModes" xml:space="preserve">
-    <value>Keine – Es werden nur Spuren eingebrannt, bei denen der Container das Format nicht unterstützt.
-Fremdsprachenspur – Die Fremdsprachenspur wird eingebrannt, falls vorhanden. 
-Erste Spur – Die erste Spur wird eingebrannt.
-Fremdsprachenton bevorzugt, sonst Erste – Wenn die Fremdsprachenspur existiert, wird sie eingebrannt, sonst wird die erste Spur ausgewählt.</value>
+    <value>なし - コンテナが形式をサポートしないトラックのみ焼き込まれます。
+吹き替え字幕 - 吹き替え字幕が利用可能な場合に焼き込まれます。
+
+最初のトラック - 最初のトラックが焼き込まれます。
+吹き替え字幕優先、でなければ最初 - 吹き替え字幕トラックが存在するならそれが焼き込まれ、でなければ最初のトラックが選ばれます。</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityHeader" xml:space="preserve">
-    <value>WebM-Untertitel-Kompatibilität</value>
+    <value>WebM字幕の互換性</value>
   </data>
   <data name="Subtitles_WebmSubtitleIncompatibilityError" xml:space="preserve">
-    <value>WebM in HandBrake unterstützt nur eingebrannte Untertitel.
+    <value>WebMはHandBrakeでは焼き込まれた字幕のみサポートします。
 
-Die Untertitelauswahl sollte geändert werden.
+字幕の選択を変更してください。
 
-Beim Fortfahren gehen nicht-eingebrannte Untertitel verloren.</value>
+このまま続けると、焼き込まれない字幕は失われます。</value>
   </data>
   <data name="Main_ScanNoTitlesFound" xml:space="preserve">
-    <value>Keine gültige Quelle oder Titel gefunden</value>
+    <value>有効なソースやタイトルが見つかりませんでした。</value>
   </data>
   <data name="Main_ScanNoTitlesFoundMessage" xml:space="preserve">
-    <value>HandBrake kann die ausgewählte Quelle nicht kodieren, da es keine gültige Quelle mit zu kodierenden Titeln gefunden hat. 
-Dies kann auf einen der folgenden Gründe zurückzuführen sein: 
-– Die Dauer jedes Titels liegt unterhalb des Schwellenwertes „Minimale Titeldauer“ in „Einstellungen &gt; Erweitert“. 
-– Die Quelldatei ist keine gültige Videodatei oder befindet sich in einem Format, das HandBrake nicht unterstützt.
-– Die Quelle kann kopiergeschützt sein oder DRM enthalten. Bitte beachten Sie, dass HandBrake das Entfernen von Kopierschutzmaßnahmen nicht unterstützt. 
+    <value>HandBrakeは選択されたソースに有効なタイトルが見つけられなかったためエンコードできません。
+これには次のような原因が考えられます:
+- それぞれのタイトル長さが'設定 &gt; 高度'の"最低タイトル長さ"のしきい値を下回っています。
+- ソースファイルが有効なビデオファイルではないか、HandBrakeがサポートしない形式です。
+- ソースファイルがDRMなどでコピープロテクトがかかっています。HandBrakeはコピープロテクトの除去はサポートしていません。
 
-Das Aktivitätsprotokoll kann weitere Informationen enthalten.</value>
+アクティビティログに更なる情報があるかもしれません。</value>
   </data>
   <data name="Main_QueueLabel" xml:space="preserve">
-    <value>Warteschlange {0}</value>
+    <value>キュー{0}</value>
   </data>
   <data name="Main_Start" xml:space="preserve">
-    <value>Encodierung starten</value>
+    <value>エンコード開始</value>
   </data>
   <data name="Main_StartQueue" xml:space="preserve">
-    <value>Warteschlange starten</value>
+    <value>キュー開始</value>
   </data>
   <data name="MainViewModel_CanNotDeleteDefaultPreset" xml:space="preserve">
-    <value>Die Standardvoreinstellung kann nicht gelöscht werden. Bitte zuerst eine andere Voreinstellung als Standard auswählen.</value>
+    <value>既定のプリセットを削除することはできません。まず違うプリセットを規定にしてください。</value>
   </data>
   <data name="MainViewModel_PresetRemove_AreYouSure" xml:space="preserve">
-    <value>Soll folgende Voreinstellung wirklich gelöscht werden:</value>
+    <value>プリセットを削除してもよろしいですか？</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encodieren: Durchgang {0} von {1}, {2:00.00} %, BpS: {3:000.0}, mittlere BpS: {4:000.0}, verbleibende Zeit: {5}, vergangen: {6:d\:hh\:mm\:ss} {7}</value>
+    <value>エンコード中: パス{0}of {1} {2:00.00}%, FPS: {3:000.0}, 平均FPS: {4:000.0}, 残り時間: {5}, 経過時間: {6:d\:hh\:mm\:ss} {7}</value>
   </data>
   <data name="AddPresetViewModel_PresetMustProvideName" xml:space="preserve">
-    <value>Eine Voreinstellung muss einen Namen haben. Bitte das Feld für den Namen der Voreinstellung ausfüllen.</value>
+    <value>プリセットには名前が必要です。プリセット名の欄に記入してください。</value>
   </data>
   <data name="AddPresetViewModel_PresetWithSameNameOverwriteWarning" xml:space="preserve">
-    <value>Eine Voreinstellung mit diesem Namen existiert bereits. Soll sie überschrieben werden?</value>
+    <value>この名前のプリセットは既に存在しています。上書きしますか？</value>
   </data>
   <data name="AddPresetViewModel_YouMustFirstScanSource" xml:space="preserve">
-    <value>Eine Quelle muss zuerst überprüft werden, bevor „Quellenmaximum“ ausgewählt werden kann.</value>
+    <value>'ソース最大'オプションを使うには最初にソースをスキャンしなければいけません。</value>
   </data>
   <data name="AddPresetViewModel_CustomWidthHeightFieldsRequired" xml:space="preserve">
-    <value>Das Feld der benutzerdefinierten Breite und Höhe muss für die Option „Eigene“ ausgefüllt werden.</value>
+    <value>'カスタム'オプションを使用した場合カスタム幅/高さ欄は必ず埋めなくてはいけません。</value>
   </data>
   <data name="AddPresetViewModel_UnableToAddPreset" xml:space="preserve">
-    <value>Voreinstellung hinzufügen fehlgeschlagen</value>
+    <value>プリセットを追加できませんでした</value>
   </data>
   <data name="UnknownError" xml:space="preserve">
-    <value>Unbekannter Fehler</value>
+    <value>不明なエラー</value>
   </data>
   <data name="AudioViewModel_AudioDefaults" xml:space="preserve">
-    <value>Audiostandard</value>
+    <value>デフォルト音声</value>
   </data>
   <data name="AudioViewModel_AudioTracks" xml:space="preserve">
-    <value>Tonspuren</value>
+    <value>音声トラック</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Auswahlverhalten</value>
+    <value>選択の方法</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
-    <value>Zu den Spuren zurückkehren</value>
+    <value>トラックに戻す</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersWarning" xml:space="preserve">
-    <value>Speichern der Kapitelmarkerdatei fehlgeschlagen!</value>
+    <value>チャプターマーカーファイルを保存することができませんでした！</value>
   </data>
   <data name="ChaptersViewModel_UnableToExportChaptersMsg" xml:space="preserve">
-    <value>Namen von Kapitelmarkern werden NICHT im Encodierten gesichert.</value>
+    <value>チャプターマーカー名はエンコードファイルの中には保存されません。</value>
   </data>
   <data name="CountdownAlertViewModel_NoticeMessage" xml:space="preserve">
-    <value>Die Aktion „{0}“ wird in {1} Sekunden ausgeführt.</value>
+    <value>次のアクション "{0}" は {1}秒後に実行されます。</value>
   </data>
   <data name="ErrorViewModel_IfTheProblemPersists" xml:space="preserve">
-    <value>Bitte HandBrake neu starten, wenn das Problem anhält.</value>
+    <value>もし問題が続くなら、HandBrakeを起動し直してみてください。</value>
   </data>
   <data name="ErrorViewModel_NoFurtherInformation" xml:space="preserve">
-    <value>Für diesen Fehler ist keine weitere Information verfügbar.</value>
+    <value>このエラーについてこれ以上の情報はありません。</value>
   </data>
   <data name="ErrorViewModel_UnknownError" xml:space="preserve">
-    <value>Ein unbekannter Fehler ist aufgetreten.</value>
+    <value>不明なエラーが発生しました。</value>
   </data>
   <data name="OptionsViewModel_NewUpdate" xml:space="preserve">
-    <value>Ein neues Update ist verfügbar! Bitte die Webseite auf Versionshinweise prüfen.</value>
+    <value>新しいアップデートが利用可能です。更新履歴を見るにはウェブサイトをチェックしてください。</value>
   </data>
   <data name="OptionsViewModel_64bitAvailable" xml:space="preserve">
-    <value>Dieses System unterstützt die 64bit-Version von HandBrake! Diese bietet Verbesserungen bezüglich Leistung und Stabilität, bezogen auf die 32bit-Version.
-Bitte die Webseite auf Versionshinweise prüfen.</value>
+    <value>あなたのシステムは64bit版のHandBrakeが利用できます！これはこの32bit版よりパフォーマンスや安定性で優れています。
+更新情報を見るにはウェブサイトをチェックしてください。</value>
   </data>
   <data name="OptionsViewModel_NoNewUpdates" xml:space="preserve">
-    <value>Es sind momentan keine Updates verfügbar.</value>
+    <value>現在更新はありません。</value>
   </data>
   <data name="OptionsViewModel_UpdateDownloaded" xml:space="preserve">
-    <value>Update geladen</value>
+    <value>アップデートダウンロード</value>
   </data>
   <data name="OptionsViewModel_UpdateServiceUnavailable" xml:space="preserve">
-    <value>Updatedienst nicht verfügbar. Es kann versucht werden, das Update von https://handbrake.fr herunterzuladen.</value>
+    <value>更新サービスが利用できません。https://handbrake.fr から更新をダウンロードすることもできます。</value>
   </data>
   <data name="OptionsViewModel_UpdateFailed" xml:space="preserve">
-    <value>Update fehlgeschlagen. Es kann versucht werden, das Update von https://handbrake.fr herunterzuladen.</value>
+    <value>更新に失敗しました。https://handbrake.fr から更新をダウンロードすることもできます。</value>
   </data>
   <data name="PictureSettingsViewModel_StorageDisplayLabel" xml:space="preserve">
-    <value>Anzeigegröße: {0}×{1}, PAR {2}×{3}</value>
+    <value>表示サイズ {0}x{1}, PAR {2}x{3}</value>
   </data>
   <data name="QueueSelectionViewModel_AddToQueue" xml:space="preserve">
-    <value>Zur Warteschlange hinzufügen</value>
+    <value>キューに追加</value>
   </data>
   <data name="QueueViewModel_NoEncodesPending" xml:space="preserve">
-    <value>Keine Encodierungen anstehend</value>
+    <value>待機中のエンコードはありません</value>
   </data>
   <data name="QueueViewModel_NoJobsPending" xml:space="preserve">
-    <value>Es werden momentan keine Aufgaben encodiert</value>
+    <value>エンコード中のジョブはありません</value>
   </data>
   <data name="QueueViewModel_Queue" xml:space="preserve">
-    <value>Warteschlange</value>
+    <value>キューの表示</value>
   </data>
   <data name="QueueViewModel_ClearQueueConfrimation" xml:space="preserve">
-    <value>Die Warteschlange wirklich löschen?</value>
+    <value>キューを本当にクリアしますか？</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Bestätigen</value>
+    <value>確認</value>
   </data>
   <data name="QueueViewModel_JobsPending" xml:space="preserve">
-    <value>{0} Aufgaben anstehend</value>
+    <value>{0}個のジョブが待機中</value>
   </data>
   <data name="QueueViewModel_QueuePending" xml:space="preserve">
-    <value>Warteschlange angehalten</value>
+    <value>キュー一時停止</value>
   </data>
   <data name="QueueViewModel_QueuePauseNotice" xml:space="preserve">
-    <value>Die Warteschlange wurde angehalten. Die aktuelle Aufgabe wird noch fertig gestellt und danach keine weiteren Aufgaben gestartet.</value>
+    <value>キューが一時停止されました。現在のジョブは完了まで実行され、それ以降のジョブは開始しません。</value>
   </data>
   <data name="QueueViewModel_DelSelectedJobConfirmation" xml:space="preserve">
-    <value>Sollen die ausgewählten Aufgaben wirklich gelöscht werden?</value>
+    <value>選択したジョブを本当に削除しますか？</value>
   </data>
   <data name="QueueViewModel_JobCurrentlyRunningWarning" xml:space="preserve">
-    <value>Diese Encodierung ist momentan in Arbeit. Wenn sie gelöscht wird, wird die Encodierung abgebrochen. Soll wirklich fortgefahren werden?</value>
+    <value>このエンコードは現在進行中です。削除されると、エンコードも停止します。本当に進めますか？</value>
   </data>
   <data name="QueueViewModel_NoPendingJobs" xml:space="preserve">
-    <value>Es sind keine Aufgaben anstehend.</value>
+    <value>待機中のジョブはありません</value>
   </data>
   <data name="QueueViewModel_EditConfrimation" xml:space="preserve">
-    <value>Soll diese Aufgabe wirklich bearbeitet werden? Sie wird aus der Warteschlange entfernt und zum Hauptfenster geleitet.</value>
+    <value>本当にこのジョブを編集しますか？キューから削除され、メインウィンドウに送られます。</value>
   </data>
   <data name="QueueViewModel_QueueReady" xml:space="preserve">
-    <value>Warteschlange bereit</value>
+    <value>キュー準備完了</value>
   </data>
   <data name="QueueViewModel_QueueNotRunning" xml:space="preserve">
-    <value>Warteschlange nicht aktiv</value>
+    <value>キューは実行していません</value>
   </data>
   <data name="QueueViewModel_QueueCompleted" xml:space="preserve">
-    <value>Warteschlange ausgeführt</value>
+    <value>キュー完了</value>
   </data>
   <data name="QueueViewModel_LastJobFinished" xml:space="preserve">
-    <value>Letzte Aufgabe in der Warteschlange ausgeführt</value>
+    <value>最後のキュージョブが終了しました</value>
   </data>
   <data name="QueueViewModel_QueueStarted" xml:space="preserve">
-    <value>Warteschlange gestartet</value>
+    <value>キューが開始しました</value>
   </data>
   <data name="QueueViewModel_QueueStatusDisplay" xml:space="preserve">
-    <value>Encodieren: Durchgang {0} von {1}, {2:00.00} %, BpS: {3:000.0}, mittlere BpS: {4:000.0}, verbleibende Zeit: {5}, vergangen: {6:d\:hh\:mm\:ss}</value>
+    <value>エンコード中: パス {0} of {1}, {2:00.00}%, FPS: {3:000.0}, 平均FPS: {4:000.0}, 残り時間: {5}, 経過時間: {6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="ShellViewModel_CanClose" xml:space="preserve">
-    <value>Eine Encodierung ist momentan in Arbeit. Das Beenden von HandBrake wird diese Encodierung abbrechen.
-Soll HandBrake wirklich beendet werden?</value>
+    <value>エンコードは現在進行中です。HandBrakeを閉じると、エンコードも停止します。本当にHandBrakeを閉じますか？</value>
   </data>
   <data name="StaticPreviewViewModel_Title" xml:space="preserve">
-    <value>Bildvorschau</value>
+    <value>画像プレビュー</value>
   </data>
   <data name="StaticPreview_UnableToDeletePreview" xml:space="preserve">
-    <value>Das Entfernen früherer Vorschaudateien ist fehlgeschlagen. Das Programm muss möglicherweise neu gestartet werden.</value>
+    <value>前のプレビューファイルを削除できません。アプリケーションの再起動が必要な場合があります。</value>
   </data>
   <data name="StaticPreviewViewModel_ScanFirst" xml:space="preserve">
-    <value>Bevor eine Vorschau erstellt werden kann, muss die Quelle überprüft und eine Encodierung festgelegt werden.</value>
+    <value>プレビューの前にまずソースをスキャンしてエンコードを設定しなければいけません。</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToFindVLC" xml:space="preserve">
-    <value>VLC-Player nicht gefunden.
-Bitte sicherstellen, dass VLC installiert und der Pfad in den HandBrake-Einstellungen korrekt ist (siehe „Extras &gt; Einstellungen &gt; Allgemein“)</value>
+    <value>VLCプレーヤーを検出できません。
+VLCがインストールされ、HandBrakeの設定で指定されたディレクトリが正しいことを確認してください。(参照:「[ツール] メニュー/[基本設定]/[一般]」)</value>
   </data>
   <data name="StaticPreviewViewModel_UnableToPlayFile" xml:space="preserve">
-    <value>Vorschaudatei konnte nicht gefunden werden. Entweder wurde die Datei gelöscht oder die Encodierung ist fehlgeschlagen. Bitte das Aktivitätsprotokoll für Details prüfen.</value>
+    <value>プレビューファイルが見つかりません。ファイルが削除されたか、エンコードに失敗しました。詳細については、履歴ウィンドウを確認してください。</value>
   </data>
   <data name="StaticPreviewViewModel_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake encodiert bereits eine Datei! Es kann nur eine Datei auf einmal encodiert werden.</value>
+    <value>HandBrakeは既に映像をエンコード中です！一度にエンコードできるファイルは一つだけです。</value>
   </data>
   <data name="SubtitlesViewModel_SubDefaults" xml:space="preserve">
-    <value>Untertitelstandard</value>
+    <value>デフォルト字幕</value>
   </data>
   <data name="SubtitlesViewModel_SubTracks" xml:space="preserve">
-    <value>Untertitelspuren</value>
+    <value>字幕トラック</value>
   </data>
   <data name="SubtitlesViewModel_SwitchToTracks" xml:space="preserve">
-    <value>Zu den Spuren zurückkehren</value>
+    <value>トラックに戻す</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>Auswahlverhalten</value>
+    <value>選択の方法</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
-    <value>Archivierte Datei:</value>
+    <value>アーカイブファイル</value>
   </data>
   <data name="PresetService_UnableToLoad" xml:space="preserve">
-    <value>Laden der Voreinstellung fehlgeschlagen.</value>
+    <value>プリセットを読み込めませんでした。</value>
   </data>
   <data name="PresetService_UnableToLoadPresets" xml:space="preserve">
-    <value>HandBrake konnte die Voreinstellungsdatei nicht laden. Sie könnte von einer älteren und nicht mehr unterstützten HandBrake-Version stammen oder beschädigt sein.
+    <value>HandBrakeはプリセットファイルを読み込むことができませんでした。恐らくHandBrakeのバージョンが古くサポートされていないか、壊れています。
 
-Die alten Voreinstellungen wurden archiviert unter:</value>
+古いプリセットファイルはアーカイブされました:</value>
   </data>
   <data name="Main_QueueFinishedErrors" xml:space="preserve">
-    <value>mit {0} Fehlern oder Abbrüchen erkannt.</value>
+    <value>{0}個のエラーまたはキャンセルを検出。</value>
   </data>
   <data name="MainViewModel_LowDiskSpace" xml:space="preserve">
-    <value>Geringer Speicherplatz</value>
+    <value>ディスクの空き容量がありません</value>
   </data>
   <data name="MainViewModel_LowDiskSpaceWarning" xml:space="preserve">
-    <value>Warnung, der verfügbare freie Speicherplatz wird knapp. HandBrake wird nicht in der Lage sein, das Encodieren abzuschließen, sollte der freie Speicherplatz nicht ausreichen.</value>
+    <value>警告、ディスクの残りが少なくなっています。残り容量がなくなればHandBrakeはこのエンコードを完了させることができません。</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersMalformedLineMsg" xml:space="preserve">
-    <value>Zeile {0} ist ungültig. Es wird nichts importiert.</value>
+    <value>{0}行目が無効です。何もインポートされません。</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersWarning" xml:space="preserve">
-    <value>Importieren der Kapiteldatei fehlgeschlagen</value>
+    <value>チャプターファイルをインポートできません</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersLineDoesNotHaveAtLeastTwoColumns" xml:space="preserve">
-    <value>Alle Zeilen der Kapiteldatei müssen mindestens 2 Spalten Daten aufweisen</value>
+    <value>チャプターファイルの全ての行には少なくとも2列以上のデータが必要です。</value>
   </data>
   <data name="ChaptersViewModel_UnableToImportChaptersFirstColumnMustContainOnlyIntegerNumber" xml:space="preserve">
-    <value>Die erste Spalte der Kapiteldatei darf nur einen ganzzahligen Zahlenwert größer als Null (0) enthalten.</value>
+    <value>チャプターファイルの最初の列は0を超える整数を必ず含む必要があります。</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatMsg" xml:space="preserve">
-    <value>Kapiteldateien des Typs „{0}“ werden zur Zeit nicht unterstützt.</value>
+    <value>チャプターファイルの形式 '{0}' は現在サポートされていません。</value>
   </data>
   <data name="ChaptersViewModel_UnsupportedFileFormatWarning" xml:space="preserve">
-    <value>Nicht unterstützter Dateityp der Kapiteldatei</value>
+    <value>サポートされていないチャプターファイルの種類</value>
   </data>
   <data name="ChaptersViewModel_ValidationFailedWarning" xml:space="preserve">
-    <value>Ungültige Kapitelinformation oder Quellmedium</value>
+    <value>ソースメディアのチャプター情報が無効です</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatch" xml:space="preserve">
-    <value>Die Anzahl der Kapitel des Quellmediums
-und die Anzahl der Kapitel der Eingabedatei stimmen nicht überein ({0} gegen {1}).
+    <value>ソースメディアのチャプター数と
+入力ファイルのチャプター数が一致しません({0} vs {1})。
 
-Sollen die Kapitelnamen trotzdem importiert werden?</value>
+このままチャプター名をインポートしますか？</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchMsg" xml:space="preserve">
-    <value>Die Anzahl der Kapitel des Quellmediums
-und die Anzahl der Kapitel der Eingabedatei stimmen nicht überein ({0} gegen {1}).
+    <value>ソースメディアのチャプター数と
+入力ファイルのチャプター数が一致しません({0} vs {1})。
 
-Sollen die Kapitelnamen trotzdem importiert werden?</value>
+このままチャプター名をインポートしますか？</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterCountMismatchWarning" xml:space="preserve">
-    <value>Die Anzahl der Kapitel zwischen Quelle und Eingangsdatei stimmen nicht überein.</value>
+    <value>ソースと入力ファイルのチャプター数が一致しません</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchMsg" xml:space="preserve">
-    <value>Die gemeldete Kapiteldauer des Quellmediums und die
-Kapiteldauer der Eingabedatei unterscheiden sich stark.
+    <value>ソースメディアから読み込まれたチャプターの長さと
+入力ファイルのチャプター長さが大きく異なります。
 
-Es ist sehr wahrscheinlich, dass diese Kapiteldatei von einem anderen Quellmedium produziert wurde.
+このチャプターファイルは恐らく違うソースメディアのものでしょう。
 
-Sollen die Kapitelnamen wirklich importiert werden?</value>
+本当にこのチャプター名をインポートしますか？</value>
   </data>
   <data name="ChaptersViewModel_ValidateImportedChapters_ChapterDurationMismatchWarning" xml:space="preserve">
-    <value>Die Dauer der Kapitel zwischen Quelle und Eingangsdatei stimmen nicht überein.</value>
+    <value>チャプターの長さがソースと入力ファイルとで一致しません</value>
   </data>
   <data name="ScanService_ScanStopFailed" xml:space="preserve">
-    <value>Beim Stoppen der Überprüfung ist ein Fehler aufgetreten. Bitte HandBrake neu starten.</value>
+    <value>スキャンを停止しようとしてエラーが発生しました。HandBrakeを再起動してください。</value>
   </data>
   <data name="Presets_PresetForceReset" xml:space="preserve">
-    <value>HandBrake kann die Voreinstellungsdatei nicht auf eine neue Version aktualisieren.
-Die Voreinstellungsdatei wird archiviert und eine neue erstellt. Die eigenen Voreinstellungen müssen dann neu erstellt werden.</value>
+    <value>HandBrakeはプリセットファイルを新しいバージョンの形式に更新することができませんでした。
+プリセットファイルはアーカイブされ新しく作り直されます。ご自身のプリセットは作り直す必要があります。</value>
   </data>
   <data name="SettingService_SaveErrorReset" xml:space="preserve">
-    <value>Alle geänderten Einstellungen müssen möglicherweise beim nächsten Start von HandBrake zurückgesetzt werden.</value>
+    <value>変更された設定は次回HandBrake起動時にリセットしなければいけないかもしれません。</value>
   </data>
   <data name="UserSettings_AnErrorOccured" xml:space="preserve">
-    <value>Beim Speichern der Einstellungen ist ein Fehler aufgetreten.</value>
+    <value>設定を保存するときに問題が発生しました。</value>
   </data>
   <data name="UserSettings_YourSettingsHaveBeenReset" xml:space="preserve">
-    <value>Warnung, die Einstellungen wurden zurückgesetzt! </value>
+    <value>警告、設定はリセットされました。</value>
   </data>
   <data name="UserSettings_YourSettingsAreCorrupt" xml:space="preserve">
-    <value>Die Benutzereinstellungsdatei war entweder beschädigt oder nicht verfügbar. Die Einstellungen wurden auf den Standard zurückgesetzt.</value>
+    <value>ユーザー設定が壊れているかアクセスできません。設定は既定にリセットされました。</value>
   </data>
   <data name="UserSettings_UnableToLoad" xml:space="preserve">
-    <value>Das Laden folgender Benutzereinstellungsdatei ist fehlgeschlagen: {0}</value>
+    <value>ユーザー設定ファイルを読み込めませんでした:{0}</value>
   </data>
   <data name="UserSettings_UnableToLoadSolution" xml:space="preserve">
-    <value>Die Benutzereinstellungsdatei war entweder beschädigt oder nicht verfügbar. Möglicherweise muss die Datei gelöscht und von HandBrake neu angelegt werden.</value>
+    <value>ユーザー設定ファイルにアクセスできないか壊れているようです。HandBrakeが新しいファイルを作るために削除する必要があるかもしれません。</value>
   </data>
   <data name="Main_NoPermissionsOrMissingDirectory" xml:space="preserve">
-    <value>Das gewählte Ausgabeverzeichnis existiert entweder nicht oder es fehlen benötigte Schreibrechte.</value>
+    <value>選択された出力先は存在しないか、ファイルを書き込むための権限がありません。</value>
   </data>
   <data name="DirectoryUtils_CreateFolder" xml:space="preserve">
-    <value>Ordner erstellen?</value>
+    <value>フォルダーを作りますか？</value>
   </data>
   <data name="DirectoryUtils_CreateFolderMsg" xml:space="preserve">
-    <value>Der Ordner in den geschrieben werden soll existiert nicht. Soll HandBrake den folgenden Ordner anlegen?
+    <value>書き込もうとしているフォルダが存在しません。HandBrakeが次のフォルダを作ってもよろしいでしょうか？
 {0}</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDir" xml:space="preserve">
-    <value>Öffnen des Zielverzeichnises fehlgeschlagen.</value>
+    <value>保存先ディレクトリを開くことができません。</value>
   </data>
   <data name="MainViewModel_UnableToLaunchDestDirSolution" xml:space="preserve">
-    <value>Bitte überprüfen, dass das Zielverzeichnis gültig ist.</value>
+    <value>保存先のディレクトリが有効か確認してください。</value>
   </data>
   <data name="MainViewModel_EncodeStatusChanged_SubScan_StatusLabel" xml:space="preserve">
-    <value>Durchgang {0} von {1}wird verarbeitet, (Untertitelprüfung) {2:00.00} %, verbleibende Prüfungszeit: {3}, vergangen: {4:d\:hh\:mm\:ss}</value>
+    <value>処理中: パス {0} of {1}, (字幕スキャン)  {2:00.00}%, スキャン残り時間: {3},  経過時間: {4:d\:hh\:mm\:ss}</value>
   </data>
   <data name="NoAdditionalInformation" xml:space="preserve">
-    <value>Keine zusätzlichen Informationen</value>
+    <value>追加情報はありません</value>
   </data>
   <data name="WindowTitleStatus" xml:space="preserve">
-    <value>{0} - ({1} %, Durchgang {2} von {3})</value>
+    <value>{0} - ({1}%, パス {2} of {3})</value>
   </data>
   <data name="TaskTrayStatusTitle" xml:space="preserve">
-    <value>{1} %, Durchgang {2} von {3}verbleibende Zeit: {4}</value>
+    <value>{1}%, パス {2}of {3}
+残り時間: {4}</value>
   </data>
   <data name="PauseOnLowDiskspace" xml:space="preserve">
-    <value>Warteschlange angehalten. Warnung, auf dem Volume auf dem encodiert wird ist nicht genügend Speicherplatz vorhanden. Bitte mehr Speicherplatz freigeben und „Start“ auswählen, um fortzufahren. Außerdem kann der minimale Speicherplatzwert in den Einstellungen angepasst werden.</value>
+    <value>キューを一時停止しました。警告、エンコードしているドライブの空き領域が少なくなっています。続けるためには空きを増やしてから開始を押してください。もしくは設定から最低領域レベルを調節することができます。</value>
   </data>
   <data name="Main_QueuePaused" xml:space="preserve">
-    <value>Warteschlange angehalten</value>
+    <value>キュー中断</value>
   </data>
   <data name="QueueViewModel_QueuePaused" xml:space="preserve">
-    <value>Warteschlange angehalten</value>
+    <value>キュー中断</value>
   </data>
   <data name="Main_LowDiskspace" xml:space="preserve">
-    <value>Das Zielverzeichnis hat wenig freien Speicherplatz. Bitte mehr Speicherplatz freigeben. Alternativ kann der Wert in den Einstellungen angepasst werden, bei dem diese Warnmeldung ausgelöst wird.</value>
+    <value>保存先ディレクトリの空き容量が少なくなっています。ドライブの空きを増やしてください。もしくは、オプションからこの警告のレベルを変更することができます。</value>
   </data>
   <data name="Queue_UnableToResetJob" xml:space="preserve">
-    <value>Der Status der Aufgabe kann nicht zurückgesetzt werden, da er sich nicht im Fehlerzustand oder im bearbeiteten Zustand  befindet</value>
+    <value>エラーでも完了でもないためジョブの状態をリセットできません</value>
   </data>
   <data name="Queue_UnableToRestoreFile" xml:space="preserve">
-    <value>Wiederherstellen der Datei in der Warteschlange fehlgeschlagen.</value>
+    <value>キューファイルを復元することができません。</value>
   </data>
   <data name="Queue_UnableToRestoreFileExtended" xml:space="preserve">
-    <value>Die Datei ist möglicherweise beschädigt oder von einer älteren und inkompatiblen Version von HandBrake</value>
+    <value>ファイルが恐らく壊れているか非対応の古いHandBrakeのものです。</value>
   </data>
   <data name="Queue_AlreadyEncoding" xml:space="preserve">
-    <value>HandBrake encodiert bereits eine Datei.</value>
+    <value>HandBrakeはすでにファイルをエンコード中です。</value>
   </data>
   <data name="Queue_AlreadyEncodingSolution" xml:space="preserve">
-    <value>Bitte das momentane Encodieren stoppen. Falls das Problem anhält, bitte HandBrake neu starten.</value>
+    <value>エンコードを停止してください。 もし問題が続くなら、HandBrakeを再起動してみてください。</value>
   </data>
   <data name="MiniViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encodieren: Durchgang {0} von {1}, {2:00.00} %
-BpS: {3:000.0}, mittlere BpS: {4:000.0}
-verbleibende Zeit: {5}, vergangen: {6:d\:hh\:mm\:ss}</value>
+    <value>エンコード中: パス {0} of {1}, {2:00.00}%
+FPS: {3:000.0}, 平均FPS: {4:000.0}
+残り時間: {5}, 経過時間: {6:d\:hh\:mm\:ss}</value>
   </data>
   <data name="StaticPreviewView_Title" xml:space="preserve">
-    <value>Vorschau ({0} % tatsächliche Größe)</value>
+    <value>プレビュー(実際のサイズの{0}%)</value>
   </data>
   <data name="OsBitnessWarning" xml:space="preserve">
-    <value>HandBrake benötigt eine 64bit-Version von Windows 7 oder neuer.</value>
+    <value>HandBrakeの実行には64bitのWindows 7かそれ以降が必要です。</value>
   </data>
   <data name="OsVersionWarning" xml:space="preserve">
-    <value>HandBrake benötigt Windows 7 oder neuer. Version 0.9.9 (XP) und 0.10.5 (Vista) waren die letzten mit einer Unterstützung für diese Version.</value>
+    <value>HandBrakeの実行にはWindows 7かそれ以降が必要です。Version 0.9.9 (XP) と 0.10.5 (Vista)が最後にサポートしたバージョンです。</value>
   </data>
   <data name="Main_ContinueAddingToQueue" xml:space="preserve">
-    <value>Soll versucht werden, den Rest hinzuzufügen?</value>
+    <value>本当にこのまま残りを追加しますか？</value>
   </data>
   <data name="Main_QueueOverwritePrompt" xml:space="preserve">
-    <value>Die Datei „{0}“ existiert bereits!
-Soll sie überschrieben werden?</value>
+    <value>ファイル'{0}'はすでに存在しています！
+上書きしますか？</value>
   </data>
   <data name="Clipboard_Unavailable" xml:space="preserve">
-    <value>Die Zwischenablage des Systems ist momentan nicht verfügbar.</value>
+    <value>システムのクリップボードは現在利用できません。</value>
   </data>
   <data name="Clipboard_Unavailable_Solution" xml:space="preserve">
-    <value>Ein möglicher Grund könnte eine andere Anwendung sein, die die Zwischenablage überwacht oder zwecks eigenem Gebrauch blockiert. Die Zwischenablage ist nicht verfügbar, solange sie blockiert ist.</value>
+    <value>恐らくほかのアプリケーションがクリップボードを利用するために監視しているかロックしています。ロックが解除されるまでクリップボードは利用できません。</value>
   </data>
   <data name="AboutView_License" xml:space="preserve">
-    <value>Lizenz:</value>
+    <value>ライセンス：</value>
   </data>
   <data name="AboutView_Version" xml:space="preserve">
-    <value>Version:</value>
+    <value>バージョン: </value>
   </data>
   <data name="AddPresetView_AddNewCategory" xml:space="preserve">
-    <value>-- Neue Kategorie hinzufügen --</value>
+    <value>-- 新しいカテゴリを追加する --</value>
   </data>
   <data name="AddPresetView_AddPreset" xml:space="preserve">
-    <value>Voreinstellung hinzufügen</value>
+    <value>プリセット追加</value>
   </data>
   <data name="AddPresetView_Category" xml:space="preserve">
-    <value>Kategorie:</value>
+    <value>カテゴリ:</value>
   </data>
   <data name="AddPresetView_Description" xml:space="preserve">
-    <value>Beschreibung:</value>
+    <value>説明:</value>
   </data>
   <data name="AddPresetView_Name" xml:space="preserve">
-    <value>Name:</value>
+    <value>名前:</value>
   </data>
   <data name="AddPresetView_SavePictureSize" xml:space="preserve">
-    <value>Bildgröße:</value>
+    <value>寸法:</value>
   </data>
   <data name="AudioDefaultView_Behaviours" xml:space="preserve">
-    <value>Quellspurauswahl</value>
+    <value>ソーストラック選択</value>
   </data>
   <data name="AudioView_AllowPassThruOf" xml:space="preserve">
-    <value>Passthru erlauben von:</value>
+    <value>パススルーを許可する:</value>
   </data>
   <data name="AudioView_AudioDefaultsDescription" xml:space="preserve">
-    <value>Konfigurieren, wie die Tonspuren automatisch ausgewählt und konfiguriert werden, wenn ein neuer Titel oder eine Videoquelle ausgewählt wird.</value>
+    <value>新しいタイトルやソースビデオを選択したときに、音声トラックがどのように自動で選択されるかを設定します。</value>
   </data>
   <data name="AudioView_AutoPassthruBehaviour" xml:space="preserve">
-    <value>„Auto Passthru“-Verhalten:</value>
+    <value>'自動パススルー'の方法:</value>
   </data>
   <data name="AudioView_Bitrate" xml:space="preserve">
-    <value>Bitrate</value>
+    <value>ビットレート</value>
   </data>
   <data name="AudioView_Codec" xml:space="preserve">
-    <value>Codec</value>
+    <value>コーデック</value>
   </data>
   <data name="AudioView_DRC" xml:space="preserve">
     <value>DRC</value>
   </data>
   <data name="AudioView_Gain" xml:space="preserve">
-    <value>Verstärkung</value>
+    <value>ゲイン</value>
   </data>
   <data name="AudioView_Hide" xml:space="preserve">
-    <value>Ausblenden</value>
+    <value>隠す</value>
   </data>
   <data name="AudioView_Mixdown" xml:space="preserve">
-    <value>Abmischung</value>
+    <value>ミックスダウン</value>
   </data>
   <data name="AudioView_OtherwiseFallbackEncoder" xml:space="preserve">
-    <value>Ausweichencoder:</value>
+    <value>予備のエンコーダー:</value>
   </data>
   <data name="AudioView_ReloadDefaults" xml:space="preserve">
-    <value>Neu laden</value>
+    <value>再読込</value>
   </data>
   <data name="AudioView_Samplerate" xml:space="preserve">
-    <value>Samplerate</value>
+    <value>サンプリングレート</value>
   </data>
   <data name="AudioView_Show" xml:space="preserve">
-    <value>Zeigen</value>
+    <value>表示</value>
   </data>
   <data name="AudioView_TrackName" xml:space="preserve">
-    <value>Spurname</value>
+    <value>トラック名</value>
   </data>
   <data name="AudioView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>Spurverhalten Sprache:</value>
+    <value>トラック選択の方法:</value>
   </data>
   <data name="AudioView_TrackSettingDefaultBehaviour" xml:space="preserve">
-    <value>Für zusätzliche Spuren:</value>
+    <value>追加のトラック用:</value>
   </data>
   <data name="AudioView_WhenAutoPassthru" xml:space="preserve">
-    <value>Wenn  „Auto Passthru“ als der Audiocodec ausgewählt ist.</value>
+    <value>音声コーデックとして'自動パススルー'が選択されていたとき。</value>
   </data>
   <data name="ChaptersView_ChapterMarkers" xml:space="preserve">
-    <value>Kapitelmarker</value>
+    <value>チャプターマーカー</value>
   </data>
   <data name="ChaptersView_ChapterName" xml:space="preserve">
-    <value>Kapitelname</value>
+    <value>チャプター名</value>
   </data>
   <data name="ChaptersView_ChapterNumber" xml:space="preserve">
-    <value>Kapitelnummer</value>
+    <value>チャプター番号</value>
   </data>
   <data name="ChaptersView_CreateChapterMarkers" xml:space="preserve">
-    <value>Kapitelmarker erstellen</value>
+    <value>チャプターマーカーを作成</value>
   </data>
   <data name="ChaptersView_Duration" xml:space="preserve">
-    <value>Dauer</value>
+    <value>合計時間</value>
   </data>
   <data name="ChaptersView_Export" xml:space="preserve">
-    <value>Export</value>
+    <value>エクスポート</value>
   </data>
   <data name="ChaptersView_Import" xml:space="preserve">
-    <value>Import</value>
+    <value>インポート</value>
   </data>
   <data name="ChapterView_ExportNames" xml:space="preserve">
-    <value>Namen exportieren</value>
+    <value>エクスポート名</value>
   </data>
   <data name="ChapterView_ImportNames" xml:space="preserve">
-    <value>Namen importieren</value>
+    <value>インポート名</value>
   </data>
   <data name="ChapterView_ResetChapterNames" xml:space="preserve">
-    <value>Kapitelnamen zurücksetzen</value>
+    <value>チャプター名をリセット</value>
   </data>
   <data name="CountdownAlterView_CancelAction" xml:space="preserve">
-    <value>Aktion abbrechen</value>
+    <value>アクションをキャンセル</value>
   </data>
   <data name="CountdownAlterView_Proceed" xml:space="preserve">
-    <value>Fortfahren</value>
+    <value>続ける</value>
   </data>
   <data name="CountdownAlterView_WhenDoneAction" xml:space="preserve">
-    <value>Finale Aktion</value>
+    <value>アクション完了時</value>
   </data>
   <data name="ErrorView_ErrorDetails" xml:space="preserve">
-    <value>Fehlerdetails:</value>
+    <value>エラーの詳細:</value>
   </data>
   <data name="FiltersView_Custom" xml:space="preserve">
-    <value>Eigene:</value>
+    <value>カスタム:</value>
   </data>
   <data name="FiltersView_Deblock" xml:space="preserve">
-    <value>Deblock:</value>
+    <value>デブロック</value>
   </data>
   <data name="FiltersView_Decomb" xml:space="preserve">
     <value>Decomb</value>
   </data>
   <data name="FiltersView_Deinterlace" xml:space="preserve">
-    <value>Deinterlace:</value>
+    <value>インターレース解除:</value>
   </data>
   <data name="FiltersView_DeinterlacePreset" xml:space="preserve">
-    <value>Voreinstellung:</value>
+    <value>プリセット:</value>
   </data>
   <data name="FiltersView_DeinterlacePresetAuto" xml:space="preserve">
-    <value>Deinterlace-Voreinstellung</value>
+    <value>インターレース解除プリセット</value>
   </data>
   <data name="FiltersView_Denoise" xml:space="preserve">
-    <value>Entrauschen:</value>
+    <value>デノイズ:</value>
   </data>
   <data name="FiltersView_DenoisePresetAuto" xml:space="preserve">
-    <value>Entrauschvoreinstellung</value>
+    <value>デノイズプリセット</value>
   </data>
   <data name="FiltersView_DenoiseTuneAuto" xml:space="preserve">
-    <value>Entrauschabstimmung</value>
+    <value>デノイズチューニング</value>
   </data>
   <data name="FiltersView_Detelecine" xml:space="preserve">
-    <value>Detelecine:</value>
+    <value>逆テレシネ:</value>
   </data>
   <data name="FiltersView_Filters" xml:space="preserve">
-    <value>Filter</value>
+    <value>フィルタ</value>
   </data>
   <data name="FiltersView_FlipVideo" xml:space="preserve">
-    <value>Spiegeln</value>
+    <value>反転</value>
   </data>
   <data name="FiltersView_Grayscale" xml:space="preserve">
-    <value>Graustufen</value>
+    <value>グレースケール</value>
   </data>
   <data name="FiltersView_InterlaceDetection" xml:space="preserve">
-    <value>Interlace-Erkennung:</value>
+    <value>インターレース検出:</value>
   </data>
   <data name="FiltersView_Preset" xml:space="preserve">
-    <value>Voreinstellung:</value>
+    <value>プリセット:</value>
   </data>
   <data name="FiltersView_Rotate" xml:space="preserve">
-    <value>Rotieren:</value>
+    <value>回転:</value>
   </data>
   <data name="FiltersView_Sharpen" xml:space="preserve">
-    <value>Schärfen:</value>
+    <value>シャープ化</value>
   </data>
   <data name="FiltersView_SharpenPresetAuto" xml:space="preserve">
-    <value>Schärfen-Voreinstellung</value>
+    <value>シャープ化プリセット</value>
   </data>
   <data name="FiltersView_SharpenTuneAuto" xml:space="preserve">
-    <value>Schärfen-Abstimmung</value>
+    <value>シャープ化チューニング</value>
   </data>
   <data name="FiltersView_Tune" xml:space="preserve">
-    <value>Abstimmung:</value>
+    <value>チューニング:</value>
   </data>
   <data name="Generic_Add" xml:space="preserve">
-    <value>Hinzufügen</value>
+    <value>追加</value>
   </data>
   <data name="Generic_Cancel" xml:space="preserve">
-    <value>Abbrechen</value>
+    <value>キャンセル</value>
   </data>
   <data name="Generic_Clear" xml:space="preserve">
-    <value>Löschen</value>
+    <value>削除</value>
   </data>
   <data name="Generic_Close" xml:space="preserve">
-    <value>Schließen</value>
+    <value>閉じる</value>
   </data>
   <data name="Generic_CopyToClipboard" xml:space="preserve">
-    <value>In die Zwischenablage kopieren</value>
+    <value>クリップボードにコピー</value>
   </data>
   <data name="Generic_MoveLeft" xml:space="preserve">
-    <value>Nach links</value>
+    <value>左へ移動</value>
   </data>
   <data name="Generic_MoveRight" xml:space="preserve">
-    <value>Nach rechts</value>
+    <value>右へ移動</value>
   </data>
   <data name="Generic_Save" xml:space="preserve">
-    <value>Sichern</value>
+    <value>保存</value>
   </data>
   <data name="LogView_CopyClipboard" xml:space="preserve">
-    <value>In die Zwischenablage kopieren</value>
+    <value>クリップボードにコピー</value>
   </data>
   <data name="LogView_EncodeLog" xml:space="preserve">
-    <value>Encodierungsprotokoll</value>
+    <value>エンコードログ</value>
   </data>
   <data name="LogView_OpenLogDir" xml:space="preserve">
-    <value>Verzeichnis des Aktivitätsprotokolls öffnen</value>
+    <value>ログディレクトリを開く</value>
   </data>
   <data name="LogView_ScanLog" xml:space="preserve">
-    <value>ScanLog</value>
+    <value>スキャンログ</value>
   </data>
   <data name="MainView_ActivityLog" xml:space="preserve">
-    <value>Aktivitätsprotokoll</value>
+    <value>履歴ウィンドウ</value>
   </data>
   <data name="MainView_AddAll" xml:space="preserve">
-    <value>Alles hinzufügen</value>
+    <value>全て追加</value>
   </data>
   <data name="MainView_AddCurrent" xml:space="preserve">
-    <value>Momentanes hinzufügen</value>
+    <value>現在を追加</value>
   </data>
   <data name="MainView_AddSelection" xml:space="preserve">
-    <value>Auswahl hinzufügen</value>
+    <value>選択を追加</value>
   </data>
   <data name="MainView_AddToQueue" xml:space="preserve">
-    <value>Zur Warteschlange hinzufügen</value>
+    <value>キューに追加</value>
   </data>
   <data name="MainView_AdvancedTab" xml:space="preserve">
-    <value>Erweitert</value>
+    <value>詳細</value>
   </data>
   <data name="MainView_AlignAVStart" xml:space="preserve">
-    <value>A/V synchron</value>
+    <value>A/V開始地点の同期</value>
   </data>
   <data name="MainView_Angle" xml:space="preserve">
-    <value>Winkel:</value>
+    <value>アングル:</value>
   </data>
   <data name="MainView_AudioTab" xml:space="preserve">
-    <value>Audio</value>
+    <value>音声</value>
   </data>
   <data name="MainView_AudioTrackCount" xml:space="preserve">
-    <value>Tonspuren</value>
+    <value>音声トラック</value>
   </data>
   <data name="MainView_Browser" xml:space="preserve">
-    <value>Wählen</value>
+    <value>参照</value>
   </data>
   <data name="MainView_ChaptersTab" xml:space="preserve">
-    <value>Kapitel</value>
+    <value>チャプター</value>
   </data>
   <data name="MainView_Container" xml:space="preserve">
-    <value>Container</value>
+    <value>コンテナ</value>
   </data>
   <data name="MainView_Destination" xml:space="preserve">
-    <value>Ziel</value>
+    <value>保存先</value>
   </data>
   <data name="MainView_Duration" xml:space="preserve">
-    <value>Dauer:</value>
+    <value>合計時間:</value>
   </data>
   <data name="MainView_File" xml:space="preserve">
-    <value>Speichern unter:</value>
+    <value>保存先ファイル:</value>
   </data>
   <data name="MainView_FiltersTab" xml:space="preserve">
-    <value>Filter</value>
+    <value>フィルタ</value>
   </data>
   <data name="MainView_Format" xml:space="preserve">
-    <value>Format:</value>
+    <value>コンテナ:</value>
   </data>
   <data name="MainView_Help" xml:space="preserve">
-    <value>Hilfe</value>
+    <value>ヘルプ</value>
   </data>
   <data name="MainView_iPod5G" xml:space="preserve">
-    <value>iPod 5G-Unterstützung</value>
+    <value>iPod 5Gに対応</value>
   </data>
   <data name="MainView_MetaDataTab" xml:space="preserve">
-    <value>Metadaten</value>
+    <value>メタデータ</value>
   </data>
   <data name="MainView_ModifiedPreset" xml:space="preserve">
-    <value>(Modifiziert)</value>
+    <value>(編集済み)</value>
   </data>
   <data name="MainView_Muxing" xml:space="preserve">
-    <value>Multiplexen: Dies kann etwas dauern …</value>
+    <value>結合中: しばらくお待ちください...</value>
   </data>
   <data name="MainView_Options" xml:space="preserve">
-    <value>Einstellungen</value>
+    <value>オプション</value>
   </data>
   <data name="MainView_OutputSettings" xml:space="preserve">
-    <value>Ausgabeeinstellungen</value>
+    <value>出力設定</value>
   </data>
   <data name="MainView_Pause" xml:space="preserve">
-    <value>Anhalten</value>
+    <value>一時停止</value>
   </data>
   <data name="MainView_PictureTab" xml:space="preserve">
-    <value>Bildgröße</value>
+    <value>寸法</value>
   </data>
   <data name="MainView_PresetManage" xml:space="preserve">
-    <value>Voreinstellung umbenennen</value>
+    <value>プリセット名を変更</value>
   </data>
   <data name="MainView_PresetOptionsContextMenu" xml:space="preserve">
-    <value>Voreinstellung-Kontextmenü</value>
+    <value>プリセットオプションコンテキストメニュー</value>
   </data>
   <data name="MainView_PresetRemove" xml:space="preserve">
-    <value>Voreinstellung löschen</value>
+    <value>プリセットを削除</value>
   </data>
   <data name="MainView_Presets" xml:space="preserve">
-    <value>Voreinstellungen</value>
+    <value>プリセット</value>
   </data>
   <data name="MainView_Preview" xml:space="preserve">
-    <value>Vorschau</value>
+    <value>プレビュー</value>
   </data>
   <data name="MainView_ProgressStatusWithTask" xml:space="preserve">
-    <value>Encodierung: {0}, {1:00.00} %, verbleibende Zeit: {2}, {3}</value>
+    <value>エンコード中: {0}, {1:00.00}%, 残り時間: {2}, {3}</value>
   </data>
   <data name="MainView_Range" xml:space="preserve">
-    <value>Bereich:</value>
+    <value>範囲:</value>
   </data>
   <data name="MainView_Reload" xml:space="preserve">
-    <value>Neu laden</value>
+    <value>再読込</value>
   </data>
   <data name="MainView_Remove" xml:space="preserve">
-    <value>Entfernen</value>
+    <value>削除</value>
   </data>
   <data name="MainView_ResetBuiltInPresets" xml:space="preserve">
-    <value>Installierte Voreinstellungen zurücksetzen</value>
+    <value>ビルトインプリセットをリセット</value>
   </data>
   <data name="MainView_SaveNewPreset" xml:space="preserve">
-    <value>Neue Voreinstellung speichern</value>
+    <value>新しいプリセットを保存</value>
   </data>
   <data name="MainView_Searching" xml:space="preserve">
-    <value>Nach der Startzeit suchen</value>
+    <value>開始時間を検索中</value>
   </data>
   <data name="MainView_SelectedPreset" xml:space="preserve">
-    <value>Ausgewählte Voreinstellung:</value>
+    <value>選択中のプリセット</value>
   </data>
   <data name="MainView_SetDefault" xml:space="preserve">
-    <value>Standard definieren</value>
+    <value>既定に設定</value>
   </data>
   <data name="MainView_ShowPreview" xml:space="preserve">
-    <value>Vorschau</value>
+    <value>プレビュー</value>
   </data>
   <data name="MainView_ShowQueue" xml:space="preserve">
-    <value>Warteschlange</value>
+    <value>キューの表示</value>
   </data>
   <data name="MainView_Source" xml:space="preserve">
-    <value>Quelle:</value>
+    <value>変換元:</value>
   </data>
   <data name="MainView_SourceOpen" xml:space="preserve">
-    <value>Quelle öffnen</value>
+    <value>変換元</value>
   </data>
   <data name="MainView_StartEncode" xml:space="preserve">
-    <value>Encodierung starten</value>
+    <value>エンコード開始</value>
   </data>
   <data name="MainView_StartQueue" xml:space="preserve">
-    <value>Warteschlange starten</value>
+    <value>キュー開始</value>
   </data>
   <data name="MainView_Stop" xml:space="preserve">
-    <value>Stop</value>
+    <value>停止</value>
   </data>
   <data name="MainView_StopEncode" xml:space="preserve">
-    <value>Encodierung gestoppt</value>
+    <value>エンコード停止</value>
   </data>
   <data name="MainView_StopEncodeConfirm" xml:space="preserve">
-    <value>Soll das Encodieren wirklich gestoppt werden?</value>
+    <value>エンコードを停止してよろしいですか？</value>
   </data>
   <data name="MainView_SubtitleBeforeScanError" xml:space="preserve">
-    <value>Bitte vor dem Import einer Untertiteldatei zuerst eine Quelle zum Encodieren wählen.</value>
+    <value>字幕ファイルをインポートする前にエンコードするソースを選んでください。</value>
   </data>
   <data name="MainView_SubtitlesTab" xml:space="preserve">
-    <value>Untertitel</value>
+    <value>字幕</value>
   </data>
   <data name="MainView_SubtitleTracksCount" xml:space="preserve">
-    <value>Untertitelspuren</value>
+    <value>字幕トラック</value>
   </data>
   <data name="MainView_SummaryTab" xml:space="preserve">
-    <value>Übersicht</value>
+    <value>概要</value>
   </data>
   <data name="MainView_through" xml:space="preserve">
-    <value>-</value>
+    <value> - </value>
   </data>
   <data name="MainView_Title" xml:space="preserve">
-    <value>Titel:</value>
+    <value>タイトル:</value>
   </data>
   <data name="MainView_UpdateSelectedPreset" xml:space="preserve">
-    <value>Ausgewählte Voreinstellung aktualisieren</value>
+    <value>選択されたプリセットを更新</value>
   </data>
   <data name="MainView_VideoTab" xml:space="preserve">
-    <value>Video</value>
+    <value>動画</value>
   </data>
   <data name="MainView_WebOptimized" xml:space="preserve">
-    <value>Web-optimiert</value>
+    <value>Web用に最適化</value>
   </data>
   <data name="ManagePresetView_ManagePreset" xml:space="preserve">
-    <value>Voreinstellungen verwalten</value>
+    <value>プリセットを管理</value>
   </data>
   <data name="MetaDataView_Title" xml:space="preserve">
-    <value>Metadaten</value>
+    <value>メタデータ</value>
   </data>
   <data name="OptionsView_EnableNvencEncoding" xml:space="preserve">
-    <value>Verwendung des Nvidia NVENC-Encoders erlauben</value>
+    <value>Nvidia NVENCエンコーダーの使用を許可する</value>
   </data>
   <data name="OptionsView_EnableQuicksyncEncoding" xml:space="preserve">
-    <value>Verwendung des Intel QuickSync-Encoders erlauben</value>
+    <value>Intel QuickSync Encodersの使用を許可する</value>
   </data>
   <data name="OptionsView_EnableVceEncoding" xml:space="preserve">
-    <value>Verwendung des AMD VCE-Encoders erlauben</value>
+    <value>AMD VCE Encodersの使用を許可する</value>
   </data>
   <data name="OptionsView_InvalidFileFormatChars" xml:space="preserve">
-    <value>Das eingegebene Dateiformat enthielt ungültige Zeichen. Diese wurden entfernt.</value>
+    <value>入力されたファイルフォーマットには無効な文字が含まれています。これらは除去されました。</value>
   </data>
   <data name="OptionsView_PlaySoundWhenDone" xml:space="preserve">
-    <value>Einen Ton abspielen, wenn alle Encodierungen abgeschlossen sind</value>
+    <value>エンコードが完了するごとに音を鳴らす</value>
   </data>
   <data name="OptionsView_PlaySoundWhenQueueDone" xml:space="preserve">
-    <value>Einen Ton abspielen, wenn die Warteschlange abgeschlossen ist</value>
+    <value>キューが完了するたびに通知音を鳴らす</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>Vorschau im Übersicht-Tab anzeigen</value>
+    <value>概要タブでプレビューを表示する。</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
-    <value>Den Encodierungsstatus in der Titelleiste des Programms anzeigen</value>
+    <value>タイトルバーにエンコードの状態を表示する</value>
   </data>
   <data name="Options_30DayLogClear" xml:space="preserve">
-    <value>Alte Aktivitätsprotokolle nach 30 Tagen löschen</value>
+    <value>30日を過ぎたログファイルをクリアする</value>
   </data>
   <data name="Options_About" xml:space="preserve">
-    <value>Über HandBrake</value>
+    <value>HandBrakeについて</value>
   </data>
   <data name="Options_Advanced" xml:space="preserve">
-    <value>Erweitert</value>
+    <value>詳細</value>
   </data>
   <data name="Options_AdvancedOptions" xml:space="preserve">
-    <value>Erweiterte Einstellungen</value>
+    <value>高度なオプション</value>
   </data>
   <data name="Options_Arguments" xml:space="preserve">
-    <value>Argumente:</value>
+    <value>引数:</value>
   </data>
   <data name="Options_AutomaticFileNaming" xml:space="preserve">
-    <value>Automatische Dateibenennung</value>
+    <value>ファイル名の自動設定</value>
   </data>
   <data name="Options_AutoNameOutput" xml:space="preserve">
-    <value>Ausgabedateien automatisch benennen</value>
+    <value>出力ファイルに自動的に名前を付ける</value>
   </data>
   <data name="Options_CheckForUpdates" xml:space="preserve">
-    <value>Auf Updates prüfen</value>
+    <value>アップデートを確認</value>
   </data>
   <data name="Options_ClearCompleted" xml:space="preserve">
-    <value>Nach erfolgter Encodierung Einträge abgeschlossener Aufgaben immer entfernen</value>
+    <value>エンコードの完了後、完了したキューアイテムを常にクリアする</value>
   </data>
   <data name="Options_ClearLogs" xml:space="preserve">
-    <value>Verlauf der Aktivitätsprotokolle löschen</value>
+    <value>ログ履歴をクリア</value>
   </data>
   <data name="Options_CopyLogToDir" xml:space="preserve">
-    <value>Eine Kopie des Encodierungsprotokolls an einem anderen Speicherort ablegen:</value>
+    <value>個々のエンコードログの複製を特定の場所に置く:</value>
   </data>
   <data name="Options_CopyLogToEncDir" xml:space="preserve">
-    <value>Eine Kopie des Encodierungsprotokolls am selben Speicherort wie das encodierte Video ablegen</value>
+    <value>個々のエンコードログの複製をエンコードされたビデオと同じ場所に置く:</value>
   </data>
   <data name="Options_CurVersion" xml:space="preserve">
-    <value>Aktuelle Version</value>
+    <value>現在のバージョン</value>
   </data>
   <data name="Options_Decoding" xml:space="preserve">
-    <value>Decodieren</value>
+    <value>デコード</value>
   </data>
   <data name="Options_DefaultPath" xml:space="preserve">
-    <value>Standardpfad:</value>
+    <value>デフォルトの保存先</value>
   </data>
   <data name="Options_DownloadUpdates" xml:space="preserve">
-    <value>Update laden</value>
+    <value>更新をダウンロード</value>
   </data>
   <data name="Options_DVD" xml:space="preserve">
-    <value>DVD-Lesen</value>
+    <value>DVDを読み込み中</value>
   </data>
   <data name="Options_DvdRead" xml:space="preserve">
-    <value>Libdvdnav deaktivieren (und stattdessen libdvdread verwenden).</value>
+    <value>LibDVDNavを無効化 (libdvdreadが代わりに使用されます)</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
-    <value>Encodieren</value>
+    <value>エンコード中</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
-    <value>Dateiformat:</value>
+    <value>ファイル名規則</value>
   </data>
   <data name="Options_General" xml:space="preserve">
-    <value>Allgemein</value>
+    <value>全般</value>
   </data>
   <data name="Options_Logging" xml:space="preserve">
-    <value>Protokollieren</value>
+    <value>ログ出力</value>
   </data>
   <data name="Options_LogLevel" xml:space="preserve">
-    <value>Aufzeichnungsumfang des Aktivitätsprotokolls:</value>
+    <value>ログの詳細度:</value>
   </data>
   <data name="Options_LogPath" xml:space="preserve">
-    <value>Pfad des Protokolls:</value>
+    <value>ログのパス:</value>
   </data>
   <data name="Options_LowDiskspaceSize" xml:space="preserve">
-    <value>Anhalten, wenn Speicherplatz kleiner als:</value>
+    <value>ディスクの空きがこれ以上少なくなったらキューを一時停止する:</value>
   </data>
   <data name="Options_MinimiseTray" xml:space="preserve">
-    <value>Den Infobereich (System Tray) minimieren (erfordert einen Neustart)</value>
+    <value>システムトレイに最小化(要再起動)</value>
   </data>
   <data name="Options_MinTitleScanLength" xml:space="preserve">
-    <value>Minimale Länge von DVD- und Blu-ray-Titeln in Sekunden. Kürzere Titel werden übersprungen:</value>
+    <value>DVDおよびBlu-rayのタイトルの最小時間(秒単位)。短いタイトルはスキップされます:</value>
   </data>
   <data name="Options_MP4FileExtension" xml:space="preserve">
-    <value>MP4-Dateiendung:</value>
+    <value>MP4ファイル拡張子:</value>
   </data>
   <data name="Options_OnStartup" xml:space="preserve">
-    <value>Beim Starten</value>
+    <value>起動時</value>
   </data>
   <data name="Options_Output" xml:space="preserve">
-    <value>Ausgabedateien</value>
+    <value>出力ファイル</value>
   </data>
   <data name="Options_Path" xml:space="preserve">
-    <value>Pfad:</value>
+    <value>パス:</value>
   </data>
   <data name="Options_PathToVLC" xml:space="preserve">
-    <value>Pfad zum VLC-Player</value>
+    <value>VLC Playerへのパス</value>
   </data>
   <data name="Options_PreventSleep" xml:space="preserve">
-    <value>Das System daran hindern während der Encodierung in den Ruhezustand zu fahren</value>
+    <value>エンコード中にシステムがスリープ状態にならないようにする</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>Anzahl der Bilder für die Vorschau:</value>
+    <value>キャンする画像プレビューの数:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
-    <value>Prioritätslevel:</value>
+    <value>優先度:</value>
   </data>
   <data name="Options_QsvDecode" xml:space="preserve">
-    <value>Intel QuickSync für das Decodieren von Videos bevorzugen, wenn verfügbar.</value>
+    <value>可能であれば、Intel QuickSyncを使用してビデオをデコードする</value>
   </data>
   <data name="Options_QsvDecodeForNonFullPath" xml:space="preserve">
-    <value>QSV-Decodierung auch verwenden, wenn kein QuickSync-Encoder verwendet wird (z. B. x265)</value>
+    <value>QuickSyncエンコーダーが使用されないときにQSVデコードも使用する。(x265等)</value>
   </data>
   <data name="Options_RemovePunctuation" xml:space="preserve">
-    <value>Punktationen entfernen</value>
+    <value>一般的な句読点の削除</value>
   </data>
   <data name="Options_ReplaceUnderscores" xml:space="preserve">
-    <value>Unterstriche durch Leerzeichen ersetzen</value>
+    <value>アンダースコアをスペースに置き換える</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>Bei jedem Start auf „Nichts tun“ zurücksetzen.</value>
+    <value>再起動時「何もしない 」に戻す。
+</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
-    <value>Skalierer wählen:</value>
+    <value>リサイズ方法を選択:</value>
   </data>
   <data name="Options_Scaling" xml:space="preserve">
-    <value>Skalierung</value>
+    <value>拡大縮小</value>
   </data>
   <data name="Options_SendFileTo" xml:space="preserve">
-    <value>Datei senden an:</value>
+    <value>ファイルの保存先:</value>
   </data>
   <data name="Options_ShowExperimentalQueueDesign" xml:space="preserve">
-    <value>Die neue experimentelle Darstellung der Warteschlange verwenden.</value>
+    <value>実験段階のキューデザインを表示する。</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
-    <value>Großbuchstaben korrigieren</value>
+    <value>小文字をタイトルの大文字に変更</value>
   </data>
   <data name="Options_Updates" xml:space="preserve">
-    <value>Updates</value>
+    <value>更新</value>
   </data>
   <data name="Options_UserInterface" xml:space="preserve">
-    <value>Benutzeroberfläche</value>
+    <value>ユーザーインターフェイス</value>
   </data>
   <data name="Options_Version" xml:space="preserve">
-    <value>Version:</value>
+    <value>バージョン:</value>
   </data>
   <data name="Options_Video" xml:space="preserve">
-    <value>Video</value>
+    <value>動画</value>
   </data>
   <data name="Options_VideoPreviewPath" xml:space="preserve">
-    <value>Dieser Pfad wird nur für die Videovorschaufunktion verwendet.</value>
+    <value>このパスは、ビデオプレビュー機能でのみ使用されます。</value>
   </data>
   <data name="Options_ViewLogDirectory" xml:space="preserve">
-    <value>Verzeichnis des Aktivitätsprotokolls zeigen</value>
+    <value>ログディレクトリを見る</value>
   </data>
   <data name="Options_WhenDone" xml:space="preserve">
-    <value>Wenn fertig</value>
+    <value>完了時</value>
   </data>
   <data name="Options_x264" xml:space="preserve">
-    <value>x264/5-Einstellungen</value>
+    <value>x264/5 設定</value>
   </data>
   <data name="Options_x264Granularity" xml:space="preserve">
-    <value>Granularitätsaufteilung bei konstanter Qualität:</value>
+    <value>固定品質の細分度:</value>
   </data>
   <data name="PictureSettingsView_Anamorphic" xml:space="preserve">
-    <value>Anamorphisch:</value>
+    <value>アナモフィック:</value>
   </data>
   <data name="PictureSettingsView_Automatic" xml:space="preserve">
-    <value>Automatisch</value>
+    <value>自動</value>
   </data>
   <data name="PictureSettingsView_Bottom" xml:space="preserve">
-    <value>Unten</value>
+    <value>下</value>
   </data>
   <data name="PictureSettingsView_Cropping" xml:space="preserve">
-    <value>Beschneiden</value>
+    <value>クロッピング</value>
   </data>
   <data name="PictureSettingsView_Custom" xml:space="preserve">
-    <value>Eigene</value>
+    <value>カスタム</value>
   </data>
   <data name="PictureSettingsView_DisplayWitdh" xml:space="preserve">
-    <value>Anzeigebreite:</value>
+    <value>表示幅:</value>
   </data>
   <data name="PictureSettingsView_Height" xml:space="preserve">
-    <value>Höhe:</value>
+    <value>高さ:</value>
   </data>
   <data name="PictureSettingsView_KeepAR" xml:space="preserve">
-    <value>Seitenverhältnis beibehalten</value>
+    <value>アスペクト比を維持</value>
   </data>
   <data name="PictureSettingsView_Left" xml:space="preserve">
-    <value>Links</value>
+    <value>左</value>
   </data>
   <data name="PictureSettingsView_Modulus" xml:space="preserve">
-    <value>Modulus:</value>
+    <value>モジュール:</value>
   </data>
   <data name="PictureSettingsView_Output" xml:space="preserve">
-    <value>Ausgabe</value>
+    <value>出力</value>
   </data>
   <data name="PictureSettingsView_PAR" xml:space="preserve">
-    <value>PAR:</value>
+    <value>ピクセルアスペクト比:</value>
   </data>
   <data name="PictureSettingsView_Right" xml:space="preserve">
-    <value>Rechts</value>
+    <value>右</value>
   </data>
   <data name="PictureSettingsView_Size" xml:space="preserve">
-    <value>Bildgröße</value>
+    <value>サイズ</value>
   </data>
   <data name="PictureSettingsView_Source" xml:space="preserve">
-    <value>Quelle:</value>
+    <value>変換元:</value>
   </data>
   <data name="PictureSettingsView_Top" xml:space="preserve">
-    <value>Oben</value>
+    <value>上</value>
   </data>
   <data name="PictureSettingsView_Width" xml:space="preserve">
-    <value>Breite:</value>
+    <value>幅:</value>
   </data>
   <data name="Preset_Custom" xml:space="preserve">
-    <value>Eigene</value>
+    <value>カスタム</value>
   </data>
   <data name="Preset_Export" xml:space="preserve">
-    <value>In Datei exportieren</value>
+    <value>ファイルにエクスポート</value>
   </data>
   <data name="Preset_Import" xml:space="preserve">
-    <value>Aus Datei importieren</value>
+    <value>ファイルからインポート</value>
   </data>
   <data name="Preset_Official" xml:space="preserve">
-    <value>Offiziell</value>
+    <value>公式</value>
   </data>
   <data name="QueueSelectionView_ChooseTitles" xml:space="preserve">
-    <value>Titel wählen:</value>
+    <value>タイトルを選択:</value>
   </data>
   <data name="QueueSelectionView_Title" xml:space="preserve">
-    <value>Zur Warteschlange hinzufügen</value>
+    <value>キューに追加</value>
   </data>
   <data name="QueueSelection_UsingPreset" xml:space="preserve">
-    <value>Die ausgewählten Titel werden mit der Voreinstellung „{0}“ hinzugefügt.</value>
+    <value>選択されたタイトルはプリセット "{0}" を使用して追加されます。</value>
   </data>
   <data name="QueueView_Advanced" xml:space="preserve">
-    <value>Erweitert:</value>
+    <value>詳細</value>
   </data>
   <data name="QueueView_Audio" xml:space="preserve">
-    <value>Audio:</value>
+    <value>音声:</value>
   </data>
   <data name="QueueView_ClearAll" xml:space="preserve">
-    <value>Alle Aufgaben löschen</value>
+    <value>全てクリア</value>
   </data>
   <data name="QueueView_ClearCompleted" xml:space="preserve">
-    <value>Abgeschlossene Aufgaben entfernen</value>
+    <value>完了済みをクリア</value>
   </data>
   <data name="QueueView_ClearQueue" xml:space="preserve">
-    <value>Warteschlange löschen</value>
+    <value>キューをクリア</value>
   </data>
   <data name="QueueView_ClearSelected" xml:space="preserve">
-    <value>Ausgewählte Aufgaben löschen</value>
+    <value>選択をクリア</value>
   </data>
   <data name="QueueView_Delete" xml:space="preserve">
-    <value>Löschen</value>
+    <value>削除</value>
   </data>
   <data name="QueueView_Destination" xml:space="preserve">
-    <value>Ziel:</value>
+    <value>保存先:</value>
   </data>
   <data name="WhenDone_DoNothing" xml:space="preserve">
-    <value>Nichts tun</value>
+    <value>何もしない</value>
   </data>
   <data name="QueueView_Duration" xml:space="preserve">
-    <value>Encodierung:</value>
+    <value>エンコード時間:</value>
   </data>
   <data name="QueueView_Edit" xml:space="preserve">
-    <value>Bearbeiten</value>
+    <value>編集</value>
   </data>
   <data name="QueueView_EndTime" xml:space="preserve">
-    <value>Endzeit:</value>
+    <value>完了時間:</value>
   </data>
   <data name="QueueView_Export" xml:space="preserve">
-    <value>Warteschlange exportieren</value>
+    <value>キューをエクスポート</value>
   </data>
   <data name="QueueView_FileSize" xml:space="preserve">
-    <value>Dateigröße:</value>
+    <value>ファイルサイズ:</value>
   </data>
   <data name="WhenDone_Hibernate" xml:space="preserve">
-    <value>Ruhezustand</value>
+    <value>休止状態</value>
   </data>
   <data name="WhenDone_LockSystem" xml:space="preserve">
-    <value>System sperren</value>
+    <value>ロック</value>
   </data>
   <data name="QueueView_LogNotAvailableYet" xml:space="preserve">
-    <value>Das Aktivitätsprotokoll ist nach Abschluss der Encodierung verfügbar.</value>
+    <value>ログファイルはエンコードの完了後に利用可能です。</value>
   </data>
   <data name="WhenDone_Logoff" xml:space="preserve">
-    <value>Ausloggen</value>
+    <value>ログアウト</value>
   </data>
   <data name="QueueView_OpenDestDir" xml:space="preserve">
-    <value>Zielpfad öffnen</value>
+    <value>保存先のディレクトリを開く</value>
   </data>
   <data name="QueueView_OpenSourceDir" xml:space="preserve">
-    <value>Pfad der Quelle öffnen</value>
+    <value>ソースのディレクトリを開く</value>
   </data>
   <data name="QueueView_Options" xml:space="preserve">
-    <value>Einstellungen</value>
+    <value>オプション</value>
   </data>
   <data name="QueueView_Pause" xml:space="preserve">
-    <value>Warteschlange anhalten</value>
+    <value>キューを一時停止</value>
   </data>
   <data name="QueueView_PausedDuration" xml:space="preserve">
-    <value>Angehalten:</value>
+    <value>一時停止時間:</value>
   </data>
   <data name="QueueView_PictureSettings" xml:space="preserve">
-    <value>Bildparameter:</value>
+    <value>画像設定:</value>
   </data>
   <data name="WhenDone_QuitHandBrake" xml:space="preserve">
-    <value>HandBrake beenden</value>
+    <value>HandBrakeを閉じる</value>
   </data>
   <data name="QueueView_ResetAllJobs" xml:space="preserve">
-    <value>Alle Aufgaben wiederholen</value>
+    <value>全てのジョブを再試行</value>
   </data>
   <data name="QueueView_ResetFailed" xml:space="preserve">
-    <value>Fehlgeschlagene Aufgaben wiederholen</value>
+    <value>再試行に失敗しました</value>
   </data>
   <data name="QueueView_ResetSelectedJobs" xml:space="preserve">
-    <value>Ausgewählte Aufgaben zurücksetzen</value>
+    <value>選択されたジョブをリセット</value>
   </data>
   <data name="QueueView_Reset" xml:space="preserve">
-    <value>Zurücksetzen</value>
+    <value>リセット</value>
   </data>
   <data name="WhenDone_Shutdown" xml:space="preserve">
-    <value>Herunterfahren</value>
+    <value>シャットダウン</value>
   </data>
   <data name="QueueView_Source" xml:space="preserve">
-    <value>Quelle:</value>
+    <value>変換元:</value>
   </data>
   <data name="QueueView_Start" xml:space="preserve">
-    <value>Warteschlange starten</value>
+    <value>キュー開始</value>
   </data>
   <data name="QueueView_StartTime" xml:space="preserve">
-    <value>Startzeit:</value>
+    <value>開始時間:</value>
   </data>
   <data name="QueueView_Statistics" xml:space="preserve">
-    <value>Statistik</value>
+    <value>統計</value>
   </data>
   <data name="QueueView_StatsNotAvailableYet" xml:space="preserve">
-    <value>Die Statistik ist verfügbar, sobald das Encodieren abgeschlossen ist.</value>
+    <value>統計はエンコードの完了後に利用可能です。</value>
   </data>
   <data name="QueueView_Subtitles" xml:space="preserve">
-    <value>Untertitel:</value>
+    <value>字幕:</value>
   </data>
   <data name="QueueView_Summary" xml:space="preserve">
-    <value>Übersicht</value>
+    <value>概要</value>
   </data>
   <data name="WhenDone_Suspend" xml:space="preserve">
-    <value>Energie sparen</value>
+    <value>スリープ</value>
   </data>
   <data name="QueueView_Video" xml:space="preserve">
-    <value>Video:</value>
+    <value>動画:</value>
   </data>
   <data name="QueueView_WhenDone" xml:space="preserve">
-    <value>Wenn fertig:</value>
+    <value>終了時:</value>
   </data>
   <data name="Shared_AddAllForSelected" xml:space="preserve">
-    <value>Alle zusätzlichen ausgewählten Sprachen hinzufügen</value>
+    <value>選択済み言語の残り全てを追加する</value>
   </data>
   <data name="Shared_AddAllRemaining" xml:space="preserve">
-    <value>Alle zusätzlichen Spuren hinzufügen</value>
+    <value>残り全てのトラックを追加する</value>
   </data>
   <data name="Shared_AddNewTrack" xml:space="preserve">
-    <value>Neue Spur hinzufügen</value>
+    <value>新規トラック追加</value>
   </data>
   <data name="Shared_AddTrack" xml:space="preserve">
-    <value>Spur hinzufügen</value>
+    <value>トラックを追加</value>
   </data>
   <data name="Shared_AvailableLanguages" xml:space="preserve">
-    <value>Verfügbare Sprachen:</value>
+    <value>利用可能な言語：</value>
   </data>
   <data name="Shared_ChooseLanguages" xml:space="preserve">
-    <value>Sprachen auswählen:</value>
+    <value>言語を選択してください：</value>
   </data>
   <data name="Shared_ChosenLangages" xml:space="preserve">
-    <value>Ausgewählte Sprachen:</value>
+    <value>選択された言語:</value>
   </data>
   <data name="Shared_ConfigureDefaultBehaviours" xml:space="preserve">
-    <value>Standardverhalten konfigurieren</value>
+    <value>デフォルトの動作を設定</value>
   </data>
   <data name="Shared_ReloadDefaults" xml:space="preserve">
-    <value>Neu laden</value>
+    <value>再読込</value>
   </data>
   <data name="SourceSelection_ChooseDisc" xml:space="preserve">
-    <value>Disk zum Überprüfen wählen</value>
+    <value>ディスクを選んでスキャンする</value>
   </data>
   <data name="SourceSelection_ChooseFile" xml:space="preserve">
-    <value>Datei zum Überprüfen wählen</value>
+    <value>ファイルを選んでスキャンする</value>
   </data>
   <data name="SourceSelection_ChooseFolder" xml:space="preserve">
-    <value>Ordner zum Überprüfen wählen</value>
+    <value>フォルダを選んでスキャンする</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>Optional einen bestimmten Titel wählen:</value>
+    <value>またはタイトルを自分で選ぶ:</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>Dann das Video / die Videos zum Encodieren auswählen:</value>
+    <value>それからエンコードしたいビデオを選んでください:</value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
-    <value>Datei</value>
+    <value>ファイル</value>
   </data>
   <data name="SourceSelection_FolderBatchScan" xml:space="preserve">
-    <value>Ordner (Stapelverarbeitung) </value>
+    <value>フォルダ (まとめてスキャン)</value>
   </data>
   <data name="SourceSelection_OpenDVDBluray" xml:space="preserve">
-    <value>Dieses DVD- oder Bluray-Laufwerk öffnen</value>
+    <value>このDVD/Blu-rayドライブを開く</value>
   </data>
   <data name="SourceSelection_OpenFolderWIth" xml:space="preserve">
-    <value>Einen Ordner mit einer oder mehreren Dateien öffnen.</value>
+    <value>一つ以上のファイルがあるフォルダを開きます。</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecovery" xml:space="preserve">
-    <value>Warteschlange wiederherstellen</value>
+    <value>キューファイルを復元</value>
   </data>
   <data name="SourceSelection_QueueArchiveRecoveryDesc" xml:space="preserve">
-    <value>Eine frühere archivierte Warteschlange ist verfügbar.</value>
+    <value>以前のキューのアーカイブが利用可能です。</value>
   </data>
   <data name="SourceSelection_SingleVideoFile" xml:space="preserve">
-    <value>Eine einzelne Videodatei öffnen.</value>
+    <value>ビデオファイルを開きます。</value>
   </data>
   <data name="SourceSelection_SourceSelection" xml:space="preserve">
-    <value>Quellenauswahl</value>
+    <value>ソース選択</value>
   </data>
   <data name="StaticPreviewView_Duration" xml:space="preserve">
-    <value>Dauer:</value>
+    <value>再生時間:</value>
   </data>
   <data name="StaticPreviewView_LivePreview" xml:space="preserve">
-    <value>Echtzeitvorschau</value>
+    <value>リアルタイムプレビュー</value>
   </data>
   <data name="StaticPreviewView_SelectPreviewImage" xml:space="preserve">
-    <value>Ein Vorschaubild wählen</value>
+    <value>プレビュー画像を選択</value>
   </data>
   <data name="StaticPreviewView_UseSystemDefault" xml:space="preserve">
-    <value>Videoabspieler des Systems verwenden</value>
+    <value>システム既定のビデオプレイヤーを使う</value>
   </data>
   <data name="SubtitlesView_AddCC" xml:space="preserve">
-    <value>Wenn verfügbar, CC-Untertitel hinzufügen</value>
+    <value>可能ならクローズドキャプションを追加する</value>
   </data>
   <data name="SubtitlesView_AddForeignAudioSearch" xml:space="preserve">
-    <value>Fremdsprachensuche hinzufügen</value>
+    <value>'吹き替え字幕スキャン'を追加する</value>
   </data>
   <data name="SubtitlesView_BurnInBehaviour" xml:space="preserve">
-    <value>Einbrennverhalten:</value>
+    <value>焼き込みの方法:</value>
   </data>
   <data name="SubtitlesView_ImportSubtitle" xml:space="preserve">
-    <value>Untertitel importieren</value>
+    <value>字幕をインポート</value>
   </data>
   <data name="SubtitlesView_TrackSelectionBehaviour" xml:space="preserve">
-    <value>Spurverhalten:</value>
+    <value>トラック選択の方法:</value>
   </data>
   <data name="SubtitleView_AddAllCC" xml:space="preserve">
-    <value>Alle restlichen CC-Untertitel hinzufügen</value>
+    <value>残りの全てのクローズドキャプションを追加する</value>
   </data>
   <data name="SubtitleView_SubtitleDefaultsDescription" xml:space="preserve">
-    <value>Konfigurieren, wie die Untertitelspuren automatisch ausgewählt und konfiguriert werden, wenn ein neuer Titel oder eine Videoquelle ausgewählt wird.</value>
+    <value>新しいタイトルやソースビデオを選択したときに、字幕トラックがどのように自動で選択されるかを設定します。</value>
   </data>
   <data name="SummaryView_AdditionalAudioTracks" xml:space="preserve">
-    <value>Zusätzliche Tonspuren</value>
+    <value>追加の音声トラック</value>
   </data>
   <data name="SummaryView_AdditionalSubtitleTracks" xml:space="preserve">
-    <value>Zusätzliche Untertitelspuren</value>
+    <value>追加の字幕トラック</value>
   </data>
   <data name="SummaryView_Burned" xml:space="preserve">
-    <value>Eingebrannt</value>
+    <value>焼き込み済み</value>
   </data>
   <data name="SummaryView_Chapters" xml:space="preserve">
-    <value>Kapitelmarker</value>
+    <value>チャプターマーカー</value>
   </data>
   <data name="SummaryView_Deblock" xml:space="preserve">
-    <value>Deblock</value>
+    <value>デブロック</value>
   </data>
   <data name="SummaryView_Detelecine" xml:space="preserve">
-    <value>Detelecine</value>
+    <value>逆テレシネ</value>
   </data>
   <data name="SummaryView_display" xml:space="preserve">
-    <value>Anzeige</value>
+    <value>表示</value>
   </data>
   <data name="SummaryView_Grayscale" xml:space="preserve">
-    <value>Graustufen</value>
+    <value>グレースケール</value>
   </data>
   <data name="SummaryView_NoAudioTracks" xml:space="preserve">
-    <value>Keine Tonspuren</value>
+    <value>音声トラックなし</value>
   </data>
   <data name="SummaryView_NoChapters" xml:space="preserve">
-    <value>Keine Kapitelmarker</value>
+    <value>チャプターマーカーなし</value>
   </data>
   <data name="SummaryView_NoFilters" xml:space="preserve">
-    <value>Keine Filter</value>
+    <value>フィルターなし</value>
   </data>
   <data name="SummaryView_NoSource" xml:space="preserve">
-    <value>Keine Quelle</value>
+    <value>ソースなし</value>
   </data>
   <data name="SummaryView_NoSubtitleTracks" xml:space="preserve">
-    <value>Keine Untertitelspuren</value>
+    <value>字幕トラックなし</value>
   </data>
   <data name="SummaryView_NoTracks" xml:space="preserve">
-    <value>Keine Spuren</value>
+    <value>トラックなし</value>
   </data>
   <data name="SummaryView_PreviewInfo" xml:space="preserve">
-    <value>Vorschau {0} von {1}</value>
+    <value>プレビュー {0} / {1}</value>
   </data>
   <data name="SummaryView_Rotation" xml:space="preserve">
-    <value>Drehung</value>
+    <value>回転</value>
   </data>
   <data name="SummaryView_storage" xml:space="preserve">
-    <value>Original</value>
+    <value>ストレージ</value>
   </data>
   <data name="VideoView_2Pass" xml:space="preserve">
-    <value>Encodierung in zwei Durchgängen</value>
+    <value>2-Passエンコード</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>Mittlere Bitrate (kbps):</value>
+    <value>平均ビットレートで指定(kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
-    <value>Videoencoder:</value>
+    <value>動画コーデック:</value>
   </data>
   <data name="VideoView_ConstantFramerate" xml:space="preserve">
-    <value>Konstante Bildfrequenz</value>
+    <value>固定フレームレート</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
-    <value>Konstante Qualität:</value>
+    <value>数値で指定:</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
-    <value>Level:</value>
+    <value>レベル:</value>
   </data>
   <data name="VideoView_EncoderPreset" xml:space="preserve">
-    <value>Voreinstellung:</value>
+    <value>プリセット:</value>
   </data>
   <data name="VideoView_EncoderProfile" xml:space="preserve">
-    <value>Profil:</value>
+    <value>プロファイル:</value>
   </data>
   <data name="VideoView_EncodeTune" xml:space="preserve">
-    <value>Abstimmung:</value>
+    <value>チューニング:</value>
   </data>
   <data name="VideoView_ExtraOptions" xml:space="preserve">
-    <value>Zusätzliche Parameter:</value>
+    <value>追加のオプション:</value>
   </data>
   <data name="VideoView_FastDecode" xml:space="preserve">
-    <value>Schnelle Decodierung</value>
+    <value>デコードの高速化</value>
   </data>
   <data name="VideoView_Framerate" xml:space="preserve">
-    <value>Bildfrequenz (BpS):</value>
+    <value>フレームレート(FPS):</value>
   </data>
   <data name="VideoView_OptimiseVideo" xml:space="preserve">
-    <value>Optimiertes Video:</value>
+    <value>映像を最適化:</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>Maximale Bildfrequenz</value>
+    <value>ピークフレームレート</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
-    <value>Qualität</value>
+    <value>品質</value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>Ersten Durchgang beschleunigen</value>
+    <value>1回目のスキャンを高速化する</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
-    <value>Variable Bildfrequenz</value>
+    <value>可変フレームレート</value>
   </data>
   <data name="VideoView_Video" xml:space="preserve">
-    <value>Video</value>
+    <value>動画</value>
   </data>
   <data name="OptionsView_Language" xml:space="preserve">
-    <value>Sprache:</value>
+    <value>言語</value>
   </data>
   <data name="Language_UseSystem" xml:space="preserve">
-    <value>Systemsprache verwenden</value>
+    <value>システム言語を使用する</value>
   </data>
   <data name="SourceSelection_AboutHandBrake" xml:space="preserve">
-    <value>Über HandBrake</value>
+    <value>HandBrakeについて</value>
   </data>
   <data name="SourceSelection_DropFileHere" xml:space="preserve">
-    <value>Oder hier eine Datei / einen Ordner ablegen …</value>
+    <value>もしくはファイルかフォルダをここにドラッグ ...</value>
   </data>
   <data name="SourceSelection_Help" xml:space="preserve">
-    <value>Hilfe</value>
+    <value>ヘルプ</value>
   </data>
   <data name="Preferences" xml:space="preserve">
-    <value>Einstellungen</value>
+    <value>設定</value>
   </data>
   <data name="AudioDefaultsView_AddTrack" xml:space="preserve">
-    <value>Spur hinzufügen</value>
+    <value>トラックを追加</value>
   </data>
   <data name="AudioDefaultsView_AutoAddTracks" xml:space="preserve">
-    <value>Audioencodereinstellungen für jede ausgewählte Spur:</value>
+    <value>選ばれたそれぞれの音声トラックのエンコード設定:</value>
   </data>
   <data name="AudioDefaultsView_Clear" xml:space="preserve">
-    <value>Löschen</value>
+    <value>削除</value>
   </data>
   <data name="SubtitlesView_BurnIn" xml:space="preserve">
-    <value>Eingebrannt</value>
+    <value>焼き込み</value>
   </data>
   <data name="SubtitlesView_Default" xml:space="preserve">
-    <value>Standard</value>
+    <value>デフォルト</value>
   </data>
   <data name="SubtitlesView_ForcedOnly" xml:space="preserve">
-    <value>Nur erzwungene</value>
+    <value>強制字幕のみ</value>
   </data>
   <data name="MainView_About" xml:space="preserve">
-    <value>_Über …</value>
+    <value>_Handbrakeについて...</value>
   </data>
   <data name="MainView_ActivityLogMenu" xml:space="preserve">
-    <value>_Aktivitätsprotokoll</value>
+    <value>_履歴ウィンドウ</value>
   </data>
   <data name="MainView_CheckForUpdates" xml:space="preserve">
-    <value>_Auf Updates prüfen</value>
+    <value>_アップデートを確認</value>
   </data>
   <data name="MainView_Exit" xml:space="preserve">
-    <value>_Beenden</value>
+    <value>_終了</value>
   </data>
   <data name="MainView_ExportToFile" xml:space="preserve">
-    <value>_In Datei exportieren</value>
+    <value>_ファイルにエクスポート</value>
   </data>
   <data name="MainView_FileMenu" xml:space="preserve">
-    <value>_Datei</value>
+    <value>_ファイル</value>
   </data>
   <data name="MainView_HandBrakeDocs" xml:space="preserve">
-    <value>_HandBrake Dokumentation (HTTPS)</value>
+    <value>_HandBrake ドキュメント (HTTPS)</value>
   </data>
   <data name="MainView_HelpMenu" xml:space="preserve">
-    <value>_Hilfe</value>
+    <value>_ヘルプ</value>
   </data>
   <data name="MainView_ImportFromFile" xml:space="preserve">
-    <value>_Aus Datei importieren</value>
+    <value>_ファイルからインポート</value>
   </data>
   <data name="MainView_PreferencesMenu" xml:space="preserve">
-    <value>_Einstellungen</value>
+    <value>_基本設定</value>
   </data>
   <data name="MainView_PresetsMenu" xml:space="preserve">
-    <value>_Voreinstellungen</value>
+    <value>_プリセット</value>
   </data>
   <data name="MainView_QueueMenu" xml:space="preserve">
-    <value>_Warteschlange</value>
+    <value>_キュー</value>
   </data>
   <data name="MainView_ResetPresets" xml:space="preserve">
-    <value>_Installierte Voreinstellungen zurücksetzen</value>
+    <value>_ビルトインプリセットをリセット</value>
   </data>
   <data name="MainView_SetCurrentAsDefault" xml:space="preserve">
-    <value>_Momentanes als Standard setzen</value>
+    <value>_現在を既定に設定</value>
   </data>
   <data name="MainView_ShowPresetPanel" xml:space="preserve">
-    <value>_Voreinstellungen zeigen</value>
+    <value>S_プリセットパネル使い方</value>
   </data>
   <data name="MainView_ShowQueueMenu" xml:space="preserve">
-    <value>_Warteschlange zeigen</value>
+    <value>_キューを表示</value>
   </data>
   <data name="MainView_ToolsMenu" xml:space="preserve">
-    <value>_Extras</value>
+    <value>_ツール</value>
   </data>
   <data name="OptionsView_CheckingForUpdates" xml:space="preserve">
-    <value>Auf Updates prüfen …</value>
+    <value>アップデートを確認中です</value>
   </data>
   <data name="OptionsView_ClearLogDirConfirm" xml:space="preserve">
-    <value>Soll das Verzeichnis der Aktivitätsprotokolle wirklich bereinigt werden?</value>
+    <value>本当にログファイルのディレクトリをクリアしますか？</value>
   </data>
   <data name="OptionsView_ClearLogs" xml:space="preserve">
-    <value>Aktivitätsprotokolle bereinigen</value>
+    <value>ログをクリア</value>
   </data>
   <data name="OptionsView_Downloading" xml:space="preserve">
-    <value>Herunterladen …</value>
+    <value>ダウンロード中...</value>
   </data>
   <data name="OptionsView_LogsCleared" xml:space="preserve">
-    <value>Das Verlaufsprotokollverzeichnis von HandBrake wurde bereinigt!</value>
+    <value>HandBrakeのログファイルディレクトリがクリアされました！</value>
   </data>
   <data name="OptionsView_Notice" xml:space="preserve">
-    <value>Hinweis</value>
+    <value>通知</value>
   </data>
   <data name="OptionsView_PreparingUpdate" xml:space="preserve">
-    <value>Update vorbereiten …</value>
+    <value>更新の準備中 ...</value>
   </data>
   <data name="OptionsView_SelectFolder" xml:space="preserve">
-    <value>Bitte einen Ordner wählen.</value>
+    <value>フォルダを選択してください。</value>
   </data>
   <data name="OptionsView_SetDefaultLocationOutputFIle" xml:space="preserve">
-    <value>„Wählen“ auswählen, um den Standardspeicherort festzulegen</value>
+    <value>既定の場所を設定するには'参照'をクリックしてください</value>
   </data>
   <data name="MainView_Hide" xml:space="preserve">
-    <value>Ausblenden</value>
+    <value>隠す</value>
   </data>
   <data name="MainView_Show" xml:space="preserve">
-    <value>Zeigen</value>
+    <value>表示</value>
   </data>
   <data name="MainView_ShowAddAllToQueue" xml:space="preserve">
-    <value>Alles zur Warteschlange hinzufügen</value>
+    <value>キューに全て追加する</value>
   </data>
   <data name="MainView_ShowAddSelectionToQueue" xml:space="preserve">
-    <value>Auswahl zur Warteschlange hinzufügen</value>
+    <value>選択済みをキューに追加する</value>
   </data>
   <data name="QueueView_PlayMediaFile" xml:space="preserve">
-    <value>Datei abspielen</value>
+    <value>ファイルを再生</value>
   </data>
   <data name="Options_ApplicaitonToolbar" xml:space="preserve">
-    <value>Programm-Symbolleiste</value>
+    <value>アプリケーションツールバー</value>
   </data>
   <data name="Options_ShowToolbarAddAll" xml:space="preserve">
-    <value>„Alles zur Warteschlange hinzufügen“ in der Symbolleiste anzeigen</value>
+    <value>ツールバーに'キューに全て追加する'を表示する</value>
   </data>
   <data name="Options_ShowToolbarAddSelection" xml:space="preserve">
-    <value>„Auswahl zur Warteschlange hinzufügen“ in der Symbolleiste anzeigen</value>
+    <value>ツールバーに'選択済みをキューに追加する'を表示する</value>
   </data>
   <data name="OptionsView_HardwareDetectFailed" xml:space="preserve">
-    <value>Die Unterstützung für Hardware-Encodierung ist momentan deaktiviert. Bitte sicherstellen, dass alle Grafikkarten-Treiber auf dem aktuellen Stand sind.
+    <value>ハードウェアエンコードが現在無効になっています。お使いのグラフィックアダプタのドライバが最新か確認してください。
 
-Dies hat keinen Einfluss auf die Software-Encoder.</value>
+これはソフトウェアエンコーダーには影響しません。</value>
   </data>
   <data name="Main_PleaseFixSubtitleSettings" xml:space="preserve">
-    <value>Bitte die Untertiteleinstellungen vor dem Fortfahren korrigieren.</value>
+    <value>続ける前に字幕設定を修正してください。</value>
   </data>
   <data name="Generic_Apply" xml:space="preserve">
-    <value>Anwenden</value>
+    <value>適用</value>
   </data>
   <data name="Main_ResumeEncode" xml:space="preserve">
-    <value>Encodierung fortsetzen</value>
+    <value>エンコード再開</value>
   </data>
   <data name="QueueView_Actions" xml:space="preserve">
-    <value>Aktionen</value>
+    <value>アクション</value>
   </data>
   <data name="QueueView_Import" xml:space="preserve">
-    <value>Warteschlange importieren</value>
+    <value>キューをインポート</value>
   </data>
   <data name="QueueViewModel_EncodeStatusChanged_StatusLabel" xml:space="preserve">
-    <value>Encodieren: Durchgang {0} von {1}, {2:00.00} %, BpS: {3:000.0}, mittlere BpS: {4:000.0}
-verbleibende Zeit: {5:hh\:mm\:ss}, vergangen: {6:hh\:mm\:ss} {7}</value>
+    <value>エンコード中: パス {0} of {1},  {2:00.00}%, FPS: {3:000.0},  平均FPS: {4:000.0}
+残り時間: {5:hh\:mm\:ss},  経過時間: {6:hh\:mm\:ss} {7}</value>
   </data>
   <data name="QueueView_DeleteSelected" xml:space="preserve">
-    <value>Ausgewähltes löschen</value>
+    <value>選択を消去</value>
   </data>
   <data name="Portable_TmpNotWritable" xml:space="preserve">
-    <value>Portabler Modus: Erstellen von TMP-Verzeichnis nicht möglich. Bitte prüfen, ob der Pfad korrekt ist und Schreibrechte vorliegen.
+    <value>ポータブルモード:TMPディレクトリを作れませんでした。パスが正しく、書き込めるかを確認してください。
 
-    {0}</value>
+   {0}</value>
   </data>
   <data name="Portable_StorageNotWritable" xml:space="preserve">
-    <value>Portabler Modus: Erstellen von Speicherverzeichnis nicht möglich. Bitte prüfen, ob der Pfad korrekt ist und Schreibrechte vorliegen.
+    <value>ポータブルモード:ストレージにディレクトリを作れませんでした。パスが正しく、書き込めるかを確認してください。
 
-    {0}</value>
+   {0}</value>
   </data>
   <data name="Portable_IniFileError" xml:space="preserve">
-    <value>Portabler Modus: Das Lesen von portable.ini ist nicht möglich. Die Datei könnte fehlerhaft sein. Bitte erneut portable.ini.template als Vorlage benutzen.</value>
+    <value>ポータブルモード: portable.iniを読み込むことができませんでした。このファイルにエラーがある可能性があります。portable.ini.templateをガイドとして使用しやり直してください。</value>
   </data>
   <data name="Startup_InitFailed" xml:space="preserve">
-    <value>HandBrakes Engine konnte nicht initialisiert werden. Dies wird oft durch veraltete GPU-Treiber verursacht.\n Bitte die GPU-Treiber für alle Onboard- und diskreten Grafikkarten aktualisieren, die dieses System besitzt.</value>
+    <value>HandBrakeエンジンの初期化に失敗しました。これはしばしば古すぎるGPUドライバによって引き起こされます。オンボードか拡張カードかに関わらず、システムに存在するすべてのGPUドライバを更新してください。</value>
   </data>
   <data name="OptionsView_FormatOptions" xml:space="preserve">
-    <value>Echtzeit-Update Optionen: {source} {title} {chapters} 
-Nicht-Echtzeit Optionen: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (Diese werden nur geändert, wenn eine neue Quelle gescannt, Titel oder Kapitel geändert werden)</value>
+    <value>自動更新オプション: {source} {title} {chapters} 
+自動更新でないオプション: {date} {time} {creation-date} {creation-time} {quality} {bitrate} (これらは新しいソースをスキャンするか、タイトルやチャプターを変更した時のみ更新されます。)</value>
   </data>
   <data name="OptionsView_PathOptions" xml:space="preserve">
-    <value>Verfügbare Optionen: {source_path} {source_folder_name} {source}</value>
+    <value>利用可能なオプション: {source_path} {source_folder_name} {source}</value>
   </data>
   <data name="FileOverwriteBehaviours_Ask" xml:space="preserve">
-    <value>Fragen um Datei zu überschreiben</value>
+    <value>上書きするかを聞く</value>
   </data>
   <data name="FileOverwriteBehaviours_Autoname" xml:space="preserve">
-    <value>Versuchen Datei automatisch umzubenennen</value>
+    <value>自動でファイル名を変える</value>
   </data>
   <data name="FileOverwriteBehaviours_Overwrite" xml:space="preserve">
-    <value>Die Datei überschreiben</value>
+    <value>ファイルを上書き</value>
   </data>
   <data name="Options_UIBehaviour" xml:space="preserve">
-    <value>Verhalten der Benutzeroberfläche</value>
+    <value>ユーザーインターフェイスのふるまい</value>
   </data>
   <data name="OptionsView_FileOverwriteBehaviour" xml:space="preserve">
-    <value>Verhalten bei Dateiüberschreibungen:</value>
+    <value>ファイル上書きの方法:</value>
   </data>
   <data name="Options_EncodeCompleted" xml:space="preserve">
-    <value>Encodierung abgeschlossen</value>
+    <value>エンコード完了</value>
   </data>
   <data name="Options_Notifications" xml:space="preserve">
-    <value>Benachrichtigungen</value>
+    <value>通知</value>
   </data>
   <data name="Options_QueueCompleted" xml:space="preserve">
-    <value>Warteschlange ausgeführt</value>
+    <value>キュー完了</value>
   </data>
   <data name="Options_WhenDoneColon" xml:space="preserve">
-    <value>Wenn fertig:</value>
+    <value>終了時:</value>
   </data>
   <data name="OptionsView_FileCollisionBehaviour" xml:space="preserve">
-    <value>Verhalten bei Dateinamenkonflikten:</value>
+    <value>ファイル名一致時のふるまい:</value>
   </data>
   <data name="CollisionBehaviour_Post" xml:space="preserve">
-    <value>Postfix</value>
+    <value>接尾辞</value>
   </data>
   <data name="CollisionBehaviour_Pre" xml:space="preserve">
-    <value>Präfix</value>
+    <value>接頭辞</value>
   </data>
   <data name="CollisionBehaviour_AppendNumber" xml:space="preserve">
-    <value>Zahl anhängen</value>
+    <value>番号を追加する</value>
   </data>
   <data name="FiltersViewAuto_DeblockPreset" xml:space="preserve">
-    <value>Deblock-Voreinstellung</value>
+    <value>フィルタービュー_デブロックプリセット</value>
   </data>
   <data name="FiltersViewAuto_DeblockTune" xml:space="preserve">
-    <value>Deblock-Abstimmung</value>
+    <value>デブロックチューニング</value>
   </data>
   <data name="OptionsView_ChoiceOfEncoderHint" xml:space="preserve">
-    <value>Die Wahl des Encoders wird im Video-Tab verfügbar gemacht.</value>
+    <value>エンコーダーは'ビデオ'タブで選択できます。</value>
   </data>
   <data name="Queue_RecoverQueueQuestionPlural" xml:space="preserve">
-    <value>HandBrake hat einige nicht fertiggestellte Warteschlangedateien gefunden. Diese werden von mehreren Instanzen von HandBrake sein. Sollen alle nicht fertig gestellten Aufträge wiederhergestellt werden?</value>
+    <value>HandBrakeは未完了のキューファイルを複数検出しました。これらは複数起動していたHandBrakeのものです。未完了のジョブをすべて復元しますか？</value>
   </data>
   <data name="Queue_RecoverQueueQuestionSingular" xml:space="preserve">
-    <value>HandBrake hat nicht fertig gestellte Objekte seit dem letzten Start in der Warteschlange gefunden. Sollen diese wiederhergestellt werden?</value>
+    <value>HandBrakeは前回起動時の未完了のアイテムがキューに残っているのを検知しました。これらを復元しますか？</value>
   </data>
   <data name="Queue_RecoveryPossible" xml:space="preserve">
-    <value>Wiederherstellung der Warteschlange möglich</value>
+    <value>キューの復元が可能です</value>
   </data>
   <data name="PresetService_ImportingBuiltInWarning" xml:space="preserve">
-    <value>Ihre Voreinstellungsdatei beinhaltete installierte Voreinstellungen. Die Importfunktion unterstützt einen Import dieser nicht. Bitte „Einstellungsmenü -&gt; Installierte Voreinstellungen zurücksetzen“ verwenden, um den Standard wieder herzustellen. 
+    <value>プリセットファイルにビルトインプリセットが含まれていました。インポート機能はこれらをサポートしません。標準のプリセットを復元するには'プリセットメニュー &gt; ビルトインプリセットをリセット'を使用してください。
 
-Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </value>
+可能であった全てのユーザープリセットはインポートされました。</value>
   </data>
   <data name="Options_PromptBeforeAction" xml:space="preserve">
-    <value>Aktion sofort ausführen (dies deaktiviert den 60-Sekunden-Bestätigungsdialog).</value>
+    <value>直ちにアクションを実行する。 (これは確認ダイアログを60秒間表示させません)</value>
   </data>
   <data name="Browse" xml:space="preserve">
-    <value>Wählen</value>
+    <value>参照</value>
   </data>
   <data name="OptionsView_MediaFileNotSet" xml:space="preserve">
-    <value>Es wurde keine Audio-Datei festgelegt. Bitte „Wählen“ klicken, um eine WAV- oder MP3-Datei für die Wiedergabe auszuwählen.</value>
+    <value>音声ファイルが設定されていません。'参照'をクリックして再生するためのwavかmp3ファイルを選択してください。</value>
   </data>
   <data name="OptionsView_Play" xml:space="preserve">
-    <value>Abspielen</value>
+    <value>再生</value>
   </data>
   <data name="QueueView_ExportCLI" xml:space="preserve">
-    <value>Warteschlange exportieren (Nur CLI)</value>
+    <value>キューをエクスポート (CLIのみ)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>Dunkles Erscheinungsbild verwenden (benötigt Neustart, nur Windows 10)</value>
+    <value>ダークテーマを使用。 (再起動が必要、Windows 10のみ)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
-    <value>Nicht verfügbar</value>
+    <value>利用不可</value>
   </data>
   <data name="Options_LowDiskspaceSizeGB" xml:space="preserve">
     <value>GB</value>
   </data>
   <data name="SystemService_ACMains" xml:space="preserve">
-    <value>Netzspannung erkannt. Encodierung wird fortgesetzt … ({0} %)</value>
+    <value>AC電源を検出しました。エンコードを再開中... ({0}%)</value>
   </data>
   <data name="SystemService_CriticalBattery" xml:space="preserve">
-    <value>Systembatterie kritisch! ({0} %)</value>
+    <value>システムのバッテリー残量が致命的です！ ({0}%)</value>
   </data>
   <data name="SystemService_LowBatteryLog" xml:space="preserve">
-    <value>Systembatterie schwach! ({0} %). Die Encodierung wurde angehalten, um das System zu schützen. Ruhezustand ist auf erlauben gesetzt!</value>
+    <value>システムのバッテリーが少なくなっています！ ({0}%) システム保護のためエンコードは一時停止されました。また、システムのスリープを許可しました！</value>
   </data>
   <data name="SystemService_LowDiskSpaceLog" xml:space="preserve">
-    <value>Der verfügbare Speicherplatz auf dem Ziellaufwerk ist unter {0} GB gefallen. Encodierung angehalten …</value>
+    <value>保存先ドライブの残り容量が {0}GB を下回りました。エンコードを一時停止中...</value>
   </data>
   <data name="AudioDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Automatische Tonauswahl konfigurieren</value>
+    <value>自動音声選択を設定します</value>
   </data>
   <data name="SubtitlesDefaultsView_PaneTitle" xml:space="preserve">
-    <value>Automatische Untertitelauswahl konfigurieren</value>
+    <value>自動字幕選択を設定します</value>
   </data>
   <data name="Options_SystemOptions" xml:space="preserve">
-    <value>System</value>
+    <value>システム</value>
   </data>
   <data name="MetadataView_Actors" xml:space="preserve">
-    <value>Darsteller:</value>
+    <value>出演:</value>
   </data>
   <data name="MetadataView_Comments" xml:space="preserve">
-    <value>Kommentare:</value>
+    <value>コメント:</value>
   </data>
   <data name="MetadataView_Description" xml:space="preserve">
-    <value>Beschreibung:</value>
+    <value>説明:</value>
   </data>
   <data name="MetadataView_Director" xml:space="preserve">
-    <value>Regisseur:</value>
+    <value>監督:</value>
   </data>
   <data name="MetadataView_Genre" xml:space="preserve">
-    <value>Genre:</value>
+    <value>ジャンル:</value>
   </data>
   <data name="MetadataView_Plot" xml:space="preserve">
-    <value>Handlung:</value>
+    <value>あらすじ:</value>
   </data>
   <data name="MetadataView_ReleaseDate" xml:space="preserve">
-    <value>Erscheinungsdatum:</value>
+    <value>公開日:</value>
   </data>
   <data name="MetadataView_TitleTag" xml:space="preserve">
-    <value>Titel:</value>
+    <value>タイトル:</value>
   </data>
   <data name="StaticPreviewView_PreviewRotationFlip" xml:space="preserve">
-    <value>Vorschau von Drehung und Spiegeln</value>
+    <value>回転と反転をプレビュー</value>
   </data>
   <data name="LogViewModel_Title" xml:space="preserve">
-    <value>Aktivitätsprotokoll</value>
+    <value>ログビューア</value>
   </data>
   <data name="MainView_Aspect" xml:space="preserve">
-    <value>Bildformat:</value>
+    <value>アスペクト:</value>
   </data>
   <data name="MainView_Filters" xml:space="preserve">
-    <value>Filter:</value>
+    <value>フィルター:</value>
   </data>
   <data name="MainView_Size" xml:space="preserve">
-    <value>Größe:</value>
+    <value>サイズ:</value>
   </data>
   <data name="MainView_Tracks" xml:space="preserve">
-    <value>Spuren:</value>
+    <value>トラック:</value>
   </data>
   <data name="OptionsTab_General" xml:space="preserve">
-    <value>Allgemein</value>
+    <value>全般</value>
   </data>
   <data name="OptionsViewModel_CheckForUpdatesMsg" xml:space="preserve">
-    <value>„Auf Updates prüfen“ wählen um auf eine neuere Versionen zu prüfen</value>
+    <value>新しいバージョンを確認するには'アップデートを確認'をクリックしてください</value>
   </data>
   <data name="OptionsView_BackButton" xml:space="preserve">
-    <value>&lt;Zurück</value>
+    <value>&lt; 戻る</value>
   </data>
   <data name="QueueView_CurrentlyPaused" xml:space="preserve">
-    <value>Momentan angehalten</value>
+    <value>一時停止中</value>
   </data>
   <data name="Options_OutputFiles" xml:space="preserve">
-    <value>Ausgabedateien</value>
+    <value>出力ファイル</value>
   </data>
   <data name="PointToPointMode_Chapters" xml:space="preserve">
-    <value>Kapitel</value>
+    <value>チャプター</value>
   </data>
   <data name="PointToPointMode_Frames" xml:space="preserve">
-    <value>Bilder</value>
+    <value>フレーム</value>
   </data>
   <data name="PointToPointMode_Preview" xml:space="preserve">
-    <value>Vorschau</value>
+    <value>プレビュー</value>
   </data>
   <data name="PointToPointMode_Seconds" xml:space="preserve">
-    <value>Sekunden</value>
+    <value>秒</value>
   </data>
   <data name="SubtitleBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Alle passenden ausgewählten Sprachen</value>
+    <value>一致する言語の全て</value>
   </data>
   <data name="SubtitleBehaviourModes_FirstMatching" xml:space="preserve">
-    <value>Erste passende ausgewählte Sprache</value>
+    <value>最初に一致した言語のみ</value>
   </data>
   <data name="SubtitleBehaviourModes_None" xml:space="preserve">
-    <value>Keine</value>
+    <value>なし</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>Erste Spur</value>
+    <value>最初のトラック</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioPreferredElseFirst" xml:space="preserve">
-    <value>Fremdsprache bevorzugt, andere zuerst</value>
+    <value>吹き替え字幕優先、でなければ最初</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_ForeignAudioTrack" xml:space="preserve">
-    <value>Fremdsprachentonspur</value>
+    <value>吹き替え字幕</value>
   </data>
   <data name="SubtitleBurnInBehaviourModes_None" xml:space="preserve">
-    <value>Keine</value>
+    <value>なし</value>
   </data>
   <data name="SubtitleViewModel_ForeignAudioSearch" xml:space="preserve">
-    <value>Fremdsprachentonsuche</value>
+    <value>吹き替え字幕検索</value>
   </data>
   <data name="Subtitle_ForeignAudioScan" xml:space="preserve">
-    <value>Fremdsprachentonsuche</value>
+    <value>吹き替え字幕スキャン</value>
   </data>
   <data name="AudioBehaviourModes_AllMatching" xml:space="preserve">
-    <value>Alle passenden ausgewählten Sprachen</value>
+    <value>一致する言語の全て</value>
   </data>
   <data name="AudioBehaviourModes_AllTracks" xml:space="preserve">
-    <value>Alle Spuren als Vorlage verwenden</value>
+    <value>全トラックをテンプレートとして使う</value>
   </data>
   <data name="AudioBehaviourModes_FirstMatch" xml:space="preserve">
-    <value>Erste passende Sprache auswählen</value>
+    <value>最初に一致した言語のみ</value>
   </data>
   <data name="AudioBehaviourModes_FirstTrack" xml:space="preserve">
-    <value>Erste Spur als Vorlage verwenden</value>
+    <value>最初のトラックをテンプレートとして使う</value>
   </data>
   <data name="AudioBehaviourModes_None" xml:space="preserve">
-    <value>Kein Ton</value>
+    <value>オーディオなし</value>
   </data>
   <data name="ChapterViewModel_Chapter" xml:space="preserve">
-    <value>Kapitel {0}</value>
+    <value>チャプター {0}</value>
   </data>
   <data name="Mp4Behaviour_Auto" xml:space="preserve">
-    <value>Automatisch</value>
+    <value>自動</value>
   </data>
   <data name="Mp4Behaviour_UseM4v" xml:space="preserve">
-    <value>Immer M4V verwenden</value>
+    <value>常にM4Vを使う</value>
   </data>
   <data name="Mp4Behaviour_UseMp4" xml:space="preserve">
-    <value>Immer MP4 verwenden</value>
+    <value>常にMP4を使う</value>
   </data>
   <data name="PresetPictureSettingsMode_Custom" xml:space="preserve">
-    <value>Eigene</value>
+    <value>カスタム</value>
   </data>
   <data name="PresetPictureSettingsMode_None" xml:space="preserve">
-    <value>Keine</value>
+    <value>なし</value>
   </data>
   <data name="PresetPictureSettingsMode_SourceMaximum" xml:space="preserve">
-    <value>Immer Auflösung der Quelle verwenden</value>
+    <value>常にソースの解像度を使う</value>
   </data>
   <data name="ProcessPriority_AboveNormal" xml:space="preserve">
-    <value>Über normal</value>
+    <value>通常以上</value>
   </data>
   <data name="ProcessPriority_BelowNormal" xml:space="preserve">
-    <value>Unter normal</value>
+    <value>通常以下</value>
   </data>
   <data name="ProcessPriority_High" xml:space="preserve">
-    <value>Hoch</value>
+    <value>高</value>
   </data>
   <data name="ProcessPriority_Low" xml:space="preserve">
-    <value>Niedrig</value>
+    <value>低</value>
   </data>
   <data name="ProcessPriority_Normal" xml:space="preserve">
-    <value>Normal</value>
+    <value>通常</value>
   </data>
   <data name="UpdateCheck_Monthly" xml:space="preserve">
-    <value>Monatlich</value>
+    <value>毎月</value>
   </data>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
-    <value>Wöchentlich</value>
+    <value>毎週</value>
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
-    <value>Verwende immer den Standardpfad für jeden neu erstellten Namen.</value>
+    <value>それぞれのファイルに既定のパスを適用する。</value>
   </data>
 </root>

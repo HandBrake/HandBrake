@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -462,5 +462,9 @@ Il utilise un noyau laplacien à 4 voisins qui améliore davantage les contours 
   </data>
   <data name="MainView_StartPoint" xml:space="preserve">
     <value>Le point de départ de cet intervalle.</value>
+  </data>
+  <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
+    <value>Lorsque cette option est activée, le système de nom automatique utilisera toujours le chemin par défaut. 
+Lorsqu'elle est désactivée, elle utilisera, s'il est renseigné, le chemin de destination indiqué dans la boîte de dialogue de la fenêtre principale; sinon elle utilisera le chemin par défaut.</value>
   </data>
 </root>

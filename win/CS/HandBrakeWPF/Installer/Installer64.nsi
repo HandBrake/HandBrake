@@ -185,6 +185,10 @@ Section "HandBrake" SEC01
   SetOverwrite ifnewer
   File "tr\*.*"
 
+  SetOutPath "$INSTDIR\ja"
+  SetOverwrite ifnewer
+  File "ja\*.*"
+
   ; Copy the standard doc set into the doc folder
   SetOutPath "$INSTDIR\doc"
   SetOverwrite ifnewer
@@ -241,6 +245,9 @@ Section Uninstall
   RMDir  "$INSTDIR\ru"
   Delete "$INSTDIR\tr\*.*"
   RMDir  "$INSTDIR\tr"
+  Delete "$INSTDIR\ja\*.*"
+  RMDir  "$INSTDIR\ja"
+
   RMDir  "$INSTDIR"
 
   Delete "$SMPROGRAMS\HandBrake\Uninstall.lnk"
