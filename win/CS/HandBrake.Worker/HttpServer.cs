@@ -35,7 +35,7 @@ namespace HandBrake.Worker
             Console.WriteLine(Environment.NewLine + "Available APIs: ");
             foreach (KeyValuePair<string, Func<HttpListenerRequest, string>> api in apiCalls)
             {
-                string url = string.Format("http://localhost:{0}/{1}/", port, api.Key);
+                string url = string.Format("http://127.0.0.1:{0}/{1}/", port, api.Key);
                 this.httpListener.Prefixes.Add(url);
                 Console.WriteLine(url);
             }
@@ -65,6 +65,8 @@ namespace HandBrake.Worker
                                     try
                                     {
                                         string path = context.Request.RawUrl.TrimStart('/').TrimEnd('/');
+
+                                        Console.WriteLine("Handling call to: " + path);
 
                                         if (this.apiHandlers.TryGetValue(path, out var actionToPerform))
                                         {

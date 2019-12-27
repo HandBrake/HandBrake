@@ -10,12 +10,17 @@
 
 namespace HandBrake.Worker
 {
+    using System;
     using System.IO;
     using System.Net;
+    using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Json.State;
     using HandBrake.Interop.Utilities;
+    using HandBrake.Worker.Logging;
+    using HandBrake.Worker.Logging.Interfaces;
+    using HandBrake.Worker.Logging.Models;
 
     using Newtonsoft.Json;
 
@@ -23,16 +28,21 @@ namespace HandBrake.Worker
     {
         private readonly JsonSerializerSettings jsonNetSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
         private HandBrakeInstance handbrakeInstance;
+        private ILogHandler logHandler;
 
-        public string Initialise(HttpListenerRequest request)
+        public string Initialise(int verbosity)
         {
             if (this.handbrakeInstance == null)
             {
                 this.handbrakeInstance = new HandBrakeInstance();
             }
 
-            // TODO support verbosity
-            this.handbrakeInstance.Initialize(1, true); // TODO enable user setting support for nohardware
+            if (this.logHandler == null)
+            {
+                this.logHandler = new LogHandler();
+            }
+
+            this.handbrakeInstance.Initialize(verbosity, true);
 
             return null;
         }
@@ -48,6 +58,7 @@ namespace HandBrake.Worker
         {
             string requestPostData = GetRequestPostData(request);
 
+            Console.WriteLine(requestPostData);
             this.handbrakeInstance.StartEncode(requestPostData);
 
             return null;
@@ -90,6 +101,57 @@ namespace HandBrake.Worker
         public string SetConfiguration(HttpListenerRequest request)
         {
             return null;
+        }
+
+
+        /* Logging API */
+
+        // POST - JSON
+        public string ConfigureLogging(HttpListenerRequest request)
+        {
+            string requestPostData = GetRequestPostData(request);
+
+            JsonSerializerSettings settings = new JsonSerializerSettings
+                                              {
+                                                  NullValueHandling = NullValueHandling.Ignore,
+                                              };
+            LogHandlerConfig config;
+            if (!string.IsNullOrEmpty(requestPostData))
+            {
+                config = JsonConvert.DeserializeObject<LogHandlerConfig>(requestPostData, settings);
+            }
+            else
+            {
+                config = new LogHandlerConfig(false, null, false, "Logging Not Configured!");
+            }
+
+            this.logHandler.ConfigureLogging(config);
+            return null;
+        }
+        
+        // GET
+        public string GetFullLog(HttpListenerRequest request)
+        {
+            return this.logHandler.GetFullLog();
+        }
+
+        // POST
+        public string GetLogFromIndex(HttpListenerRequest request)
+        {
+            string requestPostData = GetRequestPostData(request);
+
+            if (int.TryParse(requestPostData, out int index))
+            {
+                return this.logHandler.GetLogFromIndex(index);
+            }
+
+            return null;
+        }
+
+        // POST
+        public string GetLatestLogIndex(HttpListenerRequest request)
+        {
+            return this.logHandler.GetLatestLogIndex().ToString();
         }
 
         private static string GetRequestPostData(HttpListenerRequest request)
