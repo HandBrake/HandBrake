@@ -47,6 +47,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\HandBrake.Interop\HandBrake.Interop.csproj" />
+    <ProjectReference Include="..\HandBrake.Worker\HandBrake.Worker.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -120,6 +121,30 @@
 
   <ItemGroup>
     <EmbeddedResource Include="public.key" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\ResourcesTooltips.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResourcesTooltips.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\ResourcesTooltips.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResourcesTooltips.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
