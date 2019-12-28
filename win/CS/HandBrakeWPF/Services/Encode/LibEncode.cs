@@ -28,8 +28,6 @@ namespace HandBrakeWPF.Services.Encode
     using HandBrakeInstanceManager = Instance.HandBrakeInstanceManager;
     using IEncode = Interfaces.IEncode;
     using ILog = Logging.Interfaces.ILog;
-    using LogLevel = Logging.Model.LogLevel;
-    using LogMessageType = Logging.Model.LogMessageType;
     using LogService = Logging.LogService;
 
     /// <summary>
@@ -39,7 +37,7 @@ namespace HandBrakeWPF.Services.Encode
     {
         #region Private Variables
 
-        private ILog log = LogService.GetLogger();
+        private readonly ILog log;
         private readonly IHbFunctionsProvider hbFunctionsProvider;
         private IEncodeInstance instance;
         private DateTime startTime;
@@ -49,8 +47,9 @@ namespace HandBrakeWPF.Services.Encode
 
         #endregion
 
-        public LibEncode(IHbFunctionsProvider hbFunctionsProvider)
+        public LibEncode(IHbFunctionsProvider hbFunctionsProvider, ILog logService) : base(logService)
         {
+            this.log = logService;
             this.hbFunctionsProvider = hbFunctionsProvider;
         }
 
@@ -200,12 +199,12 @@ namespace HandBrakeWPF.Services.Encode
         /// <param name="message">Log message content</param>
         protected void ServiceLogMessage(string message)
         {
-            this.log.LogMessage(string.Format("{0}# {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
+            this.log.LogMessage(string.Format("{0}# {1}{0}", Environment.NewLine, message));
         }
 
         protected void TimedLogMessage(string message)
         {
-            this.log.LogMessage(string.Format("[{0}] {1}", DateTime.Now.ToString("hh:mm:ss"), message), LogMessageType.ScanOrEncode, LogLevel.Info);
+            this.log.LogMessage(string.Format("[{0}] {1}", DateTime.Now.ToString("hh:mm:ss"), message));
         }
 
         /// <summary>

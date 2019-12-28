@@ -19,6 +19,7 @@ namespace HandBrakeWPF.Startup
 
     using HandBrakeWPF.Services;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging;
     using HandBrakeWPF.Services.Presets;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Queue;
@@ -64,6 +65,7 @@ namespace HandBrakeWPF.Startup
             this.container.Singleton<IUserSettingService, UserSettingService>();
             this.container.Singleton<IPresetService, PresetService>();
             this.container.Singleton<IQueueService, QueueService>();
+            this.container.Singleton<HandBrakeWPF.Services.Logging.Interfaces.ILog, LogService>();
 
             // Commands
 

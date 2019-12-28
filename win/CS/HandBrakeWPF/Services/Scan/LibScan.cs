@@ -31,8 +31,6 @@ namespace HandBrakeWPF.Services.Scan
     using HandBrakeWPF.Utilities;
 
     using ILog = Logging.Interfaces.ILog;
-    using LogLevel = Logging.Model.LogLevel;
-    using LogMessageType = Logging.Model.LogMessageType;
     using LogService = Logging.LogService;
     using ScanProgressEventArgs = HandBrake.Interop.Interop.EventArgs.ScanProgressEventArgs;
     using Title = Model.Title;
@@ -44,7 +42,7 @@ namespace HandBrakeWPF.Services.Scan
     {
         #region Private Variables
 
-        private readonly ILog log = LogService.GetLogger();
+        private readonly ILog log = null;
         private TitleFactory titleFactory = new TitleFactory();
         private string currentSourceScanPath;
         private IHandBrakeInstance instance;
@@ -53,11 +51,9 @@ namespace HandBrakeWPF.Services.Scan
 
         #endregion
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LibScan"/> class. 
-        /// </summary>
-        public LibScan()
+        public LibScan(ILog logService)
         {
+            this.log = logService;
             this.IsScanning = false;
         }
 
@@ -240,7 +236,7 @@ namespace HandBrakeWPF.Services.Scan
         /// </param>
         protected void ServiceLogMessage(string message)
         {
-            this.log.LogMessage(string.Format("{0} # {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
+            this.log.LogMessage(string.Format("{0} # {1}{0}", Environment.NewLine, message));
         }
 
         /// <summary>

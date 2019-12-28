@@ -56,19 +56,11 @@ namespace HandBrakeWPF.Services.Presets
         private readonly List<Preset> flatPresetList = new List<Preset>();
         private readonly IErrorService errorService;
         private readonly IUserSettingService userSettingService;
-        private ILog log = LogService.GetLogger();
+        private ILog log = null;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PresetService"/> class.
-        /// </summary>
-        /// <param name="errorService">
-        /// The error service.
-        /// </param>
-        /// <param name="userSettingService">
-        /// The User setting service.
-        /// </param>
-        public PresetService(IErrorService errorService, IUserSettingService userSettingService)
+        public PresetService(IErrorService errorService, IUserSettingService userSettingService, ILog logService)
         {
+            this.log = logService;
             this.errorService = errorService;
             this.userSettingService = userSettingService;
         }
@@ -917,7 +909,7 @@ namespace HandBrakeWPF.Services.Presets
 
         protected void ServiceLogMessage(string message)
         {
-            this.log.LogMessage(string.Format("Preset Service: {0}{1}{0}", Environment.NewLine, message), LogMessageType.Application, LogLevel.Info);
+            this.log.LogMessage(string.Format("Preset Service: {0}{1}{0}", Environment.NewLine, message));
         }
     }
 }

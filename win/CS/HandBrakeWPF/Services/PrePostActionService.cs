@@ -39,34 +39,23 @@ namespace HandBrakeWPF.Services
     /// </summary>
     public class PrePostActionService : IPrePostActionService
     {
-        private readonly ILog log = LogService.GetLogger();
+        private readonly ILog log;
         private readonly IQueueService queueProcessor;
         private readonly IUserSettingService userSettingService;
         private readonly IWindowManager windowManager;
         private readonly IScan scanService;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PrePostActionService"/> class.
-        /// </summary>
-        /// <param name="queueProcessor">
-        /// The queue processor.
-        /// </param>
-        /// <param name="userSettingService">
-        /// The user Setting Service.
-        /// </param>
-        /// <param name="windowManager">
-        /// The window Manager.
-        /// </param>
-        public PrePostActionService(IQueueService queueProcessor, IUserSettingService userSettingService, IWindowManager windowManager, IScan scanService)
+        public PrePostActionService(IQueueService queueProcessor, IUserSettingService userSettingService, IWindowManager windowManager, IScan scanService, ILog logService)
         {
+            this.log = logService;
             this.queueProcessor = queueProcessor;
             this.userSettingService = userSettingService;
             this.windowManager = windowManager;
             this.scanService = scanService;
 
-            this.queueProcessor.QueueCompleted += QueueProcessorQueueCompleted;
-            this.queueProcessor.EncodeService.EncodeCompleted += EncodeService_EncodeCompleted;
-            this.queueProcessor.EncodeService.EncodeStarted += EncodeService_EncodeStarted;
+            this.queueProcessor.QueueCompleted += this.QueueProcessorQueueCompleted;
+            this.queueProcessor.EncodeService.EncodeCompleted += this.EncodeService_EncodeCompleted;
+            this.queueProcessor.EncodeService.EncodeStarted += this.EncodeService_EncodeStarted;
         }
 
         /// <summary>
@@ -236,7 +225,7 @@ namespace HandBrakeWPF.Services
 
         private void ServiceLogMessage(string message)
         {
-            this.log.LogMessage(string.Format("# {1}{0}", Environment.NewLine, message), LogMessageType.ScanOrEncode, LogLevel.Info);
+            this.log.LogMessage(string.Format("# {1}{0}", Environment.NewLine, message));
         }
     }
 }

@@ -34,11 +34,11 @@ namespace HandBrakeWPF.Services.Encode
     /// </summary>
     public class EncodeBase
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="EncodeBase"/> class.
-        /// </summary>
-        public EncodeBase()
-        {    
+        private readonly ILog logService;
+
+        public EncodeBase(ILog logService)
+        {
+            this.logService = logService;
         }
 
         #region Events
@@ -132,8 +132,7 @@ namespace HandBrakeWPF.Services.Encode
                 string encodeDestinationPath = Path.GetDirectoryName(destination);
                 string destinationFile = Path.GetFileName(destination);
                 string encodeLogFile = destinationFile + " " + DateTime.Now.ToString(CultureInfo.InvariantCulture).Replace("/", "-").Replace(":", "-") + ".txt";
-                ILog log = LogService.GetLogger();
-                string logContent = log.ActivityLog;
+                string logContent = this.logService.ActivityLog;
 
                 // Make sure the log directory exists.
                 if (!Directory.Exists(logDir))

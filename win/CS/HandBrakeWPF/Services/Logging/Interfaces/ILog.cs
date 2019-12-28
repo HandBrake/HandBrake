@@ -12,10 +12,10 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
     using System;
     using System.Collections.Generic;
 
+    using HandBrake.Worker.Logging.Models;
+
     using LogEventArgs = HandBrakeWPF.Services.Logging.EventArgs.LogEventArgs;
-    using LogLevel = HandBrakeWPF.Services.Logging.Model.LogLevel;
     using LogMessage = HandBrakeWPF.Services.Logging.Model.LogMessage;
-    using LogMessageType = HandBrakeWPF.Services.Logging.Model.LogMessageType;
 
     /// <summary>
     /// The Log interface.
@@ -48,9 +48,15 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
         void Reset();
 
         /// <summary>
-        /// The enable.
+        /// Enable logging for this worker process.
         /// </summary>
-        void Enable();
+        /// <param name="config">
+        /// Configuration for the logger.
+        /// </param>
+        /// <remarks>
+        /// If this is not called, all log messages from libhb will be ignored.
+        /// </remarks>
+        void ConfigureLogging(LogHandlerConfig config);
 
         /// <summary>
         /// Log a message.
@@ -58,31 +64,6 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
         /// <param name="content">
         /// The content of the log message,
         /// </param>
-        /// <param name="type">
-        /// The Message Type. (i.e. where it came from)
-        /// </param>
-        /// <param name="level">
-        /// The log level
-        /// </param>
-        void LogMessage(string content, LogMessageType type, LogLevel level);
-
-        /// <summary>
-        /// Enable Logging to Disk
-        /// </summary>
-        /// <param name="logFile">
-        /// The log file to write to.
-        /// </param>
-        /// <param name="deleteCurrentLogFirst">
-        /// Delete the current log file if it exists.
-        /// </param>
-        void EnableLoggingToDisk(string logFile, bool deleteCurrentLogFirst);
-
-        /// <summary>
-        /// The setup log header.
-        /// </summary>
-        /// <param name="header">
-        /// The header.
-        /// </param>
-        void SetupLogHeader(string header);
+        void LogMessage(string content);
     }
 }

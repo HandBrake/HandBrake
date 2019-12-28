@@ -21,16 +21,12 @@ namespace HandBrakeWPF.Services.Logging
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.EventArgs;
+    using HandBrake.Worker.Logging.Models;
 
     using ILog = Interfaces.ILog;
     using LogEventArgs = EventArgs.LogEventArgs;
-    using LogLevel = Model.LogLevel;
     using LogMessage = Model.LogMessage;
-    using LogMessageType = Model.LogMessageType;
 
-    /// <summary>
-    /// The log helper.
-    /// </summary>
     public class LogService : ILog
     {
         // TODO List.
@@ -41,7 +37,6 @@ namespace HandBrakeWPF.Services.Logging
         private readonly object fileWriterLock = new object();
         private readonly StringBuilder logBuilder = new StringBuilder();
  
-        private LogLevel currentLogLevel = LogLevel.Error;
         private bool isLoggingEnabled;
         private List<LogMessage> logMessages = new List<LogMessage>(); 
         private long messageIndex;
@@ -57,19 +52,10 @@ namespace HandBrakeWPF.Services.Logging
             HandBrakeUtils.ErrorLogged += this.HandBrakeUtils_ErrorLogged;
         }
 
-        /// <summary>
-        /// Fires when a new QueueTask starts
-        /// </summary>
         public event EventHandler<LogEventArgs> MessageLogged;
 
-        /// <summary>
-        /// The log reset event
-        /// </summary>
         public event EventHandler LogReset;
 
-        /// <summary>
-        /// Gets the log messages.
-        /// </summary>
         public IEnumerable<LogMessage> LogMessages
         {
             get
@@ -81,9 +67,6 @@ namespace HandBrakeWPF.Services.Logging
             }
         }
 
-        /// <summary>
-        /// Gets the Activity Log as a string.
-        /// </summary>
         public string ActivityLog
         {
             get
@@ -95,31 +78,15 @@ namespace HandBrakeWPF.Services.Logging
             }
         }
 
-        /// <summary>
-        /// Log message.
-        /// </summary>
-        /// <param name="content">
-        /// The content.
-        /// </param>
-        /// <param name="type">
-        /// The type.
-        /// </param>
-        /// <param name="level">
-        /// The level.
-        /// </param>
-        public void LogMessage(string content, LogMessageType type, LogLevel level)
+        public void LogMessage(string content)
         {
             if (!this.isLoggingEnabled)
             {
                 return;
             }
 
-            if (level > this.currentLogLevel)
-            {
-                return;
-            }
 
-            LogMessage msg = new LogMessage(content, type, level, this.messageIndex);
+            LogMessage msg = new LogMessage(content, this.messageIndex);
             lock (this.lockObject)
             {
                 this.messageIndex = this.messageIndex + 1;   
@@ -130,129 +97,36 @@ namespace HandBrakeWPF.Services.Logging
                 if (this.logMessages.Count > 50000)
                 {
                     this.messageIndex = this.messageIndex + 1;
-                    msg = new LogMessage(
-                            "Log Service Pausing. Too Many Log messages. This may indicate a problem with your encode.",
-                            LogMessageType.Application,
-                            LogLevel.Error,
-                            this.messageIndex);
+                    msg = new LogMessage("Log Service Pausing. Too Many Log messages. This may indicate a problem with your encode.", this.messageIndex);
                     this.logMessages.Add(msg);
                     this.logBuilder.AppendLine(msg.Content);
                     this.LogMessageToDisk(msg);
 
-                    this.Disable();
+                    this.isLoggingEnabled = false;
                 }
             }
 
             this.OnMessageLogged(msg); // Must be outside lock to be thread safe. 
         }
 
-        /// <summary>
-        /// Gets an shared instance of the logger. Logging is enabled by default
-        /// You can turn it off by calling Disable() if you don't want it.
-        /// </summary>
-        /// <returns>
-        /// An instance of this logger.
-        /// </returns>
-        public static ILog GetLogger()
-        {
-            return loggerInstance ?? (loggerInstance = new LogService());
-        }
-
-        /// <summary>
-        /// The set log level. Default: Info.
-        /// </summary>
-        /// <param name="level">
-        /// The level.
-        /// </param>
-        public void SetLogLevel(LogLevel level)
-        {
-            this.currentLogLevel = level;
-        }
-
-        /// <summary>
-        /// The enable.
-        /// </summary>
-        public void Enable()
+        public void ConfigureLogging(LogHandlerConfig config)
         {
             this.isLoggingEnabled = true;
-        }
 
-        /// <summary>
-        /// Enable Logging to Disk
-        /// </summary>
-        /// <param name="logFile">
-        /// The log file to write to.
-        /// </param>
-        /// <param name="deleteCurrentLogFirst">
-        /// Delete the current log file if it exists.
-        /// </param>
-        public void EnableLoggingToDisk(string logFile, bool deleteCurrentLogFirst)
-        {
-            if (this.isDiskLoggingEnabled)
+            if (config.EnableDiskLogging)
             {
-                throw new Exception("Disk Logging already enabled!");
+                if (!string.IsNullOrEmpty(config.LogFile) && !Directory.Exists(Path.GetDirectoryName(config.LogFile)))
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(config.LogFile));
+                }
+
+                this.EnableLoggingToDisk(config.LogFile, config.DeleteCurrentLogFirst);
             }
 
-            try
-            {
-                if (!Directory.Exists(Path.GetDirectoryName(logFile)))
-                {
-                    throw new Exception("Log Directory does not exist. This service will not create it for you!");
-                }
-
-                if (deleteCurrentLogFirst && File.Exists(logFile))
-                {
-                    File.Delete(logFile);
-                }
-
-                this.diskLogPath = logFile;
-                this.isDiskLoggingEnabled = true;
-                this.deleteLogFirst = deleteCurrentLogFirst;
-
-                lock (this.fileWriterLock)
-                {
-                    this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
-                }
-            }
-            catch (Exception exc)
-            {
-                this.LogMessage("Failed to Initialise Disk Logging. " + Environment.NewLine + exc, LogMessageType.Application, LogLevel.Error);
-
-                if (this.fileWriter != null)
-                {
-                    lock (this.fileWriterLock)
-                    {
-                        this.fileWriter.Flush();
-                        this.fileWriter.Close();
-                        this.fileWriter.Dispose();
-                    }
-                }
-            }
+            this.logHeader = config.Header;
+            this.LogMessage(config.Header);
         }
 
-        /// <summary>
-        /// The setup log header.
-        /// </summary>
-        /// <param name="header">
-        /// The header.
-        /// </param>
-        public void SetupLogHeader(string header)
-        {
-            this.logHeader = header;
-            this.LogMessage(header, LogMessageType.Application, LogLevel.Info);
-        }
-
-        /// <summary>
-        /// The disable.
-        /// </summary>
-        public void Disable()
-        {
-            this.isLoggingEnabled = false;
-        }
-
-        /// <summary>
-        /// Clear the log messages collection.
-        /// </summary>
         public void Reset()
         {
             lock (this.lockObject)
@@ -295,12 +169,6 @@ namespace HandBrakeWPF.Services.Logging
             }
         }
 
-        /// <summary>
-        /// Called when a log message is created.
-        /// </summary>
-        /// <param name="msg">
-        /// The Log Message
-        /// </param>
         protected virtual void OnMessageLogged(LogMessage msg)
         {
             var onMessageLogged = this.MessageLogged;
@@ -310,9 +178,6 @@ namespace HandBrakeWPF.Services.Logging
             }
         }
 
-        /// <summary>
-        /// Shutdown and Dispose of the File Writer.
-        /// </summary>
         protected void ShutdownFileWriter()
         {
             try
@@ -335,20 +200,61 @@ namespace HandBrakeWPF.Services.Logging
             }
         }
 
-        /// <summary>
-        /// Trigger the Event to notify any subscribers that the log has been reset.
-        /// </summary>
         protected virtual void OnLogReset()
         {
             this.LogReset?.Invoke(this, System.EventArgs.Empty);
         }
 
-        /// <summary>
-        /// Helper method for logging content to disk
-        /// </summary>
-        /// <param name="msg">
-        /// Log message to write.
-        /// </param>
+        private void EnableLoggingToDisk(string logFile, bool deleteCurrentLogFirst)
+        {
+            if (this.isDiskLoggingEnabled)
+            {
+                throw new Exception("Disk Logging already enabled!");
+            }
+
+            try
+            {
+                if (!Directory.Exists(Path.GetDirectoryName(logFile)))
+                {
+                    throw new Exception("Log Directory does not exist. This service will not create it for you!");
+                }
+
+                if (deleteCurrentLogFirst && File.Exists(logFile))
+                {
+                    File.Delete(logFile);
+                }
+
+                this.diskLogPath = logFile;
+                this.isDiskLoggingEnabled = true;
+                this.deleteLogFirst = deleteCurrentLogFirst;
+
+                lock (this.fileWriterLock)
+                {
+                    this.fileWriter = new StreamWriter(logFile) { AutoFlush = true };
+                }
+            }
+            catch (Exception exc)
+            {
+                this.LogMessage("Failed to Initialise Disk Logging. " + Environment.NewLine + exc);
+
+                if (this.fileWriter != null)
+                {
+                    lock (this.fileWriterLock)
+                    {
+                        this.fileWriter.Flush();
+                        this.fileWriter.Close();
+                        this.fileWriter.Dispose();
+                    }
+                }
+            }
+        }
+
+        private void SetupLogHeader(string header)
+        {
+            this.logHeader = header;
+            this.LogMessage(header);
+        }
+
         private void LogMessageToDisk(LogMessage msg)
         {
             if (!this.isDiskLoggingEnabled)
@@ -379,7 +285,7 @@ namespace HandBrakeWPF.Services.Logging
                 return;
             }
 
-            this.LogMessage(e.Message, LogMessageType.ScanOrEncode, LogLevel.Error);
+            this.LogMessage(e.Message);
         }
 
         private void HandBrakeUtils_MessageLogged(object sender, MessageLoggedEventArgs e)
@@ -389,7 +295,7 @@ namespace HandBrakeWPF.Services.Logging
                 return;
             }
 
-            this.LogMessage(e.Message, LogMessageType.ScanOrEncode, LogLevel.Info);
+            this.LogMessage(e.Message);
         }
     }
 }

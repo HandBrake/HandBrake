@@ -28,6 +28,7 @@ namespace HandBrakeWPF.Services.Queue
     using HandBrakeWPF.Services.Encode.Factories;
     using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging.Interfaces;
     using HandBrakeWPF.Services.Queue.Model;
     using HandBrakeWPF.Utilities;
 
@@ -37,8 +38,6 @@ namespace HandBrakeWPF.Services.Queue
     using Execute = Caliburn.Micro.Execute;
     using GeneralApplicationException = HandBrakeWPF.Exceptions.GeneralApplicationException;
     using IEncode = HandBrakeWPF.Services.Encode.Interfaces.IEncode;
-    using LogLevel = HandBrakeWPF.Services.Logging.Model.LogLevel;
-    using LogMessageType = HandBrakeWPF.Services.Logging.Model.LogMessageType;
     using LogService = HandBrakeWPF.Services.Logging.LogService;
     using QueueCompletedEventArgs = HandBrakeWPF.EventArgs.QueueCompletedEventArgs;
     using QueueProgressEventArgs = HandBrakeWPF.EventArgs.QueueProgressEventArgs;
@@ -47,13 +46,15 @@ namespace HandBrakeWPF.Services.Queue
     {
         private static readonly object QueueLock = new object();
         private readonly IUserSettingService userSettingService;
+        private readonly ILog logService;
         private readonly ObservableCollection<QueueTask> queue = new ObservableCollection<QueueTask>();
         private readonly string queueFile;
         private bool clearCompleted;
 
-        public QueueService(IEncode encodeService, IUserSettingService userSettingService)
+        public QueueService(IEncode encodeService, IUserSettingService userSettingService, ILog logService)
         {
             this.userSettingService = userSettingService;
+            this.logService = logService;
             this.EncodeService = encodeService;
 
             // If this is the first instance, just use the main queue file, otherwise add the instance id to the filename.
@@ -492,7 +493,7 @@ namespace HandBrakeWPF.Services.Queue
             {
                 if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace) && !DriveUtilities.HasMinimumDiskSpace(job.Task.Destination, this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseQueueOnLowDiskspaceLevel)))
                 {
-                    LogService.GetLogger().LogMessage(Resources.PauseOnLowDiskspace, LogMessageType.ScanOrEncode, LogLevel.Info);
+                    this.logService.LogMessage(Resources.PauseOnLowDiskspace);
                     job.Status = QueueItemStatus.Waiting;
                     this.Pause();
                     this.BackupQueue(string.Empty);

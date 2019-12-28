@@ -33,21 +33,14 @@ namespace HandBrakeWPF.ViewModels
     {
         private readonly IErrorService errorService;
 
-        #region Private Fields
-
         private readonly ILog logService;
         private StringBuilder log = new StringBuilder();
         private long lastReadIndex;
 
-        #endregion
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogViewModel"/> class.
-        /// </summary>
-        public LogViewModel(IErrorService errorService)
+        public LogViewModel(IErrorService errorService, ILog logService)
         {
             this.errorService = errorService;
-            this.logService = LogService.GetLogger();
+            this.logService = logService;
             this.Title = Resources.LogViewModel_Title;
         }
 

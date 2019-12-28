@@ -28,7 +28,7 @@ namespace HandBrakeWPF.Services
     {
         private readonly IUserSettingService userSettingService;
         private readonly IEncode encodeService;
-        private readonly ILog log = LogService.GetLogger();
+        private readonly ILog log = null;
         private Timer pollTimer;
 
         private bool criticalStateHit = false;
@@ -36,8 +36,9 @@ namespace HandBrakeWPF.Services
         private bool lowPowerPause = false;
         private bool storageLowPause = false;
 
-        public SystemService(IUserSettingService userSettingService, IEncode encodeService)
+        public SystemService(IUserSettingService userSettingService, IEncode encodeService, ILog logService)
         {
+            this.log = logService;
             this.userSettingService = userSettingService;
             this.encodeService = encodeService;
         }
@@ -71,12 +72,10 @@ namespace HandBrakeWPF.Services
                 long lowLevel = this.userSettingService.GetUserSetting<long>(UserSettingConstants.PauseEncodeOnLowDiskspaceLevel);
                 if (!this.storageLowPause && this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PauseOnLowDiskspace) && !DriveUtilities.HasMinimumDiskSpace(directory, lowLevel))
                 {
-                    LogService.GetLogger().LogMessage(
+                    this.log.LogMessage(
                         string.Format(
                             Resources.SystemService_LowDiskSpaceLog,
-                            lowLevel / 1000 / 1000 / 1000),
-                        LogMessageType.Application,
-                        LogLevel.Info);
+                            lowLevel / 1000 / 1000 / 1000));
                     this.encodeService.Pause();
                     this.storageLowPause = true;
                 }
@@ -137,7 +136,7 @@ namespace HandBrakeWPF.Services
 
         private void ServiceLogMessage(string message)
         {
-            this.log.LogMessage(string.Format("{0}# {1}{0}", Environment.NewLine, message), LogMessageType.Application, LogLevel.Info);
+            this.log.LogMessage(string.Format("{0}# {1}{0}", Environment.NewLine, message));
         }
     }
 }
