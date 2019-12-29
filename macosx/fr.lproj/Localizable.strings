@@ -430,6 +430,9 @@
 /* Preferences -> Output Name Token */
 "Title" = "Titre";
 
+/* HBLanguage -> Unknown language */
+"Unknown" = "Inconnu";
+
 /* Video -> Framerate */
 "Variable Framerate" = "Fréquence d'images variable";
 

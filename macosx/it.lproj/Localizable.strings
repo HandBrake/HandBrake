@@ -173,7 +173,7 @@
 "HandBrake can't playback this combination of video/audio/container format. Do you want to open it in an external player?" = "HandBrake non può riprodurre questa combinazione di formati video/audio/contenitore. Vuoi aprirlo in un riproduttore esterno?";
 
 /* Quit Alert -> informative text */
-"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Se esci da Handbrake la tua conversione attuale sarà ricarica in coda al prossimo avvio. Confermi di voler uscire?";
+"If you quit HandBrake your current encode will be reloaded into your queue at next launch. Do you want to quit anyway?" = "Se esci da Handbrake la tua conversione attuale sarà ricaricata in coda al prossimo avvio. Confermi di voler uscire?";
 
 /* Import preset open panel title */
 "Import presets" = "Importa preset";
