@@ -130,7 +130,7 @@ namespace HandBrakeWPF.Services.Encode
                 this.IsEncoding = false;
 
                 this.ServiceLogMessage("Failed to start encoding ..." + Environment.NewLine + exc);
-                this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", task.Source, null, 0));
+                this.InvokeEncodeCompleted(new EventArgs.EncodeCompletedEventArgs(false, exc, "Unable to start encoding", this.currentTask.Source, this.currentTask.Destination, null, 0));
             }
         }
 
@@ -256,8 +256,8 @@ namespace HandBrakeWPF.Services.Encode
             // Raise the Encode Completed Event.
             this.InvokeEncodeCompleted(
                 e.Error
-                    ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Destination, hbLog, filesize)
-                    : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Destination, hbLog, filesize));
+                    ? new EventArgs.EncodeCompletedEventArgs(false, null, string.Empty, this.currentTask.Source, this.currentTask.Destination, hbLog, filesize)
+                    : new EventArgs.EncodeCompletedEventArgs(true, null, string.Empty, this.currentTask.Source, this.currentTask.Destination, hbLog, filesize));
         }
 
         private long GetFilesize(string destination)

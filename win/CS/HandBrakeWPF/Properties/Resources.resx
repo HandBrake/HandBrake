@@ -2181,4 +2181,8 @@ Where supported, any user presets will have been imported.</value>
   <data name="Options_Experimental" xml:space="preserve">
     <value>Experimental</value>
   </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>Replacement Placeholders: {source} {destination}</value>
+    <comment>Note: {source} and {destination} are not translatable. </comment>
+  </data>
 </root>

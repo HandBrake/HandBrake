@@ -83,7 +83,7 @@ namespace HandBrakeWPF.Services
             // Send the file to the users requested application
             if (e.Successful)
             {
-                this.SendToApplication(e.FileName);
+                this.SendToApplication(e.SourceFileName, e.FileName);
             }
 
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.PlaySoundWhenDone))
@@ -174,28 +174,21 @@ namespace HandBrakeWPF.Services
             }
         }
 
-        /// <summary>
-        /// Send a file to a 3rd party application after encoding has completed.
-        /// </summary>
-        /// <param name="file">
-        /// The file path
-        /// </param>
-        private void SendToApplication(string file)
+        private void SendToApplication(string source, string destination)
         {
             if (this.userSettingService.GetUserSetting<bool>(UserSettingConstants.SendFile) &&
                 !string.IsNullOrEmpty(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo)))
             {
-                string args = string.Format(
-                    "{0} \"{1}\"", 
-                    this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs), 
-                    file);
-                var destination =
-                    new ProcessStartInfo(
-                        this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo), args);
+                string arguments = this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileToArgs);
 
-                this.ServiceLogMessage(string.Format("Sending output file to: {0}, with arguments: {1} ", destination, args));
+                arguments = arguments.Replace("{source}", string.Format("\"{0}\"", source));
+                arguments = arguments.Replace("{destination}", string.Format("\"{0}\"", destination));
 
-                Process.Start(destination);
+                var process = new ProcessStartInfo(this.userSettingService.GetUserSetting<string>(UserSettingConstants.SendFileTo), arguments);
+
+                this.ServiceLogMessage(string.Format("Sending output file to: {0}, with arguments: {1} ", destination, arguments));
+
+                Process.Start(process);
             }
         }
 
