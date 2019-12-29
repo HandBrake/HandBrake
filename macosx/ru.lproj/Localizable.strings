@@ -50,6 +50,9 @@
 /* Preferences Advanced Toolbar Item */
 "Advanced" = "Расширенное";
 
+/* HBLanguage -> Any language */
+"Any" = "Любой";
+
 /* Delete preset alert -> message */
 "Are you sure you want to permanently delete the selected preset?" = "Вы уверены, что хотите безвозвратно удалить выбранный пресет?";
 
@@ -429,6 +432,9 @@
 
 /* Preferences -> Output Name Token */
 "Title" = "Заголовок";
+
+/* HBLanguage -> Unknown language */
+"Unknown" = "Неизвестно";
 
 /* Video -> Framerate */
 "Variable Framerate" = "Переменная";
