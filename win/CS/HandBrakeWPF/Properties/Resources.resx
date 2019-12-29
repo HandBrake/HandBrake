@@ -2172,4 +2172,7 @@ Where supported, any user presets will have been imported.</value>
   <data name="UpdateCheck_Weekly" xml:space="preserve">
     <value>Weekly</value>
   </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>A new version of HandBrake is available!</value>
+  </data>
 </root>

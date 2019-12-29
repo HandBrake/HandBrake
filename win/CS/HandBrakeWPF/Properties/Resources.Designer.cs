@@ -5072,6 +5072,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A new version of HandBrake is available!.
+        /// </summary>
+        public static string SourceSelection_UpdateAvailable {
+            get {
+                return ResourceManager.GetString("SourceSelection_UpdateAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HandBrake&apos;s engine failed to initialise. This is often caused by out of date GPU drivers.\n  Please update the GPU drivers for any onboard and discrete graphics your system has..
         /// </summary>
         public static string Startup_InitFailed {
