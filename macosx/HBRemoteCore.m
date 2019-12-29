@@ -5,6 +5,7 @@
 #import "HBRemoteCore.h"
 #import "HBRemoteCoreProtocol.h"
 #import "HBPreferencesKeys.h"
+#import <IOKit/pwr_mgt/IOPMLib.h>
 
 @import HandBrakeKit;
 
@@ -21,6 +22,8 @@
 @property (nonatomic, readwrite, copy) HBCoreProgressHandler progressHandler;
 @property (nonatomic, readwrite, copy) HBCoreCompletionHandler completionHandler;
 
+@property (nonatomic, readwrite) IOPMAssertionID assertionID;
+
 @end
 
 @implementation HBRemoteCore
@@ -33,6 +36,7 @@
         _state = HBStateIdle;
         _stdoutRedirect = HBRedirect.stdoutRedirect;
         _stderrRedirect = HBRedirect.stderrRedirect;
+        _assertionID = -1;
 
         [self connect];
     }
@@ -124,23 +128,60 @@
     [_proxy setLogLevel:logLevel];
 }
 
-- (void)setAutomaticallyPreventSleep:(BOOL)automaticallyPreventSleep
+- (void)preventSleep
 {
-    [_proxy setAutomaticallyPreventSleep:automaticallyPreventSleep];
+    if (_assertionID != -1)
+    {
+        // nothing to do
+        return;
+    }
+
+    CFStringRef reasonForActivity= CFSTR("HandBrake is currently scanning and/or encoding");
+
+    IOReturn success = IOPMAssertionCreateWithName(kIOPMAssertPreventUserIdleSystemSleep,
+                                                   kIOPMAssertionLevelOn, reasonForActivity, &_assertionID);
+
+    if (success != kIOReturnSuccess)
+    {
+        [HBUtilities writeToActivityLog:"HBRemoteCore: failed to prevent system sleep"];
+    }
 }
 
 - (void)allowSleep
 {
-    [_proxy allowSleep];
+    if (_assertionID == -1)
+    {
+        // nothing to do
+        return;
+    }
+
+    IOReturn success = IOPMAssertionRelease(_assertionID);
+
+    if (success == kIOReturnSuccess)
+    {
+        _assertionID = -1;
+    }
 }
 
-- (void)preventSleep
+- (void)preventAutoSleep
 {
-    [_proxy preventSleep];
+    if (self.automaticallyPreventSleep)
+    {
+        [self preventSleep];
+    }
+}
+
+- (void)allowAutoSleep
+{
+    if (self.automaticallyPreventSleep)
+    {
+        [self allowSleep];
+    }
 }
 
 - (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews progressHandler:(nonnull HBCoreProgressHandler)progressHandler completionHandler:(nonnull HBCoreCompletionHandler)completionHandler
 {
+    [self preventAutoSleep];
 
 #ifdef __SANDBOX_ENABLED__
     __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:url];
@@ -167,6 +208,7 @@
 #ifdef __SANDBOX_ENABLED__
             token = nil;
 #endif
+            [weakSelf allowAutoSleep];
             handler(result);
         });
     }];
@@ -179,6 +221,8 @@
 
 - (void)encodeJob:(HBJob *)job progressHandler:(HBCoreProgressHandler)progressHandler completionHandler:(HBCoreCompletionHandler)completionHandler
 {
+    [self preventAutoSleep];
+
 #ifdef __SANDBOX_ENABLED__
     __block HBSecurityAccessToken *token = [HBSecurityAccessToken tokenWithObject:job];
 
@@ -221,6 +265,7 @@
 #ifdef __SANDBOX_ENABLED__
             token = nil;
 #endif
+            [weakSelf allowAutoSleep];
             handler(result);
         });
     }];
@@ -257,11 +302,13 @@
 - (void)pause
 {
     [_proxy pauseEncode];
+    [self allowAutoSleep];
 }
 
 - (void)resume
 {
     [_proxy resumeEncode];
+    [self preventAutoSleep];
 }
 
 @end

@@ -57,6 +57,7 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
 
     _core = [[HBCore alloc] initWithLogLevel:level queue:_queue];
     _core.name = name;
+    _core.automaticallyPreventSleep = NO;
 
     // Completion handler
     void (^completionHandler)(HBCoreResult result) = ^(HBCoreResult result)
@@ -105,13 +106,6 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     });
 }
 
-- (void)setAutomaticallyPreventSleep:(BOOL)automaticallyPreventSleep
-{
-    dispatch_sync(_queue, ^{
-        self.core.automaticallyPreventSleep = automaticallyPreventSleep;
-    });
-}
-
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     if (context == HandBrakeXPCServiceContext)
@@ -122,20 +116,6 @@ static void *HandBrakeXPCServiceContext = &HandBrakeXPCServiceContext;
     {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
-}
-
-- (void)preventSleep
-{
-    dispatch_sync(_queue, ^{
-        [self.core preventSleep];
-    });
-}
-
-- (void)allowSleep
-{
-    dispatch_sync(_queue, ^{
-        [self.core allowSleep];
-    });
 }
 
 - (void)scanURL:(NSURL *)url titleIndex:(NSUInteger)index previews:(NSUInteger)previewsNum minDuration:(NSUInteger)seconds keepPreviews:(BOOL)keepPreviews withReply:(void (^)(HBCoreResult))reply
