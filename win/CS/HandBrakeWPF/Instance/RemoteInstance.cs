@@ -4,7 +4,7 @@
 // </copyright>
 // <summary>
 //   An Implementation of IEncodeInstance that works with a remote process rather than locally in-process.
-//   This class is effectivly just a shim.
+//   This class is effectively just a shim.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -15,6 +15,9 @@ namespace HandBrakeWPF.Instance
     using System.Diagnostics;
     using System.Linq;
     using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Runtime.CompilerServices;
+    using System.Text;
     using System.Threading.Tasks;
     using System.Timers;
 
@@ -24,29 +27,30 @@ namespace HandBrakeWPF.Instance
     using HandBrake.Interop.Interop.Json.State;
 
     using HandBrakeWPF.Instance.Model;
+    using HandBrakeWPF.Utilities;
 
     using Newtonsoft.Json;
 
     /*
      * TODO:
-     *  1. Add support for logging.
-     *  2. Code to detect what ports are in use / select one within range.
-     *  3. Add support for communciating via socket instead of HTTP.
+     *  - Handle Worker Shutdown.
+     *  - Worker Registration Process
+     *  - Port in Use Handling
+     *  - Setting Configuration (libdvdnav)
+     *  - Setting No Hardware mode
      */
 
-    public class RemoteInstance : IEncodeInstance, IDisposable
+    public class RemoteInstance : HttpRequestBase, IEncodeInstance, IDisposable
     {
-        private const double EncodePollIntervalMs = 500;
-        private readonly HttpClient client = new HttpClient();
-        private readonly string serverUrl;
-        private readonly int port;
+        private const double EncodePollIntervalMs = 1000;
+
         private Process workerProcess;
         private Timer encodePollTimer;
 
         public RemoteInstance(int port)
         {
             this.port = port;
-            this.serverUrl = "http://localhost/";
+            this.serverUrl = string.Format("http://127.0.0.1:{0}/", this.port);
         }
 
         public event EventHandler<EncodeCompletedEventArgs> EncodeCompleted;
@@ -55,8 +59,8 @@ namespace HandBrakeWPF.Instance
 
         public async void PauseEncode()
         {
-            this.StopPollingProgres();
             await this.MakeHttpGetRequest("PauseEncode");
+            this.StopPollingProgress();
         }
 
         public async void ResumeEncode()
@@ -68,18 +72,17 @@ namespace HandBrakeWPF.Instance
         public async void StartEncode(JsonEncodeObject jobToStart)
         {
             JsonSerializerSettings settings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
-            string job = JsonConvert.SerializeObject(jobToStart, Formatting.Indented, settings);
+            string job = JsonConvert.SerializeObject(jobToStart, Formatting.None, settings);
 
-            var values = new Dictionary<string, string> { { "jpb", job } };
-            await this.MakeHttpPostRequest("StartEncode", values);
+            await this.MakeHttpJsonPostRequest("StartEncode", job);
 
             this.MonitorEncodeProgress();
         }
 
         public async void StopEncode()
         {
-            this.StopPollingProgres();
             await this.MakeHttpGetRequest("StopEncode");
+            this.StopPollingProgress();
         }
 
         public JsonState GetEncodeProgress()
@@ -98,9 +101,9 @@ namespace HandBrakeWPF.Instance
             return state;
         }
 
-        public void Initialize(int verbosity, bool noHardware)
+        public void Initialize(int verbosityLvl, bool noHardwareMode)
         {
-            this.StartServer();
+            this.StartServer(verbosityLvl, noHardwareMode);
         }
 
         public void Dispose()
@@ -111,16 +114,16 @@ namespace HandBrakeWPF.Instance
             this.StopServer();
         }
 
-        private void StartServer()
+        private void StartServer(int verbosityLvl, bool noHardwareMode)
         {
             if (this.workerProcess == null || this.workerProcess.HasExited)
             {
                 this.workerProcess = new Process();
                 this.workerProcess.StartInfo =
-                    new ProcessStartInfo("HandBrake.Worker.exe", string.Format("--port={0}", this.port))
-                        {
-                            WindowStyle = ProcessWindowStyle.Normal
-                        };
+                    new ProcessStartInfo("HandBrake.Worker.exe", string.Format("--port={0} --verbosity={1}", this.port, verbosityLvl))
+                    {
+                        WindowStyle = ProcessWindowStyle.Normal
+                    };
 
                 this.workerProcess.Start();
                 this.workerProcess.Exited += this.WorkerProcess_Exited;
@@ -147,8 +150,9 @@ namespace HandBrakeWPF.Instance
             this.encodePollTimer.Start();
         }
 
-        private void StopPollingProgres()
+        private void StopPollingProgress()
         {
+            this.PollEncodeProgress(); // Get the final progress state.
             this.encodePollTimer?.Stop();
         }
 
@@ -167,8 +171,20 @@ namespace HandBrakeWPF.Instance
 
         private async void PollEncodeProgress()
         {
-            ServerResponse response = await this.MakeHttpGetRequest("PollEncodeProgress");
-            if (!response.WasSuccessful)
+            ServerResponse response = null;
+            try
+            {
+                response = await this.MakeHttpGetRequest("PollEncodeProgress");
+            }
+            catch (Exception e)
+            {
+                if (this.encodePollTimer != null)
+                {
+                    this.encodePollTimer.Stop();
+                }
+            }
+
+            if (response == null || !response.WasSuccessful)
             {
                 return;
             }
@@ -202,43 +218,6 @@ namespace HandBrakeWPF.Instance
 
                 this.EncodeCompleted?.Invoke(sender: this, e: new EncodeCompletedEventArgs(state.WorkDone.Error != 0));
             }
-        }
-
-        private async Task<ServerResponse> MakeHttpPostRequest(string urlPath, Dictionary<string, string> postValues)
-        {
-            if (postValues == null || !postValues.Any())
-            {
-                throw new InvalidOperationException("No Post Values Found.");
-            }
-
-            if (postValues.Any())
-            {
-                FormUrlEncodedContent content = new FormUrlEncodedContent(postValues);
-                HttpResponseMessage response = await this.client.PostAsync(this.serverUrl + urlPath, content);
-                if (response != null)
-                {
-                    string returnContent = await response.Content.ReadAsStringAsync();
-                    ServerResponse serverResponse = new ServerResponse(response.IsSuccessStatusCode, returnContent);
-
-                    return serverResponse;
-                }
-            }
-
-            return null;
-        }
-
-        private async Task<ServerResponse> MakeHttpGetRequest(string urlPath)
-        {
-            HttpResponseMessage response = await this.client.GetAsync(this.serverUrl + urlPath);
-            if (response != null)
-            {
-                string returnContent = await response.Content.ReadAsStringAsync();
-                ServerResponse serverResponse = new ServerResponse(response.IsSuccessStatusCode, returnContent);
-
-                return serverResponse;
-            }
-
-            return null;
         }
     }
 }

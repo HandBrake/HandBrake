@@ -10,19 +10,13 @@
 namespace HandBrakeWPF.Services
 {
     using System;
-    using System.Runtime.CompilerServices;
     using System.Timers;
 
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Encode.Interfaces;
-    using HandBrakeWPF.Services.Encode.Model;
     using HandBrakeWPF.Services.Interfaces;
-    using HandBrakeWPF.Services.Logging;
     using HandBrakeWPF.Services.Logging.Interfaces;
-    using HandBrakeWPF.Services.Logging.Model;
     using HandBrakeWPF.Utilities;
-
-    using Ookii.Dialogs.Wpf;
 
     public class SystemService : ISystemService
     {

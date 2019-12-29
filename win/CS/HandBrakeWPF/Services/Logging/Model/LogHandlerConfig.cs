@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Worker.Logging.Models
+namespace HandBrakeWPF.Services.Logging.Model
 {
     public class LogHandlerConfig
     {

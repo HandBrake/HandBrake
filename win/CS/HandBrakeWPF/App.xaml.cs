@@ -129,7 +129,7 @@ namespace HandBrakeWPF
             }
 
             // NO-Hardware Mode
-            bool noHardware = e.Args.Any(f => f.Equals("--no-hardware"))  || (Portable.IsPortable() && !Portable.IsHardwareEnabled());
+            bool noHardware = e.Args.Any(f => f.Equals("--no-hardware")) || (Portable.IsPortable() && !Portable.IsHardwareEnabled());
 
             // Initialise the Engine
             HandBrakeWPF.Helpers.LogManager.Init();

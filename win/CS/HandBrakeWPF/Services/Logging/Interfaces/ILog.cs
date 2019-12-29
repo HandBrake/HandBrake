@@ -12,15 +12,17 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
     using System;
     using System.Collections.Generic;
 
+    using HandBrake.Worker.Logging.Interfaces;
     using HandBrake.Worker.Logging.Models;
 
+    using HandBrakeWPF.Services.Logging.Model;
+
     using LogEventArgs = HandBrakeWPF.Services.Logging.EventArgs.LogEventArgs;
-    using LogMessage = HandBrakeWPF.Services.Logging.Model.LogMessage;
 
     /// <summary>
     /// The Log interface.
     /// </summary>
-    public interface ILog
+    public interface ILog : ILogHandler
     {
         /// <summary>
         /// The message logged.
@@ -31,21 +33,6 @@ namespace HandBrakeWPF.Services.Logging.Interfaces
         /// The log reset event
         /// </summary>
         event EventHandler LogReset;
-
-        /// <summary>
-        /// Gets the log messages.
-        /// </summary>
-        IEnumerable<LogMessage> LogMessages { get; }
-
-        /// <summary>
-        /// Gets the activity log.
-        /// </summary>
-        string ActivityLog { get; }
-
-        /// <summary>
-        /// The reset.
-        /// </summary>
-        void Reset();
 
         /// <summary>
         /// Enable logging for this worker process.

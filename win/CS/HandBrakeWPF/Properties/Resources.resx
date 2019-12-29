@@ -2175,4 +2175,10 @@ Where supported, any user presets will have been imported.</value>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Always use the default path for each new name generated.</value>
   </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>Port range must be between 5000 and 32767</value>
+  </data>
+  <data name="Options_Experimental" xml:space="preserve">
+    <value>Experimental</value>
+  </data>
 </root>

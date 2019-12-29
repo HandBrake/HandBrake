@@ -8,12 +8,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace HandBrake.Worker
+namespace HandBrake.Worker.Routing
 {
     using System;
-    using System.IO;
+    using System.Collections.Generic;
     using System.Net;
-    using System.Runtime.InteropServices;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.Json.State;
@@ -21,6 +20,7 @@ namespace HandBrake.Worker
     using HandBrake.Worker.Logging;
     using HandBrake.Worker.Logging.Interfaces;
     using HandBrake.Worker.Logging.Models;
+    using HandBrake.Worker.Utilities;
 
     using Newtonsoft.Json;
 
@@ -29,6 +29,7 @@ namespace HandBrake.Worker
         private readonly JsonSerializerSettings jsonNetSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
         private HandBrakeInstance handbrakeInstance;
         private ILogHandler logHandler;
+        private bool isLoggingConfigured = false;
 
         public string Initialise(int verbosity)
         {
@@ -56,7 +57,7 @@ namespace HandBrake.Worker
 
         public string StartEncode(HttpListenerRequest request)
         {
-            string requestPostData = GetRequestPostData(request);
+            string requestPostData = HttpUtilities.GetRequestPostData(request);
 
             Console.WriteLine(requestPostData);
             this.handbrakeInstance.StartEncode(requestPostData);
@@ -105,69 +106,32 @@ namespace HandBrake.Worker
 
 
         /* Logging API */
-
-        // POST - JSON
-        public string ConfigureLogging(HttpListenerRequest request)
-        {
-            string requestPostData = GetRequestPostData(request);
-
-            JsonSerializerSettings settings = new JsonSerializerSettings
-                                              {
-                                                  NullValueHandling = NullValueHandling.Ignore,
-                                              };
-            LogHandlerConfig config;
-            if (!string.IsNullOrEmpty(requestPostData))
-            {
-                config = JsonConvert.DeserializeObject<LogHandlerConfig>(requestPostData, settings);
-            }
-            else
-            {
-                config = new LogHandlerConfig(false, null, false, "Logging Not Configured!");
-            }
-
-            this.logHandler.ConfigureLogging(config);
-            return null;
-        }
         
         // GET
-        public string GetFullLog(HttpListenerRequest request)
+        public string GetAllLogMessages(HttpListenerRequest request)
         {
-            return this.logHandler.GetFullLog();
+            return JsonConvert.SerializeObject(this.logHandler.GetLogMessages(), Formatting.Indented, this.jsonNetSettings);
         }
 
+
         // POST
-        public string GetLogFromIndex(HttpListenerRequest request)
+        public string GetLogMessagesFromIndex(HttpListenerRequest request)
         {
-            string requestPostData = GetRequestPostData(request);
+            string requestPostData = HttpUtilities.GetRequestPostData(request);
 
             if (int.TryParse(requestPostData, out int index))
             {
-                return this.logHandler.GetLogFromIndex(index);
+                return JsonConvert.SerializeObject(this.logHandler.GetLogMessagesFromIndex(index), Formatting.Indented, this.jsonNetSettings);
             }
 
             return null;
         }
 
-        // POST
-        public string GetLatestLogIndex(HttpListenerRequest request)
+        public string ResetLogging(HttpListenerRequest request)
         {
-            return this.logHandler.GetLatestLogIndex().ToString();
-        }
+            this.logHandler.Reset();
 
-        private static string GetRequestPostData(HttpListenerRequest request)
-        {
-            if (!request.HasEntityBody)
-            {
-                return null;
-            }
-
-            using (Stream inputStream = request.InputStream)
-            {
-                using (StreamReader streamReader = new StreamReader(inputStream, request.ContentEncoding))
-                {
-                    return streamReader.ReadToEnd();
-                }
-            }
+            return null;
         }
     }
 }

@@ -11,7 +11,7 @@ namespace HandBrakeWPF.Services.Logging.EventArgs
 {
     using System;
 
-    using LogMessage = HandBrakeWPF.Services.Logging.Model.LogMessage;
+    using HandBrake.Worker.Logging.Models;
 
     /// <summary>
     /// The Message Logged Event Args

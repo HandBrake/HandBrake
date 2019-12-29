@@ -18,16 +18,23 @@ namespace HandBrakeWPF.Services.Logging
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Timers;
 
     using HandBrake.Interop.Interop;
     using HandBrake.Interop.Interop.EventArgs;
     using HandBrake.Worker.Logging.Models;
 
+    using HandBrakeWPF.Instance.Model;
+    using HandBrakeWPF.Services.Interfaces;
+    using HandBrakeWPF.Services.Logging.Model;
+    using HandBrakeWPF.Utilities;
+
+    using Newtonsoft.Json;
+
     using ILog = Interfaces.ILog;
     using LogEventArgs = EventArgs.LogEventArgs;
-    using LogMessage = Model.LogMessage;
 
-    public class LogService : ILog
+    public class LogService : HttpRequestBase, ILog
     {
         // TODO List.
         // Maybe make the event weak?
@@ -39,17 +46,29 @@ namespace HandBrakeWPF.Services.Logging
  
         private bool isLoggingEnabled;
         private List<LogMessage> logMessages = new List<LogMessage>(); 
-        private long messageIndex;
+        private int messageIndex;
         private string diskLogPath;
         private bool deleteLogFirst;
         private bool isDiskLoggingEnabled;
         private StreamWriter fileWriter;
         private string logHeader;
+        private Timer remoteLogPollTimer;
+        private int remoteIndex = 0;
+        private bool isRemotePollingEnabled = false;
 
-        public LogService()
+        public LogService(IUserSettingService userSettingService)
         {
             HandBrakeUtils.MessageLogged += this.HandBrakeUtils_MessageLogged;
             HandBrakeUtils.ErrorLogged += this.HandBrakeUtils_ErrorLogged;
+
+            if (userSettingService.GetUserSetting<bool>(UserSettingConstants.RemoteServiceEnabled))
+            {
+                this.ActivateRemoteLogPolling();
+                this.isRemotePollingEnabled = true;
+
+                this.port = userSettingService.GetUserSetting<int>(UserSettingConstants.RemoteServicePort);
+                this.serverUrl = string.Format("http://127.0.0.1:{0}/", this.port);
+            }
         }
 
         public event EventHandler<LogEventArgs> MessageLogged;
@@ -67,24 +86,12 @@ namespace HandBrakeWPF.Services.Logging
             }
         }
 
-        public string ActivityLog
-        {
-            get
-            {
-                lock (this.lockObject)
-                {
-                    return this.logBuilder.ToString();
-                }
-            }
-        }
-
         public void LogMessage(string content)
         {
             if (!this.isLoggingEnabled)
             {
                 return;
             }
-
 
             LogMessage msg = new LogMessage(content, this.messageIndex);
             lock (this.lockObject)
@@ -127,8 +134,62 @@ namespace HandBrakeWPF.Services.Logging
             this.LogMessage(config.Header);
         }
 
-        public void Reset()
+        public string GetFullLog()
         {
+            lock (this.lockObject)
+            {
+                return this.logBuilder.ToString();
+            }
+        }
+
+        public List<LogMessage> GetLogMessages()
+        {
+            lock (this.lockObject)
+            {
+                return new List<LogMessage>(this.logMessages);
+            }
+        }
+
+        public List<LogMessage> GetLogMessagesFromIndex(int index)
+        {
+            List<LogMessage> log = new List<LogMessage>();
+            lock (this.lockObject)
+            {
+                // Note messageIndex is not 0 based.
+                for (int i = index; i < this.messageIndex; i++)
+                {
+                    log.Add(this.logMessages[i]);
+                }
+            }
+
+            return log;
+        }
+
+        public long GetLatestLogIndex()
+        {
+            lock (this.lockObject)
+            {
+                return this.messageIndex;
+            }
+        }
+        
+        public async void Reset()
+        {
+            //if (this.isRemotePollingEnabled)
+            //{
+            //    try
+            //    {
+            //        await this.MakeHttpGetRequest("ResetLogging");
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        if (this.remoteLogPollTimer != null)
+            //        {
+            //            this.remoteLogPollTimer.Stop();
+            //        }
+            //    }
+            //}
+
             lock (this.lockObject)
             {
                 this.logMessages.Clear();
@@ -296,6 +357,63 @@ namespace HandBrakeWPF.Services.Logging
             }
 
             this.LogMessage(e.Message);
+        }
+
+        private void ActivateRemoteLogPolling()
+        {
+            this.remoteLogPollTimer = new Timer();
+            this.remoteLogPollTimer.Interval = 1000;
+
+            this.remoteLogPollTimer.Elapsed += (o, e) =>
+            {
+                try
+                {
+                    this.PollRemoteLog();
+                }
+                catch (Exception exc)
+                {
+                    Debug.WriteLine(exc);
+                }
+            };
+            this.remoteLogPollTimer.Start();
+        }
+
+        private async void PollRemoteLog()
+        {
+            ServerResponse response = null;
+            try
+            {
+                int nextIndex = this.remoteIndex + 1;
+                string json = JsonConvert.SerializeObject(nextIndex, Formatting.Indented, this.jsonNetSettings);
+
+                response = await this.MakeHttpJsonPostRequest("GetLogMessagesFromIndex", json);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine("No Endpoint");
+            }
+
+            if (response == null || !response.WasSuccessful)
+            {
+                return;
+            }
+
+            string statusJson = response.JsonResponse;
+
+            List<LogMessage> messages = null;
+            if (!string.IsNullOrEmpty(statusJson))
+            {
+                messages = JsonConvert.DeserializeObject<List<LogMessage>>(statusJson, this.jsonNetSettings);
+            }
+
+            if (messages != null)
+            {
+                foreach (var item in messages)
+                {
+                    this.LogMessage(item.Content);
+                    this.remoteIndex = item.MessageIndex;
+                }
+            }
         }
     }
 }

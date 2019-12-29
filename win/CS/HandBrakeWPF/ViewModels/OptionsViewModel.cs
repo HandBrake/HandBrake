@@ -109,6 +109,10 @@ namespace HandBrakeWPF.ViewModels
         private bool useDarkTheme;
         private bool alwaysUseDefaultPath;
 
+        // Experimental
+        private int remoteServicePort;
+        private bool remoteServiceEnabled;
+
         #endregion
 
         #region Constructors and Destructors
@@ -1265,6 +1269,47 @@ namespace HandBrakeWPF.ViewModels
 
         #endregion
 
+        // Experimental
+        public bool RemoteServiceEnabled
+        {
+            get => this.remoteServiceEnabled;
+            set
+            {
+                if (value == this.remoteServiceEnabled)
+                {
+                    return;
+                }
+
+                this.remoteServiceEnabled = value;
+                this.NotifyOfPropertyChange(() => this.RemoteServiceEnabled);
+            }
+        }
+
+        public int RemoteServicePort
+        {
+            get => this.remoteServicePort;
+            set
+            {
+                if (value == this.remoteServicePort)
+                {
+                    return;
+                }
+
+                if (value > 32767 || value < 5000)
+                {
+                    this.errorService.ShowMessageBox(
+                        Resources.OptionsView_RemotePortLimit,
+                        Resources.Error,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return; // Allow only valid ports, not in the ephemeral range
+                }
+                
+                this.remoteServicePort = value;
+                this.NotifyOfPropertyChange(() => this.RemoteServicePort);
+            }
+        }
+
         #region Public Methods
 
         /// <summary>
@@ -1572,6 +1617,12 @@ namespace HandBrakeWPF.ViewModels
 
             // Use dvdnav
             this.DisableLibdvdNav = userSettingService.GetUserSetting<bool>(UserSettingConstants.DisableLibDvdNav);
+
+            // #############################
+            // Experimental
+            // #############################
+            this.RemoteServiceEnabled = this.userSettingService.GetUserSetting<bool>(UserSettingConstants.RemoteServiceEnabled);
+            this.RemoteServicePort = userSettingService.GetUserSetting<int>(UserSettingConstants.RemoteServicePort);
         }
 
         /// <summary>
@@ -1677,6 +1728,10 @@ namespace HandBrakeWPF.ViewModels
             }
 
             this.userSettingService.SetUserSetting(UserSettingConstants.DisableLibDvdNav, this.DisableLibdvdNav);
+
+            /* Experimental */
+            this.userSettingService.SetUserSetting(UserSettingConstants.RemoteServiceEnabled, this.RemoteServiceEnabled);
+            this.userSettingService.SetUserSetting(UserSettingConstants.RemoteServicePort, this.RemoteServicePort);
         }
 
         /// <summary>

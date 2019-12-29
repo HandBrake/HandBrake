@@ -29,9 +29,6 @@ namespace HandBrakeWPF.Instance
         private static HandBrakeInstance previewInstance;
         private static bool noHardware;
 
-        /// <summary>
-        /// The init.
-        /// </summary>
         public static void Init(bool noHardwareMode)
         {
             noHardware = noHardwareMode;
@@ -46,7 +43,7 @@ namespace HandBrakeWPF.Instance
         /// The verbosity.
         /// </param>
         /// <param name="configuration">
-        /// The configuratio.
+        /// The configuration.
         /// </param>
         /// <returns>
         /// The <see cref="IHandBrakeInstance"/>.

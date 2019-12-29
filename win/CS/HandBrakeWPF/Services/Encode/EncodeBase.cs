@@ -132,7 +132,7 @@ namespace HandBrakeWPF.Services.Encode
                 string encodeDestinationPath = Path.GetDirectoryName(destination);
                 string destinationFile = Path.GetFileName(destination);
                 string encodeLogFile = destinationFile + " " + DateTime.Now.ToString(CultureInfo.InvariantCulture).Replace("/", "-").Replace(":", "-") + ".txt";
-                string logContent = this.logService.ActivityLog;
+                string logContent = this.logService.GetFullLog();
 
                 // Make sure the log directory exists.
                 if (!Directory.Exists(logDir))

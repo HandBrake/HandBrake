@@ -16,6 +16,8 @@ namespace HandBrakeWPF.ViewModels
 
     using Caliburn.Micro;
 
+    using HandBrake.Worker.Logging.Models;
+
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Utilities;
@@ -23,7 +25,6 @@ namespace HandBrakeWPF.ViewModels
 
     using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;
     using LogEventArgs = HandBrakeWPF.Services.Logging.EventArgs.LogEventArgs;
-    using LogMessage = HandBrakeWPF.Services.Logging.Model.LogMessage;
     using LogService = HandBrakeWPF.Services.Logging.LogService;
 
     /// <summary>
@@ -96,7 +97,7 @@ namespace HandBrakeWPF.ViewModels
 
             // Refresh the Log Display
             this.log.Clear();
-            foreach (LogMessage logMessage in this.logService.LogMessages)
+            foreach (LogMessage logMessage in this.logService.GetLogMessages())
             {
                 this.log.AppendLine(logMessage.Content);
                 this.lastReadIndex = logMessage.MessageIndex;
@@ -156,7 +157,7 @@ namespace HandBrakeWPF.ViewModels
             this.log.Clear();
             this.lastReadIndex = 0;
 
-            foreach (LogMessage logMessage in this.logService.LogMessages)
+            foreach (LogMessage logMessage in this.logService.GetLogMessages())
             {
                 this.log.AppendLine(logMessage.Content);
                 this.lastReadIndex = logMessage.MessageIndex;

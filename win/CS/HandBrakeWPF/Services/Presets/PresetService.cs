@@ -33,7 +33,6 @@ namespace HandBrakeWPF.Services.Presets
     using HandBrakeWPF.Services.Interfaces;
     using HandBrakeWPF.Services.Logging;
     using HandBrakeWPF.Services.Logging.Interfaces;
-    using HandBrakeWPF.Services.Logging.Model;
     using HandBrakeWPF.Services.Presets.Factories;
     using HandBrakeWPF.Services.Presets.Interfaces;
     using HandBrakeWPF.Services.Presets.Model;

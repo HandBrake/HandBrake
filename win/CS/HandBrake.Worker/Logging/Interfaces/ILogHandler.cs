@@ -9,31 +9,22 @@
 
 namespace HandBrake.Worker.Logging.Interfaces
 {
+    using System.Collections.Generic;
+
     using HandBrake.Worker.Logging.Models;
 
     public interface ILogHandler
     {
-        /// <summary>
-        /// Enable logging for this worker process.
-        /// </summary>
-        /// <param name="config">
-        /// Configuration for the logger.
-        /// </param>
-        /// <remarks>
-        /// If this is not called, all log messages from libhb will be ignored.
-        /// </remarks>
-        void ConfigureLogging(LogHandlerConfig config);
-
         string GetFullLog();
 
-        long GetLatestLogIndex();
+        List<LogMessage> GetLogMessages();
 
         /// <summary>
         /// Get the log data from a given index
         /// </summary>
         /// <param name="index">index is zero based</param>
         /// <returns>Full log as a string</returns>
-        string GetLogFromIndex(int index);
+        List<LogMessage> GetLogMessagesFromIndex(int index);
 
         /// <summary>
         /// Empty the log cache and reset the log handler to defaults.

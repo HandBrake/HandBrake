@@ -44,14 +44,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiRouter.cs" />
+    <Compile Include="Routing\ApiRouter.cs" />
+    <Compile Include="Registration\ConnectionRegistrar.cs" />
     <Compile Include="HttpServer.cs" />
     <Compile Include="Logging\Interfaces\ILogHandler.cs" />
     <Compile Include="Logging\LogHandler.cs" />
-    <Compile Include="Logging\Models\LogHandlerConfig.cs" />
     <Compile Include="Logging\Models\LogMessage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Registration\Model\ConnectionResult.cs" />
+    <Compile Include="Utilities\HttpUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

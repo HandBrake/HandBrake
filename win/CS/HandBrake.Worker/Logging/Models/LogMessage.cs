@@ -11,7 +11,7 @@ namespace HandBrake.Worker.Logging.Models
 {
     public class LogMessage
     {
-        public LogMessage(string content, long messageIndex)
+        public LogMessage(string content, int messageIndex)
         {
             this.Content = content;
             this.MessageIndex = messageIndex;
@@ -19,6 +19,6 @@ namespace HandBrake.Worker.Logging.Models
 
         public string Content { get; private set; }
 
-        public long MessageIndex { get; private set; }
+        public int MessageIndex { get; private set; }
     }
 }

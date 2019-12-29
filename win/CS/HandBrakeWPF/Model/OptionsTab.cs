@@ -38,5 +38,8 @@ namespace HandBrakeWPF.Model
 
         [DisplayName(typeof(Resources), "Options_About")]
         About,
+
+        //[DisplayName(typeof(Resources), "Options_Experimental")]
+        //Experimental,
     }
 }

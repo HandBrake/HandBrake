@@ -15,6 +15,7 @@ namespace HandBrakeWPF.Helpers
 
     using HandBrake.Worker.Logging.Models;
 
+    using HandBrakeWPF.Services.Logging.Model;
     using HandBrakeWPF.Utilities;
 
     using ILog = HandBrakeWPF.Services.Logging.Interfaces.ILog;

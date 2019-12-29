@@ -14,20 +14,18 @@ namespace HandBrake.Worker
     using System.Net;
     using System.Threading;
 
+    using HandBrake.Worker.Registration;
+    using HandBrake.Worker.Routing;
+
     public class Program
     {
-        /*
-         * TODO
-         *   Support for connecting via sockets.
-         *   All methods will return a json state object response.
-         */
-
         private static ApiRouter router;
         private static ManualResetEvent manualResetEvent = new ManualResetEvent(false);
+        private static ConnectionRegistrar registrar = new ConnectionRegistrar();
 
         public static void Main(string[] args)
         {
-            int port = 8036; // Default Port;
+            int port = 8037; // Default Port;
             int verbosity = 1;
 
             if (args.Length != 0)
@@ -66,7 +64,6 @@ namespace HandBrake.Worker
 
             Console.WriteLine("Web Server Started");
 
-            // Console.ReadKey(); // Block from closing.
             manualResetEvent.WaitOne();
 
             webServer.Stop();
@@ -77,6 +74,17 @@ namespace HandBrake.Worker
             Dictionary<string, Func<HttpListenerRequest, string>> apiHandlers =
                 new Dictionary<string, Func<HttpListenerRequest, string>>();
 
+            // Worker APIs
+            apiHandlers.Add("Pair", registrar.Pair);
+            apiHandlers.Add("GetToken", registrar.GetToken);
+            apiHandlers.Add("Shutdown", ShutdownServer);
+
+            // Logging
+            apiHandlers.Add("GetAllLogMessages", router.GetAllLogMessages);
+            apiHandlers.Add("GetLogMessagesFromIndex", router.GetLogMessagesFromIndex);
+            apiHandlers.Add("ResetLogging", router.ResetLogging);
+
+            // HandBrake APIs
             apiHandlers.Add("Version", router.GetVersionInfo); 
             apiHandlers.Add("StartEncode", router.StartEncode);
             apiHandlers.Add("PauseEncode", router.PauseEncode);
@@ -84,14 +92,7 @@ namespace HandBrake.Worker
             apiHandlers.Add("StopEncode", router.StopEncode);
             apiHandlers.Add("PollEncodeProgress", router.PollEncodeProgress);
             apiHandlers.Add("SetConfiguration", router.SetConfiguration);
-            apiHandlers.Add("Shutdown", ShutdownServer);
-
-            // Logging
-            apiHandlers.Add("ConfigureLogging", router.ConfigureLogging);
-            apiHandlers.Add("GetFullLog", router.GetFullLog);
-            apiHandlers.Add("GetLatestLogIndex", router.GetLatestLogIndex);
-            apiHandlers.Add("GetLogFromIndex", router.GetLogFromIndex);
-
+            
             return apiHandlers;
         }
 

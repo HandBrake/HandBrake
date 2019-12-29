@@ -2912,6 +2912,15 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Experimental.
+        /// </summary>
+        public static string Options_Experimental {
+            get {
+                return ResourceManager.GetString("Options_Experimental", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File Format:.
         /// </summary>
         public static string Options_Format {
@@ -3541,6 +3550,15 @@ namespace HandBrakeWPF.Properties {
         public static string OptionsView_PreparingUpdate {
             get {
                 return ResourceManager.GetString("OptionsView_PreparingUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port range must be between 5000 and 32767.
+        /// </summary>
+        public static string OptionsView_RemotePortLimit {
+            get {
+                return ResourceManager.GetString("OptionsView_RemotePortLimit", resourceCulture);
             }
         }
         
