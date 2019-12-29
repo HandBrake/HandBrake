@@ -2185,4 +2185,7 @@ Where supported, any user presets will have been imported.</value>
     <value>Replacement Placeholders: {source} {destination}</value>
     <comment>Note: {source} and {destination} are not translatable. </comment>
   </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>A new version of HandBrake is available!</value>
+  </data>
 </root>

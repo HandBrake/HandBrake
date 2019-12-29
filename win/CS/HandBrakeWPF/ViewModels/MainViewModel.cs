@@ -102,6 +102,7 @@ namespace HandBrakeWPF.ViewModels
         private bool isSettingPreset;
         private IPresetObject selectedPresetCategory;
         private bool isModifiedPreset;
+        private bool updateAvailable;
 
         #endregion
 
@@ -1095,6 +1096,17 @@ namespace HandBrakeWPF.ViewModels
 
         public string ShowAddSelectionMenuName =>
             string.Format("{0} {1}", (!this.ShowAddSelectionToQueue ? Resources.MainView_Show : Resources.MainView_Hide), Resources.MainView_ShowAddSelectionToQueue);
+
+        public bool UpdateAvailable
+        {
+            get => this.updateAvailable;
+            set
+            {
+                if (value == this.updateAvailable) return;
+                this.updateAvailable = value;
+                this.NotifyOfPropertyChange(() => this.UpdateAvailable);
+            }
+        }
 
         #endregion
 
@@ -2341,6 +2353,7 @@ namespace HandBrakeWPF.ViewModels
         {
             if (information.NewVersionAvailable)
             {
+                this.UpdateAvailable = true;
                 this.ProgramStatusLabel = Resources.Main_NewUpdate;
             }
         }

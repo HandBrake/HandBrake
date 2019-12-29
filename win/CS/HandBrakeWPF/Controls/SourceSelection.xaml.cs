@@ -71,5 +71,11 @@ namespace HandBrakeWPF.Controls
         {
             Process.Start("https://handbrake.fr/docs");
         }
+
+        private void UpdateAvailable_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            MainViewModel vm = this.DataContext as MainViewModel;
+            vm.CheckForUpdates();
+        }
     }
 }
