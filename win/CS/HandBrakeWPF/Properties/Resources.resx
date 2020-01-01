@@ -147,7 +147,7 @@ Custom: You can optionally set a Maximum width and Height. When doing this an en
 Source Maximum:  Always encode at the sources resolution where possible.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2019 The HandBrake Team
+    <value>Copyright (C) 2003-2020 The HandBrake Team
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

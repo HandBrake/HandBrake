@@ -22,7 +22,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HandBrake Team")]
 [assembly: AssemblyProduct("HandBrake")]
-[assembly: AssemblyCopyright("Copyright © 2003-2019 HandBrake Team ")]
+[assembly: AssemblyCopyright("Copyright © 2003-2020 HandBrake Team ")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

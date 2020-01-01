@@ -1,6 +1,6 @@
 /*
  * render_button.h
- * Copyright (C) John Stebbins 2008-2019 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2020 <stebbins@stebbins>
  *
  * render_button.h is free software.
  *

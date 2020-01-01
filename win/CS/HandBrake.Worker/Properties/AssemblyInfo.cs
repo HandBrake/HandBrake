@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("HandBrake Team")]
 [assembly: AssemblyProduct("HandBrake.Worker")]
-[assembly: AssemblyCopyright("Copyright © 2003-2019 HandBrake Team")]
+[assembly: AssemblyCopyright("Copyright © 2003-2020 HandBrake Team")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

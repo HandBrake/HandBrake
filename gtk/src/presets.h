@@ -1,6 +1,6 @@
 /*
  * presets.h
- * Copyright (C) John Stebbins 2008-2019 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2020 <stebbins@stebbins>
  *
  * presets.h is free software.
  *

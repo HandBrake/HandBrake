@@ -1,6 +1,6 @@
 /*
  * titledict.h
- * Copyright (C) John Stebbins 2008-2019 <stebbins@stebbins>
+ * Copyright (C) John Stebbins 2008-2020 <stebbins@stebbins>
  *
  * settings.h is free software.
  *
