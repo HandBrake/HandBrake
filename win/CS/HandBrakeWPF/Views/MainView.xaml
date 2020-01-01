@@ -610,7 +610,7 @@
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch"
                       Header="Presets"
-                      Margin="0,0,5,5"
+                      Margin="0,5,5,5"
                       MaxWidth="270"
                       IsEnabled="{Binding HasSource, Converter={StaticResource booleanConverter}, ConverterParameter=false}"
                       Visibility="{Binding IsPresetPanelShowing, Converter={StaticResource boolToVisConverter}}">
@@ -703,7 +703,7 @@
 
                     <ToolBar Name="presetsToolBar"
                              Grid.Row="1"
-                             HorizontalAlignment="Center"
+                             HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
                              SnapsToDevicePixels="False"
                              UseLayoutRounding="False"
@@ -712,7 +712,7 @@
                              ToolBarTray.IsLocked="True"
                              Loaded="ToolBarLoaded"
                              KeyboardNavigation.TabNavigation="Continue" >
-
+                        
                         <ToolBar.Resources>
                             <Style TargetType="{x:Type ToolBarPanel}">
                                 <Setter Property="Orientation" Value="Vertical"/>
@@ -726,10 +726,8 @@
                             <Button cal:Message.Attach="[Event Click] = [Action PresetAdd]" AutomationProperties.Name="Add Preset" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_AddPreset}">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Width="20"
-                                               Height="20"
-                                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Add.png'}"
-                                        />
+                                        <Image Width="18" Height="18" SnapsToDevicePixels="True"
+                                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Add.png'}" />
                                         <TextBlock Margin="2,0,0,0"
                                                    VerticalAlignment="Center"
                                                    Style="{StaticResource textBlockOrangeStyle}"
@@ -742,16 +740,12 @@
                             <Button Background="Transparent" cal:Message.Attach="[Event Click] = [Action PresetRemove]" AutomationProperties.Name="Remove Preset" ToolTip="{x:Static Properties:ResourcesTooltips.MainView_RemovePreset}">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Width="20"
-                                               Height="20"
-                                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Remove.png'}"
-                                               SnapsToDevicePixels="True"
-                                        />
+                                        <Image Width="18" Height="18"
+                                               Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Remove.png'}" SnapsToDevicePixels="True" />
                                         <TextBlock Margin="2,0,0,0"
                                                    VerticalAlignment="Center"
                                                    Style="{StaticResource textBlockOrangeStyle}"
-                                                   Text="{x:Static Properties:Resources.MainView_Remove}"
-                                        />
+                                                   Text="{x:Static Properties:Resources.MainView_Remove}" />
                                     </StackPanel>
                                 </Button.Content>
                             </Button>
@@ -760,16 +754,13 @@
                                 <MenuItem ToolBar.OverflowMode="Never">
                                     <MenuItem.Header>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Width="20"
-                                                   Height="20"
+                                            <Image Width="20" Height="20" SnapsToDevicePixels="True"
                                                    Source="{Binding Converter={StaticResource themeConverter}, ConverterParameter='Advanced.png'}"
-                                                   RenderOptions.BitmapScalingMode="Linear"
-                                            />
+                                                   RenderOptions.BitmapScalingMode="Linear" />
                                             <TextBlock Margin="2,0,0,0"
                                                        VerticalAlignment="Center"
                                                        Style="{StaticResource textBlockOrangeStyle}"
-                                                       Text="{x:Static Properties:Resources.MainView_Options}"
-                                            />
+                                                       Text="{x:Static Properties:Resources.MainView_Options}" />
                                         </StackPanel>
                                     </MenuItem.Header>
                                     <MenuItem Header="{x:Static Properties:Resources.MainView_SetDefault}" cal:Message.Attach="[Event Click] = [Action PresetSetDefault]" />

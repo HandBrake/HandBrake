@@ -1,0 +1,31 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <Style TargetType="GroupBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="GroupBox">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" BorderThickness="1,1,1,0" Background="Transparent" BorderBrush="{DynamicResource Ui.Ultralight}">
+                            <Border.Resources>
+                                <Style TargetType="{x:Type Label}">
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="VerticalAlignment" Value="Center"/>
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </Style>
+                            </Border.Resources>
+                            <!--<ContentPresenter Margin="4" ContentSource="Header" RecognizesAccessKey="True" />-->
+                            <TextBlock Text="{Binding Header, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type GroupBox}}}" FontWeight="Bold" Margin="5,5,0,0" />
+                        </Border>
+                        <Border Grid.Row="1" BorderThickness="1,0,1,1" BorderBrush="{DynamicResource Ui.Ultralight}" Background="Transparent">
+                            <ContentPresenter Margin="4" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
