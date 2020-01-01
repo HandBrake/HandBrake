@@ -147,4 +147,13 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="Themes\Controls\GroupBoxDark.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Controls\ToolbarDark.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>
