@@ -1,0 +1,24 @@
+# HG changeset patch
+# User Kirithika <kirithika@multicorewareinc.com>
+# Date 1577092232 -19800
+# Branch Release_3.2
+# Node ID b4b2ecac21f666af2664b679c4122a930c07475b
+# Parent  09f3b1d9349ac84d74f14f99297f9418bc8b2b02
+Fix VBV macroblocking that comes up with the last Intra frame
+
+This patch enables the VBV Lookahead computation of an I Slice to consider the
+last MiniGop frames available in the lookahead,hence fixing the VBV macroblocking
+issue that comes due to lack of frames in the Lookahead at the end of the video.
+
+diff --git a/source/encoder/slicetype.cpp b/source/encoder/slicetype.cpp
+--- a/source/encoder/slicetype.cpp
++++ b/source/encoder/slicetype.cpp
+@@ -1748,7 +1748,7 @@
+     if (m_param->bBPyramid && curNonB - prevNonB > 1)
+         curBRef = (prevNonB + curNonB + 1) / 2;
+     int miniGopEnd = keyframe ? prevNonB : curNonB;
+-    while (curNonB < numFrames + !keyframe)
++    while (curNonB <= numFrames)
+     {
+         /* P/I cost: This shouldn't include the cost of nextNonB */
+         if (nextNonB != curNonB)
