@@ -11,10 +11,12 @@
 #### Video
 
 - Fixed rotation/flip not working properly in some cases
+- Updated presets using x265 to set aq-mode 1, the default prior to HandBrake 1.3.0
 - Improved AMD VCE rate control by always explicitly setting the rate control method
 - Added a workaround to fix x265 not parsing the H.265 Level setting where localized
 - Added an upstream patch to fix x265 limit-tu bug in loading co-located CU's TU depth
 - Added an upstream patch to fix x265 2-pass encoding failure
+- Added an upstream patch to fix x265 VBV macroblocking at end of final GOP
 
 #### Audio
 
@@ -29,6 +31,11 @@
 #### Build system
 
 - Fixed cpp and lib flags causing build failures on some Linux systems
+
+#### Third-party libraries
+
+- Updated libraries
+  - FFmpeg 4.2.2 (decoding and filters)
 
 ### Linux
 
