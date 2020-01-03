@@ -237,6 +237,9 @@ case $host in
     ;;
   *-*-freebsd*)
     HB_LIBS="$HB_LIBS -lpthread"
+    if test "x$use_qsv" = "xyes" ; then
+        HB_LIBS="$HB_LIBS -lva -lva-drm"
+    fi
     ;;
   *-*-netbsd*)
     HB_LIBS="$HB_LIBS -pthread"
