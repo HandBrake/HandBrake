@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -147,10 +147,24 @@ Eigene: Es kann optional eine maximale Breite und Höhe eingestellt werden. Dabe
 Quellenmaximum: Kodiert nach Möglichkeit immer mit der Quellauflösung.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003–2019 Das HandBrake-TeamDieses Programm ist freie Software; es kann unter den Bedingungen der GNU General Public License, wie sie von der Free Software Foundation veröffentlicht wurde, weitergeben und/oder verändert werden; entweder Version 2 der Lizenz oder (nach eigener Wahl) jede spätere Version.
-Dieses Programm wird in der Hoffnung verteilt, dass es nützlich sein wird, aber OHNE JEGLICHE GEWÄHRLEISTUNG; auch ohne die stillschweigende Gewährleistung der MARKTREIFE oder Tauglichkeit für einen bestimmten Zweck. Weitere Informationen finden Sie in der GNU General Public License.
+    <value>Copyright (C) 2003–2020 Das HandBrake-Team
 
-Sie sollten eine Kopie der GNU General Public License zusammen mit diesem Programm erhalten haben; wenn nicht, schreiben Sie an die Free SoftwareFoundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
+Dieses Programm ist freie Software; es kann unter den
+Bedingungen der GNU General Public License, wie sie von der
+Free Software Foundation veröffentlicht wurde, weitergeben
+und/oder verändert werden; entweder Version 2 der Lizenz oder
+(nach eigener Wahl) jede spätere Version.
+ 
+Dieses Programm wird in der Hoffnung verteilt, dass es nützlich
+sein wird, aber OHNE JEGLICHE GEWÄHRLEISTUNG; auch ohne
+die stillschweigende Gewährleistung der MARKTREIFE oder
+Tauglichkeit für einen bestimmten Zweck. Weitere Informationen
+finden Sie in der GNU General Public License.
+ 
+Sie sollten eine Kopie der GNU General Public License
+zusammen mit diesem Programm erhalten haben; wenn nicht,
+schreiben Sie an die Free SoftwareFoundation, Inc., 51 Franklin
+Street, Fifth Floor, Boston, MA 02110-1301, USA.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
     <value>WARNUNG: Die automatische Dateibenennung ist nicht aktiviert. Bitte diese Funktion aktivieren.</value>
@@ -2162,5 +2176,18 @@ Falls unterstützt, wird jede benutzerdefinierte Voreinstellung übernommen. </v
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Verwende immer den Standardpfad für jeden neu erstellten Namen.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>Der Bereich der Ports muss zwischen 5000 und 32767 liegen.</value>
+  </data>
+  <data name="Options_Experimental" xml:space="preserve">
+    <value>Experimentell</value>
+  </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>Austausch-Platzhalter: {source} {destination}</value>
+    <comment>Note: {source} and {destination} are not translatable. </comment>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>Eine neue Version von HandBrake ist verfügbar!</value>
   </data>
 </root>
