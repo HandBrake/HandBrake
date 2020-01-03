@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -146,7 +146,7 @@ x264とx265は対数スケールで低い数値の方が品質が高くなりま
 ソース最大: 常に可能な最大の解像度でソースがエンコードされます。</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2019 The HandBrake Team
+    <value>Copyright (C) 2003-2020 The HandBrake Team
 
 このプログラムは無料のソフトウェアです; フリーソフトウェア財団による
 GNU General Public License バージョン2、または(お好みであれば)
@@ -270,14 +270,13 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>タイトルをスキャン中{0}/{1}({2}%)</value>
   </data>
   <data name="Main_ScanSource" xml:space="preserve">
-    <value>エンコードを開始する前に、まずソースをスキャンしてジョブを設定する必要があります。ツールバーの「ソース 」ボタンをクリックして続行します。</value>
+    <value>エンコードを開始する前に、まずソースをスキャンしてジョブを設定する必要があります。ツールバーの「変換元」ボタンをクリックして続行します。</value>
   </data>
   <data name="Main_SelectPreset" xml:space="preserve">
     <value>ご自身のプリセットを選んでいるかよく確認してください。ビルトインプリセットをエクスポートすることはできません。</value>
   </data>
   <data name="Main_SelectPresetForUpdate" xml:space="preserve">
-    <value>更新するプリセットを選択してください。
-</value>
+    <value>更新するプリセットを選択してください。</value>
   </data>
   <data name="Main_SelectSource" xml:space="preserve">
     <value>「変換元」をクリックしてください</value>
@@ -431,7 +430,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>音声トラック</value>
   </data>
   <data name="AudioViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>選択の方法</value>
+    <value>選択の振る舞い</value>
   </data>
   <data name="AudioViewModel_SwitchBackToTracks" xml:space="preserve">
     <value>トラックに戻す</value>
@@ -565,7 +564,7 @@ VLCがインストールされ、HandBrakeの設定で指定されたディレ�
     <value>トラックに戻す</value>
   </data>
   <data name="SubtitlesViewModel_ConfigureDefaults" xml:space="preserve">
-    <value>選択の方法</value>
+    <value>選択の振る舞い</value>
   </data>
   <data name="PresetService_ArchiveFile" xml:space="preserve">
     <value>アーカイブファイル</value>
@@ -1160,7 +1159,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>キューが完了するたびに通知音を鳴らす</value>
   </data>
   <data name="OptionsView_ShowPreviewOnSummaryTab" xml:space="preserve">
-    <value>概要タブでプレビューを表示する。</value>
+    <value>概要タブでプレビューを表示する</value>
   </data>
   <data name="OptionsView_ShowStatusInTitleBar" xml:space="preserve">
     <value>タイトルバーにエンコードの状態を表示する</value>
@@ -1220,7 +1219,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>LibDVDNavを無効化 (libdvdreadが代わりに使用されます)</value>
   </data>
   <data name="Options_Encoding" xml:space="preserve">
-    <value>エンコード中</value>
+    <value>エンコード</value>
   </data>
   <data name="Options_Format" xml:space="preserve">
     <value>ファイル名規則</value>
@@ -1265,7 +1264,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>エンコード中にシステムがスリープ状態にならないようにする</value>
   </data>
   <data name="Options_PreviewScanCount" xml:space="preserve">
-    <value>キャンする画像プレビューの数:</value>
+    <value>スキャンする画像プレビューの数:</value>
   </data>
   <data name="Options_PriorityLevel" xml:space="preserve">
     <value>優先度:</value>
@@ -1283,8 +1282,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>アンダースコアをスペースに置き換える</value>
   </data>
   <data name="Options_ResetDoNothing" xml:space="preserve">
-    <value>再起動時「何もしない 」に戻す。
-</value>
+    <value>アプリケーションが再度起動した後「何もしない 」に戻す。</value>
   </data>
   <data name="Options_Scaler" xml:space="preserve">
     <value>リサイズ方法を選択:</value>
@@ -1299,7 +1297,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>実験段階のキューデザインを表示する。</value>
   </data>
   <data name="Options_TitleCase" xml:space="preserve">
-    <value>小文字をタイトルの大文字に変更</value>
+    <value>先頭文字を大文字にする</value>
   </data>
   <data name="Options_Updates" xml:space="preserve">
     <value>更新</value>
@@ -1557,10 +1555,10 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>フォルダを選んでスキャンする</value>
   </data>
   <data name="SourceSelection_ChooseSpecificTitle" xml:space="preserve">
-    <value>またはタイトルを自分で選ぶ:</value>
+    <value>特定のタイトルを指定できます:</value>
   </data>
   <data name="SourceSelection_ChooseVideo" xml:space="preserve">
-    <value>それからエンコードしたいビデオを選んでください:</value>
+    <value>エンコードしたいビデオを選んでください:</value>
   </data>
   <data name="SourceSelection_File" xml:space="preserve">
     <value>ファイル</value>
@@ -1674,7 +1672,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>2-Passエンコード</value>
   </data>
   <data name="VideoView_AverageBitrate" xml:space="preserve">
-    <value>平均ビットレートで指定(kbps):</value>
+    <value>平均ビットレート (kbps):</value>
   </data>
   <data name="VideoView_Codec" xml:space="preserve">
     <value>動画コーデック:</value>
@@ -1683,7 +1681,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>固定フレームレート</value>
   </data>
   <data name="VideoView_ConstantQuality" xml:space="preserve">
-    <value>数値で指定:</value>
+    <value>固定品質:</value>
   </data>
   <data name="VideoView_EncoderLevel" xml:space="preserve">
     <value>レベル:</value>
@@ -1710,13 +1708,13 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>映像を最適化:</value>
   </data>
   <data name="VideoView_PeakFramerate" xml:space="preserve">
-    <value>ピークフレームレート</value>
+    <value>可変フレームレート</value>
   </data>
   <data name="VideoView_Quality" xml:space="preserve">
     <value>品質</value>
   </data>
   <data name="VideoView_TurboFirstPass" xml:space="preserve">
-    <value>1回目のスキャンを高速化する</value>
+    <value>1パス目を高速化</value>
   </data>
   <data name="VideoView_VariableFramerate" xml:space="preserve">
     <value>可変フレームレート</value>
@@ -1990,7 +1988,7 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
     <value>キューをエクスポート (CLIのみ)</value>
   </data>
   <data name="Options_DarkTheme" xml:space="preserve">
-    <value>ダークテーマを使用。 (再起動が必要、Windows 10のみ)</value>
+    <value>ダークテーマを使用する  (再起動が必要、Windows 10のみ)</value>
   </data>
   <data name="QueueView_NotAvailable" xml:space="preserve">
     <value>利用不可</value>
@@ -2174,5 +2172,18 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>それぞれのファイルに既定のパスを適用する。</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>ポート番号は5000から32767の間でなければいけません</value>
+  </data>
+  <data name="Options_Experimental" xml:space="preserve">
+    <value>実験的機能</value>
+  </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>利用できる変数: {source} {destination}</value>
+    <comment>Note: {source} and {destination} are not translatable. </comment>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>新しいバージョンのHandBrakeが利用できます！</value>
   </data>
 </root>
