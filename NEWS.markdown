@@ -23,6 +23,7 @@
 
 - Fixed importing older presets where "und" was used to select any language track
   - Since HandBrake 1.3.0, "any" selects any language track and "und" selects undefined language tracks only
+- Fixed secondary audio tracks on Blu-ray sources not being detected in some cases
 
 #### Subtitles
 
