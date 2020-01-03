@@ -7,7 +7,6 @@
 #### General
 
 - Fixed potential crash when opening a DVD source
-- Fixed an issue where certain secondary audio tracks on bluray sources would not be detected. 
 
 #### Video
 
