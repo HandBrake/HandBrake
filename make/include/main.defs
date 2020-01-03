@@ -53,7 +53,9 @@ MODULES += contrib/libdvdnav
 MODULES += contrib/libbluray
 
 ifeq (1,$(FEATURE.qsv))
+ifeq (,$(filter $(HOST.system),freebsd))
     MODULES += contrib/libmfx
+endif
 endif
 
 ifeq (1,$(FEATURE.vce))
