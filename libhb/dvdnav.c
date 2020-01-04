@@ -2090,7 +2090,7 @@ static int TitleOpenIfo(hb_dvdnav_t * d, int t)
     /* Check pgc */
     if ( d->pgcn < 1 || d->pgcn > d->ifo->vts_pgcit->nr_of_pgci_srp || d->pgcn >= MAX_PGCN)
     {
-        hb_log( "invalid PGC ID %d for title %d, skipping", pgcn, t );
+        hb_log( "invalid PGC ID %d for title %d, skipping", d->pgcn, t );
         goto fail;
     }
 
