@@ -2522,7 +2522,70 @@ static HRESULT unlock_device(
     return hr;
 }
 
-void hb_qsv_get_free_surface_from_pool(QSVMid **out_mid, mfxFrameSurface1 **out_surface, int pool_size)
+static int hb_qsv_find_surface_idx(const QSVMid *mids, const int nb_mids, const QSVMid *mid)
+{
+    if(mids)
+    {
+        const QSVMid *m = &mids[0];
+        if (m->texture != mid->texture)
+            return -1;
+        int i;
+        for (i = 0; i < nb_mids; i++) {
+            m = &mids[i];
+            if ( m->handle == mid->handle )
+                return i;
+        }
+    }
+    return -1;
+}
+
+int hb_qsv_replace_surface_mid(const QSVMid *mid, mfxFrameSurface1 *surface)
+{
+    int ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids, hb_enc_qsv_frames_ctx.nb_mids, mid);
+    if (ret < 0)
+    {
+        ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids2, hb_enc_qsv_frames_ctx.nb_mids, mid);
+        if (ret < 0)
+        {
+            hb_error("encqsv: Surface with MemId=%p has not been found in the pool\n", mid);
+            return -1;
+        }
+        else
+        {
+            surface->Data.MemId = &hb_enc_qsv_frames_ctx.mids2[ret];
+        }
+    }
+    else
+    {
+        surface->Data.MemId = &hb_enc_qsv_frames_ctx.mids[ret];
+    }
+    return 0;
+}
+
+int hb_qsv_release_surface_from_pool(const QSVMid *mid)
+{
+    int ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids, hb_enc_qsv_frames_ctx.nb_mids, mid);
+    if (ret < 0)
+    {
+        ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids2, hb_enc_qsv_frames_ctx.nb_mids, mid);
+        if (ret < 0)
+        {
+            hb_error("encqsv: Surface with MemId=%p has not been found in the pool\n", mid);
+            return -1;
+        }
+        else
+        {
+            ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx.pool2[ret]);
+        }
+    }
+    else
+    {
+        ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx.pool[ret]);
+    }
+    return 0;
+}
+
+void hb_qsv_get_free_surface_from_pool(const int start_index, const int end_index, QSVMid **out_mid, mfxFrameSurface1 **out_surface)
 {
     QSVMid *mid = NULL;
     mfxFrameSurface1 *output_surface = NULL;
@@ -2539,11 +2602,11 @@ void hb_qsv_get_free_surface_from_pool(QSVMid **out_mid, mfxFrameSurface1 **out_
     {
         if(count > 30)
         {
-            hb_qsv_sleep(100); // prevent hang when all surfaces all used
+            hb_qsv_sleep(10); // prevent hang when all surfaces all used
             count = 0;
         }
 
-        for(int i = 0; i < pool_size; i++)
+        for(int i = start_index; i < end_index; i++)
         {
             if(hb_enc_qsv_frames_ctx.pool[i] == 0)
             {
@@ -2559,7 +2622,7 @@ void hb_qsv_get_free_surface_from_pool(QSVMid **out_mid, mfxFrameSurface1 **out_
             }
         }
 
-        for(int i = 0; i < pool_size; i++)
+        for(int i = start_index; i < end_index; i++)
         {
             if(hb_enc_qsv_frames_ctx.pool2[i] == 0)
             {
@@ -2601,7 +2664,7 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
     AVHWFramesContext *frames_ctx = (AVHWFramesContext*)hb_enc_qsv_frames_ctx.hw_frames_ctx->data;
     AVQSVFramesContext *frames_hwctx = frames_ctx->hwctx;
 
-    hb_qsv_get_free_surface_from_pool(&mid, &output_surface, HB_POOL_SURFACE_SIZE - 2); // leave 2 empty surfaces in the pool for black buffers
+    hb_qsv_get_free_surface_from_pool(0, HB_POOL_SURFACE_SIZE - HB_POOL_ENCODER_SIZE, &mid, &output_surface);
 
     // Get D3DDeviceManger handle from Media SDK
     mfxHandleType handle_type;
@@ -2931,9 +2994,19 @@ hb_buffer_t* hb_qsv_copy_frame(AVFrame *frame, hb_qsv_context *qsv_ctx)
     return NULL;
 }
 
-void hb_qsv_get_free_surface_from_pool(QSVMid **out_mid, mfxFrameSurface1 **out_surface, int pool_size)
+void hb_qsv_get_free_surface_from_pool(const int start_index, const int end_index, QSVMid **out_mid, mfxFrameSurface1 **out_surface)
 {
     return;
+}
+
+int hb_qsv_replace_surface_mid(const QSVMid *mid, mfxFrameSurface1 *surface)
+{
+    return -1;
+}
+
+int hb_qsv_release_surface_from_pool(const QSVMid *mid)
+{
+    return -1;
 }
 
 enum AVPixelFormat hb_qsv_get_format(AVCodecContext *s, const enum AVPixelFormat *pix_fmts)

@@ -12,6 +12,7 @@
 #include "handbrake/handbrake.h"
 #if HB_PROJECT_FEATURE_QSV
 #include "handbrake/qsv_libav.h"
+#include "handbrake/qsv_common.h"
 #endif
 
 #ifndef SYS_DARWIN
@@ -724,6 +725,15 @@ void hb_buffer_close( hb_buffer_t ** _b )
 #if HB_PROJECT_FEATURE_QSV
         // Reclaim QSV resources before dropping the buffer.
         // when decoding without QSV, the QSV atom will be NULL.
+        if(b->qsv_details.frame)
+        {
+            mfxFrameSurface1 *surface = (mfxFrameSurface1*)b->qsv_details.frame->data[3];
+            if(surface)
+            {
+                hb_qsv_release_surface_from_pool(surface->Data.MemId);
+                b->qsv_details.frame->data[3] = 0;
+            }
+        }
         if (b->qsv_details.qsv_atom != NULL && b->qsv_details.ctx != NULL)
         {
             hb_qsv_stage *stage = hb_qsv_get_last_stage(b->qsv_details.qsv_atom);

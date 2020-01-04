@@ -117,23 +117,6 @@ struct hb_work_private_s
     hb_list_t          * loaded_plugins;
 };
 
-int hb_qsv_find_surface_idx(QSVMid *mids, int nb_mids, QSVMid *mid)
-{
-    if(mids)
-    {
-        QSVMid *m = &mids[0];
-        if (m->texture != mid->texture)
-            return -1;
-        int i;
-        for (i = 0; i < nb_mids; i++) {
-            m = &mids[i];
-            if ( m->handle == mid->handle )
-                return i;
-        }
-    }
-    return -1;
-}
-
 static void hb_qsv_add_new_dts(hb_list_t *list, int64_t new_dts)
 {
     if (list != NULL)
@@ -2098,31 +2081,9 @@ static int qsv_enc_work(hb_work_private_t *pv,
 
             if (sts == MFX_ERR_MORE_DATA)
             {
-                if(surface)
+                if(!pv->is_sys_mem && surface)
                 {
-                    // release surface
-                    if(!pv->is_sys_mem)
-                    {
-                        QSVMid *mid = surface->Data.MemId;
-                        int ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids, hb_enc_qsv_frames_ctx.nb_mids, mid);
-                        if (ret < 0)
-                        {
-                            ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids2, hb_enc_qsv_frames_ctx.nb_mids, mid);
-                            if (ret < 0)
-                            {
-                                hb_error("encqsv: Surface with MemId=%p has not been found in the pool\n", mid);
-                                return -1;
-                            }
-                            else
-                            {
-                                ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx.pool2[ret]);
-                            }
-                        }
-                        else
-                        {
-                            ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx.pool[ret]);
-                        }
-                    }
+                    hb_qsv_release_surface_from_pool(surface->Data.MemId);
                 }
 
                 if (qsv_atom != NULL)
@@ -2196,32 +2157,10 @@ static int qsv_enc_work(hb_work_private_t *pv,
                 /* perform a sync operation to get the output bitstream */
                 hb_qsv_wait_on_sync(qsv_ctx, task->stage);
 
-                // release surface
-                if(!pv->is_sys_mem)
+                mfxFrameSurface1 *surface = task->stage->in.p_surface;
+                if(!pv->is_sys_mem && surface)
                 {
-                    mfxFrameSurface1 *surface_to_release = task->stage->in.p_surface;
-                    if(surface_to_release)
-                    {
-                        QSVMid *mid = surface_to_release->Data.MemId;
-                        int ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids, hb_enc_qsv_frames_ctx.nb_mids, mid);
-                        if (ret < 0)
-                        {
-                            ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids2, hb_enc_qsv_frames_ctx.nb_mids, mid);
-                            if (ret < 0)
-                            {
-                                hb_error("encqsv: Surface with MemId=%p has not been found in the pool\n", mid);
-                                return -1;
-                            }
-                            else
-                            {
-                                ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx.pool2[ret]);
-                            }
-                        }
-                        else
-                        {
-                            ff_qsv_atomic_dec(&hb_enc_qsv_frames_ctx.pool[ret]);
-                        }
-                    }
+                    hb_qsv_release_surface_from_pool(surface->Data.MemId);
                 }
 
                 if (task->bs->DataLength > 0)
@@ -2255,7 +2194,6 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     hb_work_private_t *pv = w->private_data;
     hb_buffer_t *in       = *buf_in;
     hb_job_t *job         = pv->job;
-
     while (qsv_enc_init(pv) >= 2)
     {
         hb_qsv_sleep(1); // encoding not initialized, wait and repeat the call
@@ -2310,29 +2248,12 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
         else
         {
             // Create black buffer in the begining of the encoding, usually first 2 frames
-            hb_qsv_get_free_surface_from_pool(&mid, &surface, HB_POOL_SURFACE_SIZE);
+            hb_qsv_get_free_surface_from_pool(HB_POOL_SURFACE_SIZE - HB_POOL_ENCODER_SIZE, HB_POOL_SURFACE_SIZE, &mid, &surface);
         }
 
         if(surface)
         {
-            int ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids, hb_enc_qsv_frames_ctx.nb_mids, mid);
-            if (ret < 0)
-            {
-                ret = hb_qsv_find_surface_idx(hb_enc_qsv_frames_ctx.mids2, hb_enc_qsv_frames_ctx.nb_mids, mid);
-                if (ret < 0)
-                {
-                    hb_error("encqsv: Surface with MemId=%p has not been found in the pool\n", mid);
-                    return -1;
-                }
-                else
-                {
-                    surface->Data.MemId = &hb_enc_qsv_frames_ctx.mids2[ret];
-                }
-            }
-            else
-            {
-                surface->Data.MemId = &hb_enc_qsv_frames_ctx.mids[ret];
-            }
+            hb_qsv_replace_surface_mid(mid, surface);
         }
         else
         {
@@ -2435,7 +2356,12 @@ int encqsvWork(hb_work_object_t *w, hb_buffer_t **buf_in, hb_buffer_t **buf_out)
     {
         goto fail;
     }
-
+#if HB_PROJECT_FEATURE_QSV
+    if (in->qsv_details.frame)
+    {
+        in->qsv_details.frame->data[3] = 0;
+    }
+#endif
     *buf_out = hb_buffer_list_clear(&pv->encoded_frames);
     return HB_WORK_OK;
 
