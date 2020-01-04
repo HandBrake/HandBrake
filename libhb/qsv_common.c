@@ -928,7 +928,7 @@ hb_list_t* hb_qsv_load_plugins(hb_qsv_info_t *info, mfxSession session, mfxVersi
 
     if (HB_CHECK_MFX_VERSION(version, 1, 8))
     {
-        if (info->codec_id == MFX_CODEC_HEVC)
+        if (info->codec_id == MFX_CODEC_HEVC && !(qsv_hardware_generation(hb_get_cpu_platform()) < QSV_G5))
         {
             if (HB_CHECK_MFX_VERSION(version, 1, 15) &&
                 qsv_implementation_is_hardware(info->implementation))
@@ -994,7 +994,9 @@ const char* hb_qsv_decode_get_codec_name(enum AVCodecID codec_id)
 int hb_qsv_decode_is_enabled(hb_job_t *job)
 {
     return ((job != NULL && job->qsv.decode) &&
-            (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV));
+            (job->title->video_decode_support & HB_DECODE_SUPPORT_QSV)) &&
+            (job->vcodec == HB_VCODEC_QSV_H265 ? (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G5) : 1) &&
+            (job->vcodec == HB_VCODEC_QSV_H265_10BIT ? (qsv_hardware_generation(hb_get_cpu_platform()) >= QSV_G6) : 1);
 }
 
 static int hb_dxva2_device_check();
