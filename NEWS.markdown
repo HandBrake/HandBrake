@@ -11,6 +11,7 @@
 #### Video
 
 - Fixed rotation/flip not working properly in some cases
+- Fixed an issue with QSV failures when using --start-at
 - Updated presets using x265 to set aq-mode 1, the default prior to HandBrake 1.3.0
 - Improved AMD VCE rate control by always explicitly setting the rate control method
 - Added a workaround to fix x265 not parsing the H.265 Level setting where localized
