@@ -26,22 +26,6 @@
   </item>
   <item>
     <key>
-      <string>GrowlEncode</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>GrowlQueue</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
       <string>ProcessPriorityInt</string>
     </key>
     <value>
@@ -54,14 +38,6 @@
     </key>
     <value>
       <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>ShowCLI</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
     </value>
   </item>
   <item>
@@ -162,14 +138,6 @@
   </item>
   <item>
     <key>
-      <string>QueryEditorTab</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
       <string>lastUpdateCheckDate</string>
     </key>
     <value>
@@ -181,7 +149,7 @@
       <string>daysBetweenUpdateCheck</string>
     </key>
     <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">0</anyType>
+      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">1</anyType>
     </value>
   </item>
   <item>
@@ -190,30 +158,6 @@
     </key>
     <value>
       <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">0</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>PromptOnUnmatchingQueries</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>NativeLanguage</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">(Any)</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>NativeLanguageSubtitles</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">(Any)</anyType>
     </value>
   </item>
   <item>
@@ -250,14 +194,6 @@
   </item>
   <item>
     <key>
-      <string>useClosedCaption</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
       <string>batchMinDuration</string>
     </key>
     <value>
@@ -282,30 +218,6 @@
   </item>
   <item>
     <key>
-      <string>SelectedLanguages</string>
-    </key>
-    <value>
-      <ArrayOfString xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" />
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>addOnlyOneAudioPerLanguage</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">true</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>ShowAdvancedAudioPassthruOpts</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
       <string>ClearCompletedFromQueue</string>
     </key>
     <value>
@@ -318,14 +230,6 @@
     </key>
     <value>
       <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:string" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">8000</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>EnableProcessIsolation</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
     </value>
   </item>
   <item>
@@ -374,14 +278,6 @@
     </key>
     <value>
       <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:int" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">0</anyType>
-    </value>
-  </item>
-  <item>
-    <key>
-      <string>AddForeignAudioScanTrack</string>
-    </key>
-    <value>
-      <anyType xmlns:q1="http://www.w3.org/2001/XMLSchema" d4p1:type="q1:boolean" xmlns:d4p1="http://www.w3.org/2001/XMLSchema-instance">false</anyType>
     </value>
   </item>
   <item>
