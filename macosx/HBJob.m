@@ -39,7 +39,7 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 @property (nonatomic, readwrite) HBSecurityAccessToken *fileURLToken;
 @property (nonatomic, readwrite) HBSecurityAccessToken *outputURLToken;
 @property (nonatomic, readwrite) HBSecurityAccessToken *subtitlesToken;
-@property (nonatomic, readwrite) NSInteger *accessCount;
+@property (nonatomic, readwrite) NSInteger accessCount;
 
 @end
 
@@ -286,6 +286,27 @@ NSString *HBChaptersChangedNotification  = @"HBChaptersChangedNotification";
 - (NSString *)description
 {
     return self.name;
+}
+
+- (void)refreshSecurityScopedResources
+{
+    if (_fileURLBookmark)
+    {
+        NSURL *resolvedURL = [HBUtilities URLFromBookmark:_fileURLBookmark];
+        if (resolvedURL)
+        {
+            _fileURL = resolvedURL;
+        }
+    }
+    if (_outputURLFolderBookmark)
+    {
+        NSURL *resolvedURL = [HBUtilities URLFromBookmark:_outputURLFolderBookmark];
+        if (resolvedURL)
+        {
+            _outputURL = resolvedURL;
+        }
+    }
+    [self.subtitles refreshSecurityScopedResources];
 }
 
 - (BOOL)startAccessingSecurityScopedResource

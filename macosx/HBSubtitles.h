@@ -6,6 +6,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HBPresetCoding.h"
+#import "HBSecurityAccessToken.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -13,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class HBTitleSubtitlesTrack;
 @class HBSubtitlesDefaults;
 
-@interface HBSubtitles : NSObject <NSSecureCoding, NSCopying>
+@interface HBSubtitles : NSObject <NSSecureCoding, NSCopying, HBSecurityScope>
 
 - (void)addAllTracks;
 - (void)removeAll;

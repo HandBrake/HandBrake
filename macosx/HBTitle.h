@@ -5,6 +5,7 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
+#import "HBSecurityAccessToken.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -42,7 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface HBTitleSubtitlesTrack : NSObject<NSSecureCoding>
+@interface HBTitleSubtitlesTrack : NSObject<NSSecureCoding, HBSecurityScope>
 
 - (instancetype)initWithDisplayName:(NSString *)displayName type:(int)type fileURL:(nullable NSURL *)fileURL;
 

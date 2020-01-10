@@ -16,7 +16,6 @@
 #import "HBLocalizationUtilities.h"
 #import "HBUtilities.h"
 #import "HBJob+Private.h"
-#import "HBSecurityAccessToken.h"
 
 #include "handbrake/common.h"
 
@@ -26,9 +25,6 @@
 @interface HBSubtitles () <HBTrackDataSource, HBTrackDelegate>
 
 @property (nonatomic, readwrite) NSArray<HBTitleSubtitlesTrack *> *sourceTracks;
-
-@property (nonatomic, readonly) NSMutableArray<HBSecurityAccessToken *> *tokens;
-@property (nonatomic, readwrite) NSInteger *accessCount;
 
 @property (nonatomic, readwrite, weak) HBJob *job;
 @property (nonatomic, readwrite) int container;
@@ -50,7 +46,6 @@
 
         _tracks = [[NSMutableArray alloc] init];
         _defaults = [[HBSubtitlesDefaults alloc] init];
-        _tokens = [NSMutableArray array];
 
         NSMutableArray<HBTitleSubtitlesTrack *> *sourceTracks = [job.title.subtitlesTracks mutableCopy];
 
@@ -376,20 +371,21 @@
     }];
 }
 
+- (void)refreshSecurityScopedResources
+{
+    for (HBTitleSubtitlesTrack *sourceTrack in self.sourceTracks)
+    {
+        [sourceTrack refreshSecurityScopedResources];
+    }
+}
+
 - (BOOL)startAccessingSecurityScopedResource
 {
 #ifdef __SANDBOX_ENABLED__
-    if (self.accessCount == 0)
+    for (HBTitleSubtitlesTrack *sourceTrack in self.sourceTracks)
     {
-        for (HBTitleSubtitlesTrack *sourceTrack in self.sourceTracks)
-        {
-            if (sourceTrack.fileURL)
-            {
-                [self.tokens addObject:[HBSecurityAccessToken tokenWithObject:sourceTrack.fileURL]];
-            }
-        }
+        [sourceTrack startAccessingSecurityScopedResource];
     }
-    self.accessCount += 1;
     return YES;
 #else
     return NO;
@@ -399,11 +395,9 @@
 - (void)stopAccessingSecurityScopedResource
 {
 #ifdef __SANDBOX_ENABLED__
-    self.accessCount -= 1;
-    NSAssert(self.accessCount >= 0, @"[HBSubtitles stopAccessingSecurityScopedResource:] unbalanced call");
-    if (self.accessCount == 0)
+    for (HBTitleSubtitlesTrack *sourceTrack in self.sourceTracks)
     {
-        [self.tokens removeAllObjects];
+        [sourceTrack stopAccessingSecurityScopedResource];
     }
 #endif
 }
@@ -431,7 +425,6 @@
         }
 
         copy->_defaults = [_defaults copy];
-        copy->_tokens = [NSMutableArray array];
     }
 
     return copy;
@@ -457,8 +450,6 @@
 - (instancetype)initWithCoder:(NSCoder *)decoder
 {
     self = [super init];
-
-    _tokens = [NSMutableArray array];
 
     decodeInt(_container); if (_container != HB_MUX_MP4 && _container != HB_MUX_MKV && _container != HB_MUX_WEBM) { goto fail; }
     decodeCollectionOfObjectsOrFail(_sourceTracks, NSArray, HBTitleSubtitlesTrack);
