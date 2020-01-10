@@ -5,26 +5,20 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <Foundation/Foundation.h>
-#import "HBJob.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @protocol HBSecurityScope <NSObject>
 
-/*  Given an instance, make the resource referenced by the job accessible to the process.
- */
+///  Given an instance, make the resource referenced by the instance accessible to the process.
 - (BOOL)startAccessingSecurityScopedResource;
 
-/*  Revokes the access granted to the url by a prior successful call to startAccessingSecurityScopedResource.
- */
+/// Revokes the access granted to the instance by a prior successful call to startAccessingSecurityScopedResource.
 - (void)stopAccessingSecurityScopedResource;
 
-@end
+/// Refresh the resources (for example if the instance stores a security scoped bookmark, it will recreate the urls from the bookmark.
+- (void)refreshSecurityScopedResources;
 
-@interface NSURL (HBSecurityScope) <HBSecurityScope>
-@end
-
-@interface HBJob (HBSecurityScope) <HBSecurityScope>
 @end
 
 @interface HBSecurityAccessToken : NSObject

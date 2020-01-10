@@ -19,6 +19,8 @@
 #import "HBSubtitles.h"
 #import "HBChapter.h"
 
+#import "HBSecurityAccessToken.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 extern NSString *HBContainerChangedNotification;
@@ -27,7 +29,7 @@ extern NSString *HBChaptersChangedNotification;
 /**
  * HBJob
  */
-@interface HBJob : NSObject <NSSecureCoding, NSCopying, HBPresetCoding>
+@interface HBJob : NSObject <NSSecureCoding, NSCopying, HBPresetCoding, HBSecurityScope>
 
 - (instancetype)initWithTitle:(HBTitle *)title andPreset:(HBPreset *)preset;
 

@@ -5,12 +5,8 @@
  It may be used under the terms of the GNU General Public License. */
 
 #import <HandBrakeKit/HandBrakeKit.h>
-#import "HBSecurityAccessToken.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
-@interface HBJob (Private) <HBSecurityScope>
-@end
 
 @interface HBVideo (Private)
 
@@ -48,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface HBSubtitles (Private) <HBSecurityScope>
+@interface HBSubtitles (Private)
 
 - (instancetype)initWithJob:(HBJob *)job;
 

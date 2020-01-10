@@ -723,6 +723,8 @@ NSString * const HBQueueItemNotificationItemKey = @"HBQueueItemNotificationItemK
         }
     };
 
+    [item.job refreshSecurityScopedResources];
+
     // Only scan 10 previews before an encode - additional previews are
     // only useful for autocrop and static previews, which are already taken care of at this point
     [self.core scanURL:item.fileURL

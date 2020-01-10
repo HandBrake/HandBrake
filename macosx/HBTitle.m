@@ -118,6 +118,9 @@ fail:
 
 @property (nonatomic, readonly, nullable) NSData *bookmark;
 
+@property (nonatomic, readwrite) NSInteger accessCount;
+@property (nonatomic, readwrite) HBSecurityAccessToken *fileURLToken;
+
 @end
 
 @implementation HBTitleSubtitlesTrack
@@ -146,6 +149,47 @@ fail:
         _isoLanguageCode = @(subtitle->iso639_2);
     }
     return self;
+}
+
+- (void)refreshSecurityScopedResources
+{
+    if (_bookmark)
+    {
+        NSURL *resolvedURL = [HBUtilities URLFromBookmark:_bookmark];
+        if (resolvedURL)
+        {
+            _fileURL = resolvedURL;
+        }
+    }
+}
+
+- (BOOL)startAccessingSecurityScopedResource
+{
+#ifdef __SANDBOX_ENABLED__
+    if (self.accessCount == 0)
+    {
+        if (_fileURL)
+        {
+            self.fileURLToken = [HBSecurityAccessToken tokenWithObject:_fileURL];
+        }
+    }
+    self.accessCount += 1;
+    return YES;
+#else
+    return NO;
+#endif
+}
+
+- (void)stopAccessingSecurityScopedResource
+{
+#ifdef __SANDBOX_ENABLED__
+    self.accessCount -= 1;
+    NSAssert(self.accessCount >= 0, @"[HBSubtitles stopAccessingSecurityScopedResource:] unbalanced call");
+    if (self.accessCount == 0)
+    {
+        self.fileURLToken = nil;
+    }
+#endif
 }
 
 + (BOOL)supportsSecureCoding { return YES ;}

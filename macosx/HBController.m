@@ -761,6 +761,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 {
     if (self.core.state != HBStateScanning)
     {
+        [job refreshSecurityScopedResources];
         [self scanURL:job.fileURL titleIndex:job.titleIdx completionHandler:^(NSArray<HBTitle *> *titles)
         {
             if (titles.count)
