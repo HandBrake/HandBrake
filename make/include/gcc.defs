@@ -90,7 +90,7 @@ GCC.args.extra.exe++   = $(LDFLAGS)
 # checking against static sized buffer overflow flaws. -fstack-protector-strong enables
 # stack canaries to detect stack buffer overflows (stack overwrites).
 ifeq (1,$(SECURITY.harden))
-    GCC.args.extra     += $(CFLAGS) $(CXXFLAGS) $(CPPFLAGS) -fstack-protector-strong -D_FORTIFY_SOURCE=2
+    GCC.args.extra     += -fstack-protector-strong -D_FORTIFY_SOURCE=2
     GCC.args.extra.exe += -fstack-protector-strong
 endif
 
