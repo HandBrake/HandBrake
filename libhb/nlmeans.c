@@ -616,10 +616,7 @@ static void nlmeans_prefilter(BorderedPlane *src,
         // Duplicate plane
         uint8_t *mem_pre = malloc(bw * bh * sizeof(uint8_t));
         uint8_t *image_pre = mem_pre + border + bw * border;
-        for (int y = 0; y < h; y++)
-        {
-            memcpy(mem_pre + y * bw, mem + y * bw, bw);
-        }
+        memcpy(mem_pre, mem, bw * bh * sizeof(uint8_t));
 
         // Filter plane; should already have at least 2px extra border on each side
         if (filter_type & NLMEANS_PREFILTER_MODE_CSM5X5)
