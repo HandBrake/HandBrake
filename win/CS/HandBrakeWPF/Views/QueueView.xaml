@@ -229,7 +229,7 @@
                                 </Image>
 
                                 <!--  Settings  -->
-                                <Grid Grid.Column="1" Margin="0,3,5,3" Height="30" VerticalAlignment="Center">
+                                <Grid Grid.Column="1" Margin="0,3,5,3" VerticalAlignment="Center">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
@@ -241,7 +241,7 @@
 
                                     <StackPanel Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
                                         <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" Grid.Row="0" Grid.Column="0"
-                                                   TextTrimming="CharacterEllipsis" VerticalAlignment="Center"   />
+                                                   TextWrapping="Wrap" VerticalAlignment="Center"   />
 
                                         <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
                                                      Value="{Binding DataContext.ProgressValue, ElementName=queueJobs}" IsIndeterminate="{Binding DataContext.IntermediateProgress, ElementName=queueJobs}"
