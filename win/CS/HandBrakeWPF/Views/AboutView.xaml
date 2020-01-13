@@ -57,7 +57,7 @@
 
                 <TextBlock Grid.Row="3" Margin="5,10,0,5" Text="{x:Static Properties:Resources.AboutView_License}" />
 
-                <TextBox Text="{x:Static Properties:Resources.About_GPL}" Grid.Row="4" Margin="10,0,10,10" HorizontalAlignment="Stretch"
+                <TextBox Text="{Binding License, Mode=OneWay}" Grid.Row="4" Margin="10,0,10,10" HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" />
 
          

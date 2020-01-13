@@ -9,8 +9,11 @@
 
 namespace HandBrakeWPF.ViewModels
 {
+    using System;
+
     using HandBrake.Interop.Utilities;
 
+    using HandBrakeWPF.Properties;
     using HandBrakeWPF.ViewModels.Interfaces;
 
     /// <summary>
@@ -35,6 +38,11 @@ namespace HandBrakeWPF.ViewModels
             {
                 return string.Format("{0}", VersionHelper.GetVersion());
             }
+        }
+
+        public string License
+        {
+            get => string.Format("{0}{1}{1}{2}", Resources.About_Copyright, Environment.NewLine, Resources.About_GPL);
         }
 
         /// <summary>
