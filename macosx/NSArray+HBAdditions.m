@@ -8,6 +8,18 @@
 
 @implementation NSArray (HBAdditions)
 
+- (BOOL)allSatisfy:(BOOL (^)(id object))block
+{
+    for (id object in self)
+    {
+        if (block(object) == NO)
+        {
+            return NO;
+        }
+    }
+    return YES;
+}
+
 - (NSArray *)filteredArrayUsingBlock:(BOOL (^)(id object))block
 {
     NSMutableArray *filteredArray = [NSMutableArray array];

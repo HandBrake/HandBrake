@@ -186,6 +186,7 @@
                 [self.children addObject:preset];
             }
         }
+        [self resetBuiltInAndDefaultState];
         return self;
     }
     else if (outError)
@@ -246,7 +247,7 @@
     return output;
 }
 
-- (BOOL)writeToURL:(NSURL *)url atomically:(BOOL)atomically format:(HBPresetFormat)format removeRoot:(BOOL)removeRoot
+- (BOOL)writeToURL:(NSURL *)url atomically:(BOOL)atomically removeRoot:(BOOL)removeRoot error:(NSError * __autoreleasing *)outError
 {
     BOOL success = NO;
     NSArray *presetList;
@@ -268,16 +269,10 @@
                             @"VersionMinor": @(minor),
                             @"VersionMicro": @(micro) };
 
-    if (format == HBPresetFormatPlist)
-    {
-        success = [dict writeToURL:url atomically:atomically];
-    }
-    else
-    {
-        NSUInteger sortKeys = (1UL << 1); // NSJSONWritingSortedKeys in 10.13 sdk;
-        NSData *jsonPreset = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted | sortKeys error:NULL];
-        success = [jsonPreset writeToURL:url atomically:atomically];
-    }
+
+    NSUInteger sortKeys = (1UL << 1); // NSJSONWritingSortedKeys in 10.13 sdk;
+    NSData *jsonPreset = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted | sortKeys error:NULL];
+    success = [jsonPreset writeToURL:url options:NSDataWritingAtomic error:outError];
 
     return success;
 }
@@ -297,6 +292,17 @@
         {
             self.content = [cleanedDict mutableCopy];
         }
+    }
+}
+
+- (void)resetBuiltInAndDefaultState
+{
+    _isBuiltIn = NO;
+    _isDefault = NO;
+
+    for (HBPreset *child in self.children)
+    {
+        [child resetBuiltInAndDefaultState];
     }
 }
 

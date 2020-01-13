@@ -277,6 +277,7 @@
 		A9B6B9F1217B408E00B957AE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9B6B9EF217B408E00B957AE /* InfoPlist.strings */; };
 		A9B6B9F4217B408E00B957AE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = A9B6B9F2217B408E00B957AE /* Localizable.strings */; };
 		A9BC24C91A69293E007DC41A /* HBAttributedStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9BC24C81A69293E007DC41A /* HBAttributedStringAdditions.m */; };
+		A9C3A50123C7A66100269CA3 /* HBFilePromiseProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C3A50023C7A66100269CA3 /* HBFilePromiseProvider.m */; };
 		A9C61F9E22E31CDB00C28E7C /* HBFlippedClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = A9C61F9D22E31CDB00C28E7C /* HBFlippedClipView.m */; };
 		A9CE0A921F57EC3400724577 /* HBImageUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CE0A911F57EC3400724577 /* HBImageUtilities.m */; };
 		A9CF25F71990D6820023F727 /* HBPresetsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A9CF25F61990D6820023F727 /* HBPresetsViewController.m */; };
@@ -732,6 +733,8 @@
 		A9C183941A716B8F00C897C2 /* HBTitleSelectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HBTitleSelectionController.m; sourceTree = "<group>"; };
 		A9C313B222F98F0D0001C438 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/HBQueueInfoViewController.strings; sourceTree = "<group>"; };
 		A9C313B322F98F0D0001C438 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/HBQueueTableViewController.strings; sourceTree = "<group>"; };
+		A9C3A4FF23C7A66100269CA3 /* HBFilePromiseProvider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBFilePromiseProvider.h; sourceTree = "<group>"; };
+		A9C3A50023C7A66100269CA3 /* HBFilePromiseProvider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBFilePromiseProvider.m; sourceTree = "<group>"; };
 		A9C61F9C22E31CDB00C28E7C /* HBFlippedClipView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HBFlippedClipView.h; sourceTree = "<group>"; };
 		A9C61F9D22E31CDB00C28E7C /* HBFlippedClipView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HBFlippedClipView.m; sourceTree = "<group>"; };
 		A9CAC26E1CCB6B0F00A39E72 /* HBPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBPlayer.h; sourceTree = "<group>"; };
@@ -1280,6 +1283,8 @@
 				A9706CB31AC1436F00BAEAA8 /* HBApplication.m */,
 				A964D3A622FDE91A00DFCAEA /* HBRemoteCore.h */,
 				A964D3A722FDE91B00DFCAEA /* HBRemoteCore.m */,
+				A9C3A4FF23C7A66100269CA3 /* HBFilePromiseProvider.h */,
+				A9C3A50023C7A66100269CA3 /* HBFilePromiseProvider.m */,
 				A95BA15F220CA5DB00A2F9F9 /* HBDistributedArray.h */,
 				A95BA160220CA5DB00A2F9F9 /* HBDistributedArray.m */,
 				A9706CB51AC1437800BAEAA8 /* HBExceptionAlertController.h */,
@@ -1949,6 +1954,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9C3A50123C7A66100269CA3 /* HBFilePromiseProvider.m in Sources */,
 				A954010322FF397000F83A5F /* HBRedirect.m in Sources */,
 				A95BA161220CA5DB00A2F9F9 /* HBDistributedArray.m in Sources */,
 				A916C99B1C844A0800C7B560 /* HBTableView.m in Sources */,

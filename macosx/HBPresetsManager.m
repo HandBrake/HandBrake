@@ -248,7 +248,7 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
 
 - (BOOL)savePresetsToURL:(NSURL *)url
 {
-    return [self.root writeToURL:url atomically:YES format:HBPresetFormatJson removeRoot:YES];
+    return [self.root writeToURL:url atomically:YES removeRoot:YES error:NULL];
 }
 
 - (BOOL)savePresets

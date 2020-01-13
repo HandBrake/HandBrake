@@ -10,6 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSArray (HBAdditions)
 
+- (BOOL)allSatisfy:(BOOL (^)(id object))block;
 - (NSArray *)filteredArrayUsingBlock:(BOOL (^)(id object))block;
 - (NSIndexSet *)indexesOfObjectsUsingBlock:(BOOL (^)(id object))block;
 
