@@ -663,9 +663,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="defaultsettings.xml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <Resource Include="Views\Images\information.png" />
     <Resource Include="Views\Images\warningsmall.png" />
     <Resource Include="Views\Images\Complete.png" />

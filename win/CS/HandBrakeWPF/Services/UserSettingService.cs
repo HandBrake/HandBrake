@@ -14,13 +14,10 @@ namespace HandBrakeWPF.Services
     using System.Collections.Specialized;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
-    using System.Xml.Serialization;
 
     using HandBrake.Interop.Model;
     using HandBrake.Interop.Utilities;
 
-    using HandBrakeWPF.Collections;
     using HandBrakeWPF.Extensions;
     using HandBrakeWPF.Properties;
     using HandBrakeWPF.Services.Interfaces;
@@ -78,9 +75,6 @@ namespace HandBrakeWPF.Services
         /// </summary>
         /// <param name="name">
         /// The name.
-        /// </param>
-        /// <param name="conversionType">
-        /// The conversion Type.
         /// </param>
         /// <typeparam name="T">
         /// The Type of the setting
@@ -147,7 +141,6 @@ namespace HandBrakeWPF.Services
                     Directory.CreateDirectory(directory);
                 }
 
-
                 using (StreamWriter file = new StreamWriter(new FileStream(this.settingsFile, FileMode.Create, FileAccess.Write)))
                 {
                     string appSettings = JsonConvert.SerializeObject(this.userSettings, Formatting.Indented, this.settings);
@@ -204,7 +197,7 @@ namespace HandBrakeWPF.Services
                 }
 
                 // Add any missing / new settings
-                SerializableDictionary<string, object> defaults = this.GetDefaults();
+                Dictionary<string, object> defaults = this.GetDefaults();
                 foreach (var item in defaults.Where(item => !this.userSettings.Keys.Contains(item.Key)))
                 {
                     this.userSettings.Add(item.Key, item.Value);
@@ -241,25 +234,82 @@ namespace HandBrakeWPF.Services
         /// <returns>
         /// The get defaults.
         /// </returns>
-        private SerializableDictionary<string, object> GetDefaults()
+        private Dictionary<string, object> GetDefaults()
         {
-            // TODO Convert this to JSON.
-            try
-            {
-                Assembly assembly = Assembly.GetEntryAssembly();
-                Stream stream = assembly.GetManifestResourceStream("HandBrakeWPF.defaultsettings.xml");
-                if (stream != null)
-                {
-                    XmlSerializer serializer = new XmlSerializer(typeof(Collections.SerializableDictionary<string, object>));
-                    return (SerializableDictionary<string, object>)serializer.Deserialize(stream);
-                }
-            }
-            catch (Exception)
-            {
-                return new SerializableDictionary<string, object>();
-            }
+            Dictionary<string, object> defaults = new Dictionary<string, object>();
 
-            return new SerializableDictionary<string, object>();
+            defaults.Add(UserSettingConstants.Verbosity, 1);
+
+            // General
+            defaults.Add(UserSettingConstants.UpdateStatus, true);
+            defaults.Add(UserSettingConstants.LastUpdateCheckDate, DateTime.Now.Date.AddDays(-30));
+            defaults.Add(UserSettingConstants.DaysBetweenUpdateCheck, 1);
+            defaults.Add(UserSettingConstants.UseDarkTheme, false);
+            defaults.Add(UserSettingConstants.ShowPreviewOnSummaryTab, true);
+            defaults.Add(UserSettingConstants.MainWindowMinimize, false);
+            defaults.Add(UserSettingConstants.ClearCompletedFromQueue, false);
+            defaults.Add(UserSettingConstants.ShowStatusInTitleBar, false);
+            defaults.Add(UserSettingConstants.ShowAddAllToQueue, false);
+            defaults.Add(UserSettingConstants.ShowAddSelectionToQueue, false);
+            defaults.Add(UserSettingConstants.VLCPath, @"C:\Program Files\VideoLAN\vlc\vlc.exe");
+
+            // Output Files
+            defaults.Add(UserSettingConstants.AutoNaming, true);
+            defaults.Add(UserSettingConstants.AutoNamePath, string.Empty);
+            defaults.Add(UserSettingConstants.AutoNameFormat, "{source}-{title}");
+            defaults.Add(UserSettingConstants.AutonameFilePrePostString, "output_");
+            defaults.Add(UserSettingConstants.AutoNameTitleCase, true);
+            defaults.Add(UserSettingConstants.AutoNameRemoveUnderscore, true);
+            defaults.Add(UserSettingConstants.AutonameFileCollisionBehaviour, 0);
+            defaults.Add(UserSettingConstants.AlwaysUseDefaultPath, true);
+            defaults.Add(UserSettingConstants.RemovePunctuation, false);
+            defaults.Add(UserSettingConstants.FileOverwriteBehaviour, 0);
+            defaults.Add(UserSettingConstants.UseM4v, 0);
+
+            // When Done
+            defaults.Add(UserSettingConstants.SendFile, false);
+            defaults.Add(UserSettingConstants.WhenCompleteAction, 0);
+            defaults.Add(UserSettingConstants.WhenDonePerformActionImmediately, false);
+            defaults.Add(UserSettingConstants.PlaySoundWhenDone, false);
+            defaults.Add(UserSettingConstants.PlaySoundWhenQueueDone, false);
+            defaults.Add(UserSettingConstants.WhenDoneAudioFile, string.Empty);
+
+            // Video
+            defaults.Add(UserSettingConstants.EnableQuickSyncEncoding, true);
+            defaults.Add(UserSettingConstants.EnableQuickSyncDecoding, false);
+            defaults.Add(UserSettingConstants.UseQSVDecodeForNonQSVEnc, false);
+            defaults.Add(UserSettingConstants.EnableVceEncoder, true);
+            defaults.Add(UserSettingConstants.EnableNvencEncoder, true);
+
+            // Advanced
+            defaults.Add(UserSettingConstants.PreventSleep, true);
+            defaults.Add(UserSettingConstants.DisableLibDvdNav, false);
+            defaults.Add(UserSettingConstants.PauseOnLowDiskspace, true);
+            defaults.Add(UserSettingConstants.PauseQueueOnLowDiskspaceLevel, 2000000000L);
+            defaults.Add(UserSettingConstants.PauseEncodeOnLowDiskspaceLevel, 2000000000L);
+            defaults.Add(UserSettingConstants.PreviewScanCount, 10);
+            defaults.Add(UserSettingConstants.MinScanDuration, 10);
+            defaults.Add(UserSettingConstants.ProcessPriorityInt, 3);
+            defaults.Add(UserSettingConstants.X264Step, 0.5);
+            defaults.Add(UserSettingConstants.SaveLogToCopyDirectory, false);
+            defaults.Add(UserSettingConstants.SaveLogWithVideo, false);
+            defaults.Add(UserSettingConstants.ClearOldLogs, true);
+
+            // Preview
+            defaults.Add(UserSettingConstants.PreviewRotationFlip, false);
+            defaults.Add(UserSettingConstants.LastPreviewDuration, 30);
+            defaults.Add(UserSettingConstants.DefaultPlayer, false);
+
+            // Experimental
+            defaults.Add(UserSettingConstants.RemoteServiceEnabled, false);
+            defaults.Add(UserSettingConstants.RemoteServicePort, true);
+
+            // Misc
+            defaults.Add(UserSettingConstants.ShowPresetPanel, false);
+            defaults.Add(UserSettingConstants.ScalingMode, 0);
+            defaults.Add(UserSettingConstants.ForcePresetReset, 3);
+
+            return defaults;
         }
     }
 }

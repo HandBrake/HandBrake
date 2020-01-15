@@ -241,7 +241,7 @@
 
                                     <StackPanel Grid.Row="0" Grid.Column="0"  VerticalAlignment="Center">
                                         <TextBlock Text="{Binding Task.Destination, Converter={StaticResource filePathToFilenameConverter}}" Grid.Row="0" Grid.Column="0"
-                                                   TextWrapping="Wrap" VerticalAlignment="Center"   />
+                                                   TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0"   />
 
                                         <ProgressBar Minimum="0" Height="4" Maximum="100" Name="pbStatus" HorizontalAlignment="Stretch" Margin="0,8,10,0"
                                                      Value="{Binding DataContext.ProgressValue, ElementName=queueJobs}" IsIndeterminate="{Binding DataContext.IntermediateProgress, ElementName=queueJobs}"
