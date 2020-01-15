@@ -20,10 +20,18 @@ ifneq (1,$(FEATURE.numa))
     X265_8.CONFIGURE.extra  += -DENABLE_LIBNUMA=OFF
 endif
 
-ifneq (none,$(X265_8.GCC.g))
-    X265_8.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+ifeq (size-aggressive,$(GCC.O))
+    X265_8.CONFIGURE.extra += -DCMAKE_CXX_FLAGS_MINSIZEREL="-Oz -DNDEBUG" -DCMAKE_C_FLAGS_MINSIZEREL="-Oz -DNDEBUG"
+endif
+
+ifeq ($(GCC.O),$(filter $(GCC.O),size size-aggressive))
+    X265_8.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=MinSizeRel
 else
-    X265_8.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
+    ifneq (none,$(X265_8.GCC.g))
+        X265_8.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Debug
+    else
+        X265_8.CONFIGURE.extra += -DCMAKE_BUILD_TYPE=Release
+    endif
 endif
 
 ifeq (1,$(HOST.cross))
