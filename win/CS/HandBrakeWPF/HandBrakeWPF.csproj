@@ -35,7 +35,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="defaultsettings.xml" />
     <None Remove="handbrakepineapple.ico" />
   </ItemGroup>
 
@@ -121,7 +120,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="defaultsettings.xml" />
     <EmbeddedResource Include="public.key" />
   </ItemGroup>
 
