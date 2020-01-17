@@ -60,6 +60,11 @@ FFMPEG.CONFIGURE.extra = \
     --cc="$(FFMPEG.GCC.gcc)" \
     --extra-ldflags="$(call fn.ARGS,FFMPEG.GCC,*archs *sysroot *minver ?extra) -L$(call fn.ABSOLUTE,$(CONTRIB.build/)lib)"
 
+ifeq (size-aggressive,$(GCC.O))
+FFMPEG.CONFIGURE.extra += \
+    --enable-small
+endif
+
 ifeq (1-linux,$(FEATURE.qsv)-$(HOST.system))
     FFMPEG.CONFIGURE.extra += --enable-vaapi
     FFMPEG.CONFIGURE.extra += --disable-xlib
