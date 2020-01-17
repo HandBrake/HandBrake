@@ -1617,9 +1617,6 @@ try:
     for tool in ToolProbe.tools:
         tool.run()
 
-    debugMode = SelectMode( 'debug', ('none','none'), ('min','min'), ('std','std'), ('max','max') )
-    optimizeMode = SelectMode( 'optimize', ('none','none'), ('speed','speed'), ('size','size'), default='speed' )
-
     ## find xcconfig values
     xcconfigMode = SelectMode( 'xcconfig', ('none',None), what='' )
     if build_tuple.match( '*-*-darwin*' ):
@@ -1638,6 +1635,16 @@ try:
         for tool in ( Tools.ar, Tools.gcc, Tools.ranlib, Tools.strip ):
             tool.__init__( tool.var, tool.option, '%s-%s' % (cross,tool.name), **tool.kwargs )
             tool.run()
+
+    debugMode = SelectMode( 'debug', ('none','none'), ('min','min'), ('std','std'), ('max','max') )
+
+    Oz_check_command = '%s -Oz -S -o /dev/null -xc /dev/null > /dev/null 2>&1' % Tools.gcc.pathname
+    Oz_check = ShellProbe('checking for -Oz', '%s' % Oz_check_command)
+    Oz_check.run()
+    if Oz_check.fail is False:
+        optimizeMode = SelectMode( 'optimize', ('none','none'), ('speed','speed'), ('size','size'), ('size-aggressive','size-aggressive'), default='speed' )
+    else:
+        optimizeMode = SelectMode( 'optimize', ('none','none'), ('speed','speed'), ('size','size'), default='speed' )
 
     # run host tuple and arch actions
     host_tuple = HostTupleAction(cross)

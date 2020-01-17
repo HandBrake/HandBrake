@@ -41,37 +41,38 @@ GCC.extra.cpp_o   = 1
 GCC.extra.dylib++ = 1
 GCC.extra.exe++   = 1
 
-GCC.args.pipe      = -pipe
-GCC.args.strip     = -Wl,-S
-GCC.args.dylib     = -dynamiclib
-GCC.args.ML        = -fmessage-length=0
-GCC.args.H         = -H
-GCC.args.W         = -W$(1)
+GCC.args.pipe              = -pipe
+GCC.args.strip             = -Wl,-S
+GCC.args.dylib             = -dynamiclib
+GCC.args.ML                = -fmessage-length=0
+GCC.args.H                 = -H
+GCC.args.W                 = -W$(1)
 ifeq (darwin,$(HOST.system))
-    GCC.args.archs = -arch $(1)
+    GCC.args.archs         = -arch $(1)
 endif
-GCC.args.sysroot   = --sysroot=$(1)
-GCC.args.minver    = -mmacosx-version-min=$(1)
-GCC.args.vis       = -fvisibility=hidden
-GCC.args.pic       = -fPIC
-GCC.args.c_std     = -std=gnu99
-GCC.args.cxx_std   = -std=c++98
-GCC.args.g.none    = -g0
-GCC.args.g.min     = -gdwarf-2 -g1
-GCC.args.g.std     = -gdwarf-2
-GCC.args.g.max     = -gdwarf-2 -g3
-GCC.args.O.none    = -O0
-GCC.args.O.size    = -Os
-GCC.args.O.speed   = -O3
-GCC.args.D         = -D$(1)
-GCC.args.I         = -I$(1)
-GCC.args.muldefs   = -Wl,--allow-multiple-definition
-GCC.args.start     = -Wl,--start-group
-GCC.args.F         = -F$(1)
-GCC.args.f         = -framework $(1)
-GCC.args.L         = -L$(1)
-GCC.args.l         = -l$(1)
-GCC.args.end       = -Wl,--end-group
+GCC.args.sysroot           = --sysroot=$(1)
+GCC.args.minver            = -mmacosx-version-min=$(1)
+GCC.args.vis               = -fvisibility=hidden
+GCC.args.pic               = -fPIC
+GCC.args.c_std             = -std=gnu99
+GCC.args.cxx_std           = -std=c++98
+GCC.args.g.none            = -g0
+GCC.args.g.min             = -gdwarf-2 -g1
+GCC.args.g.std             = -gdwarf-2
+GCC.args.g.max             = -gdwarf-2 -g3
+GCC.args.O.none            = -O0
+GCC.args.O.size            = -Os
+GCC.args.O.size-aggressive = -Oz
+GCC.args.O.speed           = -O3
+GCC.args.D                 = -D$(1)
+GCC.args.I                 = -I$(1)
+GCC.args.muldefs           = -Wl,--allow-multiple-definition
+GCC.args.start             = -Wl,--start-group
+GCC.args.F                 = -F$(1)
+GCC.args.f                 = -framework $(1)
+GCC.args.L                 = -L$(1)
+GCC.args.l                 = -l$(1)
+GCC.args.end               = -Wl,--end-group
 
 ifeq ($(HOST.machine),$(filter $(HOST.machine),i686 x86_64))
     GCC.args.extra = $(CFLAGS) $(CPPFLAGS) -mfpmath=sse -msse2
