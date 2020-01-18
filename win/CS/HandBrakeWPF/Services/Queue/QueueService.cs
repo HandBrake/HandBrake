@@ -222,11 +222,13 @@ namespace HandBrakeWPF.Services.Queue
 
         public void Clear()
         {
-            List<QueueTask> deleteList = this.queue.ToList();
+            List<QueueTask> deleteList = this.queue.Where(i => i.Status != QueueItemStatus.InProgress).ToList();
+
             foreach (QueueTask item in deleteList)
             {
                 this.queue.Remove(item);
             }
+
             this.InvokeQueueChanged(EventArgs.Empty);
         }
 
@@ -241,6 +243,7 @@ namespace HandBrakeWPF.Services.Queue
                     {
                         this.queue.Remove(item);
                     }
+
                     this.InvokeQueueChanged(EventArgs.Empty);
                 });
         }
