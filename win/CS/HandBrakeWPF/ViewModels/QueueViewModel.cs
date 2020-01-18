@@ -305,7 +305,7 @@ namespace HandBrakeWPF.ViewModels
         public void Clear()
         {
             MessageBoxResult result = this.errorService.ShowMessageBox(
-                Resources.QueueViewModel_ClearQueueConfrimation, Resources.Confirm, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                Resources.QueueViewModel_ClearQueueConfrimation, Resources.Confirm, MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 this.queueProcessor.Clear();
@@ -399,7 +399,7 @@ namespace HandBrakeWPF.ViewModels
                 return;
             }
 
-            List<QueueTask> tasksToRemove = this.SelectedItems.ToList();
+            List<QueueTask> tasksToRemove = this.SelectedItems.Where(i => i.Status != QueueItemStatus.InProgress).ToList();
             foreach (QueueTask job in tasksToRemove)
             {
                 this.RemoveJob(job);
