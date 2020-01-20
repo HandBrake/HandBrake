@@ -44,14 +44,14 @@
     self.name.placeholderString = self.preset.name;
     self.name.stringValue = self.preset.name;
 
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(controlTextDidChange:)
-                                                 name:NSControlTextDidChangeNotification object:nil];
+    [NSNotificationCenter.defaultCenter addObserver:self
+                                           selector:@selector(controlTextDidChange:)
+                                               name:NSControlTextDidChangeNotification object:nil];
 }
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NSControlTextDidChangeNotification object:nil];
+    [NSNotificationCenter.defaultCenter removeObserver:self name:NSControlTextDidChangeNotification object:nil];
 }
 
 - (void)controlTextDidChange:(NSNotification *)obj {
@@ -68,13 +68,13 @@
     if (self.name.stringValue.length == 0)
     {
         NSAlert *alert = [[NSAlert alloc] init];
-        [alert setMessageText:NSLocalizedString(@"The preset name cannot be empty.", @"Rename preset window -> name alert message")];
-        [alert setInformativeText:NSLocalizedString(@"Please enter a name.",  @"Rename preset window -> name alert informative text")];
+        alert.messageText = NSLocalizedString(@"The preset name cannot be empty.", @"Rename preset window -> name alert message");
+        alert.informativeText = NSLocalizedString(@"Please enter a name.",  @"Rename preset window -> name alert informative text");
         [alert runModal];
     }
     else
     {
-        [self.preset setName:self.name.stringValue];
+        self.preset.name = self.name.stringValue;
         [self.window.sheetParent endSheet:self.window returnCode:NSModalResponseOK];
     }
 }

@@ -10,6 +10,7 @@
 
 @property (nonatomic, strong, nullable) NSMutableDictionary *content;
 - (void)cleanUp;
+- (void)resetBuiltInAndDefaultState;
 
 @end
 
@@ -28,6 +29,11 @@
 - (void)cleanUp
 {
     [super cleanUp];
+}
+
+- (void)resetBuiltInAndDefaultState
+{
+    [super resetBuiltInAndDefaultState];
 }
 
 @end

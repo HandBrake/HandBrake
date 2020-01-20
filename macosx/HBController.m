@@ -113,14 +113,14 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 @property (nonatomic, nullable) HBJob *job;
 @property (nonatomic, nullable) HBAutoNamer *autoNamer;
 
-/// The current selected preset.
+/// The selected preset.
+@property (nonatomic, nullable, strong) HBPreset *selectedPreset;
+
+/// The current modified preset.
 @property (nonatomic, strong) HBPreset *currentPreset;
 
 /// The current destination.
-@property (nonatomic, strong) NSURL *currentDestination;
-
-/// Whether the job has been edited after a preset was applied.
-@property (nonatomic) BOOL edited;
+@property (nonatomic, strong) NSURL *destinationURL;
 
 /// The HBCore used for scanning.
 @property (nonatomic, strong) HBCore *core;
@@ -178,6 +178,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         _queue = queue;
 
         presetManager = manager;
+        _selectedPreset = manager.defaultPreset;
         _currentPreset = manager.defaultPreset;
 
         _scanSpecificTitleIdx = 1;
@@ -190,20 +191,20 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         NSData *bookmark = [NSUserDefaults.standardUserDefaults objectForKey:HBLastDestinationDirectoryBookmark];
         if (bookmark)
         {
-            _currentDestination = [HBUtilities URLFromBookmark:bookmark];
+            _destinationURL = [HBUtilities URLFromBookmark:bookmark];
         }
 #else
         _currentDestination = [NSUserDefaults.standardUserDefaults URLForKey:HBLastDestinationDirectoryURL];
 #endif
 
-        if (!_currentDestination || [[NSFileManager defaultManager] fileExistsAtPath:_currentDestination.path isDirectory:nil] == NO)
+        if (!_destinationURL || [NSFileManager.defaultManager fileExistsAtPath:_destinationURL.path isDirectory:nil] == NO)
         {
-            _currentDestination = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES) firstObject]
+            _destinationURL = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSMoviesDirectory, NSUserDomainMask, YES) firstObject]
                                              isDirectory:YES];
         }
 
 #ifdef __SANDBOX_ENABLED__
-        [_currentDestination startAccessingSecurityScopedResource];
+        [_destinationURL startAccessingSecurityScopedResource];
 #endif
     }
 
@@ -568,7 +569,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
     if (action == @selector(selectPresetFromMenu:))
     {
-        if ([menuItem.representedObject isEqualTo:self.currentPreset] && self.edited == NO)
+        if ([menuItem.representedObject isEqualTo:self.selectedPreset])
         {
             menuItem.state = NSControlStateValueOn;
         }
@@ -578,19 +579,23 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         }
         return (self.job != nil);
     }
-    if (action == @selector(exportPreset:))
-    {
-        return [fPresetsView validateUserInterfaceItem:menuItem] && self.job != nil;
-    }
-    if (action == @selector(selectDefaultPreset:) ||
-        action == @selector(insertCategory:))
+    if (action == @selector(exportPreset:) ||
+        action == @selector(selectDefaultPreset:))
     {
         return self.job != nil;
     }
     if (action == @selector(deletePreset:) ||
         action == @selector(setDefaultPreset:))
     {
-        return self.job != nil && self.edited == NO;//fixme
+        return self.job != nil && self.selectedPreset;
+    }
+    if (action == @selector(savePreset:))
+    {
+        return self.job != nil && self.selectedPreset && self.selectedPreset.isBuiltIn == NO;
+    }
+    if (action == @selector(showRenamePresetPanel:))
+    {
+        return self.selectedPreset && self.selectedPreset.isBuiltIn == NO;
     }
 
     return YES;
@@ -783,6 +788,8 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
                 {
                     job.title = titles.firstObject;
                 }
+
+                self.selectedPreset = nil;
                 self.job = job;
 
                 handler(YES);
@@ -808,7 +815,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 
     HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:self.currentPreset];
-    job.outputURL = self.currentDestination;
+    job.outputURL = self.destinationURL;
 
     // If the source is not a stream, and autonaming is disabled,
     // keep the existing file name.
@@ -974,7 +981,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
          if (result == NSModalResponseOK)
          {
              self.job.outputURL = panel.URL;
-             self.currentDestination = panel.URL;
+             self.destinationURL = panel.URL;
 
              // Save this path to the prefs so that on next browse destination window it opens there
              [NSUserDefaults.standardUserDefaults setObject:[HBUtilities bookmarkFromURL:panel.URL]
@@ -1016,7 +1023,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         {
             self.job.presetName = [NSString stringWithFormat:@"%@ %@", self.job.presetName, NSLocalizedString(@"(Modified)", @"Main Window -> preset modified")];
         }
-        self.edited = YES;
     }
 }
 
@@ -1195,7 +1201,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     for (HBTitle *title in titles)
     {
         HBJob *job = [[HBJob alloc] initWithTitle:title andPreset:preset];
-        job.outputURL = self.currentDestination;
+        job.outputURL = self.destinationURL;
         job.outputFileName = job.defaultName;
         job.title = nil;
         [jobs addObject:job];
@@ -1281,6 +1287,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (void)selectionDidChange
 {
+    self.selectedPreset = fPresetsView.selectedPreset;
     [self applyPreset:fPresetsView.selectedPreset];
 }
 
@@ -1306,9 +1313,19 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
         }
         else
         {
-            fPresetsView.selectedPreset = _currentPreset;
             [self.presetsPopover close];
         }
+    }
+}
+
+- (void)setSelectedPreset:(HBPreset *)selectedPreset
+{
+    if (selectedPreset != _selectedPreset)
+    {
+        NSUndoManager *undo = self.window.undoManager;
+        [[undo prepareWithInvocationTarget:self] setSelectedPreset:_selectedPreset];
+
+        _selectedPreset = selectedPreset;
     }
 }
 
@@ -1325,23 +1342,12 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     }
 }
 
-- (void)setEdited:(BOOL)edited
+- (IBAction)reloadPreset:(id)sender
 {
-    if (edited != _edited)
+    HBPreset *preset = self.selectedPreset ? self.selectedPreset : self.currentPreset;
+    if (preset)
     {
-        NSUndoManager *undo = self.window.undoManager;
-        [[undo prepareWithInvocationTarget:self] setEdited:_edited];
-
-        _edited = edited;
-    }
-}
-
-- (void)reloadPreset:(id)sender
-{
-    // Reload the currently selected preset if it is selected.
-    if (self.currentPreset != NULL)
-    {
-        [self applyPreset:self.currentPreset];
+        [self applyPreset:preset];
     }
 }
 
@@ -1352,7 +1358,6 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     if (self.job)
     {
         self.currentPreset = preset;
-        self.edited = NO;
 
         // Remove the job observer so we don't update the file name
         // too many times while the preset is being applied
@@ -1387,45 +1392,36 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self.window beginSheet:addPresetController.window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSModalResponseOK)
         {
+            self.selectedPreset = addPresetController.preset;
+            [self applyPreset:addPresetController.preset];
             self->fPresetsView.selectedPreset = addPresetController.preset;
-            [self applyPreset:self->fPresetsView.selectedPreset];
-            [[NSNotificationCenter defaultCenter] postNotificationName:HBPresetsChangedNotification object:nil];
         }
     }];
 }
 
-- (HBPreset *)createPresetFromCurrentSettings
+- (HBMutablePreset *)createPresetFromCurrentSettings
 {
     HBMutablePreset *preset = [self.currentPreset mutableCopy];
-
-	// Set whether or not this is a user preset or factory 0 is factory, 1 is user
-    preset[@"Type"] = @1;
-    preset[@"Default"] = @NO;
-
     [self.job writeToPreset:preset];
-
-    return [preset copy];
+    return preset;
 }
 
 - (IBAction)showRenamePresetPanel:(id)sender
 {
     [self.window HB_endEditing];
-    fPresetsView.selectedPreset = _currentPreset;
 
-    __block HBRenamePresetController *renamePresetController = [[HBRenamePresetController alloc] initWithPreset:self.currentPreset
+    __block HBRenamePresetController *renamePresetController = [[HBRenamePresetController alloc] initWithPreset:self.selectedPreset
                                                                                           presetManager:presetManager];
     [self.window beginSheet:renamePresetController.window completionHandler:^(NSModalResponse returnCode) {
         if (returnCode == NSModalResponseOK)
         {
-            [self applyPreset:self->fPresetsView.selectedPreset];
-            [[NSNotificationCenter defaultCenter] postNotificationName:HBPresetsChangedNotification object:nil];
+            self.job.presetName = renamePresetController.preset.name;
         }
         renamePresetController = nil;
     }];
 }
 
-#pragma mark -
-#pragma mark Import Export Preset(s)
+#pragma mark - Import Export Preset(s)
 
 - (IBAction)exportPreset:(id)sender
 {
@@ -1437,25 +1433,39 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [fPresetsView importPreset:sender];
 }
 
-#pragma mark -
-#pragma mark Preset Menu
+#pragma mark - Preset Menu
 
 - (IBAction)selectDefaultPreset:(id)sender
 {
+    self.selectedPreset = presetManager.defaultPreset;
     [self applyPreset:presetManager.defaultPreset];
     fPresetsView.selectedPreset = presetManager.defaultPreset;
 }
 
 - (IBAction)setDefaultPreset:(id)sender
 {
-    fPresetsView.selectedPreset = _currentPreset;
-    [fPresetsView setDefault:sender];
+    [presetManager setDefaultPreset:self.selectedPreset];
+}
+
+- (IBAction)savePreset:(id)sender
+{
+    [self.window HB_endEditing];
+
+    NSIndexPath *indexPath = [presetManager indexPathOfPreset:self.selectedPreset];
+    HBMutablePreset *preset = [self createPresetFromCurrentSettings];
+    preset.name = self.selectedPreset.name;
+    preset.isDefault = self.selectedPreset.isDefault;
+
+    [presetManager replacePresetAtIndexPath:indexPath withPreset:preset];
+
+    self.job.presetName = preset.name;
+    self.selectedPreset = preset;
+    fPresetsView.selectedPreset = preset;
 }
 
 - (IBAction)deletePreset:(id)sender
 {
-    HBPreset *preset = [sender representedObject];
-    [fPresetsView deletePreset:preset];
+    [fPresetsView deletePreset:self];
 }
 
 - (IBAction)insertCategory:(id)sender
@@ -1468,6 +1478,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     // Retrieve the preset stored in the NSMenuItem
     HBPreset *preset = [sender representedObject];
 
+    self.selectedPreset = preset;
     [self applyPreset:preset];
     fPresetsView.selectedPreset = preset;
 }

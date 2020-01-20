@@ -8,6 +8,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class HBTreeNode;
+
 /**
  *  Notify a delegate that something changed in the tree.
  *  KVO observing a tree looks complicated and expensive, so this is a lightweight
@@ -15,10 +17,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @protocol HBTreeNodeDelegate <NSObject>
 
-- (void)nodeDidChange:(id)node;
+- (void)nodeDidChange:(HBTreeNode *)node;
 
 @optional
-- (void)treeDidRemoveNode:(id)node;
+- (void)treeDidRemoveNode:(HBTreeNode *)node;
 
 @end
 
@@ -28,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface HBTreeNode : NSObject <NSCopying>
 
 // NSTreeController required properties
-@property (nonatomic, readonly) NSMutableArray *children;
+@property (nonatomic, readonly) NSMutableArray<HBTreeNode *> *children;
 @property (nonatomic) BOOL isLeaf;
 
 @property (nonatomic, weak) id<HBTreeNodeDelegate> delegate;
@@ -56,11 +58,17 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)removeObjectAtIndexPath:(NSIndexPath *)idx;
 
+/// Replaces the object at the specified index path.
+/// @param idx the NSIndexPath of the object to replace
+/// @param object the new object
+- (void)replaceObjectAtIndexPath:(NSIndexPath *)idx withObject:(HBTreeNode *)object;
+
 // KVC Accessor Methods
 
 @property (nonatomic, readonly) NSUInteger countOfChildren;
 - (id)objectInChildrenAtIndex:(NSUInteger)index;
 - (void)insertObject:(HBTreeNode *)presetObject inChildrenAtIndex:(NSUInteger)index;
+- (void)replaceObjectInChildrenAtIndex:(NSUInteger)index withObject:(HBTreeNode *)object;
 - (void)removeObjectFromChildrenAtIndex:(NSUInteger)index;
 
 @end

@@ -112,7 +112,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 {
     if (context == HBPresetsViewControllerContext)
     {
-        HBPreset *selectedNode = [[self.treeController selectedObjects] firstObject];
+        HBPreset *selectedNode = self.treeController.selectedObjects.firstObject;
         if (selectedNode && selectedNode.isLeaf && selectedNode != self.selectedPresetInternal)
         {
             self.selectedPresetInternal = selectedNode;
@@ -158,7 +158,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 - (IBAction)exportPreset:(id)sender
 {
     // Find the current selection, it can be a category too.
-    HBPreset *selectedPreset = [[[self.treeController selectedObjects] firstObject] copy];
+    HBPreset *selectedPreset = [self.treeController.selectedObjects.firstObject copy];
 
     // Open a panel to let the user choose where and how to save the export file
     NSSavePanel *panel = [NSSavePanel savePanel];
@@ -265,7 +265,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
 - (IBAction)clicked:(id)sender
 {
-    if (self.delegate && [[self.treeController.selectedObjects firstObject] isLeaf])
+    if (self.delegate && [self.treeController.selectedObjects.firstObject isLeaf])
     {
         [self.delegate selectionDidChange];
     }
@@ -273,10 +273,9 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
 - (IBAction)renamed:(id)sender
 {
-    if (self.delegate && [[self.treeController.selectedObjects firstObject] isLeaf])
+    if (self.delegate && [self.treeController.selectedObjects.firstObject isLeaf])
     {
         [self.delegate selectionDidChange];
-        [NSNotificationCenter.defaultCenter postNotificationName:HBPresetsChangedNotification object:nil];
     }
 }
 
@@ -294,14 +293,23 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     {
         // Alert user before deleting preset
         NSAlert *alert = [[NSAlert alloc] init];
-        alert.messageText = NSLocalizedString(@"Are you sure you want to permanently delete the selected preset?", @"Delete preset alert -> message");
-        alert.informativeText = NSLocalizedString(@"You can't undo this action.", @"Delete preset alert -> informative text");
-        [alert addButtonWithTitle:NSLocalizedString(@"Delete Preset", @"Delete preset alert -> first button")];
-        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Delete preset alert -> second button")];
         alert.alertStyle = NSAlertStyleCritical;
+        alert.informativeText = NSLocalizedString(@"You can't undo this action.", @"Delete preset alert -> informative text");
+
+        if (self.treeController.selectedObjects.count > 1)
+        {
+            alert.messageText = NSLocalizedString(@"Are you sure you want to permanently delete the selected presets?", @"Delete preset alert -> message");
+            [alert addButtonWithTitle:NSLocalizedString(@"Delete Presets", @"Delete preset alert -> first button")];
+        }
+        else
+        {
+            alert.messageText = NSLocalizedString(@"Are you sure you want to permanently delete the selected preset?", @"Delete preset alert -> message");
+            [alert addButtonWithTitle:NSLocalizedString(@"Delete Preset", @"Delete preset alert -> first button")];
+        }
+
+        [alert addButtonWithTitle:NSLocalizedString(@"Cancel", @"Delete preset alert -> second button")];
 
         NSInteger status = [alert runModal];
-
         if (status == NSAlertFirstButtonReturn)
         {
             for (NSIndexPath *indexPath in self.treeController.selectionIndexPaths.reverseObjectEnumerator)
@@ -327,11 +335,10 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
 - (IBAction)setDefault:(id)sender
 {
-    HBPreset *selectedNode = [[self.treeController selectedObjects] firstObject];
+    HBPreset *selectedNode = self.treeController.selectedObjects.firstObject;
     if (selectedNode.isLeaf)
     {
         self.presets.defaultPreset = selectedNode;
-        [NSNotificationCenter.defaultCenter postNotificationName:HBPresetsChangedNotification object:nil];
     }
 }
 

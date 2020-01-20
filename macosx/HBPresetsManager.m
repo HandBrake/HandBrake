@@ -47,12 +47,12 @@ NSString *HBPresetsChangedNotification = @"HBPresetsChangedNotification";
 
 #pragma mark - HBTreeNode delegate
 
-- (void)nodeDidChange:(id)node
+- (void)nodeDidChange:(HBTreeNode *)node
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:HBPresetsChangedNotification object:nil];
+    [NSNotificationCenter.defaultCenter postNotificationName:HBPresetsChangedNotification object:nil];
 }
 
-- (void)treeDidRemoveNode:(id)node
+- (void)treeDidRemoveNode:(HBTreeNode *)node
 {
     if (node == self.defaultPreset)
     {
@@ -275,6 +275,11 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
     [self.root removeObjectAtIndexPath:idx];
 }
 
+- (void)replacePresetAtIndexPath:(NSIndexPath *)idx withPreset:(HBPreset *)preset
+{
+    [self.root replaceObjectAtIndexPath:idx withObject:preset];
+}
+
 - (NSIndexPath *)indexPathOfPreset:(HBPreset *)preset
 {
     return [self.root indexPathOfObject:preset];
@@ -318,7 +323,10 @@ typedef NS_ENUM(NSUInteger, HBPresetLoadingResult) {
             defaultAlreadySetted = YES;
         }
 
-        [obj setIsDefault:NO];
+        if ([obj isDefault])
+        {
+            [obj setIsDefault:NO];
+        }
     }];
 
     if (defaultAlreadySetted)

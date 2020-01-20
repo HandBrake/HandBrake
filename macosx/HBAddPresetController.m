@@ -60,6 +60,7 @@ typedef NS_ENUM(NSUInteger, HBAddPresetControllerMode) {
     {
         NSParameterAssert(preset);
         _mutablePreset = [preset mutableCopy];
+        [_mutablePreset resetBuiltInAndDefaultState];
         _manager = manager;
         _width = customWidth;
         _height = customHeight;

@@ -14,10 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @interface HBMutablePreset : HBPreset
 
-/**
- *  Removes unknown keys and normalizes values.
- */
+/// Removes unknown keys and normalizes values.
 - (void)cleanUp;
+
+- (void)resetBuiltInAndDefaultState;
 
 - (void)setObject:(id)obj forKey:(NSString *)key;
 - (void)setObject:(id)obj forKeyedSubscript:(NSString *)key;

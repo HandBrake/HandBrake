@@ -26,7 +26,7 @@
         _manager = manager;
         _action = action;
 
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(build) name:HBPresetsChangedNotification object:nil];
+        [NSNotificationCenter.defaultCenter addObserver:self selector:@selector(build) name:HBPresetsChangedNotification object:nil];
     }
 
     return self;
@@ -34,7 +34,7 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [NSNotificationCenter.defaultCenter removeObserver:self];
 }
 
 /**

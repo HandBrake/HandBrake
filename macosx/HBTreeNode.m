@@ -32,6 +32,15 @@
     return node;
 }
 
+- (void)setDelegate:(id<HBTreeNodeDelegate>)delegate
+{
+    _delegate = delegate;
+    for (HBTreeNode *node in self.children)
+    {
+        node.delegate = delegate;
+    }
+}
+
 - (NSUInteger)countOfChildren
 {
     return self.children.count;
@@ -39,25 +48,27 @@
 
 - (id)objectInChildrenAtIndex:(NSUInteger)index
 {
-    return (self.children)[index];
+    return self.children[index];
 }
 
-- (void)insertObject:(HBTreeNode *)presetObject inChildrenAtIndex:(NSUInteger)index
+- (void)insertObject:(HBTreeNode *)object inChildrenAtIndex:(NSUInteger)index
 {
-    [self.children insertObject:presetObject atIndex:index];
-    [presetObject setDelegate:self.delegate];
-
-    for (HBTreeNode *node in self.children)
-    {
-        node.delegate = self.delegate;
-    }
-
+    [self.children insertObject:object atIndex:index];
+    object.delegate = self.delegate;
     [self.delegate nodeDidChange:self];
 }
 
 - (void)removeObjectFromChildrenAtIndex:(NSUInteger)index
 {
+    self.children[index].delegate = nil;
     [self.children removeObjectAtIndex:index];
+    [self.delegate nodeDidChange:self];
+}
+
+- (void)replaceObjectInChildrenAtIndex:(NSUInteger)index withObject:(HBTreeNode *)object
+{
+    [self.children replaceObjectAtIndex:index withObject:object];
+    object.delegate = self.delegate;
     [self.delegate nodeDidChange:self];
 }
 
@@ -133,7 +144,7 @@
 
         if (parentNode.children.count > currIdx)
         {
-            parentNode = (parentNode.children)[currIdx];
+            parentNode = parentNode.children[currIdx];
         }
     }
 
@@ -150,6 +161,27 @@
             [self.delegate treeDidRemoveNode:removedNode];
         }
     }
+}
+
+- (void)replaceObjectAtIndexPath:(NSIndexPath *)idx withObject:(HBTreeNode *)object
+{
+    HBTreeNode *parentNode = self;
+
+    // Find the object parent array
+    NSUInteger currIdx = 0;
+    NSUInteger i = 0;
+    for (i = 0; i < idx.length - 1; i++)
+    {
+        currIdx = [idx indexAtPosition:i];
+
+        if (parentNode.children.count > currIdx)
+        {
+            parentNode = parentNode.children[currIdx];
+        }
+    }
+
+    NSUInteger insertionIndex = [idx indexAtPosition:idx.length - 1];
+    [parentNode replaceObjectInChildrenAtIndex:insertionIndex withObject:object];
 }
 
 @end

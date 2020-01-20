@@ -59,6 +59,8 @@ extern NSString *HBPresetsChangedNotification;
  */
 - (void)deletePresetAtIndexPath:(NSIndexPath *)idx;
 
+- (void)replacePresetAtIndexPath:(NSIndexPath *)idx withPreset:(HBPreset *)preset;
+
 /**
  *  Returns the index path of the specified object.
  *
