@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15702" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15702"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBPresetsViewController">
             <connections>
-                <outlet property="headerBottomConstraint" destination="jy6-AG-t3l" id="0Ar-a2-XjQ"/>
-                <outlet property="headerLabel" destination="jCz-Aw-giC" id="eh7-O4-fFD"/>
                 <outlet property="outlineView" destination="00W-tb-wgY" id="T3u-ix-uIb"/>
                 <outlet property="treeController" destination="ohT-Pp-wBT" id="YGP-sN-dS3"/>
                 <outlet property="view" destination="Hz6-mo-xeY" id="xR8-5v-xDQ"/>
@@ -39,12 +37,12 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                                 <tableColumns>
                                     <tableColumn identifier="name" width="219" minWidth="16" maxWidth="1000" id="jhC-ge-H1w">
                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                            <font key="font" metaFont="label" size="11"/>
+                                            <font key="font" metaFont="menu" size="11"/>
                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" white="0.33333298560000002" alpha="1" colorSpace="calibratedWhite"/>
                                         </tableHeaderCell>
                                         <textFieldCell key="dataCell" controlSize="small" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="4tC-UE-40G">
-                                            <font key="font" metaFont="label" size="11"/>
+                                            <font key="font" metaFont="menu" size="11"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
@@ -57,7 +55,7 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                                                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" allowsCharacterPickerTouchBarItem="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VdJ-Vk-fzJ">
                                                         <rect key="frame" x="0.0" y="0.0" width="219" height="14"/>
                                                         <textFieldCell key="cell" controlSize="small" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="Table View Cell" id="oBC-Nh-TwB">
-                                                            <font key="font" metaFont="label" size="11"/>
+                                                            <font key="font" metaFont="menu" size="11"/>
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                             <connections>
@@ -206,7 +204,6 @@ Overrides all encode settings. Settings may be further adjusted after selecting 
                 <constraint firstItem="kfi-wq-mgV" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="3" id="dhx-Bz-GhP"/>
                 <constraint firstItem="uad-bt-uKD" firstAttribute="top" secondItem="jCz-Aw-giC" secondAttribute="bottom" constant="6" id="jy6-AG-t3l"/>
                 <constraint firstItem="Ybq-Zt-sta" firstAttribute="leading" secondItem="b3V-8w-euU" secondAttribute="trailing" constant="8" id="k1Z-q1-OXB"/>
-                <constraint firstItem="uad-bt-uKD" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" priority="250" constant="6" id="qPU-x9-bnh"/>
             </constraints>
             <point key="canvasLocation" x="21" y="276"/>
         </customView>
