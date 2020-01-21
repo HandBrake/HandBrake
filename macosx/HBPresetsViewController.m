@@ -94,7 +94,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     [self.outlineView setDraggingSourceOperationMask:NSDragOperationMove forLocal:YES];
 
     // Re-expand the items
-    [self expandNodes:[self.treeController.arrangedObjects childNodes]];
+    [self expandNodes:self.treeController.arrangedObjects.childNodes];
 
     [self.treeController setSelectionIndexPath:[self.presets indexPathOfPreset:self.selectedPreset]];
     [self.treeController addObserver:self forKeyPath:@"selectedObjects" options:NSKeyValueObservingOptionNew context:HBPresetsViewControllerContext];
@@ -123,14 +123,14 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
     if (action == @selector(exportPreset:))
     {
-        if (![[self.treeController selectedObjects] firstObject])
+        if (!self.treeController.selectedObjects.firstObject)
         {
             return NO;
         }
     }
     if (action == @selector(setDefault:))
     {
-        if (![[[self.treeController selectedObjects] firstObject] isLeaf])
+        if (![self.treeController.selectedObjects.firstObject isLeaf])
         {
             return NO;
         }
@@ -273,7 +273,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 
 - (IBAction)deletePreset:(id)sender
 {
-    if ([self.treeController canRemove])
+    if (self.treeController.canRemove)
     {
         // Alert user before deleting preset
         NSAlert *alert = [[NSAlert alloc] init];
@@ -352,7 +352,7 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     [self.presets generateBuiltInPresets];
 
     // Re-expand the items
-    [self expandNodes:[self.treeController.arrangedObjects childNodes]];
+    [self expandNodes:self.treeController.arrangedObjects.childNodes];
 }
 
 #pragma mark - Expanded node persistence methods

@@ -1452,19 +1452,25 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
     [self.window HB_endEditing];
 
     NSIndexPath *indexPath = [presetManager indexPathOfPreset:self.selectedPreset];
-    HBMutablePreset *preset = [self createPresetFromCurrentSettings];
-    preset.name = self.selectedPreset.name;
-    preset.isDefault = self.selectedPreset.isDefault;
+    if (indexPath)
+    {
+        HBMutablePreset *preset = [self createPresetFromCurrentSettings];
+        preset.name = self.selectedPreset.name;
+        preset.isDefault = self.selectedPreset.isDefault;
 
-    [presetManager replacePresetAtIndexPath:indexPath withPreset:preset];
+        [presetManager replacePresetAtIndexPath:indexPath withPreset:preset];
 
-    self.job.presetName = preset.name;
-    self.selectedPreset = preset;
-    fPresetsView.selectedPreset = preset;
+        self.job.presetName = preset.name;
+        self.selectedPreset = preset;
+        fPresetsView.selectedPreset = preset;
+
+        [self.window.undoManager removeAllActions];
+    }
 }
 
 - (IBAction)deletePreset:(id)sender
 {
+    fPresetsView.selectedPreset = presetManager.defaultPreset;
     [fPresetsView deletePreset:self];
 }
 
