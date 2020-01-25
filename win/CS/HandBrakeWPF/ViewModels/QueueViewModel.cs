@@ -459,14 +459,7 @@ namespace HandBrakeWPF.ViewModels
         /// </param>
         public void RetryJob(QueueTask task)
         {
-            if (task == null)
-            {
-                return;
-            }
-
-            task.Status = QueueItemStatus.Waiting;
-            task.Statistics.Reset();
-            this.queueProcessor.BackupQueue(null);
+            this.queueProcessor.RetryJob(task);
             this.JobsPending = string.Format(Resources.QueueViewModel_JobsPending, this.queueProcessor.Count);
             this.NotifyOfPropertyChange(() => this.CanRetryJob);
         }
@@ -787,7 +780,6 @@ namespace HandBrakeWPF.ViewModels
                             string logContent = logReader.ReadToEnd();
                             this.ActivityLog = logContent;
                         }
-
                     }
                     else
                     {

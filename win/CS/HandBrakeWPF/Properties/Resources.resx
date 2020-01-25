@@ -285,7 +285,7 @@ The previous user_presets.xml file was backed up.</value>
     <value>Select 'Source' to continue</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} Encodes Pending</value>
+    <value>{0} Jobs Pending</value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>Notice</value>

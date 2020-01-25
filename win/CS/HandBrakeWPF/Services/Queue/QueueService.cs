@@ -220,6 +220,20 @@ namespace HandBrakeWPF.Services.Queue
             return false;
         }
 
+        public void RetryJob(QueueTask task)
+        {
+            if (task == null)
+            {
+                return;
+            }
+
+            task.Status = QueueItemStatus.Waiting;
+            task.Statistics.Reset();
+            this.BackupQueue(null);
+     
+            this.InvokeQueueChanged(EventArgs.Empty);
+        }
+
         public void Clear()
         {
             List<QueueTask> deleteList = this.queue.Where(i => i.Status != QueueItemStatus.InProgress).ToList();
