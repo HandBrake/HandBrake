@@ -94,6 +94,14 @@ namespace HandBrakeWPF.Services.Queue.Interfaces
         void Add(QueueTask job);
 
         /// <summary>
+        /// Retry a job and update the queue status
+        /// </summary>
+        /// <param name="task">
+        /// The job to retry
+        /// </param>
+        void RetryJob(QueueTask task);
+
+        /// <summary>
         /// Backup any changes to the queue file
         /// </summary>
         /// <param name="exportPath">

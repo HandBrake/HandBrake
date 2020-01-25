@@ -1719,7 +1719,7 @@ namespace HandBrakeWPF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} Encodes Pending.
+        ///   Looks up a localized string similar to {0} Jobs Pending.
         /// </summary>
         public static string Main_XEncodesPending {
             get {
