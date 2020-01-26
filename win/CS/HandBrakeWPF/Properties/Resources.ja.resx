@@ -146,9 +146,7 @@ x264とx265は対数スケールで低い数値の方が品質が高くなりま
 ソース最大: 常に可能な最大の解像度でソースがエンコードされます。</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2020 The HandBrake Team
-
-このプログラムは無料のソフトウェアです; フリーソフトウェア財団による
+    <value>このプログラムは無料のソフトウェアです; フリーソフトウェア財団による
 GNU General Public License バージョン2、または(お好みであれば)
 それ以降の下で改変、再頒布することができます。
 
@@ -282,7 +280,7 @@ Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  021
     <value>「変換元」をクリックしてください</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0}個のエンコードが待機中</value>
+    <value>{0}個のジョブが待機中</value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>通知</value>
@@ -2185,5 +2183,8 @@ FPS: {3:000.0}, 平均FPS: {4:000.0}
   </data>
   <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
     <value>新しいバージョンのHandBrakeが利用できます！</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Copyright (C) 2003-2020 The HandBrake Team</value>
   </data>
 </root>
