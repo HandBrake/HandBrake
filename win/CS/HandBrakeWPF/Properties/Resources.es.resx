@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -144,22 +144,19 @@ Personalizada: Opcionalmente puede establecer un Ancho y Alto maximo. Al hacer e
 Fuente Maxima: Siempre codifica con la resolucion de la fuente si es posible.</value>
   </data>
   <data name="About_GPL" xml:space="preserve">
-    <value>Copyright (C) 2003-2019 The HandBrake Team
+    <value>Este programa es software libre; puedes redistribuirlo y/o
+modificarlo bajo los términos de la Licencia Pública General de GNU
+según lo publicado por la Free Software Foundation; ya sea la versión 2
+de la Licencia, o (a su elección) cualquier versión posterior.
 
-Este programa es software libre; puedes redistribuirlo y / o 
-    modificarlo bajo los términos de la Licencia Pública General 
-    de GNU según lo publicado por la Free Software Foundation; 
-    cualquiera de las dos versiones de la Licencia, o (a su elección) 
-    cualquier versión posterior.
+Este programa se distribuye con la esperanza de que sea útil,
+pero SIN NINGUNA GARANTÍA; sin siquiera la garantía implícita de
+COMERCIABILIDAD o APTITUD PARA UN PROPÓSITO EN PARTICULAR. Ver la
+Licencia pública general de GNU para más detalles.
 
-	Este programa se distribuye con la esperanza de que sea útil, 
-	Pero SIN NINGUNA GARANTÍA; sin ni siquiera la garantía implícita 
-	de COMERCIABILIDAD o IDONEIDAD PARA UN PROPÓSITO PARTICULAR. Ver 
-	el GNU General Public License para más detalles.
-
-	Debería haber recibido una copia de la Licencia Pública General 
-	de GNU junto con este programa; Si no, escriba a Software Libre
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.</value>
+Debería haber recibido una copia de la Licencia Pública General de GNU
+junto con este programa; si no, escriba a Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, EE. UU.</value>
   </data>
   <data name="QueueSelection_AutoNameWarning" xml:space="preserve">
     <value>Advertencia: No tienes el nombrado automático de archivos encendido. Puede activarlo en las opciones.</value>
@@ -285,7 +282,7 @@ No puede exportar los ajustes integrados</value>
     <value>Seleccione 'Fuente' para continuar</value>
   </data>
   <data name="Main_XEncodesPending" xml:space="preserve">
-    <value>{0} Codificaciones pendientes </value>
+    <value>{0} Trabajos pendientes</value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>Atención</value>
@@ -2175,5 +2172,21 @@ Cuando se admita, se habrán importado los ajustes preestablecidos de usuario.</
   </data>
   <data name="OptionsView_AlwaysUseDefaultPath" xml:space="preserve">
     <value>Use siempre la ruta por defecto para cada nuevo nombre generado.</value>
+  </data>
+  <data name="OptionsView_RemotePortLimit" xml:space="preserve">
+    <value>El rango de puertos debe estar entre 5000 y 32767</value>
+  </data>
+  <data name="Options_Experimental" xml:space="preserve">
+    <value>Experimental</value>
+  </data>
+  <data name="OptionsView_SendFileToArgPlaceholders" xml:space="preserve">
+    <value>Marcadores de reemplazo: {source} {destination}</value>
+    <comment>Note: {source} and {destination} are not translatable. </comment>
+  </data>
+  <data name="SourceSelection_UpdateAvailable" xml:space="preserve">
+    <value>¡Una nueva versión de HandBrake está disponible!</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Copyright (C) 2003-2020 The HandBrake Team</value>
   </data>
 </root>
