@@ -56,6 +56,9 @@
 /* Delete preset alert -> message */
 "Are you sure you want to permanently delete the selected preset?" = "Sei sicuro di voler eliminare permanentemente il preset selezionato?";
 
+/* Delete preset alert -> message */
+"Are you sure you want to permanently delete the selected presets?" = "Sei sicuro di voler eliminare permanentemente i preset selezionati?";
+
 /* Quit Alert -> message */
 "Are you sure you want to quit HandBrake?" = "Sei sicuro di volere uscire da HandBrake?";
 
@@ -113,6 +116,9 @@
 /* Delete preset alert -> first button */
 "Delete Preset" = "Elimina preset";
 
+/* Delete preset alert -> first button */
+"Delete Presets" = "Elimina";
+
 /* File already exists alert -> informative text
    File already exists in queue alert -> informative text */
 "Do you want to overwrite %@?" = "Vuoi sostituire %@?";
@@ -153,6 +159,9 @@
 
 /* Job statistics */
 "Ended at:" = "Completato alle:";
+
+/* Export presets save panel title */
+"Export preset" = "Esporta";
 
 /* Export presets save panel title */
 "Export presets" = "Esporta preset";
@@ -313,6 +322,9 @@
 
 /* Job statistics */
 "Run time:" = "Tempo di conversione:";
+
+/* Export presets panel prompt */
+"Save" = "Salva";
 
 /* Picture HUD -> scale button
    Touch bar */
