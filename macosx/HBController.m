@@ -1425,6 +1425,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (IBAction)exportPreset:(id)sender
 {
+    fPresetsView.selectedPreset = self.selectedPreset;
     [fPresetsView exportPreset:sender];
 }
 
@@ -1470,7 +1471,7 @@ static void *HBControllerLogLevelContext = &HBControllerLogLevelContext;
 
 - (IBAction)deletePreset:(id)sender
 {
-    fPresetsView.selectedPreset = presetManager.defaultPreset;
+    fPresetsView.selectedPreset = self.selectedPreset;
     [fPresetsView deletePreset:self];
 }
 

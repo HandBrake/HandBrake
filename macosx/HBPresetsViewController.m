@@ -121,7 +121,8 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
 {
     SEL action = anItem.action;
 
-    if (action == @selector(exportPreset:))
+    if (action == @selector(exportPreset:) ||
+        action == @selector(deletePreset:))
     {
         if (!self.treeController.selectedObjects.firstObject)
         {
@@ -147,19 +148,50 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
     return [name stringByAppendingPathExtension:@"json"];
 }
 
-- (IBAction)exportPreset:(id)sender
+- (nonnull NSURL *)lastPresetExportDirectoryURL
 {
-    // Find the current selection, it can be a category too.
-    HBPreset *selectedPreset = [self.treeController.selectedObjects.firstObject copy];
-
-    // Open a panel to let the user choose where and how to save the export file
-    NSSavePanel *panel = [NSSavePanel savePanel];
-    panel.title = NSLocalizedString(@"Export presets", @"Export presets save panel title");
-
-    // We get the current file name and path from the destination field here
     NSURL *defaultExportDirectory = [[NSURL fileURLWithPath:NSHomeDirectory()] URLByAppendingPathComponent:@"Desktop" isDirectory:YES];
-    panel.directoryURL = defaultExportDirectory;
-    panel.nameFieldStringValue = [self fileNameForPreset:selectedPreset];
+    NSURL *lastPresetExportDirectoryURL = [NSUserDefaults.standardUserDefaults URLForKey:@"LastPresetExportDirectoryURL"];
+    return lastPresetExportDirectoryURL ? lastPresetExportDirectoryURL : defaultExportDirectory;
+}
+
+- (void)doExportPresets:(NSArray<HBPreset *> *)presets
+{
+    NSOpenPanel *panel = [NSOpenPanel openPanel];
+    panel.title = NSLocalizedString(@"Export presets", @"Export presets save panel title");
+    panel.directoryURL = self.lastPresetExportDirectoryURL;
+    panel.canChooseFiles = NO;
+    panel.canChooseDirectories = YES;
+    panel.allowsMultipleSelection = NO;
+    panel.prompt = NSLocalizedString(@"Save", @"Export presets panel prompt");
+
+    [panel beginWithCompletionHandler:^(NSInteger result)
+     {
+        if (result == NSModalResponseOK)
+        {
+            [NSUserDefaults.standardUserDefaults setURL:panel.URL forKey:@"LastPresetExportDirectoryURL"];
+
+            for (HBPreset *preset in presets)
+            {
+                NSError *error = NULL;
+                NSString *fileName = [self fileNameForPreset:preset];
+                NSURL *url = [panel.URL URLByAppendingPathComponent:fileName];
+                BOOL success = [preset writeToURL:url atomically:YES removeRoot:NO error:&error];
+                if (success == NO)
+                {
+                    [self presentError:error];
+                }
+            }
+        }
+    }];
+}
+
+- (void)doExportPreset:(HBPreset *)preset
+{
+    NSSavePanel *panel = [NSSavePanel savePanel];
+    panel.title = NSLocalizedString(@"Export preset", @"Export presets save panel title");
+    panel.directoryURL = self.lastPresetExportDirectoryURL;
+    panel.nameFieldStringValue = [self fileNameForPreset:preset];
 
     [panel beginWithCompletionHandler:^(NSInteger result)
      {
@@ -169,13 +201,26 @@ static void *HBPresetsViewControllerContext = &HBPresetsViewControllerContext;
              [NSUserDefaults.standardUserDefaults setURL:presetExportDirectory forKey:@"LastPresetExportDirectoryURL"];
 
              NSError *error = NULL;
-             BOOL success = [selectedPreset writeToURL:panel.URL atomically:YES removeRoot:NO error:&error];
+             BOOL success = [preset writeToURL:panel.URL atomically:YES removeRoot:NO error:&error];
              if (success == NO)
              {
                  [self presentError:error];
              }
          }
      }];
+}
+
+- (IBAction)exportPreset:(id)sender
+{
+    NSArray<HBPreset *> *selectedPresets = self.treeController.selectedObjects;
+    if (selectedPresets.count == 1)
+    {
+        [self doExportPreset:selectedPresets.firstObject];
+    }
+    else if (selectedPresets.count > 1)
+    {
+        [self doExportPresets:selectedPresets];
+    }
 }
 
 - (void)doImportPreset:(NSArray<NSURL *> *)URLs atIndexPath:(nullable NSIndexPath *)indexPath
