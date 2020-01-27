@@ -347,34 +347,76 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         else if ( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ||
                   job->vcodec == HB_VCODEC_FFMPEG_NVENC_H265 )
         {
-            char qualityI[7];
+            // NVEnc Performance see Chapter 4 of Video_Codec_SDK_8.0.14/doc/NVENC_Application_Note.pdf
+            // sgothel@jausoft.com usually uses the nvenc-h264 setting: 
+            // - constant quality (cq) of 26-24, which enforces variable bitrate (vbr), 
+            // - constant framerate (cfr) w/ framerate=source
+            // - preset=hq (high quality), profile=high, level=auto
+            //
+            // Resulting to av_opts: 
+            // 'preset=hq,rc=vbr_hq,cq=26.00,init_qpP=26.00,init_qpB=28.00,init_qpI=24.00,bf=2,rc-lookahead=16,spatial-aq=1,forced-idr=1,profile=high'
+            //
+            // NVEnc:
+            // - GeForce GTX 950, has Compute SM 5.2
+            // - AQ enabled
+            // - Lookahead enabled: depth 16, scenecut enabled, B-adapt enabled.
+            //
+            // This achieves w/ HD 1080p source and even frame cropping in Handbreak around 160fps,
+            // matching the net expected of around 270fps less consumption via decoding and cropping.
+            int64_t bit_rate_ceiling = -1;
+            int64_t bit_rate_avgusr = -1;
             char quality[7];
+            char qualityI[7];
             char qualityB[7];
 
+            bit_rate_ceiling = (int64_t)job->width * (int64_t)job->height * (int64_t)fps.num / (int64_t)fps.den;
+            bit_rate_avgusr = ( 0 < job->vbitrate ) ? 1000 * (int64_t)job->vbitrate : -1;
+            hb_log( "encavcodec: bit_rate ceiling %ld by %d x %d * %d/%d; user %ld", bit_rate_ceiling, job->width, job->height, fps.num, fps.den, bit_rate_avgusr);
             double adjustedQualityI = job->vquality - 2;
             double adjustedQualityB = job->vquality + 2;
             if (adjustedQualityB > 51) {
                 adjustedQualityB = 51;
             }
-
             if (adjustedQualityI < 0){
                 adjustedQualityI = 0;
             }
-
-            snprintf(quality, 7, "%.2f", job->vquality);
             snprintf(qualityI, 7, "%.2f", adjustedQualityI);
             snprintf(qualityB, 7, "%.2f", adjustedQualityB);
+            snprintf(quality,  7, "%.2f", job->vquality);
 
-            context->bit_rate = 0;
-
-            av_dict_set( &av_opts, "rc", "vbr_hq", 0 );
+            av_dict_set( &av_opts, "rc", "vbr_hq", 0 ); // Using the new 'vbr_hq' instead of 'vbr'
             av_dict_set( &av_opts, "cq", quality, 0 );
 
-            // further Advanced Quality Settings in Constant Quality Mode
+            // Advanced Quality Settings in Constant Quality Mode
+            // This is the INITIAL qp value only and will be adjusted dynamically!
+            // '-1' should be driver default and use adaptive (dynamic) values based on 'cq' (??)
             av_dict_set( &av_opts, "init_qpP", quality, 0 );
             av_dict_set( &av_opts, "init_qpB", qualityB, 0 );
             av_dict_set( &av_opts, "init_qpI", qualityI, 0 );
-            hb_log( "encavcodec: encoding at rc=vbr %.2f", job->vquality );
+
+            // Allow 2 B frames, otherwise none would be produced
+            av_dict_set( &av_opts, "bf", "2", 0 );
+
+            // Lookahead: See Chapter 8.1 of Video_Codec_SDK_8.0.14/doc/NVENC_VideoEncoder_API_ProgGuide.pdf
+            // This also adds B frames (h264 only it seems for now) and supposed to add P frames 
+            // Using max 32 causes errors
+            av_dict_set( &av_opts, "rc-lookahead", "16", 0 ); 
+
+            // Spatial AQ: See Chapter 8.2.1 of Video_Codec_SDK_8.0.14/doc/NVENC_VideoEncoder_API_ProgGuide.pdf
+            if( job->vcodec == HB_VCODEC_FFMPEG_NVENC_H264 ) {
+                av_dict_set( &av_opts, "spatial-aq", "1", 0 ); // oops, nvenc_h264.c uses a dash
+            } else {
+                av_dict_set( &av_opts, "spatial_aq", "1", 0 ); // oops, nvenc_hevc.c uses an underscore
+            }
+            // av_dict_set( &av_opts, "temporal_aq", "1", 0 ); // only for h264: either spatial or temporal
+            // av_dict_set( &av_opts, "aq-strength", "8", 0 ); // use default value (driver auto selection)
+            hb_log( "encavcodec: encoding at rc=vbr_hq cq=%.2f, rc-lookahead=16, spatial_aq=1, aq-strength=default", job->vquality);
+
+            // This value was chosen to make the bitrate high enough
+            // for nvenc to "turn off" the maximum bitrate feature
+            // that is normally applied to constant quality. 
+            // May also use 'context->rc_max_rate' ???
+            context->bit_rate = bit_rate_ceiling;
         }
         else if ( job->vcodec == HB_VCODEC_FFMPEG_VCE_H264 || job->vcodec == HB_VCODEC_FFMPEG_VCE_H265 )
         {
@@ -635,7 +677,20 @@ int encavcodecInit( hb_work_object_t * w, hb_job_t * job )
         }
         free(filename);
     }
-
+    if( 3 <= global_verbosity_level ) {
+        // Allow user to see av_opts in log file and see ffmpeg verbosity
+        int av_log_level = av_log_get_level();
+        char * av_opts_string = NULL;
+        if( 0 <= av_dict_get_string(av_opts, &av_opts_string, '=', ',') && NULL != av_opts_string ) {
+            hb_log( "encavcodec: avcodec_open options: %s", av_opts_string);
+            free(av_opts_string);
+        } else {
+            hb_log( "encavcodec: Error gathering avcodec_open options");
+        }
+        if( AV_LOG_VERBOSE > av_log_level ) {
+            av_log_set_level(AV_LOG_VERBOSE);
+        }
+    }
     if (hb_avcodec_open(context, codec, &av_opts, HB_FFMPEG_THREADS_AUTO))
     {
         hb_log( "encavcodecInit: avcodec_open failed" );
