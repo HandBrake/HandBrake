@@ -35,7 +35,6 @@ FFMPEG.CONFIGURE.extra = \
     --disable-muxers \
     --disable-network \
     --enable-libzimg \
-    --disable-hwaccels \
     --disable-vdpau \
     --disable-encoders \
     --enable-libmp3lame \
