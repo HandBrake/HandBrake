@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="HBQueueInfoViewController">
             <connections>
+                <outlet property="divider" destination="gAc-tj-J9f" id="zoq-ng-nDX"/>
                 <outlet property="scrollView" destination="MXt-Cb-20x" id="dGY-tf-zF7"/>
                 <outlet property="statisticsHeader" destination="m2h-yw-mRX" id="do6-gL-eBp"/>
                 <outlet property="statisticsLabel" destination="Mm9-nD-res" id="I4f-MN-amu"/>
@@ -22,7 +23,7 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
             <subviews>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Z14-gh-hWn">
-                    <rect key="frame" x="410" y="13" width="64" height="32"/>
+                    <rect key="frame" x="420" y="3" width="64" height="32"/>
                     <buttonCell key="cell" type="push" title="Edit" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="erY-5X-50l">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -32,7 +33,7 @@
                     </connections>
                 </button>
                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="oq4-g0-srt">
-                    <rect key="frame" x="338" y="13" width="75" height="32"/>
+                    <rect key="frame" x="348" y="3" width="75" height="32"/>
                     <buttonCell key="cell" type="push" title="Reset" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hgl-N3-x4S">
                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                         <font key="font" metaFont="system"/>
@@ -43,19 +44,19 @@
                     </connections>
                 </button>
                 <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MXt-Cb-20x">
-                    <rect key="frame" x="0.0" y="49" width="488" height="286"/>
+                    <rect key="frame" x="0.0" y="39" width="488" height="296"/>
                     <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="kkx-XF-sYr" customClass="HBFlippedClipView">
-                        <rect key="frame" x="0.0" y="0.0" width="488" height="286"/>
+                        <rect key="frame" x="0.0" y="0.0" width="488" height="296"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view translatesAutoresizingMaskIntoConstraints="NO" id="Akt-r1-6fP">
-                                <rect key="frame" x="0.0" y="188" width="488" height="98"/>
+                                <rect key="frame" x="0.0" y="200" width="488" height="96"/>
                                 <subviews>
                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="4" horizontalStackHuggingPriority="250" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VVC-g8-nGU">
-                                        <rect key="frame" x="12" y="8" width="464" height="82"/>
+                                        <rect key="frame" x="12" y="8" width="464" height="80"/>
                                         <subviews>
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="m2h-yw-mRX" userLabel="Header">
-                                                <rect key="frame" x="0.0" y="64" width="464" height="18"/>
+                                                <rect key="frame" x="0.0" y="62" width="464" height="18"/>
                                                 <subviews>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="OOz-qb-LU4">
                                                         <rect key="frame" x="-2" y="4" width="58" height="14"/>
@@ -80,7 +81,7 @@
                                                 </constraints>
                                             </customView>
                                             <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mm9-nD-res" userLabel="Statistics">
-                                                <rect key="frame" x="-2" y="43" width="468" height="17"/>
+                                                <rect key="frame" x="-2" y="42" width="468" height="16"/>
                                                 <textFieldCell key="cell" selectable="YES" allowsUndo="NO" title="Statistics" allowsEditingTextAttributes="YES" id="S15-bh-qKU">
                                                     <font key="font" usesAppearanceFont="YES"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -88,7 +89,7 @@
                                                 </textFieldCell>
                                             </textField>
                                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="iyF-c4-9B8" userLabel="Header">
-                                                <rect key="frame" x="0.0" y="21" width="464" height="18"/>
+                                                <rect key="frame" x="0.0" y="20" width="464" height="18"/>
                                                 <subviews>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8hj-1a-dlb">
                                                         <rect key="frame" x="-2" y="4" width="58" height="14"/>
@@ -113,7 +114,7 @@
                                                 </constraints>
                                             </customView>
                                             <textField horizontalHuggingPriority="249" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3EV-1F-TH6" userLabel="Summary">
-                                                <rect key="frame" x="-2" y="0.0" width="468" height="17"/>
+                                                <rect key="frame" x="-2" y="0.0" width="468" height="16"/>
                                                 <textFieldCell key="cell" selectable="YES" allowsUndo="NO" title="Summary" allowsEditingTextAttributes="YES" id="GaR-qk-UW7">
                                                     <font key="font" usesAppearanceFont="YES"/>
                                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -158,19 +159,26 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </scroller>
                 </scrollView>
+                <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="gAc-tj-J9f">
+                    <rect key="frame" x="0.0" y="36" width="488" height="5"/>
+                </box>
             </subviews>
             <constraints>
                 <constraint firstItem="MXt-Cb-20x" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="3k7-0G-h1x"/>
                 <constraint firstItem="Z14-gh-hWn" firstAttribute="leading" secondItem="oq4-g0-srt" secondAttribute="trailing" constant="9" id="3oM-tb-KiT"/>
                 <constraint firstItem="oq4-g0-srt" firstAttribute="firstBaseline" secondItem="Z14-gh-hWn" secondAttribute="firstBaseline" id="95H-sb-RO5"/>
-                <constraint firstAttribute="bottom" secondItem="Z14-gh-hWn" secondAttribute="bottom" constant="20" id="CwL-gc-KKJ"/>
+                <constraint firstAttribute="bottom" secondItem="Z14-gh-hWn" secondAttribute="bottom" constant="10" id="CwL-gc-KKJ"/>
+                <constraint firstItem="gAc-tj-J9f" firstAttribute="leading" secondItem="Hz6-mo-xeY" secondAttribute="leading" id="MUS-G9-P7f"/>
                 <constraint firstAttribute="trailing" secondItem="MXt-Cb-20x" secondAttribute="trailing" id="Tap-ZL-CDW"/>
+                <constraint firstItem="oq4-g0-srt" firstAttribute="top" secondItem="MXt-Cb-20x" secondAttribute="bottom" constant="8" id="b1v-RU-58V"/>
+                <constraint firstItem="oq4-g0-srt" firstAttribute="top" secondItem="gAc-tj-J9f" secondAttribute="bottom" constant="7" id="cIp-Am-OAA"/>
+                <constraint firstAttribute="trailing" secondItem="gAc-tj-J9f" secondAttribute="trailing" id="hHn-Xt-wSt"/>
                 <constraint firstItem="Z14-gh-hWn" firstAttribute="top" secondItem="MXt-Cb-20x" secondAttribute="bottom" constant="8" id="lF5-Ch-EcR"/>
                 <constraint firstItem="MXt-Cb-20x" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" id="sYg-Vz-4jY"/>
-                <constraint firstAttribute="trailing" secondItem="Z14-gh-hWn" secondAttribute="trailing" constant="20" id="tSm-Qq-U0q"/>
+                <constraint firstAttribute="trailing" secondItem="Z14-gh-hWn" secondAttribute="trailing" constant="10" id="tSm-Qq-U0q"/>
                 <constraint firstItem="oq4-g0-srt" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="20" symbolic="YES" id="y0g-z9-6Sn"/>
             </constraints>
-            <point key="canvasLocation" x="-125" y="238.5"/>
+            <point key="canvasLocation" x="85" y="200"/>
         </customView>
     </objects>
 </document>

@@ -13,6 +13,7 @@
 @property (nonatomic, weak) IBOutlet NSTextField *statisticsLabel;
 @property (nonatomic, weak) IBOutlet NSTextField *summaryLabel;
 @property (nonatomic, weak) IBOutlet NSScrollView *scrollView;
+@property (nonatomic, weak) IBOutlet NSBox *divider;
 
 @property (nonatomic, weak) id<HBQueueDetailsViewControllerDelegate> delegate;
 
@@ -104,6 +105,12 @@
         self.statisticsLabel.hidden = YES;
         self.summaryLabel.hidden = YES;
     }
+}
+
+- (void)viewDidLayout
+{
+    [super viewDidLayout];
+    self.divider.hidden = self.scrollView.frame.size.height > self.scrollView.contentView.documentView.frame.size.height;
 }
 
 - (void)setItem:(HBQueueItem *)item
