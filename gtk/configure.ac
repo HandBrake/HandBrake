@@ -233,7 +233,7 @@ case $host in
     else
         HB_LIBS="$HB_LIBS -lpthreadGC2"
 	fi
-    HB_LIBS="$HB_LIBS -lbcrypt -lregex -luuid"
+    HB_LIBS="$HB_LIBS -lbcrypt -lregex -luuid -lole32"
     ;;
   *-*-freebsd*)
     HB_LIBS="$HB_LIBS -lpthread"
